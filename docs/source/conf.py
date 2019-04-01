@@ -12,9 +12,9 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
+import os
+import sys
+sys.path.insert(0, os.path.abspath('.'))
 
 
 # -- Project information -----------------------------------------------------
@@ -76,16 +76,21 @@ language = None
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ['.ipynb_checkpoints']
 
-# The name of the Pygments (syntax highlighting) style to use.
-pygments_style = None
+default_role = 'py:obj'
 
+# The name of the Pygments (syntax highlighting) style to use.
+pygments_style = 'Gruvbox'
+
+rst_prolog = """
+.. |ip| replace:: :class:`~IPython.core.interactiveshell.InteractiveShell`
+"""
 
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'alabaster'
+html_theme = 'pyramid'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -112,7 +117,7 @@ html_static_path = ['_static']
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'site-packagesdoc'
+htmlhelp_basename = 'site-packages-doc'
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -189,9 +194,9 @@ epub_exclude_files = ['search.html']
 # -- Options for intersphinx extension ---------------------------------------
 
 # Example configuration for intersphinx: refer to the Python standard library.
-# intersphinx_mapping = {'https://docs.python.org/': None}
+intersphinx_mapping = {'https://docs.python.org/': None}
 
 # -- Options for todo extension ----------------------------------------------
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
-todo_include_todos = True
+todo_include_todos = False
