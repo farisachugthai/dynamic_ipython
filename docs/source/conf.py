@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-#
-# Configuration file for the Sphinx documentation builder.
+"""Configuration file for the Sphinx documentation builder.
 #
 # This file does only contain a selection of the most common options. For a
 # full list see the documentation:
@@ -11,22 +10,35 @@
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-#
+"""
+from datetime import datetime
+import logging
 import os
+from pathlib import Path
 import sys
-sys.path.insert(0, os.path.abspath('.'))
+
+from __about__ import __version__
+
+ROOT = Path('../..')
+logger = logging.basicConfig(level=logging.WARNING)
+
+CONF_PATH = os.path.dirname(os.path.abspath(__file__))
+BUILD_PATH = os.path.join(CONF_PATH, 'build')
+
+sys.path.insert(0, os.path.abspath('..'))
+sys.path.insert(0, os.path.abspath(ROOT))
 
 
 # -- Project information -----------------------------------------------------
 
-project = 'site-packages'
-copyright = '2019, fac'
-author = 'fac'
+project = u'Dynamic IPython'
+copyright = u'Copyright (C) 2018-{} Faris Chugthai'.format(datetime.now().year)
+author = u'fac'
 
 # The short X.Y version
-version = ''
+version = __version__
 # The full version, including alpha/beta/rc tags
-release = ''
+release = version
 
 
 # -- General configuration ---------------------------------------------------
@@ -50,7 +62,8 @@ extensions = [
     'sphinx.ext.githubpages',
     'sphinx.ext.napoleon',
     'IPython.sphinxext.ipython_console_highlighting',
-    'IPython.sphinxext.ipython_directive'
+    'IPython.sphinxext.ipython_directive',
+    'numpydoc.numpydoc',
 ]
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -194,7 +207,7 @@ epub_exclude_files = ['search.html']
 # -- Options for intersphinx extension ---------------------------------------
 
 # Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {'https://docs.python.org/': None}
+intersphinx_mapping = {'https://docs.python.org/3/': None}
 
 # -- Options for todo extension ----------------------------------------------
 

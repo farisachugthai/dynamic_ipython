@@ -1,8 +1,6 @@
 README
 =======
 
-.. |ip| replace:: `IPython.core.interactiveshell.InteractiveShell`
-
 Creating IPython Extensions
 -------------------------------
 
@@ -28,7 +26,7 @@ executed. To automatically load a module when IPython starts,
 we need to add the module name to the ``c.TerminalIPythonApp.extensions``
 list in the IPython configuration file.
 
-The ``InteractiveShell`` instance represents the active
+The |ip| instance represents the active
 :mod:`IPython` interpreter. Useful methods and attributes include
 :func:`|ip|.register_magics()`, to create new magic commands,
 and ``user_ns``, to access the user namespace. You can
@@ -36,7 +34,7 @@ explore all the instance's attributes interactively from
 :mod:`IPython` with tab completion. For that, you need to execute
 the following command to get the current instance
 
-.. code-block:: python
+.. code-block:: python3
 
     from IPython import get_ipython
     ip = get_ipython()

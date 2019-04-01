@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
+"""Configuration file for IPython.
+
 IPython Config
 ==============
 
-.. module:: _ipython_config
+.. module:: ipython_config
     :synopsis: Configuration file for IPython.
 
 Heavily drawn from documentation at `ipython_docs`_.
@@ -22,6 +23,17 @@ commands to `user_ns`, or the global namespace, in addition to Git aliases.
 In addition, :mod:`pygments` is directly invoked to ensure comments are
 clearly visible in :mod:`IPython` cells.
 
+get_config and :mod:`traitlets`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+From traitlets/config/application.py::
+
+    def get_config():
+        # Get the config object for the global Application instance, if there is one
+        # otherwise return an empty config object
+        if Application.initialized():
+            return Application.instance().config
+        else:
+            return Config()
 
 Parameters
 ------------
@@ -37,15 +49,7 @@ Attributes (Non-method parameters)
 ----------------------------------
 :envvar:`IPYTHONDIR` : path-like object
     Environment variable defined before runtime to indicate where the
-    IPython profile directory is.
-
-.. I think that's a directive
-
-
-Returns
--------
-home : str
-    The users home directory.
+    :mod:`IPython` profile directory is.
 
 
 """
@@ -143,7 +147,14 @@ except OSError:
 # Reraise exceptions encountered loading IPython extensions?
 # if you realize this is a bad idea please leave a note why
 # i'm actually curious
-c.InteractiveShellApp.reraise_ipython_extension_failures = True
+
+# From traitlets/config/application.py
+    # Whether failing to load config files should prevent startup
+    # raise_config_file_errors = Bool(TRAITLETS_APPLICATION_RAISE_CONFIG_FILE_ERROR)
+
+# c.InteractiveShellApp.reraise_ipython_extension_failures = True
+# I'm assuming these are related and please don't crash the interpreter
+# from a simple mistake
 
 # ----------------------------------------------------------------------------
 # Application(SingletonConfigurable) configuration
@@ -255,10 +266,10 @@ c.InteractiveShell.autoawait = True
 
 # Autoindent IPython code entered interactively.
 # Jupyter Console doesn't handle this correctly. Alledgedly ipy7.0 fixed that
-try:
-    c.InteractiveShell.autoindent = True
-except Exception:
-    pass
+# try:
+#     c.InteractiveShell.autoindent = True
+# except Exception:
+#     pass
 
 # Enable magic commands to be called without the leading %.
 c.InteractiveShell.automagic = True
