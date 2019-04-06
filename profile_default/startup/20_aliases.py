@@ -17,7 +17,7 @@ IPython Aliases
 
 Overview
 --------
-This module utilizes ``_ip``, the global IPython InteractiveShell 
+This module utilizes ``_ip``, the global IPython InteractiveShell
 instance, and fills the ``user_ns`` with common Linux idioms.
 
 
@@ -267,11 +267,10 @@ def common_aliases(_ip):
 if __name__ == "__main__":
     _ip = get_ipython()
 
-    if not isinstance(
-            _ip, IPython.terminal.interactiveshell.TerminalInteractiveShell):
+    if not isinstance( _ip, IPython.terminal.interactiveshell.InteractiveShell):
         raise Exception
 
-    logging.basicConfig(level=logging.WARNING)
+    logging.getLogger(__name__)
 
     user_aliases = []
 

@@ -65,8 +65,6 @@ from traitlets.config import get_config
 
 c = get_config()
 
-logging.basicConfig(level=logging.INFO)
-
 try:
     home = os.path.expanduser("~")
 except OSError:

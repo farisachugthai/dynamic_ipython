@@ -114,13 +114,13 @@ c.InteractiveShellApp.reraise_ipython_extension_failures = True
 # This is an application.
 
 # The date format used by logging formatters for %(asctime)s
-# c.Application.log_datefmt = '%Y-%m-%d %H:%M:%S'
+c.Application.log_datefmt = '%Y-%m-%d %H:%M:%S'
 
 # The Logging format template
-# c.Application.log_format = '[%(name)s]%(highlevel)s %(message)s'
+c.Application.log_format = '%(asctime)s [%(name)s]  %(highlevel)s %(message)s'
 
 # Set the log level by value or name.
-# c.Application.log_level = 30
+c.Application.log_level = 30
 
 # -----------------------------------------------------------------------------
 # BaseIPythonApplication(Application) configuration
@@ -228,10 +228,6 @@ c.IPythonKernel.use_experimental_completions = True
 
 # 'all', 'last', 'last_expr' or 'none', 'last_expr_or_assign' specifying which
 # nodes should be run interactively (displaying output from expressions).
-try:
-    c.InteractiveShell.ast_node_interactivity = 'last_expr_or_assign'
-except Exception:
-    c.InteractiveShell.ast_node_interactivity = 'last_expr'
 
 # A list of ast.NodeTransformer subclass instances, which will be applied to
 # user input before code is run.
@@ -245,11 +241,6 @@ except Exception:
 # no arguments are present).
 # c.InteractiveShell.autocall = 0
 
-# Autoindent IPython code entered interactively.
-# try:
-#     c.InteractiveShell.autoindent = True
-# except Exception:
-#     pass
 
 # Enable magic commands to be called without the leading %.
 c.InteractiveShell.automagic = True
@@ -284,10 +275,10 @@ c.InteractiveShell.colors = 'Linux'
 
 # If True, anything that would be passed to the pager will be displayed as
 # regular output instead.
-c.InteractiveShell.display_page = True
+# c.InteractiveShell.display_page = True
 
 # (Provisional API) enables html representation in mime bundles sent to pagers.
-c.InteractiveShell.enable_html_pager = True
+# c.InteractiveShell.enable_html_pager = True
 
 # Total length of command history
 c.InteractiveShell.history_length = 100000
@@ -343,7 +334,7 @@ c.InteractiveShell.history_load_length = 10000
 
 # Enables rich html representation of docstrings. (This requires the docrepr
 # module).
-c.InteractiveShell.sphinxify_docstring = True
+# c.InteractiveShell.sphinxify_docstring = True
 
 c.InteractiveShell.wildcards_case_sensitive = False
 
