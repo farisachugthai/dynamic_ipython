@@ -28,7 +28,6 @@ BUILD_PATH = os.path.join(CONF_PATH, 'build')
 sys.path.insert(0, os.path.abspath('..'))
 sys.path.insert(0, os.path.abspath(ROOT))
 
-
 # -- Project information -----------------------------------------------------
 
 project = u'Dynamic IPython'
@@ -39,7 +38,6 @@ author = u'fac'
 version = __version__
 # The full version, including alpha/beta/rc tags
 release = version
-
 
 # -- General configuration ---------------------------------------------------
 
@@ -87,7 +85,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ['.ipynb_checkpoints']
+exclude_patterns = ['.ipynb_checkpoints', 'tags']
 
 default_role = 'py:obj'
 
@@ -109,7 +107,11 @@ html_theme = 'pyramid'
 # further.  For a list of options available for each theme, see the
 # documentation.
 #
-# html_theme_options = {}
+html_theme_options = {
+    "github_user": "Faris A. Chugthai",
+    "github_repo": "dynamic_ipython",
+    "github_banner": True,
+}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -124,14 +126,23 @@ html_static_path = ['_static']
 # default: ``['localtoc.html', 'relations.html', 'sourcelink.html',
 # 'searchbox.html']``.
 #
-# html_sidebars = {}
+html_sidebars = {
+    '**': [
+        'about.html',
+        'relations.html',
+        'localtoc.html',
+        'searchbox.html',
+        'sourcelink.html',
+    ]
+}
 
+# If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
+html_show_sphinx = False
 
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'site-packages-doc'
-
 
 # -- Options for LaTeX output ------------------------------------------------
 
@@ -157,20 +168,16 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'site-packages.tex', 'site-packages Documentation',
-     'fac', 'manual'),
+    (master_doc, 'site-packages.tex', 'site-packages Documentation', 'fac',
+     'manual'),
 ]
-
 
 # -- Options for manual page output ------------------------------------------
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [
-    (master_doc, 'site-packages', 'site-packages Documentation',
-     [author], 1)
-]
-
+man_pages = [(master_doc, 'site-packages', 'site-packages Documentation',
+              [author], 1)]
 
 # -- Options for Texinfo output ----------------------------------------------
 
@@ -178,11 +185,9 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'site-packages', 'site-packages Documentation',
-     author, 'site-packages', 'One line description of project.',
-     'Miscellaneous'),
+    (master_doc, 'site-packages', 'site-packages Documentation', author,
+     'site-packages', 'One line description of project.', 'Miscellaneous'),
 ]
-
 
 # -- Options for Epub output -------------------------------------------------
 
@@ -200,7 +205,6 @@ epub_title = project
 
 # A list of files that should not be packed into the epub file.
 epub_exclude_files = ['search.html']
-
 
 # -- Extension configuration -------------------------------------------------
 

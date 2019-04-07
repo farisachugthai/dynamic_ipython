@@ -25,6 +25,12 @@ a good amount of reworking as is.
    Jinja <jinja2>
 
 
+.. toctree::
+   :maxdepth: 1
+
+   API
+
+
 
 Indices and tables
 ==================

@@ -55,6 +55,7 @@ Attributes (Non-method parameters)
 """
 import logging
 import os
+import shutil
 
 from pygments.token import Comment
 
@@ -64,6 +65,8 @@ from pygments.token import Comment
 from traitlets.config import get_config
 
 c = get_config()
+
+logging.getLogger(name='__name__')
 
 try:
     home = os.path.expanduser("~")
@@ -260,7 +263,7 @@ c.InteractiveShell.autoawait = True
 # it is not applied if there are no more arguments on the line, and '2' for
 # 'full' autocall, where all callable objects are automatically called (even if
 # no arguments are present).
-# c.InteractiveShell.autocall = 0
+c.InteractiveShell.autocall = 2
 
 # Autoindent IPython code entered interactively.
 # Jupyter Console doesn't handle this correctly. Alledgedly ipy7.0 fixed that
@@ -314,7 +317,11 @@ c.InteractiveShell.colors = 'Linux'
 
 # If True, anything that would be passed to the pager will be displayed as
 #  regular output instead.
-c.InteractiveShell.display_page = True
+# Only if we don't have bat
+if shutil.which('bat'):
+    c.InteractiveShell.display_page = False
+else:
+    c.InteractiveShell.display_page = True
 
 # (Provisional API) enables html representation in mime bundles sent to pagers.
 # c.InteractiveShell.enable_html_pager = False
@@ -399,10 +406,10 @@ c.TerminalInteractiveShell.display_completions = 'multicolumn'
 # Ah I forgot <C-a> on Tmux and Emacs clobber.
 if os.environ.get("TMUX"):
     c.TerminalInteractiveShell.editing_mode = 'vi'
-    logging.warning("c.TerminalInteractiveShell.editing_mode = 'vi'")
+    logging.info("c.TerminalInteractiveShell.editing_mode = 'vi'")
 else:
     c.TerminalInteractiveShell.editing_mode = 'emacs'
-    logging.warning("c.TerminalInteractiveShell.editing_mode = 'emacs'")
+    logging.info("c.TerminalInteractiveShell.editing_mode = 'emacs'")
 
 # Set the editor used by IPython (default to $EDITOR/vi/notepad).
 c.TerminalInteractiveShell.editor = 'nvim'
