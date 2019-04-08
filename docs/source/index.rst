@@ -15,12 +15,15 @@ a good amount of reworking as is.
    :caption: Contents:
 
    Startup <startup>
+   Basic Customization <basic_customization.rst>
    Keybindings <ipython_keybindings>
+   Customizing the keybindings further <custom_keyboard_shortcuts>
    Interactive Shell Object <ipython_interactive_shell>
    Built-in Magics <magics>
    Writing Your Own Magics <custom_magics>
    Sphinx Directives <directive>
    IPython extensions and nbextensions  <extensions>
+   Rich Output <rich_output>
    Pygments highlighting <pygments>
    Jinja <jinja2>
 

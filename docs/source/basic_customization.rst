@@ -1,27 +1,13 @@
-.. _profile-default-readme:
-
 ==========
 README.rst
 ==========
 
 Configuring Prompt Toolkit in IPython
 =====================================
-Here's the original implementation for pt_app.  ``ip.init_``:kbd:`<Tab>` gives
-a ton of different places, seemingly, to muck around.
+Here's the original implementation for |ip|.pt_app.
+``ip.init_``:kbd:`<Tab>` gives a ton of different places, seemingly, to muck around.
 
 .. ipython::
-
-   In [28]: ip.init_prompt_toolkit_cli??
-   Signature: ip.init_prompt_toolkit_cli()
-   Docstring: <no docstring>
-
-
-
-.. I think that ipython takes a :python: option
-
-
-.. ipython::
-    :python:
 
     def init_prompt_toolkit_cli(self):
         if self.simple_prompt:
@@ -36,10 +22,8 @@ a ton of different places, seemingly, to muck around.
                 return '\n'.join(lines)
             self.prompt_for_code = prompt
             return
-
         # Set up keyboard shortcuts
         key_bindings = create_ipython_shortcuts(self)
-
         # Pre-populate history from IPython's history database
         history = InMemoryHistory()
         last_cell = u""
@@ -50,12 +34,9 @@ a ton of different places, seemingly, to muck around.
             if cell and (cell != last_cell):
                 history.append_string(cell)
                 last_cell = cell
-
         self._style = self._make_style_from_name_or_cls(self.highlighting_style)
         self.style = DynamicStyle(lambda: self._style)
-
         editing_mode = getattr(EditingMode, self.editing_mode.upper())
-
         self.pt_app = PromptSession(
                             editing_mode=editing_mode,
                             key_bindings=key_bindings,
@@ -66,26 +47,24 @@ a ton of different places, seemingly, to muck around.
                             include_default_pygments_style=False,
                             mouse_support=self.mouse_support,
                             enable_open_in_editor=self.extra_open_editor_shortcuts,
-                            color_depth=(ColorDepth.TRUE_COLOR if self.true_color else None),
-                            **self._extra_prompt_options())
+                            color_depth=(ColorDepth.TRUE_COLOR if self.true_color else None), \*\*self._extra_prompt_options())
+
 
 The :mod:`prompt_toolkit` tutorial does a fairly thorough job of explaining how
 most everything here works.
-
-.. need to implement that replace directive
 
 Except ``_ip.DynamicStyle()``. No idea. So I went hunting.
 
 
 .. code-block:: python3
 
-    ▼+DynamicStyle : class
-       +__init__(self, get_style) : member
-       +get_attrs_for_style_str(self, style_str, default=DEFAULT_ATTRS) : member
-       +invalidation_hash(self) : member
-       +style_rules(self) : member
+    DynamicStyle : class
+        __init__(self, get_style) : member
+        get_attrs_for_style_str(self, style_str, default=DEFAULT_ATTRS) : member
+        invalidation_hash(self) : member
+        style_rules(self) : member
 
-Found  in this dir.
+Found in this dir.
 
 .. code-block:: vim
 
@@ -93,35 +72,33 @@ Found  in this dir.
 
 Outputted the following. Also just revelling in getting that correct on the first try.
 
-`/data/data/com.termux/files/home/virtualenvs/utilities/lib/python3.7/site-packages/prompt_toolkit/styles/base.py`_
+`</data/data/com.termux/files/home/virtualenvs/utilities/lib/python3.7/site-packages/prompt_toolkit/styles/base.py>`_
 
 
-
-01-17-19
 
 Syntax Highlighting
 -------------------
+
+01-17-19
 How would someone access the highlighting groups that are provided through
 the IPython API?
 
 ``%config TerminalInteractiveShell.highlighting_style`` appears to be a
 function from :mod:`pygments`, specifically :func:`pygments.style.Style.style()`.
 
-This is implemented in IPython as follows.
+.. what the hell is that naming scheme btw?
+
+This is implemented in :mod:`IPython` as follows.
 
 .. ipython::
 
    In [6]: from IPython import get_ipython
-
-   In [8]: ip = get_ipython()
+   In [8]: _ip = get_ipython()
    Out[8]: <IPython.terminal.interactiveshell.TerminalInteractiveShell at 0x70273dd6d8>
-
    In [9]: print(ip.style.get_style())
    <prompt_toolkit.styles.style._MergedStyle object at 0x70272d74e0>
-
    In [12]: ip.highlighting_style
    Out[12]: 'legacy'
-
    In [18]: ip.style.get_style().style_rules
    Out[18]:
    [('pygments.text.whitespace', '#bbbbbb'),
@@ -177,8 +154,8 @@ This is implemented in IPython as follows.
 
 Takeaway
 ^^^^^^^^^
-To view all currently set colors in IPython, view
-`ip.style.get_style().style_rules`
+To view all currently set colors in :mod:`IPython`, view
+|ip|.style.get_style().style_rules
 
 Alternatively you could run
 

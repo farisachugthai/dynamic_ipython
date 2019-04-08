@@ -20,13 +20,18 @@ import sys
 from __about__ import __version__
 
 ROOT = Path('../..')
-logger = logging.basicConfig(level=logging.WARNING)
+PD = ROOT.joinpath('profile_default')
+STARTUP = ROOT.joinpath('profile_default/startup')
+
+logger = logging.getLogger(name=__name__)
 
 CONF_PATH = os.path.dirname(os.path.abspath(__file__))
 BUILD_PATH = os.path.join(CONF_PATH, 'build')
 
-sys.path.insert(0, os.path.abspath('..'))
+sys.path.insert(0, os.path.abspath('.'))
 sys.path.insert(0, os.path.abspath(ROOT))
+sys.path.insert(0, os.path.abspath(PD))
+sys.path.insert(0, os.path.abspath(STARTUP))
 
 # -- Project information -----------------------------------------------------
 
@@ -107,11 +112,11 @@ html_theme = 'pyramid'
 # further.  For a list of options available for each theme, see the
 # documentation.
 #
-html_theme_options = {
-    "github_user": "Faris A. Chugthai",
-    "github_repo": "dynamic_ipython",
-    "github_banner": True,
-}
+# html_theme_options = {
+#     "github_user": "Faris A. Chugthai",
+#     "github_repo": "dynamic_ipython",
+#     "github_banner": True,
+# }
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -211,9 +216,22 @@ epub_exclude_files = ['search.html']
 # -- Options for intersphinx extension ---------------------------------------
 
 # Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {'https://docs.python.org/3/': None}
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/3/', None),
+    'ipython': ('https://ipython.readthedocs.io/en/stable/', None)
+}
 
 # -- Options for todo extension ----------------------------------------------
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = False
+
+
+# Viewcode
+
+viewcode_import = True
+
+def setup(app):
+    """Add pyramid CSS to the docs."""
+    custom_css = os.path.abspath(os.path.join('_static', '', 'pyramid.css_t'))
+    app.add_stylesheet(custom_css)
