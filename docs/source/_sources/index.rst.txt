@@ -6,7 +6,7 @@
 ============================================
 Welcome to IPython packages's documentation!
 ============================================
-This is the collection of notes I've aggregated over time on IPython.
+This is the collection of notes I've aggregated over time on :mod:`IPython`.
 There are many more docs that have yet to be added, but this package needs
 a good amount of reworking as is.
 
