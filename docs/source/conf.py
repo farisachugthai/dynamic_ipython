@@ -95,7 +95,8 @@ exclude_patterns = ['.ipynb_checkpoints', 'tags']
 default_role = 'py:obj'
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'Gruvbox'
+# Specified in theme.conf
+# pygments_style = 'Gruvbox'
 
 rst_prolog = """
 .. |ip| replace:: :class:`~IPython.core.interactiveshell.InteractiveShell`
@@ -106,7 +107,7 @@ rst_prolog = """
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'pyramid'
+# html_theme = 'pyramid'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -231,7 +232,7 @@ todo_include_todos = False
 
 viewcode_import = True
 
-def setup(app):
-    """Add pyramid CSS to the docs."""
-    custom_css = os.path.abspath(os.path.join('_static', '', 'pyramid.css_t'))
-    app.add_stylesheet(custom_css)
+# def setup(app):
+#     """Add pyramid CSS to the docs."""
+#     custom_css = os.path.abspath(os.path.join(CONF_PATH, '_static', '', 'pyramid.css_t'))
+#     app.add_stylesheet(custom_css)

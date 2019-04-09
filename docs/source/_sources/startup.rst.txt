@@ -12,28 +12,25 @@ IPython Startup Scripts
 
 Configuration
 -------------
-Here's a rough outline of what's going on in this directory.
-
-.. todo::
-
-   Should this go in the dir above because we're gonna be focusing on
-   IPython configurations heavily enough that it warrants it? Or better to simply
-   put only those notes in that dir and only comment on the startup scripts in this
-   directory?
-
 As of today, the files present are as follows:
 
-04_easy_import.py_
+`01_rehashx`_
 
-05_log.py_
+`04_easy_import.py`_
 
-20_aliases.py_
+`05_log.py`_
 
-40_git_helpers.py_
+`06_help_helpers.py`_
 
-41_dir3.py_
+`20_aliases.py`_
 
-50_sysexception.py_
+`29_gruvbox.py`_
+
+`30_gruvbox.py`_
+
+`42_pandas_init.py`_
+
+`50_sysexception.py`_
 
 
 %rehash
@@ -45,9 +42,6 @@ and also adds system commands to the namespace!
 
 Insofar, I haven't noticed any significant slowdown in startup time as a result
 of this, and it hugely eases utilizing IPython as a system shell.
-
-
-.. todo::
 
 .. Development and Contributing
 .. This would be a good idea though.
@@ -142,12 +136,13 @@ with a prefix, e.g.::
     50-middle.py
     99-last.ipy
 
-.. _01_rehashx.py: ./01_rehashx.py
-.. _04_easy_import.py: ./04_easy_import.py
-.. _05_log.py: ./05_log.py
-.. _10_keybindings.py:  ./10_keybindings.py
-.. _20_aliases.py: ./20_aliases.py
-.. _30_macros_lazydl.py: ./30_macros_lazydl.py
-.. _40_git_helpers.py: ./40_git_helpers.py
-.. _41_dir3.py: ./41_dir3.py
-.. _50_sysexception.py: ./50_sysexception.py
+.. _01_rehashx.py: ../../profile_default/startup/01_rehashx.py
+.. _04_easy_import.py: ../../profile_default/startup/04_easy_import.py
+.. _05_log.py: ../../profile_default/startup/05_log.py
+.. _06_help_helpers.py: ../../profile_default/startup/06_help_helpers.py
+.. _10_keybindings.py:  ../../profile_default/startup/10_keybindings.py
+.. _20_aliases.py: ../../profile_default/startup/20_aliases.py
+.. _29_gruvbox.py: ../../profile_default/startup/29_gruvbox.py
+.. _30_gruvbox.py: ../../profile_default/startup/30_gruvbox.py
+.. _42_pandas_init.py: ../../profile_default/startup/42_pandas_init.py
+.. _50_sysexception.py: ../../profile_default/startup/50_sysexception.py
