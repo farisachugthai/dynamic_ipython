@@ -31,10 +31,7 @@ from shutil import rmtree
 
 from setuptools import setup, find_packages, Command
 
-try:
-    from dynamic_ipython.__about__ import __version__
-except ModuleNotFoundError:
-    __version__ = (0, 0, 1)
+from profile_default.__about__ import __version__
 
 if sys.version_info[:2] < (3, 6):
     raise RuntimeError("Python version >= 3.6 required.")
@@ -147,7 +144,7 @@ setup(
     install_requires=REQUIRED,
     extras_require=EXTRAS,
     test_suite='test',
-    # setup_requires=['nose>=1.0'],
+    setup_requires=['nose>=1.0'],
     include_package_data=True,
     package_data={
         # If any package contains *.txt or *.rst files, include them:

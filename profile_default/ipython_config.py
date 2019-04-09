@@ -63,10 +63,17 @@ from pygments.token import Comment
 # directly from within python and not get an error for a func call with no
 # import
 from traitlets.config import get_config
+from IPython.paths import get_ipython_dir
 
 c = get_config()
 
-logging.getLogger(name='__name__')
+# not allowed in this file. func returns None
+# _ip = get_ipython()
+
+# Is it senseless defining our own logger?
+logger = logging.getLogger(name='__name__')
+
+logger.debug(get_ipython_dir())
 
 try:
     home = os.path.expanduser("~")
@@ -150,8 +157,8 @@ except OSError:
 # i'm actually curious
 
 # From traitlets/config/application.py
-    # Whether failing to load config files should prevent startup
-    # raise_config_file_errors = Bool(TRAITLETS_APPLICATION_RAISE_CONFIG_FILE_ERROR)
+# Whether failing to load config files should prevent startup
+# raise_config_file_errors = Bool(TRAITLETS_APPLICATION_RAISE_CONFIG_FILE_ERROR)
 
 # c.InteractiveShellApp.reraise_ipython_extension_failures = True
 # I'm assuming these are related and please don't crash the interpreter
@@ -171,6 +178,8 @@ c.Application.log_format = '%(asctime)s [%(name)s]%(highlevel)s %(message)s'
 
 # Set the log level by value or name.
 c.Application.log_level = 30
+
+# _ip.logger.logwrite(get_ipython_dir)
 
 # ----------------------------------------------------------------------------
 # BaseIPythonApplication(Application) configuration
@@ -442,7 +451,7 @@ c.TerminalInteractiveShell.highlighting_style = 'Gruvbox'
 # Override highlighting format for specific tokens
 # Comments were genuinely impossible to read. Might need to override
 # punctuation next.
-c.TerminalInteractiveShell.highlighting_style_overrides = {Comment: '#ffffff'}
+# c.TerminalInteractiveShell.highlighting_style_overrides = { Comment: '#ffffff' }
 
 # Enable mouse support in the prompt (Note: prevents selecting text with the
 # mouse)

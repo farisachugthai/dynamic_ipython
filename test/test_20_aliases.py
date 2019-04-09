@@ -18,6 +18,8 @@ from IPython.utils.capture import capture_output
 
 import nose.tools as nt
 
+_ip = get_ipython()
+
 
 def test_alias_lifecycle():
     name = 'test_alias1'
@@ -58,9 +60,24 @@ def test_alias_args_error():
     nt.assert_equal(cap.stderr.split(':')[0], 'UsageError')
 
 
-if __name__ == "__main__":
-    if not ip or _ip:  # noqa F821 of course its undefined!
-        _ip = get_ipython()
+def test_alias_args_commented():
+    """Check that alias correctly ignores 'commented out' args"""
+    _ip.magic('alias commetarg echo this is %%s a commented out arg')
 
-    test_alias_lifecycle()
-    test_alias_args_error()
+    with capture_output() as cap:
+        _ip.run_cell('commetarg')
+
+    nt.assert_equal(cap.stdout, 'this is %s a commented out arg')
+
+
+def test_alias_args_commented_nargs():
+    """Check that alias correctly counts args, excluding those commented out"""
+    am = _ip.alias_manager
+    alias_name = 'comargcount'
+    cmd = 'echo this is %%s a commented out arg and this is not %s'
+
+    am.define_alias(alias_name, cmd)
+    assert am.is_alias(alias_name)
+
+    thealias = am.get_alias(alias_name)
+    nt.assert_equal(thealias.nargs, 1)
