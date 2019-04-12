@@ -264,6 +264,25 @@ def common_aliases(_ip):
     return _user_aliases
 
 
+def windows_aliases():
+    """How did these get deleted!"""
+    _ip.user_aliases = [
+                ('copy', 'copy'),
+                ('ddir', 'dir /ad /on'),
+                ('echo', 'echo'),
+                ('ldir', 'dir /ad /on'),
+                ('ls', 'dir /on'),
+                ('mkdir', 'mkdir'),
+                ('ren', 'ren'),
+                ('rmdir', 'rmdir'),
+                (
+                    'tree',
+                    'tree /F /A %l',
+                ),
+            ]
+            return _ip.user_aliases
+
+
 if __name__ == "__main__":
     _ip = get_ipython()
 

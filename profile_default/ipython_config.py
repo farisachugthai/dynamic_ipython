@@ -1,18 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Configuration file for IPython.
+"""Configuration file for :mod:`IPython`.
 
 IPython Config
 ==============
+Heavily drawn from documentation at `ipython_docs`_.  In addition to source
+code found on GitHub.
 
-.. module:: ipython_config
-    :synopsis: Configuration file for IPython.
-
-Heavily drawn from documentation at `ipython_docs`_.
 
 .. _ipython_docs: `<https://ipython.readthedocs.io/en/stable/config/intro.html#python-config-files>`
-
-In addition to source code found on GitHub.
 
 
 Overview
@@ -25,7 +21,7 @@ clearly visible in :mod:`IPython` cells.
 
 get_config and :mod:`traitlets`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-From traitlets/config/application.py::
+From :mod:`traitlets/config/application`::
 
     def get_config():
         # Get the config object for the global Application instance, if there is one
@@ -37,10 +33,10 @@ From traitlets/config/application.py::
 
 Parameters
 ------------
-c : :class:`IPython.core.interactiveshell.InteractiveShell`
+c : |ip|
     `c` is a :class:`traitlets.config.Configurable()` object
     so everything you see in this like 600 line file is how to interact
-    with those kinds of files. It's easy and doesn't require reinitializing
+    with those kinds of files. It's easy and doesn't require re-initializing
     :mod:`IPython` on simple things like creating a new prompt after every
     command increments it.
 
@@ -56,8 +52,6 @@ Attributes (Non-method parameters)
 import logging
 import os
 import shutil
-
-from pygments.token import Comment
 
 # THIS IS THE MODULE! Its too exciting to able to execute this script
 # directly from within python and not get an error for a func call with no
@@ -178,8 +172,6 @@ c.Application.log_format = '%(asctime)s [%(name)s]%(highlevel)s %(message)s'
 
 # Set the log level by value or name.
 c.Application.log_level = 30
-
-# _ip.logger.logwrite(get_ipython_dir)
 
 # ----------------------------------------------------------------------------
 # BaseIPythonApplication(Application) configuration
@@ -446,12 +438,19 @@ c.TerminalInteractiveShell.extra_open_editor_shortcuts = True
 # pastie, borland, trac, native, fruity, bw, vim, vs, tango, rrt, xcode, igor,
 # paraiso-light, paraiso-dark, lovelace, algol, algol_nu, arduino, rainbow_dash
 
-c.TerminalInteractiveShell.highlighting_style = 'Gruvbox'
+# Try to import my Gruvbox class. Can be found at
+# https://github.com/farisachugthai/Gruvbox_IPython
+try:
+    from gruvbox.style import GruvboxStyle
+except (ModuleNotFoundError, ClassNotFound):
+    c.TerminalInteractiveShell.highlighting_style = 'Gruvbox'
+else:
+    c.TerminalInteractiveShell.highlighting_style = GruvboxStyle
 
 # Override highlighting format for specific tokens
 # Comments were genuinely impossible to read. Might need to override
 # punctuation next.
-# c.TerminalInteractiveShell.highlighting_style_overrides = { Comment: '#ffffff' }
+# c.TerminalInteractiveShell.highlighting_style_overrides = {Comment: '#ffffff'}
 
 # Enable mouse support in the prompt (Note: prevents selecting text with the
 # mouse)

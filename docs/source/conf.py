@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 """Configuration file for the Sphinx documentation builder.
-#
-# This file does only contain a selection of the most common options. For a
-# full list see the documentation:
-# http://www.sphinx-doc.org/en/master/config
 
-# -- Path setup --------------------------------------------------------------
+This file does only contain a selection of the most common options. For a
+full list see the documentation:
+http://www.sphinx-doc.org/en/master/config
 
-# If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
+-- Path setup --------------------------------------------------------------
+
+If extensions (or modules to document with autodoc) are in another directory,
+add these directories to sys.path here. If the directory is relative to the
+documentation root, use os.path.abspath to make it absolute, like shown here.
 """
 from datetime import datetime
 import logging
@@ -228,13 +228,14 @@ intersphinx_mapping = {
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = False
 
-
 # Viewcode
 
 viewcode_import = True
 
+
 def setup(app):
     """Add pyramid CSS to the docs."""
-    custom_css = os.path.abspath(os.path.join(CONF_PATH, '_static', '', 'pyramid.css_t'))
+    custom_css = os.path.abspath(
+        os.path.join(CONF_PATH, '_static', '', 'pyramid.css_t'))
     logger.debug(custom_css)
     app.add_stylesheet(custom_css)
