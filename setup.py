@@ -22,7 +22,6 @@ from shutil import rmtree
 from setuptools import setup, find_packages, Command
 
 from profile_default.__about__ import __version__
-
 if sys.version_info[:2] < (3, 6):
     raise RuntimeError("Python version >= 3.6 required.")
 

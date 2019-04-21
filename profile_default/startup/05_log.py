@@ -56,8 +56,7 @@ Type:        Logger
 String form: <IPython.core.logger.Logger object at 0x7a689ae160>
 File:        /data/data/com.termux/files/usr/lib/python3.7/site-packages/IPython/core/logger.py
 Source:
-
-.. code-block:: python
+::
 
     class Logger(object):
         #A Logfile class with different policies for file creation
@@ -248,11 +247,6 @@ Source:
             else:
                 print("Logging hadn't been started.")
             self.log_active = False
-
-        # For backwards compatibility, in case anyone was using this.
-        close_log = logstop
-
-
 """
 import logging
 import os
@@ -332,6 +326,8 @@ if __name__ == "__main__":
     _ip = get_ipython()
     log_dir = _ip.profile_dir.log_dir
     fname = 'log-' + _ip.profile + '-' + time.strftime('%Y-%m-%d') + ".py"
+    logmode = 'global'
+    log_output=True
     filename = path.join(log_dir, fname)
     notnew = path.exists(filename)
     # logger = _ip.logger(home_dir=get_home(),
@@ -341,6 +337,10 @@ if __name__ == "__main__":
     #                     timestamp=True)
     # not callable! huh.
     logger = _ip.logger
+    logger.logmode = logmode
+    logger.log_output = log_output
+    logger.timestamp = True
+    logger.logfname = filename
     try:
         logger.logstart()
     except RuntimeError:

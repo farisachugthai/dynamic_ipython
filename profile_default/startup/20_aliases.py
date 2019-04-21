@@ -55,10 +55,10 @@ _ip : |ip|
 Examples
 --------
 This code creates a handful of platform-specific functions where each returns
-`user_aliases`. Realizing that this is also used in the IPython implementation,
-the source code of the implementation has been provided for reference.
+`user_aliases`. Realizing that this is also used in the :mod:`IPython`
+implementation, the source code of the implementation has been provided for reference.
 
-.. ipython::
+.. ipython:: python
 
     class AliasManager(Configurable):
 
@@ -76,7 +76,8 @@ the source code of the implementation has been provided for reference.
 See Also
 --------
 Aliases file for IPython.
-:ref:`IPython.core.alias.Alias`
+
+:mod:`IPython.core.alias`
 
 """
 import logging
@@ -122,6 +123,9 @@ def linux_specific_aliases(_ip):
 
 
     Below is the source code for the function that is invoked here.
+
+    .. if the undefined self.shell kills things then just don't make this
+    .. an executable code block
 
     .. code-block:: python3
 
@@ -279,6 +283,9 @@ if __name__ == "__main__":
 
     if not isinstance(_ip, IPython.terminal.interactiveshell.InteractiveShell):
         raise Exception
+
+    # Pretty sure we could swap these calls out for `_ip.logger.logwrite`'s
+    logging.basicConfig(level=logging.WARNING)
 
     user_aliases = []
 
