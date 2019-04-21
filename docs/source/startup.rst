@@ -7,12 +7,12 @@ IPython Startup Scripts
 .. module:: IPython_README
 
 :Author: Faris Chugthai
-:Date: Feb 23, 2019
+:Date: Apr 15, 2019
 
 
 Configuration
 -------------
-As of today, the files present are as follows:
+As of Apr 15, 2019, the startup files present in :ref:`profile_default/startup` are as follows:
 
 `01_rehashx`_
 
@@ -45,6 +45,7 @@ of this, and it hugely eases utilizing IPython as a system shell.
 
 .. Development and Contributing
 .. This would be a good idea though.
+
 
 Convenience Functions
 -----------------------

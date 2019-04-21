@@ -8,8 +8,6 @@ IPython Aliases
 .. module:: aliases
     :synopsis: Create aliases for :mod:`IPython` to ease use as a system shell.
 
-.. |ip| .. replace:: :class:`IPython.core.interactiveshell.InteractiveShell`
-
 .. rubric:: Changelog - Mar 03, 2019
 
     Moved git aliases into new :func:`common_aliases()`
@@ -20,10 +18,6 @@ Overview
 This module utilizes ``_ip``, the global IPython InteractiveShell
 instance, and fills the ``user_ns`` with common Linux idioms.
 
-
-.. todo::
-
-    - Start implementing the replace directive for `_ip` and class....InteractiveShell
 
 Parameters
 ----------
@@ -52,7 +46,7 @@ interactively the syntax ``%alias alias_name cmd`` doesn't require quoting.
 
 Attributes
 ----------
-_ip : InteractiveShell
+_ip : |ip|
     A global object representing the active IPython session.
     Contains varying packages as well as the current global namespace.
     Doesn't need to be defined in advance during an interactive session.
@@ -94,6 +88,8 @@ import IPython
 from IPython import get_ipython
 from IPython.core.alias import AliasError
 
+logger = logging.getLogger(__name__)
+
 
 def _sys_check():
     """Check OS."""
@@ -117,11 +113,11 @@ def linux_specific_aliases(_ip):
     ---------------------
     - ``ssh-day``
     - ``extract``
-    - ``fzf`` in its many invocations.
+    - :command:`fzf` in its many invocations.
 
     Parameters
     ----------
-    _ip : :class:`IPython.core.interactiveshell.InteractiveShell()` object
+    _ip : |ip|
         The global instance of :mod:`IPython`.
 
 
@@ -130,20 +126,16 @@ def linux_specific_aliases(_ip):
     .. code-block:: python3
 
         def define_alias(self, name, cmd):
-            \"\"\"Define a new alias after validating it.
-
-            This will raise an :exc:`AliasError` if there are validation
-            problems.
-            \"\"\"
+            # Define a new alias after validating it.
+            # This will raise an :exc:`AliasError` if there are validation
+            # problems.
             caller = Alias(shell=self.shell, name=name, cmd=cmd)
             self.shell.magics_manager.register_function(caller, magic_kind='line',
-                                                        magic_name=name)
+            magic_name=name)
 
     Returns
     -------
-    _ip.alias_manager.user_aliases : list of ('alias', 'system command') tuples
-
-
+    _ip.user_aliases : list of ('alias', 'system command') tuples
 
     """
     _user_aliases = [
@@ -185,22 +177,19 @@ def linux_specific_aliases(_ip):
     return _user_aliases
 
 
-def common_aliases(_ip):
+def common_aliases(_ip=None):
     r"""Add aliases common to all OSes.
 
     Parameters
     ----------
-    ``_ip`` : :class:`IPython.core.interactiveshell.InteractiveShell()` object
+    _ip : |ip|
         The global instance of IPython.
 
 
     Returns
     -------
-    _ip.alias_manager.user_aliases : SingletonConfigurable
-        Subclass of the :class:`AliasManager()` ....I think. Generically
-        referring to it as a :mod:`traitlets` object but the interface is the
-        same as a tuple with 2 elements in the form (alias, system command).
-
+    _ip.user_aliases : list
+        User aliases.
 
     """
     _user_aliases = [
@@ -224,7 +213,8 @@ def common_aliases(_ip):
         ('gf', 'git fetch --all'),
         ('git', 'git %l'),
         ('git hist',
-         'git log --pretty=format:%h %ad | %s%d [%an] --graph --date=short'),
+         'git log --pretty="format:%h %ad | %d [%an]" --graph --date=short --branches --abbrev-commit --oneline '
+         ),
         ('git last', 'git log -1 HEAD %l'),
         ('git staged', 'git diff --cached %l'),
         ('git rel', 'git rev-parse --show-prefix'),
@@ -232,7 +222,7 @@ def common_aliases(_ip):
         ('git unstage', 'git reset HEAD'),
         ('git unstaged', 'git diff %l'),
         ('gl', 'git log %l'),
-        ('glo', 'git log --graph --decorate --abbrev --branches --all'),
+        ('glo', 'git log --graph --decorate --abbrev-commit --oneline --branches --all'),
         ('gls', 'git ls-tree'),
         ('gm', 'git merge --no-ff %l'),
         ('gmm', 'git merge master'),
@@ -264,32 +254,31 @@ def common_aliases(_ip):
     return _user_aliases
 
 
-def windows_aliases():
+def windows_aliases(_ip=None):
     """How did these get deleted!"""
     _ip.user_aliases = [
-                ('copy', 'copy'),
-                ('ddir', 'dir /ad /on'),
-                ('echo', 'echo'),
-                ('ldir', 'dir /ad /on'),
-                ('ls', 'dir /on'),
-                ('mkdir', 'mkdir'),
-                ('ren', 'ren'),
-                ('rmdir', 'rmdir'),
-                (
-                    'tree',
-                    'tree /F /A %l',
-                ),
-            ]
-            return _ip.user_aliases
+        ('copy', 'copy'),
+        ('ddir', 'dir /ad /on'),
+        ('echo', 'echo'),
+        ('ldir', 'dir /ad /on'),
+        ('ls', 'dir /on'),
+        ('mkdir', 'mkdir'),
+        ('mklink', 'mklink'),
+        ('ren', 'ren'),
+        ('rmdir', 'rmdir'),
+        (
+            'tree',
+            'tree /F /A %l',
+        ),
+    ]
+    return _ip.user_aliases
 
 
 if __name__ == "__main__":
     _ip = get_ipython()
 
-    if not isinstance( _ip, IPython.terminal.interactiveshell.InteractiveShell):
+    if not isinstance(_ip, IPython.terminal.interactiveshell.InteractiveShell):
         raise Exception
-
-    logging.getLogger(__name__)
 
     user_aliases = []
 

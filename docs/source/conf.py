@@ -17,7 +17,7 @@ import os
 from pathlib import Path
 import sys
 
-from __about__ import __version__
+from profile_default.__about__ import __version__
 
 ROOT = Path('../..')
 PD = ROOT.joinpath('profile_default')
@@ -232,6 +232,9 @@ todo_include_todos = False
 
 viewcode_import = True
 
+# Option for IPython
+
+ipython_warning_is_error = False
 
 def setup(app):
     """Add pyramid CSS to the docs."""

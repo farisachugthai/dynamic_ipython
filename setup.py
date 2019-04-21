@@ -7,16 +7,6 @@ repository.
 
 _`Kenneth Reitz setup.py template <https://raw.githubusercontent.com/kennethreitz/setup.py/master/setup.py>`
 
-Still needs a handful of things panned out.
-
-Need to read the following.::
-
-    import setuptools
-    from setuptools import Distribution
-    help(Distribution)
-
-Has some useful things and also
-
 .. see also::
 
     numpy.distutils.core
@@ -144,7 +134,7 @@ setup(
     install_requires=REQUIRED,
     extras_require=EXTRAS,
     test_suite='test',
-    setup_requires=['nose>=1.0'],
+    # setup_requires=['nose>=1.0'],
     include_package_data=True,
     package_data={
         # If any package contains *.txt or *.rst files, include them:
@@ -172,10 +162,10 @@ setup(
         'upload': UploadCommand,
     },
     # project home page, if any
-    # project_urls={
-    #     "Bug Tracker": "https://bugs.example.com/HelloWorld/",
-    #     "Documentation": "https://docs.example.com/HelloWorld/",
-    #     "Source Code": "https://code.example.com/HelloWorld/",
-    # }
+    project_urls={
+        #     "Bug Tracker": "https://bugs.example.com/HelloWorld/",
+        "Documentation": "https://docs.example.com/HelloWorld/",
+        "Source Code": "https://code.example.com/HelloWorld/",
+    }
     # could also include long_description, download_url, classifiers, etc.
 )

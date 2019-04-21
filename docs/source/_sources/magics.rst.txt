@@ -65,15 +65,15 @@ amount on it in .bashrc and the ipy config.
 Special special mention.
 :func:`exec` is not a magic but I actually thought it was!
 
-In [18]: exec(In[6])
+``In [18]: exec(In[6])``
 
-:func:`exec` is a fucking Python built-in that just takes strings, but it can
-operate on history syntax. Idk how to traverse sessions yet and idk if it can.
+:func:`exec` is a Python built-in that just takes strings, but it can
+operate on history syntax.
 
 ``exec ~2/4``
 
 successfully printed the 4th line from 2 sessions ago that I wanted,
-but it wouldn't redir to exec() correctly. Maybe
+but it wouldn't redir to :func:`exec()` correctly. Maybe
 
 ``var = %history ~2/4``
 
@@ -82,7 +82,6 @@ but it wouldn't redir to exec() correctly. Maybe
 would work better?
 
 And in the future PLEASE keep hist, file, and edit together and in that order!
-
 
 .. useful_reminder:
 
@@ -105,22 +104,12 @@ current cell.
 
 ``timeit()``
 
-So this isn't an amazing example but hey.
-It's me optimizing and saving a tiny bit of time because I thought in advance.
-I ran this is as a cell magic.
-
-Idk if the 3 q's actually compound but originally the last line was
-print(i) which was horrible.
-
+-qqq means be very quiet.
 -r 5 means repeat the whole cell block 5 times.
--o means create a variable that stays in the ipython namespace for further investigation.
-[wait what variable were you saving wth?]
-
-This shell makes EVERYTHING SO EASY MY GOD
 
 .. code-block:: ipython
 
-    In [20]: %%timeit -qqq -r 5 -o
+    In [20]: %%timeit -qqq -r 5
     ...:
     ...: env_var = sorted(os.environ.keys())
     ...: for i in env_var:
@@ -147,6 +136,7 @@ Speaking of ``%%timeit`` I just gave this a whirl to try and see.
 ``%%timeit``
 ``!nvim random-python-file.py +qall``
 
+Possibly a good way to profile nvim startup time.
 You could also add in the option `--startuptime anything.txt`.
 
 Jan 31, 2019:
@@ -154,27 +144,12 @@ Jan 31, 2019:
     Now we can choose between ``%nvim file.filetype`` and
     ``%edit file.filetype`` as well!
 
-If the file exists nvim is smart enough to append. Once you get a really
-solid command down, ya know proper level of verbosity, good directory location
-that's easy to see and not forget about, proper file extension because idk if
-that'd affect how we handle the file afterwards in terms of loaded plugins
-if we wanna do anything programmatic with it,
-then you could take that awesome command and make a macro for it!
-
-With an easy to use macro, i think we'd have a simple way of profiling nvim.
-
-tl;dr: Keep chipping away and we might have a macro or extension to profile
-nvim startup time on our hands.
-
-
 macro
 --------
-I found a link on `<https://gist.github.com>` that shows you how to make jupyter
+I found a link on `<https://gist.github.com>`_ that shows you how to make jupyter
 notebook cells wider. So I figured I'd do something like
 
 ``%macro widen_jupyter_cells``
-
-Also is that a macro or a magic?
 
 store
 ------
@@ -182,17 +157,9 @@ store
 ``%store 'widen_jupyter_cells'``
 
 As a heads up that's in your db. Figured I'd mention it as it was a
-great use of the magic system man! I'm learning more and more and I'm still
-not even done exploring IPython.
+great use of the magic system.
 
-This interpreter is legitimately fucking unbelievable! love it.
-Might glance at some rust tonight for no reason.
-Or some JS so i can hack the internet :P
-
-Wow that's a helpful description of the command lol you dick.
-
-Here's the official help. I think it'd be good because you could make a
-really simple alias...to add more aliases. Erhm how about you read the help.
+Here's the official help.
 
 In[1]: store?
 Out[1]:
@@ -203,11 +170,11 @@ It should be noted that if you change the value of a variable, you
 need to ``%store`` it again if you want to persist the new value.
 
 Note also that the variables will need to be pickleable; however, most basic
-python types can be safely %store'd.
+python types can be safely ``%store``'d.
 
-Also aliases can be %store'd across sessions.
+Also aliases can be ``%store``'d across sessions.
 
-Cool. So we could make a file in `$IPYTHON/profile_default/startup/` for all of
+Cool. So we could make a file in :envvar:`$IPYTHON`/profile_default/startup/ for all of
 our aliases right? Should probably separate them out of the main config file as
 i can foresee that list BLOWING up.
 
@@ -226,56 +193,81 @@ alias is for shell commands and macro for ipython commands?
 save
 -----
 
-In [43]: save?
-Docstring:
-Save a set of lines or a macro to a given filename.
+Help docs on save.
 
-Usage:
-%save [options] filename n1-n2 n3-n4 ... n5 .. n6 ...
+``In [43]: save?``:
+    Docstring:
+    Save a set of lines or a macro to a given filename.
 
-Options:
+    Usage:
+    %save [options] filename n1-n2 n3-n4 ... n5 .. n6 ...
 
--r: use 'raw' input.  By default, the 'processed' history is used,
-so that magics are loaded in their transformed version to valid
-Python.  If this option is given, the raw input as typed as the
-command line is used instead.
+    Options:
 
--f: force overwrite.  If file exists, %save will prompt for overwrite
-unless -f is given.
+    -r: use 'raw' input.  By default, the 'processed' history is used,
+    so that magics are loaded in their transformed version to valid
+    Python.  If this option is given, the raw input as typed as the
+    command line is used instead.
 
--a: append to the file instead of overwriting it.
+    -f: force overwrite.  If file exists, %save will prompt for overwrite
+    unless -f is given.
 
-This function uses the same syntax as %history for input ranges,
-then saves the lines to the filename you specify.
+    -a: append to the file instead of overwriting it.
 
-It adds a '.py' extension to the file if you don't do so yourself, and
-it asks for confirmation before overwriting existing files.
+    This function uses the same syntax as %history for input ranges,
+    then saves the lines to the filename you specify.
 
-If `-r` option is used, the default extension is `.ipy`.
-File:      ~/miniconda3/lib/python3.6/site-packages/IPython/core/magics/code.py
+    It adds a '.py' extension to the file if you don't do so yourself, and
+    it asks for confirmation before overwriting existing files.
+
+    If `-r` option is used, the default extension is `.ipy`.
+    File:      ~/miniconda3/lib/python3.6/site-packages/IPython/core/magics/code.py
 
 
 hist
 ------
+The syntax for accessing history is admittedly wonky
 
-the syntax for accessing history is admittedly wonky
 
+history call signature
+~~~~~~~~~~~~~~~~~~~~~~
+By default, all input history from the current session is displayed.
+Ranges of history can be indicated using the syntax:
+
+``4``
+    Line 4, current session
+``4-6``
+    Lines 4-6, current session
+``243/1-5``
+    Lines 1-5, session 243
+``~2/7``
+    Line 7, session 2 before current
+``~8/1-~6/5``
+    From the first line of 8 sessions ago, to the fifth line of 6
+    sessions ago.
+
+Also note multiple ranges can be specified by separating with spaces.
+
+Okay man I think we finally got this!
 
 viewing recently run commands
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-if you run _i or __i you see the last two commands inputs.
-if you run _ or __ you get to see the last 2 commands outputs.
-this works for only the last 3 commands though!
+if you run ``_i`` or ``__i`` you see the last two commands inputs.
+if you run ``_`` or ``__`` you get to see the last 2 commands outputs.
+This works for only the last 3 commands though!
 
 you can also give cell numbers so
 
-_i10 gives the input for cell 10 as a string
+``_i10`` gives the input for cell 10 as a string.
 
-exec _i
-the exec command means run the above input again.
+``exec _i``
 
-theres also a way to access things from previous sessions. which ill discuss
+The exec command means run the above input again.
+
+Alternatively, the ``%rerun`` magic could be used.
+
+There's also a way to access things from previous sessions. which ill discuss
 later.
 
 
@@ -296,9 +288,6 @@ That returns a dict with your entire output history. so you can go `_oh.keys()`
 
 But the cell I wanted wasn't there and wasn't saved. Huh. Print statements
 might not get saved in the history. Makes sense
-
-GOT IT [Jake VDP as always]
-"""""""""""""""""""""""""""
 
 In IPython run
 
@@ -327,9 +316,7 @@ whoo}
 
 Writing a file
 ~~~~~~~~~~~~~~
-{yes we are still in hist dude shits confusing!}
-
-``%history`` isn't good to use directly for creating a file.
+Pay attention when trying to write to a file.
 
 In [52]: written = %history -n 31-33
     ...: %edit written
@@ -346,35 +333,28 @@ The file where None was defined???
 In [64]: type(writen)
 Out[64]: NoneType
 
-Sunovabitch history prints to the console and doesn't save anything.
+But you should be able to write history to a file by using:
 
-file
------
+.. ipython::
 
-This is only a cell magic. At some point I thought it could be both
-a line and cell magic. Hm.
+    %history -f file_to_write.py -n 1-3
 
-[and just as a heads up ``%%writefile`` is down at the bottom]
-[i changed that because file is literally an alias for ``%writefile`` they should be
-in the same spot]
 
 writefile
-~~~~~~~~~~
+---------
 
 ``%%writefile -a filename``
 
 needs both percentage signs even with ``automagic`` since it's a cell magic
 the -a option is to append to a file
-i actually don't know if it can create a blank file
-{you can't!!}
-but don't use quotes on the file or else it won't work. idk why not
+But don't use quotes on the file or else it won't work. idk why not
 but i kept getting `FileDoesntExistError` until i got rid of the quotes
 
-%%file as a cell magic means write everything I'm about to do to a file.
+``%%file`` as a cell magic means write everything I'm about to do to a file.
 so if you got some crazy history filtering in there I'm sure you could go do
 something like
 
-%%file
+``%%file``
 hist -n 5-10
 {where -n means print output too}
 
@@ -387,12 +367,6 @@ _i31-33
 
 $ cat idk
 # _i31-33
-
-Well shit.
-
-So how tf do we save our history as a file?
-
-lemme show you.
 
 edit
 -----
@@ -420,7 +394,7 @@ Probably happens because it doesn't take filenames as arguments.
 To explain that let's look at the help pages.
 
 edit?
-~~~~~~~~~~~
+~~~~~
 
 This is an example of creating a simple function inside the editor and
 then modifying it. First, start up the editor::
@@ -446,36 +420,12 @@ And if we call foo() again we get the modified version::
   In [4]: foo()
   foo() has now been changed!
 
-
-tldr; input ipython objects as arguments. it also takes the same input for
+**tldr;** input ipython objects as arguments. it also takes the same input for
 cells as history does. but wait how does that work?
 
-history call signature
-~~~~~~~~~~~~~~~~~~~~~~
-
-
-By default, all input history from the current session is displayed.
-Ranges of history can be indicated using the syntax:
-
-``4``
-    Line 4, current session
-``4-6``
-    Lines 4-6, current session
-``243/1-5``
-    Lines 1-5, session 243
-``~2/7``
-    Line 7, session 2 before current
-``~8/1-~6/5``
-    From the first line of 8 sessions ago, to the fifth line of 6
-    sessions ago.
-
-Also note multiple ranges can be specified by separating with spaces.
-
-Okay man I think we finally got this!
-
-Fun fact about edit:
-~~~~~~~~~~~~~~~~~~~~
-If you run edit -x in the jupyter console it doesn't do anything! fun fact.
+Fun fact about edit
+~~~~~~~~~~~~~~~~~~~
+If you run ``edit -x`` in the jupyter console it doesn't do anything! fun fact.
 Because it launched a GUI app you don't have bi-directional communication
 
 run
@@ -493,7 +443,7 @@ If -t is given, an additional ``-N<N>`` option can be given, where <N>
 must be an integer indicating how many times you want the script to
 run.  The final timing report will include total and per run results.
 
-For example (testing the script uniq_stable.py):
+For example (testing the script uniq_stable.py)::
 
     In [1]: %run -t uniq_stable
 
@@ -510,25 +460,26 @@ For example (testing the script uniq_stable.py):
       System:        0.0 s,        0.0 s.
 
 -d
-  run your program under the control of :mod:`pdb`, the Python debugger.
-This allows you to execute your program step by step, watch variables,
-etc.  Internally, what IPython does is similar to calling
 
-      ``pdb.run('execfile("YOURFILENAME")')``
+run your program under the control of :mod:`pdb`, the Python debugger.
+This allows you to execute your program step by step, watch variables,
+etc.  Internally, what IPython does is similar to calling::
+
+      pdb.run('execfile("YOURFILENAME")')
 
 with a breakpoint set on line 1 of your file.  You can change the line
 number for this automatic breakpoint to be <N> by using the -bN option
-(where N must be an integer). For example
+(where N must be an integer). For example::
 
-      ``%run -d -b40 myscript``
+      %run -d -b40 myscript
 
 will set the first breakpoint at line 40 in myscript.py.  Note that
 the first breakpoint must be set on a line which actually does
 something (not a comment or docstring) for it to stop execution.
 
-Or you can specify a breakpoint in a different file
+Or you can specify a breakpoint in a different file::
 
-      ``%run -d -b myotherfile.py:20 myscript``
+      %run -d -b myotherfile.py:20 myscript
 
 When the :mod:`pdb` debugger starts, you will see a (Pdb) prompt.  You must
 first enter :kbd:`c` to start execution up to the first
@@ -585,33 +536,30 @@ will run the example module.
 Disable shell-like glob expansion of arguments.
 
 
-Quick Notes
-------------
-
 pycat [filename]
-~~~~~~~~~~~~~~~~~~
+----------------
 Works like cat but assumes a python source-code file
 Runs it through a color syntax highlighting pager
 
 Bookmark
-~~~~~~~~~~
+--------
 
-In [13]: bookmark?
-Docstring:
-Manage IPython's bookmark system.
+``In [13]: bookmark?``:
+    Docstring:
+    Manage IPython's bookmark system.
 
-%bookmark <name>       - set bookmark to current dir
-%bookmark <name> <dir> - set bookmark to <dir>
-%bookmark -l           - list all bookmarks
-%bookmark -d <name>    - remove bookmark
-%bookmark -r           - remove all bookmarks
+    %bookmark <name>       - set bookmark to current dir
+    %bookmark <name> <dir> - set bookmark to <dir>
+    %bookmark -l           - list all bookmarks
+    %bookmark -d <name>    - remove bookmark
+    %bookmark -r           - remove all bookmarks
 
-You can later on access a bookmarked folder with
+    You can later on access a bookmarked folder with::
 
-  %cd -b <name>
+        %cd -b <name>
 
-Or simply '%cd <name>' if there is no directory called <name> AND
-there is such a bookmark defined.
+    Or simply '%cd <name>' if there is no directory called <name> AND
+    there is such a bookmark defined.
 
-Your bookmarks persist through IPython sessions, but they are
-associated with each profile.
+    Your bookmarks persist through IPython sessions, but they are
+    associated with each profile.
