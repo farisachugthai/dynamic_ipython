@@ -27,16 +27,65 @@ at the time of reading.
     :undoc-members:
     :show-inheritance:
 
+:mod:`~profile_default.startup.01_rehashx`
+------------------------------------------
 
-.. todo::
+.. automodule:: profile_default.startup.01_rehashx
+    :members:
+    :show-inheritance:
 
-    01_rehashx.py
-    04_easy_import.py
-    05_log.py
-    06_help_helpers.py
-    20_aliases.py
-    29_gruvbox.py
-    30_gruvbox.py
-    32_vi_modes.py
-    42_pandas_init.py
-    50_sysexception.py
+
+:mod:`~profile_default.startup.04_easy_import`
+----------------------------------------------
+
+.. automodule:: profile_default.startup.04_easy_import
+    :members:
+    :show-inheritance:
+
+
+:mod:`~profile_default.startup.05_log`
+--------------------------------------
+
+.. automodule:: profile_default.startup.05_log
+    :members:
+    :show-inheritance:
+
+
+:mod:`~profile_default.startup.06_help_helpers`
+-----------------------------------------------
+
+.. automodule:: profile_default.startup.06_help_helpers
+    :members:
+    :show-inheritance:
+
+
+:mod:`~profile_default.startup.20_aliases`
+------------------------------------------
+
+.. automodule:: profile_default.startup.20_aliases
+    :members:
+    :show-inheritance:
+
+
+:mod:`~profile_default.startup.32_vi_modes`
+-------------------------------------------
+
+.. automodule:: profile_default.startup.32_vi_modes
+    :members:
+    :show-inheritance:
+
+
+:mod:`~profile_default.startup.42_pandas_init`
+----------------------------------------------
+
+.. automodule:: profile_default.startup.42_pandas_init
+    :members:
+    :show-inheritance:
+
+
+:mod:`~profile_default.startup.50_sysexception`
+-----------------------------------------------
+
+.. automodule:: profile_default.startup.50_sysexception
+    :members:
+    :show-inheritance:

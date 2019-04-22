@@ -1,7 +1,4 @@
-# Configuration file for ipython-kernel.
-from traitlets.config import get_config
-
-c = get_config()  # noqa
+"""Configuration file for ipython-kernel.
 # -----------------------------------------------------------------------------
 # ConnectionFileMixin(LoggingConfigurable) configuration
 # -----------------------------------------------------------------------------
@@ -110,9 +107,12 @@ c.InteractiveShellApp.reraise_ipython_extension_failures = True
 # -----------------------------------------------------------------------------
 # Application(SingletonConfigurable) configuration
 # -----------------------------------------------------------------------------
-
+"""
 # This is an application.
 
+from traitlets.config import get_config
+
+c = get_config()  # noqa
 # The date format used by logging formatters for %(asctime)s
 c.Application.log_datefmt = '%Y-%m-%d %H:%M:%S'
 

@@ -14,7 +14,7 @@ Configuration
 -------------
 As of Apr 15, 2019, the startup files present in :ref:`profile_default/startup` are as follows:
 
-`01_rehashx`_
+`01_rehashx.py`_
 
 `04_easy_import.py`_
 
@@ -54,7 +54,7 @@ and :func:`IPython.Application.instance()`. As a result, each script can easily
 implement the following as a check to ensure that the global IPython instance
 is running.
 
-.. code-block:: python
+.. ipython:: python
 
    if __name__ == "__main__":
       from IPython import Application.initialized
@@ -70,7 +70,7 @@ which at the time of writing was released 3 days ago. If you don't have this
 version of the module, you can alternatively run
 
 
-.. code-block:: python
+.. ipython:: python
 
    from IPython.core.application import Application
    Application.initialized()
@@ -85,41 +85,38 @@ version of the module, you can alternatively run
    Type:      method
 
 
-Here's the help from IPython.application.instance.:
+Here's the help from :attr:`IPython.application.instance`.
+
+.. ipython::
 
    In [115]: IPython.Application.instance?
    Signature: IPython.Application.instance(\*args, \*\*kwargs)
    Docstring:
    Returns a global instance of this class.
-
    This method create a new instance if none have previously been created
    and returns a previously created instance is one already exists.
-
    The arguments and keyword arguments passed to this method are passed
    on to the :meth:`__init__` method of the class upon instantiation.
 
 
 Examples
 --------
-:
+Create a singleton class using instance, and retrieve it::
 
-   Create a singleton class using instance, and retrieve it::
+   >>> from traitlets.config.configurable import SingletonConfigurable
+   >>> class Foo(SingletonConfigurable): pass
+   >>> foo = Foo.instance()
+   >>> foo == Foo.instance()
+   True
 
-       >>> from traitlets.config.configurable import SingletonConfigurable
-       >>> class Foo(SingletonConfigurable): pass
-       >>> foo = Foo.instance()
-       >>> foo == Foo.instance()
-       True
+Create a subclass that is retrieved using the base class instance::
 
-   Create a subclass that is retrieved using the base class instance::
+   >>> class Bar(SingletonConfigurable): pass
+   >>> class Bam(Bar): pass
+   >>> bam = Bam.instance()
+   >>> bam == Bar.instance()
+   True
 
-       >>> class Bar(SingletonConfigurable): pass
-       >>> class Bam(Bar): pass
-       >>> bam = Bam.instance()
-       >>> bam == Bar.instance()
-       True
-
-File:      ~/miniconda3/lib/python3.7/site-packages/traitlets/config/configurable.py
 Type:      method
 
 

@@ -5,15 +5,38 @@
 Effectively adds :kbd:`j` :kbd:`k` to the <Esc> sequence that takes Vim from
 insert mode to normal mode.
 
-Also displays how to integrate prompt_toolkit and IPython together well.
+Also displays how to integrate :mod:`prompt_toolkit` and :mod:`IPython` together well.
 
 :URL: https://ipython.readthedocs.io/en/stable/config/details.html#keyboard-shortcuts
 
+.. todo:: Add one in for <C-M-j> to go to Emacs mode?
+
 """
+import logging
+from os.path import realpath, join
+
 from IPython import get_ipython
+from IPython.paths import get_ipython_dir
 from prompt_toolkit.enums import DEFAULT_BUFFER
 from prompt_toolkit.filters import HasFocus, ViInsertMode
+from prompt_toolkit.key_binding.defaults import load_key_bindings
 from prompt_toolkit.key_binding.vi_state import InputMode
+
+logging.getLogger(name=__name__)
+
+
+def _setup_logging(level):
+    logger = logging.getLogger(name=__name__)
+    logger.setLevel(level)
+
+    ipy_dir = get_ipython_dir()
+    logdir = join(realpath(ipy_dir), 'log')
+    log_file = join(logdir, 'keybinding.log')
+    hdlr = logging.FileHandler(log_file)
+    logger.addHandler(hdlr)
+    formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+    hdlr.setFormatter(formatter)
+    return logger
 
 
 def switch_to_navigation_mode(event):
@@ -26,8 +49,23 @@ def switch_to_navigation_mode(event):
     vi_state.input_mode = InputMode.NAVIGATION
 
 
+def check_defaults():
+    """What are the default keybindings we have here?
+
+    Err I suppose I should say what does Prompt Toolkit export by default
+    because I'm not 100% sure that ip imports everything or doesn't modify
+    anything along the way.
+
+    Probably gonna need to noqa something since the code isn't accessed as is.
+    """
+    registry = load_key_bindings()
+    print(registry.key_bindings)
+
+
 if __name__ == "__main__":
     _ip = get_ipython()
+
+    logger = _setup_logging()
 
     if getattr(_ip, 'pt_app', None):
         registry = _ip.pt_app.key_bindings
