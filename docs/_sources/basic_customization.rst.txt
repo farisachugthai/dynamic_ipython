@@ -1,7 +1,3 @@
-==========
-README.rst
-==========
-
 Configuring Prompt Toolkit in IPython
 =====================================
 Here's the original implementation for |ip|.pt_app.

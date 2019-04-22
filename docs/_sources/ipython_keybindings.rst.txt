@@ -7,7 +7,6 @@ Keybindings in IPython
 .. module:: ipython_keybindings
     :synopsis: Module for managing keybindings in IPython.
 
-Double check that termux has the right version of :mod:`prompt_toolkit` because
 I'm seeing different modules to import. Or there's a bug because there were
 literally no modules with docstrings according to :mod:`IPython`.
 
@@ -16,11 +15,6 @@ February 24, 2019:
     After the fact I realized it was both an error in the docstring AND
     I wasn't seeing docstrings either.
 
-Currently using 1.0.15 - 2018-09-07
-
-Oct 30, 2018:
-
-    IPython 7.1.1 ships with prompt_toolkit2!
 
 Run in shell
 -------------
@@ -151,7 +145,7 @@ This right here is the mod we need to keep our eyes on.
 
 
 Continue on in this fashion for as long as you need IPython barely comes
-with any keybindings. I'm gonna drop 1 that I thought was interesting
+with any keybindings. I'm going to drop 1 that I thought was interesting
 though.
 *Also because i didn't know or remember these were keybindings.*
 
@@ -208,7 +202,11 @@ From the pt docs:
 
 Shortcuts from IPython
 =======================
->>> %pycat shortcuts.py
+
+.. ipython:: python
+
+   >>> %pycat shortcuts.py
+
 Module to define and register Terminal IPython shortcuts with
 :mod:`prompt_toolkit`
 
