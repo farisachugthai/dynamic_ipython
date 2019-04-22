@@ -5,8 +5,7 @@
 Utilize IPython macros to search through the site-packages directory for
 membership of a package.
 
-
-Assumes
+Assume
 -------
 Unix OS
 
@@ -23,12 +22,6 @@ the home dir.
     >>>     os.environ.get('%userprofile%')
 
 
-.. todo::
-
-    - Might wanna accept sys.argv in case we don't wanna exclusively use ~/virtualenvs
-    - Accept an argument for log level...and also initialize a logger.
-    - Change the format here it shouldn't use macros. Those are better suited for interactive use and reloading things from history.
-
 
 References
 ----------
@@ -44,16 +37,15 @@ Around lines 2300
     #-------------------------------------------------------------------------
 
     def define_macro(self, name, themacro):
-        \"\"\"Define a new macro
+        # Define a new macro
 
-        Parameters
-        ----------
-        name : str
-            The name of the macro.
-        themacro : str or Macro
-            The action to do upon invoking the macro.  If a string, a new
-            Macro object is created by passing the string to it.
-        \"\"\"
+        # Parameters
+        # ----------
+        # name : str
+            # The name of the macro.
+        # themacro : str or Macro
+            # The action to do upon invoking the macro.  If a string, a new
+            # Macro object is created by passing the string to it.
 
         from IPython.core import macro
 
@@ -78,7 +70,6 @@ def _parse_arguments():
     parser.add_argument(
         "site-packages",
         default=None,
-        action='store_true',
         help="Paths to py venvs.")
 
     parser.add_argument(
@@ -103,6 +94,7 @@ def all_site_pkgs():
     pkgs = Macro("""
     from glob import glob
     from os.path import expanduser, join as pjoin
+    import os
 
     home = expanduser('~')
 

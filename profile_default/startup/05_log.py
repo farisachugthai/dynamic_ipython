@@ -327,7 +327,7 @@ if __name__ == "__main__":
     log_dir = _ip.profile_dir.log_dir
     fname = 'log-' + _ip.profile + '-' + time.strftime('%Y-%m-%d') + ".py"
     logmode = 'global'
-    log_output=True
+    log_output = True
     filename = path.join(log_dir, fname)
     notnew = path.exists(filename)
     # logger = _ip.logger(home_dir=get_home(),

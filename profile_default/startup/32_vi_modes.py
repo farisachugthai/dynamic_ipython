@@ -15,7 +15,6 @@ Also displays how to integrate :mod:`prompt_toolkit` and :mod:`IPython` together
 import logging
 from os.path import realpath, join
 
-from IPython import get_ipython
 from IPython.paths import get_ipython_dir
 from prompt_toolkit.enums import DEFAULT_BUFFER
 from prompt_toolkit.filters import HasFocus, ViInsertMode
@@ -25,12 +24,11 @@ from prompt_toolkit.key_binding.vi_state import InputMode
 logging.getLogger(name=__name__)
 
 
-def _setup_logging(level):
+def _setup_logging(level, shell=None):
     logger = logging.getLogger(name=__name__)
     logger.setLevel(level)
 
-    ipy_dir = get_ipython_dir()
-    logdir = join(realpath(ipy_dir), 'log')
+    logdir = shell.profile_dir.log_dir
     log_file = join(logdir, 'keybinding.log')
     hdlr = logging.FileHandler(log_file)
     logger.addHandler(hdlr)
@@ -65,7 +63,8 @@ def check_defaults():
 if __name__ == "__main__":
     _ip = get_ipython()
 
-    logger = _setup_logging()
+    level = logging.WARNING
+    logger = _setup_logging(level, shell=_ip)
 
     if getattr(_ip, 'pt_app', None):
         registry = _ip.pt_app.key_bindings

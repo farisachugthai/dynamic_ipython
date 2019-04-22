@@ -1,3 +1,6 @@
+"""
+NOQA F401
+"""
 import os
 import sys
 
