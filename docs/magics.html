@@ -1,0 +1,616 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>IPython Magics &#8212; Dynamic IPython 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="/data/data/com.termux/files/home/projects/dynamic_ipython/docs/source/_static/pyramid.css_t" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Defining custom magics" href="custom_magics.html" />
+    <link rel="prev" title="IPython_InteractiveShell" href="ipython_interactive_shell.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="custom_magics.html" title="Defining custom magics"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ipython_interactive_shell.html" title="IPython_InteractiveShell"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-ipython_magics">
+<span id="ipython-magics"></span><h1>IPython Magics<a class="headerlink" href="#module-ipython_magics" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="table-of-contentn">
+<p class="topic-title first">Table of Contentn</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#questions-you-had-in-the-past" id="id2">Questions you had in the past:</a></p></li>
+<li><p><a class="reference internal" href="#line" id="id3">Line:</a></p></li>
+<li><p><a class="reference internal" href="#cell" id="id4">Cell:</a></p></li>
+<li><p><a class="reference internal" href="#the-most-useful-reminder-i-have" id="id5">The most useful reminder I have</a></p></li>
+<li><p><a class="reference internal" href="#macro" id="id6">macro</a></p></li>
+<li><p><a class="reference internal" href="#store" id="id7">store</a></p></li>
+<li><p><a class="reference internal" href="#save" id="id8">save</a></p></li>
+<li><p><a class="reference internal" href="#hist" id="id9">hist</a></p>
+<ul>
+<li><p><a class="reference internal" href="#history-call-signature" id="id10">history call signature</a></p></li>
+<li><p><a class="reference internal" href="#viewing-recently-run-commands" id="id11">viewing recently run commands</a></p></li>
+<li><p><a class="reference internal" href="#output" id="id12">output</a></p></li>
+<li><p><a class="reference internal" href="#writing-a-file" id="id13">Writing a file</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#writefile" id="id14">writefile</a></p></li>
+<li><p><a class="reference internal" href="#edit" id="id15">edit</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id1" id="id16">edit?</a></p></li>
+<li><p><a class="reference internal" href="#fun-fact-about-edit" id="id17">Fun fact about edit</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#run" id="id18">run</a></p>
+<ul>
+<li><p><a class="reference internal" href="#momentary-detour" id="id19">Momentary Detour</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#run-again" id="id20">%run again</a></p></li>
+<li><p><a class="reference internal" href="#pycat-filename" id="id21">pycat [filename]</a></p></li>
+<li><p><a class="reference internal" href="#bookmark" id="id22">Bookmark</a></p></li>
+</ul>
+</div>
+<hr class="docutils" />
+<div class="section" id="questions-you-had-in-the-past">
+<span id="questions"></span><h2><a class="toc-backref" href="#id2">Questions you had in the past:</a><a class="headerlink" href="#questions-you-had-in-the-past" title="Permalink to this headline">¶</a></h2>
+<p><strong>Please review regularly! Let’s see if we can figure these out.</strong></p>
+<p>1. Why doesn’t <code class="docutils literal notranslate"><span class="pre">%matplotlib</span> <span class="pre">inline</span></code> work on my laptop? The GUI has to be enabled?
+But even when i run <code class="docutils literal notranslate"><span class="pre">%GUI</span></code> [which should disable that] it doesn’t work.</p>
+<p>2. Are you allowed to use 2 cell magics in one cell?
+What if I wanted to do</p>
+<p><code class="docutils literal notranslate"><span class="pre">%%timeit</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">%%bash</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">.</span> <span class="pre">~/.bashrc</span></code></p>
+<p>Is that legal?
+What if I want to write the output to a file? Can I prepend the <code class="docutils literal notranslate"><span class="pre">%%file</span></code> to
+the top? How deep can this rabbit hole go?</p>
+<p>Mar 30, 2019:</p>
+<p><em>I don’t think so because it crashed IPython while trying to build docs.</em></p>
+<p>Which magics are defined here?</p>
+</div>
+<div class="section" id="line">
+<span id="defined-magics"></span><h2><a class="toc-backref" href="#id3">Line:</a><a class="headerlink" href="#line" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">hist[ory]</span></code>, <code class="docutils literal notranslate"><span class="pre">pycat</span></code> (briefly), <code class="docutils literal notranslate"><span class="pre">recall</span></code>, <code class="docutils literal notranslate"><span class="pre">ed[it]</span></code>, <code class="docutils literal notranslate"><span class="pre">bookmark</span></code>,
+<code class="docutils literal notranslate"><span class="pre">run</span></code>, <code class="docutils literal notranslate"><span class="pre">store</span></code>, <code class="docutils literal notranslate"><span class="pre">save</span></code></p>
+</div>
+<div class="section" id="cell">
+<h2><a class="toc-backref" href="#id4">Cell:</a><a class="headerlink" href="#cell" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">[write]file</span></code>, <code class="docutils literal notranslate"><span class="pre">timeit</span></code> [also a line magic just not documented], <code class="docutils literal notranslate"><span class="pre">macro</span></code></p>
+<p>Which magics do you think deserve a special mention even if we haven’t
+documented them here?</p>
+<p>1. <code class="docutils literal notranslate"><span class="pre">Alias</span></code> probably should get some attention here now that i have an egregious
+amount on it in .bashrc and the ipy config.
+2. <code class="docutils literal notranslate"><span class="pre">cpaste</span></code> is neat because you can feed it lines that still have the &gt;&gt;&gt; or [In] and [Out] prepended.
+3. <code class="docutils literal notranslate"><span class="pre">paste</span> <span class="pre">directly</span></code> pulls from the clipboard without intervention AND it strips a leading &gt; so you can pull it from diff files!!</p>
+<p>Special special mention.
+<a class="reference external" href="https://docs.python.org/3/library/functions.html#exec" title="(in Python v3.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">exec()</span></code></a> is not a magic but I actually thought it was!</p>
+<p><code class="docutils literal notranslate"><span class="pre">In</span> <span class="pre">[18]:</span> <span class="pre">exec(In[6])</span></code></p>
+<p><a class="reference external" href="https://docs.python.org/3/library/functions.html#exec" title="(in Python v3.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">exec()</span></code></a> is a Python built-in that just takes strings, but it can
+operate on history syntax.</p>
+<p><code class="docutils literal notranslate"><span class="pre">exec</span> <span class="pre">~2/4</span></code></p>
+<p>successfully printed the 4th line from 2 sessions ago that I wanted,
+but it wouldn’t redir to <a class="reference external" href="https://docs.python.org/3/library/functions.html#exec" title="(in Python v3.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">exec()</span></code></a> correctly. Maybe</p>
+<p><code class="docutils literal notranslate"><span class="pre">var</span> <span class="pre">=</span> <span class="pre">%history</span> <span class="pre">~2/4</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">exec(var)</span></code></p>
+<p>would work better?</p>
+<p>And in the future PLEASE keep hist, file, and edit together and in that order!</p>
+</div>
+<div class="section" id="the-most-useful-reminder-i-have">
+<h2><a class="toc-backref" href="#id5">The most useful reminder I have</a><a class="headerlink" href="#the-most-useful-reminder-i-have" title="Permalink to this headline">¶</a></h2>
+<p><strong>tldr; use the following to view previously run commands last session.</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">hist</span> <span class="pre">~1/</span></code></p>
+<p>Okay so this might not be my most useful reminder but it’s certainly the command
+I forget the most often.</p>
+<p>Remember that <code class="docutils literal notranslate"><span class="pre">hist</span> <span class="pre">~1</span></code> OUTPUTS NOTHING! DON’T FORGET THE <kbd class="kbd docutils literal notranslate">/</kbd>!</p>
+<p>Use the following to to reload every command you ran last session into your
+current cell.</p>
+<p><code class="docutils literal notranslate"><span class="pre">recall</span> <span class="pre">~1/</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">timeit()</span></code></p>
+<p>-qqq means be very quiet.
+-r 5 means repeat the whole cell block 5 times.</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [20]: </span><span class="o">%%time</span>it -qqq -r 5
+<span class="go">...:</span>
+<span class="go">...: env_var = sorted(os.environ.keys())</span>
+<span class="go">...: for i in env_var:</span>
+<span class="go">...:     match = re.match(&#39;CONDA*&#39;, i)</span>
+<span class="go">...:     if match:</span>
+<span class="go">...:         i</span>
+<span class="go">...:</span>
+<span class="go">...:</span>
+<span class="gh">Out[20]: </span><span class="go">&lt;TimeitResult : 185 µs ± 890 ns per loop (mean ± std. dev. of 5 runs, 10000 loops each)&gt;</span>
+
+<span class="gp">In [21]: </span><span class="o">%%time</span>it -qqq -r 5 -o
+<span class="go">...:</span>
+<span class="go">...: for i in os.environ.keys():</span>
+<span class="go">...:     match = re.match(&#39;CONDA*&#39;, i)</span>
+<span class="go">...:     if match:</span>
+<span class="go">...:         i</span>
+<span class="go">...:</span>
+<span class="gh">Out[21]: </span><span class="go">&lt;TimeitResult : 207 µs ± 2.31 µs per loop (mean ± std. dev. of 5 runs, 1000 loops each)&gt;</span>
+</pre></div>
+</div>
+<p>2018-09-07</p>
+<p>Speaking of <code class="docutils literal notranslate"><span class="pre">%%timeit</span></code> I just gave this a whirl to try and see.</p>
+<p><code class="docutils literal notranslate"><span class="pre">%%timeit</span></code>
+<code class="docutils literal notranslate"><span class="pre">!nvim</span> <span class="pre">random-python-file.py</span> <span class="pre">+qall</span></code></p>
+<p>Possibly a good way to profile nvim startup time.
+You could also add in the option <code class="xref py py-obj docutils literal notranslate"><span class="pre">--startuptime</span> <span class="pre">anything.txt</span></code>.</p>
+<p>Jan 31, 2019:</p>
+<blockquote>
+<div><p>Now we can choose between <code class="docutils literal notranslate"><span class="pre">%nvim</span> <span class="pre">file.filetype</span></code> and
+<code class="docutils literal notranslate"><span class="pre">%edit</span> <span class="pre">file.filetype</span></code> as well!</p>
+</div></blockquote>
+</div>
+<div class="section" id="macro">
+<h2><a class="toc-backref" href="#id6">macro</a><a class="headerlink" href="#macro" title="Permalink to this headline">¶</a></h2>
+<p>I found a link on <a class="reference external" href="https://gist.github.com">https://gist.github.com</a> that shows you how to make jupyter
+notebook cells wider. So I figured I’d do something like</p>
+<p><code class="docutils literal notranslate"><span class="pre">%macro</span> <span class="pre">widen_jupyter_cells</span></code></p>
+</div>
+<div class="section" id="store">
+<h2><a class="toc-backref" href="#id7">store</a><a class="headerlink" href="#store" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">%store</span> <span class="pre">'widen_jupyter_cells'</span></code></p>
+<p>As a heads up that’s in your db. Figured I’d mention it as it was a
+great use of the magic system.</p>
+<p>Here’s the official help.</p>
+<p>In[1]: store?
+Out[1]:
+* <code class="docutils literal notranslate"><span class="pre">%store</span> <span class="pre">foo</span> <span class="pre">&gt;a.txt</span></code>  - Store value of foo to new file a.txt
+* <code class="docutils literal notranslate"><span class="pre">%store</span> <span class="pre">foo</span> <span class="pre">&gt;&gt;a.txt</span></code> - Append value of foo to file a.txt</p>
+<p>It should be noted that if you change the value of a variable, you
+need to <code class="docutils literal notranslate"><span class="pre">%store</span></code> it again if you want to persist the new value.</p>
+<p>Note also that the variables will need to be pickleable; however, most basic
+python types can be safely <code class="docutils literal notranslate"><span class="pre">%store</span></code>’d.</p>
+<p>Also aliases can be <code class="docutils literal notranslate"><span class="pre">%store</span></code>’d across sessions.</p>
+<p>Cool. So we could make a file in <span class="target" id="index-0"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">$IPYTHON</span></code>/profile_default/startup/ for all of
+our aliases right? Should probably separate them out of the main config file as
+i can foresee that list BLOWING up.</p>
+<p>Then we’d have a command like</p>
+<p><code class="docutils literal notranslate"><span class="pre">%store</span> <span class="pre">new_alias</span> <span class="pre">&gt;&gt;</span> <span class="pre">$IPYTHON/profile_default/startup/40_alias.py</span></code></p>
+<p>Then we’d make a persistent macro like so</p>
+<p><code class="docutils literal notranslate"><span class="pre">%macro</span> <span class="pre">add_alias</span> <span class="pre">'store...'</span></code></p>
+<p>At least I think. The difference between macro and alias is that
+alias is for shell commands and macro for ipython commands?</p>
+</div>
+<div class="section" id="save">
+<h2><a class="toc-backref" href="#id8">save</a><a class="headerlink" href="#save" title="Permalink to this headline">¶</a></h2>
+<p>Help docs on save.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">In</span> <span class="pre">[43]:</span> <span class="pre">save?</span></code>:</dt><dd><p>Docstring:
+Save a set of lines or a macro to a given filename.</p>
+<p>Usage:
+%save [options] filename n1-n2 n3-n4 … n5 .. n6 …</p>
+<p>Options:</p>
+<p>-r: use ‘raw’ input.  By default, the ‘processed’ history is used,
+so that magics are loaded in their transformed version to valid
+Python.  If this option is given, the raw input as typed as the
+command line is used instead.</p>
+<p>-f: force overwrite.  If file exists, %save will prompt for overwrite
+unless -f is given.</p>
+<p>-a: append to the file instead of overwriting it.</p>
+<p>This function uses the same syntax as %history for input ranges,
+then saves the lines to the filename you specify.</p>
+<p>It adds a ‘.py’ extension to the file if you don’t do so yourself, and
+it asks for confirmation before overwriting existing files.</p>
+<p>If <code class="xref py py-obj docutils literal notranslate"><span class="pre">-r</span></code> option is used, the default extension is <code class="xref py py-obj docutils literal notranslate"><span class="pre">ipy</span></code>.
+File:      ~/miniconda3/lib/python3.6/site-packages/IPython/core/magics/code.py</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="hist">
+<h2><a class="toc-backref" href="#id9">hist</a><a class="headerlink" href="#hist" title="Permalink to this headline">¶</a></h2>
+<p>The syntax for accessing history is admittedly wonky</p>
+<div class="section" id="history-call-signature">
+<h3><a class="toc-backref" href="#id10">history call signature</a><a class="headerlink" href="#history-call-signature" title="Permalink to this headline">¶</a></h3>
+<p>By default, all input history from the current session is displayed.
+Ranges of history can be indicated using the syntax:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">4</span></code></dt><dd><p>Line 4, current session</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">4-6</span></code></dt><dd><p>Lines 4-6, current session</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">243/1-5</span></code></dt><dd><p>Lines 1-5, session 243</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">~2/7</span></code></dt><dd><p>Line 7, session 2 before current</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">~8/1-~6/5</span></code></dt><dd><p>From the first line of 8 sessions ago, to the fifth line of 6
+sessions ago.</p>
+</dd>
+</dl>
+<p>Also note multiple ranges can be specified by separating with spaces.</p>
+<p>Okay man I think we finally got this!</p>
+</div>
+<div class="section" id="viewing-recently-run-commands">
+<h3><a class="toc-backref" href="#id11">viewing recently run commands</a><a class="headerlink" href="#viewing-recently-run-commands" title="Permalink to this headline">¶</a></h3>
+<p>if you run <code class="docutils literal notranslate"><span class="pre">_i</span></code> or <code class="docutils literal notranslate"><span class="pre">__i</span></code> you see the last two commands inputs.
+if you run <code class="docutils literal notranslate"><span class="pre">_</span></code> or <code class="docutils literal notranslate"><span class="pre">__</span></code> you get to see the last 2 commands outputs.
+This works for only the last 3 commands though!</p>
+<p>you can also give cell numbers so</p>
+<p><code class="docutils literal notranslate"><span class="pre">_i10</span></code> gives the input for cell 10 as a string.</p>
+<p><code class="docutils literal notranslate"><span class="pre">exec</span> <span class="pre">_i</span></code></p>
+<p>The exec command means run the above input again.</p>
+<p>Alternatively, the <code class="docutils literal notranslate"><span class="pre">%rerun</span></code> magic could be used.</p>
+<p>There’s also a way to access things from previous sessions. which ill discuss
+later.</p>
+</div>
+<div class="section" id="output">
+<h3><a class="toc-backref" href="#id12">output</a><a class="headerlink" href="#output" title="Permalink to this headline">¶</a></h3>
+<p>Oddly harder than just input.
+You can easily access relative previous input with <code class="xref py py-obj docutils literal notranslate"><span class="pre">_i</span></code>,  <code class="xref py py-obj docutils literal notranslate"><span class="pre">_ii</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">_iii_</span></code></p>
+<p>You can also call specific cell numbers with <code class="xref py py-obj docutils literal notranslate"><span class="pre">_i[cell]</span></code></p>
+<p>But you can’t call cell numbers for output. <code class="xref py py-obj docutils literal notranslate"><span class="pre">_</span></code> , <code class="xref py py-obj docutils literal notranslate"><span class="pre">__</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">___</span></code> access
+previous output.</p>
+<p>The only way I can find output by cell is <code class="xref py py-obj docutils literal notranslate"><span class="pre">_oh</span></code></p>
+<p>That returns a dict with your entire output history. so you can go <code class="xref py py-obj docutils literal notranslate"><span class="pre">_oh.keys()</span></code></p>
+<p>But the cell I wanted wasn’t there and wasn’t saved. Huh. Print statements
+might not get saved in the history. Makes sense</p>
+<p>In IPython run</p>
+<p><code class="docutils literal notranslate"><span class="pre">print(Out[1])</span></code></p>
+<p>And you have access to output now. Easy.</p>
+<p>07/08/18</p>
+<p>I guess I needed to step away for a little.</p>
+<p># hist_list =[]
+# for i in range(2):
+#    hist_list.append(In[i])
+#    try:
+#        hist_list.append(Out[i])
+#    except KeyError:
+#        pass</p>
+<p>Wrote that and got what I assume was the best I could. Then <kbd class="kbd docutils literal notranslate">VolUp-W</kbd>
+to pick the previous line, <kbd class="kbd docutils literal notranslate">Esc</kbd> to go to Vim normal mode, and (‘v’)
+to load the cell in an editor. Whoo that was awesome!</p>
+<p>{Also termux now has arrows in the extra keys section of the keyboard so
+whoo}</p>
+</div>
+<div class="section" id="writing-a-file">
+<h3><a class="toc-backref" href="#id13">Writing a file</a><a class="headerlink" href="#writing-a-file" title="Permalink to this headline">¶</a></h3>
+<p>Pay attention when trying to write to a file.</p>
+<dl>
+<dt>In [52]: written = %history -n 31-33</dt><dd><blockquote>
+<div><p>…: %edit written
+…:
+…:</p>
+</div></blockquote>
+<p>31: type(n)
+32: type(len(slm))
+33: type((len(slm))/n)
+/data/data/com.termux/files/usr/lib/python3.6/site-packages/IPython/core/magics/code.py:491: UserWarning: The file where <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a> was defined cannot be read or found.
+‘cannot be read or found.’ % data)</p>
+</dd>
+</dl>
+<p>The file where None was defined???</p>
+<p>In [64]: type(writen)
+Out[64]: NoneType</p>
+<p>But you should be able to write history to a file by using:</p>
+</div>
+</div>
+<div class="section" id="writefile">
+<h2><a class="toc-backref" href="#id14">writefile</a><a class="headerlink" href="#writefile" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">%%writefile</span> <span class="pre">-a</span> <span class="pre">filename</span></code></p>
+<p>needs both percentage signs even with <code class="docutils literal notranslate"><span class="pre">automagic</span></code> since it’s a cell magic
+the -a option is to append to a file
+But don’t use quotes on the file or else it won’t work. idk why not
+but i kept getting <code class="xref py py-obj docutils literal notranslate"><span class="pre">FileDoesntExistError</span></code> until i got rid of the quotes</p>
+<p><code class="docutils literal notranslate"><span class="pre">%%file</span></code> as a cell magic means write everything I’m about to do to a file.
+so if you got some crazy history filtering in there I’m sure you could go do
+something like</p>
+<p><code class="docutils literal notranslate"><span class="pre">%%file</span></code>
+hist -n 5-10
+{where -n means print output too}</p>
+<p>2018-08-26</p>
+<p>Came back to this section. That is not what it means. Let’s try.</p>
+<p>%%file idk
+_i31-33</p>
+<p>$ cat idk
+# _i31-33</p>
+</div>
+<div class="section" id="edit">
+<h2><a class="toc-backref" href="#id15">edit</a><a class="headerlink" href="#edit" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">%edit</span></code> can take cell #’s as input like hist does, and creates a file to
+work with like <code class="docutils literal notranslate"><span class="pre">%%file</span></code>.</p>
+<p>It always create temporary files unlike %%file so its REALLY important
+to use <code class="docutils literal notranslate"><span class="pre">:saveas</span> <span class="pre">/path/youll/remember</span></code> in nvim!</p>
+<p>Outside of that little gotcha it can take functions you defined in your
+<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.4.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> interactive namespace and you can fuck with them, modify
+what you want then exit and execute until you get a final product that
+deserves being saved!!</p>
+<p>And if you do this over and over you’d end up saving like 10 files so its better
+it defaults to saving in /tmp/</p>
+<p>Interesting behavior i just noticed
+<code class="docutils literal notranslate"><span class="pre">%edit</span> <span class="pre">[file_that_doesn't_exist]</span></code>
+this command fails so apparently you HAVE to run it on an existing file.</p>
+<p>Probably happens because it doesn’t take filenames as arguments.</p>
+<p>To explain that let’s look at the help pages.</p>
+<div class="section" id="id1">
+<h3><a class="toc-backref" href="#id16">edit?</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>This is an example of creating a simple function inside the editor and
+then modifying it. First, start up the editor:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="n">edit</span>
+<span class="n">Editing</span><span class="o">...</span> <span class="n">done</span><span class="o">.</span> <span class="n">Executing</span> <span class="n">edited</span> <span class="n">code</span><span class="o">...</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="s1">&#39;def foo():</span><span class="se">\n</span><span class="s1">    print &quot;foo() was defined in an editing</span>
+<span class="n">session</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&#39;</span>
+</pre></div>
+</div>
+<p>We can then call the function foo():</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">foo</span><span class="p">()</span>
+<span class="n">foo</span><span class="p">()</span> <span class="n">was</span> <span class="n">defined</span> <span class="ow">in</span> <span class="n">an</span> <span class="n">editing</span> <span class="n">session</span>
+</pre></div>
+</div>
+<p>Now we edit foo.  IPython automatically loads the editor with the
+(temporary) file where foo() was previously defined:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">edit</span> <span class="n">foo</span>
+<span class="n">Editing</span><span class="o">...</span> <span class="n">done</span><span class="o">.</span> <span class="n">Executing</span> <span class="n">edited</span> <span class="n">code</span><span class="o">...</span>
+</pre></div>
+</div>
+<p>And if we call foo() again we get the modified version:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>In [4]: foo()
+foo() has now been changed!
+</pre></div>
+</div>
+<p><strong>tldr;</strong> input ipython objects as arguments. it also takes the same input for
+cells as history does. but wait how does that work?</p>
+</div>
+<div class="section" id="fun-fact-about-edit">
+<h3><a class="toc-backref" href="#id17">Fun fact about edit</a><a class="headerlink" href="#fun-fact-about-edit" title="Permalink to this headline">¶</a></h3>
+<p>If you run <code class="docutils literal notranslate"><span class="pre">edit</span> <span class="pre">-x</span></code> in the jupyter console it doesn’t do anything! fun fact.
+Because it launched a GUI app you don’t have bi-directional communication</p>
+</div>
+</div>
+<div class="section" id="run">
+<h2><a class="toc-backref" href="#id18">run</a><a class="headerlink" href="#run" title="Permalink to this headline">¶</a></h2>
+<dl class="option-list">
+<dt><kbd><span class="option">-t</span></kbd></dt>
+<dd><p>print timing information at the end of the run.  IPython will give
+you an estimated CPU time consumption for your script, which under
+Unix uses the resource module to avoid the wraparound problems of
+time.clock().  Under Unix, an estimate of time spent on system tasks
+is also given (for Windows platforms this is reported as 0.0).</p>
+</dd>
+</dl>
+<p>If -t is given, an additional <code class="docutils literal notranslate"><span class="pre">-N&lt;N&gt;</span></code> option can be given, where &lt;N&gt;
+must be an integer indicating how many times you want the script to
+run.  The final timing report will include total and per run results.</p>
+<p>For example (testing the script uniq_stable.py):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="o">%</span><span class="n">run</span> <span class="o">-</span><span class="n">t</span> <span class="n">uniq_stable</span>
+
+<span class="n">IPython</span> <span class="n">CPU</span> <span class="n">timings</span> <span class="p">(</span><span class="n">estimated</span><span class="p">):</span>
+  <span class="n">User</span>  <span class="p">:</span>    <span class="mf">0.19597</span> <span class="n">s</span><span class="o">.</span>
+  <span class="n">System</span><span class="p">:</span>        <span class="mf">0.0</span> <span class="n">s</span><span class="o">.</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">run</span> <span class="o">-</span><span class="n">t</span> <span class="o">-</span><span class="n">N5</span> <span class="n">uniq_stable</span>
+
+<span class="n">IPython</span> <span class="n">CPU</span> <span class="n">timings</span> <span class="p">(</span><span class="n">estimated</span><span class="p">):</span>
+<span class="n">Total</span> <span class="n">runs</span> <span class="n">performed</span><span class="p">:</span> <span class="mi">5</span>
+  <span class="n">Times</span> <span class="p">:</span>      <span class="n">Total</span>       <span class="n">Per</span> <span class="n">run</span>
+  <span class="n">User</span>  <span class="p">:</span>   <span class="mf">0.910862</span> <span class="n">s</span><span class="p">,</span>  <span class="mf">0.1821724</span> <span class="n">s</span><span class="o">.</span>
+  <span class="n">System</span><span class="p">:</span>        <span class="mf">0.0</span> <span class="n">s</span><span class="p">,</span>        <span class="mf">0.0</span> <span class="n">s</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>-d</p>
+<p>run your program under the control of <a class="reference external" href="https://docs.python.org/3/library/pdb.html#module-pdb" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pdb</span></code></a>, the Python debugger.
+This allows you to execute your program step by step, watch variables,
+etc.  Internally, what IPython does is similar to calling:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pdb</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;execfile(&quot;YOURFILENAME&quot;)&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>with a breakpoint set on line 1 of your file.  You can change the line
+number for this automatic breakpoint to be &lt;N&gt; by using the -bN option
+(where N must be an integer). For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">run</span> <span class="o">-</span><span class="n">d</span> <span class="o">-</span><span class="n">b40</span> <span class="n">myscript</span>
+</pre></div>
+</div>
+<p>will set the first breakpoint at line 40 in myscript.py.  Note that
+the first breakpoint must be set on a line which actually does
+something (not a comment or docstring) for it to stop execution.</p>
+<p>Or you can specify a breakpoint in a different file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">run</span> <span class="o">-</span><span class="n">d</span> <span class="o">-</span><span class="n">b</span> <span class="n">myotherfile</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">20</span> <span class="n">myscript</span>
+</pre></div>
+</div>
+<p>When the <a class="reference external" href="https://docs.python.org/3/library/pdb.html#module-pdb" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pdb</span></code></a> debugger starts, you will see a (Pdb) prompt.  You must
+first enter <kbd class="kbd docutils literal notranslate">c</kbd> to start execution up to the first
+breakpoint.</p>
+<p>Entering ‘help’ gives information about the use of the debugger.  You
+can easily see pdb’s full documentation with <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">pdb;pdb.help()</span></code>
+at a prompt.</p>
+<div class="section" id="momentary-detour">
+<h3><a class="toc-backref" href="#id19">Momentary Detour</a><a class="headerlink" href="#momentary-detour" title="Permalink to this headline">¶</a></h3>
+<p>So this magic should create a similar output to <code class="docutils literal notranslate"><span class="pre">%debug</span></code> but for some reason
+whenever I invoke debug, it doesn’t show any relevant code when using <kbd class="kbd docutils literal notranslate">l</kbd>,
+<kbd class="kbd docutils literal notranslate">ll</kbd>, <kbd class="kbd docutils literal notranslate">list</kbd> or anything.</p>
+<p>Unsure what I’m doing wrong, but running <code class="docutils literal notranslate"><span class="pre">%run</span> <span class="pre">-d</span> <span class="pre">-b</span> <span class="pre">[line_number]</span></code> works
+perfectly enough that honestly I might not care for the time being.</p>
+</div>
+</div>
+<div class="section" id="run-again">
+<h2><a class="toc-backref" href="#id20">%run again</a><a class="headerlink" href="#run-again" title="Permalink to this headline">¶</a></h2>
+<p>-p
+run program under the control of the Python profiler module (which
+prints a detailed report of execution times, function calls, etc).</p>
+<p>You can pass other options after -p which affect the behavior of the
+profiler itself. See the docs for <code class="docutils literal notranslate"><span class="pre">%prun</span></code> for details.</p>
+<p>In this mode, the program’s variables do NOT propagate back to the
+IPython interactive namespace (because they remain in the namespace
+where the profiler executes them).</p>
+<p>Internally this triggers a call to <code class="docutils literal notranslate"><span class="pre">%prun</span></code>, see its documentation for
+details on the options available specifically for profiling.</p>
+<p>There is one special usage for which the text above doesn’t apply:
+if the filename ends with .ipy[nb], the file is run as ipython script,
+just as if the commands were written on IPython prompt.</p>
+<p>-m
+specify module name to load instead of script path. Similar to
+the <kbd class="kbd docutils literal notranslate">-m</kbd> option for the python interpreter. Use this option
+last if you want to combine with other %run options. Unlike the
+python interpreter only source modules are allowed no .pyc or .pyo files.
+For example:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">%run</span> <span class="pre">-m</span> <span class="pre">example</span></code></p>
+</div></blockquote>
+<p>will run the example module.</p>
+<p>-G</p>
+<p>Disable shell-like glob expansion of arguments.</p>
+</div>
+<div class="section" id="pycat-filename">
+<h2><a class="toc-backref" href="#id21">pycat [filename]</a><a class="headerlink" href="#pycat-filename" title="Permalink to this headline">¶</a></h2>
+<p>Works like cat but assumes a python source-code file
+Runs it through a color syntax highlighting pager</p>
+</div>
+<div class="section" id="bookmark">
+<h2><a class="toc-backref" href="#id22">Bookmark</a><a class="headerlink" href="#bookmark" title="Permalink to this headline">¶</a></h2>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">In</span> <span class="pre">[13]:</span> <span class="pre">bookmark?</span></code>:</dt><dd><p>Docstring:
+Manage IPython’s bookmark system.</p>
+<p>%bookmark &lt;name&gt;       - set bookmark to current dir
+%bookmark &lt;name&gt; &lt;dir&gt; - set bookmark to &lt;dir&gt;
+%bookmark -l           - list all bookmarks
+%bookmark -d &lt;name&gt;    - remove bookmark
+%bookmark -r           - remove all bookmarks</p>
+<p>You can later on access a bookmarked folder with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">cd</span> <span class="o">-</span><span class="n">b</span> <span class="o">&lt;</span><span class="n">name</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>Or simply ‘%cd &lt;name&gt;’ if there is no directory called &lt;name&gt; AND
+there is such a bookmark defined.</p>
+<p>Your bookmarks persist through IPython sessions, but they are
+associated with each profile.</p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Dynamic IPython</a></h1>
+
+
+
+
+
+
+
+
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="ipython_interactive_shell.html" title="previous chapter">IPython_InteractiveShell</a></li>
+      <li>Next: <a href="custom_magics.html" title="next chapter">Defining custom magics</a></li>
+  </ul></li>
+</ul>
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">IPython Magics</a><ul>
+<li><a class="reference internal" href="#questions-you-had-in-the-past">Questions you had in the past:</a></li>
+<li><a class="reference internal" href="#line">Line:</a></li>
+<li><a class="reference internal" href="#cell">Cell:</a></li>
+<li><a class="reference internal" href="#the-most-useful-reminder-i-have">The most useful reminder I have</a></li>
+<li><a class="reference internal" href="#macro">macro</a></li>
+<li><a class="reference internal" href="#store">store</a></li>
+<li><a class="reference internal" href="#save">save</a></li>
+<li><a class="reference internal" href="#hist">hist</a><ul>
+<li><a class="reference internal" href="#history-call-signature">history call signature</a></li>
+<li><a class="reference internal" href="#viewing-recently-run-commands">viewing recently run commands</a></li>
+<li><a class="reference internal" href="#output">output</a></li>
+<li><a class="reference internal" href="#writing-a-file">Writing a file</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#writefile">writefile</a></li>
+<li><a class="reference internal" href="#edit">edit</a><ul>
+<li><a class="reference internal" href="#id1">edit?</a></li>
+<li><a class="reference internal" href="#fun-fact-about-edit">Fun fact about edit</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#run">run</a><ul>
+<li><a class="reference internal" href="#momentary-detour">Momentary Detour</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#run-again">%run again</a></li>
+<li><a class="reference internal" href="#pycat-filename">pycat [filename]</a></li>
+<li><a class="reference internal" href="#bookmark">Bookmark</a></li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/magics.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="custom_magics.html" title="Defining custom magics"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ipython_interactive_shell.html" title="IPython_InteractiveShell"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright (C) 2018-2019 Faris Chugthai.
+    </div>
+  </body>
+</html>

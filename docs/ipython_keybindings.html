@@ -1,0 +1,413 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Keybindings in IPython &#8212; Dynamic IPython 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="/data/data/com.termux/files/home/projects/dynamic_ipython/docs/source/_static/pyramid.css_t" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Keyboard Shortcut Customization" href="custom_keyboard_shortcuts.html" />
+    <link rel="prev" title="Configuring Prompt Toolkit in IPython" href="basic_customization.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="custom_keyboard_shortcuts.html" title="Keyboard Shortcut Customization"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="basic_customization.html" title="Configuring Prompt Toolkit in IPython"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-ipython_keybindings">
+<span id="keybindings-in-ipython"></span><span id="ipython-keybindings"></span><h1>Keybindings in IPython<a class="headerlink" href="#module-ipython_keybindings" title="Permalink to this headline">¶</a></h1>
+<p>I’m seeing different modules to import. Or there’s a bug because there were
+literally no modules with docstrings according to <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.4.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a>.</p>
+<p>February 24, 2019:</p>
+<blockquote>
+<div><p>After the fact I realized it was both an error in the docstring AND
+I wasn’t seeing docstrings either.</p>
+</div></blockquote>
+<div class="section" id="run-in-shell">
+<h2>Run in shell<a class="headerlink" href="#run-in-shell" title="Permalink to this headline">¶</a></h2>
+<p>This section is going to go over setting keybindings interactively in the shell.</p>
+<p>Here’s a little function I found today that might help guide this along
+in a more streamlined manner</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">IPython</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">IPython</span> <span class="k">import</span> <span class="n">get_ipython</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">IPython</span><span class="o">.</span><span class="n">terminal</span><span class="o">.</span><span class="n">interactiveshell</span><span class="o">.</span><span class="n">create_ipython_shortcuts</span><span class="p">(</span><span class="n">_ip</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>So alternatively you can do</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">IPython</span> <span class="k">import</span> <span class="n">get_ipython</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">IPython.terminal.interactiveshell</span> <span class="k">import</span> <span class="n">create_ipython_shortcuts</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">create_ipython_shortcuts</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># This will give you the following methods</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">dir</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
+<span class="go">    [&#39;_KeyBindings__version&#39;,</span>
+<span class="go">    &#39;__abstractmethods__&#39;,</span>
+<span class="go">    &#39;__class__&#39;,</span>
+<span class="go">    &#39;__delattr__&#39;,</span>
+<span class="go">    &#39;__dict__&#39;,</span>
+<span class="go">    &#39;__dir__&#39;,</span>
+<span class="go">    &#39;__doc__&#39;,</span>
+<span class="go">    &#39;__eq__&#39;,</span>
+<span class="go">    &#39;__format__&#39;,</span>
+<span class="go">    &#39;__ge__&#39;,</span>
+<span class="go">    &#39;__getattribute__&#39;,</span>
+<span class="go">    &#39;__gt__&#39;,</span>
+<span class="go">    &#39;__hash__&#39;,</span>
+<span class="go">    &#39;__init__&#39;,</span>
+<span class="go">    &#39;__init_subclass__&#39;,</span>
+<span class="go">    &#39;__le__&#39;,</span>
+<span class="go">    &#39;__lt__&#39;,</span>
+<span class="go">    &#39;__module__&#39;,</span>
+<span class="go">    &#39;__ne__&#39;,</span>
+<span class="go">    &#39;__new__&#39;,</span>
+<span class="go">    &#39;__reduce__&#39;,</span>
+<span class="go">    &#39;__reduce_ex__&#39;,</span>
+<span class="go">    &#39;__repr__&#39;,</span>
+<span class="go">    &#39;__setattr__&#39;,</span>
+<span class="go">    &#39;__sizeof__&#39;,</span>
+<span class="go">    &#39;__str__&#39;,</span>
+<span class="go">    &#39;__subclasshook__&#39;,</span>
+<span class="go">    &#39;__weakref__&#39;,</span>
+<span class="go">    &#39;_abc_impl&#39;,</span>
+<span class="go">    &#39;_clear_cache&#39;,</span>
+<span class="go">    &#39;_get_bindings_for_keys_cache&#39;,</span>
+<span class="go">    &#39;_get_bindings_starting_with_keys_cache&#39;</span>
+<span class="go">    &#39;_version&#39;,</span>
+<span class="go">    &#39;add&#39;,</span>
+<span class="go">    &#39;add_binding&#39;,</span>
+<span class="go">    &#39;bindings&#39;,</span>
+<span class="go">    &#39;get_bindings_for_keys&#39;,</span>
+<span class="go">    &#39;get_bindings_starting_with_keys&#39;,</span>
+<span class="go">    &#39;remove&#39;,</span>
+<span class="go">    &#39;remove_binding&#39;]</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">c.bindings</span></code> has some useful info.
+No perceptible difference between <code class="xref py py-meth docutils literal notranslate"><span class="pre">add()</span></code> and <code class="xref py py-meth docutils literal notranslate"><span class="pre">add_binding()</span></code>.</p>
+<p>Couldn’t get <code class="docutils literal notranslate"><span class="pre">get_bindings_for_keys()</span></code> to work unfortunately.</p>
+<ul class="simple">
+<li><p>Ran with one arg with a known key <kbd class="kbd docutils literal notranslate">Control-p</kbd> and got an empty response <code class="docutils literal notranslate"><span class="pre">([])</span></code>.</p></li>
+<li><p>Ran with <code class="docutils literal notranslate"><span class="pre">args``=:kbd:`Control-p`,</span> <span class="pre">``filter=HasFocus(DEFAULTBUFFER))</span></code> and got an error.</p></li>
+<li><p>Ran with 2 keys and got an err.</p></li>
+</ul>
+<p>Help on function <code class="docutils literal notranslate"><span class="pre">create_ipython_shortcuts()</span></code> in <code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.terminal.interactiveshell()</span></code></p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">IPython</span><span class="o">.</span><span class="n">terminal</span><span class="o">.</span><span class="n">interactiveshell</span><span class="o">.</span><span class="n">create_ipython_shortcuts</span> <span class="o">=</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">create_ipython_shortcuts</span><span class="p">(</span><span class="n">shell</span><span class="p">)</span>
+<span class="go"># Set up the prompt_toolkit keyboard shortcuts for IPython</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="original-file-implementation">
+<h2>Original File Implementation<a class="headerlink" href="#original-file-implementation" title="Permalink to this headline">¶</a></h2>
+<p>Found the file where this is originally implemented YAS.
+Or I guess I should say the actual keybindings are listed.</p>
+<p>Go to the IPython root dir. This could be named something to the effect of
+<a class="reference external" href="~/miniconda3/lib/python3.7/site-packages/IPython/">~/miniconda3/lib/python3.7/site-packages/IPython/</a></p>
+<p><code class="docutils literal notranslate"><span class="pre">%cd</span> <span class="pre">terminal</span></code>
+<code class="docutils literal notranslate"><span class="pre">%pycat</span> <span class="pre">shortcuts</span></code></p>
+<p>Up at the top you have the keybindings <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.4.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> ships with listed
+for ya!</p>
+</div>
+<div class="section" id="useful-modules">
+<h2>Useful Modules<a class="headerlink" href="#useful-modules" title="Permalink to this headline">¶</a></h2>
+<p>This right here is the mod we need to keep our eyes on.</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.registry</span> <span class="k">import</span> <span class="n">Registry</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.defaults</span> <span class="k">import</span> <span class="n">load_key_bindings</span>
+<span class="kn">from</span> <span class="nn">IPython</span> <span class="k">import</span> <span class="n">get_ipython</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.enums</span> <span class="k">import</span> <span class="n">DEFAULT_BUFFER</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.keys</span> <span class="k">import</span> <span class="n">Keys</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.filters</span> <span class="k">import</span> <span class="n">HasFocus</span><span class="p">,</span> <span class="n">HasSelection</span><span class="p">,</span> <span class="n">ViInsertMode</span>
+<span class="n">ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+<span class="n">insert_mode</span> <span class="o">=</span> <span class="n">ViInsertMode</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">insert_unexpected</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;From the IPython examples on keybinding configuration.&quot;&quot;&quot;</span>
+    <span class="n">buf</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span>
+    <span class="n">buf</span><span class="o">.</span><span class="n">insert_text</span><span class="p">(</span><span class="s1">&#39;The Spanish Inquisition&#39;</span><span class="p">)</span>
+    <span class="c1"># Register the shortcut if IPython is using prompt_toolkit</span>
+    <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ip</span><span class="p">,</span> <span class="s1">&#39;pt_cli&#39;</span><span class="p">):</span>
+        <span class="n">registry</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">pt_cli</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">key_bindings_registry</span>
+
+        <span class="n">registry</span><span class="o">.</span><span class="n">add_binding</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlN</span><span class="p">,</span>
+                 <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span>
+                              <span class="o">&amp;</span> <span class="o">~</span><span class="n">HasSelection</span><span class="p">()</span>
+                         <span class="o">&amp;</span> <span class="n">insert_mode</span><span class="p">))(</span><span class="n">insert_unexpected</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Continue on in this fashion for as long as you need IPython barely comes
+with any keybindings. I’m going to drop 1 that I thought was interesting
+though.
+<em>Also because i didn’t know or remember these were keybindings.</em></p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ...</span>
+
+        <span class="c1"># Ctrl+J == Enter, seemingly</span>
+        <span class="n">registry</span><span class="o">.</span><span class="n">add_binding</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlJ</span><span class="p">,</span>
+                             <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span>
+                             <span class="o">&amp;</span> <span class="o">~</span><span class="n">HasSelection</span><span class="p">()</span>
+                             <span class="o">&amp;</span> <span class="n">insert_mode</span>
+                             <span class="p">))</span>
+                             <span class="p">(</span><span class="n">return_handler</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="pure-prompt-toolkit-way-of-rebinding-keys">
+<h3>Pure Prompt Toolkit Way of Rebinding Keys<a class="headerlink" href="#pure-prompt-toolkit-way-of-rebinding-keys" title="Permalink to this headline">¶</a></h3>
+<p>From the pt docs:</p>
+<blockquote>
+<div><p>It is also possible to combine multiple registries. We do this in the default
+key bindings. There are some registries that contain Emacs bindings, while
+others contain the Vi bindings. They are merged together using a <code class="docutils literal notranslate"><span class="pre">MergedRegistry</span></code>.</p>
+<p>We also have a <code class="docutils literal notranslate"><span class="pre">ConditionalRegistry</span></code> object that can enable/disable a group
+of key bindings at once.</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">r</span> <span class="o">=</span> <span class="n">Registry</span><span class="p">()</span>
+
+<span class="nd">@r</span><span class="o">.</span><span class="n">add_binding</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlX</span><span class="p">,</span> <span class="n">Keys</span><span class="o">.</span><span class="n">ControlC</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">INSERT</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">handler</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A quick snippet to give you a flavor of the syntax.</span>
+
+<span class="sd">    Gotta figure out what&#39;s up with that filter param over there.</span>
+<span class="sd">    02/24/2019: The ``filter`` parameter is optional it just helps specify things.</span>
+
+<span class="sd">    Luckily I think that keybindings actually don&#39;t need function bodies</span>
+<span class="sd">    The decorator&#39;s doing all the heavy lifting for ya! I think...</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Handle ControlX-ControlC key sequence.</span>
+    <span class="k">pass</span>
+
+<span class="k">def</span> <span class="nf">check_defaults</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;What are the default keybindings we have here?</span>
+
+<span class="sd">    Err I suppose I should say what does Prompt Toolkit export by default</span>
+<span class="sd">    because I&#39;m not 100% sure that ip imports everything or doesn&#39;t modify</span>
+<span class="sd">    anything along the way.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">registry</span> <span class="o">=</span> <span class="n">load_key_bindings</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">registry</span><span class="o">.</span><span class="n">key_bindings</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<div class="section" id="shortcuts-from-ipython">
+<h4>Shortcuts from IPython<a class="headerlink" href="#shortcuts-from-ipython" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="o">&gt;&gt;&gt;</span> <span class="o">%</span><span class="k">pycat</span> shortcuts.py
+<span class="go">Error: no such file, variable, URL, history range or macro</span>
+</pre></div>
+</div>
+<p>Module to define and register Terminal IPython shortcuts with
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">prompt_toolkit</span></code></p>
+<p>Copyright (c) IPython Development Team.
+Distributed under the terms of the Modified BSD License.</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">signal</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Callable</span>
+
+<span class="kn">from</span> <span class="nn">prompt_toolkit.enums</span> <span class="k">import</span> <span class="n">DEFAULT_BUFFER</span><span class="p">,</span> <span class="n">SEARCH_BUFFER</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.filters</span> <span class="k">import</span> <span class="p">(</span><span class="n">HasFocus</span><span class="p">,</span> <span class="n">HasSelection</span><span class="p">,</span> <span class="n">Condition</span><span class="p">,</span>
+    <span class="n">ViInsertMode</span><span class="p">,</span> <span class="n">EmacsInsertMode</span><span class="p">,</span> <span class="n">HasCompletions</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.filters.cli</span> <span class="k">import</span> <span class="n">ViMode</span><span class="p">,</span> <span class="n">ViNavigationMode</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.keys</span> <span class="k">import</span> <span class="n">Keys</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.completion</span> <span class="k">import</span> <span class="n">display_completions_like_readline</span>
+
+<span class="kn">from</span> <span class="nn">IPython.utils.decorators</span> <span class="k">import</span> <span class="n">undoc</span>
+
+<span class="nd">@undoc</span>
+<span class="nd">@Condition</span>
+<span class="k">def</span> <span class="nf">cursor_in_leading_ws</span><span class="p">(</span><span class="n">cli</span><span class="p">):</span>
+    <span class="n">before</span> <span class="o">=</span> <span class="n">cli</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">buffer</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">current_line_before_cursor</span>
+    <span class="k">return</span> <span class="p">(</span><span class="ow">not</span> <span class="n">before</span><span class="p">)</span> <span class="ow">or</span> <span class="n">before</span><span class="o">.</span><span class="n">isspace</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">register_ipython_shortcuts</span><span class="p">(</span><span class="n">registry</span><span class="p">,</span> <span class="n">shell</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Set up the prompt_toolkit keyboard shortcuts for IPython&quot;&quot;&quot;</span>
+    <span class="n">insert_mode</span> <span class="o">=</span> <span class="n">ViInsertMode</span><span class="p">()</span> <span class="o">|</span> <span class="n">EmacsInsertMode</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">shell</span><span class="p">,</span> <span class="s1">&#39;handle_return&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">return_handler</span> <span class="o">=</span> <span class="n">shell</span><span class="o">.</span><span class="n">handle_return</span><span class="p">(</span><span class="n">shell</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">return_handler</span> <span class="o">=</span> <span class="n">newline_or_execute_outer</span><span class="p">(</span><span class="n">shell</span><span class="p">)</span>
+
+    <span class="c1"># Ctrl+J == Enter, seemingly</span>
+    <span class="n">registry</span><span class="o">.</span><span class="n">add_binding</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlJ</span><span class="p">,</span>
+                         <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span>
+                                 <span class="o">&amp;</span> <span class="o">~</span><span class="n">HasSelection</span><span class="p">()</span>
+                                 <span class="o">&amp;</span> <span class="n">insert_mode</span>
+                        <span class="p">))(</span><span class="n">return_handler</span><span class="p">)</span>
+
+    <span class="n">registry</span><span class="o">.</span><span class="n">add_binding</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlBackslash</span><span class="p">)(</span><span class="n">force_exit</span><span class="p">)</span>
+
+    <span class="n">registry</span><span class="o">.</span><span class="n">add_binding</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlP</span><span class="p">,</span>
+                         <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">ViInsertMode</span><span class="p">()</span> <span class="o">&amp;</span> <span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span>
+                        <span class="p">))(</span><span class="n">previous_history_or_previous_completion</span><span class="p">)</span>
+
+    <span class="n">registry</span><span class="o">.</span><span class="n">add_binding</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlN</span><span class="p">,</span>
+                         <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">ViInsertMode</span><span class="p">()</span> <span class="o">&amp;</span> <span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span>
+                        <span class="p">))(</span><span class="n">next_history_or_next_completion</span><span class="p">)</span>
+
+    <span class="n">registry</span><span class="o">.</span><span class="n">add_binding</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlG</span><span class="p">,</span>
+                         <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">HasCompletions</span><span class="p">()</span>
+                        <span class="p">))(</span><span class="n">dismiss_completion</span><span class="p">)</span>
+
+    <span class="n">registry</span><span class="o">.</span><span class="n">add_binding</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlC</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span>
+                        <span class="p">)(</span><span class="n">reset_buffer</span><span class="p">)</span>
+
+    <span class="n">registry</span><span class="o">.</span><span class="n">add_binding</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlC</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">SEARCH_BUFFER</span><span class="p">)</span>
+                        <span class="p">)(</span><span class="n">reset_search_buffer</span><span class="p">)</span>
+
+    <span class="n">supports_suspend</span> <span class="o">=</span> <span class="n">Condition</span><span class="p">(</span><span class="k">lambda</span> <span class="n">cli</span><span class="p">:</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="s1">&#39;SIGTSTP&#39;</span><span class="p">))</span>
+    <span class="n">registry</span><span class="o">.</span><span class="n">add_binding</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlZ</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">supports_suspend</span>
+                        <span class="p">)(</span><span class="n">suspend_to_bg</span><span class="p">)</span>
+
+    <span class="c1"># Ctrl+I == Tab</span>
+    <span class="n">registry</span><span class="o">.</span><span class="n">add_binding</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlI</span><span class="p">,</span>
+                         <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span>
+                                 <span class="o">&amp;</span> <span class="o">~</span><span class="n">HasSelection</span><span class="p">()</span>
+                                 <span class="o">&amp;</span> <span class="n">insert_mode</span>
+                                 <span class="o">&amp;</span> <span class="n">cursor_in_leading_ws</span>
+                        <span class="p">))(</span><span class="n">indent_buffer</span><span class="p">)</span>
+
+    <span class="n">registry</span><span class="o">.</span><span class="n">add_binding</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlO</span><span class="p">,</span>
+                         <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span>
+                                <span class="o">&amp;</span> <span class="n">EmacsInsertMode</span><span class="p">()))(</span><span class="n">newline_autoindent_outer</span><span class="p">(</span><span class="n">shell</span><span class="o">.</span><span class="n">input_splitter</span><span class="p">))</span>
+
+    <span class="n">registry</span><span class="o">.</span><span class="n">add_binding</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">F2</span><span class="p">,</span>
+                         <span class="nb">filter</span><span class="o">=</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span>
+                        <span class="p">)(</span><span class="n">open_input_in_editor</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">shell</span><span class="o">.</span><span class="n">display_completions</span> <span class="o">==</span> <span class="s1">&#39;readlinelike&#39;</span><span class="p">:</span>
+        <span class="n">registry</span><span class="o">.</span><span class="n">add_binding</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlI</span><span class="p">,</span>
+                             <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span>
+                                     <span class="o">&amp;</span> <span class="o">~</span><span class="n">HasSelection</span><span class="p">()</span>
+                                     <span class="o">&amp;</span> <span class="n">insert_mode</span>
+                                     <span class="o">&amp;</span> <span class="o">~</span><span class="n">cursor_in_leading_ws</span>
+                            <span class="p">))(</span><span class="n">display_completions_like_readline</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s1">&#39;win32&#39;</span><span class="p">:</span>
+        <span class="n">registry</span><span class="o">.</span><span class="n">add_binding</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlV</span><span class="p">,</span>
+                             <span class="nb">filter</span><span class="o">=</span><span class="p">(</span>
+                             <span class="n">HasFocus</span><span class="p">(</span>
+                             <span class="n">DEFAULT_BUFFER</span><span class="p">)</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">ViMode</span><span class="p">()</span>
+                            <span class="p">))(</span><span class="n">win_paste</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Dynamic IPython</a></h1>
+
+
+
+
+
+
+
+
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="basic_customization.html" title="previous chapter">Configuring Prompt Toolkit in IPython</a></li>
+      <li>Next: <a href="custom_keyboard_shortcuts.html" title="next chapter">Keyboard Shortcut Customization</a></li>
+  </ul></li>
+</ul>
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Keybindings in IPython</a><ul>
+<li><a class="reference internal" href="#run-in-shell">Run in shell</a></li>
+<li><a class="reference internal" href="#original-file-implementation">Original File Implementation</a></li>
+<li><a class="reference internal" href="#useful-modules">Useful Modules</a><ul>
+<li><a class="reference internal" href="#pure-prompt-toolkit-way-of-rebinding-keys">Pure Prompt Toolkit Way of Rebinding Keys</a><ul>
+<li><a class="reference internal" href="#shortcuts-from-ipython">Shortcuts from IPython</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/ipython_keybindings.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="custom_keyboard_shortcuts.html" title="Keyboard Shortcut Customization"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="basic_customization.html" title="Configuring Prompt Toolkit in IPython"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright (C) 2018-2019 Faris Chugthai.
+    </div>
+  </body>
+</html>

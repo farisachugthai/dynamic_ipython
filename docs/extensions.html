@@ -1,0 +1,160 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>README &#8212; Dynamic IPython 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="/data/data/com.termux/files/home/projects/dynamic_ipython/docs/source/_static/pyramid.css_t" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Rich Output" href="rich_output.html" />
+    <link rel="prev" title="IPython Directive" href="directive.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="rich_output.html" title="Rich Output"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="directive.html" title="IPython Directive"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="readme">
+<h1>README<a class="headerlink" href="#readme" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="creating-ipython-extensions">
+<h2>Creating IPython Extensions<a class="headerlink" href="#creating-ipython-extensions" title="Permalink to this headline">¶</a></h2>
+<p><em>Summarized from “Learning IPython for Interactive Computing and Data Visualization 1st ed.pdf”“</em></p>
+<p>To create an extension, we need to create a Python module in a
+directory, which is in the Python path. A possibility is to put it in
+the current directory, or in your <a class="reference external" href="$IPYTHONDIR/extensions">IPython dir</a></p>
+<p>An extension implements a <code class="xref py py-func docutils literal notranslate"><span class="pre">|ip|.load_ipython_extension(ipython)()</span></code>,
+which takes the current <code class="docutils literal notranslate"><span class="pre">|ip|</span></code> instance as an argument (and possibly
+<code class="xref py py-func docutils literal notranslate"><span class="pre">|ip|.unload_ipython_extension(ipython)()</span></code> which is called when
+the extension is unloaded).</p>
+<p>This instance can be used to register new magic commands, access the user
+namespace, execute code, and so on.</p>
+<p>This loading function is called when the extension is loaded, which
+happens when the <code class="docutils literal notranslate"><span class="pre">%load_ext</span></code> or <code class="docutils literal notranslate"><span class="pre">%reload_ext</span> <span class="pre">magic</span></code> command is
+executed. To automatically load a module when IPython starts,
+we need to add the module name to the <code class="docutils literal notranslate"><span class="pre">c.TerminalIPythonApp.extensions</span></code>
+list in the IPython configuration file.</p>
+<p>The <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.4.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveShell</span></code></a> instance represents the active
+<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.4.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> interpreter. Useful methods and attributes include
+<code class="xref py py-func docutils literal notranslate"><span class="pre">|ip|.register_magics()</span></code>, to create new magic commands,
+and <code class="docutils literal notranslate"><span class="pre">user_ns</span></code>, to access the user namespace. You can
+explore all the instance’s attributes interactively from
+<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.4.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> with tab completion. For that, you need to execute
+the following command to get the current instance</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython</span> <span class="k">import</span> <span class="n">get_ipython</span>
+<span class="n">ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>And then access attributes with the <code class="docutils literal notranslate"><span class="pre">ip</span></code> object.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Dynamic IPython</a></h1>
+
+
+
+
+
+
+
+
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="directive.html" title="previous chapter">IPython Directive</a></li>
+      <li>Next: <a href="rich_output.html" title="next chapter">Rich Output</a></li>
+  </ul></li>
+</ul>
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">README</a><ul>
+<li><a class="reference internal" href="#creating-ipython-extensions">Creating IPython Extensions</a></li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/extensions.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="rich_output.html" title="Rich Output"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="directive.html" title="IPython Directive"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright (C) 2018-2019 Faris Chugthai.
+    </div>
+  </body>
+</html>

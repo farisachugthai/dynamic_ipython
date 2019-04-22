@@ -1,0 +1,437 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>pygments &#8212; Dynamic IPython 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="/data/data/com.termux/files/home/projects/dynamic_ipython/docs/source/_static/pyramid.css_t" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API" href="API.html" />
+    <link rel="prev" title="Rich Output" href="rich_output.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="API.html" title="API"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="rich_output.html" title="Rich Output"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pygments">
+<h1>pygments<a class="headerlink" href="#pygments" title="Permalink to this headline">¶</a></h1>
+<p>Feb 21, 2019:</p>
+<p>I just noticed a constant that actually clarifies a good amount about
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">Pygments</span></code>.
+Or gives you a direction to go in at least.</p>
+<p>A lot of this document is <code class="docutils literal notranslate"><span class="pre">pygmentize</span> <span class="pre">-L</span></code> output. Also truncated it heavily.</p>
+<p>The last section is the output from <code class="docutils literal notranslate"><span class="pre">tldr</span> <span class="pre">-m</span> <span class="pre">pygmentize</span></code>.</p>
+<p>Pygments version 2.2.0, (c) 2006-2017 by Georg Brandl.</p>
+<div class="section" id="pygments-and-css">
+<h2>Pygments and CSS<a class="headerlink" href="#pygments-and-css" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">from</span> <span class="nn">pygments.style</span> <span class="kn">import</span> <span class="n">STANDARD_TYPES</span>
+</pre></div>
+</div>
+<p>Now if you go and open up <a href="#id1"><span class="problematic" id="id2">`~/.local/scripts/gruvbox-pygments/gruvbox.css`_</span></a>
+you’ll notice that those letter abbreviations are abbreviations for CSS things!</p>
+<p>Pygments is directly a mapping of color codes to CSS that applies based on lexers
+for different programming languages. Sweet.</p>
+</div>
+<div class="section" id="formatters">
+<h2>Formatters:<a class="headerlink" href="#formatters" title="Permalink to this headline">¶</a></h2>
+<p>:</p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="simple">
+<dt>bbcode, bb:</dt><dd><p>Format tokens with BBcodes. These formatting codes are used by many bulletin boards, so you can highlight your sourcecode with pygments before posting it there.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>bmp, bitmap:</dt><dd><p>Create a bitmap image from source code. This uses the Python Imaging Library to generate a pixmap from the source code. (filenames *.bmp)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>gif:</dt><dd><p>Create a GIF image from source code. This uses the Python Imaging Library to generate a pixmap from the source code. (filenames *.gif)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>html:</dt><dd><p>Format tokens as HTML 4 <code class="docutils literal notranslate"><span class="pre">&lt;span&gt;</span></code> tags within a <code class="docutils literal notranslate"><span class="pre">&lt;pre&gt;</span></code> tag, wrapped in a <code class="docutils literal notranslate"><span class="pre">&lt;div&gt;</span></code> tag. The <code class="docutils literal notranslate"><span class="pre">&lt;div&gt;</span></code>’s CSS class can be set by the <code class="xref py py-obj docutils literal notranslate"><span class="pre">cssclass</span></code> option. (filenames *.html, *.htm)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>img, IMG, png:</dt><dd><p>Create a PNG image from source code. This uses the Python Imaging Library to generate a pixmap from the source code. (filenames *.png)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>irc, IRC:</dt><dd><p>Format tokens with IRC color sequences</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>jpg, jpeg:</dt><dd><p>Create a JPEG image from source code. This uses the Python Imaging Library to generate a pixmap from the source code. (filenames *.jpg)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>latex, tex:</dt><dd><p>Format tokens as LaTeX code. This needs the <code class="xref py py-obj docutils literal notranslate"><span class="pre">fancyvrb</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">color</span></code> standard packages. (filenames *.tex)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>raw, tokens:</dt><dd><p>Format tokens as a raw representation for storing token streams. (filenames *.raw)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>rtf:</dt><dd><p>Format tokens as RTF markup. This formatter automatically outputs full RTF documents with color information and other useful stuff. Perfect for Copy and Paste into Microsoft(R) Word(R) documents. (filenames *.rtf)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>svg:</dt><dd><p>Format tokens as an SVG graphics file.  This formatter is still experimental. Each line of code is a <code class="docutils literal notranslate"><span class="pre">&lt;text&gt;</span></code> element with explicit <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> coordinates containing <code class="docutils literal notranslate"><span class="pre">&lt;tspan&gt;</span></code> elements with the individual token styles. (filenames *.svg)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>terminal, console:</dt><dd><p>Format tokens with ANSI color sequences, for output in a text console. Color sequences are terminated at newlines, so that paging the output works correctly.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>terminal16m, console16m, 16m:</dt><dd><p>Format tokens with ANSI color sequences, for output in a true-color terminal or console.  Like in <code class="xref py py-obj docutils literal notranslate"><span class="pre">TerminalFormatter</span></code> color sequences are terminated at newlines, so that paging the output works correctly.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>terminal256, console256, 256:</dt><dd><p>Format tokens with ANSI color sequences, for output in a 256-color terminal or console.  Like in <code class="xref py py-obj docutils literal notranslate"><span class="pre">TerminalFormatter</span></code> color sequences are terminated at newlines, so that paging the output works correctly.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>testcase:</dt><dd><p>Format tokens as appropriate for a new testcase.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>text, null:</dt><dd><p>Output the text unchanged without any formatting. (filenames *.txt)</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="filters">
+<h2>Filters:<a class="headerlink" href="#filters" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>:</dt><dd><ul class="simple">
+<li><dl class="simple">
+<dt>codetagify:</dt><dd><p>Highlight special code tags in comments and docstrings.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>keywordcase:</dt><dd><p>Convert keywords to lowercase or uppercase or capitalize them,
+which means first letter uppercase, rest lowercase.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>highlight:</dt><dd><p>Highlight a normal Name (and Name.*) token with a different
+token type.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>raiseonerror:</dt><dd><p>Raise an exception when the lexer generates an error token.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>whitespace:</dt><dd><p>Convert tabs, newlines and/or spaces to visible characters.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>gobble:</dt><dd><p>Gobbles source code lines (eats initial characters).</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>tokenmerge:</dt><dd><p>Merges consecutive tokens with the same token type in the output
+stream of a lexer.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="styles">
+<h2>Styles:<a class="headerlink" href="#styles" title="Permalink to this headline">¶</a></h2>
+<p>:</p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="simple">
+<dt>default:</dt><dd><p>The default style (inspired by Emacs 22).</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>emacs:</dt><dd><p>The default style (inspired by Emacs 22).</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>friendly:</dt><dd><p>A modern style based on the VIM pyte theme.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>colorful:</dt><dd><p>A colorful style, inspired by CodeRay.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>autumn:</dt><dd><p>A colorful style, inspired by the terminal highlighting style.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>murphy:</dt><dd><p>Murphy’s style from CodeRay.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>manni:</dt><dd><p>A colorful style, inspired by the terminal highlighting style.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>monokai:</dt><dd><p>This style mimics the Monokai color scheme.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>perldoc:</dt><dd><p>Style similar to the style used in the perldoc code blocks.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>pastie:</dt><dd><p>Style similar to the pastie default style.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>borland:</dt><dd><p>Style similar to the style used in the borland IDEs.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>trac:</dt><dd><p>Port of the default trac highlighter design.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>native:</dt><dd><p>Pygments version of the “native” vim theme.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>fruity:</dt><dd><p>Pygments version of the “native” vim theme.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>vim:</dt><dd><p>Styles somewhat like vim 7.0</p>
+</dd>
+</dl>
+</li>
+<li><p>vs:</p></li>
+<li><dl class="simple">
+<dt>tango:</dt><dd><p>The Crunchy default Style inspired from the color palette from the Tango Icon Theme Guidelines.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>rrt:</dt><dd><p>Minimalistic “rrt” theme, based on Zap and Emacs defaults.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>xcode:</dt><dd><p>Style similar to the Xcode default colouring theme.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>igor:</dt><dd><p>Pygments version of the official colors for Igor Pro procedures.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>lovelace:</dt><dd><p>The style used in Lovelace interactive learning environment. Tries to avoid the “angry fruit salad” effect with desaturated and dim colours.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>arduino:</dt><dd><p>The Arduino® language style. This style is designed to highlight the Arduino source code, so exepect the best results with it.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>rainbow_dash:</dt><dd><p>A bright and colorful syntax highlighting theme.</p>
+</dd>
+</dl>
+</li>
+<li><p>abap:</p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="tldr">
+<h2>tldr<a class="headerlink" href="#tldr" title="Permalink to this headline">¶</a></h2>
+<p>&gt; Python-based syntax highlighter.</p>
+<ul class="simple">
+<li><p>Highlight file syntax and print to standard output (language is inferred from the file extension):</p></li>
+</ul>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">pygmentize</span> <span class="pre">{{file.py}}</span></code></p>
+<ul class="simple">
+<li><p>Explicitly set the language for syntax highlighting:</p></li>
+</ul>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">pygmentize</span> <span class="pre">-l</span> <span class="pre">{{javascript}}</span> <span class="pre">{{input_file}}</span></code></p>
+<ul class="simple">
+<li><p>List available lexers (processors for input languages):</p></li>
+</ul>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">pygmentize</span> <span class="pre">-L</span> <span class="pre">lexers</span></code></p>
+<ul class="simple">
+<li><p>Save output to a file in HTML format:</p></li>
+</ul>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">pygmentize</span> <span class="pre">-f</span> <span class="pre">html</span> <span class="pre">-o</span> <span class="pre">{{output_file.html}}</span> <span class="pre">{{input_file.py}}</span></code></p>
+<ul class="simple">
+<li><p>List available output formats:</p></li>
+</ul>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">pygmentize</span> <span class="pre">-L</span> <span class="pre">formatters</span></code></p>
+<ul class="simple">
+<li><p>Output an HTML file, with additional formatter options (full page, with line numbers):</p></li>
+</ul>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">pygmentize</span> <span class="pre">-f</span> <span class="pre">html</span> <span class="pre">-O</span> <span class="pre">&quot;full,linenos=True&quot;</span> <span class="pre">-o</span> <span class="pre">{{output_file.html}}</span> <span class="pre">{{input_file}}</span></code></p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [2]: </span><span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+</pre></div>
+</div>
+<p>So there’s every pygments token.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Dynamic IPython</a></h1>
+
+
+
+
+
+
+
+
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="rich_output.html" title="previous chapter">Rich Output</a></li>
+      <li>Next: <a href="API.html" title="next chapter">API</a></li>
+  </ul></li>
+</ul>
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">pygments</a><ul>
+<li><a class="reference internal" href="#pygments-and-css">Pygments and CSS</a></li>
+<li><a class="reference internal" href="#formatters">Formatters:</a></li>
+<li><a class="reference internal" href="#filters">Filters:</a></li>
+<li><a class="reference internal" href="#styles">Styles:</a></li>
+<li><a class="reference internal" href="#tldr">tldr</a></li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/pygments.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="API.html" title="API"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="rich_output.html" title="Rich Output"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright (C) 2018-2019 Faris Chugthai.
+    </div>
+  </body>
+</html>

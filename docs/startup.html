@@ -1,0 +1,231 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>IPython Startup Scripts &#8212; Dynamic IPython 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="/data/data/com.termux/files/home/projects/dynamic_ipython/docs/source/_static/pyramid.css_t" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Configuring Prompt Toolkit in IPython" href="basic_customization.html" />
+    <link rel="prev" title="Welcome to IPython packages’s documentation!" href="index.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="basic_customization.html" title="Configuring Prompt Toolkit in IPython"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to IPython packages’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-IPython_README">
+<span id="ipython-startup-scripts"></span><span id="ipython-startup-readme"></span><h1>IPython Startup Scripts<a class="headerlink" href="#module-IPython_README" title="Permalink to this headline">¶</a></h1>
+<dl class="field-list simple">
+<dt class="field-odd">Author</dt>
+<dd class="field-odd"><p>Faris Chugthai</p>
+</dd>
+<dt class="field-even">Date</dt>
+<dd class="field-even"><p>Apr 15, 2019</p>
+</dd>
+</dl>
+<div class="section" id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<p>As of Apr 15, 2019, the startup files present in <span class="xref std std-ref">profile_default/startup</span> are as follows:</p>
+<p><a class="reference external" href="../../profile_default/startup/01_rehashx.py">01_rehashx.py</a></p>
+<p><a class="reference external" href="../../profile_default/startup/04_easy_import.py">04_easy_import.py</a></p>
+<p><a class="reference external" href="../../profile_default/startup/05_log.py">05_log.py</a></p>
+<p><a class="reference external" href="../../profile_default/startup/06_help_helpers.py">06_help_helpers.py</a></p>
+<p><a class="reference external" href="../../profile_default/startup/20_aliases.py">20_aliases.py</a></p>
+<p><a class="reference external" href="../../profile_default/startup/29_gruvbox.py">29_gruvbox.py</a></p>
+<p><a class="reference external" href="../../profile_default/startup/30_gruvbox.py">30_gruvbox.py</a></p>
+<p><a class="reference external" href="../../profile_default/startup/42_pandas_init.py">42_pandas_init.py</a></p>
+<p><a class="reference external" href="../../profile_default/startup/50_sysexception.py">50_sysexception.py</a></p>
+</div>
+<div class="section" id="rehash">
+<h2>%rehash<a class="headerlink" href="#rehash" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="../../profile_default/startup/01_rehashx.py">01_rehashx.py</a></p>
+<p>The IPython magic <code class="docutils literal notranslate"><span class="pre">%rehash</span></code> allows you to reload all of your startup files
+and also adds system commands to the namespace!</p>
+<p>Insofar, I haven’t noticed any significant slowdown in startup time as a result
+of this, and it hugely eases utilizing IPython as a system shell.</p>
+</div>
+<div class="section" id="convenience-functions">
+<h2>Convenience Functions<a class="headerlink" href="#convenience-functions" title="Permalink to this headline">¶</a></h2>
+<p><span class="xref std std-ref">IPython</span> provides the functions <code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.Application.initialized()</span></code>
+and <code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.Application.instance()</span></code>. As a result, each script can easily
+implement the following as a check to ensure that the global IPython instance
+is running.</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="gp">   ...: </span>   <span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">Application</span><span class="o">.</span><span class="n">initialized</span>
+<span class="gp">   ...: </span>   <span class="kn">import</span> <span class="nn">sys</span>
+<span class="gp">   ...: </span>
+<span class="gt">  File</span><span class="nn"> &quot;&lt;ipython-input-1-cb854d5e1a2f&gt;&quot;</span><span class="gt">, line </span><span class="mi">2</span>
+    <span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">Application</span><span class="o">.</span><span class="n">initialized</span>
+                                   <span class="o">^</span>
+<span class="ne">SyntaxError</span>: invalid syntax
+</pre></div>
+</div>
+<p>Unfortunately, <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">IPython</span> <span class="pre">import</span> <span class="pre">Application</span></code> may be a feature of IPython7.3,
+which at the time of writing was released 3 days ago. If you don’t have this
+version of the module, you can alternatively run</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [2]: </span><span class="kn">from</span> <span class="nn">IPython.core.application</span> <span class="kn">import</span> <span class="n">Application</span>
+
+<span class="gp">In [3]: </span><span class="n">Application</span><span class="o">.</span><span class="n">initialized</span><span class="p">()</span>
+<span class="gh">Out[3]: </span><span class="go">False</span>
+</pre></div>
+</div>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span>IPython.Application.initialized<span class="o">?</span>
+<span class="go">Object `IPython.Application.initialized` not found.</span>
+</pre></div>
+</div>
+<p>Here’s the help from <code class="xref py py-attr docutils literal notranslate"><span class="pre">IPython.application.instance</span></code>.</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span>IPython.Application.instance<span class="o">?</span>
+<span class="go">Object `IPython.Application.instance` not found.</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>Create a singleton class using instance, and retrieve it:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">traitlets.config.configurable</span> <span class="k">import</span> <span class="n">SingletonConfigurable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Foo</span><span class="p">(</span><span class="n">SingletonConfigurable</span><span class="p">):</span> <span class="k">pass</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">foo</span> <span class="o">=</span> <span class="n">Foo</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">foo</span> <span class="o">==</span> <span class="n">Foo</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>Create a subclass that is retrieved using the base class instance:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Bar</span><span class="p">(</span><span class="n">SingletonConfigurable</span><span class="p">):</span> <span class="k">pass</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Bam</span><span class="p">(</span><span class="n">Bar</span><span class="p">):</span> <span class="k">pass</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bam</span> <span class="o">=</span> <span class="n">Bam</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bam</span> <span class="o">==</span> <span class="n">Bar</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>Type:      method</p>
+</div>
+<div class="section" id="original">
+<h2>Original<a class="headerlink" href="#original" title="Permalink to this headline">¶</a></h2>
+<p>This is the IPython startup directory</p>
+<p>.py and .ipy files in this directory will be run <em>prior</em> to any code or files specified
+via the exec_lines or exec_files configurables whenever you load this profile.</p>
+<p>Files will be run in lexicographical order, so you can control the execution order of files
+with a prefix, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">00</span><span class="o">-</span><span class="n">first</span><span class="o">.</span><span class="n">py</span>
+<span class="mi">50</span><span class="o">-</span><span class="n">middle</span><span class="o">.</span><span class="n">py</span>
+<span class="mi">99</span><span class="o">-</span><span class="n">last</span><span class="o">.</span><span class="n">ipy</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Dynamic IPython</a></h1>
+
+
+
+
+
+
+
+
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to IPython packages’s documentation!</a></li>
+      <li>Next: <a href="basic_customization.html" title="next chapter">Configuring Prompt Toolkit in IPython</a></li>
+  </ul></li>
+</ul>
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">IPython Startup Scripts</a><ul>
+<li><a class="reference internal" href="#configuration">Configuration</a></li>
+<li><a class="reference internal" href="#rehash">%rehash</a></li>
+<li><a class="reference internal" href="#convenience-functions">Convenience Functions</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#original">Original</a></li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/startup.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="basic_customization.html" title="Configuring Prompt Toolkit in IPython"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to IPython packages’s documentation!"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright (C) 2018-2019 Faris Chugthai.
+    </div>
+  </body>
+</html>

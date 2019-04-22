@@ -1,0 +1,179 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Configuring Prompt Toolkit in IPython &#8212; Dynamic IPython 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="/data/data/com.termux/files/home/projects/dynamic_ipython/docs/source/_static/pyramid.css_t" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Keybindings in IPython" href="ipython_keybindings.html" />
+    <link rel="prev" title="IPython Startup Scripts" href="startup.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="ipython_keybindings.html" title="Keybindings in IPython"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="startup.html" title="IPython Startup Scripts"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="configuring-prompt-toolkit-in-ipython">
+<h1>Configuring Prompt Toolkit in IPython<a class="headerlink" href="#configuring-prompt-toolkit-in-ipython" title="Permalink to this headline">¶</a></h1>
+<p>Here’s the original implementation for <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.4.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveShell</span></code></a>.pt_app.
+<code class="docutils literal notranslate"><span class="pre">ip.init_</span></code><kbd class="kbd docutils literal notranslate">&lt;Tab&gt;</kbd> gives a ton of different places, seemingly, to muck around.</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span>    <span class="c1"># Fall back to plain non-interactive output for tests.</span>
+    <span class="c1"># This is very limited.</span>
+<span class="c1"># Set up keyboard shortcuts</span>
+<span class="c1"># Pre-populate history from IPython&#39;s history database</span>
+    <span class="c1"># Ignore blank lines and consecutive duplicates</span>
+</pre></div>
+</div>
+<p>The <code class="xref py py-mod docutils literal notranslate"><span class="pre">prompt_toolkit</span></code> tutorial does a fairly thorough job of explaining how
+most everything here works.</p>
+<p>Except <code class="docutils literal notranslate"><span class="pre">_ip.DynamicStyle()</span></code>. No idea. So I went hunting.</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">DynamicStyle</span> <span class="p">:</span> <span class="k">class</span>
+    <span class="nc">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">get_style</span><span class="p">)</span> <span class="p">:</span> <span class="n">member</span>
+    <span class="n">get_attrs_for_style_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">style_str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">DEFAULT_ATTRS</span><span class="p">)</span> <span class="p">:</span> <span class="n">member</span>
+    <span class="n">invalidation_hash</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="p">:</span> <span class="n">member</span>
+    <span class="n">style_rules</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="p">:</span> <span class="n">member</span>
+</pre></div>
+</div>
+<p>Found in this dir.</p>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span>echo fnamemodify<span class="p">(</span>expand<span class="p">(</span><span class="s1">&#39;%&#39;</span><span class="p">),</span> <span class="s1">&#39;:p&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Outputted the following. Also just revelling in getting that correct on the first try.</p>
+<p><a class="reference external" href="/data/data/com.termux/files/home/virtualenvs/utilities/lib/python3.7/site-packages/prompt_toolkit/styles/base.py">/data/data/com.termux/files/home/virtualenvs/utilities/lib/python3.7/site-packages/prompt_toolkit/styles/base.py</a></p>
+<div class="section" id="syntax-highlighting">
+<h2>Syntax Highlighting<a class="headerlink" href="#syntax-highlighting" title="Permalink to this headline">¶</a></h2>
+<p>01-17-19
+How would someone access the highlighting groups that are provided through
+the IPython API?</p>
+<p><code class="docutils literal notranslate"><span class="pre">%config</span> <span class="pre">TerminalInteractiveShell.highlighting_style</span></code> appears to be a
+function from <code class="xref py py-mod docutils literal notranslate"><span class="pre">pygments</span></code>, specifically <code class="xref py py-func docutils literal notranslate"><span class="pre">pygments.style.Style.style()</span></code>.</p>
+<p>This is implemented in <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.4.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> as follows.</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+</pre></div>
+</div>
+<div class="section" id="takeaway">
+<h3>Takeaway<a class="headerlink" href="#takeaway" title="Permalink to this headline">¶</a></h3>
+<p>To view all currently set colors in <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.4.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a>, view
+<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.4.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveShell</span></code></a>.style.get_style().style_rules</p>
+<p>Alternatively you could run</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [2]: </span><span class="kn">from</span> <span class="nn">pygments.styles</span> <span class="kn">import</span> <span class="n">get_all_styles</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Dynamic IPython</a></h1>
+
+
+
+
+
+
+
+
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="startup.html" title="previous chapter">IPython Startup Scripts</a></li>
+      <li>Next: <a href="ipython_keybindings.html" title="next chapter">Keybindings in IPython</a></li>
+  </ul></li>
+</ul>
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Configuring Prompt Toolkit in IPython</a><ul>
+<li><a class="reference internal" href="#syntax-highlighting">Syntax Highlighting</a><ul>
+<li><a class="reference internal" href="#takeaway">Takeaway</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/basic_customization.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="ipython_keybindings.html" title="Keybindings in IPython"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="startup.html" title="IPython Startup Scripts"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright (C) 2018-2019 Faris Chugthai.
+    </div>
+  </body>
+</html>
