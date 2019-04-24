@@ -192,8 +192,9 @@ def common_aliases(_ip=None):
 
     Returns
     -------
-    _ip.user_aliases : list
+    _ip.user_aliases : List of tuples
         User aliases.
+
 
     """
     _user_aliases = [
@@ -258,8 +259,10 @@ def common_aliases(_ip=None):
     return _user_aliases
 
 
-def windows_aliases(_ip=None):
-    """How did these get deleted!"""
+def windows_aliases():
+    """How did these get deleted!
+
+    """
     _ip.user_aliases = [
         ('copy', 'copy'),
         ('ddir', 'dir /ad /on'),

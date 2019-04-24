@@ -1,29 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
+Easy Import --- Import commonly used modules into the IPython namespace.
+========================================================================
 
-    .. currentmodule:: easy_import
-        :synopsis: Import commonly used modules into the IPython namespace.
+This module is a slightly different way of importing things into the user's
+interactive namespace.
 
-:File: easy_import.py
-:Author: Faris Chugthai
+Currently a module in this repository already exists and is launched on
+startup.
 
-Attributes:
------------
-``mod_variables`` : type
-    Explanation and give an inline docstring.
-
-Example:
---------
-Any example of how to use this module goes here.
-
-.. code-block:: python3
-
-    pass
-
-.. any directives::
-
-    example text
+As it stands, it may be preferable to use that over defining arbitrary
+magic functions in ``extensions``.
 
 
 """
@@ -39,17 +27,11 @@ def load_ns(mods):
     mods : module(s)
         Modules to import.
 
-
-    Returns
-    -------
-    None
-
-
     Examples
     --------
     %ns mpl
 
-
+    .. wait can you use an alias? i have a list `aliases down there but it's not initialized??
     """
     _ip = get_ipython()
     if not _ip.user_ns:
@@ -62,4 +44,4 @@ def load_ns(mods):
 
 def load_ipython_extension(_ip):
     """Create ``ns`` magic."""
-    ___ip.magics_manager.register_function(load_ns, 'line', 'ns')
+    _ip.magics_manager.register_function(load_ns, 'line', 'ns')

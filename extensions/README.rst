@@ -19,7 +19,7 @@ Visualization 1st ed.pdf"*:
    :function:`unload_ipython_extension(ipython)`, which is called when
    the extension is unloaded). This instance can be used to register new
    magic commands, access the user namespace, execute code, and so on.
-   This loading function is called whenthe extension is loaded, which
+   This loading function is called when the extension is loaded, which
    happens when the
 
    .. ipython::
@@ -47,7 +47,7 @@ Visualization 1st ed.pdf"*:
 Here are 2 useful functuons for registering a magic with the global IPython
 instance.
 
-.. ipython::
+.. code-block:: none
 
    In [37]: _ip.register_magic_function?
    Signature: _ip.register_magic_function(func, magic_kind='line', magic_name=None)
@@ -58,15 +58,15 @@ instance.
    standalone function.  The functions should have the following
    signatures:
 
-   + For line magics: `def f(line)`
-   + For cell magics: `def f(line, cell)`
-   + For a function that does both: `def f(line, cell=None)`
+       + For line magics: `def f(line)`
+       + For cell magics: `def f(line, cell)`
+       + For a function that does both: `def f(line, cell=None)`
 
    In the latter case, the function will be called with `cell==None` when
    invoked as `%f`, and with cell as a string when invoked as `%%f`.
 
-   Parameters
-   ----------
+Parameters
+----------
    func : callable
      Function to be registered as a magic.
 
@@ -81,7 +81,7 @@ instance.
 
 Which allows us the ability to create a magic, line or cell, out of any function.
 
-.. ipython::
+.. code-block:: none
 
    In [38]: _ip.register_magics?
    Signature: _ip.register_magics(*magic_objects)
@@ -89,7 +89,7 @@ Which allows us the ability to create a magic, line or cell, out of any function
    Register one or more instances of Magics.
 
    Take one or more classes or instances of classes that subclass the main
-   `core.Magic` class, and register them with IPython to use the magic
+   :class:`~IPython.core.Magic` class, and register them with IPython to use the magic
    functions they provide.  The registration process will then ensure that
    any methods that have decorated to provide line and/or cell magics will
    be recognized with the `%x`/`%%x` syntax as a line/cell magic
@@ -139,3 +139,49 @@ Admittedly I regularly flood my user_ns so this might not be viable in all
 cases.
 
 However in a testing situation this could prove beneficial.
+
+Alternative Method of Defining Magics with Arguments
+----------------------------------------------------
+From the IPython team directly. The following is the module docstring for
+:mod:`~IPython.core.magic_arguments`.
+
+New magic functions can be defined like so::
+
+    from IPython.core.magic_arguments import (argument, magic_arguments,
+        parse_argstring)
+
+    @magic_arguments()
+    @argument('-o', '--option', help='An optional argument.')
+    @argument('arg', type=int, help='An integer positional argument.')
+    def magic_cool(self, arg):
+        """ A really cool magic command.
+
+    """
+        args = parse_argstring(magic_cool, arg)
+        ...
+
+The `@magic_arguments` decorator marks the function as having argparse arguments.
+The `@argument` decorator adds an argument using the same syntax as argparse's
+`add_argument()` method. More sophisticated uses may also require the
+`@argument_group` or `@kwds` decorator to customize the formatting and the
+parsing.
+
+Help text for the magic is automatically generated from the docstring and the
+arguments::
+
+    In[1]: %cool?
+        %cool [-o OPTION] arg
+
+        A really cool magic command.
+
+        positional arguments:
+          arg                   An integer positional argument.
+
+        optional arguments:
+          -o OPTION, --option OPTION
+                                An optional argument.
+
+Inheritance diagram:
+
+.. inheritance-diagram:: IPython.core.magic_arguments
+   :parts: 3
