@@ -43,7 +43,7 @@ c : |ip|
 
 Attributes (Non-method parameters)
 ----------------------------------
-:envvar:`IPYTHONDIR` : path-like object
+:envvar:`IPYTHONDIR` : str (path-like)
     Environment variable defined before runtime to indicate where the
     :mod:`IPython` profile directory is.
 
@@ -51,6 +51,7 @@ Attributes (Non-method parameters)
 """
 import logging
 import os
+import platform
 import shutil
 
 # THIS IS THE MODULE! Its too exciting to able to execute this script
@@ -227,7 +228,8 @@ c.TerminalIPythonApp.force_interact = False
 # ---
 # Class to use to instantiate the TerminalInteractiveShell object. Useful for
 #  custom Frontends
-# c.TerminalIPythonApp.interactive_shell_class = 'IPython.terminal.interactiveshell.TerminalInteractiveShell'
+# c.TerminalIPythonApp.interactive_shell_class =
+# 'IPython.terminal.interactiveshell.TerminalInteractiveShell'
 
 # I think the original code is above.
 # shell_cls = 'IPython.terminal.interactiveshell.TerminalInteractiveShell'
@@ -265,7 +267,7 @@ c.InteractiveShell.autoawait = True
 # it is not applied if there are no more arguments on the line, and '2' for
 # 'full' autocall, where all callable objects are automatically called (even if
 # no arguments are present).
-c.InteractiveShell.autocall = 2
+c.InteractiveShell.autocall = 0
 
 # Autoindent IPython code entered interactively.
 # Jupyter Console doesn't handle this correctly. Alledgedly ipy7.0 fixed that
@@ -406,12 +408,18 @@ c.TerminalInteractiveShell.display_completions = 'multicolumn'
 
 # Shortcut style to use at the prompt. 'vi' or 'emacs'.
 # Ah I forgot <C-a> on Tmux and Emacs clobber.
-if os.environ.get("TMUX"):
+
+# Well windows doesn't get tmux so.
+
+if platform.system() == 'Windows':
     c.TerminalInteractiveShell.editing_mode = 'vi'
-    logging.info("c.TerminalInteractiveShell.editing_mode = 'vi'")
 else:
-    c.TerminalInteractiveShell.editing_mode = 'emacs'
-    logging.info("c.TerminalInteractiveShell.editing_mode = 'emacs'")
+    if os.environ.get("TMUX"):
+        c.TerminalInteractiveShell.editing_mode = 'vi'
+        logging.info("c.TerminalInteractiveShell.editing_mode = 'vi'")
+    else:
+        c.TerminalInteractiveShell.editing_mode = 'emacs'
+        logging.info("c.TerminalInteractiveShell.editing_mode = 'emacs'")
 
 # Set the editor used by IPython (default to $EDITOR/vi/notepad).
 c.TerminalInteractiveShell.editor = 'nvim'
@@ -442,8 +450,8 @@ c.TerminalInteractiveShell.extra_open_editor_shortcuts = True
 # https://github.com/farisachugthai/Gruvbox_IPython
 try:
     from gruvbox.style import GruvboxStyle
-except (ModuleNotFoundError, ClassNotFound):
-    c.TerminalInteractiveShell.highlighting_style = 'Gruvbox'
+except ModuleNotFoundError:
+    c.TerminalInteractiveShell.highlighting_style = 'monokai'
 else:
     c.TerminalInteractiveShell.highlighting_style = GruvboxStyle
 
@@ -554,6 +562,8 @@ c.HistoryManager.db_log_output = True
 
 # Set the profile location directly. This overrides the logic used by the
 #  `profile` option.
+
+# Don't enable! Check .startup.02_path.IPythonPath
 # c.ProfileDir.location = ''
 
 # ----------------------------------------------------------------------------
@@ -654,7 +664,7 @@ c.PlainTextFormatter.max_width = 79
 # Experimental: restrict time (in milliseconds) during which Jedi can compute
 #  types. Set to 0 to stop computing types. Non-zero value lower than 100ms may
 #  hurt performance by preventing jedi to build its cache.
-c.Completer.jedi_compute_type_timeout = 400
+# c.Completer.jedi_compute_type_timeout = 400
 
 # Experimental: Use Jedi to generate autocompletions. Default to True if jedi
 # is installed
@@ -692,7 +702,7 @@ c.Completer.use_jedi = True
 #  When 1: all 'magic' names (``__foo__``) will be excluded.
 #
 #  When 0: nothing will be excluded.
-# c.IPCompleter.omit__names = 2
+c.IPCompleter.omit__names = 1
 
 # ----------------------------------------------------------------------------
 # ScriptMagics(Magics) configuration
@@ -739,3 +749,12 @@ c.LoggingMagics.quiet = True
 # If True, any %store-d variables will be automatically restored when IPython
 # starts.
 # c.StoreMagics.autorestore = False
+
+
+# ----------------------------------------------------------------------------
+# Cleanup
+# ----------------------------------------------------------------------------
+
+del home
+logging.debug("The user namespace currently contains: ")
+logging.debug(c.user_ns)

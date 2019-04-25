@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 """Add a keybinding to IPython.
 
-Effectively adds :kbd:`j` :kbd:`k` to the <Esc> sequence that takes Vim from
-insert mode to normal mode.
+Effectively adds :kbd:`j` :kbd:`k` as a way to switch from
+insert mode to normal mode, or as :mod:`prompt_toolkit` calls it, "navigation mode".
 
 Also displays how to integrate :mod:`prompt_toolkit` and :mod:`IPython` together well.
 
@@ -13,13 +13,13 @@ Also displays how to integrate :mod:`prompt_toolkit` and :mod:`IPython` together
 
 """
 import logging
-from os.path import realpath, join
+from os.path import join
 
-from IPython.paths import get_ipython_dir
 from prompt_toolkit.enums import DEFAULT_BUFFER
 from prompt_toolkit.filters import HasFocus, ViInsertMode
 from prompt_toolkit.key_binding.defaults import load_key_bindings
 from prompt_toolkit.key_binding.vi_state import InputMode
+from IPython import get_ipython
 
 logging.getLogger(name=__name__)
 
@@ -38,7 +38,7 @@ def _setup_logging(level, shell=None):
 
 
 def switch_to_navigation_mode(event):
-    """Switches IPython from Vim insert mode to Vim normal mode.
+    """Switches :mod:`IPython` from Vim insert mode to Vim normal mode.
 
     The function we can work with in the future if we want to change the
     keybinding for insert to navigation mode.
@@ -57,7 +57,7 @@ def check_defaults():
     Probably gonna need to noqa something since the code isn't accessed as is.
     """
     registry = load_key_bindings()
-    print(registry.key_bindings)
+    return registry.key_bindings
 
 
 if __name__ == "__main__":
