@@ -1,8 +1,11 @@
-.. startup-test-readme
+.. _test-readme:
 
 ======
 README
 ======
 
 :Author: Faris Chugthai
-:Date: Mar 03, 2019
+
+Ostensibly I should put some notes on tests here.
+
+
