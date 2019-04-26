@@ -15,7 +15,7 @@ IPython Aliases
 
 Overview
 --------
-This module utilizes ``_ip``, the global IPython InteractiveShell
+This module utilizes ``_ip``, the global :mod:`IPython` |ip|
 instance, and fills the ``user_ns`` with common Linux idioms.
 
 
@@ -25,12 +25,12 @@ When writing aliases, an ``%alias`` definition can take various string
 placeholders. As per the official documentation:
 
 
-    .. topic:: %l parameter
+.. topic:: ``%l`` parameter
 
-        You can use the %l specifier in an alias definition to represent the
-        whole line when the alias is called.
+    You can use the ``%l`` specifier in an ``%alias`` definition to represent the
+    whole line when the alias is called.
 
-Meaning that it behaves similarly to the parameter `$*` in shells like eshell.
+Meaning that it behaves similarly to the parameter ``$*`` in shells like eshell.
 
 The documentation goes on to say:
 
@@ -89,7 +89,10 @@ import IPython
 from IPython import get_ipython
 from IPython.core.alias import AliasError
 
-logger = logging.getLogger(__name__)
+# Now my stuff!
+from _logging import setup_ipython_logger
+
+LOGGER = setup_ipython_logger()
 
 
 def _sys_check():
@@ -198,7 +201,7 @@ def common_aliases(_ip=None):
 
     """
     _user_aliases = [
-        ('g', 'git diff --staged --stat'),
+        ('g', 'git diff --staged --stat %l'),
         ('ga', 'git add %l'),
         ('ga.', 'git add .'),
         ('gar', 'git add --renormalize %l'),
@@ -218,8 +221,8 @@ def common_aliases(_ip=None):
         ('gf', 'git fetch --all'),
         ('git', 'git %l'),
         ('git hist',
-         'git log --pretty="format:%h %ad | %d [%an]" --graph --date=short --branches --abbrev-commit --oneline '
-         ),
+         'git log --pretty="format:%h %ad | %d [%an]" --graph --date=short '
+         '--branches --abbrev-commit --oneline %l'),
         ('git last', 'git log -1 HEAD %l'),
         ('git staged', 'git diff --cached %l'),
         ('git rel', 'git rev-parse --show-prefix'),
@@ -227,7 +230,9 @@ def common_aliases(_ip=None):
         ('git unstage', 'git reset HEAD'),
         ('git unstaged', 'git diff %l'),
         ('gl', 'git log %l'),
-        ('glo', 'git log --graph --decorate --abbrev-commit --oneline --branches --all'),
+        ('glo',
+         'git log --graph --decorate --abbrev-commit --oneline --branches --all'
+         ),
         ('gls', 'git ls-tree'),
         ('gm', 'git merge --no-ff %l'),
         ('gmm', 'git merge master'),
@@ -262,8 +267,56 @@ def common_aliases(_ip=None):
 def windows_aliases():
     """How did these get deleted!
 
+    Also note that Powershell comes with a BUNCH of built-in aliases. We'll
+    have to create a way of detecting that we're in powershell specifically
+    though.
+
+    Alias           rp --> Remove-ItemProperty
+    Alias           rsn --> Remove-PSSession
+    Alias           rv --> Remove-Variable
+    Alias           rvpa --> Resolve-Path
+    Alias           sajb --> Start-Job
+    Alias           sal --> Set-Alias
+    Alias           saps --> Start-Process
+    Alias           sasv --> Start-Service
+    Alias           sbp --> Set-PSBreakpoint
+    Alias           select --> Select-Object
+    Alias           set --> Set-Variable
+    Alias           si --> Set-Item
+    Alias           sl --> Set-Location
+    Alias           sleep --> Start-Sleep
+    Alias           sls --> Select-String
+    Alias           sort --> Sort-Object
+    Alias           sp --> Set-ItemProperty
+    Alias           spjb --> Stop-Job
+    Alias           spps --> Stop-Process
+    Alias           spsv --> Stop-Service
+    Alias           start --> Start-Process
+    Alias           stz --> Set-TimeZone
+    Alias           sv --> Set-Variable
+    Alias           tee --> Tee-Object
+    Alias           type --> Get-Content
+    Alias           where --> Where-Object
+    Alias           wjb --> Wait-Job
+    Alias           write --> Write-Output
+
+    Also I felt really good about the way I reformatted that!
+
+    .. code-block:: vim
+
+        :'<,'>s/^\W/('/
+        :'<,'>s/ --> /', '/
+        :'<,'>s/$/'),
+        gv>
+        " Realize that the indentation is all out of whack and let ALE deal
+        :w
+
+    That's some non-trivial stuff right there! First try on all 4 of them!
+
     """
     _ip.user_aliases = [
+        ('cmder', 'cmder'),
+        ('conemu', 'conemu'),
         ('copy', 'copy'),
         ('ddir', 'dir /ad /on'),
         ('echo', 'echo'),
@@ -271,14 +324,56 @@ def windows_aliases():
         ('ls', 'dir /on'),
         ('mkdir', 'mkdir'),
         ('mklink', 'mklink'),
+        ('move', 'move'),
+        ('mv', 'move'),
         ('ren', 'ren'),
         ('rmdir', 'rmdir'),
+        ('rp', 'Remove-ItemProperty'),
+        ('rsn', 'Remove-PSSession'),
+        ('rv', 'Remove-Variable'),
+        ('rvpa', 'Resolve-Path'),
+        ('sajb', 'Start-Job'),
+        ('sal', 'Set-Alias'),
+        ('saps', 'Start-Process'),
+        ('sasv', 'Start-Service'),
+        ('sbp', 'Set-PSBreakpoint'),
+        ('select', 'Select-Object'),
+        ('set', 'Set-Variable'),
+        ('si', 'Set-Item'),
+        ('sl', 'Set-Location'),
+        ('sleep', 'Start-Sleep'),
+        ('sls', 'Select-String'),
+        ('sort', 'Sort-Object'),
+        ('sp', 'Set-ItemProperty'),
+        ('spjb', 'Stop-Job'),
+        ('spps', 'Stop-Process'),
+        ('spsv', 'Stop-Service'),
+        ('start', 'Start-Process'),
+        ('stz', 'Set-TimeZone'),
+        ('sv', 'Set-Variable'),
+        ('tee', 'Tee-Object'),
         (
             'tree',
             'tree /F /A %l',
         ),
+        ('type', 'Get-Content'),
+        ('where', 'Where-Object'),
+        ('wjb', 'Wait-Job'),
+        ('write', 'Write-Output'),
     ]
     return _ip.user_aliases
+
+
+def __setup_fzf(user_aliases):
+    """Poorly might I add."""
+    if which('fzf') and which('rg'):
+        user_aliases.extend(
+            ('fzf', '$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS'))
+    elif which('fzf') and which('ag'):
+        user_aliases.extend(
+            ('fzf', '$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS'))
+
+    return user_aliases
 
 
 if __name__ == "__main__":
@@ -305,12 +400,7 @@ if __name__ == "__main__":
 
     user_aliases += common_aliases(_ip)
 
-    # There has got to be a better way to do this.
-    if which('fzf') and which('rg'):
-        user_aliases.extend(
-            ('fzf', '$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS'))
-    elif which('fzf') and which('ag'):
-        pass  # TODO
+    __setup_fzf(user_aliases)
 
     logging.info("The number of available aliases is: " +
                  str(len(user_aliases)))

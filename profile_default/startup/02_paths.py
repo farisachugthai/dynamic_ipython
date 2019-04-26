@@ -42,6 +42,7 @@ from pathlib import Path
 import sys
 
 from IPython import get_ipython
+from IPython.paths import get_ipython_dir
 from IPython.core.profiledir import ProfileDir
 
 # ----------------------------------------------------------------------------
