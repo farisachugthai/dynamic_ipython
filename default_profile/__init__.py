@@ -10,4 +10,4 @@ Python3 and IPython 7+
 import os
 import sys
 
-sys.path.append(os.path.abspath(os.path.dirname(__name__)))
+sys.path.append(os.path.abspath(os.path.dirname(__file__)))

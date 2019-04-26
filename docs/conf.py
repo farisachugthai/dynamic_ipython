@@ -17,13 +17,14 @@ import os
 from pathlib import Path
 import sys
 
-from profile_default.__about__ import __version__
+from default_profile.__about__ import __version__
 
 ROOT = Path('../..')
-PD = ROOT.joinpath('profile_default')
-STARTUP = ROOT.joinpath('profile_default/startup')
+PD = ROOT.joinpath('default_profile')
+STARTUP = PD.joinpath('startup')
 
 logger = logging.getLogger(name=__name__)
+logger.setLevel(level=logging.WARNING)
 
 CONF_PATH = os.path.dirname(os.path.abspath(__file__))
 BUILD_PATH = os.path.join(CONF_PATH, 'build')
@@ -107,7 +108,7 @@ rst_prolog = """
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 
-# html_theme = 'pyramid'
+html_theme = 'pyramid'
 # Isn't working. Might need to just copy layout.
 
 # Theme options are theme-specific and customize the look and feel of a theme
@@ -235,6 +236,7 @@ viewcode_import = True
 # Option for IPython
 
 ipython_warning_is_error = False
+
 
 def setup(app):
     """Add pyramid CSS to the docs."""
