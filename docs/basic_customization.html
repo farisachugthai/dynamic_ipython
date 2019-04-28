@@ -5,9 +5,9 @@
   <head>
     <meta charset="utf-8" />
     <title>Configuring Prompt Toolkit in IPython &#8212; Dynamic IPython 0.0.1 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="/data/data/com.termux/files/home/projects/dynamic_ipython/docs/source/_static/pyramid.css_t" />
+    <link rel="stylesheet" type="text/css" href="/data/data/com.termux/files/home/projects/dynamic_ipython/docs/_static/pyramid.css_t" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
@@ -52,7 +52,7 @@
             
   <div class="section" id="configuring-prompt-toolkit-in-ipython">
 <h1>Configuring Prompt Toolkit in IPython<a class="headerlink" href="#configuring-prompt-toolkit-in-ipython" title="Permalink to this headline">¶</a></h1>
-<p>Here’s the original implementation for <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.4.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveShell</span></code></a>.pt_app.
+<p>Here’s the original implementation for <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.5.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveShell</span></code></a>.pt_app.
 <code class="docutils literal notranslate"><span class="pre">ip.init_</span></code><kbd class="kbd docutils literal notranslate">&lt;Tab&gt;</kbd> gives a ton of different places, seemingly, to muck around.</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span>    <span class="c1"># Fall back to plain non-interactive output for tests.</span>
     <span class="c1"># This is very limited.</span>
@@ -84,14 +84,14 @@ How would someone access the highlighting groups that are provided through
 the IPython API?</p>
 <p><code class="docutils literal notranslate"><span class="pre">%config</span> <span class="pre">TerminalInteractiveShell.highlighting_style</span></code> appears to be a
 function from <code class="xref py py-mod docutils literal notranslate"><span class="pre">pygments</span></code>, specifically <code class="xref py py-func docutils literal notranslate"><span class="pre">pygments.style.Style.style()</span></code>.</p>
-<p>This is implemented in <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.4.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> as follows.</p>
+<p>This is implemented in <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.5.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> as follows.</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 </pre></div>
 </div>
 <div class="section" id="takeaway">
 <h3>Takeaway<a class="headerlink" href="#takeaway" title="Permalink to this headline">¶</a></h3>
-<p>To view all currently set colors in <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.4.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a>, view
-<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.4.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveShell</span></code></a>.style.get_style().style_rules</p>
+<p>To view all currently set colors in <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.5.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a>, view
+<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.5.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveShell</span></code></a>.style.get_style().style_rules</p>
 <p>Alternatively you could run</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [2]: </span><span class="kn">from</span> <span class="nn">pygments.styles</span> <span class="kn">import</span> <span class="n">get_all_styles</span>
 </pre></div>
@@ -106,22 +106,6 @@ function from <code class="xref py py-mod docutils literal notranslate"><span cl
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="index.html">Dynamic IPython</a></h1>
-
-
-
-
-
-
-
-
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="startup.html" title="previous chapter">IPython Startup Scripts</a></li>
-      <li>Next: <a href="ipython_keybindings.html" title="next chapter">Keybindings in IPython</a></li>
-  </ul></li>
-</ul>
   <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Configuring Prompt Toolkit in IPython</a><ul>
@@ -132,7 +116,20 @@ function from <code class="xref py py-mod docutils literal notranslate"><span cl
 </ul>
 </li>
 </ul>
-
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="startup.html" title="previous chapter">IPython Startup Scripts</a></li>
+      <li>Next: <a href="ipython_keybindings.html" title="next chapter">Keybindings in IPython</a></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/basic_customization.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <div class="searchformwrapper">
@@ -143,13 +140,6 @@ function from <code class="xref py py-mod docutils literal notranslate"><span cl
     </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/basic_customization.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
         </div>
       </div>
       <div class="clearer"></div>

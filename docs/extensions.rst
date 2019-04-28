@@ -1,8 +1,6 @@
 Extensions
 ===========
 
-|date|
-
 
 :mod:`easy_import`
 ---------------------
@@ -37,60 +35,3 @@ Extensions
     :members:
     :undoc-members:
     :show-inheritance:
-
-
-:mod:`~default_profile.startup.04_easy_import`
-----------------------------------------------
-
-.. automodule:: default_profile.startup.04_easy_import
-    :members:
-    :show-inheritance:
-
-
-:mod:`~default_profile.startup.05_log`
---------------------------------------
-
-.. automodule:: default_profile.startup.05_log
-    :members:
-    :show-inheritance:
-
-
-:mod:`~default_profile.startup.06_help_helpers`
------------------------------------------------
-
-.. automodule:: default_profile.startup.06_help_helpers
-    :members:
-    :show-inheritance:
-
-
-:mod:`~default_profile.startup.20_aliases`
-------------------------------------------
-
-.. automodule:: default_profile.startup.20_aliases
-    :members:
-    :show-inheritance:
-
-
-:mod:`~default_profile.startup.32_vi_modes`
--------------------------------------------
-
-.. automodule:: default_profile.startup.32_vi_modes
-    :members:
-    :show-inheritance:
-
-
-:mod:`~default_profile.startup.42_pandas_init`
-----------------------------------------------
-
-.. automodule:: default_profile.startup.42_pandas_init
-    :members:
-    :show-inheritance:
-
-
-:mod:`~default_profile.startup.50_sysexception`
------------------------------------------------
-
-.. automodule:: default_profile.startup.50_sysexception
-    :members:
-    :show-inheritance:
-

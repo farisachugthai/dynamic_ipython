@@ -5,9 +5,9 @@
   <head>
     <meta charset="utf-8" />
     <title>profile_default.startup.05_log &#8212; Dynamic IPython 0.0.1 documentation</title>
-    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="/data/data/com.termux/files/home/projects/dynamic_ipython/docs/source/_static/pyramid.css_t" />
+    <link rel="stylesheet" type="text/css" href="/data/data/com.termux/files/home/projects/dynamic_ipython/docs/_static/pyramid.css_t" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
@@ -302,7 +302,7 @@
 <span class="kn">from</span> <span class="nn">IPython</span> <span class="k">import</span> <span class="n">get_ipython</span>
 
 
-<div class="viewcode-block" id="session_logger"><a class="viewcode-back" href="../../../API.html#profile_default.startup.05_log.session_logger">[docs]</a><span class="k">def</span> <span class="nf">session_logger</span><span class="p">(</span><span class="n">_ip</span><span class="p">):</span>
+<div class="viewcode-block" id="session_logger"><a class="viewcode-back" href="../../../profile_default.html#profile_default.startup.05_log.session_logger">[docs]</a><span class="k">def</span> <span class="nf">session_logger</span><span class="p">(</span><span class="n">_ip</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Log all input and output for an IPython session.</span>
 
 <span class="sd">    Saves the commands as valid IPython code. Note that this is not</span>
@@ -339,7 +339,7 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; Already logging to &quot;</span> <span class="o">+</span> <span class="n">_ip</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">logfname</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="handler"><a class="viewcode-back" href="../../../API.html#profile_default.startup.05_log.handler">[docs]</a><span class="k">def</span> <span class="nf">handler</span><span class="p">(</span><span class="n">arg1</span><span class="p">):</span>
+<div class="viewcode-block" id="handler"><a class="viewcode-back" href="../../../profile_default.html#profile_default.startup.05_log.handler">[docs]</a><span class="k">def</span> <span class="nf">handler</span><span class="p">(</span><span class="n">arg1</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;TODO: Docstring for file_handler.</span>
 
 <span class="sd">    Parameters</span>
@@ -360,7 +360,7 @@
     <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">file_handler</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="get_home"><a class="viewcode-back" href="../../../API.html#profile_default.startup.05_log.get_home">[docs]</a><span class="k">def</span> <span class="nf">get_home</span><span class="p">():</span>
+<div class="viewcode-block" id="get_home"><a class="viewcode-back" href="../../../profile_default.html#profile_default.startup.05_log.get_home">[docs]</a><span class="k">def</span> <span class="nf">get_home</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Get the home dir.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;Linux&#39;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s1">&#39;~&#39;</span><span class="p">)</span>
@@ -373,7 +373,7 @@
     <span class="n">log_dir</span> <span class="o">=</span> <span class="n">_ip</span><span class="o">.</span><span class="n">profile_dir</span><span class="o">.</span><span class="n">log_dir</span>
     <span class="n">fname</span> <span class="o">=</span> <span class="s1">&#39;log-&#39;</span> <span class="o">+</span> <span class="n">_ip</span><span class="o">.</span><span class="n">profile</span> <span class="o">+</span> <span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.py&quot;</span>
     <span class="n">logmode</span> <span class="o">=</span> <span class="s1">&#39;global&#39;</span>
-    <span class="n">log_output</span><span class="o">=</span><span class="kc">True</span>
+    <span class="n">log_output</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="n">filename</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">log_dir</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
     <span class="n">notnew</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
     <span class="c1"># logger = _ip.logger(home_dir=get_home(),</span>
@@ -397,17 +397,7 @@
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../../../index.html">Dynamic IPython</a></h1>
-
-
-
-
-
-
-
-
-<h3>Related Topics</h3>
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
 <ul>
   <li><a href="../../../index.html">Documentation overview</a><ul>
   <li><a href="../../index.html">Module code</a><ul>

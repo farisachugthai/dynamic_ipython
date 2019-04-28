@@ -9,7 +9,7 @@ Default IPython Profile and Startup Scripts
 :mod:`ipython_config`
 ---------------------
 
-.. automodule:: default_profile.ipython_config
+.. automodule:: profile_default.ipython_config
     :members:
     :undoc-members:
     :show-inheritance:
@@ -18,88 +18,88 @@ Default IPython Profile and Startup Scripts
 :mod:`ipython_kernel_config`
 ----------------------------
 
-.. automodule:: default_profile.ipython_kernel_config
+.. automodule:: profile_default.ipython_kernel_config
     :members:
     :undoc-members:
     :show-inheritance:
 
 
-:mod:`~default_profile.startup.01_rehashx`
+:mod:`~profile_default.startup.01_rehashx`
 ------------------------------------------
 
-.. automodule:: default_profile.startup.01_rehashx
+.. automodule:: profile_default.startup.01_rehashx
     :members:
     :undoc-members:
     :show-inheritance:
 
 
-:mod:`~default_profile.startup.02_paths`
+:mod:`~profile_default.startup.02_paths`
 ------------------------------------------
 
-.. automodule:: default_profile.startup.02_paths
+.. automodule:: profile_default.startup.02_paths
     :members:
     :undoc-members:
     :show-inheritance:
 
 
-:mod:`~default_profile.startup.04_easy_import`
+:mod:`~profile_default.startup.04_easy_import`
 ----------------------------------------------
 
-.. automodule:: default_profile.startup.04_easy_import
+.. automodule:: profile_default.startup.04_easy_import
     :members:
     :undoc-members:
     :show-inheritance:
 
 
-:mod:`~default_profile.startup.05_log`
+:mod:`~profile_default.startup.05_log`
 --------------------------------------
 
-.. automodule:: default_profile.startup.05_log
+.. automodule:: profile_default.startup.05_log
     :members:
     :undoc-members:
     :show-inheritance:
 
 
-:mod:`~default_profile.startup.06_help_helpers`
+:mod:`~profile_default.startup.06_help_helpers`
 -----------------------------------------------
 
-.. automodule:: default_profile.startup.06_help_helpers
+.. automodule:: profile_default.startup.06_help_helpers
     :members:
     :undoc-members:
     :show-inheritance:
 
 
-:mod:`~default_profile.startup.20_aliases`
+:mod:`~profile_default.startup.20_aliases`
 ------------------------------------------
 
-.. automodule:: default_profile.startup.20_aliases
+.. automodule:: profile_default.startup.20_aliases
     :members:
     :undoc-members:
     :show-inheritance:
 
 
-:mod:`~default_profile.startup.32_vi_modes`
+:mod:`~profile_default.startup.32_vi_modes`
 -------------------------------------------
 
-.. automodule:: default_profile.startup.32_vi_modes
+.. automodule:: profile_default.startup.32_vi_modes
     :members:
     :undoc-members:
     :show-inheritance:
 
 
-:mod:`~default_profile.startup.42_pandas_init`
+:mod:`~profile_default.startup.42_pandas_init`
 ----------------------------------------------
 
-.. automodule:: default_profile.startup.42_pandas_init
+.. automodule:: profile_default.startup.42_pandas_init
     :members:
     :undoc-members:
     :show-inheritance:
 
 
-:mod:`~default_profile.startup.50_sysexception`
+:mod:`~profile_default.startup.50_sysexception`
 -----------------------------------------------
 
-.. automodule:: default_profile.startup.50_sysexception
+.. automodule:: profile_default.startup.50_sysexception
     :members:
     :undoc-members:
     :show-inheritance:

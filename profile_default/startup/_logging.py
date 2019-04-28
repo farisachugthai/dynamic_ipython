@@ -11,8 +11,6 @@ it in a flexible, configurable way as if I was writing library code.
 """
 import logging
 
-__all__ = [logger]
-
 
 def setup_ipython_logger():
     """Plug and play logging. No params so you can import and forget."""
@@ -28,3 +26,6 @@ def setup_ipython_logger():
 
     logger.addHandler(file_handler)
     return logger
+
+
+logger = setup_ipython_logger()

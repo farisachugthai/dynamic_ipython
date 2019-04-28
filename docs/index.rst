@@ -22,10 +22,8 @@ a good amount of reworking as is.
    Built-in Magics <magics>
    Writing Your Own Magics <custom_magics>
    Sphinx Directives <directive>
-   IPython extensions and nbextensions  <extensions>
    Rich Output <rich_output>
    Pygments highlighting <pygments>
-   Jinja <jinja2>
 
 
 .. toctree::

@@ -4,10 +4,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>README &#8212; Dynamic IPython 0.0.1 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <title>Extensions &#8212; Dynamic IPython 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="/data/data/com.termux/files/home/projects/dynamic_ipython/docs/source/_static/pyramid.css_t" />
+    <link rel="stylesheet" type="text/css" href="/data/data/com.termux/files/home/projects/dynamic_ipython/docs/_static/pyramid.css_t" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
@@ -16,8 +16,7 @@
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Rich Output" href="rich_output.html" />
-    <link rel="prev" title="IPython Directive" href="directive.html" />
+    <link rel="prev" title="Default IPython Profile and Startup Scripts" href="profile_default.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <!--[if lte IE 6]>
@@ -36,12 +35,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="rich_output.html" title="Rich Output"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="directive.html" title="IPython Directive"
+          <a href="profile_default.html" title="Default IPython Profile and Startup Scripts"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="API.html" accesskey="U">API</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -50,37 +47,130 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="readme">
-<h1>README<a class="headerlink" href="#readme" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="creating-ipython-extensions">
-<h2>Creating IPython Extensions<a class="headerlink" href="#creating-ipython-extensions" title="Permalink to this headline">¶</a></h2>
-<p><em>Summarized from “Learning IPython for Interactive Computing and Data Visualization 1st ed.pdf”“</em></p>
-<p>To create an extension, we need to create a Python module in a
-directory, which is in the Python path. A possibility is to put it in
-the current directory, or in your <a class="reference external" href="$IPYTHONDIR/extensions">IPython dir</a></p>
-<p>An extension implements a <code class="xref py py-func docutils literal notranslate"><span class="pre">|ip|.load_ipython_extension(ipython)()</span></code>,
-which takes the current <code class="docutils literal notranslate"><span class="pre">|ip|</span></code> instance as an argument (and possibly
-<code class="xref py py-func docutils literal notranslate"><span class="pre">|ip|.unload_ipython_extension(ipython)()</span></code> which is called when
-the extension is unloaded).</p>
-<p>This instance can be used to register new magic commands, access the user
-namespace, execute code, and so on.</p>
-<p>This loading function is called when the extension is loaded, which
-happens when the <code class="docutils literal notranslate"><span class="pre">%load_ext</span></code> or <code class="docutils literal notranslate"><span class="pre">%reload_ext</span> <span class="pre">magic</span></code> command is
-executed. To automatically load a module when IPython starts,
-we need to add the module name to the <code class="docutils literal notranslate"><span class="pre">c.TerminalIPythonApp.extensions</span></code>
-list in the IPython configuration file.</p>
-<p>The <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.4.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveShell</span></code></a> instance represents the active
-<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.4.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> interpreter. Useful methods and attributes include
-<code class="xref py py-func docutils literal notranslate"><span class="pre">|ip|.register_magics()</span></code>, to create new magic commands,
-and <code class="docutils literal notranslate"><span class="pre">user_ns</span></code>, to access the user namespace. You can
-explore all the instance’s attributes interactively from
-<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.4.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> with tab completion. For that, you need to execute
-the following command to get the current instance</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython</span> <span class="k">import</span> <span class="n">get_ipython</span>
-<span class="n">ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+  <div class="section" id="extensions">
+<h1>Extensions<a class="headerlink" href="#extensions" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-extensions.easy_import">
+<span id="easy-import"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">easy_import</span></code><a class="headerlink" href="#module-extensions.easy_import" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="easy-import-import-commonly-used-modules-into-the-ipython-namespace">
+<h3>Easy Import — Import commonly used modules into the IPython namespace.<a class="headerlink" href="#easy-import-import-commonly-used-modules-into-the-ipython-namespace" title="Permalink to this headline">¶</a></h3>
+<p>This module is a slightly different way of importing things into the user’s
+interactive namespace.</p>
+<p>Currently a module in this repository already exists and is launched on
+startup.</p>
+<p>As it stands, it may be preferable to use that over defining arbitrary
+magic functions in <code class="docutils literal notranslate"><span class="pre">extensions</span></code>.</p>
+<dl class="function">
+<dt id="extensions.easy_import.load_ipython_extension">
+<code class="descclassname">extensions.easy_import.</code><code class="descname">load_ipython_extension</code><span class="sig-paren">(</span><em>_ip</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/extensions/easy_import.html#load_ipython_extension"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#extensions.easy_import.load_ipython_extension" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create <code class="docutils literal notranslate"><span class="pre">ns</span></code> magic.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="extensions.easy_import.load_ns">
+<code class="descclassname">extensions.easy_import.</code><code class="descname">load_ns</code><span class="sig-paren">(</span><em>mods</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/extensions/easy_import.html#load_ns"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#extensions.easy_import.load_ns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load modules into the namespace.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mods</strong> (<em>module</em><em>(</em><em>s</em><em>)</em>) – Modules to import.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>%ns mpl</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="module-extensions.pd_csv">
+<span id="pd-csv"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">pd_csv</span></code><a class="headerlink" href="#module-extensions.pd_csv" title="Permalink to this headline">¶</a></h2>
+<p>Magic that reads in a sstring and parses it as a csv with pandas.</p>
+<p>Example of creating a magic from IPython Interactive Computing and
+Visualization Cookbook by TODO</p>
+<p>The example specifically is from pages 32 to 35.</p>
+<dl>
+<dt>It also shows the following simpler example::</dt><dd><dl>
+<dt>In [1]: from IPython.core.magic import (register_line_magic,</dt><dd><p>register_cell_magic)</p>
+</dd>
+<dt>In [2]: &#64;register_line_magic</dt><dd><p>def hello(line):
+if line == ‘french’:</p>
+<blockquote>
+<div><p>print(“Salut tout le monde!”)</p>
+</div></blockquote>
+<dl class="simple">
+<dt>else:</dt><dd><p>print(“Hello world!”)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="function">
+<dt id="extensions.pd_csv.csv">
+<code class="descclassname">extensions.pd_csv.</code><code class="descname">csv</code><span class="sig-paren">(</span><em>line</em>, <em>cell</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/extensions/pd_csv.html#csv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#extensions.pd_csv.csv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="extensions.pd_csv.load_ipython_extension">
+<code class="descclassname">extensions.pd_csv.</code><code class="descname">load_ipython_extension</code><span class="sig-paren">(</span><em>ip</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/extensions/pd_csv.html#load_ipython_extension"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#extensions.pd_csv.load_ipython_extension" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is called when the extension is loaded. It accepts an
+IPython InteractiveShell instance. We can register the magic with th
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">register_magic_function</span></code> method.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-extensions.site_pkgs">
+<span id="site-pkgs"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">site_pkgs</span></code><a class="headerlink" href="#module-extensions.site_pkgs" title="Permalink to this headline">¶</a></h2>
+<p>Show site packages for different venvs installed on a system.</p>
+<p>Utilize IPython macros to search through the site-packages directory for
+membership of a package.</p>
+<div class="section" id="assume">
+<h3>Assume<a class="headerlink" href="#assume" title="Permalink to this headline">¶</a></h3>
+<p>Unix OS</p>
+<p>Will be tested on Win10 soon.</p>
+<p>The only changes that should need to be made is possibly making a getter for
+the home dir.</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">try</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">home</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;$HOME&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%u</span><span class="s1">serprofile%&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>And then access attributes with the <code class="docutils literal notranslate"><span class="pre">ip</span></code> object.</p>
+<p class="rubric">References</p>
+<p><a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#module-IPython.core.interactiveshell" title="(in IPython v7.5.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython.core.interactiveshell</span></code></a></p>
+<p>Around lines 2300</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#-------------------------------------------------------------------------</span>
+<span class="c1"># Things related to macros</span>
+<span class="c1">#-------------------------------------------------------------------------</span>
+
+<span class="k">def</span> <span class="nf">define_macro</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">themacro</span><span class="p">):</span>
+    <span class="c1"># Define a new macro</span>
+
+    <span class="c1"># Parameters</span>
+    <span class="c1"># ----------</span>
+    <span class="c1"># name : str</span>
+        <span class="c1"># The name of the macro.</span>
+    <span class="c1"># themacro : str or Macro</span>
+        <span class="c1"># The action to do upon invoking the macro.  If a string, a new</span>
+        <span class="c1"># Macro object is created by passing the string to it.</span>
+
+    <span class="kn">from</span> <span class="nn">IPython.core</span> <span class="k">import</span> <span class="n">macro</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">themacro</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">themacro</span> <span class="o">=</span> <span class="n">macro</span><span class="o">.</span><span class="n">Macro</span><span class="p">(</span><span class="n">themacro</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">themacro</span><span class="p">,</span> <span class="n">macro</span><span class="o">.</span><span class="n">Macro</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;A macro must be a string or a Macro instance.&#39;</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">user_ns</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">themacro</span>
+</pre></div>
+</div>
+<dl class="function">
+<dt id="extensions.site_pkgs.all_site_pkgs">
+<code class="descclassname">extensions.site_pkgs.</code><code class="descname">all_site_pkgs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/extensions/site_pkgs.html#all_site_pkgs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#extensions.site_pkgs.all_site_pkgs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display every package in site-packages.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="load-ext">
+<h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">load_ext</span></code><a class="headerlink" href="#load-ext" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 
@@ -90,30 +180,37 @@ the following command to get the current instance</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="index.html">Dynamic IPython</a></h1>
-
-
-
-
-
-
-
-
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="directive.html" title="previous chapter">IPython Directive</a></li>
-      <li>Next: <a href="rich_output.html" title="next chapter">Rich Output</a></li>
-  </ul></li>
-</ul>
   <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">README</a><ul>
-<li><a class="reference internal" href="#creating-ipython-extensions">Creating IPython Extensions</a></li>
+<li><a class="reference internal" href="#">Extensions</a><ul>
+<li><a class="reference internal" href="#module-extensions.easy_import"><code class="xref py py-mod docutils literal notranslate"><span class="pre">easy_import</span></code></a><ul>
+<li><a class="reference internal" href="#easy-import-import-commonly-used-modules-into-the-ipython-namespace">Easy Import — Import commonly used modules into the IPython namespace.</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-extensions.pd_csv"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pd_csv</span></code></a></li>
+<li><a class="reference internal" href="#module-extensions.site_pkgs"><code class="xref py py-mod docutils literal notranslate"><span class="pre">site_pkgs</span></code></a><ul>
+<li><a class="reference internal" href="#assume">Assume</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#load-ext"><code class="xref py py-mod docutils literal notranslate"><span class="pre">load_ext</span></code></a></li>
 </ul>
 </li>
 </ul>
-
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="API.html">API</a><ul>
+      <li>Previous: <a href="profile_default.html" title="previous chapter">Default IPython Profile and Startup Scripts</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/extensions.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <div class="searchformwrapper">
@@ -124,13 +221,6 @@ the following command to get the current instance</p>
     </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/extensions.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
         </div>
       </div>
       <div class="clearer"></div>
@@ -145,12 +235,10 @@ the following command to get the current instance</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="rich_output.html" title="Rich Output"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="directive.html" title="IPython Directive"
+          <a href="profile_default.html" title="Default IPython Profile and Startup Scripts"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="API.html" >API</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

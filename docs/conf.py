@@ -17,10 +17,10 @@ import os
 from pathlib import Path
 import sys
 
-from default_profile.__about__ import __version__
+from profile_default.__about__ import __version__
 
-ROOT = Path('../..')
-PD = ROOT.joinpath('default_profile')
+ROOT = Path('..')
+PD = ROOT.joinpath('profile_default')
 STARTUP = PD.joinpath('startup')
 
 logger = logging.getLogger(name=__name__)
@@ -134,15 +134,15 @@ html_static_path = ['_static']
 # default: ``['localtoc.html', 'relations.html', 'sourcelink.html',
 # 'searchbox.html']``.
 #
-html_sidebars = {
-    '**': [
-        'about.html',
-        'relations.html',
-        'localtoc.html',
-        'searchbox.html',
-        'sourcelink.html',
-    ]
-}
+# html_sidebars = {
+#     '**': [
+#         'about.html',
+#         'relations.html',
+#         'localtoc.html',
+#         'searchbox.html',
+#         'sourcelink.html',
+#     ]
+# }
 
 # If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
 html_show_sphinx = False
@@ -231,9 +231,13 @@ todo_include_todos = False
 
 # Viewcode
 
-viewcode_import = True
+# Apr 28, 2019
+# RemovedInSphinx30Warning: 
+# viewcode_import was renamed to viewcode_follow_imported_members. 
+# Please update your configuration.
+viewcode_follow_imported_members = False
 
-# Option for IPython
+# Option for IPython directive
 
 ipython_warning_is_error = False
 

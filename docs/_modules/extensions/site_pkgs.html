@@ -1,0 +1,220 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>extensions.site_pkgs &#8212; Dynamic IPython 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="/data/data/com.termux/files/home/projects/dynamic_ipython/docs/_static/pyramid.css_t" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for extensions.site_pkgs</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;Show site packages for different venvs installed on a system.</span>
+
+<span class="sd">Utilize IPython macros to search through the site-packages directory for</span>
+<span class="sd">membership of a package.</span>
+
+<span class="sd">Assume</span>
+<span class="sd">-------</span>
+<span class="sd">Unix OS</span>
+
+<span class="sd">Will be tested on Win10 soon.</span>
+
+<span class="sd">The only changes that should need to be made is possibly making a getter for</span>
+<span class="sd">the home dir.</span>
+
+<span class="sd">.. code-block:: python3</span>
+
+<span class="sd">    &gt;&gt;&gt; try:</span>
+<span class="sd">    &gt;&gt;&gt;     home = os.environ.get(&#39;$HOME&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; except OSError:</span>
+<span class="sd">    &gt;&gt;&gt;     os.environ.get(&#39;%userprofile%&#39;)</span>
+
+
+
+<span class="sd">References</span>
+<span class="sd">----------</span>
+<span class="sd">:mod:`IPython.core.interactiveshell`</span>
+
+
+<span class="sd">Around lines 2300</span>
+
+<span class="sd">.. code-block:: python3</span>
+
+<span class="sd">    #-------------------------------------------------------------------------</span>
+<span class="sd">    # Things related to macros</span>
+<span class="sd">    #-------------------------------------------------------------------------</span>
+
+<span class="sd">    def define_macro(self, name, themacro):</span>
+<span class="sd">        # Define a new macro</span>
+
+<span class="sd">        # Parameters</span>
+<span class="sd">        # ----------</span>
+<span class="sd">        # name : str</span>
+<span class="sd">            # The name of the macro.</span>
+<span class="sd">        # themacro : str or Macro</span>
+<span class="sd">            # The action to do upon invoking the macro.  If a string, a new</span>
+<span class="sd">            # Macro object is created by passing the string to it.</span>
+
+<span class="sd">        from IPython.core import macro</span>
+
+<span class="sd">        if isinstance(themacro, str):</span>
+<span class="sd">            themacro = macro.Macro(themacro)</span>
+<span class="sd">        if not isinstance(themacro, macro.Macro):</span>
+<span class="sd">            raise ValueError(&#39;A macro must be a string or a Macro instance.&#39;)</span>
+<span class="sd">        self.user_ns[name] = themacro</span>
+
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">from</span> <span class="nn">IPython.core.macro</span> <span class="k">import</span> <span class="n">Macro</span>
+
+
+<span class="k">def</span> <span class="nf">_parse_arguments</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Parse user input.&quot;&quot;&quot;</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;__doc__&quot;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;site-packages&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Paths to py venvs.&quot;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;-a&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-all&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Print all site packages in ~/virtualenvs&quot;</span>
+    <span class="p">)</span>  <span class="c1"># gonna need a path to the venv dir</span>
+
+    <span class="c1"># Stolen from argparse lib ref.</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;--log&#39;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span>
+        <span class="nb">type</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">FileType</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">),</span>
+        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The file where the packages should be written. Defaults to&#39;</span>
+        <span class="s1">&#39;stdout. &#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">parser</span>
+
+
+<div class="viewcode-block" id="all_site_pkgs"><a class="viewcode-back" href="../../extensions.html#extensions.site_pkgs.all_site_pkgs">[docs]</a><span class="k">def</span> <span class="nf">all_site_pkgs</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Display every package in site-packages.&quot;&quot;&quot;</span>
+    <span class="n">pkgs</span> <span class="o">=</span> <span class="n">Macro</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    from glob import glob</span>
+<span class="s2">    from os.path import expanduser, join as pjoin</span>
+<span class="s2">    import os</span>
+
+<span class="s2">    home = expanduser(&#39;~&#39;)</span>
+
+<span class="s2">    search = glob(pjoin(home, &quot;virtualenvs&quot;, &quot;**&quot;, &quot;lib&quot;, &quot;python3.6&quot;,&quot;site-packages&quot;, &quot;**&quot;))</span>
+
+<span class="s2">    for i in search:</span>
+<span class="s2">        if &quot;dist-info&quot; not in i:</span>
+<span class="s2">            if os.path.isdir(i):        # don&#39;t print loose files</span>
+<span class="s2">                print(i)</span>
+<span class="s2">                &quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pkgs</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># Does ipy run these files or source them?</span>
+    <span class="c1"># Let&#39;s put an ifmaun and see uf its still available</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">_parse_arguments</span><span class="p">()</span>
+    <span class="c1"># if should</span>
+    <span class="c1"># this causes ipy startup to err so moved here</span>
+    <span class="c1"># doing so gives</span>
+    <span class="c1"># AttributeError: &#39;Namespace&#39; object has no attribute &#39;print_help&#39;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="c1"># Too few arguments. We can&#39;t specify this using argparse alone, so we</span>
+        <span class="c1"># have to manually check.</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">print_help</span><span class="p">()</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+    <span class="n">pkgs</span> <span class="o">=</span> <span class="n">all_site_pkgs</span><span class="p">()</span>  <span class="c1"># leave it in user_ns in case I want it for later.</span>
+
+    <span class="n">args</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">pkgs</span><span class="p">)</span>
+    <span class="n">args</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright (C) 2018-2019 Faris Chugthai.
+    </div>
+  </body>
+</html>

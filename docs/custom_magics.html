@@ -5,9 +5,9 @@
   <head>
     <meta charset="utf-8" />
     <title>Defining custom magics &#8212; Dynamic IPython 0.0.1 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="/data/data/com.termux/files/home/projects/dynamic_ipython/docs/source/_static/pyramid.css_t" />
+    <link rel="stylesheet" type="text/css" href="/data/data/com.termux/files/home/projects/dynamic_ipython/docs/_static/pyramid.css_t" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
@@ -59,7 +59,7 @@
 </dl>
 <p>There are two main ways to define your own magic functions: from standalone
 functions and by inheriting from a base class provided by IPython:
-<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.magic.html#IPython.core.magic.Magics" title="(in IPython v7.4.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.magic.Magics</span></code></a>. Below we show code you can place in a file
+<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.magic.html#IPython.core.magic.Magics" title="(in IPython v7.5.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.magic.Magics</span></code></a>. Below we show code you can place in a file
 that you load from your configuration, such as any file in the <code class="docutils literal notranslate"><span class="pre">startup</span></code>
 subdirectory of your default IPython profile.</p>
 <p>First, let us see the simplest case. The following shows how to create a line
@@ -93,7 +93,7 @@ magic, a cell one and one that works in both modes, using just plain functions:<
 </pre></div>
 </div>
 <p>You can also create magics of all three kinds by inheriting from the
-<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.magic.html#IPython.core.magic.Magics" title="(in IPython v7.4.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.magic.Magics</span></code></a> class.  This lets you create magics that can
+<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.magic.html#IPython.core.magic.Magics" title="(in IPython v7.5.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.magic.Magics</span></code></a> class.  This lets you create magics that can
 potentially hold state in between calls, and that have full access to the main
 IPython object:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># This code can be put in any Python module, it does not require IPython</span>
@@ -216,6 +216,39 @@ class Abracadabra<span class="o">(</span>Magics<span class="o">)</span>:
         <span class="k">return</span> line, cell
 </pre></div>
 </div>
+<div class="section" id="creating-ipython-extensions">
+<h2>Creating IPython Extensions<a class="headerlink" href="#creating-ipython-extensions" title="Permalink to this headline">¶</a></h2>
+<p><em>Summarized from “Learning IPython for Interactive Computing and Data Visualization 1st ed.pdf”“</em></p>
+<p>:</p>
+<blockquote>
+<div><p>To create an extension, we need to create a Python module in a
+directory, which is in the Python path. A possibility is to put it in
+the current directory, or in your <a class="reference external" href="$IPYTHONDIR/extensions">IPython dir</a></p>
+<p>An extension implements a <code class="xref py py-func docutils literal notranslate"><span class="pre">|ip|.load_ipython_extension(ipython)()</span></code>,
+which takes the current <code class="docutils literal notranslate"><span class="pre">|ip|</span></code> instance as an argument (and possibly
+<code class="xref py py-func docutils literal notranslate"><span class="pre">|ip|.unload_ipython_extension(ipython)()</span></code> which is called when
+the extension is unloaded).</p>
+<p>This instance can be used to register new magic commands, access the user
+namespace, execute code, and so on.</p>
+<p>This loading function is called when the extension is loaded, which
+happens when the <code class="docutils literal notranslate"><span class="pre">%load_ext</span></code> or <code class="docutils literal notranslate"><span class="pre">%reload_ext</span> <span class="pre">magic</span></code> command is
+executed. To automatically load a module when IPython starts,
+we need to add the module name to the <code class="docutils literal notranslate"><span class="pre">c.TerminalIPythonApp.extensions</span></code>
+list in the IPython configuration file.</p>
+<p>The <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.5.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveShell</span></code></a> instance represents the active
+<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.5.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> interpreter. Useful methods and attributes include
+<code class="xref py py-func docutils literal notranslate"><span class="pre">|ip|.register_magics()</span></code>, to create new magic commands,
+and <code class="docutils literal notranslate"><span class="pre">user_ns</span></code>, to access the user namespace. You can
+explore all the instance’s attributes interactively from
+<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.5.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> with tab completion. For that, you need to execute
+the following command to get the current instance</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython</span> <span class="k">import</span> <span class="n">get_ipython</span>
+<span class="n">ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>And then access attributes with the <code class="docutils literal notranslate"><span class="pre">ip</span></code> object.</p>
+</div></blockquote>
+</div>
 </div>
 
 
@@ -224,15 +257,14 @@ class Abracadabra<span class="o">(</span>Magics<span class="o">)</span>:
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="index.html">Dynamic IPython</a></h1>
-
-
-
-
-
-
-
-
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Defining custom magics</a></li>
+<li><a class="reference internal" href="#complete-example">Complete Example</a><ul>
+<li><a class="reference internal" href="#creating-ipython-extensions">Creating IPython Extensions</a></li>
+</ul>
+</li>
+</ul>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
@@ -240,12 +272,13 @@ class Abracadabra<span class="o">(</span>Magics<span class="o">)</span>:
       <li>Next: <a href="directive.html" title="next chapter">IPython Directive</a></li>
   </ul></li>
 </ul>
-  <h3><a href="index.html">Table of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Defining custom magics</a></li>
-<li><a class="reference internal" href="#complete-example">Complete Example</a></li>
-</ul>
-
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/custom_magics.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <div class="searchformwrapper">
@@ -256,13 +289,6 @@ class Abracadabra<span class="o">(</span>Magics<span class="o">)</span>:
     </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/custom_magics.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
         </div>
       </div>
       <div class="clearer"></div>

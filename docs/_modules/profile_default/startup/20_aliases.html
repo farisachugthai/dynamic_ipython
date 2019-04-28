@@ -5,9 +5,9 @@
   <head>
     <meta charset="utf-8" />
     <title>profile_default.startup.20_aliases &#8212; Dynamic IPython 0.0.1 documentation</title>
-    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="/data/data/com.termux/files/home/projects/dynamic_ipython/docs/source/_static/pyramid.css_t" />
+    <link rel="stylesheet" type="text/css" href="/data/data/com.termux/files/home/projects/dynamic_ipython/docs/_static/pyramid.css_t" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
@@ -61,7 +61,7 @@
 
 <span class="sd">Overview</span>
 <span class="sd">--------</span>
-<span class="sd">This module utilizes ``_ip``, the global IPython InteractiveShell</span>
+<span class="sd">This module utilizes ``_ip``, the global :mod:`IPython` |ip|</span>
 <span class="sd">instance, and fills the ``user_ns`` with common Linux idioms.</span>
 
 
@@ -71,12 +71,12 @@
 <span class="sd">placeholders. As per the official documentation:</span>
 
 
-<span class="sd">    .. topic:: %l parameter</span>
+<span class="sd">.. topic:: ``%l`` parameter</span>
 
-<span class="sd">        You can use the %l specifier in an alias definition to represent the</span>
-<span class="sd">        whole line when the alias is called.</span>
+<span class="sd">    You can use the ``%l`` specifier in an ``%alias`` definition to represent the</span>
+<span class="sd">    whole line when the alias is called.</span>
 
-<span class="sd">Meaning that it behaves similarly to the parameter `$*` in shells like eshell.</span>
+<span class="sd">Meaning that it behaves similarly to the parameter ``$*`` in shells like eshell.</span>
 
 <span class="sd">The documentation goes on to say:</span>
 
@@ -135,7 +135,10 @@
 <span class="kn">from</span> <span class="nn">IPython</span> <span class="k">import</span> <span class="n">get_ipython</span>
 <span class="kn">from</span> <span class="nn">IPython.core.alias</span> <span class="k">import</span> <span class="n">AliasError</span>
 
-<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="c1"># Now my stuff!</span>
+<span class="kn">from</span> <span class="nn">_logging</span> <span class="k">import</span> <span class="n">setup_ipython_logger</span>
+
+<span class="n">LOGGER</span> <span class="o">=</span> <span class="n">setup_ipython_logger</span><span class="p">()</span>
 
 
 <span class="k">def</span> <span class="nf">_sys_check</span><span class="p">():</span>
@@ -143,7 +146,7 @@
     <span class="k">return</span> <span class="n">platform</span><span class="o">.</span><span class="n">uname</span><span class="p">()</span><span class="o">.</span><span class="n">system</span>
 
 
-<div class="viewcode-block" id="linux_specific_aliases"><a class="viewcode-back" href="../../../API.html#profile_default.startup.20_aliases.linux_specific_aliases">[docs]</a><span class="k">def</span> <span class="nf">linux_specific_aliases</span><span class="p">(</span><span class="n">_ip</span><span class="p">):</span>
+<div class="viewcode-block" id="linux_specific_aliases"><a class="viewcode-back" href="../../../profile_default.html#profile_default.startup.20_aliases.linux_specific_aliases">[docs]</a><span class="k">def</span> <span class="nf">linux_specific_aliases</span><span class="p">(</span><span class="n">_ip</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Add Linux specific aliases.</span>
 
 <span class="sd">    Aliases that have either:</span>
@@ -227,7 +230,7 @@
     <span class="k">return</span> <span class="n">_user_aliases</span></div>
 
 
-<div class="viewcode-block" id="common_aliases"><a class="viewcode-back" href="../../../API.html#profile_default.startup.20_aliases.common_aliases">[docs]</a><span class="k">def</span> <span class="nf">common_aliases</span><span class="p">(</span><span class="n">_ip</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="common_aliases"><a class="viewcode-back" href="../../../profile_default.html#profile_default.startup.20_aliases.common_aliases">[docs]</a><span class="k">def</span> <span class="nf">common_aliases</span><span class="p">(</span><span class="n">_ip</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Add aliases common to all OSes.</span>
 
 <span class="sd">    Parameters</span>
@@ -238,12 +241,13 @@
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    _ip.user_aliases : list</span>
+<span class="sd">    _ip.user_aliases : List of tuples</span>
 <span class="sd">        User aliases.</span>
+
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_user_aliases</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="p">(</span><span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff --staged --stat&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff --staged --stat %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;ga&#39;</span><span class="p">,</span> <span class="s1">&#39;git add %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;ga.&#39;</span><span class="p">,</span> <span class="s1">&#39;git add .&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;gar&#39;</span><span class="p">,</span> <span class="s1">&#39;git add --renormalize %l&#39;</span><span class="p">),</span>
@@ -263,8 +267,8 @@
         <span class="p">(</span><span class="s1">&#39;gf&#39;</span><span class="p">,</span> <span class="s1">&#39;git fetch --all&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;git&#39;</span><span class="p">,</span> <span class="s1">&#39;git %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;git hist&#39;</span><span class="p">,</span>
-         <span class="s1">&#39;git log --pretty=&quot;format:%h </span><span class="si">%a</span><span class="s1">d | </span><span class="si">%d</span><span class="s1"> [</span><span class="si">%a</span><span class="s1">n]&quot; --graph --date=short --branches --abbrev-commit --oneline &#39;</span>
-         <span class="p">),</span>
+         <span class="s1">&#39;git log --pretty=&quot;format:%h </span><span class="si">%a</span><span class="s1">d | </span><span class="si">%d</span><span class="s1"> [</span><span class="si">%a</span><span class="s1">n]&quot; --graph --date=short &#39;</span>
+         <span class="s1">&#39;--branches --abbrev-commit --oneline %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;git last&#39;</span><span class="p">,</span> <span class="s1">&#39;git log -1 HEAD %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;git staged&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff --cached %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;git rel&#39;</span><span class="p">,</span> <span class="s1">&#39;git rev-parse --show-prefix&#39;</span><span class="p">),</span>
@@ -272,7 +276,9 @@
         <span class="p">(</span><span class="s1">&#39;git unstage&#39;</span><span class="p">,</span> <span class="s1">&#39;git reset HEAD&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;git unstaged&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;gl&#39;</span><span class="p">,</span> <span class="s1">&#39;git log %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;glo&#39;</span><span class="p">,</span> <span class="s1">&#39;git log --graph --decorate --abbrev-commit --oneline --branches --all&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;glo&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;git log --graph --decorate --abbrev-commit --oneline --branches --all&#39;</span>
+         <span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;gls&#39;</span><span class="p">,</span> <span class="s1">&#39;git ls-tree&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;gm&#39;</span><span class="p">,</span> <span class="s1">&#39;git merge --no-ff %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;gmm&#39;</span><span class="p">,</span> <span class="s1">&#39;git merge master&#39;</span><span class="p">),</span>
@@ -304,9 +310,59 @@
     <span class="k">return</span> <span class="n">_user_aliases</span></div>
 
 
-<div class="viewcode-block" id="windows_aliases"><a class="viewcode-back" href="../../../API.html#profile_default.startup.20_aliases.windows_aliases">[docs]</a><span class="k">def</span> <span class="nf">windows_aliases</span><span class="p">(</span><span class="n">_ip</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;How did these get deleted!&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="windows_aliases"><a class="viewcode-back" href="../../../profile_default.html#profile_default.startup.20_aliases.windows_aliases">[docs]</a><span class="k">def</span> <span class="nf">windows_aliases</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;How did these get deleted!</span>
+
+<span class="sd">    Also note that Powershell comes with a BUNCH of built-in aliases. We&#39;ll</span>
+<span class="sd">    have to create a way of detecting that we&#39;re in powershell specifically</span>
+<span class="sd">    though.</span>
+
+<span class="sd">    Alias           rp --&gt; Remove-ItemProperty</span>
+<span class="sd">    Alias           rsn --&gt; Remove-PSSession</span>
+<span class="sd">    Alias           rv --&gt; Remove-Variable</span>
+<span class="sd">    Alias           rvpa --&gt; Resolve-Path</span>
+<span class="sd">    Alias           sajb --&gt; Start-Job</span>
+<span class="sd">    Alias           sal --&gt; Set-Alias</span>
+<span class="sd">    Alias           saps --&gt; Start-Process</span>
+<span class="sd">    Alias           sasv --&gt; Start-Service</span>
+<span class="sd">    Alias           sbp --&gt; Set-PSBreakpoint</span>
+<span class="sd">    Alias           select --&gt; Select-Object</span>
+<span class="sd">    Alias           set --&gt; Set-Variable</span>
+<span class="sd">    Alias           si --&gt; Set-Item</span>
+<span class="sd">    Alias           sl --&gt; Set-Location</span>
+<span class="sd">    Alias           sleep --&gt; Start-Sleep</span>
+<span class="sd">    Alias           sls --&gt; Select-String</span>
+<span class="sd">    Alias           sort --&gt; Sort-Object</span>
+<span class="sd">    Alias           sp --&gt; Set-ItemProperty</span>
+<span class="sd">    Alias           spjb --&gt; Stop-Job</span>
+<span class="sd">    Alias           spps --&gt; Stop-Process</span>
+<span class="sd">    Alias           spsv --&gt; Stop-Service</span>
+<span class="sd">    Alias           start --&gt; Start-Process</span>
+<span class="sd">    Alias           stz --&gt; Set-TimeZone</span>
+<span class="sd">    Alias           sv --&gt; Set-Variable</span>
+<span class="sd">    Alias           tee --&gt; Tee-Object</span>
+<span class="sd">    Alias           type --&gt; Get-Content</span>
+<span class="sd">    Alias           where --&gt; Where-Object</span>
+<span class="sd">    Alias           wjb --&gt; Wait-Job</span>
+<span class="sd">    Alias           write --&gt; Write-Output</span>
+
+<span class="sd">    Also I felt really good about the way I reformatted that!</span>
+
+<span class="sd">    .. code-block:: vim</span>
+
+<span class="sd">        :&#39;&lt;,&#39;&gt;s/^\W/(&#39;/</span>
+<span class="sd">        :&#39;&lt;,&#39;&gt;s/ --&gt; /&#39;, &#39;/</span>
+<span class="sd">        :&#39;&lt;,&#39;&gt;s/$/&#39;),</span>
+<span class="sd">        gv&gt;</span>
+<span class="sd">        &quot; Realize that the indentation is all out of whack and let ALE deal</span>
+<span class="sd">        :w</span>
+
+<span class="sd">    That&#39;s some non-trivial stuff right there! First try on all 4 of them!</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_ip</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s1">&#39;cmder&#39;</span><span class="p">,</span> <span class="s1">&#39;cmder&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;conemu&#39;</span><span class="p">,</span> <span class="s1">&#39;conemu&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;copy&#39;</span><span class="p">,</span> <span class="s1">&#39;copy&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;ddir&#39;</span><span class="p">,</span> <span class="s1">&#39;dir /ad /on&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;echo&#39;</span><span class="p">,</span> <span class="s1">&#39;echo&#39;</span><span class="p">),</span>
@@ -314,14 +370,56 @@
         <span class="p">(</span><span class="s1">&#39;ls&#39;</span><span class="p">,</span> <span class="s1">&#39;dir /on&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;mkdir&#39;</span><span class="p">,</span> <span class="s1">&#39;mkdir&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;mklink&#39;</span><span class="p">,</span> <span class="s1">&#39;mklink&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;move&#39;</span><span class="p">,</span> <span class="s1">&#39;move&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;mv&#39;</span><span class="p">,</span> <span class="s1">&#39;move&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;ren&#39;</span><span class="p">,</span> <span class="s1">&#39;ren&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;rmdir&#39;</span><span class="p">,</span> <span class="s1">&#39;rmdir&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;rp&#39;</span><span class="p">,</span> <span class="s1">&#39;Remove-ItemProperty&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;rsn&#39;</span><span class="p">,</span> <span class="s1">&#39;Remove-PSSession&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;rv&#39;</span><span class="p">,</span> <span class="s1">&#39;Remove-Variable&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;rvpa&#39;</span><span class="p">,</span> <span class="s1">&#39;Resolve-Path&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;sajb&#39;</span><span class="p">,</span> <span class="s1">&#39;Start-Job&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;sal&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-Alias&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;saps&#39;</span><span class="p">,</span> <span class="s1">&#39;Start-Process&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;sasv&#39;</span><span class="p">,</span> <span class="s1">&#39;Start-Service&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;sbp&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-PSBreakpoint&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;select&#39;</span><span class="p">,</span> <span class="s1">&#39;Select-Object&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;set&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-Variable&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;si&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-Item&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;sl&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-Location&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;sleep&#39;</span><span class="p">,</span> <span class="s1">&#39;Start-Sleep&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;sls&#39;</span><span class="p">,</span> <span class="s1">&#39;Select-String&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;sort&#39;</span><span class="p">,</span> <span class="s1">&#39;Sort-Object&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;sp&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-ItemProperty&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;spjb&#39;</span><span class="p">,</span> <span class="s1">&#39;Stop-Job&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;spps&#39;</span><span class="p">,</span> <span class="s1">&#39;Stop-Process&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;spsv&#39;</span><span class="p">,</span> <span class="s1">&#39;Stop-Service&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;start&#39;</span><span class="p">,</span> <span class="s1">&#39;Start-Process&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;stz&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-TimeZone&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;sv&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-Variable&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;tee&#39;</span><span class="p">,</span> <span class="s1">&#39;Tee-Object&#39;</span><span class="p">),</span>
         <span class="p">(</span>
             <span class="s1">&#39;tree&#39;</span><span class="p">,</span>
             <span class="s1">&#39;tree /F /A %l&#39;</span><span class="p">,</span>
         <span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">,</span> <span class="s1">&#39;Get-Content&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;where&#39;</span><span class="p">,</span> <span class="s1">&#39;Where-Object&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;wjb&#39;</span><span class="p">,</span> <span class="s1">&#39;Wait-Job&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;write&#39;</span><span class="p">,</span> <span class="s1">&#39;Write-Output&#39;</span><span class="p">),</span>
     <span class="p">]</span>
     <span class="k">return</span> <span class="n">_ip</span><span class="o">.</span><span class="n">user_aliases</span></div>
+
+
+<span class="k">def</span> <span class="nf">__setup_fzf</span><span class="p">(</span><span class="n">user_aliases</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Poorly might I add.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">which</span><span class="p">(</span><span class="s1">&#39;fzf&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">which</span><span class="p">(</span><span class="s1">&#39;rg&#39;</span><span class="p">):</span>
+        <span class="n">user_aliases</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+            <span class="p">(</span><span class="s1">&#39;fzf&#39;</span><span class="p">,</span> <span class="s1">&#39;$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS&#39;</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">which</span><span class="p">(</span><span class="s1">&#39;fzf&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">which</span><span class="p">(</span><span class="s1">&#39;ag&#39;</span><span class="p">):</span>
+        <span class="n">user_aliases</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+            <span class="p">(</span><span class="s1">&#39;fzf&#39;</span><span class="p">,</span> <span class="s1">&#39;$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS&#39;</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">user_aliases</span>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
@@ -348,12 +446,7 @@
 
     <span class="n">user_aliases</span> <span class="o">+=</span> <span class="n">common_aliases</span><span class="p">(</span><span class="n">_ip</span><span class="p">)</span>
 
-    <span class="c1"># There has got to be a better way to do this.</span>
-    <span class="k">if</span> <span class="n">which</span><span class="p">(</span><span class="s1">&#39;fzf&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">which</span><span class="p">(</span><span class="s1">&#39;rg&#39;</span><span class="p">):</span>
-        <span class="n">user_aliases</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
-            <span class="p">(</span><span class="s1">&#39;fzf&#39;</span><span class="p">,</span> <span class="s1">&#39;$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS&#39;</span><span class="p">))</span>
-    <span class="k">elif</span> <span class="n">which</span><span class="p">(</span><span class="s1">&#39;fzf&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">which</span><span class="p">(</span><span class="s1">&#39;ag&#39;</span><span class="p">):</span>
-        <span class="k">pass</span>  <span class="c1"># TODO</span>
+    <span class="n">__setup_fzf</span><span class="p">(</span><span class="n">user_aliases</span><span class="p">)</span>
 
     <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;The number of available aliases is: &quot;</span> <span class="o">+</span>
                  <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">user_aliases</span><span class="p">)))</span>
@@ -371,17 +464,7 @@
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../../../index.html">Dynamic IPython</a></h1>
-
-
-
-
-
-
-
-
-<h3>Related Topics</h3>
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
 <ul>
   <li><a href="../../../index.html">Documentation overview</a><ul>
   <li><a href="../../index.html">Module code</a><ul>
