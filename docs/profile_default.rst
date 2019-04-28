@@ -33,13 +33,13 @@ Default IPython Profile and Startup Scripts
     :show-inheritance:
 
 
-:mod:`~profile_default.startup.02_paths`
-------------------------------------------
+.. :mod:`~profile_default.startup.02_paths`
+.. ------------------------------------------
 
-.. automodule:: profile_default.startup.02_paths
-    :members:
-    :undoc-members:
-    :show-inheritance:
+.. .. automodule:: profile_default.startup.02_paths
+..     :members:
+..     :undoc-members:
+..     :show-inheritance:
 
 
 :mod:`~profile_default.startup.04_easy_import`

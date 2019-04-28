@@ -2,13 +2,9 @@ pygments
 ==========
 Feb 21, 2019:
 
-I just noticed a constant that actually clarifies a good amount about
-:mod:`Pygments`.
-Or gives you a direction to go in at least.
+This document is the output from :command:`pygmentize -L`. Also truncated it heavily.
 
-A lot of this document is ``pygmentize -L`` output. Also truncated it heavily.
-
-The last section is the output from ``tldr -m pygmentize``.
+The last section is the output from :command:`tldr -m pygmentize`.
 
 Pygments version 2.2.0, (c) 2006-2017 by Georg Brandl.
 
@@ -43,15 +39,12 @@ Pygments and CSS
    Token.Name.Entity: 'ni',
    Token.Name.Exception: 'ne',
 
-Now if you go and open up `~/.local/scripts/gruvbox-pygments/gruvbox.css`_
-you'll notice that those letter abbreviations are abbreviations for CSS things!
-
 Pygments is directly a mapping of color codes to CSS that applies based on lexers
 for different programming languages. Sweet.
 
 Formatters:
 -----------
-:
+Here are all the formatters provided:
 
    + bbcode, bb:
        Format tokens with BBcodes. These formatting codes are used by many bulletin boards, so you can highlight your sourcecode with pygments before posting it there.

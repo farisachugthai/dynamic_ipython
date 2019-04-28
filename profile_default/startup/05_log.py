@@ -14,42 +14,11 @@ The timestamp is particularly convenient for concurrent instances of IPy.
     - Consider using datetime instead of time. Not pertinent though.
     - Explore both the built-in logging module and IPython logging subclass.
     - Truncate output if it exceeds a certain threshold.
-        - Run dir(np) or dir(pd) a couple of times and the logs become
-        swamped.
+        - Run dir(np) or dir(pd) a couple of times and the logs become swamped.
     - Possibly change that section under the shebang to also include 3
-    double quotes and in the comment add system info like py version, venv,
-    conda, any of the 1000000 things you could add.
+      double quotes and in the comment add system info like py version, venv,
+      conda, any of the 1000000 things you could add.
 
-See Also
-----------
-For further reading, feel free to see the output of any of the following
-
-.. code-block:: python3
-
-    >>> from IPython.core.interactiveshell import InteractiveShell
-    >>> help(InteractiveShell)
-
-Which features descriptions of functions relevant to startup such as
-``register_magic_function()`` and literally every option available
-through
-the ``%config`` magic.
-
-For commands that are more related to the interactive aspect of the
-shell,
-see the following
-
-.. code-block:: python3
-
-    >>> from IPython import get_ipython()
-    >>> _ip = get_ipython()
-    >>> help(_ip)
-    >>> dir(_ip)
-
-In addition, there's an abundance of documentation online in the
-form of rst docs and ipynb notebooks.
-
-
-Also I nabbed the source code for that logger class we use.
 
 In [2]: _ip.logger??
 Type:        Logger
