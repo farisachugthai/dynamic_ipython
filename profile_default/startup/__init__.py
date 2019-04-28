@@ -18,4 +18,4 @@ _ip = get_ipython()
 
 logging.getLogger(__name__).addHandler(NullHandler())
 
-sys.path.insert(0, os.path.abspath(os.path.dirname(__name__)
+sys.path.insert(0, os.path.abspath(os.path.dirname(__name__)))
