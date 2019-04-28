@@ -13,7 +13,7 @@
 var stopwords = ["a","and","are","as","at","be","but","by","for","if","in","into","is","it","near","no","not","of","on","or","such","that","the","their","then","there","these","they","this","to","was","will","with"];
 
 
-/* Non-minified version JS is _stemmer.js if file is provided */ 
+/* Non-minified version JS is _stemmer.js if file is provided */
 /**
  * Porter Stemmer
  */
@@ -194,7 +194,7 @@ var Stemmer = function() {
       w = firstch.toLowerCase() + w.substr(1);
     return w;
   }
-}
+};
 
 
 
