@@ -20,7 +20,7 @@ def setup_ipython_logger():
     # Set the filehandler to the name of the module importing this. Don't know
     # if that's how to do it correctly so cross your fingers!
     file_handler = logging.FileHandler(__name__ + '.log')
-    formatter = logging.Formatter(
+    formatter = logging.(
         '%(asctime)s : %(levelname)s : %(name)s : %(message)s')
     file_handler.setFormatter(formatter)
 
