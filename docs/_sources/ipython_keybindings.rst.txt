@@ -7,32 +7,23 @@ Keybindings in IPython
 .. module:: ipython_keybindings
     :synopsis: Module for managing keybindings in IPython.
 
-I'm seeing different modules to import. Or there's a bug because there were
-literally no modules with docstrings according to :mod:`IPython`.
-
-February 24, 2019:
-
-    After the fact I realized it was both an error in the docstring AND
-    I wasn't seeing docstrings either.
-
-
 Run in shell
 -------------
-This section is going to go over setting keybindings interactively in the shell.
+If we would like to add extra keybindings to the IPython shell, we can utilize
+a few functions built into the :mod:`IPython.terminal.interactiveshell` module,
+in addition, to utilizing the expansive :mod:`prompt_toolkit` library.
 
-Here's a little function I found today that might help guide this along
-in a more streamlined manner
+First we'll initialize a global instance of the shell.
 
-.. code-block:: python3
+Then import the function :func:`~IPython.terminal.interactiveshell.create_ipython_shortcuts`
+and initialize a :class:`~prompt_toolkit.key_binding.key_bindings.KeyBindings`
+instance.
 
-    >>> import IPython
-    >>> from IPython import get_ipython
-    >>> _ip = get_ipython()
-    >>> IPython.terminal.interactiveshell.create_ipython_shortcuts(_ip)
+The attributes associated with :func:`~IPython.terminal.interactiveshell.create_ipython_shortcuts`
+are as follows:
 
-So alternatively you can do
 
-.. code-block:: python3
+.. ipython:: python
 
     >>> from IPython import get_ipython
     >>> from IPython.terminal.interactiveshell import create_ipython_shortcuts
@@ -41,33 +32,7 @@ So alternatively you can do
     >>> # This will give you the following methods
     >>> print(dir(c))
         ['_KeyBindings__version',
-        '__abstractmethods__',
-        '__class__',
-        '__delattr__',
-        '__dict__',
-        '__dir__',
-        '__doc__',
-        '__eq__',
-        '__format__',
-        '__ge__',
-        '__getattribute__',
-        '__gt__',
-        '__hash__',
-        '__init__',
-        '__init_subclass__',
-        '__le__',
-        '__lt__',
-        '__module__',
-        '__ne__',
-        '__new__',
-        '__reduce__',
-        '__reduce_ex__',
-        '__repr__',
-        '__setattr__',
-        '__sizeof__',
-        '__str__',
-        '__subclasshook__',
-        '__weakref__',
+        ...
         '_abc_impl',
         '_clear_cache',
         '_get_bindings_for_keys_cache',
@@ -81,43 +46,34 @@ So alternatively you can do
         'remove',
         'remove_binding']
 
-``c.bindings`` has some useful info.
-No perceptible difference between :meth:`add()` and :meth:`add_binding()`.
 
-Couldn't get ``get_bindings_for_keys()`` to work unfortunately.
-
-* Ran with one arg with a known key :kbd:`Control-p` and got an empty response ``([])``.
-
-* Ran with ``args``=:kbd:`Control-p`, ``filter=HasFocus(DEFAULTBUFFER))`` and got an error.
-
-* Ran with 2 keys and got an err.
-
-Help on function ``create_ipython_shortcuts()`` in :class:`IPython.terminal.interactiveshell()`
-
-.. code-block:: python3
-
-    >>> IPython.terminal.interactiveshell.create_ipython_shortcuts =
-    >>> create_ipython_shortcuts(shell)
-    # Set up the prompt_toolkit keyboard shortcuts for IPython
+That file also gives a good example of how to bind keys.
 
 
 Original File Implementation
 ----------------------------
-Found the file where this is originally implemented YAS.
-Or I guess I should say the actual keybindings are listed.
 
 Go to the IPython root dir. This could be named something to the effect of
 `<~/miniconda3/lib/python3.7/site-packages/IPython/>`_
 
+To find it programtically, one can use::
+
+   >>> from IPython.paths import get_ipython_package_dir
+   >>> print(get_ipython_package_dir())
+
+Then navigate to the root of that directory.
+
+``%cd /usr/lib/python3.7/site-packages/IPython``
+
+Go to the terminal package.
 ``%cd terminal``
 ``%pycat shortcuts``
 
 Up at the top you have the keybindings :mod:`IPython` ships with listed
 for ya!
 
-Useful Modules
---------------
-This right here is the mod we need to keep our eyes on.
+Official IPython Documentation
+------------------------------
 
 .. code-block:: python3
 
@@ -151,15 +107,13 @@ though.
 
 .. code-block:: python3
 
-    # ...
-
-            # Ctrl+J == Enter, seemingly
-            registry.add_binding(Keys.ControlJ,
-                                 filter=(HasFocus(DEFAULT_BUFFER)
-                                 & ~HasSelection()
-                                 & insert_mode
-                                 ))
-                                 (return_handler)
+   # Ctrl+J == Enter, seemingly
+   registry.add_binding(Keys.ControlJ,
+                        filter=(HasFocus(DEFAULT_BUFFER)
+                        & ~HasSelection()
+                        & insert_mode
+                        ))
+                        (return_handler)
 
 Pure Prompt Toolkit Way of Rebinding Keys
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -200,8 +154,8 @@ From the pt docs:
             print(registry.key_bindings)
 
 
-Shortcuts from IPython
-=======================
+Source code for creating IPython shortcuts
+------------------------------------------
 
 .. ipython:: python
 

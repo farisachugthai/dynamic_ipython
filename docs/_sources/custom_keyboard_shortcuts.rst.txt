@@ -1,5 +1,9 @@
+.. _ipython-notebook-customization:
+
 Keyboard Shortcut Customization
 ===============================
+
+.. Added that index because this information probably isn't very relevant anymore
 
 Starting with IPython 2.0 keyboard shortcuts in command and edit mode
 are fully customizable. These customizations are made using the IPython
@@ -70,4 +74,4 @@ Likewise, to remove a shortcut, use ``remove_shortcut``:
 
 If you want your keyboard shortcuts to be active for all of your
 notebooks, put the above API calls into your
-``<profile>/static/custom/custom.js`` file.
+``<profile_dir>/static/custom/custom.js`` file.

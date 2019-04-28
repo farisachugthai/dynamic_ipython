@@ -23,7 +23,7 @@ from setuptools import setup, find_packages, Command
 
 # if sys.version_info[:2] < (3, 6):
 #     raise RuntimeError("Python version >= 3.6 required.")
-#from profile_default.__about__ import __version__
+from profile_default.__about__ import __version__
 
 # Metadata: {{{1
 
