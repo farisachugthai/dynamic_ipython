@@ -79,6 +79,12 @@ Aliases file for IPython.
 
 :mod:`IPython.core.alias`
 
+Yet to be implemented
+---------------------
+- ``ssh-day``
+- ``extract``
+- :command:`fzf` in its many invocations.
+
 """
 import logging
 import platform
@@ -90,9 +96,7 @@ from IPython import get_ipython
 from IPython.core.alias import AliasError
 
 # Now my stuff!
-from _logging import setup_ipython_logger
-
-LOGGER = setup_ipython_logger()
+from ._logging import setup_ipython_logger
 
 
 def _sys_check():
@@ -112,12 +116,6 @@ def linux_specific_aliases(_ip):
     Convenience packages exist such as ConEmu or Cmder which allow a large
     number of GNU/Linux built-ins to exist on Windows, and as a result, this
     list may not be comprehensive.
-
-    Yet to be implemented
-    ---------------------
-    - ``ssh-day``
-    - ``extract``
-    - :command:`fzf` in its many invocations.
 
     Parameters
     ----------
@@ -185,7 +183,7 @@ def linux_specific_aliases(_ip):
 
 
 def common_aliases(_ip=None):
-    r"""Add aliases common to all OSes.
+    r"""Add aliases common to all OSes. Mostly Git aliases.
 
     Parameters
     ----------
@@ -318,6 +316,7 @@ def windows_aliases():
         ('cmder', 'cmder'),
         ('conemu', 'conemu'),
         ('copy', 'copy'),
+        ('dir', 'dir'),
         ('ddir', 'dir /ad /on'),
         ('echo', 'echo'),
         ('ldir', 'dir /ad /on'),
@@ -376,14 +375,15 @@ def __setup_fzf(user_aliases):
     return user_aliases
 
 
-if __name__ == "__main__":
+def main():
+    """Move everything out of the if main block so we preserve the namespace."""
     _ip = get_ipython()
 
     if not isinstance(_ip, IPython.terminal.interactiveshell.InteractiveShell):
         raise Exception
 
-    # Pretty sure we could swap these calls out for `_ip.logger.logwrite`'s
-    logging.basicConfig(level=logging.WARNING)
+    if not isinstance(_ip.log, logging.Logger):
+        setup_ipython_logger()
 
     user_aliases = []
 
@@ -411,4 +411,6 @@ if __name__ == "__main__":
         except AliasError as e:
             logging.error(e)
 
-    del i, _sys_check
+
+if __name__ == "__main__":
+    main()

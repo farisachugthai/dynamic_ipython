@@ -62,5 +62,3 @@ see the following:
 
 In addition, there's an abundance of documentation online in the
 form of rst docs and ipynb notebooks.
-
-Also I nabbed the source code for that logger class we use.

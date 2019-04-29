@@ -109,12 +109,12 @@ rst_prolog = """
 # a list of builtin themes.
 
 html_theme = 'pyramid'
-# Isn't working. Might need to just copy layout.
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-#
+
+# This right here is why pyramid wasn't working.
 # html_theme_options = {
 #     "github_user": "Faris A. Chugthai",
 #     "github_repo": "dynamic_ipython",
@@ -134,15 +134,15 @@ html_static_path = ['_static']
 # default: ``['localtoc.html', 'relations.html', 'sourcelink.html',
 # 'searchbox.html']``.
 #
-# html_sidebars = {
-#     '**': [
-#         'about.html',
-#         'relations.html',
-#         'localtoc.html',
-#         'searchbox.html',
-#         'sourcelink.html',
-#     ]
-# }
+html_sidebars = {
+    '**': [
+        'relations.html',
+        'globaltoc.html',
+        'localtoc.html',
+        'searchbox.html',
+        'sourcelink.html',
+    ]
+}
 
 # If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
 html_show_sphinx = False

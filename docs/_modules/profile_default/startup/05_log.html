@@ -71,7 +71,9 @@
 <span class="sd">String form: &lt;IPython.core.logger.Logger object at 0x7a689ae160&gt;</span>
 <span class="sd">File:        /data/data/com.termux/files/usr/lib/python3.7/site-packages/IPython/core/logger.py</span>
 <span class="sd">Source:</span>
-<span class="sd">::</span>
+
+
+<span class="sd">.. code-block:: python3</span>
 
 <span class="sd">    class Logger(object):</span>
 <span class="sd">        #A Logfile class with different policies for file creation</span>
@@ -262,18 +264,19 @@
 <span class="sd">            else:</span>
 <span class="sd">                print(&quot;Logging hadn&#39;t been started.&quot;)</span>
 <span class="sd">            self.log_active = False</span>
+
+
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">os</span> <span class="k">import</span> <span class="n">path</span>
 <span class="kn">import</span> <span class="nn">time</span>
 
 <span class="kn">from</span> <span class="nn">IPython</span> <span class="k">import</span> <span class="n">get_ipython</span>
 
 
-<div class="viewcode-block" id="session_logger"><a class="viewcode-back" href="../../../profile_default.html#profile_default.startup.05_log.session_logger">[docs]</a><span class="k">def</span> <span class="nf">session_logger</span><span class="p">(</span><span class="n">_ip</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Log all input and output for an IPython session.</span>
-
+<div class="viewcode-block" id="ipython_logger_05"><a class="viewcode-back"
+                                                      href="../../../profile_default.html#profile_default.startup.05_log.ipython_logger_05">[docs]</a><span
+        class="k">def</span> <span class="nf">ipython_logger_05</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Saves the commands as valid IPython code. Note that this is not</span>
 <span class="sd">    necessarily valid python code.</span>
 
@@ -287,61 +290,10 @@
 <span class="sd">        Global IPython instance.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">log_dir</span> <span class="o">=</span> <span class="n">_ip</span><span class="o">.</span><span class="n">profile_dir</span><span class="o">.</span><span class="n">log_dir</span>
-    <span class="n">fname</span> <span class="o">=</span> <span class="s1">&#39;log-&#39;</span> <span class="o">+</span> <span class="n">_ip</span><span class="o">.</span><span class="n">profile</span> <span class="o">+</span> <span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.py&quot;</span>
-    <span class="n">filename</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">log_dir</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
-    <span class="n">notnew</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">_ip</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s1">&#39;logstart&#39;</span><span class="p">,</span> <span class="s1">&#39;-to </span><span class="si">%s</span><span class="s1"> append&#39;</span> <span class="o">%</span> <span class="n">filename</span><span class="p">)</span>
-        <span class="c1"># added -t to get timestamps</span>
-        <span class="k">if</span> <span class="n">notnew</span><span class="p">:</span>
-            <span class="n">_ip</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">log_write</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;# =================================</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">_ip</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">log_write</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;#!/usr/bin/env python</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">_ip</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">log_write</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;# &quot;</span> <span class="o">+</span> <span class="n">fname</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">_ip</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">log_write</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;# IPython automatic logging file</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">_ip</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">log_write</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;# &quot;</span> <span class="o">+</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%H:%M:%S&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">_ip</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">log_write</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;# =================================</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; Logging to &quot;</span> <span class="o">+</span> <span class="n">filename</span><span class="p">)</span>
-    <span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; Already logging to &quot;</span> <span class="o">+</span> <span class="n">_ip</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">logfname</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="handler"><a class="viewcode-back" href="../../../profile_default.html#profile_default.startup.05_log.handler">[docs]</a><span class="k">def</span> <span class="nf">handler</span><span class="p">(</span><span class="n">arg1</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;TODO: Docstring for file_handler.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    arg1 : TODO</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    TODO</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">file_handler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="p">(</span><span class="s1">&#39;test.log&#39;</span><span class="p">)</span>
-    <span class="n">file_handler</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
-    <span class="n">file_handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span>
-            <span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> </span><span class="si">%(levelname)s</span><span class="s1">: </span><span class="si">%(message)s</span><span class="s1"> [in </span><span class="si">%(pathname)s</span><span class="s1">:</span><span class="si">%(lineno)d</span><span class="s1">]&#39;</span>
-        <span class="p">))</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">file_handler</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="get_home"><a class="viewcode-back" href="../../../profile_default.html#profile_default.startup.05_log.get_home">[docs]</a><span class="k">def</span> <span class="nf">get_home</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Get the home dir.&quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;Linux&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s1">&#39;~&#39;</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;Win32&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;USERPROFILE&#39;</span><span class="p">)</span></div>
-
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
     <span class="n">log_dir</span> <span class="o">=</span> <span class="n">_ip</span><span class="o">.</span><span class="n">profile_dir</span><span class="o">.</span><span class="n">log_dir</span>
     <span class="n">fname</span> <span class="o">=</span> <span class="s1">&#39;log-&#39;</span> <span class="o">+</span> <span class="n">_ip</span><span class="o">.</span><span class="n">profile</span> <span class="o">+</span> <span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.py&quot;</span>
-    <span class="n">logmode</span> <span class="o">=</span> <span class="s1">&#39;global&#39;</span>
+    <span class="n">logmode</span> <span class="o">=</span> <span class="s1">&#39;rotate&#39;</span>
     <span class="n">log_output</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="n">filename</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">log_dir</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
     <span class="n">notnew</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
@@ -357,9 +309,45 @@
     <span class="n">logger</span><span class="o">.</span><span class="n">timestamp</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">logfname</span> <span class="o">=</span> <span class="n">filename</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">logstart</span><span class="p">()</span>
+        <span class="c1"># added -t to get timestamps</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">logstart</span><span
+            class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">notnew</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">log_write</span><span
+            class="p">(</span><span class="sa">u</span><span class="s2">&quot;# =================================</span><span
+            class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">log_write</span><span
+            class="p">(</span><span class="sa">u</span><span class="s2">&quot;#!/usr/bin/env python</span><span
+            class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">log_write</span><span
+            class="p">(</span><span class="sa">u</span><span class="s2">&quot;# &quot;</span> <span
+            class="o">+</span> <span class="n">fname</span> <span class="o">+</span> <span class="s2">&quot;</span><span
+            class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">log_write</span><span
+            class="p">(</span><span class="sa">u</span><span
+            class="s2">&quot;# IPython automatic logging file</span><span class="se">\n</span><span
+            class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">log_write</span><span
+            class="p">(</span><span class="sa">u</span><span class="s2">&quot;# &quot;</span> <span
+            class="o">+</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span
+            class="p">(</span><span class="s1">&#39;%H:%M:%S&#39;</span><span class="p">)</span> <span
+            class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span
+            class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">log_write</span><span
+            class="p">(</span><span class="sa">u</span><span class="s2">&quot;# =================================</span><span
+            class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; Logging to &quot;</span> <span
+            class="o">+</span> <span class="n">filename</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>
-        <span class="k">pass</span>
+        <span class="nb">print</span><span class="p">(</span><span
+            class="s2">&quot; Already logging to &quot;</span> <span class="o">+</span> <span
+            class="n">logger</span><span class="o">.</span><span class="n">logfname</span><span class="p">)</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span
+                  class="p">:</span>
+    <span class="n">ipython_logger_05</span><span class="p">()</span>
 </pre></div>
 
           </div>
@@ -373,7 +361,36 @@
   </ul></li>
   </ul></li>
 </ul>
-<div id="searchbox" style="display: none" role="search">
+            <h3><a href="../../../index.html">Table of Contents</a></h3>
+            <p class="caption"><span class="caption-text">Contents:</span></p>
+            <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../../startup.html">Startup</a></li>
+                <li class="toctree-l1"><a class="reference internal" href="../../../basic_customization.html">Basic
+                    Customization</a></li>
+                <li class="toctree-l1"><a class="reference internal" href="../../../ipython_keybindings.html">Keybindings</a>
+                </li>
+                <li class="toctree-l1"><a class="reference internal" href="../../../custom_keyboard_shortcuts.html">Customizing
+                    the keybindings further</a></li>
+                <li class="toctree-l1"><a class="reference internal" href="../../../ipython_interactive_shell.html">Interactive
+                    Shell Object</a></li>
+                <li class="toctree-l1"><a class="reference internal" href="../../../magics.html">Built-in Magics</a>
+                </li>
+                <li class="toctree-l1"><a class="reference internal" href="../../../custom_magics.html">Defining custom
+                    magics</a></li>
+                <li class="toctree-l1"><a class="reference internal"
+                                          href="../../../custom_magics.html#complete-example">Complete Example</a></li>
+                <li class="toctree-l1"><a class="reference internal" href="../../../directive.html">Sphinx
+                    Directives</a></li>
+                <li class="toctree-l1"><a class="reference internal" href="../../../rich_output.html">Rich Output</a>
+                </li>
+                <li class="toctree-l1"><a class="reference internal" href="../../../pygments.html">Pygments
+                    highlighting</a></li>
+            </ul>
+            <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../../API.html">API</a></li>
+            </ul>
+
+            <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">

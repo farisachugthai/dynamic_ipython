@@ -104,6 +104,9 @@ from IPython import get_ipython
 from IPython.core.profiledir import ProfileDir
 
 
+# from IPython.paths.profileapp import ProfileLocate
+
+
 def _setup_logging():
     """Enable logging. TODO: Need to add more to the formatter."""
     logger = logging.getLogger(name=__name__)
@@ -176,8 +179,10 @@ def get_home():
 
 if __name__ == '__main__':
     logger = _setup_logging()
+
     HOME = Path.home()
     ipython_root_dir = Path.joinpath(HOME, '', '.ipython/profile_default')
+
     _ip = get_ipython()
     # Is this supposed to be IPythonPath... or IPythonPath()?
     _ip.ProfileDir.location = IPythonPath.find_profile_dir_by_name(ipython_root_dir)
