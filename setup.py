@@ -10,7 +10,7 @@ _`Kenneth Reitz setup.py template <https://raw.githubusercontent.com/kennethreit
 .. see also::
 
     numpy.distutils.core
-    numpt.distutils.misc_utils
+    numpy.distutils.misc_utils
 
 
 """
@@ -23,7 +23,7 @@ from setuptools import setup, find_packages, Command
 
 # if sys.version_info[:2] < (3, 6):
 #     raise RuntimeError("Python version >= 3.6 required.")
-from profile_default.__about__ import __version__
+from .profile_default.__about__ import __version__
 
 # Metadata: {{{1
 
@@ -34,7 +34,7 @@ DESCRIPTION = "TODO"
 LICENSE = "MIT",
 KEYWORDS = ["ipython", "configuration", "pygments"]
 URL = "https://github.com/farisachugthai/dynamic_ipython",
-REQUIRES_PYTHON = '>=3.6.0'
+# REQUIRES_PYTHON = '>=3.6.0'
 VERSION = __version__
 
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -63,7 +63,7 @@ with codecs.open(os.path.join(here, "README.rst"), encoding="utf-8") as f:
 
 # Load the package's __version__.py module as a dictionary.
 try:
-    with open(os.path.join(here, NAME, '__about__.py')) as f:
+    with open(os.path.join(here, 'profile_default', '__about__.py')) as f:
         exec(f.read(), __version__)
 except IOError:  # the file doesn't exist
     about['__version__'] = None

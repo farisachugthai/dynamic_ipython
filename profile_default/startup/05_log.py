@@ -25,7 +25,9 @@ Type:        Logger
 String form: <IPython.core.logger.Logger object at 0x7a689ae160>
 File:        /data/data/com.termux/files/usr/lib/python3.7/site-packages/IPython/core/logger.py
 Source:
-::
+
+
+.. code-block:: python3
 
     class Logger(object):
         #A Logfile class with different policies for file creation
@@ -216,18 +218,17 @@ Source:
             else:
                 print("Logging hadn't been started.")
             self.log_active = False
+
+
 """
-import logging
-import os
 from os import path
 import time
 
 from IPython import get_ipython
 
 
-def session_logger(_ip):
-    """Log all input and output for an IPython session.
-
+def ipython_logger_05():
+    """
     Saves the commands as valid IPython code. Note that this is not
     necessarily valid python code.
 
@@ -241,61 +242,10 @@ def session_logger(_ip):
         Global IPython instance.
 
     """
-    log_dir = _ip.profile_dir.log_dir
-    fname = 'log-' + _ip.profile + '-' + time.strftime('%Y-%m-%d') + ".py"
-    filename = path.join(log_dir, fname)
-    notnew = path.exists(filename)
-
-    try:
-        _ip.run_line_magic('logstart', '-to %s append' % filename)
-        # added -t to get timestamps
-        if notnew:
-            _ip.logger.log_write(u"# =================================\n")
-        else:
-            _ip.logger.log_write(u"#!/usr/bin/env python\n")
-            _ip.logger.log_write(u"# " + fname + "\n")
-            _ip.logger.log_write(u"# IPython automatic logging file\n")
-            _ip.logger.log_write(u"# " + time.strftime('%H:%M:%S') + "\n")
-            _ip.logger.log_write(u"# =================================\n")
-            print(" Logging to " + filename)
-    except RuntimeError:
-        print(" Already logging to " + _ip.logger.logfname)
-
-
-def handler(arg1):
-    """TODO: Docstring for file_handler.
-
-    Parameters
-    ----------
-    arg1 : TODO
-
-    Returns
-    -------
-    TODO
-
-    """
-    file_handler = logging.FileHandler('test.log')
-    file_handler.setLevel(level=logging.INFO)
-    file_handler.setFormatter(
-        logging.Formatter(
-            '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'
-        ))
-    logger.addHandler(file_handler)
-
-
-def get_home():
-    """Get the home dir."""
-    if os.name == 'Linux':
-        return os.expanduser('~')
-    elif os.name == 'Win32':
-        return os.environ.get('USERPROFILE')
-
-
-if __name__ == "__main__":
     _ip = get_ipython()
     log_dir = _ip.profile_dir.log_dir
     fname = 'log-' + _ip.profile + '-' + time.strftime('%Y-%m-%d') + ".py"
-    logmode = 'global'
+    logmode = 'rotate'
     log_output = True
     filename = path.join(log_dir, fname)
     notnew = path.exists(filename)
@@ -311,6 +261,20 @@ if __name__ == "__main__":
     logger.timestamp = True
     logger.logfname = filename
     try:
-        logger.logstart()
+        # added -t to get timestamps
+        logger.logstart(filename)
+        if notnew:
+            logger.log_write(u"# =================================\n")
+        else:
+            logger.log_write(u"#!/usr/bin/env python\n")
+            logger.log_write(u"# " + fname + "\n")
+            logger.log_write(u"# IPython automatic logging file\n")
+            logger.log_write(u"# " + time.strftime('%H:%M:%S') + "\n")
+            logger.log_write(u"# =================================\n")
+            print(" Logging to " + filename)
     except RuntimeError:
-        pass
+        print(" Already logging to " + logger.logfname)
+
+
+if __name__ == "__main__":
+    ipython_logger_05()

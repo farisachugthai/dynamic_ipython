@@ -95,16 +95,13 @@ So I don't feel like debugging that right now but that's where we're at.
 
 """
 import logging
+import os
 from pathlib import Path
 import sys
 
 from IPython import get_ipython
 # from IPython.paths import get_ipython_dir
 from IPython.core.profiledir import ProfileDir
-
-# ----------------------------------------------------------------------------
-# Module errors
-# ----------------------------------------------------------------------------
 
 
 def _setup_logging():
@@ -119,6 +116,10 @@ def _setup_logging():
     logger.addHandler(handler)
     return logger
 
+
+# ----------------------------------------------------------------------------
+# Module errors
+# ----------------------------------------------------------------------------
 
 class ProfileDirError(Exception):
     logging.error('Profile directory error.')
@@ -163,6 +164,14 @@ class IPythonPath(ProfileDir):
             return cls(location=profile_dir, config=config)
         else:
             raise ProfileDirError
+
+
+def get_home():
+    """Get the home dir."""
+    if os.name == 'Linux':
+        return os.expanduser('~')
+    elif os.name == 'Win32':
+        return os.environ.get('USERPROFILE')
 
 
 if __name__ == '__main__':
