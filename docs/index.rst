@@ -3,12 +3,14 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+.. _index:
+
 ============================================
-Welcome to IPython packages's documentation!
+Welcome to IPython packages' documentation!
 ============================================
-This is the collection of notes I've aggregated over time on :mod:`IPython`.
-There are many more docs that have yet to be added, but this package needs
-a good amount of reworking as is.
+
+.. include:: ../README.rst
+
 
 .. toctree::
    :maxdepth: 2

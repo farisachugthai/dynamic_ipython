@@ -8,6 +8,11 @@ Set up a more generalized logger. This differs from 05_log.py in that it
 should be decoupled from IPython and provide reasonable defaults to fall back
 on if it is executed by something other than IPython.
 
+This will occur as the directory in which the :class:`logging.Logger()` is
+determined in either a module function or a class method.
+
+
+
 Formatter
 ----------
 
