@@ -21,21 +21,19 @@ from shutil import rmtree
 
 from setuptools import setup, find_packages, Command
 
-# if sys.version_info[:2] < (3, 6):
-#     raise RuntimeError("Python version >= 3.6 required.")
-from .profile_default.__about__ import __version__
+from profile_default import __about__
 
 # Metadata: {{{1
-
 NAME = 'dynamic_ipython'
-AUTHOR = "Faris Chugthai",
-EMAIL = "farischugthai@gmail.com",
-DESCRIPTION = "TODO"
-LICENSE = "MIT",
+AUTHOR = "Faris Chugthai"
+EMAIL = "farischugthai@gmail.com"
+DESCRIPTION = "A gruvbox colorscheme for pygments."
+LICENSE = "MIT"
 KEYWORDS = ["ipython", "configuration", "pygments"]
-URL = "https://github.com/farisachugthai/dynamic_ipython",
-# REQUIRES_PYTHON = '>=3.6.0'
-VERSION = __version__
+URL = "https://github.com/farisachugthai/dynamic_ipython"
+REQUIRES_PYTHON = '>=3.6.0'
+
+VERSION = __about__.__version__
 
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 CONF_PATH = os.path.dirname(os.path.abspath('docs'))
@@ -45,31 +43,23 @@ SOURCE_PATH = os.path.join(CONF_PATH, 'source')
 REQUIRED = ['IPython']
 
 EXTRAS = {
-    'develop': ['flake8', 'flake8-rst', 'yapf'],
+    'develop': ['flake8', 'pylint', 'yapf'],
     'docs': [
         'sphinx',
         # Project uses reStructuredText, so ensure that the docutils get
         # installed or upgraded on the target machine
         'docutils>=0.3',
         'recommonmark',
-        'numpydoc'
+        'numpydoc',
+        'flake8-rst',
     ]
 }
 
-here = os.path.abspath(os.path.dirname(__file__))
-about = {}
-with codecs.open(os.path.join(here, "README.rst"), encoding="utf-8") as f:
-    long_description = "\n" + f.read()
-
-# Load the package's __version__.py module as a dictionary.
-try:
-    with open(os.path.join(here, 'profile_default', '__about__.py')) as f:
-        exec(f.read(), __version__)
-except IOError:  # the file doesn't exist
-    about['__version__'] = None
-
-
+with codecs.open(os.path.join(ROOT_PATH, "README.rst"), encoding="utf-8") as f:
+    LONG_DESCRIPTION = "\n" + f.read()
 # }}}}
+
+
 class UploadCommand(Command):  # {{{1
     """Support setup.py upload."""
 
@@ -77,9 +67,9 @@ class UploadCommand(Command):  # {{{1
     user_options = []
 
     @staticmethod
-    def status(s):
+    def status(output):
         """Print output in bold."""
-        print('\033[1m{0}\033[0m'.format(s))
+        print('\033[1m{0}\033[0m'.format(output))
 
     def initialize_options(self):
         """Initialize upload options."""
@@ -105,7 +95,7 @@ class UploadCommand(Command):  # {{{1
         os.system('twine upload dist/*')
 
         self.status('Pushing git tags…')
-        os.system('git tag v{0}'.format(about['__version__']))
+        os.system('git tag v{0}'.format(__about__.__version__))
         os.system('git push --tags')
 
         sys.exit()
@@ -115,13 +105,14 @@ class UploadCommand(Command):  # {{{1
 # Where the magic happens: {{{1
 setup(
     name=NAME,
-    version=about['__version__'],
+    version=__about__.__version__,
     description=DESCRIPTION,
-    long_description=long_description,
+    long_description=LONG_DESCRIPTION,
     long_description_content_type='text/restructuredtext',
+    python_requires=REQUIRES_PYTHON,
     author=AUTHOR,
     author_email=EMAIL,
-    python_requires=REQUIRES_PYTHON,
+    # python_requires=REQUIRES_PYTHON,
     url=URL,
     packages=find_packages(where='.'),
     # If your package is a single module, use this instead of 'packages':
@@ -133,7 +124,7 @@ setup(
     install_requires=REQUIRED,
     extras_require=EXTRAS,
     test_suite='test',
-    # setup_requires=['nose>=1.0'],
+    setup_requires=['nose>=1.0'],
     include_package_data=True,
     package_data={
         # If any package contains *.txt or *.rst files, include them:
@@ -141,7 +132,7 @@ setup(
     },
     license=LICENSE,
 
-    #  https://www.python.org/dev/peps/pep-0345/#platform-multiple-use
+    # https://www.python.org/dev/peps/pep-0345/#platform-multiple-use
     # A Platform specification describing an operating system supported by the
     # distribution which is not listed in the "Operating System" Trove
     # classifiers. See "Classifier" below.#
@@ -162,9 +153,10 @@ setup(
     },
     # project home page, if any
     project_urls={
-        #     "Bug Tracker": "https://bugs.example.com/HelloWorld/",
-        "Documentation": "https://docs.example.com/HelloWorld/",
-        "Source Code": "https://code.example.com/HelloWorld/",
+        "Bug Tracker":
+        "https://www.github.com/farisachugthai/dynamic_ipython/issues",
+        "Documentation": "https://farisachugthai.github.io/dynamic_ipython",
+        "Source Code": "https://www.github.com/farisachugthai/dynamic_ipython",
     }
     # could also include long_description, download_url, classifiers, etc.
 )

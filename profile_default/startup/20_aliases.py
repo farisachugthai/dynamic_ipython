@@ -96,7 +96,7 @@ from IPython import get_ipython
 from IPython.core.alias import AliasError
 
 # Now my stuff!
-from ._logging import setup_ipython_logger
+from _logging import setup_ipython_logger
 
 
 def _sys_check():

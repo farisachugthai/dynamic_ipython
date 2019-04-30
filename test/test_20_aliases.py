@@ -2,11 +2,6 @@
 # -*- coding: utf-8 -*-
 """Test that the :class:`IPython.core.AliasManager` behaves as expected.
 
-:File: test_20_aliases.py
-:Author: Faris Chugthai
-:Github: https://github.com/farisachugthai
-:Date: |date|
-
 Took this from the :mod:`IPython` team insofar.
 
 Should definitely consider rewriting it.
