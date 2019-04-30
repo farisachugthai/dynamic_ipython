@@ -7,7 +7,7 @@
     <title>profile_default.startup.20_aliases &#8212; Dynamic IPython 0.0.1 documentation</title>
     <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/C:\Users\faris\projects\dynamic_ipython\docs\_static\pyramid.css_t" />
+    <link rel="stylesheet" type="text/css" href="/home/faris/projects/dynamic_ipython/docs/_static/pyramid.css_t" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
@@ -125,6 +125,12 @@
 
 <span class="sd">:mod:`IPython.core.alias`</span>
 
+<span class="sd">Yet to be implemented</span>
+<span class="sd">---------------------</span>
+<span class="sd">- ``ssh-day``</span>
+<span class="sd">- ``extract``</span>
+<span class="sd">- :command:`fzf` in its many invocations.</span>
+
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">platform</span>
@@ -136,9 +142,7 @@
 <span class="kn">from</span> <span class="nn">IPython.core.alias</span> <span class="k">import</span> <span class="n">AliasError</span>
 
 <span class="c1"># Now my stuff!</span>
-<span class="kn">from</span> <span class="nn">_logging</span> <span class="k">import</span> <span class="n">setup_ipython_logger</span>
-
-<span class="n">LOGGER</span> <span class="o">=</span> <span class="n">setup_ipython_logger</span><span class="p">()</span>
+<span class="kn">from</span> <span class="nn">._logging</span> <span class="k">import</span> <span class="n">setup_ipython_logger</span>
 
 
 <span class="k">def</span> <span class="nf">_sys_check</span><span class="p">():</span>
@@ -158,12 +162,6 @@
 <span class="sd">    Convenience packages exist such as ConEmu or Cmder which allow a large</span>
 <span class="sd">    number of GNU/Linux built-ins to exist on Windows, and as a result, this</span>
 <span class="sd">    list may not be comprehensive.</span>
-
-<span class="sd">    Yet to be implemented</span>
-<span class="sd">    ---------------------</span>
-<span class="sd">    - ``ssh-day``</span>
-<span class="sd">    - ``extract``</span>
-<span class="sd">    - :command:`fzf` in its many invocations.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -231,7 +229,7 @@
 
 
 <div class="viewcode-block" id="common_aliases"><a class="viewcode-back" href="../../../profile_default.html#profile_default.startup.20_aliases.common_aliases">[docs]</a><span class="k">def</span> <span class="nf">common_aliases</span><span class="p">(</span><span class="n">_ip</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Add aliases common to all OSes.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Add aliases common to all OSes. Mostly Git aliases.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -364,6 +362,7 @@
         <span class="p">(</span><span class="s1">&#39;cmder&#39;</span><span class="p">,</span> <span class="s1">&#39;cmder&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;conemu&#39;</span><span class="p">,</span> <span class="s1">&#39;conemu&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;copy&#39;</span><span class="p">,</span> <span class="s1">&#39;copy&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;dir&#39;</span><span class="p">,</span> <span class="s1">&#39;dir&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;ddir&#39;</span><span class="p">,</span> <span class="s1">&#39;dir /ad /on&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;echo&#39;</span><span class="p">,</span> <span class="s1">&#39;echo&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;ldir&#39;</span><span class="p">,</span> <span class="s1">&#39;dir /ad /on&#39;</span><span class="p">),</span>
@@ -422,14 +421,15 @@
     <span class="k">return</span> <span class="n">user_aliases</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../profile_default.html#profile_default.startup.20_aliases.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Move everything out of the if main block so we preserve the namespace.&quot;&quot;&quot;</span>
     <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">_ip</span><span class="p">,</span> <span class="n">IPython</span><span class="o">.</span><span class="n">terminal</span><span class="o">.</span><span class="n">interactiveshell</span><span class="o">.</span><span class="n">InteractiveShell</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">Exception</span>
 
-    <span class="c1"># Pretty sure we could swap these calls out for `_ip.logger.logwrite`&#39;s</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">_ip</span><span class="o">.</span><span class="n">log</span><span class="p">,</span> <span class="n">logging</span><span class="o">.</span><span class="n">Logger</span><span class="p">):</span>
+        <span class="n">setup_ipython_logger</span><span class="p">()</span>
 
     <span class="n">user_aliases</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -455,9 +455,11 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="n">_ip</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">define_alias</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
         <span class="k">except</span> <span class="n">AliasError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span></div>
 
-    <span class="k">del</span> <span class="n">i</span><span class="p">,</span> <span class="n">_sys_check</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
 </pre></div>
 
           </div>
@@ -471,36 +473,26 @@
   </ul></li>
   </ul></li>
 </ul>
-            <h3><a href="../../../index.html">Table of Contents</a></h3>
-            <p class="caption"><span class="caption-text">Contents:</span></p>
-            <ul>
-                <li class="toctree-l1"><a class="reference internal" href="../../../startup.html">Startup</a></li>
-                <li class="toctree-l1"><a class="reference internal" href="../../../basic_customization.html">Basic
-                    Customization</a></li>
-                <li class="toctree-l1"><a class="reference internal" href="../../../ipython_keybindings.html">Keybindings</a>
-                </li>
-                <li class="toctree-l1"><a class="reference internal" href="../../../custom_keyboard_shortcuts.html">Customizing
-                    the keybindings further</a></li>
-                <li class="toctree-l1"><a class="reference internal" href="../../../ipython_interactive_shell.html">Interactive
-                    Shell Object</a></li>
-                <li class="toctree-l1"><a class="reference internal" href="../../../magics.html">Built-in Magics</a>
-                </li>
-                <li class="toctree-l1"><a class="reference internal" href="../../../custom_magics.html">Defining custom
-                    magics</a></li>
-                <li class="toctree-l1"><a class="reference internal"
-                                          href="../../../custom_magics.html#complete-example">Complete Example</a></li>
-                <li class="toctree-l1"><a class="reference internal" href="../../../directive.html">Sphinx
-                    Directives</a></li>
-                <li class="toctree-l1"><a class="reference internal" href="../../../rich_output.html">Rich Output</a>
-                </li>
-                <li class="toctree-l1"><a class="reference internal" href="../../../pygments.html">Pygments
-                    highlighting</a></li>
-            </ul>
-            <ul>
-                <li class="toctree-l1"><a class="reference internal" href="../../../API.html">API</a></li>
-            </ul>
+<h3><a href="../../../index.html">Table of Contents</a></h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../startup.html">Startup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../basic_customization.html">Basic Customization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ipython_keybindings.html">Keybindings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../custom_keyboard_shortcuts.html">Customizing the keybindings further</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ipython_interactive_shell.html">Interactive Shell Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../magics.html">Built-in Magics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../custom_magics.html">Defining custom magics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../custom_magics.html#complete-example">Complete Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../directive.html">Sphinx Directives</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rich_output.html">Rich Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pygments.html">Pygments highlighting</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../API.html">API</a></li>
+</ul>
 
-            <div id="searchbox" style="display: none" role="search">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
