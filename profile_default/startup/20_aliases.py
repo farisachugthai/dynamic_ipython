@@ -96,7 +96,7 @@ from IPython import get_ipython
 from IPython.core.alias import AliasError
 
 # Now my stuff!
-from _logging import setup_ipython_logger
+from profile_default.startup import _logging
 
 
 def _sys_check():
@@ -413,4 +413,5 @@ def main():
 
 
 if __name__ == "__main__":
+    logger = _logging.setup_ipython_logger()
     main()
