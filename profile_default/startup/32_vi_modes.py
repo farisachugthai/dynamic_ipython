@@ -11,6 +11,30 @@ Also displays how to integrate :mod:`prompt_toolkit` and :mod:`IPython` together
 
 .. todo:: Add one in for <C-M-j> to go to Emacs mode?
 
+Example Usage
+--------------
+From the `source code`_::
+
+.. ipython:: python
+
+    from prompt_toolkit.keybinding import KeyBinding
+    kb = KeyBindings()
+
+    @kb.add('c-t')
+    def _(event):
+        print('Control-T pressed')
+
+    @kb.add('c-a', 'c-b')
+    def _(event):
+        print('Control-A pressed, followed by Control-B')
+
+    @kb.add('c-x', filter=is_searching)
+    def _(event):
+        print('Control-X pressed')  # Works only if we are searching.
+
+
+.. _source-code: https://python-prompt-toolkit.readthedocs.io/en/stable/pages/reference.html#module-prompt_toolkit.key_binding
+
 """
 import logging
 from os.path import join

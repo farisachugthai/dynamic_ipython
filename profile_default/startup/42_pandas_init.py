@@ -2,12 +2,10 @@
 # -*- coding: utf-8 -*-
 """Initialize desired parameters for :mod:`pandas` at startup.
 
-.. module:: pandas_init
+.. currentmodule:: pandas_init
 
-:File: pandas_init.py
-:Author: Faris Chugthai
-:Github: https://github.com/farisachugthai
-:Date: |date|
+.. highlight:: python3
+
 :URL: `https://realpython.com/python-pandas-tricks/#1-configure-options-settings-at-interpreter-startup`_
 
 .. todo::
@@ -19,6 +17,14 @@
     - Also we should do a check that we're on python3.6+ because otherwise,
     we'll crash the interpreter as we invoke an expression with f-strings.
 
+
+Here's an interesting blurb from pandas/docs/conf.py::
+
+    # This ensures correct rendering on system with console encoding != utf8
+    # (windows). It forces pandas to encode its output reprs using utf8
+    # wherever the docs are built. The docs' target is the browser, not
+    # the console, so this is fine.
+    'pd.options.display.encoding="utf8"'
 
 """
 import sys
@@ -39,7 +45,8 @@ def start():
             'max_rows': 30,
             'max_seq_items': 50,
             # Max length of printed sequence 'precision': 4,
-            'show_dimensions': False
+            'show_dimensions': False,
+            'encoding': 'utf-8',
         },
         'mode': {
             'chained_assignment': None
