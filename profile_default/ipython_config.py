@@ -8,7 +8,7 @@ Heavily drawn from documentation at `ipython_docs`_.  In addition to source
 code found on GitHub.
 
 
-.. _ipython_docs: `<https://ipython.readthedocs.io/en/stable/config/intro.html#python-config-files>`
+.. _ipython_docs: `<https://ipython.readthedocs.io/en/stable/config/intro.html#python-config-files>`_
 
 
 Overview
@@ -155,7 +155,7 @@ except OSError:
 # Whether failing to load config files should prevent startup
 # raise_config_file_errors = Bool(TRAITLETS_APPLICATION_RAISE_CONFIG_FILE_ERROR)
 
-# c.InteractiveShellApp.reraise_ipython_extension_failures = True
+c.InteractiveShellApp.reraise_ipython_extension_failures = True
 # I'm assuming these are related and please don't crash the interpreter
 # from a simple mistake
 
@@ -563,7 +563,8 @@ c.HistoryManager.db_log_output = True
 # Set the profile location directly. This overrides the logic used by the
 #  `profile` option.
 
-# Don't enable! Check .startup.02_path.IPythonPath
+# Don't enable! Check .startup.02_path.IPythonPath. Well that's gonna have to
+# sit on the backburner for a little while we debug.
 # c.ProfileDir.location = ''
 
 # ----------------------------------------------------------------------------
@@ -668,7 +669,12 @@ c.PlainTextFormatter.max_width = 79
 
 # Experimental: Use Jedi to generate autocompletions. Default to True if jedi
 # is installed
-c.Completer.use_jedi = True
+try:
+    import jedi
+except ImportError:  # clearly not installed
+    c.Completer.use_jedi = False
+else:
+    c.Completer.use_jedi = True
 
 # ----------------------------------------------------------------------------
 # IPCompleter(Completer) configuration
@@ -756,5 +762,5 @@ c.LoggingMagics.quiet = True
 # ----------------------------------------------------------------------------
 
 del home
-logging.debug("The user namespace currently contains: ")
-logging.debug(c.user_ns)
+logger.debug("The user namespace currently contains: ")
+logger.debug(c.user_ns)

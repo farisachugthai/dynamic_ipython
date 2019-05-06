@@ -16,6 +16,7 @@ _`Kenneth Reitz setup.py template <https://raw.githubusercontent.com/kennethreit
 """
 import codecs
 import os
+from pathlib import Path
 import sys
 from shutil import rmtree
 
@@ -57,6 +58,7 @@ EXTRAS = {
 
 with codecs.open(os.path.join(ROOT_PATH, "README.rst"), encoding="utf-8") as f:
     LONG_DESCRIPTION = "\n" + f.read()
+
 # }}}}
 
 
@@ -65,6 +67,7 @@ class UploadCommand(Command):  # {{{1
 
     description = 'Build and publish the package.'
     user_options = []
+    root = Path(__file__).parent
 
     @staticmethod
     def status(output):
@@ -83,7 +86,7 @@ class UploadCommand(Command):  # {{{1
         """Upload package."""
         try:
             self.status('Removing previous builds…')
-            rmtree(os.path.join(here, 'dist'))
+            rmtree(os.path.join(str(self.root), 'dist'))
         except OSError:
             pass
 

@@ -40,15 +40,35 @@ This is more easily understood as 'remaining arguments to the magic'.
 ``%rehashx`` takes none, but leaving it blank causes the function call to raise
 an error, so an empty str is passed to the function.
 
+
 """
+import platform
+import sys
 
-if __name__ == "__main__":
-    from IPython import Application, get_ipython
-    import sys
+from IPython import Application, get_ipython
 
+
+def _sys_check():
+    """Check OS."""
+    return platform.uname().system
+
+
+def main():
+    """Check if we're on Windows and if not rehashx.
+
+    05/06/2019:
+
+        ``%rehashx`` when run in a directory with symlinks while on Windows 10
+        causes an unexpected error. Quite specific but hey.
+
+    """
     if not Application.initialized():
         sys.exit()
 
-    _ip = get_ipython()
+    if not _sys_check() == 'Windows':
+        _ip = get_ipython()
+        _ip.run_line_magic('rehashx', '')
 
-    _ip.run_line_magic('rehashx', '')
+
+if __name__ == "__main__":
+    main()

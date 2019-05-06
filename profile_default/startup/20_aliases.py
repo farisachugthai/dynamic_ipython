@@ -88,20 +88,48 @@ Yet to be implemented
 """
 import logging
 import platform
+import os
 from shutil import which
+import sys
 
 # from prompt_toolkit import print_formatted_text as print
 import IPython
 from IPython import get_ipython
 from IPython.core.alias import AliasError
 
-# Now my stuff!
-from profile_default.startup import _logging
 
+class Platform:
+    """Abstract away platform differences."""
 
-def _sys_check():
-    """Check OS."""
-    return platform.uname().system
+    @classmethod
+    def _sys_platform(self):
+        """Return the value of sys.platform."""
+        return sys.platform
+
+    def is_windows(self):
+        """True when we are using Windows.
+
+        Only checks that the return value starts with 'win' so *win32* and
+        *win64* both work.
+        """
+        return self._sys_platform.startswith('win')
+
+    def is_windows_vt100_supported(self):
+        """True when we are using Windows, but with VT100 esc sequences.
+
+        Import needs to be inline. Windows libraries are not always available.
+        """
+        from prompt_toolkit.output.windows10 import is_win_vt100_enabled
+        return self.is_windows() and is_win_vt100_enabled()
+
+    def is_conemu_ansi(self):
+        """True when the ConEmu Windows console is used."""
+        return self.is_windows() and os.environ.get('ConEmuANSI',
+                                                    'OFF') == 'ON'
+
+    def is_linux(self):
+        """True when :func:`sys.platform` returns Linux."""
+        return self._sys_platform() == 'Linux'
 
 
 def linux_specific_aliases(_ip):
@@ -167,7 +195,7 @@ def linux_specific_aliases(_ip):
         ('mk', 'mkdir -pv %l && cd %l'),  # check if this works. only mkdir
         ('mkdir', 'mkdir -pv %l'),
         ('mv', 'mv -iv %l'),
-        ('nman', 'nvim -c "Man $1" -c"wincmd T"'),
+        ('nman', 'nvim -c "Man %l" -c"wincmd T"'),
         ('r', 'fc -s'),
         ('redo', 'fc -s'),
         ('rm', 'rm -v %l'),
@@ -262,7 +290,7 @@ def common_aliases(_ip=None):
     return _user_aliases
 
 
-def windows_aliases():
+def windows_aliases(_ip=None):
     """How did these get deleted!
 
     Also note that Powershell comes with a BUNCH of built-in aliases. We'll
@@ -380,14 +408,13 @@ def main():
     _ip = get_ipython()
 
     if not isinstance(_ip, IPython.terminal.interactiveshell.InteractiveShell):
-        raise Exception
-
-    if not isinstance(_ip.log, logging.Logger):
-        setup_ipython_logger()
+        raise Exception('Are you running in IPython?')
 
     user_aliases = []
 
-    if _sys_check() == 'Linux':
+    machine = Platform()
+
+    if machine.is_linux() == 'Linux':
 
         # Now let's get the Linux aliases.
         user_aliases += linux_specific_aliases(_ip)
@@ -413,5 +440,4 @@ def main():
 
 
 if __name__ == "__main__":
-    logger = _logging.setup_ipython_logger()
     main()

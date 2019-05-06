@@ -3,6 +3,9 @@
 # flake8: noqa
 """Import my most frequently used modules.
 
+This imports a few utility functions from :ref:`IPython` and imports the python
+package neovim is served in.
+
 It seems that :mod:`IPython` and :mod:`traitlets` share a module!
 
 From a cursory glance :mod:`traitlets.utils.importstring` ==
@@ -12,6 +15,9 @@ They both export 1 function :func:`~IPython.utils.importstring.import_item()`
 
 This could be used here to dynamicallt import strings based on user
 configuration, environment variables and configuration files.
+
+The functionality here is duplicated in
+:mod:`profile_default.extensions.easy_import`.
 
 """
 from importlib import import_module
@@ -32,6 +38,7 @@ try:
     import git
 except ImportError:
     pass
+
 
 def import_nvim(mod):
     """Import the neovim module.
