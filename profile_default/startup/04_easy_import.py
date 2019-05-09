@@ -19,6 +19,16 @@ configuration, environment variables and configuration files.
 The functionality here is duplicated in
 :mod:`profile_default.extensions.easy_import`.
 
+
+The Importance of Clean Namespaces
+==================================
+May 07, 2019:
+
+    If the last line in the module didn't have ``del mod`` in it, then
+    the magic ``%pylab`` would crash!
+
+    It uses the same keyword behind the scenes interestingly enough.
+
 """
 from importlib import import_module
 import os
@@ -64,4 +74,5 @@ if __name__ == "__main__":
         mod = 'neovim'
 
     import_nvim(mod)
-    del import_nvim
+
+    del import_nvim, mod

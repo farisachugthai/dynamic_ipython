@@ -88,7 +88,7 @@ if __name__ == "__main__":
     _ip = get_ipython()
 
     level = logging.WARNING
-    logger = _setup_logging(level, shell=_ip)
+    # logger = _setup_logging(level, shell=_ip)
 
     if getattr(_ip, 'pt_app', None):
         registry = _ip.pt_app.key_bindings
