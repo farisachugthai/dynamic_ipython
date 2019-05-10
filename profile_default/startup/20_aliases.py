@@ -88,11 +88,11 @@ Yet to be implemented
 """
 import logging
 import platform
-import os
 from shutil import which
 import sys
 
 # from prompt_toolkit import print_formatted_text as print
+from prompt_toolkit.utils import is_conemu_ansi, is_windows, is_windows_vt100_supported
 import IPython
 from IPython import get_ipython
 from IPython.core.alias import AliasError
@@ -106,15 +106,15 @@ class Platform:
         """Return the value of sys.platform."""
         return sys.platform
 
-    def is_windows(self):
+    def is_win(self):
         """True when we are using Windows.
 
         Only checks that the return value starts with 'win' so *win32* and
         *win64* both work.
         """
-        return self._sys_platform.startswith('win')
+        return self.is_windows()
 
-    def is_windows_vt100_supported(self):
+    def is_win_vt100(self):
         """True when we are using Windows, but with VT100 esc sequences.
 
         Import needs to be inline. Windows libraries are not always available.
@@ -122,10 +122,10 @@ class Platform:
         from prompt_toolkit.output.windows10 import is_win_vt100_enabled
         return self.is_windows() and is_win_vt100_enabled()
 
-    def is_conemu_ansi(self):
-        """True when the ConEmu Windows console is used."""
-        return self.is_windows() and os.environ.get('ConEmuANSI',
-                                                    'OFF') == 'ON'
+    @classmethod
+    def is_conemu(self):
+        """True when the ConEmu Windows console is used. Thanks John."""
+        return is_conemu_ansi()
 
     def is_linux(self):
         """True when :func:`sys.platform` returns Linux."""
@@ -404,7 +404,7 @@ def __setup_fzf(user_aliases):
 
 
 def main():
-    """Move everything out of the if main block so we preserve the namespace."""
+    """Set up aliases for the user namespace for IPython."""
     _ip = get_ipython()
 
     if not isinstance(_ip, IPython.terminal.interactiveshell.InteractiveShell):
@@ -424,6 +424,8 @@ def main():
         if platform.machine() == "aarch64":
             # user_aliases += termux_aliases(ip)
             pass
+    elif machine.is_conemu():  # should check for 'nix-tools as an env var
+        user_aliases += windows_aliases(_ip)
 
     user_aliases += common_aliases(_ip)
 

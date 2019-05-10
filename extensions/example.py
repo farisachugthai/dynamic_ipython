@@ -8,7 +8,7 @@ Usage
 -----
 .. ipython::
 
-    %load_ext example
+    In [40]: %load_ext example
 
 
 While not utilized here, a similar execution path can be utilized for
@@ -25,13 +25,18 @@ See Also
 --------
 Utilize jedi and run ``:Pyimport IPython.core.magic`` to see the src.
 
+.. note::
+
+    Don't use register_cell_magic. That decorator is for functions.
+
+
 """
 import sys
 import time
 
 from IPython import get_ipython
 from IPython.core.magic import Magics, magics_class, line_magic
-# from IPython.core.interactiveshell import InteractiveShell
+# from IPython.core.magic import register_cell_magic
 
 
 @magics_class
@@ -49,10 +54,10 @@ class ExampleMagic(Magics):
             return time.time()
 
 
-def load_ipython_extension(_ip):
+def load_ipython_extension(shell=None):
     """Load the extension in IPython."""
-    _ip.register_magic(ExampleMagic)
-    _ip.register_magic(ExampleMagic.time_printer)
+    _ip.register_magics(ExampleMagic)
+    _ip.register_magics(ExampleMagic.time_printer)
 
 
 if __name__ == "__main__":

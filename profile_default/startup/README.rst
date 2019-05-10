@@ -1,4 +1,4 @@
-.. startup-readme:
+.. _startup-readme:
 
 =======================
 IPython Startup Scripts
@@ -14,37 +14,41 @@ Configuration
 -------------
 Here's a rough outline of what's going on in this directory.
 
-.. todo::
+As of March 3rd, the files present are as follows:
 
-   Should this go in the dir above because we're gonna be focusing on
-   IPython configurations heavily enough that it warrants it? Or better to
-   simply  put only those notes in that dir and only comment on the
-   startup scripts in this directory?
+`04_easy_import.py`_
 
-As of today, the files present are as follows:
+`05_log.py`_
 
-04_easy_import.py_
+`06_help_helpers.py`_
 
-05_log.py_
+`20_aliases.py`_
 
-20_aliases.py_
+`32_vi_modes`.py_
 
-40_git_helpers.py_
+`42_pandas_init.py`_
 
-41_dir3.py_
-
-50_sysexception.py_
+`50_sysexception.py`_
 
 
-%rehash
--------
-01_rehashx.py_
+%rehashx
+--------
+`01_rehashx.py`_
 
-The IPython magic ``%rehash`` allows you to reload all of your startup files
-and also adds system commands to the namespace!
+The :mod:`IPython` magic ``%rehashx`` allows you to reload all of your startup
+files. This is convenient when working with a new class based module, and the 
+``%reset`` magic has wiped out all of your aliases.
+
+However the beautiful part of this magic:
+
+It adds every executable listed under the environment variable :envvar:`$PATH`.
+ to the namespace!
+
+Therefore, the first script that runs in the atartup directory is a simple script
+that invokes ``%rehashx``.
 
 Insofar, I haven't noticed any significant slowdown in startup time as a result
-of this, and it hugely eases utilizing IPython as a system shell.
+of this, and it hugely eases utilizing :mod:`IPython` as a system shell.
 
 .. other
 .. -----
@@ -75,13 +79,13 @@ Convenience Functions
 -----------------------
 :ref:`IPython` provides the functions :func:`IPython.Application.initialized()`
 and :func:`IPython.Application.instance()`. As a result, each script can easily
-implement the following as a check to ensure that the global IPython instance
-is running.
+implement the following as a check to ensure that the global :mod:`IPython`
+instance is running.
 
-.. code-block:: python
+.. ipython:: python
 
    if __name__ == "__main__":
-      from IPython import Application.initialized
+      from IPython import Application
       import sys
 
       if not Application.initialized():
@@ -89,12 +93,12 @@ is running.
 
 .. double check that what I'm saying below is true
 
-Unfortunately, ``from IPython import Application`` may be a feature of IPython7.3,
-which at the time of writing was released 3 days ago. If you don't have this
-version of the module, you can alternatively run
+Unfortunately, ``from IPython import Application`` may be a feature of
+:mod:`IPython` 7.3, which at the time of writing was released 3 days ago.
+If you don't have this version of the package, you can alternatively run
 
 
-.. code-block:: python
+.. ipython:: python
 
    from IPython.core.application import Application
    Application.initialized()
@@ -110,6 +114,11 @@ version of the module, you can alternatively run
 
 
    In [115]: IPython.Application.instance?
+
+This provides the following signature:
+
+.. code-block:: none
+
    Signature: IPython.Application.instance(*args, **kwargs)
    Docstring:
    Returns a global instance of this class.
@@ -120,26 +129,26 @@ version of the module, you can alternatively run
    The arguments and keyword arguments passed to this method are passed
    on to the :meth:`__init__` method of the class upon instantiation.
 
-   Examples
-   --------
+Examples
+--------
 
-   Create a singleton class using instance, and retrieve it::
+Create a singleton class using instance, and retrieve it::
 
-       >>> from traitlets.config.configurable import SingletonConfigurable
-       >>> class Foo(SingletonConfigurable): pass
-       >>> foo = Foo.instance()
-       >>> foo == Foo.instance()
-       True
+    >>> from traitlets.config.configurable import SingletonConfigurable
+    >>> class Foo(SingletonConfigurable): pass
+    >>> foo = Foo.instance()
+    >>> foo == Foo.instance()
+    True
 
-   Create a subclass that is retrived using the base class instance::
+Create a subclass that is retrived using the base class instance::
 
-       >>> class Bar(SingletonConfigurable): pass
-       >>> class Bam(Bar): pass
-       >>> bam = Bam.instance()
-       >>> bam == Bar.instance()
-       True
-   File:      ~/miniconda3/lib/python3.7/site-packages/traitlets/config/configurable.py
-   Type:      method
+    >>> class Bar(SingletonConfigurable): pass
+    >>> class Bam(Bar): pass
+    >>> bam = Bam.instance()
+    >>> bam == Bar.instance()
+    True
+File:      ~/miniconda3/lib/python3.7/site-packages/traitlets/config/configurable.py
+Type:      method
 
 
 
@@ -163,9 +172,8 @@ execution order of files with a prefix, e.g.
 .. _01_rehashx.py: ./01_rehashx.py
 .. _04_easy_import.py: ./04_easy_import.py
 .. _05_log.py: ./05_log.py
-.. _10_keybindings.py:  ./10_keybindings.py
+.. _06_help_helpers.py:  ./10_keybindings.py
 .. _20_aliases.py: ./20_aliases.py
-.. _30_macros_lazydl.py: ./30_macros_lazydl.py
-.. _40_git_helpers.py: ./40_git_helpers.py
-.. _41_dir3.py: ./41_dir3.py
+.. _32_vi_modes.py: ./32_vi_modes.py
+.. _42_pandas_init.py: ./42_pandas_init.py
 .. _50_sysexception.py: ./50_sysexception.py

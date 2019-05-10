@@ -1,3 +1,4 @@
+==========
 pygments
 ==========
 Feb 21, 2019:
@@ -9,7 +10,7 @@ The last section is the output from :command:`tldr -m pygmentize`.
 Pygments version 2.2.0, (c) 2006-2017 by Georg Brandl.
 
 Pygments and CSS
-----------------
+================
 
 .. ipython::
 
@@ -179,6 +180,8 @@ tldr
 
 `pygmentize -f html -O "full,linenos=True" -o {{output_file.html}} {{input_file}}`
 
+All Pygments Tokens
+===================
 
 .. ipython::
    :okexcept:

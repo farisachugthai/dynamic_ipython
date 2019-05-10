@@ -13,7 +13,7 @@ From a cursory glance :mod:`traitlets.utils.importstring` ==
 
 They both export 1 function :func:`~IPython.utils.importstring.import_item()`
 
-This could be used here to dynamicallt import strings based on user
+This could be used here to dynamicallu import strings based on user
 configuration, environment variables and configuration files.
 
 The functionality here is duplicated in
@@ -28,6 +28,9 @@ May 07, 2019:
     the magic ``%pylab`` would crash!
 
     It uses the same keyword behind the scenes interestingly enough.
+
+.. todo:: Could add in :func:`wcwidth.wcswidth()` to determine width of output
+          device and print that many ``***`` for the nvim part.
 
 """
 from importlib import import_module
@@ -53,7 +56,9 @@ except ImportError:
 def import_nvim(mod):
     """Import the neovim module.
 
-    Utilizes :func:`import_module` from :mod:`importlib`.
+    Utilizes :func:`import_module` from :mod:`importlib`. Nothing about the
+    function is specific to nvim though, and it could be used for the entire
+    module.
 
     :param mod: A module to import.
     :returns: None

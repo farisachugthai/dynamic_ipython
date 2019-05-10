@@ -5,9 +5,12 @@ Created Saturday 03 March 2018
 
 `<https://github.com/ipython/ipython/blob/master/IPython/core/interactiveshell.py>`_
 
+Subclasses of |ip|
+==================
+
 Lines 436-451
 
-Here's some interesting LOC from the source code.
+Here's some interesting line from the source code.
 
 .. code-block:: python3
 
@@ -31,10 +34,10 @@ Here's some interesting LOC from the source code.
 
 Traitlets
 ---------
-We should go over that :class:`~traitlets.Instance` class.:
+.. ipython:: python
 
     In [3]: traitlets.Instance?
-    Init signature: traitlets.Instance(klass=None, args=None, kw=None, **kwargs)
+    Init signature: traitlets.Instance(klass=None, args=None, kw=None, \*\*kwargs)
     Docstring:
     A trait whose value must be an instance of a specified class.
 
