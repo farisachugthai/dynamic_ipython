@@ -92,45 +92,11 @@ from shutil import which
 import sys
 
 # from prompt_toolkit import print_formatted_text as print
-from prompt_toolkit.utils import is_conemu_ansi, is_windows, is_windows_vt100_supported
 import IPython
 from IPython import get_ipython
 from IPython.core.alias import AliasError
 
-
-class Platform:
-    """Abstract away platform differences."""
-
-    @classmethod
-    def _sys_platform(self):
-        """Return the value of sys.platform."""
-        return sys.platform
-
-    def is_win(self):
-        """True when we are using Windows.
-
-        Only checks that the return value starts with 'win' so *win32* and
-        *win64* both work.
-        """
-        return self.is_windows()
-
-    def is_win_vt100(self):
-        """True when we are using Windows, but with VT100 esc sequences.
-
-        Import needs to be inline. Windows libraries are not always available.
-        """
-        from prompt_toolkit.output.windows10 import is_win_vt100_enabled
-        return self.is_windows() and is_win_vt100_enabled()
-
-    @classmethod
-    def is_conemu(self):
-        """True when the ConEmu Windows console is used. Thanks John."""
-        return is_conemu_ansi()
-
-    def is_linux(self):
-        """True when :func:`sys.platform` returns Linux."""
-        return self._sys_platform() == 'Linux'
-
+from machine import Platform
 
 def linux_specific_aliases(_ip):
     r"""Add Linux specific aliases.
@@ -421,9 +387,10 @@ def main():
         logging.info("The number of available aliases is: " +
                      str(len(user_aliases)))
 
-        if platform.machine() == "aarch64":
+        # if platform.machine() == "aarch64":
             # user_aliases += termux_aliases(ip)
-            pass
+            # pass
+
     elif machine.is_conemu():  # should check for 'nix-tools as an env var
         user_aliases += windows_aliases(_ip)
 
