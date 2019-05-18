@@ -1,3 +1,4 @@
+===========================================
 Default IPython Profile and Startup Scripts
 ===========================================
 
@@ -5,6 +6,10 @@ Default IPython Profile and Startup Scripts
     :local:
     :depth: 2
 
+README
+======
+
+ .. include:: profile_default.README
 
 :mod:`ipython_config`
 ---------------------

@@ -7,7 +7,7 @@
     <title>profile_default.startup.04_easy_import &#8212; Dynamic IPython 0.0.1 documentation</title>
     <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="/home/faris/projects/dynamic_ipython/docs/_static/pyramid.css_t" />
+    <link rel="stylesheet" type="text/css" href="/data/data/com.termux/files/home/projects/dynamic_ipython/docs/_static/pyramid.css_t" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
@@ -49,6 +49,9 @@
 <span class="c1"># flake8: noqa</span>
 <span class="sd">&quot;&quot;&quot;Import my most frequently used modules.</span>
 
+<span class="sd">This imports a few utility functions from :ref:`IPython` and imports the python</span>
+<span class="sd">package neovim is served in.</span>
+
 <span class="sd">It seems that :mod:`IPython` and :mod:`traitlets` share a module!</span>
 
 <span class="sd">From a cursory glance :mod:`traitlets.utils.importstring` ==</span>
@@ -56,33 +59,43 @@
 
 <span class="sd">They both export 1 function :func:`~IPython.utils.importstring.import_item()`</span>
 
-<span class="sd">This could be used here to dynamicallt import strings based on user</span>
+<span class="sd">This could be used here to dynamicallu import strings based on user</span>
 <span class="sd">configuration, environment variables and configuration files.</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">importlib</span> <span class="k">import</span> <span class="n">import_module</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
-<span class="kn">import</span> <span class="nn">shutil</span>
-<span class="kn">from</span> <span class="nn">shutil</span> <span class="k">import</span> <span class="n">which</span><span class="p">,</span> <span class="n">chown</span><span class="p">,</span> <span class="n">copytree</span>  <span class="c1"># noqa: E401</span>
-<span class="kn">import</span> <span class="nn">subprocess</span>
-<span class="kn">import</span> <span class="nn">sys</span>
+<span class="sd">The functionality here is duplicated in</span>
+<span class="sd">:mod:`profile_default.extensions.easy_import`.</span>
 
-<span class="kn">from</span> <span class="nn">IPython.utils.dir2</span> <span class="k">import</span> <span class="n">dir2</span><span class="p">,</span> <span class="n">get_real_method</span><span class="p">,</span> <span class="n">safe_hasattr</span>
-<span class="kn">from</span> <span class="nn">IPython.core.interactiveshell</span> <span class="k">import</span> <span class="n">InteractiveShell</span>
+
+<span class="sd">The Importance of Clean Namespaces</span>
+<span class="sd">==================================</span>
+<span class="sd">May 07, 2019:</span>
+
+<span class="sd">    If the last line in the module didn&#39;t have ``del mod`` in it, then</span>
+<span class="sd">    the magic ``%pylab`` would crash!</span>
+
+<span class="sd">    It uses the same keyword behind the scenes interestingly enough.</span>
+
+<span class="sd">.. todo:: Could add in :func:`wcwidth.wcswidth()` to determine width of output</span>
+<span class="sd">          device and print that many ``***`` for the nvim part.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">importlib</span> <span class="k">import</span> <span class="n">import_module</span>
 
 <span class="c1"># 12/14/18</span>
-<span class="kn">import</span> <span class="nn">IPython</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">git</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="k">pass</span>
 
+
 <div class="viewcode-block" id="import_nvim"><a class="viewcode-back" href="../../../profile_default.html#profile_default.startup.04_easy_import.import_nvim">[docs]</a><span class="k">def</span> <span class="nf">import_nvim</span><span class="p">(</span><span class="n">mod</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Import the neovim module.</span>
 
-<span class="sd">    Utilizes :func:`import_module` from :mod:`importlib`.</span>
+<span class="sd">    Utilizes :func:`import_module` from :mod:`importlib`. Nothing about the</span>
+<span class="sd">    function is specific to nvim though, and it could be used for the entire</span>
+<span class="sd">    module.</span>
 
 <span class="sd">    :param mod: A module to import.</span>
 <span class="sd">    :returns: None</span>
@@ -103,7 +116,8 @@
         <span class="n">mod</span> <span class="o">=</span> <span class="s1">&#39;neovim&#39;</span>
 
     <span class="n">import_nvim</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span>
-    <span class="k">del</span> <span class="n">import_nvim</span>
+
+    <span class="k">del</span> <span class="n">import_nvim</span><span class="p">,</span> <span class="n">mod</span>
 </pre></div>
 
           </div>
@@ -120,17 +134,17 @@
 <h3><a href="../../../index.html">Table of Contents</a></h3>
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../startup.html">Startup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../basic_customization.html">Basic Customization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ipython_keybindings.html">Keybindings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../custom_keyboard_shortcuts.html">Customizing the keybindings further</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ipython_interactive_shell.html">Interactive Shell Object</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../magics.html">Built-in Magics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../custom_magics.html">Defining custom magics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../custom_magics.html#complete-example">Complete Example</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../directive.html">Sphinx Directives</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../rich_output.html">Rich Output</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../pygments.html">Pygments highlighting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../startup.html">1. Startup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../basic_customization.html">2. Basic Customization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ipython_keybindings.html">3. Keybindings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../custom_keyboard_shortcuts.html">4. Customizing the keybindings further</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ipython_interactive_shell.html">5. Interactive Shell Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../magics.html">6. Built-in Magics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../custom_magics.html">7. Defining custom magics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../custom_magics.html#complete-example">8. Complete Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../directive.html">9. Sphinx Directives</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rich_output.html">10. Rich Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pygments.html">11. Pygments highlighting</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../API.html">API</a></li>

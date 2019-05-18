@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>extensions.easy_import &#8212; Dynamic IPython 0.0.1 documentation</title>
+    <title>extensions.load_ext &#8212; Dynamic IPython 0.0.1 documentation</title>
     <link rel="stylesheet" href="../../_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="/data/data/com.termux/files/home/projects/dynamic_ipython/docs/_static/pyramid.css_t" />
@@ -43,54 +43,41 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <h1>Source code for extensions.easy_import</h1><div class="highlight"><pre>
-<span></span><span class="ch">#!/usr/bin/env python</span>
-<span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Easy Import --- Import commonly used modules into the IPython namespace.</span>
-<span class="sd">========================================================================</span>
+  <h1>Source code for extensions.load_ext</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">sys</span>
 
-<span class="sd">This module is a slightly different way of importing things into the user&#39;s</span>
-<span class="sd">interactive namespace.</span>
-
-<span class="sd">Currently a module in this repository already exists and is launched on</span>
-<span class="sd">startup.</span>
-
-<span class="sd">As it stands, it may be preferable to use that over defining arbitrary</span>
-<span class="sd">magic functions in ``extensions``.</span>
-
-
-<span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">IPython</span> <span class="k">import</span> <span class="n">get_ipython</span>
-<span class="kn">from</span> <span class="nn">IPython.utils.importstring</span> <span class="k">import</span> <span class="n">import_item</span>
+<span class="kn">from</span> <span class="nn">IPython.core.magic</span> <span class="k">import</span> <span class="n">line_magic</span>
+
+<span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="load_ns"><a class="viewcode-back" href="../../extensions.html#extensions.easy_import.load_ns">[docs]</a><span class="k">def</span> <span class="nf">load_ns</span><span class="p">(</span><span class="n">mods</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Load modules into the namespace.</span>
+<div class="viewcode-block" id="load_ext"><a class="viewcode-back" href="../../extensions.html#extensions.load_ext.load_ext">[docs]</a><span class="nd">@line_magic</span>
+<span class="k">def</span> <span class="nf">load_ext</span><span class="p">(</span><span class="n">module_str</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Load an IPython extension by its module name.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">module_str</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Missing module name.&#39;</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">_ip</span><span class="o">.</span><span class="n">extension_manager</span><span class="o">.</span><span class="n">load_extension</span><span class="p">(</span><span class="n">module_str</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">res</span> <span class="o">==</span> <span class="s1">&#39;already loaded&#39;</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;The </span><span class="si">%s</span><span class="s2"> extension is already loaded. To reload it, use:&quot;</span> <span class="o">%</span> <span class="n">module_str</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%r</span><span class="s2">eload_ext&quot;</span><span class="p">,</span> <span class="n">module_str</span><span class="p">)</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    mods : module(s)</span>
-<span class="sd">        Modules to import.</span>
+        <span class="k">elif</span> <span class="n">res</span> <span class="o">==</span> <span class="s1">&#39;no load function&#39;</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;The </span><span class="si">%s</span><span class="s2"> module is not an IPython extension.&quot;</span> <span class="o">%</span> <span class="n">module_str</span><span class="p">)</span></div>
 
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    %ns mpl</span>
 
-<span class="sd">    .. wait can you use an alias? i have a list `aliases down there but it&#39;s not initialized??</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">_ip</span><span class="o">.</span><span class="n">user_ns</span><span class="p">:</span>
-        <span class="n">_ip</span><span class="o">.</span><span class="n">user_ns</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="c1"># should probably check that this isn&#39;t empty after 20_aliases</span>
-        <span class="k">for</span> <span class="n">mod</span> <span class="ow">in</span> <span class="n">mods</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">mod</span> <span class="ow">in</span> <span class="n">aliases</span><span class="p">:</span>
-                <span class="n">_ip</span><span class="o">.</span><span class="n">user_ns</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">import_ns</span><span class="p">(</span><span class="n">namespaces</span><span class="p">[</span><span class="n">aliases</span><span class="p">[</span><span class="n">mod</span><span class="p">]]))</span></div>
-
-
-<div class="viewcode-block" id="load_ipython_extension"><a class="viewcode-back" href="../../extensions.html#extensions.easy_import.load_ipython_extension">[docs]</a><span class="k">def</span> <span class="nf">load_ipython_extension</span><span class="p">(</span><span class="n">_ip</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Create ``ns`` magic.&quot;&quot;&quot;</span>
-    <span class="n">_ip</span><span class="o">.</span><span class="n">magics_manager</span><span class="o">.</span><span class="n">register_function</span><span class="p">(</span><span class="n">load_ns</span><span class="p">,</span> <span class="s1">&#39;line&#39;</span><span class="p">,</span> <span class="s1">&#39;ns&#39;</span><span class="p">)</span></div>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s1">&#39;E127&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+            <span class="n">module_str</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">load_ext</span><span class="p">(</span><span class="n">module_str</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="n">_ip</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">IndexError</span>
 </pre></div>
 
           </div>

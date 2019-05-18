@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>profile_default.startup.50_sysexception &#8212; Dynamic IPython 0.0.1 documentation</title>
+    <title>profile_default.startup.01_rehashx &#8212; Dynamic IPython 0.0.1 documentation</title>
     <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="/data/data/com.termux/files/home/projects/dynamic_ipython/docs/_static/pyramid.css_t" />
@@ -43,28 +43,72 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <h1>Source code for profile_default.startup.50_sysexception</h1><div class="highlight"><pre>
+  <h1>Source code for profile_default.startup.01_rehashx</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;Give a detailed, colored traceback and drop into pdb on exceptions.&quot;&quot;&quot;</span>
+<span class="sd">&quot;&quot;&quot;Rehash immediately to add everything in :envvar:`$PATH` as a line alias.</span>
+
+<span class="sd">Rehash</span>
+<span class="sd">=======</span>
+
+<span class="sd">This is an incredible little gem I just ran into, and hugely useful for</span>
+<span class="sd">making IPython work as a more versatile system shell.</span>
+
+<span class="sd">Help</span>
+<span class="sd">-----</span>
+<span class="sd">Help on :func:`~IPython.core.interactiveshell.run_line_magic()`::</span>
+
+<span class="sd">    run_line_magic(magic_name, line, _stack_depth=1)</span>
+<span class="sd">    method of IPython.terminal.interactiveshell.TerminalInteractiveShell instance</span>
+<span class="sd">    Execute the given line magic.</span>
+
+
+<span class="sd">Parameters</span>
+<span class="sd">----------</span>
+<span class="sd">magic_name : str</span>
+<span class="sd">    Name of the desired magic function, without &#39;%&#39; prefix.</span>
+
+<span class="sd">line : str</span>
+<span class="sd">    The rest of the input line as a single string.</span>
+
+<span class="sd">_stack_depth : int</span>
+<span class="sd">    If :func:`IPython.core.magics.run_line_magic()` is called from :func:`IPython.core.magics.magic()` then</span>
+<span class="sd">    `_stack_depth` = 2. This is added to ensure backward compatibility for use</span>
+<span class="sd">    of :func:`IPython.core.magics.get_ipython().magic()`</span>
+
+
+<span class="sd">Usage</span>
+<span class="sd">------</span>
+<span class="sd">As the help outlines above, the second required positional argument to</span>
+<span class="sd">:func:`IPython.core.TerminalInteractiveShell.run_line_magic()` is `line`.</span>
+
+<span class="sd">This is more easily understood as &#39;remaining arguments to the magic&#39;.</span>
+<span class="sd">``%rehashx`` takes none, but leaving it blank causes the function call to raise</span>
+<span class="sd">an error, so an empty str is passed to the function.</span>
+
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 
-
-<div class="viewcode-block" id="ExceptionHook"><a class="viewcode-back" href="../../../profile_default.html#profile_default.startup.50_sysexception.ExceptionHook">[docs]</a><span class="k">class</span> <span class="nc">ExceptionHook</span><span class="p">(</span><span class="ne">BaseException</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Custom exception hook for IPython.&quot;&quot;&quot;</span>
-
-    <span class="n">instance</span> <span class="o">=</span> <span class="kc">None</span>
-
-    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">IPython.core</span> <span class="k">import</span> <span class="n">ultratb</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">instance</span> <span class="o">=</span> <span class="n">ultratb</span><span class="o">.</span><span class="n">FormattedTB</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;Plain&#39;</span><span class="p">,</span>
-                                                <span class="n">color_scheme</span><span class="o">=</span><span class="s1">&#39;Linux&#39;</span><span class="p">,</span>
-                                                <span class="n">call_pdb</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+<span class="kn">from</span> <span class="nn">IPython</span> <span class="k">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">get_ipython</span>
 
 
-<span class="n">sys</span><span class="o">.</span><span class="n">excepthook</span> <span class="o">=</span> <span class="n">ExceptionHook</span><span class="p">()</span>
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../profile_default.html#profile_default.startup.01_rehashx.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Check if :mod:`IPython` was initialized and if so, ``%rehashx``.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">Application</span><span class="o">.</span><span class="n">initialized</span><span class="p">():</span>
+        <span class="n">LOGGER</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s1">&#39;Application not initialized. Exiting.&#39;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+
+    <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+    <span class="n">_ip</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s1">&#39;rehashx&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">LOGGER</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="vm">__name__</span><span class="p">)</span>
+    <span class="n">LOG_LEVEL</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">INFO</span>
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">LOG_LEVEL</span><span class="p">)</span>
+    <span class="n">main</span><span class="p">()</span>
 </pre></div>
 
           </div>

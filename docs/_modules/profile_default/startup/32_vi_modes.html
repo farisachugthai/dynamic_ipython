@@ -7,7 +7,7 @@
     <title>profile_default.startup.32_vi_modes &#8212; Dynamic IPython 0.0.1 documentation</title>
     <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="/home/faris/projects/dynamic_ipython/docs/_static/pyramid.css_t" />
+    <link rel="stylesheet" type="text/css" href="/data/data/com.termux/files/home/projects/dynamic_ipython/docs/_static/pyramid.css_t" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
@@ -57,15 +57,39 @@
 
 <span class="sd">.. todo:: Add one in for &lt;C-M-j&gt; to go to Emacs mode?</span>
 
+<span class="sd">Example Usage</span>
+<span class="sd">--------------</span>
+<span class="sd">From the `source code`_::</span>
+
+<span class="sd">.. ipython:: python</span>
+
+<span class="sd">    from prompt_toolkit.keybinding import KeyBinding</span>
+<span class="sd">    kb = KeyBindings()</span>
+
+<span class="sd">    @kb.add(&#39;c-t&#39;)</span>
+<span class="sd">    def _(event):</span>
+<span class="sd">        print(&#39;Control-T pressed&#39;)</span>
+
+<span class="sd">    @kb.add(&#39;c-a&#39;, &#39;c-b&#39;)</span>
+<span class="sd">    def _(event):</span>
+<span class="sd">        print(&#39;Control-A pressed, followed by Control-B&#39;)</span>
+
+<span class="sd">    @kb.add(&#39;c-x&#39;, filter=is_searching)</span>
+<span class="sd">    def _(event):</span>
+<span class="sd">        print(&#39;Control-X pressed&#39;)  # Works only if we are searching.</span>
+
+
+<span class="sd">.. _source-code: https://python-prompt-toolkit.readthedocs.io/en/stable/pages/reference.html#module-prompt_toolkit.key_binding</span>
+
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">os.path</span> <span class="k">import</span> <span class="n">join</span>
 
+<span class="kn">from</span> <span class="nn">IPython</span> <span class="k">import</span> <span class="n">get_ipython</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.enums</span> <span class="k">import</span> <span class="n">DEFAULT_BUFFER</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.filters</span> <span class="k">import</span> <span class="n">HasFocus</span><span class="p">,</span> <span class="n">ViInsertMode</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.defaults</span> <span class="k">import</span> <span class="n">load_key_bindings</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.vi_state</span> <span class="k">import</span> <span class="n">InputMode</span>
-<span class="kn">from</span> <span class="nn">IPython</span> <span class="k">import</span> <span class="n">get_ipython</span>
 
 <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="vm">__name__</span><span class="p">)</span>
 
@@ -110,7 +134,7 @@
     <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
 
     <span class="n">level</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span>
-    <span class="n">logger</span> <span class="o">=</span> <span class="n">_setup_logging</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="n">_ip</span><span class="p">)</span>
+    <span class="c1"># logger = _setup_logging(level, shell=_ip)</span>
 
     <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">_ip</span><span class="p">,</span> <span class="s1">&#39;pt_app&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
         <span class="n">registry</span> <span class="o">=</span> <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">key_bindings</span>
@@ -133,17 +157,17 @@
 <h3><a href="../../../index.html">Table of Contents</a></h3>
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../startup.html">Startup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../basic_customization.html">Basic Customization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ipython_keybindings.html">Keybindings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../custom_keyboard_shortcuts.html">Customizing the keybindings further</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ipython_interactive_shell.html">Interactive Shell Object</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../magics.html">Built-in Magics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../custom_magics.html">Defining custom magics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../custom_magics.html#complete-example">Complete Example</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../directive.html">Sphinx Directives</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../rich_output.html">Rich Output</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../pygments.html">Pygments highlighting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../startup.html">1. Startup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../basic_customization.html">2. Basic Customization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ipython_keybindings.html">3. Keybindings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../custom_keyboard_shortcuts.html">4. Customizing the keybindings further</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ipython_interactive_shell.html">5. Interactive Shell Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../magics.html">6. Built-in Magics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../custom_magics.html">7. Defining custom magics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../custom_magics.html#complete-example">8. Complete Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../directive.html">9. Sphinx Directives</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rich_output.html">10. Rich Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pygments.html">11. Pygments highlighting</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../API.html">API</a></li>
