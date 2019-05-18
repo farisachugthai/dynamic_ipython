@@ -8,10 +8,9 @@ Should definitely consider rewriting it.
 But like partially because plagariasm, partially
 because wth is this saying?
 """
+import nose.tools as nt
 from IPython import get_ipython
 from IPython.utils.capture import capture_output
-
-import nose.tools as nt
 
 _ip = get_ipython()
 

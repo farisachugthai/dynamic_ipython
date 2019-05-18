@@ -7,7 +7,7 @@ away differences in operating systems and filesystems.
 
 The class can be easily initialized with::
 
-    >>> from machine import Platform
+    >>> from profile_default.startup.machine import Platform
     >>> machine = Platform()
     >>> assert machine.env
 
@@ -32,7 +32,7 @@ from prompt_toolkit.utils import is_conemu_ansi, is_windows
 class Platform:
     """Abstract away platform differences."""
 
-    def __init__(self, shell=None, env=None):
+    def __init__(self, shell=None):
         """Initialize the platform class."""
         self.shell = shell
         self.env = dict(os.environ)

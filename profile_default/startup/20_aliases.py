@@ -94,19 +94,21 @@ Yet to be implemented
 - ``ssh-day``
 - ``extract``
 - :command:`fzf` in its many invocations.
+- A function that wraps around :func:|ip|`.MagicsManager.define_alias()` and
+  checks for whether the executable is on the :envvar:`PATH` all in one swoop.
 
 """
 import logging
-import platform
 from shutil import which
-import sys
 
 # from prompt_toolkit import print_formatted_text as print
 import IPython
 from IPython import get_ipython
 from IPython.core.alias import AliasError
 
-from machine import Platform
+from .machine import Platform
+
+LOGGER = logging.getLogger(name=__name__)
 
 
 def linux_specific_aliases(_ip=None):
@@ -268,40 +270,52 @@ def common_aliases(_ip=None):
 
 
 def windows_aliases(_ip=None):
-    """How did these get deleted!
+    """Aliases for Windows OSes.
+    
+    Has only been tested on Windows 10 in a heavily configured environment.
+    
+    Niceties such as Git for Windows, ag-silversearcher, ripgrep,
+    ConEmu and others have been added.
 
-    Also note that Powershell comes with a BUNCH of built-in aliases. We'll
-    have to create a way of detecting that we're in powershell specifically
-    though.
+    The minimum number of assumptions possible have been made; however, note
+    that this section is still under development and frequently changes.
+    
+    .. note::
+    
+        The environment variable :envvar:`COMSPEC` is checked to determine the
+        default shell and it is assumed the user is running IPython from there
+        which may not always be true.
+    
+    .. code-block:: powershell
 
-    Alias           rp --> Remove-ItemProperty
-    Alias           rsn --> Remove-PSSession
-    Alias           rv --> Remove-Variable
-    Alias           rvpa --> Resolve-Path
-    Alias           sajb --> Start-Job
-    Alias           sal --> Set-Alias
-    Alias           saps --> Start-Process
-    Alias           sasv --> Start-Service
-    Alias           sbp --> Set-PSBreakpoint
-    Alias           select --> Select-Object
-    Alias           set --> Set-Variable
-    Alias           si --> Set-Item
-    Alias           sl --> Set-Location
-    Alias           sleep --> Start-Sleep
-    Alias           sls --> Select-String
-    Alias           sort --> Sort-Object
-    Alias           sp --> Set-ItemProperty
-    Alias           spjb --> Stop-Job
-    Alias           spps --> Stop-Process
-    Alias           spsv --> Stop-Service
-    Alias           start --> Start-Process
-    Alias           stz --> Set-TimeZone
-    Alias           sv --> Set-Variable
-    Alias           tee --> Tee-Object
-    Alias           type --> Get-Content
-    Alias           where --> Where-Object
-    Alias           wjb --> Wait-Job
-    Alias           write --> Write-Output
+        Alias           rp --> Remove-ItemProperty
+        Alias           rsn --> Remove-PSSession
+        Alias           rv --> Remove-Variable
+        Alias           rvpa --> Resolve-Path
+        Alias           sajb --> Start-Job
+        Alias           sal --> Set-Alias
+        Alias           saps --> Start-Process
+        Alias           sasv --> Start-Service
+        Alias           sbp --> Set-PSBreakpoint
+        Alias           select --> Select-Object
+        Alias           set --> Set-Variable
+        Alias           si --> Set-Item
+        Alias           sl --> Set-Location
+        Alias           sleep --> Start-Sleep
+        Alias           sls --> Select-String
+        Alias           sort --> Sort-Object
+        Alias           sp --> Set-ItemProperty
+        Alias           spjb --> Stop-Job
+        Alias           spps --> Stop-Process
+        Alias           spsv --> Stop-Service
+        Alias           start --> Start-Process
+        Alias           stz --> Set-TimeZone
+        Alias           sv --> Set-Variable
+        Alias           tee --> Tee-Object
+        Alias           type --> Get-Content
+        Alias           where --> Where-Object
+        Alias           wjb --> Wait-Job
+        Alias           write --> Write-Output
 
     Also I felt really good about the way I reformatted that!
 
@@ -316,23 +330,11 @@ def windows_aliases(_ip=None):
 
     That's some non-trivial stuff right there! First try on all 4 of them!
 
-    .. todo::
-
-        That's nowhere near all of the built-in aliases.
-        Also check :envvar:`COMSPEC` to determine default shell.
-        Currently don't know a better way.
-
     """
     _ip.user_aliases = [
-        ('cmder', 'cmder'),
-        ('conemu', 'conemu'),
         ('copy', 'copy'),
-        ('dir', 'dir'),
         ('ddir', 'dir /ad /on'),
-        ('echo', 'echo'),
         ('ldir', 'dir /ad /on'),
-        ('ls', 'dir /on'),
-        ('mkdir', 'mkdir'),
         ('mklink', 'mklink'),
         ('move', 'move'),
         ('mv', 'move'),

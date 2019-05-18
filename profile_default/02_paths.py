@@ -96,8 +96,8 @@ So I don't feel like debugging that right now but that's where we're at.
 """
 import logging
 import os
-from pathlib import Path
 import sys
+from pathlib import Path
 
 from IPython import get_ipython
 # from IPython.paths import get_ipython_dir
@@ -134,7 +134,7 @@ class IPythonPath(ProfileDir):
         super().__init__()
 
     @classmethod
-    def find_profile_dir_by_name(cls, ipython_dir, name=u'default', config=None):
+    def find_profile_dir_by_name(cls, ipython_dir: Path, name: object = u'default', config: object = None) -> object:
         """Find an existing profile dir by profile name, return its ProfileDir.
 
         This searches through a sequence of paths for a profile dir.  If it
@@ -163,8 +163,7 @@ class IPythonPath(ProfileDir):
         ipython_path = Path(ipython_dir)
         dirpath = ipython_path.joinpath(dirname)
         if dirpath.is_dir:
-            profile_dir = str(dirpath)
-            return cls(location=profile_dir, config=config)
+            return str(dirpath)
         else:
             raise ProfileDirError
 
@@ -172,7 +171,7 @@ class IPythonPath(ProfileDir):
 def get_home():
     """Get the home dir."""
     if os.name == 'Linux':
-        return os.expanduser('~')
+        return os.path.expanduser('~')
     elif os.name == 'Win32':
         return os.environ.get('USERPROFILE')
 

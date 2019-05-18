@@ -8,9 +8,9 @@ Python3 and IPython 7+
 
 """
 import logging
-from logging import NullHandler
 import os
 import sys
+from logging import NullHandler
 
 from IPython import get_ipython
 

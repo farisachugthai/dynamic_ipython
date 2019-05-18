@@ -39,11 +39,11 @@ From the `source code`_::
 import logging
 from os.path import join
 
+from IPython import get_ipython
 from prompt_toolkit.enums import DEFAULT_BUFFER
 from prompt_toolkit.filters import HasFocus, ViInsertMode
 from prompt_toolkit.key_binding.defaults import load_key_bindings
 from prompt_toolkit.key_binding.vi_state import InputMode
-from IPython import get_ipython
 
 logging.getLogger(name=__name__)
 

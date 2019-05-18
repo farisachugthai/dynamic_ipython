@@ -33,19 +33,10 @@ May 07, 2019:
           device and print that many ``***`` for the nvim part.
 
 """
-from importlib import import_module
-import os
-from pathlib import Path
-import shutil
-from shutil import which, chown, copytree  # noqa: E401
-import subprocess
 import sys
-
-from IPython.utils.dir2 import dir2, get_real_method, safe_hasattr
-from IPython.core.interactiveshell import InteractiveShell
+from importlib import import_module
 
 # 12/14/18
-import IPython
 
 try:
     import git

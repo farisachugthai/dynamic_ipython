@@ -215,10 +215,20 @@ The timestamp is particularly convenient for concurrent instances of IPy.
                 print("Logging hadn't been started.")
             self.log_active = False
 
+-----------
+
+Roadmap
+--------
+
+05/18/2019:
+
+Should consider using that `ipython_logger_05` as a FileHandler and then
+configure a globally available StreamHandler.
+
 
 """
-from os import path
 import time
+from os import path
 
 from IPython import get_ipython
 
@@ -274,3 +284,4 @@ def ipython_logger_05():
 
 if __name__ == "__main__":
     ipython_logger_05()
+    del ipython_logger_05

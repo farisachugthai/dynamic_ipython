@@ -79,11 +79,11 @@ import os
 import platform
 import shutil
 
+from IPython.paths import get_ipython_dir
 # THIS IS THE MODULE! Its too exciting to able to execute this script
 # directly from within python and not get an error for a func call with no
 # import
 from traitlets.config import get_config
-from IPython.paths import get_ipython_dir
 
 c = get_config()
 
