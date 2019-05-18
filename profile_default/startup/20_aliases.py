@@ -12,10 +12,15 @@ IPython Aliases
 
     Moved git aliases into new :func:`common_aliases()`
 
+.. versionchanged:: May 18, 2019
+
+    IPython might've deprecated |ip| function
+    :func:`MagicsManager.define_alias` and replaced it with
+    :func:`MagicsManager.register_alias`
 
 Overview
 --------
-This module utilizes ``_ip``, the global :mod:`IPython` |ip|
+This module utilizes `_ip`, the global :mod:`IPython` |ip|
 instance, and fills the ``user_ns`` with common Linux idioms.
 
 
@@ -46,6 +51,7 @@ interactively the syntax ``%alias alias_name cmd`` doesn't require quoting.
 
 Attributes
 ----------
+
 _ip : |ip|
     A global object representing the active IPython session.
     Contains varying packages as well as the current global namespace.
@@ -54,9 +60,11 @@ _ip : |ip|
 
 Examples
 --------
-This code creates a handful of platform-specific functions where each returns
-`user_aliases`. Realizing that this is also used in the :mod:`IPython`
-implementation, the source code of the implementation has been provided for reference.
+
+This code creates a handful of platform-specific functions where each
+returns :ref:`user_aliases`. Realizing that this is also used in the
+:mod:`IPython.core.alias` implementation, the source code of the
+implementation has been provided for reference.
 
 .. ipython:: python
 
@@ -75,12 +83,14 @@ implementation, the source code of the implementation has been provided for refe
 
 See Also
 --------
-Aliases file for IPython.
 
 :mod:`IPython.core.alias`
+    Aliases file for IPython.
+
 
 Yet to be implemented
 ---------------------
+
 - ``ssh-day``
 - ``extract``
 - :command:`fzf` in its many invocations.
@@ -98,7 +108,8 @@ from IPython.core.alias import AliasError
 
 from machine import Platform
 
-def linux_specific_aliases(_ip):
+
+def linux_specific_aliases(_ip=None):
     r"""Add Linux specific aliases.
 
     Aliases that have either:
@@ -305,6 +316,12 @@ def windows_aliases(_ip=None):
 
     That's some non-trivial stuff right there! First try on all 4 of them!
 
+    .. todo::
+
+        That's nowhere near all of the built-in aliases.
+        Also check :envvar:`COMSPEC` to determine default shell.
+        Currently don't know a better way.
+
     """
     _ip.user_aliases = [
         ('cmder', 'cmder'),
@@ -380,16 +397,16 @@ def main():
 
     machine = Platform()
 
-    if machine.is_linux() == 'Linux':
+    if machine.is_linux():
 
-        # Now let's get the Linux aliases.
+        # Now let's get the Linux aliases
         user_aliases += linux_specific_aliases(_ip)
-        logging.info("The number of available aliases is: " +
-                     str(len(user_aliases)))
+        LOGGER.info("The number of available aliases after linux aliases"
+                    " is: " + str(len(user_aliases)))
 
         # if platform.machine() == "aarch64":
-            # user_aliases += termux_aliases(ip)
-            # pass
+        # user_aliases += termux_aliases(ip)
+        # pass
 
     elif machine.is_conemu():  # should check for 'nix-tools as an env var
         user_aliases += windows_aliases(_ip)
@@ -398,15 +415,19 @@ def main():
 
     __setup_fzf(user_aliases)
 
-    logging.info("The number of available aliases is: " +
-                 str(len(user_aliases)))
+    LOGGER.info("The number of available user aliases is: "
+                "" + str(len(user_aliases)))
 
     for i in user_aliases:
         try:
             _ip.alias_manager.define_alias(i[0], i[1])
         except AliasError as e:
-            logging.error(e)
+            LOGGER.error(e)
 
 
 if __name__ == "__main__":
+    LOGGER = logging.getLogger(name=__name__)
+    LOG_LEVEL = logging.INFO
+    LOGGER.setLevel(LOG_LEVEL)
+    # needs a handler LOGGER.
     main()

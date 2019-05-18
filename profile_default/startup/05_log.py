@@ -2,6 +2,9 @@
 # -*- coding: utf-8 -*-
 """Create a logfile for the day and append to it if one already exists.
 
+.. highlight:: python3
+
+
 Collects both the input and output of every command run through the IPython
 interpreter and prepends a timestamp to commands.
 
@@ -18,13 +21,6 @@ The timestamp is particularly convenient for concurrent instances of IPy.
     - Possibly change that section under the shebang to also include 3
       double quotes and in the comment add system info like py version, venv,
       conda, any of the 1000000 things you could add.
-
-
-In [2]: _ip.logger??
-Type:        Logger
-String form: <IPython.core.logger.Logger object at 0x7a689ae160>
-File:        /data/data/com.termux/files/usr/lib/python3.7/site-packages/IPython/core/logger.py
-Source:
 
 
 .. code-block:: python3

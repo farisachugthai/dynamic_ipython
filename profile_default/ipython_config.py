@@ -4,23 +4,30 @@
 
 IPython Config
 ==============
+
 Heavily drawn from documentation at `ipython_docs`_.  In addition to source
 code found on GitHub.
 
 
 .. _ipython_docs: `<https://ipython.readthedocs.io/en/stable/config/intro.html#python-config-files>`_
 
-
 Overview
 ---------
+
 This module provides convenience functions, adds typical Linux shell
 commands to `user_ns`, or the global namespace, in addition to Git aliases.
 
-In addition, :mod:`pygments` is directly invoked to ensure comments are
+In addition, pygments is directly invoked to ensure comments are
 clearly visible in :mod:`IPython` cells.
+
 
 get_config and :mod:`traitlets`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In the online examples, it's not clearly shown what the `c` represents when
+setting varying configuration values.
+
+
 From :mod:`traitlets/config/application`::
 
     def get_config():
@@ -40,6 +47,13 @@ c : |ip|
     :mod:`IPython` on simple things like creating a new prompt after every
     command increments it.
 
+Class parameters
+~~~~~~~~~~~~~~~~
+
+Parameters are set from command-line arguments of the form:
+`--Class.trait=value`. This line is evaluated in Python, so simple expressions
+are allowed, e.g.:: `--C.a='range(3)'` For setting C.a=[0,1,2].
+
 
 Attributes (Non-method parameters)
 ----------------------------------
@@ -47,6 +61,17 @@ Attributes (Non-method parameters)
     Environment variable defined before runtime to indicate where the
     :mod:`IPython` profile directory is.
 
+.. I think there's a specific syntax used when nesting directives look
+   that up later
+
+
+
+.. versionadded:: 05/18/19: What are these?::
+
+    --autoedit-syntax
+        Turn on auto editing of files with syntax errors.
+    --no-autoedit-syntax
+        Turn off auto editing of files with syntax errors.
 
 """
 import logging
@@ -66,14 +91,21 @@ c = get_config()
 # _ip = get_ipython()
 
 # Is it senseless defining our own logger?
-logger = logging.getLogger(name='__name__')
+LOGGER = logging.getLogger(name='__name__')
+LOGGER.setLevel(logging.WARNING)
+LOGGER.debug(get_ipython_dir())
 
-logger.debug(get_ipython_dir())
 
-try:
-    home = os.path.expanduser("~")
-except OSError:
-    home = os.environ.get("%userprofile%")
+def get_home():
+    """Define the user's :envvar:`HOME`."""
+    try:
+        home = os.path.expanduser("~")
+    except OSError:
+        home = os.environ.get("%userprofile%")
+    return home
+
+
+home = get_home()
 
 # def loaded_config(loaded=None):
 #     """Just noticed IPython loads this file twice."""
@@ -132,6 +164,14 @@ except OSError:
 # c.InteractiveShellApp.hide_initial_ns = True
 
 # Configure matplotlib for interactive use with the default matplotlib backend.
+
+# TerminalIPythonApp.matplotlib=<CaselessStrEnum>
+#     Default: None
+#     Choices: ['auto', 'agg', 'gtk', 'gtk3', 'inline', 'ipympl', 'nbagg',
+#     notebook', 'osx', 'pdf', 'ps', 'qt', 'qt4', 'qt5', 'svg', 'tk',
+#     widget', 'wx']
+#     Configure matplotlib for interactive use with the default matplotlib
+#     backend.
 # c.InteractiveShellApp.matplotlib = None
 
 # Run the module as a script.
@@ -139,11 +179,12 @@ except OSError:
 
 # Pre-load matplotlib and numpy for interactive use, selecting a particular
 #  matplotlib backend and loop integration.
+# See matplotlib choices above:
 # c.InteractiveShellApp.pylab = None
 
 # If true, IPython will populate the user namespace with numpy, pylab, etc. and
 #  an ``import *`` is done from numpy and pylab, when using pylab mode.
-#
+# Dude I never noticed that this defaults to True like whatttt
 #  When False, pylab mode should not import any names into the user namespace.
 # c.InteractiveShellApp.pylab_import_all = True
 
@@ -166,9 +207,11 @@ c.InteractiveShellApp.reraise_ipython_extension_failures = True
 # This is an application.
 
 # The date format used by logging formatters for %(asctime)s
+# Default: '%Y-%m-%d %H:%M:%S'
 c.Application.log_datefmt = '%Y-%m-%d %H:%M:%S'
 
 # The Logging format template
+#Default: '[%(name)s]%(highlevel)s %(message)s'
 c.Application.log_format = '%(asctime)s [%(name)s]%(highlevel)s %(message)s'
 
 # Set the log level by value or name.
@@ -355,6 +398,10 @@ c.InteractiveShell.history_load_length = 10000
 # code
 # c.InteractiveShell.loop_runner = 'IPython.core.interactiveshell._asyncio_runner'
 
+# TODO: What is this?
+# --TerminalInteractiveShell.object_info_string_level=<Enum>
+#     Default: 0
+#     Choices: (0, 1, 2)
 # c.InteractiveShell.object_info_string_level = 0
 
 # Automatically call the pdb debugger after every exception.
@@ -390,6 +437,8 @@ c.InteractiveShell.sphinxify_docstring = False
 c.InteractiveShell.wildcards_case_sensitive = False
 
 # Switch modes for the IPython exception handlers.
+# Default: 'Context'
+# Choices: ['Context', 'Plain', 'Verbose', 'Minimal']
 # c.InteractiveShell.xmode = 'Context'
 
 # ----------------------------------------------------------------------------
@@ -452,6 +501,7 @@ try:
     from gruvbox.style import GruvboxStyle
 except ModuleNotFoundError:
     c.TerminalInteractiveShell.highlighting_style = 'monokai'
+
 else:
     c.TerminalInteractiveShell.highlighting_style = GruvboxStyle
 
@@ -501,10 +551,10 @@ c.TerminalInteractiveShell.true_color = True
 # This is intended for use by standalone history tools. IPython shells use
 # HistoryManager, below, which is a subclass of this.
 
-# *******
+# *****************************************************************************
 # What this implies is that if you want to create your own tool for analyzing
 # your history logs in IPython start here!
-# *******
+# *****************************************************************************
 
 # Options for configuring the SQLite connection
 
@@ -525,25 +575,33 @@ c.TerminalInteractiveShell.true_color = True
 # directory.  If you would rather share one history among profiles, you can set
 # this value in each, so that they are consistent.
 
-#  Due to an issue with fcntl, SQLite is known to misbehave on some NFS mounts.
-#  If you see IPython hanging, try setting this to something on a local disk,
-#  e.g::
+# Due to an issue with fcntl, SQLite is known to misbehave on some NFS mounts.
+# If you see IPython hanging, try setting this to something on a local disk,
+# e.g::
 
 #      ipython --HistoryManager.hist_file=/tmp/ipython_hist.sqlite
 
-#  you can also use the specific value `:memory:` (including the colon at both
-#  end but not the back ticks), to avoid creating an history file.
+# you can also use the specific value `:memory:` (including the colon at both
+# end but not the back ticks), to avoid creating an history file.
+
+# Wait a second that's how prompt_toolkit does it! Does the base class inherit
+# from :class:`prompt_toolkit.history.History`
 # c.HistoryAccessor.hist_file = ''
 
 # ----------------------------------------------------------------------------
 # HistoryManager(HistoryAccessor) configuration
 # ----------------------------------------------------------------------------
 
+# HistoryManager.connection_options=<Dict>
+# Default: {}
+# Options for configuring the SQLite connection
+# These options are passed as keyword args to sqlite3.connect when
+# establishing database connections.
 # A class to organize all history-related functionality in one place.
 
 # Write to database every x commands (higher values save disk access & power).
 #  Values of 1 or less effectively disable caching.
-c.HistoryManager.db_cache_size = 20
+c.HistoryManager.db_cache_size = 6
 
 # Should the history database include output? (default: no)
 c.HistoryManager.db_log_output = True
@@ -563,9 +621,11 @@ c.HistoryManager.db_log_output = True
 # Set the profile location directly. This overrides the logic used by the
 #  `profile` option.
 
-# Don't enable! Check .startup.02_path.IPythonPath. Well that's gonna have to
-# sit on the backburner for a little while we debug.
-# c.ProfileDir.location = ''
+# Don't enable! Check .startup.02_path.IPythonPath.
+# Well that's gonna have to sit on the backburner for a little while we debug.
+# 05/18/19: I'm enabling this as it overrides the logic used for profile in
+# the `BaseIPythonApplication` section
+c.ProfileDir.location = os.path.join(home, '', 'ipython')
 
 # ----------------------------------------------------------------------------
 # BaseFormatter(Configurable) configuration
@@ -632,9 +692,11 @@ c.HistoryManager.db_log_output = True
 # Truncate large collections (lists, dicts, tuples, sets) to this size.
 
 #  Set to 0 to disable truncation.
+# Default is 1000 but that floods a terminal.
 c.PlainTextFormatter.max_seq_length = 100
 
-c.PlainTextFormatter.max_width = 79
+# Default value
+# c.PlainTextFormatter.max_width = 79
 
 # c.PlainTextFormatter.newline = '\n'
 
@@ -700,13 +762,9 @@ else:
 # c.IPCompleter.merge_completions = True
 
 # Instruct the completer to omit private method names
-#
 #  Specifically, when completing on ``object.<tab>``.
-#
 #  When 2 [default]: all names that start with '_' will be excluded.
-#
 #  When 1: all 'magic' names (``__foo__``) will be excluded.
-#
 #  When 0: nothing will be excluded.
 c.IPCompleter.omit__names = 1
 
@@ -715,13 +773,11 @@ c.IPCompleter.omit__names = 1
 # ----------------------------------------------------------------------------
 
 # Magics for talking to scripts
-#
 # This defines a base `%%script` cell magic for running a cell with a program
 # in a subprocess, and registers a few top-level magics that call %%script with
 # common interpreters.
 
 # Extra script cell magics to define
-#
 # This generates simple wrappers of `%%script foo` as `%%foo`.
 #
 # If you want to add script magics that aren't on your path, specify them in
@@ -729,8 +785,6 @@ c.IPCompleter.omit__names = 1
 # c.ScriptMagics.script_magics = []
 
 # Dict mapping short 'ruby' names to full paths, such as '/opt/secret/bin/ruby'
-# AKA the gcloud libs and other 3rd party bins
-
 # Only necessary for items in script_magics where the default path will not
 # find the right interpreter.
 # c.ScriptMagics.script_paths = {}
@@ -740,7 +794,6 @@ c.IPCompleter.omit__names = 1
 # ----------------------------------------------------------------------------
 
 # Magics related to all logging machinery.
-
 # Suppress output of log state when logging is enabled
 c.LoggingMagics.quiet = True
 
@@ -749,18 +802,15 @@ c.LoggingMagics.quiet = True
 # ----------------------------------------------------------------------------
 
 # Lightweight persistence for python variables.
-#
 # Provides the %store magic.
-
 # If True, any %store-d variables will be automatically restored when IPython
 # starts.
 # c.StoreMagics.autorestore = False
-
 
 # ----------------------------------------------------------------------------
 # Cleanup
 # ----------------------------------------------------------------------------
 
 del home
-logger.debug("The user namespace currently contains: ")
-logger.debug(c.user_ns)
+LOGGER.debug("The user namespace currently contains: ")
+LOGGER.debug(c.user_ns)

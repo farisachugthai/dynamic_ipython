@@ -42,33 +42,24 @@ an error, so an empty str is passed to the function.
 
 
 """
-import platform
+import logging
 import sys
 
 from IPython import Application, get_ipython
 
 
-def _sys_check():
-    """Check OS."""
-    return platform.uname().system
-
-
 def main():
-    """Check if we're on Windows and if not rehashx.
-
-    05/06/2019:
-
-        ``%rehashx`` when run in a directory with symlinks while on Windows 10
-        causes an unexpected error. Quite specific but hey.
-
-    """
+    """Check if :mod:`IPython` was initialized and if so, ``%rehashx``."""
     if not Application.initialized():
+        LOGGER.critical('Application not initialized. Exiting.')
         sys.exit()
 
-    if not _sys_check() == 'Windows':
-        _ip = get_ipython()
-        _ip.run_line_magic('rehashx', '')
+    _ip = get_ipython()
+    _ip.run_line_magic('rehashx', '')
 
 
 if __name__ == "__main__":
+    LOGGER = logging.getLogger(name=__name__)
+    LOG_LEVEL = logging.INFO
+    LOGGER.setLevel(LOG_LEVEL)
     main()
