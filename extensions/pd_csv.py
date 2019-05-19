@@ -7,7 +7,10 @@ Visualization Cookbook by TODO
 
 The example specifically is from pages 32 to 35.
 
-It also shows the following simpler example::
+It also shows the following simpler example:
+
+.. ipython::
+
     In [1]: from IPython.core.magic import (register_line_magic,
                                             register_cell_magic)
     In [2]: @register_line_magic
@@ -28,7 +31,7 @@ except ImportError:
     sys.exit("Pandas not installed. Exiting.")
 
 
-def csv(line, cell):
+def csv(cell):
     sio = StringIO(cell)
     return pd.read_csv(sio)
 

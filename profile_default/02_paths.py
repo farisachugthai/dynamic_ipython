@@ -103,7 +103,6 @@ from IPython import get_ipython
 # from IPython.paths import get_ipython_dir
 from IPython.core.profiledir import ProfileDir
 
-
 # from IPython.paths.profileapp import ProfileLocate
 
 
@@ -124,17 +123,20 @@ def _setup_logging():
 # Module errors
 # ----------------------------------------------------------------------------
 
+
 class ProfileDirError(Exception):
     logging.error('Profile directory error.')
 
 
 class IPythonPath(ProfileDir):
-
     def __init__(self):
         super().__init__()
 
     @classmethod
-    def find_profile_dir_by_name(cls, ipython_dir: Path, name: object = u'default', config: object = None) -> object:
+    def find_profile_dir_by_name(cls,
+                                 ipython_dir: Path,
+                                 name: object = u'default',
+                                 config: object = None) -> object:
         """Find an existing profile dir by profile name, return its ProfileDir.
 
         This searches through a sequence of paths for a profile dir.  If it
@@ -158,6 +160,7 @@ class IPythonPath(ProfileDir):
         name : unicode or str
             The name of the profile.  The name of the profile directory
             will be "profile_<profile>".
+
         """
         dirname = u'profile_' + name
         ipython_path = Path(ipython_dir)
@@ -184,4 +187,5 @@ if __name__ == '__main__':
 
     _ip = get_ipython()
     # Is this supposed to be IPythonPath... or IPythonPath()?
-    _ip.ProfileDir.location = IPythonPath.find_profile_dir_by_name(ipython_root_dir)
+    _ip.ProfileDir.location = IPythonPath.find_profile_dir_by_name(
+        ipython_root_dir)

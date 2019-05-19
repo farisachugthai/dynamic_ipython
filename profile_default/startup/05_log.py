@@ -2,6 +2,10 @@
 # -*- coding: utf-8 -*-
 """Create a logfile for the day and append to it if one already exists.
 
+==============
+IPython Logger
+==============
+
 .. highlight:: python3
 
 
@@ -22,6 +26,9 @@ The timestamp is particularly convenient for concurrent instances of IPy.
       double quotes and in the comment add system info like py version, venv,
       conda, any of the 1000000 things you could add.
 
+
+IPython Implementation of a Logger Class
+========================================
 
 .. code-block:: python3
 
@@ -227,6 +234,8 @@ configure a globally available StreamHandler.
 
 
 """
+import logging
+import sys
 import time
 from os import path
 
@@ -241,6 +250,9 @@ def ipython_logger_05():
     The commands are appended to a file in the directory of the
     profile in :envvar:`$IPYTHONDIR` or fallback ~/.ipython. This file is
     named based on the date.
+
+    .. todo:: Kinda wanna change the logmode. I'm not really liking having 7 different log files for 1 day.
+
 
     Parameters
     -----------
@@ -280,6 +292,46 @@ def ipython_logger_05():
             print(" Logging to " + filename)
     except RuntimeError:
         print(" Already logging to " + logger.logfname)
+
+
+def _setup_logging(log_level=None, log_format=None):
+    """Enable logging.
+
+    This function exists purely to be imported and isn't called by the containing module.
+
+    .. todo:: Need to add more to the formatter. Also do some error checking with the user-provided arguments.
+
+    Parameters
+    ----------
+    log_level : int
+        The level to log at
+    log_format : str
+        How to format the log messages.
+
+    Returns
+    --------
+    logger : :class:`logging.Logger()`
+        Module-wide logger
+
+    """
+    logger = logging.getLogger(name=__name__)
+    handler = logging.StreamHandler(sys.stdout)
+
+    if log_level:
+        logger.setLevel(logging.log_level)
+        handler.setLevel(logging.log_level)
+    else:
+        logger.setLevel(logging.WARNING)
+        handler.setLevel(logging.WARNING)
+
+    if log_format:
+        formatter = logging.Formatter(log_format)
+    else:
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(message)s')
+
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    return logger
 
 
 if __name__ == "__main__":
