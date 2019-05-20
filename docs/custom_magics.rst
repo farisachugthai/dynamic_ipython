@@ -1,5 +1,6 @@
 .. _defining_magics:
 
+======================
 Defining custom magics
 ======================
 
@@ -8,13 +9,13 @@ Defining custom magics
 There are two main ways to define your own magic functions: from standalone
 functions and by inheriting from a base class provided by IPython:
 :class:`IPython.core.magic.Magics`. Below we show code you can place in a file
-that you load from your configuration, such as any file in the ``startup``
-subdirectory of your default IPython profile.
+that you load from your configuration, such as any file in the
+:ref:`profile_default.startup` subdirectory of your default IPython profile.
 
 First, let us see the simplest case. The following shows how to create a line
 magic, a cell one and one that works in both modes, using just plain functions:
 
-.. sourcecode:: python
+.. ipython:: python
 
     from IPython.core.magic import (register_line_magic, register_cell_magic,
                                     register_line_cell_magic)
@@ -49,7 +50,7 @@ You can also create magics of all three kinds by inheriting from the
 potentially hold state in between calls, and that have full access to the main
 IPython object:
 
-.. sourcecode:: python
+.. ipython:: python
 
     # This code can be put in any Python module, it does not require IPython
     # itself to be running already.  It only creates the magics subclass but
@@ -102,7 +103,7 @@ If you want to create a class with a different constructor that holds
 additional state, then you should always call the parent constructor and
 instantiate the class yourself before registration:
 
-.. sourcecode:: python
+.. ipython:: python
 
     @magics_class
     class StatefulMagics(Magics):
@@ -136,6 +137,7 @@ instantiate the class yourself before registration:
    :func:`define_magic` function are advised to adjust their code
    for the current API.
 
+
 Complete Example
 ================
 
@@ -155,6 +157,9 @@ setuptools, distutils, or any other distribution tools like `flit
 .. sourcecode:: bash
 
    $ cat example_magic/__init__.py
+
+.. code-block:: python
+
    """An example magic"""
    __version__ = '0.0.1'
 
@@ -166,6 +171,9 @@ setuptools, distutils, or any other distribution tools like `flit
 .. sourcecode:: bash
 
     $ cat example_magic/abracadabra.py
+
+.. code-block:: python
+
     from IPython.core.magic import (Magics, magics_class, line_magic, cell_magic)
 
     @magics_class
@@ -206,15 +214,12 @@ Creating IPython Extensions
     we need to add the module name to the ``c.TerminalIPythonApp.extensions``
     list in the IPython configuration file.
 
-    The |ip| instance represents the active
-    :mod:`IPython` interpreter. Useful methods and attributes include
-    :func:`|ip|.register_magics()`, to create new magic commands,
-    and ``user_ns``, to access the user namespace. You can
-    explore all the instance's attributes interactively from
+    The |ip| instance represents the active :mod:`IPython` interpreter.
+    Useful methods and attributes include |ip|:func:`register_magics()`
+    , to create new magic commands, and ``user_ns``, to access the user
+    namespace. You can explore all the instance's attributes interactively from
     :mod:`IPython` with tab completion. For that, you need to execute
-    the following command to get the current instance
-
-    .. code-block:: python3
+    the following command to get the current instance.::
 
         from IPython import get_ipython
         ip = get_ipython()

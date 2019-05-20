@@ -14,14 +14,12 @@ Welcome to IPython packages' documentation!
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Table of Contents:
    :numbered:
 
    Startup <startup>
-   Basic Customization <basic_customization.rst>
    Keybindings <ipython_keybindings>
    Customizing the keybindings further <custom_keyboard_shortcuts>
-   Interactive Shell Object <ipython_interactive_shell>
    Built-in Magics <magics>
    Writing Your Own Magics <custom_magics>
    Sphinx Directives <directive>

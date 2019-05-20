@@ -1,108 +1,44 @@
+================
 IPython Magics
 ================
 
 .. module:: ipython_magics
    :Synopsis: Summarizes IPython magics.
 
-.. contents:: Table of Contentn
+.. contents:: Table of Contents
     :depth: 2
     :backlinks: entry
     :local:
 
 ------------------------------------------
 
-.. _questions:
-
-Questions you had in the past:
---------------------------------
-
-**Please review regularly! Let's see if we can figure these out.**
-
-1. Why doesn't ``%matplotlib inline`` work on my laptop? The GUI has to be enabled?
-But even when i run ``%GUI`` [which should disable that] it doesn't work.
-
-2. Are you allowed to use 2 cell magics in one cell?
-What if I wanted to do
-
-``%%timeit``
-
-``%%bash``
-
-``. ~/.bashrc``
-
-Is that legal?
-What if I want to write the output to a file? Can I prepend the ``%%file`` to
-the top? How deep can this rabbit hole go?
-
-Mar 30, 2019:
-
-*I don't think so because it crashed IPython while trying to build docs.*
+.. _defined_magics:
 
 Which magics are defined here?
-
-.. _defined_magics:
+==============================
 
 Line:
 ------
 
-``hist[ory]``, ``pycat`` (briefly), ``recall``, ``ed[it]``, ``bookmark``,
-``run``, ``store``, ``save``
+- ``%hist[ory]``
+- ``%pycat``
+- ``%recall``
+- ``%ed[it]``
+- ``%bookmark``
+- ``%run``
+- ``%store``
+- ``%save``
 
 Cell:
 -----
 
-``[write]file``, ``timeit`` [also a line magic just not documented], ``macro``
+- ``%[write]file``
+- ``%timeit``
+- ``%macro``
 
 
-Which magics do you think deserve a special mention even if we haven't
-documented them here?
 
-1. ``Alias`` probably should get some attention here now that i have an egregious
-amount on it in .bashrc and the ipy config.
-2. ``cpaste`` is neat because you can feed it lines that still have the >>> or [In] and [Out] prepended.
-3. ``paste directly`` pulls from the clipboard without intervention AND it strips a leading > so you can pull it from diff files!!
-
-Special special mention.
-:func:`exec` is not a magic but I actually thought it was!
-
-``In [18]: exec(In[6])``
-
-:func:`exec` is a Python built-in that just takes strings, but it can
-operate on history syntax.
-
-``exec ~2/4``
-
-successfully printed the 4th line from 2 sessions ago that I wanted,
-but it wouldn't redir to :func:`exec()` correctly. Maybe
-
-``var = %history ~2/4``
-
-``exec(var)``
-
-would work better?
-
-And in the future PLEASE keep hist, file, and edit together and in that order!
-
-.. useful_reminder:
-
-The most useful reminder I have
---------------------------------
-
-**tldr; use the following to view previously run commands last session.**
-
-``hist ~1/``
-
-Okay so this might not be my most useful reminder but it's certainly the command
-I forget the most often.
-
-Remember that ``hist ~1`` OUTPUTS NOTHING! DON'T FORGET THE :kbd:`/`!
-
-Use the following to to reload every command you ran last session into your
-current cell.
-
-``recall ~1/``
-
-``timeit()``
+``%timeit()``
 
 -qqq means be very quiet.
 -r 5 means repeat the whole cell block 5 times.
@@ -144,12 +80,49 @@ Jan 31, 2019:
     Now we can choose between ``%nvim file.filetype`` and
     ``%edit file.filetype`` as well!
 
-macro
---------
-I found a link on `<https://gist.github.com>`_ that shows you how to make jupyter
-notebook cells wider. So I figured I'd do something like
 
-``%macro widen_jupyter_cells``
+Macros
+--------
+IPython allows it's users the ability to re-execute strings of text as valid Python.
+
+This suits itself to automating the process of retrieving text from a user or an online
+source, validating it and then executing.
+
+Having tried to do so, I've learned you shouldn't ever write a script with a macro.
+IPython macros require all input to be one string, and it's difficult to see mistakes
+when there's no distinction between any of the tokens in a program.
+
+See Also
+~~~~~~~~~~
+:mod:`IPython.core.interactiveshell`
+
+Around lines 2300:
+
+.. ipython:: python
+
+    #-------------------------------------------------------------------------
+    # Things related to macros
+    #-------------------------------------------------------------------------
+
+    def define_macro(self, name, themacro):
+        # Define a new macro
+
+        # Parameters
+        # ----------
+        # name : str
+            # The name of the macro.
+        # themacro : str or Macro
+            # The action to do upon invoking the macro.  If a string, a new
+            # Macro object is created by passing the string to it.
+
+        from IPython.core import macro
+
+        if isinstance(themacro, str):
+            themacro = macro.Macro(themacro)
+        if not isinstance(themacro, macro.Macro):
+            raise ValueError('A macro must be a string or a Macro instance.')
+        self.user_ns[name] = themacro
+
 
 store
 ------
@@ -223,6 +196,21 @@ Help docs on save.
     If `-r` option is used, the default extension is `.ipy`.
     File:      ~/miniconda3/lib/python3.6/site-packages/IPython/core/magics/code.py
 
+
+Revisiting Previously Run Commands
+==================================
+
+Access previously run commands with the ``%history`` magic. Note that it can
+be abbreviated to ``%hist`` and used like so.::
+
+   %hist ~1/
+
+.. admonition:: Remember that ``%hist ~1`` outputs nothing! Don't forget the :kbd:`/`!
+
+Use the following to to reload every command you ran last session into your
+current cell.
+
+``recall ~1/``
 
 hist
 ------
@@ -428,66 +416,90 @@ Fun fact about edit
 If you run ``edit -x`` in the jupyter console it doesn't do anything! fun fact.
 Because it launched a GUI app you don't have bi-directional communication
 
-run
-----
+Honorary Mention
+----------------
 
+:func:`exec` is not a magic but I actually thought it was!
+
+.. code-block:: none
+
+   In [18]: exec(In[6])
+
+:func:`exec` is a Python built-in that just takes strings, but it can
+operate on history syntax.
+
+.. code-block:: none
+
+   ``%hist ~2/4``
+
+successfully printed the 4th line from 2 sessions ago that I wanted.
+
+Unfortunately, it wouldn't redirect to :func:`exec()` correctly.
+
+``var = %history ~2/4``
+
+``exec(var)``
+
+would work better?
+
+
+Executing Commands with Magics
+==============================
 -t
-
    print timing information at the end of the run.  IPython will give
    you an estimated CPU time consumption for your script, which under
    Unix uses the resource module to avoid the wraparound problems of
    time.clock().  Under Unix, an estimate of time spent on system tasks
    is also given (for Windows platforms this is reported as 0.0).
 
-If -t is given, an additional ``-N<N>`` option can be given, where <N>
-must be an integer indicating how many times you want the script to
-run.  The final timing report will include total and per run results.
+   If -t is given, an additional ``-N<N>`` option can be given, where <N>
+   must be an integer indicating how many times you want the script to
+   run.  The final timing report will include total and per run results.
 
-For example (testing the script uniq_stable.py)::
+   For example (testing the script uniq_stable.py)::
 
-    In [1]: %run -t uniq_stable
+   In [1]: %run -t uniq_stable
 
-    IPython CPU timings (estimated):
-      User  :    0.19597 s.
-      System:        0.0 s.
+   IPython CPU timings (estimated):
+     User  :    0.19597 s.
+     System:        0.0 s.
 
-    In [2]: run -t -N5 uniq_stable
+   In [2]: run -t -N5 uniq_stable
 
-    IPython CPU timings (estimated):
-    Total runs performed: 5
-      Times :      Total       Per run
-      User  :   0.910862 s,  0.1821724 s.
-      System:        0.0 s,        0.0 s.
+   IPython CPU timings (estimated):
+   Total runs performed: 5
+     Times :      Total       Per run
+     User  :   0.910862 s,  0.1821724 s.
+     System:        0.0 s,        0.0 s.
 
 -d
+   run your program under the control of :mod:`pdb`, the Python debugger.
+   This allows you to execute your program step by step, watch variables,
+   etc.  Internally, what IPython does is similar to calling::
 
-run your program under the control of :mod:`pdb`, the Python debugger.
-This allows you to execute your program step by step, watch variables,
-etc.  Internally, what IPython does is similar to calling::
+         pdb.run('execfile("YOURFILENAME")')
 
-      pdb.run('execfile("YOURFILENAME")')
+   with a breakpoint set on line 1 of your file.  You can change the line
+   number for this automatic breakpoint to be <N> by using the -bN option
+   (where N must be an integer). For example::
 
-with a breakpoint set on line 1 of your file.  You can change the line
-number for this automatic breakpoint to be <N> by using the -bN option
-(where N must be an integer). For example::
+         %run -d -b40 myscript
 
-      %run -d -b40 myscript
+   will set the first breakpoint at line 40 in myscript.py.  Note that
+   the first breakpoint must be set on a line which actually does
+   something (not a comment or docstring) for it to stop execution.
 
-will set the first breakpoint at line 40 in myscript.py.  Note that
-the first breakpoint must be set on a line which actually does
-something (not a comment or docstring) for it to stop execution.
+   Or you can specify a breakpoint in a different file::
 
-Or you can specify a breakpoint in a different file::
+         %run -d -b myotherfile.py:20 myscript
 
-      %run -d -b myotherfile.py:20 myscript
+   When the :mod:`pdb` debugger starts, you will see a (Pdb) prompt.  You must
+   first enter :kbd:`c` to start execution up to the first
+   breakpoint.
 
-When the :mod:`pdb` debugger starts, you will see a (Pdb) prompt.  You must
-first enter :kbd:`c` to start execution up to the first
-breakpoint.
-
-Entering 'help' gives information about the use of the debugger.  You
-can easily see pdb's full documentation with ``import pdb;pdb.help()``
-at a prompt.
+   Entering `help` gives information about the use of the debugger.  You
+   can easily see the :mod:`pdb` full documentation with ``import pdb;pdb.help()``
+   at a prompt.
 
 Momentary Detour
 ~~~~~~~~~~~~~~~~
@@ -499,8 +511,8 @@ Unsure what I'm doing wrong, but running ``%run -d -b [line_number]`` works
 perfectly enough that honestly I might not care for the time being.
 
 
-%run again
-----------
+Back to %run!
+~~~~~~~~~~~~~
 
 -p
 run program under the control of the Python profiler module (which
@@ -517,7 +529,7 @@ Internally this triggers a call to ``%prun``, see its documentation for
 details on the options available specifically for profiling.
 
 There is one special usage for which the text above doesn't apply:
-if the filename ends with .ipy[nb], the file is run as ipython script,
+if the filename ends with .ipy[nb], the file is run as IPython script,
 just as if the commands were written on IPython prompt.
 
 -m
@@ -525,15 +537,14 @@ specify module name to load instead of script path. Similar to
 the :kbd:`-m` option for the python interpreter. Use this option
 last if you want to combine with other %run options. Unlike the
 python interpreter only source modules are allowed no .pyc or .pyo files.
-For example:
+For example::
 
       ``%run -m example``
 
 will run the example module.
 
 -G
-
-Disable shell-like glob expansion of arguments.
+   Disable shell-like glob expansion of arguments.
 
 
 pycat [filename]
@@ -544,7 +555,10 @@ Runs it through a color syntax highlighting pager
 Bookmark
 --------
 
-``In [13]: bookmark?``:
+In [13]: bookmark?
+
+.. code-block:: none
+
     Docstring:
     Manage IPython's bookmark system.
 
