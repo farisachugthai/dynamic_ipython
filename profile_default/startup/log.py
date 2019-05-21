@@ -227,8 +227,10 @@ configure a globally available StreamHandler.
 
 
 """
-import time
+import logging
 from os import path
+import sys
+import time
 
 from IPython import get_ipython
 
@@ -280,6 +282,20 @@ def ipython_logger_05():
             print(" Logging to " + filename)
     except RuntimeError:
         print(" Already logging to " + logger.logfname)
+
+
+def _setup_logging(log_level=logging.WARNING,
+                   time_format='%(asctime)s - %(name)s - %(message)s'):
+    """Enable logging. TODO: Need to add more to the formatter."""
+    logger = logging.getLogger(name=__name__)
+    logger.setLevel(log_level)
+
+    stream_handler_instance = logging.StreamHandler(sys.stdout)
+    stream_handler_instance.setLevel(log_level)
+    formatter = logging.Formatter(time_format)
+    stream_handler_instance.setFormatter(formatter)
+    logger.addHandler(stream_handler_instance)
+    return logger
 
 
 if __name__ == "__main__":

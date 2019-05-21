@@ -106,7 +106,7 @@ import IPython
 from IPython import get_ipython
 from IPython.core.alias import AliasError
 
-from .machine import Platform
+from profile_default.startup.machine import Platform
 
 LOGGER = logging.getLogger(name=__name__)
 
@@ -271,21 +271,21 @@ def common_aliases(_ip=None):
 
 def windows_aliases(_ip=None):
     """Aliases for Windows OSes.
-    
+
     Has only been tested on Windows 10 in a heavily configured environment.
-    
+
     Niceties such as Git for Windows, ag-silversearcher, ripgrep,
     ConEmu and others have been added.
 
     The minimum number of assumptions possible have been made; however, note
     that this section is still under development and frequently changes.
-    
+
     .. note::
-    
+
         The environment variable :envvar:`COMSPEC` is checked to determine the
         default shell and it is assumed the user is running IPython from there
         which may not always be true.
-    
+
     .. code-block:: powershell
 
         Alias           rp --> Remove-ItemProperty
@@ -397,7 +397,7 @@ def main():
 
     user_aliases = []
 
-    machine = Platform()
+    machine = Platform('.')
 
     if machine.is_linux():
 

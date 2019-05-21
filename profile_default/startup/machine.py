@@ -2,7 +2,11 @@
 # -*- coding: utf-8 -*-
 """Create a class for all :mod:`IPython` instances to utilize.
 
-This class leverages Prompt Toolkit and a few of it's methods to abstract
+=========
+Machine
+=========
+
+This class leverages :mod:`prompt_toolkit and a few of it's methods to abstract
 away differences in operating systems and filesystems.
 
 The class can be easily initialized with::
@@ -18,24 +22,49 @@ The class can be easily initialized with::
 
 See Also
 --------
-:mod:`20_aliases.py`
+:mod:`profile_default.startup.20_aliases.py`
     Shows an example use case
 
 """
 import os
+from pathlib import Path, Wi
 import platform
 import sys
 
 from prompt_toolkit.utils import is_conemu_ansi, is_windows
+from IPython import get_ipython
+
+from profile_default.startup import log
+
+LOGGER = log._setup_logging()
 
 
-class Platform:
-    """Abstract away platform differences."""
+class Platform(Path):
+    """Abstract away platform differences.
 
-    def __init__(self, shell=None):
+    Initializing the class now causes issues during IPython startup.
+    Glossing over the source for pathlib indicates that there's a class
+    Flavour that's created at some point in the `Path.__new__()` func.
+
+    Seemingly going to be more difficult than anticipated to subclass Path.
+    """
+
+    def __new__(cls, *args, **kwargs):
+        """Attempt to kill warnings."""
+        if os.name == 'Windows_NT':
+            return WindowsPath
+    def __init__(self, shell=None, *args, **kwargs):
         """Initialize the platform class."""
+        if not shell:
+            try:
+                shell = get_ipython()
+            except Exception as e:
+                # is this the right method?
+                LOGGER.exception(e)
+
         self.shell = shell
-        self.env = dict(os.environ)
+        # Can we give it the cwd as an arg?
+        super().__init__(args, kwargs)
 
     @classmethod
     def _sys_platform(cls):
@@ -72,3 +101,12 @@ class Platform:
     def is_linux(self):
         """True when :func:`sys.platform` returns linux."""
         return self._sys_platform() == 'linux'
+
+    @property
+    def env(self):
+        self.env = dict(os.environ)
+        return self.env
+
+    @env.setter
+    def env(self, arg):
+        os.environ.set(arg)

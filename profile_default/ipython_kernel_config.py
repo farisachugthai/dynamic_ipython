@@ -241,7 +241,6 @@ c.IPythonKernel.use_experimental_completions = True
 # no arguments are present).
 # c.InteractiveShell.autocall = 0
 
-
 # Enable magic commands to be called without the leading %.
 c.InteractiveShell.automagic = True
 
