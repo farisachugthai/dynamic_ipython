@@ -6,15 +6,21 @@ Requires
 ---------
 Python3 and IPython 7+
 
+05/21/2019:
+
+    Commented out IPython because the package dependency in an __init__
+    file means that an unsuspecting user will try to install and the build
+    will fail before pip even gets a chance to install the dependencies.
+
 """
 import logging
 import os
 import sys
 from logging import NullHandler
 
-from IPython import get_ipython
+# from IPython import get_ipython
 
-_ip = get_ipython()
+# _ip = get_ipython()
 
 logging.getLogger(__name__).addHandler(NullHandler())
 

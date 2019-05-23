@@ -2,8 +2,6 @@
 # -*- coding: utf-8 -*-
 """Show an example of how to create line and cell magics.
 
-Unfortunately in it's current invocation this extension doesn't work.
-
 Usage
 -----
 .. ipython::
@@ -14,12 +12,9 @@ Usage
 While not utilized here, a similar execution path can be utilized for
 :func:`IPython.core.magic.cell_magic()`
 
-Let's try importing the class:`IPython.core.magic.Magics()`.
+05/22/2019
 
-Ah I just read the src and it mentions quite a few things I did wrong.
-
-We also need to import InteractiveShell.register_magic(class or instance)
-So I had it spelled wrong.
+Functional again. Simple debugging because the stack traces are so easy to read.
 
 See Also
 --------
@@ -36,7 +31,12 @@ import time
 
 from IPython import get_ipython
 from IPython.core.magic import Magics, magics_class, line_magic
+
+
+# register_cell_magic is only for functions
 # from IPython.core.magic import register_cell_magic
+# _ip.register_magics is only for classes lol oh my god
+# from IPython.core.magic import register_magic
 
 
 @magics_class
@@ -57,7 +57,8 @@ class ExampleMagic(Magics):
 def load_ipython_extension(shell=None):
     """Load the extension in IPython."""
     _ip.register_magics(ExampleMagic)
-    _ip.register_magics(ExampleMagic.time_printer)
+    # _ip.register_magics(ExampleMagic.time_printer)
+    _ip.register_magic_function(ExampleMagic.time_printer)
 
 
 if __name__ == "__main__":

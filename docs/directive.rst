@@ -69,7 +69,7 @@ left off.
   ------------------------------------------------------------
      File "<ipython console>", line 1
        q = z[)   # this is a syntax error -- we trap ipy exceptions
-	     ^
+         ^
   SyntaxError: invalid syntax
 
 

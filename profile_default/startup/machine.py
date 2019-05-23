@@ -36,19 +36,11 @@ class Platform:
         """Initialize the platform class."""
         self.shell = shell
         self.env = dict(os.environ)
+        self._sys_platform = sys.platform.lower()
+        self._sys_check = platform.uname().system
 
-    @classmethod
-    def _sys_platform(cls):
-        """Return the lower-case value of sys.platform."""
-        return sys.platform.lower()
-
-    @classmethod
-    def _sys_check(cls):
-        """Check OS."""
-        return platform.uname().system
-
-    @classmethod
-    def is_win(cls):
+    @property
+    def is_win(self):
         """True when we are using Windows.
 
         Only checks that the return value starts with 'win' so *win32* and
@@ -71,4 +63,4 @@ class Platform:
 
     def is_linux(self):
         """True when :func:`sys.platform` returns linux."""
-        return self._sys_platform() == 'linux'
+        return self._sys_platform == 'linux'

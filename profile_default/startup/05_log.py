@@ -25,6 +25,10 @@ The timestamp is particularly convenient for concurrent instances of IPy.
     - Possibly change that section under the shebang to also include 3
       double quotes and in the comment add system info like py version, venv,
       conda, any of the 1000000 things you could add.
+    - setup_logging
+        - Need to add more to the formatter. Also do some error checking with the
+          user-provided arguments.
+    - change logmode in ipython logger
 
 
 IPython Implementation of a Logger Class
@@ -242,17 +246,14 @@ from os import path
 from IPython import get_ipython
 
 
-def ipython_logger_05():
-    """
-    Saves the commands as valid IPython code. Note that this is not
-    necessarily valid python code.
+def ipython_logger_05(_ip=None):
+    """Saves all commands run in the interactive namespace as valid IPython code.
+
+    .. note:: This is not necessarily valid python code.
 
     The commands are appended to a file in the directory of the
     profile in :envvar:`$IPYTHONDIR` or fallback ~/.ipython. This file is
     named based on the date.
-
-    .. todo:: Kinda wanna change the logmode. I'm not really liking having 7 different log files for 1 day.
-
 
     Parameters
     -----------
@@ -260,7 +261,6 @@ def ipython_logger_05():
         Global IPython instance.
 
     """
-    _ip = get_ipython()
     log_dir = _ip.profile_dir.log_dir
     fname = 'log-' + _ip.profile + '-' + time.strftime('%Y-%m-%d') + ".py"
     logmode = 'rotate'
@@ -299,8 +299,6 @@ def _setup_logging(log_level=None, log_format=None):
 
     This function exists purely to be imported and isn't called by the containing module.
 
-    .. todo:: Need to add more to the formatter. Also do some error checking with the user-provided arguments.
-
     Parameters
     ----------
     log_level : int
@@ -335,5 +333,6 @@ def _setup_logging(log_level=None, log_format=None):
 
 
 if __name__ == "__main__":
-    ipython_logger_05()
+    shell = get_ipython()
+    ipython_logger_05(shell)
     del ipython_logger_05
