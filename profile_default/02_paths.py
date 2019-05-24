@@ -41,7 +41,7 @@ Apr 28, 2019
 Here's your current traceback. Moved that file out of startup so you can
 resume IPython usage as normal.
 
-.. code-block:: python-traceback
+.. code-block:: py-tb
 
     ERROR:root:Profile directory error.
     2019-04-28 01:20:40 [TerminalIPythonApp] WARNING | Unknown error in handling startup files:
@@ -101,20 +101,27 @@ from pathlib import Path
 
 from IPython import get_ipython
 # from IPython.paths import get_ipython_dir
-from IPython.core.profiledir import ProfileDir
 
 
-# from IPython.paths.profileapp import ProfileLocate
+def _setup_logging(logger_name=None, logger_format=None, log_handler=None):
+    """Initialize a :class:`logging.Logger()`.
 
+    Trying to factor out all of the hard coded nonsense in this function.
+    Unfortunately the more the problem gets broken down the farther we sink in.
+    """
+    if logger_name is None:
+        logger = logging.getLogger(name=__name__)
 
-def _setup_logging():
-    """Enable logging. TODO: Need to add more to the formatter."""
-    logger = logging.getLogger(name=__name__)
     logger.setLevel(logging.WARNING)
 
-    handler = logging.StreamHandler(sys.stdout)
+    if log_handler is None:
+        handler = logging.StreamHandler(sys.stdout)
+
     handler.setLevel(logging.WARNING)
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(message)s')
+
+    if logger_format is None:
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(message)s')
+
     handler.setFormatter(formatter)
     logger.addHandler(handler)
     return logger
@@ -124,64 +131,54 @@ def _setup_logging():
 # Module errors
 # ----------------------------------------------------------------------------
 
-class ProfileDirError(Exception):
-    logging.error('Profile directory error.')
+class PathManagerError(Exception):
+    """I have no idea how to do this correctly."""
+    PathLogger = _setup_logging()
+    PathLogger.error('%s' % sys.traceback)
 
 
-class IPythonPath(ProfileDir):
-
-    def __init__(self):
-        super().__init__()
-
-    @classmethod
-    def find_profile_dir_by_name(cls, ipython_dir: Path, name: object = u'default', config: object = None) -> object:
-        """Find an existing profile dir by profile name, return its ProfileDir.
-
-        This searches through a sequence of paths for a profile dir.  If it
-        is not found, a :class:`ProfileDirError` exception will be raised.
-
-        The search path algorithm WAS:
-        1. ``os.getcwd()``
-        2. ``ipython_dir``
-
-        Currently it is:
-
-        1. ``ipython_dir``
-
-        The implementation also differs slightly from IPython's in that it
-        uses :mod:`pathlib`.
-
-        Parameters
-        ----------
-        ipython_dir : unicode or str
-            The IPython directory to use.
-        name : unicode or str
-            The name of the profile.  The name of the profile directory
-            will be "profile_<profile>".
-        """
-        dirname = u'profile_' + name
-        ipython_path = Path(ipython_dir)
-        dirpath = ipython_path.joinpath(dirname)
-        if dirpath.is_dir:
-            return str(dirpath)
-        else:
-            raise ProfileDirError
+# ----------------------------------------------------------------------------
+# Classes
+# ----------------------------------------------------------------------------
 
 
-def get_home():
-    """Get the home dir."""
-    if os.name == 'Linux':
-        return os.path.expanduser('~')
-    elif os.name == 'Win32':
-        return os.environ.get('USERPROFILE')
+class PathManager:
+    """This is the one. Needs no parameters. Fully bound namespace to start.
+
+    Examples
+    --------
+    ::
+
+        >>> pm = PathManager()
+        >>> ''.join(i for i in dir(pm) if not i.startswith('_'))
+
+    .. i think that works...it doesn't
+
+    .. ipython:: python
+
+        In [190]: tmp = '\n'.join(i for i in dir(pm) if not i.startswith('_'))
+        Out[190]: 'Path\nshell'
+        [ins] In [191]: print(tmp)
+        Path
+        shell
+
+    That *should* print out `pm.Path` and `pm.shell` and those 2 methods expose
+    everything I want. `pm.Path` is already initialized unlike my previous attempts
+    at a class like this.
+
+    It was initialized via the shell instance we bound to a meager line above.
+
+    Then I guess we should implement some factory functions or something to make
+    it syntactically simple to create new instances for different cases.
 
 
-if __name__ == '__main__':
-    logger = _setup_logging()
+    """
 
-    HOME = Path.home()
-    ipython_root_dir = Path.joinpath(HOME, '', '.ipython/profile_default')
+    def __init__(self, shell=None):
+        """Initialize an IPython mixin with pathlib."""
+        if shell is None:
+            self.shell = get_ipython()
+        self.Path = Path(self.shell.profile_dir.location)
 
-    _ip = get_ipython()
-    # Is this supposed to be IPythonPath... or IPythonPath()?
-    _ip.ProfileDir.location = IPythonPath.find_profile_dir_by_name(ipython_root_dir)
+    def __repr__(self):
+        return format({i: j for i, j in self.shell.config.items()})

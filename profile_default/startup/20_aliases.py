@@ -106,7 +106,7 @@ import IPython
 from IPython import get_ipython
 from IPython.core.alias import AliasError
 
-from .machine import Platform
+from profile_default.startup.machine import Platform
 
 LOGGER = logging.getLogger(name=__name__)
 
