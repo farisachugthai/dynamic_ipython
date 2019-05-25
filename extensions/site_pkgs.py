@@ -84,7 +84,7 @@ def _parse_arguments():
         default=sys.stdout,
         type=argparse.FileType('w'),
         help='The file where the packages should be written. Defaults to'
-        'stdout. ')
+             'stdout. ')
 
     return parser
 

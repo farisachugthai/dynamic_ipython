@@ -48,19 +48,6 @@ from prompt_toolkit.key_binding.vi_state import InputMode
 logging.getLogger(name=__name__)
 
 
-def _setup_logging(level, shell=None):
-    """Could definitely add a **LOT** here."""
-    logger = logging.getLogger(name=__name__)
-    logger.setLevel(level)
-
-    logdir = shell.profile_dir.log_dir
-    log_file = join(logdir, 'keybinding.log')
-    hdlr = logging.FileHandler(log_file)
-    logger.addHandler(hdlr)
-    formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
-    hdlr.setFormatter(formatter)
-    return logger
-
 
 def switch_to_navigation_mode(event):
     """Switches :mod:`IPython` from Vim insert mode to Vim normal mode.
@@ -146,11 +133,11 @@ def check_defaults():
         statement in the `__init__` func was execute and you'll have access
         to everything. Cool!
         """
-        registry = load_key_bindings()
-        return registry.key_bindings
+    registry = load_key_bindings()
+    return registry.key_bindings
 
 
-    if __name__ == "__main__":
+if __name__ == "__main__":
     _ip = get_ipython()
 
     level = logging.WARNING
