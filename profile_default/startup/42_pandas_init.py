@@ -36,17 +36,30 @@ except ImportError:
 
 
 def start():
-    """Define options for :mod:`pandas` startup."""
+    """Define options for :mod:`pandas` startup.
+
+    .. tip::
+
+        Don't set `start.options['show_dimensions'] to ``False``.
+        ``'show_dimensions'`` means show the size of the `pd.DataFrame` object.
+
+        ``truncate indicates to only display it when the DataFrame is...
+        well truncated.[1]_
+
+        _[1]: pandas.pydata.org/pandas-docs/stable/user-guide/options.html
+
+    """
     options = {
         'display': {
+            'encoding': 'utf-8',
+            'expand_frame_repr': False,  # Don't wrap to multiple pages
+            'html.table_schema': True,
             'max_columns': None,
             'max_colwidth': 25,
-            'expand_frame_repr': False,  # Don't wrap to multiple pages
             'max_rows': 30,
             'max_seq_items': 50,
             # Max length of printed sequence 'precision': 4,
-            'show_dimensions': False,
-            'encoding': 'utf-8',
+            'show_dimensions': 'truncate',
         },
         'mode': {
             'chained_assignment': None
@@ -63,4 +76,4 @@ if __name__ == '__main__':
     start()
 
     del start
-# Clean up namespace in the interpreter
+    # Clean up namespace in the interpreter

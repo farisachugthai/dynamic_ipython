@@ -48,18 +48,6 @@ from prompt_toolkit.key_binding.vi_state import InputMode
 logging.getLogger(name=__name__)
 
 
-def _setup_logging(level, shell=None):
-    logger = logging.getLogger(name=__name__)
-    logger.setLevel(level)
-
-    logdir = shell.profile_dir.log_dir
-    log_file = join(logdir, 'keybinding.log')
-    hdlr = logging.FileHandler(log_file)
-    logger.addHandler(hdlr)
-    formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
-    hdlr.setFormatter(formatter)
-    return logger
-
 
 def switch_to_navigation_mode(event):
     """Switches :mod:`IPython` from Vim insert mode to Vim normal mode.
@@ -79,7 +67,72 @@ def check_defaults():
     anything along the way.
 
     Probably gonna need to noqa something since the code isn't accessed as is.
-    """
+
+    May 23, 2019:
+
+        To my knowledge the keybindings you have available is every single
+        one that prompt_toolkit ships with.
+
+    .. code-block::
+
+        __all__ = [
+            'load_key_bindings',
+        ]
+
+
+        def load_key_bindings():
+            # Create a KeyBindings object that contains the default key bindings.
+            all_bindings = merge_key_bindings([
+                # Load basic bindings.
+                load_basic_bindings(),
+
+                # Load emacs bindings.
+                load_emacs_bindings(),
+                load_emacs_search_bindings(),
+
+                # Load Vi bindings.
+                load_vi_bindings(),
+                load_vi_search_bindings(),
+            ])
+
+            return merge_key_bindings([
+                # Make sure that the above key bindings are only active if the
+                # currently focused control is a `BufferControl`. For other controls, we
+                # don't want these key bindings to intervene. (This would break "ptterm"
+                # for instance, which handles 'Keys.Any' in the user control itself.)
+                ConditionalKeyBindings(all_bindings, buffer_has_focus),
+
+                # Active, even when no buffer has been focused.
+                load_mouse_bindings(),
+                load_cpr_bindings(),
+            ])
+
+        That's literally everything. IPython chooses to add their own stuff
+        during IPython.terminal.ptutil.create_ipython_shortcuts but if you
+        choose to create your own registry then you get access to everything.
+
+        It might not be hard to bind to if we do it the same way we did with
+        that one pathlib.Path class.
+
+        Literally::
+
+            from IPython import get_ipython
+            from prompt_toolkit.key_binding import merge_key_bindings, KeyBindings
+            from prompt_toolkit.key_binding.defaults import load_key_bindings
+
+            class KeyBindingsManager:
+
+                def __init__(self, shell=None):
+                    if _ip is None:
+                        _ip = get_ipython()
+                    self.registry = KeyBindings
+
+        Then you just wait.
+
+        Once the user initializes that class, then your :class:`KeyBindings`
+        statement in the `__init__` func was execute and you'll have access
+        to everything. Cool!
+        """
     registry = load_key_bindings()
     return registry.key_bindings
 

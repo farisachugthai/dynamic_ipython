@@ -8,11 +8,10 @@ IPython Logger
 
 .. highlight:: python3
 
-
 Collects both the input and output of every command run through the IPython
 interpreter and prepends a timestamp to commands.
 
-The timestamp is particularly convenient for concurrent instances of IPy.
+The timestamp is particularly convenient for concurrent instances of IPython.
 
 .. versionchanged:: Changed :func:`_ip.magic()` to :func:`_ip.run_line_magic()`
 
@@ -239,9 +238,10 @@ configure a globally available StreamHandler.
 
 """
 import logging
+import os
+from os import path
 import sys
 import time
-from os import path
 
 from IPython import get_ipython
 
@@ -294,41 +294,49 @@ def ipython_logger_05(_ip=None):
         print(" Already logging to " + logger.logfname)
 
 
-def _setup_logging(log_level=None, log_format=None):
-    """Enable logging.
+def _setup_logging(level=None, filename=None, shell=None, msg_format=None):
+    """Shit we need to rewrite this function in it's entirety.
 
-    This function exists purely to be imported and isn't called by the containing module.
+    To make it more extensible and widely used through the whole package,
+    I attempted factoring out variables I usually hard code.
 
-    Parameters
-    ----------
-    log_level : int
-        The level to log at
-    log_format : str
-        How to format the log messages.
+    Simple enough idea.
 
-    Returns
-    --------
-    logger : :class:`logging.Logger()`
-        Module-wide logger
+    But now there are SO many invariants because if the user doesn't set one,
+    the following commands will fail.
+
+    So we actually HAVE to specify a default value for everything.
+    Which kinda decreases how modular this code is.
+
+    However, if we don't then it literally won't work in the way it's written.
+    Ergh this might get tough.
+
+    Also should do some validation on the log level there. There's a really
+    useful block of code in the tutorial.
 
     """
     logger = logging.getLogger(name=__name__)
     handler = logging.StreamHandler(sys.stdout)
 
-    if log_level:
-        logger.setLevel(logging.log_level)
-        handler.setLevel(logging.log_level)
+    if level is not None:
+        logger.setLevel(level)
     else:
         logger.setLevel(logging.WARNING)
-        handler.setLevel(logging.WARNING)
 
-    if log_format:
-        formatter = logging.Formatter(log_format)
-    else:
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(message)s')
+    if shell is not None:
+        logdir = shell.profile_dir.log_dir
+    # TODO: need an else fallback if shell is not none but filename is
 
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
+    if filename is not None:
+        log_file = os.path.join(logdir, 'keybinding.log')
+        hdlr = logging.FileHandler(log_file)
+        logger.addHandler(hdlr)
+    # TODO: add stream handler in an else statement
+
+    if msg_format is not None:
+        formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+        hdlr.setFormatter(formatter)
+
     return logger
 
 

@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """Override the IPython logic to find the profile dir.
 
 Paths
@@ -101,19 +102,27 @@ from pathlib import Path
 
 from IPython import get_ipython
 # from IPython.paths import get_ipython_dir
-from IPython.core.profiledir import ProfileDir
-
-# from IPython.paths.profileapp import ProfileLocate
 
 
-def _setup_logging():
-    """Enable logging. TODO: Need to add more to the formatter."""
-    logger = logging.getLogger(name=__name__)
+def _setup_logging(logger_name=None, logger_format=None, log_handler=None):
+    """Initialize a :class:`logging.Logger()`.
+
+    Trying to factor out all of the hard coded nonsense in this function.
+    Unfortunately the more the problem gets broken down the farther we sink in.
+    """
+    if logger_name is None:
+        logger = logging.getLogger(name=__name__)
+
     logger.setLevel(logging.WARNING)
 
-    handler = logging.StreamHandler(sys.stdout)
+    if log_handler is None:
+        handler = logging.StreamHandler(sys.stdout)
+
     handler.setLevel(logging.WARNING)
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(message)s')
+
+    if logger_format is None:
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(message)s')
+
     handler.setFormatter(formatter)
     logger.addHandler(handler)
     return logger
@@ -123,9 +132,18 @@ def _setup_logging():
 # Module errors
 # ----------------------------------------------------------------------------
 
-
 class ProfileDirError(Exception):
     logging.error('Profile directory error.')
+
+
+class PathManagerError(Exception):
+    """I have no idea how to do this correctly."""
+    PathLogger = _setup_logging()
+    PathLogger.error('%s' % sys.traceback)
+
+# ----------------------------------------------------------------------------
+# Classes
+# ----------------------------------------------------------------------------
 
 
 class IPythonPath(ProfileDir):
@@ -139,27 +157,32 @@ class IPythonPath(ProfileDir):
                                  config: object = None) -> object:
         """Find an existing profile dir by profile name, return its ProfileDir.
 
-        This searches through a sequence of paths for a profile dir.  If it
-        is not found, a :class:`ProfileDirError` exception will be raised.
+         This searches through a sequence of paths for a profile dir.  If it
+         is not found, a :class:`ProfileDirError` exception will be raised.
 
-        The search path algorithm WAS:
-        1. ``os.getcwd()``
-        2. ``ipython_dir``
+         The search path algorithm WAS:
 
-        Currently it is:
+             1. ``os.getcwd()``
+             2. ``ipython_dir``
 
-        1. ``ipython_dir``
+         Currently it is:
 
-        The implementation also differs slightly from IPython's in that it
-        uses :mod:`pathlib`.
+         1. ``ipython_dir``
 
-        Parameters
-        ----------
-        ipython_dir : unicode or str
-            The IPython directory to use.
-        name : unicode or str
-            The name of the profile.  The name of the profile directory
-            will be "profile_<profile>".
+         The implementation also differs slightly from IPython's in that it
+         uses :mod:`pathlib`.
+
+         Parameters
+         ----------
+         ipython_dir : unicode or str
+             The IPython directory to use.
+         name : unicode or str
+             The name of the profile.  The name of the profile directory
+             will be "profile_<profile>".
+
+         Examples
+         --------
+         ::
 
         """
         dirname = u'profile_' + name
@@ -170,6 +193,52 @@ class IPythonPath(ProfileDir):
         else:
             raise ProfileDirError
 
+
+class PathManager():
+    """I think we got it.
+
+    Examples
+    --------
+    ::
+
+        >>> pm = PathManager()
+        >>> ''.join(i for i in dir(pm) if not i.startswith('_'))
+
+
+    .. ipython:: python
+
+        In [190]: tmp = '\n'.join(i for i in dir(pm) if not i.startswith('_'))
+        Out[190]: 'Path\nshell'
+        [ins] In [191]: print(tmp)
+        Path
+        shell
+
+
+    Parameters
+    ----------
+    ipython_dir : unicode or str
+        The IPython directory to use.
+    name : unicode or str
+        The name of the profile.  The name of the profile directory
+        will be "profile_<profile>".
+
+        """
+        dirname = u'profile_' + name
+        ipython_path = Path(ipython_dir)
+        dirpath = ipython_path.joinpath(dirname)
+        if dirpath.is_dir:
+            return str(dirpath)
+        else:
+            raise ProfileDirError
+
+    def __repr__(self):
+        return format({i: j for i, j in self.shell.config.items()})
+
+    def __init__(self, shell=None):
+        """Initialize an IPython mixin with pathlib."""
+        if shell is None:
+            self.shell = get_ipython()
+        self.Path = Path(self.shell.profile_dir.location)
 
 def get_home():
     """Get the home dir."""
@@ -184,7 +253,6 @@ if __name__ == '__main__':
 
     HOME = Path.home()
     ipython_root_dir = Path.joinpath(HOME, '', '.ipython/profile_default')
-
     _ip = get_ipython()
     # Is this supposed to be IPythonPath... or IPythonPath()?
     _ip.ProfileDir.location = IPythonPath.find_profile_dir_by_name(

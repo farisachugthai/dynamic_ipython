@@ -45,7 +45,7 @@ def _parse_arguments():
         default=sys.stdout,
         type=argparse.FileType('w'),
         help='The file where the packages should be written. Defaults to'
-        ' stdout. ')
+             ' stdout.')
 
     parser.add_argument('-ll',
                         '--log-level',
@@ -58,7 +58,28 @@ def _parse_arguments():
 
 
 def all_site_pkgs():
-    """Display every package in site-packages."""
+    """Display every package in site-packages.
+
+    .....wow. This is uh something else.
+    *sigh*
+
+    Alright so we gotta make a variable with a sane default for where we're
+    checking things. Hopefully sys.executable or sys.prefix...*or is it
+    sys.base_prefix?* will lead us in the right direction.
+
+    Then we'll check that the user gave us the right # of arguments with
+    len(sys.argv) and ``raise IndexError`` if we get something weird.
+
+    Possibly wanna think about standardizing something for argparse.
+    Definitely wanna think about standardizing something for logging.
+
+    Also literally what is that return value??? You didn't use it anywhere.
+    Man this is crazy confusing and it shouldn't have been a particularly hard
+    thing to write.
+
+    Delete all this off and use pathlib and i suppose build in a sys.version_info
+    check as a result.
+    """
     home = expanduser('~')
 
     search = glob(
@@ -73,16 +94,8 @@ def all_site_pkgs():
 
 
 if __name__ == "__main__":
-    # Does ipy run these files or source them?
-    # Let's put an ifmaun and see uf its still available
     parser = _parse_arguments()
-    # if should
-    # this causes ipy startup to err so moved here
-    # doing so gives
-    # AttributeError: 'Namespace' object has no attribute 'print_help'
     if len(sys.argv) == 1:
-        # Too few arguments. We can't specify this using argparse alone, so we
-        # have to manually check.
         parser.print_help()
         parser.exit()
 
