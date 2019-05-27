@@ -27,16 +27,16 @@ See Also
 
 """
 import os
-from pathlib import Path, WindowsPath, PosixPath
+from pathlib import Path
 import platform
 import sys
 
-from prompt_toolkit.utils import is_conemu_ansi, is_windows
 from IPython import get_ipython
+from prompt_toolkit.utils import is_conemu_ansi, is_windows
 
-from profile_default.startup import log
+from profile_default.startup import 05_log
 
-LOGGER = log._setup_logging()
+LOGGER = 05_log._setup_logging()
 
 
 class Platform:
@@ -47,9 +47,19 @@ class Platform:
     Flavour that's created at some point in the `Path.__new__()` func.
 
     Seemingly going to be more difficult than anticipated to subclass Path.
-    """
 
-    """Blind shot in the dark."""
+    After struggling for a while and considering a variety of options,
+    including decorating a :ref:`pathlib.Path` subclass with the methods I
+    wanted to implement, I realized that as no methods are going to be
+    explicitly overridden, I could simply bind the :class:`pathlib.Path()`
+    instance directly to :ref:`Platform` during initialization.
+
+    Parameters
+    ----------
+    shell : |ip|, optional
+        Global IPython Instance
+
+    """
 
     def __init__(self, shell=None, *args, **kwargs):
         """Initialize the platform class."""
@@ -60,7 +70,11 @@ class Platform:
                 # is this the right method?
                 LOGGER.exception(e)
 
+        if not shell:
+            shell = get_ipython()
         self.shell = shell
+        self.env = dict(os.environ)
+        self.Path = Path
 
     @classmethod
     def _sys_platform(cls):

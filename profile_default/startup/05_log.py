@@ -4,11 +4,14 @@
 
 .. highlight:: python3
 
+===============
+IPython Logging
+===============
 
 Collects both the input and output of every command run through the IPython
 interpreter and prepends a timestamp to commands.
 
-The timestamp is particularly convenient for concurrent instances of IPy.
+The timestamp is particularly convenient for concurrent instances of IPython.
 
 .. versionchanged:: Changed :func:`_ip.magic()` to :func:`_ip.run_line_magic()`
 
@@ -228,6 +231,7 @@ configure a globally available StreamHandler.
 
 """
 import logging
+import os
 from os import path
 import sys
 import time
@@ -297,6 +301,7 @@ def _setup_logging(log_level=logging.WARNING,
     logger.addHandler(stream_handler_instance)
     return logger
 
+
 def path_logger():
     """Trying to put all of these functions in 1 spot."""
     logger = logging.getLogger(name=__name__)
@@ -309,6 +314,42 @@ def path_logger():
     logger.addHandler(handler)
     return logger
 
+
+def _logging(level, filename=None, shell=None, msg_format=None):
+    """Shit we need to rewrite this function in it's entirety.
+
+    To make it more extensible and widely used through the whole package,
+    I attempted factoring out variables I usually hard code.
+
+    Simple enough idea.
+
+    But now there are SO many invariants because if the user doesn't set one,
+    the following commands will fail.
+
+    So we actually HAVE to specify a default value for everything.
+    Which kinda decreases how modular this code is.
+
+    However, if we don't then it literally won't work in the way it's written.
+    Ergh this might get tough.
+    """
+    logger = logging.getLogger(name=__name__)
+    logger.setLevel(level)
+
+    if shell is not None:
+        logdir = shell.profile_dir.log_dir
+    # TODO: need an else fallback if shell is not none but filename is
+
+    if filename is not None:
+        log_file = os.path.join(logdir, 'keybinding.log')
+        hdlr = logging.FileHandler(log_file)
+        logger.addHandler(hdlr)
+    # TODO: add stream handler in an else statement
+
+    if msg_format is not None:
+        formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+        hdlr.setFormatter(formatter)
+
+    return logger
 
 
 if __name__ == "__main__":
