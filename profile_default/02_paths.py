@@ -96,41 +96,20 @@ So I don't feel like debugging that right now but that's where we're at.
 
 """
 import logging
-import os
 import sys
 from pathlib import Path
 
 from IPython import get_ipython
 # from IPython.paths import get_ipython_dir
+from IPython.core.profiledir import ProfileDir
+# from IPython.paths.profileapp import ProfileLocate
 
-
-def _setup_logging(logger_name=None, logger_format=None, log_handler=None):
-    """Initialize a :class:`logging.Logger()`.
-
-    Trying to factor out all of the hard coded nonsense in this function.
-    Unfortunately the more the problem gets broken down the farther we sink in.
-    """
-    if logger_name is None:
-        logger = logging.getLogger(name=__name__)
-
-    logger.setLevel(logging.WARNING)
-
-    if log_handler is None:
-        handler = logging.StreamHandler(sys.stdout)
-
-    handler.setLevel(logging.WARNING)
-
-    if logger_format is None:
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(message)s')
-
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
-    return logger
-
+from profile_default.startup.05_log import _setup_logging
 
 # ----------------------------------------------------------------------------
 # Module errors
 # ----------------------------------------------------------------------------
+
 
 class ProfileDirError(Exception):
     logging.error('Profile directory error.')
@@ -138,8 +117,14 @@ class ProfileDirError(Exception):
 
 class PathManagerError(Exception):
     """I have no idea how to do this correctly."""
-    PathLogger = _setup_logging()
-    PathLogger.error('%s' % sys.traceback)
+
+    def __init__(self, error, logger=None):
+        """Log an exception even if we don't have a logger set up."""
+        self.error = error
+        if logger is None:
+            logger = logging.basicConfig(level=logging.WARNING)
+        logger.error('Error: %s' % error)
+
 
 # ----------------------------------------------------------------------------
 # Classes
@@ -147,7 +132,10 @@ class PathManagerError(Exception):
 
 
 class IPythonPath(ProfileDir):
+    """Override IPythons logic in ProfileDir."""
+
     def __init__(self):
+        """Initialize the class."""
         super().__init__()
 
     @classmethod
@@ -194,58 +182,25 @@ class IPythonPath(ProfileDir):
             raise ProfileDirError
 
 
-class PathManager():
-    """I think we got it.
+class PathManager:
+    """This is the one. Needs no parameters. Fully bound namespace to start.
 
-    Examples
-    --------
-    ::
+    That *should* print out `pm.Path` and `pm.shell` and those 2 methods expose
+    everything I want. `pm.Path` is already initialized unlike my previous attempts
+    at a class like this.
 
-        >>> pm = PathManager()
-        >>> ''.join(i for i in dir(pm) if not i.startswith('_'))
-
-
-    .. ipython:: python
-
-        In [190]: tmp = '\n'.join(i for i in dir(pm) if not i.startswith('_'))
-        Out[190]: 'Path\nshell'
-        [ins] In [191]: print(tmp)
-        Path
-        shell
-
-
-    Parameters
-    ----------
-    ipython_dir : unicode or str
-        The IPython directory to use.
-    name : unicode or str
-        The name of the profile.  The name of the profile directory
-        will be "profile_<profile>".
-
-        """
-        dirname = u'profile_' + name
-        ipython_path = Path(ipython_dir)
-        dirpath = ipython_path.joinpath(dirname)
-        if dirpath.is_dir:
-            return str(dirpath)
+    It was initialized via the shell instance we bound to a meager line above.
+    """
+    def __init__(self, shell=None):
+        if shell is not None:
+            self.shell = shell
         else:
-            raise ProfileDirError
+            self.shell = get_ipython()
+
+        self.Path = Path
 
     def __repr__(self):
         return format({i: j for i, j in self.shell.config.items()})
-
-    def __init__(self, shell=None):
-        """Initialize an IPython mixin with pathlib."""
-        if shell is None:
-            self.shell = get_ipython()
-        self.Path = Path(self.shell.profile_dir.location)
-
-def get_home():
-    """Get the home dir."""
-    if os.name == 'Linux':
-        return os.path.expanduser('~')
-    elif os.name == 'Win32':
-        return os.environ.get('USERPROFILE')
 
 
 if __name__ == '__main__':

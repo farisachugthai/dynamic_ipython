@@ -18,7 +18,6 @@ The timestamp is particularly convenient for concurrent instances of IPython.
 .. todo::
 
     - Consider using datetime instead of time. Not pertinent though.
-    - Explore both the built-in logging module and IPython logging subclass.
     - Truncate output if it exceeds a certain threshold.
         - Run dir(np) or dir(pd) a couple of times and the logs become swamped.
     - Possibly change that section under the shebang to also include 3
@@ -261,6 +260,9 @@ def ipython_logger_05(_ip=None):
         Global IPython instance.
 
     """
+    if _ip is None:
+        _ip = get_ipython()
+
     log_dir = _ip.profile_dir.log_dir
     fname = 'log-' + _ip.profile + '-' + time.strftime('%Y-%m-%d') + ".py"
     logmode = 'rotate'
@@ -294,7 +296,34 @@ def ipython_logger_05(_ip=None):
         print(" Already logging to " + logger.logfname)
 
 
-def _setup_logging(level=None, filename=None, shell=None, msg_format=None):
+def _setup_logging(log_level=logging.WARNING,
+                   time_format='%(asctime)s - %(name)s - %(message)s'):
+    """Enable logging. TODO: Need to add more to the formatter."""
+    logger = logging.getLogger(name=__name__)
+    logger.setLevel(log_level)
+
+    stream_handler_instance = logging.StreamHandler(sys.stdout)
+    stream_handler_instance.setLevel(log_level)
+    formatter = logging.Formatter(time_format)
+    stream_handler_instance.setFormatter(formatter)
+    logger.addHandler(stream_handler_instance)
+    return logger
+
+
+def path_logger():
+    """Trying to put all of these functions in 1 spot."""
+    logger = logging.getLogger(name=__name__)
+    logger.setLevel(logging.WARNING)
+
+    handler = logging.StreamHandler(sys.stdout)
+    handler.setLevel(logging.WARNING)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(message)s')
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    return logger
+
+
+def _logging(level, filename=None, shell=None, msg_format=None):
     """Shit we need to rewrite this function in it's entirety.
 
     To make it more extensible and widely used through the whole package,

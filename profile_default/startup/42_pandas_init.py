@@ -8,30 +8,34 @@
 
 :URL: `https://realpython.com/python-pandas-tricks/#1-configure-options-settings-at-interpreter-startup`_
 
+Pandas Initialization
+=====================
+
 .. todo::
 
-    - Import :mod:`logging` and use a :func:`logging.warning()` call if pandas
-    isn't installed. I simply pass now, but it should at least notify.
-    It used to be :func:`sys.exit()` though so at least we don't do that!
-
     - Also we should do a check that we're on python3.6+ because otherwise,
-    we'll crash the interpreter as we invoke an expression with f-strings.
+      we'll crash the interpreter as we invoke an expression with f-strings.
 
 
 Here's an interesting blurb from pandas/docs/conf.py::
 
+    import pandas as pd
     # This ensures correct rendering on system with console encoding != utf8
     # (windows). It forces pandas to encode its output reprs using utf8
     # wherever the docs are built. The docs' target is the browser, not
     # the console, so this is fine.
-    'pd.options.display.encoding="utf8"'
+    pd.options.display.encoding="utf8"
 
 """
+import logging
 import sys
+
+logger = logging.basicConfig(level=logging.WARNING)
 
 try:
     import pandas as pd
-except ImportError:
+except ImportError as e:
+    logger.warning("Import error: %s" % e)
     sys.exit()
 
 
@@ -73,7 +77,9 @@ def start():
 
 
 if __name__ == '__main__':
-    start()
+    if sys.version_info() < (3, 6, 0):
+        sys.exit("This module requires Python 3.6+")
 
-    del start
+    start()
     # Clean up namespace in the interpreter
+    del start

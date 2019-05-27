@@ -1,4 +1,8 @@
 # pdbrc
+import os
+from pprint import pprint
+import subprocess
+import sys
 
 # https://github.com/python/cpython/blob/3.7/Lib/pdb.py#L1380
 # in the do_alias() function it mentions some examples and they sounded like
@@ -9,8 +13,13 @@ alias pi for k in %1.__dict__.keys(): print("%1.",k,"=",%1.__dict__[k])
 # Print instance variables in self
 alias ps pi self
 
-
 # Apr 07, 2019
 # How in the world have I gone this long without noticing this isn't set up
 alias ? pinfo
+# Kinda sucks now only ?func is valid not func?
 alias ?? pinfo2
+
+alias ls os.listdir('%1')
+alias cd os.chdir('%1')
+# todo: fix this
+# alias nvim subprocess.run(['nvim', '%1', '%2', '%3'], sys.stdout='DEV.NULL')

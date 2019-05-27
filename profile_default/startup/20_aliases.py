@@ -106,7 +106,7 @@ import IPython
 from IPython import get_ipython
 from IPython.core.alias import AliasError
 
-from profile_default.startup.machine import Platform
+from util.machine import Platform
 
 LOGGER = logging.getLogger(name=__name__)
 
@@ -397,7 +397,7 @@ def main():
 
     user_aliases = []
 
-    machine = Platform()
+    machine = Platform('.')
 
     if machine.is_linux():
 
