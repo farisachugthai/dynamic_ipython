@@ -102,22 +102,9 @@ from pathlib import Path
 from IPython import get_ipython
 # from IPython.paths import get_ipython_dir
 from IPython.core.profiledir import ProfileDir
-
 # from IPython.paths.profileapp import ProfileLocate
 
-
-def _setup_logging():
-    """Enable logging. TODO: Need to add more to the formatter."""
-    logger = logging.getLogger(name=__name__)
-    logger.setLevel(logging.WARNING)
-
-    handler = logging.StreamHandler(sys.stdout)
-    handler.setLevel(logging.WARNING)
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(message)s')
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
-    return logger
-
+from profile_default.startup.log import _setup_logging
 
 # ----------------------------------------------------------------------------
 # Module errors
@@ -129,6 +116,7 @@ class ProfileDirError(Exception):
 
 
 class IPythonPath(ProfileDir):
+    """Override IPythons logic in ProfileDir."""
 
     def __init__(self):
         super().__init__()
@@ -161,6 +149,7 @@ class IPythonPath(ProfileDir):
         name : unicode or str
             The name of the profile.  The name of the profile directory
             will be "profile_<profile>".
+
         """
         dirname = u'profile_' + name
         ipython_path = Path(ipython_dir)
@@ -172,7 +161,10 @@ class IPythonPath(ProfileDir):
 
 
 def get_home():
-    """Get the home dir."""
+    """Get the home dir.
+
+    Pretty sure we do this elsewhere and probably better.
+    """
     if os.name == 'Linux':
         return os.path.expanduser('~')
     elif os.name == 'Win32':

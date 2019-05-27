@@ -297,6 +297,19 @@ def _setup_logging(log_level=logging.WARNING,
     logger.addHandler(stream_handler_instance)
     return logger
 
+def path_logger():
+    """Trying to put all of these functions in 1 spot."""
+    logger = logging.getLogger(name=__name__)
+    logger.setLevel(logging.WARNING)
+
+    handler = logging.StreamHandler(sys.stdout)
+    handler.setLevel(logging.WARNING)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(message)s')
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    return logger
+
+
 
 if __name__ == "__main__":
     ipython_logger_05()

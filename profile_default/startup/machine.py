@@ -27,7 +27,7 @@ See Also
 
 """
 import os
-from pathlib import Path, Wi
+from pathlib import Path, WindowsPath, PosixPath
 import platform
 import sys
 
@@ -39,7 +39,7 @@ from profile_default.startup import log
 LOGGER = log._setup_logging()
 
 
-class Platform(Path):
+class Platform:
     """Abstract away platform differences.
 
     Initializing the class now causes issues during IPython startup.
@@ -49,10 +49,8 @@ class Platform(Path):
     Seemingly going to be more difficult than anticipated to subclass Path.
     """
 
-    def __new__(cls, *args, **kwargs):
-        """Attempt to kill warnings."""
-        if os.name == 'Windows_NT':
-            return WindowsPath
+    """Blind shot in the dark."""
+
     def __init__(self, shell=None, *args, **kwargs):
         """Initialize the platform class."""
         if not shell:
@@ -63,8 +61,6 @@ class Platform(Path):
                 LOGGER.exception(e)
 
         self.shell = shell
-        # Can we give it the cwd as an arg?
-        super().__init__(args, kwargs)
 
     @classmethod
     def _sys_platform(cls):
