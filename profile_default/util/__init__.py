@@ -14,6 +14,9 @@ from logging import NullHandler
 
 from IPython import get_ipython
 
+from profile_default.util import logger
+from profile_default.util import machine
+
 _ip = get_ipython()
 
 logging.getLogger(__name__).addHandler(NullHandler())

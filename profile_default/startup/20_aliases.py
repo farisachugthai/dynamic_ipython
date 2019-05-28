@@ -399,7 +399,7 @@ def main():
 
     machine = Platform('.')
 
-    if machine.is_linux():
+    if machine.is_linux:
 
         # Now let's get the Linux aliases
         user_aliases += linux_specific_aliases(_ip)
@@ -410,7 +410,7 @@ def main():
         # user_aliases += termux_aliases(ip)
         # pass
 
-    elif machine.is_conemu():  # should check for 'nix-tools as an env var
+    elif machine.is_conemu:  # should check for 'nix-tools as an env var
         user_aliases += windows_aliases(_ip)
 
     user_aliases += common_aliases(_ip)
