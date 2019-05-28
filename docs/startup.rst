@@ -9,10 +9,27 @@ IPython Startup Scripts
 :Author: Faris Chugthai
 :Date: Apr 15, 2019
 
+.. maybe we should more gently introduce them to whats happening
+
+Startup Scripts
+================
+
+This repository hosts startup scripts that can be used during IPython's startup.
+
+The scripts add well over 1000 aliases to the namespace, import commonly used
+modules, configure the data analysis library Pandas, add multiple application
+specific loggers, and more.
+
 
 Indexed Scripts
 ================
-As of Apr 15, 2019, the startup files present in :ref:`profile_default/startup` are as follows:
+
+As of Apr 15, 2019, the startup files present in :ref:`profile_default/startup`
+are as follows:
+
+
+Configuration
+-------------
 
 `01_rehashx.py`_
 
@@ -31,7 +48,8 @@ As of Apr 15, 2019, the startup files present in :ref:`profile_default/startup` 
 
 %rehash
 -------
-:ref:`01_rehashx`
+
+01_rehashx.py_
 
 The IPython magic ``%rehash`` allows you to reload all of your startup files
 and also adds system commands to the namespace!
@@ -45,6 +63,7 @@ of this, and it hugely eases utilizing IPython as a system shell.
 
 Easy Import
 -----------
+
 :ref:`04_easy_import`
 
 This module simply populates the IPython namespace with frequently used modules.
@@ -53,13 +72,13 @@ utilize the python package Pynvim instead of Neovim.
 
 Logging
 -------
+
 :ref:`05_log`
-
-
 
 
 Convenience Functions
 -----------------------
+
 :ref:`IPython` provides the functions :func:`IPython.Application.initialized()`
 and :func:`IPython.Application.instance()`. As a result, each script can easily
 implement the following as a check to ensure that the global IPython instance
@@ -118,6 +137,7 @@ Here's the help from :attr:`IPython.application.instance`.
 
 Examples
 --------
+
 Create a singleton class using instance, and retrieve it::
 
    >>> from traitlets.config.configurable import SingletonConfigurable
@@ -136,9 +156,21 @@ Create a subclass that is retrieved using the base class instance::
 
 Type:      method
 
+Writing the Scripts
+--------------------
+
+.. admonition::
+
+   Be careful when naming scripts that begin with digits. They will require
+   extra care when you need to import them from a different module!
+
+This problem can be solved; however, with the function
+:func:`importlib.import_module()`.
+
 
 Original
 ---------
+
 This is the IPython startup directory
 
 .py and .ipy files in this directory will be run *prior* to any code or files specified
