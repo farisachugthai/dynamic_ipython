@@ -77,7 +77,7 @@ def start():
 
 
 if __name__ == '__main__':
-    if sys.version_info() < (3, 6, 0):
+    if sys.version_info < (3, 6, 0):
         sys.exit("This module requires Python 3.6+")
 
     start()

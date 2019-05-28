@@ -26,7 +26,7 @@ See Also
     Shows an example use case
 
 """
-from importlib import import_module
+# from importlib import import_module
 import os
 from pathlib import Path
 import platform
@@ -35,9 +35,10 @@ import sys
 from IPython import get_ipython
 from prompt_toolkit.utils import is_conemu_ansi, is_windows
 
-log = import_module('05_log', package='profile_default.startup')
+# log = import_module('05_log', package='profile_default.startup')
+from profile_default.util import logger
 
-LOGGER = log._setup_logging()
+LOGGER = logger._setup_logging()
 
 
 class Platform:
@@ -91,7 +92,7 @@ class Platform:
     @property
     def is_linux(self):
         """True when :func:`sys.platform` returns linux."""
-        return self._sys_platform() == 'linux'
+        return self._sys_platform == 'linux'
 
     @property
     def env(self):
