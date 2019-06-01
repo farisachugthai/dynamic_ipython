@@ -8,11 +8,16 @@ import os
 import sys
 import traceback
 
+import IPython
+from IPython import get_ipython
+
+
+logger = logging.getLogger(name=__name__)
+
 
 def _setup_logging(log_level=logging.WARNING,
                    time_format='%(asctime)s - %(name)s - %(message)s'):
     """Enable logging. TODO: Need to add more to the formatter."""
-    logger = logging.getLogger(name=__name__)
     logger.setLevel(log_level)
 
     stream_handler_instance = logging.StreamHandler(sys.stdout)
@@ -25,7 +30,6 @@ def _setup_logging(log_level=logging.WARNING,
 
 def path_logger():
     """Trying to put all of these functions in 1 spot."""
-    logger = logging.getLogger(name=__name__)
     logger.setLevel(logging.WARNING)
 
     handler = logging.StreamHandler(sys.stdout)
@@ -36,7 +40,7 @@ def path_logger():
     return logger
 
 
-def _logging(level, filename=None, shell=None, msg_format=None):
+def stream_logging(level=logging.INFO, msg_format=None):
     """Shit we need to rewrite this function in it's entirety.
 
     To make it more extensible and widely used through the whole package,
@@ -57,27 +61,62 @@ def _logging(level, filename=None, shell=None, msg_format=None):
     useful block of code in the tutorial.
 
     """
-    logger = logging.getLogger(name=__name__)
-    handler = logging.StreamHandler(sys.stdout)
+    handler = logging.StreamHandler(stream=sys.stderr)
 
-    if level is not None:
-        logger.setLevel(level)
+    logger.setLevel(level)
+    handler.setLevel(level)
+
+    if msg_format is not None:
+        formatter = logging.Formatter(msg_format)
     else:
-        logger.setLevel(logging.WARNING)
+        formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+
+    handler.setFormatter(formatter)
+
+    logger.addHandler(handler)
+
+    return logger
+
+
+def file_logger(filename, shell=None, log_level=logging.INFO, msg_format=None):
+    """Logging that emits :class:`logging.LogRecord`s to `filename`.
+
+    Parameters
+    ----------
+    filename : TODO
+    shell : TODO, optional
+    log_level : TODO, optional
+    msg_format : TODO, optional
+
+    Returns
+    -------
+    TODO
+
+    """
+    assert isinstance(shell, IPython.core.interactiveshell.InteractiveShell) \
+        or isinstance(shell, None)
 
     if shell is not None:
         logdir = shell.profile_dir.log_dir
     # TODO: need an else fallback if shell is not none but filename is
+    else:
+        shell = get_ipython()
+        logdir = shell.profile_dir.log_dir
 
-    if filename is not None:
-        log_file = os.path.join(logdir, 'keybinding.log')
-        hdlr = logging.FileHandler(log_file)
-        logger.addHandler(hdlr)
-    # TODO: add stream handler in an else statement
+    log_file = os.path.join(logdir, filename)
+    hdlr = logging.FileHandler(log_file)
+
+    hdlr.setLevel(log_level)
+    logger.setLevel(log_level)
 
     if msg_format is not None:
+        formatter = logging.Formatter(msg_format)
+    else:
         formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
-        hdlr.setFormatter(formatter)
+
+    hdlr.setFormatter(formatter)
+
+    logger.addHandler(hdlr)
 
     return logger
 
@@ -105,11 +144,10 @@ def json_logger():
 
     root_logger = logging.getLogger()
     root_logger.setLevel(logging.DEBUG)
+    handler.setFormatter(fmt)
     root_logger.addHandler(handler)
 
     return root_logger
-
-
 
 
 class JsonFormatter(logging.Formatter):

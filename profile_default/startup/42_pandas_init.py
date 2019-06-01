@@ -30,7 +30,9 @@ Here's an interesting blurb from pandas/docs/conf.py::
 import logging
 import sys
 
-logger = logging.basicConfig(level=logging.WARNING)
+# logger = logging.basicConfig(level=logging.WARNING)
+# logging.basicConfig doesn't return anything
+from profile_default.
 
 try:
     import pandas as pd
