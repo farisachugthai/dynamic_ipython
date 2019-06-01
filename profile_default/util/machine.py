@@ -101,4 +101,4 @@ class Platform:
 
     @env.setter
     def env(self, arg):
-        os.environ.set(arg)
+        return self.env.putenv(arg)
