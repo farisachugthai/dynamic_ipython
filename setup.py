@@ -127,7 +127,7 @@ setup(
     install_requires=REQUIRED,
     extras_require=EXTRAS,
     test_suite='test',
-    setup_requires=['nose>=1.0'],
+    # setup_requires=['nose>=1.0'],
     include_package_data=True,
     package_data={
         # If any package contains *.txt or *.rst files, include them:

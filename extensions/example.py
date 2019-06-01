@@ -2,28 +2,40 @@
 # -*- coding: utf-8 -*-
 """Show an example of how to create line and cell magics.
 
+=============================================
+Example of Writing A Custom IPython Extension
+=============================================
+
 Usage
------
+=====
+
 .. ipython::
 
     In [40]: %load_ext example
 
 
+Writing Cell Magics
+====================
+
 While not utilized here, a similar execution path can be utilized for
 :func:`IPython.core.magic.cell_magic()`
-
-05/22/2019
-
-Functional again. Simple debugging because the stack traces are so easy to read.
-
-See Also
---------
-Utilize jedi and run ``:Pyimport IPython.core.magic`` to see the src.
 
 .. note::
 
     Don't use register_cell_magic. That decorator is for functions.
+    `~IPython.core.magic.register_magics` is only for classes as well.
 
+::
+
+    from IPython.core.magic import register_cell_magic
+    from IPython.core.magic import register_magic
+
+Those lines specifically.
+
+See Also
+========
+IPython.core.magic
+IPython.terminal.magic
 
 """
 import sys
@@ -32,11 +44,6 @@ import time
 from IPython import get_ipython
 from IPython.core.magic import Magics, magics_class, line_magic
 
-
-# register_cell_magic is only for functions
-# from IPython.core.magic import register_cell_magic
-# _ip.register_magics is only for classes lol oh my god
-# from IPython.core.magic import register_magic
 
 
 @magics_class

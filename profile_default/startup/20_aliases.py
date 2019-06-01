@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 """File for all shell aliases.
 
+===============
 IPython Aliases
 ===============
 
@@ -19,13 +20,15 @@ IPython Aliases
     :func:`MagicsManager.register_alias`
 
 Overview
---------
+========
+
 This module utilizes `_ip`, the global :mod:`IPython` |ip|
 instance, and fills the ``user_ns`` with common Linux idioms.
 
 
 Parameters
-----------
+==========
+
 When writing aliases, an ``%alias`` definition can take various string
 placeholders. As per the official documentation:
 
@@ -50,7 +53,7 @@ interactively the syntax ``%alias alias_name cmd`` doesn't require quoting.
 
 
 Attributes
-----------
+==========
 
 _ip : |ip|
     A global object representing the active IPython session.
@@ -59,7 +62,7 @@ _ip : |ip|
 
 
 Examples
---------
+========
 
 This code creates a handful of platform-specific functions where each
 returns :ref:`user_aliases`. Realizing that this is also used in the
@@ -82,14 +85,14 @@ implementation has been provided for reference.
 
 
 See Also
---------
+========
 
 :mod:`IPython.core.alias`
     Aliases file for IPython.
 
 
 Yet to be implemented
----------------------
+=====================
 
 - ``ssh-day``
 - ``extract``
@@ -377,7 +380,20 @@ def windows_aliases(_ip=None):
 
 
 def __setup_fzf(user_aliases):
-    """Poorly might I add."""
+    """Poorly might I add.
+
+    On second thought this function has some potential. Or at least it
+    jogged a thought in my brain.
+
+    A good idea would be to make a function that's implemented as a decorator,
+    so we'll need to import functools.wrapped, and have that decorator run
+    shutil.which on an external command. If it exists continue with the
+    function and alias it. If it doesn't, then return None.
+
+    This function was useful for pointing out that the decorator should allow
+    for multiple arguments.
+
+    """
     if which('fzf') and which('rg'):
         user_aliases.extend(
             ('fzf', '$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS'))
