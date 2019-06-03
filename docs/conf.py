@@ -185,8 +185,9 @@ latex_documents = [
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [(master_doc, 'site-packages', 'site-packages Documentation',
-              [author], 1)]
+man_pages = [(master_doc, 'site-packages', 'site-packages Documentation', [
+    author
+], 1)]
 
 # -- Options for Texinfo output ----------------------------------------------
 
@@ -233,8 +234,8 @@ todo_include_todos = False
 # Viewcode
 
 # Apr 28, 2019
-# RemovedInSphinx30Warning: 
-# viewcode_import was renamed to viewcode_follow_imported_members. 
+# RemovedInSphinx30Warning:
+# viewcode_import was renamed to viewcode_follow_imported_members.
 # Please update your configuration.
 viewcode_follow_imported_members = False
 

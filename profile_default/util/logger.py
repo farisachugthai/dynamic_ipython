@@ -11,7 +11,6 @@ import traceback
 import IPython
 from IPython import get_ipython
 
-
 logger = logging.getLogger(name=__name__)
 
 
@@ -151,6 +150,7 @@ def json_logger():
 
 
 class JsonFormatter(logging.Formatter):
+
     def format(self, record):
         if record.exc_info:
             exc = traceback.format_exception(*record.exc_info)
@@ -158,12 +158,21 @@ class JsonFormatter(logging.Formatter):
             exc = None
 
         return json.dumps({
-            'msg': record.msg % record.args,
-            'timestamp': datetime.datetime.utcfromtimestamp(record.created).isoformat() + 'Z',
-            'func': record.funcName,
-            'level': record.levelname,
-            'module': record.module,
-            'process_id': record.process,
-            'thread_id': record.thread,
-            'exception': exc
+            'msg':
+            record.msg % record.args,
+            'timestamp':
+            datetime.datetime.utcfromtimestamp(record.created).isoformat() +
+            'Z',
+            'func':
+            record.funcName,
+            'level':
+            record.levelname,
+            'module':
+            record.module,
+            'process_id':
+            record.process,
+            'thread_id':
+            record.thread,
+            'exception':
+            exc
         })

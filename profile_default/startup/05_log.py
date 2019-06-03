@@ -90,7 +90,6 @@ def ipython_logger_05(_ip=None):
         print(" Already logging to " + logger.logfname)
 
 
-
 if __name__ == "__main__":
     shell = get_ipython()
     ipython_logger_05(shell)

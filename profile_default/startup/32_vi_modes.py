@@ -48,7 +48,6 @@ from prompt_toolkit.key_binding.vi_state import InputMode
 logging.getLogger(name=__name__)
 
 
-
 def switch_to_navigation_mode(event):
     """Switches :mod:`IPython` from Vim insert mode to Vim normal mode.
 

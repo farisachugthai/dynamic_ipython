@@ -29,11 +29,14 @@ def load_ext(module_str, shell=None):
     else:
         res = _ip.extension_manager.load_extension(module_str)
         if res == 'already loaded':
-            logging.warning("The %s extension is already loaded. To reload it, use:" % module_str)
+            logging.warning(
+                "The %s extension is already loaded. To reload it, use:" %
+                module_str)
             print("%reload_ext", module_str)
 
         elif res == 'no load function':
-            logging.error("The %s module is not an IPython extension." % module_str)
+            logging.error(
+                "The %s module is not an IPython extension." % module_str)
 
 
 def load_ipython_extension(shell=None):

@@ -18,7 +18,6 @@ import profile_default
 # maybe a terrible idea? idk
 from profile_default.startup import *
 
-
 _ip = get_ipython()
 
 logging.getLogger(__name__).addHandler(NullHandler())

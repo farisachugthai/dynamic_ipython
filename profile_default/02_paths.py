@@ -102,9 +102,9 @@ from pathlib import Path
 from IPython import get_ipython
 # from IPython.paths import get_ipython_dir
 from IPython.core.profiledir import ProfileDir
-# from IPython.paths.profileapp import ProfileLocate
+# from IPython.paths.profileapp import ProfileLocate1
 
-from profile_default.startup.05_log import _setup_logging
+from profile_default.util import logger
 
 # ----------------------------------------------------------------------------
 # Module errors
@@ -191,6 +191,7 @@ class PathManager:
 
     It was initialized via the shell instance we bound to a meager line above.
     """
+
     def __init__(self, shell=None):
         if shell is not None:
             self.shell = shell
@@ -204,7 +205,7 @@ class PathManager:
 
 
 if __name__ == '__main__':
-    logger = _setup_logging()
+    logger = logger.stream_logger()
 
     HOME = Path.home()
     ipython_root_dir = Path.joinpath(HOME, '', '.ipython/profile_default')

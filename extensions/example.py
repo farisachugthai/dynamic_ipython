@@ -45,7 +45,6 @@ from IPython import get_ipython
 from IPython.core.magic import Magics, magics_class, line_magic
 
 
-
 @magics_class
 class ExampleMagic(Magics):
 
