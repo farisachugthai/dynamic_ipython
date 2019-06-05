@@ -380,7 +380,7 @@ def windows_aliases(_ip=None):
 
 
 def __setup_fzf(user_aliases):
-    """Poorly might I add.
+    """Needs a good deal of work.
 
     On second thought this function has some potential. Or at least it
     jogged a thought in my brain.

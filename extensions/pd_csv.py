@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Magic that reads in a sstring and parses it as a csv with pandas.
+"""Magic that reads in a string and parses it as a :mod:`CSV` with :mod:`pandas`.
 
-Example of creating a magic from IPython Interactive Computing and
-Visualization Cookbook by TODO
+Example of creating a magic from **IPython Interactive Computing and
+Visualization Cookbook by Cyrille Roussou.**
 
 The example specifically is from pages 32 to 35.
 
@@ -37,8 +37,9 @@ def csv(cell):
 
 
 def load_ipython_extension(ip):
-    """This function is called when the extension is loaded. It accepts an
-    IPython InteractiveShell instance. We can register the magic with th
+    """This function is called when the extension is loaded.
+
+    It accepts an IPython |ip| instance. We can register the magic with the
     `register_magic_function` method.
     """
     ip.register_magic_function(csv, 'cell')

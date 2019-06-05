@@ -15,6 +15,13 @@ The class can be easily initialized with::
     >>> machine = Platform()
     >>> assert machine.env
 
+.. i ran a doctest and got the following...what does a negative number mean?
+.. Testing started at 11:37 PM ...
+.. C:\Users\faris\Anaconda3\envs\dynamic\python.exe C:\Users\faris\AppData\Local\JetBrains\Toolbox\apps\PyCharm-P\ch-0\191.7479.10\helpers\pycharm\docrunner.py C:/Users/faris/projects/dynamic_ipython/profile_default/util/machine.py
+.. C:\Users\faris\AppData\Local\JetBrains\Toolbox\apps\PyCharm-P\ch-0\191.7479.10\helpers\pycharm\docrunner.py:1: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+.. import imp
+.. Process finished with exit code -1073741571 (0xC00000FD)
+
 .. note::
 
     Don't name the instance ``platform`` as that's a module in the standard
@@ -22,11 +29,10 @@ The class can be easily initialized with::
 
 See Also
 --------
-:mod:`profile_default.startup.20_aliases.py`
+:mod:`profile_default.startup.20_aliases`
     Shows an example use case
 
 """
-# from importlib import import_module
 import os
 from pathlib import Path
 import platform
@@ -35,7 +41,6 @@ import sys
 from IPython import get_ipython
 from prompt_toolkit.utils import is_conemu_ansi, is_windows
 
-# log = import_module('05_log', package='profile_default.startup')
 from profile_default.util import logger
 
 LOGGER = logger._setup_logging()

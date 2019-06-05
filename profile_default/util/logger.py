@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """Move all randomly interspersed logging functions into one module."""
-import datetime
+from datetime import datetime
 import json
 import logging
 import os
@@ -39,25 +39,28 @@ def path_logger():
     return logger
 
 
-def stream_logging(level=logging.INFO, msg_format=None):
-    """Shit we need to rewrite this function in it's entirety.
+def stream_logging(level=logging.INFO, msg_format=None, logger=None):
+    """Set up a :class:`~logging.Logger()` instance.
 
-    To make it more extensible and widely used through the whole package,
-    I attempted factoring out variables I usually hard code.
+    Parameters
+    ----------
+    level : int, optional
+        Level of log records.
+    msg_format : str, optional
+        Representation of logging messages. Uses standard %-style string formatting.
+        Defaults to ``%(asctime)s %(levelname)s %(message)s``
+    logger : :class:`logging.Logger()`, optional
+        Configure a passed logger. See example below.
 
-    Simple enough idea.
+    Returns
+    -------
+    logger : :class:`logging.Logger()` instance
 
-    But now there are SO many invariants because if the user doesn't set one,
-    the following commands will fail.
-
-    So we actually HAVE to specify a default value for everything.
-    Which kinda decreases how modular this code is.
-
-    However, if we don't then it literally won't work in the way it's written.
-    Ergh this might get tough.
-
-    Also should do some validation on the log level there. There's a really
-    useful block of code in the tutorial.
+    Examples
+    --------
+    >>> from profile_default.util import logger
+    >>> log = logging.getLogger(name=__name__)
+    >>> LOGGER = logger.stream_logging(logger=log)
 
     """
     handler = logging.StreamHandler(stream=sys.stderr)
@@ -78,18 +81,24 @@ def stream_logging(level=logging.INFO, msg_format=None):
 
 
 def file_logger(filename, shell=None, log_level=logging.INFO, msg_format=None):
-    """Logging that emits :class:`logging.LogRecord`s to `filename`.
+    r"""Logging that emits :class:`logging.LogRecord`s to `filename`.
 
     Parameters
     ----------
-    filename : TODO
-    shell : TODO, optional
-    log_level : TODO, optional
-    msg_format : TODO, optional
+    filename : str
+        File to log :class:`logging.LogRecord`s to.
+    shell : |ip|, optional
+        Global instance of IPython. Can be none if not run in IPython though this
+        hasn't been tested.
+    log_level : int, optional
+        Level of log records.
+    msg_format : str, optional
+        Representation of logging messages. Uses standard %-style string formatting.
+        Defaults to ``%(asctime)s %(levelname)s %(message)s``
 
     Returns
     -------
-    TODO
+    logger : :class:`logging.Logger()` instance
 
     """
     assert isinstance(shell, IPython.core.interactiveshell.InteractiveShell) \
@@ -103,9 +112,9 @@ def file_logger(filename, shell=None, log_level=logging.INFO, msg_format=None):
         logdir = shell.profile_dir.log_dir
 
     log_file = os.path.join(logdir, filename)
-    hdlr = logging.FileHandler(log_file)
+    handler = logging.FileHandler(log_file)
 
-    hdlr.setLevel(log_level)
+    handler.setLevel(log_level)
     logger.setLevel(log_level)
 
     if msg_format is not None:
@@ -113,9 +122,9 @@ def file_logger(filename, shell=None, log_level=logging.INFO, msg_format=None):
     else:
         formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
 
-    hdlr.setFormatter(formatter)
+    handler.setFormatter(formatter)
 
-    logger.addHandler(hdlr)
+    logger.addHandler(handler)
 
     return logger
 
@@ -150,7 +159,6 @@ def json_logger():
 
 
 class JsonFormatter(logging.Formatter):
-
     def format(self, record):
         if record.exc_info:
             exc = traceback.format_exception(*record.exc_info)
@@ -158,21 +166,12 @@ class JsonFormatter(logging.Formatter):
             exc = None
 
         return json.dumps({
-            'msg':
-            record.msg % record.args,
-            'timestamp':
-            datetime.datetime.utcfromtimestamp(record.created).isoformat() +
-            'Z',
-            'func':
-            record.funcName,
-            'level':
-            record.levelname,
-            'module':
-            record.module,
-            'process_id':
-            record.process,
-            'thread_id':
-            record.thread,
-            'exception':
-            exc
+            'msg': record.msg % record.args,
+            'timestamp': datetime.utcfromtimestamp(record.created).isoformat() + 'Z',
+            'func': record.funcName,
+            'level': record.levelname,
+            'module': record.module,
+            'process_id': record.process,
+            'thread_id': record.thread,
+            'exception': exc
         })

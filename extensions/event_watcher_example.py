@@ -2,16 +2,20 @@
 # -*- coding: utf-8 -*-
 """Interactively watch a variable.
 
+================
 Event Watcher
-~~~~~~~~~~~~~~~~
+================
+
+:URL: https://ipython.readthedocs.io/en/stable/config/callbacks.html#ipython-events
 
 Provided by the IPython development team as an example of the new
 input parser for release 7.0!!!
 
-URL::
-    `<https://ipython.readthedocs.io/en/stable/config/callbacks.html#ipython-events>`
+-----------------
 
 IPython Events:
+===============
+
 Extension code can register callbacks functions which will be called on
 specific events within the IPython code. You can see the current list of
 available callbacks, and the parameters that will be passed with each, in the

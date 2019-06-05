@@ -37,13 +37,14 @@ From the `source code`_::
 
 """
 import logging
-from os.path import join
 
 from IPython import get_ipython
 from prompt_toolkit.enums import DEFAULT_BUFFER
 from prompt_toolkit.filters import HasFocus, ViInsertMode
 from prompt_toolkit.key_binding.defaults import load_key_bindings
 from prompt_toolkit.key_binding.vi_state import InputMode
+
+# from profile_default.util.logger import 
 
 logging.getLogger(name=__name__)
 
@@ -126,11 +127,10 @@ def check_defaults():
                         _ip = get_ipython()
                     self.registry = KeyBindings
 
-        Then you just wait.
-
         Once the user initializes that class, then your :class:`KeyBindings`
         statement in the `__init__` func was execute and you'll have access
         to everything. Cool!
+
         """
     registry = load_key_bindings()
     return registry.key_bindings
@@ -143,7 +143,7 @@ if __name__ == "__main__":
     # logger = _setup_logging(level, shell=_ip)
 
     if getattr(_ip, 'pt_app', None):
-        registry = _ip.pt_app.key_bindings
-        registry.add_binding(
+        kb = _ip.pt_app.key_bindings
+        kb.add_binding(
             u'j', u'k', filter=(HasFocus(DEFAULT_BUFFER)
                                 & ViInsertMode()))(switch_to_navigation_mode)
