@@ -30,8 +30,6 @@ Here's an interesting blurb from pandas/docs/conf.py::
 import logging
 import sys
 
-logger = logging.getLogger(name=__name__)
-
 from profile_default.util import logger
 
 
@@ -76,14 +74,13 @@ if __name__ == '__main__':
     if sys.version_info < (3, 6, 0):
         sys.exit("This module requires Python 3.6+")
 
-    logger = logger.stream_logging()
+    LOGGER = logger.stream_logging()
 
     try:
         import pandas as pd
     except ImportError as e:
-        logger.warning("Import error: %s", e)
-
-    sys.exit()
+        LOGGER.warning("Import error: %s" % e, exc_info=1)
+        sys.exit()
 
     start()
     # Clean up namespace in the interpreter

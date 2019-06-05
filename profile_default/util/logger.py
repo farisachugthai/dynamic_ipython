@@ -40,12 +40,15 @@ def path_logger():
 
 
 def stream_logging(level=logging.INFO, msg_format=None, logger=None):
-    """Set up a :class:`~logging.Logger()` instance.
+    """Set up a :class:`~logging.Logger()` instance, add a stream handler.
+
+    Should do some validation on the log level there. There's a really
+    useful block of code in the tutorial.
 
     Parameters
     ----------
     level : int, optional
-        Level of log records.
+        Level of log records. Defaults to 20.
     msg_format : str, optional
         Representation of logging messages. Uses standard %-style string formatting.
         Defaults to ``%(asctime)s %(levelname)s %(message)s``
@@ -55,6 +58,7 @@ def stream_logging(level=logging.INFO, msg_format=None, logger=None):
     Returns
     -------
     logger : :class:`logging.Logger()` instance
+        Defaults to ``logging.INFO`` and '%(asctime)s %(levelname)s %(message)s'
 
     Examples
     --------
@@ -159,6 +163,7 @@ def json_logger():
 
 
 class JsonFormatter(logging.Formatter):
+
     def format(self, record):
         if record.exc_info:
             exc = traceback.format_exception(*record.exc_info)
@@ -167,7 +172,7 @@ class JsonFormatter(logging.Formatter):
 
         return json.dumps({
             'msg': record.msg % record.args,
-            'timestamp': datetime.utcfromtimestamp(record.created).isoformat() + 'Z',
+            'timestamp': datetime.datetime.utcfromtimestamp(record.created).isoformat() + 'Z',
             'func': record.funcName,
             'level': record.levelname,
             'module': record.module,
