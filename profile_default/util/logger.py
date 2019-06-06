@@ -163,6 +163,7 @@ def json_logger():
 
 
 class JsonFormatter(logging.Formatter):
+    """Return valid :mod:`json` for a configured handler."""
 
     def format(self, record):
         if record.exc_info:
@@ -172,7 +173,7 @@ class JsonFormatter(logging.Formatter):
 
         return json.dumps({
             'msg': record.msg % record.args,
-            'timestamp': datetime.datetime.utcfromtimestamp(record.created).isoformat() + 'Z',
+            'timestamp': datetime.utcfromtimestamp(record.created).isoformat() + 'Z',
             'func': record.funcName,
             'level': record.levelname,
             'module': record.module,

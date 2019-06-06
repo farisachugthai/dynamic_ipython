@@ -110,8 +110,12 @@ from IPython import get_ipython
 from IPython.core.alias import AliasError
 
 from profile_default.util.machine import Platform
+from profile_default.util import logger
 
-LOGGER = logging.getLogger(name=__name__)
+LOGGER = logger.stream_logging()
+
+
+
 
 
 def linux_specific_aliases(_ip=None):
@@ -273,7 +277,7 @@ def common_aliases(_ip=None):
 
 
 def windows_aliases(_ip=None):
-    """Aliases for Windows OSes.
+    r"""Aliases for Windows OSes.
 
     Has only been tested on Windows 10 in a heavily configured environment.
 
@@ -444,8 +448,4 @@ def main():
 
 
 if __name__ == "__main__":
-    LOGGER = logging.getLogger(name=__name__)
-    LOG_LEVEL = logging.INFO
-    LOGGER.setLevel(LOG_LEVEL)
-    # needs a handler LOGGER.
     main()
