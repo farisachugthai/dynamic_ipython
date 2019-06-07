@@ -4,10 +4,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>7. Defining custom magics &#8212; Dynamic IPython 0.0.1 documentation</title>
+    <title>4. Defining custom magics &#8212; Dynamic IPython 0.0.1 documentation</title>
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="/data/data/com.termux/files/home/projects/dynamic_ipython/docs/_static/pyramid.css_t" />
+    <link rel="stylesheet" type="text/css" href="_static/C:\Users\faris\projects\dynamic_ipython\docs\_static\pyramid.css_t" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
@@ -16,8 +16,8 @@
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="9. IPython Directive" href="directive.html" />
-    <link rel="prev" title="6. IPython Magics" href="magics.html" />
+    <link rel="next" title="5. IPython Sphinx Directive" href="directive.html" />
+    <link rel="prev" title="3. IPython Magics" href="magics.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <!--[if lte IE 6]>
@@ -36,10 +36,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="directive.html" title="9. IPython Directive"
+          <a href="directive.html" title="5. IPython Sphinx Directive"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="magics.html" title="6. IPython Magics"
+          <a href="magics.html" title="3. IPython Magics"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li> 
       </ul>
@@ -51,7 +51,7 @@
           <div class="body" role="main">
             
   <div class="section" id="defining-custom-magics">
-<span id="defining-magics"></span><h1>7. Defining custom magics<a class="headerlink" href="#defining-custom-magics" title="Permalink to this headline">¶</a></h1>
+<span id="defining-magics"></span><h1>4. Defining custom magics<a class="headerlink" href="#defining-custom-magics" title="Permalink to this headline">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">URL</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://raw.githubusercontent.com/ipython/ipython/523ed2fe58ea5ee9971d2b21df1de33b8cdfa924/docs/source/config/custommagics.rst">https://raw.githubusercontent.com/ipython/ipython/523ed2fe58ea5ee9971d2b21df1de33b8cdfa924/docs/source/config/custommagics.rst</a></p>
@@ -60,114 +60,85 @@
 <p>There are two main ways to define your own magic functions: from standalone
 functions and by inheriting from a base class provided by IPython:
 <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.magic.html#IPython.core.magic.Magics" title="(in IPython v7.5.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.magic.Magics</span></code></a>. Below we show code you can place in a file
-that you load from your configuration, such as any file in the <code class="docutils literal notranslate"><span class="pre">startup</span></code>
-subdirectory of your default IPython profile.</p>
+that you load from your configuration, such as any file in the
+<span class="xref std std-ref">profile_default.startup</span> subdirectory of your default IPython profile.</p>
 <p>First, let us see the simplest case. The following shows how to create a line
 magic, a cell one and one that works in both modes, using just plain functions:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.core.magic</span> <span class="kn">import</span> <span class="p">(</span><span class="n">register_line_magic</span><span class="p">,</span> <span class="n">register_cell_magic</span><span class="p">,</span>
-                                <span class="n">register_line_cell_magic</span><span class="p">)</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">from</span> <span class="nn">IPython.core.magic</span> <span class="kn">import</span> <span class="p">(</span><span class="n">register_line_magic</span><span class="p">,</span> <span class="n">register_cell_magic</span><span class="p">,</span>
+<span class="gp">   ...: </span>                                <span class="n">register_line_cell_magic</span><span class="p">)</span>
+<span class="gp">   ...: </span>
 
-<span class="nd">@register_line_magic</span>
-<span class="k">def</span> <span class="nf">lmagic</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
-    <span class="s2">&quot;my line magic&quot;</span>
-    <span class="k">return</span> <span class="n">line</span>
+<span class="gp">In [2]: </span><span class="k">def</span> <span class="nf">lmagic</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
+<span class="gp">   ...: </span>    <span class="s2">&quot;my line magic&quot;</span>
+<span class="gp">   ...: </span>    <span class="k">return</span> <span class="n">line</span>
+<span class="gp">   ...: </span>
 
-<span class="nd">@register_cell_magic</span>
-<span class="k">def</span> <span class="nf">cmagic</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">cell</span><span class="p">):</span>
-    <span class="s2">&quot;my cell magic&quot;</span>
-    <span class="k">return</span> <span class="n">line</span><span class="p">,</span> <span class="n">cell</span>
+<span class="gp">In [3]: </span><span class="k">def</span> <span class="nf">cmagic</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">cell</span><span class="p">):</span>
+<span class="gp">   ...: </span>    <span class="s2">&quot;my cell magic&quot;</span>
+<span class="gp">   ...: </span>    <span class="k">return</span> <span class="n">line</span><span class="p">,</span> <span class="n">cell</span>
+<span class="gp">   ...: </span>
 
-<span class="nd">@register_line_cell_magic</span>
-<span class="k">def</span> <span class="nf">lcmagic</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-    <span class="s2">&quot;Magic that works both as </span><span class="si">%lc</span><span class="s2">magic and as </span><span class="si">%%</span><span class="s2">lcmagic&quot;</span>
-    <span class="k">if</span> <span class="n">cell</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Called as line magic&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">line</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Called as cell magic&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">line</span><span class="p">,</span> <span class="n">cell</span>
+<span class="gp">In [4]: </span><span class="k">def</span> <span class="nf">lcmagic</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<span class="gp">   ...: </span>    <span class="s2">&quot;Magic that works both as </span><span class="si">%lc</span><span class="s2">magic and as </span><span class="si">%%</span><span class="s2">lcmagic&quot;</span>
+<span class="gp">   ...: </span>    <span class="k">if</span> <span class="n">cell</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+<span class="gp">   ...: </span>        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Called as line magic&quot;</span><span class="p">)</span>
+<span class="gp">   ...: </span>        <span class="k">return</span> <span class="n">line</span>
+<span class="gp">   ...: </span>    <span class="k">else</span><span class="p">:</span>
+<span class="gp">   ...: </span>        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Called as cell magic&quot;</span><span class="p">)</span>
+<span class="gp">   ...: </span>        <span class="k">return</span> <span class="n">line</span><span class="p">,</span> <span class="n">cell</span>
+<span class="gp">   ...: </span>
 
-<span class="c1"># In an interactive session, we need to delete these to avoid</span>
-<span class="c1"># name conflicts for automagic to work on line magics.</span>
-<span class="k">del</span> <span class="n">lmagic</span><span class="p">,</span> <span class="n">lcmagic</span>
+<span class="go"># In an interactive session, we need to delete these to avoid</span>
+<span class="go"># name conflicts for automagic to work on line magics.</span>
 </pre></div>
 </div>
 <p>You can also create magics of all three kinds by inheriting from the
 <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.magic.html#IPython.core.magic.Magics" title="(in IPython v7.5.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.magic.Magics</span></code></a> class.  This lets you create magics that can
 potentially hold state in between calls, and that have full access to the main
 IPython object:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># This code can be put in any Python module, it does not require IPython</span>
-<span class="c1"># itself to be running already.  It only creates the magics subclass but</span>
-<span class="c1"># doesn&#39;t instantiate it yet.</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
-<span class="kn">from</span> <span class="nn">IPython.core.magic</span> <span class="kn">import</span> <span class="p">(</span><span class="n">Magics</span><span class="p">,</span> <span class="n">magics_class</span><span class="p">,</span> <span class="n">line_magic</span><span class="p">,</span>
-                                <span class="n">cell_magic</span><span class="p">,</span> <span class="n">line_cell_magic</span><span class="p">)</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># This code can be put in any Python module, it does not require IPython</span>
+<span class="go"># itself to be running already.  It only creates the magics subclass but</span>
+<span class="go"># doesn&#39;t instantiate it yet.</span>
+<span class="gp">In [5]: </span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
 
-<span class="c1"># The class MUST call this class decorator at creation time</span>
-<span class="nd">@magics_class</span>
-<span class="k">class</span> <span class="nc">MyMagics</span><span class="p">(</span><span class="n">Magics</span><span class="p">):</span>
+<span class="gp">In [6]: </span><span class="kn">from</span> <span class="nn">IPython.core.magic</span> <span class="kn">import</span> <span class="p">(</span><span class="n">Magics</span><span class="p">,</span> <span class="n">magics_class</span><span class="p">,</span> <span class="n">line_magic</span><span class="p">,</span>
+<span class="gp">   ...: </span>                                <span class="n">cell_magic</span><span class="p">,</span> <span class="n">line_cell_magic</span><span class="p">)</span>
+<span class="gp">   ...: </span>
 
-    <span class="nd">@line_magic</span>
-    <span class="k">def</span> <span class="nf">lmagic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
-        <span class="s2">&quot;my line magic&quot;</span>
-        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Full access to the main IPython object:&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="p">)</span>
-        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Variables in the user namespace:&quot;</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">user_ns</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
-        <span class="k">return</span> <span class="n">line</span>
-
-    <span class="nd">@cell_magic</span>
-    <span class="k">def</span> <span class="nf">cmagic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">cell</span><span class="p">):</span>
-        <span class="s2">&quot;my cell magic&quot;</span>
-        <span class="k">return</span> <span class="n">line</span><span class="p">,</span> <span class="n">cell</span>
-
-    <span class="nd">@line_cell_magic</span>
-    <span class="k">def</span> <span class="nf">lcmagic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-        <span class="s2">&quot;Magic that works both as </span><span class="si">%lc</span><span class="s2">magic and as </span><span class="si">%%</span><span class="s2">lcmagic&quot;</span>
-        <span class="k">if</span> <span class="n">cell</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Called as line magic&quot;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">line</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Called as cell magic&quot;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">line</span><span class="p">,</span> <span class="n">cell</span>
+<span class="go"># The class MUST call this class decorator at creation time</span>
+<span class="gp">In [7]: </span><span class="k">class</span> <span class="nc">MyMagics</span><span class="p">(</span><span class="n">Magics</span><span class="p">):</span>
+<span class="gt">  File</span><span class="nn"> &quot;&lt;ipython-input-7-75b2d7fb056d&gt;&quot;</span><span class="gt">, line </span><span class="mi">1</span>
+    <span class="k">class</span> <span class="nc">MyMagics</span><span class="p">(</span><span class="n">Magics</span><span class="p">):</span>
+                           <span class="o">^</span>
+<span class="ne">SyntaxError</span>: unexpected EOF while parsing
 
 
-<span class="c1"># In order to actually use these magics, you must register them with a</span>
-<span class="c1"># running IPython.</span>
+<span class="gp">In [8]: </span><span class="k">def</span> <span class="nf">cmagic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">cell</span><span class="p">):</span>
+<span class="gp">   ...: </span>        <span class="s2">&quot;my cell magic&quot;</span>
+<span class="gp">   ...: </span>        <span class="k">return</span> <span class="n">line</span><span class="p">,</span> <span class="n">cell</span>
+<span class="gp">   ...: </span>
 
-<span class="k">def</span> <span class="nf">load_ipython_extension</span><span class="p">(</span><span class="n">ipython</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Any module file that define a function named `load_ipython_extension`</span>
-<span class="sd">    can be loaded via `%load_ext module.path` or be configured to be</span>
-<span class="sd">    autoloaded by IPython at startup time.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># You can register the class itself without instantiating it.  IPython will</span>
-    <span class="c1"># call the default constructor on it.</span>
-    <span class="n">ipython</span><span class="o">.</span><span class="n">register_magics</span><span class="p">(</span><span class="n">MyMagics</span><span class="p">)</span>
+<span class="go"># In order to actually use these magics, you must register them with a</span>
+<span class="go"># running IPython.</span>
+<span class="go">    # You can register the class itself without instantiating it.  IPython will</span>
+<span class="go">    # call the default constructor on it.</span>
 </pre></div>
 </div>
 <p>If you want to create a class with a different constructor that holds
 additional state, then you should always call the parent constructor and
 instantiate the class yourself before registration:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@magics_class</span>
-<span class="k">class</span> <span class="nc">StatefulMagics</span><span class="p">(</span><span class="n">Magics</span><span class="p">):</span>
-    <span class="s2">&quot;Magics that hold additional state&quot;</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [9]: </span><span class="k">class</span> <span class="nc">StatefulMagics</span><span class="p">(</span><span class="n">Magics</span><span class="p">):</span>
+<span class="gp">   ...: </span>    <span class="s2">&quot;Magics that hold additional state&quot;</span>
+<span class="gp">   ...: </span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-        <span class="c1"># You must call the parent constructor</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">StatefulMagics</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">shell</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+<span class="gp">In [10]: </span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<span class="gp">   ....: </span>        <span class="nb">super</span><span class="p">(</span><span class="n">StatefulMagics</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">shell</span><span class="p">)</span>
+<span class="gp">   ....: </span>        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+<span class="gp">   ....: </span>
 
-    <span class="c1"># etc...</span>
-
-<span class="k">def</span> <span class="nf">load_ipython_extension</span><span class="p">(</span><span class="n">ipython</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Any module file that define a function named `load_ipython_extension`</span>
-<span class="sd">    can be loaded via `%load_ext module.path` or be configured to be</span>
-<span class="sd">    autoloaded by IPython at startup time.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># This class must then be registered with a manually created instance,</span>
-    <span class="c1"># since its constructor has different arguments from the default:</span>
-    <span class="n">magics</span> <span class="o">=</span> <span class="n">StatefulMagics</span><span class="p">(</span><span class="n">ipython</span><span class="p">,</span> <span class="n">some_data</span><span class="p">)</span>
-    <span class="n">ipython</span><span class="o">.</span><span class="n">register_magics</span><span class="p">(</span><span class="n">magics</span><span class="p">)</span>
+<span class="go">    # etc...</span>
+<span class="go">    # This class must then be registered with a manually created instance,</span>
+<span class="go">    # since its constructor has different arguments from the default:</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -179,9 +150,8 @@ in IPython 5.  Maintainers of IPython extensions that still use the
 <code class="xref py py-func docutils literal notranslate"><span class="pre">define_magic()</span></code> function are advised to adjust their code
 for the current API.</p>
 </div>
-</div>
 <div class="section" id="complete-example">
-<h1>8. Complete Example<a class="headerlink" href="#complete-example" title="Permalink to this headline">¶</a></h1>
+<h2>4.1. Complete Example<a class="headerlink" href="#complete-example" title="Permalink to this headline">¶</a></h2>
 <p>Here is a full example of a magic package. You can distribute magics using
 setuptools, distutils, or any other distribution tools like <a class="reference external" href="http://flit.readthedocs.io">flit</a> for pure Python packages.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>.
@@ -192,32 +162,36 @@ setuptools, distutils, or any other distribution tools like <a class="reference 
 </pre></div>
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cat example_magic/__init__.py
-<span class="s2">&quot;&quot;&quot;An example magic&quot;&quot;&quot;</span>
-<span class="nv">__version__</span> <span class="o">=</span> <span class="s1">&#39;0.0.1&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;An example magic&quot;&quot;&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s1">&#39;0.0.1&#39;</span>
 
-from .abracadabra import Abracadabra
+<span class="kn">from</span> <span class="nn">.abracadabra</span> <span class="kn">import</span> <span class="n">Abracadabra</span>
 
-def load_ipython_extension<span class="o">(</span>ipython<span class="o">)</span>:
-    ipython.register_magics<span class="o">(</span>Abracadabra<span class="o">)</span>
+<span class="k">def</span> <span class="nf">load_ipython_extension</span><span class="p">(</span><span class="n">ipython</span><span class="p">):</span>
+    <span class="n">ipython</span><span class="o">.</span><span class="n">register_magics</span><span class="p">(</span><span class="n">Abracadabra</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cat example_magic/abracadabra.py
-from IPython.core.magic import <span class="o">(</span>Magics, magics_class, line_magic, cell_magic<span class="o">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.core.magic</span> <span class="kn">import</span> <span class="p">(</span><span class="n">Magics</span><span class="p">,</span> <span class="n">magics_class</span><span class="p">,</span> <span class="n">line_magic</span><span class="p">,</span> <span class="n">cell_magic</span><span class="p">)</span>
 
-@magics_class
-class Abracadabra<span class="o">(</span>Magics<span class="o">)</span>:
+<span class="nd">@magics_class</span>
+<span class="k">class</span> <span class="nc">Abracadabra</span><span class="p">(</span><span class="n">Magics</span><span class="p">):</span>
 
-    @line_magic
-    def abra<span class="o">(</span>self, line<span class="o">)</span>:
-        <span class="k">return</span> line
+    <span class="nd">@line_magic</span>
+    <span class="k">def</span> <span class="nf">abra</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">line</span>
 
-    @cell_magic
-    def cadabra<span class="o">(</span>self, line, cell<span class="o">)</span>:
-        <span class="k">return</span> line, cell
+    <span class="nd">@cell_magic</span>
+    <span class="k">def</span> <span class="nf">cadabra</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">cell</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">line</span><span class="p">,</span> <span class="n">cell</span>
 </pre></div>
 </div>
 <div class="section" id="creating-ipython-extensions">
-<h2>8.1. Creating IPython Extensions<a class="headerlink" href="#creating-ipython-extensions" title="Permalink to this headline">¶</a></h2>
+<h3>4.1.1. Creating IPython Extensions<a class="headerlink" href="#creating-ipython-extensions" title="Permalink to this headline">¶</a></h3>
 <p><em>Summarized from “Learning IPython for Interactive Computing and Data Visualization 1st ed.pdf”“</em></p>
 <p>:</p>
 <blockquote>
@@ -235,19 +209,19 @@ happens when the <code class="docutils literal notranslate"><span class="pre">%l
 executed. To automatically load a module when IPython starts,
 we need to add the module name to the <code class="docutils literal notranslate"><span class="pre">c.TerminalIPythonApp.extensions</span></code>
 list in the IPython configuration file.</p>
-<p>The <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.5.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveShell</span></code></a> instance represents the active
-<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.5.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> interpreter. Useful methods and attributes include
-<code class="xref py py-func docutils literal notranslate"><span class="pre">|ip|.register_magics()</span></code>, to create new magic commands,
-and <code class="docutils literal notranslate"><span class="pre">user_ns</span></code>, to access the user namespace. You can
-explore all the instance’s attributes interactively from
+<p>The <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.5.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveShell</span></code></a> instance represents the active <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.5.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> interpreter.
+Useful methods and attributes include <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.5.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveShell</span></code></a><code class="xref py py-func docutils literal notranslate"><span class="pre">register_magics()</span></code>
+, to create new magic commands, and <code class="docutils literal notranslate"><span class="pre">user_ns</span></code>, to access the user
+namespace. You can explore all the instance’s attributes interactively from
 <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.5.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> with tab completion. For that, you need to execute
-the following command to get the current instance</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython</span> <span class="k">import</span> <span class="n">get_ipython</span>
+the following command to get the current instance.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython</span> <span class="k">import</span> <span class="n">get_ipython</span>
 <span class="n">ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>And then access attributes with the <code class="docutils literal notranslate"><span class="pre">ip</span></code> object.</p>
 </div></blockquote>
+</div>
 </div>
 </div>
 
@@ -259,27 +233,23 @@ the following command to get the current instance</p>
         <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="magics.html" title="previous chapter">6. IPython Magics</a></li>
-      <li>Next: <a href="directive.html" title="next chapter">9. IPython Directive</a></li>
+      <li>Previous: <a href="magics.html" title="previous chapter">3. IPython Magics</a></li>
+      <li>Next: <a href="directive.html" title="next chapter">5. IPython Sphinx Directive</a></li>
   </ul></li>
 </ul>
 <h3><a href="index.html">Table of Contents</a></h3>
-<p class="caption"><span class="caption-text">Contents:</span></p>
+<p class="caption"><span class="caption-text">Table of Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="startup.html">1. Startup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="basic_customization.html">2. Basic Customization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ipython_keybindings.html">3. Keybindings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="custom_keyboard_shortcuts.html">4. Customizing the keybindings further</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ipython_interactive_shell.html">5. Interactive Shell Object</a></li>
-<li class="toctree-l1"><a class="reference internal" href="magics.html">6. Built-in Magics</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">7. Defining custom magics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#complete-example">8. Complete Example</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#creating-ipython-extensions">8.1. Creating IPython Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ipython_keybindings.html">2. Keybindings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="magics.html">3. Built-in Magics</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">4. Writing Your Own Magics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#complete-example">4.1. Complete Example</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="directive.html">9. Sphinx Directives</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rich_output.html">10. Rich Output</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pygments.html">11. Pygments highlighting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="directive.html">5. Sphinx Directives</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rich_output.html">6. Rich Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pygments.html">7. Pygments highlighting</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="API.html">API</a></li>
@@ -287,9 +257,11 @@ the following command to get the current instance</p>
 
   <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">7. Defining custom magics</a></li>
-<li><a class="reference internal" href="#complete-example">8. Complete Example</a><ul>
-<li><a class="reference internal" href="#creating-ipython-extensions">8.1. Creating IPython Extensions</a></li>
+<li><a class="reference internal" href="#">4. Defining custom magics</a><ul>
+<li><a class="reference internal" href="#complete-example">4.1. Complete Example</a><ul>
+<li><a class="reference internal" href="#creating-ipython-extensions">4.1.1. Creating IPython Extensions</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -325,10 +297,10 @@ the following command to get the current instance</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="directive.html" title="9. IPython Directive"
+          <a href="directive.html" title="5. IPython Sphinx Directive"
              >next</a> |</li>
         <li class="right" >
-          <a href="magics.html" title="6. IPython Magics"
+          <a href="magics.html" title="3. IPython Magics"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li> 
       </ul>

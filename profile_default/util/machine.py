@@ -34,9 +34,9 @@ See Also
 
 """
 import os
-from pathlib import Path
 import platform
 import sys
+from pathlib import Path
 
 from IPython import get_ipython
 from prompt_toolkit.utils import is_conemu_ansi, is_windows

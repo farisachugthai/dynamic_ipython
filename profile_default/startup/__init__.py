@@ -7,12 +7,6 @@ Requires
 Python3 and IPython 7+
 
 """
-import logging
-import os
-import sys
-from logging import NullHandler
-
-from IPython import get_ipython
 
 _ip = get_ipython()
 

@@ -1,0 +1,184 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>4. Keyboard Shortcut Customization &#8212; Dynamic IPython 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/C:\Users\faris\projects\dynamic_ipython\docs\_static\pyramid.css_t" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="5. IPython_InteractiveShell" href="ipython_interactive_shell.html" />
+    <link rel="prev" title="3. Keybindings in IPython" href="ipython_keybindings.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="ipython_interactive_shell.html" title="5. IPython_InteractiveShell"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ipython_keybindings.html" title="3. Keybindings in IPython"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="keyboard-shortcut-customization">
+<span id="ipython-notebook-customization"></span><h1>4. Keyboard Shortcut Customization<a class="headerlink" href="#keyboard-shortcut-customization" title="Permalink to this headline">¶</a></h1>
+<p>Starting with IPython 2.0 keyboard shortcuts in command and edit mode
+are fully customizable. These customizations are made using the IPython
+JavaScript API. Here is an example that makes the <code class="docutils literal notranslate"><span class="pre">r</span></code> key available
+for running a cell:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="nx">javascript</span>
+
+<span class="nx">IPython</span><span class="p">.</span><span class="nx">keyboard_manager</span><span class="p">.</span><span class="nx">command_shortcuts</span><span class="p">.</span><span class="nx">add_shortcut</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">help</span> <span class="o">:</span> <span class="s1">&#39;run cell&#39;</span><span class="p">,</span>
+    <span class="nx">help_index</span> <span class="o">:</span> <span class="s1">&#39;zz&#39;</span><span class="p">,</span>
+    <span class="nx">handler</span> <span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">IPython</span><span class="p">.</span><span class="nx">notebook</span><span class="p">.</span><span class="nx">execute_cell</span><span class="p">();</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="p">}}</span>
+<span class="p">);</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">IPython</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">Javascript</span> <span class="n">at</span> <span class="mh">0x10e8d1890</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>There are a couple of points to mention about this API:</p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">help_index</span></code> field is used to sort the shortcuts in the
+Keyboard Shortcuts help dialog. It defaults to <code class="docutils literal notranslate"><span class="pre">zz</span></code>.</p></li>
+<li><p>When a handler returns <code class="docutils literal notranslate"><span class="pre">false</span></code> it indicates that the event should
+stop propagating and the default action should not be performed. For
+further details about the <code class="docutils literal notranslate"><span class="pre">event</span></code> object or event handling, see the
+jQuery docs.</p></li>
+<li><p>If you don’t need a <code class="docutils literal notranslate"><span class="pre">help</span></code> or <code class="docutils literal notranslate"><span class="pre">help_index</span></code> field, you can simply
+pass a function as the second argument to <code class="docutils literal notranslate"><span class="pre">add_shortcut</span></code>.</p></li>
+</ul>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="nx">javascript</span>
+
+<span class="nx">IPython</span><span class="p">.</span><span class="nx">keyboard_manager</span><span class="p">.</span><span class="nx">command_shortcuts</span><span class="p">.</span><span class="nx">add_shortcut</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">IPython</span><span class="p">.</span><span class="nx">notebook</span><span class="p">.</span><span class="nx">execute_cell</span><span class="p">();</span>
+    <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">IPython</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">Javascript</span> <span class="n">at</span> <span class="mh">0x1019baf90</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>Likewise, to remove a shortcut, use <code class="docutils literal notranslate"><span class="pre">remove_shortcut</span></code>:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="nx">javascript</span>
+
+<span class="nx">IPython</span><span class="p">.</span><span class="nx">keyboard_manager</span><span class="p">.</span><span class="nx">command_shortcuts</span><span class="p">.</span><span class="nx">remove_shortcut</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">IPython</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">Javascript</span> <span class="n">at</span> <span class="mh">0x10e8d1950</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>If you want your keyboard shortcuts to be active for all of your
+notebooks, put the above API calls into your
+<code class="docutils literal notranslate"><span class="pre">&lt;profile_dir&gt;/static/custom/custom.js</span></code> file.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="ipython_keybindings.html" title="previous chapter">3. Keybindings in IPython</a></li>
+      <li>Next: <a href="ipython_interactive_shell.html" title="next chapter">5. IPython_InteractiveShell</a></li>
+  </ul></li>
+</ul>
+<h3><a href="index.html">Table of Contents</a></h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="startup.html">1. Startup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basic_customization.html">2. Basic Customization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ipython_keybindings.html">3. Keybindings</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">4. Customizing the keybindings further</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ipython_interactive_shell.html">5. Interactive Shell Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="magics.html">6. Built-in Magics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_magics.html">7. Defining custom magics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_magics.html#complete-example">8. Complete Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="directive.html">9. Sphinx Directives</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rich_output.html">10. Rich Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pygments.html">11. Pygments highlighting</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="API.html">API</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/custom_keyboard_shortcuts.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="ipython_interactive_shell.html" title="5. IPython_InteractiveShell"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ipython_keybindings.html" title="3. Keybindings in IPython"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright (C) 2018-2019 Faris Chugthai.
+    </div>
+  </body>
+</html>

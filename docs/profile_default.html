@@ -7,7 +7,7 @@
     <title>Default IPython Profile and Startup Scripts &#8212; Dynamic IPython 0.0.1 documentation</title>
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="/data/data/com.termux/files/home/projects/dynamic_ipython/docs/_static/pyramid.css_t" />
+    <link rel="stylesheet" type="text/css" href="_static/C:\Users\faris\projects\dynamic_ipython\docs\_static\pyramid.css_t" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
@@ -334,12 +334,16 @@ module.</p>
 <div class="section" id="module-profile_default.startup.05_log">
 <span id="log"></span><h3><a class="toc-backref" href="#id12"><a class="reference internal" href="#module-profile_default.startup.05_log" title="profile_default.startup.05_log"><code class="xref py py-mod docutils literal notranslate"><span class="pre">05_log</span></code></a></a><a class="headerlink" href="#module-profile_default.startup.05_log" title="Permalink to this headline">¶</a></h3>
 <p>Create a logfile for the day and append to it if one already exists.</p>
+<div class="section" id="ipython-logger">
+<h4>IPython Logger<a class="headerlink" href="#ipython-logger" title="Permalink to this headline">¶</a></h4>
 <p>Collects both the input and output of every command run through the IPython
 interpreter and prepends a timestamp to commands.</p>
 <p>The timestamp is particularly convenient for concurrent instances of IPy.</p>
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in version Changed: </span><code class="xref py py-func docutils literal notranslate"><span class="pre">_ip.magic()</span></code> to <code class="xref py py-func docutils literal notranslate"><span class="pre">_ip.run_line_magic()</span></code></p>
 </div>
+<div class="section" id="ipython-implementation-of-a-logger-class">
+<h5>IPython Implementation of a Logger Class<a class="headerlink" href="#ipython-implementation-of-a-logger-class" title="Permalink to this headline">¶</a></h5>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Logger</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="c1">#A Logfile class with different policies for file creation</span>
 
@@ -547,15 +551,18 @@ self.logfile = None</p>
 </dl>
 <hr class="docutils" />
 <div class="section" id="roadmap">
-<h4>Roadmap<a class="headerlink" href="#roadmap" title="Permalink to this headline">¶</a></h4>
+<h6>Roadmap<a class="headerlink" href="#roadmap" title="Permalink to this headline">¶</a></h6>
 <p>05/18/2019:</p>
 <p>Should consider using that <a class="reference internal" href="#profile_default.startup.05_log.ipython_logger_05" title="profile_default.startup.05_log.ipython_logger_05"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ipython_logger_05</span></code></a> as a FileHandler and then
 configure a globally available StreamHandler.</p>
 <dl class="function">
 <dt id="profile_default.startup.05_log.ipython_logger_05">
-<code class="descclassname">profile_default.startup.05_log.</code><code class="descname">ipython_logger_05</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/profile_default/startup/05_log.html#ipython_logger_05"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profile_default.startup.05_log.ipython_logger_05" title="Permalink to this definition">¶</a></dt>
-<dd><p>Saves the commands as valid IPython code. Note that this is not
-necessarily valid python code.</p>
+<code class="descclassname">profile_default.startup.05_log.</code><code class="descname">ipython_logger_05</code><span class="sig-paren">(</span><em>_ip=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profile_default/startup/05_log.html#ipython_logger_05"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profile_default.startup.05_log.ipython_logger_05" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves all commands run in the interactive namespace as valid IPython code.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is not necessarily valid python code.</p>
+</div>
 <p>The commands are appended to a file in the directory of the
 profile in <span class="target" id="index-5"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">$IPYTHONDIR</span></code> or fallback ~/.ipython. This file is
 named based on the date.</p>
@@ -566,6 +573,8 @@ named based on the date.</p>
 </dl>
 </dd></dl>
 
+</div>
+</div>
 </div>
 </div>
 <div class="section" id="module-profile_default.startup.06_help_helpers">
@@ -579,7 +588,7 @@ named based on the date.</p>
 
 <dl class="function">
 <dt id="profile_default.startup.06_help_helpers.save_help">
-<code class="descclassname">profile_default.startup.06_help_helpers.</code><code class="descname">save_help</code><span class="sig-paren">(</span><em>arg=None</em>, <em>output_file=&lt;_io.TextIOWrapper name='&lt;stdout&gt;' mode='w' encoding='utf-8'&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profile_default/startup/06_help_helpers.html#save_help"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profile_default.startup.06_help_helpers.save_help" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">profile_default.startup.06_help_helpers.</code><code class="descname">save_help</code><span class="sig-paren">(</span><em>arg=None</em>, <em>output_file=&lt;colorama.ansitowin32.StreamWrapper object at 0x000001FF84FA2BE0&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profile_default/startup/06_help_helpers.html#save_help"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profile_default.startup.06_help_helpers.save_help" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write <a class="reference external" href="https://docs.python.org/3/library/functions.html#help" title="(in Python v3.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">help()</span></code></a> to a file. Defaults to <code class="docutils literal notranslate"><span class="pre">sys.stdout</span></code>.</p>
 </dd></dl>
 
@@ -664,7 +673,7 @@ implementation has been provided for reference.</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">extract</span></code></p></li>
 <li><p><strong class="command">fzf</strong> in its many invocations.</p></li>
 <li><p>A function that wraps around :func:<a href="#id3"><span class="problematic" id="id4">|</span></a>ip|`.MagicsManager.define_alias()` and
-checks for whether the executable is on the <span class="target" id="index-6"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PATH</span></code> all in one swoop.</p></li>
+checks for whether the executable is on the <span class="target" id="index-7"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PATH</span></code> all in one swoop.</p></li>
 </ul>
 <dl class="function">
 <dt id="profile_default.startup.20_aliases.common_aliases">
@@ -740,7 +749,7 @@ ConEmu and others have been added.</p>
 that this section is still under development and frequently changes.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The environment variable <span class="target" id="index-7"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">COMSPEC</span></code> is checked to determine the
+<p>The environment variable <span class="target" id="index-8"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">COMSPEC</span></code> is checked to determine the
 default shell and it is assumed the user is running IPython from there
 which may not always be true.</p>
 </div>
@@ -902,19 +911,15 @@ keybinding for insert to navigation mode.</p>
   </ul></li>
 </ul>
 <h3><a href="index.html">Table of Contents</a></h3>
-<p class="caption"><span class="caption-text">Contents:</span></p>
+<p class="caption"><span class="caption-text">Table of Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="startup.html">1. Startup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="basic_customization.html">2. Basic Customization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ipython_keybindings.html">3. Keybindings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="custom_keyboard_shortcuts.html">4. Customizing the keybindings further</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ipython_interactive_shell.html">5. Interactive Shell Object</a></li>
-<li class="toctree-l1"><a class="reference internal" href="magics.html">6. Built-in Magics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="custom_magics.html">7. Defining custom magics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="custom_magics.html#complete-example">8. Complete Example</a></li>
-<li class="toctree-l1"><a class="reference internal" href="directive.html">9. Sphinx Directives</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rich_output.html">10. Rich Output</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pygments.html">11. Pygments highlighting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ipython_keybindings.html">2. Keybindings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="magics.html">3. Built-in Magics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_magics.html">4. Writing Your Own Magics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="directive.html">5. Sphinx Directives</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rich_output.html">6. Rich Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pygments.html">7. Pygments highlighting</a></li>
 </ul>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="API.html">API</a></li>
@@ -949,7 +954,13 @@ keybinding for insert to navigation mode.</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-profile_default.startup.05_log"><code class="xref py py-mod docutils literal notranslate"><span class="pre">05_log</span></code></a><ul>
+<li><a class="reference internal" href="#ipython-logger">IPython Logger</a><ul>
+<li><a class="reference internal" href="#ipython-implementation-of-a-logger-class">IPython Implementation of a Logger Class</a><ul>
 <li><a class="reference internal" href="#roadmap">Roadmap</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-profile_default.startup.06_help_helpers"><code class="xref py py-mod docutils literal notranslate"><span class="pre">06_help_helpers</span></code></a></li>

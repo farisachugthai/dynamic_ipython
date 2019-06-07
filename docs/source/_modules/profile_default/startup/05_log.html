@@ -1,0 +1,445 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>profile_default.startup.05_log &#8212; Dynamic IPython 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/C:\Users\faris\projects\dynamic_ipython\docs\_static\pyramid.css_t" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for profile_default.startup.05_log</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;Create a logfile for the day and append to it if one already exists.</span>
+
+<span class="sd">==============</span>
+<span class="sd">IPython Logger</span>
+<span class="sd">==============</span>
+
+<span class="sd">.. highlight:: python3</span>
+
+
+<span class="sd">Collects both the input and output of every command run through the IPython</span>
+<span class="sd">interpreter and prepends a timestamp to commands.</span>
+
+<span class="sd">The timestamp is particularly convenient for concurrent instances of IPy.</span>
+
+<span class="sd">.. versionchanged:: Changed :func:`_ip.magic()` to :func:`_ip.run_line_magic()`</span>
+
+<span class="sd">.. todo::</span>
+
+<span class="sd">    - Consider using datetime instead of time. Not pertinent though.</span>
+<span class="sd">    - Explore both the built-in logging module and IPython logging subclass.</span>
+<span class="sd">    - Truncate output if it exceeds a certain threshold.</span>
+<span class="sd">        - Run dir(np) or dir(pd) a couple of times and the logs become swamped.</span>
+<span class="sd">    - Possibly change that section under the shebang to also include 3</span>
+<span class="sd">      double quotes and in the comment add system info like py version, venv,</span>
+<span class="sd">      conda, any of the 1000000 things you could add.</span>
+
+
+<span class="sd">IPython Implementation of a Logger Class</span>
+<span class="sd">========================================</span>
+
+<span class="sd">.. code-block:: python3</span>
+
+<span class="sd">    class Logger(object):</span>
+<span class="sd">        #A Logfile class with different policies for file creation</span>
+
+<span class="sd">        def __init__(self, home_dir, logfname=&#39;Logger.log&#39;, loghead=u&#39;&#39;,</span>
+<span class="sd">                     logmode=&#39;over&#39;):</span>
+
+<span class="sd">            # this is the full ipython instance, we need some attributes from it</span>
+<span class="sd">            # which won&#39;t exist until later. What a mess, clean up later...</span>
+<span class="sd">            self.home_dir = home_dir</span>
+
+<span class="sd">            self.logfname = logfname</span>
+<span class="sd">            self.loghead = loghead</span>
+<span class="sd">            self.logmode = logmode</span>
+<span class="sd">            self.logfile = None</span>
+
+<span class="sd">            # Whether to log raw or processed input</span>
+<span class="sd">            self.log_raw_input = False</span>
+
+<span class="sd">            # whether to also log output</span>
+<span class="sd">            self.log_output = False</span>
+
+<span class="sd">            # whether to put timestamps before each log entry</span>
+<span class="sd">            self.timestamp = False</span>
+
+<span class="sd">            # activity control flags</span>
+<span class="sd">            self.log_active = False</span>
+
+<span class="sd">        # logmode is a validated property</span>
+<span class="sd">        def _set_mode(self,mode):</span>
+<span class="sd">            if mode not in [&#39;append&#39;,&#39;backup&#39;,&#39;global&#39;,&#39;over&#39;,&#39;rotate&#39;]:</span>
+<span class="sd">                raise ValueError(&#39;invalid log mode %s given&#39; % mode)</span>
+<span class="sd">            self._logmode = mode</span>
+
+<span class="sd">        def _get_mode(self):</span>
+<span class="sd">            return self._logmode</span>
+
+<span class="sd">        logmode = property(_get_mode,_set_mode)</span>
+
+<span class="sd">        def logstart(self, logfname=None, loghead=None, logmode=None,</span>
+<span class="sd">                     log_output=False, timestamp=False, log_raw_input=False):</span>
+<span class="sd">            # Generate a new log-file with a default header.</span>
+
+<span class="sd">            # Raises RuntimeError if the log has already been started</span>
+
+<span class="sd">            if self.logfile is not None:</span>
+<span class="sd">                raise RuntimeError(&#39;Log file is already active: %s&#39; %</span>
+<span class="sd">                                   self.logfname)</span>
+
+<span class="sd">            # The parameters can override constructor defaults</span>
+<span class="sd">            if logfname is not None: self.logfname = logfname</span>
+<span class="sd">            if loghead is not None: self.loghead = loghead</span>
+<span class="sd">            if logmode is not None: self.logmode = logmode</span>
+
+<span class="sd">            # Parameters not part of the constructor</span>
+<span class="sd">            self.timestamp = timestamp</span>
+<span class="sd">            self.log_output = log_output</span>
+<span class="sd">            self.log_raw_input = log_raw_input</span>
+
+<span class="sd">            # init depending on the log mode requested</span>
+<span class="sd">            isfile = os.path.isfile</span>
+<span class="sd">            logmode = self.logmode</span>
+
+<span class="sd">            if logmode == &#39;append&#39;:</span>
+<span class="sd">                self.logfile = io.open(self.logfname, &#39;a&#39;, encoding=&#39;utf-8&#39;)</span>
+
+<span class="sd">            elif logmode == &#39;backup&#39;:</span>
+<span class="sd">                if isfile(self.logfname):</span>
+<span class="sd">                    backup_logname = self.logfname+&#39;~&#39;</span>
+<span class="sd">                    # Manually remove any old backup, since os.rename may fail</span>
+<span class="sd">                    # under Windows.</span>
+<span class="sd">                    if isfile(backup_logname):</span>
+<span class="sd">                        os.remove(backup_logname)</span>
+<span class="sd">                    os.rename(self.logfname,backup_logname)</span>
+<span class="sd">                self.logfile = io.open(self.logfname, &#39;w&#39;, encoding=&#39;utf-8&#39;)</span>
+
+<span class="sd">            elif logmode == &#39;global&#39;:</span>
+<span class="sd">                self.logfname = os.path.join(self.home_dir,self.logfname)</span>
+<span class="sd">                self.logfile = io.open(self.logfname, &#39;a&#39;, encoding=&#39;utf-8&#39;)</span>
+
+<span class="sd">            elif logmode == &#39;over&#39;:</span>
+<span class="sd">                if isfile(self.logfname):</span>
+<span class="sd">                    os.remove(self.logfname)</span>
+<span class="sd">                self.logfile = io.open(self.logfname,&#39;w&#39;, encoding=&#39;utf-8&#39;)</span>
+
+<span class="sd">            elif logmode == &#39;rotate&#39;:</span>
+<span class="sd">                if isfile(self.logfname):</span>
+<span class="sd">                    if isfile(self.logfname+&#39;.001~&#39;):</span>
+<span class="sd">                        old = glob.glob(self.logfname+&#39;.*~&#39;)</span>
+<span class="sd">                        old.sort()</span>
+<span class="sd">                        old.reverse()</span>
+<span class="sd">                        for f in old:</span>
+<span class="sd">                            root, ext = os.path.splitext(f)</span>
+<span class="sd">                            num = int(ext[1:-1])+1</span>
+<span class="sd">                            os.rename(f, root+&#39;.&#39;+repr(num).zfill(3)+&#39;~&#39;)</span>
+<span class="sd">                    os.rename(self.logfname, self.logfname+&#39;.001~&#39;)</span>
+<span class="sd">                self.logfile = io.open(self.logfname, &#39;w&#39;, encoding=&#39;utf-8&#39;)</span>
+
+<span class="sd">            if logmode != &#39;append&#39;:</span>
+<span class="sd">                self.logfile.write(self.loghead)</span>
+
+<span class="sd">            self.logfile.flush()</span>
+<span class="sd">            self.log_active = True</span>
+
+<span class="sd">        def switch_log(self,val):</span>
+<span class="sd">            # Switch logging on/off. val should be ONLY a boolean.</span>
+
+<span class="sd">            if val not in [False,True,0,1]:</span>
+<span class="sd">                raise ValueError(&#39;Call switch_log ONLY with a boolean argument, &#39;</span>
+<span class="sd">                                 &#39;not with: %s&#39; % val)</span>
+
+<span class="sd">            label = {0:&#39;OFF&#39;,1:&#39;ON&#39;,False:&#39;OFF&#39;,True:&#39;ON&#39;}</span>
+
+<span class="sd">            if self.logfile is None:</span>
+<span class="sd">                print(&#39;</span>
+<span class="sd">    Logging hasn&#39;t been started yet (use logstart for that).</span>
+
+<span class="sd">    %logon/%logoff are for temporarily starting and stopping logging for a logfile</span>
+<span class="sd">    which already exists. But you must first start the logging process with</span>
+<span class="sd">    %logstart (optionally giving a logfile name).&#39;)</span>
+
+<span class="sd">            else:</span>
+<span class="sd">                if self.log_active == val:</span>
+<span class="sd">                    print(&#39;Logging is already&#39;,label[val])</span>
+<span class="sd">                else:</span>
+<span class="sd">                    print(&#39;Switching logging&#39;,label[val])</span>
+<span class="sd">                    self.log_active = not self.log_active</span>
+<span class="sd">                    self.log_active_out = self.log_active</span>
+
+<span class="sd">        def logstate(self):</span>
+<span class="sd">            # Print a status message about the logger.</span>
+<span class="sd">            if self.logfile is None:</span>
+<span class="sd">                print(&#39;Logging has not been activated.&#39;)</span>
+<span class="sd">            else:</span>
+<span class="sd">                state = self.log_active and &#39;active&#39; or &#39;temporarily suspended&#39;</span>
+<span class="sd">                print(&#39;Filename       :&#39;, self.logfname)</span>
+<span class="sd">                print(&#39;Mode           :&#39;, self.logmode)</span>
+<span class="sd">                print(&#39;Output logging :&#39;, self.log_output)</span>
+<span class="sd">                print(&#39;Raw input log  :&#39;, self.log_raw_input)</span>
+<span class="sd">                print(&#39;Timestamping   :&#39;, self.timestamp)</span>
+<span class="sd">                print(&#39;State          :&#39;, state)</span>
+
+<span class="sd">        def log(self, line_mod, line_ori):</span>
+<span class="sd">            # Write the sources to a log.</span>
+
+<span class="sd">            # Inputs:</span>
+
+<span class="sd">            # - line_mod: possibly modified input, such as the transformations made</span>
+<span class="sd">            #   by input prefilters or input handlers of various kinds. This should</span>
+<span class="sd">            #   always be valid Python.</span>
+
+<span class="sd">            # - line_ori: unmodified input line from the user. This is not</span>
+<span class="sd">            #   necessarily valid Python.</span>
+
+<span class="sd">            # Write the log line, but decide which one according to the</span>
+<span class="sd">            # log_raw_input flag, set when the log is started.</span>
+<span class="sd">            if self.log_raw_input:</span>
+<span class="sd">                self.log_write(line_ori)</span>
+<span class="sd">            else:</span>
+<span class="sd">                self.log_write(line_mod)</span>
+
+<span class="sd">        def log_write(self, data, kind=&#39;input&#39;):</span>
+<span class="sd">            # Write data to the log file, if active</span>
+
+<span class="sd">            #print data: %r % data # dbg</span>
+<span class="sd">            if self.log_active and data:</span>
+<span class="sd">                write = self.logfile.write</span>
+<span class="sd">                if kind==&#39;input&#39;:</span>
+<span class="sd">                    if self.timestamp:</span>
+<span class="sd">                        write(time.strftime(&#39;# %a, %d %b %Y %H:%M:%S\n&#39;, time.localtime()))</span>
+<span class="sd">                    write(data)</span>
+<span class="sd">                elif kind==&#39;output&#39; and self.log_output:</span>
+<span class="sd">                    odata = u&#39;\n&#39;.join([u&#39;#[Out]# %s&#39; % s</span>
+<span class="sd">                                       for s in data.splitlines()])</span>
+<span class="sd">                    write(u&#39;%s\n&#39; % odata)</span>
+<span class="sd">                self.logfile.flush()</span>
+
+<span class="sd">        def logstop(self):</span>
+<span class="sd">            # Fully stop logging and close log file.</span>
+
+<span class="sd">            # In order to start logging again, a new logstart() call needs to be</span>
+<span class="sd">            # made, possibly (though not necessarily) with a new filename, mode and</span>
+<span class="sd">            # other options.</span>
+
+<span class="sd">            if self.logfile is not None:</span>
+<span class="sd">                self.logfile.close()</span>
+<span class="sd">                self.logfile = None</span>
+<span class="sd">            else:</span>
+<span class="sd">                print(&quot;Logging hadn&#39;t been started.&quot;)</span>
+<span class="sd">            self.log_active = False</span>
+
+<span class="sd">-----------</span>
+
+<span class="sd">Roadmap</span>
+<span class="sd">--------</span>
+
+<span class="sd">05/18/2019:</span>
+
+<span class="sd">Should consider using that `ipython_logger_05` as a FileHandler and then</span>
+<span class="sd">configure a globally available StreamHandler.</span>
+
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">os</span> <span class="k">import</span> <span class="n">path</span>
+
+<span class="kn">from</span> <span class="nn">IPython</span> <span class="k">import</span> <span class="n">get_ipython</span>
+
+
+<div class="viewcode-block" id="ipython_logger_05"><a class="viewcode-back" href="../../../profile_default.html#profile_default.startup.05_log.ipython_logger_05">[docs]</a><span class="k">def</span> <span class="nf">ipython_logger_05</span><span class="p">(</span><span class="n">_ip</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Saves all commands run in the interactive namespace as valid IPython code.</span>
+
+<span class="sd">    .. note:: This is not necessarily valid python code.</span>
+
+<span class="sd">    The commands are appended to a file in the directory of the</span>
+<span class="sd">    profile in :envvar:`$IPYTHONDIR` or fallback ~/.ipython. This file is</span>
+<span class="sd">    named based on the date.</span>
+
+<span class="sd">    .. todo:: Kinda wanna change the logmode. I&#39;m not really liking having 7 different log files for 1 day.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    -----------</span>
+<span class="sd">    _ip : |ip|</span>
+<span class="sd">        Global IPython instance.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">log_dir</span> <span class="o">=</span> <span class="n">_ip</span><span class="o">.</span><span class="n">profile_dir</span><span class="o">.</span><span class="n">log_dir</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="s1">&#39;log-&#39;</span> <span class="o">+</span> <span class="n">_ip</span><span class="o">.</span><span class="n">profile</span> <span class="o">+</span> <span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.py&quot;</span>
+    <span class="n">logmode</span> <span class="o">=</span> <span class="s1">&#39;rotate&#39;</span>
+    <span class="n">log_output</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">log_dir</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
+    <span class="n">notnew</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="c1"># logger = _ip.logger(home_dir=get_home(),</span>
+    <span class="c1">#                     logfname=filename,</span>
+    <span class="c1">#                     logmode=&quot;append&quot;,</span>
+    <span class="c1">#                     log_output=True,</span>
+    <span class="c1">#                     timestamp=True)</span>
+    <span class="c1"># not callable! huh.</span>
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">_ip</span><span class="o">.</span><span class="n">logger</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">logmode</span> <span class="o">=</span> <span class="n">logmode</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">log_output</span> <span class="o">=</span> <span class="n">log_output</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">timestamp</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">logfname</span> <span class="o">=</span> <span class="n">filename</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># added -t to get timestamps</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">logstart</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">notnew</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">log_write</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;# =================================</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">log_write</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;#!/usr/bin/env python</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">log_write</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;# &quot;</span> <span class="o">+</span> <span class="n">fname</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">log_write</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;# IPython automatic logging file</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">log_write</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;# &quot;</span> <span class="o">+</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%H:%M:%S&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">log_write</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;# =================================</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; Logging to &quot;</span> <span class="o">+</span> <span class="n">filename</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; Already logging to &quot;</span> <span class="o">+</span> <span class="n">logger</span><span class="o">.</span><span class="n">logfname</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_setup_logging</span><span class="p">(</span><span class="n">log_level</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">log_format</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Enable logging.</span>
+
+<span class="sd">    This function exists purely to be imported and isn&#39;t called by the containing module.</span>
+
+<span class="sd">    .. todo:: Need to add more to the formatter. Also do some error checking with the user-provided arguments.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    log_level : int</span>
+<span class="sd">        The level to log at</span>
+<span class="sd">    log_format : str</span>
+<span class="sd">        How to format the log messages.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    --------</span>
+<span class="sd">    logger : :class:`logging.Logger()`</span>
+<span class="sd">        Module-wide logger</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="vm">__name__</span><span class="p">)</span>
+    <span class="n">handler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">log_level</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">log_level</span><span class="p">)</span>
+        <span class="n">handler</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">log_level</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
+        <span class="n">handler</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">log_format</span><span class="p">:</span>
+        <span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="n">log_format</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> - </span><span class="si">%(name)s</span><span class="s1"> - </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="n">handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">logger</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+    <span class="n">ipython_logger_05</span><span class="p">(</span><span class="n">shell</span><span class="p">)</span>
+    <span class="k">del</span> <span class="n">ipython_logger_05</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+<h3><a href="../../../index.html">Table of Contents</a></h3>
+<p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../startup.html">1. Startup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ipython_keybindings.html">2. Keybindings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../magics.html">3. Built-in Magics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../custom_magics.html">4. Writing Your Own Magics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../directive.html">5. Sphinx Directives</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rich_output.html">6. Rich Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pygments.html">7. Pygments highlighting</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../API.html">API</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright (C) 2018-2019 Faris Chugthai.
+    </div>
+  </body>
+</html>

@@ -21,10 +21,9 @@ It also shows the following simpler example:
                 print("Hello world!")
 
 """
-from io import StringIO
 import sys
+from io import StringIO
 
-from IPython.core.magic import register_line_magic
 try:
     import pandas as pd
 except ImportError:

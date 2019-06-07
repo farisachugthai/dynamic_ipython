@@ -7,7 +7,7 @@
     <title>extensions.site_pkgs &#8212; Dynamic IPython 0.0.1 documentation</title>
     <link rel="stylesheet" href="../../_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="/home/faris/projects/dynamic_ipython/docs/source/_static/pyramid.css_t" />
+    <link rel="stylesheet" type="text/css" href="../../_static/C:\Users\faris\projects\dynamic_ipython\docs\_static\pyramid.css_t" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
@@ -91,7 +91,7 @@
         <span class="n">default</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span>
         <span class="nb">type</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">FileType</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">),</span>
         <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The file where the packages should be written. Defaults to&#39;</span>
-        <span class="s1">&#39; stdout.&#39;</span><span class="p">)</span>
+        <span class="s1">&#39; stdout. &#39;</span><span class="p">)</span>
 
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-ll&#39;</span><span class="p">,</span>
                         <span class="s1">&#39;--log-level&#39;</span><span class="p">,</span>
@@ -104,28 +104,7 @@
 
 
 <div class="viewcode-block" id="all_site_pkgs"><a class="viewcode-back" href="../../extensions.html#extensions.site_pkgs.all_site_pkgs">[docs]</a><span class="k">def</span> <span class="nf">all_site_pkgs</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Display every package in site-packages.</span>
-
-<span class="sd">    .....wow. This is uh something else.</span>
-<span class="sd">    *sigh*</span>
-
-<span class="sd">    Alright so we gotta make a variable with a sane default for where we&#39;re</span>
-<span class="sd">    checking things. Hopefully sys.executable or sys.prefix...*or is it</span>
-<span class="sd">    sys.base_prefix?* will lead us in the right direction.</span>
-
-<span class="sd">    Then we&#39;ll check that the user gave us the right # of arguments with</span>
-<span class="sd">    len(sys.argv) and ``raise IndexError`` if we get something weird.</span>
-
-<span class="sd">    Possibly wanna think about standardizing something for argparse.</span>
-<span class="sd">    Definitely wanna think about standardizing something for logging.</span>
-
-<span class="sd">    Also literally what is that return value??? You didn&#39;t use it anywhere.</span>
-<span class="sd">    Man this is crazy confusing and it shouldn&#39;t have been a particularly hard</span>
-<span class="sd">    thing to write.</span>
-
-<span class="sd">    Delete all this off and use pathlib and i suppose build in a sys.version_info</span>
-<span class="sd">    check as a result.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Display every package in site-packages.&quot;&quot;&quot;</span>
     <span class="n">home</span> <span class="o">=</span> <span class="n">expanduser</span><span class="p">(</span><span class="s1">&#39;~&#39;</span><span class="p">)</span>
 
     <span class="n">search</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span>
@@ -140,8 +119,16 @@
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># Does ipy run these files or source them?</span>
+    <span class="c1"># Let&#39;s put an ifmaun and see uf its still available</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">_parse_arguments</span><span class="p">()</span>
+    <span class="c1"># if should</span>
+    <span class="c1"># this causes ipy startup to err so moved here</span>
+    <span class="c1"># doing so gives</span>
+    <span class="c1"># AttributeError: &#39;Namespace&#39; object has no attribute &#39;print_help&#39;</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="c1"># Too few arguments. We can&#39;t specify this using argparse alone, so we</span>
+        <span class="c1"># have to manually check.</span>
         <span class="n">parser</span><span class="o">.</span><span class="n">print_help</span><span class="p">()</span>
         <span class="n">parser</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
 
@@ -156,7 +143,13 @@
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
 <h3><a href="../../index.html">Table of Contents</a></h3>
 <p class="caption"><span class="caption-text">Table of Contents:</span></p>
 <ul>

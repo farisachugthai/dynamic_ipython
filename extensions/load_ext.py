@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """
+========================================================================
 %load_ext --- Import commonly used modules into the IPython namespace.
 ========================================================================
 
@@ -11,6 +12,7 @@ startup.
 
 As it stands, it may be preferable to use that over defining arbitrary
 magic functions in ``extensions``.
+
 """
 import logging
 import sys
