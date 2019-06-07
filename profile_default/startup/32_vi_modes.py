@@ -36,17 +36,13 @@ From the `source code`_::
 .. _source-code: https://python-prompt-toolkit.readthedocs.io/en/stable/pages/reference.html#module-prompt_toolkit.key_binding
 
 """
-import logging
-
 from IPython import get_ipython
 from prompt_toolkit.enums import DEFAULT_BUFFER
 from prompt_toolkit.filters import HasFocus, ViInsertMode
 from prompt_toolkit.key_binding.defaults import load_key_bindings
 from prompt_toolkit.key_binding.vi_state import InputMode
 
-# from profile_default.util.logger import 
-
-logging.getLogger(name=__name__)
+from profile_default.util import log
 
 
 def switch_to_navigation_mode(event):
@@ -139,8 +135,10 @@ def check_defaults():
 if __name__ == "__main__":
     _ip = get_ipython()
 
-    level = logging.WARNING
-    # logger = _setup_logging(level, shell=_ip)
+    level = 20
+    log = logging.getLogger(name=__name__)
+
+    logger = log.stream_logger(log_level=level, logger=log)
 
     if getattr(_ip, 'pt_app', None):
         kb = _ip.pt_app.key_bindings

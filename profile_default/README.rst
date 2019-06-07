@@ -12,6 +12,9 @@ different places, seemingly to muck around.
 .. ipython::
 
    In [28]: ip.init_prompt_toolkit_cli??
+
+.. code-block:: none
+
    Signature: ip.init_prompt_toolkit_cli()
    Docstring: <no docstring>
    Source:
@@ -66,24 +69,21 @@ everything here works.
 
 Except DynamicStyle. No idea. So I went hunting.
 
+.. code-block:: none
 
-▼+DynamicStyle : class
-   +__init__(self, get_style) : member
-   +get_attrs_for_style_str(self, style_str, default=DEFAULT_ATTRS) : member
-   +invalidation_hash(self) : member
-   +style_rules(self) : member
+   ▼+DynamicStyle : class
+      +__init__(self, get_style) : member
+      +get_attrs_for_style_str(self, style_str, default=DEFAULT_ATTRS) : member
+      +invalidation_hash(self) : member
+      +style_rules(self) : member
 
-Found  in this dir.
+Found in this dir.
 
 .. code:: vim
 
    echo fnamemodify(expand('%'), ':p')
 
 Outputted the following. Also just revelling in getting that correct on the first try.
-
-/data/data/com.termux/files/home/virtualenvs/utilities/lib/python3.7/site-packages/prompt_toolkit/styles/base.py
-
-
 
 01-17-19
 
@@ -162,9 +162,9 @@ This is implemented in IPython as follows.
    ('pygments.outpromptnum', '#ansibrightred bold'),
    ('pygments.comment', '#ffffff')]
 
-   [ins] In [19]:
 
 Takeaway
-~~~~~~~~
+--------
+
 To view all currently set colors in IPython, view
 ``ip.style.get_style().style_rules``

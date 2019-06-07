@@ -7,16 +7,16 @@ import logging
 import os
 import sys
 import traceback
+import warnings
 
 import IPython
 from IPython import get_ipython
-
-logger = logging.getLogger(name=__name__)
 
 
 def _setup_logging(log_level=logging.WARNING,
                    time_format='%(asctime)s - %(name)s - %(message)s'):
     """Enable logging. TODO: Need to add more to the formatter."""
+    logger = logging.getLogger(name=__name__)
     logger.setLevel(log_level)
 
     stream_handler_instance = logging.StreamHandler(sys.stdout)
@@ -27,8 +27,13 @@ def _setup_logging(log_level=logging.WARNING,
     return logger
 
 
-def path_logger():
-    """Trying to put all of these functions in 1 spot."""
+def path_logger(logger=None):
+    """Trying to put all of these functions in 1 spot. DEPRECATED."""
+    warnings.warn('This function is deprecated.')
+
+    if logger is None:
+        logger = logging.getLogger(name=__name__)
+
     logger.setLevel(logging.WARNING)
 
     handler = logging.StreamHandler(sys.stdout)
@@ -39,7 +44,7 @@ def path_logger():
     return logger
 
 
-def stream_logging(level=logging.INFO, msg_format=None, logger=None):
+def stream_logger(log_level=logging.INFO, msg_format=None, logger=None):
     """Set up a :class:`~logging.Logger()` instance, add a stream handler.
 
     Should do some validation on the log level there. There's a really
@@ -69,6 +74,13 @@ def stream_logging(level=logging.INFO, msg_format=None, logger=None):
     """
     handler = logging.StreamHandler(stream=sys.stderr)
 
+    if isinstance(log_level, int):
+        level = log_level
+    # TODO: Come up with else. What if they pass a string?
+
+    if logger is None:
+        logger = logging.getLogger(name=__name__)
+
     logger.setLevel(level)
     handler.setLevel(level)
 
@@ -84,7 +96,7 @@ def stream_logging(level=logging.INFO, msg_format=None, logger=None):
     return logger
 
 
-def file_logger(filename, shell=None, log_level=logging.INFO, msg_format=None):
+def file_logger(filename, logger=None, shell=None, log_level=logging.INFO, msg_format=None):
     r"""Logging that emits :class:`logging.LogRecord`s to `filename`.
 
     Parameters
@@ -105,20 +117,20 @@ def file_logger(filename, shell=None, log_level=logging.INFO, msg_format=None):
     logger : :class:`logging.Logger()` instance
 
     """
-    assert isinstance(shell, IPython.core.interactiveshell.InteractiveShell) \
-        or isinstance(shell, None)
+    assert isinstance(shell, (IPython.core.interactiveshell.InteractiveShell, None))
 
     if shell is not None:
-        logdir = shell.profile_dir.log_dir
-    # TODO: need an else fallback if shell is not none but filename is
-    else:
         shell = get_ipython()
-        logdir = shell.profile_dir.log_dir
+
+    logdir = shell.profile_dir.log_dir
 
     log_file = os.path.join(logdir, filename)
     handler = logging.FileHandler(log_file)
 
     handler.setLevel(log_level)
+    if logger is None:
+        logger = logging.getLogger(name=__name__)
+
     logger.setLevel(log_level)
 
     if msg_format is not None:

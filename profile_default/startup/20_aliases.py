@@ -101,7 +101,6 @@ Yet to be implemented
   checks for whether the executable is on the :envvar:`PATH` all in one swoop.
 
 """
-import logging
 from shutil import which
 
 # from prompt_toolkit import print_formatted_text as print
@@ -110,12 +109,11 @@ from IPython import get_ipython
 from IPython.core.alias import AliasError
 
 from profile_default.util.machine import Platform
-from profile_default.util import logger
+from profile_default.util import log
 
-LOGGER = logger.stream_logging()
-
-
-
+LOGGER = log.stream_logger(logger=logging.getLogger(name=__name__),
+                           msg_format='%(asctime)s %(levelname)s %(message)s',
+                           log_level=20)
 
 
 def linux_specific_aliases(_ip=None):

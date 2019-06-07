@@ -17,8 +17,8 @@ The class can be easily initialized with::
 
 .. i ran a doctest and got the following...what does a negative number mean?
 .. Testing started at 11:37 PM ...
-.. C:\Users\faris\Anaconda3\envs\dynamic\python.exe C:\Users\faris\AppData\Local\JetBrains\Toolbox\apps\PyCharm-P\ch-0\191.7479.10\helpers\pycharm\docrunner.py C:/Users/faris/projects/dynamic_ipython/profile_default/util/machine.py
-.. C:\Users\faris\AppData\Local\JetBrains\Toolbox\apps\PyCharm-P\ch-0\191.7479.10\helpers\pycharm\docrunner.py:1: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+.. C:\\Users\\faris\\Anaconda3\\envs\\dynamic\\python.exe C:\\Users\\faris\\AppData\\Local\\JetBrains\\Toolbox\\apps\\PyCharm-P\\ch-0\\191.7479.10\\helpers\\pycharm\\docrunner.py C:/Users/faris/projects/dynamic_ipython/profile_default/util/machine.py
+.. C:\\Users\\faris\\AppData\\Local\\JetBrains\\Toolbox\\apps\\PyCharm-P\\ch-0\\191.7479.10\\helpers\\pycharm\\docrunner.py:1: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
 .. import imp
 .. Process finished with exit code -1073741571 (0xC00000FD)
 
@@ -41,9 +41,9 @@ import sys
 from IPython import get_ipython
 from prompt_toolkit.utils import is_conemu_ansi, is_windows
 
-from profile_default.util import logger
+from profile_default.util import log
 
-LOGGER = logger._setup_logging()
+LOGGER = log._setup_logging()
 
 
 class Platform:
