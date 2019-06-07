@@ -44,7 +44,7 @@ def path_logger(logger=None):
     return logger
 
 
-def stream_logger(log_level=logging.INFO, msg_format=None, logger=None):
+def stream_logger(logger=None, log_level=logging.INFO, msg_format=None):
     """Set up a :class:`~logging.Logger()` instance, add a stream handler.
 
     Should do some validation on the log level there. There's a really

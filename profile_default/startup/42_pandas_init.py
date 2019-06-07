@@ -30,7 +30,7 @@ Here's an interesting blurb from pandas/docs/conf.py::
 import logging
 import sys
 
-from profile_default.util import logger
+from profile_default.util import module_log
 
 
 def start():
@@ -74,7 +74,8 @@ if __name__ == '__main__':
     if sys.version_info < (3, 6, 0):
         sys.exit("This module requires Python 3.6+")
 
-    LOGGER = logger.stream_logging()
+    log = logging.getLogger(name=__name__)
+    LOGGER = module_log.stream_logger(logger=log, log_level=logging.INFO)
 
     try:
         import pandas as pd

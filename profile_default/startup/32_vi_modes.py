@@ -42,7 +42,7 @@ from prompt_toolkit.filters import HasFocus, ViInsertMode
 from prompt_toolkit.key_binding.defaults import load_key_bindings
 from prompt_toolkit.key_binding.vi_state import InputMode
 
-from profile_default.util import log
+from profile_default.util import module_log
 
 
 def switch_to_navigation_mode(event):
@@ -138,7 +138,7 @@ if __name__ == "__main__":
     level = 20
     log = logging.getLogger(name=__name__)
 
-    logger = log.stream_logger(log_level=level, logger=log)
+    logger = module_log.stream_logger(log_level=level, logger=log)
 
     if getattr(_ip, 'pt_app', None):
         kb = _ip.pt_app.key_bindings

@@ -41,9 +41,9 @@ import sys
 from IPython import get_ipython
 from prompt_toolkit.utils import is_conemu_ansi, is_windows
 
-from profile_default.util import log
+from profile_default.util import module_log
 
-LOGGER = log._setup_logging()
+LOGGER = module_log.stream_logger()
 
 
 class Platform:
