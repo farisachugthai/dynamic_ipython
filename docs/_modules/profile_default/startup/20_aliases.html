@@ -1,0 +1,556 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>profile_default.startup.20_aliases &#8212; Dynamic IPython 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/C:\Users\faris\projects\dynamic_ipython\docs\source\_static\pyramid.css_t" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for profile_default.startup.20_aliases</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;File for all shell aliases.</span>
+
+<span class="sd">===============</span>
+<span class="sd">IPython Aliases</span>
+<span class="sd">===============</span>
+
+<span class="sd">.. module:: aliases</span>
+<span class="sd">    :synopsis: Create aliases for :mod:`IPython` to ease use as a system shell.</span>
+
+<span class="sd">.. rubric:: Changelog - Mar 03, 2019</span>
+
+<span class="sd">    Moved git aliases into new :func:`common_aliases()`</span>
+
+<span class="sd">.. versionchanged:: May 18, 2019</span>
+
+<span class="sd">    IPython might&#39;ve deprecated |ip| function</span>
+<span class="sd">    :func:`MagicsManager.define_alias` and replaced it with</span>
+<span class="sd">    :func:`MagicsManager.register_alias`</span>
+
+<span class="sd">Overview</span>
+<span class="sd">========</span>
+
+<span class="sd">This module utilizes `_ip`, the global :mod:`IPython` |ip|</span>
+<span class="sd">instance, and fills the ``user_ns`` with common Linux idioms.</span>
+
+
+<span class="sd">Parameters</span>
+<span class="sd">==========</span>
+
+<span class="sd">When writing aliases, an ``%alias`` definition can take various string</span>
+<span class="sd">placeholders. As per the official documentation:</span>
+
+
+<span class="sd">.. topic:: ``%l`` parameter</span>
+
+<span class="sd">    You can use the ``%l`` specifier in an ``%alias`` definition to represent the</span>
+<span class="sd">    whole line when the alias is called.</span>
+
+<span class="sd">Meaning that it behaves similarly to the parameter ``$*`` in shells like eshell.</span>
+
+<span class="sd">The documentation goes on to say:</span>
+
+<span class="sd">.. ipython::</span>
+
+<span class="sd">    In [2]: %alias bracket echo &quot;Input in brackets: &lt;%l&gt;&quot;</span>
+<span class="sd">    In [3]: bracket hello world</span>
+<span class="sd">    Input in brackets: &lt;hello world&gt;</span>
+
+<span class="sd">Note that we quote when in the configuration file but when running alias</span>
+<span class="sd">interactively the syntax ``%alias alias_name cmd`` doesn&#39;t require quoting.</span>
+
+
+<span class="sd">Attributes</span>
+<span class="sd">==========</span>
+
+<span class="sd">_ip : |ip|</span>
+<span class="sd">    A global object representing the active IPython session.</span>
+<span class="sd">    Contains varying packages as well as the current global namespace.</span>
+<span class="sd">    Doesn&#39;t need to be defined in advance during an interactive session.</span>
+
+
+<span class="sd">Examples</span>
+<span class="sd">========</span>
+
+<span class="sd">This code creates a handful of platform-specific functions where each</span>
+<span class="sd">returns :ref:`user_aliases`. Realizing that this is also used in the</span>
+<span class="sd">:mod:`IPython.core.alias` implementation, the source code of the</span>
+<span class="sd">implementation has been provided for reference.</span>
+
+<span class="sd">.. ipython:: python</span>
+
+<span class="sd">    class AliasManager(Configurable):</span>
+
+<span class="sd">        default_aliases = List(default_aliases()).tag(config=True)</span>
+<span class="sd">        user_aliases = List(default_value=[]).tag(config=True)</span>
+<span class="sd">        shell = Instance(&#39;IPython.core.interactiveshell.InteractiveShellABC&#39;, allow_none=True)</span>
+
+<span class="sd">        def __init__(self, shell=None, **kwargs):</span>
+<span class="sd">            super(AliasManager, self).__init__(shell=shell, **kwargs)</span>
+<span class="sd">            # For convenient access</span>
+<span class="sd">            self.linemagics = self.shell.magics_manager.magics[&#39;line&#39;]</span>
+<span class="sd">            self.init_aliases()</span>
+
+
+<span class="sd">See Also</span>
+<span class="sd">========</span>
+
+<span class="sd">:mod:`IPython.core.alias`</span>
+<span class="sd">    Aliases file for IPython.</span>
+
+
+<span class="sd">Yet to be implemented</span>
+<span class="sd">=====================</span>
+
+<span class="sd">- ``ssh-day``</span>
+<span class="sd">- ``extract``</span>
+<span class="sd">- :command:`fzf` in its many invocations.</span>
+<span class="sd">- A function that wraps around :func:|ip|`.MagicsManager.define_alias()` and</span>
+<span class="sd">  checks for whether the executable is on the :envvar:`PATH` all in one swoop.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">shutil</span> <span class="k">import</span> <span class="n">which</span>
+
+<span class="kn">import</span> <span class="nn">IPython</span>
+<span class="kn">from</span> <span class="nn">IPython</span> <span class="k">import</span> <span class="n">get_ipython</span>
+<span class="kn">from</span> <span class="nn">IPython.core.alias</span> <span class="k">import</span> <span class="n">AliasError</span>
+
+<span class="kn">from</span> <span class="nn">profile_default.util.machine</span> <span class="k">import</span> <span class="n">Platform</span>
+<span class="kn">from</span> <span class="nn">profile_default.util</span> <span class="k">import</span> <span class="n">module_log</span>
+
+<span class="n">LOGGER</span> <span class="o">=</span> <span class="n">module_log</span><span class="o">.</span><span class="n">stream_logger</span><span class="p">(</span>
+    <span class="n">logger</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="vm">__name__</span><span class="p">),</span>
+    <span class="n">msg_format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> </span><span class="si">%(levelname)s</span><span class="s1"> </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span>
+    <span class="n">log_level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="linux_specific_aliases"><a class="viewcode-back" href="../../../profile_default.html#profile_default.startup.20_aliases.linux_specific_aliases">[docs]</a><span class="k">def</span> <span class="nf">linux_specific_aliases</span><span class="p">(</span><span class="n">_ip</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Add Linux specific aliases.</span>
+
+<span class="sd">    Aliases that have either:</span>
+
+<span class="sd">        * Only been tested on Linux</span>
+<span class="sd">        * Only natively exist on Linux</span>
+<span class="sd">        * Clobber an existing Windows command (cmd in particular)</span>
+
+<span class="sd">    Convenience packages exist such as ConEmu or Cmder which allow a large</span>
+<span class="sd">    number of GNU/Linux built-ins to exist on Windows, and as a result, this</span>
+<span class="sd">    list may not be comprehensive.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    _ip : |ip|</span>
+<span class="sd">        The global instance of :mod:`IPython`.</span>
+
+
+<span class="sd">    Below is the source code for the function that is invoked here.</span>
+
+<span class="sd">    .. if the undefined self.shell kills things then just don&#39;t make this</span>
+<span class="sd">    .. an executable code block</span>
+
+<span class="sd">    .. code-block:: python3</span>
+
+<span class="sd">        def define_alias(self, name, cmd):</span>
+<span class="sd">            # Define a new alias after validating it.</span>
+<span class="sd">            # This will raise an :exc:`AliasError` if there are validation</span>
+<span class="sd">            # problems.</span>
+<span class="sd">            caller = Alias(shell=self.shell, name=name, cmd=cmd)</span>
+<span class="sd">            self.shell.magics_manager.register_function(caller, magic_kind=&#39;line&#39;,</span>
+<span class="sd">            magic_name=name)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    _ip.user_aliases : list of (&#39;alias&#39;, &#39;system command&#39;) tuples</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_user_aliases</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s1">&#39;ag&#39;</span><span class="p">,</span> <span class="s1">&#39;ag --hidden --color %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;cs&#39;</span><span class="p">,</span> <span class="s1">&#39;cd </span><span class="si">%s</span><span class="s1"> &amp;&amp; ls -F --color=always </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;cp&#39;</span><span class="p">,</span> <span class="s1">&#39;cp -iv %l&#39;</span><span class="p">),</span>  <span class="c1"># cp mv mkdir and rmdir are all overridden</span>
+        <span class="p">(</span><span class="s1">&#39;dus&#39;</span><span class="p">,</span> <span class="s1">&#39;du -d 1 -h %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;echo&#39;</span><span class="p">,</span> <span class="s1">&#39;echo -e %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gpip&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;export PIP_REQUIRE_VIRTUALENV=0; python -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 &gt; /dev/null&#39;</span>
+         <span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gpip2&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;export PIP_REQUIRE_VIRTUALENV=0; python2 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 &gt; /dev/null&#39;</span>
+         <span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gpip3&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;export PIP_REQUIRE_VIRTUALENV=0; python3 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 &gt; /dev/null&#39;</span>
+         <span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;head&#39;</span><span class="p">,</span> <span class="s1">&#39;head -n 30 %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;la&#39;</span><span class="p">,</span> <span class="s1">&#39;ls -AF --color=always %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;l&#39;</span><span class="p">,</span> <span class="s1">&#39;ls -CF --color=always %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;ll&#39;</span><span class="p">,</span> <span class="s1">&#39;ls -AlF --color=always %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;ls&#39;</span><span class="p">,</span> <span class="s1">&#39;ls -F --color=always %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;lt&#39;</span><span class="p">,</span> <span class="s1">&#39;ls -Altcr --color=always %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;mk&#39;</span><span class="p">,</span> <span class="s1">&#39;mkdir -pv %l &amp;&amp; cd %l&#39;</span><span class="p">),</span>  <span class="c1"># check if this works. only mkdir</span>
+        <span class="p">(</span><span class="s1">&#39;mkdir&#39;</span><span class="p">,</span> <span class="s1">&#39;mkdir -pv %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;mv&#39;</span><span class="p">,</span> <span class="s1">&#39;mv -iv %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;nman&#39;</span><span class="p">,</span> <span class="s1">&#39;nvim -c &quot;Man %l&quot; -c&quot;wincmd T&quot;&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="s1">&#39;fc -s&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;redo&#39;</span><span class="p">,</span> <span class="s1">&#39;fc -s&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;rm&#39;</span><span class="p">,</span> <span class="s1">&#39;rm -v %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;rmdir&#39;</span><span class="p">,</span> <span class="s1">&#39;rmdir -v %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;profile_default&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;cd ~/projects/dotfiles/unix/.ipython/profile_default/startup&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;startup&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;cd ~/projects/dotfiles/unix/.ipython/profile_default/startup&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;tail&#39;</span><span class="p">,</span> <span class="s1">&#39;tail -n 30 %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;tre&#39;</span><span class="p">,</span> <span class="s1">&#39;tree -ashFC -I .git -I __pycache__ --filelimit 25&#39;</span><span class="p">),</span>
+    <span class="p">]</span>
+    <span class="k">return</span> <span class="n">_user_aliases</span></div>
+
+
+<div class="viewcode-block" id="common_aliases"><a class="viewcode-back" href="../../../profile_default.html#profile_default.startup.20_aliases.common_aliases">[docs]</a><span class="k">def</span> <span class="nf">common_aliases</span><span class="p">(</span><span class="n">_ip</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Add aliases common to all OSes. Mostly Git aliases.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    _ip : |ip|</span>
+<span class="sd">        The global instance of IPython.</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    _ip.user_aliases : List of tuples</span>
+<span class="sd">        User aliases.</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_user_aliases</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff --staged --stat %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;ga&#39;</span><span class="p">,</span> <span class="s1">&#39;git add %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;ga.&#39;</span><span class="p">,</span> <span class="s1">&#39;git add .&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gar&#39;</span><span class="p">,</span> <span class="s1">&#39;git add --renormalize %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gb&#39;</span><span class="p">,</span> <span class="s1">&#39;git branch -a %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gci&#39;</span><span class="p">,</span> <span class="s1">&#39;git commit %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gcia&#39;</span><span class="p">,</span> <span class="s1">&#39;git commit --amend %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gcid&#39;</span><span class="p">,</span> <span class="s1">&#39;git commit --date=%l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gciad&#39;</span><span class="p">,</span> <span class="s1">&#39;git commit --amend --date=%l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gcl&#39;</span><span class="p">,</span> <span class="s1">&#39;git clone %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gcls&#39;</span><span class="p">,</span> <span class="s1">&#39;git clone --depth 1 %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gco&#39;</span><span class="p">,</span> <span class="s1">&#39;git checkout %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gcob&#39;</span><span class="p">,</span> <span class="s1">&#39;git checkout -b %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gd&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gds&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff --staged %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gds2&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff --staged --stat %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gdt&#39;</span><span class="p">,</span> <span class="s1">&#39;git difftool %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gf&#39;</span><span class="p">,</span> <span class="s1">&#39;git fetch --all&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;git&#39;</span><span class="p">,</span> <span class="s1">&#39;git %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;git hist&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;git log --pretty=&quot;format:%h </span><span class="si">%a</span><span class="s1">d | </span><span class="si">%d</span><span class="s1"> [</span><span class="si">%a</span><span class="s1">n]&quot; --graph --date=short &#39;</span>
+         <span class="s1">&#39;--branches --abbrev-commit --oneline %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;git last&#39;</span><span class="p">,</span> <span class="s1">&#39;git log -1 HEAD %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;git staged&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff --cached %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;git rel&#39;</span><span class="p">,</span> <span class="s1">&#39;git rev-parse --show-prefix&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;git root&#39;</span><span class="p">,</span> <span class="s1">&#39;git rev-parse --show-toplevel&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;git unstage&#39;</span><span class="p">,</span> <span class="s1">&#39;git reset HEAD&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;git unstaged&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gl&#39;</span><span class="p">,</span> <span class="s1">&#39;git log %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;glo&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;git log --graph --decorate --abbrev-commit --oneline --branches --all&#39;</span>
+         <span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gls&#39;</span><span class="p">,</span> <span class="s1">&#39;git ls-tree&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gm&#39;</span><span class="p">,</span> <span class="s1">&#39;git merge --no-ff %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gmm&#39;</span><span class="p">,</span> <span class="s1">&#39;git merge master&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gmt&#39;</span><span class="p">,</span> <span class="s1">&#39;git mergetool %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gp&#39;</span><span class="p">,</span> <span class="s1">&#39;git pull --all&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gpo&#39;</span><span class="p">,</span> <span class="s1">&#39;git pull origin&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gpom&#39;</span><span class="p">,</span> <span class="s1">&#39;git pull origin master&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gpu&#39;</span><span class="p">,</span> <span class="s1">&#39;git push&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gr&#39;</span><span class="p">,</span> <span class="s1">&#39;git remote -v&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gs&#39;</span><span class="p">,</span> <span class="s1">&#39;git status&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gsh&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gshp&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash pop&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gshl&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash list&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gshd&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash drop&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gshc&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash clear&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gsha&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash apply&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gst&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff --stat %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gt&#39;</span><span class="p">,</span> <span class="s1">&#39;git tag --list&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;lswitch&#39;</span><span class="p">,</span> <span class="s1">&#39;legit switch&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;lsync&#39;</span><span class="p">,</span> <span class="s1">&#39;legit sync&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;lpublish&#39;</span><span class="p">,</span> <span class="s1">&#39;legit publish&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;lunpublish&#39;</span><span class="p">,</span> <span class="s1">&#39;legit unpublish&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;lundo&#39;</span><span class="p">,</span> <span class="s1">&#39;legit undo&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;lbranches&#39;</span><span class="p">,</span> <span class="s1">&#39;legit branches&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;xx&#39;</span><span class="p">,</span> <span class="s1">&#39;quit&#39;</span><span class="p">),</span>  <span class="c1"># this is a sweet one</span>
+        <span class="p">(</span><span class="s1">&#39;..&#39;</span><span class="p">,</span> <span class="s1">&#39;cd ..&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;...&#39;</span><span class="p">,</span> <span class="s1">&#39;cd ../..&#39;</span><span class="p">),</span>
+    <span class="p">]</span>
+    <span class="k">return</span> <span class="n">_user_aliases</span></div>
+
+
+<div class="viewcode-block" id="windows_aliases"><a class="viewcode-back" href="../../../profile_default.html#profile_default.startup.20_aliases.windows_aliases">[docs]</a><span class="k">def</span> <span class="nf">windows_aliases</span><span class="p">(</span><span class="n">_ip</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Aliases for Windows OSes.</span>
+
+<span class="sd">    Has only been tested on Windows 10 in a heavily configured environment.</span>
+
+<span class="sd">    Niceties such as Git for Windows, ag-silversearcher, ripgrep,</span>
+<span class="sd">    ConEmu and others have been added.</span>
+
+<span class="sd">    The minimum number of assumptions possible have been made; however, note</span>
+<span class="sd">    that this section is still under development and frequently changes.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        The environment variable :envvar:`COMSPEC` is checked to determine the</span>
+<span class="sd">        default shell and it is assumed the user is running IPython from there</span>
+<span class="sd">        which may not always be true.</span>
+
+<span class="sd">    .. code-block:: powershell</span>
+
+<span class="sd">        Alias           rp --&gt; Remove-ItemProperty</span>
+<span class="sd">        Alias           rsn --&gt; Remove-PSSession</span>
+<span class="sd">        Alias           rv --&gt; Remove-Variable</span>
+<span class="sd">        Alias           rvpa --&gt; Resolve-Path</span>
+<span class="sd">        Alias           sajb --&gt; Start-Job</span>
+<span class="sd">        Alias           sal --&gt; Set-Alias</span>
+<span class="sd">        Alias           saps --&gt; Start-Process</span>
+<span class="sd">        Alias           sasv --&gt; Start-Service</span>
+<span class="sd">        Alias           sbp --&gt; Set-PSBreakpoint</span>
+<span class="sd">        Alias           select --&gt; Select-Object</span>
+<span class="sd">        Alias           set --&gt; Set-Variable</span>
+<span class="sd">        Alias           si --&gt; Set-Item</span>
+<span class="sd">        Alias           sl --&gt; Set-Location</span>
+<span class="sd">        Alias           sleep --&gt; Start-Sleep</span>
+<span class="sd">        Alias           sls --&gt; Select-String</span>
+<span class="sd">        Alias           sort --&gt; Sort-Object</span>
+<span class="sd">        Alias           sp --&gt; Set-ItemProperty</span>
+<span class="sd">        Alias           spjb --&gt; Stop-Job</span>
+<span class="sd">        Alias           spps --&gt; Stop-Process</span>
+<span class="sd">        Alias           spsv --&gt; Stop-Service</span>
+<span class="sd">        Alias           start --&gt; Start-Process</span>
+<span class="sd">        Alias           stz --&gt; Set-TimeZone</span>
+<span class="sd">        Alias           sv --&gt; Set-Variable</span>
+<span class="sd">        Alias           tee --&gt; Tee-Object</span>
+<span class="sd">        Alias           type --&gt; Get-Content</span>
+<span class="sd">        Alias           where --&gt; Where-Object</span>
+<span class="sd">        Alias           wjb --&gt; Wait-Job</span>
+<span class="sd">        Alias           write --&gt; Write-Output</span>
+
+<span class="sd">    Also I felt really good about the way I reformatted that!</span>
+
+<span class="sd">    .. code-block:: vim</span>
+
+<span class="sd">        :&#39;&lt;,&#39;&gt;s/^\W/(&#39;/</span>
+<span class="sd">        :&#39;&lt;,&#39;&gt;s/ --&gt; /&#39;, &#39;/</span>
+<span class="sd">        :&#39;&lt;,&#39;&gt;s/$/&#39;),</span>
+<span class="sd">        gv&gt;</span>
+<span class="sd">        &quot; Realize that the indentation is all out of whack and let ALE deal</span>
+<span class="sd">        :w</span>
+
+<span class="sd">    That&#39;s some non-trivial stuff right there! First try on all 4 of them!</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_ip</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s1">&#39;copy&#39;</span><span class="p">,</span> <span class="s1">&#39;copy&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;ddir&#39;</span><span class="p">,</span> <span class="s1">&#39;dir /ad /on&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;ldir&#39;</span><span class="p">,</span> <span class="s1">&#39;dir /ad /on&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;mklink&#39;</span><span class="p">,</span> <span class="s1">&#39;mklink&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;move&#39;</span><span class="p">,</span> <span class="s1">&#39;move&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;mv&#39;</span><span class="p">,</span> <span class="s1">&#39;move&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;ren&#39;</span><span class="p">,</span> <span class="s1">&#39;ren&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;rmdir&#39;</span><span class="p">,</span> <span class="s1">&#39;rmdir&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;rp&#39;</span><span class="p">,</span> <span class="s1">&#39;Remove-ItemProperty&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;rsn&#39;</span><span class="p">,</span> <span class="s1">&#39;Remove-PSSession&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;rv&#39;</span><span class="p">,</span> <span class="s1">&#39;Remove-Variable&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;rvpa&#39;</span><span class="p">,</span> <span class="s1">&#39;Resolve-Path&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;sajb&#39;</span><span class="p">,</span> <span class="s1">&#39;Start-Job&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;sal&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-Alias&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;saps&#39;</span><span class="p">,</span> <span class="s1">&#39;Start-Process&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;sasv&#39;</span><span class="p">,</span> <span class="s1">&#39;Start-Service&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;sbp&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-PSBreakpoint&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;select&#39;</span><span class="p">,</span> <span class="s1">&#39;Select-Object&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;set&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-Variable&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;si&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-Item&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;sl&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-Location&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;sleep&#39;</span><span class="p">,</span> <span class="s1">&#39;Start-Sleep&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;sls&#39;</span><span class="p">,</span> <span class="s1">&#39;Select-String&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;sort&#39;</span><span class="p">,</span> <span class="s1">&#39;Sort-Object&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;sp&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-ItemProperty&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;spjb&#39;</span><span class="p">,</span> <span class="s1">&#39;Stop-Job&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;spps&#39;</span><span class="p">,</span> <span class="s1">&#39;Stop-Process&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;spsv&#39;</span><span class="p">,</span> <span class="s1">&#39;Stop-Service&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;start&#39;</span><span class="p">,</span> <span class="s1">&#39;Start-Process&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;stz&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-TimeZone&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;sv&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-Variable&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;tee&#39;</span><span class="p">,</span> <span class="s1">&#39;Tee-Object&#39;</span><span class="p">),</span>
+        <span class="p">(</span>
+            <span class="s1">&#39;tree&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;tree /F /A %l&#39;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">,</span> <span class="s1">&#39;Get-Content&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;where&#39;</span><span class="p">,</span> <span class="s1">&#39;Where-Object&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;wjb&#39;</span><span class="p">,</span> <span class="s1">&#39;Wait-Job&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;write&#39;</span><span class="p">,</span> <span class="s1">&#39;Write-Output&#39;</span><span class="p">),</span>
+    <span class="p">]</span>
+    <span class="k">return</span> <span class="n">_ip</span><span class="o">.</span><span class="n">user_aliases</span></div>
+
+
+<span class="k">def</span> <span class="nf">__setup_fzf</span><span class="p">(</span><span class="n">user_aliases</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Needs a good deal of work.</span>
+
+<span class="sd">    On second thought this function has some potential. Or at least it</span>
+<span class="sd">    jogged a thought in my brain.</span>
+
+<span class="sd">    A good idea would be to make a function that&#39;s implemented as a decorator,</span>
+<span class="sd">    so we&#39;ll need to import functools.wrapped, and have that decorator run</span>
+<span class="sd">    shutil.which on an external command. If it exists continue with the</span>
+<span class="sd">    function and alias it. If it doesn&#39;t, then return None.</span>
+
+<span class="sd">    This function was useful for pointing out that the decorator should allow</span>
+<span class="sd">    for multiple arguments.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">which</span><span class="p">(</span><span class="s1">&#39;fzf&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">which</span><span class="p">(</span><span class="s1">&#39;rg&#39;</span><span class="p">):</span>
+        <span class="n">user_aliases</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+            <span class="p">(</span><span class="s1">&#39;fzf&#39;</span><span class="p">,</span> <span class="s1">&#39;$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS&#39;</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">which</span><span class="p">(</span><span class="s1">&#39;fzf&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">which</span><span class="p">(</span><span class="s1">&#39;ag&#39;</span><span class="p">):</span>
+        <span class="n">user_aliases</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+            <span class="p">(</span><span class="s1">&#39;fzf&#39;</span><span class="p">,</span> <span class="s1">&#39;$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS&#39;</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">user_aliases</span>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../profile_default.html#profile_default.startup.20_aliases.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Set up aliases for the user namespace for IPython.&quot;&quot;&quot;</span>
+    <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">_ip</span><span class="p">,</span> <span class="n">IPython</span><span class="o">.</span><span class="n">terminal</span><span class="o">.</span><span class="n">interactiveshell</span><span class="o">.</span><span class="n">InteractiveShell</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Are you running in IPython?&#39;</span><span class="p">)</span>
+
+    <span class="n">user_aliases</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">machine</span> <span class="o">=</span> <span class="n">Platform</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">machine</span><span class="o">.</span><span class="n">is_linux</span><span class="p">:</span>
+
+        <span class="c1"># Now let&#39;s get the Linux aliases</span>
+        <span class="n">user_aliases</span> <span class="o">+=</span> <span class="n">linux_specific_aliases</span><span class="p">(</span><span class="n">_ip</span><span class="p">)</span>
+        <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;The number of available aliases after linux aliases&quot;</span>
+                    <span class="s2">&quot; is: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">user_aliases</span><span class="p">)))</span>
+
+        <span class="c1"># if platform.machine() == &quot;aarch64&quot;:</span>
+        <span class="c1"># user_aliases += termux_aliases(ip)</span>
+        <span class="c1"># pass</span>
+
+    <span class="k">elif</span> <span class="n">machine</span><span class="o">.</span><span class="n">is_conemu</span><span class="p">:</span>  <span class="c1"># should check for &#39;nix-tools as an env var</span>
+        <span class="n">user_aliases</span> <span class="o">+=</span> <span class="n">windows_aliases</span><span class="p">(</span><span class="n">_ip</span><span class="p">)</span>
+
+    <span class="n">user_aliases</span> <span class="o">+=</span> <span class="n">common_aliases</span><span class="p">(</span><span class="n">_ip</span><span class="p">)</span>
+
+    <span class="n">__setup_fzf</span><span class="p">(</span><span class="n">user_aliases</span><span class="p">)</span>
+
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;The number of available user aliases is: &quot;</span>
+                <span class="s2">&quot;&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">user_aliases</span><span class="p">)))</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">user_aliases</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">_ip</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">define_alias</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">except</span> <span class="n">AliasError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+<h3><a href="../../../index.html">Table of Contents</a></h3>
+<p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../startup.html">1. Startup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ipython_keybindings.html">2. Keybindings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../magics.html">3. Built-in Magics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../custom_magics.html">4. Writing Your Own Magics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../directive.html">5. Sphinx Directives</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rich_output.html">6. Rich Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pygments.html">7. Pygments highlighting</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../API.html">API</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright (C) 2018-2019 Faris Chugthai.
+    </div>
+  </body>
+</html>

@@ -20,15 +20,34 @@ import sys
 
 from profile_default.__about__ import __version__
 
-ROOT = Path('..')
-PD = ROOT.joinpath('profile_default')
+LOGGER = logging.getLogger(name=__name__)
+LOGGER.setLevel(level=logging.DEBUG)
+
+
+def _path_build(root, suffix, validate=True):
+    """Join parts of paths together and ensure they exist. Log nonexistant paths."""
+    if validate:
+        if isinstance(root, str):
+            root = Path(root)
+
+        if root.joinpath(suffix).exists():
+            new = root.joinpath(suffix)
+            return new
+        else:
+            LOGGER.error('%(root)s: does not exist. Returning None.')
+
+    else:
+        return root.joinpath(suffix)
+
+
+ROOT = Path('../..').resolve()
+# TODO: Build paths using function above.
+PD = _path_build(ROOT, 'profile_default')
 STARTUP = PD.joinpath('startup')
 
-logger = logging.getLogger(name=__name__)
-logger.setLevel(level=logging.WARNING)
-
-CONF_PATH = os.path.dirname(os.path.abspath(__file__))
-BUILD_PATH = os.path.join(CONF_PATH, 'build')
+DOCS_DIR = _path_build(ROOT, 'docs')
+BUILD_DIR = DOCS_DIR.joinpath('build')
+CONF_PATH = _path_build(DOCS_DIR, 'source')
 
 sys.path.insert(0, os.path.abspath('.'))
 sys.path.insert(0, os.path.abspath(ROOT))
@@ -185,9 +204,8 @@ latex_documents = [
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [(master_doc, 'site-packages', 'site-packages Documentation', [
-    author
-], 1)]
+man_pages = [(master_doc, 'site-packages', 'site-packages Documentation',
+              [author], 1)]
 
 # -- Options for Texinfo output ----------------------------------------------
 
@@ -245,8 +263,13 @@ ipython_warning_is_error = False
 
 
 def setup(app):
-    """Add pyramid CSS to the docs."""
+    """Add pyramid CSS to the docs.
+
+    I thought we had a problem with abspath previous to this? Well regardless
+    drop it. Plus we have pathlib all over so simply utilize that.
+
+    """
     custom_css = os.path.abspath(
         os.path.join(CONF_PATH, '_static', '', 'pyramid.css_t'))
-    logger.debug(custom_css)
+    LOGGER.debug(custom_css)
     app.add_stylesheet(custom_css)

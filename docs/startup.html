@@ -7,7 +7,7 @@
     <title>1. IPython Startup Scripts &#8212; Dynamic IPython 0.0.1 documentation</title>
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="_static/C:\Users\faris\projects\dynamic_ipython\docs\_static\pyramid.css_t" />
+    <link rel="stylesheet" type="text/css" href="_static/C:\Users\faris\projects\dynamic_ipython\docs\source\_static\pyramid.css_t" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
@@ -60,28 +60,48 @@
 <dd class="field-even"><p>Apr 15, 2019</p>
 </dd>
 </dl>
+<div class="section" id="startup-scripts">
+<h2>1.1. Startup Scripts<a class="headerlink" href="#startup-scripts" title="Permalink to this headline">¶</a></h2>
+<p>This repository hosts startup scripts that can be used during IPython’s startup.</p>
+<p>The scripts add well over 1000 aliases to the namespace, import commonly used
+modules, configure the data analysis library Pandas, add multiple application
+specific loggers, and more.</p>
+</div>
 <div class="section" id="indexed-scripts">
-<h2>1.1. Indexed Scripts<a class="headerlink" href="#indexed-scripts" title="Permalink to this headline">¶</a></h2>
-<p>As of Apr 15, 2019, the startup files present in <span class="xref std std-ref">profile_default/startup</span> are as follows:</p>
+<h2>1.2. Indexed Scripts<a class="headerlink" href="#indexed-scripts" title="Permalink to this headline">¶</a></h2>
+<p>As of Apr 15, 2019, the startup files present in <span class="xref std std-ref">profile_default/startup</span>
+are as follows:</p>
+<div class="section" id="configuration">
+<h3>1.2.1. Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h3>
 <p><a class="reference external" href="../../profile_default/startup/01_rehashx.py">01_rehashx.py</a></p>
 <p><a class="reference external" href="../../profile_default/startup/04_easy_import.py">04_easy_import.py</a></p>
 <p><a class="reference external" href="../../profile_default/startup/05_log.py">05_log.py</a></p>
 <p><a class="reference external" href="../../profile_default/startup/06_help_helpers.py">06_help_helpers.py</a></p>
 <p><a class="reference external" href="../../profile_default/startup/20_aliases.py">20_aliases.py</a></p>
-<p><a class="reference external" href="../../profile_default/startup/29_gruvbox.py">29_gruvbox.py</a></p>
-<p><a class="reference external" href="../../profile_default/startup/30_gruvbox.py">30_gruvbox.py</a></p>
 <p><a class="reference external" href="../../profile_default/startup/42_pandas_init.py">42_pandas_init.py</a></p>
 <p><a class="reference external" href="../../profile_default/startup/50_sysexception.py">50_sysexception.py</a></p>
+</div>
 <div class="section" id="rehash">
-<h3>1.1.1. %rehash<a class="headerlink" href="#rehash" title="Permalink to this headline">¶</a></h3>
+<h3>1.2.2. %rehash<a class="headerlink" href="#rehash" title="Permalink to this headline">¶</a></h3>
 <p><a class="reference external" href="../../profile_default/startup/01_rehashx.py">01_rehashx.py</a></p>
 <p>The IPython magic <code class="docutils literal notranslate"><span class="pre">%rehash</span></code> allows you to reload all of your startup files
 and also adds system commands to the namespace!</p>
 <p>Insofar, I haven’t noticed any significant slowdown in startup time as a result
 of this, and it hugely eases utilizing IPython as a system shell.</p>
 </div>
+<div class="section" id="easy-import">
+<h3>1.2.3. Easy Import<a class="headerlink" href="#easy-import" title="Permalink to this headline">¶</a></h3>
+<p><span class="xref std std-ref">04_easy_import</span></p>
+<p>This module simply populates the IPython namespace with frequently used modules.
+A check is run to see if the user is running a new enough version of Python to
+utilize the python package Pynvim instead of Neovim.</p>
+</div>
+<div class="section" id="logging">
+<h3>1.2.4. Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h3>
+<p><span class="xref std std-ref">05_log</span></p>
+</div>
 <div class="section" id="convenience-functions">
-<h3>1.1.2. Convenience Functions<a class="headerlink" href="#convenience-functions" title="Permalink to this headline">¶</a></h3>
+<h3>1.2.5. Convenience Functions<a class="headerlink" href="#convenience-functions" title="Permalink to this headline">¶</a></h3>
 <p><span class="xref std std-ref">IPython</span> provides the functions <code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.Application.initialized()</span></code>
 and <code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.Application.instance()</span></code>. As a result, each script can easily
 implement the following as a check to ensure that the global IPython instance
@@ -131,7 +151,7 @@ on to the :meth:`__init__` method of the class upon instantiation.
 </div>
 </div>
 <div class="section" id="examples">
-<h3>1.1.3. Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
+<h3>1.2.6. Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
 <p>Create a singleton class using instance, and retrieve it:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">traitlets.config.configurable</span> <span class="k">import</span> <span class="n">SingletonConfigurable</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Foo</span><span class="p">(</span><span class="n">SingletonConfigurable</span><span class="p">):</span> <span class="k">pass</span>
@@ -150,8 +170,13 @@ on to the :meth:`__init__` method of the class upon instantiation.
 </div>
 <p>Type:      method</p>
 </div>
+<div class="section" id="writing-the-scripts">
+<h3>1.2.7. Writing the Scripts<a class="headerlink" href="#writing-the-scripts" title="Permalink to this headline">¶</a></h3>
+<p>This problem can be solved; however, with the function
+<a class="reference external" href="https://docs.python.org/3/library/importlib.html#importlib.import_module" title="(in Python v3.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">importlib.import_module()</span></code></a>.</p>
+</div>
 <div class="section" id="original">
-<h3>1.1.4. Original<a class="headerlink" href="#original" title="Permalink to this headline">¶</a></h3>
+<h3>1.2.8. Original<a class="headerlink" href="#original" title="Permalink to this headline">¶</a></h3>
 <p>This is the IPython startup directory</p>
 <p>.py and .ipy files in this directory will be run <em>prior</em> to any code or files specified
 via the exec_lines or exec_files configurables whenever you load this profile.</p>
@@ -182,7 +207,8 @@ with a prefix, e.g.:</p>
 <p class="caption"><span class="caption-text">Table of Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">1. Startup</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#indexed-scripts">1.1. Indexed Scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#startup-scripts">1.1. Startup Scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#indexed-scripts">1.2. Indexed Scripts</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="ipython_keybindings.html">2. Keybindings</a></li>
@@ -199,11 +225,16 @@ with a prefix, e.g.:</p>
   <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">1. IPython Startup Scripts</a><ul>
-<li><a class="reference internal" href="#indexed-scripts">1.1. Indexed Scripts</a><ul>
-<li><a class="reference internal" href="#rehash">1.1.1. %rehash</a></li>
-<li><a class="reference internal" href="#convenience-functions">1.1.2. Convenience Functions</a></li>
-<li><a class="reference internal" href="#examples">1.1.3. Examples</a></li>
-<li><a class="reference internal" href="#original">1.1.4. Original</a></li>
+<li><a class="reference internal" href="#startup-scripts">1.1. Startup Scripts</a></li>
+<li><a class="reference internal" href="#indexed-scripts">1.2. Indexed Scripts</a><ul>
+<li><a class="reference internal" href="#configuration">1.2.1. Configuration</a></li>
+<li><a class="reference internal" href="#rehash">1.2.2. %rehash</a></li>
+<li><a class="reference internal" href="#easy-import">1.2.3. Easy Import</a></li>
+<li><a class="reference internal" href="#logging">1.2.4. Logging</a></li>
+<li><a class="reference internal" href="#convenience-functions">1.2.5. Convenience Functions</a></li>
+<li><a class="reference internal" href="#examples">1.2.6. Examples</a></li>
+<li><a class="reference internal" href="#writing-the-scripts">1.2.7. Writing the Scripts</a></li>
+<li><a class="reference internal" href="#original">1.2.8. Original</a></li>
 </ul>
 </li>
 </ul>
