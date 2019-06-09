@@ -33,50 +33,28 @@ As of March 3rd, the files present are as follows:
 
 %rehashx
 --------
+
 `01_rehashx.py`_
 
 The :mod:`IPython` magic ``%rehashx`` allows you to reload all of your startup
-files. This is convenient when working with a new class based module, and the 
+files. This is convenient when working with a new class based module, and the
 ``%reset`` magic has wiped out all of your aliases.
 
 However the beautiful part of this magic:
 
 It adds every executable listed under the environment variable :envvar:`$PATH`.
- to the namespace!
+to the namespace!
 
-Therefore, the first script that runs in the atartup directory is a simple script
+Therefore, the first script that runs in the startup directory is a simple script
 that invokes ``%rehashx``.
 
 Insofar, I haven't noticed any significant slowdown in startup time as a result
 of this, and it hugely eases utilizing :mod:`IPython` as a system shell.
 
-.. other
-.. -----
-.. Sep 27, 2018:
-
-.. Wrote a macro with :ref:`%macro lazydl _i`, used ``%store lazydl`` to save it,
-.. then ran
-
-.. ipython::
-
-..    %store lazydl >> 30_macros_lazydl.py
-
-.. So that it persists for every :mod:`IPython` session. The char ``%`` is optional
-.. as this configuration has ``automagic`` enabled.
-
-.. It uses the :func:`input()`  to circumvent the fact that macros don't take
-.. command line arguments.
-
-.. todo:: Create an official docs section
-
-.. Official Docs
-.. --------------
-
-.. Development and Contributing
-.. This would be a good idea though.
 
 Convenience Functions
 -----------------------
+
 :ref:`IPython` provides the functions :func:`IPython.Application.initialized()`
 and :func:`IPython.Application.instance()`. As a result, each script can easily
 implement the following as a check to ensure that the global :mod:`IPython`
@@ -91,12 +69,6 @@ instance is running.
       if not Application.initialized():
          sys.exit()
 
-.. double check that what I'm saying below is true
-
-Unfortunately, ``from IPython import Application`` may be a feature of
-:mod:`IPython` 7.3, which at the time of writing was released 3 days ago.
-If you don't have this version of the package, you can alternatively run
-
 
 .. ipython:: python
 
@@ -107,11 +79,15 @@ If you don't have this version of the package, you can alternatively run
 .. ipython::
 
    In [114]: IPython.Application.initialized?
+
+.. code-block:: none
+
    Signature: IPython.Application.initialized()
    Docstring: Has an instance been created?
    File:      ~/miniconda3/lib/python3.7/site-packages/traitlets/config/configurable.py
    Type:      method
 
+.. ipython::
 
    In [115]: IPython.Application.instance?
 
@@ -140,20 +116,18 @@ Create a singleton class using instance, and retrieve it::
     >>> foo == Foo.instance()
     True
 
-Create a subclass that is retrived using the base class instance::
+Create a subclass that is retrieved using the base class instance::
 
     >>> class Bar(SingletonConfigurable): pass
     >>> class Bam(Bar): pass
     >>> bam = Bam.instance()
     >>> bam == Bar.instance()
     True
-File:      ~/miniconda3/lib/python3.7/site-packages/traitlets/config/configurable.py
-Type:      method
-
 
 
 Original
 ---------
+
 This is the IPython startup directory
 
 .py and .ipy files in this directory will be run *prior* to any code or

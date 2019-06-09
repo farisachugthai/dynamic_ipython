@@ -2,18 +2,24 @@
 # -*- coding: utf-8 -*-
 """Add a keybinding to IPython.
 
-Effectively adds :kbd:`j` :kbd:`k` as a way to switch from
-insert mode to normal mode, or as :mod:`prompt_toolkit` calls it, "navigation mode".
+====================================
+Keybindings and Toggling Insert Mode
+====================================
 
-Also displays how to integrate :mod:`prompt_toolkit` and :mod:`IPython` together well.
+Effectively adds :kbd:`j` :kbd:`k` as a way to switch from insert mode to
+normal mode, or as :mod:`prompt_toolkit` calls it, "navigation mode".
+
+Also displays how to integrate :mod:`prompt_toolkit` and :mod:`IPython`
+together well.
 
 :URL: https://ipython.readthedocs.io/en/stable/config/details.html#keyboard-shortcuts
 
-.. todo:: Add one in for <C-M-j> to go to Emacs mode?
+.. todo:: Add one in for :kbd:`C-M-j` to go to Emacs mode?
 
 Example Usage
---------------
-From the `source code`_::
+==============
+
+From the `source code`_:
 
 .. ipython:: python
 
@@ -36,11 +42,11 @@ From the `source code`_::
 .. _source-code: https://python-prompt-toolkit.readthedocs.io/en/stable/pages/reference.html#module-prompt_toolkit.key_binding
 
 """
-from IPython import get_ipython
 from prompt_toolkit.enums import DEFAULT_BUFFER
 from prompt_toolkit.filters import HasFocus, ViInsertMode
 from prompt_toolkit.key_binding.defaults import load_key_bindings
 from prompt_toolkit.key_binding.vi_state import InputMode
+from IPython import get_ipython
 
 from profile_default.util import module_log
 
@@ -69,7 +75,7 @@ def check_defaults():
         To my knowledge the keybindings you have available is every single
         one that prompt_toolkit ships with.
 
-    .. code-block::
+    .. code-block:: python3
 
         __all__ = [
             'load_key_bindings',
@@ -103,31 +109,31 @@ def check_defaults():
                 load_cpr_bindings(),
             ])
 
-        That's literally everything. IPython chooses to add their own stuff
-        during IPython.terminal.ptutil.create_ipython_shortcuts but if you
-        choose to create your own registry then you get access to everything.
+    That's literally everything. IPython chooses to add their own stuff
+    during IPython.terminal.ptutil.create_ipython_shortcuts but if you
+    choose to create your own registry then you get access to everything.
 
-        It might not be hard to bind to if we do it the same way we did with
-        that one pathlib.Path class.
+    It might not be hard to bind to if we do it the same way we did with
+    that one pathlib.Path class.
 
-        Literally::
+    Literally::
 
-            from IPython import get_ipython
-            from prompt_toolkit.key_binding import merge_key_bindings, KeyBindings
-            from prompt_toolkit.key_binding.defaults import load_key_bindings
+        from IPython import get_ipython
+        from prompt_toolkit.key_binding import merge_key_bindings, KeyBindings
+        from prompt_toolkit.key_binding.defaults import load_key_bindings
 
-            class KeyBindingsManager:
+        class KeyBindingsManager:
 
-                def __init__(self, shell=None):
-                    if _ip is None:
-                        _ip = get_ipython()
-                    self.registry = KeyBindings
+            def __init__(self, shell=None):
+                if _ip is None:
+                    _ip = get_ipython()
+                self.registry = KeyBindings
 
-        Once the user initializes that class, then your :class:`KeyBindings`
-        statement in the `__init__` func was execute and you'll have access
-        to everything. Cool!
+    Once the user initializes that class, then your :class:`KeyBindings`
+    statement in the `__init__` func was execute and you'll have access
+    to everything. Cool!
 
-        """
+    """
     registry = load_key_bindings()
     return registry.key_bindings
 
