@@ -1,0 +1,285 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>1.2. Jupyter &#8212; Dynamic IPython 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/C:\Users\faris\projects\dynamic_ipython\docs\source\_static\pyramid.css_t" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="1.3. Extensions" href="extensions.html" />
+    <link rel="prev" title="1.1. Default IPython Profile and Startup Scripts" href="profile_default.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="extensions.html" title="1.3. Extensions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="profile_default.html" title="1.1. Default IPython Profile and Startup Scripts"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="API.html" accesskey="U">1. API</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="jupyter">
+<h1>1.2. Jupyter<a class="headerlink" href="#jupyter" title="Permalink to this headline">¶</a></h1>
+<p>These are the auto-generated documents for the Jupyter shell.</p>
+<p>Note that they may not accurately reflect the API as they display the interface at the time of writing.</p>
+<div class="section" id="module-jupyter.jupyter_qtconsole_config">
+<span id="jupyter-qtconsole"></span><h2>1.2.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_qtconsole</span></code><a class="headerlink" href="#module-jupyter.jupyter_qtconsole_config" title="Permalink to this headline">¶</a></h2>
+<p>Configuration file for jupyter-qtconsole.</p>
+<div class="section" id="id1">
+<h3>1.2.1.1. Jupyter QTConsole<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>May 27, 2019:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(ins)(navigator) faris@faris-U56E:~$ jupyter-qtconsole
+xkbcommon: ERROR: failed to add default include path
+Qt: Failed to create XKB context!
+Use QT_XKB_CONFIG_ROOT environmental variable to provide an additional
+search path, add &#39;:&#39; as separator to provide several search paths and/or
+make sure that XKB configuration data directory contains recent enough
+contents, to update please see http://cgit.freedesktop.org/xkeyboard-config/ .
+</pre></div>
+</div>
+<p>So we have to debug that because the keyboard isn’t working on jupyter
+qtconsole :/</p>
+<p>In a rare turn of events, it <strong>IS</strong> however, working just fine on Windows.</p>
+<div class="section" id="initializing-jupyter-qtconsole">
+<h4>1.2.1.1.1. Initializing Jupyter QTConsole<a class="headerlink" href="#initializing-jupyter-qtconsole" title="Permalink to this headline">¶</a></h4>
+<p>The initial entry point for <strong class="command">jupyter-qtconsole</strong> is in the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qtconsole.qtconsole</span> <span class="n">app</span> <span class="kn">import</span> <span class="nn">main</span>
+<span class="c1"># Also there&#39;s just a lot going on there</span>
+<span class="kn">from</span> <span class="nn">qtconsole</span> <span class="k">import</span> <span class="n">qtconsole</span>
+<span class="n">the_sauce</span> <span class="o">=</span> <span class="nb">dir</span><span class="p">(</span><span class="n">qtconsole</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Worth skimming.</p>
+<dl class="data">
+<dt id="jupyter.jupyter_qtconsole_config.LOGGER">
+<code class="sig-prename descclassname">jupyter.jupyter_qtconsole_config.</code><code class="sig-name descname">LOGGER</code><em class="property"> = None</em><a class="headerlink" href="#jupyter.jupyter_qtconsole_config.LOGGER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="jupyter.jupyter_qtconsole_config.c">
+<code class="sig-prename descclassname">jupyter.jupyter_qtconsole_config.</code><code class="sig-name descname">c</code><em class="property"> = {'Application': {'log_datefmt': '%Y-%m-%d %H:%M:%S', 'log_format': '[%(name)s]%(highlevel)s %(message)s', 'log_level': 20}, 'ConsoleWidget': {'buffer_size': 100, 'console_height': 50, 'console_width': 120, 'font_family': 'Fira Mono, Hack, Consolas', 'font_size': 14, 'gui_completion': 'droplist', 'kind': 'rich', 'paging': 'vsplit'}, 'HistoryConsoleWidget': {'history_lock': True}, 'JupyterConsoleApp': {'confirm_exit': False, 'kernel_name': 'python3'}, 'JupyterQtConsoleApp': {'display_banner': False}, 'JupyterWidget': {'editor': 'nvim-qt', 'syntax_style': 'Gruvbox'}, 'Session': {'username': 'faris'}}</em><a class="headerlink" href="#jupyter.jupyter_qtconsole_config.c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="jupyter.jupyter_qtconsole_config.connectionFileMixin">
+<code class="sig-prename descclassname">jupyter.jupyter_qtconsole_config.</code><code class="sig-name descname">connectionFileMixin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jupyter/jupyter_qtconsole_config.html#connectionFileMixin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jupyter.jupyter_qtconsole_config.connectionFileMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adding commented out sections to docstrings for Sphinx.</p>
+<p># ——————————————————————————
+# connectionFileMixin(LoggingConfigurable) configuration
+# ——————————————————————————</p>
+<p># Mixin for configurable classes that work with connection files</p>
+<p># JSON file in which to store connection info [default: kernel-&lt;pid&gt;.json]
+#
+#  This file will contain the IP, ports, and authentication key needed to connect
+#  clients to this kernel. By default, this file will be created in the security
+#  dir of the current profile, but can be specified by absolute path.
+# c.ConnectionFileMixin.connection_file = ‘’</p>
+<p># set the control (ROUTER) port [default: random]
+# c.ConnectionFileMixin.control_port = 0</p>
+<p># set the heartbeat port [default: random]
+# c.ConnectionFileMixin.hb_port = 0</p>
+<p># set the iopub (PUB) port [default: random]
+# c.ConnectionFileMixin.iopub_port = 0</p>
+<p># Set the kernel’s IP address [default localhost]. If the IP address is
+#  something other than localhost, then Consoles on other machines will be able
+#  to connect to the Kernel, so be careful!
+# c.ConnectionFileMixin.ip = ‘’</p>
+<p># set the shell (ROUTER) port [default: random]
+# c.ConnectionFileMixin.shell_port = 0</p>
+<p># set the stdin (ROUTER) port [default: random]
+# c.ConnectionFileMixin.stdin_port = 0</p>
+<p># c.ConnectionFileMixin.transport = ‘tcp’</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="jupyter.jupyter_qtconsole_config.consoleWidgetconf">
+<code class="sig-prename descclassname">jupyter.jupyter_qtconsole_config.</code><code class="sig-name descname">consoleWidgetconf</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jupyter/jupyter_qtconsole_config.html#consoleWidgetconf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jupyter.jupyter_qtconsole_config.consoleWidgetconf" title="Permalink to this definition">¶</a></dt>
+<dd><p># ——————————————————————————
+# consoleWidget(NewBase) configuration
+# ——————————————————————————</p>
+<p># An abstract base class for console-type widgets. This class has functionality
+#  for:
+#
+#      * Maintaining a prompt and editing region
+#      * Providing the traditional Unix-style console keyboard shortcuts
+#      * Performing tab completion
+#      * Paging text
+#      * Handling ANSI escape codes
+#
+#  ConsoleWidget also provides a number of utility methods that will be
+#  convenient to implementors of a console-style widget.</p>
+<p># Surprisingly windows handles this correctly
+# Whether to process ANSI escape codes.
+# c.ConsoleWidget.ansi_codes = True</p>
+<p>The following is for ConsoleWidget.buffer_size:</p>
+<p># The maximum number of lines of text before truncation. Specifying a non-
+#  positive number disables text truncation (not recommended).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="jupyter.jupyter_qtconsole_config.get_home">
+<code class="sig-prename descclassname">jupyter.jupyter_qtconsole_config.</code><code class="sig-name descname">get_home</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jupyter/jupyter_qtconsole_config.html#get_home"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jupyter.jupyter_qtconsole_config.get_home" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the user’s home directory.</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+<div class="section" id="module-jupyter.jupyter_notebook_config">
+<span id="jupyter-notebook"></span><h2>1.2.2. <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_notebook</span></code><a class="headerlink" href="#module-jupyter.jupyter_notebook_config" title="Permalink to this headline">¶</a></h2>
+<p>Configuration file for jupyter-notebook.</p>
+<div class="section" id="id2">
+<h3>1.2.2.1. Jupyter Notebook<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<dl class="data">
+<dt id="jupyter.jupyter_notebook_config.j">
+<code class="sig-prename descclassname">jupyter.jupyter_notebook_config.</code><code class="sig-name descname">j</code><em class="property"> = {'ContentsManager': {'allow_hidden': True, 'hide_globs': ['__pycache__', '*.pyc', '*.pyo', '.DS_Store', '*.so', '*.dylib', '*~', '.git']}, 'MappingKernelManager': {'cull_interval': 3000}, 'NotebookApp': {'reraise_server_extension_failures': True, 'webbrowser_open_new': 1}}</em><a class="headerlink" href="#jupyter.jupyter_notebook_config.j" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="jupyter-nbconvert">
+<h2>1.2.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_nbconvert</span></code><a class="headerlink" href="#jupyter-nbconvert" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="jupyter-labextension">
+<h2>1.2.4. <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_labextension</span></code><a class="headerlink" href="#jupyter-labextension" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="API.html">1. API</a><ul>
+      <li>Previous: <a href="profile_default.html" title="previous chapter">1.1. Default IPython Profile and Startup Scripts</a></li>
+      <li>Next: <a href="extensions.html" title="next chapter">1.3. Extensions</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+<h3><a href="index.html">Table of Contents</a></h3>
+<p class="caption"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="startup.html">1. Startup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ipython_keybindings.html">2. Keybindings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="magics.html">3. Built-in Magics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_magics.html">4. Writing Your Own Magics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="directive.html">5. Sphinx Directives</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pygments.html">6. Pygments highlighting</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Docs</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="API.html">1. API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="profile_default.html">1.1. Startup Files and IPython Shell Initialization</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">1.2. Jupyter ZMQShell</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-jupyter.jupyter_qtconsole_config">1.2.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_qtconsole</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-jupyter.jupyter_notebook_config">1.2.2. <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_notebook</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#jupyter-nbconvert">1.2.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_nbconvert</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#jupyter-labextension">1.2.4. <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_labextension</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="extensions.html">1.3. IPython Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev.html">1.4. Developers Notes</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">1.2. Jupyter</a><ul>
+<li><a class="reference internal" href="#module-jupyter.jupyter_qtconsole_config">1.2.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_qtconsole</span></code></a><ul>
+<li><a class="reference internal" href="#id1">1.2.1.1. Jupyter QTConsole</a><ul>
+<li><a class="reference internal" href="#initializing-jupyter-qtconsole">1.2.1.1.1. Initializing Jupyter QTConsole</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-jupyter.jupyter_notebook_config">1.2.2. <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_notebook</span></code></a><ul>
+<li><a class="reference internal" href="#id2">1.2.2.1. Jupyter Notebook</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#jupyter-nbconvert">1.2.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_nbconvert</span></code></a></li>
+<li><a class="reference internal" href="#jupyter-labextension">1.2.4. <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_labextension</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/jupyter.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="extensions.html" title="1.3. Extensions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="profile_default.html" title="1.1. Default IPython Profile and Startup Scripts"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="API.html" >1. API</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Copyright (C) 2018-2019 Faris Chugthai.
+    </div>
+  </body>
+</html>
