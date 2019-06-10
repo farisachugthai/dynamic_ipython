@@ -58,6 +58,7 @@ def switch_to_navigation_mode(event):
     keybinding for insert to navigation mode.
     """
     vi_state = event.cli.vi_state
+    logger.debug('%s', dir(event))
     vi_state.input_mode = InputMode.NAVIGATION
 
 
@@ -141,7 +142,7 @@ def check_defaults():
 if __name__ == "__main__":
     _ip = get_ipython()
 
-    level = 20
+    level = 10
     log = logging.getLogger(name=__name__)
 
     logger = module_log.stream_logger(log_level=level, logger=log)

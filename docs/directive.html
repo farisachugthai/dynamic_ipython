@@ -13,10 +13,9 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="6. Rich Output" href="rich_output.html" />
+    <link rel="next" title="6. pygments" href="pygments.html" />
     <link rel="prev" title="4. Defining custom magics" href="custom_magics.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
@@ -36,7 +35,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="rich_output.html" title="6. Rich Output"
+          <a href="pygments.html" title="6. pygments"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="custom_magics.html" title="4. Defining custom magics"
@@ -270,7 +269,7 @@ text, and then resave</p>
 <span class="gh">Out[23]: </span><span class="go">Text(38.222222222222214, 0.5, &#39;number&#39;)</span>
 
 <span class="gp">In [24]: </span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;normal distribution&#39;</span><span class="p">)</span>
-<span class="go">                                                 Out[24]: Text(0.5, 1.0, &#39;normal distribution&#39;)</span>
+<span class="go">                                                 Out[24]: Text(0.5, 1, &#39;normal distribution&#39;)</span>
 
 <span class="gp">In [25]: </span><span class="n">grid</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
@@ -474,7 +473,7 @@ like an interactive ipython section.</p>
 <span class="gp">In [2]: </span><span class="kn">import</span> <span class="nn">datetime</span>
 <span class="gp">   ...: </span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
 <span class="gp">   ...: </span>
-<span class="go">          Out[2]: datetime.datetime(2019, 6, 8, 18, 1, 14, 885600)</span>
+<span class="go">          Out[2]: datetime.datetime(2019, 6, 10, 4, 5, 29, 973945)</span>
 </pre></div>
 </div>
 <p>It supports IPython construct that plain
@@ -482,7 +481,7 @@ Python does not understand (like magics):</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [3]: </span><span class="kn">import</span> <span class="nn">time</span>
 
 <span class="gp">In [4]: </span><span class="o">%</span><span class="k">timeit</span> time.sleep(0.05)
-<span class="go">59.4 ms +- 1.66 ms per loop (mean +- std. dev. of 7 runs, 10 loops each)</span>
+<span class="go">59.7 ms +- 1.23 ms per loop (mean +- std. dev. of 7 runs, 10 loops each)</span>
 </pre></div>
 </div>
 <p>This will also support top-level async when using IPython 7.0+</p>
@@ -632,11 +631,11 @@ separated code.</p></li>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="custom_magics.html" title="previous chapter">4. Defining custom magics</a></li>
-      <li>Next: <a href="rich_output.html" title="next chapter">6. Rich Output</a></li>
+      <li>Next: <a href="pygments.html" title="next chapter">6. pygments</a></li>
   </ul></li>
 </ul>
 <h3><a href="index.html">Table of Contents</a></h3>
-<p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="startup.html">1. Startup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ipython_keybindings.html">2. Keybindings</a></li>
@@ -646,19 +645,27 @@ separated code.</p></li>
 <li class="toctree-l2"><a class="reference internal" href="#persisting-the-python-session-across-ipython-directive-blocks">5.1. Persisting the Python session across IPython directive blocks</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#adding-documentation-tests-to-your-ipython-directive">5.2. Adding documentation tests to your IPython directive</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#multi-line-input">5.3. Multi-line input</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#testing-directive-outputs">5.4. Testing directive outputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#testing-directive-outputs">5.4. Testing directive outputs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#writing-pure-python-code">5.4.1. Writing Pure Python Code</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#handling-comments">5.5. Handling Comments</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#splitting-python-statements-across-lines">5.6. Splitting Python statements across lines</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pseudo-decorators">5.7. Pseudo-Decorators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#configuration-options">5.8. Configuration Options</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-IPython.sphinxext.ipython_directive">5.9. Automatically generated documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-IPython.sphinxext.ipython_directive">5.9. Automatically generated documentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ipython-sphinx-directive-module">5.9.1. IPython Sphinx directive module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">5.9.2. Pseudo-Decorators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#to-do">5.9.3. To Do</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="rich_output.html">6. Rich Output</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pygments.html">7. Pygments highlighting</a></li>
 </ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pygments.html">6. Pygments highlighting</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="API.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="API.html">1. API</a></li>
 </ul>
 
   <h3><a href="index.html">Table of Contents</a></h3>
@@ -716,7 +723,7 @@ separated code.</p></li>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="rich_output.html" title="6. Rich Output"
+          <a href="pygments.html" title="6. pygments"
              >next</a> |</li>
         <li class="right" >
           <a href="custom_magics.html" title="4. Defining custom magics"

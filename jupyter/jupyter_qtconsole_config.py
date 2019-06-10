@@ -39,8 +39,8 @@ Worth skimming.
 """
 import logging
 import os
-from pathlib import Path
 import shutil
+from pathlib import Path
 
 from traitlets.config import get_config
 
@@ -58,40 +58,48 @@ def get_home():
     else:
         return home
 
-# ------------------------------------------------------------------------------
-# connectionFileMixin(LoggingConfigurable) configuration
-# ------------------------------------------------------------------------------
 
-# Mixin for configurable classes that work with connection files
+def connectionFileMixin():
+    """Adding commented out sections to docstrings for Sphinx.
 
-# JSON file in which to store connection info [default: kernel-<pid>.json]
-#
-#  This file will contain the IP, ports, and authentication key needed to connect
-#  clients to this kernel. By default, this file will be created in the security
-#  dir of the current profile, but can be specified by absolute path.
-# c.ConnectionFileMixin.connection_file = ''
+    # ------------------------------------------------------------------------------
+    # connectionFileMixin(LoggingConfigurable) configuration
+    # ------------------------------------------------------------------------------
 
-# set the control (ROUTER) port [default: random]
-# c.ConnectionFileMixin.control_port = 0
+    # Mixin for configurable classes that work with connection files
 
-# set the heartbeat port [default: random]
-# c.ConnectionFileMixin.hb_port = 0
+    # JSON file in which to store connection info [default: kernel-<pid>.json]
+    #
+    #  This file will contain the IP, ports, and authentication key needed to connect
+    #  clients to this kernel. By default, this file will be created in the security
+    #  dir of the current profile, but can be specified by absolute path.
+    # c.ConnectionFileMixin.connection_file = ''
 
-# set the iopub (PUB) port [default: random]
-# c.ConnectionFileMixin.iopub_port = 0
+    # set the control (ROUTER) port [default: random]
+    # c.ConnectionFileMixin.control_port = 0
 
-# Set the kernel's IP address [default localhost]. If the IP address is
-#  something other than localhost, then Consoles on other machines will be able
-#  to connect to the Kernel, so be careful!
-# c.ConnectionFileMixin.ip = ''
+    # set the heartbeat port [default: random]
+    # c.ConnectionFileMixin.hb_port = 0
 
-# set the shell (ROUTER) port [default: random]
-# c.ConnectionFileMixin.shell_port = 0
+    # set the iopub (PUB) port [default: random]
+    # c.ConnectionFileMixin.iopub_port = 0
 
-# set the stdin (ROUTER) port [default: random]
-# c.ConnectionFileMixin.stdin_port = 0
+    # Set the kernel's IP address [default localhost]. If the IP address is
+    #  something other than localhost, then Consoles on other machines will be able
+    #  to connect to the Kernel, so be careful!
+    # c.ConnectionFileMixin.ip = ''
 
-# c.ConnectionFileMixin.transport = 'tcp'
+    # set the shell (ROUTER) port [default: random]
+    # c.ConnectionFileMixin.shell_port = 0
+
+    # set the stdin (ROUTER) port [default: random]
+    # c.ConnectionFileMixin.stdin_port = 0
+
+    # c.ConnectionFileMixin.transport = 'tcp'
+
+    """
+    pass
+
 
 # ------------------------------------------------------------------------------
 # JupyterConsoleApp(ConnectionFileMixin) configuration
@@ -165,29 +173,39 @@ c.JupyterQtConsoleApp.display_banner = False
 # path to a custom CSS stylesheet
 # c.JupyterQtConsoleApp.stylesheet = ''
 
-# ------------------------------------------------------------------------------
-# consoleWidget(NewBase) configuration
-# ------------------------------------------------------------------------------
 
-# An abstract base class for console-type widgets. This class has functionality
-#  for:
-#
-#      * Maintaining a prompt and editing region
-#      * Providing the traditional Unix-style console keyboard shortcuts
-#      * Performing tab completion
-#      * Paging text
-#      * Handling ANSI escape codes
-#
-#  ConsoleWidget also provides a number of utility methods that will be
-#  convenient to implementors of a console-style widget.
+def consoleWidgetconf():
+    """
 
-# Surprisingly windows handles this correctly
-# Whether to process ANSI escape codes.
-# c.ConsoleWidget.ansi_codes = True
+    # ------------------------------------------------------------------------------
+    # consoleWidget(NewBase) configuration
+    # ------------------------------------------------------------------------------
 
-# The maximum number of lines of text before truncation. Specifying a non-
-#  positive number disables text truncation (not recommended).
-c.ConsoleWidget.buffer_size = 1000
+    # An abstract base class for console-type widgets. This class has functionality
+    #  for:
+    #
+    #      * Maintaining a prompt and editing region
+    #      * Providing the traditional Unix-style console keyboard shortcuts
+    #      * Performing tab completion
+    #      * Paging text
+    #      * Handling ANSI escape codes
+    #
+    #  ConsoleWidget also provides a number of utility methods that will be
+    #  convenient to implementors of a console-style widget.
+
+    # Surprisingly windows handles this correctly
+    # Whether to process ANSI escape codes.
+    # c.ConsoleWidget.ansi_codes = True
+
+    The following is for ConsoleWidget.buffer_size:
+
+    # The maximum number of lines of text before truncation. Specifying a non-
+    #  positive number disables text truncation (not recommended).
+    """
+    pass
+
+
+c.ConsoleWidget.buffer_size = 100
 
 # The height of the console at start time in number of characters (will double
 #  with `vsplit` paging)
