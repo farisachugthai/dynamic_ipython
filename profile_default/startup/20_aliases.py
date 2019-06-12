@@ -113,7 +113,7 @@ from profile_default.util import module_log
 
 LOGGER = module_log.stream_logger(
     logger=logging.getLogger(name=__name__),
-    msg_format='%(asctime)s %(levelname)s %(message)s',
+    msg_format='%(asctime)s : %(levelname)s : %(module)s %(message)s',
     log_level=logging.INFO)
 
 
