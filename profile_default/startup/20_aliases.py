@@ -107,9 +107,8 @@ from shutil import which
 import IPython
 from IPython import get_ipython
 from IPython.core.alias import AliasError
-
-from profile_default.util.machine import Platform
 from profile_default.util import module_log
+from profile_default.util.machine import Platform
 
 LOGGER = module_log.stream_logger(
     logger=logging.getLogger(name=__name__),
@@ -422,12 +421,8 @@ def main():
 
         # Now let's get the Linux aliases
         user_aliases += linux_specific_aliases(_ip)
-        LOGGER.info("The number of available aliases after linux aliases"
-                    " is: " + str(len(user_aliases)))
-
-        # if platform.machine() == "aarch64":
-        # user_aliases += termux_aliases(ip)
-        # pass
+        # LOGGER.info("The number of available aliases after linux aliases"
+        # " is: " + str(len(user_aliases)))
 
     elif machine.is_conemu:  # should check for 'nix-tools as an env var
         user_aliases += windows_aliases(_ip)
@@ -436,8 +431,8 @@ def main():
 
     __setup_fzf(user_aliases)
 
-    LOGGER.info("The number of available user aliases is: "
-                "" + str(len(user_aliases)))
+    # LOGGER.info("The number of available user aliases is: "
+    #"" + str(len(user_aliases)))
 
     for i in user_aliases:
         try:
