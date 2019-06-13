@@ -423,15 +423,33 @@ c.InteractiveShell.quiet = False
 
 # Jan 20, 2019: Even with docrepr installed this still ends up raising errors.
 # Need to debug later.
-c.InteractiveShell.sphinxify_docstring = False
-# Enables rich html representation of docstrings. (This requires the docrepr
+# c.InteractiveShell.sphinxify_docstring = False
 #  module).
-# import importlib  # noqa E402
-# try:
-#     importlib.import_module("docrepr")  # noqa E402
-# except ImportError:
+def sphinxify(obj):
+    """Enables rich html representation of docstrings.
+
+    .. note:: This requires the docrepr module.
+
+    """
+    import webbrowser
+    from docrepr import sphinxify                 # html generator
+    from IPython.core.oinspect import Inspector   # oinfo generator
+
+    oinfo = Inspector().info(obj)
+    url = sphinxify.rich_repr(oinfo)
+
+    webbrowser.open_new_tab(url)
+
+
+import importlib  # noqa E402
+try:
+    importlib.import_module("docrepr")  # noqa E402
+except ImportError:
+    pass
 #   c.InteractiveShell.sphinxify_docstring = False
-# else:
+else:
+    print("Sphinxify docstrings with sphinxify(obj)")
+
 #   c.InteractiveShell.sphinxify_docstring = True
 
 c.InteractiveShell.wildcards_case_sensitive = False
