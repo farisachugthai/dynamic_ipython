@@ -62,40 +62,42 @@ def get_home():
 def connectionFileMixin():
     """Adding commented out sections to docstrings for Sphinx.
 
-    # ------------------------------------------------------------------------------
-    # connectionFileMixin(LoggingConfigurable) configuration
-    # ------------------------------------------------------------------------------
+    .. code-block:: python3
 
-    # Mixin for configurable classes that work with connection files
+        # ------------------------------------------------------------------------------
+        # connectionFileMixin(LoggingConfigurable) configuration
+        # ------------------------------------------------------------------------------
 
-    # JSON file in which to store connection info [default: kernel-<pid>.json]
-    #
-    #  This file will contain the IP, ports, and authentication key needed to connect
-    #  clients to this kernel. By default, this file will be created in the security
-    #  dir of the current profile, but can be specified by absolute path.
-    # c.ConnectionFileMixin.connection_file = ''
+        # Mixin for configurable classes that work with connection files
 
-    # set the control (ROUTER) port [default: random]
-    # c.ConnectionFileMixin.control_port = 0
+        # JSON file in which to store connection info [default: kernel-<pid>.json]
+        #
+        #  This file will contain the IP, ports, and authentication key needed to connect
+        #  clients to this kernel. By default, this file will be created in the security
+        #  dir of the current profile, but can be specified by absolute path.
+        # c.ConnectionFileMixin.connection_file = ''
 
-    # set the heartbeat port [default: random]
-    # c.ConnectionFileMixin.hb_port = 0
+        # set the control (ROUTER) port [default: random]
+        # c.ConnectionFileMixin.control_port = 0
 
-    # set the iopub (PUB) port [default: random]
-    # c.ConnectionFileMixin.iopub_port = 0
+        # set the heartbeat port [default: random]
+        # c.ConnectionFileMixin.hb_port = 0
 
-    # Set the kernel's IP address [default localhost]. If the IP address is
-    #  something other than localhost, then Consoles on other machines will be able
-    #  to connect to the Kernel, so be careful!
-    # c.ConnectionFileMixin.ip = ''
+        # set the iopub (PUB) port [default: random]
+        # c.ConnectionFileMixin.iopub_port = 0
 
-    # set the shell (ROUTER) port [default: random]
-    # c.ConnectionFileMixin.shell_port = 0
+        # Set the kernel's IP address [default localhost]. If the IP address is
+        #  something other than localhost, then Consoles on other machines will be able
+        #  to connect to the Kernel, so be careful!
+        # c.ConnectionFileMixin.ip = ''
 
-    # set the stdin (ROUTER) port [default: random]
-    # c.ConnectionFileMixin.stdin_port = 0
+        # set the shell (ROUTER) port [default: random]
+        # c.ConnectionFileMixin.shell_port = 0
 
-    # c.ConnectionFileMixin.transport = 'tcp'
+        # set the stdin (ROUTER) port [default: random]
+        # c.ConnectionFileMixin.stdin_port = 0
+
+        # c.ConnectionFileMixin.transport = 'tcp'
 
     """
     pass

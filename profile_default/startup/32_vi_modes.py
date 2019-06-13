@@ -6,7 +6,7 @@
 Keybindings and Toggling Insert Mode
 ====================================
 
-Effectively adds :kbd:`j` :kbd:`k` as a way to switch from insert mode to
+Effectively adds :kbd:`c` :kbd:`k` as a way to switch from insert mode to
 normal mode, or as :mod:`prompt_toolkit` calls it, "navigation mode".
 
 Also displays how to integrate :mod:`prompt_toolkit` and :mod:`IPython`
@@ -14,7 +14,7 @@ together well.
 
 :URL: https://ipython.readthedocs.io/en/stable/config/details.html#keyboard-shortcuts
 
-.. todo:: Add one in for :kbd:`C-M-j` to go to Emacs mode?
+.. todo:: Add one in for :kbd:`C-M-c` to go to Emacs mode?
 
 Example Usage
 ==============
@@ -150,5 +150,5 @@ if __name__ == "__main__":
     if getattr(_ip, 'pt_app', None):
         kb = _ip.pt_app.key_bindings
         kb.add_binding(
-            u'j', u'k', filter=(HasFocus(DEFAULT_BUFFER)
+            u'c', u'k', filter=(HasFocus(DEFAULT_BUFFER)
                                 & ViInsertMode()))(switch_to_navigation_mode)
