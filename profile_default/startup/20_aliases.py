@@ -104,7 +104,6 @@ Yet to be implemented
 import logging
 from shutil import which
 
-import IPython
 from IPython import get_ipython
 from IPython.core.alias import AliasError
 

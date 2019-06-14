@@ -37,20 +37,66 @@ use the function :func:`prompt_toolkit.key_binding.merge_key_bindings()`
 Readline Bindings
 =================
 
-Fortunately for us, John implemented named commands from readline and made them easily
-accessed through :ref:`prompt_toolkit.key_binding.bindings.named_commands.get_by_name`
+Fortunately for us, John implemented named commands from readline and
+made them easily accessible through
+:ref:`prompt_toolkit.key_binding.bindings.named_commands.get_by_name`.
 
-As a result, K and J were rebound to "previous-history" and "next-history" while in
-Vim normal mode.
+As a result, K and J were rebound to "previous-history" and "next-history"
+while in Vim normal mode. However, very little is bound by default.
+
+.. ipython::
+
+    In [13]: _ip.pt_app.key_bindings.bindings
+    Out[13]:
+    [_Binding(keys=('c-m',), handler=<function newline_or_execute_outer.<locals>.newline_or_execute at 0x7c2c76f840>),
+     _Binding(keys=('c-\\',), handler=<function force_exit at 0x7c2c7e51e0>),
+     _Binding(keys=('c-p',), handler=<function previous_history_or_previous_completion at 0x7c2c7dee18>),
+     _Binding(keys=('c-n',), handler=<function next_history_or_next_completion at 0x7c2c7deea0>),
+     _Binding(keys=('c-g',), handler=<function dismiss_completion at 0x7c2c7def28>),
+     _Binding(keys=('c-c',), handler=<function reset_buffer at 0x7c2c7e5048>),
+     _Binding(keys=('c-c',), handler=<function reset_search_buffer at 0x7c2c7e50d0>),
+     _Binding(keys=('c-z',), handler=<function suspend_to_bg at 0x7c2c7e5158>),
+     _Binding(keys=('c-i',), handler=<function indent_buffer at 0x7c2c7e5268>),
+     _Binding(keys=('c-o',), handler=<function newline_autoindent_outer.<locals>.newline_autoindent at 0x7c2c671400>),                                                                               _Binding(keys=('f2',), handler=<function open_input_in_editor at 0x7c2c7e5400>),
+     _Binding(keys=('j', 'k'), handler=<function switch_to_navigation_mode at 0x7c2bd03c80>),
+     _Binding(keys=('K',), handler=<function previous_history at 0x7c2d9d76a8>),
+     _Binding(keys=('J',), handler=<function next_history at 0x7c2d9d7730>)]
+
+That leaves a LOT to work with in terms of all the functions defined in
+:ref:`prompt_toolkit.key_binding.bindings.default`.
+
+Example Usage
+==============
+
+From the `source code`_:
+
+.. ipython:: python
+
+    from prompt_toolkit.keybinding import KeyBinding
+    kb = KeyBindings()
+
+    @kb.add('c-t')
+    def _(event):
+        print('Control-T pressed')
+
+    @kb.add('c-a', 'c-b')
+    def _(event):
+        print('Control-A pressed, followed by Control-B')
+
+    @kb.add('c-x', filter=is_searching)
+    def _(event):
+        print('Control-X pressed')  # Works only if we are searching.
+
+
+.. _source-code: https://python-prompt-toolkit.readthedocs.io/en/stable/pages/reference.html#module-prompt_toolkit.key_binding
 
 
 """
 import logging
 
 from prompt_toolkit.enums import DEFAULT_BUFFER
-from prompt_toolkit.filters import HasFocus, ViInsertMode
-from prompt_toolkit.key_binding import  merge_key_bindings
-from prompt_toolkit.key_binding.defaults import load_key_bindings
+from prompt_toolkit.filters import HasFocus, ViInsertMode, ViNavigationMode
+from prompt_toolkit.key_binding import merge_key_bindings
 from prompt_toolkit.key_binding.vi_state import InputMode
 from prompt_toolkit.key_binding.bindings.named_commands import get_by_name
 
@@ -74,11 +120,12 @@ def switch_to_navigation_mode(event):
 def original_bindings(*args, shell=None):
     """Merge in the old keybindings with ours.
 
-    I genuinely didn't expect ``if get_attr(_ip, 'pt_app', None)`` to eval to ``None``.
+    I genuinely didn't expect ``if get_attr(_ip, 'pt_app', None)`` to
+    eval to ``None``.
 
-    Below I posted the full implementation of when the keybindings are added in...
-    but it's so late in the process that we need to know basically all the attributes
-    of the class :class:`traitlets.Configurable`.
+    Below I posted the full implementation of when the keybindings are
+    added in... but it's so late in the process that we need to know
+    basically all the attributes of the class :class:`traitlets.Configurable`.
 
     Parameters
     ----------
@@ -144,6 +191,9 @@ def original_bindings(*args, shell=None):
                             enable_open_in_editor=self.extra_open_editor_shortcuts,
                             color_depth=self.color_depth,
                             **self._extra_prompt_options())
+
+    That is so many mixins and traits oh my god.
+
     """
     if shell is None:
         _ip = get_ipython()
@@ -156,6 +206,32 @@ def original_bindings(*args, shell=None):
     return merged
 
 
+def main(_ip=None):
+    """Begin initializing keybindings for IPython.
+
+    Parameters
+    ----------
+    _ip : |ip|
+        Global IPython instance.
+
+    """
+    # uhhhh what do we do in the else case? do we restart IPython or build prompt_toolkit in the form we want?
+    if getattr(_ip, 'pt_app', None):
+        kb = _ip.pt_app.key_bindings
+        kb.add_binding(
+            u'j', u'k', filter=(HasFocus(DEFAULT_BUFFER)
+                                & ViInsertMode()))(switch_to_navigation_mode)
+
+    ph = get_by_name('previous-history')
+    nh = get_by_name('next-history')
+
+    kb.add_binding('K', filter=(HasFocus(DEFAULT_BUFFER) & ViNavigationMode()))(ph)
+
+    kb.add_binding('J', filter=(HasFocus(DEFAULT_BUFFER) & ViNavigationMode()))(nh)
+
+    return kb
+
+
 if __name__ == "__main__":
     _ip = get_ipython()
 
@@ -164,20 +240,5 @@ if __name__ == "__main__":
 
     logger = module_log.stream_logger(log_level=level, logger=log)
 
-    # uhhhh what do we do in the else case? do we restart IPython or build prompt_toolkit in the form we want?
-    if getattr(_ip, 'pt_app', None):
-        kb = _ip.pt_app.key_bindings
-        kb.add_binding(
-            u'c', u'k', filter=(HasFocus(DEFAULT_BUFFER)
-                                & ViInsertMode()))(switch_to_navigation_mode)
-
-    ph = get_by_name('previous-history')
-    nh = get_by_name('next-history')
-
-    registry.add_binding('K',
-                         filter=(HasFocus(DEFAULT_BUFFER) &
-                                 ViNavigationMode()))(ph)
-
-    registry.add_binding('J',
-                         filter=(HasFocus(DEFAULT_BUFFER) &
-                                 ViNavigationMode()))(nh)
+    keybindings = main(_ip)
+    # how do we bind them back?

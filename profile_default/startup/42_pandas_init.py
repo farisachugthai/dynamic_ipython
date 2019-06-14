@@ -79,8 +79,8 @@ if __name__ == '__main__':
 
     try:
         import pandas as pd
-    except (ImportError, ModuleNotFoundError) as e:
-        LOGGER.warning("Import error: %s" % e, exc_info=1)
+    except (ImportError, ModuleNotFoundError):
+        # LOGGER.warning("Import error: %s" % e, exc_info=1)
         sys.exit()
 
     start()
