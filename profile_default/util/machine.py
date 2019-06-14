@@ -33,6 +33,7 @@ See Also
     Shows an example use case
 
 """
+import logging
 import os
 import platform
 import sys
@@ -42,8 +43,6 @@ from IPython import get_ipython
 from prompt_toolkit.utils import is_conemu_ansi, is_windows
 
 from profile_default.util import module_log
-
-LOGGER = module_log.stream_logger()
 
 
 class Platform:
@@ -101,9 +100,18 @@ class Platform:
 
     @property
     def env(self):
+        """Memoize the user's environment variables."""
         self.env = dict(os.environ)
         return self.env
 
     @env.setter
     def env(self, arg):
-        return self.env.putenv(arg)
+        return self.env.update(arg)
+
+
+if __name__ == "__main__":
+    # Modules kept importing this and ending up with 2 loggers and i was confused
+    LOGGER = module_log.stream_logger(
+        logger=logging.getLogger(name=__name__),
+        msg_format='%(asctime)s : %(levelname)s : %(module)s %(message)s',
+        log_level=logging.INFO)

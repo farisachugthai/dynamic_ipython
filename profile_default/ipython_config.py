@@ -78,6 +78,7 @@ import logging
 import os
 import platform
 import shutil
+from tempfile import TemporaryDirectory
 
 from IPython.paths import get_ipython_dir
 # THIS IS THE MODULE! Its too exciting to able to execute this script
@@ -423,15 +424,48 @@ c.InteractiveShell.quiet = False
 
 # Jan 20, 2019: Even with docrepr installed this still ends up raising errors.
 # Need to debug later.
-c.InteractiveShell.sphinxify_docstring = False
-# Enables rich html representation of docstrings. (This requires the docrepr
+# c.InteractiveShell.sphinxify_docstring = False
 #  module).
-# import importlib  # noqa E402
-# try:
-#     importlib.import_module("docrepr")  # noqa E402
-# except ImportError:
+def sphinxify(obj):
+    """Enables rich html representation of docstrings.
+
+    .. note:: This requires the docrepr module.
+
+    """
+    import webbrowser
+    from docrepr import sphinxify                 # html generator
+    from IPython.core.oinspect import Inspector   # oinfo generator
+
+    oinfo = Inspector().info(obj)
+    url = sphinxify.rich_repr(oinfo)
+
+    webbrowser.open_new_tab(url)
+
+
+try:
+    import docrepr.sphinxify as sphx
+
+    def ipython_sphinxify(doc):
+        """The official way IPython does it in :ref:`IPython.core.interactiveshell`."""
+        with TemporaryDirectory() as dirname:
+            return {
+                'text/html': sphx.sphinxify(doc, dirname),
+                'text/plain': doc
+            }
+
+except ImportError:
+    ipython_sphinxify = None
+
+# Now do it theway spyder does it!
+import importlib  # noqa E402
+try:
+    importlib.import_module("docrepr")  # noqa E402
+except ImportError:
+    pass
 #   c.InteractiveShell.sphinxify_docstring = False
-# else:
+else:
+    print("Sphinxify docstrings with sphinxify(obj)")
+
 #   c.InteractiveShell.sphinxify_docstring = True
 
 c.InteractiveShell.wildcards_case_sensitive = False

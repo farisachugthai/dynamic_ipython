@@ -1,19 +1,74 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Add a keybinding to IPython.
+"""Dynamically add keybindings to IPython. Strive to implementing Tim Pope's rsi plugin in IPython.
 
-Effectively adds :kbd:`j` :kbd:`k` as a way to switch from
-insert mode to normal mode, or as :mod:`prompt_toolkit` calls it, "navigation mode".
+====================================
+Keybindings and Toggling Insert Mode
+====================================
 
-Also displays how to integrate :mod:`prompt_toolkit` and :mod:`IPython` together well.
+.. module:: `32_vi_modes`
+
+.. hope that doesn't crash the interpreter!
+
+Effectively adds :kbd:`j` :kbd:`k` as a way to switch from insert mode to
+normal mode, or as :mod:`prompt_toolkit` calls it, "navigation mode".
+
+Also displays how to integrate :mod:`prompt_toolkit` and :mod:`IPython`
+together well.
 
 :URL: https://ipython.readthedocs.io/en/stable/config/details.html#keyboard-shortcuts
 
-.. todo:: Add one in for <C-M-j> to go to Emacs mode?
+.. todo:: Add one in for :kbd:`C-M-j` to go to Emacs mode?
+
+
+Original KeyBindings
+====================
+
+An initial concern may be that while dynamically bindings keys to the namespace,
+one may accidentally delete all the keybindings provided by IPython.
+
+This can be prevented by merging them in.
+
+They're initialized through :func:`IPython.terminal.interactiveshell.create_ipython_shortcuts()`.
+We can save those to a temporary :class:`prompt_toolkit.key_bindings.KeyBindings()` instance, and then
+use the function :func:`prompt_toolkit.key_binding.merge_key_bindings()`
+
+
+Readline Bindings
+=================
+
+Fortunately for us, John implemented named commands from readline and
+made them easily accessible through
+:ref:`prompt_toolkit.key_binding.bindings.named_commands.get_by_name`.
+
+As a result, K and J were rebound to "previous-history" and "next-history"
+while in Vim normal mode. However, very little is bound by default.
+
+.. ipython::
+
+    In [13]: _ip.pt_app.key_bindings.bindings
+    Out[13]:
+    [_Binding(keys=('c-m',), handler=<function newline_or_execute_outer.<locals>.newline_or_execute at 0x7c2c76f840>),
+     _Binding(keys=('c-\\',), handler=<function force_exit at 0x7c2c7e51e0>),
+     _Binding(keys=('c-p',), handler=<function previous_history_or_previous_completion at 0x7c2c7dee18>),
+     _Binding(keys=('c-n',), handler=<function next_history_or_next_completion at 0x7c2c7deea0>),
+     _Binding(keys=('c-g',), handler=<function dismiss_completion at 0x7c2c7def28>),
+     _Binding(keys=('c-c',), handler=<function reset_buffer at 0x7c2c7e5048>),
+     _Binding(keys=('c-c',), handler=<function reset_search_buffer at 0x7c2c7e50d0>),
+     _Binding(keys=('c-z',), handler=<function suspend_to_bg at 0x7c2c7e5158>),
+     _Binding(keys=('c-i',), handler=<function indent_buffer at 0x7c2c7e5268>),
+     _Binding(keys=('c-o',), handler=<function newline_autoindent_outer.<locals>.newline_autoindent at 0x7c2c671400>),                                                                               _Binding(keys=('f2',), handler=<function open_input_in_editor at 0x7c2c7e5400>),
+     _Binding(keys=('j', 'k'), handler=<function switch_to_navigation_mode at 0x7c2bd03c80>),
+     _Binding(keys=('K',), handler=<function previous_history at 0x7c2d9d76a8>),
+     _Binding(keys=('J',), handler=<function next_history at 0x7c2d9d7730>)]
+
+That leaves a LOT to work with in terms of all the functions defined in
+:ref:`prompt_toolkit.key_binding.bindings.default`.
 
 Example Usage
---------------
-From the `source code`_::
+==============
+
+From the `source code`_:
 
 .. ipython:: python
 
@@ -35,12 +90,18 @@ From the `source code`_::
 
 .. _source-code: https://python-prompt-toolkit.readthedocs.io/en/stable/pages/reference.html#module-prompt_toolkit.key_binding
 
+
 """
-from IPython import get_ipython
+import logging
+
 from prompt_toolkit.enums import DEFAULT_BUFFER
-from prompt_toolkit.filters import HasFocus, ViInsertMode
-from prompt_toolkit.key_binding.defaults import load_key_bindings
+from prompt_toolkit.filters import HasFocus, ViInsertMode, ViNavigationMode
+from prompt_toolkit.key_binding import merge_key_bindings
 from prompt_toolkit.key_binding.vi_state import InputMode
+from prompt_toolkit.key_binding.bindings.named_commands import get_by_name
+
+from IPython import get_ipython
+from IPython.terminal.interactiveshell import create_ipython_shortcuts
 
 from profile_default.util import module_log
 
@@ -52,96 +113,132 @@ def switch_to_navigation_mode(event):
     keybinding for insert to navigation mode.
     """
     vi_state = event.cli.vi_state
+    logger.debug('%s', dir(event))
     vi_state.input_mode = InputMode.NAVIGATION
 
 
-def check_defaults():
-    """What are the default keybindings we have here?
+def original_bindings(*args, shell=None):
+    """Merge in the old keybindings with ours.
 
-    Err I suppose I should say what does Prompt Toolkit export by default
-    because I'm not 100% sure that ip imports everything or doesn't modify
-    anything along the way.
+    I genuinely didn't expect ``if get_attr(_ip, 'pt_app', None)`` to
+    eval to ``None``.
 
-    Probably gonna need to noqa something since the code isn't accessed as is.
+    Below I posted the full implementation of when the keybindings are
+    added in... but it's so late in the process that we need to know
+    basically all the attributes of the class :class:`traitlets.Configurable`.
 
-    May 23, 2019:
+    Parameters
+    ----------
+    _ip : |ip|
+        Global IPython instance
 
-        To my knowledge the keybindings you have available is every single
-        one that prompt_toolkit ships with.
+    Returns
+    -------
+    merged_keybindings : :class:`prompt_toolkit.key_bindings.MergedKeyBindings()`
+        Merged keybindings.
 
-    .. code-block::
+    See Also
+    --------
+    :func:`~IPython.terminal.interactiveshell.create_ipython_shortcuts()`
+        Where the shortcuts are added.
 
-        __all__ = [
-            'load_key_bindings',
-        ]
+    Examples
+    --------
+    ::
+
+       def init_prompt_toolkit_cli(self):
+        if self.simple_prompt:
+            # Fall back to plain non-interactive output for tests.
+            # This is very limited.
+            def prompt():
+                prompt_text = "".join(x[1] for x in self.prompts.in_prompt_tokens())
+                lines = [input(prompt_text)]
+                prompt_continuation = "".join(x[1] for x in self.prompts.continuation_prompt_tokens())
+                while self.check_complete('\n'.join(lines))[0] == 'incomplete':
+                    lines.append( input(prompt_continuation) )
+                return '\n'.join(lines)
+            self.prompt_for_code = prompt
+            return
+
+        # Set up keyboard shortcuts
+        key_bindings = create_ipython_shortcuts(self)
+
+        # Pre-populate history from IPython's history database
+        history = InMemoryHistory()
+        last_cell = u""
+        for __, ___, cell in self.history_manager.get_tail(self.history_load_length,
+                                                        include_latest=True):
+            # Ignore blank lines and consecutive duplicates
+            cell = cell.rstrip()
+            if cell and (cell != last_cell):
+                history.append_string(cell)
+                last_cell = cell
+
+        self._style = self._make_style_from_name_or_cls(self.highlighting_style)
+        self.style = DynamicStyle(lambda: self._style)
+
+        editing_mode = getattr(EditingMode, self.editing_mode.upper())
+
+        self.pt_app = PromptSession(
+                            editing_mode=editing_mode,
+                            key_bindings=key_bindings,
+                            history=history,
+                            completer=IPythonPTCompleter(shell=self),
+                            enable_history_search = self.enable_history_search,
+                            style=self.style,
+                            include_default_pygments_style=False,
+                            mouse_support=self.mouse_support,
+                            enable_open_in_editor=self.extra_open_editor_shortcuts,
+                            color_depth=self.color_depth,
+                            **self._extra_prompt_options())
+
+    That is so many mixins and traits oh my god.
+
+    """
+    if shell is None:
+        _ip = get_ipython()
+
+    tmp_kb = create_ipython_shortcuts(_ip)
+    # idk if i did this right but i'm hoping this captures all passed KeyBindings objects to that container
+    OurRegistry, *OtherRegistries = args
+
+    merged = merge_key_bindings(tmp_kb, OurRegistry, *OtherRegistries)
+    return merged
 
 
-        def load_key_bindings():
-            # Create a KeyBindings object that contains the default key bindings.
-            all_bindings = merge_key_bindings([
-                # Load basic bindings.
-                load_basic_bindings(),
+def main(_ip=None):
+    """Begin initializing keybindings for IPython.
 
-                # Load emacs bindings.
-                load_emacs_bindings(),
-                load_emacs_search_bindings(),
+    Parameters
+    ----------
+    _ip : |ip|
+        Global IPython instance.
 
-                # Load Vi bindings.
-                load_vi_bindings(),
-                load_vi_search_bindings(),
-            ])
-
-            return merge_key_bindings([
-                # Make sure that the above key bindings are only active if the
-                # currently focused control is a `BufferControl`. For other controls, we
-                # don't want these key bindings to intervene. (This would break "ptterm"
-                # for instance, which handles 'Keys.Any' in the user control itself.)
-                ConditionalKeyBindings(all_bindings, buffer_has_focus),
-
-                # Active, even when no buffer has been focused.
-                load_mouse_bindings(),
-                load_cpr_bindings(),
-            ])
-
-        That's literally everything. IPython chooses to add their own stuff
-        during IPython.terminal.ptutil.create_ipython_shortcuts but if you
-        choose to create your own registry then you get access to everything.
-
-        It might not be hard to bind to if we do it the same way we did with
-        that one pathlib.Path class.
-
-        Literally::
-
-            from IPython import get_ipython
-            from prompt_toolkit.key_binding import merge_key_bindings, KeyBindings
-            from prompt_toolkit.key_binding.defaults import load_key_bindings
-
-            class KeyBindingsManager:
-
-                def __init__(self, shell=None):
-                    if _ip is None:
-                        _ip = get_ipython()
-                    self.registry = KeyBindings
-
-        Once the user initializes that class, then your :class:`KeyBindings`
-        statement in the `__init__` func was execute and you'll have access
-        to everything. Cool!
-
-        """
-    registry = load_key_bindings()
-    return registry.key_bindings
-
-
-if __name__ == "__main__":
-    _ip = get_ipython()
-
-    level = 20
-    log = logging.getLogger(name=__name__)
-
-    logger = module_log.stream_logger(log_level=level, logger=log)
-
+    """
+    # uhhhh what do we do in the else case? do we restart IPython or build prompt_toolkit in the form we want?
     if getattr(_ip, 'pt_app', None):
         kb = _ip.pt_app.key_bindings
         kb.add_binding(
             u'j', u'k', filter=(HasFocus(DEFAULT_BUFFER)
                                 & ViInsertMode()))(switch_to_navigation_mode)
+
+    ph = get_by_name('previous-history')
+    nh = get_by_name('next-history')
+
+    kb.add_binding('K', filter=(HasFocus(DEFAULT_BUFFER) & ViNavigationMode()))(ph)
+
+    kb.add_binding('J', filter=(HasFocus(DEFAULT_BUFFER) & ViNavigationMode()))(nh)
+
+    return kb
+
+
+if __name__ == "__main__":
+    _ip = get_ipython()
+
+    level = 10
+    log = logging.getLogger(name=__name__)
+
+    logger = module_log.stream_logger(log_level=level, logger=log)
+
+    keybindings = main(_ip)
+    # how do we bind them back?

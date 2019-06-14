@@ -11,11 +11,10 @@ Welcome to IPython packages' documentation!
 
 .. include:: ../README.rst
 
-
 .. toctree::
-   :maxdepth: 2
-   :caption: Table of Contents:
+   :caption: Tutorial
    :numbered:
+   :maxdepth: 3
 
    Startup <startup>
    Keybindings <ipython_keybindings>
@@ -26,9 +25,10 @@ Welcome to IPython packages' documentation!
    Rich Output <rich_output>
    Pygments highlighting <pygments>
 
-
 .. toctree::
-   :maxdepth: 1
+   :caption: API Docs
+   :numbered:
+   :maxdepth: 2
 
    API
 

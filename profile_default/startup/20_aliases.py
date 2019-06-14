@@ -104,7 +104,6 @@ Yet to be implemented
 import logging
 from shutil import which
 
-import IPython
 from IPython import get_ipython
 from IPython.core.alias import AliasError
 from profile_default.util import module_log
@@ -112,7 +111,7 @@ from profile_default.util.machine import Platform
 
 LOGGER = module_log.stream_logger(
     logger=logging.getLogger(name=__name__),
-    msg_format='%(asctime)s %(levelname)s %(message)s',
+    msg_format='%(asctime)s : %(levelname)s : %(module)s %(message)s',
     log_level=logging.INFO)
 
 
@@ -274,6 +273,27 @@ def common_aliases(_ip=None):
     return _user_aliases
 
 
+def cmd_aliases(_ip=None):
+    r"""Aliases for the cmd interpreter specifically.
+
+    .. todo::
+
+        Do a :envvar:`COMSPEC` check.
+
+    """
+    _ip.user_aliases = [
+        ('copy', 'copy'),
+        ('ddir', 'dir /ad /on'),
+        ('ldir', 'dir /ad /on'),
+        ('mklink', 'mklink'),
+        ('move', 'move'),
+        ('mv', 'move'),
+        ('ren', 'ren'),
+        ('rmdir', 'rmdir'),
+    ]
+    return _ip.user_aliases
+
+
 def windows_aliases(_ip=None):
     r"""Aliases for Windows OSes.
 
@@ -337,14 +357,6 @@ def windows_aliases(_ip=None):
 
     """
     _ip.user_aliases = [
-        ('copy', 'copy'),
-        ('ddir', 'dir /ad /on'),
-        ('ldir', 'dir /ad /on'),
-        ('mklink', 'mklink'),
-        ('move', 'move'),
-        ('mv', 'move'),
-        ('ren', 'ren'),
-        ('rmdir', 'rmdir'),
         ('rp', 'Remove-ItemProperty'),
         ('rsn', 'Remove-PSSession'),
         ('rv', 'Remove-Variable'),
@@ -410,7 +422,10 @@ def main():
     """Set up aliases for the user namespace for IPython."""
     _ip = get_ipython()
 
-    if not isinstance(_ip, IPython.terminal.interactiveshell.InteractiveShell):
+    # if not isinstance(_ip, IPython.terminal.interactiveshell.InteractiveShell):
+    #     raise Exception('Are you running in IPython?')
+    # so let's not do isinstance. embrace the interface not the type!
+    if not hasattr(_ip, 'magics_manager'):
         raise Exception('Are you running in IPython?')
 
     user_aliases = []

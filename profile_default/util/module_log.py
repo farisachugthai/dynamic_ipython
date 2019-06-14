@@ -44,21 +44,28 @@ def path_logger(logger=None):
     return logger
 
 
-def stream_logger(logger=None, log_level=logging.INFO, msg_format=None):
+def stream_logger(logger, log_level=logging.INFO, msg_format=None):
     """Set up a :class:`~logging.Logger()` instance, add a stream handler.
 
     Should do some validation on the log level there. There's a really
     useful block of code in the tutorial.
 
+    .. admonition:: The following can't go in library logging code because
+                    it takes the name of this module not where it
+                    gets imported.::
+
+                        if logger is None:
+                        logger = logging.getLogger(name=__name__)
+
     Parameters
     ----------
+    logger : :class:`logging.Logger()`
+        Configure a passed logger. See example below.
     level : int, optional
         Level of log records. Defaults to 20.
     msg_format : str, optional
         Representation of logging messages. Uses standard %-style string formatting.
         Defaults to ``%(asctime)s %(levelname)s %(message)s``
-    logger : :class:`logging.Logger()`, optional
-        Configure a passed logger. See example below.
 
     Returns
     -------
@@ -72,14 +79,13 @@ def stream_logger(logger=None, log_level=logging.INFO, msg_format=None):
     >>> LOGGER = logger.stream_logging(logger=log)
 
     """
+    assert logger is not None
+
     handler = logging.StreamHandler(stream=sys.stderr)
 
     if isinstance(log_level, int):
         level = log_level
     # TODO: Come up with else. What if they pass a string?
-
-    if logger is None:
-        logger = logging.getLogger(name=__name__)
 
     logger.setLevel(level)
     handler.setLevel(level)
