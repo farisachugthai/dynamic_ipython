@@ -309,6 +309,7 @@ Progress Bar Section
 
 Conditional Key Bindings
 ~~~~~~~~~~~~~~~~~~~~~~~~
+
 Then again as a more advanced section.:
 
     It is also possible to combine multiple registries. We do this in the default
@@ -347,9 +348,96 @@ Then again as a more advanced section.:
             print(registry.key_bindings)
 
 
-What happened here?
+Load all default keybindings
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+From :ref:`prompt_toolkit.key_bindings.bindings.defaults`
+
+::
+
+     def load_key_bindings():
+         # Create a KeyBindings object that contains the default key bindings.
+         all_bindings = merge_key_bindings([
+             # Load basic bindings.
+             load_basic_bindings(),
+
+             # Load emacs bindings.
+             load_emacs_bindings(),
+             load_emacs_search_bindings(),
+
+             # Load Vi bindings.
+             load_vi_bindings(),
+             load_vi_search_bindings(),
+         ])
+
+         return merge_key_bindings([
+             # Make sure that the above key bindings are only active if the
+             # currently focused control is a `BufferControl`. For other controls, we
+             # don't want these key bindings to intervene. (This would break "ptterm"
+             # for instance, which handles 'Keys.Any' in the user control itself.)
+             ConditionalKeyBindings(all_bindings, buffer_has_focus),
+
+             # Active, even when no buffer has been focused.
+             load_mouse_bindings(),
+             load_cpr_bindings(),
+         ])
+
+That's literally everything. IPython chooses to add their own stuff
+during IPython.terminal.ptutil.create_ipython_shortcuts but if you
+choose to create your own registry then you get access to everything.
+
+It might not be hard to bind to if we do it the same way we did with
+that one pathlib.Path class.
+
+Literally::
+
+    from IPython import get_ipython
+    from prompt_toolkit.key_binding import merge_key_bindings, KeyBindings
+    from prompt_toolkit.key_binding.defaults import load_key_bindings
+
+    class KeyBindingsManager:
+
+        def __init__(self, shell=None):
+            if _ip is None:
+                _ip = get_ipython()
+            self.registry = KeyBindings
+
+Once the user initializes that class, then your :class:`KeyBindings`
+statement in the `__init__` func was execute and you'll have access
+to everything. Cool!
+
+::
+
+   registry = load_key_bindings()
+   return registry.key_bindings
+
+
+Ptpython and autocorrection
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+::
+
+    corrections = {
+        'impotr': 'import',
+        'pritn': 'print',
+    }
+
+    @repl.add_key_binding(' ')
+    def _(event):
+        ' When a space is pressed. Check & correct word before cursor. '
+        b = event.cli.current_buffer
+        w = b.document.get_word_before_cursor()
+
+        if w is not None:
+            if w in corrections:
+                b.delete_before_cursor(count=len(w))
+                b.insert_text(corrections[w])
+
+        b.insert_text(' ')
+
+
+Summary So Far
 ====================
-.. don't let this go into the final commit
 
 I wanted to try experimenting with the code to dynamically set up a toggle
 between Emacs and Vim.

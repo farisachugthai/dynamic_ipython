@@ -78,6 +78,7 @@ import logging
 import os
 import platform
 import shutil
+from tempfile import TemporaryDirectory
 
 from IPython.paths import get_ipython_dir
 # THIS IS THE MODULE! Its too exciting to able to execute this script
@@ -441,6 +442,21 @@ def sphinxify(obj):
     webbrowser.open_new_tab(url)
 
 
+try:
+    import docrepr.sphinxify as sphx
+
+    def ipython_sphinxify(doc):
+        """The official way IPython does it in :ref:`IPython.core.interactiveshell`."""
+        with TemporaryDirectory() as dirname:
+            return {
+                'text/html': sphx.sphinxify(doc, dirname),
+                'text/plain': doc
+            }
+
+except ImportError:
+    ipython_sphinxify = None
+
+# Now do it theway spyder does it!
 import importlib  # noqa E402
 try:
     importlib.import_module("docrepr")  # noqa E402
