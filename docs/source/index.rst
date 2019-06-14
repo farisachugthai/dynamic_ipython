@@ -28,7 +28,7 @@ Welcome to IPython packages' documentation!
 .. toctree::
    :caption: API Docs
    :numbered:
-   :maxdepth: 3
+   :maxdepth: 2
 
    API
 

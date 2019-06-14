@@ -7,8 +7,9 @@ Keybindings in IPython
 
 Interactively Binding Keys
 ==========================
+
 If we would like to add extra keybindings to the IPython shell, we can utilize
-a few functions built into the :mod:`IPython.terminal.interactiveshell` module,
+a few functions built into the :mod:`~IPython.terminal.interactiveshell` module,
 in addition, to utilizing the expansive :mod:`prompt_toolkit` library.
 
 First we'll initialize a global instance of the shell.
@@ -45,9 +46,6 @@ are as follows:
         'remove_binding']
 
 
-That file also gives a good example of how to bind keys.
-
-
 Original File Implementation
 ----------------------------
 
@@ -59,19 +57,22 @@ To find it programtically, one can use::
    >>> from IPython.paths import get_ipython_package_dir
    >>> print(get_ipython_package_dir())
 
-Then navigate to the root of that directory.
+Then navigate to the root of that directory and go to the terminal package.
 
-``%cd /usr/lib/python3.7/site-packages/IPython``
+.. ipython::
 
-Go to the terminal package.
-``%cd terminal``
-``%pycat shortcuts``
+    %cd /usr/lib/python3.7/site-packages/IPython
+    %cd terminal
+    %pycat shortcuts
 
 Up at the top you have the keybindings :mod:`IPython` ships with listed
 for ya!
 
 Official IPython Documentation
 ==============================
+
+Before we dive straight into the source code, let's check out how IPython
+describes rebindings keys.
 
 .. code-block:: python3
 
@@ -98,14 +99,13 @@ Official IPython Documentation
                              & insert_mode))(insert_unexpected)
 
 
-The documentation also shows a way of adding a Conditional Filter
+The documentation also shows a way of adding a `Conditional` Filter
 *a la Prompt Toolkit* to the Enter key. Looks like it invokes some
 :class:`prompt_toolkit.application.Buffer()` type code.
 
-Continue on in this fashion for as long as you need IPython barely comes
+Continue on in this fashion for as long as you need. In my opinion, IPython barely comes
 with any keybindings. I'm going to drop 1 that I thought was interesting
 though.
-*Also because i didn't know or remember these were keybindings.*
 
 .. code-block:: python3
 
@@ -119,7 +119,9 @@ though.
 
 Pure Prompt Toolkit Way of Rebinding Keys
 --------------------------------------------
-There are 2 different sections on rebinding keys from Prompt Toolkit.
+
+There are 3 different sections in the Prompt Toolkit Official Documentation
+on how to rebind keys using the package.
 
 The first time it's mentioned is in the :doc:`prompt_toolkit.asking_for_input` document.:
 
@@ -162,6 +164,10 @@ Adding custom key bindings
 
 Enable key bindings according to a condition
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Then key_bindings are discussed in the context of being filtered through
+certain conditions.
+
 :
 
     Often, some key bindings can be enabled or disabled according to a certain
@@ -192,6 +198,7 @@ Enable key bindings according to a condition
 
 Dynamically switch between Emacs and Vi mode
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 This is the part I'm most interested in, as we're going to try coming up with
 a new set of keybindings that blends together Emacs insert mode and Vim command mode.
 
@@ -235,6 +242,8 @@ might be useful. Bring it together with :func:`prompt_toolkit.key_bindings.merge
         run()
 
 Read more about key bindings …
+
+Here's a general overview with more examples on how to rebind keys.
 
 Using control-space for completion
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -297,10 +306,8 @@ Progress Bar Section
     progress bar is displayed. This ensures that printing happens above the
     progress bar.
 
-    .. lol what is that typo. mean thread???
-
     Further, when “x” is pressed, we set a cancel flag, which stops the progress.
-    It would also be possible to send SIGINT to the mean thread, but that’s not
+    It would also be possible to send SIGINT to the main thread, but that’s not
     always considered a clean way of cancelling something.
 
     In the example above, we also display a toolbar at the bottom which shows the
@@ -348,6 +355,12 @@ Then again as a more advanced section.:
             print(registry.key_bindings)
 
 
+Reviewing Source Code
+---------------------
+
+Whew! Well that was a lot take in. But now we'll move from their official documents
+to simply the source code where this is implemented.
+
 Load all default keybindings
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -383,11 +396,11 @@ From :ref:`prompt_toolkit.key_bindings.bindings.defaults`
          ])
 
 That's literally everything. IPython chooses to add their own stuff
-during IPython.terminal.ptutil.create_ipython_shortcuts but if you
+during :ref:`IPython.terminal.ptutil.create_ipython_shortcuts` but if you
 choose to create your own registry then you get access to everything.
 
 It might not be hard to bind to if we do it the same way we did with
-that one pathlib.Path class.
+that one :class:`pathlib.Path` class.
 
 Literally::
 
@@ -415,7 +428,8 @@ to everything. Cool!
 Ptpython and autocorrection
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-::
+This is simoply a different way to conceptualize key bindings that I hadn't
+seen before and found pretty creative.::
 
     corrections = {
         'impotr': 'import',
@@ -449,17 +463,6 @@ But I was curious what would happen.
 
 Doing so actually created an embedded IPython instance that you can now toggle on and off.
 
-And IPython allows you to do so with their ``dummy_mode`` attribute; which I've never
-known about. The lack of a useful docstring to introspect the object with didn't help at all.
-
-So maybe check out the source code for :mod:`IPython.terminal.embed`. But yeah I have
-no idea what the fuck happened here.::
-
-    In[7]: prompt_toolkit.key_binding.DynamicKeyBindings(_ip)
-    Out[7]: <prompt_toolkit.key_binding.key_bindings.DynamicKeyBindings at 0x189d84cae10>
-    In[8]: t = prompt_toolkit.key_binding.DynamicKeyBindings(_ip)
-      ...:
-    In[9]: t?
     Type:        DynamicKeyBindings
     String form: <prompt_toolkit.key_binding.key_bindings.DynamicKeyBindings object at 0x00000189D84CA160>
     File:        c:\tools\miniconda3\envs\dynamic\lib\site-packages\prompt_toolkit\key_binding\key_bindings.py
@@ -473,33 +476,6 @@ no idea what the fuck happened here.::
     In[11]: dir(t)
     Out[11]:
     ['_DynamicKeyBindings__version',
-     '__abstractmethods__',
-     '__class__',
-     '__delattr__',
-     '__dict__',
-     '__dir__',
-     '__doc__',
-     '__eq__',
-     '__format__',
-     '__ge__',
-     '__getattribute__',
-     '__gt__',
-     '__hash__',
-     '__init__',
-     '__init_subclass__',
-     '__le__',
-     '__lt__',
-     '__module__',
-     '__ne__',
-     '__new__',
-     '__reduce__',
-     '__reduce_ex__',
-     '__repr__',
-     '__setattr__',
-     '__sizeof__',
-     '__str__',
-     '__subclasshook__',
-     '__weakref__',
      '_abc_impl',
      '_dummy',
      '_last_child_version',
@@ -509,30 +485,10 @@ no idea what the fuck happened here.::
      'get_bindings_for_keys',
      'get_bindings_starting_with_keys',
      'get_key_bindings']
-    In[12]: t.bindings
-    Python 3.7.3 (default, Apr 24 2019, 15:29:51) [MSC v.1915 64 bit (AMD64)]
-    Type 'copyright', 'credits' or 'license' for more information
-    IPython 7.5.0 -- An enhanced Interactive Python. Type '?' for help.
 
-    In [10]: >? exi
-    ---------------------------------------------------------------------------
-    NameError                                 Traceback (most recent call last)
-    C:\tools\miniconda3\envs\dynamic\lib\site-packages\prompt_toolkit\key_binding\key_bindings.py in <module>
-    ----> 1 exi
-
-    NameError: name 'exi' is not defined
-
-    In [11]: >? exit
-
-    Out[12]: []
     In[13]: type(t)
     Out[13]: prompt_toolkit.key_binding.key_bindings.DynamicKeyBindings
     In[14]: t.get_key_bindings()
-    Python 3.7.3 (default, Apr 24 2019, 15:29:51) [MSC v.1915 64 bit (AMD64)]
-    Type 'copyright', 'credits' or 'license' for more information
-    IPython 7.5.0 -- An enhanced Interactive Python. Type '?' for help.
-
-    In [12]: >? exit
 
     In[15]: t.get_key_bindings?
     Signature:
@@ -547,8 +503,6 @@ no idea what the fuck happened here.::
         **kw,
     )
     Type:            InteractiveShellEmbed
-    String form:     <IPython.terminal.embed.InteractiveShellEmbed object at 0x00000189D8331860>
-    File:            c:\tools\miniconda3\envs\dynamic\lib\site-packages\ipython\terminal\embed.py
     Docstring:       <no docstring>
     Class docstring: An enhanced, interactive shell for Python.
     Init docstring:

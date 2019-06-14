@@ -44,6 +44,7 @@ these modifications while within :command:`cmd`.
 
 Installing
 ===========
+
 In addition, the scripts therein make a few assumptions. One is that the repository
 at `<https://github.com/farisachugthai/Gruvbox-IPython>`_ has been installed.
 
