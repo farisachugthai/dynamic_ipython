@@ -18,10 +18,7 @@ Note that they may not accurately reflect the API as they display the interface 
 :mod:`jupyter_notebook`
 =======================
 
-.. automodule:: jupyter.jupyter_notebook_config
-    :members:
-    :undoc-members:
-    :show-inheritance:
+.. autofunction:: jupyter.jupyter_notebook_config.jupyter_specific_configs
 
 
 :mod:`jupyter_nbconvert`

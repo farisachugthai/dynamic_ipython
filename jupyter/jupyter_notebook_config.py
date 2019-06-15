@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 """Configuration file for jupyter-notebook.
 
+.. currentmodule:: jupyter_notebook_config
+
 ================
 Jupyter Notebook
 ================
@@ -396,7 +398,7 @@ def jupyter_specific_configs():
 # Reraise exceptions encountered loading server extensions?
 c.NotebookApp.reraise_server_extension_failures = True
 
-del jupyter_specific_configs
+# del jupyter_specific_configs
 
 # Specify Where to open the notebook on startup. This is the `new` argument
 # passed to the standard library method `webbrowser.open`. The behaviour is not
@@ -950,4 +952,3 @@ c.ContentsManager.hide_globs = ['__pycache__', '*.pyc', '*.pyo', '.DS_Store', '*
 
 # Google Analytics tracking code
 # c.NteractConfig.ga_code = ''
->>>>>>> master

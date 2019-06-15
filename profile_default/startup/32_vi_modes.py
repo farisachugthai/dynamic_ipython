@@ -94,14 +94,13 @@ From the `source code`_:
 """
 import logging
 
+from IPython import get_ipython
+from IPython.terminal.interactiveshell import create_ipython_shortcuts
 from prompt_toolkit.enums import DEFAULT_BUFFER
 from prompt_toolkit.filters import HasFocus, ViInsertMode, ViNavigationMode
 from prompt_toolkit.key_binding import merge_key_bindings
-from prompt_toolkit.key_binding.vi_state import InputMode
 from prompt_toolkit.key_binding.bindings.named_commands import get_by_name
-
-from IPython import get_ipython
-from IPython.terminal.interactiveshell import create_ipython_shortcuts
+from prompt_toolkit.key_binding.vi_state import InputMode
 
 from profile_default.util import module_log
 
