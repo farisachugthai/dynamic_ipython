@@ -5,14 +5,14 @@
   <head>
     <meta charset="utf-8" />
     <title>jupyter.jupyter_notebook_config &#8212; Dynamic IPython 0.0.1 documentation</title>
-    <link rel="stylesheet" href="../../_static/pyramid.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../source/_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../source/_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/C:\Users\faris\projects\dynamic_ipython\docs\source\_static\pyramid.css_t" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../source/_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../source/_static/jquery.js"></script>
+    <script type="text/javascript" src="../../source/_static/underscore.js"></script>
+    <script type="text/javascript" src="../../source/_static/doctools.js"></script>
+    <script type="text/javascript" src="../../source/_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
@@ -33,7 +33,7 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../../source/_modules/index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -47,6 +47,8 @@
 <span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;Configuration file for jupyter-notebook.</span>
 
+<span class="sd">.. currentmodule:: jupyter_notebook_config</span>
+
 <span class="sd">================</span>
 <span class="sd">Jupyter Notebook</span>
 <span class="sd">================</span>
@@ -54,7 +56,7 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">traitlets.config</span> <span class="k">import</span> <span class="n">get_config</span>
 
-<span class="n">j</span> <span class="o">=</span> <span class="n">get_config</span><span class="p">()</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">get_config</span><span class="p">()</span>
 
 <span class="c1"># -----------------------------------------------------------------------------</span>
 <span class="c1"># Application(SingletonConfigurable) configuration</span>
@@ -63,13 +65,13 @@
 <span class="c1"># This is an application.</span>
 
 <span class="c1"># The date format used by logging formatters for %(asctime)s</span>
-<span class="c1"># j.Application.log_datefmt = &#39;%Y-%m-%d %H:%M:%S&#39;</span>
+<span class="n">c</span><span class="o">.</span><span class="n">Application</span><span class="o">.</span><span class="n">log_datefmt</span> <span class="o">=</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span>
 
 <span class="c1"># The Logging format template</span>
-<span class="c1"># j.Application.log_format = &#39;[%(name)s]%(highlevel)s %(message)s&#39;</span>
+<span class="n">c</span><span class="o">.</span><span class="n">Application</span><span class="o">.</span><span class="n">log_format</span> <span class="o">=</span> <span class="s1">&#39;[</span><span class="si">%(name)s</span><span class="s1">]</span><span class="si">%(highlevel)s</span><span class="s1"> </span><span class="si">%(message)s</span><span class="s1">&#39;</span>
 
 <span class="c1"># Set the log level by value or name.</span>
-<span class="c1"># j.Application.log_level = 30</span>
+<span class="n">c</span><span class="o">.</span><span class="n">Application</span><span class="o">.</span><span class="n">log_level</span> <span class="o">=</span> <span class="mi">30</span>
 
 <span class="c1"># -----------------------------------------------------------------------------</span>
 <span class="c1"># JupyterApp(Application) configuration</span>
@@ -78,372 +80,381 @@
 <span class="c1"># Base class for Jupyter applications</span>
 
 <span class="c1"># Answer yes to any prompts.</span>
-<span class="c1"># j.JupyterApp.answer_yes = False</span>
+<span class="c1"># c.JupyterApp.answer_yes = False</span>
 
 <span class="c1"># Full path of a config file.</span>
-<span class="c1"># j.JupyterApp.config_file = &#39;&#39;</span>
+<span class="c1"># c.JupyterApp.config_file = &#39;&#39;</span>
 
 <span class="c1"># Specify a config file to load.</span>
-<span class="c1"># j.JupyterApp.config_file_name = &#39;&#39;</span>
+<span class="c1"># c.JupyterApp.config_file_name = &#39;&#39;</span>
 
 <span class="c1"># Generate default config file.</span>
-<span class="c1"># j.JupyterApp.generate_config = False</span>
+<span class="c1"># c.JupyterApp.generate_config = False</span>
 
-<span class="c1"># -----------------------------------------------------------------------------</span>
-<span class="c1"># NotebookApp(JupyterApp) configuration</span>
-<span class="c1"># -----------------------------------------------------------------------------</span>
+<div class="viewcode-block" id="jupyter_specific_configs"><a class="viewcode-back" href="../../jupyter.html#jupyter.jupyter_notebook_config.jupyter_specific_configs">[docs]</a><span class="k">def</span> <span class="nf">jupyter_specific_configs</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="c1"># Set the Access-Control-Allow-Credentials: true header</span>
-<span class="c1"># j.NotebookApp.allow_credentials = False</span>
+<span class="sd">    -----------------------------------------------------------------------------</span>
+<span class="sd">    NotebookApp(JupyterApp) configuration</span>
+<span class="sd">    -----------------------------------------------------------------------------</span>
 
-<span class="c1"># Set the Access-Control-Allow-Origin header</span>
+<span class="sd">    Set the Access-Control-Allow-Credentials: true header</span>
+<span class="sd">    c.NotebookApp.allow_credentials = False</span>
 
-<span class="c1"># Use &#39;*&#39; to allow any origin to access your server.</span>
+<span class="sd">    Set the Access-Control-Allow-Origin header</span>
 
-<span class="c1"># Takes precedence over allow_origin_pat.</span>
-<span class="c1"># j.NotebookApp.allow_origin = &#39;&#39;</span>
+<span class="sd">    Use &#39;*&#39; to allow any origin to access your server.</span>
 
-<span class="c1"># Use a regular expression for the Access-Control-Allow-Origin header</span>
+<span class="sd">    Takes precedence over allow_origin_pat.</span>
+<span class="sd">    c.NotebookApp.allow_origin = &#39;&#39;</span>
 
-<span class="c1"># Requests from an origin matching the expression will get replies with:</span>
+<span class="sd">    Use a regular expression for the Access-Control-Allow-Origin header</span>
 
-<span class="c1">#     Access-Control-Allow-Origin: origin</span>
+<span class="sd">    Requests from an origin matching the expression will get replies with:</span>
 
-<span class="c1"># where `origin` is the origin of the request.</span>
+<span class="sd">        Access-Control-Allow-Origin: origin</span>
 
-<span class="c1"># Ignored if allow_origin is set.</span>
-<span class="c1"># j.NotebookApp.allow_origin_pat = &#39;&#39;</span>
+<span class="sd">    where `origin` is the origin of the request.</span>
 
-<span class="c1"># Allow password to be changed at login for the notebook server.</span>
+<span class="sd">    Ignored if allow_origin is set.</span>
+<span class="sd">    c.NotebookApp.allow_origin_pat = &#39;&#39;</span>
 
-<span class="c1"># While loggin in with a token, the notebook server UI will give the opportunity</span>
-<span class="c1"># to the user to enter a new password at the same time that will replace the</span>
-<span class="c1"># token login mechanism.</span>
+<span class="sd">    Allow password to be changed at login for the notebook server.</span>
 
-<span class="c1"># This can be set to false to prevent changing password from the UI/API.</span>
-<span class="c1"># j.NotebookApp.allow_password_change = True</span>
+<span class="sd">    While loggin in with a token, the notebook server UI will give the opportunity</span>
+<span class="sd">    to the user to enter a new password at the same time that will replace the</span>
+<span class="sd">    token login mechanism.</span>
 
-<span class="c1"># Allow requests where the Host header doesn&#39;t point to a local server</span>
+<span class="sd">    This can be set to false to prevent changing password from the UI/API.</span>
+<span class="sd">    c.NotebookApp.allow_password_change = True</span>
 
-<span class="c1"># By default, requests get a 403 forbidden response if the &#39;Host&#39; header shows</span>
-<span class="c1"># that the browser thinks it&#39;s on a non-local domain. Setting this option to</span>
-<span class="c1"># True disables this check.</span>
+<span class="sd">    Allow requests where the Host header doesn&#39;t point to a local server</span>
 
-<span class="c1"># This protects against &#39;DNS rebinding&#39; attacks, where a remote web server</span>
-<span class="c1"># serves you a page and then changes its DNS to send later requests to a local</span>
-<span class="c1"># IP, bypassing same-origin checks.</span>
+<span class="sd">    By default, requests get a 403 forbidden response if the &#39;Host&#39; header shows</span>
+<span class="sd">    that the browser thinks it&#39;s on a non-local domain. Setting this option to</span>
+<span class="sd">    True disables this check.</span>
 
-<span class="c1"># Local IP addresses (such as 127.0.0.1 and ::1) are allowed as local, along</span>
-<span class="c1"># with hostnames configured in local_hostnames.</span>
-<span class="c1"># j.NotebookApp.allow_remote_access = False</span>
+<span class="sd">    This protects against &#39;DNS rebinding&#39; attacks, where a remote web server</span>
+<span class="sd">    serves you a page and then changes its DNS to send later requests to a local</span>
+<span class="sd">    IP, bypassing same-origin checks.</span>
 
-<span class="c1"># Whether to allow the user to run the notebook as root.</span>
-<span class="c1"># j.NotebookApp.allow_root = False</span>
+<span class="sd">    Local IP addresses (such as 127.0.0.1 and ::1) are allowed as local, along</span>
+<span class="sd">    with hostnames configured in local_hostnames.</span>
+<span class="sd">    c.NotebookApp.allow_remote_access = False</span>
 
-<span class="c1"># DEPRECATED use base_url</span>
-<span class="c1"># j.NotebookApp.base_project_url = &#39;/&#39;</span>
+<span class="sd">    Whether to allow the user to run the notebook as root.</span>
+<span class="sd">    c.NotebookApp.allow_root = False</span>
 
-<span class="c1"># The base URL for the notebook server.</span>
+<span class="sd">    DEPRECATED use base_url</span>
+<span class="sd">    c.NotebookApp.base_project_url = &#39;/&#39;</span>
 
-<span class="c1"># Leading and trailing slashes can be omitted, and will automatically be added.</span>
-<span class="c1"># j.NotebookApp.base_url = &#39;/&#39;</span>
+<span class="sd">    The base URL for the notebook server.</span>
 
-<span class="c1"># Specify what command to use to invoke a web browser when opening the notebook.</span>
-<span class="c1"># If not specified, the default browser will be determined by the `webbrowser`</span>
-<span class="c1"># standard library module, which allows setting of the BROWSER environment</span>
-<span class="c1"># variable to override it.</span>
-<span class="c1"># j.NotebookApp.browser = &#39;&#39;</span>
+<span class="sd">    Leading and trailing slashes can be omitted, and will automatically be added.</span>
+<span class="sd">    c.NotebookApp.base_url = &#39;/&#39;</span>
 
-<span class="c1"># The full path to an SSL/TLS certificate file.</span>
-<span class="c1"># j.NotebookApp.certfile = &#39;&#39;</span>
+<span class="sd">    Specify what command to use to invoke a web browser when opening the notebook.</span>
+<span class="sd">    If not specified, the default browser will be determined by the `webbrowser`</span>
+<span class="sd">    standard library module, which allows setting of the BROWSER environment</span>
+<span class="sd">    variable to override it.</span>
+<span class="sd">    c.NotebookApp.browser = &#39;&#39;</span>
 
-<span class="c1"># The full path to a certificate authority certificate for SSL/TLS client</span>
-<span class="c1"># authentication.</span>
-<span class="c1"># j.NotebookApp.client_ca = &#39;&#39;</span>
+<span class="sd">    The full path to an SSL/TLS certificate file.</span>
+<span class="sd">    c.NotebookApp.certfile = &#39;&#39;</span>
 
-<span class="c1"># The config manager class to use</span>
-<span class="c1"># j.NotebookApp.config_manager_class = &#39;notebook.services.config.manager.ConfigManager&#39;</span>
+<span class="sd">    The full path to a certificate authority certificate for SSL/TLS client</span>
+<span class="sd">    authentication.</span>
+<span class="sd">    c.NotebookApp.client_ca = &#39;&#39;</span>
 
-<span class="c1"># The notebook manager class to use.</span>
-<span class="c1"># j.NotebookApp.contents_manager_class = &#39;notebook.services.contents.largefilemanager.LargeFileManager&#39;</span>
+<span class="sd">    The config manager class to use</span>
+<span class="sd">    c.NotebookApp.config_manager_class = &#39;notebook.services.config.manager.ConfigManager&#39;</span>
 
-<span class="c1"># Extra keyword arguments to pass to `set_secure_cookie`. See tornado&#39;s</span>
-<span class="c1"># set_secure_cookie docs for details.</span>
-<span class="c1"># j.NotebookApp.cookie_options = {}</span>
+<span class="sd">    The notebook manager class to use.</span>
+<span class="sd">    c.NotebookApp.contents_manager_class = &#39;notebook.services.contents.largefilemanager.LargeFileManager&#39;</span>
 
-<span class="c1"># The random bytes used to secure cookies. By default this is a new random</span>
-<span class="c1"># number every time you start the Notebook. Set it to a value in a config file</span>
-<span class="c1"># to enable logins to persist across server sessions.</span>
+<span class="sd">    Extra keyword arguments to pass to `set_secure_cookie`. See tornado&#39;s</span>
+<span class="sd">    set_secure_cookie docs for details.</span>
+<span class="sd">    c.NotebookApp.cookie_options = {}</span>
 
-<span class="c1"># Note: Cookie secrets should be kept private, do not share config files with</span>
-<span class="c1"># cookie_secret stored in plaintext (you can read the value from a file).</span>
-<span class="c1"># j.NotebookApp.cookie_secret = b&#39;&#39;</span>
+<span class="sd">    The random bytes used to secure cookies. By default this is a new random</span>
+<span class="sd">    number every time you start the Notebook. Set it to a value in a config file</span>
+<span class="sd">    to enable logins to persist across server sessions.</span>
 
-<span class="c1"># The file where the cookie secret is stored.</span>
-<span class="c1"># j.NotebookApp.cookie_secret_file = &#39;&#39;</span>
+<span class="sd">    Note: Cookie secrets should be kept private, do not share config files with</span>
+<span class="sd">    cookie_secret stored in plaintext (you can read the value from a file).</span>
+<span class="sd">    c.NotebookApp.cookie_secret = b&#39;&#39;</span>
 
-<span class="c1"># Override URL shown to users.</span>
+<span class="sd">    The file where the cookie secret is stored.</span>
+<span class="sd">    c.NotebookApp.cookie_secret_file = &#39;&#39;</span>
 
-<span class="c1"># Replace actual URL, including protocol, address, port and base URL, with the</span>
-<span class="c1"># given value when displaying URL to the users. Do not change the actual</span>
-<span class="c1"># connection URL. If authentication token is enabled, the token is added to the</span>
-<span class="c1"># custom URL automatically.</span>
+<span class="sd">    Override URL shown to users.</span>
 
-<span class="c1"># This option is intended to be used when the URL to display to the user cannot</span>
-<span class="c1"># be determined reliably by the Jupyter notebook server (proxified or</span>
-<span class="c1"># containerized setups for example).</span>
-<span class="c1"># j.NotebookApp.custom_display_url = &#39;&#39;</span>
+<span class="sd">    Replace actual URL, including protocol, address, port and base URL, with the</span>
+<span class="sd">    given value when displaying URL to the users. Do not change the actual</span>
+<span class="sd">    connection URL. If authentication token is enabled, the token is added to the</span>
+<span class="sd">    custom URL automatically.</span>
 
-<span class="c1"># The default URL to redirect to from `/`</span>
-<span class="c1"># j.NotebookApp.default_url = &#39;/tree&#39;</span>
+<span class="sd">    This option is intended to be used when the URL to display to the user cannot</span>
+<span class="sd">    be determined reliably by the Jupyter notebook server (proxified or</span>
+<span class="sd">    containerized setups for example).</span>
+<span class="sd">    c.NotebookApp.custom_display_url = &#39;&#39;</span>
 
-<span class="c1"># Disable cross-site-request-forgery protection</span>
+<span class="sd">    The default URL to redirect to from `/`</span>
+<span class="sd">    c.NotebookApp.default_url = &#39;/tree&#39;</span>
 
-<span class="c1"># Jupyter notebook 4.3.1 introduces protection from cross-site request</span>
-<span class="c1"># forgeries, requiring API requests to either:</span>
+<span class="sd">    Disable cross-site-request-forgery protection</span>
 
-<span class="c1"># - originate from pages served by this server (validated with XSRF cookie and</span>
-<span class="c1"># token), or - authenticate with a token</span>
+<span class="sd">    Jupyter notebook 4.3.1 introduces protection from cross-site request</span>
+<span class="sd">    forgeries, requiring API requests to either:</span>
 
-<span class="c1"># Some anonymous compute resources still desire the ability to run code,</span>
-<span class="c1"># completely without authentication. These services can disable all</span>
-<span class="c1"># authentication and security checks, with the full knowledge of what that</span>
-<span class="c1"># implies.</span>
-<span class="c1"># j.NotebookApp.disable_check_xsrf = False</span>
+<span class="sd">    - originate from pages served by this server (validated with XSRF cookie and</span>
+<span class="sd">    token), or - authenticate with a token</span>
 
-<span class="c1"># Whether to enable MathJax for typesetting math/TeX</span>
+<span class="sd">    Some anonymous compute resources still desire the ability to run code,</span>
+<span class="sd">    completely without authentication. These services can disable all</span>
+<span class="sd">    authentication and security checks, with the full knowledge of what that</span>
+<span class="sd">    implies.</span>
+<span class="sd">    c.NotebookApp.disable_check_xsrf = False</span>
 
-<span class="c1"># MathJax is the javascript library Jupyter uses to render math/LaTeX. It is</span>
-<span class="c1"># very large, so you may want to disable it if you have a slow internet</span>
-<span class="c1"># connection, or for offline use of the notebook.</span>
+<span class="sd">    Whether to enable MathJax for typesetting math/TeX</span>
 
-<span class="c1"># When disabled, equations etj. will appear as their untransformed TeX source.</span>
-<span class="c1"># j.NotebookApp.enable_mathjax = True</span>
+<span class="sd">    MathJax is the javascript library Jupyter uses to render math/LaTeX. It is</span>
+<span class="sd">    very large, so you may want to disable it if you have a slow internet</span>
+<span class="sd">    connection, or for offline use of the notebook.</span>
 
-<span class="c1"># extra paths to look for Javascript notebook extensions</span>
-<span class="c1"># j.NotebookApp.extra_nbextensions_path = []</span>
+<span class="sd">    When disabled, equations etj. will appear as their untransformed TeX source.</span>
+<span class="sd">    c.NotebookApp.enable_mathjax = True</span>
 
-<span class="c1"># handlers that should be loaded at higher priority than the default services</span>
-<span class="c1"># j.NotebookApp.extra_services = []</span>
+<span class="sd">    extra paths to look for Javascript notebook extensions</span>
+<span class="sd">    c.NotebookApp.extra_nbextensions_path = []</span>
 
-<span class="c1"># Extra paths to search for serving static files.</span>
+<span class="sd">    handlers that should be loaded at higher priority than the default services</span>
+<span class="sd">    c.NotebookApp.extra_services = []</span>
 
-<span class="c1"># This allows adding javascript/css to be available from the notebook server</span>
-<span class="c1"># machine, or overriding individual files in the IPython</span>
-<span class="c1"># j.NotebookApp.extra_static_paths = []</span>
+<span class="sd">    Extra paths to search for serving static files.</span>
 
-<span class="c1"># Extra paths to search for serving jinja templates.</span>
+<span class="sd">    This allows adding javascript/css to be available from the notebook server</span>
+<span class="sd">    machine, or overriding individual files in the IPython</span>
+<span class="sd">    c.NotebookApp.extra_static_paths = []</span>
 
-<span class="c1"># Can be used to override templates from notebook.templates.</span>
-<span class="c1"># j.NotebookApp.extra_template_paths = []</span>
+<span class="sd">    Extra paths to search for serving jinja templates.</span>
 
+<span class="sd">    Can be used to override templates from notebook.templates.</span>
+<span class="sd">    c.NotebookApp.extra_template_paths = []</span>
 
-<span class="c1"># j.NotebookApp.file_to_run = &#39;&#39;</span>
 
-<span class="c1"># Extra keyword arguments to pass to `get_secure_cookie`. See tornado&#39;s</span>
-<span class="c1"># get_secure_cookie docs for details.</span>
-<span class="c1"># j.NotebookApp.get_secure_cookie_kwargs = {}</span>
+<span class="sd">    c.NotebookApp.file_to_run = &#39;&#39;</span>
 
-<span class="c1"># Deprecated: Use minified JS file or not, mainly use during dev to avoid JS</span>
-<span class="c1"># recompilation</span>
-<span class="c1"># j.NotebookApp.ignore_minified_js = False</span>
+<span class="sd">    Extra keyword arguments to pass to `get_secure_cookie`. See tornado&#39;s</span>
+<span class="sd">    get_secure_cookie docs for details.</span>
+<span class="sd">    c.NotebookApp.get_secure_cookie_kwargs = {}</span>
 
-<span class="c1"># (bytes/sec) Maximum rate at which stream output can be sent on iopub before</span>
-<span class="c1"># they are limited.</span>
-<span class="c1"># j.NotebookApp.iopub_data_rate_limit = 1000000</span>
+<span class="sd">    Deprecated: Use minified JS file or not, mainly use during dev to avoid JS</span>
+<span class="sd">    recompilation</span>
+<span class="sd">    c.NotebookApp.ignore_minified_js = False</span>
 
-<span class="c1"># (msgs/sec) Maximum rate at which messages can be sent on iopub before they are</span>
-<span class="c1"># limited.</span>
-<span class="c1"># j.NotebookApp.iopub_msg_rate_limit = 1000</span>
+<span class="sd">    (bytes/sec) Maximum rate at which stream output can be sent on iopub before</span>
+<span class="sd">    they are limited.</span>
+<span class="sd">    c.NotebookApp.iopub_data_rate_limit = 1000000</span>
 
-<span class="c1"># The IP address the notebook server will listen on.</span>
-<span class="c1"># j.NotebookApp.ip = &#39;localhost&#39;</span>
+<span class="sd">    (msgs/sec) Maximum rate at which messages can be sent on iopub before they are</span>
+<span class="sd">    limited.</span>
+<span class="sd">    c.NotebookApp.iopub_msg_rate_limit = 1000</span>
 
-<span class="c1"># Supply extra arguments that will be passed to Jinja environment.</span>
-<span class="c1"># j.NotebookApp.jinja_environment_options = {}</span>
+<span class="sd">    The IP address the notebook server will listen on.</span>
+<span class="sd">    c.NotebookApp.ip = &#39;localhost&#39;</span>
 
-<span class="c1"># Extra variables to supply to jinja templates when rendering.</span>
-<span class="c1"># j.NotebookApp.jinja_template_vars = {}</span>
+<span class="sd">    Supply extra arguments that will be passed to Jinja environment.</span>
+<span class="sd">    c.NotebookApp.jinja_environment_options = {}</span>
 
-<span class="c1"># The kernel manager class to use.</span>
-<span class="c1"># j.NotebookApp.kernel_manager_class = &#39;notebook.services.kernels.kernelmanager.MappingKernelManager&#39;</span>
+<span class="sd">    Extra variables to supply to jinja templates when rendering.</span>
+<span class="sd">    c.NotebookApp.jinja_template_vars = {}</span>
 
-<span class="c1"># The kernel spec manager class to use. Should be a subclass of</span>
-<span class="c1"># `jupyter_client.kernelspej.KernelSpecManager`.</span>
+<span class="sd">    The kernel manager class to use.</span>
+<span class="sd">    c.NotebookApp.kernel_manager_class = &#39;notebook.services.kernels.kernelmanager.MappingKernelManager&#39;</span>
 
-<span class="c1"># The Api of KernelSpecManager is provisional and might change without warning</span>
-<span class="c1"># between this version of Jupyter and the next stable one.</span>
-<span class="c1"># j.NotebookApp.kernel_spec_manager_class = &#39;jupyter_client.kernelspec.KernelSpecManager&#39;</span>
+<span class="sd">    The kernel spec manager class to use. Should be a subclass of</span>
+<span class="sd">    `jupyter_client.kernelspej.KernelSpecManager`.</span>
 
-<span class="c1"># The full path to a private key file for usage with SSL/TLS.</span>
-<span class="c1"># j.NotebookApp.keyfile = &#39;&#39;</span>
+<span class="sd">    The Api of KernelSpecManager is provisional and might change without warning</span>
+<span class="sd">    between this version of Jupyter and the next stable one.</span>
+<span class="sd">    c.NotebookApp.kernel_spec_manager_class = &#39;jupyter_client.kernelspec.KernelSpecManager&#39;</span>
 
-<span class="c1"># Hostnames to allow as local when allow_remote_access is False.</span>
+<span class="sd">    The full path to a private key file for usage with SSL/TLS.</span>
+<span class="sd">    c.NotebookApp.keyfile = &#39;&#39;</span>
 
-<span class="c1"># Local IP addresses (such as 127.0.0.1 and ::1) are automatically accepted as</span>
-<span class="c1"># local as well.</span>
-<span class="c1"># j.NotebookApp.local_hostnames = [&#39;localhost&#39;]</span>
+<span class="sd">    Hostnames to allow as local when allow_remote_access is False.</span>
 
-<span class="c1"># The login handler class to use.</span>
-<span class="c1"># j.NotebookApp.login_handler_class = &#39;notebook.auth.login.LoginHandler&#39;</span>
+<span class="sd">    Local IP addresses (such as 127.0.0.1 and ::1) are automatically accepted as</span>
+<span class="sd">    local as well.</span>
+<span class="sd">    c.NotebookApp.local_hostnames = [&#39;localhost&#39;]</span>
 
-<span class="c1"># The logout handler class to use.</span>
-<span class="c1"># j.NotebookApp.logout_handler_class = &#39;notebook.auth.logout.LogoutHandler&#39;</span>
+<span class="sd">    The login handler class to use.</span>
+<span class="sd">    c.NotebookApp.login_handler_class = &#39;notebook.auth.login.LoginHandler&#39;</span>
 
-<span class="c1"># The MathJax.js configuration file that is to be used.</span>
-<span class="c1"># j.NotebookApp.mathjax_config = &#39;TeX-AMS-MML_HTMLorMML-full,Safe&#39;</span>
+<span class="sd">    The logout handler class to use.</span>
+<span class="sd">    c.NotebookApp.logout_handler_class = &#39;notebook.auth.logout.LogoutHandler&#39;</span>
 
-<span class="c1"># A custom url for MathJax.js. Should be in the form of a case-sensitive url to</span>
-<span class="c1"># MathJax, for example:  /static/components/MathJax/MathJax.js</span>
-<span class="c1"># j.NotebookApp.mathjax_url = &#39;&#39;</span>
+<span class="sd">    The MathJax.js configuration file that is to be used.</span>
+<span class="sd">    c.NotebookApp.mathjax_config = &#39;TeX-AMS-MML_HTMLorMML-full,Safe&#39;</span>
 
-<span class="c1"># Sets the maximum allowed size of the client request body, specified in  the</span>
-<span class="c1"># Content-Length request header field. If the size in a request  exceeds the</span>
-<span class="c1"># configured value, a malformed HTTP message is returned to the client.</span>
+<span class="sd">    A custom url for MathJax.js. Should be in the form of a case-sensitive url to</span>
+<span class="sd">    MathJax, for example:  /static/components/MathJax/MathJax.js</span>
+<span class="sd">    c.NotebookApp.mathjax_url = &#39;&#39;</span>
 
-<span class="c1"># Note: max_body_size is applied even in streaming mode.</span>
-<span class="c1"># j.NotebookApp.max_body_size = 536870912</span>
+<span class="sd">    Sets the maximum allowed size of the client request body, specified in  the</span>
+<span class="sd">    Content-Length request header field. If the size in a request  exceeds the</span>
+<span class="sd">    configured value, a malformed HTTP message is returned to the client.</span>
 
-<span class="c1"># Gets or sets the maximum amount of memory, in bytes, that is allocated  for</span>
-<span class="c1"># use by the buffer manager.</span>
-<span class="c1"># j.NotebookApp.max_buffer_size = 536870912</span>
+<span class="sd">    Note: max_body_size is applied even in streaming mode.</span>
+<span class="sd">    c.NotebookApp.max_body_size = 536870912</span>
 
-<span class="c1"># Dict of Python modules to load as notebook server extensions.Entry values can</span>
-<span class="c1"># be used to enable and disable the loading ofthe extensions. The extensions</span>
-<span class="c1"># will be loaded in alphabetical order.</span>
-<span class="c1"># j.NotebookApp.nbserver_extensions = {}</span>
+<span class="sd">    Gets or sets the maximum amount of memory, in bytes, that is allocated  for</span>
+<span class="sd">    use by the buffer manager.</span>
+<span class="sd">    c.NotebookApp.max_buffer_size = 536870912</span>
 
-<span class="c1"># The directory to use for notebooks and kernels.</span>
-<span class="c1"># j.NotebookApp.notebook_dir = &#39;&#39;</span>
+<span class="sd">    Dict of Python modules to load as notebook server extensions.Entry values can</span>
+<span class="sd">    be used to enable and disable the loading ofthe extensions. The extensions</span>
+<span class="sd">    will be loaded in alphabetical order.</span>
+<span class="sd">    c.NotebookApp.nbserver_extensions = {}</span>
 
-<span class="c1"># Whether to open in a browser after starting. The specific browser used is</span>
-<span class="c1"># platform dependent and determined by the python standard library `webbrowser`</span>
-<span class="c1"># module, unless it is overridden using the --browser (NotebookApp.browser)</span>
-<span class="c1"># configuration option.</span>
-<span class="c1"># j.NotebookApp.open_browser = True</span>
+<span class="sd">    The directory to use for notebooks and kernels.</span>
+<span class="sd">    c.NotebookApp.notebook_dir = &#39;&#39;</span>
 
-<span class="c1"># Hashed password to use for web authentication.</span>
+<span class="sd">    Whether to open in a browser after starting. The specific browser used is</span>
+<span class="sd">    platform dependent and determined by the python standard library `webbrowser`</span>
+<span class="sd">    module, unless it is overridden using the --browser (NotebookApp.browser)</span>
+<span class="sd">    configuration option.</span>
+<span class="sd">    c.NotebookApp.open_browser = True</span>
 
-<span class="c1"># To generate, type in a python/IPython shell:</span>
+<span class="sd">    Hashed password to use for web authentication.</span>
 
-<span class="c1">#   from notebook.auth import passwd; passwd()</span>
+<span class="sd">    To generate, type in a python/IPython shell:</span>
 
-<span class="c1"># The string should be of the form type:salt:hashed-password.</span>
-<span class="c1"># j.NotebookApp.password = &#39;&#39;</span>
+<span class="sd">      from notebook.auth import passwd; passwd()</span>
 
-<span class="c1"># Forces users to use a password for the Notebook server. This is useful in a</span>
-<span class="c1"># multi user environment, for instance when everybody in the LAN can access each</span>
-<span class="c1"># other&#39;s machine through ssh.</span>
+<span class="sd">    The string should be of the form type:salt:hashed-password.</span>
+<span class="sd">    c.NotebookApp.password = &#39;&#39;</span>
 
-<span class="c1"># In such a case, server the notebook server on localhost is not secure since</span>
-<span class="c1"># any user can connect to the notebook server via ssh.</span>
-<span class="c1"># j.NotebookApp.password_required = False</span>
+<span class="sd">    Forces users to use a password for the Notebook server. This is useful in a</span>
+<span class="sd">    multi user environment, for instance when everybody in the LAN can access each</span>
+<span class="sd">    other&#39;s machine through ssh.</span>
 
-<span class="c1"># The port the notebook server will listen on.</span>
-<span class="c1"># j.NotebookApp.port = 8888</span>
+<span class="sd">    In such a case, server the notebook server on localhost is not secure since</span>
+<span class="sd">    any user can connect to the notebook server via ssh.</span>
+<span class="sd">    c.NotebookApp.password_required = False</span>
 
-<span class="c1"># The number of additional ports to try if the specified port is not available.</span>
-<span class="c1"># j.NotebookApp.port_retries = 50</span>
+<span class="sd">    The port the notebook server will listen on.</span>
+<span class="sd">    c.NotebookApp.port = 8888</span>
 
-<span class="c1"># DISABLED: use %pylab or %matplotlib in the notebook to enable matplotlib.</span>
-<span class="c1"># j.NotebookApp.pylab = &#39;disabled&#39;</span>
+<span class="sd">    The number of additional ports to try if the specified port is not available.</span>
+<span class="sd">    c.NotebookApp.port_retries = 50</span>
 
-<span class="c1"># If True, display a button in the dashboard to quit (shutdown the notebook</span>
-<span class="c1"># server).</span>
-<span class="c1"># j.NotebookApp.quit_button = True</span>
+<span class="sd">    DISABLED: use %pylab or %matplotlib in the notebook to enable matplotlib.</span>
+<span class="sd">    c.NotebookApp.pylab = &#39;disabled&#39;</span>
 
-<span class="c1"># (sec) Time window used to  check the message and data rate limits.</span>
-<span class="c1"># j.NotebookApp.rate_limit_window = 3</span>
+<span class="sd">    If True, display a button in the dashboard to quit (shutdown the notebook</span>
+<span class="sd">    server).</span>
+<span class="sd">    c.NotebookApp.quit_button = True</span>
+
+<span class="sd">    (sec) Time window used to  check the message and data rate limits.</span>
+<span class="sd">    c.NotebookApp.rate_limit_window = 3</span>
+
+<span class="sd">    The directory for user settings.</span>
+<span class="sd">    c.LabApp.user_settings_dir = &#39;/data/data/com.termux/files/home/.jupyter/lab/user-settings&#39;</span>
+
+<span class="sd">    #############</span>
+<span class="sd">     fswatcher  #</span>
+<span class="sd">    #############</span>
+
+<span class="sd">    Whether to serve the app in watch mode</span>
+<span class="sd">    c.LabApp.watch = False</span>
+
+<span class="sd">     The directory for workspaces</span>
+<span class="sd">    .LabApp.workspaces_dir = &#39;/data/data/com.termux/files/home/.jupyter/lab/workspaces&#39;</span>
+
+<span class="sd">    Supply SSL options for the tornado HTTPServer. See the tornado docs for</span>
+<span class="sd">    details.</span>
+<span class="sd">    c.NotebookApp.ssl_options = {}</span>
+
+<span class="sd">    Supply overrides for terminado. Currently only supports &quot;shell_command&quot;.</span>
+<span class="sd">    c.NotebookApp.terminado_settings = {}</span>
+
+<span class="sd">    Set to False to disable terminals.</span>
+
+<span class="sd">    This does *not* make the notebook server more secure by itself. Anything the</span>
+<span class="sd">    user can in a terminal, they can also do in a notebook.</span>
+
+<span class="sd">    Terminals may also be automatically disabled if the terminado package is not</span>
+<span class="sd">    available.</span>
+<span class="sd">    c.NotebookApp.terminals_enabled = True</span>
+
+<span class="sd">    Token used for authenticating first-time connections to the server.</span>
+
+<span class="sd">    When no password is enabled, the default is to generate a new, random token.</span>
+
+<span class="sd">    Setting to an empty string disables authentication altogether, which is NOT</span>
+<span class="sd">    RECOMMENDED.</span>
+<span class="sd">    c.NotebookApp.token = &#39;&lt;generated&gt;&#39;</span>
+
+<span class="sd">    Supply overrides for the tornado.web.Application that the Jupyter notebook</span>
+<span class="sd">    uses.</span>
+<span class="sd">    c.NotebookApp.tornado_settings = {}</span>
+
+<span class="sd">    Whether to trust or not X-Scheme/X-Forwarded-Proto and X-Real-Ip/X-Forwarded-</span>
+<span class="sd">    For headerssent by the upstream reverse proxy. Necessary if the proxy handles</span>
+<span class="sd">    SSL</span>
+<span class="sd">    c.NotebookApp.trust_xheaders = False</span>
+
+<span class="sd">    DEPRECATED, use tornado_settings</span>
+<span class="sd">    c.NotebookApp.webapp_settings = {}</span>
+
+
+<span class="sd">    Set the tornado compression options for websocket connections.</span>
+
+<span class="sd">    This value will be returned from</span>
+<span class="sd">    :meth:`WebSocketHandler.get_compression_options`. None (default) will disable</span>
+<span class="sd">    compression. A dict (even an empty one) will enable compression.</span>
+
+<span class="sd">    See the tornado docs for WebSocketHandler.get_compression_options for details.</span>
+<span class="sd">    c.NotebookApp.websocket_compression_options = None</span>
+
+<span class="sd">    The base URL for websockets, if it differs from the HTTP server (hint: it</span>
+<span class="sd">    almost certainly doesn&#39;t).</span>
+
+<span class="sd">    Should be in the form of an HTTP origin: ws[s]://hostname[:port]</span>
+<span class="sd">    c.NotebookApp.websocket_url = &#39;&#39;</span>
+
+<span class="sd">    -----------------------------------------------------------------------------</span>
+<span class="sd">    NteractApp(NotebookApp) configuration</span>
+<span class="sd">    -----------------------------------------------------------------------------</span>
+
+<span class="sd">    Application for runing nteract on a jupyter notebook server.</span>
+
+<span class="sd">    Whether to start the app in dev mode. Expects resources to be loaded from</span>
+<span class="sd">    webpack&#39;s hot reloading server at http://localhost:8357/. Run `yarn workspace</span>
+<span class="sd">    nteract-on-jupyter run hot --port 8357` To serve your assets. This is only</span>
+<span class="sd">    useful if NteractApp is installed editably e.g., using `pip install -e .`.</span>
+<span class="sd">    c.NteractApp.dev_mode = False</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">pass</span></div>
+
 
 <span class="c1"># Reraise exceptions encountered loading server extensions?</span>
-<span class="n">j</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">reraise_server_extension_failures</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">reraise_server_extension_failures</span> <span class="o">=</span> <span class="kc">True</span>
 
-<span class="c1"># The directory for user settings.</span>
-<span class="c1"># c.LabApp.user_settings_dir = &#39;/data/data/com.termux/files/home/.jupyter/lab/user-settings&#39;</span>
-
-<span class="c1">###############</span>
-<span class="c1">#  fswatcher  #</span>
-<span class="c1">###############</span>
-
-<span class="c1"># Whether to serve the app in watch mode</span>
-<span class="c1"># c.LabApp.watch = False</span>
-
-<span class="c1">## The directory for workspaces</span>
-<span class="c1">#c.LabApp.workspaces_dir = &#39;/data/data/com.termux/files/home/.jupyter/lab/workspaces&#39;</span>
-
-<span class="c1"># Supply SSL options for the tornado HTTPServer. See the tornado docs for</span>
-<span class="c1"># details.</span>
-<span class="c1"># j.NotebookApp.ssl_options = {}</span>
-
-<span class="c1"># Supply overrides for terminado. Currently only supports &quot;shell_command&quot;.</span>
-<span class="c1"># j.NotebookApp.terminado_settings = {}</span>
-
-<span class="c1"># Set to False to disable terminals.</span>
-
-<span class="c1"># This does *not* make the notebook server more secure by itself. Anything the</span>
-<span class="c1"># user can in a terminal, they can also do in a notebook.</span>
-
-<span class="c1"># Terminals may also be automatically disabled if the terminado package is not</span>
-<span class="c1"># available.</span>
-<span class="c1"># j.NotebookApp.terminals_enabled = True</span>
-
-<span class="c1"># Token used for authenticating first-time connections to the server.</span>
-
-<span class="c1"># When no password is enabled, the default is to generate a new, random token.</span>
-
-<span class="c1"># Setting to an empty string disables authentication altogether, which is NOT</span>
-<span class="c1"># RECOMMENDED.</span>
-<span class="c1"># j.NotebookApp.token = &#39;&lt;generated&gt;&#39;</span>
-
-<span class="c1"># Supply overrides for the tornado.web.Application that the Jupyter notebook</span>
-<span class="c1"># uses.</span>
-<span class="c1"># j.NotebookApp.tornado_settings = {}</span>
-
-<span class="c1"># Whether to trust or not X-Scheme/X-Forwarded-Proto and X-Real-Ip/X-Forwarded-</span>
-<span class="c1"># For headerssent by the upstream reverse proxy. Necessary if the proxy handles</span>
-<span class="c1"># SSL</span>
-<span class="c1"># j.NotebookApp.trust_xheaders = False</span>
-
-<span class="c1"># DEPRECATED, use tornado_settings</span>
-<span class="c1"># j.NotebookApp.webapp_settings = {}</span>
+<span class="c1"># del jupyter_specific_configs</span>
 
 <span class="c1"># Specify Where to open the notebook on startup. This is the `new` argument</span>
 <span class="c1"># passed to the standard library method `webbrowser.open`. The behaviour is not</span>
 <span class="c1"># guaranteed, but depends on browser support. Valid values are:</span>
 
-<span class="c1">#  - 2 opens a new tab,</span>
-<span class="c1">#  - 1 opens a new window,</span>
-<span class="c1">#  - 0 opens in an existing window.</span>
+<span class="c1"># - 2 opens a new tab,</span>
+<span class="c1"># - 1 opens a new window,</span>
+<span class="c1"># - 0 opens in an existing window.</span>
 
 <span class="c1"># See the `webbrowser.open` documentation for details.</span>
-<span class="n">j</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">webbrowser_open_new</span> <span class="o">=</span> <span class="mi">1</span>
-
-<span class="c1"># Set the tornado compression options for websocket connections.</span>
-
-<span class="c1"># This value will be returned from</span>
-<span class="c1"># :meth:`WebSocketHandler.get_compression_options`. None (default) will disable</span>
-<span class="c1"># compression. A dict (even an empty one) will enable compression.</span>
-
-<span class="c1"># See the tornado docs for WebSocketHandler.get_compression_options for details.</span>
-<span class="c1"># j.NotebookApp.websocket_compression_options = None</span>
-
-<span class="c1"># The base URL for websockets, if it differs from the HTTP server (hint: it</span>
-<span class="c1"># almost certainly doesn&#39;t).</span>
-
-<span class="c1"># Should be in the form of an HTTP origin: ws[s]://hostname[:port]</span>
-<span class="c1"># j.NotebookApp.websocket_url = &#39;&#39;</span>
-
-<span class="c1"># -----------------------------------------------------------------------------</span>
-<span class="c1"># NteractApp(NotebookApp) configuration</span>
-<span class="c1"># -----------------------------------------------------------------------------</span>
-
-<span class="c1"># Application for runing nteract on a jupyter notebook server.</span>
-
-<span class="c1"># Whether to start the app in dev mode. Expects resources to be loaded from</span>
-<span class="c1"># webpack&#39;s hot reloading server at http://localhost:8357/. Run `yarn workspace</span>
-<span class="c1"># nteract-on-jupyter run hot --port 8357` To serve your assets. This is only</span>
-<span class="c1"># useful if NteractApp is installed editably e.g., using `pip install -e .`.</span>
-<span class="c1"># j.NteractApp.dev_mode = False</span>
+<span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">webbrowser_open_new</span> <span class="o">=</span> <span class="mi">1</span>
 
 <span class="c1"># -----------------------------------------------------------------------------</span>
 <span class="c1"># ConnectionFileMixin(LoggingConfigurable) configuration</span>
@@ -456,7 +467,7 @@
 <span class="c1"># This file will contain the IP, ports, and authentication key needed to connect</span>
 <span class="c1"># clients to this kernel. By default, this file will be created in the security</span>
 <span class="c1"># dir of the current profile, but can be specified by absolute path.</span>
-<span class="c1"># j.ConnectionFileMixin.connection_file = &#39;&#39;</span>
+<span class="c1"># c.ConnectionFileMixin.connection_file = &#39;&#39;</span>
 
 <span class="c1">## JSON file in which to store connection info [default: kernel-&lt;pid&gt;.json]</span>
 <span class="c1">#</span>
@@ -466,24 +477,24 @@
 <span class="c1">#c.ConnectionFileMixin.connection_file = &#39;&#39;</span>
 
 <span class="c1"># set the heartbeat port [default: random]</span>
-<span class="c1"># j.ConnectionFileMixin.hb_port = 0</span>
+<span class="c1"># c.ConnectionFileMixin.hb_port = 0</span>
 
 <span class="c1"># set the iopub (PUB) port [default: random]</span>
-<span class="c1"># j.ConnectionFileMixin.iopub_port = 0</span>
+<span class="c1"># c.ConnectionFileMixin.iopub_port = 0</span>
 
 <span class="c1"># Set the kernel&#39;s IP address [default localhost]. If the IP address is</span>
 <span class="c1"># something other than localhost, then Consoles on other machines will be able</span>
 <span class="c1"># to connect to the Kernel, so be careful!</span>
-<span class="c1"># j.ConnectionFileMixin.ip = &#39;&#39;</span>
+<span class="c1"># c.ConnectionFileMixin.ip = &#39;&#39;</span>
 
 <span class="c1"># set the shell (ROUTER) port [default: random]</span>
-<span class="c1"># j.ConnectionFileMixin.shell_port = 0</span>
+<span class="c1"># c.ConnectionFileMixin.shell_port = 0</span>
 
 <span class="c1"># set the stdin (ROUTER) port [default: random]</span>
-<span class="c1"># j.ConnectionFileMixin.stdin_port = 0</span>
+<span class="c1"># c.ConnectionFileMixin.stdin_port = 0</span>
 
 
-<span class="c1"># j.ConnectionFileMixin.transport = &#39;tcp&#39;</span>
+<span class="c1"># c.ConnectionFileMixin.transport = &#39;tcp&#39;</span>
 
 <span class="c1"># -----------------------------------------------------------------------------</span>
 <span class="c1"># KernelManager(ConnectionFileMixin) configuration</span>
@@ -513,10 +524,10 @@
 <span class="c1"># the arguments that the kernel understands. In particular, this means that the</span>
 <span class="c1"># kernel does not receive the option --debug if it given on the Jupyter command</span>
 <span class="c1"># line.</span>
-<span class="c1"># j.KernelManager.kernel_cmd = []</span>
+<span class="c1"># c.KernelManager.kernel_cmd = []</span>
 
 <span class="c1"># Time to wait for a kernel to terminate before killing it, in seconds.</span>
-<span class="c1"># j.KernelManager.shutdown_wait_time = 5.0</span>
+<span class="c1"># c.KernelManager.shutdown_wait_time = 5.0</span>
 
 <span class="c1"># -----------------------------------------------------------------------------</span>
 <span class="c1"># Session(Configurable) configuration</span>
@@ -645,55 +656,55 @@
 
 <span class="c1"># Threshold (in bytes) beyond which an object&#39;s buffer should be extracted to</span>
 <span class="c1"># avoid pickling.</span>
-<span class="c1"># j.Session.buffer_threshold = 1024</span>
+<span class="c1"># c.Session.buffer_threshold = 1024</span>
 
 <span class="c1"># Whether to check PID to protect against calls after fork.</span>
 
 <span class="c1"># This check can be disabled if fork-safety is handled elsewhere.</span>
-<span class="c1"># j.Session.check_pid = True</span>
+<span class="c1"># c.Session.check_pid = True</span>
 
 <span class="c1"># Threshold (in bytes) beyond which a buffer should be sent without copying.</span>
-<span class="c1"># j.Session.copy_threshold = 65536</span>
+<span class="c1"># c.Session.copy_threshold = 65536</span>
 
 <span class="c1"># Debug output in the Session</span>
-<span class="c1"># j.Session.debug = False</span>
+<span class="c1"># c.Session.debug = False</span>
 
 <span class="c1"># The maximum number of digests to remember.</span>
 
 <span class="c1"># The digest history will be culled when it exceeds this value.</span>
-<span class="c1"># j.Session.digest_history_size = 65536</span>
+<span class="c1"># c.Session.digest_history_size = 65536</span>
 
 <span class="c1"># The maximum number of items for a container to be introspected for custom</span>
 <span class="c1"># serialization. Containers larger than this are pickled outright.</span>
-<span class="c1"># j.Session.item_threshold = 64</span>
+<span class="c1"># c.Session.item_threshold = 64</span>
 
 <span class="c1"># execution key, for signing messages.</span>
-<span class="c1"># j.Session.key = b&#39;&#39;</span>
+<span class="c1"># c.Session.key = b&#39;&#39;</span>
 
 <span class="c1"># path to file containing execution key.</span>
-<span class="c1"># j.Session.keyfile = &#39;&#39;</span>
+<span class="c1"># c.Session.keyfile = &#39;&#39;</span>
 
 <span class="c1"># Metadata dictionary, which serves as the default top-level metadata dict for</span>
 <span class="c1"># each message.</span>
-<span class="c1"># j.Session.metadata = {}</span>
+<span class="c1"># c.Session.metadata = {}</span>
 
 <span class="c1"># The name of the packer for serializing messages. Should be one of &#39;json&#39;,</span>
 <span class="c1"># &#39;pickle&#39;, or an import name for a custom callable serializer.</span>
-<span class="c1"># j.Session.packer = &#39;json&#39;</span>
+<span class="c1"># c.Session.packer = &#39;json&#39;</span>
 
 <span class="c1"># The UUID identifying this session.</span>
-<span class="c1"># j.Session.session = &#39;&#39;</span>
+<span class="c1"># c.Session.session = &#39;&#39;</span>
 
 <span class="c1"># The digest scheme used to construct the message signatures. Must have the form</span>
 <span class="c1"># &#39;hmac-HASH&#39;.</span>
-<span class="c1"># j.Session.signature_scheme = &#39;hmac-sha256&#39;</span>
+<span class="c1"># c.Session.signature_scheme = &#39;hmac-sha256&#39;</span>
 
 <span class="c1"># The name of the unpacker for unserializing messages. Only used with custom</span>
 <span class="c1"># functions for `packer`.</span>
-<span class="c1"># j.Session.unpacker = &#39;json&#39;</span>
+<span class="c1"># c.Session.unpacker = &#39;json&#39;</span>
 
 <span class="c1"># Username for the Session. Default is your system username.</span>
-<span class="c1"># j.Session.username = &#39;username&#39;</span>
+<span class="c1"># c.Session.username = &#39;username&#39;</span>
 
 <span class="c1"># -----------------------------------------------------------------------------</span>
 <span class="c1"># MultiKernelManager(LoggingConfigurable) configuration</span>
@@ -702,11 +713,11 @@
 <span class="c1"># A class for managing multiple kernels.</span>
 
 <span class="c1"># The name of the default kernel to start</span>
-<span class="c1"># j.MultiKernelManager.default_kernel_name = &#39;python3&#39;</span>
+<span class="c1"># c.MultiKernelManager.default_kernel_name = &#39;python3&#39;</span>
 
 <span class="c1"># The kernel manager class.  This is configurable to allow subclassing of the</span>
 <span class="c1"># KernelManager for customized behavior.</span>
-<span class="c1"># j.MultiKernelManager.kernel_manager_class = &#39;jupyter_client.ioloop.IOLoopKernelManager&#39;</span>
+<span class="c1"># c.MultiKernelManager.kernel_manager_class = &#39;jupyter_client.ioloop.IOLoopKernelManager&#39;</span>
 
 <span class="c1"># -----------------------------------------------------------------------------</span>
 <span class="c1"># MappingKernelManager(MultiKernelManager) configuration</span>
@@ -737,9 +748,10 @@
 <span class="c1">#  in kernels being culled for users with poor network connections.</span>
 <span class="c1">#c.MappingKernelManager.cull_idle_timeout = 0</span>
 
+<span class="c1">###### TODO: why are there multiple instances...?</span>
 <span class="c1">## The interval (in seconds) on which to check for idle kernels exceeding the</span>
 <span class="c1">#  cull timeout value.</span>
-<span class="c1">#c.MappingKernelManager.cull_interval = 300</span>
+<span class="c1"># c.MappingKernelManager.cull_interval = 300</span>
 
 <span class="c1">## Timeout for giving up on a kernel (in seconds).</span>
 <span class="c1">#</span>
@@ -755,24 +767,24 @@
 
 <span class="c1"># Disable if long-running kernels will produce too much output while no</span>
 <span class="c1"># frontends are connected.</span>
-<span class="c1"># j.MappingKernelManager.buffer_offline_messages = True</span>
+<span class="c1"># c.MappingKernelManager.buffer_offline_messages = True</span>
 
 <span class="c1"># Whether to consider culling kernels which are busy. Only effective if</span>
 <span class="c1"># cull_idle_timeout &gt; 0.</span>
-<span class="c1"># j.MappingKernelManager.cull_busy = False</span>
+<span class="c1"># c.MappingKernelManager.cull_busy = False</span>
 
 <span class="c1"># Whether to consider culling kernels which have one or more connections. Only</span>
 <span class="c1"># effective if cull_idle_timeout &gt; 0.</span>
-<span class="c1"># j.MappingKernelManager.cull_connected = False</span>
+<span class="c1"># c.MappingKernelManager.cull_connected = False</span>
 
 <span class="c1"># Timeout (in seconds) after which a kernel is considered idle and ready to be</span>
 <span class="c1"># culled. Values of 0 or lower disable culling. Very short timeouts may result</span>
 <span class="c1"># in kernels being culled for users with poor network connections.</span>
-<span class="c1"># j.MappingKernelManager.cull_idle_timeout = 0</span>
+<span class="c1"># c.MappingKernelManager.cull_idle_timeout = 0</span>
 
 <span class="c1"># The interval (in seconds) on which to check for idle kernels exceeding the</span>
 <span class="c1"># cull timeout value.</span>
-<span class="n">j</span><span class="o">.</span><span class="n">MappingKernelManager</span><span class="o">.</span><span class="n">cull_interval</span> <span class="o">=</span> <span class="mi">3000</span>
+<span class="n">c</span><span class="o">.</span><span class="n">MappingKernelManager</span><span class="o">.</span><span class="n">cull_interval</span> <span class="o">=</span> <span class="mi">3000</span>
 
 <span class="c1"># Timeout for giving up on a kernel (in seconds).</span>
 
@@ -781,9 +793,9 @@
 <span class="c1"># for how long the kernel can take before being presumed dead.  This affects the</span>
 <span class="c1"># MappingKernelManager (which handles kernel restarts)  and the</span>
 <span class="c1"># ZMQChannelsHandler (which handles the startup).</span>
-<span class="c1"># j.MappingKernelManager.kernel_info_timeout = 60</span>
+<span class="c1"># c.MappingKernelManager.kernel_info_timeout = 60</span>
 
-<span class="c1"># j.MappingKernelManager.root_dir = &#39;&#39;</span>
+<span class="c1"># c.MappingKernelManager.root_dir = &#39;&#39;</span>
 
 <span class="c1"># -----------------------------------------------------------------------------</span>
 <span class="c1"># ContentsManager(LoggingConfigurable) configuration</span>
@@ -810,13 +822,13 @@
 <span class="c1"># always refers to a directory.</span>
 
 <span class="c1"># Allow access to hidden files</span>
-<span class="n">j</span><span class="o">.</span><span class="n">ContentsManager</span><span class="o">.</span><span class="n">allow_hidden</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">c</span><span class="o">.</span><span class="n">ContentsManager</span><span class="o">.</span><span class="n">allow_hidden</span> <span class="o">=</span> <span class="kc">True</span>
 
-<span class="c1"># j.ContentsManager.checkpoints = None</span>
+<span class="c1"># c.ContentsManager.checkpoints = None</span>
 
-<span class="c1"># j.ContentsManager.checkpoints_class = &#39;notebook.services.contents.checkpoints.Checkpoints&#39;</span>
+<span class="c1"># c.ContentsManager.checkpoints_class = &#39;notebook.services.contents.checkpoints.Checkpoints&#39;</span>
 
-<span class="c1"># j.ContentsManager.checkpoints_kwargs = {}</span>
+<span class="c1"># c.ContentsManager.checkpoints_kwargs = {}</span>
 
 <span class="c1"># handler class to use when serving raw file requests.</span>
 
@@ -827,16 +839,16 @@
 <span class="c1"># will be much more efficient.</span>
 
 <span class="c1"># Access to these files should be Authenticated.</span>
-<span class="c1"># j.ContentsManager.files_handler_class = &#39;notebook.files.handlers.FilesHandler&#39;</span>
+<span class="c1"># c.ContentsManager.files_handler_class = &#39;notebook.files.handlers.FilesHandler&#39;</span>
 
 <span class="c1"># Extra parameters to pass to files_handler_class.</span>
 
 <span class="c1"># For example, StaticFileHandlers generally expect a `path` argument specifying</span>
 <span class="c1"># the root directory from which to serve files.</span>
-<span class="c1"># j.ContentsManager.files_handler_params = {}</span>
+<span class="c1"># c.ContentsManager.files_handler_params = {}</span>
 
 <span class="c1"># Glob patterns to hide in file and directory listings.</span>
-<span class="n">j</span><span class="o">.</span><span class="n">ContentsManager</span><span class="o">.</span><span class="n">hide_globs</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;__pycache__&#39;</span><span class="p">,</span> <span class="s1">&#39;*.pyc&#39;</span><span class="p">,</span> <span class="s1">&#39;*.pyo&#39;</span><span class="p">,</span> <span class="s1">&#39;.DS_Store&#39;</span><span class="p">,</span> <span class="s1">&#39;*.so&#39;</span><span class="p">,</span> <span class="s1">&#39;*.dylib&#39;</span><span class="p">,</span> <span class="s1">&#39;*~&#39;</span><span class="p">,</span> <span class="s1">&#39;.git&#39;</span><span class="p">]</span>
+<span class="n">c</span><span class="o">.</span><span class="n">ContentsManager</span><span class="o">.</span><span class="n">hide_globs</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;__pycache__&#39;</span><span class="p">,</span> <span class="s1">&#39;*.pyc&#39;</span><span class="p">,</span> <span class="s1">&#39;*.pyo&#39;</span><span class="p">,</span> <span class="s1">&#39;.DS_Store&#39;</span><span class="p">,</span> <span class="s1">&#39;*.so&#39;</span><span class="p">,</span> <span class="s1">&#39;*.dylib&#39;</span><span class="p">,</span> <span class="s1">&#39;*~&#39;</span><span class="p">,</span> <span class="s1">&#39;.git&#39;</span><span class="p">]</span>
 
 <span class="c1"># Python callable or importstring thereof</span>
 
@@ -853,19 +865,19 @@
 <span class="c1">#   Modifying this dict will affect the file that is stored.</span>
 <span class="c1"># - path: the API path of the save destination</span>
 <span class="c1"># - contents_manager: this ContentsManager instance</span>
-<span class="c1"># j.ContentsManager.pre_save_hook = None</span>
+<span class="c1"># c.ContentsManager.pre_save_hook = None</span>
 
 
-<span class="c1"># j.ContentsManager.root_dir = &#39;/&#39;</span>
+<span class="c1"># c.ContentsManager.root_dir = &#39;/&#39;</span>
 
 <span class="c1"># The base name used when creating untitled directories.</span>
-<span class="c1"># j.ContentsManager.untitled_directory = &#39;Untitled Folder&#39;</span>
+<span class="c1"># c.ContentsManager.untitled_directory = &#39;Untitled Folder&#39;</span>
 
 <span class="c1"># The base name used when creating untitled files.</span>
-<span class="c1"># j.ContentsManager.untitled_file = &#39;untitled&#39;</span>
+<span class="c1"># c.ContentsManager.untitled_file = &#39;untitled&#39;</span>
 
 <span class="c1"># The base name used when creating untitled notebooks.</span>
-<span class="c1"># j.ContentsManager.untitled_notebook = &#39;Untitled&#39;</span>
+<span class="c1"># c.ContentsManager.untitled_notebook = &#39;Untitled&#39;</span>
 
 <span class="c1"># -----------------------------------------------------------------------------</span>
 <span class="c1"># FileManagerMixin(Configurable) configuration</span>
@@ -891,7 +903,7 @@
 <span class="c1"># enforcement (like some networked fs). If set to False, the new notebook is</span>
 <span class="c1"># written directly on the old one which could fail (eg: full filesystem or quota</span>
 <span class="c1"># )</span>
-<span class="c1"># j.FileManagerMixin.use_atomic_writing = True</span>
+<span class="c1"># c.FileManagerMixin.use_atomic_writing = True</span>
 
 <span class="c1"># -----------------------------------------------------------------------------</span>
 <span class="c1"># FileContentsManager(FileManagerMixin,ContentsManager) configuration</span>
@@ -900,7 +912,7 @@
 <span class="c1"># If True (default), deleting files will send them to the platform&#39;s</span>
 <span class="c1"># trash/recycle bin, where they can be recovered. If False, deleting files</span>
 <span class="c1"># really deletes them.</span>
-<span class="c1"># j.FileContentsManager.delete_to_trash = True</span>
+<span class="c1"># c.FileContentsManager.delete_to_trash = True</span>
 
 <span class="c1">## Python callable or importstring thereof</span>
 <span class="c1">#</span>
@@ -928,10 +940,10 @@
 
 <span class="c1"># - path: the filesystem path to the file just written - model: the model</span>
 <span class="c1"># representing the file - contents_manager: this ContentsManager instance</span>
-<span class="c1"># j.FileContentsManager.post_save_hook = None</span>
+<span class="c1"># c.FileContentsManager.post_save_hook = None</span>
 
 
-<span class="c1"># j.FileContentsManager.root_dir = &#39;&#39;</span>
+<span class="c1"># c.FileContentsManager.root_dir = &#39;&#39;</span>
 
 <span class="c1"># -----------------------------------------------------------------------------</span>
 <span class="c1"># NotebookNotary(LoggingConfigurable) configuration</span>
@@ -940,22 +952,22 @@
 <span class="c1"># A class for computing and verifying notebook signatures.</span>
 
 <span class="c1"># The hashing algorithm used to sign notebooks.</span>
-<span class="c1"># j.NotebookNotary.algorithm = &#39;sha256&#39;</span>
+<span class="c1"># c.NotebookNotary.algorithm = &#39;sha256&#39;</span>
 
 <span class="c1"># The sqlite file in which to store notebook signatures. By default, this will</span>
 <span class="c1"># be in your Jupyter data directory. You can set it to &#39;:memory:&#39; to disable</span>
 <span class="c1"># sqlite writing to the filesystem.</span>
-<span class="c1"># j.NotebookNotary.db_file = &#39;&#39;</span>
+<span class="c1"># c.NotebookNotary.db_file = &#39;&#39;</span>
 
 <span class="c1"># The secret key with which notebooks are signed.</span>
-<span class="c1"># j.NotebookNotary.secret = b&#39;&#39;</span>
+<span class="c1"># c.NotebookNotary.secret = b&#39;&#39;</span>
 
 <span class="c1"># The file where the secret key is stored.</span>
-<span class="c1"># j.NotebookNotary.secret_file = &#39;&#39;</span>
+<span class="c1"># c.NotebookNotary.secret_file = &#39;&#39;</span>
 
 <span class="c1"># A callable returning the storage backend for notebook signatures. The default</span>
 <span class="c1"># uses an SQLite database.</span>
-<span class="c1"># j.NotebookNotary.store_factory = traitlets.Undefined</span>
+<span class="c1"># c.NotebookNotary.store_factory = traitlets.Undefined</span>
 
 <span class="c1"># -----------------------------------------------------------------------------</span>
 <span class="c1"># KernelSpecManager(LoggingConfigurable) configuration</span>
@@ -963,16 +975,16 @@
 
 <span class="c1"># If there is no Python kernelspec registered and the IPython kernel is</span>
 <span class="c1"># available, ensure it is added to the spec list.</span>
-<span class="c1"># j.KernelSpecManager.ensure_native_kernel = True</span>
+<span class="c1"># c.KernelSpecManager.ensure_native_kernel = True</span>
 
 <span class="c1"># The kernel spec class.  This is configurable to allow subclassing of the</span>
 <span class="c1"># KernelSpecManager for customized behavior.</span>
-<span class="c1"># j.KernelSpecManager.kernel_spec_class = &#39;jupyter_client.kernelspec.KernelSpec&#39;</span>
+<span class="c1"># c.KernelSpecManager.kernel_spec_class = &#39;jupyter_client.kernelspec.KernelSpec&#39;</span>
 
 <span class="c1"># Whitelist of allowed kernel names.</span>
 
 <span class="c1"># By default, all installed kernels are allowed.</span>
-<span class="c1"># j.KernelSpecManager.whitelist = set()</span>
+<span class="c1"># c.KernelSpecManager.whitelist = set()</span>
 
 <span class="c1"># -----------------------------------------------------------------------------</span>
 <span class="c1"># NteractConfig(Configurable) configuration</span>
@@ -981,10 +993,10 @@
 <span class="c1"># The nteract application configuration object</span>
 
 <span class="c1"># Remote URL for loading assets</span>
-<span class="c1"># j.NteractConfig.asset_url = &#39;&#39;</span>
+<span class="c1"># c.NteractConfig.asset_url = &#39;&#39;</span>
 
 <span class="c1"># Google Analytics tracking code</span>
-<span class="c1"># j.NteractConfig.ga_code = &#39;&#39;</span>
+<span class="c1"># c.NteractConfig.ga_code = &#39;&#39;</span>
 </pre></div>
 
           </div>
@@ -994,23 +1006,24 @@
         <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation overview</a><ul>
-  <li><a href="../index.html">Module code</a><ul>
+  <li><a href="../../source/_modules/index.html">Module code</a><ul>
   </ul></li>
   </ul></li>
 </ul>
 <h3><a href="../../index.html">Table of Contents</a></h3>
 <p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../startup.html">1. Startup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../ipython_keybindings.html">2. Keybindings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../magics.html">3. Built-in Magics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../custom_magics.html">4. Writing Your Own Magics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../directive.html">5. Sphinx Directives</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../pygments.html">6. Pygments highlighting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../startup.html">Startup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ipython_interactive_shell.html">The Interactive Shell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ipython_keybindings.html">Keybindings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../magics.html">Built-in Magics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../custom_magics.html">Writing Your Own Magics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../directive.html">Sphinx Directives</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pygments.html">Pygments highlighting</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../API.html">1. API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../API.html">API</a></li>
 </ul>
 
 <div id="searchbox" style="display: none" role="search">
@@ -1037,7 +1050,7 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../../source/_modules/index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

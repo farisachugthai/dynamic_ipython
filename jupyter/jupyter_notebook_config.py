@@ -46,6 +46,7 @@ c.Application.log_level = 30
 # Generate default config file.
 # c.JupyterApp.generate_config = False
 
+
 def jupyter_specific_configs():
     """
 
@@ -318,9 +319,9 @@ def jupyter_specific_configs():
     The directory for user settings.
     c.LabApp.user_settings_dir = '/data/data/com.termux/files/home/.jupyter/lab/user-settings'
 
-    #############
+    #######
      fswatcher  #
-    #############
+    #######
 
     Whether to serve the app in watch mode
     c.LabApp.watch = False
@@ -424,12 +425,8 @@ c.NotebookApp.webbrowser_open_new = 1
 # dir of the current profile, but can be specified by absolute path.
 # c.ConnectionFileMixin.connection_file = ''
 
-## JSON file in which to store connection info [default: kernel-<pid>.json]
-#
-#  This file will contain the IP, ports, and authentication key needed to connect
-#  clients to this kernel. By default, this file will be created in the security
-#  dir of the current profile, but can be specified by absolute path.
-#c.ConnectionFileMixin.connection_file = ''
+# set the control (ROUTER) port [default: random]
+# c.ConnectionFileMixin.control_port = 0
 
 # set the heartbeat port [default: random]
 # c.ConnectionFileMixin.hb_port = 0
@@ -448,7 +445,6 @@ c.NotebookApp.webbrowser_open_new = 1
 # set the stdin (ROUTER) port [default: random]
 # c.ConnectionFileMixin.stdin_port = 0
 
-
 # c.ConnectionFileMixin.transport = 'tcp'
 
 # -----------------------------------------------------------------------------
@@ -456,11 +452,13 @@ c.NotebookApp.webbrowser_open_new = 1
 # -----------------------------------------------------------------------------
 
 # Manages a single kernel in a subprocess on this host.
+#
+# This version starts kernels with Popen.
 
-## Should we autorestart the kernel if it dies.
+# Should we autorestart the kernel if it dies.
 #c.KernelManager.autorestart = True
 
-## DEPRECATED: Use kernel_name instead.
+# DEPRECATED: Use kernel_name instead.
 #
 #  The Popen Command to launch the kernel. Override this if you have a custom
 #  kernel. If kernel_cmd is specified in a configuration file, Jupyter does not
@@ -470,116 +468,21 @@ c.NotebookApp.webbrowser_open_new = 1
 #  line.
 #c.KernelManager.kernel_cmd = []
 
-## Time to wait for a kernel to terminate before killing it, in seconds.
-#c.KernelManager.shutdown_wait_time = 5.0
-
-# The Popen Command to launch the kernel. Override this if you have a custom
-# kernel. If kernel_cmd is specified in a configuration file, Jupyter does not
-# pass any arguments to the kernel, because it cannot make any assumptions about
-# the arguments that the kernel understands. In particular, this means that the
-# kernel does not receive the option --debug if it given on the Jupyter command
-# line.
-# c.KernelManager.kernel_cmd = []
-
 # Time to wait for a kernel to terminate before killing it, in seconds.
-# c.KernelManager.shutdown_wait_time = 5.0
+#c.KernelManager.shutdown_wait_time = 5.0
 
 # -----------------------------------------------------------------------------
 # Session(Configurable) configuration
 # -----------------------------------------------------------------------------
 
-## Object for handling serialization and sending of messages.
-#
-#  The Session object handles building messages and sending them with ZMQ sockets
-#  or ZMQStream objects.  Objects can communicate with each other over the
-#  network via Session objects, and only need to work with the dict-based IPython
-#  message spec. The Session will handle serialization/deserialization, security,
-#  and metadata.
-#
-#  Sessions support configurable serialization via packer/unpacker traits, and
-#  signing with HMAC digests via the key/keyfile traits.
-#
-#  Parameters ----------
-#
-#  debug : bool
-#      whether to trigger extra debugging statements
-#  packer/unpacker : str : 'json', 'pickle' or import_string
-#      importstrings for methods to serialize message parts.  If just
-#      'json' or 'pickle', predefined JSON and pickle packers will be used.
-#      Otherwise, the entire importstring must be used.
-#
-#      The functions must accept at least valid JSON input, and output *bytes*.
-#
-#      For example, to use msgpack:
-#      packer = 'msgpack.packb', unpacker='msgpack.unpackb'
-#  pack/unpack : callables
-#      You can also set the pack/unpack callables for serialization directly.
-#  session : bytes
-#      the ID of this Session object.  The default is to generate a new UUID.
-#  username : unicode
-#      username added to message headers.  The default is to ask the OS.
-#  key : bytes
-#      The key used to initialize an HMAC signature.  If unset, messages
-#      will not be signed or checked.
-#  keyfile : filepath
-#      The file containing a key.  If this is set, `key` will be initialized
-#      to the contents of the file.
-
-## Threshold (in bytes) beyond which an object's buffer should be extracted to
-#  avoid pickling.
-#c.Session.buffer_threshold = 1024
-
-## Whether to check PID to protect against calls after fork.
-#
-#  This check can be disabled if fork-safety is handled elsewhere.
-#c.Session.check_pid = True
-
-## Threshold (in bytes) beyond which a buffer should be sent without copying.
-#c.Session.copy_threshold = 65536
-
-## Debug output in the Session
-#c.Session.debug = False
-
-## The maximum number of digests to remember.
-#
-#  The digest history will be culled when it exceeds this value.
-#c.Session.digest_history_size = 65536
-
-## The maximum number of items for a container to be introspected for custom
-#  serialization. Containers larger than this are pickled outright.
-#c.Session.item_threshold = 64
-
-## execution key, for signing messages.
-#c.Session.key = b''
-
-## path to file containing execution key.
-#c.Session.keyfile = ''
-
-## Metadata dictionary, which serves as the default top-level metadata dict for
-#  each message.
-#c.Session.metadata = {}
-
-## The name of the packer for serializing messages. Should be one of 'json',
-#  'pickle', or an import name for a custom callable serializer.
-#c.Session.packer = 'json'
-
-## The UUID identifying this session.
-#c.Session.session = ''
-
-## The digest scheme used to construct the message signatures. Must have the form
-#  'hmac-HASH'.
-#c.Session.signature_scheme = 'hmac-sha256'
-
-## The name of the unpacker for unserializing messages. Only used with custom
-#  functions for `packer`.
-#c.Session.unpacker = 'json'
+# Object for handling serialization and sending of messages.
 
 # The Session object handles building messages and sending them with ZMQ sockets
 # or ZMQStream objects.  Objects can communicate with each other over the
 # network via Session objects, and only need to work with the dict-based IPython
-# message spej. The Session will handle serialization/deserialization, security,
+# message spec. The Session will handle serialization/deserialization, security,
 # and metadata.
-
+#
 # Sessions support configurable serialization via packer/unpacker traits, and
 # signing with HMAC digests via the key/keyfile traits.
 
@@ -592,22 +495,22 @@ c.NotebookApp.webbrowser_open_new = 1
 #     'json' or 'pickle', predefined JSON and pickle packers will be used.
 #     Otherwise, the entire importstring must be used.
 
-#     The functions must accept at least valid JSON input, and output *bytes*.
+#      The functions must accept at least valid JSON input, and output *bytes*.
 
-#     For example, to use msgpack:
-#     packer = 'msgpack.packb', unpacker='msgpack.unpackb'
+#      For example, to use msgpack:
+#      packer = 'msgpack.packb', unpacker='msgpack.unpackb'
 # pack/unpack : callables
-#     You can also set the pack/unpack callables for serialization directly.
-# session : bytes
-#     the ID of this Session object.  The default is to generate a new UUID.
-# username : unicode
-#     username added to message headers.  The default is to ask the OS.
-# key : bytes
-#     The key used to initialize an HMAC signature.  If unset, messages
-#     will not be signed or checked.
-# keyfile : filepath
-#     The file containing a key.  If this is set, `key` will be initialized
-#     to the contents of the file.
+#      You can also set the pack/unpack callables for serialization directly.
+#  session : bytes
+#      the ID of this Session object.  The default is to generate a new UUID.
+#  username : unicode
+#      username added to message headers.  The default is to ask the OS.
+#  key : bytes
+#      The key used to initialize an HMAC signature.  If unset, messages
+#      will not be signed or checked.
+#  keyfile : filepath
+#      The file containing a key.  If this is set, `key` will be initialized
+#      to the contents of the file.
 
 # Threshold (in bytes) beyond which an object's buffer should be extracted to
 # avoid pickling.
@@ -648,15 +551,15 @@ c.NotebookApp.webbrowser_open_new = 1
 # c.Session.packer = 'json'
 
 # The UUID identifying this session.
-# c.Session.session = ''
+#c.Session.session = ''
 
 # The digest scheme used to construct the message signatures. Must have the form
-# 'hmac-HASH'.
-# c.Session.signature_scheme = 'hmac-sha256'
+#  'hmac-HASH'.
+#c.Session.signature_scheme = 'hmac-sha256'
 
 # The name of the unpacker for unserializing messages. Only used with custom
-# functions for `packer`.
-# c.Session.unpacker = 'json'
+#  functions for `packer`.
+#c.Session.unpacker = 'json'
 
 # Username for the Session. Default is your system username.
 # c.Session.username = 'username'
@@ -680,57 +583,23 @@ c.NotebookApp.webbrowser_open_new = 1
 
 # A KernelManager that handles notebook mapping and HTTP error handling
 
-## Whether messages from kernels whose frontends have disconnected should be
-#  buffered in-memory.
-#
+# Whether messages from kernels whose frontends have disconnected should be
+# buffered in-memory.
+
 #  When True (default), messages are buffered and replayed on reconnect, avoiding
 #  lost messages due to interrupted connectivity.
-#
+
 #  Disable if long-running kernels will produce too much output while no
 #  frontends are connected.
 #c.MappingKernelManager.buffer_offline_messages = True
 
-## Whether to consider culling kernels which are busy. Only effective if
-#  cull_idle_timeout > 0.
-#c.MappingKernelManager.cull_busy = False
-
-## Whether to consider culling kernels which have one or more connections. Only
-#  effective if cull_idle_timeout > 0.
-#c.MappingKernelManager.cull_connected = False
-
-## Timeout (in seconds) after which a kernel is considered idle and ready to be
-#  culled. Values of 0 or lower disable culling. Very short timeouts may result
-#  in kernels being culled for users with poor network connections.
-#c.MappingKernelManager.cull_idle_timeout = 0
-
-###### TODO: why are there multiple instances...?
-## The interval (in seconds) on which to check for idle kernels exceeding the
-#  cull timeout value.
-# c.MappingKernelManager.cull_interval = 300
-
-## Timeout for giving up on a kernel (in seconds).
-#
-#  On starting and restarting kernels, we check whether the kernel is running and
-#  responsive by sending kernel_info_requests. This sets the timeout in seconds
-#  for how long the kernel can take before being presumed dead.  This affects the
-#  MappingKernelManager (which handles kernel restarts)  and the
-#  ZMQChannelsHandler (which handles the startup).
-#c.MappingKernelManager.kernel_info_timeout = 60
-
-# When True (default), messages are buffered and replayed on reconnect, avoiding
-# lost messages due to interrupted connectivity.
-
-# Disable if long-running kernels will produce too much output while no
-# frontends are connected.
-# c.MappingKernelManager.buffer_offline_messages = True
-
 # Whether to consider culling kernels which are busy. Only effective if
 # cull_idle_timeout > 0.
-# c.MappingKernelManager.cull_busy = False
+#c.MappingKernelManager.cull_busy = False
 
 # Whether to consider culling kernels which have one or more connections. Only
 # effective if cull_idle_timeout > 0.
-# c.MappingKernelManager.cull_connected = False
+#c.MappingKernelManager.cull_connected = False
 
 # Timeout (in seconds) after which a kernel is considered idle and ready to be
 # culled. Values of 0 or lower disable culling. Very short timeouts may result
@@ -747,17 +616,16 @@ c.MappingKernelManager.cull_interval = 3000
 # responsive by sending kernel_info_requests. This sets the timeout in seconds
 # for how long the kernel can take before being presumed dead.  This affects the
 # MappingKernelManager (which handles kernel restarts)  and the
-# ZMQChannelsHandler (which handles the startup).
-# c.MappingKernelManager.kernel_info_timeout = 60
+#  ZMQChannelsHandler (which handles the startup).
+#c.MappingKernelManager.kernel_info_timeout = 60
 
 # c.MappingKernelManager.root_dir = ''
 
 # -----------------------------------------------------------------------------
 # ContentsManager(LoggingConfigurable) configuration
 # -----------------------------------------------------------------------------
-
-## Base class for serving files and directories.
-#
+# Base class for serving files and directories.
+# -----------------------------------------------------------------------------
 #  This serves any text or binary file, as well as directories, with special
 #  handling for JSON notebook documents.
 #
@@ -803,7 +671,10 @@ c.ContentsManager.allow_hidden = True
 # c.ContentsManager.files_handler_params = {}
 
 # Glob patterns to hide in file and directory listings.
-c.ContentsManager.hide_globs = ['__pycache__', '*.pyc', '*.pyo', '.DS_Store', '*.so', '*.dylib', '*~', '.git']
+c.ContentsManager.hide_globs = [
+    '__pycache__', '*.pyc', '*.pyo', '.DS_Store', '*.so', '*.dylib', '*~',
+    '.git'
+]
 
 # Python callable or importstring thereof
 
@@ -821,7 +692,6 @@ c.ContentsManager.hide_globs = ['__pycache__', '*.pyc', '*.pyo', '.DS_Store', '*
 # - path: the API path of the save destination
 # - contents_manager: this ContentsManager instance
 # c.ContentsManager.pre_save_hook = None
-
 
 # c.ContentsManager.root_dir = '/'
 
@@ -869,13 +739,10 @@ c.ContentsManager.hide_globs = ['__pycache__', '*.pyc', '*.pyo', '.DS_Store', '*
 # really deletes them.
 # c.FileContentsManager.delete_to_trash = True
 
-## Python callable or importstring thereof
-#
-#  to be called on the path of a file just saved.
-#
-#  This can be used to process the file on disk, such as converting the notebook
-#  to a script or HTML via nbconvert.
-#
+# Python callable or importstring thereof to be called on the path of a file just saved.
+# This can be used to process the file on disk, such as converting the notebook
+# to a script or HTML via nbconvert.
+
 #  It will be called as (all arguments passed by keyword)::
 #
 #      hook(os_path=os_path, model=model, contents_manager=instance)
@@ -886,19 +753,10 @@ c.ContentsManager.hide_globs = ['__pycache__', '*.pyc', '*.pyo', '.DS_Store', '*
 
 # to be called on the path of a file just saved.
 
-# This can be used to process the file on disk, such as converting the notebook
-# to a script or HTML via nbconvert.
-
-# It will be called as (all arguments passed by keyword)::
-
-#     hook(os_path=os_path, model=model, contents_manager=instance)
-
-# - path: the filesystem path to the file just written - model: the model
-# representing the file - contents_manager: this ContentsManager instance
-# c.FileContentsManager.post_save_hook = None
-
-
 # c.FileContentsManager.root_dir = ''
+
+# DEPRECATED, use post_save_hook. Will be removed in Notebook 5.0
+#c.FileContentsManager.save_script = False
 
 # -----------------------------------------------------------------------------
 # NotebookNotary(LoggingConfigurable) configuration

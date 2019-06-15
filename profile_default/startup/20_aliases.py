@@ -194,7 +194,14 @@ def linux_specific_aliases(_ip=None):
 
 
 def common_aliases(_ip=None):
-    r"""Add aliases common to all OSes. Mostly Git aliases.
+    r"""Add aliases common to all OSes. Overwhelmingly :command:`Git` aliases.
+
+    This method adds around 70 to 80 aliases that can be implemented on most
+    of the major platforms.
+
+    The only real requirement is Git being installed and working.
+
+    .. todo:: :command:`git show`
 
     Parameters
     ----------
@@ -206,15 +213,16 @@ def common_aliases(_ip=None):
     -------
     _ip.user_aliases : List of tuples
         User aliases.
-
-
     """
     _user_aliases = [
         ('g', 'git diff --staged --stat %l'),
         ('ga', 'git add %l'),
         ('ga.', 'git add .'),
         ('gar', 'git add --renormalize %l'),
-        ('gb', 'git branch -a %l'),
+        ('gb', 'git branch --all %l'),
+        ('gbl', 'git blame %l'),
+        ('gbr', 'git branch %l'),
+        ('gbu', 'git branch --set-upstream-to origin %l'),
         ('gci', 'git commit %l'),
         ('gcia', 'git commit --amend %l'),
         ('gcid', 'git commit --date=%l'),
@@ -227,39 +235,49 @@ def common_aliases(_ip=None):
         ('gds', 'git diff --staged %l'),
         ('gds2', 'git diff --staged --stat %l'),
         ('gdt', 'git difftool %l'),
-        ('gf', 'git fetch --all'),
+        ('gf', 'git fetch --all %l'),
+        ('gfe', 'git fetch %l'),
+        ('ggc', 'git gc %l'),
+        ('ggcp', 'git gc --prune %l'),
         ('git', 'git %l'),
         ('git hist',
          'git log --pretty="format:%h %ad | %d [%an]" --graph --date=short '
          '--branches --abbrev-commit --oneline %l'),
         ('git last', 'git log -1 HEAD %l'),
-        ('git staged', 'git diff --cached %l'),
-        ('git rel', 'git rev-parse --show-prefix'),
-        ('git root', 'git rev-parse --show-toplevel'),
-        ('git unstage', 'git reset HEAD'),
-        ('git unstaged', 'git diff %l'),
         ('gl', 'git log %l'),
         ('glo',
          'git log --graph --decorate --abbrev-commit --oneline --branches --all'
          ),
-        ('gls', 'git ls-tree'),
+        ('gls', 'git ls-tree master %l'),
+        ('git ls', 'git ls-tree master %l'),
         ('gm', 'git merge --no-ff %l'),
-        ('gmm', 'git merge master'),
+        ('gma', 'git merge --abort %l'),
+        ('gmc', 'git merge --continue %l'),
+        ('gmm', 'git merge master %l'),
         ('gmt', 'git mergetool %l'),
         ('gp', 'git pull --all'),
         ('gpo', 'git pull origin'),
         ('gpom', 'git pull origin master'),
         ('gpu', 'git push'),
-        ('gr', 'git remote -v'),
-        ('gs', 'git status'),
-        ('gsh', 'git stash'),
-        ('gshp', 'git stash pop'),
-        ('gshl', 'git stash list'),
-        ('gshd', 'git stash drop'),
-        ('gshc', 'git stash clear'),
-        ('gsha', 'git stash apply'),
+        ('gr', 'git remote -v %l'),
+        ('gre', 'git remote %l'),
+        ('gs', 'git status %l'),
+        ('gsh', 'git stash %l'),
+        ('gsha', 'git stash apply %l'),
+        ('gshc', 'git stash clear %l'),
+        ('gshd', 'git stash drop %l'),
+        ('gshl', 'git stash list %l'),
+        ('gshp', 'git stash pop %l'),
+        ('gshs', 'git stash show %l'),
+        ('gshsp', 'git stash show --patch %l'),
+        ('gss', 'git status -sb %l'),
         ('gst', 'git diff --stat %l'),
-        ('gt', 'git tag --list'),
+        ('git staged', 'git diff --cached %l'),
+        ('git rel', 'git rev-parse --show-prefix %l'),
+        ('git root', 'git rev-parse --show-toplevel %l'),
+        ('git unstage', 'git reset HEAD %l'),
+        ('git unstaged', 'git diff %l'),
+        ('gt', 'git tag --list %l'),
         ('lswitch', 'legit switch'),
         ('lsync', 'legit sync'),
         ('lpublish', 'legit publish'),
@@ -314,50 +332,128 @@ def windows_aliases(_ip=None):
 
     .. code-block:: powershell
 
-        Alias           rp --> Remove-ItemProperty
-        Alias           rsn --> Remove-PSSession
-        Alias           rv --> Remove-Variable
-        Alias           rvpa --> Resolve-Path
-        Alias           sajb --> Start-Job
-        Alias           sal --> Set-Alias
-        Alias           saps --> Start-Process
-        Alias           sasv --> Start-Service
-        Alias           sbp --> Set-PSBreakpoint
-        Alias           select --> Select-Object
-        Alias           set --> Set-Variable
-        Alias           si --> Set-Item
-        Alias           sl --> Set-Location
-        Alias           sleep --> Start-Sleep
-        Alias           sls --> Select-String
-        Alias           sort --> Sort-Object
-        Alias           sp --> Set-ItemProperty
-        Alias           spjb --> Stop-Job
-        Alias           spps --> Stop-Process
-        Alias           spsv --> Stop-Service
-        Alias           start --> Start-Process
-        Alias           stz --> Set-TimeZone
-        Alias           sv --> Set-Variable
-        Alias           tee --> Tee-Object
-        Alias           type --> Get-Content
-        Alias           where --> Where-Object
-        Alias           wjb --> Wait-Job
-        Alias           write --> Write-Output
-
-    Also I felt really good about the way I reformatted that!
-
-    .. code-block:: vim
-
-        :'<,'>s/^\W/('/
-        :'<,'>s/ --> /', '/
-        :'<,'>s/$/'),
-        gv>
-        " Realize that the indentation is all out of whack and let ALE deal
-        :w
+        Alias           % -> ForEach-Object
+        Alias           ? -> Where-Object
+        Alias           clhy -> Clear-History
+        Alias           cli -> Clear-Item
+        Alias           clp -> Clear-ItemProperty
+        Alias           cls -> Clear-Host
+        Alias           clv -> Clear-Variable
+        Alias           cnsn -> Connect-PSSession
+        Alias           compare -> Compare-Object
+        Alias           cpi -> Copy-Item
+        Alias           cpp -> Copy-ItemProperty
+        Alias           curl -> Invoke-WebRequest
+        Alias           cvpa -> Convert-Path
+        Alias           dbp -> Disable-PSBreakpoint
+        Alias           diff -> Compare-Object
+        Alias           dnsn -> Disconnect-PSSession
+        Alias           ebp -> Enable-PSBreakpoint
+        Alias           epal -> Export-Alias
+        Alias           epcsv -> Export-Csv
+        Alias           epsn -> Export-PSSession
+        Alias           erase -> Remove-Item
+        Alias           etsn -> Enter-PSSession
+        Alias           exsn -> Exit-PSSession
+        Alias           fc -> Format-Custom
+        Alias           fl -> Format-List
+        Alias           foreach -> ForEach-Object
+        Alias           ft -> Format-Table
+        Alias           fw -> Format-Wide
+        Alias           gal -> Get-Alias
+        Alias           gbp -> Get-PSBreakpoint
+        Alias           gc -> Get-Content
+        Alias           gci -> Get-ChildItem
+        Alias           gcm -> Get-Command
+        Alias           gcs -> Get-PSCallStack
+        Alias           gdr -> Get-PSDrive
+        Alias           ghy -> Get-History
+        Alias           gi -> Get-Item
+        Alias           gjb -> Get-Job
+        Alias           gl -> Get-Location
+        Alias           gm -> Get-Member
+        Alias           gmo -> Get-Module
+        Alias           gp -> Get-ItemProperty
+        Alias           gps -> Get-Process
+        Alias           gpv -> Get-ItemPropertyValue
+        Alias           group -> Group-Object
+        Alias           gsn -> Get-PSSession
+        Alias           gsnp -> Get-PSSnapin
+        Alias           gsv -> Get-Service
+        Alias           gu -> Get-Unique
+        Alias           gv -> Get-Variable
+        Alias           gwmi -> Get-WmiObject
+        Alias           h -> Get-History
+        Alias           icm -> Invoke-Command
+        Alias           iex -> Invoke-Expression
+        Alias           ihy -> Invoke-History
+        Alias           ii -> Invoke-Item
+        Alias           ipal -> Import-Alias
+        Alias           ipcsv -> Import-Csv
+        Alias           ipmo -> Import-Module
+        Alias           ipsn -> Import-PSSession
+        Alias           irm -> Invoke-RestMethod
+        Alias           ise -> powershell_ise.exe
+        Alias           iwmi -> Invoke-WMIMethod
+        Alias           iwr -> Invoke-WebRequest
+        Alias           lp -> Out-Printer
+        Alias           man -> help
+        Alias           md -> mkdir
+        Alias           measure -> Measure-Object
+        Alias           mi -> Move-Item
+        Alias           mount -> New-PSDrive
+        Alias           mp -> Move-ItemProperty
+        Alias           nal -> New-Alias
+        Alias           ndr -> New-PSDrive
+        Alias           ni -> New-Item
+        Alias           nmo -> New-Module
+        Alias           npssc -> New-PSSessionConfigurationFile
+        Alias           nsn -> New-PSSession
+        Alias           nv -> New-Variable
+        Alias           ogv -> Out-GridView
+        Alias           oh -> Out-Host
+        Alias           r -> Invoke-History
+        Alias           rbp -> Remove-PSBreakpoint
+        Alias           rcjb -> Receive-Job
+        Alias           rcsn -> Receive-PSSession
+        Alias           rd -> Remove-Item
+        Alias           rdr -> Remove-PSDrive
+        Alias           ri -> Remove-Item
+        Alias           rjb -> Remove-Job
+        Alias           rmo -> Remove-Module
+        Alias           rni -> Rename-Item
+        Alias           rnp -> Rename-ItemProperty
 
     That's some non-trivial stuff right there! First try on all 4 of them!
 
     """
     _ip.user_aliases = [
+        ('ac', 'Add-Content %l'),
+        ('asnp', 'Add-PSSnapin %l'),
+        ('cat', 'Get-Content %l'),
+        ('cd', 'Set-Location %l'),
+        ('clc', 'Clear-Content %l'),
+        ('clear', 'Clear-History %l'),
+        ('copy', 'Copy-Item %l'),
+        ('cp', 'Copy-Item %l'),
+        ('del', 'Remove-Item %l'),
+        ('dir', 'Get-ChildItem %l'),
+        ('echo', 'Write-Output %l'),
+        ('history', 'Get-History %l'),
+        ('kill', 'Stop-Process'),
+        ('l', 'Get-ChildItem %l'),
+        ('ls', 'Get-ChildItem %l'),
+        ('man', 'Get-Help %l'),
+        ('md', 'mkdir %l'),
+        ('move', 'Move-Item %l'),
+        ('mv', 'Move-Item %l'),
+        ('popd', 'Pop-Location %l'),
+        ('ps', 'Get-Process %l'),
+        ('pushd', 'Push-Location %l'),
+        ('pwd', 'Get-Location %l'),
+        ('ren', 'Rename-Item %l'),
+        ('rm', 'Remove-Item %l'),
+        ('rmdir', 'Remove-Item %l'),
         ('rp', 'Remove-ItemProperty'),
         ('rsn', 'Remove-PSSession'),
         ('rv', 'Remove-Variable'),

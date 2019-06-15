@@ -98,9 +98,10 @@ from IPython import get_ipython
 from IPython.terminal.interactiveshell import create_ipython_shortcuts
 from prompt_toolkit.enums import DEFAULT_BUFFER
 from prompt_toolkit.filters import HasFocus, ViInsertMode, ViNavigationMode
-from prompt_toolkit.key_binding import merge_key_bindings
-from prompt_toolkit.key_binding.bindings.named_commands import get_by_name
+from prompt_toolkit.key_binding import merge_key_bindings, KeyBindings
 from prompt_toolkit.key_binding.vi_state import InputMode
+from prompt_toolkit.key_binding.bindings import named_commands
+from prompt_toolkit.key_binding.bindings.named_commands import get_by_name
 
 from profile_default.util import module_log
 
@@ -288,6 +289,8 @@ def main(_ip=None):
         kb.add_binding(
             u'j', u'k', filter=(HasFocus(DEFAULT_BUFFER)
                                 & ViInsertMode()))(switch_to_navigation_mode)
+    else:
+        kb = KeyBindings()
 
     ph = get_by_name('previous-history')
     nh = get_by_name('next-history')
@@ -295,6 +298,12 @@ def main(_ip=None):
     kb.add_binding('K', filter=(HasFocus(DEFAULT_BUFFER) & ViNavigationMode()))(ph)
 
     kb.add_binding('J', filter=(HasFocus(DEFAULT_BUFFER) & ViNavigationMode()))(nh)
+
+    # 06/15/2019: Got it.
+    kb.add('c-a', filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.beginning_of_line)
+    # did you know that C-a won't work? Odd.
+    kb.add('c-b', filter=HasFocus(DEFAULT_BUFFER) & ViInsertMode())(named_commands.backward_char)
+    kb.add('c-d', filter=HasFocus(DEFAULT_BUFFER) & ViInsertMode())(named_commands.delete_char)
 
     return kb
 

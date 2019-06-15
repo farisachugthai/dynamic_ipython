@@ -73,8 +73,7 @@ class Platform:
             try:
                 shell = get_ipython()
             except Exception as e:
-                # is this the right method?
-                LOGGER.exception(e)
+                LOGGER.error(e, exc_info=True)
 
         # so let's leave this commented out until we figure out...init param or property
         # self.env = dict(os.environ)
@@ -83,6 +82,9 @@ class Platform:
         self.is_win = is_windows()
         self.is_conemu = is_conemu_ansi()
         self.Path = Path
+
+    def __repr__(self):
+        return 'Platform is: {}.\nUse `dir(your_obj)` to view methods.'.format(self._sys_platform)
 
     @property
     def is_win_vt100(self):

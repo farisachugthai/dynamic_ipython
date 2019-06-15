@@ -5,14 +5,14 @@
   <head>
     <meta charset="utf-8" />
     <title>jupyter.jupyter_qtconsole_config &#8212; Dynamic IPython 0.0.1 documentation</title>
-    <link rel="stylesheet" href="../../_static/pyramid.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../source/_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../source/_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/C:\Users\faris\projects\dynamic_ipython\docs\source\_static\pyramid.css_t" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../source/_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../source/_static/jquery.js"></script>
+    <script type="text/javascript" src="../../source/_static/underscore.js"></script>
+    <script type="text/javascript" src="../../source/_static/doctools.js"></script>
+    <script type="text/javascript" src="../../source/_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
@@ -33,7 +33,7 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../../source/_modules/index.html" accesskey="U">Module code</a> &#187;</li>
       </ul>
     </div>  
 
@@ -80,12 +80,28 @@
 <span class="sd">Worth skimming.</span>
 
 
+<span class="sd">May 27, 2019:</span>
+
+
+<span class="sd">.. code-block:: none</span>
+
+<span class="sd">    (ins)(navigator) faris@faris-U56E:~$ jupyter-qtconsole</span>
+<span class="sd">    xkbcommon: ERROR: failed to add default include path</span>
+<span class="sd">    Qt: Failed to create XKB context!</span>
+<span class="sd">    Use QT_XKB_CONFIG_ROOT environmental variable to provide an additional</span>
+<span class="sd">    search path, add &#39;:&#39; as separator to provide several search paths and/or</span>
+<span class="sd">    make sure that XKB configuration data directory contains recent enough</span>
+<span class="sd">    contents, to update please see http://cgit.freedesktop.org/xkeyboard-config</span>
+
+
+<span class="sd">So we have to debug that because the keyboard isn&#39;t working on jupyter</span>
+<span class="sd">qtconsole :/</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
 
 <span class="kn">from</span> <span class="nn">traitlets.config</span> <span class="k">import</span> <span class="n">get_config</span>
 
@@ -107,40 +123,42 @@
 <div class="viewcode-block" id="connectionFileMixin"><a class="viewcode-back" href="../../jupyter.html#jupyter.jupyter_qtconsole_config.connectionFileMixin">[docs]</a><span class="k">def</span> <span class="nf">connectionFileMixin</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Adding commented out sections to docstrings for Sphinx.</span>
 
-<span class="sd">    # ------------------------------------------------------------------------------</span>
-<span class="sd">    # connectionFileMixin(LoggingConfigurable) configuration</span>
-<span class="sd">    # ------------------------------------------------------------------------------</span>
+<span class="sd">    .. code-block:: python3</span>
 
-<span class="sd">    # Mixin for configurable classes that work with connection files</span>
+<span class="sd">        # ------------------------------------------------------------------------------</span>
+<span class="sd">        # connectionFileMixin(LoggingConfigurable) configuration</span>
+<span class="sd">        # ------------------------------------------------------------------------------</span>
 
-<span class="sd">    # JSON file in which to store connection info [default: kernel-&lt;pid&gt;.json]</span>
-<span class="sd">    #</span>
-<span class="sd">    #  This file will contain the IP, ports, and authentication key needed to connect</span>
-<span class="sd">    #  clients to this kernel. By default, this file will be created in the security</span>
-<span class="sd">    #  dir of the current profile, but can be specified by absolute path.</span>
-<span class="sd">    # c.ConnectionFileMixin.connection_file = &#39;&#39;</span>
+<span class="sd">        # Mixin for configurable classes that work with connection files</span>
 
-<span class="sd">    # set the control (ROUTER) port [default: random]</span>
-<span class="sd">    # c.ConnectionFileMixin.control_port = 0</span>
+<span class="sd">        # JSON file in which to store connection info [default: kernel-&lt;pid&gt;.json]</span>
+<span class="sd">        #</span>
+<span class="sd">        #  This file will contain the IP, ports, and authentication key needed to connect</span>
+<span class="sd">        #  clients to this kernel. By default, this file will be created in the security</span>
+<span class="sd">        #  dir of the current profile, but can be specified by absolute path.</span>
+<span class="sd">        # c.ConnectionFileMixin.connection_file = &#39;&#39;</span>
 
-<span class="sd">    # set the heartbeat port [default: random]</span>
-<span class="sd">    # c.ConnectionFileMixin.hb_port = 0</span>
+<span class="sd">        # set the control (ROUTER) port [default: random]</span>
+<span class="sd">        # c.ConnectionFileMixin.control_port = 0</span>
 
-<span class="sd">    # set the iopub (PUB) port [default: random]</span>
-<span class="sd">    # c.ConnectionFileMixin.iopub_port = 0</span>
+<span class="sd">        # set the heartbeat port [default: random]</span>
+<span class="sd">        # c.ConnectionFileMixin.hb_port = 0</span>
 
-<span class="sd">    # Set the kernel&#39;s IP address [default localhost]. If the IP address is</span>
-<span class="sd">    #  something other than localhost, then Consoles on other machines will be able</span>
-<span class="sd">    #  to connect to the Kernel, so be careful!</span>
-<span class="sd">    # c.ConnectionFileMixin.ip = &#39;&#39;</span>
+<span class="sd">        # set the iopub (PUB) port [default: random]</span>
+<span class="sd">        # c.ConnectionFileMixin.iopub_port = 0</span>
 
-<span class="sd">    # set the shell (ROUTER) port [default: random]</span>
-<span class="sd">    # c.ConnectionFileMixin.shell_port = 0</span>
+<span class="sd">        # Set the kernel&#39;s IP address [default localhost]. If the IP address is</span>
+<span class="sd">        #  something other than localhost, then Consoles on other machines will be able</span>
+<span class="sd">        #  to connect to the Kernel, so be careful!</span>
+<span class="sd">        # c.ConnectionFileMixin.ip = &#39;&#39;</span>
 
-<span class="sd">    # set the stdin (ROUTER) port [default: random]</span>
-<span class="sd">    # c.ConnectionFileMixin.stdin_port = 0</span>
+<span class="sd">        # set the shell (ROUTER) port [default: random]</span>
+<span class="sd">        # c.ConnectionFileMixin.shell_port = 0</span>
 
-<span class="sd">    # c.ConnectionFileMixin.transport = &#39;tcp&#39;</span>
+<span class="sd">        # set the stdin (ROUTER) port [default: random]</span>
+<span class="sd">        # c.ConnectionFileMixin.stdin_port = 0</span>
+
+<span class="sd">        # c.ConnectionFileMixin.transport = &#39;tcp&#39;</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">pass</span></div>
@@ -218,7 +236,6 @@
 <span class="c1"># path to a custom CSS stylesheet</span>
 <span class="c1"># c.JupyterQtConsoleApp.stylesheet = &#39;&#39;</span>
 
-
 <div class="viewcode-block" id="consoleWidgetconf"><a class="viewcode-back" href="../../jupyter.html#jupyter.jupyter_qtconsole_config.consoleWidgetconf">[docs]</a><span class="k">def</span> <span class="nf">consoleWidgetconf</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
 
@@ -249,8 +266,9 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">pass</span></div>
 
-
-<span class="n">c</span><span class="o">.</span><span class="n">ConsoleWidget</span><span class="o">.</span><span class="n">buffer_size</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="c1"># The maximum number of lines of text before truncation. Specifying a non-</span>
+<span class="c1">#  positive number disables text truncation (not recommended).</span>
+<span class="n">c</span><span class="o">.</span><span class="n">ConsoleWidget</span><span class="o">.</span><span class="n">buffer_size</span> <span class="o">=</span> <span class="mi">1000</span>
 
 <span class="c1"># The height of the console at start time in number of characters (will double</span>
 <span class="c1">#  with `vsplit` paging)</span>
@@ -367,7 +385,8 @@
 <span class="c1"># the end the command. To use a terminal text editor, the command should launch</span>
 <span class="c1"># a new terminal, e.g. ``&quot;gnome-terminal -- vim&quot;``.</span>
 
-<span class="c1"># We have to specify the terminal too? This just got 40000 more complicated.</span>
+
+<span class="c1"># Shit we have to specify the terminal too? This just got 40000 more complicated.</span>
 <span class="c1"># Gotta determine OS, version, what terminal I&#39;m using ugh</span>
 <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s1">&#39;Windows-NT&#39;</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s1">&#39;nvim-qt&#39;</span><span class="p">):</span>
@@ -554,23 +573,24 @@
         <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation overview</a><ul>
-  <li><a href="../index.html">Module code</a><ul>
+  <li><a href="../../source/_modules/index.html">Module code</a><ul>
   </ul></li>
   </ul></li>
 </ul>
 <h3><a href="../../index.html">Table of Contents</a></h3>
 <p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../startup.html">1. Startup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../ipython_keybindings.html">2. Keybindings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../magics.html">3. Built-in Magics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../custom_magics.html">4. Writing Your Own Magics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../directive.html">5. Sphinx Directives</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../pygments.html">6. Pygments highlighting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../startup.html">Startup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ipython_interactive_shell.html">The Interactive Shell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ipython_keybindings.html">Keybindings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../magics.html">Built-in Magics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../custom_magics.html">Writing Your Own Magics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../directive.html">Sphinx Directives</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pygments.html">Pygments highlighting</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../API.html">1. API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../API.html">API</a></li>
 </ul>
 
 <div id="searchbox" style="display: none" role="search">
@@ -597,7 +617,7 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../../source/_modules/index.html" >Module code</a> &#187;</li>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
