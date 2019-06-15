@@ -209,6 +209,74 @@ def original_bindings(*args, shell=None):
 def main(_ip=None):
     """Begin initializing keybindings for IPython.
 
+    .. todo::
+
+        Add all the emacs keys to Vi insert mode.
+
+    .. code-block::
+
+        from prompt_toolkit.application.current import get_app
+        from prompt_toolkit.buffer import Buffer, SelectionType, indent, unindent
+        from prompt_toolkit.completion import CompleteEvent
+        from prompt_toolkit.filters import (
+            Condition,
+            emacs_insert_mode,
+            emacs_mode,
+            has_arg,
+            has_selection,
+            is_multiline,
+            is_read_only,
+            vi_search_direction_reversed,
+        )
+        from prompt_toolkit.key_binding.key_processor import KeyPressEvent
+        from prompt_toolkit.keys import Keys
+
+        from ..key_bindings import ConditionalKeyBindings, KeyBindings, KeyBindingsBase
+        from .named_commands import get_by_name
+
+        E = KeyPressEvent
+
+        def load_emacs_bindings() -> KeyBindingsBase:
+            Some e-macs extensions.
+            # Overview of Readline emacs commands:
+            # http://www.catonmat.net/download/readline-emacs-editing-mode-cheat-sheet.pdf
+            key_bindings = KeyBindings()
+            handle = key_bindings.add
+
+            insert_mode = emacs_insert_mode
+
+            @handle('escape')
+            def _(event: E) -> None:
+                By default, ignore escape key.
+                (If we don't put this here, and Esc is followed by a key which sequence
+                is not handled, we'll insert an Escape character in the input stream.
+                Something we don't want and happens to easily in emacs mode.
+                Further, people can always use ControlQ to do a quoted insert.)
+                pass
+
+            handle('c-a')(get_by_name('beginning-of-line'))
+            handle('c-b')(get_by_name('backward-char'))
+            handle('c-delete', filter=insert_mode)(get_by_name('kill-word'))
+            handle('c-e')(get_by_name('end-of-line'))
+            handle('c-f')(get_by_name('forward-char'))
+            handle('c-left')(get_by_name('backward-word'))
+            handle('c-right')(get_by_name('forward-word'))
+            handle('c-x', 'r', 'y', filter=insert_mode)(get_by_name('yank'))
+            handle('c-y', filter=insert_mode)(get_by_name('yank'))
+            handle('escape', 'b')(get_by_name('backward-word'))
+            handle('escape', 'c', filter=insert_mode)(get_by_name('capitalize-word'))
+            handle('escape', 'd', filter=insert_mode)(get_by_name('kill-word'))
+            handle('escape', 'f')(get_by_name('forward-word'))
+            handle('escape', 'l', filter=insert_mode)(get_by_name('downcase-word'))
+            handle('escape', 'u', filter=insert_mode)(get_by_name('uppercase-word'))
+            handle('escape', 'y', filter=insert_mode)(get_by_name('yank-pop'))
+            handle('escape', 'backspace', filter=insert_mode)(get_by_name('backward-kill-word'))
+            handle('escape', '\\', filter=insert_mode)(get_by_name('delete-horizontal-space'))
+
+    Oh poop. I just realized. Instead of doing that, can we just call this function?
+    :ref:`prompt_toolkit.key_binding.defaults.load_key_bindings()` and merge in the
+    Emacs insert mode ones?
+
     Parameters
     ----------
     _ip : |ip|

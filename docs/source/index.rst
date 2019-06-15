@@ -9,14 +9,14 @@
 Welcome to IPython packages' documentation!
 ============================================
 
-.. include:: ../README.rst
+.. include:: ../../README.rst
 
 .. toctree::
    :caption: Tutorial
-   :numbered:
-   :maxdepth: 3
+   :maxdepth: 2
 
    Startup <startup>
+   The Interactive Shell <ipython_interactive_shell>
    Keybindings <ipython_keybindings>
    Customizing the keybindings further <custom_keyboard_shortcuts>
    Built-in Magics <magics>
@@ -27,8 +27,7 @@ Welcome to IPython packages' documentation!
 
 .. toctree::
    :caption: API Docs
-   :numbered:
-   :maxdepth: 2
+   :maxdepth: 3
 
    API
 
