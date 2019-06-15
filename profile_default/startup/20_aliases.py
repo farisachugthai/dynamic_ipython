@@ -266,6 +266,7 @@ def common_aliases(_ip=None):
         ('lunpublish', 'legit unpublish'),
         ('lundo', 'legit undo'),
         ('lbranches', 'legit branches'),
+        ('ssh-day', 'eval "$(ssh-agent -s)"; ssh-add %l'),
         ('xx', 'quit'),  # this is a sweet one
         ('..', 'cd ..'),
         ('...', 'cd ../..'),
