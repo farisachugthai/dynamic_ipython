@@ -84,6 +84,14 @@ From the `source code`_:
 
 .. _source-code: https://python-prompt-toolkit.readthedocs.io/en/stable/pages/reference.html#module-prompt_toolkit.key_binding
 
+---------------------
+
+Before we begin defining functions:
+
+See Also
+---------
+_ip.pt_app.layout.current_buffer : :class:`prompt_toolkit.application.Buffer`
+    Has all the named commands implemented here and possibly more.
 
 """
 import logging

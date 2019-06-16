@@ -3,25 +3,35 @@
 # flake8: noqa
 """Import my most frequently used modules.
 
+==============
+04_easy_import
+==============
+
+.. currentmodule:: 04_easy_import
+
 This imports a few utility functions from :ref:`IPython` and imports the python
 package neovim is served in.
+
+Overlap between IPython and traitlets
+======================================
 
 It seems that :mod:`IPython` and :mod:`traitlets` share a module!
 
 From a cursory glance :mod:`traitlets.utils.importstring` ==
 :mod:`IPython.utils.importstring`.
 
-They both export 1 function :func:`~IPython.utils.importstring.import_item()`
+They both export 1 function: :func:`~IPython.utils.importstring.import_item()`
 
 This could be used here to dynamicallu import strings based on user
 configuration, environment variables and configuration files.
 
-The functionality here is duplicated in
-:mod:`profile_default.extensions.easy_import`.
+.. warning: Pending Deprecation: The functionality here is duplicated in
+            :mod:`profile_default.extensions.easy_import`.
 
 
 The Importance of Clean Namespaces
 ==================================
+
 May 07, 2019:
 
     If the last line in the module didn't have ``del mod`` in it, then
@@ -36,23 +46,28 @@ May 07, 2019:
 import sys
 from importlib import import_module
 
-# 12/14/18
-
 try:
-    import git
-except ImportError:
+    from git import Git
+except (ImportError, ModuleNotFoundError):
     pass
 
 
 def import_nvim(mod):
     """Import the neovim module.
 
-    Utilizes :func:`import_module` from :mod:`importlib`. Nothing about the
-    function is specific to nvim though, and it could be used for the entire
-    module.
+    Utilizes :func:`importlib.import_module()` from :mod:`importlib`.
+    Nothing about the function is specific to nvim though, and it could be
+    used for the entire package.
 
-    :param mod: A module to import.
-    :returns: None
+    Parameters
+    ----------
+    mod : str
+       A module to import.
+
+    Returns
+    -------
+    None
+
     """
     try:
         import_module(mod)

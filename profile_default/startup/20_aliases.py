@@ -199,7 +199,8 @@ def common_aliases(_ip=None):
     This method adds around 70 to 80 aliases that can be implemented on most
     of the major platforms.
 
-    The only real requirement is Git being installed and working.
+    The only real requirement is Git being installed and working. Docker
+    commands possibly going to be added.
 
     .. todo:: :command:`git show`
 
@@ -232,7 +233,7 @@ def common_aliases(_ip=None):
         ('gcia', 'git commit --amend %l'),
         ('gciad', 'git commit --amend --date=%l'),
         ('gcid', 'git commit --date=%l'),
-        ('gcim', 'git commit --verbose --message %l'),   # TODO: what's the other parameter we can give?
+        ('gcim', 'git commit --verbose --message %s'),
         ('gcl', 'git clone %l'),
         ('gcls', 'git clone --depth 1 %l'),
         ('gco', 'git checkout %l'),

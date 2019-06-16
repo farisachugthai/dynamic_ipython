@@ -6,6 +6,8 @@
 IPython Logger
 ==============
 
+.. currentmodule:: 05_log
+
 .. highlight:: python3
 
 Collects both the input and output of every command run through the IPython
@@ -46,7 +48,7 @@ import time
 from IPython import get_ipython
 
 
-def ipython_logger_05(_ip=None):
+def ipython_logger_05(shell=None):
     """Saves all commands run in the interactive namespace as valid IPython code.
 
     .. note:: This is not necessarily valid python code.
@@ -61,16 +63,16 @@ def ipython_logger_05(_ip=None):
         Global IPython instance.
 
     """
-    if _ip is None:
-        _ip = get_ipython()
+    if shell is None:
+        shell = get_ipython()
 
-    log_dir = _ip.profile_dir.log_dir
-    fname = 'log-' + _ip.profile + '-' + time.strftime('%Y-%m-%d') + ".py"
+    log_dir = shell.profile_dir.log_dir
+    fname = 'log-' + shell.profile + '-' + time.strftime('%Y-%m-%d') + ".py"
     logmode = 'append'
     log_output = True
     filename = path.join(log_dir, fname)
     notnew = path.exists(filename)
-    logger = _ip.logger
+    logger = shell.logger
     logger.logmode = logmode
     logger.log_output = log_output
     logger.timestamp = True
@@ -91,6 +93,6 @@ def ipython_logger_05(_ip=None):
 
 
 if __name__ == "__main__":
-    shell = get_ipython()
-    ipython_logger_05(shell)
+    _ip = get_ipython()
+    ipython_logger_05(_ip)
     del ipython_logger_05
