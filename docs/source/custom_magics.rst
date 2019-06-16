@@ -246,29 +246,27 @@ IPython object:
     # The class MUST call this class decorator at creation time
     @magics_class
     class MyMagics(Magics):
-
         @line_magic
         def lmagic(self, line):
-            "my line magic"
+            """My line magic."""
             print("Full access to the main IPython object:", self.shell)
             print("Variables in the user namespace:", list(self.shell.user_ns.keys()))
             return line
 
         @cell_magic
         def cmagic(self, line, cell):
-            "my cell magic"
+            """My cell magic."""
             return line, cell
 
         @line_cell_magic
         def lcmagic(self, line, cell=None):
-            "Magic that works both as %lcmagic and as %%lcmagic"
+            """Magic that works both as %lcmagic and as %%lcmagic."""
             if cell is None:
                 print("Called as line magic")
                 return line
             else:
                 print("Called as cell magic")
                 return line, cell
-
 
     # In order to actually use these magics, you must register them with a
     # running IPython.
@@ -278,9 +276,9 @@ IPython object:
         Any module file that define a function named `load_ipython_extension`
         can be loaded via `%load_ext module.path` or be configured to be
         autoloaded by IPython at startup time.
+        You can register the class itself without instantiating it.  IPython will
+        call the default constructor on it.
         """
-        # You can register the class itself without instantiating it.  IPython will
-        # call the default constructor on it.
         ipython.register_magics(MyMagics)
 
 If you want to create a class with a different constructor that holds
@@ -329,7 +327,7 @@ Here is a full example of a magic package. You can distribute magics using
 setuptools, distutils, or any other distribution tools like `flit
 <http://flit.readthedocs.io>`_ for pure Python packages.
 
-.. sourcecode:: bash
+.. sourcecode:: none
 
    .
    ├── example_magic

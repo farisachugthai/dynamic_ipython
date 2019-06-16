@@ -227,7 +227,7 @@ def common_aliases(_ip=None):
         ('gbl', 'git blame %l'),
         ('gbr', 'git branch %l'),
         ('gbru', 'git branch --set-upstream-to origin %l'),
-        ('gbrv', 'git branch --all --verbose %l')
+        ('gbrv', 'git branch --all --verbose %l'),
         ('gci', 'git commit %l'),
         ('gcia', 'git commit --amend %l'),
         ('gciad', 'git commit --amend --date=%l'),
@@ -334,6 +334,10 @@ def windows_aliases(_ip=None):
 
     The minimum number of assumptions possible have been made; however, note
     that this section is still under development and frequently changes.
+
+    .. warning:: Warning: 5 aliases have been commented out as they emit warnings
+                 upon being set. They're unfortunately aliases to cmd commands
+                 and as a result don't run correctly in PowerShell...
 
     .. note::
 
@@ -442,15 +446,16 @@ def windows_aliases(_ip=None):
         ('ac', 'Add-Content %l'),
         ('asnp', 'Add-PSSnapin %l'),
         ('cat', 'Get-Content %l'),
-        ('cd', 'Set-Location %l'),
+        # ('cd', 'Set-Location %l'),
         ('clc', 'Clear-Content %l'),
         ('clear', 'Clear-History %l'),
+        ('conda env', 'Get-Conda-Environment %l'),
         ('copy', 'Copy-Item %l'),
         ('cp', 'Copy-Item %l'),
         ('del', 'Remove-Item %l'),
         ('dir', 'Get-ChildItem %l'),
         ('echo', 'Write-Output %l'),
-        ('history', 'Get-History %l'),
+        # ('history', 'Get-History %l'),
         ('kill', 'Stop-Process'),
         ('l', 'Get-ChildItem %l'),
         ('ll', 'GetChildItem -Verbose %l'),
@@ -459,11 +464,11 @@ def windows_aliases(_ip=None):
         ('md', 'mkdir %l'),
         ('move', 'Move-Item %l'),
         ('mv', 'Move-Item %l'),
-        ('popd', 'Pop-Location %l'),
+        # ('popd', 'Pop-Location %l'),
         ('pro', 'nvim $Profile.CurrentUserAllHosts'),
         ('ps', 'Get-Process %l'),
-        ('pushd', 'Push-Location %l'),
-        ('pwd', 'Get-Location %l'),
+        # ('pushd', 'Push-Location %l'),
+        # ('pwd', 'Get-Location %l'),
         ('ren', 'Rename-Item %l'),
         ('rm', 'Remove-Item %l'),
         ('rmdir', 'Remove-Item %l'),
