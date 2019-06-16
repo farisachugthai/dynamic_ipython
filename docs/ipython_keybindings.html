@@ -106,7 +106,7 @@ for ya!</p>
 <div class="section" id="official-ipython-documentation">
 <h2>Official IPython Documentation<a class="headerlink" href="#official-ipython-documentation" title="Permalink to this headline">¶</a></h2>
 <p>Before we dive straight into the source code, let’s check out how IPython
-describes rebindings keys.</p>
+describes the process of re-binding keys.</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.registry</span> <span class="k">import</span> <span class="n">Registry</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.defaults</span> <span class="k">import</span> <span class="n">load_key_bindings</span>
 <span class="kn">from</span> <span class="nn">IPython</span> <span class="k">import</span> <span class="n">get_ipython</span>
@@ -470,88 +470,52 @@ between Emacs and Vim.</p>
 that they meant the IPython global instance.</p>
 <p>But I was curious what would happen.</p>
 <p>Doing so actually created an embedded IPython instance that you can now toggle on and off.</p>
-<blockquote>
-<div><p>Type:        DynamicKeyBindings
-String form: &lt;prompt_toolkit.key_binding.key_bindings.DynamicKeyBindings object at 0x00000189D84CA160&gt;
-File:        c:toolsminiconda3envsdynamiclibsite-packagesprompt_toolkitkey_bindingkey_bindings.py
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Type:        DynamicKeyBindings
 Docstring:
-KeyBindings class that can dynamically returns any KeyBindings.</p>
-<dl class="field-list simple">
-<dt class="field-odd">param get_key_bindings</dt>
-<dd class="field-odd"><p>Callable that returns a <code class="xref py py-class docutils literal notranslate"><span class="pre">KeyBindings</span></code> instance.</p>
-</dd>
-</dl>
-<p>In[10]: t
-Out[10]: &lt;prompt_toolkit.key_binding.key_bindings.DynamicKeyBindings at 0x189d84ca160&gt;
+KeyBindings class that can dynamically returns any KeyBindings.
+
+:param get_key_bindings: Callable that returns a :class:`.KeyBindings` instance.
+</pre></div>
+</div>
+<p>When run in the REPL:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>In[10]: t
 In[11]: dir(t)
 Out[11]:
-[‘_DynamicKeyBindings__version’,</p>
-<blockquote>
-<div><p>‘_abc_impl’,
-‘_dummy’,
-‘_last_child_version’,
-‘_update_cache’,
-‘_version’,
-‘bindings’,
-‘get_bindings_for_keys’,
-‘get_bindings_starting_with_keys’,
-‘get_key_bindings’]</p>
-</div></blockquote>
-<p>In[13]: type(t)
+[&#39;_DynamicKeyBindings__version&#39;,
+&#39;_abc_impl&#39;,
+&#39;_dummy&#39;,
+&#39;_last_child_version&#39;,
+&#39;_update_cache&#39;,
+&#39;_version&#39;,
+&#39;bindings&#39;,
+&#39;get_bindings_for_keys&#39;,
+&#39;get_bindings_starting_with_keys&#39;,
+&#39;get_key_bindings&#39;]
+
+In[13]: type(t)
 Out[13]: prompt_toolkit.key_binding.key_bindings.DynamicKeyBindings
-In[14]: t.get_key_bindings()</p>
-<p>In[15]: t.get_key_bindings?
-Signature:
-t.get_key_bindings(</p>
-<blockquote>
-<div><p>header=’‘,
-local_ns=None,
-module=None,
-dummy=None,
-stack_depth=1,
-global_ns=None,
-compile_flags=None,
-<a href="#id1"><span class="problematic" id="id2">**</span></a>kw,</p>
-</div></blockquote>
-<p>)
+In[14]: t.get_key_bindings()
+In[15]: t.get_key_bindings?
+Signature: t.get_key_bindings(header=&#39;&#39;, local_ns=None, module=None, dummy=None, stack_depth=1, global_ns=None, compile_flags=None, **kw,)
+
 Type:            InteractiveShellEmbed
 Docstring:       &lt;no docstring&gt;
 Class docstring: An enhanced, interactive shell for Python.
-Init docstring:
-Create a configurable given a config config.</p>
-<dl class="simple">
-<dt>config<span class="classifier">Config</span></dt><dd><p>If this is empty, default values are used. If config is a
-<code class="xref py py-class docutils literal notranslate"><span class="pre">Config</span></code> instance, it will be used to configure the
-instance.</p>
-</dd>
-<dt>parent<span class="classifier">Configurable instance, optional</span></dt><dd><p>The parent Configurable instance of this object.</p>
-</dd>
-</dl>
-<p>Subclasses of Configurable must call the <code class="xref py py-meth docutils literal notranslate"><span class="pre">__init__()</span></code> method of
-<code class="xref py py-class docutils literal notranslate"><span class="pre">Configurable</span></code> <em>before</em> doing anything else and using
-<a class="reference external" href="https://docs.python.org/3/library/functions.html#super" title="(in Python v3.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">super()</span></code></a>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyConfigurable</span><span class="p">(</span><span class="n">Configurable</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">MyConfigurable</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
-        <span class="c1"># Then any other code you need to finish initialization.</span>
+
+__call__(self,header=&#39;&#39;,local_ns=None,module=None,dummy=None) -&gt; Start
+the interpreter shell with the given local and global namespaces, and
+optionally print a header string at startup.
+
+The shell can be globally activated/deactivated using the
+dummy_mode attribute. This allows you to turn off a shell used
+for debugging globally.
+
+However, *each* time you call the shell you can override the current
+state of dummy_mode with the optional keyword parameter &#39;dummy&#39;. For
+example, if you set dummy mode on with IPShell.dummy_mode = True, you
+can still have a specific call work by making it as IPShell(dummy=False).
 </pre></div>
 </div>
-<p>This ensures that instances will be configured properly.
-Call docstring:
-Activate the interactive interpreter.</p>
-<p>__call__(self,header=’‘,local_ns=None,module=None,dummy=None) -&gt; Start
-the interpreter shell with the given local and global namespaces, and
-optionally print a header string at startup.</p>
-<p>The shell can be globally activated/deactivated using the
-dummy_mode attribute. This allows you to turn off a shell used
-for debugging globally.</p>
-<p>However, <em>each</em> time you call the shell you can override the current
-state of dummy_mode with the optional keyword parameter ‘dummy’. For
-example, if you set dummy mode on with IPShell.dummy_mode = True, you
-can still have a specific call work by making it as IPShell(dummy=False).</p>
-<p>In[16]: _ip.dummy_mode?
-Type:        bool</p>
-</div></blockquote>
 </div>
 <div class="section" id="source-code-for-creating-ipython-shortcuts">
 <h2>Source code for creating IPython shortcuts<a class="headerlink" href="#source-code-for-creating-ipython-shortcuts" title="Permalink to this headline">¶</a></h2>
@@ -685,7 +649,6 @@ Distributed under the terms of the Modified BSD License.</p>
 <li class="toctree-l1"><a class="reference internal" href="magics.html">Built-in Magics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="custom_magics.html">Writing Your Own Magics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="directive.html">Sphinx Directives</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pygments.html">Pygments highlighting</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>

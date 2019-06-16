@@ -18,12 +18,9 @@ Welcome to IPython packages' documentation!
    Startup <startup>
    The Interactive Shell <ipython_interactive_shell>
    Keybindings <ipython_keybindings>
-   Customizing the keybindings further <custom_keyboard_shortcuts>
    Built-in Magics <magics>
    Writing Your Own Magics <custom_magics>
    Sphinx Directives <directive>
-   Rich Output <rich_output>
-   Pygments highlighting <pygments>
 
 .. toctree::
    :caption: API Docs

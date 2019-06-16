@@ -72,7 +72,7 @@ Official IPython Documentation
 ==============================
 
 Before we dive straight into the source code, let's check out how IPython
-describes rebindings keys.
+describes the process of re-binding keys.
 
 .. code-block:: python3
 
@@ -463,90 +463,55 @@ But I was curious what would happen.
 
 Doing so actually created an embedded IPython instance that you can now toggle on and off.
 
-    Type:        DynamicKeyBindings
-    String form: <prompt_toolkit.key_binding.key_bindings.DynamicKeyBindings object at 0x00000189D84CA160>
-    File:        c:\tools\miniconda3\envs\dynamic\lib\site-packages\prompt_toolkit\key_binding\key_bindings.py
-    Docstring:
-    KeyBindings class that can dynamically returns any KeyBindings.
+.. code-block:: none
 
-    :param get_key_bindings: Callable that returns a :class:`.KeyBindings` instance.
+   Type:        DynamicKeyBindings
+   Docstring:
+   KeyBindings class that can dynamically returns any KeyBindings.
 
-    In[10]: t
-    Out[10]: <prompt_toolkit.key_binding.key_bindings.DynamicKeyBindings at 0x189d84ca160>
-    In[11]: dir(t)
-    Out[11]:
-    ['_DynamicKeyBindings__version',
-     '_abc_impl',
-     '_dummy',
-     '_last_child_version',
-     '_update_cache',
-     '_version',
-     'bindings',
-     'get_bindings_for_keys',
-     'get_bindings_starting_with_keys',
-     'get_key_bindings']
+   :param get_key_bindings: Callable that returns a :class:`.KeyBindings` instance.
 
-    In[13]: type(t)
-    Out[13]: prompt_toolkit.key_binding.key_bindings.DynamicKeyBindings
-    In[14]: t.get_key_bindings()
+When run in the REPL:
 
-    In[15]: t.get_key_bindings?
-    Signature:
-    t.get_key_bindings(
-        header='',
-        local_ns=None,
-        module=None,
-        dummy=None,
-        stack_depth=1,
-        global_ns=None,
-        compile_flags=None,
-        **kw,
-    )
-    Type:            InteractiveShellEmbed
-    Docstring:       <no docstring>
-    Class docstring: An enhanced, interactive shell for Python.
-    Init docstring:
-    Create a configurable given a config config.
+.. code-block:: none
 
-    Parameters
-    ----------
-    config : Config
-        If this is empty, default values are used. If config is a
-        :class:`Config` instance, it will be used to configure the
-        instance.
-    parent : Configurable instance, optional
-        The parent Configurable instance of this object.
+   In[10]: t
+   In[11]: dir(t)
+   Out[11]:
+   ['_DynamicKeyBindings__version',
+   '_abc_impl',
+   '_dummy',
+   '_last_child_version',
+   '_update_cache',
+   '_version',
+   'bindings',
+   'get_bindings_for_keys',
+   'get_bindings_starting_with_keys',
+   'get_key_bindings']
 
-    Notes
-    -----
-    Subclasses of Configurable must call the :meth:`__init__` method of
-    :class:`Configurable` *before* doing anything else and using
-    :func:`super`::
+   In[13]: type(t)
+   Out[13]: prompt_toolkit.key_binding.key_bindings.DynamicKeyBindings
+   In[14]: t.get_key_bindings()
+   In[15]: t.get_key_bindings?
+   Signature: t.get_key_bindings(header='', local_ns=None, module=None, dummy=None, stack_depth=1, global_ns=None, compile_flags=None, **kw,)
 
-        class MyConfigurable(Configurable):
-            def __init__(self, config=None):
-                super(MyConfigurable, self).__init__(config=config)
-                # Then any other code you need to finish initialization.
+   Type:            InteractiveShellEmbed
+   Docstring:       <no docstring>
+   Class docstring: An enhanced, interactive shell for Python.
 
-    This ensures that instances will be configured properly.
-    Call docstring:
-    Activate the interactive interpreter.
+   __call__(self,header='',local_ns=None,module=None,dummy=None) -> Start
+   the interpreter shell with the given local and global namespaces, and
+   optionally print a header string at startup.
 
-    __call__(self,header='',local_ns=None,module=None,dummy=None) -> Start
-    the interpreter shell with the given local and global namespaces, and
-    optionally print a header string at startup.
+   The shell can be globally activated/deactivated using the
+   dummy_mode attribute. This allows you to turn off a shell used
+   for debugging globally.
 
-    The shell can be globally activated/deactivated using the
-    dummy_mode attribute. This allows you to turn off a shell used
-    for debugging globally.
+   However, *each* time you call the shell you can override the current
+   state of dummy_mode with the optional keyword parameter 'dummy'. For
+   example, if you set dummy mode on with IPShell.dummy_mode = True, you
+   can still have a specific call work by making it as IPShell(dummy=False).
 
-    However, *each* time you call the shell you can override the current
-    state of dummy_mode with the optional keyword parameter 'dummy'. For
-    example, if you set dummy mode on with IPShell.dummy_mode = True, you
-    can still have a specific call work by making it as IPShell(dummy=False).
-
-    In[16]: _ip.dummy_mode?
-    Type:        bool
 
 Source code for creating IPython shortcuts
 ==========================================

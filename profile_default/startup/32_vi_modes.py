@@ -1,12 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Dynamically add keybindings to IPython. Strive to implementing Tim Pope's rsi plugin in IPython.
+"""Dynamically add keybindings to IPython.
 
 ====================================
 Keybindings and Toggling Insert Mode
 ====================================
 
 .. module:: `32_vi_modes`
+
+:URL: https://ipython.readthedocs.io/en/stable/config/details.html#keyboard-shortcuts
 
 .. hope that doesn't crash the interpreter!
 
@@ -16,18 +18,10 @@ normal mode, or as :mod:`prompt_toolkit` calls it, "navigation mode".
 Also displays how to integrate :mod:`prompt_toolkit` and :mod:`IPython`
 together well.
 
-:URL: https://ipython.readthedocs.io/en/stable/config/details.html#keyboard-shortcuts
-
-.. todo:: Add one in for :kbd:`C-M-j` to go to Emacs mode?
-
+Ultimately this module hopes to implementing Tim Pope's rsi plugin in IPython.
 
 Original KeyBindings
 ====================
-
-An initial concern may be that while dynamically bindings keys to the namespace,
-one may accidentally delete all the keybindings provided by IPython.
-
-This can be prevented by merging them in.
 
 They're initialized through :func:`IPython.terminal.interactiveshell.create_ipython_shortcuts()`.
 We can save those to a temporary :class:`prompt_toolkit.key_bindings.KeyBindings()` instance, and then
@@ -199,7 +193,8 @@ def original_bindings(*args, shell=None):
         _ip = get_ipython()
 
     tmp_kb = create_ipython_shortcuts(_ip)
-    # idk if i did this right but i'm hoping this captures all passed KeyBindings objects to that container
+    # idk if i did this right but i'm hoping this captures all passed
+    # KeyBindings objects to that container
     OurRegistry, *OtherRegistries = args
 
     merged = merge_key_bindings(tmp_kb, OurRegistry, *OtherRegistries)
@@ -277,6 +272,10 @@ def main(_ip=None):
     :ref:`prompt_toolkit.key_binding.defaults.load_key_bindings()` and merge in the
     Emacs insert mode ones?
 
+    Probably not. The function starts with kb = KeyBindings() but we already
+    might have an initialized instance so don't wipe ours....
+    oh shit. Unless we merge our existing keybindings goddamn this is confusing.
+
     Parameters
     ----------
     _ip : |ip|
@@ -304,6 +303,42 @@ def main(_ip=None):
     # did you know that C-a won't work? Odd.
     kb.add('c-b', filter=HasFocus(DEFAULT_BUFFER) & ViInsertMode())(named_commands.backward_char)
     kb.add('c-d', filter=HasFocus(DEFAULT_BUFFER) & ViInsertMode())(named_commands.delete_char)
+
+    kb.add('c-delete', filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.kill_word)
+    kb.add('c-e', filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.end_of_line)
+    kb.add('c-f', filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.forward_char)
+    kb.add('c-left', filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.backward_word)
+    kb.add('c-right', filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.forward_word)
+    kb.add('c-x', 'r', 'y', filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.yank)
+    kb.add('c-y', filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.yank)
+    kb.add('escape', 'b', filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.backward_word)
+    kb.add('escape', 'c', filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.capitalize_word)
+    kb.add('escape', 'd', filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.kill_word)
+    kb.add('escape', 'f', filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.forward_word)
+    kb.add('escape', 'l', filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.downcase_word)
+    kb.add('escape', 'u', filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.uppercase_word)
+    kb.add('escape', 'y', filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.yank_pop)
+    kb.add('escape', 'backspace', filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.backward_kill_word)
+    kb.add('escape', '\\', filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.delete_horizontal_space)
+
+    # how do i modify ones with preexisting filters?
+    # i deleted a bunch of the insert_mode ones off but idk what to do about
+    # others
+
+    # kb.add('c-_', save_before=(lambda e: False), filter=insert_mode, filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(
+    #     named_commands.undo))
+
+    # kb.add('c-x', 'c-u', save_before=(lambda e: False), filter=insert_mode, filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(
+    #     named_commands.undo))
+
+    # kb.add('escape', '<', filter= ~has_selection, filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.beginning-of-history))
+    # kb.add('escape', '>', filter= ~has_selection, filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.end-of-history))
+
+    # kb.add('escape', '.',  filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.yank-last-arg))
+    # kb.add('escape', '_',  filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.yank-last-arg))
+    # kb.add('escape', 'c-y', filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.yank-nth-arg))
+    # kb.add('escape', '#', filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.insert-comment))
+    # kb.add('c-o', filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.operate-and-get-next))
 
     return kb
 

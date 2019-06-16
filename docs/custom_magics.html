@@ -58,11 +58,12 @@ Visualization 1st ed.pdf”</em>:</p>
 <blockquote>
 <div><p>To create an extension, we need to create a Python module in a
 directory, which is in the Python path. A possibility is to put it in
-the current directory, or in your <a class="reference external" href="../extensions">IPython extensions dir</a></p>
-<p>An extension implements a <a href="#id1"><span class="problematic" id="id2">:function:`load_ipython_extension(ipython)`</span></a>, which
-takes the current <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.5.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveShell</span></code></a> instance as an argument (and possibly
-<a href="#id3"><span class="problematic" id="id4">:function:`unload_ipython_extension(ipython)`</span></a>, which is called when
-the extension is unloaded). This instance can be used to register new
+the current directory, or in your <a class="reference external" href="../../extensions">IPython extensions dir</a></p>
+<p>An extension implements a
+<code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.core.magics.extension.load_ipython_extension(ipython)()</span></code>,
+which takes the current <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.5.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveShell</span></code></a> instance as an argument (and possibly
+<code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.core.magics.extension.unload_ipython_extension(ipython)()</span></code>,
+which is called when the extension is unloaded). This instance can be used to register new
 magic commands, access the user namespace, execute code, and so on.
 This loading function is called when the extension is loaded, which
 happens when the command is executed.</p>
@@ -71,7 +72,7 @@ we need to add the module name to the <code class="docutils literal notranslate"
 list in the <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.5.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> configuration file.</p>
 <p>The <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.5.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveShell</span></code></a> instance represents the active
 IPython interpreter. Useful methods and attributes include
-<a href="#id5"><span class="problematic" id="id6">:function:`register_magics()`</span></a>, to create new magic commands,
+<code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.core.magic.register_magics()</span></code>, to create new magic commands,
 and <code class="docutils literal notranslate"><span class="pre">user_ns</span></code>, to access the user namespace. You can
 explore all the instance’s attributes interactively from
 <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.5.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> with tab completion. For that, you need to execute
@@ -141,7 +142,9 @@ magic_objects : one or more classes or instances
 <p>Writing the extension:</p>
 <ul>
 <li><p>Import the global <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.5.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> instance with:</p>
-<p>from IPython import get_ipython</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython</span> <span class="k">import</span> <span class="n">get_ipython</span>
+</pre></div>
+</div>
 </li>
 <li><p>Create an object with the global ipython app with:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
@@ -216,10 +219,11 @@ arguments:</p>
 <dd class="field-odd"><p><a class="reference external" href="https://raw.githubusercontent.com/ipython/ipython/523ed2fe58ea5ee9971d2b21df1de33b8cdfa924/docs/source/config/custommagics.rst">https://raw.githubusercontent.com/ipython/ipython/523ed2fe58ea5ee9971d2b21df1de33b8cdfa924/docs/source/config/custommagics.rst</a></p>
 </dd>
 </dl>
-<p>There are two main ways to define your own magic functions: from standalone
-functions and by inheriting from a base class provided by IPython:
-<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.magic.html#IPython.core.magic.Magics" title="(in IPython v7.5.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.magic.Magics</span></code></a>. Below we show code you can place in a file
-that you load from your configuration, such as any file in the
+<p>There are two main ways to define your own magic functions. From standalone
+functions and by inheriting from a base class provided by IPython:</p>
+<p><a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.magic.html#IPython.core.magic.Magics" title="(in IPython v7.5.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.magic.Magics</span></code></a></p>
+<p>Below, there will be code displayed that demonstrates how to write an extension
+and allow it to be automatically loaded.
 <span class="xref std std-ref">profile_default.startup</span> subdirectory of your default IPython profile.</p>
 <p>First, let us see the simplest case. The following shows how to create a line
 magic, a cell one and one that works in both modes, using just plain functions:</p>
@@ -350,8 +354,8 @@ setuptools, distutils, or any other distribution tools like <a class="reference 
         <span class="k">return</span> <span class="n">line</span><span class="p">,</span> <span class="n">cell</span>
 </pre></div>
 </div>
-<div class="section" id="id7">
-<h3>Creating IPython Extensions<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id1">
+<h3>Creating IPython Extensions<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <p><em>Summarized from “Learning IPython for Interactive Computing and Data Visualization 1st ed.pdf”</em></p>
 <p>:</p>
 <blockquote>
@@ -411,7 +415,6 @@ the following command to get the current instance.:</p>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="directive.html">Sphinx Directives</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pygments.html">Pygments highlighting</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
@@ -429,7 +432,7 @@ the following command to get the current instance.:</p>
 </li>
 <li><a class="reference internal" href="#writing-custom-magics">Writing Custom Magics</a></li>
 <li><a class="reference internal" href="#complete-example">Complete Example</a><ul>
-<li><a class="reference internal" href="#id7">Creating IPython Extensions</a></li>
+<li><a class="reference internal" href="#id1">Creating IPython Extensions</a></li>
 </ul>
 </li>
 </ul>

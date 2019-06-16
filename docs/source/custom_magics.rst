@@ -6,17 +6,19 @@ Defining custom magics
 
 Creating IPython Extensions
 ===============================
+
 *Summarized from "Learning IPython for Interactive Computing and Data
 Visualization 1st ed.pdf"*:
 
    To create an extension, we need to create a Python module in a
    directory, which is in the Python path. A possibility is to put it in
-   the current directory, or in your `IPython extensions dir <../extensions>`_
+   the current directory, or in your `IPython extensions dir <../../extensions>`_
 
-   An extension implements a :function:`load_ipython_extension(ipython)`, which
-   takes the current |ip| instance as an argument (and possibly
-   :function:`unload_ipython_extension(ipython)`, which is called when
-   the extension is unloaded). This instance can be used to register new
+   An extension implements a
+   :func:`IPython.core.magics.extension.load_ipython_extension(ipython)`,
+   which takes the current |ip| instance as an argument (and possibly
+   :func:`IPython.core.magics.extension.unload_ipython_extension(ipython)`,
+   which is called when the extension is unloaded). This instance can be used to register new
    magic commands, access the user namespace, execute code, and so on.
    This loading function is called when the extension is loaded, which
    happens when the command is executed.
@@ -32,7 +34,7 @@ Visualization 1st ed.pdf"*:
 
    The |ip| instance represents the active
    IPython interpreter. Useful methods and attributes include
-   :function:`register_magics()`, to create new magic commands,
+   :func:`IPython.core.magic.register_magics()`, to create new magic commands,
    and ``user_ns``, to access the user namespace. You can
    explore all the instance's attributes interactively from
    :mod:`IPython` with tab completion. For that, you need to execute
@@ -110,7 +112,7 @@ Writing the extension:
 
 - Import the global :mod:`IPython` instance with::
 
-  from IPython import get_ipython
+   from IPython import get_ipython
 
 - Create an object with the global ipython app with::
 
@@ -176,17 +178,22 @@ arguments::
 
 Inheritance diagram:
 
-.. inheritance-diagram:: IPython.core.magic_arguments
+.. why am i getting an error 'unknown directive type?
+.. inheritance-diagram: IPython.core.magic_arguments
    :parts: 3
 
 Writing Custom Magics
 ======================
+
 :URL: https://raw.githubusercontent.com/ipython/ipython/523ed2fe58ea5ee9971d2b21df1de33b8cdfa924/docs/source/config/custommagics.rst
 
-There are two main ways to define your own magic functions: from standalone
+There are two main ways to define your own magic functions. From standalone
 functions and by inheriting from a base class provided by IPython:
-:class:`IPython.core.magic.Magics`. Below we show code you can place in a file
-that you load from your configuration, such as any file in the
+
+:class:`IPython.core.magic.Magics`
+
+Below, there will be code displayed that demonstrates how to write an extension
+and allow it to be automatically loaded.
 :ref:`profile_default.startup` subdirectory of your default IPython profile.
 
 First, let us see the simplest case. The following shows how to create a line

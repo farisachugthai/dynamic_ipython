@@ -4,7 +4,7 @@ Default IPython Profile and Startup Scripts
 
 .. contents::
     :local:
-    :depth: 2
+    :depth: 4
 
 README
 ======
