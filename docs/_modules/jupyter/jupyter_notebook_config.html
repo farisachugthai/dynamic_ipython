@@ -5,14 +5,14 @@
   <head>
     <meta charset="utf-8" />
     <title>jupyter.jupyter_notebook_config &#8212; Dynamic IPython 0.0.1 documentation</title>
-    <link rel="stylesheet" href="../../source/_static/pyramid.css" type="text/css" />
-    <link rel="stylesheet" href="../../source/_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/C:\Users\faris\projects\dynamic_ipython\docs\source\_static\pyramid.css_t" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../source/_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../source/_static/jquery.js"></script>
-    <script type="text/javascript" src="../../source/_static/underscore.js"></script>
-    <script type="text/javascript" src="../../source/_static/doctools.js"></script>
-    <script type="text/javascript" src="../../source/_static/language_data.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
@@ -33,7 +33,7 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../source/_modules/index.html" accesskey="U">Module code</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -90,6 +90,7 @@
 
 <span class="c1"># Generate default config file.</span>
 <span class="c1"># c.JupyterApp.generate_config = False</span>
+
 
 <div class="viewcode-block" id="jupyter_specific_configs"><a class="viewcode-back" href="../../jupyter.html#jupyter.jupyter_notebook_config.jupyter_specific_configs">[docs]</a><span class="k">def</span> <span class="nf">jupyter_specific_configs</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -363,9 +364,9 @@
 <span class="sd">    The directory for user settings.</span>
 <span class="sd">    c.LabApp.user_settings_dir = &#39;/data/data/com.termux/files/home/.jupyter/lab/user-settings&#39;</span>
 
-<span class="sd">    #############</span>
+<span class="sd">    #######</span>
 <span class="sd">     fswatcher  #</span>
-<span class="sd">    #############</span>
+<span class="sd">    #######</span>
 
 <span class="sd">    Whether to serve the app in watch mode</span>
 <span class="sd">    c.LabApp.watch = False</span>
@@ -469,12 +470,8 @@
 <span class="c1"># dir of the current profile, but can be specified by absolute path.</span>
 <span class="c1"># c.ConnectionFileMixin.connection_file = &#39;&#39;</span>
 
-<span class="c1">## JSON file in which to store connection info [default: kernel-&lt;pid&gt;.json]</span>
-<span class="c1">#</span>
-<span class="c1">#  This file will contain the IP, ports, and authentication key needed to connect</span>
-<span class="c1">#  clients to this kernel. By default, this file will be created in the security</span>
-<span class="c1">#  dir of the current profile, but can be specified by absolute path.</span>
-<span class="c1">#c.ConnectionFileMixin.connection_file = &#39;&#39;</span>
+<span class="c1"># set the control (ROUTER) port [default: random]</span>
+<span class="c1"># c.ConnectionFileMixin.control_port = 0</span>
 
 <span class="c1"># set the heartbeat port [default: random]</span>
 <span class="c1"># c.ConnectionFileMixin.hb_port = 0</span>
@@ -493,7 +490,6 @@
 <span class="c1"># set the stdin (ROUTER) port [default: random]</span>
 <span class="c1"># c.ConnectionFileMixin.stdin_port = 0</span>
 
-
 <span class="c1"># c.ConnectionFileMixin.transport = &#39;tcp&#39;</span>
 
 <span class="c1"># -----------------------------------------------------------------------------</span>
@@ -501,11 +497,13 @@
 <span class="c1"># -----------------------------------------------------------------------------</span>
 
 <span class="c1"># Manages a single kernel in a subprocess on this host.</span>
+<span class="c1">#</span>
+<span class="c1"># This version starts kernels with Popen.</span>
 
-<span class="c1">## Should we autorestart the kernel if it dies.</span>
+<span class="c1"># Should we autorestart the kernel if it dies.</span>
 <span class="c1">#c.KernelManager.autorestart = True</span>
 
-<span class="c1">## DEPRECATED: Use kernel_name instead.</span>
+<span class="c1"># DEPRECATED: Use kernel_name instead.</span>
 <span class="c1">#</span>
 <span class="c1">#  The Popen Command to launch the kernel. Override this if you have a custom</span>
 <span class="c1">#  kernel. If kernel_cmd is specified in a configuration file, Jupyter does not</span>
@@ -515,116 +513,21 @@
 <span class="c1">#  line.</span>
 <span class="c1">#c.KernelManager.kernel_cmd = []</span>
 
-<span class="c1">## Time to wait for a kernel to terminate before killing it, in seconds.</span>
-<span class="c1">#c.KernelManager.shutdown_wait_time = 5.0</span>
-
-<span class="c1"># The Popen Command to launch the kernel. Override this if you have a custom</span>
-<span class="c1"># kernel. If kernel_cmd is specified in a configuration file, Jupyter does not</span>
-<span class="c1"># pass any arguments to the kernel, because it cannot make any assumptions about</span>
-<span class="c1"># the arguments that the kernel understands. In particular, this means that the</span>
-<span class="c1"># kernel does not receive the option --debug if it given on the Jupyter command</span>
-<span class="c1"># line.</span>
-<span class="c1"># c.KernelManager.kernel_cmd = []</span>
-
 <span class="c1"># Time to wait for a kernel to terminate before killing it, in seconds.</span>
-<span class="c1"># c.KernelManager.shutdown_wait_time = 5.0</span>
+<span class="c1">#c.KernelManager.shutdown_wait_time = 5.0</span>
 
 <span class="c1"># -----------------------------------------------------------------------------</span>
 <span class="c1"># Session(Configurable) configuration</span>
 <span class="c1"># -----------------------------------------------------------------------------</span>
 
-<span class="c1">## Object for handling serialization and sending of messages.</span>
-<span class="c1">#</span>
-<span class="c1">#  The Session object handles building messages and sending them with ZMQ sockets</span>
-<span class="c1">#  or ZMQStream objects.  Objects can communicate with each other over the</span>
-<span class="c1">#  network via Session objects, and only need to work with the dict-based IPython</span>
-<span class="c1">#  message spec. The Session will handle serialization/deserialization, security,</span>
-<span class="c1">#  and metadata.</span>
-<span class="c1">#</span>
-<span class="c1">#  Sessions support configurable serialization via packer/unpacker traits, and</span>
-<span class="c1">#  signing with HMAC digests via the key/keyfile traits.</span>
-<span class="c1">#</span>
-<span class="c1">#  Parameters ----------</span>
-<span class="c1">#</span>
-<span class="c1">#  debug : bool</span>
-<span class="c1">#      whether to trigger extra debugging statements</span>
-<span class="c1">#  packer/unpacker : str : &#39;json&#39;, &#39;pickle&#39; or import_string</span>
-<span class="c1">#      importstrings for methods to serialize message parts.  If just</span>
-<span class="c1">#      &#39;json&#39; or &#39;pickle&#39;, predefined JSON and pickle packers will be used.</span>
-<span class="c1">#      Otherwise, the entire importstring must be used.</span>
-<span class="c1">#</span>
-<span class="c1">#      The functions must accept at least valid JSON input, and output *bytes*.</span>
-<span class="c1">#</span>
-<span class="c1">#      For example, to use msgpack:</span>
-<span class="c1">#      packer = &#39;msgpack.packb&#39;, unpacker=&#39;msgpack.unpackb&#39;</span>
-<span class="c1">#  pack/unpack : callables</span>
-<span class="c1">#      You can also set the pack/unpack callables for serialization directly.</span>
-<span class="c1">#  session : bytes</span>
-<span class="c1">#      the ID of this Session object.  The default is to generate a new UUID.</span>
-<span class="c1">#  username : unicode</span>
-<span class="c1">#      username added to message headers.  The default is to ask the OS.</span>
-<span class="c1">#  key : bytes</span>
-<span class="c1">#      The key used to initialize an HMAC signature.  If unset, messages</span>
-<span class="c1">#      will not be signed or checked.</span>
-<span class="c1">#  keyfile : filepath</span>
-<span class="c1">#      The file containing a key.  If this is set, `key` will be initialized</span>
-<span class="c1">#      to the contents of the file.</span>
-
-<span class="c1">## Threshold (in bytes) beyond which an object&#39;s buffer should be extracted to</span>
-<span class="c1">#  avoid pickling.</span>
-<span class="c1">#c.Session.buffer_threshold = 1024</span>
-
-<span class="c1">## Whether to check PID to protect against calls after fork.</span>
-<span class="c1">#</span>
-<span class="c1">#  This check can be disabled if fork-safety is handled elsewhere.</span>
-<span class="c1">#c.Session.check_pid = True</span>
-
-<span class="c1">## Threshold (in bytes) beyond which a buffer should be sent without copying.</span>
-<span class="c1">#c.Session.copy_threshold = 65536</span>
-
-<span class="c1">## Debug output in the Session</span>
-<span class="c1">#c.Session.debug = False</span>
-
-<span class="c1">## The maximum number of digests to remember.</span>
-<span class="c1">#</span>
-<span class="c1">#  The digest history will be culled when it exceeds this value.</span>
-<span class="c1">#c.Session.digest_history_size = 65536</span>
-
-<span class="c1">## The maximum number of items for a container to be introspected for custom</span>
-<span class="c1">#  serialization. Containers larger than this are pickled outright.</span>
-<span class="c1">#c.Session.item_threshold = 64</span>
-
-<span class="c1">## execution key, for signing messages.</span>
-<span class="c1">#c.Session.key = b&#39;&#39;</span>
-
-<span class="c1">## path to file containing execution key.</span>
-<span class="c1">#c.Session.keyfile = &#39;&#39;</span>
-
-<span class="c1">## Metadata dictionary, which serves as the default top-level metadata dict for</span>
-<span class="c1">#  each message.</span>
-<span class="c1">#c.Session.metadata = {}</span>
-
-<span class="c1">## The name of the packer for serializing messages. Should be one of &#39;json&#39;,</span>
-<span class="c1">#  &#39;pickle&#39;, or an import name for a custom callable serializer.</span>
-<span class="c1">#c.Session.packer = &#39;json&#39;</span>
-
-<span class="c1">## The UUID identifying this session.</span>
-<span class="c1">#c.Session.session = &#39;&#39;</span>
-
-<span class="c1">## The digest scheme used to construct the message signatures. Must have the form</span>
-<span class="c1">#  &#39;hmac-HASH&#39;.</span>
-<span class="c1">#c.Session.signature_scheme = &#39;hmac-sha256&#39;</span>
-
-<span class="c1">## The name of the unpacker for unserializing messages. Only used with custom</span>
-<span class="c1">#  functions for `packer`.</span>
-<span class="c1">#c.Session.unpacker = &#39;json&#39;</span>
+<span class="c1"># Object for handling serialization and sending of messages.</span>
 
 <span class="c1"># The Session object handles building messages and sending them with ZMQ sockets</span>
 <span class="c1"># or ZMQStream objects.  Objects can communicate with each other over the</span>
 <span class="c1"># network via Session objects, and only need to work with the dict-based IPython</span>
-<span class="c1"># message spej. The Session will handle serialization/deserialization, security,</span>
+<span class="c1"># message spec. The Session will handle serialization/deserialization, security,</span>
 <span class="c1"># and metadata.</span>
-
+<span class="c1">#</span>
 <span class="c1"># Sessions support configurable serialization via packer/unpacker traits, and</span>
 <span class="c1"># signing with HMAC digests via the key/keyfile traits.</span>
 
@@ -637,22 +540,22 @@
 <span class="c1">#     &#39;json&#39; or &#39;pickle&#39;, predefined JSON and pickle packers will be used.</span>
 <span class="c1">#     Otherwise, the entire importstring must be used.</span>
 
-<span class="c1">#     The functions must accept at least valid JSON input, and output *bytes*.</span>
+<span class="c1">#      The functions must accept at least valid JSON input, and output *bytes*.</span>
 
-<span class="c1">#     For example, to use msgpack:</span>
-<span class="c1">#     packer = &#39;msgpack.packb&#39;, unpacker=&#39;msgpack.unpackb&#39;</span>
+<span class="c1">#      For example, to use msgpack:</span>
+<span class="c1">#      packer = &#39;msgpack.packb&#39;, unpacker=&#39;msgpack.unpackb&#39;</span>
 <span class="c1"># pack/unpack : callables</span>
-<span class="c1">#     You can also set the pack/unpack callables for serialization directly.</span>
-<span class="c1"># session : bytes</span>
-<span class="c1">#     the ID of this Session object.  The default is to generate a new UUID.</span>
-<span class="c1"># username : unicode</span>
-<span class="c1">#     username added to message headers.  The default is to ask the OS.</span>
-<span class="c1"># key : bytes</span>
-<span class="c1">#     The key used to initialize an HMAC signature.  If unset, messages</span>
-<span class="c1">#     will not be signed or checked.</span>
-<span class="c1"># keyfile : filepath</span>
-<span class="c1">#     The file containing a key.  If this is set, `key` will be initialized</span>
-<span class="c1">#     to the contents of the file.</span>
+<span class="c1">#      You can also set the pack/unpack callables for serialization directly.</span>
+<span class="c1">#  session : bytes</span>
+<span class="c1">#      the ID of this Session object.  The default is to generate a new UUID.</span>
+<span class="c1">#  username : unicode</span>
+<span class="c1">#      username added to message headers.  The default is to ask the OS.</span>
+<span class="c1">#  key : bytes</span>
+<span class="c1">#      The key used to initialize an HMAC signature.  If unset, messages</span>
+<span class="c1">#      will not be signed or checked.</span>
+<span class="c1">#  keyfile : filepath</span>
+<span class="c1">#      The file containing a key.  If this is set, `key` will be initialized</span>
+<span class="c1">#      to the contents of the file.</span>
 
 <span class="c1"># Threshold (in bytes) beyond which an object&#39;s buffer should be extracted to</span>
 <span class="c1"># avoid pickling.</span>
@@ -693,15 +596,15 @@
 <span class="c1"># c.Session.packer = &#39;json&#39;</span>
 
 <span class="c1"># The UUID identifying this session.</span>
-<span class="c1"># c.Session.session = &#39;&#39;</span>
+<span class="c1">#c.Session.session = &#39;&#39;</span>
 
 <span class="c1"># The digest scheme used to construct the message signatures. Must have the form</span>
-<span class="c1"># &#39;hmac-HASH&#39;.</span>
-<span class="c1"># c.Session.signature_scheme = &#39;hmac-sha256&#39;</span>
+<span class="c1">#  &#39;hmac-HASH&#39;.</span>
+<span class="c1">#c.Session.signature_scheme = &#39;hmac-sha256&#39;</span>
 
 <span class="c1"># The name of the unpacker for unserializing messages. Only used with custom</span>
-<span class="c1"># functions for `packer`.</span>
-<span class="c1"># c.Session.unpacker = &#39;json&#39;</span>
+<span class="c1">#  functions for `packer`.</span>
+<span class="c1">#c.Session.unpacker = &#39;json&#39;</span>
 
 <span class="c1"># Username for the Session. Default is your system username.</span>
 <span class="c1"># c.Session.username = &#39;username&#39;</span>
@@ -725,57 +628,23 @@
 
 <span class="c1"># A KernelManager that handles notebook mapping and HTTP error handling</span>
 
-<span class="c1">## Whether messages from kernels whose frontends have disconnected should be</span>
-<span class="c1">#  buffered in-memory.</span>
-<span class="c1">#</span>
+<span class="c1"># Whether messages from kernels whose frontends have disconnected should be</span>
+<span class="c1"># buffered in-memory.</span>
+
 <span class="c1">#  When True (default), messages are buffered and replayed on reconnect, avoiding</span>
 <span class="c1">#  lost messages due to interrupted connectivity.</span>
-<span class="c1">#</span>
+
 <span class="c1">#  Disable if long-running kernels will produce too much output while no</span>
 <span class="c1">#  frontends are connected.</span>
 <span class="c1">#c.MappingKernelManager.buffer_offline_messages = True</span>
 
-<span class="c1">## Whether to consider culling kernels which are busy. Only effective if</span>
-<span class="c1">#  cull_idle_timeout &gt; 0.</span>
-<span class="c1">#c.MappingKernelManager.cull_busy = False</span>
-
-<span class="c1">## Whether to consider culling kernels which have one or more connections. Only</span>
-<span class="c1">#  effective if cull_idle_timeout &gt; 0.</span>
-<span class="c1">#c.MappingKernelManager.cull_connected = False</span>
-
-<span class="c1">## Timeout (in seconds) after which a kernel is considered idle and ready to be</span>
-<span class="c1">#  culled. Values of 0 or lower disable culling. Very short timeouts may result</span>
-<span class="c1">#  in kernels being culled for users with poor network connections.</span>
-<span class="c1">#c.MappingKernelManager.cull_idle_timeout = 0</span>
-
-<span class="c1">###### TODO: why are there multiple instances...?</span>
-<span class="c1">## The interval (in seconds) on which to check for idle kernels exceeding the</span>
-<span class="c1">#  cull timeout value.</span>
-<span class="c1"># c.MappingKernelManager.cull_interval = 300</span>
-
-<span class="c1">## Timeout for giving up on a kernel (in seconds).</span>
-<span class="c1">#</span>
-<span class="c1">#  On starting and restarting kernels, we check whether the kernel is running and</span>
-<span class="c1">#  responsive by sending kernel_info_requests. This sets the timeout in seconds</span>
-<span class="c1">#  for how long the kernel can take before being presumed dead.  This affects the</span>
-<span class="c1">#  MappingKernelManager (which handles kernel restarts)  and the</span>
-<span class="c1">#  ZMQChannelsHandler (which handles the startup).</span>
-<span class="c1">#c.MappingKernelManager.kernel_info_timeout = 60</span>
-
-<span class="c1"># When True (default), messages are buffered and replayed on reconnect, avoiding</span>
-<span class="c1"># lost messages due to interrupted connectivity.</span>
-
-<span class="c1"># Disable if long-running kernels will produce too much output while no</span>
-<span class="c1"># frontends are connected.</span>
-<span class="c1"># c.MappingKernelManager.buffer_offline_messages = True</span>
-
 <span class="c1"># Whether to consider culling kernels which are busy. Only effective if</span>
 <span class="c1"># cull_idle_timeout &gt; 0.</span>
-<span class="c1"># c.MappingKernelManager.cull_busy = False</span>
+<span class="c1">#c.MappingKernelManager.cull_busy = False</span>
 
 <span class="c1"># Whether to consider culling kernels which have one or more connections. Only</span>
 <span class="c1"># effective if cull_idle_timeout &gt; 0.</span>
-<span class="c1"># c.MappingKernelManager.cull_connected = False</span>
+<span class="c1">#c.MappingKernelManager.cull_connected = False</span>
 
 <span class="c1"># Timeout (in seconds) after which a kernel is considered idle and ready to be</span>
 <span class="c1"># culled. Values of 0 or lower disable culling. Very short timeouts may result</span>
@@ -792,17 +661,16 @@
 <span class="c1"># responsive by sending kernel_info_requests. This sets the timeout in seconds</span>
 <span class="c1"># for how long the kernel can take before being presumed dead.  This affects the</span>
 <span class="c1"># MappingKernelManager (which handles kernel restarts)  and the</span>
-<span class="c1"># ZMQChannelsHandler (which handles the startup).</span>
-<span class="c1"># c.MappingKernelManager.kernel_info_timeout = 60</span>
+<span class="c1">#  ZMQChannelsHandler (which handles the startup).</span>
+<span class="c1">#c.MappingKernelManager.kernel_info_timeout = 60</span>
 
 <span class="c1"># c.MappingKernelManager.root_dir = &#39;&#39;</span>
 
 <span class="c1"># -----------------------------------------------------------------------------</span>
 <span class="c1"># ContentsManager(LoggingConfigurable) configuration</span>
 <span class="c1"># -----------------------------------------------------------------------------</span>
-
-<span class="c1">## Base class for serving files and directories.</span>
-<span class="c1">#</span>
+<span class="c1"># Base class for serving files and directories.</span>
+<span class="c1"># -----------------------------------------------------------------------------</span>
 <span class="c1">#  This serves any text or binary file, as well as directories, with special</span>
 <span class="c1">#  handling for JSON notebook documents.</span>
 <span class="c1">#</span>
@@ -848,7 +716,10 @@
 <span class="c1"># c.ContentsManager.files_handler_params = {}</span>
 
 <span class="c1"># Glob patterns to hide in file and directory listings.</span>
-<span class="n">c</span><span class="o">.</span><span class="n">ContentsManager</span><span class="o">.</span><span class="n">hide_globs</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;__pycache__&#39;</span><span class="p">,</span> <span class="s1">&#39;*.pyc&#39;</span><span class="p">,</span> <span class="s1">&#39;*.pyo&#39;</span><span class="p">,</span> <span class="s1">&#39;.DS_Store&#39;</span><span class="p">,</span> <span class="s1">&#39;*.so&#39;</span><span class="p">,</span> <span class="s1">&#39;*.dylib&#39;</span><span class="p">,</span> <span class="s1">&#39;*~&#39;</span><span class="p">,</span> <span class="s1">&#39;.git&#39;</span><span class="p">]</span>
+<span class="n">c</span><span class="o">.</span><span class="n">ContentsManager</span><span class="o">.</span><span class="n">hide_globs</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;__pycache__&#39;</span><span class="p">,</span> <span class="s1">&#39;*.pyc&#39;</span><span class="p">,</span> <span class="s1">&#39;*.pyo&#39;</span><span class="p">,</span> <span class="s1">&#39;.DS_Store&#39;</span><span class="p">,</span> <span class="s1">&#39;*.so&#39;</span><span class="p">,</span> <span class="s1">&#39;*.dylib&#39;</span><span class="p">,</span> <span class="s1">&#39;*~&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;.git&#39;</span>
+<span class="p">]</span>
 
 <span class="c1"># Python callable or importstring thereof</span>
 
@@ -866,7 +737,6 @@
 <span class="c1"># - path: the API path of the save destination</span>
 <span class="c1"># - contents_manager: this ContentsManager instance</span>
 <span class="c1"># c.ContentsManager.pre_save_hook = None</span>
-
 
 <span class="c1"># c.ContentsManager.root_dir = &#39;/&#39;</span>
 
@@ -914,13 +784,10 @@
 <span class="c1"># really deletes them.</span>
 <span class="c1"># c.FileContentsManager.delete_to_trash = True</span>
 
-<span class="c1">## Python callable or importstring thereof</span>
-<span class="c1">#</span>
-<span class="c1">#  to be called on the path of a file just saved.</span>
-<span class="c1">#</span>
-<span class="c1">#  This can be used to process the file on disk, such as converting the notebook</span>
-<span class="c1">#  to a script or HTML via nbconvert.</span>
-<span class="c1">#</span>
+<span class="c1"># Python callable or importstring thereof to be called on the path of a file just saved.</span>
+<span class="c1"># This can be used to process the file on disk, such as converting the notebook</span>
+<span class="c1"># to a script or HTML via nbconvert.</span>
+
 <span class="c1">#  It will be called as (all arguments passed by keyword)::</span>
 <span class="c1">#</span>
 <span class="c1">#      hook(os_path=os_path, model=model, contents_manager=instance)</span>
@@ -931,19 +798,10 @@
 
 <span class="c1"># to be called on the path of a file just saved.</span>
 
-<span class="c1"># This can be used to process the file on disk, such as converting the notebook</span>
-<span class="c1"># to a script or HTML via nbconvert.</span>
-
-<span class="c1"># It will be called as (all arguments passed by keyword)::</span>
-
-<span class="c1">#     hook(os_path=os_path, model=model, contents_manager=instance)</span>
-
-<span class="c1"># - path: the filesystem path to the file just written - model: the model</span>
-<span class="c1"># representing the file - contents_manager: this ContentsManager instance</span>
-<span class="c1"># c.FileContentsManager.post_save_hook = None</span>
-
-
 <span class="c1"># c.FileContentsManager.root_dir = &#39;&#39;</span>
+
+<span class="c1"># DEPRECATED, use post_save_hook. Will be removed in Notebook 5.0</span>
+<span class="c1">#c.FileContentsManager.save_script = False</span>
 
 <span class="c1"># -----------------------------------------------------------------------------</span>
 <span class="c1"># NotebookNotary(LoggingConfigurable) configuration</span>
@@ -1006,7 +864,7 @@
         <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation overview</a><ul>
-  <li><a href="../../source/_modules/index.html">Module code</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
   </ul></li>
   </ul></li>
 </ul>
@@ -1019,7 +877,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../magics.html">Built-in Magics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../custom_magics.html">Writing Your Own Magics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../directive.html">Sphinx Directives</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../pygments.html">Pygments highlighting</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
@@ -1050,7 +907,7 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../source/_modules/index.html" >Module code</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

@@ -13,7 +13,6 @@
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
@@ -49,25 +48,35 @@
 <span class="c1"># flake8: noqa</span>
 <span class="sd">&quot;&quot;&quot;Import my most frequently used modules.</span>
 
+<span class="sd">==============</span>
+<span class="sd">04_easy_import</span>
+<span class="sd">==============</span>
+
+<span class="sd">.. currentmodule:: 04_easy_import</span>
+
 <span class="sd">This imports a few utility functions from :ref:`IPython` and imports the python</span>
 <span class="sd">package neovim is served in.</span>
+
+<span class="sd">Overlap between IPython and traitlets</span>
+<span class="sd">======================================</span>
 
 <span class="sd">It seems that :mod:`IPython` and :mod:`traitlets` share a module!</span>
 
 <span class="sd">From a cursory glance :mod:`traitlets.utils.importstring` ==</span>
 <span class="sd">:mod:`IPython.utils.importstring`.</span>
 
-<span class="sd">They both export 1 function :func:`~IPython.utils.importstring.import_item()`</span>
+<span class="sd">They both export 1 function: :func:`~IPython.utils.importstring.import_item()`</span>
 
 <span class="sd">This could be used here to dynamicallu import strings based on user</span>
 <span class="sd">configuration, environment variables and configuration files.</span>
 
-<span class="sd">The functionality here is duplicated in</span>
-<span class="sd">:mod:`profile_default.extensions.easy_import`.</span>
+<span class="sd">.. warning: Pending Deprecation: The functionality here is duplicated in</span>
+<span class="sd">            :mod:`profile_default.extensions.easy_import`.</span>
 
 
 <span class="sd">The Importance of Clean Namespaces</span>
 <span class="sd">==================================</span>
+
 <span class="sd">May 07, 2019:</span>
 
 <span class="sd">    If the last line in the module didn&#39;t have ``del mod`` in it, then</span>
@@ -82,23 +91,28 @@
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">from</span> <span class="nn">importlib</span> <span class="k">import</span> <span class="n">import_module</span>
 
-<span class="c1"># 12/14/18</span>
-
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">git</span>
-<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">git</span> <span class="k">import</span> <span class="n">Git</span>
+<span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="n">ModuleNotFoundError</span><span class="p">):</span>
     <span class="k">pass</span>
 
 
 <div class="viewcode-block" id="import_nvim"><a class="viewcode-back" href="../../../profile_default.html#profile_default.startup.04_easy_import.import_nvim">[docs]</a><span class="k">def</span> <span class="nf">import_nvim</span><span class="p">(</span><span class="n">mod</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Import the neovim module.</span>
 
-<span class="sd">    Utilizes :func:`import_module` from :mod:`importlib`. Nothing about the</span>
-<span class="sd">    function is specific to nvim though, and it could be used for the entire</span>
-<span class="sd">    module.</span>
+<span class="sd">    Utilizes :func:`importlib.import_module()` from :mod:`importlib`.</span>
+<span class="sd">    Nothing about the function is specific to nvim though, and it could be</span>
+<span class="sd">    used for the entire package.</span>
 
-<span class="sd">    :param mod: A module to import.</span>
-<span class="sd">    :returns: None</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mod : str</span>
+<span class="sd">       A module to import.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">import_module</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span>
@@ -132,16 +146,16 @@
   </ul></li>
 </ul>
 <h3><a href="../../../index.html">Table of Contents</a></h3>
-<p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../startup.html">1. Startup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ipython_keybindings.html">2. Keybindings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../magics.html">3. Built-in Magics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../custom_magics.html">4. Writing Your Own Magics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../directive.html">5. Sphinx Directives</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../rich_output.html">6. Rich Output</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../pygments.html">7. Pygments highlighting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../startup.html">Startup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ipython_interactive_shell.html">The Interactive Shell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ipython_keybindings.html">Keybindings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../magics.html">Built-in Magics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../custom_magics.html">Writing Your Own Magics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../directive.html">Sphinx Directives</a></li>
 </ul>
+<p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../API.html">API</a></li>
 </ul>

@@ -13,7 +13,6 @@
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
@@ -150,16 +149,14 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">shutil</span> <span class="k">import</span> <span class="n">which</span>
 
-<span class="kn">import</span> <span class="nn">IPython</span>
 <span class="kn">from</span> <span class="nn">IPython</span> <span class="k">import</span> <span class="n">get_ipython</span>
 <span class="kn">from</span> <span class="nn">IPython.core.alias</span> <span class="k">import</span> <span class="n">AliasError</span>
-
-<span class="kn">from</span> <span class="nn">profile_default.util.machine</span> <span class="k">import</span> <span class="n">Platform</span>
 <span class="kn">from</span> <span class="nn">profile_default.util</span> <span class="k">import</span> <span class="n">module_log</span>
+<span class="kn">from</span> <span class="nn">profile_default.util.machine</span> <span class="k">import</span> <span class="n">Platform</span>
 
 <span class="n">LOGGER</span> <span class="o">=</span> <span class="n">module_log</span><span class="o">.</span><span class="n">stream_logger</span><span class="p">(</span>
     <span class="n">logger</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="vm">__name__</span><span class="p">),</span>
-    <span class="n">msg_format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> </span><span class="si">%(levelname)s</span><span class="s1"> </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span>
+    <span class="n">msg_format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> : </span><span class="si">%(levelname)s</span><span class="s1"> : </span><span class="si">%(module)s</span><span class="s1"> </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span>
     <span class="n">log_level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
 
 
@@ -203,10 +200,10 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_user_aliases</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="p">(</span><span class="s1">&#39;ag&#39;</span><span class="p">,</span> <span class="s1">&#39;ag --hidden --color %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;ag&#39;</span><span class="p">,</span> <span class="s1">&#39;ag --hidden --color --no-column %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;cs&#39;</span><span class="p">,</span> <span class="s1">&#39;cd </span><span class="si">%s</span><span class="s1"> &amp;&amp; ls -F --color=always </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;cp&#39;</span><span class="p">,</span> <span class="s1">&#39;cp -iv %l&#39;</span><span class="p">),</span>  <span class="c1"># cp mv mkdir and rmdir are all overridden</span>
-        <span class="p">(</span><span class="s1">&#39;dus&#39;</span><span class="p">,</span> <span class="s1">&#39;du -d 1 -h %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;dus&#39;</span><span class="p">,</span> <span class="s1">&#39;du -d 1 -ha %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;echo&#39;</span><span class="p">,</span> <span class="s1">&#39;echo -e %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;gpip&#39;</span><span class="p">,</span>
          <span class="s1">&#39;export PIP_REQUIRE_VIRTUALENV=0; python -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 &gt; /dev/null&#39;</span>
@@ -232,7 +229,7 @@
         <span class="p">(</span><span class="s1">&#39;rm&#39;</span><span class="p">,</span> <span class="s1">&#39;rm -v %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;rmdir&#39;</span><span class="p">,</span> <span class="s1">&#39;rmdir -v %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;profile_default&#39;</span><span class="p">,</span>
-         <span class="s1">&#39;cd ~/projects/dotfiles/unix/.ipython/profile_default/startup&#39;</span><span class="p">),</span>
+         <span class="s1">&#39;cd ~/projects/dotfiles/unix/.ipython/profile_default&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;startup&#39;</span><span class="p">,</span>
          <span class="s1">&#39;cd ~/projects/dotfiles/unix/.ipython/profile_default/startup&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;tail&#39;</span><span class="p">,</span> <span class="s1">&#39;tail -n 30 %l&#39;</span><span class="p">),</span>
@@ -242,7 +239,15 @@
 
 
 <div class="viewcode-block" id="common_aliases"><a class="viewcode-back" href="../../../profile_default.html#profile_default.startup.20_aliases.common_aliases">[docs]</a><span class="k">def</span> <span class="nf">common_aliases</span><span class="p">(</span><span class="n">_ip</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Add aliases common to all OSes. Mostly Git aliases.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Add aliases common to all OSes. Overwhelmingly :command:`Git` aliases.</span>
+
+<span class="sd">    This method adds around 70 to 80 aliases that can be implemented on most</span>
+<span class="sd">    of the major platforms.</span>
+
+<span class="sd">    The only real requirement is Git being installed and working. Docker</span>
+<span class="sd">    commands possibly going to be added.</span>
+
+<span class="sd">    .. todo:: :command:`git show`</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -254,19 +259,26 @@
 <span class="sd">    -------</span>
 <span class="sd">    _ip.user_aliases : List of tuples</span>
 <span class="sd">        User aliases.</span>
-
-
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_user_aliases</span> <span class="o">=</span> <span class="p">[</span>
         <span class="p">(</span><span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff --staged --stat %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;ga&#39;</span><span class="p">,</span> <span class="s1">&#39;git add %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gaa&#39;</span><span class="p">,</span> <span class="s1">&#39;git add --all %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gai&#39;</span><span class="p">,</span> <span class="s1">&#39;git add --interactive %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gap&#39;</span><span class="p">,</span> <span class="s1">&#39;git add --patch %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gar&#39;</span><span class="p">,</span> <span class="s1">&#39;git add --renormalize -A %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gau&#39;</span><span class="p">,</span> <span class="s1">&#39;git add --update %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;ga.&#39;</span><span class="p">,</span> <span class="s1">&#39;git add .&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gar&#39;</span><span class="p">,</span> <span class="s1">&#39;git add --renormalize %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gb&#39;</span><span class="p">,</span> <span class="s1">&#39;git branch -a %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gb&#39;</span><span class="p">,</span> <span class="s1">&#39;git branch --all %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gbl&#39;</span><span class="p">,</span> <span class="s1">&#39;git blame %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gbr&#39;</span><span class="p">,</span> <span class="s1">&#39;git branch %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gbru&#39;</span><span class="p">,</span> <span class="s1">&#39;git branch --set-upstream-to origin %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gbrv&#39;</span><span class="p">,</span> <span class="s1">&#39;git branch --all --verbose %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;gci&#39;</span><span class="p">,</span> <span class="s1">&#39;git commit %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;gcia&#39;</span><span class="p">,</span> <span class="s1">&#39;git commit --amend %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gcid&#39;</span><span class="p">,</span> <span class="s1">&#39;git commit --date=%l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;gciad&#39;</span><span class="p">,</span> <span class="s1">&#39;git commit --amend --date=%l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gcid&#39;</span><span class="p">,</span> <span class="s1">&#39;git commit --date=%l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gcim&#39;</span><span class="p">,</span> <span class="s1">&#39;git commit --verbose --message </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;gcl&#39;</span><span class="p">,</span> <span class="s1">&#39;git clone %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;gcls&#39;</span><span class="p">,</span> <span class="s1">&#39;git clone --depth 1 %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;gco&#39;</span><span class="p">,</span> <span class="s1">&#39;git checkout %l&#39;</span><span class="p">),</span>
@@ -275,50 +287,87 @@
         <span class="p">(</span><span class="s1">&#39;gds&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff --staged %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;gds2&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff --staged --stat %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;gdt&#39;</span><span class="p">,</span> <span class="s1">&#39;git difftool %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gf&#39;</span><span class="p">,</span> <span class="s1">&#39;git fetch --all&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gdw&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff --word-diff %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gf&#39;</span><span class="p">,</span> <span class="s1">&#39;git fetch --all %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gfe&#39;</span><span class="p">,</span> <span class="s1">&#39;git fetch %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;ggc&#39;</span><span class="p">,</span> <span class="s1">&#39;git gc %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;ggcp&#39;</span><span class="p">,</span> <span class="s1">&#39;git gc --prune %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;git&#39;</span><span class="p">,</span> <span class="s1">&#39;git %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;git hist&#39;</span><span class="p">,</span>
          <span class="s1">&#39;git log --pretty=&quot;format:%h </span><span class="si">%a</span><span class="s1">d | </span><span class="si">%d</span><span class="s1"> [</span><span class="si">%a</span><span class="s1">n]&quot; --graph --date=short &#39;</span>
          <span class="s1">&#39;--branches --abbrev-commit --oneline %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;git last&#39;</span><span class="p">,</span> <span class="s1">&#39;git log -1 HEAD %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;git staged&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff --cached %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;git rel&#39;</span><span class="p">,</span> <span class="s1">&#39;git rev-parse --show-prefix&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;git root&#39;</span><span class="p">,</span> <span class="s1">&#39;git rev-parse --show-toplevel&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;git unstage&#39;</span><span class="p">,</span> <span class="s1">&#39;git reset HEAD&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;git unstaged&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;gl&#39;</span><span class="p">,</span> <span class="s1">&#39;git log %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;glo&#39;</span><span class="p">,</span>
          <span class="s1">&#39;git log --graph --decorate --abbrev-commit --oneline --branches --all&#39;</span>
          <span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gls&#39;</span><span class="p">,</span> <span class="s1">&#39;git ls-tree&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gls&#39;</span><span class="p">,</span> <span class="s1">&#39;git ls-tree master %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;git ls&#39;</span><span class="p">,</span> <span class="s1">&#39;git ls-tree master %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;gm&#39;</span><span class="p">,</span> <span class="s1">&#39;git merge --no-ff %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gmm&#39;</span><span class="p">,</span> <span class="s1">&#39;git merge master&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gma&#39;</span><span class="p">,</span> <span class="s1">&#39;git merge --abort %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gmc&#39;</span><span class="p">,</span> <span class="s1">&#39;git merge --continue %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gmm&#39;</span><span class="p">,</span> <span class="s1">&#39;git merge master %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;gmt&#39;</span><span class="p">,</span> <span class="s1">&#39;git mergetool %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;gp&#39;</span><span class="p">,</span> <span class="s1">&#39;git pull --all&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;gpo&#39;</span><span class="p">,</span> <span class="s1">&#39;git pull origin&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;gpom&#39;</span><span class="p">,</span> <span class="s1">&#39;git pull origin master&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;gpu&#39;</span><span class="p">,</span> <span class="s1">&#39;git push&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gr&#39;</span><span class="p">,</span> <span class="s1">&#39;git remote -v&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gs&#39;</span><span class="p">,</span> <span class="s1">&#39;git status&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gsh&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gshp&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash pop&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gshl&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash list&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gshd&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash drop&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gshc&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash clear&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gsha&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash apply&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gr&#39;</span><span class="p">,</span> <span class="s1">&#39;git remote -v %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gre&#39;</span><span class="p">,</span> <span class="s1">&#39;git remote %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;grb&#39;</span><span class="p">,</span> <span class="s1">&#39;git rebase %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;grba&#39;</span><span class="p">,</span> <span class="s1">&#39;git rebase --abort %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;grbc&#39;</span><span class="p">,</span> <span class="s1">&#39;git rebase --continue %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;grbi&#39;</span><span class="p">,</span> <span class="s1">&#39;git rebase --interactive %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gs&#39;</span><span class="p">,</span> <span class="s1">&#39;git status %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gsh&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gsha&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash apply %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gshc&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash clear %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gshd&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash drop %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gshl&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash list %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gshp&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash pop %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gshs&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash show %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gshsp&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash show --patch %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gss&#39;</span><span class="p">,</span> <span class="s1">&#39;git status -sb %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;gst&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff --stat %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gt&#39;</span><span class="p">,</span> <span class="s1">&#39;git tag --list&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;git staged&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff --cached %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;git rel&#39;</span><span class="p">,</span> <span class="s1">&#39;git rev-parse --show-prefix %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;git root&#39;</span><span class="p">,</span> <span class="s1">&#39;git rev-parse --show-toplevel %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;git unstage&#39;</span><span class="p">,</span> <span class="s1">&#39;git reset HEAD %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;git unstaged&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gt&#39;</span><span class="p">,</span> <span class="s1">&#39;git tag --list %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;lswitch&#39;</span><span class="p">,</span> <span class="s1">&#39;legit switch&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;lsync&#39;</span><span class="p">,</span> <span class="s1">&#39;legit sync&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;lpublish&#39;</span><span class="p">,</span> <span class="s1">&#39;legit publish&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;lunpublish&#39;</span><span class="p">,</span> <span class="s1">&#39;legit unpublish&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;lundo&#39;</span><span class="p">,</span> <span class="s1">&#39;legit undo&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;lbranches&#39;</span><span class="p">,</span> <span class="s1">&#39;legit branches&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;ssh-day&#39;</span><span class="p">,</span> <span class="s1">&#39;eval &quot;$(ssh-agent -s)&quot;; ssh-add %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;xx&#39;</span><span class="p">,</span> <span class="s1">&#39;quit&#39;</span><span class="p">),</span>  <span class="c1"># this is a sweet one</span>
         <span class="p">(</span><span class="s1">&#39;..&#39;</span><span class="p">,</span> <span class="s1">&#39;cd ..&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;...&#39;</span><span class="p">,</span> <span class="s1">&#39;cd ../..&#39;</span><span class="p">),</span>
     <span class="p">]</span>
     <span class="k">return</span> <span class="n">_user_aliases</span></div>
+
+
+<div class="viewcode-block" id="cmd_aliases"><a class="viewcode-back" href="../../../profile_default.html#profile_default.startup.20_aliases.cmd_aliases">[docs]</a><span class="k">def</span> <span class="nf">cmd_aliases</span><span class="p">(</span><span class="n">_ip</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Aliases for the cmd interpreter specifically.</span>
+
+<span class="sd">    .. todo::</span>
+
+<span class="sd">        Do a :envvar:`COMSPEC` check.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_ip</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s1">&#39;copy&#39;</span><span class="p">,</span> <span class="s1">&#39;copy&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;ddir&#39;</span><span class="p">,</span> <span class="s1">&#39;dir /ad /on&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;ldir&#39;</span><span class="p">,</span> <span class="s1">&#39;dir /ad /on&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;mklink&#39;</span><span class="p">,</span> <span class="s1">&#39;mklink&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;move&#39;</span><span class="p">,</span> <span class="s1">&#39;move&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;mv&#39;</span><span class="p">,</span> <span class="s1">&#39;move&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;ren&#39;</span><span class="p">,</span> <span class="s1">&#39;ren&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;rmdir&#39;</span><span class="p">,</span> <span class="s1">&#39;rmdir&#39;</span><span class="p">),</span>
+    <span class="p">]</span>
+    <span class="k">return</span> <span class="n">_ip</span><span class="o">.</span><span class="n">user_aliases</span></div>
 
 
 <div class="viewcode-block" id="windows_aliases"><a class="viewcode-back" href="../../../profile_default.html#profile_default.startup.20_aliases.windows_aliases">[docs]</a><span class="k">def</span> <span class="nf">windows_aliases</span><span class="p">(</span><span class="n">_ip</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -332,6 +381,10 @@
 <span class="sd">    The minimum number of assumptions possible have been made; however, note</span>
 <span class="sd">    that this section is still under development and frequently changes.</span>
 
+<span class="sd">    .. warning:: Warning: 5 aliases have been commented out as they emit warnings</span>
+<span class="sd">                 upon being set. They&#39;re unfortunately aliases to cmd commands</span>
+<span class="sd">                 and as a result don&#39;t run correctly in PowerShell...</span>
+
 <span class="sd">    .. note::</span>
 
 <span class="sd">        The environment variable :envvar:`COMSPEC` is checked to determine the</span>
@@ -340,90 +393,163 @@
 
 <span class="sd">    .. code-block:: powershell</span>
 
-<span class="sd">        Alias           rp --&gt; Remove-ItemProperty</span>
-<span class="sd">        Alias           rsn --&gt; Remove-PSSession</span>
-<span class="sd">        Alias           rv --&gt; Remove-Variable</span>
-<span class="sd">        Alias           rvpa --&gt; Resolve-Path</span>
-<span class="sd">        Alias           sajb --&gt; Start-Job</span>
-<span class="sd">        Alias           sal --&gt; Set-Alias</span>
-<span class="sd">        Alias           saps --&gt; Start-Process</span>
-<span class="sd">        Alias           sasv --&gt; Start-Service</span>
-<span class="sd">        Alias           sbp --&gt; Set-PSBreakpoint</span>
-<span class="sd">        Alias           select --&gt; Select-Object</span>
-<span class="sd">        Alias           set --&gt; Set-Variable</span>
-<span class="sd">        Alias           si --&gt; Set-Item</span>
-<span class="sd">        Alias           sl --&gt; Set-Location</span>
-<span class="sd">        Alias           sleep --&gt; Start-Sleep</span>
-<span class="sd">        Alias           sls --&gt; Select-String</span>
-<span class="sd">        Alias           sort --&gt; Sort-Object</span>
-<span class="sd">        Alias           sp --&gt; Set-ItemProperty</span>
-<span class="sd">        Alias           spjb --&gt; Stop-Job</span>
-<span class="sd">        Alias           spps --&gt; Stop-Process</span>
-<span class="sd">        Alias           spsv --&gt; Stop-Service</span>
-<span class="sd">        Alias           start --&gt; Start-Process</span>
-<span class="sd">        Alias           stz --&gt; Set-TimeZone</span>
-<span class="sd">        Alias           sv --&gt; Set-Variable</span>
-<span class="sd">        Alias           tee --&gt; Tee-Object</span>
-<span class="sd">        Alias           type --&gt; Get-Content</span>
-<span class="sd">        Alias           where --&gt; Where-Object</span>
-<span class="sd">        Alias           wjb --&gt; Wait-Job</span>
-<span class="sd">        Alias           write --&gt; Write-Output</span>
-
-<span class="sd">    Also I felt really good about the way I reformatted that!</span>
-
-<span class="sd">    .. code-block:: vim</span>
-
-<span class="sd">        :&#39;&lt;,&#39;&gt;s/^\W/(&#39;/</span>
-<span class="sd">        :&#39;&lt;,&#39;&gt;s/ --&gt; /&#39;, &#39;/</span>
-<span class="sd">        :&#39;&lt;,&#39;&gt;s/$/&#39;),</span>
-<span class="sd">        gv&gt;</span>
-<span class="sd">        &quot; Realize that the indentation is all out of whack and let ALE deal</span>
-<span class="sd">        :w</span>
+<span class="sd">        Alias           % -&gt; ForEach-Object</span>
+<span class="sd">        Alias           ? -&gt; Where-Object</span>
+<span class="sd">        Alias           clhy -&gt; Clear-History</span>
+<span class="sd">        Alias           cli -&gt; Clear-Item</span>
+<span class="sd">        Alias           clp -&gt; Clear-ItemProperty</span>
+<span class="sd">        Alias           cls -&gt; Clear-Host</span>
+<span class="sd">        Alias           clv -&gt; Clear-Variable</span>
+<span class="sd">        Alias           cnsn -&gt; Connect-PSSession</span>
+<span class="sd">        Alias           compare -&gt; Compare-Object</span>
+<span class="sd">        Alias           cpi -&gt; Copy-Item</span>
+<span class="sd">        Alias           cpp -&gt; Copy-ItemProperty</span>
+<span class="sd">        Alias           curl -&gt; Invoke-WebRequest</span>
+<span class="sd">        Alias           cvpa -&gt; Convert-Path</span>
+<span class="sd">        Alias           dbp -&gt; Disable-PSBreakpoint</span>
+<span class="sd">        Alias           diff -&gt; Compare-Object</span>
+<span class="sd">        Alias           dnsn -&gt; Disconnect-PSSession</span>
+<span class="sd">        Alias           ebp -&gt; Enable-PSBreakpoint</span>
+<span class="sd">        Alias           epal -&gt; Export-Alias</span>
+<span class="sd">        Alias           epcsv -&gt; Export-Csv</span>
+<span class="sd">        Alias           epsn -&gt; Export-PSSession</span>
+<span class="sd">        Alias           erase -&gt; Remove-Item</span>
+<span class="sd">        Alias           etsn -&gt; Enter-PSSession</span>
+<span class="sd">        Alias           exsn -&gt; Exit-PSSession</span>
+<span class="sd">        Alias           fc -&gt; Format-Custom</span>
+<span class="sd">        Alias           fl -&gt; Format-List</span>
+<span class="sd">        Alias           foreach -&gt; ForEach-Object</span>
+<span class="sd">        Alias           ft -&gt; Format-Table</span>
+<span class="sd">        Alias           fw -&gt; Format-Wide</span>
+<span class="sd">        Alias           gal -&gt; Get-Alias</span>
+<span class="sd">        Alias           gbp -&gt; Get-PSBreakpoint</span>
+<span class="sd">        Alias           gc -&gt; Get-Content</span>
+<span class="sd">        Alias           gci -&gt; Get-ChildItem</span>
+<span class="sd">        Alias           gcm -&gt; Get-Command</span>
+<span class="sd">        Alias           gcs -&gt; Get-PSCallStack</span>
+<span class="sd">        Alias           gdr -&gt; Get-PSDrive</span>
+<span class="sd">        Alias           ghy -&gt; Get-History</span>
+<span class="sd">        Alias           gi -&gt; Get-Item</span>
+<span class="sd">        Alias           gjb -&gt; Get-Job</span>
+<span class="sd">        Alias           gl -&gt; Get-Location</span>
+<span class="sd">        Alias           gm -&gt; Get-Member</span>
+<span class="sd">        Alias           gmo -&gt; Get-Module</span>
+<span class="sd">        Alias           gp -&gt; Get-ItemProperty</span>
+<span class="sd">        Alias           gps -&gt; Get-Process</span>
+<span class="sd">        Alias           gpv -&gt; Get-ItemPropertyValue</span>
+<span class="sd">        Alias           group -&gt; Group-Object</span>
+<span class="sd">        Alias           gsn -&gt; Get-PSSession</span>
+<span class="sd">        Alias           gsnp -&gt; Get-PSSnapin</span>
+<span class="sd">        Alias           gsv -&gt; Get-Service</span>
+<span class="sd">        Alias           gu -&gt; Get-Unique</span>
+<span class="sd">        Alias           gv -&gt; Get-Variable</span>
+<span class="sd">        Alias           gwmi -&gt; Get-WmiObject</span>
+<span class="sd">        Alias           h -&gt; Get-History</span>
+<span class="sd">        Alias           icm -&gt; Invoke-Command</span>
+<span class="sd">        Alias           iex -&gt; Invoke-Expression</span>
+<span class="sd">        Alias           ihy -&gt; Invoke-History</span>
+<span class="sd">        Alias           ii -&gt; Invoke-Item</span>
+<span class="sd">        Alias           ipal -&gt; Import-Alias</span>
+<span class="sd">        Alias           ipcsv -&gt; Import-Csv</span>
+<span class="sd">        Alias           ipmo -&gt; Import-Module</span>
+<span class="sd">        Alias           ipsn -&gt; Import-PSSession</span>
+<span class="sd">        Alias           irm -&gt; Invoke-RestMethod</span>
+<span class="sd">        Alias           ise -&gt; powershell_ise.exe</span>
+<span class="sd">        Alias           iwmi -&gt; Invoke-WMIMethod</span>
+<span class="sd">        Alias           iwr -&gt; Invoke-WebRequest</span>
+<span class="sd">        Alias           lp -&gt; Out-Printer</span>
+<span class="sd">        Alias           man -&gt; help</span>
+<span class="sd">        Alias           md -&gt; mkdir</span>
+<span class="sd">        Alias           measure -&gt; Measure-Object</span>
+<span class="sd">        Alias           mi -&gt; Move-Item</span>
+<span class="sd">        Alias           mount -&gt; New-PSDrive</span>
+<span class="sd">        Alias           mp -&gt; Move-ItemProperty</span>
+<span class="sd">        Alias           nal -&gt; New-Alias</span>
+<span class="sd">        Alias           ndr -&gt; New-PSDrive</span>
+<span class="sd">        Alias           ni -&gt; New-Item</span>
+<span class="sd">        Alias           nmo -&gt; New-Module</span>
+<span class="sd">        Alias           npssc -&gt; New-PSSessionConfigurationFile</span>
+<span class="sd">        Alias           nsn -&gt; New-PSSession</span>
+<span class="sd">        Alias           nv -&gt; New-Variable</span>
+<span class="sd">        Alias           ogv -&gt; Out-GridView</span>
+<span class="sd">        Alias           oh -&gt; Out-Host</span>
+<span class="sd">        Alias           r -&gt; Invoke-History</span>
+<span class="sd">        Alias           rbp -&gt; Remove-PSBreakpoint</span>
+<span class="sd">        Alias           rcjb -&gt; Receive-Job</span>
+<span class="sd">        Alias           rcsn -&gt; Receive-PSSession</span>
+<span class="sd">        Alias           rd -&gt; Remove-Item</span>
+<span class="sd">        Alias           rdr -&gt; Remove-PSDrive</span>
+<span class="sd">        Alias           ri -&gt; Remove-Item</span>
+<span class="sd">        Alias           rjb -&gt; Remove-Job</span>
+<span class="sd">        Alias           rmo -&gt; Remove-Module</span>
+<span class="sd">        Alias           rni -&gt; Rename-Item</span>
+<span class="sd">        Alias           rnp -&gt; Rename-ItemProperty</span>
 
 <span class="sd">    That&#39;s some non-trivial stuff right there! First try on all 4 of them!</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_ip</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="p">(</span><span class="s1">&#39;copy&#39;</span><span class="p">,</span> <span class="s1">&#39;copy&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;ddir&#39;</span><span class="p">,</span> <span class="s1">&#39;dir /ad /on&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;ldir&#39;</span><span class="p">,</span> <span class="s1">&#39;dir /ad /on&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;mklink&#39;</span><span class="p">,</span> <span class="s1">&#39;mklink&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;move&#39;</span><span class="p">,</span> <span class="s1">&#39;move&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;mv&#39;</span><span class="p">,</span> <span class="s1">&#39;move&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;ren&#39;</span><span class="p">,</span> <span class="s1">&#39;ren&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;rmdir&#39;</span><span class="p">,</span> <span class="s1">&#39;rmdir&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;rp&#39;</span><span class="p">,</span> <span class="s1">&#39;Remove-ItemProperty&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;rsn&#39;</span><span class="p">,</span> <span class="s1">&#39;Remove-PSSession&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;rv&#39;</span><span class="p">,</span> <span class="s1">&#39;Remove-Variable&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;rvpa&#39;</span><span class="p">,</span> <span class="s1">&#39;Resolve-Path&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;sajb&#39;</span><span class="p">,</span> <span class="s1">&#39;Start-Job&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;sal&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-Alias&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;saps&#39;</span><span class="p">,</span> <span class="s1">&#39;Start-Process&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;sasv&#39;</span><span class="p">,</span> <span class="s1">&#39;Start-Service&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;sbp&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-PSBreakpoint&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;select&#39;</span><span class="p">,</span> <span class="s1">&#39;Select-Object&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;set&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-Variable&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;si&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-Item&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;sl&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-Location&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;sleep&#39;</span><span class="p">,</span> <span class="s1">&#39;Start-Sleep&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;sls&#39;</span><span class="p">,</span> <span class="s1">&#39;Select-String&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;sort&#39;</span><span class="p">,</span> <span class="s1">&#39;Sort-Object&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;sp&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-ItemProperty&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;spjb&#39;</span><span class="p">,</span> <span class="s1">&#39;Stop-Job&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;spps&#39;</span><span class="p">,</span> <span class="s1">&#39;Stop-Process&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;spsv&#39;</span><span class="p">,</span> <span class="s1">&#39;Stop-Service&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;start&#39;</span><span class="p">,</span> <span class="s1">&#39;Start-Process&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;stz&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-TimeZone&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;sv&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-Variable&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;tee&#39;</span><span class="p">,</span> <span class="s1">&#39;Tee-Object&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;ac&#39;</span><span class="p">,</span> <span class="s1">&#39;Add-Content %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;asnp&#39;</span><span class="p">,</span> <span class="s1">&#39;Add-PSSnapin %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;cat&#39;</span><span class="p">,</span> <span class="s1">&#39;Get-Content %l&#39;</span><span class="p">),</span>
+        <span class="c1"># (&#39;cd&#39;, &#39;Set-Location %l&#39;),</span>
+        <span class="p">(</span><span class="s1">&#39;clc&#39;</span><span class="p">,</span> <span class="s1">&#39;Clear-Content %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;clear&#39;</span><span class="p">,</span> <span class="s1">&#39;Clear-History %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;conda env&#39;</span><span class="p">,</span> <span class="s1">&#39;Get-Conda-Environment %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;copy&#39;</span><span class="p">,</span> <span class="s1">&#39;Copy-Item %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;cp&#39;</span><span class="p">,</span> <span class="s1">&#39;Copy-Item %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;del&#39;</span><span class="p">,</span> <span class="s1">&#39;Remove-Item %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;dir&#39;</span><span class="p">,</span> <span class="s1">&#39;Get-ChildItem %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;echo&#39;</span><span class="p">,</span> <span class="s1">&#39;Write-Output %l&#39;</span><span class="p">),</span>
+        <span class="c1"># (&#39;history&#39;, &#39;Get-History %l&#39;),</span>
+        <span class="p">(</span><span class="s1">&#39;kill&#39;</span><span class="p">,</span> <span class="s1">&#39;Stop-Process&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;l&#39;</span><span class="p">,</span> <span class="s1">&#39;Get-ChildItem %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;ll&#39;</span><span class="p">,</span> <span class="s1">&#39;GetChildItem -Verbose %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;ls&#39;</span><span class="p">,</span> <span class="s1">&#39;Get-ChildItem %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;man&#39;</span><span class="p">,</span> <span class="s1">&#39;Get-Help %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;md&#39;</span><span class="p">,</span> <span class="s1">&#39;mkdir %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;move&#39;</span><span class="p">,</span> <span class="s1">&#39;Move-Item %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;mv&#39;</span><span class="p">,</span> <span class="s1">&#39;Move-Item %l&#39;</span><span class="p">),</span>
+        <span class="c1"># (&#39;popd&#39;, &#39;Pop-Location %l&#39;),</span>
+        <span class="p">(</span><span class="s1">&#39;pro&#39;</span><span class="p">,</span> <span class="s1">&#39;nvim $Profile.CurrentUserAllHosts&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;ps&#39;</span><span class="p">,</span> <span class="s1">&#39;Get-Process %l&#39;</span><span class="p">),</span>
+        <span class="c1"># (&#39;pushd&#39;, &#39;Push-Location %l&#39;),</span>
+        <span class="c1"># (&#39;pwd&#39;, &#39;Get-Location %l&#39;),</span>
+        <span class="p">(</span><span class="s1">&#39;ren&#39;</span><span class="p">,</span> <span class="s1">&#39;Rename-Item %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;rm&#39;</span><span class="p">,</span> <span class="s1">&#39;Remove-Item %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;rmdir&#39;</span><span class="p">,</span> <span class="s1">&#39;Remove-Item %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;rp&#39;</span><span class="p">,</span> <span class="s1">&#39;Remove-ItemProperty %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;rsn&#39;</span><span class="p">,</span> <span class="s1">&#39;Remove-PSSession %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;rv&#39;</span><span class="p">,</span> <span class="s1">&#39;Remove-Variable %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;rvpa&#39;</span><span class="p">,</span> <span class="s1">&#39;Resolve-Path %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;sajb&#39;</span><span class="p">,</span> <span class="s1">&#39;Start-Job %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;sal&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-Alias %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;saps&#39;</span><span class="p">,</span> <span class="s1">&#39;Start-Process %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;sasv&#39;</span><span class="p">,</span> <span class="s1">&#39;Start-Service %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;sbp&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-PSBreakpoint %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;select&#39;</span><span class="p">,</span> <span class="s1">&#39;Select-Object %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;set&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-Variable %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;si&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-Item %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;sl&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-Location %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;sleep&#39;</span><span class="p">,</span> <span class="s1">&#39;Start-Sleep %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;sls&#39;</span><span class="p">,</span> <span class="s1">&#39;Select-String %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;sort&#39;</span><span class="p">,</span> <span class="s1">&#39;Sort-Object %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;sp&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-ItemProperty %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;spjb&#39;</span><span class="p">,</span> <span class="s1">&#39;Stop-Job %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;spps&#39;</span><span class="p">,</span> <span class="s1">&#39;Stop-Process %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;spsv&#39;</span><span class="p">,</span> <span class="s1">&#39;Stop-Service %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;start&#39;</span><span class="p">,</span> <span class="s1">&#39;Start-Process %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;stz&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-TimeZone %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;sv&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-Variable %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;tee&#39;</span><span class="p">,</span> <span class="s1">&#39;Tee-Object %l&#39;</span><span class="p">),</span>
         <span class="p">(</span>
             <span class="s1">&#39;tree&#39;</span><span class="p">,</span>
             <span class="s1">&#39;tree /F /A %l&#39;</span><span class="p">,</span>
         <span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">,</span> <span class="s1">&#39;Get-Content&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;where&#39;</span><span class="p">,</span> <span class="s1">&#39;Where-Object&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;wjb&#39;</span><span class="p">,</span> <span class="s1">&#39;Wait-Job&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;write&#39;</span><span class="p">,</span> <span class="s1">&#39;Write-Output&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">,</span> <span class="s1">&#39;Get-Content %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;where&#39;</span><span class="p">,</span> <span class="s1">&#39;Where-Object %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;wjb&#39;</span><span class="p">,</span> <span class="s1">&#39;Wait-Job %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;write&#39;</span><span class="p">,</span> <span class="s1">&#39;Write-Output %l&#39;</span><span class="p">),</span>
     <span class="p">]</span>
     <span class="k">return</span> <span class="n">_ip</span><span class="o">.</span><span class="n">user_aliases</span></div>
 
@@ -457,7 +583,10 @@
     <span class="sd">&quot;&quot;&quot;Set up aliases for the user namespace for IPython.&quot;&quot;&quot;</span>
     <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
 
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">_ip</span><span class="p">,</span> <span class="n">IPython</span><span class="o">.</span><span class="n">terminal</span><span class="o">.</span><span class="n">interactiveshell</span><span class="o">.</span><span class="n">InteractiveShell</span><span class="p">):</span>
+    <span class="c1"># if not isinstance(_ip, IPython.terminal.interactiveshell.InteractiveShell):</span>
+    <span class="c1">#     raise Exception(&#39;Are you running in IPython?&#39;)</span>
+    <span class="c1"># so let&#39;s not do isinstance. embrace the interface not the type!</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_ip</span><span class="p">,</span> <span class="s1">&#39;magics_manager&#39;</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Are you running in IPython?&#39;</span><span class="p">)</span>
 
     <span class="n">user_aliases</span> <span class="o">=</span> <span class="p">[]</span>
@@ -468,12 +597,8 @@
 
         <span class="c1"># Now let&#39;s get the Linux aliases</span>
         <span class="n">user_aliases</span> <span class="o">+=</span> <span class="n">linux_specific_aliases</span><span class="p">(</span><span class="n">_ip</span><span class="p">)</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;The number of available aliases after linux aliases&quot;</span>
-                    <span class="s2">&quot; is: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">user_aliases</span><span class="p">)))</span>
-
-        <span class="c1"># if platform.machine() == &quot;aarch64&quot;:</span>
-        <span class="c1"># user_aliases += termux_aliases(ip)</span>
-        <span class="c1"># pass</span>
+        <span class="c1"># LOGGER.info(&quot;The number of available aliases after linux aliases&quot;</span>
+        <span class="c1"># &quot; is: &quot; + str(len(user_aliases)))</span>
 
     <span class="k">elif</span> <span class="n">machine</span><span class="o">.</span><span class="n">is_conemu</span><span class="p">:</span>  <span class="c1"># should check for &#39;nix-tools as an env var</span>
         <span class="n">user_aliases</span> <span class="o">+=</span> <span class="n">windows_aliases</span><span class="p">(</span><span class="n">_ip</span><span class="p">)</span>
@@ -482,8 +607,8 @@
 
     <span class="n">__setup_fzf</span><span class="p">(</span><span class="n">user_aliases</span><span class="p">)</span>
 
-    <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;The number of available user aliases is: &quot;</span>
-                <span class="s2">&quot;&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">user_aliases</span><span class="p">)))</span>
+    <span class="c1"># LOGGER.info(&quot;The number of available user aliases is: &quot;</span>
+    <span class="c1">#&quot;&quot; + str(len(user_aliases)))</span>
 
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">user_aliases</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
@@ -508,16 +633,16 @@
   </ul></li>
 </ul>
 <h3><a href="../../../index.html">Table of Contents</a></h3>
-<p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../startup.html">1. Startup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ipython_keybindings.html">2. Keybindings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../magics.html">3. Built-in Magics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../custom_magics.html">4. Writing Your Own Magics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../directive.html">5. Sphinx Directives</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../rich_output.html">6. Rich Output</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../pygments.html">7. Pygments highlighting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../startup.html">Startup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ipython_interactive_shell.html">The Interactive Shell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ipython_keybindings.html">Keybindings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../magics.html">Built-in Magics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../custom_magics.html">Writing Your Own Magics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../directive.html">Sphinx Directives</a></li>
 </ul>
+<p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../API.html">API</a></li>
 </ul>

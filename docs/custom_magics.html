@@ -270,21 +270,20 @@ IPython object:</p>
 
 <span class="go"># The class MUST call this class decorator at creation time</span>
 <span class="gp">In [7]: </span><span class="k">class</span> <span class="nc">MyMagics</span><span class="p">(</span><span class="n">Magics</span><span class="p">):</span>
-<span class="gt">  File</span><span class="nn"> &quot;&lt;ipython-input-7-75b2d7fb056d&gt;&quot;</span><span class="gt">, line </span><span class="mi">1</span>
-    <span class="k">class</span> <span class="nc">MyMagics</span><span class="p">(</span><span class="n">Magics</span><span class="p">):</span>
-                           <span class="o">^</span>
-<span class="ne">SyntaxError</span>: unexpected EOF while parsing
-
+<span class="gp">   ...: </span>    <span class="k">def</span> <span class="nf">lmagic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+<span class="gp">   ...: </span>        <span class="sd">&quot;&quot;&quot;My line magic.&quot;&quot;&quot;</span>
+<span class="gp">   ...: </span>        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Full access to the main IPython object:&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="p">)</span>
+<span class="gp">   ...: </span>        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Variables in the user namespace:&quot;</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">user_ns</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+<span class="gp">   ...: </span>        <span class="k">return</span> <span class="n">line</span>
+<span class="gp">   ...: </span>
 
 <span class="gp">In [8]: </span><span class="k">def</span> <span class="nf">cmagic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">cell</span><span class="p">):</span>
-<span class="gp">   ...: </span>        <span class="s2">&quot;my cell magic&quot;</span>
+<span class="gp">   ...: </span>        <span class="sd">&quot;&quot;&quot;My cell magic.&quot;&quot;&quot;</span>
 <span class="gp">   ...: </span>        <span class="k">return</span> <span class="n">line</span><span class="p">,</span> <span class="n">cell</span>
 <span class="gp">   ...: </span>
 
 <span class="go"># In order to actually use these magics, you must register them with a</span>
 <span class="go"># running IPython.</span>
-<span class="go">    # You can register the class itself without instantiating it.  IPython will</span>
-<span class="go">    # call the default constructor on it.</span>
 </pre></div>
 </div>
 <p>If you want to create a class with a different constructor that holds
@@ -318,7 +317,7 @@ for the current API.</p>
 <h2>Complete Example<a class="headerlink" href="#complete-example" title="Permalink to this headline">¶</a></h2>
 <p>Here is a full example of a magic package. You can distribute magics using
 setuptools, distutils, or any other distribution tools like <a class="reference external" href="http://flit.readthedocs.io">flit</a> for pure Python packages.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>.
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>.
 ├── example_magic
 │   ├── __init__.py
 │   └── abracadabra.py

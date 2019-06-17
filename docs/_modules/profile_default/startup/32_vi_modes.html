@@ -13,7 +13,6 @@
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
@@ -46,20 +45,69 @@
   <h1>Source code for profile_default.startup.32_vi_modes</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;Add a keybinding to IPython.</span>
+<span class="sd">&quot;&quot;&quot;Dynamically add keybindings to IPython.</span>
 
-<span class="sd">Effectively adds :kbd:`j` :kbd:`k` as a way to switch from</span>
-<span class="sd">insert mode to normal mode, or as :mod:`prompt_toolkit` calls it, &quot;navigation mode&quot;.</span>
+<span class="sd">====================================</span>
+<span class="sd">Keybindings and Toggling Insert Mode</span>
+<span class="sd">====================================</span>
 
-<span class="sd">Also displays how to integrate :mod:`prompt_toolkit` and :mod:`IPython` together well.</span>
+<span class="sd">.. module:: `32_vi_modes`</span>
 
 <span class="sd">:URL: https://ipython.readthedocs.io/en/stable/config/details.html#keyboard-shortcuts</span>
 
-<span class="sd">.. todo:: Add one in for &lt;C-M-j&gt; to go to Emacs mode?</span>
+<span class="sd">.. hope that doesn&#39;t crash the interpreter!</span>
+
+<span class="sd">Effectively adds :kbd:`j` :kbd:`k` as a way to switch from insert mode to</span>
+<span class="sd">normal mode, or as :mod:`prompt_toolkit` calls it, &quot;navigation mode&quot;.</span>
+
+<span class="sd">Also displays how to integrate :mod:`prompt_toolkit` and :mod:`IPython`</span>
+<span class="sd">together well.</span>
+
+<span class="sd">Ultimately this module hopes to implementing Tim Pope&#39;s rsi plugin in IPython.</span>
+
+<span class="sd">Original KeyBindings</span>
+<span class="sd">====================</span>
+
+<span class="sd">They&#39;re initialized through :func:`IPython.terminal.interactiveshell.create_ipython_shortcuts()`.</span>
+<span class="sd">We can save those to a temporary :class:`prompt_toolkit.key_bindings.KeyBindings()` instance, and then</span>
+<span class="sd">use the function :func:`prompt_toolkit.key_binding.merge_key_bindings()`</span>
+
+
+<span class="sd">Readline Bindings</span>
+<span class="sd">=================</span>
+
+<span class="sd">Fortunately for us, John implemented named commands from readline and</span>
+<span class="sd">made them easily accessible through</span>
+<span class="sd">:ref:`prompt_toolkit.key_binding.bindings.named_commands.get_by_name`.</span>
+
+<span class="sd">As a result, K and J were rebound to &quot;previous-history&quot; and &quot;next-history&quot;</span>
+<span class="sd">while in Vim normal mode. However, very little is bound by default.</span>
+
+<span class="sd">.. ipython::</span>
+
+<span class="sd">    In [13]: _ip.pt_app.key_bindings.bindings</span>
+<span class="sd">    Out[13]:</span>
+<span class="sd">    [_Binding(keys=(&#39;c-m&#39;,), handler=&lt;function newline_or_execute_outer.&lt;locals&gt;.newline_or_execute at 0x7c2c76f840&gt;),</span>
+<span class="sd">     _Binding(keys=(&#39;c-\\&#39;,), handler=&lt;function force_exit at 0x7c2c7e51e0&gt;),</span>
+<span class="sd">     _Binding(keys=(&#39;c-p&#39;,), handler=&lt;function previous_history_or_previous_completion at 0x7c2c7dee18&gt;),</span>
+<span class="sd">     _Binding(keys=(&#39;c-n&#39;,), handler=&lt;function next_history_or_next_completion at 0x7c2c7deea0&gt;),</span>
+<span class="sd">     _Binding(keys=(&#39;c-g&#39;,), handler=&lt;function dismiss_completion at 0x7c2c7def28&gt;),</span>
+<span class="sd">     _Binding(keys=(&#39;c-c&#39;,), handler=&lt;function reset_buffer at 0x7c2c7e5048&gt;),</span>
+<span class="sd">     _Binding(keys=(&#39;c-c&#39;,), handler=&lt;function reset_search_buffer at 0x7c2c7e50d0&gt;),</span>
+<span class="sd">     _Binding(keys=(&#39;c-z&#39;,), handler=&lt;function suspend_to_bg at 0x7c2c7e5158&gt;),</span>
+<span class="sd">     _Binding(keys=(&#39;c-i&#39;,), handler=&lt;function indent_buffer at 0x7c2c7e5268&gt;),</span>
+<span class="sd">     _Binding(keys=(&#39;c-o&#39;,), handler=&lt;function newline_autoindent_outer.&lt;locals&gt;.newline_autoindent at 0x7c2c671400&gt;),                                                                               _Binding(keys=(&#39;f2&#39;,), handler=&lt;function open_input_in_editor at 0x7c2c7e5400&gt;),</span>
+<span class="sd">     _Binding(keys=(&#39;j&#39;, &#39;k&#39;), handler=&lt;function switch_to_navigation_mode at 0x7c2bd03c80&gt;),</span>
+<span class="sd">     _Binding(keys=(&#39;K&#39;,), handler=&lt;function previous_history at 0x7c2d9d76a8&gt;),</span>
+<span class="sd">     _Binding(keys=(&#39;J&#39;,), handler=&lt;function next_history at 0x7c2d9d7730&gt;)]</span>
+
+<span class="sd">That leaves a LOT to work with in terms of all the functions defined in</span>
+<span class="sd">:ref:`prompt_toolkit.key_binding.bindings.default`.</span>
 
 <span class="sd">Example Usage</span>
-<span class="sd">--------------</span>
-<span class="sd">From the `source code`_::</span>
+<span class="sd">==============</span>
+
+<span class="sd">From the `source code`_:</span>
 
 <span class="sd">.. ipython:: python</span>
 
@@ -81,12 +129,26 @@
 
 <span class="sd">.. _source-code: https://python-prompt-toolkit.readthedocs.io/en/stable/pages/reference.html#module-prompt_toolkit.key_binding</span>
 
+<span class="sd">---------------------</span>
+
+<span class="sd">Before we begin defining functions:</span>
+
+<span class="sd">See Also</span>
+<span class="sd">---------</span>
+<span class="sd">_ip.pt_app.layout.current_buffer : :class:`prompt_toolkit.application.Buffer`</span>
+<span class="sd">    Has all the named commands implemented here and possibly more.</span>
+
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
 <span class="kn">from</span> <span class="nn">IPython</span> <span class="k">import</span> <span class="n">get_ipython</span>
+<span class="kn">from</span> <span class="nn">IPython.terminal.interactiveshell</span> <span class="k">import</span> <span class="n">create_ipython_shortcuts</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.enums</span> <span class="k">import</span> <span class="n">DEFAULT_BUFFER</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.filters</span> <span class="k">import</span> <span class="n">HasFocus</span><span class="p">,</span> <span class="n">ViInsertMode</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.defaults</span> <span class="k">import</span> <span class="n">load_key_bindings</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.filters</span> <span class="k">import</span> <span class="n">HasFocus</span><span class="p">,</span> <span class="n">ViInsertMode</span><span class="p">,</span> <span class="n">ViNavigationMode</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding</span> <span class="k">import</span> <span class="n">merge_key_bindings</span><span class="p">,</span> <span class="n">KeyBindings</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.vi_state</span> <span class="k">import</span> <span class="n">InputMode</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings</span> <span class="k">import</span> <span class="n">named_commands</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.named_commands</span> <span class="k">import</span> <span class="n">get_by_name</span>
 
 <span class="kn">from</span> <span class="nn">profile_default.util</span> <span class="k">import</span> <span class="n">module_log</span>
 
@@ -98,99 +160,252 @@
 <span class="sd">    keybinding for insert to navigation mode.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">vi_state</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">cli</span><span class="o">.</span><span class="n">vi_state</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="nb">dir</span><span class="p">(</span><span class="n">event</span><span class="p">))</span>
     <span class="n">vi_state</span><span class="o">.</span><span class="n">input_mode</span> <span class="o">=</span> <span class="n">InputMode</span><span class="o">.</span><span class="n">NAVIGATION</span></div>
 
 
-<div class="viewcode-block" id="check_defaults"><a class="viewcode-back" href="../../../profile_default.html#profile_default.startup.32_vi_modes.check_defaults">[docs]</a><span class="k">def</span> <span class="nf">check_defaults</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;What are the default keybindings we have here?</span>
+<div class="viewcode-block" id="original_bindings"><a class="viewcode-back" href="../../../profile_default.html#profile_default.startup.32_vi_modes.original_bindings">[docs]</a><span class="k">def</span> <span class="nf">original_bindings</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Merge in the old keybindings with ours.</span>
 
-<span class="sd">    Err I suppose I should say what does Prompt Toolkit export by default</span>
-<span class="sd">    because I&#39;m not 100% sure that ip imports everything or doesn&#39;t modify</span>
-<span class="sd">    anything along the way.</span>
+<span class="sd">    I genuinely didn&#39;t expect ``if get_attr(_ip, &#39;pt_app&#39;, None)`` to</span>
+<span class="sd">    eval to ``None``.</span>
 
-<span class="sd">    Probably gonna need to noqa something since the code isn&#39;t accessed as is.</span>
+<span class="sd">    Below I posted the full implementation of when the keybindings are</span>
+<span class="sd">    added in... but it&#39;s so late in the process that we need to know</span>
+<span class="sd">    basically all the attributes of the class :class:`traitlets.Configurable`.</span>
 
-<span class="sd">    May 23, 2019:</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    _ip : |ip|</span>
+<span class="sd">        Global IPython instance</span>
 
-<span class="sd">        To my knowledge the keybindings you have available is every single</span>
-<span class="sd">        one that prompt_toolkit ships with.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    merged_keybindings : :class:`prompt_toolkit.key_bindings.MergedKeyBindings()`</span>
+<span class="sd">        Merged keybindings.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    :func:`~IPython.terminal.interactiveshell.create_ipython_shortcuts()`</span>
+<span class="sd">        Where the shortcuts are added.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ::</span>
+
+<span class="sd">       def init_prompt_toolkit_cli(self):</span>
+<span class="sd">        if self.simple_prompt:</span>
+<span class="sd">            # Fall back to plain non-interactive output for tests.</span>
+<span class="sd">            # This is very limited.</span>
+<span class="sd">            def prompt():</span>
+<span class="sd">                prompt_text = &quot;&quot;.join(x[1] for x in self.prompts.in_prompt_tokens())</span>
+<span class="sd">                lines = [input(prompt_text)]</span>
+<span class="sd">                prompt_continuation = &quot;&quot;.join(x[1] for x in self.prompts.continuation_prompt_tokens())</span>
+<span class="sd">                while self.check_complete(&#39;\n&#39;.join(lines))[0] == &#39;incomplete&#39;:</span>
+<span class="sd">                    lines.append( input(prompt_continuation) )</span>
+<span class="sd">                return &#39;\n&#39;.join(lines)</span>
+<span class="sd">            self.prompt_for_code = prompt</span>
+<span class="sd">            return</span>
+
+<span class="sd">        # Set up keyboard shortcuts</span>
+<span class="sd">        key_bindings = create_ipython_shortcuts(self)</span>
+
+<span class="sd">        # Pre-populate history from IPython&#39;s history database</span>
+<span class="sd">        history = InMemoryHistory()</span>
+<span class="sd">        last_cell = u&quot;&quot;</span>
+<span class="sd">        for __, ___, cell in self.history_manager.get_tail(self.history_load_length,</span>
+<span class="sd">                                                        include_latest=True):</span>
+<span class="sd">            # Ignore blank lines and consecutive duplicates</span>
+<span class="sd">            cell = cell.rstrip()</span>
+<span class="sd">            if cell and (cell != last_cell):</span>
+<span class="sd">                history.append_string(cell)</span>
+<span class="sd">                last_cell = cell</span>
+
+<span class="sd">        self._style = self._make_style_from_name_or_cls(self.highlighting_style)</span>
+<span class="sd">        self.style = DynamicStyle(lambda: self._style)</span>
+
+<span class="sd">        editing_mode = getattr(EditingMode, self.editing_mode.upper())</span>
+
+<span class="sd">        self.pt_app = PromptSession(</span>
+<span class="sd">                            editing_mode=editing_mode,</span>
+<span class="sd">                            key_bindings=key_bindings,</span>
+<span class="sd">                            history=history,</span>
+<span class="sd">                            completer=IPythonPTCompleter(shell=self),</span>
+<span class="sd">                            enable_history_search = self.enable_history_search,</span>
+<span class="sd">                            style=self.style,</span>
+<span class="sd">                            include_default_pygments_style=False,</span>
+<span class="sd">                            mouse_support=self.mouse_support,</span>
+<span class="sd">                            enable_open_in_editor=self.extra_open_editor_shortcuts,</span>
+<span class="sd">                            color_depth=self.color_depth,</span>
+<span class="sd">                            **self._extra_prompt_options())</span>
+
+<span class="sd">    That is so many mixins and traits oh my god.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">shell</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+
+    <span class="n">tmp_kb</span> <span class="o">=</span> <span class="n">create_ipython_shortcuts</span><span class="p">(</span><span class="n">_ip</span><span class="p">)</span>
+    <span class="c1"># idk if i did this right but i&#39;m hoping this captures all passed</span>
+    <span class="c1"># KeyBindings objects to that container</span>
+    <span class="n">OurRegistry</span><span class="p">,</span> <span class="o">*</span><span class="n">OtherRegistries</span> <span class="o">=</span> <span class="n">args</span>
+
+    <span class="n">merged</span> <span class="o">=</span> <span class="n">merge_key_bindings</span><span class="p">(</span><span class="n">tmp_kb</span><span class="p">,</span> <span class="n">OurRegistry</span><span class="p">,</span> <span class="o">*</span><span class="n">OtherRegistries</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">merged</span></div>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../profile_default.html#profile_default.startup.32_vi_modes.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">_ip</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Begin initializing keybindings for IPython.</span>
+
+<span class="sd">    .. todo::</span>
+
+<span class="sd">        Add all the emacs keys to Vi insert mode.</span>
 
 <span class="sd">    .. code-block::</span>
 
-<span class="sd">        __all__ = [</span>
-<span class="sd">            &#39;load_key_bindings&#39;,</span>
-<span class="sd">        ]</span>
+<span class="sd">        from prompt_toolkit.application.current import get_app</span>
+<span class="sd">        from prompt_toolkit.buffer import Buffer, SelectionType, indent, unindent</span>
+<span class="sd">        from prompt_toolkit.completion import CompleteEvent</span>
+<span class="sd">        from prompt_toolkit.filters import (</span>
+<span class="sd">            Condition,</span>
+<span class="sd">            emacs_insert_mode,</span>
+<span class="sd">            emacs_mode,</span>
+<span class="sd">            has_arg,</span>
+<span class="sd">            has_selection,</span>
+<span class="sd">            is_multiline,</span>
+<span class="sd">            is_read_only,</span>
+<span class="sd">            vi_search_direction_reversed,</span>
+<span class="sd">        )</span>
+<span class="sd">        from prompt_toolkit.key_binding.key_processor import KeyPressEvent</span>
+<span class="sd">        from prompt_toolkit.keys import Keys</span>
 
+<span class="sd">        from ..key_bindings import ConditionalKeyBindings, KeyBindings, KeyBindingsBase</span>
+<span class="sd">        from .named_commands import get_by_name</span>
 
-<span class="sd">        def load_key_bindings():</span>
-<span class="sd">            # Create a KeyBindings object that contains the default key bindings.</span>
-<span class="sd">            all_bindings = merge_key_bindings([</span>
-<span class="sd">                # Load basic bindings.</span>
-<span class="sd">                load_basic_bindings(),</span>
+<span class="sd">        E = KeyPressEvent</span>
 
-<span class="sd">                # Load emacs bindings.</span>
-<span class="sd">                load_emacs_bindings(),</span>
-<span class="sd">                load_emacs_search_bindings(),</span>
+<span class="sd">        def load_emacs_bindings() -&gt; KeyBindingsBase:</span>
+<span class="sd">            Some e-macs extensions.</span>
+<span class="sd">            # Overview of Readline emacs commands:</span>
+<span class="sd">            # http://www.catonmat.net/download/readline-emacs-editing-mode-cheat-sheet.pdf</span>
+<span class="sd">            key_bindings = KeyBindings()</span>
+<span class="sd">            handle = key_bindings.add</span>
 
-<span class="sd">                # Load Vi bindings.</span>
-<span class="sd">                load_vi_bindings(),</span>
-<span class="sd">                load_vi_search_bindings(),</span>
-<span class="sd">            ])</span>
+<span class="sd">            insert_mode = emacs_insert_mode</span>
 
-<span class="sd">            return merge_key_bindings([</span>
-<span class="sd">                # Make sure that the above key bindings are only active if the</span>
-<span class="sd">                # currently focused control is a `BufferControl`. For other controls, we</span>
-<span class="sd">                # don&#39;t want these key bindings to intervene. (This would break &quot;ptterm&quot;</span>
-<span class="sd">                # for instance, which handles &#39;Keys.Any&#39; in the user control itself.)</span>
-<span class="sd">                ConditionalKeyBindings(all_bindings, buffer_has_focus),</span>
+<span class="sd">            @handle(&#39;escape&#39;)</span>
+<span class="sd">            def _(event: E) -&gt; None:</span>
+<span class="sd">                By default, ignore escape key.</span>
+<span class="sd">                (If we don&#39;t put this here, and Esc is followed by a key which sequence</span>
+<span class="sd">                is not handled, we&#39;ll insert an Escape character in the input stream.</span>
+<span class="sd">                Something we don&#39;t want and happens to easily in emacs mode.</span>
+<span class="sd">                Further, people can always use ControlQ to do a quoted insert.)</span>
+<span class="sd">                pass</span>
 
-<span class="sd">                # Active, even when no buffer has been focused.</span>
-<span class="sd">                load_mouse_bindings(),</span>
-<span class="sd">                load_cpr_bindings(),</span>
-<span class="sd">            ])</span>
+<span class="sd">            handle(&#39;c-a&#39;)(get_by_name(&#39;beginning-of-line&#39;))</span>
+<span class="sd">            handle(&#39;c-b&#39;)(get_by_name(&#39;backward-char&#39;))</span>
+<span class="sd">            handle(&#39;c-delete&#39;, filter=insert_mode)(get_by_name(&#39;kill-word&#39;))</span>
+<span class="sd">            handle(&#39;c-e&#39;)(get_by_name(&#39;end-of-line&#39;))</span>
+<span class="sd">            handle(&#39;c-f&#39;)(get_by_name(&#39;forward-char&#39;))</span>
+<span class="sd">            handle(&#39;c-left&#39;)(get_by_name(&#39;backward-word&#39;))</span>
+<span class="sd">            handle(&#39;c-right&#39;)(get_by_name(&#39;forward-word&#39;))</span>
+<span class="sd">            handle(&#39;c-x&#39;, &#39;r&#39;, &#39;y&#39;, filter=insert_mode)(get_by_name(&#39;yank&#39;))</span>
+<span class="sd">            handle(&#39;c-y&#39;, filter=insert_mode)(get_by_name(&#39;yank&#39;))</span>
+<span class="sd">            handle(&#39;escape&#39;, &#39;b&#39;)(get_by_name(&#39;backward-word&#39;))</span>
+<span class="sd">            handle(&#39;escape&#39;, &#39;c&#39;, filter=insert_mode)(get_by_name(&#39;capitalize-word&#39;))</span>
+<span class="sd">            handle(&#39;escape&#39;, &#39;d&#39;, filter=insert_mode)(get_by_name(&#39;kill-word&#39;))</span>
+<span class="sd">            handle(&#39;escape&#39;, &#39;f&#39;)(get_by_name(&#39;forward-word&#39;))</span>
+<span class="sd">            handle(&#39;escape&#39;, &#39;l&#39;, filter=insert_mode)(get_by_name(&#39;downcase-word&#39;))</span>
+<span class="sd">            handle(&#39;escape&#39;, &#39;u&#39;, filter=insert_mode)(get_by_name(&#39;uppercase-word&#39;))</span>
+<span class="sd">            handle(&#39;escape&#39;, &#39;y&#39;, filter=insert_mode)(get_by_name(&#39;yank-pop&#39;))</span>
+<span class="sd">            handle(&#39;escape&#39;, &#39;backspace&#39;, filter=insert_mode)(get_by_name(&#39;backward-kill-word&#39;))</span>
+<span class="sd">            handle(&#39;escape&#39;, &#39;\\&#39;, filter=insert_mode)(get_by_name(&#39;delete-horizontal-space&#39;))</span>
 
-<span class="sd">        That&#39;s literally everything. IPython chooses to add their own stuff</span>
-<span class="sd">        during IPython.terminal.ptutil.create_ipython_shortcuts but if you</span>
-<span class="sd">        choose to create your own registry then you get access to everything.</span>
+<span class="sd">    Oh poop. I just realized. Instead of doing that, can we just call this function?</span>
+<span class="sd">    :ref:`prompt_toolkit.key_binding.defaults.load_key_bindings()` and merge in the</span>
+<span class="sd">    Emacs insert mode ones?</span>
 
-<span class="sd">        It might not be hard to bind to if we do it the same way we did with</span>
-<span class="sd">        that one pathlib.Path class.</span>
+<span class="sd">    Probably not. The function starts with kb = KeyBindings() but we already</span>
+<span class="sd">    might have an initialized instance so don&#39;t wipe ours....</span>
+<span class="sd">    oh shit. Unless we merge our existing keybindings goddamn this is confusing.</span>
 
-<span class="sd">        Literally::</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    _ip : |ip|</span>
+<span class="sd">        Global IPython instance.</span>
 
-<span class="sd">            from IPython import get_ipython</span>
-<span class="sd">            from prompt_toolkit.key_binding import merge_key_bindings, KeyBindings</span>
-<span class="sd">            from prompt_toolkit.key_binding.defaults import load_key_bindings</span>
-
-<span class="sd">            class KeyBindingsManager:</span>
-
-<span class="sd">                def __init__(self, shell=None):</span>
-<span class="sd">                    if _ip is None:</span>
-<span class="sd">                        _ip = get_ipython()</span>
-<span class="sd">                    self.registry = KeyBindings</span>
-
-<span class="sd">        Once the user initializes that class, then your :class:`KeyBindings`</span>
-<span class="sd">        statement in the `__init__` func was execute and you&#39;ll have access</span>
-<span class="sd">        to everything. Cool!</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-    <span class="n">registry</span> <span class="o">=</span> <span class="n">load_key_bindings</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">registry</span><span class="o">.</span><span class="n">key_bindings</span></div>
-
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-
-    <span class="n">level</span> <span class="o">=</span> <span class="mi">20</span>
-    <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="vm">__name__</span><span class="p">)</span>
-
-    <span class="n">logger</span> <span class="o">=</span> <span class="n">module_log</span><span class="o">.</span><span class="n">stream_logger</span><span class="p">(</span><span class="n">log_level</span><span class="o">=</span><span class="n">level</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="n">log</span><span class="p">)</span>
-
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># uhhhh what do we do in the else case? do we restart IPython or build prompt_toolkit in the form we want?</span>
     <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">_ip</span><span class="p">,</span> <span class="s1">&#39;pt_app&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
         <span class="n">kb</span> <span class="o">=</span> <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">key_bindings</span>
         <span class="n">kb</span><span class="o">.</span><span class="n">add_binding</span><span class="p">(</span>
             <span class="sa">u</span><span class="s1">&#39;j&#39;</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span>
                                 <span class="o">&amp;</span> <span class="n">ViInsertMode</span><span class="p">()))(</span><span class="n">switch_to_navigation_mode</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">kb</span> <span class="o">=</span> <span class="n">KeyBindings</span><span class="p">()</span>
+
+    <span class="n">ph</span> <span class="o">=</span> <span class="n">get_by_name</span><span class="p">(</span><span class="s1">&#39;previous-history&#39;</span><span class="p">)</span>
+    <span class="n">nh</span> <span class="o">=</span> <span class="n">get_by_name</span><span class="p">(</span><span class="s1">&#39;next-history&#39;</span><span class="p">)</span>
+
+    <span class="n">kb</span><span class="o">.</span><span class="n">add_binding</span><span class="p">(</span><span class="s1">&#39;K&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">ViNavigationMode</span><span class="p">()))(</span><span class="n">ph</span><span class="p">)</span>
+
+    <span class="n">kb</span><span class="o">.</span><span class="n">add_binding</span><span class="p">(</span><span class="s1">&#39;J&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">ViNavigationMode</span><span class="p">()))(</span><span class="n">nh</span><span class="p">)</span>
+
+    <span class="c1"># 06/15/2019: Got it.</span>
+    <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;c-a&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">ViInsertMode</span><span class="p">()))(</span><span class="n">named_commands</span><span class="o">.</span><span class="n">beginning_of_line</span><span class="p">)</span>
+    <span class="c1"># did you know that C-a won&#39;t work? Odd.</span>
+    <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;c-b&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">ViInsertMode</span><span class="p">())(</span><span class="n">named_commands</span><span class="o">.</span><span class="n">backward_char</span><span class="p">)</span>
+    <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;c-d&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">ViInsertMode</span><span class="p">())(</span><span class="n">named_commands</span><span class="o">.</span><span class="n">delete_char</span><span class="p">)</span>
+
+    <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;c-delete&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">ViInsertMode</span><span class="p">()))(</span><span class="n">named_commands</span><span class="o">.</span><span class="n">kill_word</span><span class="p">)</span>
+    <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;c-e&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">ViInsertMode</span><span class="p">()))(</span><span class="n">named_commands</span><span class="o">.</span><span class="n">end_of_line</span><span class="p">)</span>
+    <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;c-f&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">ViInsertMode</span><span class="p">()))(</span><span class="n">named_commands</span><span class="o">.</span><span class="n">forward_char</span><span class="p">)</span>
+    <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;c-left&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">ViInsertMode</span><span class="p">()))(</span><span class="n">named_commands</span><span class="o">.</span><span class="n">backward_word</span><span class="p">)</span>
+    <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;c-right&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">ViInsertMode</span><span class="p">()))(</span><span class="n">named_commands</span><span class="o">.</span><span class="n">forward_word</span><span class="p">)</span>
+    <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;c-x&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">ViInsertMode</span><span class="p">()))(</span><span class="n">named_commands</span><span class="o">.</span><span class="n">yank</span><span class="p">)</span>
+    <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;c-y&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">ViInsertMode</span><span class="p">()))(</span><span class="n">named_commands</span><span class="o">.</span><span class="n">yank</span><span class="p">)</span>
+    <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;escape&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">ViInsertMode</span><span class="p">()))(</span><span class="n">named_commands</span><span class="o">.</span><span class="n">backward_word</span><span class="p">)</span>
+    <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;escape&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">ViInsertMode</span><span class="p">()))(</span><span class="n">named_commands</span><span class="o">.</span><span class="n">capitalize_word</span><span class="p">)</span>
+    <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;escape&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">ViInsertMode</span><span class="p">()))(</span><span class="n">named_commands</span><span class="o">.</span><span class="n">kill_word</span><span class="p">)</span>
+    <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;escape&#39;</span><span class="p">,</span> <span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">ViInsertMode</span><span class="p">()))(</span><span class="n">named_commands</span><span class="o">.</span><span class="n">forward_word</span><span class="p">)</span>
+    <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;escape&#39;</span><span class="p">,</span> <span class="s1">&#39;l&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">ViInsertMode</span><span class="p">()))(</span><span class="n">named_commands</span><span class="o">.</span><span class="n">downcase_word</span><span class="p">)</span>
+    <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;escape&#39;</span><span class="p">,</span> <span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">ViInsertMode</span><span class="p">()))(</span><span class="n">named_commands</span><span class="o">.</span><span class="n">uppercase_word</span><span class="p">)</span>
+    <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;escape&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">ViInsertMode</span><span class="p">()))(</span><span class="n">named_commands</span><span class="o">.</span><span class="n">yank_pop</span><span class="p">)</span>
+    <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;escape&#39;</span><span class="p">,</span> <span class="s1">&#39;backspace&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">ViInsertMode</span><span class="p">()))(</span><span class="n">named_commands</span><span class="o">.</span><span class="n">backward_kill_word</span><span class="p">)</span>
+    <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;escape&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">ViInsertMode</span><span class="p">()))(</span><span class="n">named_commands</span><span class="o">.</span><span class="n">delete_horizontal_space</span><span class="p">)</span>
+
+    <span class="c1"># how do i modify ones with preexisting filters?</span>
+    <span class="c1"># i deleted a bunch of the insert_mode ones off but idk what to do about</span>
+    <span class="c1"># others</span>
+
+    <span class="c1"># kb.add(&#39;c-_&#39;, save_before=(lambda e: False), filter=insert_mode, filter=(HasFocus(DEFAULT_BUFFER) &amp; ViInsertMode()))(</span>
+    <span class="c1">#     named_commands.undo))</span>
+
+    <span class="c1"># kb.add(&#39;c-x&#39;, &#39;c-u&#39;, save_before=(lambda e: False), filter=insert_mode, filter=(HasFocus(DEFAULT_BUFFER) &amp; ViInsertMode()))(</span>
+    <span class="c1">#     named_commands.undo))</span>
+
+    <span class="c1"># kb.add(&#39;escape&#39;, &#39;&lt;&#39;, filter= ~has_selection, filter=(HasFocus(DEFAULT_BUFFER) &amp; ViInsertMode()))(named_commands.beginning-of-history))</span>
+    <span class="c1"># kb.add(&#39;escape&#39;, &#39;&gt;&#39;, filter= ~has_selection, filter=(HasFocus(DEFAULT_BUFFER) &amp; ViInsertMode()))(named_commands.end-of-history))</span>
+
+    <span class="c1"># kb.add(&#39;escape&#39;, &#39;.&#39;,  filter=(HasFocus(DEFAULT_BUFFER) &amp; ViInsertMode()))(named_commands.yank-last-arg))</span>
+    <span class="c1"># kb.add(&#39;escape&#39;, &#39;_&#39;,  filter=(HasFocus(DEFAULT_BUFFER) &amp; ViInsertMode()))(named_commands.yank-last-arg))</span>
+    <span class="c1"># kb.add(&#39;escape&#39;, &#39;c-y&#39;, filter=(HasFocus(DEFAULT_BUFFER) &amp; ViInsertMode()))(named_commands.yank-nth-arg))</span>
+    <span class="c1"># kb.add(&#39;escape&#39;, &#39;#&#39;, filter=(HasFocus(DEFAULT_BUFFER) &amp; ViInsertMode()))(named_commands.insert-comment))</span>
+    <span class="c1"># kb.add(&#39;c-o&#39;, filter=(HasFocus(DEFAULT_BUFFER) &amp; ViInsertMode()))(named_commands.operate-and-get-next))</span>
+
+    <span class="k">return</span> <span class="n">kb</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+
+    <span class="n">level</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="vm">__name__</span><span class="p">)</span>
+
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">module_log</span><span class="o">.</span><span class="n">stream_logger</span><span class="p">(</span><span class="n">log_level</span><span class="o">=</span><span class="n">level</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="n">log</span><span class="p">)</span>
+
+    <span class="n">keybindings</span> <span class="o">=</span> <span class="n">main</span><span class="p">(</span><span class="n">_ip</span><span class="p">)</span>
+    <span class="c1"># how do we bind them back?</span>
 </pre></div>
 
           </div>
@@ -205,16 +420,16 @@
   </ul></li>
 </ul>
 <h3><a href="../../../index.html">Table of Contents</a></h3>
-<p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../startup.html">1. Startup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ipython_keybindings.html">2. Keybindings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../magics.html">3. Built-in Magics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../custom_magics.html">4. Writing Your Own Magics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../directive.html">5. Sphinx Directives</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../rich_output.html">6. Rich Output</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../pygments.html">7. Pygments highlighting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../startup.html">Startup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ipython_interactive_shell.html">The Interactive Shell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ipython_keybindings.html">Keybindings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../magics.html">Built-in Magics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../custom_magics.html">Writing Your Own Magics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../directive.html">Sphinx Directives</a></li>
 </ul>
+<p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../API.html">API</a></li>
 </ul>

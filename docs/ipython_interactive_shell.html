@@ -51,12 +51,25 @@
             
   <div class="section" id="ipython-interactiveshell">
 <h1>IPython_InteractiveShell<a class="headerlink" href="#ipython-interactiveshell" title="Permalink to this headline">¶</a></h1>
-<p>Created Saturday 03 March 2018</p>
-<p><a class="reference external" href="https://github.com/ipython/ipython/blob/master/IPython/core/interactiveshell.py">https://github.com/ipython/ipython/blob/master/IPython/core/interactiveshell.py</a></p>
+<p><a class="reference external" href="https://github.com/ipython/ipython/blob/master/IPython/core/interactiveshell.py">Source: IPython/core/interactiveshell</a></p>
+<p>The InteractiveShell class is the primary Trait used in the design of IPython.</p>
+<p>The foundation of the application appears to be working with mixins and traits.</p>
+<p>Class attributes are defined and exposed to the user through the traitlets
+API, and <code class="xref py py-class docutils literal notranslate"><span class="pre">Configurable</span></code> are modified according to
+user preference.</p>
 <div class="section" id="subclasses-of-ip">
 <h2>Subclasses of <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.5.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveShell</span></code></a><a class="headerlink" href="#subclasses-of-ip" title="Permalink to this headline">¶</a></h2>
+<dl class="field-list simple">
+<dt class="field-odd">date</dt>
+<dd class="field-odd"><p>Saturday 03 March 2018</p>
+</dd>
+</dl>
 <p>Lines 436-451</p>
-<p>Here’s some interesting line from the source code.</p>
+<p>These lines prove particularly interesting for anyone deeply interested
+in the inner workings of IPython and in application design generally.</p>
+<p>This displays all of the subclasses of the IPython InteractiveShell and the
+profile property that users use to configure their particular instance of
+IPython.</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Subcomponents of InteractiveShell</span>
 <span class="n">alias_manager</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="s1">&#39;IPython.core.alias.AliasManager&#39;</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">prefilter_manager</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="s1">&#39;IPython.core.prefilter.PrefilterManager&#39;</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -70,24 +83,52 @@
 
 <span class="nd">@property</span>
 <span class="k">def</span> <span class="nf">profile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">profile_dir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">profile_dir</span><span class="o">.</span><span class="n">location</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;profile_&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+   <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">profile_dir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+       <span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">profile_dir</span><span class="o">.</span><span class="n">location</span><span class="p">)</span>
+   <span class="k">return</span> <span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;profile_&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 </pre></div>
+</div>
 </div>
 <div class="section" id="traitlets">
-<h3>Traitlets<a class="headerlink" href="#traitlets" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="n">In</span> <span class="p">[</span><span class="mi">3</span><span class="p">]:</span> traitlets.Instance<span class="o">?</span>
-<span class="gp">   ...: </span><span class="n">Init</span> <span class="n">signature</span><span class="p">:</span> <span class="n">traitlets</span><span class="o">.</span><span class="n">Instance</span><span class="p">(</span><span class="n">klass</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">kw</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> \<span class="o">*</span>\<span class="o">*</span><span class="n">kwargs</span><span class="p">)</span>
-<span class="gp">   ...: </span><span class="n">Docstring</span><span class="p">:</span>
-<span class="gp">   ...: </span><span class="n">A</span> <span class="n">trait</span> <span class="n">whose</span> <span class="n">value</span> <span class="n">must</span> <span class="n">be</span> <span class="n">an</span> <span class="n">instance</span> <span class="n">of</span> <span class="n">a</span> <span class="n">specified</span> <span class="n">class</span><span class="o">.</span>
-<span class="gp">   ...: </span>
-<span class="gt">  File</span><span class="nn"> &quot;&lt;ipython-input-1-480f37c68755&gt;&quot;</span><span class="gt">, line </span><span class="mi">2</span>
-    <span class="n">Init</span> <span class="n">signature</span><span class="p">:</span> <span class="n">traitlets</span><span class="o">.</span><span class="n">Instance</span><span class="p">(</span><span class="n">klass</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">kw</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> \<span class="o">*</span>\<span class="o">*</span><span class="n">kwargs</span><span class="p">)</span>
-                 <span class="o">^</span>
-<span class="ne">SyntaxError</span>: invalid syntax
+<h2>Traitlets<a class="headerlink" href="#traitlets" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>In [3]: traitlets.Instance?
+Init signature: traitlets.Instance(klass=None, args=None, kw=None, \*\*kwargs)
+Docstring:
+A trait whose value must be an instance of a specified class.
+
+The value can also be an instance of a subclass of the specified class.
+
+Subclasses can declare default classes by overriding the klass attribute
+Init docstring:
+Construct an Instance trait.
+
+This trait allows values that are instances of a particular
+class or its subclasses.  Our implementation is quite different
+from that of enthough.traits as we don&#39;t allow instances to be used
+for klass and we handle the ``args`` and ``kw`` arguments differently.
+
+Parameters
+----------
+klass : class, str
+    The class that forms the basis for the trait.  Class names
+    can also be specified as strings, like &#39;foo.bar.Bar&#39;.
+args : tuple
+    Positional arguments for generating the default value.
+kw : dict
+    Keyword arguments for generating the default value.
+allow_none : bool [ default False ]
+    Indicates whether None is allowed as a value.
+
+Notes
+-----
+If both ``args`` and ``kw`` are None, then the default value is None.
+If ``args`` is a tuple and ``kw`` is a dict, then the default is
+created as ``klass(*args, **kw)``.  If exactly one of ``args`` or ``kw`` is
+None, the None is replaced by ``()`` or ``{}``, respectively.
+File:           ~/virtualenvs/utilities/lib/python3.7/site-packages/traitlets/traitlets.py
+Type:           type
+Subclasses:     ForwardDeclaredInstance, Container, Dict
 </pre></div>
-</div>
 </div>
 </div>
 </div>
@@ -110,6 +151,7 @@
 <li class="toctree-l1"><a class="reference internal" href="startup.html">Startup</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">The Interactive Shell</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#subclasses-of-ip">Subclasses of <code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveShell</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#traitlets">Traitlets</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="ipython_keybindings.html">Keybindings</a></li>
@@ -125,10 +167,8 @@
   <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">IPython_InteractiveShell</a><ul>
-<li><a class="reference internal" href="#subclasses-of-ip">Subclasses of <code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveShell</span></code></a><ul>
+<li><a class="reference internal" href="#subclasses-of-ip">Subclasses of <code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveShell</span></code></a></li>
 <li><a class="reference internal" href="#traitlets">Traitlets</a></li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
