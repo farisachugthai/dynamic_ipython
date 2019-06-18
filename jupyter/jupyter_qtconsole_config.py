@@ -191,6 +191,7 @@ c.JupyterQtConsoleApp.display_banner = False
 # path to a custom CSS stylesheet
 # c.JupyterQtConsoleApp.stylesheet = ''
 
+
 def consoleWidgetconf():
     """
 
@@ -220,6 +221,7 @@ def consoleWidgetconf():
     #  positive number disables text truncation (not recommended).
     """
     pass
+
 
 # The maximum number of lines of text before truncation. Specifying a non-
 #  positive number disables text truncation (not recommended).
@@ -339,7 +341,6 @@ c.HistoryConsoleWidget.history_lock = True
 # format specifier, it will be used. Otherwise, the filename will be appended to
 # the end the command. To use a terminal text editor, the command should launch
 # a new terminal, e.g. ``"gnome-terminal -- vim"``.
-
 
 # Shit we have to specify the terminal too? This just got 40000 more complicated.
 # Gotta determine OS, version, what terminal I'm using ugh

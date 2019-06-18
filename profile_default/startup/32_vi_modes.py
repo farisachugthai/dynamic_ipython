@@ -51,7 +51,8 @@ while in Vim normal mode. However, very little is bound by default.
      _Binding(keys=('c-c',), handler=<function reset_search_buffer at 0x7c2c7e50d0>),
      _Binding(keys=('c-z',), handler=<function suspend_to_bg at 0x7c2c7e5158>),
      _Binding(keys=('c-i',), handler=<function indent_buffer at 0x7c2c7e5268>),
-     _Binding(keys=('c-o',), handler=<function newline_autoindent_outer.<locals>.newline_autoindent at 0x7c2c671400>),                                                                               _Binding(keys=('f2',), handler=<function open_input_in_editor at 0x7c2c7e5400>),
+     _Binding(keys=('c-o',), handler=<function newline_autoindent_outer.<locals>.newline_autoindent at 0x7c2c671400>),
+     _Binding(keys=('f2',), handler=<function open_input_in_editor at 0x7c2c7e5400>),
      _Binding(keys=('j', 'k'), handler=<function switch_to_navigation_mode at 0x7c2bd03c80>),
      _Binding(keys=('K',), handler=<function previous_history at 0x7c2d9d76a8>),
      _Binding(keys=('J',), handler=<function next_history at 0x7c2d9d7730>)]
@@ -59,30 +60,6 @@ while in Vim normal mode. However, very little is bound by default.
 That leaves a LOT to work with in terms of all the functions defined in
 :ref:`prompt_toolkit.key_binding.bindings.default`.
 
-Example Usage
-==============
-
-From the `source code`_:
-
-.. ipython:: python
-
-    from prompt_toolkit.keybinding import KeyBinding
-    kb = KeyBindings()
-
-    @kb.add('c-t')
-    def _(event):
-        print('Control-T pressed')
-
-    @kb.add('c-a', 'c-b')
-    def _(event):
-        print('Control-A pressed, followed by Control-B')
-
-    @kb.add('c-x', filter=is_searching)
-    def _(event):
-        print('Control-X pressed')  # Works only if we are searching.
-
-
-.. _source-code: https://python-prompt-toolkit.readthedocs.io/en/stable/pages/reference.html#module-prompt_toolkit.key_binding
 
 ---------------------
 
@@ -119,130 +96,16 @@ def switch_to_navigation_mode(event):
     vi_state.input_mode = InputMode.NAVIGATION
 
 
-def original_bindings(*args, shell=None):
-    """Merge in the old keybindings with ours.
-
-    I genuinely didn't expect ``if get_attr(_ip, 'pt_app', None)`` to
-    eval to ``None``.
-
-    Below I posted the full implementation of when the keybindings are
-    added in... but it's so late in the process that we need to know
-    basically all the attributes of the class :class:`traitlets.Configurable`.
-
-    Parameters
-    ----------
-    _ip : |ip|
-        Global IPython instance
-
-    Returns
-    -------
-    merged_keybindings : :class:`prompt_toolkit.key_bindings.MergedKeyBindings()`
-        Merged keybindings.
-
-    See Also
-    --------
-    :func:`~IPython.terminal.interactiveshell.create_ipython_shortcuts()`
-        Where the shortcuts are added.
-
-    Examples
-    --------
-    ::
-
-       def init_prompt_toolkit_cli(self):
-        if self.simple_prompt:
-            # Fall back to plain non-interactive output for tests.
-            # This is very limited.
-            def prompt():
-                prompt_text = "".join(x[1] for x in self.prompts.in_prompt_tokens())
-                lines = [input(prompt_text)]
-                prompt_continuation = "".join(x[1] for x in self.prompts.continuation_prompt_tokens())
-                while self.check_complete('\n'.join(lines))[0] == 'incomplete':
-                    lines.append( input(prompt_continuation) )
-                return '\n'.join(lines)
-            self.prompt_for_code = prompt
-            return
-
-        # Set up keyboard shortcuts
-        key_bindings = create_ipython_shortcuts(self)
-
-        # Pre-populate history from IPython's history database
-        history = InMemoryHistory()
-        last_cell = u""
-        for __, ___, cell in self.history_manager.get_tail(self.history_load_length,
-                                                        include_latest=True):
-            # Ignore blank lines and consecutive duplicates
-            cell = cell.rstrip()
-            if cell and (cell != last_cell):
-                history.append_string(cell)
-                last_cell = cell
-
-        self._style = self._make_style_from_name_or_cls(self.highlighting_style)
-        self.style = DynamicStyle(lambda: self._style)
-
-        editing_mode = getattr(EditingMode, self.editing_mode.upper())
-
-        self.pt_app = PromptSession(
-                            editing_mode=editing_mode,
-                            key_bindings=key_bindings,
-                            history=history,
-                            completer=IPythonPTCompleter(shell=self),
-                            enable_history_search = self.enable_history_search,
-                            style=self.style,
-                            include_default_pygments_style=False,
-                            mouse_support=self.mouse_support,
-                            enable_open_in_editor=self.extra_open_editor_shortcuts,
-                            color_depth=self.color_depth,
-                            **self._extra_prompt_options())
-
-    That is so many mixins and traits oh my god.
-
-    """
-    if shell is None:
-        _ip = get_ipython()
-
-    tmp_kb = create_ipython_shortcuts(_ip)
-    # idk if i did this right but i'm hoping this captures all passed
-    # KeyBindings objects to that container
-    OurRegistry, *OtherRegistries = args
-
-    merged = merge_key_bindings(tmp_kb, OurRegistry, *OtherRegistries)
-    return merged
-
-
 def main(_ip=None):
     """Begin initializing keybindings for IPython.
 
-    .. todo::
-
-        Add all the emacs keys to Vi insert mode.
-
-    .. code-block::
-
-        from prompt_toolkit.application.current import get_app
-        from prompt_toolkit.buffer import Buffer, SelectionType, indent, unindent
-        from prompt_toolkit.completion import CompleteEvent
-        from prompt_toolkit.filters import (
-            Condition,
-            emacs_insert_mode,
-            emacs_mode,
-            has_arg,
-            has_selection,
-            is_multiline,
-            is_read_only,
-            vi_search_direction_reversed,
-        )
-        from prompt_toolkit.key_binding.key_processor import KeyPressEvent
-        from prompt_toolkit.keys import Keys
-
-        from ..key_bindings import ConditionalKeyBindings, KeyBindings, KeyBindingsBase
-        from .named_commands import get_by_name
-
-        E = KeyPressEvent
+    Here's a *slightly truncated version of the prompt_toolkit implementation for Emacs bindings.
+    Note that the escape key is ignored, warranting the reimplementation rather than just
+    importing John's work.::
 
         def load_emacs_bindings() -> KeyBindingsBase:
             Some e-macs extensions.
             # Overview of Readline emacs commands:
-            # http://www.catonmat.net/download/readline-emacs-editing-mode-cheat-sheet.pdf
             key_bindings = KeyBindings()
             handle = key_bindings.add
 
@@ -276,13 +139,27 @@ def main(_ip=None):
             handle('escape', 'backspace', filter=insert_mode)(get_by_name('backward-kill-word'))
             handle('escape', '\\', filter=insert_mode)(get_by_name('delete-horizontal-space'))
 
-    Oh poop. I just realized. Instead of doing that, can we just call this function?
-    :ref:`prompt_toolkit.key_binding.defaults.load_key_bindings()` and merge in the
-    Emacs insert mode ones?
+    .. code-block:: python-traceback
 
-    Probably not. The function starts with kb = KeyBindings() but we already
-    might have an initialized instance so don't wipe ours....
-    oh shit. Unless we merge our existing keybindings goddamn this is confusing.
+        ---------------------------------------------------------------------------
+        TypeError                                 Traceback (most recent call last)
+        ~/.ipython/profile_default/startup/32_vi_modes.py in <module>
+            218     logger = module_log.stream_logger(log_level=level, logger=log)
+            219
+        --> 220     keybindings = main(_ip)
+            221     # how do we bind them back?
+
+        ~/.ipython/profile_default/startup/32_vi_modes.py in main(_ip)
+            160     nh = get_by_name('next-history')
+            161
+        --> 162     kb.add_binding((u'j', u'k'), filter=(insert_mode)(switch_to_navigation_mode))
+            163     kb.add_binding('K', filter=(HasFocus(DEFAULT_BUFFER) & ViNavigationMode())(ph))
+            164
+
+        TypeError: __call__() takes 1 positional argument but 2 were given
+
+    ??
+
 
     Parameters
     ----------
@@ -293,60 +170,62 @@ def main(_ip=None):
     # uhhhh what do we do in the else case? do we restart IPython or build prompt_toolkit in the form we want?
     if getattr(_ip, 'pt_app', None):
         kb = _ip.pt_app.key_bindings
-        kb.add_binding(
-            u'j', u'k', filter=(HasFocus(DEFAULT_BUFFER)
-                                & ViInsertMode()))(switch_to_navigation_mode)
     else:
         kb = KeyBindings()
 
+    insert_mode = HasFocus(DEFAULT_BUFFER) & ViInsertMode()
+
+    # kb.add_binding(keys=(u'j', u'k'), filter=(insert_mode), handler=(switch_to_navigation_mode))
+    # fuck assert not kwargs is an expression in this so we can't use that but I hope it clarifies the format!
     ph = get_by_name('previous-history')
     nh = get_by_name('next-history')
 
-    kb.add_binding('K', filter=(HasFocus(DEFAULT_BUFFER) & ViNavigationMode()))(ph)
+    # kb.add_binding((u'j', u'k'), filter=(insert_mode)(switch_to_navigation_mode))
+    kb.add_binding('K', filter=(HasFocus(DEFAULT_BUFFER) & ViNavigationMode())(ph))
 
-    kb.add_binding('J', filter=(HasFocus(DEFAULT_BUFFER) & ViNavigationMode()))(nh)
+    kb.add_binding('J', filter=(HasFocus(DEFAULT_BUFFER) & ViNavigationMode())(nh))
 
     # 06/15/2019: Got it.
-    kb.add('c-a', filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.beginning_of_line)
+    kb.add('c-a', filter=(insert_mode)(named_commands.beginning_of_line))
     # did you know that C-a won't work? Odd.
-    kb.add('c-b', filter=HasFocus(DEFAULT_BUFFER) & ViInsertMode())(named_commands.backward_char)
-    kb.add('c-d', filter=HasFocus(DEFAULT_BUFFER) & ViInsertMode())(named_commands.delete_char)
+    kb.add('c-b', filter=(insert_mode)(named_commands.backward_char))
+    kb.add('c-d', filter=(insert_mode)(named_commands.delete_char))
 
-    kb.add('c-delete', filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.kill_word)
-    kb.add('c-e', filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.end_of_line)
-    kb.add('c-f', filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.forward_char)
-    kb.add('c-left', filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.backward_word)
-    kb.add('c-right', filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.forward_word)
-    kb.add('c-x', 'r', 'y', filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.yank)
-    kb.add('c-y', filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.yank)
-    kb.add('escape', 'b', filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.backward_word)
-    kb.add('escape', 'c', filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.capitalize_word)
-    kb.add('escape', 'd', filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.kill_word)
-    kb.add('escape', 'f', filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.forward_word)
-    kb.add('escape', 'l', filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.downcase_word)
-    kb.add('escape', 'u', filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.uppercase_word)
-    kb.add('escape', 'y', filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.yank_pop)
-    kb.add('escape', 'backspace', filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.backward_kill_word)
-    kb.add('escape', '\\', filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.delete_horizontal_space)
+    kb.add('c-delete', filter=(insert_mode)(named_commands.kill_word))
+    kb.add('c-e', filter=(insert_mode)(named_commands.end_of_line))
+    kb.add('c-f', filter=(insert_mode)(named_commands.forward_char))
+    kb.add('c-left', filter=(insert_mode)(named_commands.backward_word))
+    kb.add('c-right', filter=(insert_mode)(named_commands.forward_word))
+    kb.add('c-x', 'r', 'y', filter=(insert_mode)(named_commands.yank))
+    kb.add('c-y', filter=(insert_mode)(named_commands.yank))
+    kb.add('escape', 'b', filter=(insert_mode)(named_commands.backward_word))
+    kb.add('escape', 'c', filter=(insert_mode)(named_commands.capitalize_word))
+    kb.add('escape', 'd', filter=(insert_mode)(named_commands.kill_word))
+    kb.add('escape', 'f', filter=(insert_mode)(named_commands.forward_word))
+    kb.add('escape', 'l', filter=(insert_mode)(named_commands.downcase_word))
+    kb.add('escape', 'u', filter=(insert_mode)(named_commands.uppercase_word))
+    kb.add('escape', 'y', filter=(insert_mode)(named_commands.yank_pop))
+    kb.add('escape', 'backspace', filter=(insert_mode)(named_commands.backward_kill_word))
+    kb.add('escape', '\\', filter=(insert_mode)(named_commands.delete_horizontal_space))
 
     # how do i modify ones with preexisting filters?
     # i deleted a bunch of the insert_mode ones off but idk what to do about
     # others
 
-    # kb.add('c-_', save_before=(lambda e: False), filter=insert_mode, filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(
+    # kb.add('c-_', save_before=(lambda e: False), filter=insert_mode, filter=(insert_mode)(
     #     named_commands.undo))
 
-    # kb.add('c-x', 'c-u', save_before=(lambda e: False), filter=insert_mode, filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(
+    # kb.add('c-x', 'c-u', save_before=(lambda e: False), filter=insert_mode, filter=(insert_mode)(
     #     named_commands.undo))
 
-    # kb.add('escape', '<', filter= ~has_selection, filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.beginning-of-history))
-    # kb.add('escape', '>', filter= ~has_selection, filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.end-of-history))
+    # kb.add('escape', '<', filter= ~has_selection, filter=(insert_mode)(named_commands.beginning-of-history))
+    # kb.add('escape', '>', filter= ~has_selection, filter=(insert_mode)(named_commands.end-of-history))
 
-    # kb.add('escape', '.',  filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.yank-last-arg))
-    # kb.add('escape', '_',  filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.yank-last-arg))
-    # kb.add('escape', 'c-y', filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.yank-nth-arg))
-    # kb.add('escape', '#', filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.insert-comment))
-    # kb.add('c-o', filter=(HasFocus(DEFAULT_BUFFER) & ViInsertMode()))(named_commands.operate-and-get-next))
+    # kb.add('escape', '.',  filter=(insert_mode)(named_commands.yank-last-arg))
+    # kb.add('escape', '_',  filter=(insert_mode)(named_commands.yank-last-arg))
+    # kb.add('escape', 'c-y', filter=(insert_mode)(named_commands.yank-nth-arg))
+    # kb.add('escape', '#', filter=(insert_mode)(named_commands.insert-comment))
+    # kb.add('c-o', filter=(insert_mode)(named_commands.operate-and-get-next))
 
     return kb
 

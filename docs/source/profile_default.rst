@@ -84,14 +84,6 @@ README
     :show-inheritance:
 
 
-:mod:`~profile_default.startup.32_vi_modes`
--------------------------------------------
-
-.. automodule:: profile_default.startup.32_vi_modes
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 
 :mod:`~profile_default.startup.42_pandas_init`
 ----------------------------------------------

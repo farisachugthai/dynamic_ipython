@@ -6,7 +6,12 @@ README.rst
 
 Configuring Prompt Toolkit in IPython
 =====================================
-Here's the original implementation for pt_app.  ``ip.init_**`` gives a ton of
+
+Here's the original implementation for pt_app.
+
+This shows us where the entry point for prompt_toolkit is in IPython.
+
+``ip.init_**`` gives a ton of
 different places, seemingly to muck around.
 
 .. ipython::
@@ -64,8 +69,23 @@ different places, seemingly to muck around.
                                color_depth=(ColorDepth.TRUE_COLOR if self.true_color else None),
                                **self._extra_prompt_options())
 
-The prompt toolkit tutorial does a fairly thorough job of explaining how most
+The `prompt toolkit tutorial`_ does a fairly thorough job of explaining how most
 everything here works.
+
+.. _`prompt toolkit tutorial: https://prompt-toolkit.read-the-docs.com/prompts/
+
+Where we come in is by taking the `self.pt_app` object and initializing an
+instance of the module's class :class:`~prompt_toolkit.key_bindings.KeyBindings()`
+
+:mod:`~profile_default.startup.32_vi_modes`
+-------------------------------------------
+
+.. automodule:: profile_default.startup.32_vi_modes
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
 
 Except DynamicStyle. No idea. So I went hunting.
 
