@@ -50,7 +50,6 @@ EXTRAS = {
         # Project uses reStructuredText, so ensure that the docutils get
         # installed or upgraded on the target machine
         'docutils>=0.3',
-        'recommonmark',
         'numpydoc',
         'flake8-rst',
     ]
@@ -115,7 +114,7 @@ setup(
     python_requires=REQUIRES_PYTHON,
     author=AUTHOR,
     author_email=EMAIL,
-    # python_requires=REQUIRES_PYTHON,
+    python_requires=REQUIRES_PYTHON,
     url=URL,
     packages=find_packages(where='.'),
     # If your package is a single module, use this instead of 'packages':

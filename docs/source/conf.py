@@ -3,6 +3,7 @@
 
 This file does only contain a selection of the most common options. For a
 full list see the documentation:
+
 http://www.sphinx-doc.org/en/master/config
 
 -- Path setup --------------------------------------------------------------
@@ -43,16 +44,14 @@ def _path_build(root, suffix, validate=True):
 ROOT = Path('../..').resolve()
 # TODO: Build paths using function above.
 PD = _path_build(ROOT, 'profile_default')
-STARTUP = PD.joinpath('startup')
+STARTUP = _path_build(PD, 'startup')
 
 DOCS_DIR = _path_build(ROOT, 'docs')
-BUILD_DIR = DOCS_DIR.joinpath('build')
+BUILD_DIR = _path_build(DOCS_DIR, 'build')
 CONF_PATH = _path_build(DOCS_DIR, 'source')
 
 sys.path.insert(0, os.path.abspath('.'))
-sys.path.insert(0, os.path.abspath(ROOT))
 sys.path.insert(0, os.path.abspath(PD))
-sys.path.insert(0, os.path.abspath(STARTUP))
 
 # -- Project information -----------------------------------------------------
 
@@ -68,14 +67,16 @@ release = version
 # -- General configuration ---------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
-#
-# needs_sphinx = '1.0'
+
+needs_sphinx = '2.1.0'
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx.ext.autosummary',
+    'sphinx.ext.autosectionlabel',
     'sphinx.ext.doctest',
     'sphinx.ext.intersphinx',
     'sphinx.ext.todo',
@@ -249,7 +250,7 @@ intersphinx_mapping = {
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = False
 
-# Viewcode
+# -- Viewcode ----------------------------------------------------------------
 
 # Apr 28, 2019
 # RemovedInSphinx30Warning:
@@ -257,9 +258,15 @@ todo_include_todos = False
 # Please update your configuration.
 viewcode_follow_imported_members = False
 
-# Option for IPython directive
+# -- IPython directive -------------------------------------------------------
 
 ipython_warning_is_error = False
+
+# -- autosummary -------------------------------------------------------------
+
+autosummary_generate = True
+
+autosummary_imported_members = True
 
 
 def setup(app):

@@ -1,4 +1,19 @@
 """Configuration file for ipython-kernel.
+
+============================
+IPython Kernel Configuration
+============================
+
+.. currentmodule:: ipython_kernel_config
+
+.. highlight:: python3
+
+.. Probably would be simpler to do a literalinclude here.
+
+
+IPython Kernel Config
+======================
+
 # -----------------------------------------------------------------------------
 # ConnectionFileMixin(LoggingConfigurable) configuration
 # -----------------------------------------------------------------------------
@@ -107,6 +122,133 @@ c.InteractiveShellApp.reraise_ipython_extension_failures = True
 # -----------------------------------------------------------------------------
 # Application(SingletonConfigurable) configuration
 # -----------------------------------------------------------------------------
+
+
+------------
+
+
+Jupyter Kernel Config
+=======================
+
+
+Run a kernel locally in a subprocess
+
+Options
+-------
+
+Arguments that take values are actually convenience aliases to full
+Configurables, whose aliases are listed on the help line. For more information
+on full configurables, see '--help-all'.
+
+--debug
+    set log level to logging.DEBUG (maximize logging output)
+--kernel=<Unicode> (KernelApp.kernel_name)
+    Default: 'python3'
+    The name of a kernel type to start
+--ip=<Unicode> (KernelManager.ip)
+    Default: ''
+    Set the kernel's IP address [default localhost]. If the IP address is
+    something other than localhost, then Consoles on other machines will be able
+    to connect to the Kernel, so be careful!
+
+Class parameters
+----------------
+
+Parameters are set from command-line arguments of the form:
+`--Class.trait=value`. This line is evaluated in Python, so simple expressions
+are allowed, e.g.:: `--C.a='range(3)'` For setting C.a=[0,1,2].
+
+KernelApp options
+-----------------
+--KernelApp.answer_yes=<Bool>
+    Default: False
+    Answer yes to any prompts.
+--KernelApp.config_file=<Unicode>
+    Default: ''
+    Full path of a config file.
+--KernelApp.config_file_name=<Unicode>
+    Default: ''
+    Specify a config file to load.
+--KernelApp.generate_config=<Bool>
+    Default: False
+    Generate default config file.
+--KernelApp.kernel_name=<Unicode>
+    Default: 'python3'
+    The name of a kernel type to start
+--KernelApp.log_datefmt=<Unicode>
+    Default: '%Y-%m-%d %H:%M:%S'
+    The date format used by logging formatters for %(asctime)s
+--KernelApp.log_format=<Unicode>
+    Default: '[%(name)s]%(highlevel)s %(message)s'
+    The Logging format template
+--KernelApp.log_level=<Enum>
+    Default: 30
+    Choices: (0, 10, 20, 30, 40, 50, 'DEBUG', 'INFO', 'WARN', 'ERROR', 'CRITICAL')
+    Set the log level by value or name.
+
+KernelManager options
+---------------------
+--KernelManager.autorestart=<Bool>
+    Default: True
+    Should we autorestart the kernel if it dies.
+--KernelManager.connection_file=<Unicode>
+    Default: ''
+    JSON file in which to store connection info [default: kernel-<pid>.json]
+    This file will contain the IP, ports, and authentication key needed to
+    connect clients to this kernel. By default, this file will be created in the
+    security dir of the current profile, but can be specified by absolute path.
+--KernelManager.control_port=<Int>
+    Default: 0
+    set the control (ROUTER) port [default: random]
+--KernelManager.hb_port=<Int>
+    Default: 0
+    set the heartbeat port [default: random]
+--KernelManager.iopub_port=<Int>
+    Default: 0
+    set the iopub (PUB) port [default: random]
+--KernelManager.ip=<Unicode>
+    Default: ''
+    Set the kernel's IP address [default localhost]. If the IP address is
+    something other than localhost, then Consoles on other machines will be able
+    to connect to the Kernel, so be careful!
+--KernelManager.kernel_cmd=<List>
+    Default: []
+    DEPRECATED: Use kernel_name instead.
+    The Popen Command to launch the kernel. Override this if you have a custom
+    kernel. If kernel_cmd is specified in a configuration file, Jupyter does not
+    pass any arguments to the kernel, because it cannot make any assumptions
+    about the arguments that the kernel understands. In particular, this means
+    that the kernel does not receive the option --debug if it given on the
+    Jupyter command line.
+--KernelManager.shell_port=<Int>
+    Default: 0
+    set the shell (ROUTER) port [default: random]
+--KernelManager.shutdown_wait_time=<Float>
+    Default: 5.0
+    Time to wait for a kernel to terminate before killing it, in seconds.
+--KernelManager.stdin_port=<Int>
+    Default: 0
+    set the stdin (ROUTER) port [default: random]
+--KernelManager.transport=<CaselessStrEnum>
+    Default: 'tcp'
+    Choices: ['tcp', 'ipc']
+
+KernelSpecManager options
+-------------------------
+--KernelSpecManager.ensure_native_kernel=<Bool>
+    Default: True
+    If there is no Python kernelspec registered and the IPython kernel is
+    available, ensure it is added to the spec list.
+--KernelSpecManager.kernel_spec_class=<Type>
+    Default: 'jupyter_client.kernelspec.KernelSpec'
+    The kernel spec class.  This is configurable to allow subclassing of the
+    KernelSpecManager for customized behavior.
+--KernelSpecManager.whitelist=<Set>
+    Default: set()
+    Whitelist of allowed kernel names.
+    By default, all installed kernels are allowed.
+
+
 """
 # This is an application.
 

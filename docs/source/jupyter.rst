@@ -18,7 +18,12 @@ Note that they may not accurately reflect the API as they display the interface 
 :mod:`jupyter_notebook`
 =======================
 
-.. autofunction:: jupyter.jupyter_notebook_config.jupyter_specific_configs
+.. nope not anymore autofunction:: jupyter.jupyter_notebook_config.jupyter_specific_configs
+
+.. automodule:: `~jupyter.jupyter_notebook_config`
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 
 :mod:`jupyter_nbconvert`
@@ -34,6 +39,15 @@ Note that they may not accurately reflect the API as they display the interface 
 ===========================
 
 .. automodule:: `jupyter.jupyter_labextension_config`
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+:mod:`jupyter_console`
+======================
+
+.. automodule:: jupyter.jupyter_console_config
     :members:
     :undoc-members:
     :show-inheritance:

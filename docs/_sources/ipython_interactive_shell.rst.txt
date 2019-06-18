@@ -1,56 +1,40 @@
 ==========================
 IPython_InteractiveShell
 ==========================
+Created Saturday 03 March 2018
 
-
-`Source: IPython/core/interactiveshell <https://github.com/ipython/ipython/blob/master/IPython/core/interactiveshell.py>`_
-
-The InteractiveShell class is the primary Trait used in the design of IPython.
-
-The foundation of the application appears to be working with mixins and traits.
-
-Class attributes are defined and exposed to the user through the traitlets
-API, and :class:`~traitlets.configurable.Configurable` are modified according to
-user preference.
+`<https://github.com/ipython/ipython/blob/master/IPython/core/interactiveshell.py>`_
 
 Subclasses of |ip|
 ==================
 
-:date: Saturday 03 March 2018
-
 Lines 436-451
 
-These lines prove particularly interesting for anyone deeply interested
-in the inner workings of IPython and in application design generally.
-
-This displays all of the subclasses of the IPython InteractiveShell and the
-profile property that users use to configure their particular instance of
-IPython.
+Here's some interesting line from the source code.
 
 .. code-block:: python3
 
-   # Subcomponents of InteractiveShell
-   alias_manager = Instance('IPython.core.alias.AliasManager', allow_none=True)
-   prefilter_manager = Instance('IPython.core.prefilter.PrefilterManager', allow_none=True)
-   builtin_trap = Instance('IPython.core.builtin_trap.BuiltinTrap', allow_none=True)
-   display_trap = Instance('IPython.core.display_trap.DisplayTrap', allow_none=True)
-   extension_manager = Instance('IPython.core.extensions.ExtensionManager', allow_none=True)
-   payload_manager = Instance('IPython.core.payload.PayloadManager', allow_none=True)
-   history_manager = Instance('IPython.core.history.HistoryAccessorBase', allow_none=True)
-   magics_manager = Instance('IPython.core.magic.MagicsManager', allow_none=True)
-   profile_dir = Instance('IPython.core.application.ProfileDir', allow_none=True)
+        # Subcomponents of InteractiveShell
+        alias_manager = Instance('IPython.core.alias.AliasManager', allow_none=True)
+        prefilter_manager = Instance('IPython.core.prefilter.PrefilterManager', allow_none=True)
+        builtin_trap = Instance('IPython.core.builtin_trap.BuiltinTrap', allow_none=True)
+        display_trap = Instance('IPython.core.display_trap.DisplayTrap', allow_none=True)
+        extension_manager = Instance('IPython.core.extensions.ExtensionManager', allow_none=True)
+        payload_manager = Instance('IPython.core.payload.PayloadManager', allow_none=True)
+        history_manager = Instance('IPython.core.history.HistoryAccessorBase', allow_none=True)
+        magics_manager = Instance('IPython.core.magic.MagicsManager', allow_none=True)
+        profile_dir = Instance('IPython.core.application.ProfileDir', allow_none=True)
 
-   @property
-   def profile(self):
-      if self.profile_dir is not None:
-          name = os.path.basename(self.profile_dir.location)
-      return name.replace('profile_','')
+        @property
+        def profile(self):
+            if self.profile_dir is not None:
+                name = os.path.basename(self.profile_dir.location)
+            return name.replace('profile_','')
 
 
 Traitlets
-=========
-
-.. code-block:: none
+---------
+.. ipython:: python
 
     In [3]: traitlets.Instance?
     Init signature: traitlets.Instance(klass=None, args=None, kw=None, \*\*kwargs)
