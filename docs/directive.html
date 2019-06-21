@@ -4,20 +4,20 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>5. IPython Sphinx Directive &#8212; Dynamic IPython 0.0.1 documentation</title>
+    <title>IPython Sphinx Directive &#8212; Dynamic IPython 0.0.1 documentation</title>
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="/data/data/com.termux/files/home/projects/dynamic_ipython/docs/source/_static/pyramid.css_t" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="/data/data/com.termux/files/home/projects/dynamic_ipython/docs/_static/pyramid.css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="6. Rich Output" href="rich_output.html" />
-    <link rel="prev" title="4. Defining custom magics" href="custom_magics.html" />
+    <link rel="next" title="API" href="API.html" />
+    <link rel="prev" title="Defining custom magics" href="custom_magics.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <!--[if lte IE 6]>
@@ -36,10 +36,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="rich_output.html" title="6. Rich Output"
+          <a href="API.html" title="API"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="custom_magics.html" title="4. Defining custom magics"
+          <a href="custom_magics.html" title="Defining custom magics"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li> 
       </ul>
@@ -51,31 +51,29 @@
           <div class="body" role="main">
             
   <div class="section" id="ipython-sphinx-directive">
-<span id="ipython-directive"></span><h1>5. IPython Sphinx Directive<a class="headerlink" href="#ipython-sphinx-directive" title="Permalink to this headline">¶</a></h1>
+<span id="ipython-directive"></span><h1>IPython Sphinx Directive<a class="headerlink" href="#ipython-sphinx-directive" title="Permalink to this headline">¶</a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The IPython Sphinx Directive is in ‘beta’ and currently under
 active development. Improvements to the code or documentation are welcome!</p>
 </div>
-<p>The ipython directive is a stateful ipython shell for embedding in
-sphinx documents.  It knows about standard ipython prompts, and
+<p>The <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.5.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> directive is a stateful <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.5.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> shell for embedding in
+sphinx documents.  It knows about standard <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.5.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> prompts, and
 extracts the input and output lines.  These prompts will be renumbered
 starting at <code class="docutils literal notranslate"><span class="pre">1</span></code>.  The inputs will be fed to an embedded ipython
 interpreter and the outputs from that interpreter will be inserted as
-well.  For example, code blocks like the following:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">..</span> <span class="n">ipython</span><span class="p">::</span>
-
-   <span class="n">In</span> <span class="p">[</span><span class="mi">136</span><span class="p">]:</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span>
-
-   <span class="n">In</span> <span class="p">[</span><span class="mi">137</span><span class="p">]:</span> <span class="n">x</span><span class="o">**</span><span class="mi">3</span>
-   <span class="n">Out</span><span class="p">[</span><span class="mi">137</span><span class="p">]:</span> <span class="mi">8</span>
-</pre></div>
-</div>
-<p>will be rendered as</p>
+well.  For example, code blocks like the following</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="n">x</span> <span class="o">=</span> <span class="mi">2</span>
 
 <span class="gp">In [2]: </span><span class="n">x</span><span class="o">**</span><span class="mi">3</span>
 <span class="gh">Out[2]: </span><span class="go">8</span>
+</pre></div>
+</div>
+<p>will be rendered as</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [3]: </span><span class="n">x</span> <span class="o">=</span> <span class="mi">2</span>
+
+<span class="gp">In [4]: </span><span class="n">x</span><span class="o">**</span><span class="mi">3</span>
+<span class="gh">Out[4]: </span><span class="go">8</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -87,23 +85,23 @@ above, we will not in general be showing the literal ReST in this
 document that generates the rendered output.</p>
 </div>
 <div class="section" id="persisting-the-python-session-across-ipython-directive-blocks">
-<h2>5.1. Persisting the Python session across IPython directive blocks<a class="headerlink" href="#persisting-the-python-session-across-ipython-directive-blocks" title="Permalink to this headline">¶</a></h2>
+<h2>Persisting the Python session across IPython directive blocks<a class="headerlink" href="#persisting-the-python-session-across-ipython-directive-blocks" title="Permalink to this headline">¶</a></h2>
 <p>The state from previous sessions is stored, and standard error is
 trapped. At doc build time, ipython’s output and std err will be
 inserted, and prompts will be renumbered. So the prompt below should
 be renumbered in the rendered docs, and pick up where the block above
 left off.</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [3]: </span><span class="n">z</span> <span class="o">=</span> <span class="n">x</span><span class="o">*</span><span class="mi">3</span>   <span class="c1"># x is recalled from previous block</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">z</span> <span class="o">=</span> <span class="n">x</span><span class="o">*</span><span class="mi">3</span>   <span class="c1"># x is recalled from previous block</span>
 
-<span class="gp">In [4]: </span><span class="n">z</span>
-<span class="gh">Out[4]: </span><span class="go">6</span>
+<span class="gp">In [6]: </span><span class="n">z</span>
+<span class="gh">Out[6]: </span><span class="go">6</span>
 
-<span class="gp">In [5]: </span><span class="k">print</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+<span class="gp">In [7]: </span><span class="k">print</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
 <span class="go">6</span>
 
-<span class="gp">In [6]: </span><span class="n">q</span> <span class="o">=</span> <span class="n">z</span><span class="p">[)</span>   <span class="c1"># this is a syntax error -- we trap ipy exceptions</span>
+<span class="gp">In [8]: </span><span class="n">q</span> <span class="o">=</span> <span class="n">z</span><span class="p">[)</span>   <span class="c1"># this is a syntax error -- we trap ipy exceptions</span>
 <span class="gt">------------------------------------------------------------</span>
-   <span class="n">File</span> <span class="s2">&quot;&lt;ipython console&gt;&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">1</span>
+   <span class="n">File</span> <span class="s2">&quot;&lt;:mod:`IPython` console&gt;&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">1</span>
      <span class="n">q</span> <span class="o">=</span> <span class="n">z</span><span class="p">[)</span>   <span class="c1"># this is a syntax error -- we trap ipy exceptions</span>
        <span class="o">^</span>
 <span class="ne">SyntaxError</span>: invalid syntax
@@ -111,57 +109,62 @@ left off.</p>
 </div>
 </div>
 <div class="section" id="adding-documentation-tests-to-your-ipython-directive">
-<h2>5.2. Adding documentation tests to your IPython directive<a class="headerlink" href="#adding-documentation-tests-to-your-ipython-directive" title="Permalink to this headline">¶</a></h2>
+<h2>Adding documentation tests to your IPython directive<a class="headerlink" href="#adding-documentation-tests-to-your-ipython-directive" title="Permalink to this headline">¶</a></h2>
 <p>The embedded interpreter supports some limited markup.  For example,
-you can put comments in your ipython sessions, which are reported
+you can put comments in your <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.5.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> sessions, which are reported
 verbatim.  There are some handy “pseudo-decorators” that let you
 doctest the output.  The inputs are fed to an embedded ipython
-session and the outputs from the ipython session are inserted into
-your doc.  If the output in your doc and in the ipython session don’t
+session and the outputs from the <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.5.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> session are inserted into
+your doc.  If the output in your doc and in the <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.5.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> session don’t
 match on a doctest assertion, an error will occur.</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [7]: </span><span class="n">x</span> <span class="o">=</span> <span class="s1">&#39;hello world&#39;</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [9]: </span><span class="n">x</span> <span class="o">=</span> <span class="s1">&#39;hello world&#39;</span>
 
-<span class="go"># this will raise an error if the ipython output is different</span>
-<span class="gp">In [8]: </span><span class="n">x</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
-<span class="gh">Out[8]: </span><span class="go">&#39;HELLO WORLD&#39;</span>
+<span class="go"># this will raise an error if the :mod:`IPython` output is different</span>
+<span class="gp">In [10]: </span><span class="n">x</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+<span class="gh">Out[10]: </span><span class="go">&#39;HELLO WORLD&#39;</span>
 
 <span class="go"># some readline features cannot be supported, so we allow</span>
 <span class="go"># &quot;verbatim&quot; blocks, which are dumped in verbatim except prompts</span>
 <span class="go"># are continuously numbered</span>
-<span class="gp">In [9]: </span><span class="n">x</span><span class="o">.</span><span class="n">st</span><span class="o">&lt;</span><span class="n">TAB</span><span class="o">&gt;</span>
+<span class="gp">In [11]: </span><span class="n">x</span><span class="o">.</span><span class="n">st</span><span class="o">&lt;</span><span class="n">TAB</span><span class="o">&gt;</span>
 <span class="go">x.startswith  x.strip</span>
 </pre></div>
 </div>
 <p>For more information on &#64;doctest decorator, please refer to the end of this page in Pseudo-Decorators section.</p>
 </div>
 <div class="section" id="multi-line-input">
-<h2>5.3. Multi-line input<a class="headerlink" href="#multi-line-input" title="Permalink to this headline">¶</a></h2>
+<h2>Multi-line input<a class="headerlink" href="#multi-line-input" title="Permalink to this headline">¶</a></h2>
 <p>Multi-line input is supported.</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [10]: </span><span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;http://ichart.finance.yahoo.com/table.csv?s=CROX</span><span class="se">\</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [12]: </span><span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;http://ichart.finance.yahoo.com/table.csv?s=CROX</span><span class="se">\</span>
 <span class="gp">   ....: </span><span class="s1">&amp;d=9&amp;e=22&amp;f=2009&amp;g=d&amp;a=1&amp;br=8&amp;c=2006&amp;ignore=.csv&#39;</span>
 <span class="gp">   ....: </span>
 
-<span class="gp">In [11]: </span><span class="k">print</span><span class="p">(</span><span class="n">url</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;&amp;&#39;</span><span class="p">))</span>
+<span class="gp">In [13]: </span><span class="k">print</span><span class="p">(</span><span class="n">url</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;&amp;&#39;</span><span class="p">))</span>
 <span class="go">[&#39;http://ichart.finance.yahoo.com/table.csv?s=CROX&#39;, &#39;d=9&#39;, &#39;e=22&#39;,</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="testing-directive-outputs">
-<h2>5.4. Testing directive outputs<a class="headerlink" href="#testing-directive-outputs" title="Permalink to this headline">¶</a></h2>
-<p>The IPython Sphinx Directive makes it possible to test the outputs that you provide with your code. To do this,
-decorate the contents in your directive block with one of the following:</p>
+<h2>Testing directive outputs<a class="headerlink" href="#testing-directive-outputs" title="Permalink to this headline">¶</a></h2>
+<p>The IPython Sphinx Directive makes it possible to test the outputs that
+you provide with your code. To do this, decorate the contents in your
+directive block with one of the following:</p>
 <blockquote>
 <div><ul class="simple">
 <li><p>list directives here</p></li>
 </ul>
 </div></blockquote>
-<p>If an IPython doctest decorator is found, it will take these steps when your documentation is built:</p>
-<p>1. Run the <em>input</em> lines in your IPython directive block against the current Python kernel (remember that the session
-persists across IPython directive blocks);</p>
-<p>2. Compare the <em>output</em> of this with the output text that you’ve put in the IPython directive block (what comes
-after <code class="xref py py-obj docutils literal notranslate"><span class="pre">Out[NN]</span></code>);</p>
-<ol class="arabic simple" start="3">
-<li><p>If there is a difference, the directive will raise an error and your documentation build will fail.</p></li>
+<p>If an IPython doctest decorator is found, it will take these steps when
+your documentation is built:</p>
+<ol class="arabic simple">
+<li><p>Run the <em>input</em> lines in your IPython directive block against the
+current Python kernel (remember that the session
+persists across IPython directive blocks);</p></li>
+<li><p>Compare the <em>output</em> of this with the output text that you’ve put
+in the IPython directive block (what comes
+after <code class="xref py py-obj docutils literal notranslate"><span class="pre">Out[NN]</span></code>);</p></li>
+<li><p>If there is a difference, the directive will raise an error and your
+documentation build will fail.</p></li>
 </ol>
 <p>You can do doctesting on multi-line output as well.  Just be careful
 when using non-deterministic inputs like random numbers in the ipython
@@ -169,10 +172,10 @@ directive, because your inputs are run through a live interpreter, so
 if you are doctesting random output you will get an error.  Here we
 “seed” the random number generator for deterministic output, and we
 suppress the seed line so it doesn’t show up in the rendered output</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [12]: </span><span class="kn">import</span> <span class="nn">numpy.random</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [14]: </span><span class="kn">import</span> <span class="nn">numpy.random</span>
 
-<span class="gp">In [13]: </span><span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
-<span class="gh">Out[13]: </span><span class="go"></span>
+<span class="gp">In [15]: </span><span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="gh">Out[15]: </span><span class="go"></span>
 <span class="go">array([[0.64524308, 0.59943846],</span>
 <span class="go">       [0.47102322, 0.8715456 ],</span>
 <span class="go">       [0.29370834, 0.74776844],</span>
@@ -188,10 +191,10 @@ suppress the seed line so it doesn’t show up in the rendered output</p>
 <p>For more information on &#64;supress and &#64;doctest decorators, please refer to the end of this file in
 Pseudo-Decorators section.</p>
 <p>Another demonstration of multi-line input and output</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [14]: </span><span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [16]: </span><span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 <span class="go">jdh</span>
 
-<span class="gp">In [15]: </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+<span class="gp">In [17]: </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
 <span class="gp">   ....: </span>    <span class="k">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 <span class="gp">   ....: </span>
 <span class="gp">   ....: </span>
@@ -213,33 +216,25 @@ you can do.  When using the matplotlib <code class="docutils literal notranslate
 occur before any import of pylab.  This will not show up in the
 rendered docs, but the commands will be executed in the embedded
 interpreter and subsequent line numbers will be incremented to reflect
-the inputs:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">..</span> <span class="n">ipython</span><span class="p">::</span>
-   <span class="p">:</span><span class="n">suppress</span><span class="p">:</span>
-
-   <span class="n">In</span> <span class="p">[</span><span class="mi">144</span><span class="p">]:</span> <span class="kn">from</span> <span class="nn">matplotlib.pylab</span> <span class="k">import</span> <span class="o">*</span>
-
-   <span class="n">In</span> <span class="p">[</span><span class="mi">145</span><span class="p">]:</span> <span class="n">ion</span><span class="p">()</span>
-</pre></div>
-</div>
+the inputs</p>
 <p>Likewise, you can set <code class="docutils literal notranslate"><span class="pre">:doctest:</span></code> or <code class="docutils literal notranslate"><span class="pre">:verbatim:</span></code> to apply these
 settings to the entire block.  For example,</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [16]: </span><span class="n">cd</span> <span class="n">mpl</span><span class="o">/</span><span class="n">examples</span><span class="o">/</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [18]: </span><span class="n">cd</span> <span class="n">mpl</span><span class="o">/</span><span class="n">examples</span><span class="o">/</span>
 <span class="go">/home/jdhunter/mpl/examples</span>
 
-<span class="gp">In [17]: </span><span class="n">pwd</span>
-<span class="gh">Out[17]: </span><span class="go">&#39;/home/jdhunter/mpl/examples&#39;</span>
+<span class="gp">In [19]: </span><span class="n">pwd</span>
+<span class="gh">Out[19]: </span><span class="go">&#39;/home/jdhunter/mpl/examples&#39;</span>
 
-<span class="gp">In [18]: </span><span class="n">cd</span> <span class="n">mpl</span><span class="o">/</span><span class="n">examples</span><span class="o">/&lt;</span><span class="n">TAB</span><span class="o">&gt;</span>
+<span class="gp">In [20]: </span><span class="n">cd</span> <span class="n">mpl</span><span class="o">/</span><span class="n">examples</span><span class="o">/&lt;</span><span class="n">TAB</span><span class="o">&gt;</span>
 <span class="go">mpl/examples/animation/        mpl/examples/misc/</span>
 <span class="go">mpl/examples/api/              mpl/examples/mplot3d/</span>
 <span class="go">mpl/examples/axes_grid/        mpl/examples/pylab_examples/</span>
 <span class="go">mpl/examples/event_handling/   mpl/examples/widgets</span>
 
-<span class="gp">In [19]: </span><span class="n">cd</span> <span class="n">mpl</span><span class="o">/</span><span class="n">examples</span><span class="o">/</span><span class="n">widgets</span><span class="o">/</span>
+<span class="gp">In [21]: </span><span class="n">cd</span> <span class="n">mpl</span><span class="o">/</span><span class="n">examples</span><span class="o">/</span><span class="n">widgets</span><span class="o">/</span>
 <span class="go">/home/msierig/mpl/examples/widgets</span>
 
-<span class="gp">In [20]: </span><span class="o">!</span>wc *
+<span class="gp">In [22]: </span><span class="o">!</span>wc *
 <span class="go">    2    12    77 README.txt</span>
 <span class="go">   40    97   884 buttons.py</span>
 <span class="go">   26    90   712 check_buttons.py</span>
@@ -256,28 +251,28 @@ settings to the entire block.  For example,</p>
 <p>You can create one or more pyplot plots and insert them with the
 <code class="docutils literal notranslate"><span class="pre">&#64;savefig</span></code> decorator.</p>
 <p>For more information on &#64;savefig decorator, please refer to the end of this page in Pseudo-Decorators section.</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [21]: </span><span class="n">plot</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]);</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [23]: </span><span class="n">plot</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]);</span>
 
 <span class="go"># use a semicolon to suppress the output</span>
-<span class="gp">In [22]: </span><span class="n">hist</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">10000</span><span class="p">),</span> <span class="mi">100</span><span class="p">);</span>
+<span class="gp">In [24]: </span><span class="n">hist</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">10000</span><span class="p">),</span> <span class="mi">100</span><span class="p">);</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="_images/plot_simple.png"><img alt="_images/plot_simple.png" src="_images/plot_simple.png" style="width: 4in;" /></a>
 <a class="reference internal image-reference" href="_images/hist_simple.png"><img alt="_images/hist_simple.png" src="_images/hist_simple.png" style="width: 4in;" /></a>
 <p>In a subsequent session, we can update the current figure with some
 text, and then resave</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [23]: </span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;number&#39;</span><span class="p">)</span>
-<span class="gh">Out[23]: </span><span class="go">Text(38.097222222222214, 0.5, &#39;number&#39;)</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [25]: </span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;number&#39;</span><span class="p">)</span>
+<span class="gh">Out[25]: </span><span class="go">Text(38.097222222222214, 0.5, &#39;number&#39;)</span>
 
-<span class="gp">In [24]: </span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;normal distribution&#39;</span><span class="p">)</span>
-<span class="go">                                                 Out[24]: Text(0.5, 1.0, &#39;normal distribution&#39;)</span>
+<span class="gp">In [26]: </span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;normal distribution&#39;</span><span class="p">)</span>
+<span class="go">                                                 Out[26]: Text(0.5, 1.0, &#39;normal distribution&#39;)</span>
 
-<span class="gp">In [25]: </span><span class="n">grid</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">In [27]: </span><span class="n">grid</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="_images/hist_with_text.png"><img alt="_images/hist_with_text.png" src="_images/hist_with_text.png" style="width: 4in;" /></a>
 <p>You can also have function definitions included in the source.</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [26]: </span><span class="k">def</span> <span class="nf">square</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [28]: </span><span class="k">def</span> <span class="nf">square</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 <span class="gp">   ....: </span>    <span class="sd">&quot;&quot;&quot;</span>
 <span class="gp">   ....: </span><span class="sd">    An overcomplicated square function as an example.</span>
 <span class="gp">   ....: </span><span class="sd">    &quot;&quot;&quot;</span>
@@ -289,15 +284,15 @@ text, and then resave</p>
 </pre></div>
 </div>
 <p>Then call it from a subsequent section.</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [27]: </span><span class="n">square</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="gh">Out[27]: </span><span class="go">9</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [29]: </span><span class="n">square</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="gh">Out[29]: </span><span class="go">9</span>
 
-<span class="gp">In [28]: </span><span class="n">square</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
-<span class="go">           Out[28]: 4</span>
+<span class="gp">In [30]: </span><span class="n">square</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">           Out[30]: 4</span>
 </pre></div>
 </div>
 <div class="section" id="writing-pure-python-code">
-<h3>5.4.1. Writing Pure Python Code<a class="headerlink" href="#writing-pure-python-code" title="Permalink to this headline">¶</a></h3>
+<h3>Writing Pure Python Code<a class="headerlink" href="#writing-pure-python-code" title="Permalink to this headline">¶</a></h3>
 <p>Pure python code is supported by the optional argument <code class="xref py py-obj docutils literal notranslate"><span class="pre">python</span></code>. In this pure
 python syntax you do not include the output from the python interpreter. The
 following markup:</p>
@@ -310,29 +305,29 @@ following markup:</p>
 </pre></div>
 </div>
 <p>Renders as</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [29]: </span><span class="n">foo</span> <span class="o">=</span> <span class="s1">&#39;bar&#39;</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [31]: </span><span class="n">foo</span> <span class="o">=</span> <span class="s1">&#39;bar&#39;</span>
 
-<span class="gp">In [30]: </span><span class="k">print</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span>
+<span class="gp">In [32]: </span><span class="k">print</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span>
 <span class="go">bar</span>
 
-<span class="gp">In [31]: </span><span class="n">foo</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="gp">In [33]: </span><span class="n">foo</span> <span class="o">=</span> <span class="mi">2</span>
 
-<span class="gp">In [32]: </span><span class="n">foo</span><span class="o">**</span><span class="mi">2</span>
-<span class="gh">Out[32]: </span><span class="go">4</span>
+<span class="gp">In [34]: </span><span class="n">foo</span><span class="o">**</span><span class="mi">2</span>
+<span class="gh">Out[34]: </span><span class="go">4</span>
 </pre></div>
 </div>
 <p>We can even plot from python, using the savefig decorator, as well as, suppress
 output with a semicolon</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [33]: </span><span class="n">plot</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]);</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [35]: </span><span class="n">plot</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]);</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="_images/plot_simple_python.png"><img alt="_images/plot_simple_python.png" src="_images/plot_simple_python.png" style="width: 4in;" /></a>
 <p>For more information on &#64;savefig decorator, please refer to the end of this page in Pseudo-Decorators section.</p>
 <p>Similarly, std err is inserted</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [34]: </span><span class="n">foo</span> <span class="o">=</span> <span class="s1">&#39;bar&#39;</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [36]: </span><span class="n">foo</span> <span class="o">=</span> <span class="s1">&#39;bar&#39;</span>
 
-<span class="gp">In [35]: </span><span class="n">foo</span><span class="p">[)</span>
-<span class="gt">  File</span><span class="nn"> &quot;&lt;ipython-input-35-edde7a2425af&gt;&quot;</span><span class="gt">, line </span><span class="mi">1</span>
+<span class="gp">In [37]: </span><span class="n">foo</span><span class="p">[)</span>
+<span class="gt">  File</span><span class="nn"> &quot;&lt;ipython-input-37-edde7a2425af&gt;&quot;</span><span class="gt">, line </span><span class="mi">1</span>
     <span class="n">foo</span><span class="p">[)</span>
         <span class="o">^</span>
 <span class="ne">SyntaxError</span>: invalid syntax
@@ -341,30 +336,30 @@ output with a semicolon</p>
 </div>
 </div>
 <div class="section" id="handling-comments">
-<h2>5.5. Handling Comments<a class="headerlink" href="#handling-comments" title="Permalink to this headline">¶</a></h2>
+<h2>Handling Comments<a class="headerlink" href="#handling-comments" title="Permalink to this headline">¶</a></h2>
 <p>Comments are handled and state is preserved</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># comments are handled</span>
-<span class="gp">In [36]: </span><span class="k">print</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span>
+<span class="gp">In [38]: </span><span class="k">print</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span>
 <span class="go">bar</span>
 </pre></div>
 </div>
 <p>If you don’t see the next code block then the options work.</p>
 </div>
 <div class="section" id="splitting-python-statements-across-lines">
-<h2>5.6. Splitting Python statements across lines<a class="headerlink" href="#splitting-python-statements-across-lines" title="Permalink to this headline">¶</a></h2>
+<h2>Splitting Python statements across lines<a class="headerlink" href="#splitting-python-statements-across-lines" title="Permalink to this headline">¶</a></h2>
 <p>Multi-line input is handled.</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [37]: </span><span class="n">line</span> <span class="o">=</span> <span class="s1">&#39;Multi</span><span class="se">\</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [39]: </span><span class="n">line</span> <span class="o">=</span> <span class="s1">&#39;Multi</span><span class="se">\</span>
 <span class="gp">   ....: </span><span class="s1">        line &amp;</span><span class="se">\</span>
 <span class="gp">   ....: </span><span class="s1">        support &amp;</span><span class="se">\</span>
 <span class="gp">   ....: </span><span class="s1">        works&#39;</span>
 <span class="gp">   ....: </span>
 
-<span class="gp">In [38]: </span><span class="k">print</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;&amp;&#39;</span><span class="p">))</span>
+<span class="gp">In [40]: </span><span class="k">print</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;&amp;&#39;</span><span class="p">))</span>
 <span class="go">[&#39;Multi        line &#39;, &#39;        support &#39;, &#39;        works&#39;]</span>
 </pre></div>
 </div>
 <p>Functions definitions are correctly parsed</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [39]: </span><span class="k">def</span> <span class="nf">square</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [41]: </span><span class="k">def</span> <span class="nf">square</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 <span class="gp">   ....: </span>    <span class="sd">&quot;&quot;&quot;</span>
 <span class="gp">   ....: </span><span class="sd">    An overcomplicated square function as an example.</span>
 <span class="gp">   ....: </span><span class="sd">    &quot;&quot;&quot;</span>
@@ -376,26 +371,26 @@ output with a semicolon</p>
 </pre></div>
 </div>
 <p>And persist across sessions</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [40]: </span><span class="k">print</span><span class="p">(</span><span class="n">square</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [42]: </span><span class="k">print</span><span class="p">(</span><span class="n">square</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
 <span class="go">9</span>
 
-<span class="gp">In [41]: </span><span class="k">print</span><span class="p">(</span><span class="n">square</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">))</span>
+<span class="gp">In [43]: </span><span class="k">print</span><span class="p">(</span><span class="n">square</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">))</span>
 <span class="go">  4</span>
 </pre></div>
 </div>
-<p>Pretty much anything you can do with the ipython code, you can do with
+<p>Pretty much anything you can do with the <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.5.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> code, you can do with
 with a simple python script. Obviously, though it doesn’t make sense
 to use the doctest option.</p>
 </div>
 <div class="section" id="pseudo-decorators">
-<h2>5.7. Pseudo-Decorators<a class="headerlink" href="#pseudo-decorators" title="Permalink to this headline">¶</a></h2>
+<h2>Pseudo-Decorators<a class="headerlink" href="#pseudo-decorators" title="Permalink to this headline">¶</a></h2>
 <p>Here are the supported decorators, and any optional arguments they
 take.  Some of the decorators can be used as options to the entire
 block (eg <code class="docutils literal notranslate"><span class="pre">verbatim</span></code> and <code class="docutils literal notranslate"><span class="pre">suppress</span></code>), and some only apply to the
 line just below them (eg <code class="docutils literal notranslate"><span class="pre">savefig</span></code>).</p>
 <p>&#64;suppress</p>
 <blockquote>
-<div><p>execute the ipython input block, but suppress the input and output
+<div><p>execute the <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.5.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> input block, but suppress the input and output
 block from the rendered output.  Also, can be applied to the entire
 <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">ipython</span></code> block as a directive option with <code class="docutils literal notranslate"><span class="pre">:suppress:</span></code>.</p>
 </div></blockquote>
@@ -418,46 +413,14 @@ for details.</p>
 </div></blockquote>
 <p>&#64;doctest</p>
 <blockquote>
-<div><p>Compare the pasted in output in the ipython block with the output
+<div><p>Compare the pasted in output in the <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.5.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> block with the output
 generated at doc build time, and raise errors if they don’t
 match. Also, can be applied to the entire <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">ipython</span></code> block as a
 directive option with <code class="docutils literal notranslate"><span class="pre">:doctest:</span></code>.</p>
 </div></blockquote>
 </div>
-<div class="section" id="configuration-options">
-<h2>5.8. Configuration Options<a class="headerlink" href="#configuration-options" title="Permalink to this headline">¶</a></h2>
-<p>ipython_savefig_dir</p>
-<blockquote>
-<div><p>The directory in which to save the figures. This is relative to the
-Sphinx source directory. The default is <code class="xref py py-obj docutils literal notranslate"><span class="pre">html_static_path</span></code>.</p>
-</div></blockquote>
-<p>ipython_rgxin</p>
-<blockquote>
-<div><p>The compiled regular expression to denote the start of IPython input
-lines. The default is <code class="xref py py-obj docutils literal notranslate"><span class="pre">re.compile('In</span> <span class="pre">[(d+)]:s?(.*)s*')</span></code>. You
-shouldn’t need to change this.</p>
-</div></blockquote>
-<p>ipython_rgxout</p>
-<blockquote>
-<div><p>The compiled regular expression to denote the start of IPython output
-lines. The default is <code class="xref py py-obj docutils literal notranslate"><span class="pre">re.compile('Out[(d+)]:s?(.*)s*')</span></code>. You
-shouldn’t need to change this.</p>
-</div></blockquote>
-<p>ipython_promptin</p>
-<blockquote>
-<div><p>The string to represent the IPython input prompt in the generated ReST.
-The default is <code class="xref py py-obj docutils literal notranslate"><span class="pre">'In</span> <span class="pre">[%d]:'</span></code>. This expects that the line numbers are used
-in the prompt.</p>
-</div></blockquote>
-<p>ipython_promptout</p>
-<blockquote>
-<div><p>The string to represent the IPython prompt in the generated ReST. The
-default is <code class="xref py py-obj docutils literal notranslate"><span class="pre">'Out</span> <span class="pre">[%d]:'</span></code>. This expects that the line numbers are used
-in the prompt.</p>
-</div></blockquote>
-</div>
 <div class="section" id="module-IPython.sphinxext.ipython_directive">
-<span id="automatically-generated-documentation"></span><h2>5.9. Automatically generated documentation<a class="headerlink" href="#module-IPython.sphinxext.ipython_directive" title="Permalink to this headline">¶</a></h2>
+<span id="automatically-generated-documentation"></span><h2>Automatically generated documentation<a class="headerlink" href="#module-IPython.sphinxext.ipython_directive" title="Permalink to this headline">¶</a></h2>
 <p>Sphinx directive to support embedded IPython code.</p>
 <p>IPython provides an extension for <a class="reference external" href="http://www.sphinx-doc.org/">Sphinx</a> to
 highlight and run code.</p>
@@ -474,7 +437,7 @@ like an interactive ipython section.</p>
 <span class="gp">In [2]: </span><span class="kn">import</span> <span class="nn">datetime</span>
 <span class="gp">   ...: </span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
 <span class="gp">   ...: </span>
-<span class="go">          Out[2]: datetime.datetime(2019, 6, 6, 2, 38, 37, 508703)</span>
+<span class="go">          Out[2]: datetime.datetime(2019, 6, 21, 12, 13, 36, 366311)</span>
 </pre></div>
 </div>
 <p>It supports IPython construct that plain
@@ -482,7 +445,7 @@ Python does not understand (like magics):</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [3]: </span><span class="kn">import</span> <span class="nn">time</span>
 
 <span class="gp">In [4]: </span><span class="o">%</span><span class="k">timeit</span> time.sleep(0.05)
-<span class="go">50.6 ms +- 89.3 us per loop (mean +- std. dev. of 7 runs, 10 loops each)</span>
+<span class="go">50.9 ms +- 243 us per loop (mean +- std. dev. of 7 runs, 10 loops each)</span>
 </pre></div>
 </div>
 <p>This will also support top-level async when using IPython 7.0+</p>
@@ -516,7 +479,7 @@ to the current block, otherwise the build will fail.</p>
 </pre></div>
 </div>
 <div class="section" id="ipython-sphinx-directive-module">
-<h3>5.9.1. IPython Sphinx directive module<a class="headerlink" href="#ipython-sphinx-directive-module" title="Permalink to this headline">¶</a></h3>
+<h3>IPython Sphinx directive module<a class="headerlink" href="#ipython-sphinx-directive-module" title="Permalink to this headline">¶</a></h3>
 <p>To enable this directive, simply list it in your Sphinx <code class="docutils literal notranslate"><span class="pre">conf.py</span></code> file
 (making sure the directory where you placed it is visible to sphinx, as is
 needed for all Sphinx directives). For example, to enable syntax highlighting
@@ -595,7 +558,7 @@ one sets the backend to <a class="reference external" href="https://docs.python.
 documentation.</p>
 </div>
 <div class="section" id="id1">
-<h3>5.9.2. Pseudo-Decorators<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<h3>Pseudo-Decorators<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <p>Note: Only one decorator is supported per input. If more than one decorator
 is specified, then only the last one is used.</p>
 <p>In addition to the Pseudo-Decorators/options described at the above link,
@@ -613,7 +576,7 @@ or :okwarning: options:</p>
 </div>
 </div>
 <div class="section" id="to-do">
-<h3>5.9.3. To Do<a class="headerlink" href="#to-do" title="Permalink to this headline">¶</a></h3>
+<h3>To Do<a class="headerlink" href="#to-do" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Turn the ad-hoc test() function into a real test suite.</p></li>
 <li><p>Break up ipython-specific functionality from matplotlib stuff into better
@@ -628,57 +591,55 @@ separated code.</p></li>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="custom_magics.html"
-                        title="previous chapter">4. Defining custom magics</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="rich_output.html"
-                        title="next chapter">6. Rich Output</a></p>
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="custom_magics.html" title="previous chapter">Defining custom magics</a></li>
+      <li>Next: <a href="API.html" title="next chapter">API</a></li>
+  </ul></li>
+</ul>
 <h3><a href="index.html">Table of Contents</a></h3>
-<p class="caption"><span class="caption-text">Table of Contents:</span></p>
+<p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="startup.html">1. Startup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ipython_keybindings.html">2. Keybindings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="magics.html">3. Built-in Magics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="custom_magics.html">4. Writing Your Own Magics</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">5. Sphinx Directives</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#persisting-the-python-session-across-ipython-directive-blocks">5.1. Persisting the Python session across IPython directive blocks</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#adding-documentation-tests-to-your-ipython-directive">5.2. Adding documentation tests to your IPython directive</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#multi-line-input">5.3. Multi-line input</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#testing-directive-outputs">5.4. Testing directive outputs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#handling-comments">5.5. Handling Comments</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#splitting-python-statements-across-lines">5.6. Splitting Python statements across lines</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#pseudo-decorators">5.7. Pseudo-Decorators</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#configuration-options">5.8. Configuration Options</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-IPython.sphinxext.ipython_directive">5.9. Automatically generated documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="startup.html">Startup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ipython_interactive_shell.html">The Interactive Shell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ipython_keybindings.html">Keybindings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="magics.html">Built-in Magics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_magics.html">Writing Your Own Magics</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Sphinx Directives</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#persisting-the-python-session-across-ipython-directive-blocks">Persisting the Python session across IPython directive blocks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-documentation-tests-to-your-ipython-directive">Adding documentation tests to your IPython directive</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#multi-line-input">Multi-line input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#testing-directive-outputs">Testing directive outputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#handling-comments">Handling Comments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#splitting-python-statements-across-lines">Splitting Python statements across lines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pseudo-decorators">Pseudo-Decorators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-IPython.sphinxext.ipython_directive">Automatically generated documentation</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="rich_output.html">6. Rich Output</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pygments.html">7. Pygments highlighting</a></li>
 </ul>
+<p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="API.html">API</a></li>
 </ul>
 
   <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">5. IPython Sphinx Directive</a><ul>
-<li><a class="reference internal" href="#persisting-the-python-session-across-ipython-directive-blocks">5.1. Persisting the Python session across IPython directive blocks</a></li>
-<li><a class="reference internal" href="#adding-documentation-tests-to-your-ipython-directive">5.2. Adding documentation tests to your IPython directive</a></li>
-<li><a class="reference internal" href="#multi-line-input">5.3. Multi-line input</a></li>
-<li><a class="reference internal" href="#testing-directive-outputs">5.4. Testing directive outputs</a><ul>
-<li><a class="reference internal" href="#writing-pure-python-code">5.4.1. Writing Pure Python Code</a></li>
+<li><a class="reference internal" href="#">IPython Sphinx Directive</a><ul>
+<li><a class="reference internal" href="#persisting-the-python-session-across-ipython-directive-blocks">Persisting the Python session across IPython directive blocks</a></li>
+<li><a class="reference internal" href="#adding-documentation-tests-to-your-ipython-directive">Adding documentation tests to your IPython directive</a></li>
+<li><a class="reference internal" href="#multi-line-input">Multi-line input</a></li>
+<li><a class="reference internal" href="#testing-directive-outputs">Testing directive outputs</a><ul>
+<li><a class="reference internal" href="#writing-pure-python-code">Writing Pure Python Code</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#handling-comments">5.5. Handling Comments</a></li>
-<li><a class="reference internal" href="#splitting-python-statements-across-lines">5.6. Splitting Python statements across lines</a></li>
-<li><a class="reference internal" href="#pseudo-decorators">5.7. Pseudo-Decorators</a></li>
-<li><a class="reference internal" href="#configuration-options">5.8. Configuration Options</a></li>
-<li><a class="reference internal" href="#module-IPython.sphinxext.ipython_directive">5.9. Automatically generated documentation</a><ul>
-<li><a class="reference internal" href="#ipython-sphinx-directive-module">5.9.1. IPython Sphinx directive module</a></li>
-<li><a class="reference internal" href="#id1">5.9.2. Pseudo-Decorators</a></li>
-<li><a class="reference internal" href="#to-do">5.9.3. To Do</a></li>
+<li><a class="reference internal" href="#handling-comments">Handling Comments</a></li>
+<li><a class="reference internal" href="#splitting-python-statements-across-lines">Splitting Python statements across lines</a></li>
+<li><a class="reference internal" href="#pseudo-decorators">Pseudo-Decorators</a></li>
+<li><a class="reference internal" href="#module-IPython.sphinxext.ipython_directive">Automatically generated documentation</a><ul>
+<li><a class="reference internal" href="#ipython-sphinx-directive-module">IPython Sphinx directive module</a></li>
+<li><a class="reference internal" href="#id1">Pseudo-Decorators</a></li>
+<li><a class="reference internal" href="#to-do">To Do</a></li>
 </ul>
 </li>
 </ul>
@@ -716,16 +677,16 @@ separated code.</p></li>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="rich_output.html" title="6. Rich Output"
+          <a href="API.html" title="API"
              >next</a> |</li>
         <li class="right" >
-          <a href="custom_magics.html" title="4. Defining custom magics"
+          <a href="custom_magics.html" title="Defining custom magics"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright Copyright (C) 2018-2019 Faris Chugthai.
+        &#169; Copyright (C) 2018-2019 Faris Chugthai.
     </div>
   </body>
 </html>

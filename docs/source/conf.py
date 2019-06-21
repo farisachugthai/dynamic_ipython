@@ -55,7 +55,7 @@ sys.path.insert(0, os.path.abspath(PD))
 # -- Project information -----------------------------------------------------
 
 project = u'Dynamic IPython'
-copyright = u'Copyright (C) 2018-{} Faris Chugthai'.format(datetime.now().year)
+copyright = u'(C) 2018-{} Faris Chugthai'.format(datetime.now().year)
 author = u'fac'
 
 # The short X.Y version
@@ -74,20 +74,24 @@ needs_sphinx = '2.1.0'
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
-    'sphinx.ext.autosummary',
     'sphinx.ext.autosectionlabel',
-    'sphinx.ext.doctest',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.todo',
+    'sphinx.ext.autosummary',
     'sphinx.ext.coverage',
-    'sphinx.ext.mathjax',
-    'sphinx.ext.ifconfig',
-    'sphinx.ext.viewcode',
+    'sphinx.ext.doctest',
+    'sphinx.ext.extlinks',
     'sphinx.ext.githubpages',
+    'sphinx.ext.ifconfig',
+    'sphinx.ext.inheritance_diagram',
+    'sphinx.ext.intersphinx',
+    'sphinx.ext.linkcode',
+    'sphinx.ext.mathjax',
     'sphinx.ext.napoleon',
+    'sphinx.ext.todo',
+    'sphinx.ext.viewcode',
     'IPython.sphinxext.ipython_console_highlighting',
     'IPython.sphinxext.ipython_directive',
     'numpydoc.numpydoc',
+    'matplotlib.sphinxext.plot_directive',
 ]
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -272,6 +276,19 @@ autosummary_imported_members = False
 
 numpydoc_show_class_members = False  # Otherwise Sphinx emits thousands of warnings
 numpydoc_class_members_toctree = False
+
+# -- linkcode ----------------------------------------------------------------
+
+
+def linkcode_resolve(domain, info):
+    """Oddly this function is required for the linkcode extension."""
+    if domain != 'py':
+        return None
+    if not info['module']:
+        return None
+
+    filename = info['module'].replace('.', '/')
+    return "https://github.com/farisachugthai/dynamic_ipython/%s.py" % filename
 
 
 def setup(app):

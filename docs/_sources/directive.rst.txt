@@ -8,24 +8,26 @@ IPython Sphinx Directive
    that IPython has a copy of this document, Matplotlib does too, and so does
    Jupyter. Somehow the one at ipython.readthedocs.com is the most updated one...
 
+.. :%s/ipython /:mod:`IPython` /g netted 11 substitutions on 10 lines....
+
 .. note::
 
    The IPython Sphinx Directive is in 'beta' and currently under
    active development. Improvements to the code or documentation are welcome!
 
-The ipython directive is a stateful ipython shell for embedding in
-sphinx documents.  It knows about standard ipython prompts, and
+The :mod:`IPython` directive is a stateful :mod:`IPython` shell for embedding in
+sphinx documents.  It knows about standard :mod:`IPython` prompts, and
 extracts the input and output lines.  These prompts will be renumbered
 starting at ``1``.  The inputs will be fed to an embedded ipython
 interpreter and the outputs from that interpreter will be inserted as
-well.  For example, code blocks like the following::
+well.  For example, code blocks like the following
 
-  .. ipython::
+.. ipython::
 
-     In [136]: x = 2
+   In [136]: x = 2
 
-     In [137]: x**3
-     Out[137]: 8
+   In [137]: x**3
+   Out[137]: 8
 
 will be rendered as
 
@@ -67,7 +69,7 @@ left off.
 
   In [141]: q = z[)   # this is a syntax error -- we trap ipy exceptions
   ------------------------------------------------------------
-     File "<ipython console>", line 1
+     File "<:mod:`IPython` console>", line 1
        q = z[)   # this is a syntax error -- we trap ipy exceptions
          ^
   SyntaxError: invalid syntax
@@ -77,11 +79,11 @@ Adding documentation tests to your IPython directive
 ====================================================
 
 The embedded interpreter supports some limited markup.  For example,
-you can put comments in your ipython sessions, which are reported
+you can put comments in your :mod:`IPython` sessions, which are reported
 verbatim.  There are some handy "pseudo-decorators" that let you
 doctest the output.  The inputs are fed to an embedded ipython
-session and the outputs from the ipython session are inserted into
-your doc.  If the output in your doc and in the ipython session don't
+session and the outputs from the :mod:`IPython` session are inserted into
+your doc.  If the output in your doc and in the :mod:`IPython` session don't
 match on a doctest assertion, an error will occur.
 
 
@@ -89,7 +91,7 @@ match on a doctest assertion, an error will occur.
 
    In [1]: x = 'hello world'
 
-   # this will raise an error if the ipython output is different
+   # this will raise an error if the :mod:`IPython` output is different
    @doctest
    In [2]: x.upper()
    Out[2]: 'HELLO WORLD'
@@ -120,20 +122,25 @@ Multi-line input is supported.
 Testing directive outputs
 =========================
 
-The IPython Sphinx Directive makes it possible to test the outputs that you provide with your code. To do this,
-decorate the contents in your directive block with one of the following:
+The IPython Sphinx Directive makes it possible to test the outputs that
+you provide with your code. To do this, decorate the contents in your
+directive block with one of the following:
 
   * list directives here
 
-If an IPython doctest decorator is found, it will take these steps when your documentation is built:
+If an IPython doctest decorator is found, it will take these steps when
+your documentation is built:
 
-1. Run the *input* lines in your IPython directive block against the current Python kernel (remember that the session
-persists across IPython directive blocks);
+1. Run the *input* lines in your IPython directive block against the
+   current Python kernel (remember that the session
+   persists across IPython directive blocks);
 
-2. Compare the *output* of this with the output text that you've put in the IPython directive block (what comes
-after `Out[NN]`);
+2. Compare the *output* of this with the output text that you've put
+   in the IPython directive block (what comes
+   after `Out[NN]`);
 
-3. If there is a difference, the directive will raise an error and your documentation build will fail.
+3. If there is a difference, the directive will raise an error and your
+   documentation build will fail.
 
 You can do doctesting on multi-line output as well.  Just be careful
 when using non-deterministic inputs like random numbers in the ipython
@@ -196,15 +203,7 @@ you can do.  When using the matplotlib ``use`` directive, it should
 occur before any import of pylab.  This will not show up in the
 rendered docs, but the commands will be executed in the embedded
 interpreter and subsequent line numbers will be incremented to reflect
-the inputs::
-
-
-  .. ipython::
-     :suppress:
-
-     In [144]: from matplotlib.pylab import *
-
-     In [145]: ion()
+the inputs
 
 .. ipython::
    :suppress:
@@ -392,7 +391,7 @@ And persist across sessions
    print(square(3))
    print(square(-2))
 
-Pretty much anything you can do with the ipython code, you can do with
+Pretty much anything you can do with the :mod:`IPython` code, you can do with
 with a simple python script. Obviously, though it doesn't make sense
 to use the doctest option.
 
@@ -406,7 +405,7 @@ line just below them (eg ``savefig``).
 
 @suppress
 
-    execute the ipython input block, but suppress the input and output
+    execute the :mod:`IPython` input block, but suppress the input and output
     block from the rendered output.  Also, can be applied to the entire
     ``.. ipython`` block as a directive option with ``:suppress:``.
 
@@ -430,44 +429,10 @@ line just below them (eg ``savefig``).
 
 @doctest
 
-    Compare the pasted in output in the ipython block with the output
+    Compare the pasted in output in the :mod:`IPython` block with the output
     generated at doc build time, and raise errors if they don't
     match. Also, can be applied to the entire ``.. ipython`` block as a
     directive option with ``:doctest:``.
-
-Configuration Options
-=====================
-
-ipython_savefig_dir
-
-    The directory in which to save the figures. This is relative to the
-    Sphinx source directory. The default is `html_static_path`.
-
-ipython_rgxin
-
-    The compiled regular expression to denote the start of IPython input
-    lines. The default is `re.compile('In \[(\d+)\]:\s?(.*)\s*')`. You
-    shouldn't need to change this.
-
-ipython_rgxout
-
-    The compiled regular expression to denote the start of IPython output
-    lines. The default is `re.compile('Out\[(\d+)\]:\s?(.*)\s*')`. You
-    shouldn't need to change this.
-
-
-ipython_promptin
-
-    The string to represent the IPython input prompt in the generated ReST.
-    The default is `'In [%d]:'`. This expects that the line numbers are used
-    in the prompt.
-
-ipython_promptout
-
-    The string to represent the IPython prompt in the generated ReST. The
-    default is `'Out [%d]:'`. This expects that the line numbers are used
-    in the prompt.
-
 
 Automatically generated documentation
 =====================================

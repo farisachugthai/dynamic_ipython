@@ -214,7 +214,7 @@ current cell.
 
 hist
 ------
-The syntax for accessing history is admittedly wonky
+The syntax for accessing history is admittedly wonky.
 
 
 history call signature
@@ -234,18 +234,19 @@ Ranges of history can be indicated using the syntax:
     From the first line of 8 sessions ago, to the fifth line of 6
     sessions ago.
 
-Also note multiple ranges can be specified by separating with spaces.
+Multiple ranges can be specified by separating with spaces.
 
-Okay man I think we finally got this!
 
 viewing recently run commands
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-if you run ``_i`` or ``__i`` you see the last two commands inputs.
-if you run ``_`` or ``__`` you get to see the last 2 commands outputs.
+If you run ``_i`` or ``__i`` you see the last two commands inputs.
+
+If you run ``_`` or ``__`` you get to see the last 2 commands outputs.
+
 This works for only the last 3 commands though!
 
-you can also give cell numbers so
+You can also give cell numbers so
 
 ``_i10`` gives the input for cell 10 as a string.
 
@@ -253,10 +254,28 @@ you can also give cell numbers so
 
 The exec command means run the above input again.
 
-Alternatively, the ``%rerun`` magic could be used.
+This is interrelated with the *%recall* command.
 
-There's also a way to access things from previous sessions. which ill discuss
-later.
+%recall
+-------
+
+This is one of the IPython conveniences that makes you understand why they're called
+*magics*.
+
+All too often, one will run into the problem of manipulating some data in the REPL,
+and need a way of interacting with it in a manner similar to a pipeline.
+
+Storing the data may be difficult, or if it simply prints out to console,
+may be impossible.
+
+*%recall* takes the **output**, not the input, of the last run command and
+autoinserts it at the next input prompt.
+
+As a result, this magic works as it's own pipeline.
+
+.. tip::
+
+   recall is also aliased to ``rep`` for repeat.
 
 
 output
