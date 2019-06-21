@@ -6,6 +6,8 @@
 Example of Writing A Custom IPython Extension
 =============================================
 
+.. currentmodule:: extensions.example
+
 Usage
 =====
 
@@ -62,9 +64,9 @@ class ExampleMagic(Magics):
 
 def load_ipython_extension(shell=None):
     """Load the extension in IPython."""
-    _ip.register_magics(ExampleMagic)
+    shell.register_magics(ExampleMagic)
     # _ip.register_magics(ExampleMagic.time_printer)
-    _ip.register_magic_function(ExampleMagic.time_printer)
+    shell.register_magic_function(ExampleMagic.time_printer)
 
 
 if __name__ == "__main__":

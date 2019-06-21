@@ -1,3 +1,8 @@
+"""Jupyter Console config.
+
+.. currentmodule:: jupyter.jupyter_console_config
+
+"""
 from traitlets.config import get_config
 
 c = get_config()
@@ -103,13 +108,28 @@ c.Application.log_level = 20
 
 # Text to display before the first prompt. Will be formatted with variables
 #  {version} and {kernel_banner}.
-# c.ZMQTerminalInteractiveShell.banner = 'Jupyter console {version}\n\n{kernel_banner}'
+c.ZMQTerminalInteractiveShell.banner = ''
 
-# Callable object called via 'callable' image handler with one argument, `data`,
-#  which is `msg["content"]["data"]` where `msg` is the message from iopub
-#  channel.  For exmaple, you can find base64 encoded PNG data as
-#  `data['image/png']`. If your function can't handle the data supplied, it
-#  should return `False` to indicate this.
+
+def zmqterminalinteractiveshell_image():
+    """
+
+    ---------
+
+    Need to set something up for the Jupyter Console image handler.
+    Same thing for QTConsole.
+
+    Callable object called via 'callable' image handler with one argument, `data`,
+    which is `msg["content"]["data"]` where `msg` is the message from iopub
+    channel.  For exmaple, you can find base64 encoded PNG data as
+    `data['image/png']`. If your function can't handle the data supplied, it
+    should return `False` to indicate this.
+
+    So that's the default text you're working with.
+    """
+    pass
+
+
 # c.ZMQTerminalInteractiveShell.callable_image_handler = None
 
 # Set to display confirmation dialog on exit. You can always use 'exit' or

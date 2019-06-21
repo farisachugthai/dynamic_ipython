@@ -42,7 +42,6 @@ def _path_build(root, suffix, validate=True):
 
 
 ROOT = Path('../..').resolve()
-# TODO: Build paths using function above.
 PD = _path_build(ROOT, 'profile_default')
 STARTUP = _path_build(PD, 'startup')
 
@@ -145,7 +144,7 @@ html_theme = 'pyramid'
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = ['../_static']
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
@@ -205,8 +204,9 @@ latex_documents = [
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [(master_doc, 'site-packages', 'site-packages Documentation',
-              [author], 1)]
+man_pages = [(master_doc, 'site-packages', 'site-packages Documentation', [
+    author
+], 1)]
 
 # -- Options for Texinfo output ----------------------------------------------
 
@@ -266,7 +266,12 @@ ipython_warning_is_error = False
 
 autosummary_generate = True
 
-autosummary_imported_members = True
+autosummary_imported_members = False
+
+# -- numpydoc extension ------------------------------------------------------
+
+numpydoc_show_class_members = False  # Otherwise Sphinx emits thousands of warnings
+numpydoc_class_members_toctree = False
 
 
 def setup(app):
@@ -277,6 +282,9 @@ def setup(app):
 
     """
     custom_css = os.path.abspath(
-        os.path.join(CONF_PATH, '_static', '', 'pyramid.css_t'))
+        os.path.join(CONF_PATH, '', '..', '_static', 'pyramid.css'))
+
+    if not os.path.isfile(custom_css):
+        LOGGER.warning('%s is not a file' % custom_css)
     LOGGER.debug(custom_css)
     app.add_stylesheet(custom_css)
