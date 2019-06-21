@@ -422,6 +422,7 @@ c.InteractiveShell.quiet = False
 # Show rewritten input, e.g. for autocall.
 # c.InteractiveShell.show_rewritten_input = True
 
+
 # Jan 20, 2019: Even with docrepr installed this still ends up raising errors.
 # Need to debug later.
 # c.InteractiveShell.sphinxify_docstring = False
@@ -433,8 +434,8 @@ def sphinxify(obj):
 
     """
     import webbrowser
-    from docrepr import sphinxify                 # html generator
-    from IPython.core.oinspect import Inspector   # oinfo generator
+    from docrepr import sphinxify  # html generator
+    from IPython.core.oinspect import Inspector  # oinfo generator
 
     oinfo = Inspector().info(obj)
     url = sphinxify.rich_repr(oinfo)

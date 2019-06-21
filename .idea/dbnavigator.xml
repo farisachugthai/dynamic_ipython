@@ -25,7 +25,7 @@
     <show-object-properties value="true" />
     <loaded-nodes>
       <connection connection-id="aaa1e712-0704-4503-b209-a448f487a9d3">
-        <schema name="main" object-types="column, constraint, index, view, dataset trigger, table" />
+        <schema name="main" object-types="dataset trigger, index, constraint, column, view, table" />
       </connection>
     </loaded-nodes>
   </component>
@@ -35,10 +35,21 @@
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files />
+    <open-files>
+      <object connection-id="aaa1e712-0704-4503-b209-a448f487a9d3" object-ref="schemas/main/tables/history" />
+    </open-files>
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="aaa1e712-0704-4503-b209-a448f487a9d3" />
+  </component>
+  <component name="DBNavigator.Project.DatasetFilterManager">
+    <filter-actions connection-id="aaa1e712-0704-4503-b209-a448f487a9d3" dataset="main.sessions" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="aaa1e712-0704-4503-b209-a448f487a9d3" dataset="main.sqlite_sequence" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="aaa1e712-0704-4503-b209-a448f487a9d3" dataset="main.history" active-filter-id="674fbba3-7017-41d6-85e5-47a1988e6396">
+      <filter id="674fbba3-7017-41d6-85e5-47a1988e6396" name="cd**" temporary="false" custom-name="false" type="basic" join-type="AND">
+        <condition column="source_raw" operator="!=" value="cd**" active="true" />
+      </filter>
+    </filter-actions>
   </component>
   <component name="DBNavigator.Project.EditorStateManager">
     <last-used-providers />
@@ -65,7 +76,7 @@
     <connections>
       <connection id="aaa1e712-0704-4503-b209-a448f487a9d3" active="true">
         <database>
-          <name value="Connection" />
+          <name value="IPython history.bak.sqlite" />
           <description value="" />
           <database-type value="SQLITE" />
           <config-type value="BASIC" />
@@ -74,14 +85,13 @@
           <driver-library value="" />
           <driver value="" />
           <url-type value="FILE" />
-          <host value="" />
-          <port value="" />
-          <database value="" />
+          <host value="localhost" />
+          <port value="1234" />
+          <database value="database" />
           <files>
             <file path="$USER_HOME$/.ipython/profile_default/history.bak.sqlite" schema="main" />
           </files>
-          <os-authentication value="false" />
-          <empty-authentication value="false" />
+          <type value="NONE" />
           <user value="" />
           <deprecated-pwd value="" />
         </database>
@@ -119,7 +129,7 @@
           <max-connection-pool-size value="7" />
           <alternative-statement-delimiter value="" />
         </details>
-        <object-filters hide-empty-schemas="false">
+        <object-filters hide-empty-schemas="true" hide-pseudo-columns="true">
           <object-type-filter use-master-settings="true">
             <object-type name="SCHEMA" enabled="true" />
             <object-type name="USER" enabled="true" />
@@ -209,22 +219,22 @@
           <object-type name="TABLE" enabled="true" />
           <object-type name="VIEW" enabled="true" />
           <object-type name="MATERIALIZED VIEW" enabled="true" />
-          <object-type name="NESTED TABLE" enabled="false" />
-          <object-type name="COLUMN" enabled="false" />
+          <object-type name="NESTED TABLE" enabled="true" />
+          <object-type name="COLUMN" enabled="true" />
           <object-type name="INDEX" enabled="true" />
           <object-type name="CONSTRAINT" enabled="true" />
           <object-type name="DATASET TRIGGER" enabled="true" />
           <object-type name="DATABASE TRIGGER" enabled="true" />
-          <object-type name="SYNONYM" enabled="false" />
+          <object-type name="SYNONYM" enabled="true" />
           <object-type name="SEQUENCE" enabled="true" />
           <object-type name="PROCEDURE" enabled="true" />
           <object-type name="FUNCTION" enabled="true" />
           <object-type name="PACKAGE" enabled="true" />
           <object-type name="TYPE" enabled="true" />
-          <object-type name="TYPE ATTRIBUTE" enabled="false" />
-          <object-type name="ARGUMENT" enabled="false" />
-          <object-type name="DIMENSION" enabled="false" />
-          <object-type name="CLUSTER" enabled="false" />
+          <object-type name="TYPE ATTRIBUTE" enabled="true" />
+          <object-type name="ARGUMENT" enabled="true" />
+          <object-type name="DIMENSION" enabled="true" />
+          <object-type name="CLUSTER" enabled="true" />
           <object-type name="DBLINK" enabled="true" />
         </lookup-objects>
         <force-database-load value="false" />
@@ -274,16 +284,12 @@
       <qualified-text-editor text-length-threshold="300">
         <content-types>
           <content-type name="Text" enabled="true" />
-          <content-type name="Properties" enabled="true" />
           <content-type name="XML" enabled="true" />
           <content-type name="DTD" enabled="true" />
           <content-type name="HTML" enabled="true" />
           <content-type name="XHTML" enabled="true" />
-          <content-type name="CSS" enabled="true" />
           <content-type name="SQL" enabled="true" />
           <content-type name="PL/SQL" enabled="true" />
-          <content-type name="JavaScript" enabled="true" />
-          <content-type name="YAML" enabled="true" />
           <content-type name="Bash" enabled="true" />
         </content-types>
       </qualified-text-editor>

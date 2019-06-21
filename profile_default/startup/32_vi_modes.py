@@ -228,11 +228,9 @@ def main(_ip=None):
     kb.add('escape', 'l', filter=(insert_mode))(named_commands.downcase_word)
     kb.add('escape', 'u', filter=(insert_mode))(named_commands.uppercase_word)
     kb.add('escape', 'y', filter=(insert_mode))(named_commands.yank_pop)
-    kb.add('escape',
-           'backspace',
+    kb.add('escape', 'backspace',
            filter=(insert_mode))(named_commands.backward_kill_word)
-    kb.add('escape',
-           '\\',
+    kb.add('escape', '\\',
            filter=(insert_mode))(named_commands.delete_horizontal_space)
 
     # how do i modify ones with preexisting filters?
