@@ -134,9 +134,10 @@ class PathManagerError(Exception):
 class IPythonPath(ProfileDir):
     """Override IPythons logic in ProfileDir."""
 
-    def __init__(self):
+    def __init__(self, location):
         """Initialize the class."""
         super().__init__()
+        self.location = location
 
     @classmethod
     def find_profile_dir_by_name(cls,

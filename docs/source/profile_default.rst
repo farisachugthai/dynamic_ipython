@@ -24,10 +24,9 @@ README
 :mod:`ipython_kernel_config`
 ----------------------------
 
-.. automodule:: profile_default.ipython_kernel_config
-    :members:
-    :undoc-members:
-    :show-inheritance:
+.. literalinclude:: `~profile_default.ipython_kernel_config`
+   :language: python3
+   :numbered:
 
 
 :mod:`~profile_default.startup.01_rehashx`
