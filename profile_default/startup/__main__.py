@@ -1,6 +1,20 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Define the main startup for the IPython startup directory."""
+"""Define the main startup for the IPython startup directory.
+
+==========
+__main__
+==========
+
+
+Origin
+=======
+
+This definitely came from the IPython team but I need to note where.
+
+Don't remember currently.
+
+"""
 import sys
 
 from IPython import get_ipython

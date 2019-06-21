@@ -10,8 +10,6 @@ Keybindings and Toggling Insert Mode
 
 :URL: https://ipython.readthedocs.io/en/stable/config/details.html#keyboard-shortcuts
 
-.. hope that doesn't crash the interpreter!
-
 Effectively adds :kbd:`j` :kbd:`k` as a way to switch from insert mode to
 normal mode, or as :mod:`prompt_toolkit` calls it, "navigation mode".
 
@@ -24,8 +22,9 @@ Original KeyBindings
 ====================
 
 They're initialized through :func:`IPython.terminal.interactiveshell.create_ipython_shortcuts()`.
-We can save those to a temporary :class:`prompt_toolkit.key_bindings.KeyBindings()` instance, and then
-use the function :func:`prompt_toolkit.key_binding.merge_key_bindings()`
+We can save those to a temporary :class:`prompt_toolkit.key_bindings.KeyBindings()`
+instance, and then use the function
+:func:`prompt_toolkit.key_binding.merge_key_bindings()`
 
 
 Readline Bindings
@@ -60,6 +59,29 @@ while in Vim normal mode. However, very little is bound by default.
 That leaves a LOT to work with in terms of all the functions defined in
 :ref:`prompt_toolkit.key_binding.bindings.default`.
 
+Current Traceback
+==================
+
+Admittedly this is a little ridiculous.
+
+.. ipython
+
+    In [7]: from prompt_toolkit.key_binding.key_bindings import ALL_KEYS
+    In [8]: ALL_KEYS
+    Out[8]:
+    '<Any>',
+    's-tab',
+    '<bracketed-paste>',
+    '<cursor-position-response>',
+     'c-a',
+     'c-@',
+     'c-b',
+     'c-\\',
+     'c-c',
+     'c-^',
+     'c-d',
+     'c-delete',
+
 
 ---------------------
 
@@ -74,10 +96,9 @@ _ip.pt_app.layout.current_buffer : :class:`prompt_toolkit.application.Buffer`
 import logging
 
 from IPython import get_ipython
-from IPython.terminal.interactiveshell import create_ipython_shortcuts
 from prompt_toolkit.enums import DEFAULT_BUFFER
 from prompt_toolkit.filters import HasFocus, ViInsertMode, ViNavigationMode
-from prompt_toolkit.key_binding import merge_key_bindings, KeyBindings
+from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.key_binding.vi_state import InputMode
 from prompt_toolkit.key_binding.bindings import named_commands
 from prompt_toolkit.key_binding.bindings.named_commands import get_by_name
@@ -173,40 +194,46 @@ def main(_ip=None):
     else:
         kb = KeyBindings()
 
-    insert_mode = HasFocus(DEFAULT_BUFFER) & ViInsertMode()
+    insert_mode = (HasFocus(DEFAULT_BUFFER) & ViInsertMode())
 
-    # kb.add_binding(keys=(u'j', u'k'), filter=(insert_mode), handler=(switch_to_navigation_mode))
+    # kb.add_binding(keys=(u'j', u'k'), filter=(insert_mode),
+    # handler=(switch_to_navigation_mode))
     # fuck assert not kwargs is an expression in this so we can't use that but I hope it clarifies the format!
     ph = get_by_name('previous-history')
     nh = get_by_name('next-history')
 
     # kb.add_binding((u'j', u'k'), filter=(insert_mode)(switch_to_navigation_mode))
-    kb.add_binding('K', filter=(HasFocus(DEFAULT_BUFFER) & ViNavigationMode())(ph))
+    kb.add_binding('K',
+                   filter=(HasFocus(DEFAULT_BUFFER) & ViNavigationMode()))(ph)
 
-    kb.add_binding('J', filter=(HasFocus(DEFAULT_BUFFER) & ViNavigationMode())(nh))
+    kb.add_binding('J',
+                   filter=(HasFocus(DEFAULT_BUFFER) & ViNavigationMode()))(nh)
 
     # 06/15/2019: Got it.
-    kb.add('c-a', filter=(insert_mode)(named_commands.beginning_of_line))
+    kb.add('c-a', filter=(insert_mode))(named_commands.beginning_of_line)
     # did you know that C-a won't work? Odd.
-    kb.add('c-b', filter=(insert_mode)(named_commands.backward_char))
-    kb.add('c-d', filter=(insert_mode)(named_commands.delete_char))
-
-    kb.add('c-delete', filter=(insert_mode)(named_commands.kill_word))
-    kb.add('c-e', filter=(insert_mode)(named_commands.end_of_line))
-    kb.add('c-f', filter=(insert_mode)(named_commands.forward_char))
-    kb.add('c-left', filter=(insert_mode)(named_commands.backward_word))
-    kb.add('c-right', filter=(insert_mode)(named_commands.forward_word))
-    kb.add('c-x', 'r', 'y', filter=(insert_mode)(named_commands.yank))
-    kb.add('c-y', filter=(insert_mode)(named_commands.yank))
-    kb.add('escape', 'b', filter=(insert_mode)(named_commands.backward_word))
-    kb.add('escape', 'c', filter=(insert_mode)(named_commands.capitalize_word))
-    kb.add('escape', 'd', filter=(insert_mode)(named_commands.kill_word))
-    kb.add('escape', 'f', filter=(insert_mode)(named_commands.forward_word))
-    kb.add('escape', 'l', filter=(insert_mode)(named_commands.downcase_word))
-    kb.add('escape', 'u', filter=(insert_mode)(named_commands.uppercase_word))
-    kb.add('escape', 'y', filter=(insert_mode)(named_commands.yank_pop))
-    kb.add('escape', 'backspace', filter=(insert_mode)(named_commands.backward_kill_word))
-    kb.add('escape', '\\', filter=(insert_mode)(named_commands.delete_horizontal_space))
+    kb.add('c-b', filter=(insert_mode))(named_commands.backward_char)
+    kb.add('c-d', filter=(insert_mode))(named_commands.delete_char)
+    kb.add('c-delete', filter=(insert_mode))(named_commands.kill_word)
+    kb.add('c-e', filter=(insert_mode))(named_commands.end_of_line)
+    kb.add('c-f', filter=(insert_mode))(named_commands.forward_char)
+    kb.add('c-left', filter=(insert_mode))(named_commands.backward_word)
+    kb.add('c-right', filter=(insert_mode))(named_commands.forward_word)
+    kb.add('c-x', 'r', 'y', filter=(insert_mode))(named_commands.yank)
+    kb.add('c-y', filter=(insert_mode))(named_commands.yank)
+    kb.add('escape', 'b', filter=(insert_mode))(named_commands.backward_word)
+    kb.add('escape', 'c', filter=(insert_mode))(named_commands.capitalize_word)
+    kb.add('escape', 'd', filter=(insert_mode))(named_commands.kill_word)
+    kb.add('escape', 'f', filter=(insert_mode))(named_commands.forward_word)
+    kb.add('escape', 'l', filter=(insert_mode))(named_commands.downcase_word)
+    kb.add('escape', 'u', filter=(insert_mode))(named_commands.uppercase_word)
+    kb.add('escape', 'y', filter=(insert_mode))(named_commands.yank_pop)
+    kb.add('escape',
+           'backspace',
+           filter=(insert_mode))(named_commands.backward_kill_word)
+    kb.add('escape',
+           '\\',
+           filter=(insert_mode))(named_commands.delete_horizontal_space)
 
     # how do i modify ones with preexisting filters?
     # i deleted a bunch of the insert_mode ones off but idk what to do about
