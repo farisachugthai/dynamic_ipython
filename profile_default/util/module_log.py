@@ -102,7 +102,11 @@ def stream_logger(logger, log_level=logging.INFO, msg_format=None):
     return logger
 
 
-def file_logger(filename, logger=None, shell=None, log_level=logging.INFO, msg_format=None):
+def file_logger(filename,
+                logger=None,
+                shell=None,
+                log_level=logging.INFO,
+                msg_format=None):
     r"""Logging that emits :class:`logging.LogRecord`s to `filename`.
 
     Parameters
@@ -123,7 +127,8 @@ def file_logger(filename, logger=None, shell=None, log_level=logging.INFO, msg_f
     logger : :class:`logging.Logger()` instance
 
     """
-    assert isinstance(shell, (IPython.core.interactiveshell.InteractiveShell, None))
+    assert isinstance(shell,
+                      (IPython.core.interactiveshell.InteractiveShell, None))
 
     if shell is not None:
         shell = get_ipython()
@@ -190,12 +195,20 @@ class JsonFormatter(logging.Formatter):
             exc = None
 
         return json.dumps({
-            'msg': record.msg % record.args,
-            'timestamp': datetime.utcfromtimestamp(record.created).isoformat() + 'Z',
-            'func': record.funcName,
-            'level': record.levelname,
-            'module': record.module,
-            'process_id': record.process,
-            'thread_id': record.thread,
-            'exception': exc
+            'msg':
+            record.msg % record.args,
+            'timestamp':
+            datetime.utcfromtimestamp(record.created).isoformat() + 'Z',
+            'func':
+            record.funcName,
+            'level':
+            record.levelname,
+            'module':
+            record.module,
+            'process_id':
+            record.process,
+            'thread_id':
+            record.thread,
+            'exception':
+            exc
         })

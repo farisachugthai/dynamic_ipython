@@ -84,7 +84,8 @@ class Platform:
         self.Path = Path
 
     def __repr__(self):
-        return 'Platform is: {}.\nUse `dir(your_obj)` to view methods.'.format(self._sys_platform)
+        return 'Platform is: {}.\nUse `dir(your_obj)` to view methods.'.format(
+            self._sys_platform)
 
     @property
     def is_win_vt100(self):

@@ -22,7 +22,6 @@ from IPython.core.debugger import BdbQuit_excepthook
 from IPython.terminal.ipapp import TerminalIPythonApp
 from IPython.terminal.embed import InteractiveShellEmbed
 
-
 shell = get_ipython()
 if shell is None:
     # Not inside IPython
@@ -40,5 +39,4 @@ else:
     if isinstance(shell, InteractiveShellEmbed):
         sys.stderr.write(
             "\nYou are currently into an embedded ipython shell,\n"
-            "the configuration will not be loaded.\n\n"
-        )
+            "the configuration will not be loaded.\n\n")

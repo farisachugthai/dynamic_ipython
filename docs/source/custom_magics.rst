@@ -23,26 +23,26 @@ Visualization 1st ed.pdf"*:
    This loading function is called when the extension is loaded, which
    happens when the command is executed.
 
-   .. ipython::
+.. ipython::
 
-      %load_ext  # or
-      %reload_ext magic
+   %load_ext  # or
+   %reload_ext magic
 
-   To automatically load a module when :mod:`IPython` starts,
-   we need to add the module name to the ``c.TerminalIPythonApp.extensions``
-   list in the :mod:`IPython` configuration file.
+To automatically load a module when :mod:`IPython` starts,
+we need to add the module name to the ``c.TerminalIPythonApp.extensions``
+list in the :mod:`IPython` configuration file.
 
-   The |ip| instance represents the active
-   IPython interpreter. Useful methods and attributes include
-   :func:`IPython.core.magic.register_magics()`, to create new magic commands,
-   and ``user_ns``, to access the user namespace. You can
-   explore all the instance's attributes interactively from
-   :mod:`IPython` with tab completion. For that, you need to execute
-   the following command to get the current instance
+The |ip| instance represents the active
+IPython interpreter. Useful methods and attributes include
+:func:`IPython.core.magic.register_magics()`, to create new magic commands,
+and ``user_ns``, to access the user namespace. You can
+explore all the instance's attributes interactively from
+:mod:`IPython` with tab completion. For that, you need to execute
+the following command to get the current instance
 
-   .. code-block:: python3
+.. code-block:: python3
 
-       _ip = get_ipython()
+    _ip = get_ipython()
 
 
 Here are 2 useful functuons for registering a magic with the global IPython
@@ -185,7 +185,7 @@ Inheritance diagram:
 Writing Custom Magics
 ======================
 
-:URL: https://raw.githubusercontent.com/ipython/ipython/523ed2fe58ea5ee9971d2b21df1de33b8cdfa924/docs/source/config/custommagics.rst
+`Custom Magics <https://raw.githubusercontent.com/ipython/ipython/523ed2fe58ea5ee9971d2b21df1de33b8cdfa924/docs/source/config/custommagics.rst>`_:
 
 There are two main ways to define your own magic functions. From standalone
 functions and by inheriting from a base class provided by IPython:
@@ -271,7 +271,7 @@ IPython object:
     # In order to actually use these magics, you must register them with a
     # running IPython.
 
-    def load_ipython_extension(ipython):
+    def load_ipython_extension(shell):
         """
         Any module file that define a function named `load_ipython_extension`
         can be loaded via `%load_ext module.path` or be configured to be
@@ -279,7 +279,7 @@ IPython object:
         You can register the class itself without instantiating it.  IPython will
         call the default constructor on it.
         """
-        ipython.register_magics(MyMagics)
+        shell.register_magics(MyMagics)
 
 If you want to create a class with a different constructor that holds
 additional state, then you should always call the parent constructor and
@@ -402,7 +402,7 @@ Creating IPython Extensions
     :mod:`IPython` with tab completion. For that, you need to execute
     the following command to get the current instance.::
 
-        from IPython import get_ipython
-        ip = get_ipython()
+       from IPython import get_ipython
+       ip = get_ipython()
 
     And then access attributes with the ``ip`` object.
