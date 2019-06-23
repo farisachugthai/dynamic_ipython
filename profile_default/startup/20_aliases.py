@@ -9,21 +9,25 @@ IPython Aliases
 .. module:: aliases
     :synopsis: Create aliases for :mod:`IPython` to ease use as a system shell.
 
-.. rubric:: Changelog - Mar 03, 2019
-
-    Moved git aliases into new :func:`common_aliases()`
-
-.. versionchanged:: May 18, 2019
-
-    IPython might've deprecated |ip| function
-    :func:`MagicsManager.define_alias` and replaced it with
-    :func:`MagicsManager.register_alias`
+.. rubric:: Moved git aliases into new :func:`common_aliases()`
 
 Overview
 ========
 
 This module utilizes `_ip`, the global :mod:`IPython` |ip|
-instance, and fills the ``user_ns`` with common Linux idioms.
+instance, and fills the ``user_ns`` with aliases that are functionally
+useful while working in a shell.
+
+As a result, the module needs to test the user's OS, what shell they're using
+and what executables are available on the :envvar:`PATH`.
+
+On Linux platforms, it is assumed that the user is using a bash shell.
+
+However on Windows, it is possible that the user has a shell that runs
+``dosbatch``, ``powershell``, or ``bash``.
+
+As a result, the environment variable :envvar:`shell` is checked, and if present,
+that value is used.
 
 
 Parameters
@@ -133,11 +137,7 @@ def linux_specific_aliases(_ip=None):
     _ip : |ip|
         The global instance of :mod:`IPython`.
 
-
     Below is the source code for the function that is invoked here.
-
-    .. if the undefined self.shell kills things then just don't make this
-    .. an executable code block
 
     .. code-block:: python3
 
@@ -208,7 +208,6 @@ def common_aliases(_ip=None):
     ----------
     _ip : |ip|
         The global instance of IPython.
-
 
     Returns
     -------
@@ -305,13 +304,7 @@ def common_aliases(_ip=None):
 
 
 def cmd_aliases(_ip=None):
-    r"""Aliases for the cmd interpreter specifically.
-
-    .. todo::
-
-        Do a :envvar:`COMSPEC` check.
-
-    """
+    r"""Aliases for the cmd interpreter specifically."""
     _ip.user_aliases = [
         ('copy', 'copy'),
         ('ddir', 'dir /ad /on'),
@@ -326,7 +319,7 @@ def cmd_aliases(_ip=None):
 
 
 def windows_aliases(_ip=None):
-    r"""Aliases for Windows OSes.
+    r"""Aliases for Windows OSes using :command:`powershell`.
 
     Has only been tested on Windows 10 in a heavily configured environment.
 
@@ -340,11 +333,6 @@ def windows_aliases(_ip=None):
                  upon being set. They're unfortunately aliases to cmd commands
                  and as a result don't run correctly in PowerShell...
 
-    .. note::
-
-        The environment variable :envvar:`COMSPEC` is checked to determine the
-        default shell and it is assumed the user is running IPython from there
-        which may not always be true.
 
     .. code-block:: powershell
 

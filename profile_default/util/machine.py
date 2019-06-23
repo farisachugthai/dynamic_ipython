@@ -17,8 +17,12 @@ The class can be easily initialized with::
 
 .. i ran a doctest and got the following...what does a negative number mean?
 .. Testing started at 11:37 PM ...
-.. C:\\Users\\faris\\Anaconda3\\envs\\dynamic\\python.exe C:\\Users\\faris\\AppData\\Local\\JetBrains\\Toolbox\\apps\\PyCharm-P\\ch-0\\191.7479.10\\helpers\\pycharm\\docrunner.py C:/Users/faris/projects/dynamic_ipython/profile_default/util/machine.py
-.. C:\\Users\\faris\\AppData\\Local\\JetBrains\\Toolbox\\apps\\PyCharm-P\\ch-0\\191.7479.10\\helpers\\pycharm\\docrunner.py:1: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+.. C:\\Users\\faris\\Anaconda3\\envs\\dynamic\\python.exe
+.. C:\\Users\\faris\\AppData\\Local\\JetBrains\\Toolbox\\apps\\PyCharm-P\\ch-0\\191.7479.10\\helpers\\pycharm\\docrunner.py
+.. C:/Users/faris/projects/dynamic_ipython/profile_default/util/machine.py
+.. C:\\Users\\faris\\AppData\\Local\\JetBrains\\Toolbox\\apps\\PyCharm-P\\ch-0\\191.7479.10\\helpers\\pycharm\\docrunner.py:1:
+.. DeprecationWarning: the imp module is deprecated in favour of importlib;
+.. see the module's documentation for alternative uses
 .. import imp
 .. Process finished with exit code -1073741571 (0xC00000FD)
 
@@ -48,17 +52,13 @@ from profile_default.util import module_log
 class Platform:
     """Abstract away platform differences.
 
-    Initializing the class now causes issues during IPython startup.
-    Glossing over the source for pathlib indicates that there's a class
-    Flavour that's created at some point in the `Path.__new__()` func.
+    After toying with the initial implementation,I realized I could simply
+    bind the :class:`pathlib.Path()` instance directly to :ref:`Platform`
+    during initialization.
 
-    Seemingly going to be more difficult than anticipated to subclass Path.
-
-    After struggling for a while and considering a variety of options,
-    including decorating a :ref:`pathlib.Path` subclass with the methods I
-    wanted to implement, I realized that as no methods are going to be
-    explicitly overridden, I could simply bind the :class:`pathlib.Path()`
-    instance directly to :ref:`Platform` during initialization.
+    This allows for a user to check the `sys.platform` instance, and then
+    act in an appropriate manner without knowing what the :class:`pathlib.Path()`
+    actually initialized to.
 
     Parameters
     ----------
@@ -83,8 +83,9 @@ class Platform:
         self.is_conemu = is_conemu_ansi()
         self.Path = Path
 
-    def __repr__(self):
-        return 'Platform is: {}.\nUse `dir(your_obj)` to view methods.'.format(self._sys_platform)
+    def __str__(self):
+        return '{!s} is: {!s}.\nUse `dir(your_obj)` to view methods.'.format(
+            self.__class__.__name__, self._sys_platform)
 
     @property
     def is_win_vt100(self):
