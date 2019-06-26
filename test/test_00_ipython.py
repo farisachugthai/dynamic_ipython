@@ -11,8 +11,9 @@ class TestIPython(unittest.TestCase):
 
     shell = get_ipython()
 
-    def __init__(self):
+    def __init__(self, shell):
         self.shell = shell
+        super().__init__()
 
     def test_ipython(self):
         self.assertIsInstance(self.shell, IPython.core.interactiveshell.InteractiveShell)

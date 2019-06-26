@@ -7,8 +7,8 @@ These are the auto-generated documents for the Jupyter shell.
 Note that they may not accurately reflect the API as they display the interface
 at the time of writing.
 
-:mod:`jupyter_conf.jupyter_qtconsole_config`
-============================================
+:mod:`jupyter_conf.qtconsole`
+=============================
 
 .. automodule:: jupyter_conf.jupyter_qtconsole_config
     :members:
@@ -16,19 +16,26 @@ at the time of writing.
     :show-inheritance:
 
 
+<<<<<<< Updated upstream
+:mod:`jupyter_conf.notebook`
+============================
+||||||| merged common ancestors
 :mod:`jupyter_conf.jupyter_notebook_config`
 ===========================================
+=======
+:mod:`~jupyter_conf.jupyter_notebook_config`
+===========================================
+>>>>>>> Stashed changes
 
-.. nope not anymore autofunction:: jupyter_conf.jupyter_notebook_config.jupyter_specific_configs
 
-.. automodule:: `~jupyter_conf.jupyter_notebook_config`
+.. automodule:: `jupyter_conf.jupyter_notebook_config`
     :members:
     :undoc-members:
     :show-inheritance:
 
 
-:mod:`jupyter_conf.jupyter_nbconvert_config`
-============================================
+:mod:`jupyter_conf.nbconvert`
+=============================
 
 .. automodule:: `jupyter_conf.jupyter_nbconvert_config`
     :members:
@@ -36,8 +43,8 @@ at the time of writing.
     :show-inheritance:
 
 
-:mod:`jupyter_conf.jupyter_labextension_config`
-===============================================
+:mod:`jupyter_conf.labextension_config`
+=================================
 
 .. automodule:: `jupyter_conf.jupyter_labextension_config`
     :members:
@@ -45,8 +52,8 @@ at the time of writing.
     :show-inheritance:
 
 
-:mod:`jupyter_conf.jupyter_console_config`
-==========================================
+:mod:`jupyter_conf.console_config`
+===========================
 
 .. automodule:: jupyter_conf.jupyter_console_config
     :members:

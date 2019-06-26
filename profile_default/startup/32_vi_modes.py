@@ -21,7 +21,8 @@ Ultimately this module hopes to implementing Tim Pope's rsi plugin in IPython.
 Original KeyBindings
 ====================
 
-They're initialized through :func:`IPython.terminal.interactiveshell.create_ipython_shortcuts()`.
+They're initialized through
+:func:`IPython.terminal.interactiveshell.create_ipython_shortcuts()`.
 We can save those to a temporary :class:`prompt_toolkit.key_bindings.KeyBindings()`
 instance, and then use the function
 :func:`prompt_toolkit.key_binding.merge_key_bindings()`
@@ -169,6 +170,7 @@ def main(_ip=None):
     kb.add('c-a', filter=(insert_mode))(named_commands.beginning_of_line)
     # did you know that C-a won't work? Odd.
     kb.add('c-b', filter=(insert_mode))(named_commands.backward_char)
+    kb.add('c-d', filter=(insert_mode))(named_commands.delete_char)
     kb.add('c-delete', filter=(insert_mode))(named_commands.kill_word)
     kb.add('c-e', filter=(insert_mode))(named_commands.end_of_line)
     kb.add('c-f', filter=(insert_mode))(named_commands.forward_char)
