@@ -16,12 +16,19 @@ at the time of writing.
     :show-inheritance:
 
 
+<<<<<<< Updated upstream
 :mod:`jupyter_conf.notebook`
 ============================
+||||||| merged common ancestors
+:mod:`jupyter_conf.jupyter_notebook_config`
+===========================================
+=======
+:mod:`~jupyter_conf.jupyter_notebook_config`
+===========================================
+>>>>>>> Stashed changes
 
-.. nope not anymore autofunction:: jupyter_conf.jupyter_notebook_config.jupyter_specific_configs
 
-.. automodule:: `~jupyter_conf.jupyter_notebook_config`
+.. automodule:: `jupyter_conf.jupyter_notebook_config`
     :members:
     :undoc-members:
     :show-inheritance:
