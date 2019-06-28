@@ -68,6 +68,7 @@ instance.
 
 Magic Function Parameters
 -------------------------
+
 func : callable
  Function to be registered as a magic.
 
@@ -108,6 +109,7 @@ Example usage exists on the official website as well.
 
 Tldr
 ----
+
 Writing the extension:
 
 - Import the global :mod:`IPython` instance with::
@@ -120,15 +122,16 @@ Writing the extension:
 
 If you want to try out your ipython magics you can do the following:
 
-- Load your magic with::
+- Load your magic with:
 
-    ip.magic('load_ext your_magic_name')
+    ``ip.magic('load_ext your_magic_name')``
 
-- Run your magic with::
+- Run your magic with:
 
-    ip.run_line_magic('your_magic_function', 'your_magic_arguments')
+    ``ip.run_line_magic('your_magic_function', 'your_magic_arguments')``
 
-*(Optional) Access results of your magic with ip.user_ns (ipython user namespace).*
+*(Optional) Access results of your magic with :attr:`ip.user_ns``
+in the IPython user namespace.*
 
 Admittedly I regularly flood my ``user_ns`` so this might not be viable in all
 cases.
@@ -137,6 +140,7 @@ However in a testing situation this could prove beneficial.
 
 Alternative Method of Defining Magics with Arguments
 ----------------------------------------------------
+
 From the IPython team directly. The following is the module docstring for
 :mod:`~IPython.core.magic_arguments`.
 
@@ -153,7 +157,6 @@ New magic functions can be defined like so::
 
     """
         args = parse_argstring(magic_cool, arg)
-        ...
 
 The `@magic_arguments` decorator marks the function as having argparse arguments.
 The `@argument` decorator adds an argument using the same syntax as argparse's
@@ -162,23 +165,23 @@ The `@argument` decorator adds an argument using the same syntax as argparse's
 parsing.
 
 Help text for the magic is automatically generated from the docstring and the
-arguments::
+arguments
+
+.. code-block:: none
 
     In[1]: %cool?
-        %cool [-o OPTION] arg
+           %cool [-o OPTION] arg
 
-        A really cool magic command.
+           A really cool magic command.
 
-        positional arguments:
-          arg                   An integer positional argument.
+           positional arguments:
+             arg                   An integer positional argument.
 
-        optional arguments:
-          -o OPTION, --option OPTION
-                                An optional argument.
+           optional arguments:
+             -o OPTION, --option OPTION      An optional argument.
 
 Inheritance diagram:
 
-.. why am i getting an error 'unknown directive type?
 .. inheritance-diagram: IPython.core.magic_arguments
    :parts: 3
 
@@ -230,7 +233,7 @@ magic, a cell one and one that works in both modes, using just plain functions:
 
 
 You can also create magics of all three kinds by inheriting from the
-:class:`IPython.core.magic.Magics` class.  This lets you create magics that can
+:class:`IPython.core.magic.Magics()` class.  This lets you create magics that can
 potentially hold state in between calls, and that have full access to the main
 IPython object:
 
@@ -346,7 +349,7 @@ setuptools, distutils, or any other distribution tools like `flit
 
    from .abracadabra import Abracadabra
 
-   def load_ipython_extension(ipython):
+   def load_ipython_extension(_ip):
        ipython.register_magics(Abracadabra)
 
 .. sourcecode:: bash
@@ -400,7 +403,7 @@ Creating IPython Extensions
     , to create new magic commands, and ``user_ns``, to access the user
     namespace. You can explore all the instance's attributes interactively from
     :mod:`IPython` with tab completion. For that, you need to execute
-    the following command to get the current instance.::
+    the following command to get the current instance.:
 
        from IPython import get_ipython
        ip = get_ipython()

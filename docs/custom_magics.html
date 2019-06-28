@@ -16,7 +16,7 @@
     <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="IPython Sphinx Directive" href="directive.html" />
+    <link rel="next" title="API" href="API.html" />
     <link rel="prev" title="IPython Magics" href="magics.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
@@ -36,7 +36,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="directive.html" title="IPython Sphinx Directive"
+          <a href="API.html" title="API"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="magics.html" title="IPython Magics"
@@ -156,17 +156,18 @@ magic_objects : one or more classes or instances
 <p>If you want to try out your ipython magics you can do the following:</p>
 <ul>
 <li><p>Load your magic with:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ip</span><span class="o">.</span><span class="n">magic</span><span class="p">(</span><span class="s1">&#39;load_ext your_magic_name&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">ip.magic('load_ext</span> <span class="pre">your_magic_name')</span></code></p>
+</div></blockquote>
 </li>
 <li><p>Run your magic with:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ip</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s1">&#39;your_magic_function&#39;</span><span class="p">,</span> <span class="s1">&#39;your_magic_arguments&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">ip.run_line_magic('your_magic_function',</span> <span class="pre">'your_magic_arguments')</span></code></p>
+</div></blockquote>
 </li>
 </ul>
-<p><em>(Optional) Access results of your magic with ip.user_ns (ipython user namespace).</em></p>
+<p><em>(Optional) Access results of your magic with :attr:`ip.user_ns``
+in the IPython user namespace.</em></p>
 <p>Admittedly I regularly flood my <code class="docutils literal notranslate"><span class="pre">user_ns</span></code> so this might not be viable in all
 cases.</p>
 <p>However in a testing situation this could prove beneficial.</p>
@@ -187,7 +188,6 @@ cases.</p>
 
 <span class="sd">&quot;&quot;&quot;</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">parse_argstring</span><span class="p">(</span><span class="n">magic_cool</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
-    <span class="o">...</span>
 </pre></div>
 </div>
 <p>The <code class="xref py py-obj docutils literal notranslate"><span class="pre">&#64;magic_arguments</span></code> decorator marks the function as having argparse arguments.
@@ -196,18 +196,17 @@ The <code class="xref py py-obj docutils literal notranslate"><span class="pre">
 <code class="xref py py-obj docutils literal notranslate"><span class="pre">&#64;argument_group</span></code> or <code class="xref py py-obj docutils literal notranslate"><span class="pre">&#64;kwds</span></code> decorator to customize the formatting and the
 parsing.</p>
 <p>Help text for the magic is automatically generated from the docstring and the
-arguments:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>In[1]: %cool?
-    %cool [-o OPTION] arg
+arguments</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>In[1]: %cool?
+       %cool [-o OPTION] arg
 
-    A really cool magic command.
+       A really cool magic command.
 
-    positional arguments:
-      arg                   An integer positional argument.
+       positional arguments:
+         arg                   An integer positional argument.
 
-    optional arguments:
-      -o OPTION, --option OPTION
-                            An optional argument.
+       optional arguments:
+         -o OPTION, --option OPTION      An optional argument.
 </pre></div>
 </div>
 <p>Inheritance diagram:</p>
@@ -253,7 +252,7 @@ magic, a cell one and one that works in both modes, using just plain functions:<
 </pre></div>
 </div>
 <p>You can also create magics of all three kinds by inheriting from the
-<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.magic.html#IPython.core.magic.Magics" title="(in IPython v7.5.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.magic.Magics</span></code></a> class.  This lets you create magics that can
+<code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.magic.Magics()</span></code> class.  This lets you create magics that can
 potentially hold state in between calls, and that have full access to the main
 IPython object:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># This code can be put in any Python module, it does not require IPython</span>
@@ -329,7 +328,7 @@ setuptools, distutils, or any other distribution tools like <a class="reference 
 
 <span class="kn">from</span> <span class="nn">.abracadabra</span> <span class="kn">import</span> <span class="n">Abracadabra</span>
 
-<span class="k">def</span> <span class="nf">load_ipython_extension</span><span class="p">(</span><span class="n">ipython</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">load_ipython_extension</span><span class="p">(</span><span class="n">_ip</span><span class="p">):</span>
     <span class="n">ipython</span><span class="o">.</span><span class="n">register_magics</span><span class="p">(</span><span class="n">Abracadabra</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -375,10 +374,10 @@ Useful methods and attributes include <a class="reference external" href="https:
 namespace. You can explore all the instance’s attributes interactively from
 <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.5.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> with tab completion. For that, you need to execute
 the following command to get the current instance.:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython</span> <span class="k">import</span> <span class="n">get_ipython</span>
-<span class="n">ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-</pre></div>
-</div>
+<blockquote>
+<div><p>from IPython import get_ipython
+ip = get_ipython()</p>
+</div></blockquote>
 <p>And then access attributes with the <code class="docutils literal notranslate"><span class="pre">ip</span></code> object.</p>
 </div></blockquote>
 </div>
@@ -394,7 +393,7 @@ the following command to get the current instance.:</p>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="magics.html" title="previous chapter">IPython Magics</a></li>
-      <li>Next: <a href="directive.html" title="next chapter">IPython Sphinx Directive</a></li>
+      <li>Next: <a href="API.html" title="next chapter">API</a></li>
   </ul></li>
 </ul>
 <h3><a href="index.html">Table of Contents</a></h3>
@@ -410,7 +409,6 @@ the following command to get the current instance.:</p>
 <li class="toctree-l2"><a class="reference internal" href="#complete-example">Complete Example</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="directive.html">Sphinx Directives</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
@@ -466,7 +464,7 @@ the following command to get the current instance.:</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="directive.html" title="IPython Sphinx Directive"
+          <a href="API.html" title="API"
              >next</a> |</li>
         <li class="right" >
           <a href="magics.html" title="IPython Magics"

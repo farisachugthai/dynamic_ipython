@@ -35,7 +35,7 @@ def _path_build(root, suffix, validate=True):
             new = root.joinpath(suffix)
             return new
         else:
-            LOGGER.error('%(root)s: does not exist. Returning None.')
+            LOGGER.error('%s: does not exist. Returning None.' % root)
 
     else:
         return root.joinpath(suffix)
@@ -91,7 +91,6 @@ extensions = [
     'IPython.sphinxext.ipython_console_highlighting',
     'IPython.sphinxext.ipython_directive',
     'numpydoc.numpydoc',
-    'matplotlib.sphinxext.plot_directive',
 ]
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

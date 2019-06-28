@@ -6,7 +6,7 @@
 Jupyter Notebook
 ================
 
-.. currentmodule:: jupyter_conf.jupyter_notebook_config
+.. module:: jupyter_conf.jupyter_notebook_config
 
 .. just indented 371 lines. Gonna set off so many linters.
 

@@ -4,7 +4,7 @@
 Jupyter QTConsole
 ==================
 
-.. currentmodule:: jupyter.jupyter_qtconsole_config
+.. module:: jupyter_conf.jupyter_qtconsole_config
 
 May 27, 2019:
 
@@ -53,6 +53,8 @@ May 27, 2019:
 
 So we have to debug that because the keyboard isn't working on jupyter
 qtconsole :/
+
+--------
 
 """
 import logging
@@ -151,7 +153,7 @@ c.JupyterConsoleApp.kernel_name = 'python3'
 c.Application.log_datefmt = '%Y-%m-%d %H:%M:%S'
 
 # The Logging format template
-c.Application.log_format = '[%(name)s]%(highlevel)s %(message)s'
+c.Application.log_format = '%(pid)s - [%(name)s] : %(highlevel)s %(message)s'
 
 # Set the log level by value or name.
 c.Application.log_level = 20

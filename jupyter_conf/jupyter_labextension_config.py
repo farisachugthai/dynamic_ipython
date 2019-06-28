@@ -1,3 +1,12 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""Jupyter Lab Extension Config.
+
+-----
+
+.. module:: jupyter_labextension_config
+
+"""
 # Configuration file for jupyter labextension.
 from traitlets.config import get_config
 c = get_config()

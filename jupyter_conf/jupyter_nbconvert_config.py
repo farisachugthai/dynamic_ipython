@@ -120,21 +120,21 @@ c.NbConvertApp.export_format = 'executable'
 # ------------------------------------------------------------------------------
 
 # Exports notebooks into other file formats.  Uses Jinja 2 templating engine to
-#  output new formats.  Inherit from this class if you are creating a new
-#  template type along with new filters/preprocessors.  If the filters/
-#  preprocessors provided by default suffice, there is no need to inherit from
-#  this class.  Instead, override the template_file and file_extension traits via
-#  a config file.
+# output new formats.  Inherit from this class if you are creating a new
+# template type along with new filters/preprocessors.  If the filters/
+# preprocessors provided by default suffice, there is no need to inherit from
+# this class.  Instead, override the template_file and file_extension traits via
+# a config file.
 #
-#  Filters available by default for templates:
+# Filters available by default for templates:
 #
-#  - add_anchor - add_prompts - ansi2html - ansi2latex - ascii_only -
-#  citation2latex - comment_lines - convert_pandoc - escape_latex -
-#  filter_data_type - get_lines - get_metadata - highlight2html - highlight2latex
-#  - html2text - indent - ipython2python - json_dumps - markdown2asciidoc -
-#  markdown2html - markdown2latex - markdown2rst - path2url - posix_path -
-#  prevent_list_blocks - strip_ansi - strip_dollars - strip_files_prefix -
-#  wrap_text
+# - add_anchor - add_prompts - ansi2html - ansi2latex - ascii_only -
+# citation2latex - comment_lines - convert_pandoc - escape_latex -
+# filter_data_type - get_lines - get_metadata - highlight2html - highlight2latex
+# - html2text - indent - ipython2python - json_dumps - markdown2asciidoc -
+# markdown2html - markdown2latex - markdown2rst - path2url - posix_path -
+# prevent_list_blocks - strip_ansi - strip_dollars - strip_files_prefix -
+# wrap_text
 
 # This allows you to exclude code cells from all templates if set to True.
 # c.TemplateExporter.exclude_code_cell = False
@@ -167,13 +167,11 @@ c.NbConvertApp.export_format = 'executable'
 # formats of raw cells to be included in this Exporter's output.
 # c.TemplateExporter.raw_mimetypes = []
 
-#
 # c.TemplateExporter.template_extension = '.tpl'
 
 # Name of the template file to use
 # c.TemplateExporter.template_file = ''
 
-#
 # c.TemplateExporter.template_path = ['.']
 
 # ------------------------------------------------------------------------------
@@ -205,7 +203,6 @@ c.NbConvertApp.export_format = 'executable'
 #  config option.  Place your template in the special "/latex"  subfolder of the
 #  "../templates" folder.
 
-#
 # c.LatexExporter.template_extension = '.tplx'
 
 # ------------------------------------------------------------------------------
@@ -451,10 +448,12 @@ c.NbConvertApp.export_format = 'executable'
 #  are returned in the 'resources' dictionary.
 
 #
-# c.ExtractOutputPreprocessor.extract_output_types = {'image/png', 'application/pdf', 'image/jpeg', 'image/svg+xml'}
+# c.ExtractOutputPreprocessor.extract_output_types = {'image/png',
+# 'application/pdf', 'image/jpeg', 'image/svg+xml'}
 
 #
-# c.ExtractOutputPreprocessor.output_filename_template = '{unique_key}_{cell_index}_{index}{extension}'
+# c.ExtractOutputPreprocessor.output_filename_template =
+# '{unique_key}_{cell_index}_{index}{extension}'
 
 # ------------------------------------------------------------------------------
 # HighlightMagicsPreprocessor(Preprocessor) configuration

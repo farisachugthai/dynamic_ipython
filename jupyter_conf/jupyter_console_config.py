@@ -1,6 +1,9 @@
 """Jupyter Console config.
 
-.. currentmodule:: jupyter.jupyter_console_config
+.. module:: jupyter_conf.jupyter_console_config
+
+Running the program :program:`jupyter console` emits a deprecaion warning so
+not much going on here.
 
 """
 from traitlets.config import get_config
