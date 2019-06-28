@@ -30,49 +30,63 @@ are as follows:
     >>> c = create_ipython_shortcuts(ip)
     >>> # This will give you the following methods
     >>> print(dir(c))
-        ['_KeyBindings__version',
-        ...
-        '_abc_impl',
-        '_clear_cache',
-        '_get_bindings_for_keys_cache',
-        '_get_bindings_starting_with_keys_cache'
-        '_version',
-        'add',
-        'add_binding',
-        'bindings',
-        'get_bindings_for_keys',
-        'get_bindings_starting_with_keys',
-        'remove',
-        'remove_binding']
+
+This will produce an output of:
+
+.. code-block:: none
+
+   ['_KeyBindings__version',
+   ...
+   '_abc_impl',
+   '_clear_cache',
+   '_get_bindings_for_keys_cache',
+   '_get_bindings_starting_with_keys_cache'
+   '_version',
+   'add',
+   'add_binding',
+   'bindings',
+   'get_bindings_for_keys',
+   'get_bindings_starting_with_keys',
+   'remove',
+   'remove_binding']
 
 
 Original File Implementation
 ----------------------------
 
-Go to the IPython root dir. This could be named something to the effect of
-`<~/miniconda3/lib/python3.7/site-packages/IPython/>`_
+Let's first check out how keybindings were originally implemented to give
+ourselves a frame of reference.:
 
-To find it programtically, one can use::
+.. ipython::
 
-   >>> from IPython.paths import get_ipython_package_dir
-   >>> print(get_ipython_package_dir())
+   In [1]: from IPython.paths import get_ipython_package_dir
+   In [2]: get_ipython_package_dir()
+
+Go to the directory where IPython is installed. You can use the code above
+to check its location.
+
+This could be named something to the effect of
+`<~/miniconda3/lib/python3.7/site-packages/IPython/>`_ for example.
 
 Then navigate to the root of that directory and go to the terminal package.
 
 .. ipython::
+   :okexcept:
 
     %cd /usr/lib/python3.7/site-packages/IPython
     %cd terminal
     %pycat shortcuts
 
-Up at the top you have the keybindings :mod:`IPython` ships with listed
-for ya!
+Up at the top you have the keybindings :mod:`IPython` ships with!
 
 Official IPython Documentation
 ==============================
 
 Before we dive straight into the source code, let's check out how IPython
 describes the process of re-binding keys.
+
+Conditional Filters
+-------------------
 
 .. code-block:: python3
 
@@ -103,19 +117,24 @@ The documentation also shows a way of adding a `Conditional` Filter
 *a la Prompt Toolkit* to the Enter key. Looks like it invokes some
 :class:`prompt_toolkit.application.Buffer()` type code.
 
-Continue on in this fashion for as long as you need. In my opinion, IPython barely comes
-with any keybindings. I'm going to drop 1 that I thought was interesting
-though.
+Continue on in this fashion for as long as you need. In my opinion,
+IPython barely comes with any keybindings.
+
+The source code does provide this however:
 
 .. code-block:: python3
 
    # Ctrl+J == Enter, seemingly
    registry.add_binding(Keys.ControlJ,
                         filter=(HasFocus(DEFAULT_BUFFER)
-                        & ~HasSelection()
-                        & insert_mode
-                        ))
+                        & ~HasSelection() & insert_mode))
                         (return_handler)
+
+This displays a few useful ways of doing things.
+
+1. Importing :class:`~prompt_toolkit.key_bindings.bindings.Keys()` as a more
+   consistent interface than passing strings.
+2. Utilizing a function ``return_handler`` inline to decorate the keybinding.
 
 Pure Prompt Toolkit Way of Rebinding Keys
 --------------------------------------------
@@ -123,7 +142,8 @@ Pure Prompt Toolkit Way of Rebinding Keys
 There are 3 different sections in the Prompt Toolkit Official Documentation
 on how to rebind keys using the package.
 
-The first time it's mentioned is in the :doc:`prompt_toolkit.asking_for_input` document.:
+The first time it's mentioned is in the :doc:`prompt_toolkit.asking_for_input`
+document.:
 
 Adding custom key bindings
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
