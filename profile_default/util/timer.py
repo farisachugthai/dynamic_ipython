@@ -21,3 +21,5 @@ def timer(func):
         return value
 
     return wrapper_timer
+
+# class ModuleTimer()

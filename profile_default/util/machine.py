@@ -72,8 +72,7 @@ class Platform:
         self.Path = Path
 
     def __str__(self):
-        return '{!s} is: {!s}.\nUse `dir(your_obj)` to view methods.'.format(
-            self.__class__.__name__, self._sys_platform)
+        return '{!s} platform: {!s}.'.format(self.__class__.__name__, self._sys_platform)
 
     @property
     def is_win_vt100(self):

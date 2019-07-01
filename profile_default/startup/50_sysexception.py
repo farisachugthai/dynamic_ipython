@@ -6,9 +6,14 @@
 Customized Exceptions
 =====================
 
-.. currentmodule:: 50_sysexception
+.. module:: 50_sysexception
+   :synopsis: Specify a handler for IPython's traceback formatting.
 
-This is definitely exceaaively long but look at how cute and personal this
+.. versionchanged:: 06/30/2019: Testing out
+                    :class:`~IPython.core.ultratb.AutoFormattedTb()`
+
+
+This is excessively long but look at how cute and personal this
 help doc is for :ref:`IPython.core.ultratb`!!:
 
 
@@ -68,6 +73,12 @@ DESCRIPTION
 
     Note:  Much of the code in this module was lifted verbatim from the standard
     library module 'traceback.py' and Ka-Ping Yee's 'cgitb.py'.
+
+----------
+
+This guy was even so kind as to give us a full explanation for the color
+schemes! I never saw anything this thorough in the official docs so that's
+really cool.:
 
     Color schemes
     -------------
@@ -150,23 +161,45 @@ DATA
     DEFAULT_SCHEME = 'NoColor'
     INDENT_SIZE = 8
 
-
-
 """
 import sys
 
+from IPython.core import ultratb
+
 
 class ExceptionHook(BaseException):
-    """Custom exception hook for IPython."""
+    """Custom exception hook for IPython.
+
+    From the IPython official documentation:
+
+    Print out a formatted exception traceback.
+
+        Optional arguments:
+          - out: an open file-like object to direct output to.
+
+          - tb_offset: the number of frames to skip over in the stack, on a
+          per-call basis (this overrides temporarily the instance's tb_offset
+          given at initialization time.
+
+    Parameters
+    ----------
+    *args, **kwargs : The least useful call signature
+
+    See Also
+    --------
+    IPython.core.ultratb.FormattedTB
+        Displays all accepted keyword arguments.
+
+    """
 
     instance = None
 
     def __call__(self, *args, **kwargs):
         if self.instance is None:
-            from IPython.core import ultratb
-            self.instance = ultratb.FormattedTB(mode='Plain',
+            self.instance = ultratb.AutoFormattedTB(mode='Context',
                                                 color_scheme='Linux',
-                                                call_pdb=1)
+                                                call_pdb=True,
+                                                ostream=sys.stdout)
         return self.instance(*args, **kwargs)
 
 

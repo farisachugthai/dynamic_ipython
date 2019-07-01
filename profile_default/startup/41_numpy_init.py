@@ -6,7 +6,7 @@
 Numpy Init
 ==========
 
-.. currentmodule:: 41_numpy_init
+.. module:: 41_numpy_init
 
 This could be a starting point for practicing module configuration with traits.
 

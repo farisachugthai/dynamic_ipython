@@ -32,24 +32,6 @@
  * Create a custom button in toolbar that execute `%qtconsole` in kernel
  * and hence open a qtconsole attached to the same kernel as the current notebook
  *
- *    define([
- *        'base/js/namespace',
- *        'base/js/events'
- *    ], function(IPython, events) {
- *        events.on('app_initialized.NotebookApp', function(){
- *            IPython.toolbar.add_buttons_group([
- *                {
- *                    'label'   : 'run qtconsole',
- *                    'icon'    : 'icon-terminal', // select your icon from http://fortawesome.github.io/Font-Awesome/icons
- *                    'callback': function () {
- *                        IPython.notebook.kernel.execute('%qtconsole')
- *                    }
- *                }
- *                // add more button here if needed.
- *                ]);
- *        });
- *    });
- *
  * __Example 2:__
  *
  * At the completion of the dashboard loading, load an unofficial javascript extension
@@ -80,3 +62,40 @@
  * @class customjs
  * @static
  */
+
+     define([
+         'base/js/namespace',
+         'base/js/events'
+     ], function(IPython, events) {
+         events.on('app_initialized.NotebookApp', function(){
+             IPython.toolbar.add_buttons_group([
+                 {
+                     'label'   : 'run qtconsole',
+                     'icon'    : 'icon-terminal', // select your icon from http://fortawesome.github.io/Font-Awesome/icons
+                     'callback': function () {
+                         IPython.notebook.kernel.execute('%qtconsole')
+                     }
+                 }
+                 // add more button here if needed.
+                 ]);
+         });
+     });
+
+<html>
+    <head>
+// <!-- Load require.js. Delete this if your page already loads require.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@jupyter-widgets/html-manager@*/dist/embed-amd.js" crossorigin="anonymous"></script>
+<script type="application/vnd.jupyter.widget-state+json">
+{
+    "version_major": 2,
+    "version_minor": 0,
+    "state": {}
+}
+</script>
+</head>
+<body>
+
+
+</body>
+</html>

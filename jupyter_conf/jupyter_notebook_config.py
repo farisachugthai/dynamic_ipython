@@ -705,6 +705,7 @@ c.ContentsManager.hide_globs = [
 # c.ContentsManager.root_dir = '/'
 
 # The base name used when creating untitled directories.
+# oooo we should totally set this to a tempdir so that we don't have to bother with this anymore
 # c.ContentsManager.untitled_directory = 'Untitled Folder'
 
 # The base name used when creating untitled files.

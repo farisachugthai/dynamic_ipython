@@ -37,6 +37,8 @@ from IPython import get_ipython
 from prompt_toolkit.enums import DEFAULT_BUFFER
 from prompt_toolkit.filters import HasFocus, ViInsertMode, ViNavigationMode
 from prompt_toolkit.key_binding import KeyBindings, merge_key_bindings
+# commented out but we could refactor with Keys.Ctrl-a to avoid using strings for an enumerated data type
+# from prompt_toolkit.keys import KEY_ALIASES, Keys
 from prompt_toolkit.key_binding.vi_state import InputMode
 from prompt_toolkit.key_binding.bindings import named_commands, vi
 from prompt_toolkit.key_binding.bindings.named_commands import get_by_name

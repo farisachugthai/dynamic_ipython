@@ -46,10 +46,11 @@ May 07, 2019:
 import sys
 from importlib import import_module
 
-try:
-    from git import Git
-except (ImportError, ModuleNotFoundError):
-    pass
+# don't do this anymore because it'll mess up the line alias:: alias %git git %l
+# try:
+#     from git import Git
+# except (ImportError, ModuleNotFoundError):
+#     pass
 
 
 def import_nvim(mod):
