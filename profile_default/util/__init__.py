@@ -12,10 +12,6 @@ import os
 import sys
 from logging import NullHandler
 
-from IPython import get_ipython
-
-_ip = get_ipython()
-
 logging.getLogger(__name__).addHandler(NullHandler())
 
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))

@@ -9,7 +9,7 @@ logging.basicConfig(level=logging.INFO)
 
 
 def timer(func):
-    """Print the runtime of the decorated function"""
+    """Print the runtime of the decorated function. Is this the right way to profile something on Windows btw?"""
 
     @functools.wraps(func)
     def wrapper_timer(*args, **kwargs):

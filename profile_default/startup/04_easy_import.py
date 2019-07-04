@@ -7,7 +7,7 @@
 04_easy_import
 ==============
 
-.. currentmodule:: 04_easy_import
+.. module:: 04_easy_import
 
 This imports a few utility functions from :ref:`IPython` and imports the python
 package neovim is served in.
@@ -22,7 +22,7 @@ From a cursory glance :mod:`traitlets.utils.importstring` ==
 
 They both export 1 function: :func:`~IPython.utils.importstring.import_item()`
 
-This could be used here to dynamicallu import strings based on user
+This could be used here to dynamically import strings based on user
 configuration, environment variables and configuration files.
 
 .. warning: Pending Deprecation: The functionality here is duplicated in
@@ -46,11 +46,32 @@ May 07, 2019:
 import sys
 from importlib import import_module
 
+import IPython
+from IPython.utils import importstring
+from IPython.lib.deepreload import reload as __reload
+
 # don't do this anymore because it'll mess up the line alias:: alias %git git %l
 # try:
 #     from git import Git
 # except (ImportError, ModuleNotFoundError):
 #     pass
+
+
+def dreload(mod, extra_excludes=None,
+        excludes=('sys','os.path', 'builtins', '__main__', 'io', 'numpy', 'numpy._globals', 'IPython')):
+    """Import IPython's deepreload magic and modify the :param:`excludes` set.
+
+    Parameters
+    ----------
+    mod : mod
+        Module to reload
+    extra_excludes : set of str, optional
+        Extra modules to exclude from deepreload.
+    excludes : set of str, optional
+        Modules that won't be reloaded in order to preserve display and excepthooks.
+
+    """
+    return __reload(mod, excludes=excludes+set(extra_excludes))
 
 
 def import_nvim(mod):
@@ -67,16 +88,19 @@ def import_nvim(mod):
 
     Returns
     -------
-    None
+    pynvim : mod
+        Neovim's python module.
 
     """
     try:
-        import_module(mod)
+        pynvim = import_module(mod)
     except ImportError:
         print("************************************************************")
         print("{} import failed. Only ignore this if you plan on going"
               " the entire session without using %edit".format(mod))
         print("************************************************************")
+    else:
+        return pynvim
 
 
 if __name__ == "__main__":

@@ -6,7 +6,7 @@
 Machine
 =========
 
-This class leverages :mod:`prompt_toolkit and a few of it's methods to abstract
+This class leverages :mod:`prompt_toolkit` and a few of it's methods to abstract
 away differences in operating systems and filesystems.
 
 The class can be easily initialized with::
@@ -23,6 +23,9 @@ See Also
 --------
 :mod:`profile_default.startup.20_aliases`
     Shows an example use case
+
+
+-------------------------------------------
 
 """
 import logging
@@ -71,8 +74,9 @@ class Platform:
         self.is_conemu = is_conemu_ansi()
         self.Path = Path
 
-    def __str__(self):
-        return '{!s} platform: {!s}.'.format(self.__class__.__name__, self._sys_platform)
+    def __repr__(self):
+        return '{!r}: {!r}.'.format(self.__class__.__name__,
+                                    self._sys_platform)
 
     @property
     def is_win_vt100(self):
@@ -93,10 +97,6 @@ class Platform:
         """Memoize the user's environment variables."""
         self.env = dict(os.environ)
         return self.env
-
-    @env.setter
-    def env(self, arg):
-        return self.env.update(arg)
 
 
 if __name__ == "__main__":

@@ -106,7 +106,7 @@ Yet to be implemented
 
 """
 import logging
-from shutil import which
+import shutil
 
 from IPython import get_ipython
 from IPython.core.alias import AliasError
@@ -304,11 +304,12 @@ def common_aliases(_ip=None):
 
 
 def cmd_aliases(_ip=None):
-    r"""Aliases for the cmd interpreter specifically."""
+    r"""Aliases for the :command:`cmd` shell."""
     _ip.user_aliases = [
         ('copy', 'copy'),
         ('ddir', 'dir /ad /on'),
         ('ldir', 'dir /ad /on'),
+        ('ln', 'mklink %s %s'),  # I know this really isn't the same but I need it
         ('mklink', 'mklink'),
         ('move', 'move'),
         ('mv', 'move'),
@@ -318,7 +319,7 @@ def cmd_aliases(_ip=None):
     return _ip.user_aliases
 
 
-def windows_aliases(_ip=None):
+def powershell_aliases(_ip=None):
     r"""Aliases for Windows OSes using :command:`powershell`.
 
     Has only been tested on Windows 10 in a heavily configured environment.
@@ -512,12 +513,12 @@ def __setup_fzf(user_aliases):
     for multiple arguments.
 
     """
-    if which('fzf') and which('rg'):
+    if shutil.which('fzf') and shutil.which('rg'):
         # user_aliases.extend(
         #     ('fzf', '$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS'))
         user_aliases.extend(('fzf', 'rg --pretty .*[a-zA-Z]* --no-heading -m 30 | fzf --ansi'))
 
-    elif which('fzf') and which('ag'):
+    elif shutil.which('fzf') and shutil.which('ag'):
         # user_aliases.extend(
         #     ('fzf', '$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS'))
         user_aliases.extend(('fzf', 'ag -C 0 --color-win-ansi --noheading | fzf --ansi'))
@@ -527,8 +528,6 @@ def __setup_fzf(user_aliases):
 
 def main():
     """Set up aliases for the user namespace for IPython."""
-    _ip = get_ipython()
-
     # if not isinstance(_ip, IPython.terminal.interactiveshell.InteractiveShell):
     #     raise Exception('Are you running in IPython?')
     # so let's not do isinstance. embrace the interface not the type!
@@ -546,8 +545,11 @@ def main():
         # LOGGER.info("The number of available aliases after linux aliases"
         # " is: " + str(len(user_aliases)))
 
-    elif machine.is_conemu:  # should check for 'nix-tools as an env var
-        user_aliases += windows_aliases(_ip)
+    # need to figure out what's wrong with my machine.env method.
+    # elif machine.is_conemu:  # should check for 'nix-tools as an env var
+    #     user_aliases += powershell_aliases(_ip)
+    else:
+        user_aliases += cmd_aliases(_ip)
 
     user_aliases += common_aliases(_ip)
 
@@ -564,4 +566,7 @@ def main():
 
 
 if __name__ == "__main__":
+    _ip = get_ipython()
+
     main()
+    LOGGER.debug('Number of aliases is: %s' % len(_ip.run_line_magic('alias', '')))

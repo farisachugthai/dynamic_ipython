@@ -38,5 +38,5 @@ else:
     # Detect if embed shell or not and display a message
     if isinstance(shell, InteractiveShellEmbed):
         sys.stderr.write(
-            "\nYou are currently into an embedded ipython shell,\n"
+            "\nYou are currently in an embedded IPython shell,\n"
             "the configuration will not be loaded.\n\n")

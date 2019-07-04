@@ -33,6 +33,7 @@ import logging
 import sys
 
 from IPython import get_ipython
+from IPython.terminal.shortcuts import create_ipython_shortcuts
 
 from prompt_toolkit.enums import DEFAULT_BUFFER
 from prompt_toolkit.filters import HasFocus, ViInsertMode, ViNavigationMode
@@ -57,89 +58,24 @@ def switch_to_navigation_mode(event):
     vi_state.input_mode = InputMode.NAVIGATION
 
 
-def get_default_vim_bindings(_ip=None):
-    """Adds 300 bindings to IPython!"""
-    _ip.pt_app.key_bindings = merge_key_bindings(
-        [_ip.pt_app.key_bindings, vi.load_vi_bindings()])
-    _ip.pt_app.key_bindings = merge_key_bindings(
-        [_ip.pt_app.key_bindings,
-         vi.load_vi_search_bindings()])
-    return _ip
+def get_default_vim_bindings():
+    """Adds 300 bindings to IPython!
 
+    Before we keep going we should figure out if we can use the + operator
+    and just add the vi bindings that way.
 
-def main(_ip=None):
-    """Begin initializing keybindings for IPython.
+    In addition, how do we add these instances of keybindings from the vi
+    and emacs classes to our keybindings class?
 
-    Here's a *slightly truncated version of the prompt_toolkit implementation for Emacs bindings.
-    Note that the escape key is ignored, warranting the reimplementation rather than just
-    importing John's work.::
-
-        def load_emacs_bindings() -> KeyBindingsBase:
-            Some e-macs extensions.
-            # Overview of Readline emacs commands:
-            key_bindings = KeyBindings()
-            handle = key_bindings.add
-
-            insert_mode = emacs_insert_mode
-
-            @handle('escape')
-            def _(event: E) -> None:
-                By default, ignore escape key.
-                (If we don't put this here, and Esc is followed by a key which sequence
-                is not handled, we'll insert an Escape character in the input stream.
-                Something we don't want and happens to easily in emacs mode.
-                Further, people can always use ControlQ to do a quoted insert.)
-                pass
-
-            handle('c-a')(get_by_name('beginning-of-line'))
-            handle('c-b')(get_by_name('backward-char'))
-            handle('c-delete', filter=insert_mode)(get_by_name('kill-word'))
-            handle('c-e')(get_by_name('end-of-line'))
-            handle('c-f')(get_by_name('forward-char'))
-            handle('c-left')(get_by_name('backward-word'))
-            handle('c-right')(get_by_name('forward-word'))
-            handle('c-x', 'r', 'y', filter=insert_mode)(get_by_name('yank'))
-            handle('c-y', filter=insert_mode)(get_by_name('yank'))
-            handle('escape', 'b')(get_by_name('backward-word'))
-            handle('escape', 'c', filter=insert_mode)(get_by_name('capitalize-word'))
-            handle('escape', 'd', filter=insert_mode)(get_by_name('kill-word'))
-            handle('escape', 'f')(get_by_name('forward-word'))
-            handle('escape', 'l', filter=insert_mode)(get_by_name('downcase-word'))
-            handle('escape', 'u', filter=insert_mode)(get_by_name('uppercase-word'))
-            handle('escape', 'y', filter=insert_mode)(get_by_name('yank-pop'))
-            handle('escape', 'backspace', filter=insert_mode)(get_by_name('backward-kill-word'))
-            handle('escape', '\\', filter=insert_mode)(get_by_name('delete-horizontal-space'))
-
-
-    Parameters
-    ----------
-    _ip : |ip|
-        Global IPython instance.
-
+    Just merge them and keep merging? Idk.
     """
-    if _ip is None:
-        _ip = get_ipython()
+    return merge_key_bindings([vi.load_vi_bindings(),
+                              vi.load_vi_search_bindings()])
 
-    if getattr(_ip, 'pt_app', None):
-        kb = _ip.pt_app.key_bindings
-    else:
-        sys.exit('IPython does not have prompt_toolkit. Exiting.')
 
-    # now let's do the Emacs ones.
-
-    insert_mode = (HasFocus(DEFAULT_BUFFER) & ViInsertMode())
-
-    ph = get_by_name('previous-history')
-    nh = get_by_name('next-history')
-
-    kb.add_binding(u'j', u'k', filter=(insert_mode))(switch_to_navigation_mode)
-    kb.add_binding('K',
-                   filter=(HasFocus(DEFAULT_BUFFER) & ViNavigationMode()))(ph)
-
-    kb.add_binding('J',
-                   filter=(HasFocus(DEFAULT_BUFFER) & ViNavigationMode()))(nh)
-
-    # 06/15/2019: Got it.
+def emacs_bindings(escape_keys=False):
+    """Load emacs bindings in Vim's insert mode."""
+    kb = KeyBindings()
     kb.add('c-a', filter=(insert_mode))(named_commands.beginning_of_line)
     kb.add('c-b', filter=(insert_mode))(named_commands.backward_char)
     kb.add('c-delete', filter=(insert_mode))(named_commands.kill_word)
@@ -149,17 +85,17 @@ def main(_ip=None):
     kb.add('c-right', filter=(insert_mode))(named_commands.forward_word)
     kb.add('c-x', 'r', 'y', filter=(insert_mode))(named_commands.yank)
     kb.add('c-y', filter=(insert_mode))(named_commands.yank)
-    kb.add('escape', 'b', filter=(insert_mode))(named_commands.backward_word)
-    kb.add('escape', 'c', filter=(insert_mode))(named_commands.capitalize_word)
-    kb.add('escape', 'd', filter=(insert_mode))(named_commands.kill_word)
-    kb.add('escape', 'f', filter=(insert_mode))(named_commands.forward_word)
-    kb.add('escape', 'l', filter=(insert_mode))(named_commands.downcase_word)
-    kb.add('escape', 'u', filter=(insert_mode))(named_commands.uppercase_word)
-    kb.add('escape', 'y', filter=(insert_mode))(named_commands.yank_pop)
-    kb.add('escape', 'backspace',
-           filter=(insert_mode))(named_commands.backward_kill_word)
-    kb.add('escape', '\\',
-           filter=(insert_mode))(named_commands.delete_horizontal_space)
+    # kb.add('escape', 'b', filter=(insert_mode))(named_commands.backward_word)
+    # kb.add('escape', 'c', filter=(insert_mode))(named_commands.capitalize_word)
+    # kb.add('escape', 'd', filter=(insert_mode))(named_commands.kill_word)
+    # kb.add('escape', 'f', filter=(insert_mode))(named_commands.forward_word)
+    # kb.add('escape', 'l', filter=(insert_mode))(named_commands.downcase_word)
+    # kb.add('escape', 'u', filter=(insert_mode))(named_commands.uppercase_word)
+    # kb.add('escape', 'y', filter=(insert_mode))(named_commands.yank_pop)
+    # kb.add('escape', 'backspace',
+    #        filter=(insert_mode))(named_commands.backward_kill_word)
+    # kb.add('escape', '\\',
+    #        filter=(insert_mode))(named_commands.delete_horizontal_space)
 
     # how do i modify ones with preexisting filters?
     # i deleted a bunch of the insert_mode ones off but idk what to do about
@@ -179,19 +115,60 @@ def main(_ip=None):
     # kb.add('escape', 'c-y', filter=(insert_mode)(named_commands.yank-nth-arg))
     # kb.add('escape', '#', filter=(insert_mode)(named_commands.insert-comment))
     # kb.add('c-o', filter=(insert_mode)(named_commands.operate-and-get-next))
+    return kb
 
+
+def main(_ip=None):
+    """Begin initializing keybindings for IPython.
+
+    This function delegates the extra bindings.
+
+    Parameters
+    ----------
+    _ip : |ip|
+        Global IPython instance.
+
+    """
+    if _ip is None:
+        _ip = get_ipython()
+
+    # IPython < 7.0
+    if hasattr(_ip, 'pt_cli'):
+        kb = _ip.pt_cli.application.key_bindings_registry
+    # IPython >= 7.0
+    elif hasattr(_ip, 'pt_app'):
+        kb = _ip.pt_app.key_bindings
+    else:
+        LOGGER.error('Is this being run in IPython?:\nType: %s ' % type(_ip))
+        kb = KeyBindings()
+
+    ph = get_by_name('previous-history')
+    nh = get_by_name('next-history')
+
+    kb.add_binding(u'j', u'k', filter=(insert_mode))(switch_to_navigation_mode)
+    kb.add_binding('K',
+                   filter=(HasFocus(DEFAULT_BUFFER) & ViNavigationMode()))(ph)
+
+    kb.add_binding('J',
+                   filter=(HasFocus(DEFAULT_BUFFER) & ViNavigationMode()))(nh)
+
+    emacs_keys = emacs_bindings(escape_keys=False)
     # actually let's load pt's vim keybindings first.
     # nope! merged key bindings class doesn't have the add_binding method!
-    _ip = get_default_vim_bindings(_ip)
+    vim_keys = get_default_vim_bindings()
+
+    merge_key_bindings([emacs_keys, vim_keys, create_ipython_shortcuts(_ip)])
     return kb
 
 
 if __name__ == "__main__":
     _ip = get_ipython()
 
-    # level = 10
-    # log = logging.getLogger(name=__name__)
+    insert_mode = (HasFocus(DEFAULT_BUFFER) & ViInsertMode())
 
-    # logger = module_log.stream_logger(log_level=level, logger=log)
+    level = 10
+    LOG = logging.getLogger(name=__name__)
+
+    LOGGER = module_log.stream_logger(log_level=level, logger=LOG)
 
     keybindings = main(_ip)

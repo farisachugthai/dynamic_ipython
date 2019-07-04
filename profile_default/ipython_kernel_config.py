@@ -4,7 +4,7 @@
 IPython Kernel Configuration
 ============================
 
-.. currentmodule:: ipython_kernel_config
+.. module:: ipython_kernel_config
 
 .. highlight:: python3
 
@@ -250,7 +250,8 @@ KernelSpecManager options
 
 
 """
-# This is an application.
+import os
+from pathlib import Path
 
 from traitlets.config import get_config
 
@@ -263,6 +264,10 @@ c.Application.log_format = '%(asctime)s [%(name)s]  %(highlevel)s %(message)s'
 
 # Set the log level by value or name.
 c.Application.log_level = 30
+
+
+def get_home():
+    return Path.home()
 
 # -----------------------------------------------------------------------------
 # BaseIPythonApplication(Application) configuration
@@ -389,6 +394,7 @@ c.InteractiveShell.automagic = True
 # The part of the banner to be printed before the profile
 # c.InteractiveShell.banner1 = "Python 3.6.5 |Anaconda, Inm| (default, Apr 29 2018, 16:14:56) \nType 'copyright',
 # 'credits' or 'license' for more information\nIPython 6.4.0 -- An enhanced Interactive Python. Type '?' for help.\n"
+c.InteractiveShell.banner1 = ''
 
 # The part of the banner to be printed after the profile
 # c.InteractiveShell.banner2 = ''
@@ -502,7 +508,11 @@ c.InteractiveShell.wildcards_case_sensitive = False
 
 # Set the profile location directly. This overrides the logic used by the
 # `profile` option.
-# c.ProfileDir.location = ''
+if os.environ.get('IPYTHONDIR'):
+    c.ProfileDir.location = os.environ.get('IPYTHONDIR')
+else:
+    if get_home():
+        c.ProfileDir.location = Path.joinpath(get_home(), '', '.ipython')
 
 # -----------------------------------------------------------------------------
 # Session(Configurable) configuration
