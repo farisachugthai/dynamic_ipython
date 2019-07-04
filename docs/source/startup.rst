@@ -41,6 +41,10 @@ Configuration
 
 `20_aliases.py`_
 
+`32_vi_modes.py`_
+
+`41_numpy_init.py`_
+
 `42_pandas_init.py`_
 
 `50_sysexception.py`_
@@ -67,73 +71,34 @@ Easy Import
 :ref:`04_easy_import`
 
 This module simply populates the IPython namespace with frequently used modules.
+
 A check is run to see if the user is running a new enough version of Python to
 utilize the python package Pynvim instead of Neovim.
 
 Logging
 -------
 
-:ref:`05_log`
+:ref:`05_log`_
+
+This uses the IPython core :class:`~IPython.core.logger.LoggingConfigurable()`
+to create a FileHandler that creates one new log file for every calendar
+day of the year.
+
+Running IPython instances will continue to write to the log file if the
+session continues after the point when the logfile rolls over.
+
+If multiple sessions are started, the new instances will append onto the same
+file as the older ones.
+
+.. admonition:: This only works on Linux. The Win API seemingly isn't able to
+                maintain multiple connections to the same file.
 
 
-Convenience Functions
------------------------
+Help Helpers
+-------------
 
-:ref:`IPython` provides the functions :func:`IPython.Application.initialized()`
-and :func:`IPython.Application.instance()`. As a result, each script can easily
-implement the following as a check to ensure that the global IPython instance
-is running.
-
-.. ipython:: python
-
-   if __name__ == "__main__":
-      from IPython import Application.initialized
-      import sys
-
-      if not Application.initialized():
-         sys.exit()
-
-.. TODO double check that what I'm saying below is true
-
-Unfortunately, ``from IPython import Application`` may be a feature of IPython7.3,
-which at the time of writing was released 3 days ago. If you don't have this
-version of the module, you can alternatively run
-
-
-.. ipython:: python
-
-   from IPython.core.application import Application
-   Application.initialized()
-
-
-.. ipython::
-
-   In [114]: IPython.Application.initialized?
-
-.. code-block:: none
-
-   Signature: IPython.Application.initialized()
-   Docstring: Has an instance been created?
-   File:      ~/miniconda3/lib/python3.7/site-packages/traitlets/config/configurable.py
-   Type:      method
-
-
-Here's the help from :attr:`IPython.application.instance`.
-
-.. ipython::
-
-   In [115]: IPython.Application.instance?
-
-.. code-block:: none
-
-   Signature: IPython.Application.instance(\*args, \*\*kwargs)
-   Docstring:
-   Returns a global instance of this class.
-   This method create a new instance if none have previously been created
-   and returns a previously created instance is one already exists.
-   The arguments and keyword arguments passed to this method are passed
-   on to the :meth:`__init__` method of the class upon instantiation.
-
+Creates 2 functions in userspace to save the output of ``help(python_object)``
+to a file or output to ``sys.stdout``.
 
 Examples
 --------
@@ -189,5 +154,7 @@ with a prefix, e.g.::
 .. _06_help_helpers.py: ../../profile_default/startup/06_help_helpers.py
 .. ignore _10_keybindings.py:  ../../profile_default/startup/10_keybindings.py
 .. _20_aliases.py: ../../profile_default/startup/20_aliases.py
+.. _32_vi_modes.py: ../../profile_default/startup/32_vi_modes.py
+.. _41_numpy_init.py: ../../profile_default/startup/32_vi_modes.py
 .. _42_pandas_init.py: ../../profile_default/startup/42_pandas_init.py
 .. _50_sysexception.py: ../../profile_default/startup/50_sysexception.py

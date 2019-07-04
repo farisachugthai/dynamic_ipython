@@ -437,7 +437,7 @@ def windows_aliases(_ip=None):
         ('cat', 'Get-Content %l'),
         # ('cd', 'Set-Location %l'),
         ('clc', 'Clear-Content %l'),
-        ('clear', 'Clear-History %l'),
+        # ('clear', 'Clear-History %l'),
         ('conda env', 'Get-Conda-Environment %l'),
         ('copy', 'Copy-Item %l'),
         ('cp', 'Copy-Item %l'),
@@ -515,12 +515,14 @@ def __setup_fzf(user_aliases):
     if which('fzf') and which('rg'):
         # user_aliases.extend(
         #     ('fzf', '$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS'))
-        user_aliases.extend(('fzf', 'rg --pretty .*[a-zA-Z]* --no-heading -m 30 | fzf --ansi'))
+        user_aliases.extend(
+            ('fzf', 'rg --pretty .*[a-zA-Z]* --no-heading -m 30 | fzf --ansi'))
 
     elif which('fzf') and which('ag'):
         # user_aliases.extend(
         #     ('fzf', '$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS'))
-        user_aliases.extend(('fzf', 'ag -C 0 --color-win-ansi --noheading | fzf --ansi'))
+        user_aliases.extend(
+            ('fzf', 'ag -C 0 --color-win-ansi --noheading | fzf --ansi'))
 
     return user_aliases
 

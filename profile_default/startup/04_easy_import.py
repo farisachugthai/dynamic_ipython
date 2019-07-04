@@ -7,7 +7,7 @@
 04_easy_import
 ==============
 
-.. currentmodule:: 04_easy_import
+.. module:: 04_easy_import
 
 This imports a few utility functions from :ref:`IPython` and imports the python
 package neovim is served in.
@@ -22,7 +22,7 @@ From a cursory glance :mod:`traitlets.utils.importstring` ==
 
 They both export 1 function: :func:`~IPython.utils.importstring.import_item()`
 
-This could be used here to dynamicallu import strings based on user
+This could be used here to dynamically import strings based on user
 configuration, environment variables and configuration files.
 
 .. warning: Pending Deprecation: The functionality here is duplicated in

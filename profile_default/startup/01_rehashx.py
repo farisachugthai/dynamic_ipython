@@ -6,7 +6,7 @@
 Rehash
 =======
 
-.. currentmodule:: 01_rehashx
+.. module:: 01_rehashx
 
 This is an incredible little gem I just ran into, and hugely useful for
 making IPython work as a more versatile system shell.
@@ -51,24 +51,35 @@ an error, so an empty str is passed to the function.
 import logging
 import sys
 
-from IPython import Application, get_ipython
+from IPython import get_ipython
+from IPython.core.alias import AliasError
 
 from profile_default.util.timer import timer
 
 
+def blacklisted_aliases(shell=None):
+    """Remove aliases that would otherwise raise errors."""
+    blacklist = ['more', 'less', 'clear', 'man']
+    for i in blacklist:
+        try:
+            shell.run_line_magic('alias', '-d {}'.format(i))
+        except AliasError:
+            pass
+
 @timer
-def main():
+def main(shell=None):
     """Check if :mod:`IPython` was initialized and if so, ``%rehashx``."""
-    if not Application.initialized():
-        LOGGER.critical('Application not initialized. Exiting.')
-        sys.exit()
+    shell.run_line_magic('rehashx', '')
 
-    _ip = get_ipython()
-    _ip.run_line_magic('rehashx', '')
+    blacklisted_aliases(shell)
 
+    return shell
 
 if __name__ == "__main__":
     LOGGER = logging.getLogger(name=__name__)
     LOG_LEVEL = logging.INFO
     LOGGER.setLevel(LOG_LEVEL)
-    main()
+
+    _ip = get_ipython()
+
+    _ip = main(_ip)
