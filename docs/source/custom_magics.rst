@@ -1,5 +1,3 @@
-.. _defining_magics:
-
 ======================
 Defining custom magics
 ======================
@@ -184,6 +182,9 @@ Inheritance diagram:
 
 .. inheritance-diagram: IPython.core.magic_arguments
    :parts: 3
+
+
+.. _extensions-and-custom-magics:
 
 Writing Custom Magics
 ======================

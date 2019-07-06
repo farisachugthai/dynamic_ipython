@@ -16,7 +16,7 @@ at the time of writing.
     :show-inheritance:
 
 
-:mod:`~jupyter_conf.jupyter_notebook_config`
+:mod:`jupyter_conf.jupyter_notebook_config`
 ============================================
 
 .. automodule:: `jupyter_conf.jupyter_notebook_config`
