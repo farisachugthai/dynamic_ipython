@@ -12,6 +12,8 @@ import os
 import sys
 from logging import NullHandler
 
-logging.getLogger(__name__).addHandler(NullHandler())
+from profile_default.util import module_log
+from profile_default.util import machine
+from profile_default.util import timer
 
-sys.path.append(os.path.abspath(os.path.dirname(__file__)))
+logging.getLogger(__name__).addHandler(NullHandler())

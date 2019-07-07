@@ -7,6 +7,7 @@ Keybindings and Toggling Insert Mode
 ====================================
 
 .. module:: `32_vi_modes`
+   :synopsis: Add extra keybindings to IPython.
 
 :URL: https://ipython.readthedocs.io/en/stable/config/details.html#keyboard-shortcuts
 
@@ -16,8 +17,11 @@ normal mode, or as :mod:`prompt_toolkit` calls it, "navigation mode".
 Also displays how to integrate :mod:`prompt_toolkit` and :mod:`IPython`
 together well.
 
-Ultimately this module hopes to implementing Tim Pope's rsi plugin in IPython.
+Ultimately this module hopes to implementing Tim Pope's rsi plugin in
+IPython.
 
+Specifically it intends on adding the standard :mod:`readline` bindings
+to Vim's insert mode.
 
 ---------------------
 
@@ -25,12 +29,11 @@ Before we begin defining functions:
 
 See Also
 ---------
-_ip.pt_app.layout.current_buffer : :class:`prompt_toolkit.application.Buffer`
+:mod:`prompt_toolkit.key_binding.defaults` : str (path)
     Has all the named commands implemented here and possibly more.
 
 """
 import logging
-import sys
 
 from IPython import get_ipython
 from IPython.terminal.shortcuts import create_ipython_shortcuts
@@ -59,22 +62,32 @@ def switch_to_navigation_mode(event):
 
 
 def get_default_vim_bindings():
-    """Adds 300 bindings to IPython!
+    """Adds 300 bindings to IPython! Merge any existing KeyBindings classes.
 
     Before we keep going we should figure out if we can use the + operator
     and just add the vi bindings that way.
-
     In addition, how do we add these instances of keybindings from the vi
     and emacs classes to our keybindings class?
 
     Just merge them and keep merging? Idk.
+
+    Parameters
+    ----------
+    _ip : |ip|
+        Global IPython instance.
     """
     return merge_key_bindings([vi.load_vi_bindings(),
                               vi.load_vi_search_bindings()])
 
 
-def emacs_bindings(escape_keys=False):
-    """Load emacs bindings in Vim's insert mode."""
+def emacs_bindings():
+    """Load emacs bindings in Vim's insert mode.
+
+    Parameters
+    ----------
+    escape_keys : bool, Optional
+        Whether to load :kbd:`Esc` or :kbd:`Alt` key bindings.
+    """
     kb = KeyBindings()
     kb.add('c-a', filter=(insert_mode))(named_commands.beginning_of_line)
     kb.add('c-b', filter=(insert_mode))(named_commands.backward_char)
@@ -85,40 +98,51 @@ def emacs_bindings(escape_keys=False):
     kb.add('c-right', filter=(insert_mode))(named_commands.forward_word)
     kb.add('c-x', 'r', 'y', filter=(insert_mode))(named_commands.yank)
     kb.add('c-y', filter=(insert_mode))(named_commands.yank)
-    # kb.add('escape', 'b', filter=(insert_mode))(named_commands.backward_word)
-    # kb.add('escape', 'c', filter=(insert_mode))(named_commands.capitalize_word)
-    # kb.add('escape', 'd', filter=(insert_mode))(named_commands.kill_word)
-    # kb.add('escape', 'f', filter=(insert_mode))(named_commands.forward_word)
-    # kb.add('escape', 'l', filter=(insert_mode))(named_commands.downcase_word)
-    # kb.add('escape', 'u', filter=(insert_mode))(named_commands.uppercase_word)
-    # kb.add('escape', 'y', filter=(insert_mode))(named_commands.yank_pop)
-    # kb.add('escape', 'backspace',
-    #        filter=(insert_mode))(named_commands.backward_kill_word)
-    # kb.add('escape', '\\',
-    #        filter=(insert_mode))(named_commands.delete_horizontal_space)
+    # kb.add('c-o', filter=(insert_mode))(named_commands.operate-and-get-next)
+    # kb.add('c-_', save_before=(lambda e: False), filter=(insert_mode)(named_commands.undo))
+    # kb.add('c-x', 'c-u', save_before=(lambda e: False), filter=insert_mode,
+    # filter=(insert_mode)(named_commands.undo))
+
+    return kb
+
+def emacs_alt_bindings():
+    """TODO: Docstring for emacs_alt_bindings.
+
+    Parameters
+    ----------
+    arg1 : TODO
+
+    Returns
+    -------
+    TODO
+
+    """
+    kb = KeyBindings()
+    kb.add('escape', 'b', filter=(insert_mode))(named_commands.backward_word)
+    kb.add('escape', 'c', filter=(insert_mode))(named_commands.capitalize_word)
+    kb.add('escape', 'd', filter=(insert_mode))(named_commands.kill_word)
+    kb.add('escape', 'f', filter=(insert_mode))(named_commands.forward_word)
+    kb.add('escape', 'l', filter=(insert_mode))(named_commands.downcase_word)
+    kb.add('escape', 'u', filter=(insert_mode))(named_commands.uppercase_word)
+    kb.add('escape', 'y', filter=(insert_mode))(named_commands.yank_pop)
+    kb.add('escape', 'backspace',
+           filter=(insert_mode))(named_commands.backward_kill_word)
+    kb.add('escape', '\\',
+           filter=(insert_mode))(named_commands.delete_horizontal_space)
 
     # how do i modify ones with preexisting filters?
     # i deleted a bunch of the insert_mode ones off but idk what to do about
     # others
-
-    # kb.add('c-_', save_before=(lambda e: False), filter=insert_mode, filter=(insert_mode)(
-    #     named_commands.undo))
-
-    # kb.add('c-x', 'c-u', save_before=(lambda e: False), filter=insert_mode, filter=(insert_mode)(
-    #     named_commands.undo))
-
     # kb.add('escape', '<', filter= ~has_selection, filter=(insert_mode)(named_commands.beginning-of-history))
     # kb.add('escape', '>', filter= ~has_selection, filter=(insert_mode)(named_commands.end-of-history))
-
-    # kb.add('escape', '.',  filter=(insert_mode)(named_commands.yank-last-arg))
-    # kb.add('escape', '_',  filter=(insert_mode)(named_commands.yank-last-arg))
-    # kb.add('escape', 'c-y', filter=(insert_mode)(named_commands.yank-nth-arg))
-    # kb.add('escape', '#', filter=(insert_mode)(named_commands.insert-comment))
-    # kb.add('c-o', filter=(insert_mode)(named_commands.operate-and-get-next))
+    kb.add('escape', '.',  filter=(insert_mode)(named_commands.yank-last-arg))
+    kb.add('escape', '_',  filter=(insert_mode)(named_commands.yank-last-arg))
+    kb.add('escape', 'c-y', filter=(insert_mode)(named_commands.yank-nth-arg))
+    kb.add('escape', '#', filter=(insert_mode)(named_commands.insert-comment))
     return kb
 
 
-def main(_ip=None):
+def main(_ip=None, escape_keys=False):
     """Begin initializing keybindings for IPython.
 
     This function delegates the extra bindings.
@@ -152,7 +176,11 @@ def main(_ip=None):
     kb.add_binding('J',
                    filter=(HasFocus(DEFAULT_BUFFER) & ViNavigationMode()))(nh)
 
-    emacs_keys = emacs_bindings(escape_keys=False)
+    emacs_keys = emacs_bindings()
+
+    if escape_keys:
+        emacs_keys = merge_key_bindings([emacs_keys, emacs_alt_bindings()])
+
     # actually let's load pt's vim keybindings first.
     # nope! merged key bindings class doesn't have the add_binding method!
     vim_keys = get_default_vim_bindings()

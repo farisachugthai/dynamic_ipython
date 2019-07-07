@@ -18,6 +18,11 @@ import os
 import sys
 from logging import NullHandler
 
-logging.getLogger(__name__).addHandler(NullHandler())
+try:
+    # these should always be available
+    import IPython
+    from IPython import get_ipython
+except (ImportError, ModuleNotFoundError):
+    pass
 
-sys.path.append(os.path.abspath(os.path.dirname(__file__)))
+logging.getLogger(__name__).addHandler(NullHandler())
