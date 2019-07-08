@@ -20,6 +20,8 @@ from profile_default.util import module_log
 
 logging.getLogger(__name__).addHandler(NullHandler())
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
 rehashx_mod = importlib.import_module('01_rehashx')
 
 easy_import = importlib.import_module('04_easy_import')

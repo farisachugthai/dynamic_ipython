@@ -41,7 +41,8 @@ from IPython.terminal.shortcuts import create_ipython_shortcuts
 from prompt_toolkit.enums import DEFAULT_BUFFER
 from prompt_toolkit.filters import HasFocus, ViInsertMode, ViNavigationMode
 from prompt_toolkit.key_binding import KeyBindings, merge_key_bindings
-# commented out but we could refactor with Keys.Ctrl-a to avoid using strings for an enumerated data type
+# commented out but we could refactor with Keys.Ctrl-a to avoid using strings
+# for an enumerated data type
 # from prompt_toolkit.keys import KEY_ALIASES, Keys
 from prompt_toolkit.key_binding.vi_state import InputMode
 from prompt_toolkit.key_binding.bindings import named_commands, vi
@@ -75,9 +76,11 @@ def get_default_vim_bindings():
     ----------
     _ip : |ip|
         Global IPython instance.
+
     """
-    return merge_key_bindings([vi.load_vi_bindings(),
-                              vi.load_vi_search_bindings()])
+    return merge_key_bindings(
+        [vi.load_vi_bindings(),
+         vi.load_vi_search_bindings()])
 
 
 def emacs_bindings():
@@ -87,6 +90,7 @@ def emacs_bindings():
     ----------
     escape_keys : bool, Optional
         Whether to load :kbd:`Esc` or :kbd:`Alt` key bindings.
+
     """
     kb = KeyBindings()
     kb.add('c-a', filter=(insert_mode))(named_commands.beginning_of_line)
@@ -99,11 +103,10 @@ def emacs_bindings():
     kb.add('c-x', 'r', 'y', filter=(insert_mode))(named_commands.yank)
     kb.add('c-y', filter=(insert_mode))(named_commands.yank)
     # kb.add('c-o', filter=(insert_mode))(named_commands.operate-and-get-next)
-    # kb.add('c-_', save_before=(lambda e: False), filter=(insert_mode)(named_commands.undo))
     # kb.add('c-x', 'c-u', save_before=(lambda e: False), filter=insert_mode,
     # filter=(insert_mode)(named_commands.undo))
-
     return kb
+
 
 def emacs_alt_bindings():
     """TODO: Docstring for emacs_alt_bindings.
@@ -130,15 +133,6 @@ def emacs_alt_bindings():
     kb.add('escape', '\\',
            filter=(insert_mode))(named_commands.delete_horizontal_space)
 
-    # how do i modify ones with preexisting filters?
-    # i deleted a bunch of the insert_mode ones off but idk what to do about
-    # others
-    # kb.add('escape', '<', filter= ~has_selection, filter=(insert_mode)(named_commands.beginning-of-history))
-    # kb.add('escape', '>', filter= ~has_selection, filter=(insert_mode)(named_commands.end-of-history))
-    kb.add('escape', '.',  filter=(insert_mode)(named_commands.yank-last-arg))
-    kb.add('escape', '_',  filter=(insert_mode)(named_commands.yank-last-arg))
-    kb.add('escape', 'c-y', filter=(insert_mode)(named_commands.yank-nth-arg))
-    kb.add('escape', '#', filter=(insert_mode)(named_commands.insert-comment))
     return kb
 
 

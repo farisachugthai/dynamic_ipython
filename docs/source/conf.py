@@ -19,7 +19,9 @@ import os
 from pathlib import Path
 import sys
 
+import profile_default
 from profile_default.__about__ import __version__
+from profile_default.startup import *
 
 LOGGER = logging.getLogger(name=__name__)
 LOGGER.setLevel(level=logging.DEBUG)
@@ -177,7 +179,7 @@ htmlhelp_basename = 'site-packages-doc'
 
 # -- Options for LaTeX output ------------------------------------------------
 
-latex_elements = {
+# latex_elements = {
     # The paper size ('letterpaper' or 'a4paper').
     #
     # 'papersize': 'letterpaper',
@@ -193,38 +195,38 @@ latex_elements = {
     # Latex figure (float) alignment
     #
     # 'figure_align': 'htbp',
-}
+# }
 
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
-latex_documents = [
-    (master_doc, 'site-packages.tex', 'site-packages Documentation', 'fac',
-     'manual'),
-]
+# latex_documents = [
+#     (master_doc, 'site-packages.tex', 'site-packages Documentation', 'fac',
+#      'manual'),
+# ]
 
 # -- Options for manual page output ------------------------------------------
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [(master_doc, 'site-packages', 'site-packages Documentation', [
-    author
-], 1)]
+# man_pages = [(master_doc, 'site-packages', 'site-packages Documentation', [
+#     author
+# ], 1)]
 
 # -- Options for Texinfo output ----------------------------------------------
 
 # Grouping the document tree into Texinfo files. List of tuples
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
-texinfo_documents = [
-    (master_doc, 'site-packages', 'site-packages Documentation', author,
-     'site-packages', 'One line description of project.', 'Miscellaneous'),
-]
+# texinfo_documents = [
+#     (master_doc, 'site-packages', 'site-packages Documentation', author,
+#      'site-packages', 'One line description of project.', 'Miscellaneous'),
+# ]
 
 # -- Options for Epub output -------------------------------------------------
 
 # Bibliographic Dublin Core info.
-epub_title = project
+# epub_title = project
 
 # The unique identifier of the text. This can be a ISBN number
 # or the project homepage.
@@ -236,7 +238,7 @@ epub_title = project
 # epub_uid = ''
 
 # A list of files that should not be packed into the epub file.
-epub_exclude_files = ['search.html']
+# epub_exclude_files = ['search.html']
 
 # -- Extension configuration -------------------------------------------------
 
@@ -245,7 +247,8 @@ epub_exclude_files = ['search.html']
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3/', None),
-    'ipython': ('https://ipython.readthedocs.io/en/stable/', None)
+    'ipython': ('https://ipython.readthedocs.io/en/stable/', None),
+    'prompt_toolkit': ('https://python-prompt-toolkit.readthedocs.io/en/stable/', None),
 }
 
 # -- Options for todo extension ----------------------------------------------
@@ -290,6 +293,8 @@ def linkcode_resolve(domain, info):
     return "https://github.com/farisachugthai/dynamic_ipython/%s.py" % filename
 
 
+# -- Setup -------------------------------------------------------------------
+
 def setup(app):
     """Add pyramid CSS to the docs.
 
@@ -297,10 +302,14 @@ def setup(app):
     drop it. Plus we have pathlib all over so simply utilize that.
 
     """
-    custom_css = os.path.abspath(
-        os.path.join(CONF_PATH, '', '..', '_static', 'pyramid.css'))
+    if hasattr(CONF_PATH, 'joinpath'):
+        def add_css():
+            custom_css = CONF_PATH.joinpath('..', '_static', 'pyramid.css')
 
-    if not os.path.isfile(custom_css):
-        LOGGER.warning('%s is not a file' % custom_css)
-    LOGGER.debug(custom_css)
-    app.add_stylesheet(custom_css)
+            if not custom_css:
+                LOGGER.warning('%s is not a file' % custom_css)
+            LOGGER.debug(custom_css)
+            return custom_css
+
+        extra_css = str(add_css())
+        app.add_stylesheet(extra_css)

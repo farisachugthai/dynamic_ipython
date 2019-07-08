@@ -9,11 +9,14 @@ Machine
 This class leverages :mod:`prompt_toolkit` and a few of it's methods to abstract
 away differences in operating systems and filesystems.
 
-The class can be easily initialized with::
+The class can be easily initialized with:
+
+.. ipython::
 
     >>> from profile_default.util.machine import Platform
     >>> machine = Platform()
-    >>> assert machine.env
+    >>> env = machine.get_env()
+    >>> assert env is not None
 
 .. note::
     Don't name the instance ``platform`` as that's a module in the standard
@@ -55,10 +58,12 @@ class Platform:
     ----------
     shell : |ip|, optional
         Global IPython Instance
+    env : Dict
+        Environment variables to add to the instance
 
     """
 
-    def __init__(self, shell=None, *args, **kwargs):
+    def __init__(self, shell=None, env=None):
         """Initialize the platform class."""
         if not shell:
             try:
@@ -73,6 +78,7 @@ class Platform:
         self.is_win = is_windows()
         self.is_conemu = is_conemu_ansi()
         self.Path = Path
+        self.env = env
 
     def __repr__(self):
         return '{!r}: {!r}.'.format(self.__class__.__name__,
@@ -92,11 +98,26 @@ class Platform:
         """True when :func:`sys.platform` returns linux."""
         return self._sys_platform == 'linux'
 
-    @property
-    def env(self):
-        """Memoize the user's environment variables."""
-        self.env = dict(os.environ)
-        return self.env
+    def get_env(self):
+        """Unsurprisingly stolen from IPython.
+
+        See Also
+        ---------
+        :meth:`IPython.testing.iptestcontroller.TestController.launch()` : method
+            Copies and updates the user's environment in the same way.
+
+        `"""
+        env = dict(os.environ.copy())
+        env.update(self.env)
+        return env
+
+    def update_env(self, env=None, **kwargs):
+        """Add more arguements to the environment.
+        :type kwargs: dict
+        """
+        if env is None:
+            env = self.get_env()
+        return env.update(kwargs)
 
 
 if __name__ == "__main__":

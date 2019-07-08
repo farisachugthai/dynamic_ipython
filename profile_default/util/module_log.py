@@ -52,10 +52,15 @@ def stream_logger(logger, log_level=logging.INFO, msg_format=None):
 
     .. admonition:: The following can't go in library logging code because
                     it takes the name of this module not where it
-                    gets imported.::
+                    gets imported.
 
-                        if logger is None:
-                        logger = logging.getLogger(name=__name__)
+
+    .. ipython:: python
+        :okexcept:
+
+        if logger is None:
+            logger = logging.getLogger(name=__name__)
+
 
     Parameters
     ----------
@@ -74,9 +79,9 @@ def stream_logger(logger, log_level=logging.INFO, msg_format=None):
 
     Examples
     --------
-    >>> from profile_default.util import logger
+    >>> from profile_default.util.module_log import stream_logger
     >>> log = logging.getLogger(name=__name__)
-    >>> LOGGER = logger.stream_logging(logger=log)
+    >>> LOGGER = stream_logger(logger=log)
 
     """
     assert logger is not None

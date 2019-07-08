@@ -269,6 +269,7 @@ c.Application.log_level = 30
 def get_home():
     return Path.home()
 
+
 # -----------------------------------------------------------------------------
 # BaseIPythonApplication(Application) configuration
 # -----------------------------------------------------------------------------

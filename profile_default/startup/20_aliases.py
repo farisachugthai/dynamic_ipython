@@ -309,7 +309,8 @@ def cmd_aliases(_ip=None):
         ('copy', 'copy'),
         ('ddir', 'dir /ad /on'),
         ('ldir', 'dir /ad /on'),
-        ('ln', 'mklink %s %s'),  # I know this really isn't the same but I need it
+        ('ln',
+         'mklink %s %s'),  # I know this really isn't the same but I need it
         ('mklink', 'mklink'),
         ('move', 'move'),
         ('mv', 'move'),
@@ -538,7 +539,7 @@ def main():
 
     user_aliases = []
 
-    machine = Platform('.')
+    machine = Platform()
 
     if machine.is_linux:
 
@@ -571,4 +572,5 @@ if __name__ == "__main__":
     _ip = get_ipython()
 
     main()
-    LOGGER.debug('Number of aliases is: %s' % len(_ip.run_line_magic('alias', '')))
+    LOGGER.debug('Number of aliases is: %s' %
+                 len(_ip.run_line_magic('alias', '')))

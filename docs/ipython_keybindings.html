@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
-    <link rel="stylesheet" type="text/css" href="/data/data/com.termux/files/home/projects/dynamic_ipython/docs/_static/pyramid.css" />
+    <link rel="stylesheet" type="text/css" href="_static/C:\Users\faris\projects\dynamic_ipython\docs\source\..\_static\pyramid.css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
@@ -17,7 +17,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="IPython Magics" href="magics.html" />
-    <link rel="prev" title="IPython_InteractiveShell" href="ipython_interactive_shell.html" />
+    <link rel="prev" title="IPython Startup Scripts" href="startup.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <!--[if lte IE 6]>
@@ -39,7 +39,7 @@
           <a href="magics.html" title="IPython Magics"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="ipython_interactive_shell.html" title="IPython_InteractiveShell"
+          <a href="startup.html" title="IPython Startup Scripts"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li> 
       </ul>
@@ -55,7 +55,7 @@
 <div class="section" id="interactively-binding-keys">
 <h2>Interactively Binding Keys<a class="headerlink" href="#interactively-binding-keys" title="Permalink to this headline">¶</a></h2>
 <p>If we would like to add extra keybindings to the IPython shell, we can utilize
-a few functions built into the <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.terminal.interactiveshell.html#module-IPython.terminal.interactiveshell" title="(in IPython v7.5.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">interactiveshell</span></code></a> module,
+a few functions built into the <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.terminal.interactiveshell.html#module-IPython.terminal.interactiveshell" title="(in IPython v7.6.1)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">interactiveshell</span></code></a> module,
 in addition, to utilizing the expansive <code class="xref py py-mod docutils literal notranslate"><span class="pre">prompt_toolkit</span></code> library.</p>
 <p>First we’ll initialize a global instance of the shell.</p>
 <p>Then import the function <code class="xref py py-func docutils literal notranslate"><span class="pre">create_ipython_shortcuts()</span></code>
@@ -69,45 +69,64 @@ are as follows:</p>
 <span class="gp">   ...: </span><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">create_ipython_shortcuts</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span>
 <span class="gp">   ...: </span><span class="o">&gt;&gt;&gt;</span> <span class="c1"># This will give you the following methods</span>
 <span class="gp">   ...: </span><span class="o">&gt;&gt;&gt;</span> <span class="k">print</span><span class="p">(</span><span class="nb">dir</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
-<span class="gp">   ...: </span>    <span class="p">[</span><span class="s1">&#39;_KeyBindings__version&#39;</span><span class="p">,</span>
-<span class="gp">   ...: </span>    <span class="o">...</span>
-<span class="gp">   ...: </span>    <span class="s1">&#39;_abc_impl&#39;</span><span class="p">,</span>
-<span class="gp">   ...: </span>    <span class="s1">&#39;_clear_cache&#39;</span><span class="p">,</span>
-<span class="gp">   ...: </span>    <span class="s1">&#39;_get_bindings_for_keys_cache&#39;</span><span class="p">,</span>
-<span class="gp">   ...: </span>    <span class="s1">&#39;_get_bindings_starting_with_keys_cache&#39;</span>
-<span class="gp">   ...: </span>    <span class="s1">&#39;_version&#39;</span><span class="p">,</span>
-<span class="gp">   ...: </span>    <span class="s1">&#39;add&#39;</span><span class="p">,</span>
-<span class="gp">   ...: </span>    <span class="s1">&#39;add_binding&#39;</span><span class="p">,</span>
-<span class="gp">   ...: </span>    <span class="s1">&#39;bindings&#39;</span><span class="p">,</span>
-<span class="gp">   ...: </span>    <span class="s1">&#39;get_bindings_for_keys&#39;</span><span class="p">,</span>
-<span class="gp">   ...: </span>    <span class="s1">&#39;get_bindings_starting_with_keys&#39;</span><span class="p">,</span>
-<span class="gp">   ...: </span>    <span class="s1">&#39;remove&#39;</span><span class="p">,</span>
-<span class="gp">   ...: </span>    <span class="s1">&#39;remove_binding&#39;</span><span class="p">]</span>
 <span class="gp">   ...: </span>
-<span class="gt">  File</span><span class="nn"> &quot;&lt;ipython-input-1-0ad2178af322&gt;&quot;</span><span class="gt">, line </span><span class="mi">7</span>
-    <span class="p">[</span><span class="s1">&#39;_KeyBindings__version&#39;</span><span class="p">,</span>
-    <span class="o">^</span>
-<span class="ne">IndentationError</span>: unexpected indent
+<span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">AttributeError</span><span class="g g-Whitespace">                            </span>Traceback (most recent call last)
+<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">f3fb9eb4f478</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">from</span> <span class="nn">IPython.terminal.interactiveshell</span> <span class="kn">import</span> <span class="n">create_ipython_shortcuts</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+<span class="ne">----&gt; </span><span class="mi">4</span> <span class="n">c</span> <span class="o">=</span> <span class="n">create_ipython_shortcuts</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="c1"># This will give you the following methods</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="k">print</span><span class="p">(</span><span class="nb">dir</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
+
+<span class="nn">~\src\ipython\IPython\terminal\shortcuts.py</span> in <span class="ni">create_ipython_shortcuts</span><span class="nt">(shell)</span>
+<span class="g g-Whitespace">     </span><span class="mi">78</span>     <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;f2&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">has_focus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">))(</span><span class="n">open_input_in_editor</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">79</span> 
+<span class="ne">---&gt; </span><span class="mi">80</span>     <span class="k">if</span> <span class="n">shell</span><span class="o">.</span><span class="n">display_completions</span> <span class="o">==</span> <span class="s1">&#39;readlinelike&#39;</span><span class="p">:</span>
+<span class="g g-Whitespace">     </span><span class="mi">81</span>         <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;c-i&#39;</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">82</span>                <span class="nb">filter</span><span class="o">=</span><span class="p">(</span>
+
+<span class="ne">AttributeError</span>: &#39;InteractiveShell&#39; object has no attribute &#39;display_completions&#39;
+</pre></div>
+</div>
+<p>This will produce an output of:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;_KeyBindings__version&#39;,
+...
+&#39;_abc_impl&#39;,
+&#39;_clear_cache&#39;,
+&#39;_get_bindings_for_keys_cache&#39;,
+&#39;_get_bindings_starting_with_keys_cache&#39;
+&#39;_version&#39;,
+&#39;add&#39;,
+&#39;add_binding&#39;,
+&#39;bindings&#39;,
+&#39;get_bindings_for_keys&#39;,
+&#39;get_bindings_starting_with_keys&#39;,
+&#39;remove&#39;,
+&#39;remove_binding&#39;]
 </pre></div>
 </div>
 <div class="section" id="original-file-implementation">
 <h3>Original File Implementation<a class="headerlink" href="#original-file-implementation" title="Permalink to this headline">¶</a></h3>
-<p>Go to the IPython root dir. This could be named something to the effect of
-<a class="reference external" href="~/miniconda3/lib/python3.7/site-packages/IPython/">~/miniconda3/lib/python3.7/site-packages/IPython/</a></p>
-<p>To find it programtically, one can use:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">IPython.paths</span> <span class="k">import</span> <span class="n">get_ipython_package_dir</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">get_ipython_package_dir</span><span class="p">())</span>
+<p>Let’s first check out how keybindings were originally implemented to give
+ourselves a frame of reference.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [2]: </span><span class="kn">from</span> <span class="nn">IPython.paths</span> <span class="kn">import</span> <span class="n">get_ipython_package_dir</span>
 </pre></div>
 </div>
+<p>Go to the directory where IPython is installed. You can use the code above
+to check its location.</p>
+<p>This could be named something to the effect of
+<a class="reference external" href="~/miniconda3/lib/python3.7/site-packages/IPython/">~/miniconda3/lib/python3.7/site-packages/IPython/</a> for example.</p>
 <p>Then navigate to the root of that directory and go to the terminal package.</p>
-<p>Up at the top you have the keybindings <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.5.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> ships with listed
-for ya!</p>
+<p>Up at the top you have the keybindings <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.6.1)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> ships with!</p>
 </div>
 </div>
 <div class="section" id="official-ipython-documentation">
 <h2>Official IPython Documentation<a class="headerlink" href="#official-ipython-documentation" title="Permalink to this headline">¶</a></h2>
 <p>Before we dive straight into the source code, let’s check out how IPython
 describes the process of re-binding keys.</p>
+<div class="section" id="conditional-filters">
+<h3>Conditional Filters<a class="headerlink" href="#conditional-filters" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.registry</span> <span class="k">import</span> <span class="n">Registry</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.defaults</span> <span class="k">import</span> <span class="n">load_key_bindings</span>
 <span class="kn">from</span> <span class="nn">IPython</span> <span class="k">import</span> <span class="n">get_ipython</span>
@@ -134,23 +153,29 @@ describes the process of re-binding keys.</p>
 <p>The documentation also shows a way of adding a <code class="xref py py-obj docutils literal notranslate"><span class="pre">Conditional</span></code> Filter
 <em>a la Prompt Toolkit</em> to the Enter key. Looks like it invokes some
 <code class="xref py py-class docutils literal notranslate"><span class="pre">prompt_toolkit.application.Buffer()</span></code> type code.</p>
-<p>Continue on in this fashion for as long as you need. In my opinion, IPython barely comes
-with any keybindings. I’m going to drop 1 that I thought was interesting
-though.</p>
+<p>Continue on in this fashion for as long as you need. In my opinion,
+IPython barely comes with any keybindings.</p>
+<p>The source code does provide this however:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Ctrl+J == Enter, seemingly</span>
 <span class="n">registry</span><span class="o">.</span><span class="n">add_binding</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlJ</span><span class="p">,</span>
                      <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span>
-                     <span class="o">&amp;</span> <span class="o">~</span><span class="n">HasSelection</span><span class="p">()</span>
-                     <span class="o">&amp;</span> <span class="n">insert_mode</span>
-                     <span class="p">))</span>
+                     <span class="o">&amp;</span> <span class="o">~</span><span class="n">HasSelection</span><span class="p">()</span> <span class="o">&amp;</span> <span class="n">insert_mode</span><span class="p">))</span>
                      <span class="p">(</span><span class="n">return_handler</span><span class="p">)</span>
 </pre></div>
+</div>
+<p>This displays a few useful ways of doing things.</p>
+<ol class="arabic simple">
+<li><p>Importing <code class="xref py py-class docutils literal notranslate"><span class="pre">Keys()</span></code> as a more
+consistent interface than passing strings.</p></li>
+<li><p>Utilizing a function <code class="docutils literal notranslate"><span class="pre">return_handler</span></code> inline to decorate the keybinding.</p></li>
+</ol>
 </div>
 <div class="section" id="pure-prompt-toolkit-way-of-rebinding-keys">
 <h3>Pure Prompt Toolkit Way of Rebinding Keys<a class="headerlink" href="#pure-prompt-toolkit-way-of-rebinding-keys" title="Permalink to this headline">¶</a></h3>
 <p>There are 3 different sections in the Prompt Toolkit Official Documentation
 on how to rebind keys using the package.</p>
-<p>The first time it’s mentioned is in the <span class="xref std std-doc">prompt_toolkit.asking_for_input</span> document.:</p>
+<p>The first time it’s mentioned is in the <span class="xref std std-doc">prompt_toolkit.asking_for_input</span>
+document.:</p>
 <div class="section" id="adding-custom-key-bindings">
 <h4>Adding custom key bindings<a class="headerlink" href="#adding-custom-key-bindings" title="Permalink to this headline">¶</a></h4>
 <blockquote>
@@ -520,7 +545,7 @@ can still have a specific call work by making it as IPShell(dummy=False).
 </div>
 <div class="section" id="source-code-for-creating-ipython-shortcuts">
 <h2>Source code for creating IPython shortcuts<a class="headerlink" href="#source-code-for-creating-ipython-shortcuts" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [2]: </span><span class="o">&gt;&gt;&gt;</span> <span class="o">%</span><span class="k">pycat</span> shortcuts.py
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [3]: </span><span class="o">&gt;&gt;&gt;</span> <span class="o">%</span><span class="k">pycat</span> shortcuts.py
 <span class="go">Error: no such file, variable, URL, history range or macro</span>
 </pre></div>
 </div>
@@ -631,7 +656,7 @@ Distributed under the terms of the Modified BSD License.</p>
         <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="ipython_interactive_shell.html" title="previous chapter">IPython_InteractiveShell</a></li>
+      <li>Previous: <a href="startup.html" title="previous chapter">IPython Startup Scripts</a></li>
       <li>Next: <a href="magics.html" title="next chapter">IPython Magics</a></li>
   </ul></li>
 </ul>
@@ -639,7 +664,6 @@ Distributed under the terms of the Modified BSD License.</p>
 <p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="startup.html">Startup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ipython_interactive_shell.html">The Interactive Shell</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Keybindings</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#interactively-binding-keys">Interactively Binding Keys</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#official-ipython-documentation">Official IPython Documentation</a></li>
@@ -663,6 +687,7 @@ Distributed under the terms of the Modified BSD License.</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#official-ipython-documentation">Official IPython Documentation</a><ul>
+<li><a class="reference internal" href="#conditional-filters">Conditional Filters</a></li>
 <li><a class="reference internal" href="#pure-prompt-toolkit-way-of-rebinding-keys">Pure Prompt Toolkit Way of Rebinding Keys</a><ul>
 <li><a class="reference internal" href="#adding-custom-key-bindings">Adding custom key bindings</a></li>
 <li><a class="reference internal" href="#enable-key-bindings-according-to-a-condition">Enable key bindings according to a condition</a></li>
@@ -719,7 +744,7 @@ Distributed under the terms of the Modified BSD License.</p>
           <a href="magics.html" title="IPython Magics"
              >next</a> |</li>
         <li class="right" >
-          <a href="ipython_interactive_shell.html" title="IPython_InteractiveShell"
+          <a href="startup.html" title="IPython Startup Scripts"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li> 
       </ul>

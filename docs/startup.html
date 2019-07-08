@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
-    <link rel="stylesheet" type="text/css" href="/data/data/com.termux/files/home/projects/dynamic_ipython/docs/_static/pyramid.css" />
+    <link rel="stylesheet" type="text/css" href="_static/C:\Users\faris\projects\dynamic_ipython\docs\source\..\_static\pyramid.css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
@@ -16,7 +16,7 @@
     <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="IPython_InteractiveShell" href="ipython_interactive_shell.html" />
+    <link rel="next" title="Keybindings in IPython" href="ipython_keybindings.html" />
     <link rel="prev" title="Welcome to IPython packages’ documentation!" href="index.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
@@ -36,7 +36,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="ipython_interactive_shell.html" title="IPython_InteractiveShell"
+          <a href="ipython_keybindings.html" title="Keybindings in IPython"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="index.html" title="Welcome to IPython packages’ documentation!"
@@ -78,6 +78,8 @@ are as follows:</p>
 <p><a class="reference external" href="../../profile_default/startup/05_log.py">05_log.py</a></p>
 <p><a class="reference external" href="../../profile_default/startup/06_help_helpers.py">06_help_helpers.py</a></p>
 <p><a class="reference external" href="../../profile_default/startup/20_aliases.py">20_aliases.py</a></p>
+<p><a class="reference external" href="../../profile_default/startup/32_vi_modes.py">32_vi_modes.py</a></p>
+<p><a class="reference external" href="../../profile_default/startup/32_vi_modes.py">41_numpy_init.py</a></p>
 <p><a class="reference external" href="../../profile_default/startup/42_pandas_init.py">42_pandas_init.py</a></p>
 <p><a class="reference external" href="../../profile_default/startup/50_sysexception.py">50_sysexception.py</a></p>
 </div>
@@ -92,63 +94,25 @@ of this, and it hugely eases utilizing IPython as a system shell.</p>
 <div class="section" id="easy-import">
 <h3>Easy Import<a class="headerlink" href="#easy-import" title="Permalink to this headline">¶</a></h3>
 <p><a class="reference internal" href="profile_default.html#id2"><span class="std std-ref">04_easy_import</span></a></p>
-<p>This module simply populates the IPython namespace with frequently used modules.
-A check is run to see if the user is running a new enough version of Python to
+<p>This module simply populates the IPython namespace with frequently used modules.</p>
+<p>A check is run to see if the user is running a new enough version of Python to
 utilize the python package Pynvim instead of Neovim.</p>
 </div>
 <div class="section" id="logging">
 <h3>Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h3>
-<p><span class="xref std std-ref">05_log</span></p>
+<p><a href="#id1"><span class="problematic" id="id2">:ref:`05_log`_</span></a></p>
+<p>This uses the IPython core <code class="xref py py-class docutils literal notranslate"><span class="pre">LoggingConfigurable()</span></code>
+to create a FileHandler that creates one new log file for every calendar
+day of the year.</p>
+<p>Running IPython instances will continue to write to the log file if the
+session continues after the point when the logfile rolls over.</p>
+<p>If multiple sessions are started, the new instances will append onto the same
+file as the older ones.</p>
 </div>
-<div class="section" id="convenience-functions">
-<h3>Convenience Functions<a class="headerlink" href="#convenience-functions" title="Permalink to this headline">¶</a></h3>
-<p><a class="reference internal" href="index.html#ipython"><span class="std std-ref">IPython</span></a> provides the functions <code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.Application.initialized()</span></code>
-and <code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.Application.instance()</span></code>. As a result, each script can easily
-implement the following as a check to ensure that the global IPython instance
-is running.</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-<span class="gp">   ...: </span>   <span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">Application</span><span class="o">.</span><span class="n">initialized</span>
-<span class="gp">   ...: </span>   <span class="kn">import</span> <span class="nn">sys</span>
-<span class="gp">   ...: </span>
-<span class="gt">  File</span><span class="nn"> &quot;&lt;ipython-input-1-cb854d5e1a2f&gt;&quot;</span><span class="gt">, line </span><span class="mi">2</span>
-    <span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">Application</span><span class="o">.</span><span class="n">initialized</span>
-                                   <span class="o">^</span>
-<span class="ne">SyntaxError</span>: invalid syntax
-</pre></div>
-</div>
-<p>Unfortunately, <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">IPython</span> <span class="pre">import</span> <span class="pre">Application</span></code> may be a feature of IPython7.3,
-which at the time of writing was released 3 days ago. If you don’t have this
-version of the module, you can alternatively run</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [2]: </span><span class="kn">from</span> <span class="nn">IPython.core.application</span> <span class="kn">import</span> <span class="n">Application</span>
-
-<span class="gp">In [3]: </span><span class="n">Application</span><span class="o">.</span><span class="n">initialized</span><span class="p">()</span>
-<span class="gh">Out[3]: </span><span class="go">False</span>
-</pre></div>
-</div>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span>IPython.Application.initialized<span class="o">?</span>
-<span class="go">Object `IPython.Application.initialized` not found.</span>
-</pre></div>
-</div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Signature: IPython.Application.initialized()
-Docstring: Has an instance been created?
-File:      ~/miniconda3/lib/python3.7/site-packages/traitlets/config/configurable.py
-Type:      method
-</pre></div>
-</div>
-<p>Here’s the help from <code class="xref py py-attr docutils literal notranslate"><span class="pre">IPython.application.instance</span></code>.</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span>IPython.Application.instance<span class="o">?</span>
-<span class="go">Object `IPython.Application.instance` not found.</span>
-</pre></div>
-</div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Signature: IPython.Application.instance(\*args, \*\*kwargs)
-Docstring:
-Returns a global instance of this class.
-This method create a new instance if none have previously been created
-and returns a previously created instance is one already exists.
-The arguments and keyword arguments passed to this method are passed
-on to the :meth:`__init__` method of the class upon instantiation.
-</pre></div>
-</div>
+<div class="section" id="help-helpers">
+<h3>Help Helpers<a class="headerlink" href="#help-helpers" title="Permalink to this headline">¶</a></h3>
+<p>Creates 2 functions in userspace to save the output of <code class="docutils literal notranslate"><span class="pre">help(python_object)</span></code>
+to a file or output to <code class="docutils literal notranslate"><span class="pre">sys.stdout</span></code>.</p>
 </div>
 <div class="section" id="examples">
 <h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
@@ -200,7 +164,7 @@ with a prefix, e.g.:</p>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="index.html" title="previous chapter">Welcome to IPython packages’ documentation!</a></li>
-      <li>Next: <a href="ipython_interactive_shell.html" title="next chapter">IPython_InteractiveShell</a></li>
+      <li>Next: <a href="ipython_keybindings.html" title="next chapter">Keybindings in IPython</a></li>
   </ul></li>
 </ul>
 <h3><a href="index.html">Table of Contents</a></h3>
@@ -211,7 +175,6 @@ with a prefix, e.g.:</p>
 <li class="toctree-l2"><a class="reference internal" href="#indexed-scripts">Indexed Scripts</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="ipython_interactive_shell.html">The Interactive Shell</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ipython_keybindings.html">Keybindings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="magics.html">Built-in Magics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="custom_magics.html">Writing Your Own Magics</a></li>
@@ -230,7 +193,7 @@ with a prefix, e.g.:</p>
 <li><a class="reference internal" href="#rehash">%rehash</a></li>
 <li><a class="reference internal" href="#easy-import">Easy Import</a></li>
 <li><a class="reference internal" href="#logging">Logging</a></li>
-<li><a class="reference internal" href="#convenience-functions">Convenience Functions</a></li>
+<li><a class="reference internal" href="#help-helpers">Help Helpers</a></li>
 <li><a class="reference internal" href="#examples">Examples</a></li>
 <li><a class="reference internal" href="#writing-the-scripts">Writing the Scripts</a></li>
 <li><a class="reference internal" href="#original">Original</a></li>
@@ -271,7 +234,7 @@ with a prefix, e.g.:</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="ipython_interactive_shell.html" title="IPython_InteractiveShell"
+          <a href="ipython_keybindings.html" title="Keybindings in IPython"
              >next</a> |</li>
         <li class="right" >
           <a href="index.html" title="Welcome to IPython packages’ documentation!"

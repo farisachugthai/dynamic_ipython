@@ -12,9 +12,12 @@ from logging import NullHandler
 import os
 import sys
 
-from IPython import get_ipython
+from IPython import get_ipython, start_ipython
 
 _ip = get_ipython()
+
+if _ip is None:
+    _ip = start_ipython()
 
 logger = logging.getLogger(name=__name__).addHandler(NullHandler)
 

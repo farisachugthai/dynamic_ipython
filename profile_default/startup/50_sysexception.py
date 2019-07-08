@@ -197,9 +197,9 @@ class ExceptionHook(BaseException):
     def __call__(self, *args, **kwargs):
         if self.instance is None:
             self.instance = ultratb.AutoFormattedTB(mode='Context',
-                                                color_scheme='Linux',
-                                                call_pdb=True,
-                                                ostream=sys.stdout)
+                                                    color_scheme='Linux',
+                                                    call_pdb=True,
+                                                    ostream=sys.stdout)
         return self.instance(*args, **kwargs)
 
 

@@ -57,8 +57,10 @@ from IPython.lib.deepreload import reload as __reload
 #     pass
 
 
-def dreload(mod, extra_excludes=None,
-        excludes=('sys','os.path', 'builtins', '__main__', 'io', 'numpy', 'numpy._globals', 'IPython')):
+def dreload(mod,
+            extra_excludes=None,
+            excludes=('sys', 'os.path', 'builtins', '__main__', 'io', 'numpy',
+                      'numpy._globals', 'IPython')):
     """Import IPython's deepreload magic and modify the :param:`excludes` set.
 
     Parameters
@@ -71,7 +73,7 @@ def dreload(mod, extra_excludes=None,
         Modules that won't be reloaded in order to preserve display and excepthooks.
 
     """
-    return __reload(mod, excludes=excludes+set(extra_excludes))
+    return __reload(mod, excludes=excludes + set(extra_excludes))
 
 
 def import_nvim(mod):

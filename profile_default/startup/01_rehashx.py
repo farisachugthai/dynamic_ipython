@@ -66,6 +66,7 @@ def blacklisted_aliases(shell=None):
         except AliasError:
             pass
 
+
 @timer
 def main(shell=None):
     """Check if :mod:`IPython` was initialized and if so, ``%rehashx``."""
@@ -74,6 +75,7 @@ def main(shell=None):
     blacklisted_aliases(shell)
 
     return shell
+
 
 if __name__ == "__main__":
     LOGGER = logging.getLogger(name=__name__)
