@@ -14,6 +14,7 @@ documentation root, use os.path.abspath to make it absolute, like shown here.
 
 """
 from datetime import datetime
+import functools
 import logging
 import os
 from pathlib import Path
@@ -180,21 +181,21 @@ htmlhelp_basename = 'site-packages-doc'
 # -- Options for LaTeX output ------------------------------------------------
 
 # latex_elements = {
-    # The paper size ('letterpaper' or 'a4paper').
-    #
-    # 'papersize': 'letterpaper',
+# The paper size ('letterpaper' or 'a4paper').
+#
+# 'papersize': 'letterpaper',
 
-    # The font size ('10pt', '11pt' or '12pt').
-    #
-    # 'pointsize': '10pt',
+# The font size ('10pt', '11pt' or '12pt').
+#
+# 'pointsize': '10pt',
 
-    # Additional stuff for the LaTeX preamble.
-    #
-    # 'preamble': '',
+# Additional stuff for the LaTeX preamble.
+#
+# 'preamble': '',
 
-    # Latex figure (float) alignment
-    #
-    # 'figure_align': 'htbp',
+# Latex figure (float) alignment
+#
+# 'figure_align': 'htbp',
 # }
 
 # Grouping the document tree into LaTeX files. List of tuples
@@ -209,9 +210,10 @@ htmlhelp_basename = 'site-packages-doc'
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-# man_pages = [(master_doc, 'site-packages', 'site-packages Documentation', [
-#     author
-# ], 1)]
+man_pages = [(master_doc, 'site-packages', 'site-packages Documentation',
+    [ author ], 1)]
+
+manpages_url = 'https://linux.die.net/man/'
 
 # -- Options for Texinfo output ----------------------------------------------
 
@@ -295,6 +297,20 @@ def linkcode_resolve(domain, info):
 
 # -- Setup -------------------------------------------------------------------
 
+def add_css(func):
+    """Add a CSS file to Sphinx."""
+
+    @functools.wraps(func)
+    def decorate_css(*args, **kwargs):
+        custom_css = CONF_PATH.joinpath('..', '_static', 'pyramid.css')
+
+        if not custom_css:
+            LOGGER.warning('%s is not a file' % custom_css)
+        LOGGER.debug(custom_css)
+        return custom_css
+
+
+@add_css
 def setup(app):
     """Add pyramid CSS to the docs.
 
@@ -303,13 +319,5 @@ def setup(app):
 
     """
     if hasattr(CONF_PATH, 'joinpath'):
-        def add_css():
-            custom_css = CONF_PATH.joinpath('..', '_static', 'pyramid.css')
-
-            if not custom_css:
-                LOGGER.warning('%s is not a file' % custom_css)
-            LOGGER.debug(custom_css)
-            return custom_css
-
         extra_css = str(add_css())
         app.add_stylesheet(extra_css)

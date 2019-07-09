@@ -12,12 +12,13 @@ Visualization 1st ed.pdf"*:
    directory, which is in the Python path. A possibility is to put it in
    the current directory, or in your `IPython extensions dir <../../extensions>`_
 
-   An extension implements a
+   An extension implements a function load_ipython_extension.
    :func:`IPython.core.magics.extension.load_ipython_extension(ipython)`,
-   which takes the current |ip| instance as an argument (and possibly
+   takes the current |ip| instance as an argument (and possibly
    :func:`IPython.core.magics.extension.unload_ipython_extension(ipython)`,
-   which is called when the extension is unloaded). This instance can be used to register new
-   magic commands, access the user namespace, execute code, and so on.
+   which is called when the extension is unloaded). This instance can be
+   used to register new magic commands, access the user namespace, execute
+   code, and so on.
    This loading function is called when the extension is loaded, which
    happens when the command is executed.
 
@@ -43,7 +44,7 @@ the following command to get the current instance
     _ip = get_ipython()
 
 
-Here are 2 useful functuons for registering a magic with the global IPython
+Here are 2 useful functions for registering a magic with the global IPython
 instance.
 
 .. code-block:: none
