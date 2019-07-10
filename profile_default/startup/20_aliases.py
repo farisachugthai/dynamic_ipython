@@ -15,46 +15,23 @@ Overview
 ========
 
 This module utilizes `_ip`, the global :mod:`IPython` |ip|
-instance, and fills the ``user_ns`` with aliases that are functionally
-useful while working in a shell.
+instance, and fills the ``user_ns`` with aliases that are available
+in a typical system shell.
+
+Unfortunately, the exact definition of what a system shell is, what language
+it responds to, and it's ability to receive and pass along input and output
+in pipelines will vary greatly.
 
 As a result, the module needs to test the user's OS, what shell they're using
 and what executables are available on the :envvar:`PATH`.
 
-On Linux platforms, it is assumed that the user is using a bash shell.
+On Unix platforms, it is assumed that the user is using a bash shell.
 
 However on Windows, it is possible that the user has a shell that runs
 ``dosbatch``, ``powershell``, or ``bash``.
 
-As a result, the environment variable :envvar:`shell` is checked, and if present,
-that value is used.
-
-
-Parameters
-==========
-
-When writing aliases, an ``%alias`` definition can take various string
-placeholders. As per the official documentation:
-
-
-.. topic:: ``%l`` parameter
-
-    You can use the ``%l`` specifier in an ``%alias`` definition to represent the
-    whole line when the alias is called.
-
-Meaning that it behaves similarly to the parameter ``$*`` in shells like eshell.
-
-The documentation goes on to say:
-
-.. ipython::
-
-    In [2]: %alias bracket echo "Input in brackets: <%l>"
-    In [3]: bracket hello world
-    Input in brackets: <hello world>
-
-Note that we quote when in the configuration file but when running alias
-interactively the syntax ``%alias alias_name cmd`` doesn't require quoting.
-
+As a result, the environment variable :envvar:`ComSpec` will be checked,
+and if present, that value is used.
 
 Attributes
 ==========
@@ -68,12 +45,12 @@ _ip : |ip|
 Examples
 ========
 
-This code creates a handful of platform-specific functions where each
-returns :ref:`user_aliases`. Realizing that this is also used in the
-:mod:`IPython.core.alias` implementation, the source code of the
-implementation has been provided for reference.
+The source code of the implementation, module :mod:`IPython.core.alias`
+implementation, has been provided for reference.:
 
 .. ipython:: python
+
+    from traitlets.config import Configurable, List, Instance
 
     class AliasManager(Configurable):
 
@@ -87,22 +64,66 @@ implementation has been provided for reference.
             self.linemagics = self.shell.magics_manager.magics['line']
             self.init_aliases()
 
+Tips
+====
+
+When writing aliases, an ``%alias`` definition can take various string
+placeholders. As per the official documentation:
+
+.. topic:: ``%l`` parameter
+
+    You can use the ``%l`` specifier in an ``%alias`` definition to represent the
+    whole line when the alias is called.
+
+Meaning that it behaves similarly to the parameter ``$*`` in typical POSIX shells.
+
+The documentation goes on to say:
+
+.. ipython::
+
+    In [2]: %alias bracket echo "Input in brackets: <%l>"
+    In [3]: bracket hello world
+    Input in brackets: <hello world>
+
+Note that we quote when in the configuration file but when running alias
+interactively the syntax ``%alias alias_name cmd`` doesn't require quoting.
+
 
 See Also
 ========
 
 :mod:`IPython.core.alias`
-    Aliases file for IPython.
+    Module where the alias functionality for IPython is defined and the basic
+    implementation scaffolded.
 
 
-Yet to be implemented
-=====================
+Todo
+====
 
 - ``ssh-day``
 - ``extract``
-- :command:`fzf` in its many invocations.
+- Cleaning up the current implementation of :command:`fzf`
+  and continue building on its many invocations.
+
 - A function that wraps around :func:|ip|`.MagicsManager.define_alias()` and
   checks for whether the executable is on the :envvar:`PATH` all in one swoop.
+
+This module will need refactoring soon as POSIX standard builtins and packages
+from the Ubuntu repository and pypi.org are intermixed haphazardly.
+
+Should break this up into 2 modules, built-in or not built-in or possibly even
+break it up on an OS basis. Actually that'll probably be the cleanest.
+
+In addition if we break up, let's say powershell aliases, into it's own module;
+then we can break that module up into 2 main sections for built-ins and not.
+
+Then, if we organized it that way, could we attempt multi-threading the define_alias
+calls? Or potentially make a shutil.which() decorator over possible aliases, then only
+return it if assert shutil.which(func) and have that running in a different process entirely?
+Idk.
+
+Doesn't seem easy especially with 'Modify the namespace of a SingletonInstance'
+as our end goal.
 
 """
 import logging
@@ -110,6 +131,7 @@ import shutil
 
 from IPython import get_ipython
 from IPython.core.alias import AliasError
+
 from profile_default.util import module_log
 from profile_default.util.machine import Platform
 
@@ -542,24 +564,15 @@ def main():
     machine = Platform()
 
     if machine.is_linux:
-
-        # Now let's get the Linux aliases
         user_aliases += linux_specific_aliases(_ip)
-        # LOGGER.info("The number of available aliases after linux aliases"
-        # " is: " + str(len(user_aliases)))
 
-    # need to figure out what's wrong with my machine.env method.
     # elif machine.is_conemu:  # should check for 'nix-tools as an env var
     #     user_aliases += powershell_aliases(_ip)
     else:
         user_aliases += cmd_aliases(_ip)
 
     user_aliases += common_aliases(_ip)
-
     __setup_fzf(user_aliases)
-
-    # LOGGER.info("The number of available user aliases is: "
-    #"" + str(len(user_aliases)))
 
     for i in user_aliases:
         try:
