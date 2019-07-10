@@ -26,7 +26,8 @@ def _parse_arguments():
     parser.add_argument(
         "site-packages",
         default=None,
-        help="Path to installation-specific site-packages directory.")
+        help="Path to installation-specific site-packages directory."
+    )
 
     parser.add_argument(
         "-a",
@@ -45,14 +46,17 @@ def _parse_arguments():
         default=sys.stdout,
         type=argparse.FileType('w'),
         help='The file where the packages should be written. Defaults to'
-        ' stdout.')
+        ' stdout.'
+    )
 
-    parser.add_argument('-ll',
-                        '--log-level',
-                        metavar='log-level',
-                        default=logging.WARNING,
-                        type=int,
-                        help='Log level. Defaults to logging.WARNING.')
+    parser.add_argument(
+        '-ll',
+        '--log-level',
+        metavar='log-level',
+        default=logging.WARNING,
+        type=int,
+        help='Log level. Defaults to logging.WARNING.'
+    )
 
     return parser
 
@@ -83,8 +87,11 @@ def all_site_pkgs():
     home = expanduser('~')
 
     search = glob(
-        pjoin(home, "virtualenvs", "**", "lib", "python3.6", "site-packages",
-              "**"))
+        pjoin(
+            home, "virtualenvs", "**", "lib", "python3.6", "site-packages",
+            "**"
+        )
+    )
 
     for i in search:
         if "dist-info" not in i:

@@ -6,6 +6,8 @@
 Event Watcher
 ================
 
+.. module:: event_watcher_example
+
 :URL: https://ipython.readthedocs.io/en/stable/config/callbacks.html#ipython-events
 
 Provided by the IPython development team as an example of the new
@@ -25,7 +27,7 @@ To register callbacks, use `IPython.core.events.EventManager.register().`
 """
 
 
-class VarWatcher(object):
+class VarWatcher:
 
     def __init__(self, ip):
         self.shell = ip

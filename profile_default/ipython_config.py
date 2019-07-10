@@ -450,8 +450,7 @@ try:
         """The official way IPython does it in :ref:`IPython.core.interactiveshell`."""
         with TemporaryDirectory() as dirname:
             return {
-                'text/html': sphx.sphinxify(doc, dirname),
-                'text/plain': doc
+                'text/html': sphx.sphinxify(doc, dirname), 'text/plain': doc
             }
 
 except ImportError:

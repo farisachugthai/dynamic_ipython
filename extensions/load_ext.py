@@ -33,12 +33,14 @@ def load_ext(module_str, shell=None):
         if res == 'already loaded':
             logging.warning(
                 "The %s extension is already loaded. To reload it, use:" %
-                module_str)
+                module_str
+            )
             print("%reload_ext", module_str)
 
         elif res == 'no load function':
             logging.error(
-                "The %s module is not an IPython extension." % module_str)
+                "The %s module is not an IPython extension." % module_str
+            )
 
 
 def load_ipython_extension(shell=None):

@@ -15,10 +15,10 @@ It also shows the following simpler example:
                                             register_cell_magic)
     In [2]: @register_line_magic
             def hello(line):
-            if line == 'french':
-                print("Salut tout le monde!")
-            else:
-                print("Hello world!")
+                if line == 'french':
+                    print("Salut tout le monde!")
+                else:
+                    print("Hello world!")
 
 """
 import sys

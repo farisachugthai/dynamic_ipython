@@ -78,9 +78,10 @@ def get_default_vim_bindings():
         Global IPython instance.
 
     """
-    return merge_key_bindings(
-        [vi.load_vi_bindings(),
-         vi.load_vi_search_bindings()])
+    return merge_key_bindings([
+        vi.load_vi_bindings(),
+        vi.load_vi_search_bindings()
+    ])
 
 
 def emacs_bindings():
@@ -128,10 +129,12 @@ def emacs_alt_bindings():
     kb.add('escape', 'l', filter=(insert_mode))(named_commands.downcase_word)
     kb.add('escape', 'u', filter=(insert_mode))(named_commands.uppercase_word)
     kb.add('escape', 'y', filter=(insert_mode))(named_commands.yank_pop)
-    kb.add('escape', 'backspace',
-           filter=(insert_mode))(named_commands.backward_kill_word)
-    kb.add('escape', '\\',
-           filter=(insert_mode))(named_commands.delete_horizontal_space)
+    kb.add(
+        'escape', 'backspace', filter=(insert_mode)
+    )(named_commands.backward_kill_word)
+    kb.add(
+        'escape', '\\', filter=(insert_mode)
+    )(named_commands.delete_horizontal_space)
 
     return kb
 
@@ -164,11 +167,13 @@ def main(_ip=None, escape_keys=False):
     nh = get_by_name('next-history')
 
     kb.add_binding(u'j', u'k', filter=(insert_mode))(switch_to_navigation_mode)
-    kb.add_binding('K',
-                   filter=(HasFocus(DEFAULT_BUFFER) & ViNavigationMode()))(ph)
+    kb.add_binding(
+        'K', filter=(HasFocus(DEFAULT_BUFFER) & ViNavigationMode())
+    )(ph)
 
-    kb.add_binding('J',
-                   filter=(HasFocus(DEFAULT_BUFFER) & ViNavigationMode()))(nh)
+    kb.add_binding(
+        'J', filter=(HasFocus(DEFAULT_BUFFER) & ViNavigationMode())
+    )(nh)
 
     emacs_keys = emacs_bindings()
 

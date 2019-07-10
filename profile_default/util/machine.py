@@ -81,8 +81,9 @@ class Platform:
         self.env = env
 
     def __repr__(self):
-        return '{!r}: {!r}.'.format(self.__class__.__name__,
-                                    self._sys_platform)
+        return '{!r}: {!r}.'.format(
+            self.__class__.__name__, self._sys_platform
+        )
 
     @property
     def is_win_vt100(self):
@@ -125,4 +126,5 @@ if __name__ == "__main__":
     LOGGER = module_log.stream_logger(
         logger=logging.getLogger(name=__name__),
         msg_format='%(asctime)s : %(levelname)s : %(module)s %(message)s',
-        log_level=logging.INFO)
+        log_level=logging.INFO
+    )

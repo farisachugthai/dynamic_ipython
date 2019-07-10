@@ -57,10 +57,14 @@ from IPython.lib.deepreload import reload as __reload
 #     pass
 
 
-def dreload(mod,
-            extra_excludes=None,
-            excludes=('sys', 'os.path', 'builtins', '__main__', 'io', 'numpy',
-                      'numpy._globals', 'IPython')):
+def dreload(
+        mod,
+        extra_excludes=None,
+        excludes=(
+            'sys', 'os.path', 'builtins', '__main__', 'io', 'numpy',
+            'numpy._globals', 'IPython'
+        )
+):
     """Import IPython's deepreload magic and modify the :param:`excludes` set.
 
     Parameters
@@ -98,8 +102,10 @@ def import_nvim(mod):
         pynvim = import_module(mod)
     except ImportError:
         print("************************************************************")
-        print("{} import failed. Only ignore this if you plan on going"
-              " the entire session without using %edit".format(mod))
+        print(
+            "{} import failed. Only ignore this if you plan on going"
+            " the entire session without using %edit".format(mod)
+        )
         print("************************************************************")
     else:
         return pynvim

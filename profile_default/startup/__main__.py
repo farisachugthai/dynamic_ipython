@@ -48,8 +48,10 @@ if _ip.initialized():
 
     # Detect if embed shell or not and display a message
     if isinstance(_ip, InteractiveShellEmbed):
-        sys.stderr.write("\nYou are currently in an embedded IPython shell,\n"
-                         "the configuration will not be loaded.\n\n")
+        sys.stderr.write(
+            "\nYou are currently in an embedded IPython shell,\n"
+            "the configuration will not be loaded.\n\n"
+        )
 else:
     # Not inside IPython
     # Build a terminal app in order to force ipython to load the configuration
@@ -62,7 +64,8 @@ else:
 
     if sys.argv[1] is None:
         profile_to_load = os.path.expanduser(
-            ''.join('~/.ipython/profile_default'))
+            ''.join('~/.ipython/profile_default')
+        )
 
     if ensure_dir_exists(profile_to_load):
         ipapp.profile_dir = os.path.expanduser('~/.ipython/profile_default')
