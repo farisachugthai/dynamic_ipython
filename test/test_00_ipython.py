@@ -51,28 +51,34 @@ import IPython
 from IPython import get_ipython
 
 
+logging.basicConfig(level=logging.INFO)
+
+
 class TestIPython(unittest.TestCase):
     """For debugging the test suite."""
 
-    shell = get_ipython()
-
     def __init__(self, shell=None):
+        """Initialize IPython for unit testing."""
         super().__init__()
         if shell is not None:
             self.shell = shell
         else:
-            from IPython import start_ipython
-            self.shell = start_ipython()
+            self.shell = get_ipython()
 
     def test_ipython(self):
-        print(type(self.shell))
+        """Test that the object returns an IPython instance.
+
+        Mostly here to check that I'm using :mod:`unittest` correctly.
+        """
+        logging.info('Type of self.shell is: {}'.format(type(self.shell)))
         self.assertIsInstance(self.shell, IPython.core.interactiveshell.InteractiveShell)
 
     def runTest(self):
         """This is required as stated in the unittest.TestCase docstring.
 
-        As a result, the only use of this function will be to call the necessary
-        methods.
+        Begin runTest
+        =============
+
         """
         return self.test_ipython()
 

@@ -7,6 +7,12 @@ These are the auto-generated documents for the Jupyter shell.
 Note that they may not accurately reflect the API as they display the interface
 at the time of writing.
 
+.. ipython::
+
+   import jupyter
+   import jupyter_conf
+
+
 :mod:`~jupyter_conf.jupyter_qtconsole_config`
 =============================================
 

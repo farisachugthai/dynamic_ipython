@@ -18,6 +18,23 @@ import os
 import sys
 from logging import NullHandler
 
+try:
+    # these should always be available
+    import IPython
+    from IPython import get_ipython
+except (ImportError, ModuleNotFoundError):
+    pass
+
+try:
+    import ipykernel
+except (ImportError, ModuleNotFoundError):
+    pass
+
+try:
+    import jupyter
+except (ImportError, ModuleNotFoundError):
+    pass
+
 logging.getLogger(__name__).addHandler(NullHandler())
 
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))

@@ -1,3 +1,20 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""Jupyter contrib config.
+
+.. module:: jupyter_contrib_config
+    :Synopsis: Configuration file for the jupyter_nbextensions_contrib package.
+
+======================
+Jupyter Contrib Config
+======================
+
+The Jupyter Notebook has a great ecosystem of contributors surrounding it,
+and this module exists as the module that intends to build on that platform.
+
+-----------------------
+
+"""
 # Configuration file for jupyter contrib.
 from traitlets.config import get_config
 c = get_config()

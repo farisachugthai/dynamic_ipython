@@ -16,6 +16,13 @@ from logging import NullHandler
 import os
 import sys
 
+try:
+    # these should always be available
+    import IPython
+    from IPython import get_ipython
+except (ImportError, ModuleNotFoundError):
+    pass
+
 from profile_default.util import module_log
 
 logging.getLogger(__name__).addHandler(NullHandler())
