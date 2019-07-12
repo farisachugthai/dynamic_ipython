@@ -49,8 +49,9 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-ipython_keybindings">
-<span id="keybindings-in-ipython"></span><h1>Keybindings in IPython<a class="headerlink" href="#module-ipython_keybindings" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="keybindings-in-ipython">
+<h1>Keybindings in IPython<a class="headerlink" href="#keybindings-in-ipython" title="Permalink to this headline">¶</a></h1>
+<p>This document will summarize how to rebind keys in IPython since IPython 5.0.</p>
 <div class="section" id="interactively-binding-keys">
 <h2>Interactively Binding Keys<a class="headerlink" href="#interactively-binding-keys" title="Permalink to this headline">¶</a></h2>
 <p>If we would like to add extra keybindings to the IPython shell, we can utilize
@@ -58,36 +59,16 @@ a few functions built into the <a class="reference external" href="https://ipyth
 in addition, to utilizing the expansive <code class="xref py py-mod docutils literal notranslate"><span class="pre">prompt_toolkit</span></code> library.</p>
 <p>First we’ll initialize a global instance of the shell.</p>
 <p>Then import the function <code class="xref py py-func docutils literal notranslate"><span class="pre">create_ipython_shortcuts()</span></code>
-and initialize a <code class="xref py py-class docutils literal notranslate"><span class="pre">KeyBindings</span></code>
+and initialize a <code class="xref py py-class docutils literal notranslate"><span class="pre">KeyBindings()</span></code>
 instance.</p>
 <p>The attributes associated with <code class="xref py py-func docutils literal notranslate"><span class="pre">create_ipython_shortcuts()</span></code>
 are as follows:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
-<span class="gp">   ...: </span><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">IPython.terminal.interactiveshell</span> <span class="kn">import</span> <span class="n">create_ipython_shortcuts</span>
-<span class="gp">   ...: </span><span class="o">&gt;&gt;&gt;</span> <span class="n">ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-<span class="gp">   ...: </span><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">create_ipython_shortcuts</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span>
-<span class="gp">   ...: </span><span class="o">&gt;&gt;&gt;</span> <span class="c1"># This will give you the following methods</span>
-<span class="gp">   ...: </span><span class="o">&gt;&gt;&gt;</span> <span class="k">print</span><span class="p">(</span><span class="nb">dir</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
-<span class="gp">   ...: </span>
-<span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">AttributeError</span><span class="g g-Whitespace">                            </span>Traceback (most recent call last)
-<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">f3fb9eb4f478</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">from</span> <span class="nn">IPython.terminal.interactiveshell</span> <span class="kn">import</span> <span class="n">create_ipython_shortcuts</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-<span class="ne">----&gt; </span><span class="mi">4</span> <span class="n">c</span> <span class="o">=</span> <span class="n">create_ipython_shortcuts</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="c1"># This will give you the following methods</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="k">print</span><span class="p">(</span><span class="nb">dir</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
-
-<span class="nn">~/.local/share/virtualenvs/dynamic_ipython-jCMV-BoR/lib/python3.7/site-packages/IPython/terminal/shortcuts.py</span> in <span class="ni">create_ipython_shortcuts</span><span class="nt">(shell)</span>
-<span class="g g-Whitespace">     </span><span class="mi">74</span>     <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;f2&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">has_focus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">))(</span><span class="n">open_input_in_editor</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">75</span> 
-<span class="ne">---&gt; </span><span class="mi">76</span>     <span class="k">if</span> <span class="n">shell</span><span class="o">.</span><span class="n">display_completions</span> <span class="o">==</span> <span class="s1">&#39;readlinelike&#39;</span><span class="p">:</span>
-<span class="g g-Whitespace">     </span><span class="mi">77</span>         <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;c-i&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">has_focus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">78</span>                               <span class="o">&amp;</span> <span class="o">~</span><span class="n">has_selection</span>
-
-<span class="ne">AttributeError</span>: &#39;InteractiveShell&#39; object has no attribute &#39;display_completions&#39;
-</pre></div>
-</div>
+<p>from IPython import get_ipython
+from IPython.terminal.interactiveshell import create_ipython_shortcuts
+ip = get_ipython()
+c = create_ipython_shortcuts(ip)
+# This will give you the following methods
+print(dir(c))</p>
 <p>This will produce an output of:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;_KeyBindings__version&#39;,
 ...
@@ -109,7 +90,7 @@ are as follows:</p>
 <h3>Original File Implementation<a class="headerlink" href="#original-file-implementation" title="Permalink to this headline">¶</a></h3>
 <p>Let’s first check out how keybindings were originally implemented to give
 ourselves a frame of reference.:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [2]: </span><span class="kn">from</span> <span class="nn">IPython.paths</span> <span class="kn">import</span> <span class="n">get_ipython_package_dir</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">from</span> <span class="nn">IPython.paths</span> <span class="kn">import</span> <span class="n">get_ipython_package_dir</span>
 </pre></div>
 </div>
 <p>Go to the directory where IPython is installed. You can use the code above
@@ -126,27 +107,35 @@ to check its location.</p>
 describes the process of re-binding keys.</p>
 <div class="section" id="conditional-filters">
 <h3>Conditional Filters<a class="headerlink" href="#conditional-filters" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.registry</span> <span class="k">import</span> <span class="n">Registry</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.defaults</span> <span class="k">import</span> <span class="n">load_key_bindings</span>
-<span class="kn">from</span> <span class="nn">IPython</span> <span class="k">import</span> <span class="n">get_ipython</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.enums</span> <span class="k">import</span> <span class="n">DEFAULT_BUFFER</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.keys</span> <span class="k">import</span> <span class="n">Keys</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.filters</span> <span class="k">import</span> <span class="n">HasFocus</span><span class="p">,</span> <span class="n">HasSelection</span><span class="p">,</span> <span class="n">ViInsertMode</span>
-<span class="n">ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-<span class="n">insert_mode</span> <span class="o">=</span> <span class="n">ViInsertMode</span><span class="p">()</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [2]: </span><span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.registry</span> <span class="kn">import</span> <span class="n">Registry</span>
+<span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">2</span><span class="o">-</span><span class="n">d9f6ccb1cd79</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.registry</span> <span class="kn">import</span> <span class="n">Registry</span>
 
-<span class="k">def</span> <span class="nf">insert_unexpected</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;From the IPython examples on keybinding configuration.&quot;&quot;&quot;</span>
-    <span class="n">buf</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span>
-    <span class="n">buf</span><span class="o">.</span><span class="n">insert_text</span><span class="p">(</span><span class="s1">&#39;The Spanish Inquisition&#39;</span><span class="p">)</span>
-    <span class="c1"># Register the shortcut if IPython is using prompt_toolkit</span>
-    <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ip</span><span class="p">,</span> <span class="s1">&#39;pt_cli&#39;</span><span class="p">):</span>
-        <span class="n">registry</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">pt_cli</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">key_bindings_registry</span>
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;prompt_toolkit.key_binding.registry&#39;
 
-        <span class="n">registry</span><span class="o">.</span><span class="n">add_binding</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlN</span><span class="p">,</span>
-                 <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span>
-                              <span class="o">&amp;</span> <span class="o">~</span><span class="n">HasSelection</span><span class="p">()</span>
-                         <span class="o">&amp;</span> <span class="n">insert_mode</span><span class="p">))(</span><span class="n">insert_unexpected</span><span class="p">)</span>
+<span class="gp">In [3]: </span><span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.defaults</span> <span class="kn">import</span> <span class="n">load_key_bindings</span>
+
+<span class="gp">In [4]: </span><span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+
+<span class="gp">In [5]: </span><span class="kn">from</span> <span class="nn">prompt_toolkit.enums</span> <span class="kn">import</span> <span class="n">DEFAULT_BUFFER</span>
+
+<span class="gp">In [6]: </span><span class="kn">from</span> <span class="nn">prompt_toolkit.keys</span> <span class="kn">import</span> <span class="n">Keys</span>
+
+<span class="gp">In [7]: </span><span class="kn">from</span> <span class="nn">prompt_toolkit.filters</span> <span class="kn">import</span> <span class="n">HasFocus</span><span class="p">,</span> <span class="n">HasSelection</span><span class="p">,</span> <span class="n">ViInsertMode</span>
+
+<span class="gp">In [8]: </span><span class="n">ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+
+<span class="gp">In [9]: </span><span class="n">insert_mode</span> <span class="o">=</span> <span class="n">ViInsertMode</span><span class="p">()</span>
+
+<span class="gp">In [10]: </span><span class="k">def</span> <span class="nf">insert_unexpected</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+<span class="gp">   ....: </span>    <span class="sd">&quot;&quot;&quot;From the IPython examples on keybinding configuration.&quot;&quot;&quot;</span>
+<span class="gp">   ....: </span>    <span class="n">buf</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span>
+<span class="gp">   ....: </span>    <span class="n">buf</span><span class="o">.</span><span class="n">insert_text</span><span class="p">(</span><span class="s1">&#39;The Spanish Inquisition&#39;</span><span class="p">)</span>
+<span class="gp">   ....: </span>    <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ip</span><span class="p">,</span> <span class="s1">&#39;pt_cli&#39;</span><span class="p">):</span>
+<span class="gp">   ....: </span>        <span class="n">registry</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">pt_cli</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">key_bindings_registry</span>
+<span class="gp">   ....: </span>
 </pre></div>
 </div>
 <p>The documentation also shows a way of adding a <code class="xref py py-obj docutils literal notranslate"><span class="pre">Conditional</span></code> Filter
@@ -544,7 +533,7 @@ can still have a specific call work by making it as IPShell(dummy=False).
 </div>
 <div class="section" id="source-code-for-creating-ipython-shortcuts">
 <h2>Source code for creating IPython shortcuts<a class="headerlink" href="#source-code-for-creating-ipython-shortcuts" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [3]: </span><span class="o">&gt;&gt;&gt;</span> <span class="o">%</span><span class="k">pycat</span> shortcuts.py
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [11]: </span><span class="o">&gt;&gt;&gt;</span> <span class="o">%</span><span class="k">pycat</span> shortcuts.py
 <span class="go">Error: no such file, variable, URL, history range or macro</span>
 </pre></div>
 </div>

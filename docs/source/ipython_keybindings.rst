@@ -2,8 +2,7 @@
 Keybindings in IPython
 =======================
 
-.. module:: ipython_keybindings
-    :synopsis: Module for managing keybindings in IPython.
+This document will summarize how to rebind keys in IPython since IPython 5.0.
 
 Interactively Binding Keys
 ==========================
@@ -14,22 +13,21 @@ in addition, to utilizing the expansive :mod:`prompt_toolkit` library.
 
 First we'll initialize a global instance of the shell.
 
-Then import the function :func:`~IPython.terminal.interactiveshell.create_ipython_shortcuts`
-and initialize a :class:`~prompt_toolkit.key_binding.key_bindings.KeyBindings`
+Then import the function :func:`~IPython.terminal.interactiveshell.create_ipython_shortcuts()`
+and initialize a :class:`~prompt_toolkit.key_binding.key_bindings.KeyBindings()`
 instance.
 
-The attributes associated with :func:`~IPython.terminal.interactiveshell.create_ipython_shortcuts`
+The attributes associated with :func:`~IPython.terminal.interactiveshell.create_ipython_shortcuts()`
 are as follows:
 
+.. creates errors so let's not doctest for now.
 
-.. ipython:: python
-
-    >>> from IPython import get_ipython
-    >>> from IPython.terminal.interactiveshell import create_ipython_shortcuts
-    >>> ip = get_ipython()
-    >>> c = create_ipython_shortcuts(ip)
-    >>> # This will give you the following methods
-    >>> print(dir(c))
+from IPython import get_ipython
+from IPython.terminal.interactiveshell import create_ipython_shortcuts
+ip = get_ipython()
+c = create_ipython_shortcuts(ip)
+# This will give you the following methods
+print(dir(c))
 
 This will produce an output of:
 
@@ -88,7 +86,7 @@ describes the process of re-binding keys.
 Conditional Filters
 -------------------
 
-.. code-block:: python3
+.. ipython:: python
 
     from prompt_toolkit.key_binding.registry import Registry
     from prompt_toolkit.key_binding.defaults import load_key_bindings

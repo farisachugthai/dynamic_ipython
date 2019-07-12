@@ -2,11 +2,7 @@
 
 .. module:: jupyter_conf.jupyter_console_config
 
-===============
-Jupyter Console
-===============
-
-Running the command :program:`jupyter console` emits a **Deprecation Warning** so
+Running the program :program:`jupyter console` emits a deprecaion warning so
 not much going on here.
 
 """
@@ -123,10 +119,8 @@ def zmqterminalinteractiveshell_image():
 
     ---------
 
-    .. todo:: Image Handler
-
-        Need to set something up for the Jupyter Console image handler.
-        Same thing for QTConsole.
+    Need to set something up for the Jupyter Console image handler.
+    Same thing for QTConsole.
 
     Callable object called via 'callable' image handler with one argument, `data`,
     which is `msg["content"]["data"]` where `msg` is the message from iopub
@@ -134,33 +128,7 @@ def zmqterminalinteractiveshell_image():
     `data['image/png']`. If your function can't handle the data supplied, it
     should return `False` to indicate this.
 
-    So that's the default help message we're given to set up
-    the image handler.
-
-    Options For Image Handler
-    -------------------------
-
-    .. code-block:: none
-
-        Handler for image type output.  This is useful, for example, when connecting
-        to the kernel in which pylab inline backend is activated.
-
-        There are four handlers defined.
-
-        1. 'PIL': Use Python Imaging Library to popup image;
-
-        2. stream': Use an external program to show the image.  Image will be fed into
-        the STDIN  of the program.
-        You will need to configure `stream_image_handler`;
-
-        3. 'tempfile': Use an external program to show the image.  Image will be saved in
-        a temporally file and the program is called with the temporally file.  You
-        will need to configure `tempfile_image_handler`;
-
-        4. 'callable': You can set any  Python callable which is called with the image
-        data.  You will need to configure `callable_image_handler`.
-
-
+    So that's the default text you're working with.
     """
     pass
 
@@ -175,12 +143,7 @@ c.ZMQTerminalInteractiveShell.confirm_exit = False
 # c.ZMQTerminalInteractiveShell.editing_mode = 'emacs'
 
 # The name of a Pygments style to use for syntax highlighting
-try:
-    from gruvbox.style import GruvboxStyle
-except (ImportError, ModuleNotFoundError):
-    c.ZMQTerminalInteractiveShell.highlighting_style = 'Monokai'
-else:
-    c.ZMQTerminalInteractiveShell.highlighting_style = 'Gruvbox'
+c.ZMQTerminalInteractiveShell.highlighting_style = 'Gruvbox'
 
 # Override highlighting format for specific tokens
 # c.ZMQTerminalInteractiveShell.highlighting_style_overrides = {}
@@ -188,12 +151,29 @@ else:
 # How many history items to load into memory
 c.ZMQTerminalInteractiveShell.history_load_length = 5000
 
+# Handler for image type output.  This is useful, for example, when connecting
+#  to the kernel in which pylab inline backend is activated.
+
+# There are four handlers defined.
+
+# 'PIL': Use Python Imaging Library to popup image;
+
+# stream': Use an external program to show the image.  Image will be fed into
+# the STDIN  of the program.
+# You will need to configure `stream_image_handler`;
+
+# 'tempfile': Use an external program to show the image.  Image will be saved in
+#  a temporally file and the program is called with the temporally file.  You
+#  will need to configure `tempfile_image_handler`;
+
+# 'callable': You can set any  Python callable which is called with the image
+# data.  You will need to configure `callable_image_handler`.
 # c.ZMQTerminalInteractiveShell.image_handler = 'PIL'
 
 # Whether to include output from clients other than this one sharing the same
-# kernel.
+#  kernel.
 #
-# Outputs are not displayed until enter is pressed.
+#  Outputs are not displayed until enter is pressed.
 c.ZMQTerminalInteractiveShell.include_other_output = True
 
 # Timeout (in seconds) for giving up on a kernel's is_complete response.
