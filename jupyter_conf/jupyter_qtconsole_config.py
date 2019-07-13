@@ -4,8 +4,6 @@
 Jupyter QTConsole
 ==================
 
-.. module:: jupyter_conf.jupyter_qtconsole_config
-
 May 27, 2019:
 
 .. code-block:: none
