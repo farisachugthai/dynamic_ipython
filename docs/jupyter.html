@@ -15,7 +15,7 @@
     <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="4. Extensions" href="extensions.html" />
+    <link rel="next" title="3. Extensions" href="extensions.html" />
     <link rel="prev" title="1. Default IPython Profile and Startup Scripts" href="profile_default.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
@@ -35,7 +35,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="extensions.html" title="4. Extensions"
+          <a href="extensions.html" title="3. Extensions"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="profile_default.html" title="1. Default IPython Profile and Startup Scripts"
@@ -53,26 +53,49 @@
 <h1>2. Jupyter<a class="headerlink" href="#jupyter" title="Permalink to this headline">¶</a></h1>
 <p>Here are the default configuration files for the Jupyter application
 suite. These have been commented and marked up as appropriate.</p>
-<div class="section" id="jupyter-qtconsole-config">
-<h2>2.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_qtconsole_config</span></code><a class="headerlink" href="#jupyter-qtconsole-config" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="jupyter-qtconsole-jupyter-qtconsole-config">
+<h2>2.1. Jupyter QTConsole — <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_qtconsole_config</span></code><a class="headerlink" href="#jupyter-qtconsole-jupyter-qtconsole-config" title="Permalink to this headline">¶</a></h2>
+<p>May 27, 2019:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(ins)(navigator) faris@faris-U56E:~$ jupyter-qtconsole
+xkbcommon: ERROR: failed to add default include path
+Qt: Failed to create XKB context!
+Use QT_XKB_CONFIG_ROOT environmental variable to provide an additional
+search path, add &#39;:&#39; as separator to provide several search paths and/or
+make sure that XKB configuration data directory contains recent enough
+contents, to update please see http://cgit.freedesktop.org/xkeyboard-config/ .
+</pre></div>
+</div>
+<p>So we have to debug that because the keyboard isn’t working on jupyter
+qtconsole :/</p>
+<p>In a rare turn of events, it <strong>IS</strong> however, working just fine on Windows.</p>
+<div class="section" id="initializing-jupyter-qtconsole">
+<h3>2.1.1. Initializing Jupyter QTConsole<a class="headerlink" href="#initializing-jupyter-qtconsole" title="Permalink to this headline">¶</a></h3>
+<p>The initial entry point for <strong class="command">jupyter-qtconsole</strong> is in the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qtconsole.qtconsole</span> <span class="n">app</span> <span class="kn">import</span> <span class="nn">main</span>
+<span class="c1"># Also there&#39;s just a lot going on there</span>
+<span class="kn">from</span> <span class="nn">qtconsole</span> <span class="k">import</span> <span class="n">qtconsole</span>
+<span class="n">the_sauce</span> <span class="o">=</span> <span class="nb">dir</span><span class="p">(</span><span class="n">qtconsole</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Worth skimming.</p>
 </div>
 </div>
 <div class="section" id="jupyter-notebook-jupyter-conf-jupyter-notebook-config">
-<h1>3. Jupyter Notebook — <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_conf.jupyter_notebook_config</span></code><a class="headerlink" href="#jupyter-notebook-jupyter-conf-jupyter-notebook-config" title="Permalink to this headline">¶</a></h1>
+<h2>2.2. Jupyter Notebook — <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_conf.jupyter_notebook_config</span></code><a class="headerlink" href="#jupyter-notebook-jupyter-conf-jupyter-notebook-config" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">from</span> <span class="nn">traitlets.config</span> <span class="kn">import</span> <span class="n">get_config</span>
 
 <span class="gp">In [2]: </span><span class="n">c</span> <span class="o">=</span> <span class="n">get_config</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Base class for Jupyter applications</p>
-<p>Answer yes to any prompts.
-c.JupyterApp.answer_yes = False</p>
-<p>Full path of a config file.
-c.JupyterApp.config_file = ‘’</p>
-<p>Specify a config file to load.
-c.JupyterApp.config_file_name = ‘’</p>
-<p>Generate default config file.
-c.JupyterApp.generate_config = False</p>
+<p>Base class for Jupyter applications
+Answer yes to any prompts.</p>
+<p>c.JupyterApp.answer_yes = False</p>
+<p>Full path of a config file.</p>
+<p>c.JupyterApp.config_file = ‘’</p>
+<p>Specify a config file to load.</p>
+<p>c.JupyterApp.config_file_name = ‘’</p>
+<p>Generate default config file.</p>
+<p>c.JupyterApp.generate_config = False</p>
 <p>Set the Access-Control-Allow-Credentials: true header
 c.NotebookApp.allow_credentials = False</p>
 <p>Set the Access-Control-Allow-Origin header</p>
@@ -246,62 +269,60 @@ c.NotebookApp.password = ‘’</p>
 multi user environment, for instance when everybody in the LAN can access each
 other’s machine through ssh.</p>
 <p>In such a case, server the notebook server on localhost is not secure since
-any user can connect to the notebook server via ssh.
-c.NotebookApp.password_required = False</p>
-<p>The port the notebook server will listen on.
-c.NotebookApp.port = 8888</p>
-<p>The number of additional ports to try if the specified port is not available.
-c.NotebookApp.port_retries = 50</p>
-<p>DISABLED: use %pylab or %matplotlib in the notebook to enable matplotlib.
-c.NotebookApp.pylab = ‘disabled’</p>
+any user can connect to the notebook server via ssh.</p>
+<p>c.NotebookApp.password_required = False</p>
+<p>The port the notebook server will listen on.</p>
+<p>c.NotebookApp.port = 8888</p>
+<p>The number of additional ports to try if the specified port is not available.</p>
+<p>c.NotebookApp.port_retries = 50</p>
+<p>DISABLED: use %pylab or %matplotlib in the notebook to enable matplotlib.</p>
+<p>c.NotebookApp.pylab = ‘disabled’</p>
 <p>If True, display a button in the dashboard to quit (shutdown the notebook
-server).
-c.NotebookApp.quit_button = True</p>
-<p>(sec) Time window used to  check the message and data rate limits.
-c.NotebookApp.rate_limit_window = 3</p>
-<p>The directory for user settings.
-c.LabApp.user_settings_dir = ‘/data/data/com.termux/files/home/.jupyter/lab/user-settings’</p>
-<p>Whether to serve the app in watch mode
-c.LabApp.watch = False</p>
-<blockquote>
-<div><p>The directory for workspaces</p>
-</div></blockquote>
-<p>.LabApp.workspaces_dir = ‘/data/data/com.termux/files/home/.jupyter/lab/workspaces’</p>
+server).</p>
+<p>c.NotebookApp.quit_button = True</p>
+<p>(sec) Time window used to check the message and data rate limits.</p>
+<p>c.NotebookApp.rate_limit_window = 3</p>
+<p>The directory for user settings.</p>
+<p>c.LabApp.user_settings_dir = ‘/data/data/com.termux/files/home/.jupyter/lab/user-settings’</p>
+<p>Whether to serve the app in watch mode.:</p>
+<p>c.LabApp.watch = False</p>
+<p>The directory for workspaces.:</p>
+<p>c.LabApp.workspaces_dir = ‘/data/data/com.termux/files/home/.jupyter/lab/workspaces’</p>
 <p>Supply SSL options for the tornado HTTPServer. See the tornado docs for
-details.
-c.NotebookApp.ssl_options = {}</p>
-<p>Supply overrides for terminado. Currently only supports “shell_command”.
-c.NotebookApp.terminado_settings = {}</p>
-<p>Set to False to disable terminals.</p>
-<p>This does <em>not</em> make the notebook server more secure by itself. Anything the
-user can in a terminal, they can also do in a notebook.</p>
-<p>Terminals may also be automatically disabled if the terminado package is not
-available.
-c.NotebookApp.terminals_enabled = True</p>
-<p>Token used for authenticating first-time connections to the server.</p>
-<p>When no password is enabled, the default is to generate a new, random token.</p>
-<p>Setting to an empty string disables authentication altogether, which is NOT
-RECOMMENDED.
-c.NotebookApp.token = ‘&lt;generated&gt;’</p>
+details.</p>
+<p>c.NotebookApp.ssl_options = {}</p>
+<p>Supply overrides for terminado. Currently only supports “shell_command”.</p>
+<p>c.NotebookApp.terminado_settings = {}</p>
+<p>Set to False to disable terminals.
+This does <em>not</em> make the notebook server more secure by itself. Anything the
+user can in a terminal, they can also do in a notebook.
+Terminals may also be automatically disabled if the terminado package is not
+available.</p>
+<p>c.NotebookApp.terminals_enabled = True</p>
+<p>Token used for authenticating first-time connections to the server.
+When no password is enabled, the default is to generate a new, random token.
+Setting to an empty string disables authentication altogether, which is NOT
+RECOMMENDED.</p>
+<p>c.NotebookApp.token = ‘&lt;generated&gt;’</p>
 <p>Supply overrides for the tornado.web.Application that the Jupyter notebook
-uses.
-c.NotebookApp.tornado_settings = {}</p>
+uses.</p>
+<p>c.NotebookApp.tornado_settings = {}</p>
 <p>Whether to trust or not X-Scheme/X-Forwarded-Proto and X-Real-Ip/X-Forwarded-
-For headerssent by the upstream reverse proxy. Necessary if the proxy handles
-SSL
-c.NotebookApp.trust_xheaders = False</p>
-<p>DEPRECATED, use tornado_settings
-c.NotebookApp.webapp_settings = {}</p>
-<p>Set the tornado compression options for websocket connections.</p>
-<p>This value will be returned from
+For headers sent by the upstream reverse proxy. Necessary if the proxy handles
+SSL</p>
+<p>c.NotebookApp.trust_xheaders = False</p>
+<p>DEPRECATED, use tornado_settings</p>
+<p>c.NotebookApp.webapp_settings = {}</p>
+<p>Set the tornado compression options for websocket connections.
+This value will be returned from
 <code class="xref py py-meth docutils literal notranslate"><span class="pre">WebSocketHandler.get_compression_options()</span></code>. None (default) will disable
-compression. A dict (even an empty one) will enable compression.</p>
-<p>See the tornado docs for WebSocketHandler.get_compression_options for details.
-c.NotebookApp.websocket_compression_options = None</p>
+compression. A dict (even an empty one) will enable compression.
+See the tornado docs for WebSocketHandler.get_compression_options for details.</p>
+<p>c.NotebookApp.websocket_compression_options = None</p>
 <p>The base URL for websockets, if it differs from the HTTP server (hint: it
-almost certainly doesn’t).</p>
-<p>Should be in the form of an HTTP origin: ws[s]://hostname[:port]
-c.NotebookApp.websocket_url = ‘’</p>
+almost certainly doesn’t).
+Should be in the form of an HTTP origin: ws[s]://hostname[:port]</p>
+<p>c.NotebookApp.websocket_url = ‘’</p>
 <p>Application for running <strong class="command">nteract</strong> on a jupyter notebook server.</p>
 <p>Whether to start the app in dev mode. Expects resources to be loaded from
 Webpack’s hot reloading server at <a class="reference external" href="http://localhost:8357">http://localhost:8357</a>. Run</p>
@@ -314,14 +335,15 @@ in editable mode e.g., using:</p>
 <span class="n">c</span><span class="o">.</span><span class="n">NteractApp</span><span class="o">.</span><span class="n">dev_mode</span> <span class="o">=</span> <span class="bp">False</span>
 </pre></div>
 </div>
+</div>
 <div class="section" id="jupyter-nbconvert-config">
-<h2>3.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_nbconvert_config</span></code><a class="headerlink" href="#jupyter-nbconvert-config" title="Permalink to this headline">¶</a></h2>
+<h2>2.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_nbconvert_config</span></code><a class="headerlink" href="#jupyter-nbconvert-config" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="jupyter-labextension-config">
-<h2>3.2. <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_labextension_config</span></code><a class="headerlink" href="#jupyter-labextension-config" title="Permalink to this headline">¶</a></h2>
+<h2>2.4. <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_labextension_config</span></code><a class="headerlink" href="#jupyter-labextension-config" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="jupyter-console-config">
-<h2>3.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_console_config</span></code><a class="headerlink" href="#jupyter-console-config" title="Permalink to this headline">¶</a></h2>
+<h2>2.5. <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_console_config</span></code><a class="headerlink" href="#jupyter-console-config" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 
@@ -334,7 +356,7 @@ in editable mode e.g., using:</p>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="profile_default.html" title="previous chapter">1. Default IPython Profile and Startup Scripts</a></li>
-      <li>Next: <a href="extensions.html" title="next chapter">4. Extensions</a></li>
+      <li>Next: <a href="extensions.html" title="next chapter">3. Extensions</a></li>
   </ul></li>
 </ul>
 <h3><a href="index.html">Table of Contents</a></h3>
@@ -348,18 +370,16 @@ in editable mode e.g., using:</p>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="profile_default.html">1. Startup Files and IPython Shell Initialization</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">2. Jupyter</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#jupyter-qtconsole-config">2.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_qtconsole_config</span></code></a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">2. Jupyter ZMQShell</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#jupyter-qtconsole-jupyter-qtconsole-config">2.1. Jupyter QTConsole — <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_qtconsole_config</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#jupyter-notebook-jupyter-conf-jupyter-notebook-config">2.2. Jupyter Notebook — <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_conf.jupyter_notebook_config</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#jupyter-nbconvert-config">2.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_nbconvert_config</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#jupyter-labextension-config">2.4. <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_labextension_config</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#jupyter-console-config">2.5. <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_console_config</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="#jupyter-notebook-jupyter-conf-jupyter-notebook-config">3. Jupyter Notebook — <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_conf.jupyter_notebook_config</span></code></a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#jupyter-nbconvert-config">3.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_nbconvert_config</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#jupyter-labextension-config">3.2. <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_labextension_config</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#jupyter-console-config">3.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_console_config</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="extensions.html">4. IPython Extensions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="dev.html">5. Developers Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extensions.html">3. IPython Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev.html">4. Developers Notes</a></li>
 </ul>
 
 
@@ -367,13 +387,14 @@ in editable mode e.g., using:</p>
   <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">2. Jupyter</a><ul>
-<li><a class="reference internal" href="#jupyter-qtconsole-config">2.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_qtconsole_config</span></code></a></li>
+<li><a class="reference internal" href="#jupyter-qtconsole-jupyter-qtconsole-config">2.1. Jupyter QTConsole — <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_qtconsole_config</span></code></a><ul>
+<li><a class="reference internal" href="#initializing-jupyter-qtconsole">2.1.1. Initializing Jupyter QTConsole</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#jupyter-notebook-jupyter-conf-jupyter-notebook-config">3. Jupyter Notebook — <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_conf.jupyter_notebook_config</span></code></a><ul>
-<li><a class="reference internal" href="#jupyter-nbconvert-config">3.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_nbconvert_config</span></code></a></li>
-<li><a class="reference internal" href="#jupyter-labextension-config">3.2. <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_labextension_config</span></code></a></li>
-<li><a class="reference internal" href="#jupyter-console-config">3.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_console_config</span></code></a></li>
+<li><a class="reference internal" href="#jupyter-notebook-jupyter-conf-jupyter-notebook-config">2.2. Jupyter Notebook — <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_conf.jupyter_notebook_config</span></code></a></li>
+<li><a class="reference internal" href="#jupyter-nbconvert-config">2.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_nbconvert_config</span></code></a></li>
+<li><a class="reference internal" href="#jupyter-labextension-config">2.4. <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_labextension_config</span></code></a></li>
+<li><a class="reference internal" href="#jupyter-console-config">2.5. <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_console_config</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -409,7 +430,7 @@ in editable mode e.g., using:</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="extensions.html" title="4. Extensions"
+          <a href="extensions.html" title="3. Extensions"
              >next</a> |</li>
         <li class="right" >
           <a href="profile_default.html" title="1. Default IPython Profile and Startup Scripts"

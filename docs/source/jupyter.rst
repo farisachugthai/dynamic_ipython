@@ -5,17 +5,41 @@ Jupyter
 Here are the default configuration files for the Jupyter application
 suite. These have been commented and marked up as appropriate.
 
-:mod:`~jupyter_conf.jupyter_qtconsole_config`
-=============================================
 
-.. automodule:: `jupyter_conf.jupyter_qtconsole_config`
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-.. Let's see if this works any better.
-
+Jupyter QTConsole --- :mod:`~jupyter_conf.jupyter_qtconsole_config`
 ====================================================================
+
+May 27, 2019:
+
+.. code-block:: none
+
+    (ins)(navigator) faris@faris-U56E:~$ jupyter-qtconsole
+    xkbcommon: ERROR: failed to add default include path
+    Qt: Failed to create XKB context!
+    Use QT_XKB_CONFIG_ROOT environmental variable to provide an additional
+    search path, add ':' as separator to provide several search paths and/or
+    make sure that XKB configuration data directory contains recent enough
+    contents, to update please see http://cgit.freedesktop.org/xkeyboard-config/ .
+
+
+So we have to debug that because the keyboard isn't working on jupyter
+qtconsole :/
+
+In a rare turn of events, it **IS** however, working just fine on Windows.
+
+Initializing Jupyter QTConsole
+--------------------------------
+
+The initial entry point for :command:`jupyter-qtconsole` is in the following::
+
+    from qtconsole.qtconsole app import main
+    # Also there's just a lot going on there
+    from qtconsole import qtconsole
+    the_sauce = dir(qtconsole)
+
+Worth skimming.
+
+
 Jupyter Notebook --- :mod:`jupyter_conf.jupyter_notebook_config`
 ====================================================================
 
@@ -32,17 +56,20 @@ JupyterApp(Application) configuration
 -----------------------------------------------------------------------------
 
 Base class for Jupyter applications
-
 Answer yes to any prompts.
+
 c.JupyterApp.answer_yes = False
 
 Full path of a config file.
+
 c.JupyterApp.config_file = ''
 
 Specify a config file to load.
+
 c.JupyterApp.config_file_name = ''
 
 Generate default config file.
+
 c.JupyterApp.generate_config = False
 
 
@@ -296,25 +323,32 @@ other's machine through ssh.
 
 In such a case, server the notebook server on localhost is not secure since
 any user can connect to the notebook server via ssh.
+
 c.NotebookApp.password_required = False
 
 The port the notebook server will listen on.
+
 c.NotebookApp.port = 8888
 
 The number of additional ports to try if the specified port is not available.
+
 c.NotebookApp.port_retries = 50
 
 DISABLED: use %pylab or %matplotlib in the notebook to enable matplotlib.
+
 c.NotebookApp.pylab = 'disabled'
 
 If True, display a button in the dashboard to quit (shutdown the notebook
 server).
+
 c.NotebookApp.quit_button = True
 
-(sec) Time window used to  check the message and data rate limits.
+(sec) Time window used to check the message and data rate limits.
+
 c.NotebookApp.rate_limit_window = 3
 
 The directory for user settings.
+
 c.LabApp.user_settings_dir = '/data/data/com.termux/files/home/.jupyter/lab/user-settings'
 
 
@@ -322,62 +356,65 @@ c.LabApp.user_settings_dir = '/data/data/com.termux/files/home/.jupyter/lab/user
 # fswatcher  #
 ##############
 
-Whether to serve the app in watch mode
+Whether to serve the app in watch mode.:
+
 c.LabApp.watch = False
 
- The directory for workspaces
-.LabApp.workspaces_dir = '/data/data/com.termux/files/home/.jupyter/lab/workspaces'
+The directory for workspaces.:
+
+c.LabApp.workspaces_dir = '/data/data/com.termux/files/home/.jupyter/lab/workspaces'
 
 Supply SSL options for the tornado HTTPServer. See the tornado docs for
 details.
+
 c.NotebookApp.ssl_options = {}
 
 Supply overrides for terminado. Currently only supports "shell_command".
+
 c.NotebookApp.terminado_settings = {}
 
 Set to False to disable terminals.
-
 This does *not* make the notebook server more secure by itself. Anything the
 user can in a terminal, they can also do in a notebook.
-
 Terminals may also be automatically disabled if the terminado package is not
 available.
+
 c.NotebookApp.terminals_enabled = True
 
 Token used for authenticating first-time connections to the server.
-
 When no password is enabled, the default is to generate a new, random token.
-
 Setting to an empty string disables authentication altogether, which is NOT
 RECOMMENDED.
+
 c.NotebookApp.token = '<generated>'
 
 Supply overrides for the tornado.web.Application that the Jupyter notebook
 uses.
+
 c.NotebookApp.tornado_settings = {}
 
 Whether to trust or not X-Scheme/X-Forwarded-Proto and X-Real-Ip/X-Forwarded-
-For headerssent by the upstream reverse proxy. Necessary if the proxy handles
+For headers sent by the upstream reverse proxy. Necessary if the proxy handles
 SSL
+
 c.NotebookApp.trust_xheaders = False
 
 DEPRECATED, use tornado_settings
+
 c.NotebookApp.webapp_settings = {}
 
-
 Set the tornado compression options for websocket connections.
-
 This value will be returned from
 :meth:`WebSocketHandler.get_compression_options`. None (default) will disable
 compression. A dict (even an empty one) will enable compression.
-
 See the tornado docs for WebSocketHandler.get_compression_options for details.
+
 c.NotebookApp.websocket_compression_options = None
 
 The base URL for websockets, if it differs from the HTTP server (hint: it
 almost certainly doesn't).
-
 Should be in the form of an HTTP origin: ws[s]://hostname[:port]
+
 c.NotebookApp.websocket_url = ''
 
 --------------------------------------------------------------------------

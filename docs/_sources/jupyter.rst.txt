@@ -2,25 +2,67 @@
 Jupyter
 =======
 
-These are the auto-generated documents for the Jupyter shell.
-
-Note that they may not accurately reflect the API as they display the interface
-at the time of writing.
-
-:mod:`~jupyter_conf.jupyter_qtconsole_config`
-=============================================
-
-.. automodule:: `jupyter_conf.jupyter_qtconsole_config`
-    :members:
-    :undoc-members:
-    :show-inheritance:
+Here are the default configuration files for the Jupyter application
+suite. These have been commented and marked up as appropriate.
 
 
-:mod:`jupyter_conf.jupyter_notebook_config`
-============================================
+Jupyter QTConsole --- :mod:`~jupyter_conf.jupyter_qtconsole_config`
+====================================================================
+
+May 27, 2019:
+
+.. code-block:: none
+
+    (ins)(navigator) faris@faris-U56E:~$ jupyter-qtconsole
+    xkbcommon: ERROR: failed to add default include path
+    Qt: Failed to create XKB context!
+    Use QT_XKB_CONFIG_ROOT environmental variable to provide an additional
+    search path, add ':' as separator to provide several search paths and/or
+    make sure that XKB configuration data directory contains recent enough
+    contents, to update please see http://cgit.freedesktop.org/xkeyboard-config/ .
 
 
-.. highlight:: python
+So we have to debug that because the keyboard isn't working on jupyter
+qtconsole :/
+
+In a rare turn of events, it **IS** however, working just fine on Windows.
+
+Initializing Jupyter QTConsole
+===============================
+
+The initial entry point for :command:`jupyter-qtconsole` is in the following::
+
+    from qtconsole.qtconsole app import main
+    # Also there's just a lot going on there
+    from qtconsole import qtconsole
+    the_sauce = dir(qtconsole)
+
+Worth skimming.
+
+
+May 27, 2019:
+
+
+.. code-block:: none
+
+    (ins)(navigator) faris@faris-U56E:~$ jupyter-qtconsole
+    xkbcommon: ERROR: failed to add default include path
+    Qt: Failed to create XKB context!
+    Use QT_XKB_CONFIG_ROOT environmental variable to provide an additional
+    search path, add ':' as separator to provide several search paths and/or
+    make sure that XKB configuration data directory contains recent enough
+    contents, to update please see http://cgit.freedesktop.org/xkeyboard-config
+
+
+So we have to debug that because the keyboard isn't working on jupyter
+qtconsole :/
+
+--------
+
+Jupyter Notebook --- :mod:`jupyter_conf.jupyter_notebook_config`
+====================================================================
+
+.. highlight:: ipython
 
 .. ipython:: python
 
@@ -65,7 +107,7 @@ Use a regular expression for the Access-Control-Allow-Origin header
 
 Requests from an origin matching the expression will get replies with:
 
-  Access-Control-Allow-Origin: origin
+    Access-Control-Allow-Origin: origin
 
 where `origin` is the origin of the request.
 
@@ -74,7 +116,7 @@ c.NotebookApp.allow_origin_pat = ''
 
 Allow password to be changed at login for the notebook server.
 
-While loggin in with a token, the notebook server UI will give the opportunity
+While logging in with a token, the notebook server UI will give the opportunity
 to the user to enter a new password at the same time that will replace the
 token login mechanism.
 
@@ -162,7 +204,7 @@ Disable cross-site-request-forgery protection
 Jupyter notebook 4.3.1 introduces protection from cross-site request
 forgeries, requiring API requests to either:
 
-- originate from pages served by this server (validated with XSRF cookie and
+* originate from pages served by this server (validated with XSRF cookie and
 token), or - authenticate with a token
 
 Some anonymous compute resources still desire the ability to run code,
@@ -177,7 +219,7 @@ MathJax is the javascript library Jupyter uses to render math/LaTeX. It is
 very large, so you may want to disable it if you have a slow internet
 connection, or for offline use of the notebook.
 
-When disabled, equations etj. will appear as their untransformed TeX source.
+When disabled, equations etj. Will appear as their untransformed TeX source.
 c.NotebookApp.enable_mathjax = True
 
 extra paths to look for Javascript notebook extensions
@@ -284,9 +326,9 @@ c.NotebookApp.open_browser = True
 
 Hashed password to use for web authentication.
 
-To generate, type in a python/IPython shell:
+To generate, type in a python/IPython shell::
 
-from notebook.auth import passwd; passwd()
+   from notebook.auth import passwd; passwd()
 
 The string should be of the form type:salt:hashed-password.
 c.NotebookApp.password = ''
@@ -318,6 +360,7 @@ c.NotebookApp.rate_limit_window = 3
 The directory for user settings.
 c.LabApp.user_settings_dir = '/data/data/com.termux/files/home/.jupyter/lab/user-settings'
 
+
 ##############
 # fswatcher  #
 ##############
@@ -325,7 +368,7 @@ c.LabApp.user_settings_dir = '/data/data/com.termux/files/home/.jupyter/lab/user
 Whether to serve the app in watch mode
 c.LabApp.watch = False
 
-The directory for workspaces
+ The directory for workspaces
 .LabApp.workspaces_dir = '/data/data/com.termux/files/home/.jupyter/lab/workspaces'
 
 Supply SSL options for the tornado HTTPServer. See the tornado docs for
@@ -387,16 +430,17 @@ NteractApp(NotebookApp) configuration
 Application for running :command:`nteract` on a jupyter notebook server.
 
 Whether to start the app in dev mode. Expects resources to be loaded from
-Webpack's hot reloading server at `<http://localhost:8357>`_. Run:
+Webpack's hot reloading server at `<http://localhost:8357>`_. Run
 
-  ``yarn workspace nteract-on-jupyter run hot --port 8357``
+.. code-block:: console
+
+   ``yarn workspace nteract-on-jupyter run hot --port 8357``
 
 To serve your assets. This is only useful if NteractApp is installed
 in editable mode e.g., using::
 
    `pip install -e .`
-
-c.NteractApp.dev_mode = False
+   c.NteractApp.dev_mode = False
 
 
 :mod:`~jupyter_conf.jupyter_nbconvert_config`
