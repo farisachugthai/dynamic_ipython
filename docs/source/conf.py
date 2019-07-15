@@ -20,11 +20,9 @@ import os
 from pathlib import Path
 import sys
 
-import jupyter_conf
-
 import profile_default
 from profile_default.__about__ import __version__
-from profile_default.startup import *  # noqa F403
+from profile_default.startup import *
 
 LOGGER = logging.getLogger(name=__name__)
 LOGGER.setLevel(level=logging.DEBUG)
@@ -297,23 +295,10 @@ def linkcode_resolve(domain, info):
     return "https://github.com/farisachugthai/dynamic_ipython/%s.py" % filename
 
 
-# -- Autodoc ------------------------------------------------------------------
-
-# By default Sphinx orders your objects alphabetically...why??? I ordered them
-# in a specific way intentionally! Use the source.
-autodoc_member_order = 'bysource'
-
-autodoc_mock_imports = ['IPython', 'flake8_rst', 'matplotlib', 'profile_default', 'jupyter_conf']
-
 # -- Setup -------------------------------------------------------------------
 
 def add_css(func):
-    """Add a CSS file to Sphinx.
-
-    So there's an ``.. autodecorator::`` directive that Sphinx recognizes...
-
-    Lol is it too much to start autodocumenting my conf.py??
-    """
+    """Add a CSS file to Sphinx."""
 
     @functools.wraps(func)
     def decorate_css(*args, **kwargs):

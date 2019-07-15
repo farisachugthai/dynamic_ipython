@@ -6,10 +6,15 @@
 Example of Writing A Custom IPython Extension
 =============================================
 
-.. module:: extensions.example
-    :synopsis: Provide an example of creating IPython extensions.
+.. currentmodule:: extensions.example
 
----------------------------------------------
+Usage
+=====
+
+.. ipython::
+
+    In [40]: %load_ext example
+
 
 Writing Cell Magics
 ====================
@@ -19,19 +24,20 @@ While not utilized here, a similar execution path can be utilized for
 
 .. note::
 
-    Don't use :func:`~IPython.core.magic.register_cell_magic()`.
-    for this module. That decorator is for standalone functions that need to be
-    registered as magics rather than classes.
-    Conversely, :func:`~IPython.core.magic.register_magics()` is used for class
-    based magics, and is more appropriate for this module.
+    Don't use register_cell_magic. That decorator is for functions.
+    `~IPython.core.magic.register_magics` is only for classes as well.
+
+::
+
+    from IPython.core.magic import register_cell_magic
+    from IPython.core.magic import register_magic
+
+Those lines specifically.
 
 See Also
 ========
-:mod:`IPython.core.magic` : str
-    Implementation of magics, magic_managers and instantiates objects to handle
-    instances for interactive use. Useful reference for Jupyter notebooks as well.
-:mod:`IPython.terminal.magic` : str
-    Similar implementation specific to IPython.
+IPython.core.magic
+IPython.terminal.magic
 
 """
 import sys

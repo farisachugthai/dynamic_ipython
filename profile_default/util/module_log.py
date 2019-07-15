@@ -202,9 +202,20 @@ class JsonFormatter(logging.Formatter):
             exc = None
 
         return json.dumps({
-            'msg': record.msg % record.args, 'timestamp':
+            'msg':
+                record.msg % record.args,
+            'timestamp':
                 datetime.utcfromtimestamp(record.created).isoformat() + 'Z',
-            'func': record.funcName, 'level': record.levelname, 'module':
-                record.module, 'process_id': record.process, 'thread_id':
-                    record.thread, 'exception': exc
+            'func':
+                record.funcName,
+            'level':
+                record.levelname,
+            'module':
+                record.module,
+            'process_id':
+                record.process,
+            'thread_id':
+                record.thread,
+            'exception':
+                exc
         })
