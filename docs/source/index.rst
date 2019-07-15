@@ -16,18 +16,20 @@ Welcome to IPython packages' documentation!
    :maxdepth: 2
 
    Startup <startup>
-   The Interactive Shell <ipython_interactive_shell>
    Keybindings <ipython_keybindings>
    Built-in Magics <magics>
    Writing Your Own Magics <custom_magics>
-   Sphinx Directives <directive>
+
 
 .. toctree::
    :caption: API Docs
-   :maxdepth: 3
+   :maxdepth: 2
+   :numbered:
 
-   API
-
+   Startup Files and IPython Shell Initialization <profile_default>
+   Jupyter ZMQShell <jupyter>
+   IPython Extensions <extensions>
+   Developers Notes <dev>
 
 
 Indices and tables

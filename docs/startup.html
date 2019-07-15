@@ -50,13 +50,13 @@
           <div class="body" role="main">
             
   <div class="section" id="module-IPython_README">
-<span id="ipython-startup-scripts"></span><span id="ipython-startup-readme"></span><h1>IPython Startup Scripts<a class="headerlink" href="#module-IPython_README" title="Permalink to this headline">¶</a></h1>
+<span id="ipython-startup-scripts"></span><h1>IPython Startup Scripts<a class="headerlink" href="#module-IPython_README" title="Permalink to this headline">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Author</dt>
 <dd class="field-odd"><p>Faris Chugthai</p>
 </dd>
 <dt class="field-even">Date</dt>
-<dd class="field-even"><p>Apr 15, 2019</p>
+<dd class="field-even"><p>Jul 14, 2019</p>
 </dd>
 </dl>
 <div class="section" id="startup-scripts">
@@ -68,30 +68,29 @@ specific loggers, and more.</p>
 </div>
 <div class="section" id="indexed-scripts">
 <h2>Indexed Scripts<a class="headerlink" href="#indexed-scripts" title="Permalink to this headline">¶</a></h2>
-<p>As of Apr 15, 2019, the startup files present in <span class="xref std std-ref">profile_default/startup</span>
-are as follows:</p>
+<p>The startup files present in the startup directory are as follows:</p>
 <div class="section" id="configuration">
 <h3>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h3>
-<p><a class="reference external" href="../../profile_default/startup/01_rehashx.py">01_rehashx.py</a></p>
-<p><a class="reference external" href="../../profile_default/startup/04_easy_import.py">04_easy_import.py</a></p>
-<p><a class="reference external" href="../../profile_default/startup/05_log.py">05_log.py</a></p>
-<p><a class="reference external" href="../../profile_default/startup/06_help_helpers.py">06_help_helpers.py</a></p>
-<p><a class="reference external" href="../../profile_default/startup/20_aliases.py">20_aliases.py</a></p>
-<p><a class="reference external" href="../../profile_default/startup/32_vi_modes.py">32_vi_modes.py</a></p>
-<p><a class="reference external" href="../../profile_default/startup/32_vi_modes.py">41_numpy_init.py</a></p>
-<p><a class="reference external" href="../../profile_default/startup/42_pandas_init.py">42_pandas_init.py</a></p>
-<p><a class="reference external" href="../../profile_default/startup/50_sysexception.py">50_sysexception.py</a></p>
+<p><a class="reference external" href="../../profile_default/startup/01_rehashx.py">01_rehashx</a></p>
+<p><a class="reference external" href="../../profile_default/startup/04_easy_import.py">04_easy_import</a></p>
+<p><a class="reference external" href="../../profile_default/startup/05_log.py">05_log</a></p>
+<p><a class="reference external" href="../../profile_default/startup/06_help_helpers.py">06_help_helpers</a></p>
+<p><a class="reference external" href="../../profile_default/startup/20_aliases.py">20_aliases</a></p>
+<p><a class="reference external" href="../../profile_default/startup/32_vi_modes.py">32_vi_modes</a></p>
+<p><a class="reference external" href="../../profile_default/startup/32_vi_modes.py">41_numpy_init</a></p>
+<p><a class="reference external" href="../../profile_default/startup/42_pandas_init.py">42_pandas_init</a></p>
+<p><a class="reference external" href="../../profile_default/startup/50_sysexception.py">50_sysexception</a></p>
 </div>
 <div class="section" id="rehash">
 <h3>%rehash<a class="headerlink" href="#rehash" title="Permalink to this headline">¶</a></h3>
-<p><a class="reference external" href="../../profile_default/startup/01_rehashx.py">01_rehashx.py</a></p>
+<p><a href="#id1"><span class="problematic" id="id2">:ref:`01_rehashx`_</span></a></p>
 <p>The IPython magic <code class="docutils literal notranslate"><span class="pre">%rehash</span></code> allows you to reload all of your startup files
 and also adds system commands to the namespace!</p>
 <p>Insofar, I haven’t noticed any significant slowdown in startup time as a result
 of this, and it hugely eases utilizing IPython as a system shell.</p>
 </div>
-<div class="section" id="easy-import">
-<h3>Easy Import<a class="headerlink" href="#easy-import" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="importing-commonly-used-modules">
+<h3>Importing Commonly Used Modules<a class="headerlink" href="#importing-commonly-used-modules" title="Permalink to this headline">¶</a></h3>
 <p><a class="reference internal" href="profile_default.html#id2"><span class="std std-ref">04_easy_import</span></a></p>
 <p>This module simply populates the IPython namespace with frequently used modules.</p>
 <p>A check is run to see if the user is running a new enough version of Python to
@@ -99,22 +98,30 @@ utilize the python package Pynvim instead of Neovim.</p>
 </div>
 <div class="section" id="logging">
 <h3>Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h3>
-<p><a href="#id1"><span class="problematic" id="id2">:ref:`05_log`_</span></a></p>
+<p><a href="#id3"><span class="problematic" id="id4">:ref:`05_log`_</span></a></p>
 <p>This uses the IPython core <code class="xref py py-class docutils literal notranslate"><span class="pre">LoggingConfigurable()</span></code>
-to create a FileHandler that creates one new log file for every calendar
-day of the year.</p>
+to create a <code class="xref py py-class docutils literal notranslate"><span class="pre">logging.handler.FileHandler()</span></code> that creates one new log
+file for every calendar day of the year.</p>
 <p>Running IPython instances will continue to write to the log file if the
 session continues after the point when the logfile rolls over.</p>
 <p>If multiple sessions are started, the new instances will append onto the same
 file as the older ones.</p>
+<div class="admonition-linux-only admonition">
+<p class="admonition-title">Linux Only</p>
+<p>This only works on Linux. The Win API seemingly isn’t able to
+maintain multiple connections to the same file.</p>
+</div>
 </div>
 <div class="section" id="help-helpers">
 <h3>Help Helpers<a class="headerlink" href="#help-helpers" title="Permalink to this headline">¶</a></h3>
+<p><a href="#id5"><span class="problematic" id="id6">:ref:`06_log`_</span></a></p>
 <p>Creates 2 functions in userspace to save the output of <code class="docutils literal notranslate"><span class="pre">help(python_object)</span></code>
 to a file or output to <code class="docutils literal notranslate"><span class="pre">sys.stdout</span></code>.</p>
 </div>
+</div>
 <div class="section" id="examples">
-<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>Here we’ll explain the traitlets API a little bit.</p>
 <p>Create a singleton class using instance, and retrieve it:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">traitlets.config.configurable</span> <span class="k">import</span> <span class="n">SingletonConfigurable</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Foo</span><span class="p">(</span><span class="n">SingletonConfigurable</span><span class="p">):</span> <span class="k">pass</span>
@@ -132,11 +139,30 @@ to a file or output to <code class="docutils literal notranslate"><span class="p
 </pre></div>
 </div>
 <p>Type:      method</p>
-</div>
 <div class="section" id="writing-the-scripts">
 <h3>Writing the Scripts<a class="headerlink" href="#writing-the-scripts" title="Permalink to this headline">¶</a></h3>
+<div class="admonition-naming-modules admonition">
+<p class="admonition-title">Naming modules</p>
+<p>Be careful when naming scripts that begin with digits.
+They will require extra care when importing from a different module!</p>
+</div>
 <p>This problem can be solved; however, with the function
 <a class="reference external" href="https://docs.python.org/3/library/importlib.html#importlib.import_module" title="(in Python v3.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">importlib.import_module()</span></code></a>.</p>
+<p>In the <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> file in the startup directory, all modules are imported
+and assigned to variables in the following manner.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rehashx_mod</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s1">&#39;01_rehashx&#39;</span><span class="p">)</span>
+<span class="n">easy_import</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s1">&#39;04_easy_import&#39;</span><span class="p">)</span>
+<span class="n">ipython_file_logger</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s1">&#39;05_log&#39;</span><span class="p">)</span>
+<span class="n">help_helpers</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s1">&#39;06_help_helpers&#39;</span><span class="p">)</span>
+<span class="n">user_aliases</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s1">&#39;20_aliases&#39;</span><span class="p">)</span>
+<span class="n">vi_mode_keybindings</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s1">&#39;32_vi_modes&#39;</span><span class="p">)</span>
+<span class="n">numpy_init</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s1">&#39;41_numpy_init&#39;</span><span class="p">)</span>
+<span class="n">pandas_init</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s1">&#39;42_pandas_init&#39;</span><span class="p">)</span>
+<span class="n">except_hook</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s1">&#39;50_sysexception&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This allows the modules to be used in the interactive user namespace and also
+be used by other scripts.</p>
 </div>
 <div class="section" id="original">
 <h3>Original<a class="headerlink" href="#original" title="Permalink to this headline">¶</a></h3>
@@ -172,6 +198,7 @@ with a prefix, e.g.:</p>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Startup</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#startup-scripts">Startup Scripts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#indexed-scripts">Indexed Scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="ipython_keybindings.html">Keybindings</a></li>
@@ -180,9 +207,15 @@ with a prefix, e.g.:</p>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="API.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="profile_default.html">1. Startup Files and IPython Shell Initialization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jupyter.html">2. Jupyter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jupyter.html#jupyter-notebook-jupyter-conf-jupyter-notebook-config">3. Jupyter Notebook — <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_conf.jupyter_notebook_config</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="extensions.html">4. IPython Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev.html">5. Developers Notes</a></li>
 </ul>
 
+
+ Vim: set ft=htmljinja:
   <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">IPython Startup Scripts</a><ul>
@@ -190,10 +223,12 @@ with a prefix, e.g.:</p>
 <li><a class="reference internal" href="#indexed-scripts">Indexed Scripts</a><ul>
 <li><a class="reference internal" href="#configuration">Configuration</a></li>
 <li><a class="reference internal" href="#rehash">%rehash</a></li>
-<li><a class="reference internal" href="#easy-import">Easy Import</a></li>
+<li><a class="reference internal" href="#importing-commonly-used-modules">Importing Commonly Used Modules</a></li>
 <li><a class="reference internal" href="#logging">Logging</a></li>
 <li><a class="reference internal" href="#help-helpers">Help Helpers</a></li>
-<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
 <li><a class="reference internal" href="#writing-the-scripts">Writing the Scripts</a></li>
 <li><a class="reference internal" href="#original">Original</a></li>
 </ul>

@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="../../_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/C:\Users\faris\projects\dynamic_ipython\docs\source\..\_static\pyramid.css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
@@ -72,7 +71,8 @@
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
         <span class="s2">&quot;site-packages&quot;</span><span class="p">,</span>
         <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Path to installation-specific site-packages directory.&quot;</span><span class="p">)</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Path to installation-specific site-packages directory.&quot;</span>
+    <span class="p">)</span>
 
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
         <span class="s2">&quot;-a&quot;</span><span class="p">,</span>
@@ -91,14 +91,17 @@
         <span class="n">default</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span>
         <span class="nb">type</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">FileType</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">),</span>
         <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The file where the packages should be written. Defaults to&#39;</span>
-        <span class="s1">&#39; stdout.&#39;</span><span class="p">)</span>
+        <span class="s1">&#39; stdout.&#39;</span>
+    <span class="p">)</span>
 
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-ll&#39;</span><span class="p">,</span>
-                        <span class="s1">&#39;--log-level&#39;</span><span class="p">,</span>
-                        <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;log-level&#39;</span><span class="p">,</span>
-                        <span class="n">default</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">,</span>
-                        <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
-                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Log level. Defaults to logging.WARNING.&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;-ll&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;--log-level&#39;</span><span class="p">,</span>
+        <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;log-level&#39;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">,</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Log level. Defaults to logging.WARNING.&#39;</span>
+    <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">parser</span>
 
@@ -129,8 +132,11 @@
     <span class="n">home</span> <span class="o">=</span> <span class="n">expanduser</span><span class="p">(</span><span class="s1">&#39;~&#39;</span><span class="p">)</span>
 
     <span class="n">search</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span>
-        <span class="n">pjoin</span><span class="p">(</span><span class="n">home</span><span class="p">,</span> <span class="s2">&quot;virtualenvs&quot;</span><span class="p">,</span> <span class="s2">&quot;**&quot;</span><span class="p">,</span> <span class="s2">&quot;lib&quot;</span><span class="p">,</span> <span class="s2">&quot;python3.6&quot;</span><span class="p">,</span> <span class="s2">&quot;site-packages&quot;</span><span class="p">,</span>
-              <span class="s2">&quot;**&quot;</span><span class="p">))</span>
+        <span class="n">pjoin</span><span class="p">(</span>
+            <span class="n">home</span><span class="p">,</span> <span class="s2">&quot;virtualenvs&quot;</span><span class="p">,</span> <span class="s2">&quot;**&quot;</span><span class="p">,</span> <span class="s2">&quot;lib&quot;</span><span class="p">,</span> <span class="s2">&quot;python3.6&quot;</span><span class="p">,</span> <span class="s2">&quot;site-packages&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;**&quot;</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">search</span><span class="p">:</span>
         <span class="k">if</span> <span class="s2">&quot;dist-info&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">i</span><span class="p">:</span>
@@ -173,9 +179,14 @@
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../API.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../profile_default.html">1. Startup Files and IPython Shell Initialization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../jupyter.html">2. Jupyter ZMQShell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../extensions.html">3. IPython Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev.html">4. Developers Notes</a></li>
 </ul>
 
+
+ Vim: set ft=htmljinja:
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <div class="searchformwrapper">

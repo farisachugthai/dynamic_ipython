@@ -2,7 +2,7 @@
 Jupyter
 =======
 
-Here are the default coniguration files for the Jupyter application
+Here are the default configuration files for the Jupyter application
 suite. These have been commented and marked up as appropriate.
 
 :mod:`~jupyter_conf.jupyter_qtconsole_config`
@@ -19,7 +19,7 @@ suite. These have been commented and marked up as appropriate.
 Jupyter Notebook --- :mod:`jupyter_conf.jupyter_notebook_config`
 ====================================================================
 
-.. highlight:: python3
+.. highlight:: ipython
 
 .. ipython:: python
 
@@ -73,7 +73,7 @@ c.NotebookApp.allow_origin_pat = ''
 
 Allow password to be changed at login for the notebook server.
 
-While loggin in with a token, the notebook server UI will give the opportunity
+While logging in with a token, the notebook server UI will give the opportunity
 to the user to enter a new password at the same time that will replace the
 token login mechanism.
 
@@ -106,9 +106,9 @@ Leading and trailing slashes can be omitted, and will automatically be added.
 c.NotebookApp.base_url = '/'
 
 Specify what command to use to invoke a web browser when opening the notebook.
-If not specified, the default browser will be determined by the `webbrowser`
-standard library module, which allows setting of the BROWSER environment
-variable to override it.
+If not specified, the default browser will be determined by the :mod:`webbrowser`
+standard library module, which allows setting of the :envvar:`$BROWSER`
+environment variable to override it.
 c.NotebookApp.browser = ''
 
 The full path to an SSL/TLS certificate file.
@@ -118,10 +118,12 @@ The full path to a certificate authority certificate for SSL/TLS client
 authentication.
 c.NotebookApp.client_ca = ''
 
-The config manager class to use
+The config manager class to use.
+
 c.NotebookApp.config_manager_class = 'notebook.services.config.manager.ConfigManager'
 
 The notebook manager class to use.
+
 c.NotebookApp.contents_manager_class = 'notebook.services.contents.largefilemanager.LargeFileManager'
 
 Extra keyword arguments to pass to `set_secure_cookie`. See tornado's
@@ -151,7 +153,7 @@ be determined reliably by the Jupyter notebook server (proxified or
 containerized setups for example).
 c.NotebookApp.custom_display_url = ''
 
-The default URL to redirect to from `/`
+The default URL to redirect to from :kbd:`/`
 c.NotebookApp.default_url = '/tree'
 
 Disable cross-site-request-forgery protection
@@ -174,7 +176,7 @@ MathJax is the javascript library Jupyter uses to render math/LaTeX. It is
 very large, so you may want to disable it if you have a slow internet
 connection, or for offline use of the notebook.
 
-When disabled, equations etj. will appear as their untransformed TeX source.
+When disabled, equations etj. Will appear as their untransformed TeX source.
 c.NotebookApp.enable_mathjax = True
 
 extra paths to look for Javascript notebook extensions
@@ -281,9 +283,9 @@ c.NotebookApp.open_browser = True
 
 Hashed password to use for web authentication.
 
-To generate, type in a python/IPython shell:
+To generate, type in a python/IPython shell::
 
-  from notebook.auth import passwd; passwd()
+   from notebook.auth import passwd; passwd()
 
 The string should be of the form type:salt:hashed-password.
 c.NotebookApp.password = ''
@@ -315,9 +317,10 @@ c.NotebookApp.rate_limit_window = 3
 The directory for user settings.
 c.LabApp.user_settings_dir = '/data/data/com.termux/files/home/.jupyter/lab/user-settings'
 
-#######
- fswatcher  #
-#######
+
+##############
+# fswatcher  #
+##############
 
 Whether to serve the app in watch mode
 c.LabApp.watch = False
@@ -381,19 +384,20 @@ c.NotebookApp.websocket_url = ''
 NteractApp(NotebookApp) configuration
 --------------------------------------------------------------------------
 
-Application for runing :command:`nteract` on a jupyter notebook server.
+Application for running :command:`nteract` on a jupyter notebook server.
 
 Whether to start the app in dev mode. Expects resources to be loaded from
-webpack's hot reloading server at `<http://localhost:8357>`_. Run:
+Webpack's hot reloading server at `<http://localhost:8357>`_. Run
 
-    ``yarn workspace nteract-on-jupyter run hot --port 8357``
+.. code-block:: console
 
-To serve your assets. This is only
-useful if NteractApp is installed editably e.g., using:
+   ``yarn workspace nteract-on-jupyter run hot --port 8357``
 
-    `pip install -e .`
+To serve your assets. This is only useful if NteractApp is installed
+in editable mode e.g., using::
 
-c.NteractApp.dev_mode = False
+   `pip install -e .`
+   c.NteractApp.dev_mode = False
 
 
 :mod:`~jupyter_conf.jupyter_nbconvert_config`

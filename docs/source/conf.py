@@ -22,18 +22,37 @@ import sys
 
 import profile_default
 from profile_default.__about__ import __version__
-from profile_default.startup import *
+from profile_default.startup import *  # noqa F0403
 
 LOGGER = logging.getLogger(name=__name__)
 LOGGER.setLevel(level=logging.DEBUG)
 
 
 def _path_build(root, suffix, validate=True):
-    """Join parts of paths together and ensure they exist. Log nonexistant paths."""
+    """Join parts of paths together and ensure they exist.
+
+    Log nonexistant paths.
+
+    Parameters
+    ----------
+    root : str or b(Path-like)
+        Directory to build on
+    suffix : str, bytes or Path (Path-like)
+        What to add to the root directory
+    validate : bool, Optional
+        Whether to check that the root dir exists first. Defaults to False.
+
+    Returns
+    -------
+    new : Path
+        Path object with suffix joined onto root.
+
+    """
     if validate:
         if isinstance(root, str):
             root = Path(root)
 
+        # TODO: Should probably add one in for bytes
         if root.joinpath(suffix).exists():
             new = root.joinpath(suffix)
             return new
