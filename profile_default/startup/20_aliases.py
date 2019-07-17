@@ -337,13 +337,30 @@ def common_aliases(_ip=None):
 
 
 def cmd_aliases(_ip=None):
-    r"""Aliases for the :command:`cmd` shell."""
+    r"""Aliases for the :command:`cmd` shell.
+
+    .. todo:: Cmd, :envvar:`COPYCMD` and IPython
+
+        Need to consider how to handle env vars. Still working out how
+        IPython's logic for Window's shells works, but that'll determine
+        how :envvar:`SHELL` and :envvar:`COMSPEC` are handled.
+
+        However it'll also take some consideration to figure out how to
+        handle env vars like COPYCMD. Should we build them into the aliases
+        we have here because that'll affect :data:`_ip.user_aliases.mv`.
+
+    Parameters
+    ----------
+    _ip : IPython shell
+
+    """
     _ip.user_aliases = [
         ('copy', 'copy'),
         ('ddir', 'dir /ad /on'),
         ('ldir', 'dir /ad /on'),
         ('ln',
          'mklink %s %s'),  # I know this really isn't the same but I need it
+        ('make', 'make.bat'),  # Useful when we're building docs
         ('mklink', 'mklink'),
         ('move', 'move'),
         ('mv', 'move'),

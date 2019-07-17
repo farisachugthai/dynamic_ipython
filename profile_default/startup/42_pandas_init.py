@@ -2,14 +2,16 @@
 # -*- coding: utf-8 -*-
 """Initialize desired parameters for :mod:`pandas` at startup.
 
-.. currentmodule:: pandas_init
-
-.. highlight:: python3
-
-:URL: `https://realpython.com/python-pandas-tricks/#1-configure-options-settings-at-interpreter-startup`_
-
+=====================
 Pandas Initialization
 =====================
+
+.. module:: pandas_init
+    :synopsis: Set display options for pandas.
+
+.. highlight:: python
+
+:URL: `https://realpython.com/python-pandas-tricks/#1-configure-options-settings-at-interpreter-startup`_
 
 .. todo::
 

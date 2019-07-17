@@ -87,11 +87,6 @@ def get_default_vim_bindings():
 def emacs_bindings():
     """Load emacs bindings in Vim's insert mode.
 
-    Parameters
-    ----------
-    escape_keys : bool, Optional
-        Whether to load :kbd:`Esc` or :kbd:`Alt` key bindings.
-
     """
     kb = KeyBindings()
     kb.add('c-a', filter=(insert_mode))(named_commands.beginning_of_line)
@@ -148,6 +143,8 @@ def main(_ip=None, escape_keys=False):
     ----------
     _ip : |ip|
         Global IPython instance.
+    escape_keys : bool, Optional
+        Whether to load :kbd:`Esc` or :kbd:`Alt` key bindings.
 
     """
     if _ip is None:
@@ -160,7 +157,7 @@ def main(_ip=None, escape_keys=False):
     elif hasattr(_ip, 'pt_app'):
         kb = _ip.pt_app.key_bindings
     else:
-        LOGGER.error('Is this being run in IPython?:\nType: %s ' % type(_ip))
+        LOGGER.error('Is this being run in IPython?:\nType: %s ', type(_ip), exc_info=1)
         kb = KeyBindings()
 
     ph = get_by_name('previous-history')

@@ -16,17 +16,25 @@ try:
     import prompt_toolkit
 except (ImportError, ModuleNotFoundError):
     sys.exit('Install prompt_toolkit.')
+else:
+    from prompt_toolkit.shortcuts import PromptSession
+    from prompt_toolkit.output.color_depth import ColorDepth
+    from prompt_toolkit.history import InMemoryHistory
 
-from prompt_toolkit.shortcuts import PromptSession
-from prompt_toolkit.output.color_depth import ColorDepth
-from prompt_toolkit.history import InMemoryHistory
+    # A handful are none because I wanna come back and fill them in
+    test = PromptSession(vi_mode=True, enable_history_searrch=True,
+                        search_ignore_case=True, enable_system_prompt=False,
+                        enable_suspend=False, enable_open_in_editor=True,
+                        completer=None, history=InMemoryHistory(),
+                        bottom_toolbar=None, lexer=None, clipboard=None)
 
-# A handful are none because I wanna come back and fill them in
-test = PromptSession(vi_mode=True, enable_history_searrch=True,
-                    search_ignore_case=True, enable_system_prompt=False,
-                    enable_suspend=False, enable_open_in_editor=True,
-                    completer=None, history=InMemoryHistory(),
-                    bottom_toolbar=None, lexer=None, clipboard=None)
+    while True:
+        try:
+            test.prompt()
+        # except KeyboardError:  # what is this really called?
+        except EOFError:
+            sys.exit()
+        # should add a bunch more
 
 
 # https://github.com/python/cpython/blob/3.7/Lib/pdb.py#L1380
@@ -50,7 +58,7 @@ alias ?? pinfo2
 # else:
 #     alias ls os.listdir(os.curdir) '%l'
 
-alias cd os.chdir('%s')
+# alias cd os.chdir('%s')
 # TODO: fix this
 # alias nvim subprocess.run(['nvim', '%1', '%2', '%3'], sys.stdout='DEV.NULL')
 
@@ -59,11 +67,3 @@ alias ~ os.expanduser('~')
 
 # if os.environ.get('PREFIX'):
 #     subprocess.run([])
-
-while True:
-    try:
-        test.prompt()
-    # except KeyboardError:  # what is this really called?
-    except EOFError:
-        sys.exit()
-    # should add a bunch more

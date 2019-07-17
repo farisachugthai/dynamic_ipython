@@ -1,14 +1,18 @@
+===========
 Extensions
 ===========
 
+.. highlight:: ipython
 
-:mod:`example`
---------------
 
-.. automodule:: extensions.example
-    :members:
-    :undoc-members:
-    :show-inheritance:
+.. sphinx breaks from this. TODO
+.. :mod:`example`
+.. --------------
+
+.. .. automodule:: extensions.example
+..     :members:
+..     :undoc-members:
+..     :show-inheritance:
 
 
 :mod:`pd_csv`

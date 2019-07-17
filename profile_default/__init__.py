@@ -8,9 +8,13 @@ Python3 and IPython 7+
 
 05/21/2019:
 
-    Commented out IPython because the package dependency in an __init__
-    file means that an unsuspecting user will try to install and the build
-    will fail before pip even gets a chance to install the dependencies.
+Commented out IPython because the package dependency in an __init__
+file means that an unsuspecting user will try to install and the build
+will fail before pip even gets a chance to install the dependencies.
+
+Jul 12, 2019:
+
+Admittedly, you could just use a try/except....
 
 """
 import logging

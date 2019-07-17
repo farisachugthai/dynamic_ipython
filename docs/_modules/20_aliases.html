@@ -382,13 +382,30 @@
 
 
 <div class="viewcode-block" id="cmd_aliases"><a class="viewcode-back" href="../profile_default.html#20_aliases.cmd_aliases">[docs]</a><span class="k">def</span> <span class="nf">cmd_aliases</span><span class="p">(</span><span class="n">_ip</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Aliases for the :command:`cmd` shell.&quot;&quot;&quot;</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Aliases for the :command:`cmd` shell.</span>
+
+<span class="sd">    .. todo:: Cmd, :envvar:`COPYCMD` and IPython</span>
+
+<span class="sd">        Need to consider how to handle env vars. Still working out how</span>
+<span class="sd">        IPython&#39;s logic for Window&#39;s shells works, but that&#39;ll determine</span>
+<span class="sd">        how :envvar:`SHELL` and :envvar:`COMSPEC` are handled.</span>
+
+<span class="sd">        However it&#39;ll also take some consideration to figure out how to</span>
+<span class="sd">        handle env vars like COPYCMD. Should we build them into the aliases</span>
+<span class="sd">        we have here because that&#39;ll affect :data:`_ip.user_aliases.mv`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    _ip : IPython shell</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_ip</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="p">[</span>
         <span class="p">(</span><span class="s1">&#39;copy&#39;</span><span class="p">,</span> <span class="s1">&#39;copy&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;ddir&#39;</span><span class="p">,</span> <span class="s1">&#39;dir /ad /on&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;ldir&#39;</span><span class="p">,</span> <span class="s1">&#39;dir /ad /on&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;ln&#39;</span><span class="p">,</span>
          <span class="s1">&#39;mklink </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">),</span>  <span class="c1"># I know this really isn&#39;t the same but I need it</span>
+        <span class="p">(</span><span class="s1">&#39;make&#39;</span><span class="p">,</span> <span class="s1">&#39;make.bat&#39;</span><span class="p">),</span>  <span class="c1"># Useful when we&#39;re building docs</span>
         <span class="p">(</span><span class="s1">&#39;mklink&#39;</span><span class="p">,</span> <span class="s1">&#39;mklink&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;move&#39;</span><span class="p">,</span> <span class="s1">&#39;move&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;mv&#39;</span><span class="p">,</span> <span class="s1">&#39;move&#39;</span><span class="p">),</span>
@@ -670,10 +687,9 @@
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../profile_default.html">1. Startup Files and IPython Shell Initialization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../jupyter.html">2. Jupyter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../jupyter.html#jupyter-notebook-jupyter-conf-jupyter-notebook-config">3. Jupyter Notebook — <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_conf.jupyter_notebook_config</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="../extensions.html">4. IPython Extensions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../dev.html">5. Developers Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../jupyter.html">2. Jupyter ZMQShell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../extensions.html">3. IPython Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev.html">4. Developers Notes</a></li>
 </ul>
 
 

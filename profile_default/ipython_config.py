@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 """Configuration file for :mod:`IPython`.
 
+==============
 IPython Config
 ==============
 
@@ -12,7 +13,7 @@ code found on GitHub.
 .. _ipython_docs: `<https://ipython.readthedocs.io/en/stable/config/intro.html#python-config-files>`_
 
 Overview
----------
+=========
 
 This module provides convenience functions, adds typical Linux shell
 commands to `user_ns`, or the global namespace, in addition to Git aliases.
@@ -22,13 +23,17 @@ clearly visible in :mod:`IPython` cells.
 
 
 get_config and :mod:`traitlets`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-------------------------------
 
 In the online examples, it's not clearly shown what the `c` represents when
 setting varying configuration values.
 
 
 From :mod:`traitlets/config/application`::
+
+    # so as to not break the Sphinx shell
+    from traitlets import config
+    from traitlets.config import Config, Application
 
     def get_config():
         # Get the config object for the global Application instance, if there is one
@@ -38,44 +43,77 @@ From :mod:`traitlets/config/application`::
         else:
             return Config()
 
-Parameters
-------------
-c : |ip|
-    `c` is a :class:`traitlets.config.Configurable()` object
-    so everything you see in this like 600 line file is how to interact
-    with those kinds of files. It's easy and doesn't require re-initializing
-    :mod:`IPython` on simple things like creating a new prompt after every
-    command increments it.
+
+`c` subclasses the :class:`traitlets.config.Configurable()` object
+in order to build up the declarative syntax used by IPython
+to make easy to modify values for users. This is setup by initializing
+classes with predefined attributes is a fundamental part of IPython.
+
+Everything in the following module, therefore, is a way of interacting
+with the varying traits classes IPython exports as it's API.
+
+It's easy and doesn't require re-initializing
+:mod:`IPython` on simple things like creating a new prompt after every
+command increments it.
+
 
 Class parameters
-~~~~~~~~~~~~~~~~
+----------------
 
 Parameters are set from command-line arguments of the form:
-`--Class.trait=value`. This line is evaluated in Python, so simple expressions
-are allowed, e.g.:: `--C.a='range(3)'` For setting C.a=[0,1,2].
+
+
+``--Class.trait=value``.
+
+
+This line is evaluated in Python, so simple expressions
+are allowed, e.g.::
+
+
+    --C.a='range(3)'
+
+
+For setting ``C.a=[0,1,2]``.
+
+
+Notable Expressions
+--------------------
+
+With the background laid, there are a few expressions worth noting:
+
+    ``c.InteractiveShellApp.reraise_ipython_extension_failures = False``
+
+Initially, one would assume this means something to effect of "Don't stop
+raising errors caused by faulty extensions."
+
+In actuality, it refers to crashing the interpreter if there are extension
+issues, which one will notice when reading the traitlets source code.
+
+From traitlets/config/application.py:
+
+    # Whether failing to load config files should prevent startup
+    raise_config_file_errors = Bool(TRAITLETS_APPLICATION_RAISE_CONFIG_FILE_ERROR)
+
+
+Parameters
+------------
+
+c : :class:`IPython.terminal.interactiveshell.TerminalInteractiveShell()`
+    Global IPython instance.
 
 
 Attributes (Non-method parameters)
 ----------------------------------
+
 :envvar:`IPYTHONDIR` : str (path-like)
     Environment variable defined before runtime to indicate where the
     :mod:`IPython` profile directory is.
 
-.. I think there's a specific syntax used when nesting directives look
-   that up later
-
-
-
-.. versionadded:: 05/18/19: What are these?::
-
-    --autoedit-syntax
-        Turn on auto editing of files with syntax errors.
-    --no-autoedit-syntax
-        Turn off auto editing of files with syntax errors.
 
 """
 import logging
 import os
+from pathlib import Path
 import platform
 import shutil
 from tempfile import TemporaryDirectory
@@ -88,19 +126,15 @@ from traitlets.config import get_config
 
 c = get_config()
 
-# not allowed in this file. func returns None
+# not allowed in this file. func returns None so I suppose IPython hasn't
+# officially instantiated yet
 # _ip = get_ipython()
-
-# Is it senseless defining our own logger?
-LOGGER = logging.getLogger(name='__name__')
-LOGGER.setLevel(logging.WARNING)
-LOGGER.debug(get_ipython_dir())
 
 
 def get_home():
     """Define the user's :envvar:`HOME`."""
     try:
-        home = os.path.expanduser("~")
+        home = Path.home()
     except OSError:
         home = os.environ.get("%userprofile%")
     return home
@@ -193,11 +227,8 @@ home = get_home()
 # if you realize this is a bad idea please leave a note why
 # i'm actually curious
 
-# From traitlets/config/application.py
-# Whether failing to load config files should prevent startup
-# raise_config_file_errors = Bool(TRAITLETS_APPLICATION_RAISE_CONFIG_FILE_ERROR)
+c.InteractiveShellApp.reraise_ipython_extension_failures = False
 
-c.InteractiveShellApp.reraise_ipython_extension_failures = True
 # I'm assuming these are related and please don't crash the interpreter
 # from a simple mistake
 
@@ -444,29 +475,28 @@ def sphinxify(obj):
 
 
 try:
-    import docrepr.sphinxify as sphx
+    import docrepr
 
     def ipython_sphinxify(doc):
         """The official way IPython does it in :ref:`IPython.core.interactiveshell`."""
         with TemporaryDirectory() as dirname:
             return {
-                'text/html': sphx.sphinxify(doc, dirname), 'text/plain': doc
+                'text/html': sphinxify.sphinxify(doc, dirname),
+                'text/plain': doc
             }
 
-except ImportError:
+except (ImportError,ModuleNotFoundError):
     ipython_sphinxify = None
 
-# Now do it theway spyder does it!
+# Now do it the way spyder does it!
 import importlib  # noqa E402
 try:
     importlib.import_module("docrepr")  # noqa E402
-except ImportError:
-    pass
-#   c.InteractiveShell.sphinxify_docstring = False
+except (ImportError, ModuleNotFoundError):
+    c.InteractiveShell.sphinxify_docstring = False
 else:
-    print("Sphinxify docstrings with sphinxify(obj)")
-
-#   c.InteractiveShell.sphinxify_docstring = True
+    # print("Sphinxify docstrings with sphinxify(obj)")
+    c.InteractiveShell.sphinxify_docstring = True
 
 c.InteractiveShell.wildcards_case_sensitive = False
 
@@ -846,5 +876,3 @@ c.LoggingMagics.quiet = True
 # ----------------------------------------------------------------------------
 
 del home
-LOGGER.debug("The user namespace currently contains: ")
-LOGGER.debug(c.user_ns)

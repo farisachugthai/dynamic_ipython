@@ -23,8 +23,9 @@ Welcome to IPython packages' documentation!
 
 .. toctree::
    :caption: API Docs
-   :maxdepth: 2
+   :maxdepth: 1
    :numbered:
+   :titlesonly:
 
    Startup Files and IPython Shell Initialization <profile_default>
    Jupyter ZMQShell <jupyter>

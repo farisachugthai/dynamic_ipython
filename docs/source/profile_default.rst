@@ -2,10 +2,13 @@
 Default IPython Profile and Startup Scripts
 ===========================================
 
+.. highlight:: ipython
+   :linenothreshold: 5
+
 .. contents:: Table of Contents
     :local:
     :backlinks: entry
-    :depth: 4
+    :depth: 3
 
 README
 ======
@@ -25,7 +28,7 @@ README
 ----------------------------
 
 .. literalinclude:: `~profile_default.ipython_kernel_config`
-   :language: python3
+   :language: ipython
    :numbered:
 
 

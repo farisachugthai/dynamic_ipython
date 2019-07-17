@@ -51,10 +51,15 @@
 <span class="sd">Help Helpers</span>
 <span class="sd">============</span>
 
-<span class="sd">.. currentmodule:: 06_help_helpers</span>
+<span class="sd">.. module:: 06_help_helpers</span>
+<span class="sd">    :synopsis: Export functions that aide working with the :func:`help` builtin.</span>
 
 <span class="sd">This module utilizes the examples given in the official documentation</span>
 <span class="sd">for :mod:`contextlib`!</span>
+
+<span class="sd">In addition to utilizing contextlib, create a function that allows</span>
+<span class="sd">for an easier &quot;grep-like&quot; utility through objects that are too large</span>
+<span class="sd">to simply skim the output of :func:`dir()`.</span>
 
 <span class="sd">------------------</span>
 
@@ -63,6 +68,7 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">contextlib</span>
+<span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 
 <span class="kn">from</span> <span class="nn">IPython</span> <span class="k">import</span> <span class="n">get_ipython</span>
@@ -86,6 +92,12 @@
 <div class="viewcode-block" id="page_help"><a class="viewcode-back" href="../profile_default.html#06_help_helpers.page_help">[docs]</a><span class="k">def</span> <span class="nf">page_help</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;WIP.&quot;&quot;&quot;</span>
     <span class="n">_ip</span><span class="o">.</span><span class="n">pinfo</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="grep"><a class="viewcode-back" href="../profile_default.html#06_help_helpers.grep">[docs]</a><span class="k">def</span> <span class="nf">grep</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;^a-z.*$&#39;</span><span class="p">]):</span>
+    <span class="n">compiled</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
+    <span class="n">attributes</span> <span class="o">=</span> <span class="nb">dir</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">attributes</span> <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">compiled</span><span class="p">,</span> <span class="n">i</span><span class="p">)))</span></div>
 </pre></div>
 
           </div>
@@ -110,10 +122,9 @@
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../profile_default.html">1. Startup Files and IPython Shell Initialization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../jupyter.html">2. Jupyter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../jupyter.html#jupyter-notebook-jupyter-conf-jupyter-notebook-config">3. Jupyter Notebook — <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_conf.jupyter_notebook_config</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="../extensions.html">4. IPython Extensions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../dev.html">5. Developers Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../jupyter.html">2. Jupyter ZMQShell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../extensions.html">3. IPython Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev.html">4. Developers Notes</a></li>
 </ul>
 
 
