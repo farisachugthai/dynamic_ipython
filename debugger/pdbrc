@@ -1,0 +1,69 @@
+# pdbrc
+# Vim: set ft=python:
+
+import os
+from pprint import pprint
+import subprocess
+import sys
+
+try:
+    import ipdb
+except (ImportError, ModuleNotFoundError):
+    pass
+
+# Gonna make this a prompt_toolkit testing ground
+try:
+    import prompt_toolkit
+except (ImportError, ModuleNotFoundError):
+    sys.exit('Install prompt_toolkit.')
+else:
+    from prompt_toolkit.shortcuts import PromptSession
+    from prompt_toolkit.output.color_depth import ColorDepth
+    from prompt_toolkit.history import InMemoryHistory
+
+    # A handful are none because I wanna come back and fill them in
+    test = PromptSession(vi_mode=True, enable_history_searrch=True,
+                        search_ignore_case=True, enable_system_prompt=False,
+                        enable_suspend=False, enable_open_in_editor=True,
+                        completer=None, history=InMemoryHistory(),
+                        bottom_toolbar=None, lexer=None, clipboard=None)
+
+    while True:
+        try:
+            test.prompt()
+        # except KeyboardError:  # what is this really called?
+        except EOFError:
+            sys.exit()
+        # should add a bunch more
+
+
+# https://github.com/python/cpython/blob/3.7/Lib/pdb.py#L1380
+# in the do_alias() function it mentions some examples and they sounded like
+# useful alias to tack on!
+
+# Print instance variables (usage "pi classInst")
+alias pi for k in % 1.__dict__.keys(): print("%1.", k, "=", % 1.__dict__[k])  # noqa
+# Print instance variables in self
+alias ps pi self
+
+# Apr 07, 2019
+# How in the world have I gone this long without noticing this isn't set up
+alias ? pinfo
+# Kinda sucks now only ?func is valid not func?
+alias ?? pinfo2
+
+# this is probably not how we wanna do this
+# if '%1':
+#     alias ls os.listdir('%l')
+# else:
+#     alias ls os.listdir(os.curdir) '%l'
+
+# alias cd os.chdir('%s')
+# TODO: fix this
+# alias nvim subprocess.run(['nvim', '%1', '%2', '%3'], sys.stdout='DEV.NULL')
+
+# I wonder/hope this is recursive
+alias ~ os.expanduser('~')
+
+# if os.environ.get('PREFIX'):
+#     subprocess.run([])
