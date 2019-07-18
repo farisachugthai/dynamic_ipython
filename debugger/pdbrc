@@ -9,13 +9,14 @@ import sys
 try:
     import ipdb
 except (ImportError, ModuleNotFoundError):
-    pass
+    import pdb
 
 # Gonna make this a prompt_toolkit testing ground
 try:
     import prompt_toolkit
 except (ImportError, ModuleNotFoundError):
-    sys.exit('Install prompt_toolkit.')
+    # sys.exit('Install prompt_toolkit.')
+    pass
 else:
     from prompt_toolkit.shortcuts import PromptSession
     from prompt_toolkit.output.color_depth import ColorDepth
@@ -23,10 +24,10 @@ else:
 
     # A handful are none because I wanna come back and fill them in
     test = PromptSession(vi_mode=True, enable_history_searrch=True,
-                        search_ignore_case=True, enable_system_prompt=False,
-                        enable_suspend=False, enable_open_in_editor=True,
-                        completer=None, history=InMemoryHistory(),
-                        bottom_toolbar=None, lexer=None, clipboard=None)
+                         search_ignore_case=True, enable_system_prompt=False,
+                         enable_suspend=False, enable_open_in_editor=True,
+                         completer=None, history=InMemoryHistory(),
+                         bottom_toolbar=None, lexer=None, clipboard=None)
 
     while True:
         try:

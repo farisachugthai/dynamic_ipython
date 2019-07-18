@@ -2,6 +2,10 @@
 Keybindings in IPython
 =======================
 
+.. highlight:: ipython
+   :linenothreshold: 5
+
+
 This document will summarize how to rebind keys in IPython since IPython 5.0.
 
 Interactively Binding Keys
@@ -17,17 +21,19 @@ Then import the function :func:`~IPython.terminal.interactiveshell.create_ipytho
 and initialize a :class:`~prompt_toolkit.key_binding.key_bindings.KeyBindings()`
 instance.
 
-The attributes associated with :func:`~IPython.terminal.interactiveshell.create_ipython_shortcuts()`
+The attributes associated with
+:func:`~IPython.terminal.interactiveshell.create_ipython_shortcuts()`
 are as follows:
 
-.. creates errors so let's not doctest for now.
+.. ipython:: python
+   :okexcept:
 
-from IPython import get_ipython
-from IPython.terminal.interactiveshell import create_ipython_shortcuts
-ip = get_ipython()
-c = create_ipython_shortcuts(ip)
-# This will give you the following methods
-print(dir(c))
+   from IPython import get_ipython
+   from IPython.terminal.interactiveshell import create_ipython_shortcuts
+   ip = get_ipython()
+   c = create_ipython_shortcuts(ip)
+   # This will give you the following methods
+   print(dir(c))
 
 This will produce an output of:
 
@@ -64,7 +70,7 @@ Go to the directory where IPython is installed. You can use the code above
 to check its location.
 
 This could be named something to the effect of
-`<~/miniconda3/lib/python3.7/site-packages/IPython/>`_ for example.
+`<~/miniconda3/lib/python3.7/site-packages/IPython/>` for example.
 
 Then navigate to the root of that directory and go to the terminal package.
 
@@ -85,6 +91,11 @@ describes the process of re-binding keys.
 
 Conditional Filters
 -------------------
+
+.. todo add in a link to the original docs
+
+The code block below is taken from the IPython documentation and
+shows how to bind keys.
 
 .. ipython:: python
 
@@ -112,15 +123,12 @@ Conditional Filters
 
 
 The documentation also shows a way of adding a `Conditional` Filter
-*a la Prompt Toolkit* to the Enter key. Looks like it invokes some
-:class:`prompt_toolkit.application.Buffer()` type code.
+*a la Prompt Toolkit* to the Enter key.
 
 Continue on in this fashion for as long as you need. In my opinion,
 IPython barely comes with any keybindings.
 
 The source code does provide this however:
-
-.. code-block:: python3
 
    # Ctrl+J == Enter, seemingly
    registry.add_binding(Keys.ControlJ,
@@ -131,7 +139,7 @@ The source code does provide this however:
 This displays a few useful ways of doing things.
 
 1. Importing :class:`~prompt_toolkit.key_bindings.bindings.Keys()` as a more
-   consistent interface than passing strings.
+   consistent interface than passing strings to represent keys.
 2. Utilizing a function ``return_handler`` inline to decorate the keybinding.
 
 Pure Prompt Toolkit Way of Rebinding Keys
@@ -140,11 +148,11 @@ Pure Prompt Toolkit Way of Rebinding Keys
 There are 3 different sections in the Prompt Toolkit Official Documentation
 on how to rebind keys using the package.
 
-The first time it's mentioned is in the :doc:`prompt_toolkit.asking_for_input`
-document.:
-
 Adding custom key bindings
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The first time it's mentioned is in the :doc:`prompt_toolkit.asking_for_input`
+document.:
 
     By default, every prompt already has a set of key bindings which implements
     the usual Vi or Emacs behaviour.
@@ -177,7 +185,7 @@ Adding custom key bindings
 
     Note that we use run_in_terminal() for the first key binding. This ensures
     that the output of the print-statement and the prompt don’t mix up. If the
-    key bindings doesn’t print anything, then it can be handled directly
+    key bindings doesn't print anything, then it can be handled directly
     without nesting functions.
 
 Enable key bindings according to a condition
@@ -194,7 +202,7 @@ certain conditions.
     at run time.
 
     In order to enable a key binding according to a certain condition, we have
-    to pass it a Filter, usually a Condition instance. (Read more about filters.)::
+    to pass it a Filter, usually a Condition instance.::
 
         from prompt_toolkit import prompt
         from prompt_toolkit.filters import Condition
@@ -214,18 +222,23 @@ certain conditions.
 
         prompt('> ', key_bindings=bindings)
 
+
 Dynamically switch between Emacs and Vi mode
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This is the part I'm most interested in, as we're going to try coming up with
-a new set of keybindings that blends together Emacs insert mode and Vim command mode.
+a new set of keybindings that blends together Emacs insert mode and
+Vim command mode.
 
-Ideally this would be tied together as 1 set of keybindings so that we don't run into
-key binding collisions. A :class:`prompt_toolkit.key_bindings.DynamicKeyBindings`
-might be useful. Bring it together with :func:`prompt_toolkit.key_bindings.merge_key_bindings`:
+Ideally this would be tied together as 1 set of keybindings so that we don't
+run into key binding collisions. A
+:class:`prompt_toolkit.key_bindings.DynamicKeyBindings()`
+might be useful. Bring it together with
+:func:`prompt_toolkit.key_bindings.merge_key_bindings()`:
 
     The Application has an editing_mode attribute. We can change the key
-    bindings by changing this attribute from EditingMode.VI to EditingMode.EMACS.::
+    bindings by changing this attribute from EditingMode.VI to
+    EditingMode.EMACS.::
 
         from prompt_toolkit import prompt
         from prompt_toolkit.application.current import get_app
@@ -259,17 +272,16 @@ might be useful. Bring it together with :func:`prompt_toolkit.key_bindings.merge
 
         run()
 
-Read more about key bindings …
 
-Here's a general overview with more examples on how to rebind keys.
 
 Using control-space for completion
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-:
 
-    An popular short cut that people sometimes use it to use control-space for
-    opening the autocompletion menu instead of the tab key. This can be done
-    with the following key binding.::
+Here's a general overview with more examples on how to rebind keys.:
+
+    A popular short cut that people sometimes use is :kbd:`Ctrl`-:kbd:`Space`
+    for opening the autocompletion menu instead of the tab key.
+    This can be done with the following key binding.::
 
         kb = KeyBindings()
 
@@ -282,9 +294,11 @@ Using control-space for completion
             else:
                 buff.start_completion(select_first=False)
 
+
 Progress Bar Section
 ~~~~~~~~~~~~~~~~~~~~
-::
+
+This continues in the section on progress bars.::
 
     from prompt_toolkit import HTML
     from prompt_toolkit.key_binding import KeyBindings
@@ -433,8 +447,9 @@ Literally::
                 _ip = get_ipython()
             self.registry = KeyBindings
 
-Once the user initializes that class, then your :class:`KeyBindings`
-statement in the `__init__` func was execute and you'll have access
+Once the user initializes that class, then your
+:class:`prompt_toolkit.key_bindings.keybinding.KeyBindings()`
+statement in the ``__init__`` func was execute and you'll have access
 to everything. Cool!
 
 ::
@@ -446,7 +461,7 @@ to everything. Cool!
 Ptpython and autocorrection
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This is simoply a different way to conceptualize key bindings that I hadn't
+This is simply a different way to conceptualize key bindings that I hadn't
 seen before and found pretty creative.::
 
     corrections = {
@@ -468,18 +483,19 @@ seen before and found pretty creative.::
         b.insert_text(' ')
 
 
-Summary So Far
+Side Effects
 ====================
 
 I wanted to try experimenting with the code to dynamically set up a toggle
 between Emacs and Vim.
 
-I didn't think that when the docstring said "DynamicKeyBindings takes a callable"
-that they meant the IPython global instance.
+I didn't think that when the docstring said "**DynamicKeyBindings**
+take a callable" that they meant the IPython global instance.
 
 But I was curious what would happen.
 
-Doing so actually created an embedded IPython instance that you can now toggle on and off.
+Doing so actually created an embedded IPython instance that you can now
+toggle on and off.
 
 .. code-block:: none
 
@@ -533,10 +549,6 @@ When run in the REPL:
 
 Source code for creating IPython shortcuts
 ==========================================
-
-.. ipython:: python
-
-   >>> %pycat shortcuts.py
 
 Module to define and register Terminal IPython shortcuts with
 :mod:`prompt_toolkit`

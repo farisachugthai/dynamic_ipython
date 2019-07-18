@@ -8,12 +8,11 @@ Default IPython Profile and Startup Scripts
 .. contents:: Table of Contents
     :local:
     :backlinks: entry
-    :depth: 3
+    :depth: 1
 
 README
 ======
 
- .. include:: profile_default.README
 
 :mod:`ipython_config`
 ---------------------

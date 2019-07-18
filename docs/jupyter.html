@@ -87,6 +87,8 @@ qtconsole :/</p>
 <span class="gp">In [2]: </span><span class="n">c</span> <span class="o">=</span> <span class="n">get_config</span><span class="p">()</span>
 </pre></div>
 </div>
+<div class="section" id="jupyterapp-application-configuration">
+<h3>2.2.1. JupyterApp(Application) configuration<a class="headerlink" href="#jupyterapp-application-configuration" title="Permalink to this headline">¶</a></h3>
 <p>Base class for Jupyter applications
 Answer yes to any prompts.</p>
 <p>c.JupyterApp.answer_yes = False</p>
@@ -96,6 +98,9 @@ Answer yes to any prompts.</p>
 <p>c.JupyterApp.config_file_name = ‘’</p>
 <p>Generate default config file.</p>
 <p>c.JupyterApp.generate_config = False</p>
+</div>
+<div class="section" id="notebookapp-jupyterapp-configuration">
+<h3>2.2.2. NotebookApp(JupyterApp) configuration<a class="headerlink" href="#notebookapp-jupyterapp-configuration" title="Permalink to this headline">¶</a></h3>
 <p>Set the Access-Control-Allow-Credentials: true header
 c.NotebookApp.allow_credentials = False</p>
 <p>Set the Access-Control-Allow-Origin header</p>
@@ -107,57 +112,57 @@ c.NotebookApp.allow_origin = ‘’</p>
 <blockquote>
 <div><p>Access-Control-Allow-Origin: origin</p>
 </div></blockquote>
-<p>where <code class="xref py py-obj docutils literal notranslate"><span class="pre">origin</span></code> is the origin of the request.</p>
-<p>Ignored if allow_origin is set.
-c.NotebookApp.allow_origin_pat = ‘’</p>
-<p>Allow password to be changed at login for the notebook server.</p>
-<p>While logging in with a token, the notebook server UI will give the opportunity
+<p>where <code class="xref py py-obj docutils literal notranslate"><span class="pre">origin</span></code> is the origin of the request.
+Ignored if allow_origin is set.</p>
+<p>c.NotebookApp.allow_origin_pat = ‘’</p>
+<p>Allow password to be changed at login for the notebook server.
+While logging in with a token, the notebook server UI will give the opportunity
 to the user to enter a new password at the same time that will replace the
-token login mechanism.</p>
-<p>This can be set to false to prevent changing password from the UI/API.
-c.NotebookApp.allow_password_change = True</p>
-<p>Allow requests where the Host header doesn’t point to a local server</p>
-<p>By default, requests get a 403 forbidden response if the ‘Host’ header shows
+token login mechanism.
+This can be set to false to prevent changing password from the UI/API.</p>
+<p>c.NotebookApp.allow_password_change = True</p>
+<p>Allow requests where the Host header doesn’t point to a local server
+By default, requests get a 403 forbidden response if the ‘Host’ header shows
 that the browser thinks it’s on a non-local domain. Setting this option to
-True disables this check.</p>
-<p>This protects against ‘DNS rebinding’ attacks, where a remote web server
+True disables this check.
+This protects against ‘DNS rebinding’ attacks, where a remote web server
 serves you a page and then changes its DNS to send later requests to a local
 IP, bypassing same-origin checks.</p>
 <p>Local IP addresses (such as 127.0.0.1 and ::1) are allowed as local, along
-with hostnames configured in local_hostnames.
-c.NotebookApp.allow_remote_access = False</p>
-<p>Whether to allow the user to run the notebook as root.
-c.NotebookApp.allow_root = False</p>
-<p>DEPRECATED use base_url
-c.NotebookApp.base_project_url = ‘/’</p>
+with hostnames configured in local_hostnames.</p>
+<p>c.NotebookApp.allow_remote_access = False</p>
+<p>Whether to allow the user to run the notebook as root.</p>
+<p>c.NotebookApp.allow_root = False</p>
+<p>DEPRECATED use base_url</p>
+<p>c.NotebookApp.base_project_url = ‘/’</p>
 <p>The base URL for the notebook server.</p>
-<p>Leading and trailing slashes can be omitted, and will automatically be added.
-c.NotebookApp.base_url = ‘/’</p>
+<p>Leading and trailing slashes can be omitted, and will automatically be added.</p>
+<p>c.NotebookApp.base_url = ‘/’</p>
 <p>Specify what command to use to invoke a web browser when opening the notebook.
 If not specified, the default browser will be determined by the <a class="reference external" href="https://docs.python.org/3/library/webbrowser.html#module-webbrowser" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">webbrowser</span></code></a>
 standard library module, which allows setting of the <span class="target" id="index-0"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">$BROWSER</span></code>
-environment variable to override it.
-c.NotebookApp.browser = ‘’</p>
-<p>The full path to an SSL/TLS certificate file.
-c.NotebookApp.certfile = ‘’</p>
+environment variable to override it.</p>
+<p>c.NotebookApp.browser = ‘’</p>
+<p>The full path to an SSL/TLS certificate file.</p>
+<p>c.NotebookApp.certfile = ‘’</p>
 <p>The full path to a certificate authority certificate for SSL/TLS client
-authentication.
-c.NotebookApp.client_ca = ‘’</p>
+authentication.</p>
+<p>c.NotebookApp.client_ca = ‘’</p>
 <p>The config manager class to use.</p>
 <p>c.NotebookApp.config_manager_class = ‘notebook.services.config.manager.ConfigManager’</p>
 <p>The notebook manager class to use.</p>
 <p>c.NotebookApp.contents_manager_class = ‘notebook.services.contents.largefilemanager.LargeFileManager’</p>
 <p>Extra keyword arguments to pass to <code class="xref py py-obj docutils literal notranslate"><span class="pre">set_secure_cookie</span></code>. See tornado’s
-set_secure_cookie docs for details.
-c.NotebookApp.cookie_options = {}</p>
+set_secure_cookie docs for details.</p>
+<p>c.NotebookApp.cookie_options = {}</p>
 <p>The random bytes used to secure cookies. By default this is a new random
 number every time you start the Notebook. Set it to a value in a config file
 to enable logins to persist across server sessions.</p>
 <p>Note: Cookie secrets should be kept private, do not share config files with
-cookie_secret stored in plaintext (you can read the value from a file).
-c.NotebookApp.cookie_secret = b’‘</p>
-<p>The file where the cookie secret is stored.
-c.NotebookApp.cookie_secret_file = ‘’</p>
+cookie_secret stored in plaintext (you can read the value from a file).</p>
+<p>c.NotebookApp.cookie_secret = b’‘</p>
+<p>The file where the cookie secret is stored.</p>
+<p>c.NotebookApp.cookie_secret_file = ‘’</p>
 <p>Override URL shown to users.</p>
 <p>Replace actual URL, including protocol, address, port and base URL, with the
 given value when displaying URL to the users. Do not change the actual
@@ -165,110 +170,111 @@ connection URL. If authentication token is enabled, the token is added to the
 custom URL automatically.</p>
 <p>This option is intended to be used when the URL to display to the user cannot
 be determined reliably by the Jupyter notebook server (proxified or
-containerized setups for example).
-c.NotebookApp.custom_display_url = ‘’</p>
-<p>The default URL to redirect to from <kbd class="kbd docutils literal notranslate">/</kbd>
-c.NotebookApp.default_url = ‘/tree’</p>
-<p>Disable cross-site-request-forgery protection</p>
-<p>Jupyter notebook 4.3.1 introduces protection from cross-site request
-forgeries, requiring API requests to either:</p>
-<ul class="simple">
-<li><p>originate from pages served by this server (validated with XSRF cookie and</p></li>
-</ul>
-<p>token), or - authenticate with a token</p>
+containerized setups for example).</p>
+<p>c.NotebookApp.custom_display_url = ‘’</p>
+<p>The default URL to redirect to from <kbd class="kbd docutils literal notranslate">/</kbd></p>
+<p>c.NotebookApp.default_url = ‘/tree’</p>
+<p>Disable cross-site-request-forgery protection
+Jupyter notebook 4.3.1 introduces protection from cross-site request
+forgeries, requiring API requests to either:
+Originate from pages served by this server (validated with XSRF cookie and
+token), or authenticate with a token</p>
 <p>Some anonymous compute resources still desire the ability to run code,
 completely without authentication. These services can disable all
 authentication and security checks, with the full knowledge of what that
-implies.
-c.NotebookApp.disable_check_xsrf = False</p>
-<p>Whether to enable MathJax for typesetting math/TeX</p>
-<p>MathJax is the javascript library Jupyter uses to render math/LaTeX. It is
+implies.</p>
+<p>c.NotebookApp.disable_check_xsrf = False</p>
+<p>Whether to enable MathJax for typesetting math/Tex.
+MathJax is the javascript library Jupyter uses to render math/LaTeX. It is
 very large, so you may want to disable it if you have a slow internet
-connection, or for offline use of the notebook.</p>
-<p>When disabled, equations etj. Will appear as their untransformed TeX source.
-c.NotebookApp.enable_mathjax = True</p>
-<p>extra paths to look for Javascript notebook extensions
-c.NotebookApp.extra_nbextensions_path = []</p>
-<p>handlers that should be loaded at higher priority than the default services
-c.NotebookApp.extra_services = []</p>
-<p>Extra paths to search for serving static files.</p>
-<p>This allows adding javascript/css to be available from the notebook server
-machine, or overriding individual files in the IPython
-c.NotebookApp.extra_static_paths = []</p>
-<p>Extra paths to search for serving jinja templates.</p>
-<p>Can be used to override templates from notebook.templates.
-c.NotebookApp.extra_template_paths = []</p>
+connection, or for offline use of the notebook.
+When disabled, equations etj. Will appear as their untransformed TeX source.</p>
+<p>c.NotebookApp.enable_mathjax = True</p>
+<p>extra paths to look for Javascript notebook extensions</p>
+<p>c.NotebookApp.extra_nbextensions_path = []</p>
+<p>handlers that should be loaded at higher priority than the default services</p>
+<p>c.NotebookApp.extra_services = []</p>
+<p>Extra paths to search for serving static files.
+This allows adding javascript/css to be available from the notebook server
+machine, or overriding individual files in the IPython</p>
+<p>c.NotebookApp.extra_static_paths = []</p>
+<p>Extra paths to search for serving jinja templates.
+Can be used to override templates from notebook.templates.</p>
+<p>c.NotebookApp.extra_template_paths = []</p>
 <p>c.NotebookApp.file_to_run = ‘’</p>
 <p>Extra keyword arguments to pass to <code class="xref py py-obj docutils literal notranslate"><span class="pre">get_secure_cookie</span></code>. See tornado’s
-get_secure_cookie docs for details.
-c.NotebookApp.get_secure_cookie_kwargs = {}</p>
+get_secure_cookie docs for details.</p>
+<p>c.NotebookApp.get_secure_cookie_kwargs = {}</p>
 <p>Deprecated: Use minified JS file or not, mainly use during dev to avoid JS
-recompilation
-c.NotebookApp.ignore_minified_js = False</p>
+recompilation</p>
+<p>c.NotebookApp.ignore_minified_js = False</p>
 <p>(bytes/sec) Maximum rate at which stream output can be sent on iopub before
-they are limited.
-c.NotebookApp.iopub_data_rate_limit = 1000000</p>
+they are limited.</p>
+<p>c.NotebookApp.iopub_data_rate_limit = 1000000</p>
 <p>(msgs/sec) Maximum rate at which messages can be sent on iopub before they are
-limited.
-c.NotebookApp.iopub_msg_rate_limit = 1000</p>
-<p>The IP address the notebook server will listen on.
-c.NotebookApp.ip = ‘localhost’</p>
-<p>Supply extra arguments that will be passed to Jinja environment.
-c.NotebookApp.jinja_environment_options = {}</p>
-<p>Extra variables to supply to jinja templates when rendering.
-c.NotebookApp.jinja_template_vars = {}</p>
-<p>The kernel manager class to use.
-c.NotebookApp.kernel_manager_class = ‘notebook.services.kernels.kernelmanager.MappingKernelManager’</p>
+limited.</p>
+<p>c.NotebookApp.iopub_msg_rate_limit = 1000</p>
+<p>The IP address the notebook server will listen on.</p>
+<p>c.NotebookApp.ip = ‘localhost’</p>
+<p>Supply extra arguments that will be passed to Jinja environment.</p>
+<p>c.NotebookApp.jinja_environment_options = {}</p>
+<p>Extra variables to supply to jinja templates when rendering.</p>
+<p>c.NotebookApp.jinja_template_vars = {}</p>
+<p>The kernel manager class to use.</p>
+<p>c.NotebookApp.kernel_manager_class = ‘notebook.services.kernels.kernelmanager.MappingKernelManager’</p>
 <p>The kernel spec manager class to use. Should be a subclass of
-<code class="xref py py-obj docutils literal notranslate"><span class="pre">jupyter_client.kernelspej.KernelSpecManager</span></code>.</p>
-<p>The Api of KernelSpecManager is provisional and might change without warning
-between this version of Jupyter and the next stable one.
-c.NotebookApp.kernel_spec_manager_class = ‘jupyter_client.kernelspec.KernelSpecManager’</p>
-<p>The full path to a private key file for usage with SSL/TLS.
-c.NotebookApp.keyfile = ‘’</p>
-<p>Hostnames to allow as local when allow_remote_access is False.</p>
-<p>Local IP addresses (such as 127.0.0.1 and ::1) are automatically accepted as
-local as well.
-c.NotebookApp.local_hostnames = [‘localhost’]</p>
-<p>The login handler class to use.
-c.NotebookApp.login_handler_class = ‘notebook.auth.login.LoginHandler’</p>
-<p>The logout handler class to use.
-c.NotebookApp.logout_handler_class = ‘notebook.auth.logout.LogoutHandler’</p>
-<p>The MathJax.js configuration file that is to be used.
-c.NotebookApp.mathjax_config = ‘TeX-AMS-MML_HTMLorMML-full,Safe’</p>
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">jupyter_client.kernelspej.KernelSpecManager</span></code>.
+The Api of KernelSpecManager is provisional and might change without warning
+between this version of Jupyter and the next stable one.</p>
+<p>c.NotebookApp.kernel_spec_manager_class = ‘jupyter_client.kernelspec.KernelSpecManager’</p>
+<p>The full path to a private key file for usage with SSL/TLS.</p>
+<p>c.NotebookApp.keyfile = ‘’</p>
+<p>Hostnames to allow as local when allow_remote_access is False.
+Local IP addresses (such as 127.0.0.1 and ::1) are automatically accepted as
+local as well.</p>
+<p>c.NotebookApp.local_hostnames = [‘localhost’]</p>
+<p>The login handler class to use.</p>
+<p>c.NotebookApp.login_handler_class = ‘notebook.auth.login.LoginHandler’</p>
+<p>The logout handler class to use.</p>
+<p>c.NotebookApp.logout_handler_class = ‘notebook.auth.logout.LogoutHandler’</p>
+<p>The MathJax.js configuration file that is to be used.</p>
+<p>c.NotebookApp.mathjax_config = ‘TeX-AMS-MML_HTMLorMML-full,Safe’</p>
 <p>A custom url for MathJax.js. Should be in the form of a case-sensitive url to
-MathJax, for example:  /static/components/MathJax/MathJax.js
-c.NotebookApp.mathjax_url = ‘’</p>
+MathJax, for example:  /static/components/MathJax/MathJax.js</p>
+<p>c.NotebookApp.mathjax_url = ‘’</p>
 <p>Sets the maximum allowed size of the client request body, specified in  the
 Content-Length request header field. If the size in a request  exceeds the
 configured value, a malformed HTTP message is returned to the client.</p>
-<p>Note: max_body_size is applied even in streaming mode.
-c.NotebookApp.max_body_size = 536870912</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>max_body_size is applied even in streaming mode.</p>
+</div>
+<p>c.NotebookApp.max_body_size = 536870912</p>
 <p>Gets or sets the maximum amount of memory, in bytes, that is allocated  for
-use by the buffer manager.
-c.NotebookApp.max_buffer_size = 536870912</p>
+use by the buffer manager.</p>
+<p>c.NotebookApp.max_buffer_size = 536870912</p>
 <p>Dict of Python modules to load as notebook server extensions.Entry values can
 be used to enable and disable the loading ofthe extensions. The extensions
-will be loaded in alphabetical order.
-c.NotebookApp.nbserver_extensions = {}</p>
+will be loaded in alphabetical order.</p>
+<p>c.NotebookApp.nbserver_extensions = {}</p>
 <p>The directory to use for notebooks and kernels.
 c.NotebookApp.notebook_dir = ‘’</p>
 <p>Whether to open in a browser after starting. The specific browser used is
 platform dependent and determined by the python standard library <a class="reference external" href="https://docs.python.org/3/library/webbrowser.html#module-webbrowser" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">webbrowser</span></code></a>
 module, unless it is overridden using the –browser (NotebookApp.browser)
-configuration option.
-c.NotebookApp.open_browser = True</p>
+configuration option.</p>
+<p>c.NotebookApp.open_browser = True</p>
 <p>Hashed password to use for web authentication.</p>
 <p>To generate, type in a python/IPython shell:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">notebook.auth</span> <span class="kn">import</span> <span class="n">passwd</span><span class="p">;</span> <span class="n">passwd</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>The string should be of the form type:salt:hashed-password.
-c.NotebookApp.password = ‘’</p>
+<p>The string should be of the form type:salt:hashed-password.</p>
+<p>c.NotebookApp.password = ‘’</p>
 <p>Forces users to use a password for the Notebook server. This is useful in a
 multi user environment, for instance when everybody in the LAN can access each
 other’s machine through ssh.</p>
-<p>In such a case, server the notebook server on localhost is not secure since
+<p>In such a case, server the notebook server on loca1lhost is not secure since
 any user can connect to the notebook server via ssh.</p>
 <p>c.NotebookApp.password_required = False</p>
 <p>The port the notebook server will listen on.</p>
@@ -284,6 +290,8 @@ server).</p>
 <p>c.NotebookApp.rate_limit_window = 3</p>
 <p>The directory for user settings.</p>
 <p>c.LabApp.user_settings_dir = ‘/data/data/com.termux/files/home/.jupyter/lab/user-settings’</p>
+<div class="section" id="fswatcher">
+<h4>2.2.2.1. fswatcher<a class="headerlink" href="#fswatcher" title="Permalink to this headline">¶</a></h4>
 <p>Whether to serve the app in watch mode.:</p>
 <p>c.LabApp.watch = False</p>
 <p>The directory for workspaces.:</p>
@@ -323,6 +331,8 @@ See the tornado docs for WebSocketHandler.get_compression_options for details.</
 almost certainly doesn’t).
 Should be in the form of an HTTP origin: ws[s]://hostname[:port]</p>
 <p>c.NotebookApp.websocket_url = ‘’</p>
+<div class="section" id="nteractapp-notebookapp-configuration">
+<h5>2.2.2.1.1. NteractApp(NotebookApp) configuration<a class="headerlink" href="#nteractapp-notebookapp-configuration" title="Permalink to this headline">¶</a></h5>
 <p>Application for running <strong class="command">nteract</strong> on a jupyter notebook server.</p>
 <p>Whether to start the app in dev mode. Expects resources to be loaded from
 Webpack’s hot reloading server at <a class="reference external" href="http://localhost:8357">http://localhost:8357</a>. Run</p>
@@ -331,9 +341,12 @@ Webpack’s hot reloading server at <a class="reference external" href="http://l
 </div>
 <p>To serve your assets. This is only useful if NteractApp is installed
 in editable mode e.g., using:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="sb">`pip install -e .`</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">e</span> <span class="o">.</span>
 <span class="n">c</span><span class="o">.</span><span class="n">NteractApp</span><span class="o">.</span><span class="n">dev_mode</span> <span class="o">=</span> <span class="bp">False</span>
 </pre></div>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="section" id="jupyter-nbconvert-config">
@@ -377,14 +390,24 @@ in editable mode e.g., using:</p>
 
 
  Vim: set ft=htmljinja:
-  <h3><a href="index.html">Table of Contents</a></h3>
+  <h3><a href="index.html">On This Page:</a></h3>
   <ul>
 <li><a class="reference internal" href="#">2. Jupyter</a><ul>
 <li><a class="reference internal" href="#jupyter-qtconsole-jupyter-qtconsole-config">2.1. Jupyter QTConsole — <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_qtconsole_config</span></code></a><ul>
 <li><a class="reference internal" href="#initializing-jupyter-qtconsole">2.1.1. Initializing Jupyter QTConsole</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#jupyter-notebook-jupyter-conf-jupyter-notebook-config">2.2. Jupyter Notebook — <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_conf.jupyter_notebook_config</span></code></a></li>
+<li><a class="reference internal" href="#jupyter-notebook-jupyter-conf-jupyter-notebook-config">2.2. Jupyter Notebook — <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_conf.jupyter_notebook_config</span></code></a><ul>
+<li><a class="reference internal" href="#jupyterapp-application-configuration">2.2.1. JupyterApp(Application) configuration</a></li>
+<li><a class="reference internal" href="#notebookapp-jupyterapp-configuration">2.2.2. NotebookApp(JupyterApp) configuration</a><ul>
+<li><a class="reference internal" href="#fswatcher">2.2.2.1. fswatcher</a><ul>
+<li><a class="reference internal" href="#nteractapp-notebookapp-configuration">2.2.2.1.1. NteractApp(NotebookApp) configuration</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a class="reference internal" href="#jupyter-nbconvert-config">2.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_nbconvert_config</span></code></a></li>
 <li><a class="reference internal" href="#jupyter-labextension-config">2.4. <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_labextension_config</span></code></a></li>
 <li><a class="reference internal" href="#jupyter-console-config">2.5. <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_console_config</span></code></a></li>

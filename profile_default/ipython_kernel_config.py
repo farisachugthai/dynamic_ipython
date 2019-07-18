@@ -14,114 +14,111 @@ IPython Kernel Configuration
 IPython Kernel Config
 ======================
 
-# -----------------------------------------------------------------------------
-# ConnectionFileMixin(LoggingConfigurable) configuration
-# -----------------------------------------------------------------------------
+ConnectionFileMixin(LoggingConfigurable) configuration
+-----------------------------------------------------------------------------
 
-# Mixin for configurable classes that work with connection files
+Mixin for configurable classes that work with connection files
 
-# JSON file in which to store connection info [default: kernel-<pid>.json]
-#
-# This file will contain the IP, ports, and authentication key needed to connect
-# clients to this kernel. By default, this file will be created in the security
-# dir of the current profile, but can be specified by absolute path.
-# c.ConnectionFileMixin.connection_file = ''
+JSON file in which to store connection info [default: kernel-<pid>.json]
 
-# set the control (ROUTER) port [default: random]
-# c.ConnectionFileMixin.control_port = 0
+This file will contain the IP, ports, and authentication key needed to connect
+clients to this kernel. By default, this file will be created in the security
+dir of the current profile, but can be specified by absolute path.
+c.ConnectionFileMixin.connection_file = ''
 
-# set the heartbeat port [default: random]
-# c.ConnectionFileMixin.hb_port = 0
+set the control (ROUTER) port [default: random]
+c.ConnectionFileMixin.control_port = 0
 
-# set the iopub (PUB) port [default: random]
-# c.ConnectionFileMixin.iopub_port = 0
+set the heartbeat port [default: random]
+c.ConnectionFileMixin.hb_port = 0
 
-# Set the kernel's IP address [default localhost]. If the IP address is
-# something other than localhost, then Consoles on other machines will be able
-# to connect to the Kernel, so be careful!
+set the iopub (PUB) port [default: random]
+c.ConnectionFileMixin.iopub_port = 0
 
-# **could we set a private IP of we trust the LAN?**
-# c.ConnectionFileMixin.ip = ''
+Set the kernel's IP address [default localhost]. If the IP address is
+something other than localhost, then Consoles on other machines will be able
+to connect to the Kernel, so be careful!
 
-# set the shell (ROUTER) port [default: random]
-# c.ConnectionFileMixin.shell_port = 0
+**could we set a private IP of we trust the LAN?**
+c.ConnectionFileMixin.ip = ''
 
-# set the stdin (ROUTER) port [default: random]
-# c.ConnectionFileMixin.stdin_port = 0
+set the shell (ROUTER) port [default: random]
+c.ConnectionFileMixin.shell_port = 0
 
-# c.ConnectionFileMixin.transport = 'tcp'
+set the stdin (ROUTER) port [default: random]
+c.ConnectionFileMixin.stdin_port = 0
 
-# -----------------------------------------------------------------------------
-# InteractiveShellApp(Configurable) configuration
-# -----------------------------------------------------------------------------
+c.ConnectionFileMixin.transport = 'tcp'
 
-# A Mixin for applications that start InteractiveShell instances.
-#
-# Provides configurables for loading extensions and executing files as part of
-# configuring a Shell environment.
-#
-# The following methods should be called by the :meth:`initialize` method of the
-# subclass:
-#
-#   - :meth:`init_path`
-#   - :meth:`init_shell` (to be implemented by the subclass)
-#   - :meth:`init_gui_pylab`
-#   - :meth:`init_extensions`
-#   - :meth:`init_code`
+InteractiveShellApp(Configurable) configuration
+-----------------------------------------------------------------------------
 
-# Execute the given command string.
-# c.InteractiveShellApp.code_to_run = ''
+A Mixin for applications that start InteractiveShell instances.
 
-# Run the file referenced by the PYTHONSTARTUP environment variable at IPython
-# startup.
-# c.InteractiveShellApp.exec_PYTHONSTARTUP = True
+Provides configurables for loading extensions and executing files as part of
+configuring a Shell environment.
 
-# List of files to run at IPython startup.
-# c.InteractiveShellApp.exec_files = []
+The following methods should be called by the :meth:`initialize` method of the
+subclass:
 
-# lines of code to run at IPython startup.
-# c.InteractiveShellApp.exec_lines = []
+  - :meth:`init_path`
+  - :meth:`init_shell` (to be implemented by the subclass)
+  - :meth:`init_gui_pylab`
+  - :meth:`init_extensions`
+  - :meth:`init_code`
 
-# A list of dotted module names of IPython extensions to load.
-# c.InteractiveShellApp.extensions = []
+Execute the given command string.
+c.InteractiveShellApp.code_to_run = ''
 
-# dotted module name of an IPython extension to load.
-# c.InteractiveShellApp.extra_extension = ''
+Run the file referenced by the PYTHONSTARTUP environment variable at IPython
+startup.
+c.InteractiveShellApp.exec_PYTHONSTARTUP = True
 
-# A file to be run
-# c.InteractiveShellApp.file_to_run = ''
+List of files to run at IPython startup.
+c.InteractiveShellApp.exec_files = []
 
-# Enable GUI event loop integration with any of ('glut', 'gtk', 'gtk2', 'gtk3',
-# 'osx', 'pyglet', 'qt', 'qt4', 'qt5', 'tk', 'wx', 'gtk2', 'qt4').
-# c.InteractiveShellApp.gui = None
+lines of code to run at IPython startup.
+c.InteractiveShellApp.exec_lines = []
 
-# Should variables loaded at startup (by startup files, exec_lines, etc.) be
-# hidden from tools like %who?
-# c.InteractiveShellApp.hide_initial_ns = True
+A list of dotted module names of IPython extensions to load.
+c.InteractiveShellApp.extensions = []
 
-# Configure matplotlib for interactive use with the default matplotlib backend.
-# TODO: we need to test for if we have an X11 server ready to help us out
-# c.InteractiveShellApp.matplotlib = None
+dotted module name of an IPython extension to load.
+c.InteractiveShellApp.extra_extension = ''
 
-# Run the module as a script.
-# c.InteractiveShellApp.module_to_run = ''
+A file to be run
+c.InteractiveShellApp.file_to_run = ''
 
-# Pre-load matplotlib and numpy for interactive use, selecting a particular
-# matplotlib backend and loop integration.
-# c.InteractiveShellApp.pylab = None
+Enable GUI event loop integration with any of ('glut', 'gtk', 'gtk2', 'gtk3',
+'osx', 'pyglet', 'qt', 'qt4', 'qt5', 'tk', 'wx', 'gtk2', 'qt4').
+c.InteractiveShellApp.gui = None
 
-# If true, IPython will populate the user namespace with numpy, pylab, etc. and
-# an ``import *`` is done from numpy and pylab, when using pylab mode.
-#
-# When False, pylab mode should not import any names into the user namespace.
-# c.InteractiveShellApp.pylab_import_all = True
+Should variables loaded at startup (by startup files, exec_lines, etc.) be
+hidden from tools like %who?
+c.InteractiveShellApp.hide_initial_ns = True
 
-# Reraise exceptions encountered loading IPython extensions?
-c.InteractiveShellApp.reraise_ipython_extension_failures = True
+Configure matplotlib for interactive use with the default matplotlib backend.
+TODO: we need to test for if we have an X11 server ready to help us out
+c.InteractiveShellApp.matplotlib = None
 
-# -----------------------------------------------------------------------------
-# Application(SingletonConfigurable) configuration
-# -----------------------------------------------------------------------------
+Run the module as a script.
+c.InteractiveShellApp.module_to_run = ''
+
+Pre-load matplotlib and numpy for interactive use, selecting a particular
+matplotlib backend and loop integration.
+c.InteractiveShellApp.pylab = None
+
+If true, IPython will populate the user namespace with numpy, pylab, etc. and
+an ``import *`` is done from numpy and pylab, when using pylab mode.
+
+When False, pylab mode should not import any names into the user namespace.
+c.InteractiveShellApp.pylab_import_all = True
+
+Reraise exceptions encountered loading IPython extensions?
+InteractiveShellApp.reraise_ipython_extension_failures = True
+
+Application(SingletonConfigurable) configuration
+-----------------------------------------------------------------------------
 
 
 ------------
@@ -160,6 +157,7 @@ are allowed, e.g.:: `--C.a='range(3)'` For setting C.a=[0,1,2].
 
 KernelApp options
 -----------------
+
 --KernelApp.answer_yes=<Bool>
     Default: False
     Answer yes to any prompts.
@@ -188,6 +186,7 @@ KernelApp options
 
 KernelManager options
 ---------------------
+
 --KernelManager.autorestart=<Bool>
     Default: True
     Should we autorestart the kernel if it dies.
@@ -235,6 +234,7 @@ KernelManager options
 
 KernelSpecManager options
 -------------------------
+
 --KernelSpecManager.ensure_native_kernel=<Bool>
     Default: True
     If there is no Python kernelspec registered and the IPython kernel is
