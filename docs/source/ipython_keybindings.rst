@@ -25,18 +25,6 @@ The attributes associated with
 :func:`~IPython.terminal.interactiveshell.create_ipython_shortcuts()`
 are as follows:
 
-.. ipython:: python
-   :okexcept:
-
-   from IPython import get_ipython
-   from IPython.terminal.interactiveshell import create_ipython_shortcuts
-   ip = get_ipython()
-   c = create_ipython_shortcuts(ip)
-   # This will give you the following methods
-   print(dir(c))
-
-This will produce an output of:
-
 .. code-block:: none
 
    ['_KeyBindings__version',

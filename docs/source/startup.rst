@@ -91,7 +91,7 @@ file as the older ones.
 Help Helpers
 -------------
 
-`06_log`_
+`06_help_helpers`_
 
 Creates 2 functions in userspace to save the output of ``help(python_object)``
 to a file or output to ``sys.stdout``.

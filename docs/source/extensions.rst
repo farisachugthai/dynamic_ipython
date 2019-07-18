@@ -3,6 +3,7 @@ Extensions
 ===========
 
 .. highlight:: ipython
+   :linenothreshold: 5
 
 
 .. sphinx breaks from this. TODO

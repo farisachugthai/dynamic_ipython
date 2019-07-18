@@ -1,8 +1,4 @@
-"""Configuration file for jupyter-nbconvert.
-
-Jesus Christ this file is long. I guess rearrange stuff so the docstring becomes
-easier to read.
-"""
+"""Configuration file for jupyter-nbconvert."""
 from traitlets.config import get_config
 
 c = get_config()
@@ -107,7 +103,18 @@ c.NbConvertApp.export_format = 'executable'
 
 # List of preprocessors available by default, by name, namespace, instance, or
 #  type.
-# c.Exporter.default_preprocessors = ['nbconvert.preprocessors.TagRemovePreprocessor', 'nbconvert.preprocessors.RegexRemovePreprocessor', 'nbconvert.preprocessors.ClearOutputPreprocessor', 'nbconvert.preprocessors.ExecutePreprocessor', 'nbconvert.preprocessors.coalesce_streams', 'nbconvert.preprocessors.SVG2PDFPreprocessor', 'nbconvert.preprocessors.CSSHTMLHeaderPreprocessor', 'nbconvert.preprocessors.LatexPreprocessor', 'nbconvert.preprocessors.HighlightMagicsPreprocessor', 'nbconvert.preprocessors.ExtractOutputPreprocessor']
+# c.Exporter.default_preprocessors = [
+#       'nbconvert.preprocessors.TagRemovePreprocessor',
+#       'nbconvert.preprocessors.RegexRemovePreprocessor',
+#       'nbconvert.preprocessors.ClearOutputPreprocessor',
+#       'nbconvert.preprocessors.ExecutePreprocessor', 
+#       'nbconvert.preprocessors.coalesce_streams', 
+#       'nbconvert.preprocessors.SVG2PDFPreprocessor', 
+#       'nbconvert.preprocessors.CSSHTMLHeaderPreprocessor',
+#       'nbconvert.preprocessors.LatexPreprocessor',
+#       'nbconvert.preprocessors.HighlightMagicsPreprocessor', 
+#       'nbconvert.preprocessors.ExtractOutputPreprocessor'
+# ]
 
 # Extension of the file that should be written to disk
 # c.Exporter.file_extension = '.txt'

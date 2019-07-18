@@ -1,11 +1,4 @@
-"""Jupyter Console config.
-
-.. module:: jupyter_conf.jupyter_console_config
-
-Running the program :program:`jupyter console` emits a deprecaion warning so
-not much going on here.
-
-"""
+"""Jupyter Console config."""
 from traitlets.config import get_config
 
 c = get_config()
@@ -114,23 +107,6 @@ c.Application.log_level = 20
 c.ZMQTerminalInteractiveShell.banner = ''
 
 
-def zmqterminalinteractiveshell_image():
-    """
-
-    ---------
-
-    Need to set something up for the Jupyter Console image handler.
-    Same thing for QTConsole.
-
-    Callable object called via 'callable' image handler with one argument, `data`,
-    which is `msg["content"]["data"]` where `msg` is the message from iopub
-    channel.  For exmaple, you can find base64 encoded PNG data as
-    `data['image/png']`. If your function can't handle the data supplied, it
-    should return `False` to indicate this.
-
-    So that's the default text you're working with.
-    """
-    pass
 
 
 # c.ZMQTerminalInteractiveShell.callable_image_handler = None
@@ -151,24 +127,6 @@ c.ZMQTerminalInteractiveShell.highlighting_style = 'Gruvbox'
 # How many history items to load into memory
 c.ZMQTerminalInteractiveShell.history_load_length = 5000
 
-# Handler for image type output.  This is useful, for example, when connecting
-#  to the kernel in which pylab inline backend is activated.
-
-# There are four handlers defined.
-
-# 'PIL': Use Python Imaging Library to popup image;
-
-# stream': Use an external program to show the image.  Image will be fed into
-# the STDIN  of the program.
-# You will need to configure `stream_image_handler`;
-
-# 'tempfile': Use an external program to show the image.  Image will be saved in
-#  a temporally file and the program is called with the temporally file.  You
-#  will need to configure `tempfile_image_handler`;
-
-# 'callable': You can set any  Python callable which is called with the image
-# data.  You will need to configure `callable_image_handler`.
-# c.ZMQTerminalInteractiveShell.image_handler = 'PIL'
 
 # Whether to include output from clients other than this one sharing the same
 #  kernel.

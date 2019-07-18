@@ -1,4 +1,5 @@
 =======
+=======
 Jupyter
 =======
 
@@ -50,6 +51,7 @@ Jupyter Notebook --- :mod:`jupyter_conf.jupyter_notebook_config`
     from traitlets.config import get_config
 
     c = get_config()
+
 
 JupyterApp(Application) configuration
 -----------------------------------------------------------------------------
@@ -377,7 +379,7 @@ c.LabApp.user_settings_dir = '/data/data/com.termux/files/home/.jupyter/lab/user
 
 
 fswatcher
-##############
+--------------
 
 Whether to serve the app in watch mode.:
 
@@ -440,7 +442,6 @@ Should be in the form of an HTTP origin: ws[s]://hostname[:port]
 
 c.NotebookApp.websocket_url = ''
 
---------------------------------------------------------------------------
 NteractApp(NotebookApp) configuration
 --------------------------------------------------------------------------
 
@@ -460,28 +461,55 @@ in editable mode e.g., using::
    c.NteractApp.dev_mode = False
 
 
-:mod:`~jupyter_conf.jupyter_nbconvert_config`
-=============================================
-
-.. automodule:: `jupyter_conf.jupyter_nbconvert_config`
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-
-:mod:`~jupyter_conf.jupyter_labextension_config`
-================================================
-
-.. automodule:: `jupyter_conf.jupyter_labextension_config`
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 
 :mod:`~jupyter_conf.jupyter_console_config`
 ===========================================
 
-.. automodule:: `jupyter_conf.jupyter_console_config`
-    :members:
-    :undoc-members:
-    :show-inheritance:
+Need to set something up for the Jupyter Console image handler.
+Same thing for QTConsole.
+
+Callable object called via 'callable' image handler with one argument, `data`,
+which is `msg["content"]["data"]` where `msg` is the message from iopub
+channel.  For exmaple, you can find base64 encoded PNG data as
+`data['image/png']`. If your function can't handle the data supplied, it
+should return `False` to indicate this.
+
+Handler for image type output.  This is useful, for example, when connecting
+ to the kernel in which pylab inline backend is activated.
+
+There are four handlers defined.
+
+'PIL': Use Python Imaging Library to popup image;
+
+stream': Use an external program to show the image.  Image will be fed into
+the STDIN  of the program.
+You will need to configure `stream_image_handler`;
+
+'tempfile': Use an external program to show the image.  Image will be saved in
+ a temporally file and the program is called with the temporally file.  You
+ will need to configure `tempfile_image_handler`;
+
+'callable': You can set any  Python callable which is called with the image
+data.  You will need to configure `callable_image_handler`.
+c.ZMQTerminalInteractiveShell.image_handler = 'PIL'
+
+ that's the default text you're working with.
+Handler for image type output.  This is useful, for example, when connecting
+ to the kernel in which pylab inline backend is activated.
+
+There are four handlers defined.
+
+'PIL': Use Python Imaging Library to popup image;
+
+stream': Use an external program to show the image.  Image will be fed into
+the STDIN  of the program.
+You will need to configure `stream_image_handler`;
+
+'tempfile': Use an external program to show the image.  Image will be saved in
+ a temporally file and the program is called with the temporally file.  You
+ will need to configure `tempfile_image_handler`;
+
+'callable': You can set any  Python callable which is called with the image
+data.  You will need to configure `callable_image_handler`.
+
+``c.ZMQTerminalInteractiveShell.image_handler = 'PIL'``
