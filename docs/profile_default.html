@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Default IPython Profile and Startup Scripts &#8212; Dynamic IPython 0.0.1 documentation</title>
+    <title>Profile Default API docs &#8212; Dynamic IPython 0.0.1 documentation</title>
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
@@ -49,34 +49,55 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="default-ipython-profile-and-startup-scripts">
-<h1>Default IPython Profile and Startup Scripts<a class="headerlink" href="#default-ipython-profile-and-startup-scripts" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="profile-default-api-docs">
+<h1>Profile Default API docs<a class="headerlink" href="#profile-default-api-docs" title="Permalink to this headline">¶</a></h1>
 <div class="contents local topic" id="table-of-contents">
 <p class="topic-title first">Table of Contents</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#readme" id="id24">README</a></p>
+<li><p><a class="reference internal" href="#readme" id="id33">README</a></p></li>
+<li><p><a class="reference internal" href="#creating-profiles" id="id34">Creating Profiles</a></p></li>
+<li><p><a class="reference internal" href="#ipython-default-profile-api" id="id35">IPython Default Profile API</a></p>
 <ul>
-<li><p><a class="reference internal" href="#module-profile_default.ipython_config" id="id25"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ipython_config</span></code></a></p></li>
-<li><p><a class="reference internal" href="#ipython-kernel-config" id="id26"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ipython_kernel_config</span></code></a></p></li>
-<li><p><a class="reference internal" href="#module-01_rehashx" id="id27"><code class="xref py py-mod docutils literal notranslate"><span class="pre">01_rehashx</span></code></a></p></li>
-<li><p><a class="reference internal" href="#module-04_easy_import" id="id28"><code class="xref py py-mod docutils literal notranslate"><span class="pre">04_easy_import</span></code></a></p></li>
-<li><p><a class="reference internal" href="#module-05_log" id="id29"><code class="xref py py-mod docutils literal notranslate"><span class="pre">05_log</span></code></a></p></li>
-<li><p><a class="reference internal" href="#module-06_help_helpers" id="id30"><code class="xref py py-mod docutils literal notranslate"><span class="pre">06_help_helpers</span></code></a></p></li>
-<li><p><a class="reference internal" href="#module-20_aliases" id="id31"><code class="xref py py-mod docutils literal notranslate"><span class="pre">20_aliases</span></code></a></p></li>
-<li><p><a class="reference internal" href="#module-42_pandas_init" id="id32"><code class="xref py py-mod docutils literal notranslate"><span class="pre">42_pandas_init</span></code></a></p></li>
-<li><p><a class="reference internal" href="#module-50_sysexception" id="id33"><code class="xref py py-mod docutils literal notranslate"><span class="pre">50_sysexception</span></code></a></p></li>
+<li><p><a class="reference internal" href="#module-profile_default.ipython_config" id="id36"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ipython_config</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ipython-kernel-config" id="id37"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ipython_kernel_config</span></code></a></p></li>
+<li><p><a class="reference internal" href="#module-01_rehashx" id="id38"><code class="xref py py-mod docutils literal notranslate"><span class="pre">01_rehashx</span></code></a></p></li>
+<li><p><a class="reference internal" href="#module-04_easy_import" id="id39"><code class="xref py py-mod docutils literal notranslate"><span class="pre">04_easy_import</span></code></a></p></li>
+<li><p><a class="reference internal" href="#module-05_log" id="id40"><code class="xref py py-mod docutils literal notranslate"><span class="pre">05_log</span></code></a></p></li>
+<li><p><a class="reference internal" href="#module-06_help_helpers" id="id41"><code class="xref py py-mod docutils literal notranslate"><span class="pre">06_help_helpers</span></code></a></p></li>
+<li><p><a class="reference internal" href="#module-20_aliases" id="id42"><code class="xref py py-mod docutils literal notranslate"><span class="pre">20_aliases</span></code></a></p></li>
+<li><p><a class="reference internal" href="#module-42_pandas_init" id="id43"><code class="xref py py-mod docutils literal notranslate"><span class="pre">42_pandas_init</span></code></a></p></li>
+<li><p><a class="reference internal" href="#module-50_sysexception" id="id44"><code class="xref py py-mod docutils literal notranslate"><span class="pre">50_sysexception</span></code></a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#utils" id="id45">Utils</a></p>
+<ul>
+<li><p><a class="reference internal" href="#module-util.timer" id="id46"><a class="reference internal" href="#module-util.timer" title="util.timer"><code class="xref py py-mod docutils literal notranslate"><span class="pre">timer</span></code></a></a></p></li>
+<li><p><a class="reference internal" href="#module-util.machine" id="id47"><a class="reference internal" href="#module-util.machine" title="util.machine"><code class="xref py py-mod docutils literal notranslate"><span class="pre">machine</span></code></a></a></p></li>
+<li><p><a class="reference internal" href="#module-util.module_log" id="id48"><a class="reference internal" href="#module-util.module_log" title="util.module_log"><code class="xref py py-mod docutils literal notranslate"><span class="pre">module_log</span></code></a></a></p></li>
 </ul>
 </li>
 </ul>
 </div>
 <div class="section" id="readme">
-<h2><a class="toc-backref" href="#id24">README</a><a class="headerlink" href="#readme" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id33">README</a><a class="headerlink" href="#readme" title="Permalink to this headline">¶</a></h2>
+<p>The IPython startup file can be generated with
+<code class="docutils literal notranslate"><span class="pre">ipython</span> <span class="pre">profile</span> <span class="pre">create</span> <span class="pre">[profilename]</span></code>
+and will create a configuration file at
+<code class="docutils literal notranslate"><span class="pre">~/.ipython/profile_[profilename]/ipython_config.py'</span></code>.
+Leaving the optional <a href="#id1"><span class="problematic" id="id2">:param:`profilename`</span></a> argument blank will create a
+default profile (see this for more info).</p>
+</div>
+<div class="section" id="creating-profiles">
+<h2><a class="toc-backref" href="#id34">Creating Profiles</a><a class="headerlink" href="#creating-profiles" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="ipython-default-profile-api">
+<h2><a class="toc-backref" href="#id35">IPython Default Profile API</a><a class="headerlink" href="#ipython-default-profile-api" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="module-profile_default.ipython_config">
-<span id="ipython-config"></span><h3><a class="toc-backref" href="#id25"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ipython_config</span></code></a><a class="headerlink" href="#module-profile_default.ipython_config" title="Permalink to this headline">¶</a></h3>
+<span id="ipython-config"></span><h3><a class="toc-backref" href="#id36"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ipython_config</span></code></a><a class="headerlink" href="#module-profile_default.ipython_config" title="Permalink to this headline">¶</a></h3>
 <p>Configuration file for <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.6.1)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a>.</p>
-<div class="section" id="id1">
-<h4>IPython Config<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
-<p>Heavily drawn from documentation at <a href="#id22"><span class="problematic" id="id23">`ipython_docs`_</span></a>.  In addition to source
+<div class="section" id="id3">
+<h4>IPython Config<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h4>
+<p>Heavily drawn from documentation at <a href="#id31"><span class="problematic" id="id32">`ipython_docs`_</span></a>.  In addition to source
 code found on GitHub.</p>
 <div class="section" id="overview">
 <h5>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h5>
@@ -185,10 +206,10 @@ raise_config_file_errors = Bool(TRAITLETS_APPLICATION_RAISE_CONFIG_FILE_ERROR)</
 </div>
 </div>
 <div class="section" id="ipython-kernel-config">
-<h3><a class="toc-backref" href="#id26"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ipython_kernel_config</span></code></a><a class="headerlink" href="#ipython-kernel-config" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id37"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ipython_kernel_config</span></code></a><a class="headerlink" href="#ipython-kernel-config" title="Permalink to this headline">¶</a></h3>
 </div>
 <div class="section" id="module-01_rehashx">
-<span id="rehashx"></span><h3><a class="toc-backref" href="#id27"><code class="xref py py-mod docutils literal notranslate"><span class="pre">01_rehashx</span></code></a><a class="headerlink" href="#module-01_rehashx" title="Permalink to this headline">¶</a></h3>
+<span id="rehashx"></span><h3><a class="toc-backref" href="#id38"><code class="xref py py-mod docutils literal notranslate"><span class="pre">01_rehashx</span></code></a><a class="headerlink" href="#module-01_rehashx" title="Permalink to this headline">¶</a></h3>
 <p>Rehash immediately to add everything in <span class="target" id="index-2"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">$PATH</span></code> as a line alias.</p>
 <div class="section" id="module-01_rehashx">
 <span id="rehash"></span><h4>Rehash<a class="headerlink" href="#module-01_rehashx" title="Permalink to this headline">¶</a></h4>
@@ -249,10 +270,10 @@ an error, so an empty str is passed to the function.</p>
 </div>
 </div>
 <div class="section" id="module-04_easy_import">
-<span id="easy-import"></span><h3><a class="toc-backref" href="#id28"><code class="xref py py-mod docutils literal notranslate"><span class="pre">04_easy_import</span></code></a><a class="headerlink" href="#module-04_easy_import" title="Permalink to this headline">¶</a></h3>
+<span id="easy-import"></span><h3><a class="toc-backref" href="#id39"><code class="xref py py-mod docutils literal notranslate"><span class="pre">04_easy_import</span></code></a><a class="headerlink" href="#module-04_easy_import" title="Permalink to this headline">¶</a></h3>
 <p>Import my most frequently used modules.</p>
-<div class="section" id="id2">
-<h4>04_easy_import<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="id4">
+<h4>04_easy_import<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h4>
 <span class="target" id="module-04_easy_import"></span><p>This imports a few utility functions from <a class="reference internal" href="index.html#ipython"><span class="std std-ref">IPython</span></a> and imports the python
 package neovim is served in.</p>
 <div class="section" id="overlap-between-ipython-and-traitlets">
@@ -275,7 +296,7 @@ the magic <code class="docutils literal notranslate"><span class="pre">%pylab</s
 <dl class="function">
 <dt id="04_easy_import.dreload">
 <code class="sig-prename descclassname">04_easy_import.</code><code class="sig-name descname">dreload</code><span class="sig-paren">(</span><em class="sig-param">mod</em>, <em class="sig-param">extra_excludes=None</em>, <em class="sig-param">excludes=('sys'</em>, <em class="sig-param">'os.path'</em>, <em class="sig-param">'builtins'</em>, <em class="sig-param">'__main__'</em>, <em class="sig-param">'io'</em>, <em class="sig-param">'numpy'</em>, <em class="sig-param">'numpy._globals'</em>, <em class="sig-param">'IPython')</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/04_easy_import.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/04_easy_import.html#dreload"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#04_easy_import.dreload" title="Permalink to this definition">¶</a></dt>
-<dd><p>Import IPython’s deepreload magic and modify the <a href="#id4"><span class="problematic" id="id5">:param:`excludes`</span></a> set.</p>
+<dd><p>Import IPython’s deepreload magic and modify the <a href="#id6"><span class="problematic" id="id7">:param:`excludes`</span></a> set.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -311,7 +332,7 @@ used for the entire package.</p>
 </div>
 </div>
 <div class="section" id="module-05_log">
-<span id="log"></span><h3><a class="toc-backref" href="#id29"><code class="xref py py-mod docutils literal notranslate"><span class="pre">05_log</span></code></a><a class="headerlink" href="#module-05_log" title="Permalink to this headline">¶</a></h3>
+<span id="log"></span><h3><a class="toc-backref" href="#id40"><code class="xref py py-mod docutils literal notranslate"><span class="pre">05_log</span></code></a><a class="headerlink" href="#module-05_log" title="Permalink to this headline">¶</a></h3>
 <p>Create a logfile for the day and append to it if one already exists.</p>
 <div class="section" id="ipython-logger">
 <h4>IPython Logger<a class="headerlink" href="#ipython-logger" title="Permalink to this headline">¶</a></h4>
@@ -349,10 +370,10 @@ named based on the date.</p>
 </div>
 </div>
 <div class="section" id="module-06_help_helpers">
-<span id="help-helpers"></span><h3><a class="toc-backref" href="#id30"><code class="xref py py-mod docutils literal notranslate"><span class="pre">06_help_helpers</span></code></a><a class="headerlink" href="#module-06_help_helpers" title="Permalink to this headline">¶</a></h3>
+<span id="help-helpers"></span><h3><a class="toc-backref" href="#id41"><code class="xref py py-mod docutils literal notranslate"><span class="pre">06_help_helpers</span></code></a><a class="headerlink" href="#module-06_help_helpers" title="Permalink to this headline">¶</a></h3>
 <p>Export functions to redirect <a class="reference external" href="https://docs.python.org/3/library/functions.html#help" title="(in Python v3.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">help()</span></code></a> output.</p>
 <div class="section" id="module-06_help_helpers">
-<span id="id7"></span><h4>Help Helpers<a class="headerlink" href="#module-06_help_helpers" title="Permalink to this headline">¶</a></h4>
+<span id="id9"></span><h4>Help Helpers<a class="headerlink" href="#module-06_help_helpers" title="Permalink to this headline">¶</a></h4>
 <p>This module utilizes the examples given in the official documentation
 for <a class="reference external" href="https://docs.python.org/3/library/contextlib.html#module-contextlib" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">contextlib</span></code></a>!</p>
 <p>In addition to utilizing contextlib, create a function that allows
@@ -385,13 +406,13 @@ to simply skim the output of <a class="reference external" href="https://docs.py
 </div>
 </div>
 <div class="section" id="module-20_aliases">
-<span id="aliases"></span><h3><a class="toc-backref" href="#id31"><code class="xref py py-mod docutils literal notranslate"><span class="pre">20_aliases</span></code></a><a class="headerlink" href="#module-20_aliases" title="Permalink to this headline">¶</a></h3>
+<span id="aliases"></span><h3><a class="toc-backref" href="#id42"><code class="xref py py-mod docutils literal notranslate"><span class="pre">20_aliases</span></code></a><a class="headerlink" href="#module-20_aliases" title="Permalink to this headline">¶</a></h3>
 <p>File for all shell aliases.</p>
 <div class="section" id="module-aliases">
 <span id="ipython-aliases"></span><h4>IPython Aliases<a class="headerlink" href="#module-aliases" title="Permalink to this headline">¶</a></h4>
 <p class="rubric">Moved git aliases into new <code class="xref py py-func docutils literal notranslate"><span class="pre">common_aliases()</span></code></p>
-<div class="section" id="id9">
-<h5>Overview<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id11">
+<h5>Overview<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h5>
 <p>This module utilizes <a class="reference internal" href="#aliases._ip" title="aliases._ip"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_ip</span></code></a>, the global <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.6.1)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.6.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveShell</span></code></a>
 instance, and fills the <code class="docutils literal notranslate"><span class="pre">user_ns</span></code> with aliases that are available
 in a typical system shell.</p>
@@ -659,13 +680,13 @@ and as a result don’t run correctly in PowerShell…</p>
 </div>
 </div>
 <div class="section" id="module-42_pandas_init">
-<span id="pandas-init"></span><h3><a class="toc-backref" href="#id32"><code class="xref py py-mod docutils literal notranslate"><span class="pre">42_pandas_init</span></code></a><a class="headerlink" href="#module-42_pandas_init" title="Permalink to this headline">¶</a></h3>
+<span id="pandas-init"></span><h3><a class="toc-backref" href="#id43"><code class="xref py py-mod docutils literal notranslate"><span class="pre">42_pandas_init</span></code></a><a class="headerlink" href="#module-42_pandas_init" title="Permalink to this headline">¶</a></h3>
 <p>Initialize desired parameters for <code class="xref py py-mod docutils literal notranslate"><span class="pre">pandas</span></code> at startup.</p>
 <div class="section" id="module-pandas_init">
 <span id="pandas-initialization"></span><h4>Pandas Initialization<a class="headerlink" href="#module-pandas_init" title="Permalink to this headline">¶</a></h4>
 <dl class="field-list simple">
 <dt class="field-odd">URL</dt>
-<dd class="field-odd"><p><a href="#id34"><span class="problematic" id="id35">`https://realpython.com/python-pandas-tricks/#1-configure-options-settings-at-interpreter-startup`_</span></a></p>
+<dd class="field-odd"><p><a href="#id49"><span class="problematic" id="id50">`https://realpython.com/python-pandas-tricks/#1-configure-options-settings-at-interpreter-startup`_</span></a></p>
 </dd>
 </dl>
 <p>Here’s an interesting blurb from pandas/docs/conf.py:</p>
@@ -685,7 +706,7 @@ and as a result don’t run correctly in PowerShell…</p>
 <p class="admonition-title">Tip</p>
 <p>Don’t set <code class="xref py py-obj docutils literal notranslate"><span class="pre">start.options['show_dimensions']</span> <span class="pre">to</span> <span class="pre">``False`</span></code>.
 <code class="docutils literal notranslate"><span class="pre">'show_dimensions'</span></code> means show the size of the <code class="xref py py-obj docutils literal notranslate"><span class="pre">pd.DataFrame</span></code> object.</p>
-<p><a href="#id16"><span class="problematic" id="id17">``</span></a>truncate indicates to only display it when the DataFrame is…
+<p><a href="#id18"><span class="problematic" id="id19">``</span></a>truncate indicates to only display it when the DataFrame is…
 well truncated.[1]_</p>
 <p>_[1]: pandas.pydata.org/pandas-docs/stable/user-guide/options.html</p>
 </div>
@@ -694,7 +715,7 @@ well truncated.[1]_</p>
 </div>
 </div>
 <div class="section" id="module-50_sysexception">
-<span id="sysexception"></span><h3><a class="toc-backref" href="#id33"><code class="xref py py-mod docutils literal notranslate"><span class="pre">50_sysexception</span></code></a><a class="headerlink" href="#module-50_sysexception" title="Permalink to this headline">¶</a></h3>
+<span id="sysexception"></span><h3><a class="toc-backref" href="#id44"><code class="xref py py-mod docutils literal notranslate"><span class="pre">50_sysexception</span></code></a><a class="headerlink" href="#module-50_sysexception" title="Permalink to this headline">¶</a></h3>
 <p>Give a detailed, colored traceback and drop into pdb on exceptions.</p>
 <div class="section" id="module-50_sysexception">
 <span id="customized-exceptions"></span><h4>Customized Exceptions<a class="headerlink" href="#module-50_sysexception" title="Permalink to this headline">¶</a></h4>
@@ -886,6 +907,232 @@ given at initialization time.</p>
 </div>
 </div>
 </div>
+<div class="section" id="utils">
+<h2><a class="toc-backref" href="#id45">Utils</a><a class="headerlink" href="#utils" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-util.timer">
+<span id="timer"></span><h3><a class="toc-backref" href="#id46"><a class="reference internal" href="#module-util.timer" title="util.timer"><code class="xref py py-mod docutils literal notranslate"><span class="pre">timer</span></code></a></a><a class="headerlink" href="#module-util.timer" title="Permalink to this headline">¶</a></h3>
+<p>Create a timer decorator.</p>
+<div class="section" id="id24">
+<h4>Timer<a class="headerlink" href="#id24" title="Permalink to this headline">¶</a></h4>
+<span class="target" id="module-timer"></span><p>Largely this module was simply practice on writing decorators.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><code class="xref py py-mod docutils literal notranslate"><span class="pre">profile_default.01_rehashx</span></code></dt><dd><p>module Module where <span class="xref std std-ref">profile_default.01_rehashx.main</span> is wrapped with the timer decorator.</p>
+</dd>
+</dl>
+</div>
+<dl class="function">
+<dt id="util.timer.timer">
+<code class="sig-prename descclassname">util.timer.</code><code class="sig-name descname">timer</code><span class="sig-paren">(</span><em class="sig-param">func</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/util/timer.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/util/timer.html#timer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.timer.timer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print the runtime of the decorated function.</p>
+<p>Is this the right way to profile something on Windows btw?</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>func</strong> (<em>function</em>) – Function to profile</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>value</strong> – Output of function <a class="reference external" href="https://docs.python.org/3/library/time.html#time.perf_counter" title="(in Python v3.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">time.perf_counter()</span></code></a>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="module-util.machine">
+<span id="machine"></span><h3><a class="toc-backref" href="#id47"><a class="reference internal" href="#module-util.machine" title="util.machine"><code class="xref py py-mod docutils literal notranslate"><span class="pre">machine</span></code></a></a><a class="headerlink" href="#module-util.machine" title="Permalink to this headline">¶</a></h3>
+<p>Create a class for all <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.6.1)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> instances to utilize.</p>
+<div class="section" id="id26">
+<h4>Machine<a class="headerlink" href="#id26" title="Permalink to this headline">¶</a></h4>
+<p>This class leverages <code class="xref py py-mod docutils literal notranslate"><span class="pre">prompt_toolkit</span></code> and a few of it’s methods to abstract
+away differences in operating systems and filesystems.</p>
+<p>The class can be easily initialized with:</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Don’t name the instance <code class="docutils literal notranslate"><span class="pre">platform</span></code> as that’s a module in the standard
+library.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><code class="xref py py-mod docutils literal notranslate"><span class="pre">profile_default.startup.20_aliases</span></code></dt><dd><p>Shows an example use case</p>
+</dd>
+</dl>
+</div>
+<hr class="docutils" />
+<dl class="class">
+<dt id="util.machine.Platform">
+<em class="property">class </em><code class="sig-prename descclassname">util.machine.</code><code class="sig-name descname">Platform</code><span class="sig-paren">(</span><em class="sig-param">shell=None</em>, <em class="sig-param">env=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/util/machine.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/util/machine.html#Platform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.machine.Platform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Abstract away platform differences.</p>
+<p>After toying with the initial implementation,I realized I could simply
+bind the <code class="xref py py-class docutils literal notranslate"><span class="pre">pathlib.Path()</span></code> instance directly to <span class="xref std std-ref">Platform</span>
+during initialization.</p>
+<p>This allows for a user to check the <a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.platform" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sys.platform</span></code></a> instance, and then
+act in an appropriate manner without knowing what the <code class="xref py py-class docutils literal notranslate"><span class="pre">pathlib.Path()</span></code>
+actually initialized to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>shell</strong> (<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.6.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveShell</span></code></a>, optional) – Global IPython Instance</p></li>
+<li><p><strong>env</strong> (<em>Dict</em>) – Environment variables to add to the instance</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="util.machine.Platform.get_env">
+<code class="sig-name descname">get_env</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/util/machine.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/util/machine.html#Platform.get_env"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.machine.Platform.get_env" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unsurprisingly stolen from IPython.</p>
+<p>See Also:</p>
+<dl class="simple">
+<dt>IPython.testing.iptestcontroller.TestController.launch()</dt><dd><p>Copies and updates the user’s environment in the same way.</p>
+</dd>
+</dl>
+<p><a href="#id27"><span class="problematic" id="id28">`</span></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="util.machine.Platform.is_linux">
+<em class="property">property </em><code class="sig-name descname">is_linux</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/util/machine.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/util/machine.html#Platform.is_linux"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.machine.Platform.is_linux" title="Permalink to this definition">¶</a></dt>
+<dd><p>True when <code class="xref py py-func docutils literal notranslate"><span class="pre">sys.platform()</span></code> returns linux.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="util.machine.Platform.is_win_vt100">
+<em class="property">property </em><code class="sig-name descname">is_win_vt100</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/util/machine.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/util/machine.html#Platform.is_win_vt100"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.machine.Platform.is_win_vt100" title="Permalink to this definition">¶</a></dt>
+<dd><p>True when we are using Windows, but with VT100 esc sequences.</p>
+<p>Import needs to be inline. Windows libraries are not always available.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="util.machine.Platform.update_env">
+<code class="sig-name descname">update_env</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">env=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/util/machine.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/util/machine.html#Platform.update_env"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.machine.Platform.update_env" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add more arguments to the environment.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="module-util.module_log">
+<span id="module-log"></span><h3><a class="toc-backref" href="#id48"><a class="reference internal" href="#module-util.module_log" title="util.module_log"><code class="xref py py-mod docutils literal notranslate"><span class="pre">module_log</span></code></a></a><a class="headerlink" href="#module-util.module_log" title="Permalink to this headline">¶</a></h3>
+<p>Move all randomly interspersed logging functions into one module.</p>
+<dl class="class">
+<dt id="util.module_log.JsonFormatter">
+<em class="property">class </em><code class="sig-prename descclassname">util.module_log.</code><code class="sig-name descname">JsonFormatter</code><span class="sig-paren">(</span><em class="sig-param">fmt=None</em>, <em class="sig-param">datefmt=None</em>, <em class="sig-param">style='%'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/util/module_log.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/util/module_log.html#JsonFormatter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.module_log.JsonFormatter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Formatter" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">logging.Formatter</span></code></a></p>
+<p>Return valid <a class="reference external" href="https://docs.python.org/3/library/json.html#module-json" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">json</span></code></a> for a configured handler.</p>
+<dl class="method">
+<dt id="util.module_log.JsonFormatter.format">
+<code class="sig-name descname">format</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">record</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/util/module_log.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/util/module_log.html#JsonFormatter.format"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.module_log.JsonFormatter.format" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format the specified record as text.</p>
+<p>The record’s attribute dictionary is used as the operand to a
+string formatting operation which yields the returned string.
+Before formatting the dictionary, a couple of preparatory steps
+are carried out. The message attribute of the record is computed
+using LogRecord.getMessage(). If the formatting string uses the
+time (as determined by a call to usesTime(), formatTime() is
+called to format the event time. If there is exception information,
+it is formatted using formatException() and appended to the message.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="util.module_log.file_logger">
+<code class="sig-prename descclassname">util.module_log.</code><code class="sig-name descname">file_logger</code><span class="sig-paren">(</span><em class="sig-param">filename</em>, <em class="sig-param">logger=None</em>, <em class="sig-param">shell=None</em>, <em class="sig-param">log_level=20</em>, <em class="sig-param">msg_format=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/util/module_log.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/util/module_log.html#file_logger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.module_log.file_logger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logging that emits <code class="xref py py-class docutils literal notranslate"><span class="pre">logging.LogRecord`s</span> <span class="pre">to</span> <span class="pre">`filename</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – File to log :class:<a href="#id29"><span class="problematic" id="id30">`</span></a>logging.LogRecord`s to.</p></li>
+<li><p><strong>shell</strong> (<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.6.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveShell</span></code></a>, optional) – Global instance of IPython. Can be none if not run in IPython though this
+hasn’t been tested.</p></li>
+<li><p><strong>log_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em>) – Level of log records.</p></li>
+<li><p><strong>msg_format</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Representation of logging messages. Uses standard %-style string formatting.
+Defaults to <code class="docutils literal notranslate"><span class="pre">%(asctime)s</span> <span class="pre">%(levelname)s</span> <span class="pre">%(message)s</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>logger</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">logging.Logger()</span></code> instance</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="util.module_log.json_logger">
+<code class="sig-prename descclassname">util.module_log.</code><code class="sig-name descname">json_logger</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/util/module_log.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/util/module_log.html#json_logger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.module_log.json_logger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set up a logger that returns properly formatted JSON.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;This is an exception&#39;</span><span class="p">)</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="n">root_logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s1">&#39;caught exception&#39;</span><span class="p">)</span>
+
+<span class="n">root_logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;this is a test message&#39;</span><span class="p">)</span>
+<span class="n">root_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;this request_id=</span><span class="si">%d</span><span class="s1"> name=</span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;John&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="util.module_log.path_logger">
+<code class="sig-prename descclassname">util.module_log.</code><code class="sig-name descname">path_logger</code><span class="sig-paren">(</span><em class="sig-param">logger=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/util/module_log.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/util/module_log.html#path_logger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.module_log.path_logger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trying to put all of these functions in 1 spot. DEPRECATED.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="util.module_log.stream_logger">
+<code class="sig-prename descclassname">util.module_log.</code><code class="sig-name descname">stream_logger</code><span class="sig-paren">(</span><em class="sig-param">logger</em>, <em class="sig-param">log_level=20</em>, <em class="sig-param">msg_format=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/util/module_log.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/util/module_log.html#stream_logger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.module_log.stream_logger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set up a <code class="xref py py-class docutils literal notranslate"><span class="pre">Logger()</span></code> instance, add a stream handler.</p>
+<p>Should do some validation on the log level there. There’s a really
+useful block of code in the tutorial.</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="k">if</span> <span class="n">logger</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+<span class="gp">   ...: </span>    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="gp">   ...: </span>
+<span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="mi">569</span><span class="n">b557f50ca</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="k">if</span> <span class="n">logger</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span>     <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="ne">NameError</span>: name &#39;logger&#39; is not defined
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>logger</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">logging.Logger()</span></code>) – Configure a passed logger. See example below.</p></li>
+<li><p><strong>level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em>) – Level of log records. Defaults to 20.</p></li>
+<li><p><strong>msg_format</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Representation of logging messages. Uses standard %-style string formatting.
+Defaults to <code class="docutils literal notranslate"><span class="pre">%(asctime)s</span> <span class="pre">%(levelname)s</span> <span class="pre">%(message)s</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>logger</strong> – Defaults to <code class="docutils literal notranslate"><span class="pre">logging.INFO</span></code> and ‘%(asctime)s %(levelname)s %(message)s’</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">logging.Logger()</span></code> instance</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">profile_default.util.module_log</span> <span class="k">import</span> <span class="n">stream_logger</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">LOGGER</span> <span class="o">=</span> <span class="n">stream_logger</span><span class="p">(</span><span class="n">logger</span><span class="o">=</span><span class="n">log</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
 </div>
 
 
@@ -923,10 +1170,12 @@ given at initialization time.</p>
  Vim: set ft=htmljinja:
   <h3><a href="index.html">On This Page:</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Default IPython Profile and Startup Scripts</a><ul>
-<li><a class="reference internal" href="#readme">README</a><ul>
+<li><a class="reference internal" href="#">Profile Default API docs</a><ul>
+<li><a class="reference internal" href="#readme">README</a></li>
+<li><a class="reference internal" href="#creating-profiles">Creating Profiles</a></li>
+<li><a class="reference internal" href="#ipython-default-profile-api">IPython Default Profile API</a><ul>
 <li><a class="reference internal" href="#module-profile_default.ipython_config"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ipython_config</span></code></a><ul>
-<li><a class="reference internal" href="#id1">IPython Config</a><ul>
+<li><a class="reference internal" href="#id3">IPython Config</a><ul>
 <li><a class="reference internal" href="#overview">Overview</a><ul>
 <li><a class="reference internal" href="#get-config-and-traitlets">get_config and <code class="xref py py-mod docutils literal notranslate"><span class="pre">traitlets</span></code></a></li>
 <li><a class="reference internal" href="#class-parameters">Class parameters</a></li>
@@ -948,7 +1197,7 @@ given at initialization time.</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-04_easy_import"><code class="xref py py-mod docutils literal notranslate"><span class="pre">04_easy_import</span></code></a><ul>
-<li><a class="reference internal" href="#id2">04_easy_import</a><ul>
+<li><a class="reference internal" href="#id4">04_easy_import</a><ul>
 <li><a class="reference internal" href="#overlap-between-ipython-and-traitlets">Overlap between IPython and traitlets</a></li>
 <li><a class="reference internal" href="#the-importance-of-clean-namespaces">The Importance of Clean Namespaces</a></li>
 </ul>
@@ -968,7 +1217,7 @@ given at initialization time.</p>
 </li>
 <li><a class="reference internal" href="#module-20_aliases"><code class="xref py py-mod docutils literal notranslate"><span class="pre">20_aliases</span></code></a><ul>
 <li><a class="reference internal" href="#module-aliases">IPython Aliases</a><ul>
-<li><a class="reference internal" href="#id9">Overview</a></li>
+<li><a class="reference internal" href="#id11">Overview</a></li>
 <li><a class="reference internal" href="#tips">Tips</a></li>
 </ul>
 </li>
@@ -985,6 +1234,18 @@ given at initialization time.</p>
 </li>
 </ul>
 </li>
+</ul>
+</li>
+<li><a class="reference internal" href="#utils">Utils</a><ul>
+<li><a class="reference internal" href="#module-util.timer"><code class="xref py py-mod docutils literal notranslate"><span class="pre">timer</span></code></a><ul>
+<li><a class="reference internal" href="#id24">Timer</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-util.machine"><code class="xref py py-mod docutils literal notranslate"><span class="pre">machine</span></code></a><ul>
+<li><a class="reference internal" href="#id26">Machine</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-util.module_log"><code class="xref py py-mod docutils literal notranslate"><span class="pre">module_log</span></code></a></li>
 </ul>
 </li>
 </ul>

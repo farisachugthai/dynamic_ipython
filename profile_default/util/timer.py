@@ -1,6 +1,28 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Create a timer decorator."""
+"""Create a timer decorator.
+
+======
+Timer
+======
+
+.. module:: timer
+
+.. highlight:: ipython
+
+Largely this module was simply practice on writing decorators.
+
+.. todo::
+
+    Explore the module :mod:`timeit()` or IPython's ``%timeit`` magic.
+
+See Also
+--------
+:mod:`profile_default.01_rehashx` : module
+    Module where :ref:`profile_default.01_rehashx.main` is wrapped with the
+    timer decorator.
+
+"""
 import functools
 import logging
 import time
@@ -9,7 +31,21 @@ logging.basicConfig(level=logging.INFO)
 
 
 def timer(func):
-    """Print the runtime of the decorated function. Is this the right way to profile something on Windows btw?"""
+    """Print the runtime of the decorated function.
+
+    Is this the right way to profile something on Windows btw?
+
+    Parameters
+    ----------
+    func : function
+        Function to profile
+
+    Returns
+    -------
+    value : float
+        Output of function :func:`time.perf_counter()`.
+
+    """
 
     @functools.wraps(func)
     def wrapper_timer(*args, **kwargs):

@@ -1,5 +1,5 @@
 ===========================================
-Default IPython Profile and Startup Scripts
+Profile Default API docs
 ===========================================
 
 .. highlight:: ipython
@@ -13,6 +13,20 @@ Default IPython Profile and Startup Scripts
 README
 ======
 
+The IPython startup file can be generated with
+``ipython profile create [profilename]``
+and will create a configuration file at
+``~/.ipython/profile_[profilename]/ipython_config.py'``.
+Leaving the optional :param:`profilename` argument blank will create a
+default profile (see this for more info).
+
+
+Creating Profiles
+==================
+
+
+IPython Default Profile API
+===========================
 
 :mod:`ipython_config`
 ---------------------
@@ -92,3 +106,32 @@ README
 .. automodule:: 50_sysexception
     :members:
     :undoc-members:
+
+Utils
+=====
+
+:mod:`~util.timer`
+------------------
+
+.. automodule:: util.timer
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+:mod:`~util.machine`
+--------------------
+
+.. automodule:: util.machine
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+:mod:`~util.module_log`
+-----------------------
+
+.. automodule:: util.module_log
+    :members:
+    :undoc-members:
+    :show-inheritance:

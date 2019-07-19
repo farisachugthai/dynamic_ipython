@@ -50,12 +50,6 @@ import IPython
 from IPython.utils import importstring
 from IPython.lib.deepreload import reload as __reload
 
-# don't do this anymore because it'll mess up the line alias:: alias %git git %l
-# try:
-#     from git import Git
-# except (ImportError, ModuleNotFoundError):
-#     pass
-
 
 def dreload(
         mod,
@@ -77,7 +71,10 @@ def dreload(
         Modules that won't be reloaded in order to preserve display and excepthooks.
 
     """
-    return __reload(mod, excludes=excludes + set(extra_excludes))
+    if extra_excludes is not None:
+        return __reload(mod, excludes=excludes + set(extra_excludes))
+    else:
+        return __reload(mod, excludes=excludes)
 
 
 def import_nvim(mod):

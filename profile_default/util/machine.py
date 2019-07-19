@@ -102,9 +102,9 @@ class Platform:
     def get_env(self):
         """Unsurprisingly stolen from IPython.
 
-        See Also
-        ---------
-        :meth:`IPython.testing.iptestcontroller.TestController.launch()` : method
+        See Also:
+
+        IPython.testing.iptestcontroller.TestController.launch()
             Copies and updates the user's environment in the same way.
 
         `"""
@@ -113,8 +113,10 @@ class Platform:
         return env
 
     def update_env(self, env=None, **kwargs):
-        """Add more arguements to the environment.
+        """Add more arguments to the environment.
+
         :type kwargs: dict
+
         """
         if env is None:
             env = self.get_env()
