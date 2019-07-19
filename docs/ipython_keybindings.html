@@ -136,43 +136,27 @@ shows how to bind keys.</p>
 18
 19
 20
-21
-22
-23
-24
-25
-26
-27
-28
-29</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="gp">In [2]: </span><span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.registry</span> <span class="kn">import</span> <span class="n">Registry</span>
-<span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">2</span><span class="o">-</span><span class="n">d9f6ccb1cd79</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.registry</span> <span class="kn">import</span> <span class="n">Registry</span>
+21</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="gp">In [2]: </span><span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.defaults</span> <span class="kn">import</span> <span class="n">load_key_bindings</span>
 
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;prompt_toolkit.key_binding.registry&#39;
+<span class="gp">In [3]: </span><span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 
-<span class="gp">In [3]: </span><span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.defaults</span> <span class="kn">import</span> <span class="n">load_key_bindings</span>
+<span class="gp">In [4]: </span><span class="kn">from</span> <span class="nn">prompt_toolkit.enums</span> <span class="kn">import</span> <span class="n">DEFAULT_BUFFER</span>
 
-<span class="gp">In [4]: </span><span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+<span class="gp">In [5]: </span><span class="kn">from</span> <span class="nn">prompt_toolkit.keys</span> <span class="kn">import</span> <span class="n">Keys</span>
 
-<span class="gp">In [5]: </span><span class="kn">from</span> <span class="nn">prompt_toolkit.enums</span> <span class="kn">import</span> <span class="n">DEFAULT_BUFFER</span>
+<span class="gp">In [6]: </span><span class="kn">from</span> <span class="nn">prompt_toolkit.filters</span> <span class="kn">import</span> <span class="n">HasFocus</span><span class="p">,</span> <span class="n">HasSelection</span><span class="p">,</span> <span class="n">ViInsertMode</span>
 
-<span class="gp">In [6]: </span><span class="kn">from</span> <span class="nn">prompt_toolkit.keys</span> <span class="kn">import</span> <span class="n">Keys</span>
+<span class="gp">In [7]: </span><span class="n">ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
 
-<span class="gp">In [7]: </span><span class="kn">from</span> <span class="nn">prompt_toolkit.filters</span> <span class="kn">import</span> <span class="n">HasFocus</span><span class="p">,</span> <span class="n">HasSelection</span><span class="p">,</span> <span class="n">ViInsertMode</span>
+<span class="gp">In [8]: </span><span class="n">insert_mode</span> <span class="o">=</span> <span class="n">ViInsertMode</span><span class="p">()</span>
 
-<span class="gp">In [8]: </span><span class="n">ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-
-<span class="gp">In [9]: </span><span class="n">insert_mode</span> <span class="o">=</span> <span class="n">ViInsertMode</span><span class="p">()</span>
-
-<span class="gp">In [10]: </span><span class="k">def</span> <span class="nf">insert_unexpected</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
-<span class="gp">   ....: </span>    <span class="sd">&quot;&quot;&quot;From the IPython examples on keybinding configuration.&quot;&quot;&quot;</span>
-<span class="gp">   ....: </span>    <span class="n">buf</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span>
-<span class="gp">   ....: </span>    <span class="n">buf</span><span class="o">.</span><span class="n">insert_text</span><span class="p">(</span><span class="s1">&#39;The Spanish Inquisition&#39;</span><span class="p">)</span>
-<span class="gp">   ....: </span>    <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ip</span><span class="p">,</span> <span class="s1">&#39;pt_cli&#39;</span><span class="p">):</span>
-<span class="gp">   ....: </span>        <span class="n">registry</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">pt_cli</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">key_bindings_registry</span>
-<span class="gp">   ....: </span>
+<span class="gp">In [9]: </span><span class="k">def</span> <span class="nf">insert_unexpected</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+<span class="gp">   ...: </span>    <span class="sd">&quot;&quot;&quot;From the IPython examples on keybinding configuration.&quot;&quot;&quot;</span>
+<span class="gp">   ...: </span>    <span class="n">buf</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span>
+<span class="gp">   ...: </span>    <span class="n">buf</span><span class="o">.</span><span class="n">insert_text</span><span class="p">(</span><span class="s1">&#39;The Spanish Inquisition&#39;</span><span class="p">)</span>
+<span class="gp">   ...: </span>    <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ip</span><span class="p">,</span> <span class="s1">&#39;pt_cli&#39;</span><span class="p">):</span>
+<span class="gp">   ...: </span>        <span class="n">registry</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">pt_cli</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">key_bindings_registry</span>
+<span class="gp">   ...: </span>
 </pre></div>
 </td></tr></table></div>
 <p>The documentation also shows a way of adding a <code class="xref py py-obj docutils literal notranslate"><span class="pre">Conditional</span></code> Filter
@@ -180,15 +164,27 @@ shows how to bind keys.</p>
 <p>Continue on in this fashion for as long as you need. In my opinion,
 IPython barely comes with any keybindings.</p>
 <p>The source code does provide this however:</p>
-<blockquote>
-<div><p># Ctrl+J == Enter, seemingly
-registry.add_binding(Keys.ControlJ,</p>
-<blockquote>
-<div><p>filter=(HasFocus(DEFAULT_BUFFER)
-&amp; ~HasSelection() &amp; insert_mode))
-(return_handler)</p>
-</div></blockquote>
-</div></blockquote>
+<div class="highlight-ipython notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="go"># Ctrl+J == Enter, seemingly</span>
+<span class="gp">In [10]: </span><span class="n">registry</span><span class="o">.</span><span class="n">add_binding</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlJ</span><span class="p">,</span>
+<span class="gp">   ....: </span>                     <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span>
+<span class="gp">   ....: </span>                     <span class="o">&amp;</span> <span class="o">~</span><span class="n">HasSelection</span><span class="p">()</span> <span class="o">&amp;</span> <span class="n">insert_mode</span><span class="p">))</span>
+<span class="gp">   ....: </span>                     <span class="p">(</span><span class="n">return_handler</span><span class="p">)</span>
+<span class="gp">   ....: </span>
+<span class="gt">  File</span><span class="nn"> &quot;&lt;ipython-input-10-0ef99c458d66&gt;&quot;</span><span class="gt">, line </span><span class="mi">4</span>
+    <span class="p">(</span><span class="n">return_handler</span><span class="p">)</span>
+    <span class="o">^</span>
+<span class="ne">IndentationError</span>: unexpected indent
+</pre></div>
+</td></tr></table></div>
 <p>This displays a few useful ways of doing things.</p>
 <ol class="arabic simple">
 <li><p>Importing <code class="xref py py-class docutils literal notranslate"><span class="pre">Keys()</span></code> as a more

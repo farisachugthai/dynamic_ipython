@@ -8,7 +8,7 @@ Default IPython Profile and Startup Scripts
 .. contents:: Table of Contents
     :local:
     :backlinks: entry
-    :depth: 1
+    :depth: 2
 
 README
 ======
@@ -26,9 +26,9 @@ README
 :mod:`ipython_kernel_config`
 ----------------------------
 
-.. literalinclude:: `~profile_default.ipython_kernel_config`
+.. literalinclude:: profile_default.ipython_kernel_config
    :language: ipython
-   :numbered:
+   :linenos:
 
 
 :mod:`~profile_default.startup.01_rehashx`
@@ -38,15 +38,6 @@ README
     :members:
     :undoc-members:
     :show-inheritance:
-
-
-.. :mod:`~profile_default.startup.02_paths`
-.. ------------------------------------------
-
-.. .. automodule:: profile_default.startup.02_paths
-..     :members:
-..     :undoc-members:
-..     :show-inheritance:
 
 
 :mod:`~profile_default.startup.04_easy_import`
@@ -101,4 +92,3 @@ README
 .. automodule:: 50_sysexception
     :members:
     :undoc-members:
-    :show-inheritance:

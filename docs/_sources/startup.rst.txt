@@ -158,9 +158,9 @@ this profile.
 Files will be run in lexicographical order, so you can control the execution
 order of files with a prefix, e.g.:
 
-    00-first.py
-    50-middle.py
-    99-last.ipy
+    * 00-first.py
+    * 50-middle.py
+    * 99-last.ipy
 
 .. _01_rehashx: ../../profile_default/startup/01_rehashx.py
 .. _04_easy_import: ../../profile_default/startup/04_easy_import.py

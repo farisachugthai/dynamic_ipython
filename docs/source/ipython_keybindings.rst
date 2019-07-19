@@ -87,7 +87,6 @@ shows how to bind keys.
 
 .. ipython:: python
 
-    from prompt_toolkit.key_binding.registry import Registry
     from prompt_toolkit.key_binding.defaults import load_key_bindings
     from IPython import get_ipython
     from prompt_toolkit.enums import DEFAULT_BUFFER
@@ -117,6 +116,8 @@ Continue on in this fashion for as long as you need. In my opinion,
 IPython barely comes with any keybindings.
 
 The source code does provide this however:
+
+.. ipython:: python
 
    # Ctrl+J == Enter, seemingly
    registry.add_binding(Keys.ControlJ,
