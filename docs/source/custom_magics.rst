@@ -22,7 +22,7 @@ Visualization 1st ed.pdf"*:
    This loading function is called when the extension is loaded, which
    happens when the command is executed.
 
-.. ipython::
+.. code-block:: none
 
    %load_ext  # or
    %reload_ext magic
@@ -239,7 +239,7 @@ You can also create magics of all three kinds by inheriting from the
 potentially hold state in between calls, and that have full access to the main
 IPython object:
 
-.. ipython:: python
+.. code-block:: none
 
     # This code can be put in any Python module, it does not require IPython
     # itself to be running already.  It only creates the magics subclass but
@@ -291,6 +291,9 @@ additional state, then you should always call the parent constructor and
 instantiate the class yourself before registration:
 
 .. ipython:: python
+
+    from IPython.core.magic import (Magics, magics_class, line_magic,
+                                    cell_magic, line_cell_magic)
 
     @magics_class
     class StatefulMagics(Magics):

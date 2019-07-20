@@ -91,175 +91,268 @@ qtconsole :/</p>
 <div class="section" id="jupyterapp-application-configuration">
 <h2>JupyterApp(Application) configuration<a class="headerlink" href="#jupyterapp-application-configuration" title="Permalink to this headline">¶</a></h2>
 <p>Base class for Jupyter applications
-Answer yes to any prompts.</p>
-<p>c.JupyterApp.answer_yes = False</p>
-<p>Full path of a config file.</p>
-<p>c.JupyterApp.config_file = ‘’</p>
-<p>Specify a config file to load.</p>
-<p>c.JupyterApp.config_file_name = ‘’</p>
-<p>Generate default config file.</p>
-<p>c.JupyterApp.generate_config = False</p>
+Answer yes to any prompts.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">JupyterApp</span><span class="o">.</span><span class="n">answer_yes</span> <span class="o">=</span> <span class="bp">False</span>
+</pre></div>
+</div>
+<p>Full path of a config file.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">JupyterApp</span><span class="o">.</span><span class="n">config_file</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
+<p>Specify a config file to load.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">JupyterApp</span><span class="o">.</span><span class="n">config_file_name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
+<p>Generate default config file.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">JupyterApp</span><span class="o">.</span><span class="n">generate_config</span> <span class="o">=</span> <span class="bp">False</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="notebookapp-jupyterapp-configuration">
 <h2>NotebookApp(JupyterApp) configuration<a class="headerlink" href="#notebookapp-jupyterapp-configuration" title="Permalink to this headline">¶</a></h2>
-<p>Set the Access-Control-Allow-Credentials: true header
-c.NotebookApp.allow_credentials = False</p>
-<p>Set the Access-Control-Allow-Origin header</p>
-<p>Use ‘*’ to allow any origin to access your server.</p>
-<p>Takes precedence over allow_origin_pat.
-c.NotebookApp.allow_origin = ‘’</p>
-<p>Use a regular expression for the Access-Control-Allow-Origin header</p>
-<p>Requests from an origin matching the expression will get replies with:</p>
+<p>Set the Access-Control-Allow-Credentials: true header:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">allow_credentials</span> <span class="o">=</span> <span class="bp">False</span>
+</pre></div>
+</div>
+<p>Set the Access-Control-Allow-Origin header
+Use ‘*’ to allow any origin to access your server.
+Takes precedence over allow_origin_pat.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">allow_origin</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
+<p>Use a regular expression for the Access-Control-Allow-Origin header
+Requests from an origin matching the expression will get replies with:</p>
 <blockquote>
 <div><p>Access-Control-Allow-Origin: origin</p>
 </div></blockquote>
 <p>where <code class="xref py py-obj docutils literal notranslate"><span class="pre">origin</span></code> is the origin of the request.
-Ignored if allow_origin is set.</p>
-<p>c.NotebookApp.allow_origin_pat = ‘’</p>
+Ignored if allow_origin is set.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">allow_origin_pat</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
 <p>Allow password to be changed at login for the notebook server.
 While logging in with a token, the notebook server UI will give the opportunity
 to the user to enter a new password at the same time that will replace the
 token login mechanism.
-This can be set to false to prevent changing password from the UI/API.</p>
-<p>c.NotebookApp.allow_password_change = True</p>
+This can be set to false to prevent changing password from the UI/API.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">allow_password_change</span> <span class="o">=</span> <span class="bp">True</span>
+</pre></div>
+</div>
 <p>Allow requests where the Host header doesn’t point to a local server
 By default, requests get a 403 forbidden response if the ‘Host’ header shows
 that the browser thinks it’s on a non-local domain. Setting this option to
 True disables this check.
 This protects against ‘DNS rebinding’ attacks, where a remote web server
 serves you a page and then changes its DNS to send later requests to a local
-IP, bypassing same-origin checks.</p>
-<p>Local IP addresses (such as 127.0.0.1 and ::1) are allowed as local, along
-with hostnames configured in local_hostnames.</p>
-<p>c.NotebookApp.allow_remote_access = False</p>
-<p>Whether to allow the user to run the notebook as root.</p>
-<p>c.NotebookApp.allow_root = False</p>
-<p>DEPRECATED use base_url</p>
-<p>c.NotebookApp.base_project_url = ‘/’</p>
-<p>The base URL for the notebook server.</p>
-<p>Leading and trailing slashes can be omitted, and will automatically be added.</p>
-<p>c.NotebookApp.base_url = ‘/’</p>
+IP, bypassing same-origin checks.
+Local IP addresses (such as 127.0.0.1 and ::1) are allowed as local, along
+with hostnames configured in local_hostnames.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">allow_remote_access</span> <span class="o">=</span> <span class="bp">False</span>
+</pre></div>
+</div>
+<p>Whether to allow the user to run the notebook as root.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">allow_root</span> <span class="o">=</span> <span class="bp">False</span>
+</pre></div>
+</div>
+<p>DEPRECATED use <span class="xref std std-ref">c.NotebookApp.base_url</span>:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">base_project_url</span> <span class="o">=</span> <span class="s1">&#39;/&#39;</span>
+</pre></div>
+</div>
+<p>The base URL for the notebook server.
+Leading and trailing slashes can be omitted, and will automatically be added.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">base_url</span> <span class="o">=</span> <span class="s1">&#39;/&#39;</span>
+</pre></div>
+</div>
 <p>Specify what command to use to invoke a web browser when opening the notebook.
 If not specified, the default browser will be determined by the <a class="reference external" href="https://docs.python.org/3/library/webbrowser.html#module-webbrowser" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">webbrowser</span></code></a>
 standard library module, which allows setting of the <span class="target" id="index-0"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">$BROWSER</span></code>
-environment variable to override it.</p>
-<p>c.NotebookApp.browser = ‘’</p>
-<p>The full path to an SSL/TLS certificate file.</p>
-<p>c.NotebookApp.certfile = ‘’</p>
+environment variable to override it.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">browser</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
+<p>The full path to an SSL/TLS certificate file.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">certfile</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
 <p>The full path to a certificate authority certificate for SSL/TLS client
-authentication.</p>
-<p>c.NotebookApp.client_ca = ‘’</p>
-<p>The config manager class to use.</p>
-<p>c.NotebookApp.config_manager_class = ‘notebook.services.config.manager.ConfigManager’</p>
-<p>The notebook manager class to use.</p>
-<p>c.NotebookApp.contents_manager_class = ‘notebook.services.contents.largefilemanager.LargeFileManager’</p>
+authentication.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">client_ca</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
+<p>The config manager class to use.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">config_manager_class</span> <span class="o">=</span> <span class="s1">&#39;notebook.services.config.manager.ConfigManager&#39;</span>
+</pre></div>
+</div>
+<p>The notebook manager class to use.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">contents_manager_class</span> <span class="o">=</span> <span class="s1">&#39;notebook.services.contents.largefilemanager.LargeFileManager&#39;</span>
+</pre></div>
+</div>
 <p>Extra keyword arguments to pass to <code class="xref py py-obj docutils literal notranslate"><span class="pre">set_secure_cookie</span></code>. See tornado’s
-set_secure_cookie docs for details.</p>
-<p>c.NotebookApp.cookie_options = {}</p>
+set_secure_cookie docs for details.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">cookie_options</span> <span class="o">=</span> <span class="p">{}</span>
+</pre></div>
+</div>
 <p>The random bytes used to secure cookies. By default this is a new random
 number every time you start the Notebook. Set it to a value in a config file
-to enable logins to persist across server sessions.</p>
-<p>Note: Cookie secrets should be kept private, do not share config files with
-cookie_secret stored in plaintext (you can read the value from a file).</p>
-<p>c.NotebookApp.cookie_secret = b’‘</p>
-<p>The file where the cookie secret is stored.</p>
-<p>c.NotebookApp.cookie_secret_file = ‘’</p>
-<p>Override URL shown to users.</p>
-<p>Replace actual URL, including protocol, address, port and base URL, with the
+to enable logins to persist across server sessions.
+Note: Cookie secrets should be kept private, do not share config files with
+cookie_secret stored in plaintext (you can read the value from a file).:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">cookie_secret</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
+<p>The file where the cookie secret is stored.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">cookie_secret_file</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
+<p>Override URL shown to users.
+Replace actual URL, including protocol, address, port and base URL, with the
 given value when displaying URL to the users. Do not change the actual
 connection URL. If authentication token is enabled, the token is added to the
 custom URL automatically.</p>
 <p>This option is intended to be used when the URL to display to the user cannot
 be determined reliably by the Jupyter notebook server (proxified or
-containerized setups for example).</p>
-<p>c.NotebookApp.custom_display_url = ‘’</p>
-<p>The default URL to redirect to from <kbd class="kbd docutils literal notranslate">/</kbd></p>
-<p>c.NotebookApp.default_url = ‘/tree’</p>
+containerized setups for example).:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">custom_display_url</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
+<p>The default URL to redirect to from <kbd class="kbd docutils literal notranslate">/</kbd>.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">default_url</span> <span class="o">=</span> <span class="s1">&#39;/tree&#39;</span>
+</pre></div>
+</div>
 <p>Disable cross-site-request-forgery protection
 Jupyter notebook 4.3.1 introduces protection from cross-site request
 forgeries, requiring API requests to either:
 Originate from pages served by this server (validated with XSRF cookie and
 token), or authenticate with a token</p>
 <p>Some anonymous compute resources still desire the ability to run code,
-completely without authentication. These services can disable all
-authentication and security checks, with the full knowledge of what that
-implies.</p>
-<p>c.NotebookApp.disable_check_xsrf = False</p>
+completely without authentication. These services can disable all authentication
+and security checks, with the full knowledge of what that implies.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">disable_check_xsrf</span> <span class="o">=</span> <span class="bp">False</span>
+</pre></div>
+</div>
 <p>Whether to enable MathJax for typesetting math/Tex.
 MathJax is the javascript library Jupyter uses to render math/LaTeX. It is
 very large, so you may want to disable it if you have a slow internet
 connection, or for offline use of the notebook.
-When disabled, equations etj. Will appear as their untransformed TeX source.</p>
-<p>c.NotebookApp.enable_mathjax = True</p>
-<p>extra paths to look for Javascript notebook extensions</p>
-<p>c.NotebookApp.extra_nbextensions_path = []</p>
-<p>handlers that should be loaded at higher priority than the default services</p>
-<p>c.NotebookApp.extra_services = []</p>
+When disabled, equations etj. Will appear as their untransformed TeX source.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">enable_mathjax</span> <span class="o">=</span> <span class="bp">True</span>
+</pre></div>
+</div>
+<p>Extra paths to look for Javascript notebook extensions:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">extra_nbextensions_path</span> <span class="o">=</span> <span class="p">[]</span>
+</pre></div>
+</div>
+<p>Handlers that should be loaded at higher priority than the default services.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">extra_services</span> <span class="o">=</span> <span class="p">[]</span>
+</pre></div>
+</div>
 <p>Extra paths to search for serving static files.
 This allows adding javascript/css to be available from the notebook server
-machine, or overriding individual files in the IPython</p>
-<p>c.NotebookApp.extra_static_paths = []</p>
+machine, or overriding individual files in the IPython.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">extra_static_paths</span> <span class="o">=</span> <span class="p">[]</span>
+</pre></div>
+</div>
 <p>Extra paths to search for serving jinja templates.
-Can be used to override templates from notebook.templates.</p>
-<p>c.NotebookApp.extra_template_paths = []</p>
+Can be used to override templates from notebook.templates.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">extra_template_paths</span> <span class="o">=</span> <span class="p">[]</span>
+</pre></div>
+</div>
 <p>c.NotebookApp.file_to_run = ‘’</p>
 <p>Extra keyword arguments to pass to <code class="xref py py-obj docutils literal notranslate"><span class="pre">get_secure_cookie</span></code>. See tornado’s
-get_secure_cookie docs for details.</p>
-<p>c.NotebookApp.get_secure_cookie_kwargs = {}</p>
+get_secure_cookie docs for details.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">get_secure_cookie_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+</pre></div>
+</div>
 <p>Deprecated: Use minified JS file or not, mainly use during dev to avoid JS
-recompilation</p>
-<p>c.NotebookApp.ignore_minified_js = False</p>
+recompilation.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">ignore_minified_js</span> <span class="o">=</span> <span class="bp">False</span>
+</pre></div>
+</div>
 <p>(bytes/sec) Maximum rate at which stream output can be sent on iopub before
-they are limited.</p>
-<p>c.NotebookApp.iopub_data_rate_limit = 1000000</p>
+they are limited.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">iopub_data_rate_limit</span> <span class="o">=</span> <span class="mi">1000000</span>
+</pre></div>
+</div>
 <p>(msgs/sec) Maximum rate at which messages can be sent on iopub before they are
-limited.</p>
-<p>c.NotebookApp.iopub_msg_rate_limit = 1000</p>
-<p>The IP address the notebook server will listen on.</p>
-<p>c.NotebookApp.ip = ‘localhost’</p>
-<p>Supply extra arguments that will be passed to Jinja environment.</p>
-<p>c.NotebookApp.jinja_environment_options = {}</p>
-<p>Extra variables to supply to jinja templates when rendering.</p>
-<p>c.NotebookApp.jinja_template_vars = {}</p>
-<p>The kernel manager class to use.</p>
-<p>c.NotebookApp.kernel_manager_class = ‘notebook.services.kernels.kernelmanager.MappingKernelManager’</p>
+limited.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">iopub_msg_rate_limit</span> <span class="o">=</span> <span class="mi">1000</span>
+</pre></div>
+</div>
+<p>The IP address the notebook server will listen on.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">ip</span> <span class="o">=</span> <span class="s1">&#39;localhost&#39;</span>
+</pre></div>
+</div>
+<p>Supply extra arguments that will be passed to Jinja environment.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">jinja_environment_options</span> <span class="o">=</span> <span class="p">{}</span>
+</pre></div>
+</div>
+<p>Extra variables to supply to jinja templates when rendering.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">jinja_template_vars</span> <span class="o">=</span> <span class="p">{}</span>
+</pre></div>
+</div>
+<p>The kernel manager class to use.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">kernel_manager_class</span> <span class="o">=</span> <span class="s1">&#39;notebook.services.kernels.kernelmanager.MappingKernelManager&#39;</span>
+</pre></div>
+</div>
 <p>The kernel spec manager class to use. Should be a subclass of
 <code class="xref py py-obj docutils literal notranslate"><span class="pre">jupyter_client.kernelspej.KernelSpecManager</span></code>.
-The Api of KernelSpecManager is provisional and might change without warning
-between this version of Jupyter and the next stable one.</p>
-<p>c.NotebookApp.kernel_spec_manager_class = ‘jupyter_client.kernelspec.KernelSpecManager’</p>
-<p>The full path to a private key file for usage with SSL/TLS.</p>
-<p>c.NotebookApp.keyfile = ‘’</p>
+The API of KernelSpecManager is provisional and might change without warning
+between this version of Jupyter and the next stable one.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">kernel_spec_manager_class</span> <span class="o">=</span> <span class="s1">&#39;jupyter_client.kernelspec.KernelSpecManager&#39;</span>
+</pre></div>
+</div>
+<p>The full path to a private key file for usage with SSL/TLS.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">keyfile</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
 <p>Hostnames to allow as local when allow_remote_access is False.
 Local IP addresses (such as 127.0.0.1 and ::1) are automatically accepted as
-local as well.</p>
-<p>c.NotebookApp.local_hostnames = [‘localhost’]</p>
-<p>The login handler class to use.</p>
-<p>c.NotebookApp.login_handler_class = ‘notebook.auth.login.LoginHandler’</p>
-<p>The logout handler class to use.</p>
-<p>c.NotebookApp.logout_handler_class = ‘notebook.auth.logout.LogoutHandler’</p>
-<p>The MathJax.js configuration file that is to be used.</p>
-<p>c.NotebookApp.mathjax_config = ‘TeX-AMS-MML_HTMLorMML-full,Safe’</p>
+local as well.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">local_hostnames</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;localhost&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The login handler class to use.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">login_handler_class</span> <span class="o">=</span> <span class="s1">&#39;notebook.auth.login.LoginHandler&#39;</span>
+</pre></div>
+</div>
+<p>The logout handler class to use.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">logout_handler_class</span> <span class="o">=</span> <span class="s1">&#39;notebook.auth.logout.LogoutHandler&#39;</span>
+</pre></div>
+</div>
+<p>The MathJax.js configuration file that is to be used.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">mathjax_config</span> <span class="o">=</span> <span class="s1">&#39;TeX-AMS-MML_HTMLorMML-full,Safe&#39;</span>
+</pre></div>
+</div>
 <p>A custom url for MathJax.js. Should be in the form of a case-sensitive url to
-MathJax, for example:  /static/components/MathJax/MathJax.js</p>
-<p>c.NotebookApp.mathjax_url = ‘’</p>
-<p>Sets the maximum allowed size of the client request body, specified in  the
-Content-Length request header field. If the size in a request  exceeds the
-configured value, a malformed HTTP message is returned to the client.</p>
+MathJax, for example:  /static/components/MathJax/MathJax.js:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">mathjax_url</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>max_body_size is applied even in streaming mode.</p>
 </div>
-<p>c.NotebookApp.max_body_size = 536870912</p>
+<p>Sets the maximum allowed size of the client request body, specified in  the
+Content-Length request header field. If the size in a request  exceeds the
+configured value, a malformed HTTP message is returned to the client.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">max_body_size</span> <span class="o">=</span> <span class="mi">536870912</span>
+</pre></div>
+</div>
 <p>Gets or sets the maximum amount of memory, in bytes, that is allocated  for
-use by the buffer manager.</p>
-<p>c.NotebookApp.max_buffer_size = 536870912</p>
+use by the buffer manager.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">max_buffer_size</span> <span class="o">=</span> <span class="mi">536870912</span>
+</pre></div>
+</div>
 <p>Dict of Python modules to load as notebook server extensions.Entry values can
-be used to enable and disable the loading ofthe extensions. The extensions
-will be loaded in alphabetical order.</p>
-<p>c.NotebookApp.nbserver_extensions = {}</p>
-<p>The directory to use for notebooks and kernels.
-c.NotebookApp.notebook_dir = ‘’</p>
+be used to enable and disable the loading of the extensions. The extensions
+will be loaded in alphabetical order.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">nbserver_extensions</span> <span class="o">=</span> <span class="p">{}</span>
+</pre></div>
+</div>
+<p>The directory to use for notebooks and kernels.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">notebook_dir</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
 <p>Whether to open in a browser after starting. The specific browser used is
 platform dependent and determined by the python standard library <a class="reference external" href="https://docs.python.org/3/library/webbrowser.html#module-webbrowser" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">webbrowser</span></code></a>
 module, unless it is overridden using the –browser (NotebookApp.browser)

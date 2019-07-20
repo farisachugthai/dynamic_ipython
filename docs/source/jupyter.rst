@@ -57,54 +57,53 @@ JupyterApp(Application) configuration
 -----------------------------------------------------------------------------
 
 Base class for Jupyter applications
-Answer yes to any prompts.
+Answer yes to any prompts.::
 
-c.JupyterApp.answer_yes = False
+   c.JupyterApp.answer_yes = False
 
-Full path of a config file.
+Full path of a config file.::
 
-c.JupyterApp.config_file = ''
+   c.JupyterApp.config_file = ''
 
-Specify a config file to load.
+Specify a config file to load.::
 
-c.JupyterApp.config_file_name = ''
+   c.JupyterApp.config_file_name = ''
 
-Generate default config file.
+Generate default config file.::
 
-c.JupyterApp.generate_config = False
+   c.JupyterApp.generate_config = False
 
 
 NotebookApp(JupyterApp) configuration
 -----------------------------------------------------------------------------
 
-Set the Access-Control-Allow-Credentials: true header
-c.NotebookApp.allow_credentials = False
+Set the Access-Control-Allow-Credentials: true header::
+
+   c.NotebookApp.allow_credentials = False
 
 Set the Access-Control-Allow-Origin header
-
 Use '*' to allow any origin to access your server.
+Takes precedence over allow_origin_pat.::
 
-Takes precedence over allow_origin_pat.
-c.NotebookApp.allow_origin = ''
+   c.NotebookApp.allow_origin = ''
 
 Use a regular expression for the Access-Control-Allow-Origin header
-
 Requests from an origin matching the expression will get replies with:
 
     Access-Control-Allow-Origin: origin
 
 where `origin` is the origin of the request.
-Ignored if allow_origin is set.
+Ignored if allow_origin is set.::
 
-c.NotebookApp.allow_origin_pat = ''
+   c.NotebookApp.allow_origin_pat = ''
 
 Allow password to be changed at login for the notebook server.
 While logging in with a token, the notebook server UI will give the opportunity
 to the user to enter a new password at the same time that will replace the
 token login mechanism.
-This can be set to false to prevent changing password from the UI/API.
+This can be set to false to prevent changing password from the UI/API.::
 
-c.NotebookApp.allow_password_change = True
+   c.NotebookApp.allow_password_change = True
 
 Allow requests where the Host header doesn't point to a local server
 By default, requests get a 403 forbidden response if the 'Host' header shows
@@ -113,70 +112,66 @@ True disables this check.
 This protects against 'DNS rebinding' attacks, where a remote web server
 serves you a page and then changes its DNS to send later requests to a local
 IP, bypassing same-origin checks.
-
 Local IP addresses (such as 127.0.0.1 and ::1) are allowed as local, along
-with hostnames configured in local_hostnames.
+with hostnames configured in local_hostnames.::
 
-c.NotebookApp.allow_remote_access = False
+   c.NotebookApp.allow_remote_access = False
 
-Whether to allow the user to run the notebook as root.
+Whether to allow the user to run the notebook as root.::
 
-c.NotebookApp.allow_root = False
+   c.NotebookApp.allow_root = False
 
-DEPRECATED use base_url
+DEPRECATED use :ref:`c.NotebookApp.base_url`::
 
-c.NotebookApp.base_project_url = '/'
+   c.NotebookApp.base_project_url = '/'
 
 The base URL for the notebook server.
+Leading and trailing slashes can be omitted, and will automatically be added.::
 
-Leading and trailing slashes can be omitted, and will automatically be added.
-
-c.NotebookApp.base_url = '/'
+   c.NotebookApp.base_url = '/'
 
 Specify what command to use to invoke a web browser when opening the notebook.
 If not specified, the default browser will be determined by the :mod:`webbrowser`
 standard library module, which allows setting of the :envvar:`$BROWSER`
-environment variable to override it.
+environment variable to override it.::
 
-c.NotebookApp.browser = ''
+   c.NotebookApp.browser = ''
 
-The full path to an SSL/TLS certificate file.
+The full path to an SSL/TLS certificate file.::
 
-c.NotebookApp.certfile = ''
+   c.NotebookApp.certfile = ''
 
 The full path to a certificate authority certificate for SSL/TLS client
-authentication.
+authentication.::
 
-c.NotebookApp.client_ca = ''
+   c.NotebookApp.client_ca = ''
 
-The config manager class to use.
+The config manager class to use.::
 
-c.NotebookApp.config_manager_class = 'notebook.services.config.manager.ConfigManager'
+   c.NotebookApp.config_manager_class = 'notebook.services.config.manager.ConfigManager'
 
-The notebook manager class to use.
+The notebook manager class to use.::
 
-c.NotebookApp.contents_manager_class = 'notebook.services.contents.largefilemanager.LargeFileManager'
+   c.NotebookApp.contents_manager_class = 'notebook.services.contents.largefilemanager.LargeFileManager'
 
 Extra keyword arguments to pass to `set_secure_cookie`. See tornado's
-set_secure_cookie docs for details.
+set_secure_cookie docs for details.::
 
-c.NotebookApp.cookie_options = {}
+   c.NotebookApp.cookie_options = {}
 
 The random bytes used to secure cookies. By default this is a new random
 number every time you start the Notebook. Set it to a value in a config file
 to enable logins to persist across server sessions.
-
 Note: Cookie secrets should be kept private, do not share config files with
-cookie_secret stored in plaintext (you can read the value from a file).
+cookie_secret stored in plaintext (you can read the value from a file).::
 
-c.NotebookApp.cookie_secret = b''
+   c.NotebookApp.cookie_secret = b''
 
-The file where the cookie secret is stored.
+The file where the cookie secret is stored.::
 
-c.NotebookApp.cookie_secret_file = ''
+   c.NotebookApp.cookie_secret_file = ''
 
 Override URL shown to users.
-
 Replace actual URL, including protocol, address, port and base URL, with the
 given value when displaying URL to the users. Do not change the actual
 connection URL. If authentication token is enabled, the token is added to the
@@ -184,13 +179,13 @@ custom URL automatically.
 
 This option is intended to be used when the URL to display to the user cannot
 be determined reliably by the Jupyter notebook server (proxified or
-containerized setups for example).
+containerized setups for example).::
 
-c.NotebookApp.custom_display_url = ''
+   c.NotebookApp.custom_display_url = ''
 
-The default URL to redirect to from :kbd:`/`
+The default URL to redirect to from :kbd:`/`.::
 
-c.NotebookApp.default_url = '/tree'
+   c.NotebookApp.default_url = '/tree'
 
 Disable cross-site-request-forgery protection
 Jupyter notebook 4.3.1 introduces protection from cross-site request
@@ -199,132 +194,132 @@ Originate from pages served by this server (validated with XSRF cookie and
 token), or authenticate with a token
 
 Some anonymous compute resources still desire the ability to run code,
-completely without authentication. These services can disable all
-authentication and security checks, with the full knowledge of what that
-implies.
+completely without authentication. These services can disable all authentication
+and security checks, with the full knowledge of what that implies.::
 
-c.NotebookApp.disable_check_xsrf = False
+   c.NotebookApp.disable_check_xsrf = False
 
 Whether to enable MathJax for typesetting math/Tex.
 MathJax is the javascript library Jupyter uses to render math/LaTeX. It is
 very large, so you may want to disable it if you have a slow internet
 connection, or for offline use of the notebook.
-When disabled, equations etj. Will appear as their untransformed TeX source.
+When disabled, equations etj. Will appear as their untransformed TeX source.::
 
-c.NotebookApp.enable_mathjax = True
+   c.NotebookApp.enable_mathjax = True
 
-extra paths to look for Javascript notebook extensions
+Extra paths to look for Javascript notebook extensions::
 
-c.NotebookApp.extra_nbextensions_path = []
+   c.NotebookApp.extra_nbextensions_path = []
 
-handlers that should be loaded at higher priority than the default services
+Handlers that should be loaded at higher priority than the default services.::
 
-c.NotebookApp.extra_services = []
+   c.NotebookApp.extra_services = []
 
 Extra paths to search for serving static files.
 This allows adding javascript/css to be available from the notebook server
-machine, or overriding individual files in the IPython
+machine, or overriding individual files in the IPython.::
 
-c.NotebookApp.extra_static_paths = []
+   c.NotebookApp.extra_static_paths = []
 
 Extra paths to search for serving jinja templates.
-Can be used to override templates from notebook.templates.
+Can be used to override templates from notebook.templates.::
 
-c.NotebookApp.extra_template_paths = []
+   c.NotebookApp.extra_template_paths = []
 
 c.NotebookApp.file_to_run = ''
 
 Extra keyword arguments to pass to `get_secure_cookie`. See tornado's
-get_secure_cookie docs for details.
+get_secure_cookie docs for details.::
 
-c.NotebookApp.get_secure_cookie_kwargs = {}
+   c.NotebookApp.get_secure_cookie_kwargs = {}
 
 Deprecated: Use minified JS file or not, mainly use during dev to avoid JS
-recompilation
+recompilation.::
 
-c.NotebookApp.ignore_minified_js = False
+   c.NotebookApp.ignore_minified_js = False
 
 (bytes/sec) Maximum rate at which stream output can be sent on iopub before
-they are limited.
+they are limited.::
 
-c.NotebookApp.iopub_data_rate_limit = 1000000
+   c.NotebookApp.iopub_data_rate_limit = 1000000
 
 (msgs/sec) Maximum rate at which messages can be sent on iopub before they are
-limited.
+limited.::
 
-c.NotebookApp.iopub_msg_rate_limit = 1000
+   c.NotebookApp.iopub_msg_rate_limit = 1000
 
-The IP address the notebook server will listen on.
+The IP address the notebook server will listen on.::
 
-c.NotebookApp.ip = 'localhost'
+   c.NotebookApp.ip = 'localhost'
 
-Supply extra arguments that will be passed to Jinja environment.
+Supply extra arguments that will be passed to Jinja environment.::
 
-c.NotebookApp.jinja_environment_options = {}
+   c.NotebookApp.jinja_environment_options = {}
 
-Extra variables to supply to jinja templates when rendering.
+Extra variables to supply to jinja templates when rendering.::
 
-c.NotebookApp.jinja_template_vars = {}
+   c.NotebookApp.jinja_template_vars = {}
 
-The kernel manager class to use.
+The kernel manager class to use.::
 
-c.NotebookApp.kernel_manager_class = 'notebook.services.kernels.kernelmanager.MappingKernelManager'
+   c.NotebookApp.kernel_manager_class = 'notebook.services.kernels.kernelmanager.MappingKernelManager'
 
 The kernel spec manager class to use. Should be a subclass of
 `jupyter_client.kernelspej.KernelSpecManager`.
-The Api of KernelSpecManager is provisional and might change without warning
-between this version of Jupyter and the next stable one.
+The API of KernelSpecManager is provisional and might change without warning
+between this version of Jupyter and the next stable one.::
 
-c.NotebookApp.kernel_spec_manager_class = 'jupyter_client.kernelspec.KernelSpecManager'
+   c.NotebookApp.kernel_spec_manager_class = 'jupyter_client.kernelspec.KernelSpecManager'
 
-The full path to a private key file for usage with SSL/TLS.
+The full path to a private key file for usage with SSL/TLS.::
 
-c.NotebookApp.keyfile = ''
+   c.NotebookApp.keyfile = ''
 
 Hostnames to allow as local when allow_remote_access is False.
 Local IP addresses (such as 127.0.0.1 and ::1) are automatically accepted as
-local as well.
+local as well.::
 
-c.NotebookApp.local_hostnames = ['localhost']
+   c.NotebookApp.local_hostnames = ['localhost']
 
-The login handler class to use.
+The login handler class to use.::
 
-c.NotebookApp.login_handler_class = 'notebook.auth.login.LoginHandler'
+   c.NotebookApp.login_handler_class = 'notebook.auth.login.LoginHandler'
 
-The logout handler class to use.
+The logout handler class to use.::
 
-c.NotebookApp.logout_handler_class = 'notebook.auth.logout.LogoutHandler'
+   c.NotebookApp.logout_handler_class = 'notebook.auth.logout.LogoutHandler'
 
-The MathJax.js configuration file that is to be used.
+The MathJax.js configuration file that is to be used.::
 
-c.NotebookApp.mathjax_config = 'TeX-AMS-MML_HTMLorMML-full,Safe'
+   c.NotebookApp.mathjax_config = 'TeX-AMS-MML_HTMLorMML-full,Safe'
 
 A custom url for MathJax.js. Should be in the form of a case-sensitive url to
-MathJax, for example:  /static/components/MathJax/MathJax.js
+MathJax, for example:  /static/components/MathJax/MathJax.js::
 
-c.NotebookApp.mathjax_url = ''
-
-Sets the maximum allowed size of the client request body, specified in  the
-Content-Length request header field. If the size in a request  exceeds the
-configured value, a malformed HTTP message is returned to the client.
+   c.NotebookApp.mathjax_url = ''
 
 .. note:: max_body_size is applied even in streaming mode.
 
-c.NotebookApp.max_body_size = 536870912
+Sets the maximum allowed size of the client request body, specified in  the
+Content-Length request header field. If the size in a request  exceeds the
+configured value, a malformed HTTP message is returned to the client.::
+
+   c.NotebookApp.max_body_size = 536870912
 
 Gets or sets the maximum amount of memory, in bytes, that is allocated  for
-use by the buffer manager.
+use by the buffer manager.::
 
-c.NotebookApp.max_buffer_size = 536870912
+   c.NotebookApp.max_buffer_size = 536870912
 
 Dict of Python modules to load as notebook server extensions.Entry values can
-be used to enable and disable the loading ofthe extensions. The extensions
-will be loaded in alphabetical order.
+be used to enable and disable the loading of the extensions. The extensions
+will be loaded in alphabetical order.::
 
-c.NotebookApp.nbserver_extensions = {}
+   c.NotebookApp.nbserver_extensions = {}
 
-The directory to use for notebooks and kernels.
-c.NotebookApp.notebook_dir = ''
+The directory to use for notebooks and kernels.::
+
+   c.NotebookApp.notebook_dir = ''
 
 Whether to open in a browser after starting. The specific browser used is
 platform dependent and determined by the python standard library `webbrowser`

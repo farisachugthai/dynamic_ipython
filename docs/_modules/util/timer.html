@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>extensions.pd_csv &#8212; Dynamic IPython 0.0.1 documentation</title>
+    <title>util.timer &#8212; Dynamic IPython 0.0.1 documentation</title>
     <link rel="stylesheet" href="../../_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -42,51 +42,69 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <h1>Source code for extensions.pd_csv</h1><div class="highlight"><pre>
+  <h1>Source code for util.timer</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;Magic that reads in a string and parses it as a :mod:`CSV` with :mod:`pandas`.</span>
+<span class="sd">&quot;&quot;&quot;Create a timer decorator.</span>
 
-<span class="sd">Example of creating a magic from **IPython Interactive Computing and</span>
-<span class="sd">Visualization Cookbook by Cyrille Roussou.**</span>
+<span class="sd">======</span>
+<span class="sd">Timer</span>
+<span class="sd">======</span>
 
-<span class="sd">The example specifically is from pages 32 to 35.</span>
+<span class="sd">.. module:: timer</span>
 
-<span class="sd">It also shows the following simpler example:</span>
+<span class="sd">.. highlight:: ipython</span>
 
-<span class="sd">.. ipython::</span>
+<span class="sd">Largely this module was simply practice on writing decorators.</span>
 
-<span class="sd">    In [1]: from IPython.core.magic import (register_line_magic, register_cell_magic)</span>
-<span class="sd">    In [2]: @register_line_magic</span>
-<span class="sd">            def hello(line):</span>
-<span class="sd">                if line == &#39;french&#39;:</span>
-<span class="sd">                    print(&quot;Salut tout le monde!&quot;)</span>
-<span class="sd">                else:</span>
-<span class="sd">                    print(&quot;Hello world!&quot;)</span>
+<span class="sd">.. todo::</span>
+
+<span class="sd">    Explore the module :mod:`timeit()` or IPython&#39;s ``%timeit`` magic.</span>
+
+<span class="sd">See Also</span>
+<span class="sd">--------</span>
+<span class="sd">:mod:`profile_default.01_rehashx` : module</span>
+<span class="sd">    Module where :ref:`profile_default.01_rehashx.main` is wrapped with the</span>
+<span class="sd">    timer decorator.</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">from</span> <span class="nn">io</span> <span class="k">import</span> <span class="n">StringIO</span>
+<span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">time</span>
 
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s2">&quot;Pandas not installed. Exiting.&quot;</span><span class="p">)</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="csv"><a class="viewcode-back" href="../../extensions.html#extensions.pd_csv.csv">[docs]</a><span class="k">def</span> <span class="nf">csv</span><span class="p">(</span><span class="n">cell</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Read in an :class:`io.StringIO()` and parse it with the pandas library.&quot;&quot;&quot;</span>
-    <span class="n">sio</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">sio</span><span class="p">)</span></div>
+<div class="viewcode-block" id="timer"><a class="viewcode-back" href="../../profile_default.html#util.timer.timer">[docs]</a><span class="k">def</span> <span class="nf">timer</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Print the runtime of the decorated function.</span>
 
+<span class="sd">    Is this the right way to profile something on Windows btw?</span>
 
-<div class="viewcode-block" id="load_ipython_extension"><a class="viewcode-back" href="../../extensions.html#extensions.pd_csv.load_ipython_extension">[docs]</a><span class="k">def</span> <span class="nf">load_ipython_extension</span><span class="p">(</span><span class="n">ip</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;This function is called when the extension is loaded.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    func : function</span>
+<span class="sd">        Function to profile</span>
 
-<span class="sd">    It accepts an IPython |ip| instance. We can register the magic with the</span>
-<span class="sd">    `register_magic_function` method.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    value : float</span>
+<span class="sd">        Output of function :func:`time.perf_counter()`.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">ip</span><span class="o">.</span><span class="n">register_magic_function</span><span class="p">(</span><span class="n">csv</span><span class="p">,</span> <span class="s1">&#39;cell&#39;</span><span class="p">)</span></div>
+
+    <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">wrapper_timer</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+        <span class="n">run_time</span> <span class="o">=</span> <span class="n">end_time</span> <span class="o">-</span> <span class="n">start_time</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Finished </span><span class="si">{func.__name__!r}</span><span class="s2"> in </span><span class="si">{run_time:.4f}</span><span class="s2"> secs&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">value</span>
+
+    <span class="k">return</span> <span class="n">wrapper_timer</span></div>
+
+
+<span class="c1"># class ModuleTimer()</span>
 </pre></div>
 
           </div>

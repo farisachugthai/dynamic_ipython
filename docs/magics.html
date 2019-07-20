@@ -58,23 +58,23 @@
 <ul>
 <li><p><a class="reference internal" href="#line" id="id3">Line:</a></p></li>
 <li><p><a class="reference internal" href="#cell" id="id4">Cell:</a></p></li>
-<li><p><a class="reference internal" href="#macros" id="id5">Macros</a></p></li>
-<li><p><a class="reference internal" href="#store" id="id6">store</a></p></li>
-<li><p><a class="reference internal" href="#save" id="id7">save</a></p></li>
+<li><p><a class="reference internal" href="#store" id="id5">store</a></p></li>
+<li><p><a class="reference internal" href="#save" id="id6">save</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#revisiting-previously-run-commands" id="id8">Revisiting Previously Run Commands</a></p>
+<li><p><a class="reference internal" href="#revisiting-previously-run-commands" id="id7">Revisiting Previously Run Commands</a></p>
 <ul>
-<li><p><a class="reference internal" href="#hist" id="id9">hist</a></p></li>
-<li><p><a class="reference internal" href="#recall" id="id10">%recall</a></p></li>
-<li><p><a class="reference internal" href="#writefile" id="id11">writefile</a></p></li>
-<li><p><a class="reference internal" href="#edit" id="id12">edit</a></p></li>
-<li><p><a class="reference internal" href="#honorary-mention" id="id13">Honorary Mention</a></p></li>
+<li><p><a class="reference internal" href="#hist" id="id8">hist</a></p></li>
+<li><p><a class="reference internal" href="#recall" id="id9">%recall</a></p></li>
+<li><p><a class="reference internal" href="#writefile" id="id10">writefile</a></p></li>
+<li><p><a class="reference internal" href="#edit" id="id11">edit</a></p></li>
+<li><p><a class="reference internal" href="#honorary-mention" id="id12">Honorary Mention</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#executing-commands-with-magics" id="id14">Executing Commands with Magics</a></p>
+<li><p><a class="reference internal" href="#executing-commands-with-magics" id="id13">Executing Commands with Magics</a></p>
 <ul>
-<li><p><a class="reference internal" href="#pycat-filename" id="id15">pycat [filename]</a></p></li>
+<li><p><a class="reference internal" href="#help-docs-for-run" id="id14">Help Docs for %run</a></p></li>
+<li><p><a class="reference internal" href="#pycat-filename" id="id15"><code class="docutils literal notranslate"><span class="pre">%pycat</span></code> [filename]</a></p></li>
 <li><p><a class="reference internal" href="#bookmark" id="id16">Bookmark</a></p></li>
 </ul>
 </li>
@@ -139,41 +139,8 @@ You could also add in the option <code class="xref py py-obj docutils literal no
 <code class="docutils literal notranslate"><span class="pre">%edit</span> <span class="pre">file.filetype</span></code> as well!</p>
 </div></blockquote>
 </div>
-<div class="section" id="macros">
-<h3><a class="toc-backref" href="#id5">Macros</a><a class="headerlink" href="#macros" title="Permalink to this headline">¶</a></h3>
-<p>IPython allows it’s users the ability to re-execute strings of text as valid Python.</p>
-<p>This suits itself to automating the process of retrieving text from a user or an online
-source, validating it and then executing.</p>
-<p>Having tried to do so, I’ve learned you shouldn’t ever write a script with a macro.
-IPython macros require all input to be one string, and it’s difficult to see mistakes
-when there’s no distinction between any of the tokens in a program.</p>
-<div class="section" id="see-also">
-<h4>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h4>
-<p><a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#module-IPython.core.interactiveshell" title="(in IPython v7.6.1)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython.core.interactiveshell</span></code></a></p>
-<p>Around lines 2300:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go">#-------------------------------------------------------------------------</span>
-<span class="go"># Things related to macros</span>
-<span class="go">#-------------------------------------------------------------------------</span>
-<span class="gp">In [1]: </span><span class="k">def</span> <span class="nf">define_macro</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">themacro</span><span class="p">):</span>
-<span class="gt">  File</span><span class="nn"> &quot;&lt;ipython-input-1-0c2a4021ad32&gt;&quot;</span><span class="gt">, line </span><span class="mi">1</span>
-    <span class="k">def</span> <span class="nf">define_macro</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">themacro</span><span class="p">):</span>
-                                           <span class="o">^</span>
-<span class="ne">SyntaxError</span>: unexpected EOF while parsing
-
-
-    <span class="c1"># Parameters</span>
-    <span class="c1"># ----------</span>
-    <span class="c1"># name : str</span>
-        <span class="c1"># The name of the macro.</span>
-    <span class="c1"># themacro : str or Macro</span>
-        <span class="c1"># The action to do upon invoking the macro.  If a string, a new</span>
-        <span class="c1"># Macro object is created by passing the string to it.</span>
-</pre></div>
-</div>
-</div>
-</div>
 <div class="section" id="store">
-<h3><a class="toc-backref" href="#id6">store</a><a class="headerlink" href="#store" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id5">store</a><a class="headerlink" href="#store" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">%store</span> <span class="pre">'widen_jupyter_cells'</span></code></p>
 <p>As a heads up that’s in your db. Figured I’d mention it as it was a
 great use of the magic system.</p>
@@ -198,7 +165,7 @@ i can foresee that list BLOWING up.</p>
 alias is for shell commands and macro for ipython commands?</p>
 </div>
 <div class="section" id="save">
-<h3><a class="toc-backref" href="#id7">save</a><a class="headerlink" href="#save" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id6">save</a><a class="headerlink" href="#save" title="Permalink to this headline">¶</a></h3>
 <p>Help docs on save.</p>
 <dl>
 <dt><code class="docutils literal notranslate"><span class="pre">In</span> <span class="pre">[43]:</span> <span class="pre">save?</span></code>:</dt><dd><p>Docstring:
@@ -224,7 +191,7 @@ File:      ~/miniconda3/lib/python3.6/site-packages/IPython/core/magics/code.py<
 </div>
 </div>
 <div class="section" id="revisiting-previously-run-commands">
-<h2><a class="toc-backref" href="#id8">Revisiting Previously Run Commands</a><a class="headerlink" href="#revisiting-previously-run-commands" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id7">Revisiting Previously Run Commands</a><a class="headerlink" href="#revisiting-previously-run-commands" title="Permalink to this headline">¶</a></h2>
 <p>Access previously run commands with the <code class="docutils literal notranslate"><span class="pre">%history</span></code> magic. Note that it can
 be abbreviated to <code class="docutils literal notranslate"><span class="pre">%hist</span></code> and used like so.:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">hist</span> <span class="o">~</span><span class="mi">1</span><span class="o">/</span>
@@ -234,7 +201,7 @@ be abbreviated to <code class="docutils literal notranslate"><span class="pre">%
 current cell.</p>
 <p><code class="docutils literal notranslate"><span class="pre">recall</span> <span class="pre">~1/</span></code></p>
 <div class="section" id="hist">
-<h3><a class="toc-backref" href="#id9">hist</a><a class="headerlink" href="#hist" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id8">hist</a><a class="headerlink" href="#hist" title="Permalink to this headline">¶</a></h3>
 <p>The syntax for accessing history is admittedly wonky.</p>
 <div class="section" id="history-call-signature">
 <h4>history call signature<a class="headerlink" href="#history-call-signature" title="Permalink to this headline">¶</a></h4>
@@ -268,7 +235,7 @@ sessions ago.</p>
 </div>
 </div>
 <div class="section" id="recall">
-<h3><a class="toc-backref" href="#id10">%recall</a><a class="headerlink" href="#recall" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id9">%recall</a><a class="headerlink" href="#recall" title="Permalink to this headline">¶</a></h3>
 <p>This is one of the IPython conveniences that makes you understand why they’re called
 <em>magics</em>.</p>
 <p>All too often, one will run into the problem of manipulating some data in the REPL,
@@ -334,7 +301,7 @@ Out[64]: NoneType</p>
 </div>
 </div>
 <div class="section" id="writefile">
-<h3><a class="toc-backref" href="#id11">writefile</a><a class="headerlink" href="#writefile" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id10">writefile</a><a class="headerlink" href="#writefile" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">%%writefile</span> <span class="pre">-a</span> <span class="pre">filename</span></code></p>
 <p>needs both percentage signs even with <code class="docutils literal notranslate"><span class="pre">automagic</span></code> since it’s a cell magic
 the -a option is to append to a file
@@ -354,7 +321,7 @@ _i31-33</p>
 # _i31-33</p>
 </div>
 <div class="section" id="edit">
-<h3><a class="toc-backref" href="#id12">edit</a><a class="headerlink" href="#edit" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id11">edit</a><a class="headerlink" href="#edit" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">%edit</span></code> can take cell #’s as input like hist does, and creates a file to
 work with like <code class="docutils literal notranslate"><span class="pre">%%file</span></code>.</p>
 <p>It always create temporary files unlike %%file so its REALLY important
@@ -406,7 +373,7 @@ Because it launched a GUI app you don’t have bi-directional communication</p>
 </div>
 </div>
 <div class="section" id="honorary-mention">
-<h3><a class="toc-backref" href="#id13">Honorary Mention</a><a class="headerlink" href="#honorary-mention" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id12">Honorary Mention</a><a class="headerlink" href="#honorary-mention" title="Permalink to this headline">¶</a></h3>
 <p><a class="reference external" href="https://docs.python.org/3/library/functions.html#exec" title="(in Python v3.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">exec()</span></code></a> is not a magic but I actually thought it was!</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>In [18]: exec(In[6])
 </pre></div>
@@ -424,7 +391,9 @@ operate on history syntax.</p>
 </div>
 </div>
 <div class="section" id="executing-commands-with-magics">
-<h2><a class="toc-backref" href="#id14">Executing Commands with Magics</a><a class="headerlink" href="#executing-commands-with-magics" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id13">Executing Commands with Magics</a><a class="headerlink" href="#executing-commands-with-magics" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="help-docs-for-run">
+<h3><a class="toc-backref" href="#id14">Help Docs for %run</a><a class="headerlink" href="#help-docs-for-run" title="Permalink to this headline">¶</a></h3>
 <dl class="option-list">
 <dt><kbd><span class="option">-t</span></kbd></dt>
 <dd><p>print timing information at the end of the run.  IPython will give
@@ -479,13 +448,19 @@ can easily see the <a class="reference external" href="https://docs.python.org/3
 at a prompt.</p>
 </dd>
 </dl>
+<div class="section" id="momentary-detour">
+<h4>Momentary Detour<a class="headerlink" href="#momentary-detour" title="Permalink to this headline">¶</a></h4>
 <p>So this magic should create a similar output to <code class="docutils literal notranslate"><span class="pre">%debug</span></code> but for some reason
 whenever I invoke debug, it doesn’t show any relevant code when using <kbd class="kbd docutils literal notranslate">l</kbd>,
 <kbd class="kbd docutils literal notranslate">ll</kbd>, <kbd class="kbd docutils literal notranslate">list</kbd> or anything.</p>
 <p>Unsure what I’m doing wrong, but running <code class="docutils literal notranslate"><span class="pre">%run</span> <span class="pre">-d</span> <span class="pre">-b</span> <span class="pre">[line_number]</span></code> works
 perfectly enough that honestly I might not care for the time being.</p>
-<p>-p
-run program under the control of the Python profiler module (which
+</div>
+<div class="section" id="back-to-run">
+<h4>Back to <code class="docutils literal notranslate"><span class="pre">%run</span></code>!<a class="headerlink" href="#back-to-run" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd><span class="option">-p</span></kbd></dt>
+<dd><p>run program under the control of the Python profiler module (which
 prints a detailed report of execution times, function calls, etc).</p>
 <p>You can pass other options after -p which affect the behavior of the
 profiler itself. See the docs for <code class="docutils literal notranslate"><span class="pre">%prun</span></code> for details.</p>
@@ -497,8 +472,9 @@ details on the options available specifically for profiling.</p>
 <p>There is one special usage for which the text above doesn’t apply:
 if the filename ends with .ipy[nb], the file is run as IPython script,
 just as if the commands were written on IPython prompt.</p>
-<p>-m
-specify module name to load instead of script path. Similar to
+</dd>
+<dt><kbd><span class="option">-m</span></kbd></dt>
+<dd><p>specify module name to load instead of script path. Similar to
 the <kbd class="kbd docutils literal notranslate">-m</kbd> option for the python interpreter. Use this option
 last if you want to combine with other %run options. Unlike the
 python interpreter only source modules are allowed no .pyc or .pyo files.
@@ -507,15 +483,20 @@ For example:</p>
 </pre></div>
 </div>
 <p>will run the example module.</p>
-<dl class="option-list">
+</dd>
 <dt><kbd><span class="option">-G</span></kbd></dt>
 <dd><p>Disable shell-like glob expansion of arguments.</p>
 </dd>
 </dl>
+</div>
+</div>
 <div class="section" id="pycat-filename">
-<h3><a class="toc-backref" href="#id15">pycat [filename]</a><a class="headerlink" href="#pycat-filename" title="Permalink to this headline">¶</a></h3>
-<p>Works like cat but assumes a python source-code file
-Runs it through a color syntax highlighting pager</p>
+<h3><a class="toc-backref" href="#id15"><code class="docutils literal notranslate"><span class="pre">%pycat</span></code> [filename]</a><a class="headerlink" href="#pycat-filename" title="Permalink to this headline">¶</a></h3>
+<p>Works like cat but assumes a python source-code file.
+Runs it through a color syntax highlighting pager.
+The source code for the syntax highlighting can be found in the combination
+of files in <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.utils.PyColorize.html#module-IPython.utils.PyColorize" title="(in IPython v7.6.1)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython.utils.PyColorize</span></code></a>, <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.utils.coloransi.html#module-IPython.utils.coloransi" title="(in IPython v7.6.1)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython.utils.coloransi</span></code></a>,
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython.core.colorable</span></code> and others.</p>
 </div>
 <div class="section" id="bookmark">
 <h3><a class="toc-backref" href="#id16">Bookmark</a><a class="headerlink" href="#bookmark" title="Permalink to this headline">¶</a></h3>
@@ -596,10 +577,6 @@ associated with each profile.
 <li><a class="reference internal" href="#which-magics-are-defined-here">Which magics are defined here?</a><ul>
 <li><a class="reference internal" href="#line">Line:</a></li>
 <li><a class="reference internal" href="#cell">Cell:</a></li>
-<li><a class="reference internal" href="#macros">Macros</a><ul>
-<li><a class="reference internal" href="#see-also">See Also</a></li>
-</ul>
-</li>
 <li><a class="reference internal" href="#store">store</a></li>
 <li><a class="reference internal" href="#save">save</a></li>
 </ul>
@@ -625,7 +602,12 @@ associated with each profile.
 </ul>
 </li>
 <li><a class="reference internal" href="#executing-commands-with-magics">Executing Commands with Magics</a><ul>
-<li><a class="reference internal" href="#pycat-filename">pycat [filename]</a></li>
+<li><a class="reference internal" href="#help-docs-for-run">Help Docs for %run</a><ul>
+<li><a class="reference internal" href="#momentary-detour">Momentary Detour</a></li>
+<li><a class="reference internal" href="#back-to-run">Back to <code class="docutils literal notranslate"><span class="pre">%run</span></code>!</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pycat-filename"><code class="docutils literal notranslate"><span class="pre">%pycat</span></code> [filename]</a></li>
 <li><a class="reference internal" href="#bookmark">Bookmark</a></li>
 </ul>
 </li>

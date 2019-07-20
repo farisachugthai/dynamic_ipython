@@ -1,6 +1,22 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Move all randomly interspersed logging functions into one module."""
+"""Set up easily instantied :class:logging.Logger()` instances.
+
+==========
+module_log
+==========
+
+.. module:: module_log
+
+.. highlight:: ipython
+
+Create a few formatters and logging instances that can be easily
+imported and utilized across the package.
+
+Currently :func:`module_log.stream_logger()` is the easiest and most oft
+used entry point in this module.
+
+"""
 from datetime import datetime
 import json
 import logging
@@ -30,7 +46,10 @@ def _setup_logging(
 
 
 def path_logger(logger=None):
-    """Trying to put all of these functions in 1 spot. DEPRECATED."""
+    """Stream logger. Emits a warning from :func:`warnings.warn()`.
+
+    DEPRECATED.
+    """
     warnings.warn('This function is deprecated.')
 
     if logger is None:
@@ -52,17 +71,6 @@ def stream_logger(logger, log_level=logging.INFO, msg_format=None):
     Should do some validation on the log level there. There's a really
     useful block of code in the tutorial.
 
-    .. admonition:: The following can't go in library logging code because
-                    it takes the name of this module not where it
-                    gets imported.
-
-
-    .. ipython:: python
-        :okexcept:
-
-        if logger is None:
-            logger = logging.getLogger(name=__name__)
-
 
     Parameters
     ----------
@@ -71,8 +79,8 @@ def stream_logger(logger, log_level=logging.INFO, msg_format=None):
     level : int, optional
         Level of log records. Defaults to 20.
     msg_format : str, optional
-        Representation of logging messages. Uses standard %-style string formatting.
-        Defaults to ``%(asctime)s %(levelname)s %(message)s``
+        Representation of logging messages. Uses standard %-style string
+        formatting. Defaults to ``%(asctime)s %(levelname)s %(message)s``
 
     Returns
     -------
@@ -119,6 +127,9 @@ def file_logger(
     ----------
     filename : str
         File to log :class:`logging.LogRecord`s to.
+    logger : :class:`logging.Logger(), optional
+        Instance of a :class:`logging.Logger() instantiated in the calling
+        module.
     shell : |ip|, optional
         Global instance of IPython. Can be none if not run in IPython though this
         hasn't been tested.
@@ -163,8 +174,21 @@ def file_logger(
     return logger
 
 
-def json_logger():
+def json_logger(JSONFormatter=None):
     """Set up a logger that returns properly formatted JSON.
+
+    Parameters
+    ----------
+    JSONFormatter : :class:`logging.formatter()`, optional
+        :ref:`module_log.JsonFormatter()` instance.
+        Included in the listed parameters to be explicit; however, it's
+        probably easier to not include the parameter as one is configured
+        in the function anyway.
+
+    Returns
+    -------
+    root_logger : :class:`logging.Logger()`
+        Instance of a :class:`logging.Logger()`.
 
     Examples
     --------
@@ -196,26 +220,16 @@ class JsonFormatter(logging.Formatter):
     """Return valid :mod:`json` for a configured handler."""
 
     def format(self, record):
+        """Format a :class:`logging.LogRecord()`."""
         if record.exc_info:
             exc = traceback.format_exception(*record.exc_info)
         else:
             exc = None
 
         return json.dumps({
-            'msg':
-                record.msg % record.args,
-            'timestamp':
+            'msg': record.msg % record.args, 'timestamp':
                 datetime.utcfromtimestamp(record.created).isoformat() + 'Z',
-            'func':
-                record.funcName,
-            'level':
-                record.levelname,
-            'module':
-                record.module,
-            'process_id':
-                record.process,
-            'thread_id':
-                record.thread,
-            'exception':
-                exc
+            'func': record.funcName, 'level': record.levelname, 'module':
+                record.module, 'process_id': record.process, 'thread_id':
+                    record.thread, 'exception': exc
         })

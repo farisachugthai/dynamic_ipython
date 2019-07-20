@@ -81,49 +81,6 @@ Jan 31, 2019:
     ``%edit file.filetype`` as well!
 
 
-Macros
---------
-IPython allows it's users the ability to re-execute strings of text as valid Python.
-
-This suits itself to automating the process of retrieving text from a user or an online
-source, validating it and then executing.
-
-Having tried to do so, I've learned you shouldn't ever write a script with a macro.
-IPython macros require all input to be one string, and it's difficult to see mistakes
-when there's no distinction between any of the tokens in a program.
-
-See Also
-~~~~~~~~~~
-:mod:`IPython.core.interactiveshell`
-
-Around lines 2300:
-
-.. ipython:: python
-
-    #-------------------------------------------------------------------------
-    # Things related to macros
-    #-------------------------------------------------------------------------
-
-    def define_macro(self, name, themacro):
-        # Define a new macro
-
-        # Parameters
-        # ----------
-        # name : str
-            # The name of the macro.
-        # themacro : str or Macro
-            # The action to do upon invoking the macro.  If a string, a new
-            # Macro object is created by passing the string to it.
-
-        from IPython.core import macro
-
-        if isinstance(themacro, str):
-            themacro = macro.Macro(themacro)
-        if not isinstance(themacro, macro.Macro):
-            raise ValueError('A macro must be a string or a Macro instance.')
-        self.user_ns[name] = themacro
-
-
 store
 ------
 
@@ -464,6 +421,10 @@ would work better?
 
 Executing Commands with Magics
 ==============================
+
+Help Docs for %run
+------------------
+
 -t
    print timing information at the end of the run.  IPython will give
    you an estimated CPU time consumption for your script, which under
@@ -522,6 +483,7 @@ Executing Commands with Magics
 
 Momentary Detour
 ~~~~~~~~~~~~~~~~
+
 So this magic should create a similar output to ``%debug`` but for some reason
 whenever I invoke debug, it doesn't show any relevant code when using :kbd:`l`,
 :kbd:`ll`, :kbd:`list` or anything.
@@ -529,47 +491,50 @@ whenever I invoke debug, it doesn't show any relevant code when using :kbd:`l`,
 Unsure what I'm doing wrong, but running ``%run -d -b [line_number]`` works
 perfectly enough that honestly I might not care for the time being.
 
-
-Back to %run!
-~~~~~~~~~~~~~
+Back to ``%run``!
+~~~~~~~~~~~~~~~~~
 
 -p
-run program under the control of the Python profiler module (which
-prints a detailed report of execution times, function calls, etc).
+   run program under the control of the Python profiler module (which
+   prints a detailed report of execution times, function calls, etc).
 
-You can pass other options after -p which affect the behavior of the
-profiler itself. See the docs for ``%prun`` for details.
+   You can pass other options after -p which affect the behavior of the
+   profiler itself. See the docs for ``%prun`` for details.
 
-In this mode, the program's variables do NOT propagate back to the
-IPython interactive namespace (because they remain in the namespace
-where the profiler executes them).
+   In this mode, the program's variables do NOT propagate back to the
+   IPython interactive namespace (because they remain in the namespace
+   where the profiler executes them).
 
-Internally this triggers a call to ``%prun``, see its documentation for
-details on the options available specifically for profiling.
+   Internally this triggers a call to ``%prun``, see its documentation for
+   details on the options available specifically for profiling.
 
-There is one special usage for which the text above doesn't apply:
-if the filename ends with .ipy[nb], the file is run as IPython script,
-just as if the commands were written on IPython prompt.
+   There is one special usage for which the text above doesn't apply:
+   if the filename ends with .ipy[nb], the file is run as IPython script,
+   just as if the commands were written on IPython prompt.
 
 -m
-specify module name to load instead of script path. Similar to
-the :kbd:`-m` option for the python interpreter. Use this option
-last if you want to combine with other %run options. Unlike the
-python interpreter only source modules are allowed no .pyc or .pyo files.
-For example::
+   specify module name to load instead of script path. Similar to
+   the :kbd:`-m` option for the python interpreter. Use this option
+   last if you want to combine with other %run options. Unlike the
+   python interpreter only source modules are allowed no .pyc or .pyo files.
+   For example::
 
-      ``%run -m example``
+         ``%run -m example``
 
-will run the example module.
+   will run the example module.
 
 -G
    Disable shell-like glob expansion of arguments.
 
 
-pycat [filename]
-----------------
-Works like cat but assumes a python source-code file
-Runs it through a color syntax highlighting pager
+``%pycat`` [filename]
+---------------------
+
+Works like cat but assumes a python source-code file.
+Runs it through a color syntax highlighting pager.
+The source code for the syntax highlighting can be found in the combination
+of files in :mod:`IPython.utils.PyColorize`, :mod:`IPython.utils.coloransi`,
+:mod:`IPython.core.colorable` and others.
 
 Bookmark
 --------

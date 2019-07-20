@@ -11,8 +11,7 @@ It also shows the following simpler example:
 
 .. ipython::
 
-    In [1]: from IPython.core.magic import (register_line_magic,
-                                            register_cell_magic)
+    In [1]: from IPython.core.magic import (register_line_magic, register_cell_magic)
     In [2]: @register_line_magic
             def hello(line):
                 if line == 'french':
@@ -31,6 +30,7 @@ except ImportError:
 
 
 def csv(cell):
+    """Read in an :class:`io.StringIO()` and parse it with the pandas library."""
     sio = StringIO(cell)
     return pd.read_csv(sio)
 
