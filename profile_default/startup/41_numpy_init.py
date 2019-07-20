@@ -156,12 +156,29 @@ To put back the default options, you can use:
 
 
 """
-import sys
+import doctest
 
 try:
     import numpy as np
 except (ImportError, ModuleNotFoundError):
-    sys.exit()
+    pass
+else:
+    def set_numpy_printoptions(**kwargs):
+        """Define this function only if numpy can be imported.
+
+        But don't end the script with sys.exit() because anything that imports
+        this module will exit too. As the :ref:`__init__.py` imports this module
+        the whole package breaks due to a simple installation issue.
+
+        Parameters
+        ----------
+        overrides : dict
+            Any options that should be overridden.
+
+        """
+        np.set_printoptions(threshold=20)
+
 
 if __name__ == "__main__":
-    np.set_printoptions(threshold=20)
+    set_numpy_printoptions()
+    doctest.testmod()  # why not?

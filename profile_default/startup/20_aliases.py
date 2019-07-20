@@ -349,23 +349,26 @@ def cmd_aliases(_ip=None):
         handle env vars like COPYCMD. Should we build them into the aliases
         we have here because that'll affect :data:`_ip.user_aliases.mv`.
 
+        Also note DIRCMD for :command:`dir`.
+
     Parameters
     ----------
     _ip : IPython shell
 
     """
     _ip.user_aliases = [
-        ('copy', 'copy'),
-        ('ddir', 'dir /ad /on'),
-        ('ldir', 'dir /ad /on'),
+        ('copy', 'copy %s %s'),
+        ('ddir', 'dir /ad /on %l'),
+        ('ldir', 'dir /ad /on %l'),
+        ('ll', 'dir /Q %l'),
         ('ln',
          'mklink %s %s'),  # I know this really isn't the same but I need it
-        ('make', 'make.bat'),  # Useful when we're building docs
-        ('mklink', 'mklink'),
-        ('move', 'move'),
-        ('mv', 'move'),
+        ('make', 'make.bat %l'),  # Useful when we're building docs
+        ('mklink', 'mklink %s %s'),
+        ('move', 'move %s %s'),
+        ('mv', 'move %s %s'),
         ('ren', 'ren'),
-        ('rmdir', 'rmdir'),
+        ('rmdir', 'rmdir %l'),
     ]
     return _ip.user_aliases
 
@@ -381,9 +384,9 @@ def powershell_aliases(_ip=None):
     The minimum number of assumptions possible have been made; however, note
     that this section is still under development and frequently changes.
 
-    .. warning:: Warning: 5 aliases have been commented out as they emit warnings
-                 upon being set. They're unfortunately aliases to cmd commands
-                 and as a result don't run correctly in PowerShell...
+    .. warning:: Warning: 5 aliases have been commented out as they emit
+                 warnings upon being set. They're unfortunately aliases to
+                 cmd commands and don't run correctly in PowerShell.
 
 
     .. code-block:: powershell
@@ -568,7 +571,9 @@ def __setup_fzf(user_aliases):
         # user_aliases.extend(
         #     ('fzf', '$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS'))
         user_aliases.extend(
-            ('fzf', 'rg --pretty .*[a-zA-Z]* --no-heading -m 30 | fzf --ansi')
+            ('fzf', 'rg --pretty --hidden --max-columns=300 --max-columns-preview '
+            '.*[a-zA-Z]* --no-heading -m=30 --no-messages --color=ansi --no-column '
+            ' --no-line-number -C 0 | fzf --ansi')
         )
 
     elif shutil.which('fzf') and shutil.which('ag'):

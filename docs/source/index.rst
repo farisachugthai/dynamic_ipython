@@ -19,6 +19,7 @@ Welcome to IPython packages' documentation!
    Keybindings <ipython_keybindings>
    Built-in Magics <magics>
    Writing Your Own Magics <custom_magics>
+   The Sphinx Extension <sphinxext>
 
 
 .. toctree::
