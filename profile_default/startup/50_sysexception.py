@@ -9,7 +9,7 @@ Customized Exceptions
 .. module:: 50_sysexception
    :synopsis: Specify a handler for IPython's traceback formatting.
 
-.. versionchanged:: 06/30/2019: Testing out :class:`~IPython.core.ultratb.AutoFormattedTb()`
+.. versionchanged:: Testing out :class:`~IPython.core.ultratb.AutoFormattedTb()`
 
 This is excessively long but look at how cute and personal this
 help doc is for :ref:`IPython.core.ultratb`!!:
@@ -113,8 +113,8 @@ class ExceptionHook(BaseException):
           - out: an open file-like object to direct output to.
 
           - tb_offset: the number of frames to skip over in the stack, on a
-          per-call basis (this overrides temporarily the instance's tb_offset
-          given at initialization time.
+            per-call basis (this overrides temporarily the instance's tb_offset
+            given at initialization time.
 
     Parameters
     ----------

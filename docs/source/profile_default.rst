@@ -1,5 +1,5 @@
 ===========================================
-Profile Default API docs
+IPython Default Profile API docs
 ===========================================
 
 .. highlight:: ipython
@@ -10,23 +10,19 @@ Profile Default API docs
     :backlinks: entry
     :depth: 2
 
-README
-======
 
 The IPython startup file can be generated with
-``ipython profile create [profilename]``
+
+.. code-block:: console
+
+    ipython profile create [profilename]
+
 and will create a configuration file at
+
 ``~/.ipython/profile_[profilename]/ipython_config.py'``.
-Leaving the optional :param:`profilename` argument blank will create a
-default profile (see this for more info).
 
+Leaving the ``[profilename]`` argument blank will create a default profile.
 
-Creating Profiles
-==================
-
-
-IPython Default Profile API
-===========================
 
 :mod:`ipython_config`
 ---------------------
@@ -41,7 +37,6 @@ IPython Default Profile API
 ----------------------------
 
 .. literalinclude:: profile_default.ipython_kernel_config
-   :language: ipython
    :linenos:
 
 

@@ -6,6 +6,9 @@
 Machine
 =========
 
+.. module:: machine
+    :synopsis: Abstracts away platform differences.
+
 This class leverages :mod:`prompt_toolkit` and a few of it's methods to abstract
 away differences in operating systems and filesystems.
 
@@ -14,8 +17,8 @@ The class can be easily initialized with:
 .. ipython::
 
     >>> from profile_default.util.machine import Platform
-    >>> machine = Platform()
-    >>> env = machine.get_env()
+    >>> users_machine = Platform()
+    >>> env = users_machine.get_env()
     >>> assert env is not None
 
 .. note::
@@ -31,6 +34,7 @@ See Also
 -------------------------------------------
 
 """
+import doctest
 import logging
 import os
 import platform
@@ -102,20 +106,25 @@ class Platform:
     def get_env(self):
         """Unsurprisingly stolen from IPython.
 
-        See Also:
-
-        IPython.testing.iptestcontroller.TestController.launch()
-            Copies and updates the user's environment in the same way.
-
+        Returns
+        --------
+        env : dict
+            The user's environment variables.
         `"""
-        env = dict(os.environ.copy())
-        env.update(self.env)
-        return env
+        user_env = self.env
+        if user_env is None:
+            user_env = os.environ.copy()
+        return user_env
 
     def update_env(self, env=None, **kwargs):
         """Add more arguments to the environment.
 
-        :type kwargs: dict
+        Parameters
+        ----------
+        env : dict
+            Current environment variables.
+        kwargs : dict
+            Extra arguments to the env.
 
         """
         if env is None:
@@ -130,3 +139,5 @@ if __name__ == "__main__":
         msg_format='%(asctime)s : %(levelname)s : %(module)s %(message)s',
         log_level=logging.INFO
     )
+
+    doctest.testmod()

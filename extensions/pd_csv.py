@@ -2,6 +2,13 @@
 # -*- coding: utf-8 -*-
 """Magic that reads in a string and parses it as a :mod:`CSV` with :mod:`pandas`.
 
+============
+Pandas CSV
+============
+
+.. module:: pd_csv
+    :synopsis: Utilize pandas to read in CSV files.
+
 Example of creating a magic from **IPython Interactive Computing and
 Visualization Cookbook by Cyrille Roussou.**
 

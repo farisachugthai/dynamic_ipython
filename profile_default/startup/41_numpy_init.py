@@ -7,6 +7,7 @@ Numpy Init
 ==========
 
 .. module:: 41_numpy_init
+    :synopsis: Configure and modify numpy's print options.
 
 This could be a starting point for practicing module configuration with
 traits.

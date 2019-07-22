@@ -2,24 +2,41 @@
 # Vim: set ft=python:
 """Set up pdb or ipdb.
 
-(dynamic_ipython) 16:15:42 u0_a144@localhost Thu Jul 18 ~/projects/dynamic_ipython/debugger
-@ $: ipdb3 -h
+.. module:: pdbrc
+    :synopsis: Configure pdb.
 
- Logging to /data/data/com.termux/files/home/.ipython/profile_default/log/log-default-2019-07-18.py
-Total number of aliases: 1049
+.. code-block:: console
 
-usage: python -m ipdb [-c command] ... pyfile [arg] ...
+    $: ipdb3 -h
 
-Debug the Python program given by pyfile.
+.. code-block:: none
 
-Initial commands are read from .pdbrc files in your home directory
-and in the current directory, if they exist.  Commands supplied with
--c are executed after commands from .pdbrc files.
+    usage: python -m ipdb [-c command] ... pyfile [arg] ...
+    Debug the Python program given by pyfile.
+    Initial commands are read from .pdbrc files in your home directory
+    and in the current directory, if they exist.  Commands supplied with
+    -c are executed after commands from .pdbrc files.
+    To let the script run until an exception occurs, use "-c continue".
+    To let the script run up to a given line X in the debugged file, use
+    "-c 'until X'"
+    ipdb version 0.10.3.
 
-To let the script run until an exception occurs, use "-c continue".
-To let the script run up to a given line X in the debugged file, use
-"-c 'until X'"
-ipdb version 0.10.3.
+From IPython's core interactiveshell module.::
+
+    self.pt_app = PromptSession(
+                        editing_mode=editing_mode,
+                        key_bindings=key_bindings,
+                        history=history,
+                        completer=IPythonPTCompleter(shell=self),
+                        enable_history_search = self.enable_history_search,
+                        style=self.style,
+                        include_default_pygments_style=False,
+                        mouse_support=self.mouse_support,
+                        enable_open_in_editor=self.extra_open_editor_shortcuts,
+                        color_depth=(ColorDepth.TRUE_COLOR if self.true_color else None),
+                        **self._extra_prompt_options())
+
+That's probably a good way to initialize a PromptSession then.
 
 
 """
@@ -44,11 +61,19 @@ else:
     from prompt_toolkit.output.color_depth import ColorDepth
     from prompt_toolkit.history import InMemoryHistory
 
+    try:
+        from gruvbox.style import GruvboxStyle
+    except (ImportError, ModuleNotFoundError):
+        style = 'Monokai'
+    else:
+        style = GruvboxStyle
+
     # A handful are none because I wanna come back and fill them in
-    test = PromptSession(vi_mode=True, enable_history_searrch=True,
+    test = PromptSession(vi_mode=True, enable_history_search=True,
                          search_ignore_case=True, enable_system_prompt=False,
                          enable_suspend=False, enable_open_in_editor=True,
                          completer=None, history=InMemoryHistory(),
+                         style=style,
                          bottom_toolbar=None, lexer=None, clipboard=None)
 
     while True:

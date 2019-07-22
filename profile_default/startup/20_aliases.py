@@ -48,22 +48,6 @@ Examples
 The source code of the implementation, module :mod:`IPython.core.alias`
 implementation, has been provided for reference.:
 
-.. ipython:: python
-
-    from traitlets.config import Configurable, List, Instance
-
-    class AliasManager(Configurable):
-
-        default_aliases = List(default_aliases()).tag(config=True)
-        user_aliases = List(default_value=[]).tag(config=True)
-        shell = Instance('IPython.core.interactiveshell.InteractiveShellABC', allow_none=True)
-
-        def __init__(self, shell=None, **kwargs):
-            super(AliasManager, self).__init__(shell=shell, **kwargs)
-            # For convenient access
-            self.linemagics = self.shell.magics_manager.magics['line']
-            self.init_aliases()
-
 Tips
 ====
 
@@ -76,7 +60,6 @@ placeholders. As per the official documentation:
     whole line when the alias is called.
 
 Meaning that it behaves similarly to the parameter ``$*`` in typical POSIX shells.
-
 The documentation goes on to say:
 
 .. ipython::
