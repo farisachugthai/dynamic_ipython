@@ -134,7 +134,7 @@ def emacs_alt_bindings():
     return kb
 
 
-def main(_ip=None, escape_keys=False):
+def main(escape_keys=False):
     """Begin initializing keybindings for IPython.
 
     This function delegates the extra bindings.
@@ -147,18 +147,7 @@ def main(_ip=None, escape_keys=False):
         Whether to load :kbd:`Esc` or :kbd:`Alt` key bindings.
 
     """
-    if _ip is None:
-        _ip = get_ipython()
-
-    # IPython < 7.0
-    if hasattr(_ip, 'pt_cli'):
-        kb = _ip.pt_cli.application.key_bindings_registry
-    # IPython >= 7.0
-    elif hasattr(_ip, 'pt_app'):
-        kb = _ip.pt_app.key_bindings
-    else:
-        LOGGER.error('Is this being run in IPython?:\nType: %s ', type(_ip), exc_info=1)
-        kb = KeyBindings()
+    kb = KeyBindings()
 
     ph = get_by_name('previous-history')
     nh = get_by_name('next-history')
@@ -172,22 +161,21 @@ def main(_ip=None, escape_keys=False):
         'J', filter=(HasFocus(DEFAULT_BUFFER) & ViNavigationMode())
     )(nh)
 
-    emacs_keys = emacs_bindings()
-
     if escape_keys:
-        emacs_keys = merge_key_bindings([emacs_keys, emacs_alt_bindings()])
+        emacs_keys = merge_key_bindings([emacs_bindings(), emacs_alt_bindings()])
+    else:
+        emacs_keys = emacs_bindings()
 
     # actually let's load pt's vim keybindings first.
     # nope! merged key bindings class doesn't have the add_binding method!
     vim_keys = get_default_vim_bindings()
 
-    merge_key_bindings([emacs_keys, vim_keys, create_ipython_shortcuts(_ip)])
-    return kb
+    rsi = merge_key_bindings([emacs_keys, vim_keys])
+
+    return rsi
 
 
 if __name__ == "__main__":
-    _ip = get_ipython()
-
     insert_mode = (HasFocus(DEFAULT_BUFFER) & ViInsertMode())
 
     level = 10
@@ -195,4 +183,15 @@ if __name__ == "__main__":
 
     LOGGER = module_log.stream_logger(log_level=level, logger=LOG)
 
-    keybindings = main(_ip)
+    almost_all_keys = main(escape_keys=True)
+
+    _ip = get_ipython()
+
+    # IPython < 7.0
+    if hasattr(_ip, 'pt_cli'):
+        _ip.pt_cli.application.key_bindings_registry = merge_key_bindings([almost_all_keys, create_ipython_shortcuts(_ip)])
+    # IPython >= 7.0
+    elif hasattr(_ip, 'pt_app'):
+        _ip.pt_app.key_bindings = merge_key_bindings([almost_all_keys, create_ipython_shortcuts(_ip)])
+    else:
+        LOGGER.error('Is this being run in IPython?:\nType: %s ', type(_ip), exc_info=1)
