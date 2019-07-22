@@ -8,9 +8,10 @@ Numpy Init
 
 .. module:: 41_numpy_init
 
-This could be a starting point for practicing module configuration with traits.
+This could be a starting point for practicing module configuration with
+traits.
 
-Help on function set_printoptions in numpy::
+Help on function :func:`numpy.set_printoptions()` in numpy::
 
     numpy.set_printoptions = set_printoptions(
         precision=None, threshold=None, edgeitems=None, linewidth=None,
@@ -120,20 +121,23 @@ Floating point precision can be set:
 
 >>> np.set_printoptions(precision=4)
 >>> print(np.array([1.123456789]))
-[ 1.1235]
+[1.1235]
 
 Long arrays can be summarised:
 
 >>> np.set_printoptions(threshold=5)
 >>> print(np.arange(10))
-[0 1 2 ..., 7 8 9]
+[0 1 2 ... 7 8 9]
+
+This doctest fails with the exact numbers it's supposed to have.
+How do you fix a whitespace issue?
 
 Small results can be suppressed:
 
 >>> eps = np.finfo(float).eps
 >>> x = np.arange(4.)
 >>> x**2 - (x + eps)**2
-array([ -4.9304e-32,  -4.4409e-16,   0.0000e+00,   0.0000e+00])
+array([-4.9304e-32, -4.4409e-16, 0.0000e+00, 0.0000e+00])
 >>> np.set_printoptions(suppress=True)
 >>> x**2 - (x + eps)**2
 array([-0., -0.,  0.,  0.])
