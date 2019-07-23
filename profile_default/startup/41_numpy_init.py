@@ -138,7 +138,7 @@ Small results can be suppressed:
 >>> eps = np.finfo(float).eps
 >>> x = np.arange(4.)
 >>> x**2 - (x + eps)**2
-array([-4.9304e-32, -4.4409e-16, 0.0000e+00, 0.0000e+00])
+array([-4.9304e-32, -4.4409e-16,  0.0000e+00,  0.0000e+00])
 >>> np.set_printoptions(suppress=True)
 >>> x**2 - (x + eps)**2
 array([-0., -0.,  0.,  0.])

@@ -1,4 +1,3 @@
-
 .. _ipython_directive:
 
 ========================
@@ -11,9 +10,11 @@ IPython Sphinx Directive
    active development. Improvements to the code or documentation are welcome!
 
 The IPython directive is a stateful shell that can be useful for parsing
-valid IPython code, autogenerating documentation based on the docstrings in
+valid IPython code, auto-generating documentation based on the docstrings in
 source code, and embedding featureful plots based on live data in
 Sphinx documents.
+
+.. is featureful a word?
 
 The IPython Sphinx extension can correctly parse standard IPython prompts, and
 extracts the input and output lines to generate HTML.
@@ -106,7 +107,8 @@ Testing directive outputs
 The embedded interpreter supports some limited markup.  For example,
 you can put comments in your IPython sessions, which are reported
 verbatim.  There are some handy "pseudo-decorators" that let you
-doctest the output.  The inputs are fed to an embedded IPython
+wrap a function with ``@doctest`` and utilize the :mod:`doctest` module on
+the output. The inputs are fed to an embedded IPython
 session and the outputs are inserted into your documentation automatically.
 
 If the output in your doc and the output from the embedded shell don't
@@ -137,7 +139,8 @@ match on a doctest assertion, an error will occur.
 
 ..   * list directives here
 
-If an IPython doctest decorator is found, it will take these steps when your documentation is built:
+If an IPython doctest decorator is found, it will take these steps when your
+documentation is built:
 
 1. Execute the *input* lines in your IPython directive block.
 
@@ -152,15 +155,15 @@ If an IPython doctest decorator is found, it will take these steps when your doc
    All warnings are treated as errors in the default configuration which
    will lead to frequent crashes while building documentation.
    The option where this behavior can be modified, `ipython_warning_is_error`
-   is displayed in the :ref:`IPython Sphinx directive module` section at the 
+   is displayed in the :ref:`IPython Sphinx directive module` section at the
    bottom of the page.
 
-You can doctest multi-line output as well.  Just be careful
-when using non-deterministic inputs like random numbers in the ipython
+You can doctest multi-line output as well. Just be careful
+when using non-deterministic inputs like random numbers in the IPython
 directive, because your inputs are run through a live interpreter, so
 if you are doctesting random output you will get an error.  Here we
 "seed" the random number generator for deterministic output, and we
-suppress the seed line so it doesn't show up in the rendered output
+suppress the seed line so it doesn't show up in the rendered output.:
 
 .. ipython::
 
@@ -183,10 +186,10 @@ suppress the seed line so it doesn't show up in the rendered output
           [0.22591016, 0.77731835],
           [0.0072729 , 0.34273127]])
 
-For more information on @supress and @doctest decorators, please refer to the end of this file in
-Pseudo-Decorators section.
+For more information on @suppress and @doctest decorators, please refer
+to the end of this file in :ref:`Pseudo-Decorators` section.
 
-Another demonstration of multi-line input and output
+Another demonstration of multi-line input and output.:
 
 .. ipython::
    :verbatim:
@@ -210,7 +213,7 @@ Another demonstration of multi-line input and output
    9
 
 
-Most of the "pseudo-decorators" can be used an options to ipython
+Most of the "pseudo-decorators" can be used an options to IPython
 mode.  For example, to setup matplotlib pylab but suppress the output,
 you can do.  When using the matplotlib ``use`` directive, it should
 occur before any import of pylab.  This will not show up in the
@@ -271,7 +274,8 @@ settings to the entire block.  For example,
 You can create one or more pyplot plots and insert them with the
 ``@savefig`` decorator.
 
-For more information on @savefig decorator, please refer to the end of this page in Pseudo-Decorators section.
+For more information on ``@savefig`` decorator, please refer to the end of this
+page in :ref:`Pseudo-Decorators` section.
 
 .. ipython::
 
@@ -283,7 +287,7 @@ For more information on @savefig decorator, please refer to the end of this page
    In [151]: hist(np.random.randn(10000), 100);
 
 In a subsequent session, we can update the current figure with some
-text, and then resave
+text, and then resave.:
 
 .. ipython::
 
@@ -320,7 +324,7 @@ Then call it from a subsequent section.
    Out [5]: 4
 
 
-For more information on the **@doctest** decorator, please refer to the end of
+For more information on the ``@doctest`` decorator, please refer to the end of
 this page in the :ref:`Pseudo-Decorators` section.
 
 
@@ -347,17 +351,20 @@ Renders as
    foo = 2
    foo**2
 
-We can even plot from python, using the savefig decorator, as well as, suppress
-output with a semicolon
+We can even plot from python, using the ``@savefig`` decorator, as well as
+suppress output with a semicolon.:
 
 .. ipython:: python
 
    @savefig plot_simple_python.png width=4in
    plot([1,2,3]);
 
-For more information on @savefig decorator, please refer to the end of this page in Pseudo-Decorators section.
+For more information on ``@savefig`` decorator,
+please refer to the end of this page in Pseudo-Decorators section.
 
-Similarly, std err is inserted
+.. wth guys this is the 3rd time that sentence is in this doc
+
+Similarly, :data:`sys.stderr` is inserted.:
 
 .. ipython:: python
    :okexcept:
@@ -368,14 +375,18 @@ Similarly, std err is inserted
 Handling Comments
 ==================
 
-Comments are handled and state is preserved
+Comments are handled and state is preserved.:
 
 .. ipython:: python
 
    # comments are handled
    print(foo)
 
-If you don't see the next code block then the options work.
+The following section attempts to execute faulty code, namely the calling
+the functions ``ioff()`` and ``ion`` which haven't been defined.
+
+If you don't see the next code block then we can surmise that the ``@surpress``
+decorator is behaving as expected.:
 
 .. ipython:: python
    :suppress:
@@ -386,7 +397,7 @@ If you don't see the next code block then the options work.
 Splitting Python statements across lines
 ========================================
 
-Multi-line input is handled.
+Multi-line input is handled.:
 
 .. ipython:: python
 
@@ -396,7 +407,9 @@ Multi-line input is handled.
            works'
    print(line.split('&'))
 
-Functions definitions are correctly parsed
+.. why is this function definition in here twice?
+
+Functions definitions are correctly parsed.:
 
 .. ipython:: python
 
@@ -409,34 +422,29 @@ Functions definitions are correctly parsed
        y = x * x
        return y
 
-And persist across sessions
+And persist across sessions.:
 
 .. ipython:: python
 
    print(square(3))
    print(square(-2))
 
-Pretty much anything you can do with the ipython code, you can do with
-with a simple python script. Obviously, though it doesn't make sense
-to use the doctest option.
-
 Pseudo-Decorators
 =================
 
 Here are the supported decorators, and any optional arguments they
 take.  Some of the decorators can be used as options to the entire
-block (eg ``verbatim`` and ``suppress``), and some only apply to the
-line just below them (eg ``savefig``).
+block (e.g. ``@verbatim`` and ``@suppress``), and some only apply to the
+line just below them (eg ``@savefig``).
 
 @suppress
-
-    execute the ipython input block, but suppress the input and output
+    Execute the IPython input block, but suppress the input and output
     block from the rendered output.  Also, can be applied to the entire
     ``.. ipython`` block as a directive option with ``:suppress:``.
 
 @verbatim
 
-    insert the input and output block in verbatim, but auto-increment
+    Insert the input and output block in verbatim, but auto-increment
     the line numbers. Internally, the interpreter will be fed an empty
     string, so it is a no-op that keeps line numbering consistent.
     Also, can be applied to the entire ``.. ipython`` block as a
@@ -444,57 +452,25 @@ line just below them (eg ``savefig``).
 
 @savefig OUTFILE [IMAGE_OPTIONS]
 
-    save the figure to the static directory and insert it into the
-    document, possibly binding it into a minipage and/or putting
+    Save the figure to the static directory and insert it into the
+    document, possibly binding it into a mini-page and/or putting
     code/figure label/references to associate the code and the
     figure. Takes args to pass to the image directive (*scale*,
-    *width*, etc can be kwargs); see `image options
+    *width*, etc can be ``**kwargs``); see `image options
     <http://docutils.sourceforge.net/docs/ref/rst/directives.html#image>`_
     for details.
 
+.. i have no idea what the above is saying holy hell
+
 @doctest
 
-    Compare the pasted in output in the ipython block with the output
+    Compare the pasted in output in the IPython block with the output
     generated at doc build time, and raise errors if they don't
     match. Also, can be applied to the entire ``.. ipython`` block as a
     directive option with ``:doctest:``.
-
-Configuration Options
-=====================
-
-ipython_savefig_dir
-
-    The directory in which to save the figures. This is relative to the
-    Sphinx source directory. The default is `html_static_path`.
-
-ipython_rgxin
-
-    The compiled regular expression to denote the start of IPython input
-    lines. The default is `re.compile('In \[(\d+)\]:\s?(.*)\s*')`. You
-    shouldn't need to change this.
-
-ipython_rgxout
-
-    The compiled regular expression to denote the start of IPython output
-    lines. The default is `re.compile('Out\[(\d+)\]:\s?(.*)\s*')`. You
-    shouldn't need to change this.
-
-
-ipython_promptin
-
-    The string to represent the IPython input prompt in the generated ReST.
-    The default is `'In [%d]:'`. This expects that the line numbers are used
-    in the prompt.
-
-ipython_promptout
-
-    The string to represent the IPython prompt in the generated ReST. The
-    default is `'Out [%d]:'`. This expects that the line numbers are used
-    in the prompt.
 
 
 Automatically generated documentation
 =====================================
 
 .. automodule:: IPython.sphinxext.ipython_directive
-

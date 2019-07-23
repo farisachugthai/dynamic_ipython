@@ -16,7 +16,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Extensions" href="extensions.html" />
-    <link rel="prev" title="Profile Default API docs" href="profile_default.html" />
+    <link rel="prev" title="IPython Default Profile API docs" href="profile_default.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <!--[if lte IE 6]>
@@ -38,7 +38,7 @@
           <a href="extensions.html" title="Extensions"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="profile_default.html" title="Profile Default API docs"
+          <a href="profile_default.html" title="IPython Default Profile API docs"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li> 
       </ul>
@@ -53,9 +53,9 @@
 <h1>Jupyter<a class="headerlink" href="#jupyter" title="Permalink to this headline">¶</a></h1>
 <p>Here are the default configuration files for the Jupyter application
 suite. These have been commented and marked up as appropriate.</p>
-</div>
-<div class="section" id="jupyter-qtconsole-jupyter-qtconsole-config">
-<h1>Jupyter QTConsole — <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_qtconsole_config</span></code><a class="headerlink" href="#jupyter-qtconsole-jupyter-qtconsole-config" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="jupyter-qtconsole">
+<h2>Jupyter QTConsole<a class="headerlink" href="#jupyter-qtconsole" title="Permalink to this headline">¶</a></h2>
+<p><code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_qtconsole_config</span></code></p>
 <p>May 27, 2019:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(ins)(navigator) faris@faris-U56E:~$ jupyter-qtconsole
 xkbcommon: ERROR: failed to add default include path
@@ -70,26 +70,27 @@ contents, to update please see http://cgit.freedesktop.org/xkeyboard-config/ .
 qtconsole :/</p>
 <p>In a rare turn of events, it <strong>IS</strong> however, working just fine on Windows.</p>
 <div class="section" id="initializing-jupyter-qtconsole">
-<h2>Initializing Jupyter QTConsole<a class="headerlink" href="#initializing-jupyter-qtconsole" title="Permalink to this headline">¶</a></h2>
+<h3>Initializing Jupyter QTConsole<a class="headerlink" href="#initializing-jupyter-qtconsole" title="Permalink to this headline">¶</a></h3>
 <p>The initial entry point for <strong class="command">jupyter-qtconsole</strong> is in the following:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qtconsole.qtconsole</span> <span class="n">app</span> <span class="kn">import</span> <span class="nn">main</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qtconsole.qtconsole</span> <span class="nn">app</span> <span class="kn">import</span> <span class="n">main</span>
 <span class="c1"># Also there&#39;s just a lot going on there</span>
-<span class="kn">from</span> <span class="nn">qtconsole</span> <span class="k">import</span> <span class="n">qtconsole</span>
+<span class="kn">from</span> <span class="nn">qtconsole</span> <span class="kn">import</span> <span class="n">qtconsole</span>
 <span class="n">the_sauce</span> <span class="o">=</span> <span class="nb">dir</span><span class="p">(</span><span class="n">qtconsole</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Worth skimming.</p>
 </div>
 </div>
-<div class="section" id="jupyter-notebook-jupyter-conf-jupyter-notebook-config">
-<h1>Jupyter Notebook — <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_conf.jupyter_notebook_config</span></code><a class="headerlink" href="#jupyter-notebook-jupyter-conf-jupyter-notebook-config" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="jupyter-notebook">
+<h2>Jupyter Notebook<a class="headerlink" href="#jupyter-notebook" title="Permalink to this headline">¶</a></h2>
+<p><code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_conf.jupyter_notebook_config</span></code></p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">from</span> <span class="nn">traitlets.config</span> <span class="kn">import</span> <span class="n">get_config</span>
 
 <span class="gp">In [2]: </span><span class="n">c</span> <span class="o">=</span> <span class="n">get_config</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="section" id="jupyterapp-application-configuration">
-<h2>JupyterApp(Application) configuration<a class="headerlink" href="#jupyterapp-application-configuration" title="Permalink to this headline">¶</a></h2>
+<h3>JupyterApp(Application) configuration<a class="headerlink" href="#jupyterapp-application-configuration" title="Permalink to this headline">¶</a></h3>
 <p>Base class for Jupyter applications
 Answer yes to any prompts.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">JupyterApp</span><span class="o">.</span><span class="n">answer_yes</span> <span class="o">=</span> <span class="bp">False</span>
@@ -109,7 +110,7 @@ Answer yes to any prompts.:</p>
 </div>
 </div>
 <div class="section" id="notebookapp-jupyterapp-configuration">
-<h2>NotebookApp(JupyterApp) configuration<a class="headerlink" href="#notebookapp-jupyterapp-configuration" title="Permalink to this headline">¶</a></h2>
+<h3>NotebookApp(JupyterApp) configuration<a class="headerlink" href="#notebookapp-jupyterapp-configuration" title="Permalink to this headline">¶</a></h3>
 <p>Set the Access-Control-Allow-Credentials: true header:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">allow_credentials</span> <span class="o">=</span> <span class="bp">False</span>
 </pre></div>
@@ -356,79 +357,117 @@ will be loaded in alphabetical order.:</p>
 <p>Whether to open in a browser after starting. The specific browser used is
 platform dependent and determined by the python standard library <a class="reference external" href="https://docs.python.org/3/library/webbrowser.html#module-webbrowser" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">webbrowser</span></code></a>
 module, unless it is overridden using the –browser (NotebookApp.browser)
-configuration option.</p>
-<p>c.NotebookApp.open_browser = True</p>
+configuration option.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">open_browser</span> <span class="o">=</span> <span class="bp">True</span>
+</pre></div>
+</div>
 <p>Hashed password to use for web authentication.</p>
 <p>To generate, type in a python/IPython shell:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">notebook.auth</span> <span class="kn">import</span> <span class="n">passwd</span><span class="p">;</span> <span class="n">passwd</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>The string should be of the form type:salt:hashed-password.</p>
-<p>c.NotebookApp.password = ‘’</p>
+<p>The string should be of the form <code class="docutils literal notranslate"><span class="pre">type:salt:hashed-password</span></code>.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">password</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
 <p>Forces users to use a password for the Notebook server. This is useful in a
 multi user environment, for instance when everybody in the LAN can access each
 other’s machine through ssh.</p>
 <p>In such a case, server the notebook server on loca1lhost is not secure since
-any user can connect to the notebook server via ssh.</p>
-<p>c.NotebookApp.password_required = False</p>
-<p>The port the notebook server will listen on.</p>
-<p>c.NotebookApp.port = 8888</p>
-<p>The number of additional ports to try if the specified port is not available.</p>
-<p>c.NotebookApp.port_retries = 50</p>
-<p>DISABLED: use %pylab or %matplotlib in the notebook to enable matplotlib.</p>
-<p>c.NotebookApp.pylab = ‘disabled’</p>
+any user can connect to the notebook server via <strong class="command">ssh</strong>.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">password_required</span> <span class="o">=</span> <span class="bp">False</span>
+</pre></div>
+</div>
+<p>The port the notebook server will listen on.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="mi">8888</span>
+</pre></div>
+</div>
+<p>The number of additional ports to try if the specified port is not available.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">port_retries</span> <span class="o">=</span> <span class="mi">50</span>
+</pre></div>
+</div>
+<p>DISABLED: use %pylab or %matplotlib in the notebook to enable matplotlib.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">pylab</span> <span class="o">=</span> <span class="s1">&#39;disabled&#39;</span>
+</pre></div>
+</div>
 <p>If True, display a button in the dashboard to quit (shutdown the notebook
-server).</p>
-<p>c.NotebookApp.quit_button = True</p>
-<p>(sec) Time window used to check the message and data rate limits.</p>
-<p>c.NotebookApp.rate_limit_window = 3</p>
-<p>The directory for user settings.</p>
-<p>c.LabApp.user_settings_dir = ‘/data/data/com.termux/files/home/.jupyter/lab/user-settings’</p>
+server).:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">quit_button</span> <span class="o">=</span> <span class="bp">True</span>
+</pre></div>
+</div>
+<p>(sec) Time window used to check the message and data rate limits.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">rate_limit_window</span> <span class="o">=</span> <span class="mi">3</span>
+</pre></div>
+</div>
+<p>The directory for user settings.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">LabApp</span><span class="o">.</span><span class="n">user_settings_dir</span> <span class="o">=</span> <span class="s1">&#39;.jupyter/lab/user-settings&#39;</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="fswatcher">
-<h2>fswatcher<a class="headerlink" href="#fswatcher" title="Permalink to this headline">¶</a></h2>
+<h3>fswatcher<a class="headerlink" href="#fswatcher" title="Permalink to this headline">¶</a></h3>
 <p>Whether to serve the app in watch mode.:</p>
-<p>c.LabApp.watch = False</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">LabApp</span><span class="o">.</span><span class="n">watch</span> <span class="o">=</span> <span class="bp">False</span>
+</pre></div>
+</div>
 <p>The directory for workspaces.:</p>
-<p>c.LabApp.workspaces_dir = ‘/data/data/com.termux/files/home/.jupyter/lab/workspaces’</p>
+<p>c.LabApp.workspaces_dir = ‘.jupyter/lab/workspaces’</p>
 <p>Supply SSL options for the tornado HTTPServer. See the tornado docs for
-details.</p>
-<p>c.NotebookApp.ssl_options = {}</p>
-<p>Supply overrides for terminado. Currently only supports “shell_command”.</p>
-<p>c.NotebookApp.terminado_settings = {}</p>
+details.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">ssl_options</span> <span class="o">=</span> <span class="p">{}</span>
+</pre></div>
+</div>
+<p>Supply overrides for terminado. Currently only supports “shell_command”.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">terminado_settings</span> <span class="o">=</span> <span class="p">{}</span>
+</pre></div>
+</div>
 <p>Set to False to disable terminals.
 This does <em>not</em> make the notebook server more secure by itself. Anything the
 user can in a terminal, they can also do in a notebook.
 Terminals may also be automatically disabled if the terminado package is not
-available.</p>
-<p>c.NotebookApp.terminals_enabled = True</p>
+available.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">terminals_enabled</span> <span class="o">=</span> <span class="bp">True</span>
+</pre></div>
+</div>
 <p>Token used for authenticating first-time connections to the server.
 When no password is enabled, the default is to generate a new, random token.
 Setting to an empty string disables authentication altogether, which is NOT
-RECOMMENDED.</p>
-<p>c.NotebookApp.token = ‘&lt;generated&gt;’</p>
+RECOMMENDED.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">token</span> <span class="o">=</span> <span class="s1">&#39;&lt;generated&gt;&#39;</span>
+</pre></div>
+</div>
 <p>Supply overrides for the tornado.web.Application that the Jupyter notebook
-uses.</p>
-<p>c.NotebookApp.tornado_settings = {}</p>
+uses.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">tornado_settings</span> <span class="o">=</span> <span class="p">{}</span>
+</pre></div>
+</div>
 <p>Whether to trust or not X-Scheme/X-Forwarded-Proto and X-Real-Ip/X-Forwarded-
 For headers sent by the upstream reverse proxy. Necessary if the proxy handles
-SSL</p>
-<p>c.NotebookApp.trust_xheaders = False</p>
-<p>DEPRECATED, use tornado_settings</p>
-<p>c.NotebookApp.webapp_settings = {}</p>
-<p>Set the tornado compression options for websocket connections.
-This value will be returned from
-<code class="xref py py-meth docutils literal notranslate"><span class="pre">WebSocketHandler.get_compression_options()</span></code>. None (default) will disable
-compression. A dict (even an empty one) will enable compression.
-See the tornado docs for WebSocketHandler.get_compression_options for details.</p>
-<p>c.NotebookApp.websocket_compression_options = None</p>
+SSL.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">trust_xheaders</span> <span class="o">=</span> <span class="bp">False</span>
+</pre></div>
+</div>
+<p>DEPRECATED, use tornado_settings.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">webapp_settings</span> <span class="o">=</span> <span class="p">{}</span>
+</pre></div>
+</div>
+<p>Set the tornado compression options for websocket connections.</p>
+<p>This value will be returned from
+<a href="#id1"><span class="problematic" id="id2">:method:`WebSocketHandler.get_compression_options`</span></a>.</p>
+<p>None (default) will disable compression.</p>
+<p>A dict (even an empty one) will enable compression.</p>
+<p>See the tornado docs for WebSocketHandler.get_compression_options for details.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">websocket_compression_options</span> <span class="o">=</span> <span class="bp">None</span>
+</pre></div>
+</div>
 <p>The base URL for websockets, if it differs from the HTTP server (hint: it
 almost certainly doesn’t).
-Should be in the form of an HTTP origin: ws[s]://hostname[:port]</p>
+Should be in the form of an HTTP origin:</p>
+<p><code class="docutils literal notranslate"><span class="pre">ws[s]://hostname[:port]</span></code></p>
 <p>c.NotebookApp.websocket_url = ‘’</p>
 </div>
 <div class="section" id="nteractapp-notebookapp-configuration">
-<h2>NteractApp(NotebookApp) configuration<a class="headerlink" href="#nteractapp-notebookapp-configuration" title="Permalink to this headline">¶</a></h2>
+<h3>NteractApp(NotebookApp) configuration<a class="headerlink" href="#nteractapp-notebookapp-configuration" title="Permalink to this headline">¶</a></h3>
 <p>Application for running <strong class="command">nteract</strong> on a jupyter notebook server.</p>
 <p>Whether to start the app in dev mode. Expects resources to be loaded from
 Webpack’s hot reloading server at <a class="reference external" href="http://localhost:8357">http://localhost:8357</a>. Run</p>
@@ -443,52 +482,46 @@ in editable mode e.g., using:</p>
 </div>
 </div>
 </div>
-<div class="section" id="jupyter-console-config">
-<h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_console_config</span></code><a class="headerlink" href="#jupyter-console-config" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="image-handlers">
+<h2>Image Handlers<a class="headerlink" href="#image-handlers" title="Permalink to this headline">¶</a></h2>
 <p>Need to set something up for the Jupyter Console image handler.
 Same thing for QTConsole.</p>
 <p>Callable object called via ‘callable’ image handler with one argument, <code class="xref py py-obj docutils literal notranslate"><span class="pre">data</span></code>,
-which is <code class="xref py py-obj docutils literal notranslate"><span class="pre">msg[&quot;content&quot;][&quot;data&quot;]</span></code> where <code class="xref py py-obj docutils literal notranslate"><span class="pre">msg</span></code> is the message from iopub
-channel.  For exmaple, you can find base64 encoded PNG data as
-<code class="xref py py-obj docutils literal notranslate"><span class="pre">data['image/png']</span></code>. If your function can’t handle the data supplied, it
+which is <strong>msg[“content”][“data”]</strong> where <strong>msg</strong> is the message from iopub
+channel.  For exmaple, you can find <a class="reference external" href="https://docs.python.org/3/library/base64.html#module-base64" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">base64</span></code></a> encoded PNG data as
+<strong>data[‘image/png’]</strong>. If your function can’t handle the data supplied, it
 should return <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a> to indicate this.</p>
-<dl class="simple">
-<dt>Handler for image type output.  This is useful, for example, when connecting</dt><dd><p>to the kernel in which pylab inline backend is activated.</p>
-</dd>
-</dl>
+<p>Handler for image type output.  This is useful, for example, when connecting
+to the kernel in which pylab inline backend is activated.</p>
 <p>There are four handlers defined.</p>
-<p>‘PIL’: Use Python Imaging Library to popup image;</p>
-<p>stream’: Use an external program to show the image.  Image will be fed into
-the STDIN  of the program.
-You will need to configure <code class="xref py py-obj docutils literal notranslate"><span class="pre">stream_image_handler</span></code>;</p>
-<dl class="simple">
-<dt>‘tempfile’: Use an external program to show the image.  Image will be saved in</dt><dd><p>a temporally file and the program is called with the temporally file.  You
-will need to configure <code class="xref py py-obj docutils literal notranslate"><span class="pre">tempfile_image_handler</span></code>;</p>
-</dd>
-</dl>
-<p>‘callable’: You can set any  Python callable which is called with the image
-data.  You will need to configure <code class="xref py py-obj docutils literal notranslate"><span class="pre">callable_image_handler</span></code>.
-c.ZMQTerminalInteractiveShell.image_handler = ‘PIL’</p>
+<ul>
+<li><p>‘PIL’: Use Python Imaging Library to popup image;</p></li>
+<li><p>stream’: Use an external program to show the image.  Image will be fed into
+the STDIN  of the program.</p>
+<ul class="simple">
+<li><p>You will need to configure <code class="docutils literal notranslate"><span class="pre">stream_image_handler</span></code></p></li>
+</ul>
+</li>
+<li><p>‘tempfile’: Use an external program to show the image.  Image will be saved in
+a temporary file and the program will be called with that file.</p>
+<ul class="simple">
+<li><p>You will need to configure <code class="docutils literal notranslate"><span class="pre">tempfile_image_handler</span></code></p></li>
+</ul>
+</li>
+<li><p>‘callable’: You can set any Python callable which is called with the image data.</p>
 <blockquote>
-<div><p>that’s the default text you’re working with.</p>
+<div><ul>
+<li><p>You will need to configure <code class="docutils literal notranslate"><span class="pre">callable_image_handler</span></code>.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">ZMQTerminalInteractiveShell</span><span class="o">.</span><span class="n">image_handler</span> <span class="o">=</span> <span class="s1">&#39;PIL&#39;</span>
+</pre></div>
+</div>
+</li>
+</ul>
 </div></blockquote>
-<dl class="simple">
-<dt>Handler for image type output.  This is useful, for example, when connecting</dt><dd><p>to the kernel in which pylab inline backend is activated.</p>
-</dd>
-</dl>
-<p>There are four handlers defined.</p>
-<p>‘PIL’: Use Python Imaging Library to popup image;</p>
-<p>stream’: Use an external program to show the image.  Image will be fed into
-the STDIN  of the program.
-You will need to configure <code class="xref py py-obj docutils literal notranslate"><span class="pre">stream_image_handler</span></code>;</p>
-<dl class="simple">
-<dt>‘tempfile’: Use an external program to show the image.  Image will be saved in</dt><dd><p>a temporally file and the program is called with the temporally file.  You
-will need to configure <code class="xref py py-obj docutils literal notranslate"><span class="pre">tempfile_image_handler</span></code>;</p>
-</dd>
-</dl>
-<p>‘callable’: You can set any  Python callable which is called with the image
-data.  You will need to configure <code class="xref py py-obj docutils literal notranslate"><span class="pre">callable_image_handler</span></code>.</p>
-<p><code class="docutils literal notranslate"><span class="pre">c.ZMQTerminalInteractiveShell.image_handler</span> <span class="pre">=</span> <span class="pre">'PIL'</span></code></p>
+</li>
+</ul>
+<p>That’s the default text you’re working with.</p>
+</div>
 </div>
 
 
@@ -499,7 +532,7 @@ data.  You will need to configure <code class="xref py py-obj docutils literal n
         <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="profile_default.html" title="previous chapter">Profile Default API docs</a></li>
+      <li>Previous: <a href="profile_default.html" title="previous chapter">IPython Default Profile API docs</a></li>
       <li>Next: <a href="extensions.html" title="next chapter">Extensions</a></li>
   </ul></li>
 </ul>
@@ -519,10 +552,7 @@ data.  You will need to configure <code class="xref py py-obj docutils literal n
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="profile_default.html">Startup Files and IPython Shell Initialization</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Jupyter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#jupyter-qtconsole-jupyter-qtconsole-config">Jupyter QTConsole — <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_qtconsole_config</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="#jupyter-notebook-jupyter-conf-jupyter-notebook-config">Jupyter Notebook — <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_conf.jupyter_notebook_config</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="#jupyter-console-config"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_console_config</span></code></a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Jupyter ZMQShell</a></li>
 <li class="toctree-l1"><a class="reference internal" href="extensions.html">IPython Extensions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dev.html">Developers Notes</a></li>
 </ul>
@@ -534,19 +564,21 @@ data.  You will need to configure <code class="xref py py-obj docutils literal n
 <div>&nbsp;</div>
 <div id="sidebartoc">
   <ul>
-<li><a class="reference internal" href="#">Jupyter</a></li>
-<li><a class="reference internal" href="#jupyter-qtconsole-jupyter-qtconsole-config">Jupyter QTConsole — <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_qtconsole_config</span></code></a><ul>
+<li><a class="reference internal" href="#">Jupyter</a><ul>
+<li><a class="reference internal" href="#jupyter-qtconsole">Jupyter QTConsole</a><ul>
 <li><a class="reference internal" href="#initializing-jupyter-qtconsole">Initializing Jupyter QTConsole</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#jupyter-notebook-jupyter-conf-jupyter-notebook-config">Jupyter Notebook — <code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_conf.jupyter_notebook_config</span></code></a><ul>
+<li><a class="reference internal" href="#jupyter-notebook">Jupyter Notebook</a><ul>
 <li><a class="reference internal" href="#jupyterapp-application-configuration">JupyterApp(Application) configuration</a></li>
 <li><a class="reference internal" href="#notebookapp-jupyterapp-configuration">NotebookApp(JupyterApp) configuration</a></li>
 <li><a class="reference internal" href="#fswatcher">fswatcher</a></li>
 <li><a class="reference internal" href="#nteractapp-notebookapp-configuration">NteractApp(NotebookApp) configuration</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#jupyter-console-config"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_console_config</span></code></a></li>
+<li><a class="reference internal" href="#image-handlers">Image Handlers</a></li>
+</ul>
+</li>
 </ul>
 
 </div>
@@ -584,7 +616,7 @@ data.  You will need to configure <code class="xref py py-obj docutils literal n
           <a href="extensions.html" title="Extensions"
              >next</a> |</li>
         <li class="right" >
-          <a href="profile_default.html" title="Profile Default API docs"
+          <a href="profile_default.html" title="IPython Default Profile API docs"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li> 
       </ul>

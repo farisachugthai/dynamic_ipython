@@ -1,14 +1,18 @@
 =======
-=======
 Jupyter
 =======
+
+.. highlight:: ipython
 
 Here are the default configuration files for the Jupyter application
 suite. These have been commented and marked up as appropriate.
 
 
-Jupyter QTConsole --- :mod:`~jupyter_conf.jupyter_qtconsole_config`
+Jupyter QTConsole
 ====================================================================
+
+:mod:`~jupyter_conf.jupyter_qtconsole_config`
+
 
 May 27, 2019:
 
@@ -41,10 +45,9 @@ The initial entry point for :command:`jupyter-qtconsole` is in the following::
 Worth skimming.
 
 
-Jupyter Notebook --- :mod:`jupyter_conf.jupyter_notebook_config`
+Jupyter Notebook
 ====================================================================
-
-.. highlight:: ipython
+:mod:`jupyter_conf.jupyter_notebook_config`
 
 .. ipython:: python
 
@@ -324,9 +327,9 @@ The directory to use for notebooks and kernels.::
 Whether to open in a browser after starting. The specific browser used is
 platform dependent and determined by the python standard library `webbrowser`
 module, unless it is overridden using the --browser (NotebookApp.browser)
-configuration option.
+configuration option.::
 
-c.NotebookApp.open_browser = True
+    c.NotebookApp.open_browser = True
 
 Hashed password to use for web authentication.
 
@@ -334,106 +337,113 @@ To generate, type in a python/IPython shell::
 
    from notebook.auth import passwd; passwd()
 
-The string should be of the form type:salt:hashed-password.
+The string should be of the form ``type:salt:hashed-password``.::
 
-c.NotebookApp.password = ''
+    c.NotebookApp.password = ''
 
 Forces users to use a password for the Notebook server. This is useful in a
 multi user environment, for instance when everybody in the LAN can access each
 other's machine through ssh.
 
 In such a case, server the notebook server on loca1lhost is not secure since
-any user can connect to the notebook server via ssh.
+any user can connect to the notebook server via :command:`ssh`.::
 
-c.NotebookApp.password_required = False
+    c.NotebookApp.password_required = False
 
-The port the notebook server will listen on.
+The port the notebook server will listen on.::
 
-c.NotebookApp.port = 8888
+    c.NotebookApp.port = 8888
 
-The number of additional ports to try if the specified port is not available.
+The number of additional ports to try if the specified port is not available.::
 
-c.NotebookApp.port_retries = 50
+    c.NotebookApp.port_retries = 50
 
-DISABLED: use %pylab or %matplotlib in the notebook to enable matplotlib.
+DISABLED: use %pylab or %matplotlib in the notebook to enable matplotlib.::
 
-c.NotebookApp.pylab = 'disabled'
+    c.NotebookApp.pylab = 'disabled'
 
 If True, display a button in the dashboard to quit (shutdown the notebook
-server).
+server).::
 
-c.NotebookApp.quit_button = True
+    c.NotebookApp.quit_button = True
 
-(sec) Time window used to check the message and data rate limits.
+(sec) Time window used to check the message and data rate limits.::
 
-c.NotebookApp.rate_limit_window = 3
+    c.NotebookApp.rate_limit_window = 3
 
-The directory for user settings.
+The directory for user settings.::
 
-c.LabApp.user_settings_dir = '/data/data/com.termux/files/home/.jupyter/lab/user-settings'
+    c.LabApp.user_settings_dir = '.jupyter/lab/user-settings'
 
 
 fswatcher
 --------------
 
-Whether to serve the app in watch mode.:
+Whether to serve the app in watch mode.::
 
-c.LabApp.watch = False
+    c.LabApp.watch = False
 
-The directory for workspaces.:
+The directory for workspaces.::
 
-c.LabApp.workspaces_dir = '/data/data/com.termux/files/home/.jupyter/lab/workspaces'
+c.LabApp.workspaces_dir = '.jupyter/lab/workspaces'
 
 Supply SSL options for the tornado HTTPServer. See the tornado docs for
-details.
+details.::
 
-c.NotebookApp.ssl_options = {}
+    c.NotebookApp.ssl_options = {}
 
-Supply overrides for terminado. Currently only supports "shell_command".
+Supply overrides for terminado. Currently only supports "shell_command".::
 
-c.NotebookApp.terminado_settings = {}
+    c.NotebookApp.terminado_settings = {}
 
 Set to False to disable terminals.
 This does *not* make the notebook server more secure by itself. Anything the
 user can in a terminal, they can also do in a notebook.
 Terminals may also be automatically disabled if the terminado package is not
-available.
+available.::
 
-c.NotebookApp.terminals_enabled = True
+    c.NotebookApp.terminals_enabled = True
 
 Token used for authenticating first-time connections to the server.
 When no password is enabled, the default is to generate a new, random token.
 Setting to an empty string disables authentication altogether, which is NOT
-RECOMMENDED.
+RECOMMENDED.::
 
-c.NotebookApp.token = '<generated>'
+    c.NotebookApp.token = '<generated>'
 
 Supply overrides for the tornado.web.Application that the Jupyter notebook
-uses.
+uses.::
 
-c.NotebookApp.tornado_settings = {}
+    c.NotebookApp.tornado_settings = {}
 
 Whether to trust or not X-Scheme/X-Forwarded-Proto and X-Real-Ip/X-Forwarded-
 For headers sent by the upstream reverse proxy. Necessary if the proxy handles
-SSL
+SSL.::
 
-c.NotebookApp.trust_xheaders = False
+    c.NotebookApp.trust_xheaders = False
 
-DEPRECATED, use tornado_settings
+DEPRECATED, use tornado_settings.::
 
-c.NotebookApp.webapp_settings = {}
+    c.NotebookApp.webapp_settings = {}
 
 Set the tornado compression options for websocket connections.
-This value will be returned from
-:meth:`WebSocketHandler.get_compression_options`. None (default) will disable
-compression. A dict (even an empty one) will enable compression.
-See the tornado docs for WebSocketHandler.get_compression_options for details.
 
-c.NotebookApp.websocket_compression_options = None
+This value will be returned from
+:method:`WebSocketHandler.get_compression_options`.
+
+None (default) will disable compression.
+
+A dict (even an empty one) will enable compression.
+
+See the tornado docs for WebSocketHandler.get_compression_options for details.::
+
+    c.NotebookApp.websocket_compression_options = None
 
 The base URL for websockets, if it differs from the HTTP server (hint: it
 almost certainly doesn't).
-Should be in the form of an HTTP origin: ws[s]://hostname[:port]
+Should be in the form of an HTTP origin:
+
+``ws[s]://hostname[:port]``
 
 c.NotebookApp.websocket_url = ''
 
@@ -457,54 +467,39 @@ in editable mode e.g., using::
 
 
 
-:mod:`~jupyter_conf.jupyter_console_config`
-===========================================
+Image Handlers
+==============
 
 Need to set something up for the Jupyter Console image handler.
 Same thing for QTConsole.
 
 Callable object called via 'callable' image handler with one argument, `data`,
-which is `msg["content"]["data"]` where `msg` is the message from iopub
-channel.  For exmaple, you can find base64 encoded PNG data as
-`data['image/png']`. If your function can't handle the data supplied, it
+which is **msg["content"]["data"]** where **msg** is the message from iopub
+channel.  For exmaple, you can find :mod:`base64` encoded PNG data as
+**data['image/png']**. If your function can't handle the data supplied, it
 should return `False` to indicate this.
 
 Handler for image type output.  This is useful, for example, when connecting
- to the kernel in which pylab inline backend is activated.
+to the kernel in which pylab inline backend is activated.
 
 There are four handlers defined.
 
-'PIL': Use Python Imaging Library to popup image;
+- 'PIL': Use Python Imaging Library to popup image;
 
-stream': Use an external program to show the image.  Image will be fed into
-the STDIN  of the program.
-You will need to configure `stream_image_handler`;
+- stream': Use an external program to show the image.  Image will be fed into
+  the STDIN  of the program.
 
-'tempfile': Use an external program to show the image.  Image will be saved in
- a temporally file and the program is called with the temporally file.  You
- will need to configure `tempfile_image_handler`;
+  - You will need to configure ``stream_image_handler``
 
-'callable': You can set any  Python callable which is called with the image
-data.  You will need to configure `callable_image_handler`.
-c.ZMQTerminalInteractiveShell.image_handler = 'PIL'
+- 'tempfile': Use an external program to show the image.  Image will be saved in
+  a temporary file and the program will be called with that file.
 
- that's the default text you're working with.
-Handler for image type output.  This is useful, for example, when connecting
- to the kernel in which pylab inline backend is activated.
+  - You will need to configure ``tempfile_image_handler``
 
-There are four handlers defined.
+- 'callable': You can set any Python callable which is called with the image data.
 
-'PIL': Use Python Imaging Library to popup image;
+    - You will need to configure ``callable_image_handler``.::
 
-stream': Use an external program to show the image.  Image will be fed into
-the STDIN  of the program.
-You will need to configure `stream_image_handler`;
+        c.ZMQTerminalInteractiveShell.image_handler = 'PIL'
 
-'tempfile': Use an external program to show the image.  Image will be saved in
- a temporally file and the program is called with the temporally file.  You
- will need to configure `tempfile_image_handler`;
-
-'callable': You can set any  Python callable which is called with the image
-data.  You will need to configure `callable_image_handler`.
-
-``c.ZMQTerminalInteractiveShell.image_handler = 'PIL'``
+That's the default text you're working with.
