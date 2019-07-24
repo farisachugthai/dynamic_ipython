@@ -34,8 +34,6 @@ def _parse_arguments():
         "--all",
         help="Convenience function that prints all site packages in"
         " ~/virtualenvs",
-        dest='all',
-        metavar='all',
     )  # gonna need a path to the venv dir
 
     # Stolen from argparse lib ref.

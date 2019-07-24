@@ -6,7 +6,7 @@
 Help Helpers
 ============
 
-.. module:: 06_help_helpers
+.. currentmodule:: 06_help_helpers
     :synopsis: Export functions that aide working with the :func:`help` builtin.
 
 This module utilizes the examples given in the official documentation

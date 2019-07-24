@@ -163,6 +163,7 @@ To put back the default options, you can use:
 """
 import logging
 import doctest
+import logging
 
 from IPython import get_ipython
 
@@ -186,6 +187,8 @@ else:
         """
         np.set_printoptions(threshold=20)
 
+    # Don't put this in the ifmain block because if it's only defined here
+    # you'll raise an error if it gets called from a different scope
     set_numpy_printoptions()
     doctest.testmod()  # why not?
 

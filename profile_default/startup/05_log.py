@@ -7,6 +7,7 @@ IPython Logger
 ==============
 
 .. currentmodule:: 05_log
+    :synopsis: Establish a file-logger for IPython.
 
 .. highlight:: python3
 

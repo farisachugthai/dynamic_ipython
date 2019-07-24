@@ -6,7 +6,7 @@
 Pandas CSV
 ============
 
-.. module:: pd_csv
+.. module:: extensions.pd_csv
     :synopsis: Utilize pandas to read in CSV files.
 
 Example of creating a magic from **IPython Interactive Computing and
@@ -27,17 +27,20 @@ It also shows the following simpler example:
                     print("Hello world!")
 
 """
-import sys
 from io import StringIO
+import logging
+import sys
+
+logging.basicConfig()
 
 try:
     import pandas as pd
 except ImportError:
-    sys.exit("Pandas not installed. Exiting.")
+    logging.error("{lib} not installed.", lib='Pandas')
 
 
 def csv(cell):
-    """Read in an :class:`io.StringIO()` and parse it with the pandas library."""
+    """Read in an :class:`io.StringIO()` and parse it with pandas."""
     sio = StringIO(cell)
     return pd.read_csv(sio)
 
@@ -46,6 +49,6 @@ def load_ipython_extension(ip):
     """This function is called when the extension is loaded.
 
     It accepts an IPython |ip| instance. We can register the magic with the
-    `register_magic_function` method.
+    `IPython.core.magics.register_magic_function()` method.
     """
     ip.register_magic_function(csv, 'cell')
