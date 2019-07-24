@@ -13,7 +13,7 @@ from IPython import get_ipython, start_ipython
 try:
     import nose  # noqa F401
 except ImportError as e:
-    warnings.warn(e)
+    warnings.warn(str(e))
 
 
 if __name__ == '__main__':

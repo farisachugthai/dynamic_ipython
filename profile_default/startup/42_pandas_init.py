@@ -6,10 +6,10 @@
 Pandas Initialization
 =====================
 
-.. module:: pandas_init
+.. currentmodule:: pandas_init
     :synopsis: Set display options for pandas.
 
-.. highlight:: python
+.. highlight:: ipython
 
 :URL: `https://realpython.com/python-pandas-tricks/#1-configure-options-settings-at-interpreter-startup`_
 
@@ -35,7 +35,7 @@ import sys
 from profile_default.util import module_log
 
 
-def start():
+def pandas_init():
     """Define options for :mod:`pandas` startup.
 
     .. tip::
@@ -43,10 +43,10 @@ def start():
         Don't set `start.options['show_dimensions'] to ``False``.
         ``'show_dimensions'`` means show the size of the `pd.DataFrame` object.
 
-        ``truncate indicates to only display it when the DataFrame is...
-        well truncated.[1]_
+        ``truncate`` indicates to only display it when the DataFrame is...
+        well truncated. [1]_
 
-        _[1]: pandas.pydata.org/pandas-docs/stable/user-guide/options.html
+        _[1]: https://pandas.pydata.org/pandas-docs/stable/user-guide/options.html
 
     """
     options = {
@@ -81,10 +81,10 @@ if __name__ == '__main__':
 
     try:
         import pandas as pd
-    except (ImportError, ModuleNotFoundError):
-        LOGGER.warning("Import error: %s" % e, exc_info=1)
+    except (ImportError, ModuleNotFoundError) as e:
+        # jesus christ this just printed the error like 8 times. need to fix
+        # LOGGER.warning("Import error: %s" % e, exc_info=1)
         # sys.exit()
-
-    start()
-    # Clean up namespace in the interpreter
-    del start
+        pass
+    else:
+        pandas_init()

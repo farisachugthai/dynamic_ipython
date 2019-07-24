@@ -161,7 +161,10 @@ To put back the default options, you can use:
 
 
 """
+import logging
 import doctest
+
+from IPython import get_ipython
 
 try:
     import numpy as np
@@ -183,7 +186,10 @@ else:
         """
         np.set_printoptions(threshold=20)
 
-
-if __name__ == "__main__":
     set_numpy_printoptions()
     doctest.testmod()  # why not?
+
+
+if __name__ == "__main__":
+    logging.basicConfig()
+    _ip = get_ipython()

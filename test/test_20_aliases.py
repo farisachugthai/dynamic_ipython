@@ -8,11 +8,15 @@ Should definitely consider rewriting it.
 But like partially because plagariasm, partially
 because wth is this saying?
 """
-import nose.tools as nt
+import unittest
+
 from IPython import get_ipython
 from IPython.utils.capture import capture_output
 
-_ip = get_ipython()
+try:
+    import nose.tools as nt
+except (ImportError, ModuleNotFoundError):
+    NO_NOSE = True
 
 
 def test_alias_lifecycle():
@@ -75,3 +79,9 @@ def test_alias_args_commented_nargs():
 
     thealias = am.get_alias(alias_name)
     nt.assert_equal(thealias.nargs, 1)
+
+
+if __name__ == "__main__":
+    _ip = get_ipython()
+    unittest.skipIf(NO_NOSE, 'Nose not installed.')
+    unittest.main()

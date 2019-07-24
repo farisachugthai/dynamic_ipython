@@ -149,6 +149,15 @@ authentication.::
 
    c.NotebookApp.client_ca = ''
 
+Full path of a config file.
+Default: ''::
+
+   c.NotebookApp.config_file=<Unicode>
+
+Specify a config file to load.::
+
+   c.NotebookApp.config_file_name=<Unicode>
+
 The config manager class to use.::
 
    c.NotebookApp.config_manager_class = 'notebook.services.config.manager.ConfigManager'
@@ -220,16 +229,18 @@ Handlers that should be loaded at higher priority than the default services.::
 
 Extra paths to search for serving static files.
 This allows adding javascript/css to be available from the notebook server
-machine, or overriding individual files in the IPython.::
+machine, or overriding individual files in the IPython notebook.::
 
    c.NotebookApp.extra_static_paths = []
 
-Extra paths to search for serving jinja templates.
+Extra paths to search for serving Jinja templates.
 Can be used to override templates from notebook.templates.::
 
    c.NotebookApp.extra_template_paths = []
 
-c.NotebookApp.file_to_run = ''
+So apparently there's no help text for this one.::
+
+   c.NotebookApp.file_to_run = ''
 
 Extra keyword arguments to pass to `get_secure_cookie`. See tornado's
 get_secure_cookie docs for details.::
@@ -345,6 +356,7 @@ Forces users to use a password for the Notebook server. This is useful in a
 multi user environment, for instance when everybody in the LAN can access each
 other's machine through ssh.
 
+.. please observe the git log frl
 In such a case, server the notebook server on loca1lhost is not secure since
 any user can connect to the notebook server via :command:`ssh`.::
 
@@ -475,16 +487,16 @@ Same thing for QTConsole.
 
 Callable object called via 'callable' image handler with one argument, `data`,
 which is **msg["content"]["data"]** where **msg** is the message from iopub
-channel.  For exmaple, you can find :mod:`base64` encoded PNG data as
+channel.  For example, you can find :mod:`base64` encoded PNG data as
 **data['image/png']**. If your function can't handle the data supplied, it
 should return `False` to indicate this.
 
 Handler for image type output.  This is useful, for example, when connecting
-to the kernel in which pylab inline backend is activated.
+to the kernel in which pylab inline back-end is activated.
 
 There are four handlers defined.
 
-- 'PIL': Use Python Imaging Library to popup image;
+- 'PIL': Use Python Imaging Library to pop-up image;
 
 - stream': Use an external program to show the image.  Image will be fed into
   the STDIN  of the program.
@@ -502,4 +514,4 @@ There are four handlers defined.
 
         c.ZMQTerminalInteractiveShell.image_handler = 'PIL'
 
-That's the default text you're working with.
+That's the default text for the Jupyter consoles (both non-GUI and QT).

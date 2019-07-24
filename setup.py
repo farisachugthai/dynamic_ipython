@@ -1,16 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Create an installable package for the utilities repository.
+"""Create an installable package for this repository.
 
 Largely based off of the work done by @kennethreitz in his `setup.py`_
 repository.
 
 _`Kenneth Reitz setup.py template <https://raw.githubusercontent.com/kennethreitz/setup.py/master/setup.py>`
 
-.. see also::
-
-    numpy.distutils.core
-    numpy.distutils.misc_utils
+See Also
+--------
+numpy.distutils.core
+numpy.distutils.misc_utils
 
 
 """
@@ -41,6 +41,7 @@ CONF_PATH = os.path.dirname(os.path.abspath('docs'))
 BUILD_PATH = os.path.join(CONF_PATH, 'build')
 SOURCE_PATH = os.path.join(CONF_PATH, 'source')
 
+README = os.path.join(ROOT_PATH, '', 'README.rst')
 REQUIRED = ['IPython']
 
 EXTRAS = {
@@ -55,7 +56,7 @@ EXTRAS = {
     ]
 }
 
-with codecs.open(os.path.join(ROOT_PATH, "README.rst"), encoding="utf-8") as f:
+with codecs.open(README, encoding = "utf-8") as f:
     LONG_DESCRIPTION = "\n" + f.read()
 
 # }}}}

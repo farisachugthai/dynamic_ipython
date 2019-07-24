@@ -289,6 +289,12 @@ viewcode_follow_imported_members = False
 
 ipython_warning_is_error = False
 
+# need to determine if we have matplotlib
+try:
+    import matplotlib
+except (ImportError, ModuleNotFoundError):
+    ipython_mplbackend = 'None'
+
 # -- autosummary -------------------------------------------------------------
 
 autosummary_generate = True
