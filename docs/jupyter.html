@@ -180,6 +180,15 @@ authentication.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">client_ca</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
 </pre></div>
 </div>
+<p>Full path of a config file.
+Default: ‘’:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">config_file</span><span class="o">=&lt;</span><span class="n">Unicode</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>Specify a config file to load.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">config_file_name</span><span class="o">=&lt;</span><span class="n">Unicode</span><span class="o">&gt;</span>
+</pre></div>
+</div>
 <p>The config manager class to use.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">config_manager_class</span> <span class="o">=</span> <span class="s1">&#39;notebook.services.config.manager.ConfigManager&#39;</span>
 </pre></div>
@@ -249,16 +258,19 @@ When disabled, equations etj. Will appear as their untransformed TeX source.:</p
 </div>
 <p>Extra paths to search for serving static files.
 This allows adding javascript/css to be available from the notebook server
-machine, or overriding individual files in the IPython.:</p>
+machine, or overriding individual files in the IPython notebook.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">extra_static_paths</span> <span class="o">=</span> <span class="p">[]</span>
 </pre></div>
 </div>
-<p>Extra paths to search for serving jinja templates.
+<p>Extra paths to search for serving Jinja templates.
 Can be used to override templates from notebook.templates.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">extra_template_paths</span> <span class="o">=</span> <span class="p">[]</span>
 </pre></div>
 </div>
-<p>c.NotebookApp.file_to_run = ‘’</p>
+<p>So apparently there’s no help text for this one.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">file_to_run</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
 <p>Extra keyword arguments to pass to <code class="xref py py-obj docutils literal notranslate"><span class="pre">get_secure_cookie</span></code>. See tornado’s
 get_secure_cookie docs for details.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">get_secure_cookie_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
@@ -488,14 +500,14 @@ in editable mode e.g., using:</p>
 Same thing for QTConsole.</p>
 <p>Callable object called via ‘callable’ image handler with one argument, <code class="xref py py-obj docutils literal notranslate"><span class="pre">data</span></code>,
 which is <strong>msg[“content”][“data”]</strong> where <strong>msg</strong> is the message from iopub
-channel.  For exmaple, you can find <a class="reference external" href="https://docs.python.org/3/library/base64.html#module-base64" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">base64</span></code></a> encoded PNG data as
+channel.  For example, you can find <a class="reference external" href="https://docs.python.org/3/library/base64.html#module-base64" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">base64</span></code></a> encoded PNG data as
 <strong>data[‘image/png’]</strong>. If your function can’t handle the data supplied, it
 should return <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a> to indicate this.</p>
 <p>Handler for image type output.  This is useful, for example, when connecting
-to the kernel in which pylab inline backend is activated.</p>
+to the kernel in which pylab inline back-end is activated.</p>
 <p>There are four handlers defined.</p>
 <ul>
-<li><p>‘PIL’: Use Python Imaging Library to popup image;</p></li>
+<li><p>‘PIL’: Use Python Imaging Library to pop-up image;</p></li>
 <li><p>stream’: Use an external program to show the image.  Image will be fed into
 the STDIN  of the program.</p>
 <ul class="simple">
@@ -520,7 +532,7 @@ a temporary file and the program will be called with that file.</p>
 </div></blockquote>
 </li>
 </ul>
-<p>That’s the default text you’re working with.</p>
+<p>That’s the default text for the Jupyter consoles (both non-GUI and QT).</p>
 </div>
 </div>
 
