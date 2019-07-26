@@ -15,8 +15,6 @@
     <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="IPython Default Profile API docs" href="profile_default.html" />
-    <link rel="prev" title="Defining custom magics" href="custom_magics.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <!--[if lte IE 6]>
@@ -34,12 +32,6 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="profile_default.html" title="IPython Default Profile API docs"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="custom_magics.html" title="Defining custom magics"
-             accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li> 
       </ul>
     </div>  
@@ -273,12 +265,28 @@ page in <a class="reference internal" href="#id1"><span class="std std-ref">Pseu
 <p>In a subsequent session, we can update the current figure with some
 text, and then resave.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [23]: </span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;number&#39;</span><span class="p">)</span>
-<span class="gh">Out[23]: </span><span class="go">Text(38.222222222222214, 0.5, &#39;number&#39;)</span>
+<span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">23</span><span class="o">-</span><span class="n">a7e7cc5f751b</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;number&#39;</span><span class="p">)</span>
+
+<span class="ne">NameError</span>: name &#39;ylabel&#39; is not defined
 
 <span class="gp">In [24]: </span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;normal distribution&#39;</span><span class="p">)</span>
-<span class="go">                                                 Out[24]: Text(0.5, 1, &#39;normal distribution&#39;)</span>
+<span class="go">                                                                                                                                                                                                                                                                      ---------------------------------------------------------------------------</span>
+<span class="go">NameError                                 Traceback (most recent call last)</span>
+<span class="go">&lt;ipython-input-24-806e0571ed82&gt; in &lt;module&gt;</span>
+<span class="go">----&gt; 1 title(&#39;normal distribution&#39;)</span>
+
+<span class="go">NameError: name &#39;title&#39; is not defined</span>
 
 <span class="gp">In [25]: </span><span class="n">grid</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       ---------------------------------------------------------------------------</span>
+<span class="go">NameError                                 Traceback (most recent call last)</span>
+<span class="go">&lt;ipython-input-25-9f5e9827be9f&gt; in &lt;module&gt;</span>
+<span class="go">----&gt; 1 grid(True)</span>
+
+<span class="go">NameError: name &#39;grid&#39; is not defined</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="_images/hist_with_text.png"><img alt="_images/hist_with_text.png" src="_images/hist_with_text.png" style="width: 4in;" /></a>
@@ -451,7 +459,7 @@ like an interactive ipython section.</p>
 <span class="gp">In [2]: </span><span class="kn">import</span> <span class="nn">datetime</span>
 <span class="gp">   ...: </span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
 <span class="gp">   ...: </span>
-<span class="go">          Out[2]: datetime.datetime(2019, 7, 24, 20, 58, 11, 74436)</span>
+<span class="go">          Out[2]: datetime.datetime(2019, 7, 26, 6, 25, 49, 388364)</span>
 </pre></div>
 </div>
 <p>It supports IPython construct that plain
@@ -459,7 +467,7 @@ Python does not understand (like magics):</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [3]: </span><span class="kn">import</span> <span class="nn">time</span>
 
 <span class="gp">In [4]: </span><span class="o">%</span><span class="k">timeit</span> time.sleep(0.05)
-<span class="go">50.2 ms +- 8.97 us per loop (mean +- std. dev. of 7 runs, 10 loops each)</span>
+<span class="go">51 ms +- 449 us per loop (mean +- std. dev. of 7 runs, 10 loops each)</span>
 </pre></div>
 </div>
 <p>This will also support top-level async when using IPython 7.0+</p>
@@ -608,8 +616,6 @@ separated code.</p></li>
         <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="custom_magics.html" title="previous chapter">Defining custom magics</a></li>
-      <li>Next: <a href="profile_default.html" title="next chapter">IPython Default Profile API docs</a></li>
   </ul></li>
 </ul>
 
@@ -618,27 +624,19 @@ separated code.</p></li>
 <div>&nbsp;</div>
 <div id="sidebartoc">
     <p class="caption"><span class="caption-text">Tutorial</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="startup.html">Startup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ipython_keybindings.html">Keybindings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="magics.html">Built-in Magics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="custom_magics.html">Writing Your Own Magics</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">The Sphinx Extension</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#persisting-the-session-across-ipython-directive-blocks">Persisting the session across IPython directive blocks</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#multi-line-input">Multi-line input</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#testing-directive-outputs">Testing directive outputs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#handling-comments">Handling Comments</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#splitting-python-statements-across-lines">Splitting Python statements across lines</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#pseudo-decorators">Pseudo-Decorators</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-IPython.sphinxext.ipython_directive">Automatically generated documentation</a></li>
-</ul>
-</li>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="profile_default.html">Startup Files and IPython Shell Initialization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="profile_default.html">IPython Shell Initialization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="profile_default.startup.html">Startup Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="profile_default.util.html">Utility Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="jupyter.html">Jupyter ZMQShell</a></li>
-<li class="toctree-l1"><a class="reference internal" href="extensions.html">IPython Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extensions.html">Notebook Extensions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dev.html">Developers Notes</a></li>
 </ul>
 
@@ -700,12 +698,6 @@ separated code.</p></li>
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="profile_default.html" title="IPython Default Profile API docs"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="custom_magics.html" title="Defining custom magics"
-             >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li> 
       </ul>
     </div>

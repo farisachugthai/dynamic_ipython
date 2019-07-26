@@ -19,7 +19,13 @@ Welcome to IPython packages' documentation!
    Keybindings <ipython_keybindings>
    Built-in Magics <magics>
    Writing Your Own Magics <custom_magics>
-   The Sphinx Extension <sphinxext>
+
+.. .. ifconfig:: HAS_MPL
+
+..    .. toctree::
+..       :maxdepth: 2
+
+..       The Sphinx Extension <sphinxext>
 
 
 .. toctree::
@@ -27,9 +33,11 @@ Welcome to IPython packages' documentation!
    :maxdepth: 1
    :titlesonly:
 
-   Startup Files and IPython Shell Initialization <profile_default>
+   IPython Shell Initialization <profile_default>
+   Startup Files <profile_default.startup>
+   Utility Functions <profile_default.util>
    Jupyter ZMQShell <jupyter>
-   IPython Extensions <extensions>
+   Notebook Extensions <extensions>
    Developers Notes <dev>
 
 

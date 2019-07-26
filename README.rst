@@ -1,44 +1,19 @@
-============
-IPython
-============
+================
+Dynamic IPython
+================
+
+:date: |today|
+
+.. highlight:: ipython
+
+.. moduleauthor:: Faris Chugthai
+
+.. module:: root_index
+   :synopsis: Index
 
 This repository contains a collection of different scripts written over the
-course of the last year modifying :mod:`IPython`.
-
-Installing
-===========
-
-All of the resources necessary for installing the contents of this repository
-have been moved to the directory `tools <tools>`_.
-
-There are environment files for Conda on both `Linux
-<tools/environment_linux.txt>`_ and `Windows <tools/environment_windows.yml>`_,
-`a Pipfile <tools/Pipfile>`_, `a requirements.txt <tools/requirements.txt>`_,
-and another for a `development installation <tools/requirements_dev.txt>`_,
-as well as a `tox.ini <tools/tox.ini>`_.
-
-Therefore the number of files that one can use to install this repository grew
-large enough that they've all been moved to their own separate folder.
-
-Installation Assumptions
-------------------------
-
-In addition, the scripts therein make a few assumptions. One is that
-the repository at `<https://github.com/farisachugthai/Gruvbox-IPython>`_
-has been installed.
-
-
-The other assumption, the subject of many online debates, is that the user
-wants to use the text editor Neovim as their default editor.
-
-The editor will be invoked whenever the user runs the line magic ``%edit``.
-
-If this behavior isn't desired, the following parameter needs to be
-changed like so::
-
-   from traitlets import get_config
-   c = get_config()
-   c.TerminalInteractiveShell.editor = 'nvim'
+course of the last year modifying `IPython <docs/profile_default.html>`_
+and `Jupyter <docs/jupyter.html>`_.
 
 Features
 ==========
@@ -71,7 +46,6 @@ shells.
 
 Therefore the value of the environment variable :envvar:`shell` is checked
 in addition to the observed platform.
-on what platform is used to initialize the system.
 
 ``%rehashx``
 -------------

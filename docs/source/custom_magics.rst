@@ -2,6 +2,8 @@
 Defining custom magics
 ======================
 
+.. highlight:: ipython
+
 Creating IPython Extensions
 ===============================
 
@@ -22,7 +24,7 @@ Visualization 1st ed.pdf"*:
    This loading function is called when the extension is loaded, which
    happens when the command is executed.
 
-.. code-block:: none
+.. ipython::
 
    %load_ext  # or
    %reload_ext magic
@@ -39,7 +41,7 @@ explore all the instance's attributes interactively from
 :mod:`IPython` with tab completion. For that, you need to execute
 the following command to get the current instance
 
-.. code-block:: python3
+.. ipython::
 
     _ip = get_ipython()
 
@@ -47,7 +49,7 @@ the following command to get the current instance
 Here are 2 useful functions for registering a magic with the global IPython
 instance.
 
-.. code-block:: none
+.. ipython::
 
    In [37]: _ip.register_magic_function
    Signature: _ip.register_magic_function(func, magic_kind='line', magic_name=None)
@@ -199,7 +201,10 @@ functions and by inheriting from a base class provided by IPython:
 
 Below, there will be code displayed that demonstrates how to write an extension
 and allow it to be automatically loaded.
-:ref:`profile_default.startup` subdirectory of your default IPython profile.
+
+Start by changing to IPython's startup directory. This can be found as the
+`startup <../../profile_default/startup>`_ subdirectory of your default
+IPython profile.
 
 First, let us see the simplest case. The following shows how to create a line
 magic, a cell one and one that works in both modes, using just plain functions:
@@ -239,16 +244,19 @@ You can also create magics of all three kinds by inheriting from the
 potentially hold state in between calls, and that have full access to the main
 IPython object:
 
-.. code-block:: none
+This code can be put in any Python module, it does not require IPython
+itself to be running already.  It only creates the magics subclass but
+doesn't instantiate it yet.
 
-    # This code can be put in any Python module, it does not require IPython
-    # itself to be running already.  It only creates the magics subclass but
-    # doesn't instantiate it yet.
+.. note::
+    The class MUST call this class decorator at creation time
+
+.. ipython:: python
+
     from __future__ import print_function
-    from IPython.core.magic import (Magics, magics_class, line_magic,
-                                    cell_magic, line_cell_magic)
+    from IPython.core.magic import Magics, magics_class, line_magic
+    from IPython.core.magic import cell_magic, line_cell_magic
 
-    # The class MUST call this class decorator at creation time
     @magics_class
     class MyMagics(Magics):
         @line_magic
@@ -273,18 +281,22 @@ IPython object:
                 print("Called as cell magic")
                 return line, cell
 
-    # In order to actually use these magics, you must register them with a
-    # running IPython.
+In order to actually use these magics, you must register them with a
+running IPython instance.
 
-    def load_ipython_extension(shell):
-        """
-        Any module file that define a function named `load_ipython_extension`
-        can be loaded via `%load_ext module.path` or be configured to be
-        autoloaded by IPython at startup time.
-        You can register the class itself without instantiating it.  IPython will
-        call the default constructor on it.
-        """
-        shell.register_magics(MyMagics)
+Any module file that define a function named `load_ipython_extension`
+can be loaded via `%load_ext module.path` or be configured to be
+autoloaded by IPython at startup time.
+
+You can register the class itself without instantiating it.  IPython will
+call the default constructor on it.::
+
+   from IPython import get_ipython
+   
+   shell = get_ipython()
+
+   def load_ipython_extension(shell):
+       shell.register_magics(MyMagics)
 
 If you want to create a class with a different constructor that holds
 additional state, then you should always call the parent constructor and
@@ -307,18 +319,13 @@ instantiate the class yourself before registration:
         # etc...
 
     def load_ipython_extension(ipython):
-        """
-        Any module file that define a function named `load_ipython_extension`
-        can be loaded via `%load_ext module.path` or be configured to be
-        autoloaded by IPython at startup time.
-        """
         # This class must then be registered with a manually created instance,
         # since its constructor has different arguments from the default:
         magics = StatefulMagics(ipython, some_data)
         ipython.register_magics(magics)
 
 
-.. note::
+.. note:: pre 0.12 IPython API change
 
    In early IPython versions 0.12 and before the line magics were
    created using a :func:`define_magic` API function.  This API has been
@@ -375,3 +382,12 @@ setuptools, distutils, or any other distribution tools like `flit
         @cell_magic
         def cadabra(self, line, cell):
             return line, cell
+
+
+Exception Handling
+------------------
+
+Inspiration on how to handle errors.::
+
+   from IPython.core.error import UsageError
+   UsageError?

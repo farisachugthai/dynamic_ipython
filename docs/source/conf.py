@@ -294,6 +294,9 @@ try:
     import matplotlib
 except (ImportError, ModuleNotFoundError):
     ipython_mplbackend = 'None'
+    HAS_MPL = False
+else:
+    HAS_MPL = True
 
 # -- autosummary -------------------------------------------------------------
 
@@ -346,3 +349,4 @@ def setup(app):
     if hasattr(CONF_PATH, 'joinpath'):
         extra_css = str(add_css())
         app.add_stylesheet(extra_css)
+    app.add_config_value(HAS_MPL, True, 'env')

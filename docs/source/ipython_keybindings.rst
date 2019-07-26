@@ -18,13 +18,13 @@ in addition, to utilizing the expansive :mod:`prompt_toolkit` library.
 First we'll initialize a global instance of the shell.
 
 Then import the function
-:func:`~IPython.terminal.interactiveshell.create_ipython_shortcuts()`
+:func:`IPython.terminal.interactiveshell.create_ipython_shortcuts()`
 and initialize a
-:class:`~prompt_toolkit.key_binding.key_bindings.KeyBindings()`
+:class:`prompt_toolkit.key_binding.key_bindings.KeyBindings()`
 instance.
 
 The attributes associated with
-:func:`~IPython.terminal.interactiveshell.create_ipython_shortcuts()`
+:func:`IPython.terminal.interactiveshell.create_ipython_shortcuts()`
 are as follows:
 
 .. code-block:: none

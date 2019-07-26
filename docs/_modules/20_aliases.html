@@ -394,26 +394,23 @@
 <span class="sd">        handle env vars like COPYCMD. Should we build them into the aliases</span>
 <span class="sd">        we have here because that&#39;ll affect :data:`_ip.user_aliases.mv`.</span>
 
-<span class="sd">        Also note DIRCMD for :command:`dir`.</span>
-
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    _ip : IPython shell</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_ip</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="p">(</span><span class="s1">&#39;copy&#39;</span><span class="p">,</span> <span class="s1">&#39;copy </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;ddir&#39;</span><span class="p">,</span> <span class="s1">&#39;dir /ad /on %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;ldir&#39;</span><span class="p">,</span> <span class="s1">&#39;dir /ad /on %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;ll&#39;</span><span class="p">,</span> <span class="s1">&#39;dir /Q %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;copy&#39;</span><span class="p">,</span> <span class="s1">&#39;copy&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;ddir&#39;</span><span class="p">,</span> <span class="s1">&#39;dir /ad /on&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;ldir&#39;</span><span class="p">,</span> <span class="s1">&#39;dir /ad /on&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;ln&#39;</span><span class="p">,</span>
          <span class="s1">&#39;mklink </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">),</span>  <span class="c1"># I know this really isn&#39;t the same but I need it</span>
-        <span class="p">(</span><span class="s1">&#39;make&#39;</span><span class="p">,</span> <span class="s1">&#39;make.bat %l&#39;</span><span class="p">),</span>  <span class="c1"># Useful when we&#39;re building docs</span>
-        <span class="p">(</span><span class="s1">&#39;mklink&#39;</span><span class="p">,</span> <span class="s1">&#39;mklink </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;move&#39;</span><span class="p">,</span> <span class="s1">&#39;move </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;mv&#39;</span><span class="p">,</span> <span class="s1">&#39;move </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;make&#39;</span><span class="p">,</span> <span class="s1">&#39;make.bat&#39;</span><span class="p">),</span>  <span class="c1"># Useful when we&#39;re building docs</span>
+        <span class="p">(</span><span class="s1">&#39;mklink&#39;</span><span class="p">,</span> <span class="s1">&#39;mklink&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;move&#39;</span><span class="p">,</span> <span class="s1">&#39;move&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;mv&#39;</span><span class="p">,</span> <span class="s1">&#39;move&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;ren&#39;</span><span class="p">,</span> <span class="s1">&#39;ren&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;rmdir&#39;</span><span class="p">,</span> <span class="s1">&#39;rmdir %l&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;rmdir&#39;</span><span class="p">,</span> <span class="s1">&#39;rmdir&#39;</span><span class="p">),</span>
     <span class="p">]</span>
     <span class="k">return</span> <span class="n">_ip</span><span class="o">.</span><span class="n">user_aliases</span></div>
 
@@ -429,9 +426,9 @@
 <span class="sd">    The minimum number of assumptions possible have been made; however, note</span>
 <span class="sd">    that this section is still under development and frequently changes.</span>
 
-<span class="sd">    .. warning:: Warning: 5 aliases have been commented out as they emit</span>
-<span class="sd">                 warnings upon being set. They&#39;re unfortunately aliases to</span>
-<span class="sd">                 cmd commands and don&#39;t run correctly in PowerShell.</span>
+<span class="sd">    .. warning:: Warning: 5 aliases have been commented out as they emit warnings</span>
+<span class="sd">                 upon being set. They&#39;re unfortunately aliases to cmd commands</span>
+<span class="sd">                 and as a result don&#39;t run correctly in PowerShell...</span>
 
 
 <span class="sd">    .. code-block:: powershell</span>
@@ -616,9 +613,7 @@
         <span class="c1"># user_aliases.extend(</span>
         <span class="c1">#     (&#39;fzf&#39;, &#39;$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS&#39;))</span>
         <span class="n">user_aliases</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
-            <span class="p">(</span><span class="s1">&#39;fzf&#39;</span><span class="p">,</span> <span class="s1">&#39;rg --pretty --hidden --max-columns=300 --max-columns-preview &#39;</span>
-            <span class="s1">&#39;.*[a-zA-Z]* --no-heading -m=30 --no-messages --color=ansi --no-column &#39;</span>
-            <span class="s1">&#39; --no-line-number -C 0 | fzf --ansi&#39;</span><span class="p">)</span>
+            <span class="p">(</span><span class="s1">&#39;fzf&#39;</span><span class="p">,</span> <span class="s1">&#39;rg --pretty .*[a-zA-Z]* --no-heading -m 30 | fzf --ansi&#39;</span><span class="p">)</span>
         <span class="p">)</span>
 
     <span class="k">elif</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s1">&#39;fzf&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s1">&#39;ag&#39;</span><span class="p">):</span>
@@ -681,18 +676,13 @@
   </ul></li>
   </ul></li>
 </ul>
-
 <h3><a href="../index.html">Table of Contents</a></h3>
-
-<div>&nbsp;</div>
-<div id="sidebartoc">
-    <p class="caption"><span class="caption-text">Tutorial</span></p>
+<p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../startup.html">Startup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../ipython_keybindings.html">Keybindings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../magics.html">Built-in Magics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../custom_magics.html">Writing Your Own Magics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../sphinxext.html">The Sphinx Extension</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
@@ -705,7 +695,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../dev.html">Developers Notes</a></li>
 </ul>
 
-</div>
+
+ Vim: set ft=htmljinja:
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <div class="searchformwrapper">

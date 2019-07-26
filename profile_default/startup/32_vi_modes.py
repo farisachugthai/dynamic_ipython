@@ -6,7 +6,7 @@
 Keybindings and Toggling Insert Mode
 ====================================
 
-.. module:: `32_vi_modes`
+.. module:: 32_vi_modes
    :synopsis: Add extra keybindings to IPython.
 
 :URL: https://ipython.readthedocs.io/en/stable/config/details.html#keyboard-shortcuts
@@ -22,6 +22,10 @@ IPython.
 
 Specifically it intends on adding the standard :mod:`readline` bindings
 to Vim's insert mode.
+
+.. todo:: Refactor as a class.
+
+    This is quite hard to follow as is.
 
 ---------------------
 
@@ -72,10 +76,9 @@ def get_default_vim_bindings():
 
     Just merge them and keep merging? Idk.
 
-    Parameters
-    ----------
-    _ip : |ip|
-        Global IPython instance.
+    Returns
+    -------
+    MergedKeys : :class:`~prompt_toolkit.key_bindings.MergedKeyBindings()`
 
     """
     return merge_key_bindings([
@@ -107,13 +110,14 @@ def emacs_bindings():
 def emacs_alt_bindings():
     """TODO: Docstring for emacs_alt_bindings.
 
-    Parameters
-    ----------
-    arg1 : TODO
+    .. ipython::
+
+        In [1]: timeit emacs_alt_bindings()
+        762 µs ± 911 ns per loop (mean ± std. dev. of 7 runs, 1000 loops each)
 
     Returns
     -------
-    TODO
+    kb : :class:`~prompt_toolkit.key_bindings.KeyBindings()`
 
     """
     kb = KeyBindings()
@@ -135,16 +139,18 @@ def emacs_alt_bindings():
 
 
 def main(escape_keys=False):
-    """Begin initializing keybindings for IPython.
+    """Begin initializing keybindings for `IPython`.
 
     This function delegates the extra bindings.
 
     Parameters
     ----------
-    _ip : |ip|
-        Global IPython instance.
     escape_keys : bool, Optional
         Whether to load :kbd:`Esc` or :kbd:`Alt` key bindings.
+
+    Returns
+    -------
+    kb : :class:`~prompt_toolkit.key_bindings.KeyBindings()`
 
     """
     kb = KeyBindings()
@@ -181,7 +187,7 @@ if __name__ == "__main__":
     level = 10
     LOG = logging.getLogger(name=__name__)
 
-    LOGGER = module_log.stream_logger(log_level=level, logger=LOG)
+    LOGGER = module_log.stream_logger(logger=LOG, log_level=level)
 
     almost_all_keys = main(escape_keys=True)
 
@@ -190,8 +196,11 @@ if __name__ == "__main__":
     # IPython < 7.0
     if hasattr(_ip, 'pt_cli'):
         _ip.pt_cli.application.key_bindings_registry = merge_key_bindings([almost_all_keys, create_ipython_shortcuts(_ip)])
+        LOGGER.info('Number of keybindings:'
+                '{}:\t'.format(_ip.pt_cli.application.key_bindings_registry.bindings))
     # IPython >= 7.0
     elif hasattr(_ip, 'pt_app'):
         _ip.pt_app.key_bindings = merge_key_bindings([almost_all_keys, create_ipython_shortcuts(_ip)])
+        LOGGER.info('Number of keybindings {}:\t'.format(len(_ip.pt_app.key_bindings.bindings)))
     else:
         LOGGER.error('Is this being run in IPython?:\nType: %s ', type(_ip), exc_info=1)

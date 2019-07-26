@@ -2,14 +2,48 @@
 Developer's Notes
 =================
 
-.. tip::
+.. highlight:: vim
 
-   While working in Vim, the following commands can be useful for building documentation.
+Installing
+===========
+
+All of the resources necessary for installing the contents of this repository
+have been moved to the directory `tools <tools>`_.
+
+There are environment files for Conda on both `Linux
+<tools/environment_linux.txt>`_ and `Windows <tools/environment_windows.yml>`_,
+`a Pipfile <tools/Pipfile>`_, `a requirements.txt <tools/requirements.txt>`_,
+and another for a `development installation <tools/requirements_dev.txt>`_,
+as well as a `tox.ini <tools/tox.ini>`_.
+
+Therefore the number of files that one can use to install this repository grew
+large enough that they've all been moved to their own separate folder.
+
+Installation Assumptions
+------------------------
+
+In addition, the scripts therein make a few assumptions. One is that
+the repository at `<https://github.com/farisachugthai/Gruvbox-IPython>`_
+has been installed.
+
+The other assumption, the subject of many online debates, is that the user
+wants to use the text editor Neovim as their default editor.
+
+The editor will be invoked whenever the user runs the line magic ``%edit``.
+
+If this behavior isn't desired, the following parameter needs to be
+changed like so::
+
+   from traitlets import get_config
+   c = get_config()
+   c.TerminalInteractiveShell.editor = 'nvim'
 
 Building Documentation
 ======================
 
-.. highlight:: vim
+.. tip::
+
+   While working in Vim, the following commands can be useful for building documentation.
 
 .. code-block::
 
@@ -21,9 +55,3 @@ Generally it's more difficult to specify parameters in the ``makeprg`` option
 than it is to write them out manually on the cmdline.
 
 In addition, ``makeprg`` is not an option one is allowed to set in a modeline.
-
-.. there's not a clean way to do this but
-.. Vim: set makeprg=sphinx-build -b html . ../build
-.. damnit i don't think you're allowed to set it in a modeline!
-.. besides we needed
-.. let &makeprg = 'sphinx-build -b html . ../build'

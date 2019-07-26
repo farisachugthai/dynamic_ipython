@@ -9,7 +9,7 @@ suite. These have been commented and marked up as appropriate.
 
 
 Jupyter QTConsole
-====================================================================
+=================
 
 :mod:`~jupyter_conf.jupyter_qtconsole_config`
 
@@ -37,7 +37,7 @@ Initializing Jupyter QTConsole
 
 The initial entry point for :command:`jupyter-qtconsole` is in the following::
 
-    from qtconsole.qtconsole app import main
+    from qtconsole.qtconsole.app import main
     # Also there's just a lot going on there
     from qtconsole import qtconsole
     the_sauce = dir(qtconsole)
@@ -46,7 +46,8 @@ Worth skimming.
 
 
 Jupyter Notebook
-====================================================================
+================
+
 :mod:`jupyter_conf.jupyter_notebook_config`
 
 .. ipython:: python
@@ -124,7 +125,7 @@ Whether to allow the user to run the notebook as root.::
 
    c.NotebookApp.allow_root = False
 
-DEPRECATED use :ref:`c.NotebookApp.base_url`::
+DEPRECATED use `c.NotebookApp.base_url`::
 
    c.NotebookApp.base_project_url = '/'
 
@@ -397,21 +398,21 @@ Whether to serve the app in watch mode.::
 
 The directory for workspaces.::
 
-c.LabApp.workspaces_dir = '.jupyter/lab/workspaces'
+   c.LabApp.workspaces_dir = '.jupyter/lab/workspaces'
 
 Supply SSL options for the tornado HTTPServer. See the tornado docs for
 details.::
 
     c.NotebookApp.ssl_options = {}
 
-Supply overrides for terminado. Currently only supports "shell_command".::
+Supply overrides for ``terminado``. Currently only supports "shell_command".::
 
     c.NotebookApp.terminado_settings = {}
 
 Set to False to disable terminals.
 This does *not* make the notebook server more secure by itself. Anything the
 user can in a terminal, they can also do in a notebook.
-Terminals may also be automatically disabled if the terminado package is not
+Terminals may also be automatically disabled if the ``terminado`` package is not
 available.::
 
     c.NotebookApp.terminals_enabled = True
@@ -438,7 +439,7 @@ DEPRECATED, use tornado_settings.::
 
     c.NotebookApp.webapp_settings = {}
 
-Set the tornado compression options for websocket connections.
+Set the tornado compression options for ``websocket`` connections.
 
 This value will be returned from
 :method:`WebSocketHandler.get_compression_options`.
@@ -447,17 +448,19 @@ None (default) will disable compression.
 
 A dict (even an empty one) will enable compression.
 
-See the tornado docs for WebSocketHandler.get_compression_options for details.::
+See the tornado docs for ``WebSocketHandler.get_compression_options`` for details.::
 
     c.NotebookApp.websocket_compression_options = None
 
 The base URL for websockets, if it differs from the HTTP server (hint: it
-almost certainly doesn't).
+almost certainly doesn't).::
+
+   c.NotebookApp.websocket_url = ''
+
 Should be in the form of an HTTP origin:
 
 ``ws[s]://hostname[:port]``
 
-c.NotebookApp.websocket_url = ''
 
 NteractApp(NotebookApp) configuration
 --------------------------------------------------------------------------
@@ -469,14 +472,18 @@ Webpack's hot reloading server at `<http://localhost:8357>`_. Run
 
 .. code-block:: console
 
-   ``yarn workspace nteract-on-jupyter run hot --port 8357``
+   yarn workspace nteract-on-jupyter run hot --port 8357
 
 To serve your assets. This is only useful if NteractApp is installed
-in editable mode e.g., using::
+in editable mode e.g., using:
+
+.. code-block:: console
 
    pip install -e .
-   c.NteractApp.dev_mode = False
 
+Then in the Jupyter configuration file modifying::
+
+   c.NteractApp.dev_mode = False
 
 
 Image Handlers

@@ -6,7 +6,7 @@
 module_log
 ==========
 
-.. module:: module_log
+.. currentmodule:: module_log
 
 .. highlight:: ipython
 
@@ -71,7 +71,6 @@ def stream_logger(logger, log_level=logging.INFO, msg_format=None):
     Should do some validation on the log level there. There's a really
     useful block of code in the tutorial.
 
-
     Parameters
     ----------
     logger : :class:`logging.Logger()`
@@ -90,18 +89,15 @@ def stream_logger(logger, log_level=logging.INFO, msg_format=None):
     Examples
     --------
     >>> from profile_default.util.module_log import stream_logger
-    >>> log = logging.getLogger(name=__name__)
-    >>> LOGGER = stream_logger(logger=log)
+    >>> LOGGER = stream_logger()
 
     """
-    assert logger is not None
-
     handler = logging.StreamHandler(stream=sys.stderr)
 
     if isinstance(log_level, int):
         level = log_level
     # TODO: Come up with else. What if they pass a string?
-
+    logger = logging.getLogger()
     logger.setLevel(level)
     handler.setLevel(level)
 
