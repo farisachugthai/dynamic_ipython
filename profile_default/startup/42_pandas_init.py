@@ -6,18 +6,12 @@
 Pandas Initialization
 =====================
 
-.. currentmodule:: pandas_init
+.. module:: 42_pandas_init
     :synopsis: Set display options for pandas.
 
 .. highlight:: ipython
 
-:URL: `https://realpython.com/python-pandas-tricks/#1-configure-options-settings-at-interpreter-startup`_
-
-.. todo::
-
-    - Also we should do a check that we're on python3.6+ because otherwise,
-      we'll crash the interpreter as we invoke an expression with f-strings.
-
+:URL: https://realpython.com/python-pandas-tricks/#1-configure-options-settings-at-interpreter-startup
 
 Here's an interesting blurb from pandas/docs/conf.py::
 

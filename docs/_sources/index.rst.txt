@@ -34,11 +34,10 @@ Welcome to IPython packages' documentation!
    :titlesonly:
 
    IPython Shell Initialization <profile_default>
-   Startup Files <profile_default.startup>
-   Utility Functions <profile_default.util>
    Jupyter ZMQShell <jupyter>
    Notebook Extensions <extensions>
    Developers Notes <dev>
+   modules
 
 
 Indices and tables

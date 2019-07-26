@@ -6,13 +6,13 @@
 Help Helpers
 ============
 
-.. currentmodule:: 06_help_helpers
+.. module:: 06_help_helpers
     :synopsis: Export functions that aide working with the :func:`help` builtin.
 
 This module utilizes the examples given in the official documentation
 for :mod:`contextlib`!
 
-In addition to utilizing contextlib, create a function that allows
+In addition to utilizing `contextlib`, create a function that allows
 for an easier "grep-like" utility through objects that are too large
 to simply skim the output of :func:`dir()`.
 

@@ -75,7 +75,7 @@ def stream_logger(logger, log_level=logging.INFO, msg_format=None):
     ----------
     logger : :class:`logging.Logger()`
         Configure a passed logger. See example below.
-    level : int, optional
+    log_level : int, optional
         Level of log records. Defaults to 20.
     msg_format : str, optional
         Representation of logging messages. Uses standard %-style string
@@ -89,7 +89,8 @@ def stream_logger(logger, log_level=logging.INFO, msg_format=None):
     Examples
     --------
     >>> from profile_default.util.module_log import stream_logger
-    >>> LOGGER = stream_logger()
+    >>> log = logging.getLogger(name=__name__)
+    >>> LOGGER = stream_logger(logger=log)
 
     """
     handler = logging.StreamHandler(stream=sys.stderr)
@@ -188,15 +189,13 @@ def json_logger(JSONFormatter=None):
 
     Examples
     --------
-    ::
-
-        try:
-            raise Exception('This is an exception')
-        except:
-            root_logger.exception('caught exception')
-
-        root_logger.warn('this is a test message')
-        root_logger.debug('this request_id=%d name=%s', 1, 'John')
+    >>> root_logger = json_logger(JSONFormatter=JSONFormatter())
+    >>> try:
+    >>>     raise Exception('This is an exception')
+    >>> except:
+    >>>    root_logger.exception('caught exception')
+    >>> root_logger.warn('this is a test message')
+    >>> root_logger.debug('this request_id=%d name=%s', 1, 'John')
 
     """
     handler = logging.StreamHandler()

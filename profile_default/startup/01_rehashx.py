@@ -7,14 +7,15 @@ Rehash
 =======
 
 .. module:: 01_rehashx
+    :synopsis: Rehash everything on $PATH and make available in the user namespace.
 
 This is an incredible little gem I just ran into, and hugely useful for
-making IPython work as a more versatile system shell.
+making `IPython` work as a more versatile system shell.
 
 Help
 -----
 
-Help on :func:`~IPython.core.interactiveshell.run_line_magic()`.
+Help on :func:`IPython.core.interactiveshell.run_line_magic()`.
 
 .. code-block:: none
 
@@ -43,7 +44,7 @@ As the help outlines above, the second required positional argument to
 :func:`IPython.core.TerminalInteractiveShell.run_line_magic()` is `line`.
 
 This is more easily understood as 'remaining arguments to the magic'.
-``%rehashx`` takes none, but leaving it blank causes the function call to raise
+`%rehashx` takes none, but leaving it blank causes the function call to raise
 an error, so an empty str is passed to the function.
 
 

@@ -2,20 +2,20 @@
 profile\_default package
 ========================
 
-.. _profile-default-subpackages:
-
-Subpackages
-===========
-
 .. toctree::
+   :hidden:
+   :maxdepth: 1
 
    profile_default.startup
    profile_default.util
+
+
 
 .. _profile-default-submodules:
 
 Submodules
 ==========
+
 
 profile\_default.ipython\_config module
 ---------------------------------------
@@ -25,6 +25,7 @@ profile\_default.ipython\_config module
    :undoc-members:
    :show-inheritance:
 
+
 profile\_default.ipython\_kernel\_config module
 -----------------------------------------------
 
@@ -32,6 +33,7 @@ profile\_default.ipython\_kernel\_config module
    :members:
    :undoc-members:
    :show-inheritance:
+
 
 .. _profile-default-contents:
 

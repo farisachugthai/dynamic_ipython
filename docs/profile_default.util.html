@@ -78,7 +78,7 @@ followed if and only if both <code class="xref py py-obj docutils literal notran
 
 <dl class="function">
 <dt id="profile_default.util.copytree.copytree">
-<code class="sig-prename descclassname">profile_default.util.copytree.</code><code class="sig-name descname">copytree</code><span class="sig-paren">(</span><em class="sig-param">src</em>, <em class="sig-param">dst</em>, <em class="sig-param">symlinks=False</em>, <em class="sig-param">ignore=None</em>, <em class="sig-param">copy_function=&lt;function copy2 at 0x775fa189e0&gt;</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/profile_default/util/copytree.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/profile_default/util/copytree.html#copytree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profile_default.util.copytree.copytree" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">profile_default.util.copytree.</code><code class="sig-name descname">copytree</code><span class="sig-paren">(</span><em class="sig-param">src</em>, <em class="sig-param">dst</em>, <em class="sig-param">symlinks=False</em>, <em class="sig-param">ignore=None</em>, <em class="sig-param">copy_function=&lt;function copy2 at 0x000002094ECF1C80&gt;</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/profile_default/util/copytree.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/profile_default/util/copytree.html#copytree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profile_default.util.copytree.copytree" title="Permalink to this definition">¶</a></dt>
 <dd><p>Let’s try and do <code class="xref py py-obj docutils literal notranslate"><span class="pre">shutil.copytree()</span></code> a little better.</p>
 </dd></dl>
 
@@ -223,7 +223,7 @@ Defaults to <code class="docutils literal notranslate"><span class="pre">%(ascti
 <dd><p>Set up a logger that returns properly formatted JSON.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>JSONFormatter</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">logging.Formatter()</span></code>, optional) – <span class="xref std std-ref">~profile_default.util.module_log.JsonFormatter()</span> instance.
+<dd class="field-odd"><p><strong>JSONFormatter</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">logging.formatter()</span></code>, optional) – <span class="xref std std-ref">module_log.JsonFormatter()</span> instance.
 Included in the listed parameters to be explicit; however, it’s
 probably easier to not include the parameter as one is configured
 in the function anyway.</p>
@@ -236,11 +236,11 @@ in the function anyway.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">root_logger</span> <span class="o">=</span> <span class="n">json_logger</span><span class="p">(</span><span class="n">JSONFormatter</span><span class="p">())</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">root_logger</span> <span class="o">=</span> <span class="n">json_logger</span><span class="p">(</span><span class="n">JSONFormatter</span><span class="o">=</span><span class="n">JSONFormatter</span><span class="p">())</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">try</span><span class="p">:</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;This is an exception&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">except</span><span class="p">:</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="n">root_logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s1">&#39;caught exception&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>   <span class="n">root_logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s1">&#39;caught exception&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">root_logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;this is a test message&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">root_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;this request_id=</span><span class="si">%d</span><span class="s1"> name=</span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;John&#39;</span><span class="p">)</span>
 </pre></div>
@@ -264,7 +264,7 @@ useful block of code in the tutorial.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>logger</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">logging.Logger()</span></code>) – Configure a passed logger. See example below.</p></li>
-<li><p><strong>level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em>) – Level of log records. Defaults to 20.</p></li>
+<li><p><strong>log_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em>) – Level of log records. Defaults to 20.</p></li>
 <li><p><strong>msg_format</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Representation of logging messages. Uses standard %-style string
 formatting. Defaults to <code class="docutils literal notranslate"><span class="pre">%(asctime)s</span> <span class="pre">%(levelname)s</span> <span class="pre">%(message)s</span></code></p></li>
 </ul>
@@ -278,7 +278,8 @@ formatting. Defaults to <code class="docutils literal notranslate"><span class="
 </dl>
 <p class="rubric">Examples</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">profile_default.util.module_log</span> <span class="k">import</span> <span class="n">stream_logger</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">LOGGER</span> <span class="o">=</span> <span class="n">stream_logger</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">LOGGER</span> <span class="o">=</span> <span class="n">stream_logger</span><span class="p">(</span><span class="n">logger</span><span class="o">=</span><span class="n">log</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -355,13 +356,12 @@ formatting. Defaults to <code class="docutils literal notranslate"><span class="
 <li class="toctree-l1"><a class="reference internal" href="custom_magics.html">Writing Your Own Magics</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="profile_default.html">IPython Shell Initialization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="profile_default.startup.html">Startup Files</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Utility Functions</a></li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="profile_default.html">IPython Shell Initialization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="jupyter.html">Jupyter ZMQShell</a></li>
 <li class="toctree-l1"><a class="reference internal" href="extensions.html">Notebook Extensions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dev.html">Developers Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">profile_default</a></li>
 </ul>
 
 </div>

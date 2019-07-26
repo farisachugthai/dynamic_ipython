@@ -43,7 +43,7 @@ the following command to get the current instance
 
 .. ipython::
 
-    _ip = get_ipython()
+   In [30]: _ip = get_ipython()
 
 
 Here are 2 useful functions for registering a magic with the global IPython
@@ -195,7 +195,7 @@ Writing Custom Magics
 `Custom Magics <https://raw.githubusercontent.com/ipython/ipython/523ed2fe58ea5ee9971d2b21df1de33b8cdfa924/docs/source/config/custommagics.rst>`_:
 
 There are two main ways to define your own magic functions. From standalone
-functions and by inheriting from a base class provided by IPython:
+functions and by inheriting from a base class provided by `IPython`:
 
 :class:`IPython.core.magic.Magics`
 

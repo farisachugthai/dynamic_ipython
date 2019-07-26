@@ -6,10 +6,10 @@
 IPython Logger
 ==============
 
-.. currentmodule:: 05_log
+.. module:: 05_log
     :synopsis: Establish a file-logger for IPython.
 
-.. highlight:: python3
+.. highlight:: ipython3
 
 Collects both the input and output of every command run through the IPython
 interpreter and prepends a timestamp to commands.
@@ -18,26 +18,28 @@ The timestamp is particularly convenient for concurrent instances of IPython.
 
 .. versionchanged:: 0.0.1
 
-    Changed :func:`_ip.magic()` to :func:`_ip.run_line_magic()`
+    :func:`IPython.core.interactiveshell.InteractiveShell.magic()`
+    to :func:`IPython.core.interactiveshell.InteractiveShell.run_line_magic()`
 
 .. todo::
 
     - Truncate output if it exceeds a certain threshold.
-        - Run dir(np) or dir(pd) a couple of times and the logs become swamped.
+        - Run **dir(np)** or **dir(pd)** a couple of times and the logs
+          become swamped.
     - Possibly change that section under the shebang to also include 3
       double quotes and in the comment add system info like py version, venv,
       conda, any of the 1000000 things you could add.
 
------------
 
 Roadmap
 --------
 
 05/18/2019:
 
-Should consider using that `ipython_logger_05` as a :class:`logging.FileHandler` and then
-configure a globally available :class:`logging.StreamHandler`.
+Should consider using that ipython_logger_05 as a :class:`logging.FileHandler()`
+and then configure a globally available :class:`logging.StreamHandler()`.
 
+-----------
 
 """
 import logging
@@ -62,6 +64,8 @@ def ipython_logger_05(shell=None):
     -----------
     _ip : |ip|
         Global IPython instance.
+        :param shell:
+        :type shell:
 
     """
     if shell is None:

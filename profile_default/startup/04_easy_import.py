@@ -8,6 +8,7 @@
 ==============
 
 .. module:: 04_easy_import
+    :synopsis: Import frequently used modules in the user namespace.
 
 This imports a few utility functions from :ref:`IPython` and imports the python
 package neovim is served in.
@@ -17,10 +18,9 @@ Overlap between IPython and traitlets
 
 It seems that :mod:`IPython` and :mod:`traitlets` share a module!
 
-From a cursory glance :mod:`traitlets.utils.importstring` ==
-:mod:`IPython.utils.importstring`.
+:mod:`traitlets.utils.importstring` == :mod:`IPython.utils.importstring`.
 
-They both export 1 function: :func:`~IPython.utils.importstring.import_item()`
+They both export 1 function: :func:`IPython.utils.importstring.import_item()`
 
 This could be used here to dynamically import strings based on user
 configuration, environment variables and configuration files.
@@ -34,13 +34,13 @@ The Importance of Clean Namespaces
 
 May 07, 2019:
 
-    If the last line in the module didn't have ``del mod`` in it, then
-    the magic ``%pylab`` would crash!
+If the last line in the module didn't have ``del mod`` in it, then
+the magic `%pylab` would crash!
 
-    It uses the same keyword behind the scenes interestingly enough.
+It uses the same keyword behind the scenes interestingly enough.
 
-.. todo:: Could add in :func:`wcwidth.wcswidth()` to determine width of output
-          device and print that many ``***`` for the nvim part.
+.. todo:: Could add in `wcwidth.wcswidth()` to determine width of output
+          device and print that many :kbd:`***` for the nvim part.
 
 """
 import sys
@@ -109,7 +109,7 @@ def import_nvim(mod):
 
 
 if __name__ == "__main__":
-    if sys.version_info > (3, 5):
+    if sys.version_info > (3, 5):  # actually shouldn't happen IPy requires 3.5>
         mod = 'pynvim'
     else:
         mod = 'neovim'
