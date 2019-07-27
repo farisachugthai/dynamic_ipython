@@ -42,10 +42,10 @@ BUILD_PATH = os.path.join(CONF_PATH, 'build')
 SOURCE_PATH = os.path.join(CONF_PATH, 'source')
 
 README = os.path.join(ROOT_PATH, '', 'README.rst')
-REQUIRED = ['IPython']
+REQUIRED = [ 'IPython==7.6.1' ]
 
 EXTRAS = {
-    'develop': ['flake8', 'pylint', 'yapf'],
+    'develop': ['flake8==3.7.1', 'pylint', 'yapf==0.27.0'],
     'docs': [
         'sphinx',
         # Project uses reStructuredText, so ensure that the docutils get

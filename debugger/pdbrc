@@ -56,9 +56,10 @@ except (ImportError, ModuleNotFoundError):
     # sys.exit('Install prompt_toolkit.')
     pass
 else:
-    from prompt_toolkit.shortcuts import PromptSession
-    from prompt_toolkit.output.color_depth import ColorDepth
     from prompt_toolkit.history import InMemoryHistory
+    from prompt_toolkit.output.color_depth import ColorDepth
+    from prompt_toolkit.key_bindings.defaults import load_default_bindings
+    from prompt_toolkit.shortcuts import PromptSession
 
     try:
         from gruvbox.style import GruvboxStyle
@@ -70,9 +71,10 @@ else:
     # A handful are none because I wanna come back and fill them in
     test = PromptSession(vi_mode=True, enable_history_search=True,
                          search_ignore_case=True, enable_system_prompt=False,
-                         enable_suspend=False, enable_open_in_editor=True,
+                         enable_suspend=True, enable_open_in_editor=True,
                          completer=None, history=InMemoryHistory(),
-                         style=style,
+                         style=style, key_binding=load_default_bindings,
+                         multiline=True,
                          bottom_toolbar=None, lexer=None, clipboard=None)
 
     while True:

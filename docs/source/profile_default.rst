@@ -10,6 +10,16 @@ profile\_default package
    profile_default.util
 
 
+.. _profile-default-contents:
+
+Module contents
+===============
+
+.. automodule:: profile_default
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 
 .. _profile-default-submodules:
 
@@ -26,21 +36,11 @@ profile\_default.ipython\_config module
    :show-inheritance:
 
 
-profile\_default.ipython\_kernel\_config module
------------------------------------------------
+.. profile\_default.ipython\_kernel\_config module
+.. -----------------------------------------------
 
-.. automodule:: profile_default.ipython_kernel_config
-   :members:
-   :undoc-members:
-   :show-inheritance:
+.. .. automodule:: profile_default.ipython_kernel_config
+..    :members:
+..    :undoc-members:
+..    :show-inheritance:
 
-
-.. _profile-default-contents:
-
-Module contents
-===============
-
-.. automodule:: profile_default
-   :members:
-   :undoc-members:
-   :show-inheritance:
