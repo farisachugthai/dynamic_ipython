@@ -89,8 +89,17 @@ def stream_logger(logger, log_level=logging.INFO, msg_format=None):
     Examples
     --------
     >>> from profile_default.util.module_log import stream_logger
-    >>> log = logging.getLogger(name=__name__)
-    >>> LOGGER = stream_logger(logger=log)
+    >>> LOGGER = stream_logger(logging.getLogger(name=__name__))
+
+    See Also
+    --------
+    profile_default.startup.32_vi_modes : module
+        In profile_default.startup.32_vi_modes we call this func.
+        Why is this the output? 3 slightly different LogRecords?:
+
+            INFO:root:Number of keybindings 359:
+            2019-07-26 09:55:49,450 : INFO : 32_vi_modes Number of keybindings 359:
+            2019-07-26 09:55:49,450 INFO Number of keybindings 359:
 
     """
     handler = logging.StreamHandler(stream=sys.stderr)
@@ -176,8 +185,8 @@ def json_logger(JSONFormatter=None):
 
     Parameters
     ----------
-    JSONFormatter : :class:`logging.formatter()`, optional
-        :ref:`module_log.JsonFormatter()` instance.
+    JSONFormatter : :class:`logging.Formatter()`, optional
+        :ref:`~profile_default.util.module_log.JsonFormatter()` instance.
         Included in the listed parameters to be explicit; however, it's
         probably easier to not include the parameter as one is configured
         in the function anyway.
