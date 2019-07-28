@@ -53,7 +53,6 @@
 <span class="sd">==============</span>
 
 <span class="sd">.. module:: 04_easy_import</span>
-<span class="sd">    :synopsis: Import frequently used modules in the user namespace.</span>
 
 <span class="sd">This imports a few utility functions from :ref:`IPython` and imports the python</span>
 <span class="sd">package neovim is served in.</span>
@@ -63,9 +62,10 @@
 
 <span class="sd">It seems that :mod:`IPython` and :mod:`traitlets` share a module!</span>
 
-<span class="sd">:mod:`traitlets.utils.importstring` == :mod:`IPython.utils.importstring`.</span>
+<span class="sd">From a cursory glance :mod:`traitlets.utils.importstring` ==</span>
+<span class="sd">:mod:`IPython.utils.importstring`.</span>
 
-<span class="sd">They both export 1 function: :func:`IPython.utils.importstring.import_item()`</span>
+<span class="sd">They both export 1 function: :func:`~IPython.utils.importstring.import_item()`</span>
 
 <span class="sd">This could be used here to dynamically import strings based on user</span>
 <span class="sd">configuration, environment variables and configuration files.</span>
@@ -79,13 +79,13 @@
 
 <span class="sd">May 07, 2019:</span>
 
-<span class="sd">If the last line in the module didn&#39;t have ``del mod`` in it, then</span>
-<span class="sd">the magic `%pylab` would crash!</span>
+<span class="sd">    If the last line in the module didn&#39;t have ``del mod`` in it, then</span>
+<span class="sd">    the magic ``%pylab`` would crash!</span>
 
-<span class="sd">It uses the same keyword behind the scenes interestingly enough.</span>
+<span class="sd">    It uses the same keyword behind the scenes interestingly enough.</span>
 
-<span class="sd">.. todo:: Could add in `wcwidth.wcswidth()` to determine width of output</span>
-<span class="sd">          device and print that many :kbd:`***` for the nvim part.</span>
+<span class="sd">.. todo:: Could add in :func:`wcwidth.wcswidth()` to determine width of output</span>
+<span class="sd">          device and print that many ``***`` for the nvim part.</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">sys</span>
@@ -154,7 +154,7 @@
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">):</span>  <span class="c1"># actually shouldn&#39;t happen IPy requires 3.5&gt;</span>
+    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">):</span>
         <span class="n">mod</span> <span class="o">=</span> <span class="s1">&#39;pynvim&#39;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">mod</span> <span class="o">=</span> <span class="s1">&#39;neovim&#39;</span>
@@ -190,10 +190,11 @@
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../profile_default.html">IPython Shell Initialization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../profile_default.startup.html">Startup Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../profile_default.util.html">Utility Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../jupyter.html">Jupyter ZMQShell</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Notebook Extensions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../dev.html">Developers Notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">profile_default</a></li>
 </ul>
 
 </div>
