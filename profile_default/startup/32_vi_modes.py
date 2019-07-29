@@ -17,7 +17,7 @@ normal mode, or as :mod:`prompt_toolkit` calls it, "navigation mode".
 Also displays how to integrate :mod:`prompt_toolkit` and :mod:`IPython`
 together well.
 
-Ultimately this module hopes to implementing Tim Pope's rsi plugin in
+Ultimately this module hopes to implementing Tim Pope's vim plugin *rsi* in
 IPython.
 
 Specifically it intends on adding the standard :mod:`readline` bindings
@@ -150,7 +150,8 @@ def main(escape_keys=False):
 
     Returns
     -------
-    kb : :class:`~prompt_toolkit.key_bindings.KeyBindings()`
+    rsi : :class:`~prompt_toolkit.key_bindings.KeyBindings()`
+        Readline bindings in Vim 's insert mode.
 
     """
     kb = KeyBindings()
