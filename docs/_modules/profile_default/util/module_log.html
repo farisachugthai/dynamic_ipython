@@ -134,8 +134,17 @@
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; from profile_default.util.module_log import stream_logger</span>
-<span class="sd">    &gt;&gt;&gt; log = logging.getLogger(name=__name__)</span>
-<span class="sd">    &gt;&gt;&gt; LOGGER = stream_logger(logger=log)</span>
+<span class="sd">    &gt;&gt;&gt; LOGGER = stream_logger(logging.getLogger(name=__name__))</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    profile_default.startup.32_vi_modes : module</span>
+<span class="sd">        In profile_default.startup.32_vi_modes we call this func.</span>
+<span class="sd">        Why is this the output? 3 slightly different LogRecords?:</span>
+
+<span class="sd">            INFO:root:Number of keybindings 359:</span>
+<span class="sd">            2019-07-26 09:55:49,450 : INFO : 32_vi_modes Number of keybindings 359:</span>
+<span class="sd">            2019-07-26 09:55:49,450 INFO Number of keybindings 359:</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">handler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">(</span><span class="n">stream</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
@@ -221,8 +230,8 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    JSONFormatter : :class:`logging.formatter()`, optional</span>
-<span class="sd">        :ref:`module_log.JsonFormatter()` instance.</span>
+<span class="sd">    JSONFormatter : :class:`logging.Formatter()`, optional</span>
+<span class="sd">        :ref:`~profile_default.util.module_log.JsonFormatter()` instance.</span>
 <span class="sd">        Included in the listed parameters to be explicit; however, it&#39;s</span>
 <span class="sd">        probably easier to not include the parameter as one is configured</span>
 <span class="sd">        in the function anyway.</span>

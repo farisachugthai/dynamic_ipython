@@ -2,10 +2,21 @@
 profile\_default.util package
 =============================
 
+.. _util-contents:
+
+Module contents
+---------------
+
+.. automodule:: profile_default.util
+   :members:
+   :undoc-members:
+   :show-inheritance:
 .. _util-submodules:
+
 
 Submodules
 ----------
+
 
 profile\_default.util.copytree module
 -------------------------------------
@@ -15,6 +26,7 @@ profile\_default.util.copytree module
    :undoc-members:
    :show-inheritance:
 
+
 profile\_default.util.machine module
 ------------------------------------
 
@@ -22,6 +34,7 @@ profile\_default.util.machine module
    :members:
    :undoc-members:
    :show-inheritance:
+
 
 profile\_default.util.module\_log module
 ----------------------------------------
@@ -31,20 +44,11 @@ profile\_default.util.module\_log module
    :undoc-members:
    :show-inheritance:
 
+
 profile\_default.util.timer module
 ----------------------------------
 
 .. automodule:: profile_default.util.timer
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-.. _util-contents:
-
-Module contents
----------------
-
-.. automodule:: profile_default.util
    :members:
    :undoc-members:
    :show-inheritance:

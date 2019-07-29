@@ -53,11 +53,25 @@
 <h1>profile_default package<a class="headerlink" href="#profile-default-package" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
+<div class="section" id="module-profile_default">
+<span id="module-contents"></span><span id="profile-default-contents"></span><h2>Module contents<a class="headerlink" href="#module-profile_default" title="Permalink to this headline">¶</a></h2>
+<p>Initialize the global IPython instance and begin configuring.</p>
+<div class="section" id="requires">
+<h3>Requires<a class="headerlink" href="#requires" title="Permalink to this headline">¶</a></h3>
+<p>Python3 and IPython 7+</p>
+<p>05/21/2019:</p>
+<p>Commented out IPython because the package dependency in an __init__
+file means that an unsuspecting user will try to install and the build
+will fail before pip even gets a chance to install the dependencies.</p>
+<p>Jul 12, 2019:</p>
+<p>Admittedly, you could just use a try/except….</p>
+</div>
+</div>
 <div class="section" id="submodules">
 <span id="profile-default-submodules"></span><h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="module-profile_default.ipython_config">
 <span id="profile-default-ipython-config-module"></span><h3>profile_default.ipython_config module<a class="headerlink" href="#module-profile_default.ipython_config" title="Permalink to this headline">¶</a></h3>
-<p>Configuration file for <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.6.1)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a>.</p>
+<p>Configuration file for <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.7.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a>.</p>
 <dl class="function">
 <dt id="profile_default.ipython_config.get_home">
 <code class="sig-prename descclassname">profile_default.ipython_config.</code><code class="sig-name descname">get_home</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/profile_default/ipython_config.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/profile_default/ipython_config.html#get_home"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profile_default.ipython_config.get_home" title="Permalink to this definition">¶</a></dt>
@@ -74,243 +88,6 @@
 </div>
 </dd></dl>
 
-</div>
-<div class="section" id="module-profile_default.ipython_kernel_config">
-<span id="profile-default-ipython-kernel-config-module"></span><h3>profile_default.ipython_kernel_config module<a class="headerlink" href="#module-profile_default.ipython_kernel_config" title="Permalink to this headline">¶</a></h3>
-<p>Configuration file for ipython-kernel.</p>
-<div class="section" id="module-ipython_kernel_config">
-<span id="ipython-kernel-configuration"></span><h4>IPython Kernel Configuration<a class="headerlink" href="#module-ipython_kernel_config" title="Permalink to this headline">¶</a></h4>
-<div class="section" id="ipython-kernel-config">
-<h5>IPython Kernel Config<a class="headerlink" href="#ipython-kernel-config" title="Permalink to this headline">¶</a></h5>
-<div class="section" id="connectionfilemixin-loggingconfigurable-configuration">
-<h6>ConnectionFileMixin(LoggingConfigurable) configuration<a class="headerlink" href="#connectionfilemixin-loggingconfigurable-configuration" title="Permalink to this headline">¶</a></h6>
-<p>Mixin for configurable classes that work with connection files</p>
-<p>JSON file in which to store connection info [default: kernel-&lt;pid&gt;.json]</p>
-<p>This file will contain the IP, ports, and authentication key needed to connect
-clients to this kernel. By default, this file will be created in the security
-dir of the current profile, but can be specified by absolute path.
-c.ConnectionFileMixin.connection_file = ‘’</p>
-<p>set the control (ROUTER) port [default: random]
-c.ConnectionFileMixin.control_port = 0</p>
-<p>set the heartbeat port [default: random]
-c.ConnectionFileMixin.hb_port = 0</p>
-<p>set the iopub (PUB) port [default: random]
-c.ConnectionFileMixin.iopub_port = 0</p>
-<p>Set the kernel’s IP address [default localhost]. If the IP address is
-something other than localhost, then Consoles on other machines will be able
-to connect to the Kernel, so be careful!</p>
-<p><strong>could we set a private IP of we trust the LAN?</strong>
-c.ConnectionFileMixin.ip = ‘’</p>
-<p>set the shell (ROUTER) port [default: random]
-c.ConnectionFileMixin.shell_port = 0</p>
-<p>set the stdin (ROUTER) port [default: random]
-c.ConnectionFileMixin.stdin_port = 0</p>
-<p>c.ConnectionFileMixin.transport = ‘tcp’</p>
-</div>
-<div class="section" id="interactiveshellapp-configurable-configuration">
-<h6>InteractiveShellApp(Configurable) configuration<a class="headerlink" href="#interactiveshellapp-configurable-configuration" title="Permalink to this headline">¶</a></h6>
-<p>A Mixin for applications that start InteractiveShell instances.</p>
-<p>Provides configurables for loading extensions and executing files as part of
-configuring a Shell environment.</p>
-<p>The following methods should be called by the <code class="xref py py-meth docutils literal notranslate"><span class="pre">initialize()</span></code> method of the
-subclass:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">init_path()</span></code></p></li>
-<li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">init_shell()</span></code> (to be implemented by the subclass)</p></li>
-<li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">init_gui_pylab()</span></code></p></li>
-<li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">init_extensions()</span></code></p></li>
-<li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">init_code()</span></code></p></li>
-</ul>
-</div></blockquote>
-<p>Execute the given command string.
-c.InteractiveShellApp.code_to_run = ‘’</p>
-<p>Run the file referenced by the PYTHONSTARTUP environment variable at IPython
-startup.
-c.InteractiveShellApp.exec_PYTHONSTARTUP = True</p>
-<p>List of files to run at IPython startup.
-c.InteractiveShellApp.exec_files = []</p>
-<p>lines of code to run at IPython startup.
-c.InteractiveShellApp.exec_lines = []</p>
-<p>A list of dotted module names of IPython extensions to load.
-c.InteractiveShellApp.extensions = []</p>
-<p>dotted module name of an IPython extension to load.
-c.InteractiveShellApp.extra_extension = ‘’</p>
-<p>A file to be run
-c.InteractiveShellApp.file_to_run = ‘’</p>
-<p>Enable GUI event loop integration with any of (‘glut’, ‘gtk’, ‘gtk2’, ‘gtk3’,
-‘osx’, ‘pyglet’, ‘qt’, ‘qt4’, ‘qt5’, ‘tk’, ‘wx’, ‘gtk2’, ‘qt4’).
-c.InteractiveShellApp.gui = None</p>
-<p>Should variables loaded at startup (by startup files, exec_lines, etc.) be
-hidden from tools like %who?
-c.InteractiveShellApp.hide_initial_ns = True</p>
-<p>Configure matplotlib for interactive use with the default matplotlib backend.
-TODO: we need to test for if we have an X11 server ready to help us out
-c.InteractiveShellApp.matplotlib = None</p>
-<p>Run the module as a script.
-c.InteractiveShellApp.module_to_run = ‘’</p>
-<p>Pre-load matplotlib and numpy for interactive use, selecting a particular
-matplotlib backend and loop integration.
-c.InteractiveShellApp.pylab = None</p>
-<p>If true, IPython will populate the user namespace with numpy, pylab, etc. and
-an <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">*</span></code> is done from numpy and pylab, when using pylab mode.</p>
-<p>When False, pylab mode should not import any names into the user namespace.
-c.InteractiveShellApp.pylab_import_all = True</p>
-<p>Reraise exceptions encountered loading IPython extensions?
-InteractiveShellApp.reraise_ipython_extension_failures = True</p>
-</div>
-<div class="section" id="application-singletonconfigurable-configuration">
-<h6>Application(SingletonConfigurable) configuration<a class="headerlink" href="#application-singletonconfigurable-configuration" title="Permalink to this headline">¶</a></h6>
-</div>
-</div>
-<hr class="docutils" />
-<div class="section" id="jupyter-kernel-config">
-<h5>Jupyter Kernel Config<a class="headerlink" href="#jupyter-kernel-config" title="Permalink to this headline">¶</a></h5>
-<p>Run a kernel locally in a subprocess</p>
-<div class="section" id="options">
-<h6>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h6>
-<p>Arguments that take values are actually convenience aliases to full
-Configurables, whose aliases are listed on the help line. For more information
-on full configurables, see ‘–help-all’.</p>
-<dl class="option-list">
-<dt><kbd><span class="option">--debug</span></kbd></dt>
-<dd><p>set log level to logging.DEBUG (maximize logging output)</p>
-</dd>
-</dl>
-<dl class="simple">
-<dt>–kernel=&lt;Unicode&gt; (KernelApp.kernel_name)</dt><dd><p>Default: ‘python3’
-The name of a kernel type to start</p>
-</dd>
-<dt>–ip=&lt;Unicode&gt; (KernelManager.ip)</dt><dd><p>Default: ‘’
-Set the kernel’s IP address [default localhost]. If the IP address is
-something other than localhost, then Consoles on other machines will be able
-to connect to the Kernel, so be careful!</p>
-</dd>
-</dl>
-</div>
-<div class="section" id="class-parameters">
-<h6>Class parameters<a class="headerlink" href="#class-parameters" title="Permalink to this headline">¶</a></h6>
-<p>Parameters are set from command-line arguments of the form:
-<code class="xref py py-obj docutils literal notranslate"><span class="pre">--Class.trait=value</span></code>. This line is evaluated in Python, so simple expressions
-are allowed, e.g.:: <code class="xref py py-obj docutils literal notranslate"><span class="pre">--C.a='range(3)'</span></code> For setting C.a=[0,1,2].</p>
-</div>
-<div class="section" id="kernelapp-options">
-<h6>KernelApp options<a class="headerlink" href="#kernelapp-options" title="Permalink to this headline">¶</a></h6>
-<dl class="simple">
-<dt>–KernelApp.answer_yes=&lt;Bool&gt;</dt><dd><p>Default: False
-Answer yes to any prompts.</p>
-</dd>
-<dt>–KernelApp.config_file=&lt;Unicode&gt;</dt><dd><p>Default: ‘’
-Full path of a config file.</p>
-</dd>
-<dt>–KernelApp.config_file_name=&lt;Unicode&gt;</dt><dd><p>Default: ‘’
-Specify a config file to load.</p>
-</dd>
-<dt>–KernelApp.generate_config=&lt;Bool&gt;</dt><dd><p>Default: False
-Generate default config file.</p>
-</dd>
-<dt>–KernelApp.kernel_name=&lt;Unicode&gt;</dt><dd><p>Default: ‘python3’
-The name of a kernel type to start</p>
-</dd>
-<dt>–KernelApp.log_datefmt=&lt;Unicode&gt;</dt><dd><p>Default: ‘%Y-%m-%d %H:%M:%S’
-The date format used by logging formatters for %(asctime)s</p>
-</dd>
-<dt>–KernelApp.log_format=&lt;Unicode&gt;</dt><dd><p>Default: ‘[%(name)s]%(highlevel)s %(message)s’
-The Logging format template</p>
-</dd>
-<dt>–KernelApp.log_level=&lt;Enum&gt;</dt><dd><p>Default: 30
-Choices: (0, 10, 20, 30, 40, 50, ‘DEBUG’, ‘INFO’, ‘WARN’, ‘ERROR’, ‘CRITICAL’)
-Set the log level by value or name.</p>
-</dd>
-</dl>
-</div>
-<div class="section" id="kernelmanager-options">
-<h6>KernelManager options<a class="headerlink" href="#kernelmanager-options" title="Permalink to this headline">¶</a></h6>
-<dl class="simple">
-<dt>–KernelManager.autorestart=&lt;Bool&gt;</dt><dd><p>Default: True
-Should we autorestart the kernel if it dies.</p>
-</dd>
-<dt>–KernelManager.connection_file=&lt;Unicode&gt;</dt><dd><p>Default: ‘’
-JSON file in which to store connection info [default: kernel-&lt;pid&gt;.json]
-This file will contain the IP, ports, and authentication key needed to
-connect clients to this kernel. By default, this file will be created in the
-security dir of the current profile, but can be specified by absolute path.</p>
-</dd>
-<dt>–KernelManager.control_port=&lt;Int&gt;</dt><dd><p>Default: 0
-set the control (ROUTER) port [default: random]</p>
-</dd>
-<dt>–KernelManager.hb_port=&lt;Int&gt;</dt><dd><p>Default: 0
-set the heartbeat port [default: random]</p>
-</dd>
-<dt>–KernelManager.iopub_port=&lt;Int&gt;</dt><dd><p>Default: 0
-set the iopub (PUB) port [default: random]</p>
-</dd>
-<dt>–KernelManager.ip=&lt;Unicode&gt;</dt><dd><p>Default: ‘’
-Set the kernel’s IP address [default localhost]. If the IP address is
-something other than localhost, then Consoles on other machines will be able
-to connect to the Kernel, so be careful!</p>
-</dd>
-<dt>–KernelManager.kernel_cmd=&lt;List&gt;</dt><dd><p>Default: []
-DEPRECATED: Use kernel_name instead.
-The Popen Command to launch the kernel. Override this if you have a custom
-kernel. If kernel_cmd is specified in a configuration file, Jupyter does not
-pass any arguments to the kernel, because it cannot make any assumptions
-about the arguments that the kernel understands. In particular, this means
-that the kernel does not receive the option –debug if it given on the
-Jupyter command line.</p>
-</dd>
-<dt>–KernelManager.shell_port=&lt;Int&gt;</dt><dd><p>Default: 0
-set the shell (ROUTER) port [default: random]</p>
-</dd>
-<dt>–KernelManager.shutdown_wait_time=&lt;Float&gt;</dt><dd><p>Default: 5.0
-Time to wait for a kernel to terminate before killing it, in seconds.</p>
-</dd>
-<dt>–KernelManager.stdin_port=&lt;Int&gt;</dt><dd><p>Default: 0
-set the stdin (ROUTER) port [default: random]</p>
-</dd>
-<dt>–KernelManager.transport=&lt;CaselessStrEnum&gt;</dt><dd><p>Default: ‘tcp’
-Choices: [‘tcp’, ‘ipc’]</p>
-</dd>
-</dl>
-</div>
-<div class="section" id="kernelspecmanager-options">
-<h6>KernelSpecManager options<a class="headerlink" href="#kernelspecmanager-options" title="Permalink to this headline">¶</a></h6>
-<dl class="simple">
-<dt>–KernelSpecManager.ensure_native_kernel=&lt;Bool&gt;</dt><dd><p>Default: True
-If there is no Python kernelspec registered and the IPython kernel is
-available, ensure it is added to the spec list.</p>
-</dd>
-<dt>–KernelSpecManager.kernel_spec_class=&lt;Type&gt;</dt><dd><p>Default: ‘jupyter_client.kernelspec.KernelSpec’
-The kernel spec class.  This is configurable to allow subclassing of the
-KernelSpecManager for customized behavior.</p>
-</dd>
-<dt>–KernelSpecManager.whitelist=&lt;Set&gt;</dt><dd><p>Default: set()
-Whitelist of allowed kernel names.
-By default, all installed kernels are allowed.</p>
-</dd>
-</dl>
-<dl class="function">
-<dt id="profile_default.ipython_kernel_config.get_home">
-<code class="sig-prename descclassname">profile_default.ipython_kernel_config.</code><code class="sig-name descname">get_home</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/profile_default/ipython_kernel_config.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/profile_default/ipython_kernel_config.html#get_home"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profile_default.ipython_kernel_config.get_home" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="section" id="module-profile_default">
-<span id="module-contents"></span><span id="profile-default-contents"></span><h2>Module contents<a class="headerlink" href="#module-profile_default" title="Permalink to this headline">¶</a></h2>
-<p>Initialize the global IPython instance and begin configuring.</p>
-<div class="section" id="requires">
-<h3>Requires<a class="headerlink" href="#requires" title="Permalink to this headline">¶</a></h3>
-<p>Python3 and IPython 7+</p>
-<p>05/21/2019:</p>
-<p>Commented out IPython because the package dependency in an __init__
-file means that an unsuspecting user will try to install and the build
-will fail before pip even gets a chance to install the dependencies.</p>
-<p>Jul 12, 2019:</p>
-<p>Admittedly, you could just use a try/except….</p>
 </div>
 </div>
 </div>
@@ -356,32 +133,12 @@ will fail before pip even gets a chance to install the dependencies.</p>
 <div id="sidebartoc">
   <ul>
 <li><a class="reference internal" href="#">profile_default package</a><ul>
-<li><a class="reference internal" href="#submodules">Submodules</a><ul>
-<li><a class="reference internal" href="#module-profile_default.ipython_config">profile_default.ipython_config module</a></li>
-<li><a class="reference internal" href="#module-profile_default.ipython_kernel_config">profile_default.ipython_kernel_config module</a><ul>
-<li><a class="reference internal" href="#module-ipython_kernel_config">IPython Kernel Configuration</a><ul>
-<li><a class="reference internal" href="#ipython-kernel-config">IPython Kernel Config</a><ul>
-<li><a class="reference internal" href="#connectionfilemixin-loggingconfigurable-configuration">ConnectionFileMixin(LoggingConfigurable) configuration</a></li>
-<li><a class="reference internal" href="#interactiveshellapp-configurable-configuration">InteractiveShellApp(Configurable) configuration</a></li>
-<li><a class="reference internal" href="#application-singletonconfigurable-configuration">Application(SingletonConfigurable) configuration</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#jupyter-kernel-config">Jupyter Kernel Config</a><ul>
-<li><a class="reference internal" href="#options">Options</a></li>
-<li><a class="reference internal" href="#class-parameters">Class parameters</a></li>
-<li><a class="reference internal" href="#kernelapp-options">KernelApp options</a></li>
-<li><a class="reference internal" href="#kernelmanager-options">KernelManager options</a></li>
-<li><a class="reference internal" href="#kernelspecmanager-options">KernelSpecManager options</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
 <li><a class="reference internal" href="#module-profile_default">Module contents</a><ul>
 <li><a class="reference internal" href="#requires">Requires</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#submodules">Submodules</a><ul>
+<li><a class="reference internal" href="#module-profile_default.ipython_config">profile_default.ipython_config module</a></li>
 </ul>
 </li>
 </ul>
