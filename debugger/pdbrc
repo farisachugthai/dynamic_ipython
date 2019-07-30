@@ -22,24 +22,6 @@
     "-c 'until X'"
     ipdb version 0.10.3.
 
-From IPython's core interactiveshell module.::
-
-    self.pt_app = PromptSession(
-                        editing_mode=editing_mode,
-                        key_bindings=key_bindings,
-                        history=history,
-                        completer=IPythonPTCompleter(shell=self),
-                        enable_history_search = self.enable_history_search,
-                        style=self.style,
-                        include_default_pygments_style=False,
-                        mouse_support=self.mouse_support,
-                        enable_open_in_editor=self.extra_open_editor_shortcuts,
-                        color_depth=(ColorDepth.TRUE_COLOR if self.true_color else None),
-                        **self._extra_prompt_options())
-
-That's probably a good way to initialize a PromptSession then.
-
-
 """
 import os
 from pprint import pprint
@@ -51,43 +33,6 @@ try:
 except (ImportError, ModuleNotFoundError):
     import pdb
 
-# Gonna make this a prompt_toolkit testing ground
-try:
-    import prompt_toolkit
-except (ImportError, ModuleNotFoundError):
-    # sys.exit('Install prompt_toolkit.')
-    pass
-else:
-    from prompt_toolkit.history import InMemoryHistory
-    from prompt_toolkit.output.color_depth import ColorDepth
-    from prompt_toolkit.key_bindings.defaults import load_default_bindings
-    from prompt_toolkit.shortcuts import PromptSession
-
-    try:
-        from gruvbox.style import GruvboxStyle
-    except (ImportError, ModuleNotFoundError):
-        style = 'Monokai'
-    else:
-        style = GruvboxStyle
-
-    # A handful are none because I wanna come back and fill them in
-    test = PromptSession(vi_mode=True, enable_history_search=True,
-                         search_ignore_case=True, enable_system_prompt=False,
-                         enable_suspend=True, enable_open_in_editor=True,
-                         completer=None, history=InMemoryHistory(),
-                         style=style, key_binding=load_default_bindings,
-                         multiline=True,
-                         bottom_toolbar=None, lexer=None, clipboard=None)
-
-    while True:
-        try:
-            test.prompt()
-        # except KeyboardError:  # what is this really called?
-        except EOFError:
-            sys.exit()
-        # should add a bunch more
-
-
 # https://github.com/python/cpython/blob/3.7/Lib/pdb.py#L1380
 # in the do_alias() function it mentions some examples and they sounded like
 # useful alias to tack on!
@@ -95,29 +40,29 @@ else:
 # def create_aliases():
 
 # Print instance variables (usage "pi classInst")
-alias pi for k in % 1.__dict__.keys(): print("%1.", k, "=", % 1.__dict__[k])  # noqa
-# Print instance variables in self
-alias ps pi self
+# alias pi for k in % 1.__dict__.keys(): print("%1.", k, "=", % 1.__dict__[k])  # noqa
+# # Print instance variables in self
+# alias ps pi self
 
-# Apr 07, 2019
-# How in the world have I gone this long without noticing this isn't set up
-alias ? pinfo
-# Kinda sucks now only ?func is valid not func?
-alias ?? pinfo2
+# # Apr 07, 2019
+# # How in the world have I gone this long without noticing this isn't set up
+# alias ? pinfo
+# # Kinda sucks now only ?func is valid not func?
+# alias ?? pinfo2
 
-# this is probably not how we wanna do this
-# if '%1':
-#     alias ls os.listdir('%l')
-# else:
-#     alias ls os.listdir(os.curdir) '%l'
+# # this is probably not how we wanna do this
+# # if '%1':
+# #     alias ls os.listdir('%l')
+# # else:
+# #     alias ls os.listdir(os.curdir) '%l'
 
-# alias cd os.chdir('%s')
-# TODO: fix this
-# alias nvim subprocess.run(['nvim', '%1', '%2', '%3'], sys.stdout='DEV.NULL')
+# # alias cd os.chdir('%s')
+# # TODO: fix this
+# # alias nvim subprocess.run(['nvim', '%1', '%2', '%3'], sys.stdout='DEV.NULL')
 
-# I wonder/hope this is recursive
-alias ~ os.expanduser('~')
+# # I wonder/hope this is recursive
+# alias ~ os.expanduser('~')
 
-# if os.environ.get('PREFIX'):
-#     subprocess.run([])
-# Vim: set ft=python:
+# # if os.environ.get('PREFIX'):
+# #     subprocess.run([])
+# # Vim: set ft=python:

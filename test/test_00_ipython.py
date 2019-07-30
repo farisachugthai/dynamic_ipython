@@ -52,7 +52,11 @@ from IPython import get_ipython
 
 
 class TestIPython(unittest.TestCase):
-    """For debugging the test suite."""
+    """For debugging the test suite.
+
+    Who knew overriding the :class:`unittest.TestCase()` ``__init__`` method would be
+    such a hassle?
+    """
 
     shell = get_ipython()
 
@@ -71,7 +75,11 @@ class TestIPython(unittest.TestCase):
         self.assertIsInstance(self.shell, str)
 
     def runTest(self):
-        """This is required as stated in the unittest.TestCase docstring.
+        """runTest function for:
+
+        :mod:`test_00_ipython`
+        :class:`TestIPython()`
+        :func:`runTest`
 
         As a result, the only use of this function will be to call the necessary
         methods.

@@ -12,7 +12,7 @@ Interactively Binding Keys
 ==========================
 
 If we would like to add extra keybindings to the IPython shell, we can utilize
-a few functions built into the :mod:`~IPython.terminal.interactiveshell` module,
+a few functions built into the :mod:`IPython.terminal.interactiveshell` module,
 in addition, to utilizing the expansive :mod:`prompt_toolkit` library.
 
 First we'll initialize a global instance of the shell.
