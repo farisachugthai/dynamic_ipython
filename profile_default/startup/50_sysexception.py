@@ -99,6 +99,7 @@ really cool.:
 """
 import sys
 
+from IPython import get_ipython
 from IPython.core import ultratb
 
 
@@ -141,3 +142,8 @@ class ExceptionHook(BaseException):
 
 
 sys.excepthook = ExceptionHook()
+
+if __name__ == '__main__':
+    _ip = get_ipython()
+    # So the InteractiveShell class tmk has an attribute called excepthook but
+    # it's probably a bad idea to overwrite it

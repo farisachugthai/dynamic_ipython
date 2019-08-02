@@ -121,6 +121,7 @@ form of rst docs and ipynb notebooks.
 .. toctree::
    :caption: Tutorial
    :maxdepth: 2
+   :noindex:
 
    Startup <startup>
    Keybindings <ipython_keybindings>
@@ -139,8 +140,9 @@ form of rst docs and ipynb notebooks.
    :caption: API Docs
    :maxdepth: 1
    :titlesonly:
+   :noindex:
 
-   IPython Shell Initialization <profile_default>
+   IPython Shell Initialization <profile/index>
    Jupyter ZMQShell <jupyter>
    Notebook Extensions <extensions>
    Developers Notes <dev>

@@ -14,6 +14,9 @@ from IPython.paths import get_ipython_dir
 # import
 from traitlets.config import get_config
 
+
+logging.basicConfig(level=logging.INFO)
+
 c = get_config()
 
 # not allowed in this file. func returns None so I suppose IPython hasn't
@@ -548,13 +551,15 @@ c.TerminalInteractiveShell.true_color = True
 
 # HistoryManager.connection_options=<Dict>
 # Default: {}
+
 # Options for configuring the SQLite connection
 # These options are passed as keyword args to sqlite3.connect when
 # establishing database connections.
 # A class to organize all history-related functionality in one place.
+# c.HistoryManager.connection_options={}
 
 # Write to database every x commands (higher values save disk access & power).
-#  Values of 1 or less effectively disable caching.
+# Values of 1 or less effectively disable caching.
 c.HistoryManager.db_cache_size = 6
 
 # Should the history database include output? (default: no)
@@ -575,8 +580,6 @@ c.HistoryManager.db_log_output = True
 # Set the profile location directly. This overrides the logic used by the
 #  `profile` option.
 
-# Don't enable! Check .startup.02_path.IPythonPath.
-# Well that's gonna have to sit on the backburner for a little while we debug.
 # 05/18/19: I'm enabling this as it overrides the logic used for profile in
 # the `BaseIPythonApplication` section
 c.ProfileDir.location = os.path.join(home, '', 'ipython')
@@ -656,7 +659,7 @@ c.PlainTextFormatter.max_seq_length = 100
 
 # c.PlainTextFormatter.pprint = True
 
-# c.PlainTextFormatter.verbose = False
+c.PlainTextFormatter.verbose = True
 
 # ----------------------------------------------------------------------------
 # Completer(Configurable) configuration
