@@ -74,7 +74,7 @@
 <span class="kn">from</span> <span class="nn">profile_default.util</span> <span class="k">import</span> <span class="n">module_log</span>
 
 
-<div class="viewcode-block" id="pandas_init"><a class="viewcode-back" href="../../../profile_default.startup.html#profile_default.startup.42_pandas_init.pandas_init">[docs]</a><span class="k">def</span> <span class="nf">pandas_init</span><span class="p">():</span>
+<div class="viewcode-block" id="pandas_init"><a class="viewcode-back" href="../../../profile/startup.html#profile_default.startup.42_pandas_init.pandas_init">[docs]</a><span class="k">def</span> <span class="nf">pandas_init</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Define options for :mod:`pandas` startup.</span>
 
 <span class="sd">    .. tip::</span>
@@ -83,9 +83,9 @@
 <span class="sd">        ``&#39;show_dimensions&#39;`` means show the size of the `pd.DataFrame` object.</span>
 
 <span class="sd">        ``truncate`` indicates to only display it when the DataFrame is...</span>
-<span class="sd">        well truncated. [1]_</span>
+<span class="sd">        well truncated. [1]</span>
 
-<span class="sd">        _[1]: https://pandas.pydata.org/pandas-docs/stable/user-guide/options.html</span>
+<span class="sd">        .. [1] https://pandas.pydata.org/pandas-docs/stable/user-guide/options.html</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">options</span> <span class="o">=</span> <span class="p">{</span>
@@ -115,7 +115,7 @@
     <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s2">&quot;This module requires Python 3.6+&quot;</span><span class="p">)</span>
 
-    <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="vm">__name__</span><span class="p">)</span>
+    <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;profile_default.startup.pandas_init&#39;</span><span class="p">)</span>
     <span class="n">LOGGER</span> <span class="o">=</span> <span class="n">module_log</span><span class="o">.</span><span class="n">stream_logger</span><span class="p">(</span><span class="n">logger</span><span class="o">=</span><span class="n">log</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
 
     <span class="k">try</span><span class="p">:</span>
@@ -124,7 +124,7 @@
         <span class="c1"># jesus christ this just printed the error like 8 times. need to fix</span>
         <span class="c1"># LOGGER.warning(&quot;Import error: %s&quot; % e, exc_info=1)</span>
         <span class="c1"># sys.exit()</span>
-        <span class="k">pass</span>
+        <span class="n">LOGGER</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Import error: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">pandas_init</span><span class="p">()</span>
 </pre></div>
@@ -154,11 +154,10 @@
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../profile_default.html">IPython Shell Initialization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../profile/index.html">IPython Shell Initialization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../jupyter.html">Jupyter ZMQShell</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Notebook Extensions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../dev.html">Developers Notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">profile_default</a></li>
 </ul>
 
 </div>

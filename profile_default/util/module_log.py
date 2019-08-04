@@ -13,8 +13,8 @@ module_log
 Create a few formatters and logging instances that can be easily
 imported and utilized across the package.
 
-Currently :func:`module_log.stream_logger()` is the easiest and most oft
-used entry point in this module.
+Currently :func:`profile_default.util.module_log.stream_logger()`
+is the easiest and most oft used entry point in this module.
 
 """
 from datetime import datetime
@@ -66,7 +66,7 @@ def path_logger(logger=None):
 
 
 def stream_logger(logger, log_level=logging.INFO, msg_format=None):
-    """Set up a :class:`~logging.Logger()` instance, add a stream handler.
+    """Set up a :class:`logging.Logger()` instance, add a stream handler.
 
     Should do some validation on the log level there. There's a really
     useful block of code in the tutorial.
@@ -127,7 +127,7 @@ def file_logger(
         filename, logger=None, shell=None, log_level=logging.INFO,
         msg_format=None
 ):
-    r"""Logging that emits :class:`logging.LogRecord`s to `filename`.
+    r"""Logging that emits a :class:`logging.LogRecord` to `filename`.
 
     Parameters
     ----------
@@ -142,7 +142,8 @@ def file_logger(
     log_level : int, optional
         Level of log records.
     msg_format : str, optional
-        Representation of logging messages. Uses standard %-style string formatting.
+        Representation of logging messages. Uses standard :kbd:`%` style
+        string formatting.
         Defaults to ``%(asctime)s %(levelname)s %(message)s``
 
     Returns
@@ -186,7 +187,7 @@ def json_logger(JSONFormatter=None):
     Parameters
     ----------
     JSONFormatter : :class:`logging.Formatter()`, optional
-        :ref:`~profile_default.util.module_log.JsonFormatter()` instance.
+        :ref:`profile_default.util.module_log.JsonFormatter()` instance.
         Included in the listed parameters to be explicit; however, it's
         probably easier to not include the parameter as one is configured
         in the function anyway.

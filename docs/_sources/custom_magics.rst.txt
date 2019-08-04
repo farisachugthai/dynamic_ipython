@@ -12,7 +12,8 @@ Visualization 1st ed.pdf"*:
 
    To create an extension, we need to create a Python module in a
    directory, which is in the Python path. A possibility is to put it in
-   the current directory, or in your `IPython extensions dir <../../extensions>`_
+   the current directory, or in your `IPython extensions dir
+   <../../extensions>`_
 
    An extension implements a function load_ipython_extension.
    :func:`IPython.core.magics.extension.load_ipython_extension(ipython)`,
@@ -41,19 +42,20 @@ explore all the instance's attributes interactively from
 :mod:`IPython` with tab completion. For that, you need to execute
 the following command to get the current instance
 
-.. ipython::
-
-   In [30]: _ip = get_ipython()
-
-
 Here are 2 useful functions for registering a magic with the global IPython
 instance.
 
-.. ipython::
+register_magic_function
+-----------------------
 
-   In [37]: _ip.register_magic_function
-   Signature: _ip.register_magic_function(func, magic_kind='line', magic_name=None)
-   Docstring:
+The first is the: **register_magic_function** bound to the |ip| instance.
+
+Signature: register_magic_function(func, magic_kind='line', magic_name=None)
+
+Docstring:
+
+.. code-block:: rst
+
    Expose a standalone function as magic function for IPython.
 
    This will create an IPython magic (line, cell or both) from a
@@ -68,7 +70,7 @@ instance.
    invoked as `%f`, and with cell as a string when invoked as `%%f`.
 
 Magic Function Parameters
--------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 func : callable
  Function to be registered as a magic.
@@ -80,18 +82,27 @@ magic_name : optional str
  If given, the name the magic will have in the IPython namespace.  By
  default, the name of the function itself is used.
 
-Which allows us the ability to create a magic, line or cell, out of any function.
+This affords users the ability to create a magic, line or cell, out of
+any function.
 
-.. code-block:: none
 
-   In [38]: _ip.register_magics?
-   Signature: _ip.register_magics(*magic_objects)
-   Docstring:
+The second is simply named **register_magics**.
+
+register_magics
+---------------
+
+
+Signature: ``register_magics(*magic_objects)``
+
+Docstring:
+
    Register one or more instances of Magics.
 
    Take one or more classes or instances of classes that subclass the main
-   :class:`~IPython.core.Magic` class, and register them with IPython to use the magic
-   functions they provide.  The registration process will then ensure that
+   :class:`IPython.core.magic.Magic()` class, and register them with
+   IPython to use the magic functions they provide.
+
+   The registration process will then ensure that
    any methods that have decorated to provide line and/or cell magics will
    be recognized with the `%x`/`%%x` syntax as a line/cell magic
    respectively.
@@ -102,9 +113,11 @@ Which allows us the ability to create a magic, line or cell, out of any function
 
    The provided arguments can be an arbitrary mix of classes and instances.
 
-   Parameters
-   ----------
-   magic_objects : one or more classes or instances
+
+register_magic Parameters
+~~~~~~~~~~~~~~~~~~~~~~~~~
+magic_objects : one or more classes or instances
+
 
 Example usage exists on the official website as well.
 
@@ -131,7 +144,7 @@ If you want to try out your ipython magics you can do the following:
 
     ``ip.run_line_magic('your_magic_function', 'your_magic_arguments')``
 
-*(Optional) Access results of your magic with :attr:`ip.user_ns``
+*(Optional) Access results of your magic with :attr:`ip.user_ns`
 in the IPython user namespace.*
 
 Admittedly I regularly flood my ``user_ns`` so this might not be viable in all
@@ -143,7 +156,7 @@ Alternative Method of Defining Magics with Arguments
 ----------------------------------------------------
 
 From the IPython team directly. The following is the module docstring for
-:mod:`~IPython.core.magic_arguments`.
+:mod:`IPython.core.magic_arguments`.
 
 New magic functions can be defined like so::
 
@@ -159,11 +172,14 @@ New magic functions can be defined like so::
     """
         args = parse_argstring(magic_cool, arg)
 
-The `@magic_arguments` decorator marks the function as having argparse arguments.
-The `@argument` decorator adds an argument using the same syntax as argparse's
-`add_argument()` method. More sophisticated uses may also require the
-`@argument_group` or `@kwds` decorator to customize the formatting and the
-parsing.
+The `@magic_arguments` decorator marks the function as having
+:mod:`argparse` arguments.
+
+The `@argument` decorator adds an argument using the same syntax as
+:mod:`argparse`'s `add_argument()` method.
+
+More sophisticated uses may also require the `@argument_group` or
+`@kwds` decorator to customize the formatting and the parsing.
 
 Help text for the magic is automatically generated from the docstring and the
 arguments
@@ -240,9 +256,10 @@ magic, a cell one and one that works in both modes, using just plain functions:
 
 
 You can also create magics of all three kinds by inheriting from the
-:class:`IPython.core.magic.Magics()` class.  This lets you create magics that can
-potentially hold state in between calls, and that have full access to the main
-IPython object:
+:class:`IPython.core.magic.Magics()` class.
+
+This lets you create magics that can potentially hold state in between
+calls, and that have full access to the main IPython object:
 
 This code can be put in any Python module, it does not require IPython
 itself to be running already.  It only creates the magics subclass but
@@ -292,7 +309,7 @@ You can register the class itself without instantiating it.  IPython will
 call the default constructor on it.::
 
    from IPython import get_ipython
-   
+
    shell = get_ipython()
 
    def load_ipython_extension(shell):

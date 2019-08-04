@@ -58,8 +58,8 @@
 <span class="sd">Create a few formatters and logging instances that can be easily</span>
 <span class="sd">imported and utilized across the package.</span>
 
-<span class="sd">Currently :func:`module_log.stream_logger()` is the easiest and most oft</span>
-<span class="sd">used entry point in this module.</span>
+<span class="sd">Currently :func:`profile_default.util.module_log.stream_logger()`</span>
+<span class="sd">is the easiest and most oft used entry point in this module.</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span>
@@ -90,7 +90,7 @@
     <span class="k">return</span> <span class="n">logger</span>
 
 
-<div class="viewcode-block" id="path_logger"><a class="viewcode-back" href="../../../profile_default.util.html#profile_default.util.module_log.path_logger">[docs]</a><span class="k">def</span> <span class="nf">path_logger</span><span class="p">(</span><span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="path_logger"><a class="viewcode-back" href="../../../profile/util.html#profile_default.util.module_log.path_logger">[docs]</a><span class="k">def</span> <span class="nf">path_logger</span><span class="p">(</span><span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Stream logger. Emits a warning from :func:`warnings.warn()`.</span>
 
 <span class="sd">    DEPRECATED.</span>
@@ -110,8 +110,8 @@
     <span class="k">return</span> <span class="n">logger</span></div>
 
 
-<div class="viewcode-block" id="stream_logger"><a class="viewcode-back" href="../../../profile_default.util.html#profile_default.util.module_log.stream_logger">[docs]</a><span class="k">def</span> <span class="nf">stream_logger</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="n">msg_format</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Set up a :class:`~logging.Logger()` instance, add a stream handler.</span>
+<div class="viewcode-block" id="stream_logger"><a class="viewcode-back" href="../../../profile/util.html#profile_default.util.module_log.stream_logger">[docs]</a><span class="k">def</span> <span class="nf">stream_logger</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="n">msg_format</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Set up a :class:`logging.Logger()` instance, add a stream handler.</span>
 
 <span class="sd">    Should do some validation on the log level there. There&#39;s a really</span>
 <span class="sd">    useful block of code in the tutorial.</span>
@@ -168,11 +168,11 @@
     <span class="k">return</span> <span class="n">logger</span></div>
 
 
-<div class="viewcode-block" id="file_logger"><a class="viewcode-back" href="../../../profile_default.util.html#profile_default.util.module_log.file_logger">[docs]</a><span class="k">def</span> <span class="nf">file_logger</span><span class="p">(</span>
+<div class="viewcode-block" id="file_logger"><a class="viewcode-back" href="../../../profile/util.html#profile_default.util.module_log.file_logger">[docs]</a><span class="k">def</span> <span class="nf">file_logger</span><span class="p">(</span>
         <span class="n">filename</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span>
         <span class="n">msg_format</span><span class="o">=</span><span class="kc">None</span>
 <span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Logging that emits :class:`logging.LogRecord`s to `filename`.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Logging that emits a :class:`logging.LogRecord` to `filename`.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -187,7 +187,8 @@
 <span class="sd">    log_level : int, optional</span>
 <span class="sd">        Level of log records.</span>
 <span class="sd">    msg_format : str, optional</span>
-<span class="sd">        Representation of logging messages. Uses standard %-style string formatting.</span>
+<span class="sd">        Representation of logging messages. Uses standard :kbd:`%` style</span>
+<span class="sd">        string formatting.</span>
 <span class="sd">        Defaults to ``%(asctime)s %(levelname)s %(message)s``</span>
 
 <span class="sd">    Returns</span>
@@ -225,13 +226,13 @@
     <span class="k">return</span> <span class="n">logger</span></div>
 
 
-<div class="viewcode-block" id="json_logger"><a class="viewcode-back" href="../../../profile_default.util.html#profile_default.util.module_log.json_logger">[docs]</a><span class="k">def</span> <span class="nf">json_logger</span><span class="p">(</span><span class="n">JSONFormatter</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="json_logger"><a class="viewcode-back" href="../../../profile/util.html#profile_default.util.module_log.json_logger">[docs]</a><span class="k">def</span> <span class="nf">json_logger</span><span class="p">(</span><span class="n">JSONFormatter</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Set up a logger that returns properly formatted JSON.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    JSONFormatter : :class:`logging.Formatter()`, optional</span>
-<span class="sd">        :ref:`~profile_default.util.module_log.JsonFormatter()` instance.</span>
+<span class="sd">        :ref:`profile_default.util.module_log.JsonFormatter()` instance.</span>
 <span class="sd">        Included in the listed parameters to be explicit; however, it&#39;s</span>
 <span class="sd">        probably easier to not include the parameter as one is configured</span>
 <span class="sd">        in the function anyway.</span>
@@ -265,10 +266,10 @@
     <span class="k">return</span> <span class="n">root_logger</span></div>
 
 
-<div class="viewcode-block" id="JsonFormatter"><a class="viewcode-back" href="../../../profile_default.util.html#profile_default.util.module_log.JsonFormatter">[docs]</a><span class="k">class</span> <span class="nc">JsonFormatter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">):</span>
+<div class="viewcode-block" id="JsonFormatter"><a class="viewcode-back" href="../../../profile/util.html#profile_default.util.module_log.JsonFormatter">[docs]</a><span class="k">class</span> <span class="nc">JsonFormatter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Return valid :mod:`json` for a configured handler.&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="JsonFormatter.format"><a class="viewcode-back" href="../../../profile_default.util.html#profile_default.util.module_log.JsonFormatter.format">[docs]</a>    <span class="k">def</span> <span class="nf">format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
+<div class="viewcode-block" id="JsonFormatter.format"><a class="viewcode-back" href="../../../profile/util.html#profile_default.util.module_log.JsonFormatter.format">[docs]</a>    <span class="k">def</span> <span class="nf">format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Format a :class:`logging.LogRecord()`.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">record</span><span class="o">.</span><span class="n">exc_info</span><span class="p">:</span>
             <span class="n">exc</span> <span class="o">=</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exception</span><span class="p">(</span><span class="o">*</span><span class="n">record</span><span class="o">.</span><span class="n">exc_info</span><span class="p">)</span>
@@ -309,11 +310,10 @@
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../profile_default.html">IPython Shell Initialization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../profile/index.html">IPython Shell Initialization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../jupyter.html">Jupyter ZMQShell</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Notebook Extensions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../dev.html">Developers Notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">profile_default</a></li>
 </ul>
 
 </div>

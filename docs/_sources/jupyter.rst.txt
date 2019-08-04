@@ -45,6 +45,35 @@ The initial entry point for :command:`jupyter-qtconsole` is in the following::
 Worth skimming.
 
 
+The following is from the Jupyter QTConsole help.
+
+Display
+=======
+
+For example, if using the IPython kernel, there are functions available for
+object display:
+
+
+    In [4]: from IPython.display import display
+
+    In [5]: from IPython.display import display_png, display_svg
+
+Python objects can simply be passed to these functions and the appropriate
+representations will be displayed in the console as long as the objects know
+how to compute those representations. The easiest way of teaching objects how
+to format themselves in various representations is to define special methods
+such as: ``_repr_svg_`` and ``_repr_png_``. IPython's display formatters
+can also be given custom formatter functions for various types::
+
+    In [6]: ip = get_ipython()
+
+    In [7]: png_formatter = ip.display_formatter.formatters['image/png']
+
+    In [8]: png_formatter.for_type(Foo, foo_to_png)
+
+For further details, see ``IPython.core.formatters``.
+
+
 Jupyter Notebook
 ================
 
@@ -58,7 +87,7 @@ Jupyter Notebook
 
 
 JupyterApp(Application) configuration
------------------------------------------------------------------------------
+-------------------------------------
 
 Base class for Jupyter applications
 Answer yes to any prompts.::
@@ -79,7 +108,7 @@ Generate default config file.::
 
 
 NotebookApp(JupyterApp) configuration
------------------------------------------------------------------------------
+-------------------------------------
 
 Set the Access-Control-Allow-Credentials: true header::
 
@@ -135,9 +164,9 @@ Leading and trailing slashes can be omitted, and will automatically be added.::
    c.NotebookApp.base_url = '/'
 
 Specify what command to use to invoke a web browser when opening the notebook.
-If not specified, the default browser will be determined by the :mod:`webbrowser`
-standard library module, which allows setting of the :envvar:`$BROWSER`
-environment variable to override it.::
+If not specified, the default browser will be determined by
+the :mod:`webbrowser` standard library module, which allows setting
+of the :envvar:`$BROWSER` environment variable to override it.::
 
    c.NotebookApp.browser = ''
 
@@ -207,8 +236,9 @@ Originate from pages served by this server (validated with XSRF cookie and
 token), or authenticate with a token
 
 Some anonymous compute resources still desire the ability to run code,
-completely without authentication. These services can disable all authentication
-and security checks, with the full knowledge of what that implies.::
+completely without authentication. These services can disable
+all authentication and security checks, with the full knowledge of
+what that implies.::
 
    c.NotebookApp.disable_check_xsrf = False
 
@@ -317,7 +347,7 @@ MathJax, for example:  /static/components/MathJax/MathJax.js::
 
 Sets the maximum allowed size of the client request body, specified in  the
 Content-Length request header field. If the size in a request  exceeds the
-configured value, a malformed HTTP message is returned to the client.::
+configured value, a malformed :mod:`HTTP` message is returned to the client.::
 
    c.NotebookApp.max_body_size = 536870912
 
@@ -338,8 +368,8 @@ The directory to use for notebooks and kernels.::
 
 Whether to open in a browser after starting. The specific browser used is
 platform dependent and determined by the python standard library `webbrowser`
-module, unless it is overridden using the --browser (NotebookApp.browser)
-configuration option.::
+module, unless it is overridden using the :option:`browser`
+(NotebookApp.browser) configuration option.::
 
     c.NotebookApp.open_browser = True
 
@@ -357,9 +387,8 @@ Forces users to use a password for the Notebook server. This is useful in a
 multi user environment, for instance when everybody in the LAN can access each
 other's machine through ssh.
 
-.. please observe the git log frl
-In such a case, server the notebook server on loca1lhost is not secure since
-any user can connect to the notebook server via :command:`ssh`.::
+In such a case, server the notebook server on localhost is not secure since
+any user can connect to the notebook server via :command:`ssh`.
 
     c.NotebookApp.password_required = False
 
@@ -412,8 +441,8 @@ Supply overrides for ``terminado``. Currently only supports "shell_command".::
 Set to False to disable terminals.
 This does *not* make the notebook server more secure by itself. Anything the
 user can in a terminal, they can also do in a notebook.
-Terminals may also be automatically disabled if the ``terminado`` package is not
-available.::
+Terminals may also be automatically disabled if the ``terminado`` package
+is not available.::
 
     c.NotebookApp.terminals_enabled = True
 
@@ -448,7 +477,8 @@ None (default) will disable compression.
 
 A dict (even an empty one) will enable compression.
 
-See the tornado docs for ``WebSocketHandler.get_compression_options`` for details.::
+See the tornado docs for ``WebSocketHandler.get_compression_options``
+for details.::
 
     c.NotebookApp.websocket_compression_options = None
 
@@ -468,7 +498,7 @@ NteractApp(NotebookApp) configuration
 Application for running :command:`nteract` on a jupyter notebook server.
 
 Whether to start the app in dev mode. Expects resources to be loaded from
-Webpack's hot reloading server at `<http://localhost:8357>`_. Run
+Webpack's hot reloading server at http://localhost:8357. Run
 
 .. code-block:: console
 
@@ -510,12 +540,14 @@ There are four handlers defined.
 
   - You will need to configure ``stream_image_handler``
 
-- 'tempfile': Use an external program to show the image.  Image will be saved in
-  a temporary file and the program will be called with that file.
+- 'tempfile': Use an external program to show the image.
+  Image will be saved in a temporary file and the program will be
+  called with that file.
 
   - You will need to configure ``tempfile_image_handler``
 
-- 'callable': You can set any Python callable which is called with the image data.
+- 'callable': You can set any Python callable which is called with the
+  image data.
 
     - You will need to configure ``callable_image_handler``.::
 

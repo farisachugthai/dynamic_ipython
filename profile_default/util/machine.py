@@ -50,13 +50,13 @@ from profile_default.util import module_log
 class Platform:
     """Abstract away platform differences.
 
-    After toying with the initial implementation,I realized I could simply
-    bind the :class:`pathlib.Path()` instance directly to :ref:`Platform`
+    After toying with the initial implementation, I realized I could simply
+    bind the :class:`pathlib.Path()` instance directly to `Platform`
     during initialization.
 
     This allows for a user to check the `sys.platform` instance, and then
-    act in an appropriate manner without knowing what the :class:`pathlib.Path()`
-    actually initialized to.
+    act in an appropriate manner without knowing what the
+    :class:`pathlib.Path()` actually initialized to.
 
     Parameters
     ----------
