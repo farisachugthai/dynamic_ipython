@@ -16,7 +16,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Extensions" href="extensions.html" />
-    <link rel="prev" title="profile_default.util package" href="profile_default.util.html" />
+    <link rel="prev" title="profile_default.util package" href="profile/util.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <!--[if lte IE 6]>
@@ -38,7 +38,7 @@
           <a href="extensions.html" title="Extensions"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="profile_default.util.html" title="profile_default.util package"
+          <a href="profile/util.html" title="profile_default.util package"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li> 
       </ul>
@@ -79,7 +79,31 @@ qtconsole :/</p>
 </pre></div>
 </div>
 <p>Worth skimming.</p>
+<p>The following is from the Jupyter QTConsole help.</p>
 </div>
+</div>
+<div class="section" id="display">
+<h2>Display<a class="headerlink" href="#display" title="Permalink to this headline">¶</a></h2>
+<p>For example, if using the IPython kernel, there are functions available for
+object display:</p>
+<blockquote>
+<div><p>In [4]: from IPython.display import display</p>
+<p>In [5]: from IPython.display import display_png, display_svg</p>
+</div></blockquote>
+<p>Python objects can simply be passed to these functions and the appropriate
+representations will be displayed in the console as long as the objects know
+how to compute those representations. The easiest way of teaching objects how
+to format themselves in various representations is to define special methods
+such as: <code class="docutils literal notranslate"><span class="pre">_repr_svg_</span></code> and <code class="docutils literal notranslate"><span class="pre">_repr_png_</span></code>. IPython’s display formatters
+can also be given custom formatter functions for various types:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [6]: </span><span class="n">ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+
+<span class="gp">In [7]: </span><span class="n">png_formatter</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">display_formatter</span><span class="o">.</span><span class="n">formatters</span><span class="p">[</span><span class="s1">&#39;image/png&#39;</span><span class="p">]</span>
+
+<span class="gp">In [8]: </span><span class="n">png_formatter</span><span class="o">.</span><span class="n">for_type</span><span class="p">(</span><span class="n">Foo</span><span class="p">,</span> <span class="n">foo_to_png</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For further details, see <code class="docutils literal notranslate"><span class="pre">IPython.core.formatters</span></code>.</p>
 </div>
 <div class="section" id="jupyter-notebook">
 <h2>Jupyter Notebook<a class="headerlink" href="#jupyter-notebook" title="Permalink to this headline">¶</a></h2>
@@ -165,9 +189,9 @@ Leading and trailing slashes can be omitted, and will automatically be added.:</
 </pre></div>
 </div>
 <p>Specify what command to use to invoke a web browser when opening the notebook.
-If not specified, the default browser will be determined by the <a class="reference external" href="https://docs.python.org/3/library/webbrowser.html#module-webbrowser" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">webbrowser</span></code></a>
-standard library module, which allows setting of the <span class="target" id="index-0"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">$BROWSER</span></code>
-environment variable to override it.:</p>
+If not specified, the default browser will be determined by
+the <a class="reference external" href="https://docs.python.org/3/library/webbrowser.html#module-webbrowser" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">webbrowser</span></code></a> standard library module, which allows setting
+of the <span class="target" id="index-0"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">$BROWSER</span></code> environment variable to override it.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">browser</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
 </pre></div>
 </div>
@@ -235,8 +259,9 @@ forgeries, requiring API requests to either:
 Originate from pages served by this server (validated with XSRF cookie and
 token), or authenticate with a token</p>
 <p>Some anonymous compute resources still desire the ability to run code,
-completely without authentication. These services can disable all authentication
-and security checks, with the full knowledge of what that implies.:</p>
+completely without authentication. These services can disable
+all authentication and security checks, with the full knowledge of
+what that implies.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">disable_check_xsrf</span> <span class="o">=</span> <span class="bp">False</span>
 </pre></div>
 </div>
@@ -347,7 +372,7 @@ MathJax, for example:  /static/components/MathJax/MathJax.js:</p>
 </div>
 <p>Sets the maximum allowed size of the client request body, specified in  the
 Content-Length request header field. If the size in a request  exceeds the
-configured value, a malformed HTTP message is returned to the client.:</p>
+configured value, a malformed <code class="xref py py-mod docutils literal notranslate"><span class="pre">HTTP</span></code> message is returned to the client.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">max_body_size</span> <span class="o">=</span> <span class="mi">536870912</span>
 </pre></div>
 </div>
@@ -368,8 +393,8 @@ will be loaded in alphabetical order.:</p>
 </div>
 <p>Whether to open in a browser after starting. The specific browser used is
 platform dependent and determined by the python standard library <a class="reference external" href="https://docs.python.org/3/library/webbrowser.html#module-webbrowser" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">webbrowser</span></code></a>
-module, unless it is overridden using the –browser (NotebookApp.browser)
-configuration option.:</p>
+module, unless it is overridden using the <code class="xref std std-option docutils literal notranslate"><span class="pre">browser</span></code>
+(NotebookApp.browser) configuration option.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">open_browser</span> <span class="o">=</span> <span class="bp">True</span>
 </pre></div>
 </div>
@@ -385,11 +410,11 @@ configuration option.:</p>
 <p>Forces users to use a password for the Notebook server. This is useful in a
 multi user environment, for instance when everybody in the LAN can access each
 other’s machine through ssh.</p>
-<p>In such a case, server the notebook server on loca1lhost is not secure since
-any user can connect to the notebook server via <strong class="command">ssh</strong>.:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">password_required</span> <span class="o">=</span> <span class="bp">False</span>
-</pre></div>
-</div>
+<p>In such a case, server the notebook server on localhost is not secure since
+any user can connect to the notebook server via <strong class="command">ssh</strong>.</p>
+<blockquote>
+<div><p>c.NotebookApp.password_required = False</p>
+</div></blockquote>
 <p>The port the notebook server will listen on.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="mi">8888</span>
 </pre></div>
@@ -438,8 +463,8 @@ details.:</p>
 <p>Set to False to disable terminals.
 This does <em>not</em> make the notebook server more secure by itself. Anything the
 user can in a terminal, they can also do in a notebook.
-Terminals may also be automatically disabled if the <code class="docutils literal notranslate"><span class="pre">terminado</span></code> package is not
-available.:</p>
+Terminals may also be automatically disabled if the <code class="docutils literal notranslate"><span class="pre">terminado</span></code> package
+is not available.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">terminals_enabled</span> <span class="o">=</span> <span class="bp">True</span>
 </pre></div>
 </div>
@@ -470,7 +495,8 @@ SSL.:</p>
 <a href="#id1"><span class="problematic" id="id2">:method:`WebSocketHandler.get_compression_options`</span></a>.</p>
 <p>None (default) will disable compression.</p>
 <p>A dict (even an empty one) will enable compression.</p>
-<p>See the tornado docs for <code class="docutils literal notranslate"><span class="pre">WebSocketHandler.get_compression_options</span></code> for details.:</p>
+<p>See the tornado docs for <code class="docutils literal notranslate"><span class="pre">WebSocketHandler.get_compression_options</span></code>
+for details.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">websocket_compression_options</span> <span class="o">=</span> <span class="bp">None</span>
 </pre></div>
 </div>
@@ -521,13 +547,15 @@ the STDIN  of the program.</p>
 <li><p>You will need to configure <code class="docutils literal notranslate"><span class="pre">stream_image_handler</span></code></p></li>
 </ul>
 </li>
-<li><p>‘tempfile’: Use an external program to show the image.  Image will be saved in
-a temporary file and the program will be called with that file.</p>
+<li><p>‘tempfile’: Use an external program to show the image.
+Image will be saved in a temporary file and the program will be
+called with that file.</p>
 <ul class="simple">
 <li><p>You will need to configure <code class="docutils literal notranslate"><span class="pre">tempfile_image_handler</span></code></p></li>
 </ul>
 </li>
-<li><p>‘callable’: You can set any Python callable which is called with the image data.</p>
+<li><p>‘callable’: You can set any Python callable which is called with the
+image data.</p>
 <blockquote>
 <div><ul>
 <li><p>You will need to configure <code class="docutils literal notranslate"><span class="pre">callable_image_handler</span></code>.:</p>
@@ -551,7 +579,7 @@ a temporary file and the program will be called with that file.</p>
         <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="profile_default.util.html" title="previous chapter">profile_default.util package</a></li>
+      <li>Previous: <a href="profile/util.html" title="previous chapter">profile_default.util package</a></li>
       <li>Next: <a href="extensions.html" title="next chapter">Extensions</a></li>
   </ul></li>
 </ul>
@@ -569,11 +597,10 @@ a temporary file and the program will be called with that file.</p>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="profile_default.html">IPython Shell Initialization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="profile/index.html">IPython Shell Initialization</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Jupyter ZMQShell</a></li>
 <li class="toctree-l1"><a class="reference internal" href="extensions.html">Notebook Extensions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dev.html">Developers Notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">profile_default</a></li>
 </ul>
 
 </div>
@@ -588,6 +615,7 @@ a temporary file and the program will be called with that file.</p>
 <li><a class="reference internal" href="#initializing-jupyter-qtconsole">Initializing Jupyter QTConsole</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#display">Display</a></li>
 <li><a class="reference internal" href="#jupyter-notebook">Jupyter Notebook</a><ul>
 <li><a class="reference internal" href="#jupyterapp-application-configuration">JupyterApp(Application) configuration</a></li>
 <li><a class="reference internal" href="#notebookapp-jupyterapp-configuration">NotebookApp(JupyterApp) configuration</a></li>
@@ -635,7 +663,7 @@ a temporary file and the program will be called with that file.</p>
           <a href="extensions.html" title="Extensions"
              >next</a> |</li>
         <li class="right" >
-          <a href="profile_default.util.html" title="profile_default.util package"
+          <a href="profile/util.html" title="profile_default.util package"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li> 
       </ul>
