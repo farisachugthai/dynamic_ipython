@@ -88,10 +88,12 @@ def _parse_arguments(cmds=None):
                         default=None,
                         help='filename of section or method name to build.')
 
-    parser.add_argument('-b', '--open_browser', metavar='BROWSER', type=bool,
-            default=False, dest='open_browser',
-            help='Toggle opening the docs in the default browser after'
-            ' a successful build.')
+    parser.add_argument('-b', '--open_browser',
+                        metavar='BROWSER',
+                        type=bool,
+                        default=False, dest='open_browser',
+                        help='Toggle opening the docs in the default'
+                        ' browser after a successful build.')
 
     parser.add_argument('-l',
                         '--log',
@@ -195,7 +197,7 @@ class DocBuilder:
         return cmd
         return subprocess.run([self._cmd])
 
-    def _open_browser(self, single_doc_html):
+    def open_browser(self, single_doc_html):
         """Open a browser tab showing the single doc html option."""
         url = os.path.join('file://', DOC_PATH, 'build', 'html',
                            single_doc_html)

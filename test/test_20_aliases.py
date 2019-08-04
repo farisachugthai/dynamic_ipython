@@ -10,13 +10,20 @@ because wth is this saying?
 """
 import unittest
 
-from IPython import get_ipython
+from IPython import get_ipython, start_ipython
 from IPython.utils.capture import capture_output
 
 try:
     import nose.tools as nt
+    import nose
 except (ImportError, ModuleNotFoundError):
     NO_NOSE = True
+else:
+    NO_NOSE = None
+
+_ip = get_ipython()
+if _ip is None:
+    _ip = start_ipython()
 
 
 def test_alias_lifecycle():
@@ -82,6 +89,6 @@ def test_alias_args_commented_nargs():
 
 
 if __name__ == "__main__":
-    _ip = get_ipython()
     unittest.skipIf(NO_NOSE, 'Nose not installed.')
     unittest.main()
+    nose.run()

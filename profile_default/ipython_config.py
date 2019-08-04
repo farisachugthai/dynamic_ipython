@@ -455,12 +455,12 @@ c.TerminalInteractiveShell.extra_open_editor_shortcuts = True
 # Try to import my Gruvbox class. Can be found at
 # https://github.com/farisachugthai/Gruvbox_IPython
 try:
-    from gruvbox.style import GruvboxStyle
+    from gruvbox.style import GruvboxDarkHard
 except ModuleNotFoundError:
     c.TerminalInteractiveShell.highlighting_style = 'monokai'
 
 else:
-    c.TerminalInteractiveShell.highlighting_style = GruvboxStyle
+    c.TerminalInteractiveShell.highlighting_style = GruvboxDarkHard
 
 # Override highlighting format for specific tokens
 # Comments were genuinely impossible to read. Might need to override

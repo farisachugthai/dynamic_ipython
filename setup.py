@@ -17,8 +17,9 @@ numpy.distutils.misc_utils
 import codecs
 import os
 from pathlib import Path
-import sys
+from runpy import run_path, run_module
 from shutil import rmtree
+import sys
 
 from setuptools import setup, find_packages, Command
 
@@ -47,11 +48,11 @@ REQUIRED = ['IPython>=7.6.1']
 EXTRAS = {
     'develop': ['flake8==3.7.1', 'pylint', 'yapf==0.27.0'],
     'docs': [
-        'sphinx',
+        'sphinx>=2.1.2',
         # Project uses reStructuredText, so ensure that the docutils get
         # installed or upgraded on the target machine
         'docutils>=0.3',
-        'numpydoc',
+        'numpydoc>=0.9',
         'flake8-rst',
     ]
 }
@@ -82,6 +83,10 @@ class UploadCommand(Command):  # {{{1
         """Finalize upload options."""
         pass
 
+    def _run_setup(self):
+        """I don't know why Kenneth Reitz didn't do it this way."""
+        run_path(__file__)
+
     def run(self):
         """Upload package."""
         try:
@@ -91,6 +96,7 @@ class UploadCommand(Command):  # {{{1
             pass
 
         self.status('Building Source and Wheel (universal) distribution…')
+
         os.system('{0} setup.py sdist bdist_wheel --universal'.format(
             sys.executable))
 

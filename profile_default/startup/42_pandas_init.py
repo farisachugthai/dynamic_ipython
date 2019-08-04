@@ -38,9 +38,9 @@ def pandas_init():
         ``'show_dimensions'`` means show the size of the `pd.DataFrame` object.
 
         ``truncate`` indicates to only display it when the DataFrame is...
-        well truncated. [1]_
+        well truncated. [1]
 
-        _[1]: https://pandas.pydata.org/pandas-docs/stable/user-guide/options.html
+        .. [1] https://pandas.pydata.org/pandas-docs/stable/user-guide/options.html
 
     """
     options = {
@@ -70,7 +70,7 @@ if __name__ == '__main__':
     if sys.version_info < (3, 6, 0):
         sys.exit("This module requires Python 3.6+")
 
-    log = logging.getLogger(name=__name__)
+    log = logging.getLogger(name='profile_default.startup.pandas_init')
     LOGGER = module_log.stream_logger(logger=log, log_level=logging.INFO)
 
     try:
@@ -79,6 +79,6 @@ if __name__ == '__main__':
         # jesus christ this just printed the error like 8 times. need to fix
         # LOGGER.warning("Import error: %s" % e, exc_info=1)
         # sys.exit()
-        pass
+        LOGGER.warning("Import error: %s", e)
     else:
         pandas_init()
