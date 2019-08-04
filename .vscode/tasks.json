@@ -1,17 +1,48 @@
 {
     // See https://go.microsoft.com/fwlink/?LinkId=733558
     // for the documentation about the tasks.json format
+    // idk what that is but here's the plaintext URL
+    // https://code.visualstudio.com/docs/editor/tasks#vscode
     "version": "2.0.0",
     "tasks": [
         {
             "label": "echo",
             "type": "shell",
             "command": "echo Hello"
+        },
+        {
+            "label": "conda",
+            "type": "shell",
+            "isBackground": true,
+            "windows": {
+                "command": "conda activate jupyter"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "autopep8 current file",
+            "type": "process",
+            "command": "${config:python.pythonPath}",
+            "args": [
+                "-m",
+                "autopep8",
+                "-i",
+                "${file}"
+            ]
+        },
+        {
+            "label": "YAPF current file",
+            "type": "process",
+            "command": "${config:python.pythonPath}",
+            "args": [
+                "-m",
+                "yapf",
+                "-i",
+                "${file}"
+            ]
         }
-    ],
-    "windows": {
-        "type": "shell",
-        "isBackground": true,
-        "command": "conda activate jupyter"
-    }
+    ]
 }

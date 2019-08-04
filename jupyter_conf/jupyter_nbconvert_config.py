@@ -44,9 +44,13 @@ c.Application.log_level = 20
 #
 #  WARNING: THE COMMANDLINE INTERFACE MAY CHANGE IN FUTURE RELEASES.
 
-# The export format to be used, either one of the built-in formats, or a dotted
-#  object name that represents the import path for an `Exporter` class
-c.NbConvertApp.export_format = 'executable'
+# The export format to be used, either one of the built-in formats ['asciidoc',
+# 'custom', 'html', 'html_ch', 'html_embed', 'html_toc', 'html_with_lenvs',
+# 'html_with_toclenvs', 'latex', 'latex_with_lenvs', 'markdown', 'notebook',
+# 'pdf', 'python', 'rst', 'script', 'selectLanguage', 'slides',
+# 'slides_with_lenvs'] or a dotted object name that represents the import path
+# for an `Exporter` class
+#c.NbConvertApp.export_format = 'html'
 
 # read a single notebook from stdin.
 # c.NbConvertApp.from_stdin = False
@@ -70,8 +74,8 @@ c.NbConvertApp.export_format = 'executable'
 # c.NbConvertApp.postprocessor_class = ''
 
 # Whether to apply a suffix prior to the extension (only relevant when
-#  converting to notebook format). The suffix is determined by the exporter, and
-#  is usually '.nbconvert'.
+# converting to notebook format). The suffix is determined by the exporter, and
+# is usually '.nbconvert'.
 # c.NbConvertApp.use_output_suffix = True
 
 # Writer class used to write the  results of the conversion
@@ -98,8 +102,8 @@ c.NbConvertApp.export_format = 'executable'
 # ------------------------------------------------------------------------------
 
 # Class containing methods that sequentially run a list of preprocessors on a
-#  NotebookNode object and then return the modified NotebookNode object and
-#  accompanying resources dict.
+# NotebookNode object and then return the modified NotebookNode object and
+# accompanying resources dict.
 
 # List of preprocessors available by default, by name, namespace, instance, or
 #  type.
@@ -135,16 +139,16 @@ c.NbConvertApp.export_format = 'executable'
 #
 # Filters available by default for templates:
 #
-# - add_anchor - add_prompts - ansi2html - ansi2latex - ascii_only -
-# citation2latex - comment_lines - convert_pandoc - escape_latex -
-# filter_data_type - get_lines - get_metadata - highlight2html - highlight2latex
-# - html2text - indent - ipython2python - json_dumps - markdown2asciidoc -
-# markdown2html - markdown2latex - markdown2rst - path2url - posix_path -
-# prevent_list_blocks - strip_ansi - strip_dollars - strip_files_prefix -
-# wrap_text
+# - add_anchor - add_prompts - ansi2html - ansi2latex - ascii_only
+# - citation2latex - comment_lines - convert_pandoc - escape_latex
+# - filter_data_type - get_lines - get_metadata - highlight2html - highlight2latex
+# - html2text - indent - ipython2python - json_dumps - markdown2asciidoc
+# - markdown2html - markdown2latex - markdown2rst - path2url - posix_path
+# - prevent_list_blocks - strip_ansi - strip_dollars - strip_files_prefix
+# - wrap_text
 
 # This allows you to exclude code cells from all templates if set to True.
-# c.TemplateExporter.exclude_code_cell = False
+c.TemplateExporter.exclude_code_cell = True
 
 # This allows you to exclude code cell inputs from all templates if set to True.
 # c.TemplateExporter.exclude_input = False
@@ -243,8 +247,8 @@ c.NbConvertApp.export_format = 'executable'
 # Shell command used to run bibtex.
 # c.PDFExporter.bib_command = ['bibtex', '{filename}']
 
-# Shell command used to compile latex.
-# c.PDFExporter.latex_command = ['xelatex', '{filename}']
+## Shell command used to compile latex.
+#c.PDFExporter.latex_command = ['xelatex', '{filename}', '-quiet']
 
 # How many times latex will be called.
 # c.PDFExporter.latex_count = 3
@@ -353,7 +357,16 @@ c.NbConvertApp.export_format = 'executable'
 # CSS highlight class identifier
 # c.CSSHTMLHeaderPreprocessor.highlight_class = '.highlight'
 
-# ------------------------------------------------------------------------------
+## Name of the pygments style to use
+#c.CSSHTMLHeaderPreprocessor.style = 'default'
+
+#------------------------------------------------------------------------------
+# ClearMetadataPreprocessor(Preprocessor) configuration
+#------------------------------------------------------------------------------
+
+## Removes all the metadata from all code cells in a notebook.
+
+#------------------------------------------------------------------------------
 # ClearOutputPreprocessor(Preprocessor) configuration
 # ------------------------------------------------------------------------------
 
@@ -428,7 +441,11 @@ c.NbConvertApp.export_format = 'executable'
 #  longer, a RuntimeError is raised.
 # c.ExecutePreprocessor.startup_timeout = 60
 
-# The time to wait (in seconds) for output from executions. If a cell execution
+## If `True` (default), then the state of the Jupyter widgets created at the
+#  kernel will be stored in the metadata of the notebook.
+#c.ExecutePreprocessor.store_widget_state = True
+
+## The time to wait (in seconds) for output from executions. If a cell execution
 #  takes longer, an exception (TimeoutError on python 3+, RuntimeError on python
 #  2) is raised.
 #

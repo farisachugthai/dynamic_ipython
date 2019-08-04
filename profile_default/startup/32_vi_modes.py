@@ -23,7 +23,7 @@ IPython.
 Specifically it intends on adding the standard :mod:`readline` bindings
 to Vim's insert mode.
 
-.. todo:: Refactor as a class.
+.. todo:: Refactor everything as classes.
 
     This is quite hard to follow as is.
 
@@ -51,6 +51,11 @@ from prompt_toolkit.key_binding import KeyBindings, merge_key_bindings
 from prompt_toolkit.key_binding.vi_state import InputMode
 from prompt_toolkit.key_binding.bindings import named_commands, vi
 from prompt_toolkit.key_binding.bindings.named_commands import get_by_name
+
+try:
+    from ipykernel.zmqshell import ZMQInteractiveShell
+except (ImportError,ModuleNotFoundError):
+    ZMQInteractiveShell = None
 
 from profile_default.util import module_log
 
@@ -138,22 +143,8 @@ def emacs_alt_bindings():
     return kb
 
 
-def main(escape_keys=False):
-    """Begin initializing keybindings for `IPython`.
-
-    This function delegates the extra bindings.
-
-    Parameters
-    ----------
-    escape_keys : bool, Optional
-        Whether to load :kbd:`Esc` or :kbd:`Alt` key bindings.
-
-    Returns
-    -------
-    rsi : :class:`~prompt_toolkit.key_bindings.KeyBindings()`
-        Readline bindings in Vim 's insert mode.
-
-    """
+def base_keys(escape_keys=False):
+    """Set up the easy ones."""
     kb = KeyBindings()
 
     ph = get_by_name('previous-history')
@@ -182,7 +173,22 @@ def main(escape_keys=False):
     return rsi
 
 
-if __name__ == "__main__":
+def main():
+    """Begin initializing keybindings for `IPython`.
+
+    This function delegates the extra bindings.
+
+    Parameters
+    ----------
+    escape_keys : bool, Optional
+        Whether to load :kbd:`Esc` or :kbd:`Alt` key bindings.
+
+    Returns
+    -------
+    rsi : :class:`~prompt_toolkit.key_bindings.KeyBindings()`
+        Readline bindings in Vim 's insert mode.
+
+    """
     insert_mode = (HasFocus(DEFAULT_BUFFER) & ViInsertMode())
 
     level = 10
@@ -190,7 +196,7 @@ if __name__ == "__main__":
 
     LOGGER = module_log.stream_logger(logger=LOG, log_level=level)
 
-    almost_all_keys = main(escape_keys=True)
+    almost_all_keys = base_keys(escape_keys=False)
 
     _ip = get_ipython()
 
@@ -203,5 +209,14 @@ if __name__ == "__main__":
     elif hasattr(_ip, 'pt_app'):
         _ip.pt_app.key_bindings = merge_key_bindings([almost_all_keys, create_ipython_shortcuts(_ip)])
         LOGGER.info('Number of keybindings {}:\t'.format(len(_ip.pt_app.key_bindings.bindings)))
+
+    # Jupyter QTConsole
+    elif isinstance(_ip, ZMQInteractiveShell):
+        sys.exit()
+
     else:
         LOGGER.error('Is this being run in IPython?:\nType: %s ', type(_ip), exc_info=1)
+
+
+if __name__ == "__main__":
+    main()

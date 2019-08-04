@@ -82,7 +82,8 @@ The source code can be found `here`_ with documentation at `this site`_.
 Motivation
 ===========
 
-The intent was to create a system that worked on any relatively modern platform.
+The intent was to create a system that worked on any relatively
+modern platform.
 
 I regularly use :mod:`IPython` as a system shell in comparison to the
 typical Bash shell that Unix OSes provide. While a terminal provides a
@@ -121,7 +122,6 @@ form of rst docs and ipynb notebooks.
 .. toctree::
    :caption: Tutorial
    :maxdepth: 2
-   :noindex:
 
    Startup <startup>
    Keybindings <ipython_keybindings>
@@ -140,13 +140,11 @@ form of rst docs and ipynb notebooks.
    :caption: API Docs
    :maxdepth: 1
    :titlesonly:
-   :noindex:
 
    IPython Shell Initialization <profile/index>
    Jupyter ZMQShell <jupyter>
    Notebook Extensions <extensions>
    Developers Notes <dev>
-   modules
 
 
 Indices and tables
