@@ -176,7 +176,7 @@ else:
         """Define this function only if numpy can be imported.
 
         But don't end the script with sys.exit() because anything that imports
-        this module will exit too. As the :ref:`__init__.py` imports this module
+        this module will exit too. As the ``__init__.py`` imports this module
         the whole package breaks due to a simple installation issue.
 
         Parameters

@@ -15,12 +15,24 @@
             "type": "shell",
             "isBackground": true,
             "windows": {
-                "command": "conda activate jupyter"
+                "command": "conda activate flask"
+            },
+        },
+        {
+            "label": "sphinx",
+            "type": "process",
+            "command": "${config:python.pythonPath}",
+            "windows": {
+            "args": [
+                "-m", "sphinx-build", "-b", "html", "-o", "docs\\build\\html", "docs\\source"
+            ]
             },
             "group": {
                 "kind": "build",
                 "isDefault": true
             }
+            // doesn't work unfortunately but that'd be pretty sweet
+            // "runOptions": {}
         },
         {
             "label": "autopep8 current file",

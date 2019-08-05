@@ -189,13 +189,6 @@ def main():
         Readline bindings in Vim 's insert mode.
 
     """
-    insert_mode = (HasFocus(DEFAULT_BUFFER) & ViInsertMode())
-
-    level = 10
-    LOG = logging.getLogger(name=__name__)
-
-    LOGGER = module_log.stream_logger(logger=LOG, log_level=level)
-
     almost_all_keys = base_keys(escape_keys=False)
 
     _ip = get_ipython()
@@ -219,4 +212,11 @@ def main():
 
 
 if __name__ == "__main__":
+    insert_mode = (HasFocus(DEFAULT_BUFFER) & ViInsertMode())
+
+    level = 10
+    LOG = logging.getLogger(name=__name__)
+
+    LOGGER = module_log.stream_logger(logger=LOG, log_level=level)
+
     main()

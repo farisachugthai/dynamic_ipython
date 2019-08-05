@@ -14,7 +14,6 @@ making `IPython` work as a more versatile system shell.
 
 Help
 -----
-
 Help on :func:`IPython.core.interactiveshell.run_line_magic()`.
 
 .. code-block:: none
@@ -39,7 +38,6 @@ _stack_depth : int
 
 Usage
 ------
-
 As the help outlines above, the second required positional argument to
 :func:`IPython.core.TerminalInteractiveShell.run_line_magic()` is `line`.
 
@@ -63,7 +61,7 @@ def blacklisted_aliases(shell=None):
     blacklist = ['more', 'less', 'clear', 'man']
     for i in blacklist:
         try:
-            shell.run_line_magic('alias', '-d {}'.format(i))
+            shell.run_line_magic('unalias', '{}'.format(i))
         except AliasError:
             pass
 

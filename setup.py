@@ -5,7 +5,8 @@
 Largely based off of the work done by @kennethreitz in his `setup.py`_
 repository.
 
-_`Kenneth Reitz setup.py template <https://raw.githubusercontent.com/kennethreitz/setup.py/master/setup.py>`
+_`Kenneth Reitz setup.py template
+<https://raw.githubusercontent.com/kennethreitz/setup.py/master/setup.py>`_
 
 See Also
 --------
@@ -83,9 +84,8 @@ class UploadCommand(Command):  # {{{1
         """Finalize upload options."""
         pass
 
-    def _run_setup(self):
-        """I don't know why Kenneth Reitz didn't do it this way."""
-        run_path(__file__)
+    def _run_setup(self, **kwargs):
+        run_path(__file__, init_globals=**kwargs)
 
     def run(self):
         """Upload package."""
