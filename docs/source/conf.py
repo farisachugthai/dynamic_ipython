@@ -20,9 +20,11 @@ import os
 from pathlib import Path
 import sys
 
-import profile_default
+# import profile_default
 from profile_default.__about__ import __version__
-from profile_default.startup import *  # noqa F0403
+# from profile_default.startup import *  # noqa F0403
+
+from gruvbox.style import GruvboxStyle
 
 LOGGER = logging.getLogger(name=__name__)
 LOGGER.setLevel(level=logging.DEBUG)
@@ -140,9 +142,15 @@ exclude_patterns = ['.ipynb_checkpoints', 'tags']
 
 default_role = 'py:obj'
 
+# There are two options for replacing |today|: either, you set today to some
+# non-false value, then it is used:
+#today = ''
+# Else, today_fmt is used as the format for a strftime call.
+today_fmt = '%B %d, %Y'
+
 # The name of the Pygments (syntax highlighting) style to use.
 # Specified in theme.conf
-# pygments_style = 'Gruvbox'
+pygments_style = GruvboxStyle
 
 rst_prolog = """
 .. |ip| replace:: :class:`~IPython.core.interactiveshell.InteractiveShell`
@@ -191,6 +199,10 @@ html_sidebars = {
 
 # If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
 html_show_sphinx = False
+
+# If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
+# using the given strftime format.
+html_last_updated_fmt = '%b %d, %Y'
 
 # -- Options for HTMLHelp output ---------------------------------------------
 

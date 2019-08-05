@@ -84,9 +84,6 @@ class UploadCommand(Command):  # {{{1
         """Finalize upload options."""
         pass
 
-    def _run_setup(self, **kwargs):
-        run_path(__file__, init_globals=**kwargs)
-
     def run(self):
         """Upload package."""
         try:

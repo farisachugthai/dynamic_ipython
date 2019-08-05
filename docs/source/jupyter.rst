@@ -11,8 +11,53 @@ suite. These have been commented and marked up as appropriate.
 Jupyter QTConsole
 =================
 
-:mod:`~jupyter_conf.jupyter_qtconsole_config`
+:mod:`jupyter_conf.jupyter_qtconsole_config`
 
+connectionFileMixin(LoggingConfigurable) configuration
+------------------------------------------------------
+
+:class:`jupyter.qtconsole.connectionFileMixin` --- Mixin for configurable
+classes that work with connection files
+
+:mod:`JSON` file in which to store connection info.
+
+[default: kernel-<pid>.json]
+
+This file will contain the IP, ports, and authentication key needed to connect
+clients to this kernel. By default, this file will be created in the security
+dir of the current profile, but can be specified by absolute path.::
+
+   c.ConnectionFileMixin.connection_file = ''
+
+Set the control (ROUTER) port [default: random]::
+
+   c.ConnectionFileMixin.control_port = 0
+
+Set the heartbeat port [default: random]::
+
+   c.ConnectionFileMixin.hb_port = 0
+
+Set the iopub (PUB) port [default: random]::
+
+   c.ConnectionFileMixin.iopub_port = 0
+
+Set the kernel's IP address [default localhost]. If the IP address is
+something other than localhost, then Consoles on other machines will be able
+to connect to the Kernel, so be careful!::
+
+   c.ConnectionFileMixin.ip = ''
+
+Set the shell (ROUTER) port [default: random]::
+
+   c.ConnectionFileMixin.shell_port = 0
+
+Set the stdin (ROUTER) port [default: random]::
+
+   c.ConnectionFileMixin.stdin_port = 0
+
+
+Keyboard Errors
+---------------
 
 May 27, 2019:
 
@@ -27,8 +72,8 @@ May 27, 2019:
     contents, to update please see http://cgit.freedesktop.org/xkeyboard-config/ .
 
 
-So we have to debug that because the keyboard isn't working on jupyter
-qtconsole :/
+So we have to debug that because the keyboard isn't working on Jupyter
+QTConsole :/
 
 In a rare turn of events, it **IS** however, working just fine on Windows.
 
@@ -51,11 +96,9 @@ Display
 =======
 
 For example, if using the IPython kernel, there are functions available for
-object display:
-
+object display::
 
     In [4]: from IPython.display import display
-
     In [5]: from IPython.display import display_png, display_svg
 
 Python objects can simply be passed to these functions and the appropriate
@@ -65,13 +108,12 @@ to format themselves in various representations is to define special methods
 such as: ``_repr_svg_`` and ``_repr_png_``. IPython's display formatters
 can also be given custom formatter functions for various types::
 
+    In [#]: from IPython import get_ipython
     In [6]: ip = get_ipython()
-
     In [7]: png_formatter = ip.display_formatter.formatters['image/png']
-
     In [8]: png_formatter.for_type(Foo, foo_to_png)
 
-For further details, see ``IPython.core.formatters``.
+For further details, see :ref:`IPython.core.formatters`.
 
 
 Jupyter Notebook
@@ -82,14 +124,12 @@ Jupyter Notebook
 .. ipython:: python
 
     from traitlets.config import get_config
-
     c = get_config()
 
 
 JupyterApp(Application) configuration
 -------------------------------------
 
-Base class for Jupyter applications
 Answer yes to any prompts.::
 
    c.JupyterApp.answer_yes = False
@@ -288,8 +328,8 @@ they are limited.::
 
    c.NotebookApp.iopub_data_rate_limit = 1000000
 
-(msgs/sec) Maximum rate at which messages can be sent on iopub before they are
-limited.::
+Maximum rate at which messages can be sent on iopub before they are
+limited. (Msgs/sec)::
 
    c.NotebookApp.iopub_msg_rate_limit = 1000
 
@@ -301,7 +341,7 @@ Supply extra arguments that will be passed to Jinja environment.::
 
    c.NotebookApp.jinja_environment_options = {}
 
-Extra variables to supply to jinja templates when rendering.::
+Extra variables to supply to Jinja templates when rendering.::
 
    c.NotebookApp.jinja_template_vars = {}
 
@@ -482,7 +522,7 @@ for details.::
 
     c.NotebookApp.websocket_compression_options = None
 
-The base URL for websockets, if it differs from the HTTP server (hint: it
+The base URL for ``websockets``, if it differs from the HTTP server (hint: it
 almost certainly doesn't).::
 
    c.NotebookApp.websocket_url = ''
@@ -509,12 +549,11 @@ in editable mode e.g., using:
 
 .. code-block:: console
 
-   pip install -e .
+   %pip install -e .
 
-Then in the Jupyter configuration file modifying::
+In addition, the Jupyter configuration file must be modified like so::
 
    c.NteractApp.dev_mode = False
-
 
 Image Handlers
 ==============
@@ -533,24 +572,22 @@ to the kernel in which pylab inline back-end is activated.
 
 There are four handlers defined.
 
-- 'PIL': Use Python Imaging Library to pop-up image;
+#) 'PIL': Use Python Imaging Library to pop-up image;
 
-- stream': Use an external program to show the image.  Image will be fed into
+#) stream': Use an external program to show the image.  Image will be fed into
   the STDIN  of the program.
 
   - You will need to configure ``stream_image_handler``
 
-- 'tempfile': Use an external program to show the image.
-  Image will be saved in a temporary file and the program will be
-  called with that file.
+#) 'tempfile': Use an external program to show the image.  Image will be saved in
+   a temporary file and the program will be called with that file.
 
-  - You will need to configure ``tempfile_image_handler``
+   - You will need to configure ``tempfile_image_handler``
 
-- 'callable': You can set any Python callable which is called with the
-  image data.
+#) 'callable': You can set any Python callable which is called with the image data.
 
-    - You will need to configure ``callable_image_handler``.::
+   - You will need to configure ``callable_image_handler``.::
 
-        c.ZMQTerminalInteractiveShell.image_handler = 'PIL'
+       c.ZMQTerminalInteractiveShell.image_handler = 'PIL'
 
 That's the default text for the Jupyter consoles (both non-GUI and QT).

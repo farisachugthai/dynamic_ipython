@@ -200,6 +200,13 @@ def main():
                 '{}:\t'.format(_ip.pt_cli.application.key_bindings_registry.bindings))
     # IPython >= 7.0
     elif hasattr(_ip, 'pt_app'):
+
+        # Here's one that might blow your mind.
+        if type(_ip.pt_app) == None:
+            sys.exit()  # ran into this while running pytest.
+            # If you start IPython from something like pytest i guess it starts
+            # the machinery with a few parts missing...I don't know.
+
         _ip.pt_app.key_bindings = merge_key_bindings([almost_all_keys, create_ipython_shortcuts(_ip)])
         LOGGER.info('Number of keybindings {}:\t'.format(len(_ip.pt_app.key_bindings.bindings)))
 
