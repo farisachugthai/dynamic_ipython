@@ -6,7 +6,7 @@
 Pandas CSV
 ============
 
-.. module:: extensions.pd_csv
+.. module:: pd_csv
     :synopsis: Utilize pandas to read in CSV files.
 
 Example of creating a magic from **IPython Interactive Computing and
@@ -18,7 +18,8 @@ It also shows the following simpler example:
 
 .. ipython::
 
-    In [1]: from IPython.core.magic import (register_line_magic, register_cell_magic)
+    In [1]: from IPython.core.magic import (register_line_magic,
+    register_cell_magic)
     In [2]: @register_line_magic
             def hello(line):
                 if line == 'french':
@@ -35,7 +36,7 @@ logging.basicConfig()
 
 try:
     import pandas as pd
-except ImportError:
+except (ImportError,ModuleNotFoundError):
     logging.error("{lib} not installed.", lib='Pandas')
 
 

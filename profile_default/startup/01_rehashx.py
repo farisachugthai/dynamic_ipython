@@ -12,17 +12,6 @@ Rehash
 This is an incredible little gem I just ran into, and hugely useful for
 making `IPython` work as a more versatile system shell.
 
-Help
------
-Help on :func:`IPython.core.interactiveshell.run_line_magic()`.
-
-.. code-block:: none
-
-    run_line_magic(magic_name, line, _stack_depth=1)
-    method of |ip| instance
-    Execute the given line magic.
-
-
 Parameters
 ----------
 magic_name : str
@@ -35,6 +24,15 @@ _stack_depth : int
     `_stack_depth` = 2. This is added to ensure backward compatibility for use
     of :func:`IPython.core.magics.get_ipython().magic()`
 
+Notes
+-----
+`run_line_magic()`
+    A method of the |ip| instance.
+
+.. code-block:: none
+
+    run_line_magic(magic_name, line, _stack_depth=1)
+    Execute the given line magic.
 
 Usage
 ------
@@ -44,7 +42,6 @@ As the help outlines above, the second required positional argument to
 This is more easily understood as 'remaining arguments to the magic'.
 `%rehashx` takes none, but leaving it blank causes the function call to raise
 an error, so an empty str is passed to the function.
-
 
 """
 import logging
@@ -77,7 +74,7 @@ def main(shell=None):
 
 
 if __name__ == "__main__":
-    LOGGER = logging.getLogger(name=__name__)
+    LOGGER = logging.getLogger(name='01_rehashx')
     LOG_LEVEL = logging.INFO
     LOGGER.setLevel(LOG_LEVEL)
 

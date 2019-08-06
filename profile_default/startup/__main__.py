@@ -12,7 +12,10 @@ __main__
 .. module\:\: main here?
 
 
-07/08/2019:
+07/08/2019
+
+This module executes a check that's similar in nature to what
+an :func:`IPython.get_ipython()` call is doing.::
 
     def get_ipython():
         from IPython.core.interactiveshell import InteractiveShell
@@ -121,7 +124,7 @@ class Dynamic:
 
 def main():
     dynamically = Dynamic()
-    dynamically.initialize_profile()
+    # dynamically.initialize_profile()
     # dynamically.begin_eventloop(dynamically.canary)
 
 

@@ -27,14 +27,13 @@ to Vim's insert mode.
 
     This is quite hard to follow as is.
 
----------------------
-
-Before we begin defining functions:
 
 See Also
 ---------
 :mod:`prompt_toolkit.key_binding.defaults` : str (path)
     Has all the named commands implemented here and possibly more.
+
+---------------------
 
 """
 import logging
@@ -185,7 +184,7 @@ def main():
 
     Returns
     -------
-    rsi : :class:`~prompt_toolkit.key_bindings.KeyBindings()`
+    rsi : :class:`prompt_toolkit.key_bindings.KeyBindings()`
         Readline bindings in Vim 's insert mode.
 
     """
@@ -196,7 +195,7 @@ def main():
     # IPython < 7.0
     if hasattr(_ip, 'pt_cli'):
         _ip.pt_cli.application.key_bindings_registry = merge_key_bindings([almost_all_keys, create_ipython_shortcuts(_ip)])
-        LOGGER.info('Number of keybindings:'
+        RSI_LOGGER.info('Number of keybindings:'
                 '{}:\t'.format(_ip.pt_cli.application.key_bindings_registry.bindings))
     # IPython >= 7.0
     elif hasattr(_ip, 'pt_app'):
@@ -208,22 +207,23 @@ def main():
             # the machinery with a few parts missing...I don't know.
 
         _ip.pt_app.key_bindings = merge_key_bindings([almost_all_keys, create_ipython_shortcuts(_ip)])
-        LOGGER.info('Number of keybindings {}:\t'.format(len(_ip.pt_app.key_bindings.bindings)))
+        RSI_LOGGER.info('Number of keybindings {}:\t'.format(len(_ip.pt_app.key_bindings.bindings)))
 
     # Jupyter QTConsole
     elif isinstance(_ip, ZMQInteractiveShell):
         sys.exit()
 
     else:
-        LOGGER.error('Is this being run in IPython?:\nType: %s ', type(_ip), exc_info=1)
+        RSI_LOGGER.error('Is this being run in IPython?:\nType: %s ',
+                          type(_ip), exc_info=1)
 
 
 if __name__ == "__main__":
     insert_mode = (HasFocus(DEFAULT_BUFFER) & ViInsertMode())
 
     level = 10
-    LOG = logging.getLogger(name=__name__)
+    RSI_LOG = logging.getLogger(name='32_vi_modes')
 
-    LOGGER = module_log.stream_logger(logger=LOG, log_level=level)
+    RSI_LOGGER = module_log.stream_logger(logger=RSI_LOG, log_level=level)
 
     main()

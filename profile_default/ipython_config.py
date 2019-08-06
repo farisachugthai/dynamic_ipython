@@ -672,7 +672,7 @@ c.PlainTextFormatter.verbose = True
 
 # Enable debug for the Completer. Mostly print extra information for
 #  experimental jedi integration.
-# c.Completer.debug = False
+c.Completer.debug = False
 
 # Activate greedy completion PENDING DEPRECTION. this is now mostly taken care
 #  of with Jedi.
@@ -684,7 +684,7 @@ c.PlainTextFormatter.verbose = True
 # Experimental: restrict time (in milliseconds) during which Jedi can compute
 #  types. Set to 0 to stop computing types. Non-zero value lower than 100ms may
 #  hurt performance by preventing jedi to build its cache.
-# c.Completer.jedi_compute_type_timeout = 400
+c.Completer.jedi_compute_type_timeout = 1000
 
 # Experimental: Use Jedi to generate autocompletions. Default to True if jedi
 # is installed
