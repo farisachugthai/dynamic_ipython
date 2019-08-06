@@ -318,221 +318,231 @@ def common_aliases(_ip=None):
     ]
     return _user_aliases
 
+class WindowsAliases:
+    """Aggregated Window aliases."""
 
-def cmd_aliases(_ip=None):
-    r"""Aliases for the :command:`cmd` shell.
+    def __init__(self, _ip=None):
+        if _ip is not None:
+            self._ip = _ip
+        else:
+            self._ip = get_ipython()
 
-    .. todo:: Cmd, :envvar:`COPYCMD` and IPython
+    @classmethod
+    def cmd_aliases(self):
+        r"""Aliases for the :command:`cmd` shell.
 
-        Need to consider how to handle env vars. Still working out how
-        IPython's logic for Window's shells works, but that'll determine
-        how :envvar:`SHELL` and :envvar:`COMSPEC` are handled.
+        .. todo:: Cmd, :envvar:`COPYCMD` and IPython
 
-        However it'll also take some consideration to figure out how to
-        handle env vars like COPYCMD. Should we build them into the aliases
-        we have here because that'll affect :data:`_ip.user_aliases.mv`.
+            Need to consider how to handle env vars. Still working out how
+            IPython's logic for Window's shells works, but that'll determine
+            how :envvar:`SHELL` and :envvar:`COMSPEC` are handled.
 
-        Also note DIRCMD for :command:`dir`.
+            However it'll also take some consideration to figure out how to
+            handle env vars like COPYCMD. Should we build them into the aliases
+            we have here because that'll affect :data:`_ip.user_aliases.mv`?
 
-    Parameters
-    ----------
-    _ip : IPython shell
+            Also note DIRCMD for :command:`dir`.
 
-    """
-    _ip.user_aliases = [
-        ('copy', 'copy %s %s'),
-        ('ddir', 'dir /ad /on %l'),
-        ('ldir', 'dir /ad /on %l'),
-        ('ll', 'dir /Q %l'),
-        ('ln',
-         'mklink %s %s'),  # I know this really isn't the same but I need it
-        ('make', 'make.bat %l'),  # Useful when we're building docs
-        ('mklink', 'mklink %s %s'),
-        ('move', 'move %s %s'),
-        ('mv', 'move %s %s'),
-        ('ren', 'ren'),
-        ('rmdir', 'rmdir %l'),
-    ]
-    return _ip.user_aliases
+        Parameters
+        ----------
+        _ip : IPython shell
+
+        """
+        _ip.user_aliases = [
+            ('cp', 'copy %s %s'),
+            ('copy', 'copy %s %s'),
+            ('ddir', 'dir /ad /on %l'),
+            ('ldir', 'dir /ad /on %l'),
+            ('ll', 'dir /Q %l'),
+            ('ln',
+             'mklink %s %s'),  # I know this really isn't the same but I need it
+            ('make', 'make.bat %l'),  # Useful when we're building docs
+            ('mklink', 'mklink %s %s'),
+            ('move', 'move %s %s'),
+            ('mv', 'move %s %s'),
+            ('ren', 'ren'),
+            ('rmdir', 'rmdir %l'),
+        ]
+        return _ip.user_aliases
+
+    @classmethod
+    def powershell_aliases(self):
+        r"""Aliases for Windows OSes using :command:`powershell`.
+
+        Has only been tested on Windows 10 in a heavily configured environment.
+
+        Niceties such as Git for Windows, ag-silversearcher, ripgrep,
+        ConEmu and others have been added.
+
+        The minimum number of assumptions possible have been made; however, note
+        that this section is still under development and frequently changes.
+
+        .. warning:: Warning: 5 aliases have been commented out as they emit
+                     warnings upon being set. They're unfortunately aliases to
+                     cmd commands and don't run correctly in PowerShell.
 
 
-def powershell_aliases(_ip=None):
-    r"""Aliases for Windows OSes using :command:`powershell`.
+        .. code-block:: powershell
 
-    Has only been tested on Windows 10 in a heavily configured environment.
+            Alias           % -> ForEach-Object
+            Alias           ? -> Where-Object
+            Alias           clhy -> Clear-History
+            Alias           cli -> Clear-Item
+            Alias           clp -> Clear-ItemProperty
+            Alias           cls -> Clear-Host
+            Alias           clv -> Clear-Variable
+            Alias           cnsn -> Connect-PSSession
+            Alias           compare -> Compare-Object
+            Alias           cpi -> Copy-Item
+            Alias           cpp -> Copy-ItemProperty
+            Alias           curl -> Invoke-WebRequest
+            Alias           cvpa -> Convert-Path
+            Alias           dbp -> Disable-PSBreakpoint
+            Alias           diff -> Compare-Object
+            Alias           dnsn -> Disconnect-PSSession
+            Alias           ebp -> Enable-PSBreakpoint
+            Alias           epal -> Export-Alias
+            Alias           epcsv -> Export-Csv
+            Alias           epsn -> Export-PSSession
+            Alias           erase -> Remove-Item
+            Alias           etsn -> Enter-PSSession
+            Alias           exsn -> Exit-PSSession
+            Alias           fc -> Format-Custom
+            Alias           fl -> Format-List
+            Alias           foreach -> ForEach-Object
+            Alias           ft -> Format-Table
+            Alias           fw -> Format-Wide
+            Alias           gal -> Get-Alias
+            Alias           gbp -> Get-PSBreakpoint
+            Alias           gc -> Get-Content
+            Alias           gci -> Get-ChildItem
+            Alias           gcm -> Get-Command
+            Alias           gcs -> Get-PSCallStack
+            Alias           gdr -> Get-PSDrive
+            Alias           ghy -> Get-History
+            Alias           gi -> Get-Item
+            Alias           gjb -> Get-Job
+            Alias           gl -> Get-Location
+            Alias           gm -> Get-Member
+            Alias           gmo -> Get-Module
+            Alias           gp -> Get-ItemProperty
+            Alias           gps -> Get-Process
+            Alias           gpv -> Get-ItemPropertyValue
+            Alias           group -> Group-Object
+            Alias           gsn -> Get-PSSession
+            Alias           gsnp -> Get-PSSnapin
+            Alias           gsv -> Get-Service
+            Alias           gu -> Get-Unique
+            Alias           gv -> Get-Variable
+            Alias           gwmi -> Get-WmiObject
+            Alias           h -> Get-History
+            Alias           icm -> Invoke-Command
+            Alias           iex -> Invoke-Expression
+            Alias           ihy -> Invoke-History
+            Alias           ii -> Invoke-Item
+            Alias           ipal -> Import-Alias
+            Alias           ipcsv -> Import-Csv
+            Alias           ipmo -> Import-Module
+            Alias           ipsn -> Import-PSSession
+            Alias           irm -> Invoke-RestMethod
+            Alias           ise -> powershell_ise.exe
+            Alias           iwmi -> Invoke-WMIMethod
+            Alias           iwr -> Invoke-WebRequest
+            Alias           lp -> Out-Printer
+            Alias           man -> help
+            Alias           md -> mkdir
+            Alias           measure -> Measure-Object
+            Alias           mi -> Move-Item
+            Alias           mount -> New-PSDrive
+            Alias           mp -> Move-ItemProperty
+            Alias           nal -> New-Alias
+            Alias           ndr -> New-PSDrive
+            Alias           ni -> New-Item
+            Alias           nmo -> New-Module
+            Alias           npssc -> New-PSSessionConfigurationFile
+            Alias           nsn -> New-PSSession
+            Alias           nv -> New-Variable
+            Alias           ogv -> Out-GridView
+            Alias           oh -> Out-Host
+            Alias           r -> Invoke-History
+            Alias           rbp -> Remove-PSBreakpoint
+            Alias           rcjb -> Receive-Job
+            Alias           rcsn -> Receive-PSSession
+            Alias           rd -> Remove-Item
+            Alias           rdr -> Remove-PSDrive
+            Alias           ri -> Remove-Item
+            Alias           rjb -> Remove-Job
+            Alias           rmo -> Remove-Module
+            Alias           rni -> Rename-Item
+            Alias           rnp -> Rename-ItemProperty
 
-    Niceties such as Git for Windows, ag-silversearcher, ripgrep,
-    ConEmu and others have been added.
+        That's some non-trivial stuff right there! First try on all 4 of them!
 
-    The minimum number of assumptions possible have been made; however, note
-    that this section is still under development and frequently changes.
-
-    .. warning:: Warning: 5 aliases have been commented out as they emit
-                 warnings upon being set. They're unfortunately aliases to
-                 cmd commands and don't run correctly in PowerShell.
-
-
-    .. code-block:: powershell
-
-        Alias           % -> ForEach-Object
-        Alias           ? -> Where-Object
-        Alias           clhy -> Clear-History
-        Alias           cli -> Clear-Item
-        Alias           clp -> Clear-ItemProperty
-        Alias           cls -> Clear-Host
-        Alias           clv -> Clear-Variable
-        Alias           cnsn -> Connect-PSSession
-        Alias           compare -> Compare-Object
-        Alias           cpi -> Copy-Item
-        Alias           cpp -> Copy-ItemProperty
-        Alias           curl -> Invoke-WebRequest
-        Alias           cvpa -> Convert-Path
-        Alias           dbp -> Disable-PSBreakpoint
-        Alias           diff -> Compare-Object
-        Alias           dnsn -> Disconnect-PSSession
-        Alias           ebp -> Enable-PSBreakpoint
-        Alias           epal -> Export-Alias
-        Alias           epcsv -> Export-Csv
-        Alias           epsn -> Export-PSSession
-        Alias           erase -> Remove-Item
-        Alias           etsn -> Enter-PSSession
-        Alias           exsn -> Exit-PSSession
-        Alias           fc -> Format-Custom
-        Alias           fl -> Format-List
-        Alias           foreach -> ForEach-Object
-        Alias           ft -> Format-Table
-        Alias           fw -> Format-Wide
-        Alias           gal -> Get-Alias
-        Alias           gbp -> Get-PSBreakpoint
-        Alias           gc -> Get-Content
-        Alias           gci -> Get-ChildItem
-        Alias           gcm -> Get-Command
-        Alias           gcs -> Get-PSCallStack
-        Alias           gdr -> Get-PSDrive
-        Alias           ghy -> Get-History
-        Alias           gi -> Get-Item
-        Alias           gjb -> Get-Job
-        Alias           gl -> Get-Location
-        Alias           gm -> Get-Member
-        Alias           gmo -> Get-Module
-        Alias           gp -> Get-ItemProperty
-        Alias           gps -> Get-Process
-        Alias           gpv -> Get-ItemPropertyValue
-        Alias           group -> Group-Object
-        Alias           gsn -> Get-PSSession
-        Alias           gsnp -> Get-PSSnapin
-        Alias           gsv -> Get-Service
-        Alias           gu -> Get-Unique
-        Alias           gv -> Get-Variable
-        Alias           gwmi -> Get-WmiObject
-        Alias           h -> Get-History
-        Alias           icm -> Invoke-Command
-        Alias           iex -> Invoke-Expression
-        Alias           ihy -> Invoke-History
-        Alias           ii -> Invoke-Item
-        Alias           ipal -> Import-Alias
-        Alias           ipcsv -> Import-Csv
-        Alias           ipmo -> Import-Module
-        Alias           ipsn -> Import-PSSession
-        Alias           irm -> Invoke-RestMethod
-        Alias           ise -> powershell_ise.exe
-        Alias           iwmi -> Invoke-WMIMethod
-        Alias           iwr -> Invoke-WebRequest
-        Alias           lp -> Out-Printer
-        Alias           man -> help
-        Alias           md -> mkdir
-        Alias           measure -> Measure-Object
-        Alias           mi -> Move-Item
-        Alias           mount -> New-PSDrive
-        Alias           mp -> Move-ItemProperty
-        Alias           nal -> New-Alias
-        Alias           ndr -> New-PSDrive
-        Alias           ni -> New-Item
-        Alias           nmo -> New-Module
-        Alias           npssc -> New-PSSessionConfigurationFile
-        Alias           nsn -> New-PSSession
-        Alias           nv -> New-Variable
-        Alias           ogv -> Out-GridView
-        Alias           oh -> Out-Host
-        Alias           r -> Invoke-History
-        Alias           rbp -> Remove-PSBreakpoint
-        Alias           rcjb -> Receive-Job
-        Alias           rcsn -> Receive-PSSession
-        Alias           rd -> Remove-Item
-        Alias           rdr -> Remove-PSDrive
-        Alias           ri -> Remove-Item
-        Alias           rjb -> Remove-Job
-        Alias           rmo -> Remove-Module
-        Alias           rni -> Rename-Item
-        Alias           rnp -> Rename-ItemProperty
-
-    That's some non-trivial stuff right there! First try on all 4 of them!
-
-    """
-    _ip.user_aliases = [
-        ('ac', 'Add-Content %l'),
-        ('asnp', 'Add-PSSnapin %l'),
-        ('cat', 'Get-Content %l'),
-        # ('cd', 'Set-Location %l'),
-        ('clc', 'Clear-Content %l'),
-        # ('clear', 'Clear-History %l'),
-        ('conda env', 'Get-Conda-Environment %l'),
-        ('copy', 'Copy-Item %l'),
-        ('cp', 'Copy-Item %l'),
-        ('del', 'Remove-Item %l'),
-        ('dir', 'Get-ChildItem %l'),
-        ('echo', 'Write-Output %l'),
-        # ('history', 'Get-History %l'),
-        ('kill', 'Stop-Process'),
-        ('l', 'Get-ChildItem %l'),
-        ('ll', 'GetChildItem -Verbose %l'),
-        ('ls', 'Get-ChildItem %l'),
-        ('man', 'Get-Help %l'),
-        ('md', 'mkdir %l'),
-        ('move', 'Move-Item %l'),
-        ('mv', 'Move-Item %l'),
-        # ('popd', 'Pop-Location %l'),
-        ('pro', 'nvim $Profile.CurrentUserAllHosts'),
-        ('ps', 'Get-Process %l'),
-        # ('pushd', 'Push-Location %l'),
-        # ('pwd', 'Get-Location %l'),
-        ('ren', 'Rename-Item %l'),
-        ('rm', 'Remove-Item %l'),
-        ('rmdir', 'Remove-Item %l'),
-        ('rp', 'Remove-ItemProperty %l'),
-        ('rsn', 'Remove-PSSession %l'),
-        ('rv', 'Remove-Variable %l'),
-        ('rvpa', 'Resolve-Path %l'),
-        ('sajb', 'Start-Job %l'),
-        ('sal', 'Set-Alias %l'),
-        ('saps', 'Start-Process %l'),
-        ('sasv', 'Start-Service %l'),
-        ('sbp', 'Set-PSBreakpoint %l'),
-        ('select', 'Select-Object %l'),
-        ('set', 'Set-Variable %l'),
-        ('si', 'Set-Item %l'),
-        ('sl', 'Set-Location %l'),
-        ('sleep', 'Start-Sleep %l'),
-        ('sls', 'Select-String %l'),
-        ('sort', 'Sort-Object %l'),
-        ('sp', 'Set-ItemProperty %l'),
-        ('spjb', 'Stop-Job %l'),
-        ('spps', 'Stop-Process %l'),
-        ('spsv', 'Stop-Service %l'),
-        ('start', 'Start-Process %l'),
-        ('stz', 'Set-TimeZone %l'),
-        ('sv', 'Set-Variable %l'),
-        ('tee', 'Tee-Object %l'),
-        (
-            'tree',
-            'tree /F /A %l',
-        ),
-        ('type', 'Get-Content %l'),
-        ('where', 'Where-Object %l'),
-        ('wjb', 'Wait-Job %l'),
-        ('write', 'Write-Output %l'),
-    ]
-    return _ip.user_aliases
+        """
+        _ip.user_aliases = [
+            ('ac', 'Add-Content %l'),
+            ('asnp', 'Add-PSSnapin %l'),
+            ('cat', 'Get-Content %l'),
+            # ('cd', 'Set-Location %l'),
+            ('clc', 'Clear-Content %l'),
+            # ('clear', 'Clear-History %l'),
+            ('conda env', 'Get-Conda-Environment %l'),
+            ('copy', 'Copy-Item %l'),
+            ('cp', 'Copy-Item %l'),
+            ('del', 'Remove-Item %l'),
+            ('dir', 'Get-ChildItem %l'),
+            ('echo', 'Write-Output %l'),
+            # ('history', 'Get-History %l'),
+            ('kill', 'Stop-Process'),
+            ('l', 'Get-ChildItem %l'),
+            ('ll', 'GetChildItem -Verbose %l'),
+            ('ls', 'Get-ChildItem %l'),
+            ('man', 'Get-Help %l'),
+            ('md', 'mkdir %l'),
+            ('move', 'Move-Item %l'),
+            ('mv', 'Move-Item %l'),
+            # ('popd', 'Pop-Location %l'),
+            ('pro', 'nvim $Profile.CurrentUserAllHosts'),
+            ('ps', 'Get-Process %l'),
+            # ('pushd', 'Push-Location %l'),
+            # ('pwd', 'Get-Location %l'),
+            ('ren', 'Rename-Item %l'),
+            ('rm', 'Remove-Item %l'),
+            ('rmdir', 'Remove-Item %l'),
+            ('rp', 'Remove-ItemProperty %l'),
+            ('rsn', 'Remove-PSSession %l'),
+            ('rv', 'Remove-Variable %l'),
+            ('rvpa', 'Resolve-Path %l'),
+            ('sajb', 'Start-Job %l'),
+            ('sal', 'Set-Alias %l'),
+            ('saps', 'Start-Process %l'),
+            ('sasv', 'Start-Service %l'),
+            ('sbp', 'Set-PSBreakpoint %l'),
+            ('select', 'Select-Object %l'),
+            ('set', 'Set-Variable %l'),
+            ('si', 'Set-Item %l'),
+            ('sl', 'Set-Location %l'),
+            ('sleep', 'Start-Sleep %l'),
+            ('sls', 'Select-String %l'),
+            ('sort', 'Sort-Object %l'),
+            ('sp', 'Set-ItemProperty %l'),
+            ('spjb', 'Stop-Job %l'),
+            ('spps', 'Stop-Process %l'),
+            ('spsv', 'Stop-Service %l'),
+            ('start', 'Start-Process %l'),
+            ('stz', 'Set-TimeZone %l'),
+            ('sv', 'Set-Variable %l'),
+            ('tee', 'Tee-Object %l'),
+            (
+                'tree',
+                'tree /F /A %l',
+            ),
+            ('type', 'Get-Content %l'),
+            ('where', 'Where-Object %l'),
+            ('wjb', 'Wait-Job %l'),
+            ('write', 'Write-Output %l'),
+        ]
+        return _ip.user_aliases
 
 
 def __setup_fzf(user_aliases):
@@ -571,23 +581,21 @@ def __setup_fzf(user_aliases):
 
 def main():
     """Set up aliases for the user namespace for IPython."""
-    # if not isinstance(_ip, IPython.terminal.interactiveshell.InteractiveShell):
-    #     raise Exception('Are you running in IPython?')
-    # so let's not do isinstance. embrace the interface not the type!
     if not hasattr(_ip, 'magics_manager'):
         raise Exception('Are you running in IPython?')
 
     user_aliases = []
-
     machine = Platform()
 
     if machine.is_linux:
         user_aliases += linux_specific_aliases(_ip)
-
-    # elif machine.is_conemu:  # should check for 'nix-tools as an env var
-    #     user_aliases += powershell_aliases(_ip)
-    else:
-        user_aliases += cmd_aliases(_ip)
+    elif machine.is_win:
+        # finish the shell class in profile_default.util.machine
+        # then we can create a shell class that determines if
+        # we're in cmd or pwsh
+        # win_ = WindowsAliases(_ip)
+        # if win
+        user_aliases += WindowsAliases(_ip).cmd_aliases()
 
     user_aliases += common_aliases(_ip)
     __setup_fzf(user_aliases)

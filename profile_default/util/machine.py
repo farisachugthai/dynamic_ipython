@@ -9,6 +9,8 @@ Machine
 .. module:: machine
     :synopsis: Abstracts away platform differences.
 
+.. highlight:: ipython
+
 This class leverages :mod:`prompt_toolkit` and a few of it's methods to abstract
 away differences in operating systems and filesystems.
 
@@ -82,7 +84,7 @@ class Platform:
         self.is_win = is_windows()
         self.is_conemu = is_conemu_ansi()
         self.Path = Path
-        self.env = env
+        self.env = get_env()
 
     def __repr__(self):
         return '{!r}: {!r}.'.format(
@@ -130,6 +132,22 @@ class Platform:
         if env is None:
             env = self.get_env()
         return env.update(kwargs)
+
+
+class Shell(Platform):
+    """Subclass Platform to gain information about the user's shell."""
+
+    @property
+    def is_cmd(self):
+        pass
+
+    @property
+    def is_powershell(self):
+        pass
+
+    @property
+    def is_pwsh(self):
+        pass
 
 
 if __name__ == "__main__":
