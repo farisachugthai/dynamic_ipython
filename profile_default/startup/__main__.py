@@ -6,17 +6,13 @@
 __main__
 ==========
 
+.. highlight:: ipython
 
-Origin
-=======
+.. Can we put a module directive here? Would it fuck something up to see
+.. module\:\: main here?
 
-This definitely came from the IPython team but I need to note where.
 
-Don't remember currently.
-
-07/08/2019
-
-Admittedly this is an odd way of doing this because here's what the get_ipython() call is doing.::
+07/08/2019:
 
     def get_ipython():
         from IPython.core.interactiveshell import InteractiveShell
@@ -25,6 +21,7 @@ Admittedly this is an odd way of doing this because here's what the get_ipython(
 
 
 """
+import errno
 import logging
 import os
 from pathlib import Path
@@ -35,7 +32,6 @@ from IPython import get_ipython
 from IPython.core.interactiveshell import InteractiveShell
 from IPython.terminal.ipapp import TerminalIPythonApp
 from IPython.terminal.embed import InteractiveShellEmbed
-from IPython.utils.path import ensure_dir_exists
 
 from profile_default.util.module_log import stream_logger
 
@@ -44,15 +40,19 @@ log = logging.getLogger(name='profile_default.startup.__main__')
 LOGGER = stream_logger(logger=log)
 
 class Dynamic:
-    """Let's organize this free flowing code into one class so we can allow users to override what they need as necessary."""
+    """Organize personal configuration code into one class.
+
+    This module was created to allow users to override what they need as
+    necessary.
+    """
     canary = InteractiveShell
 
     def __init__(self):
-        if canary.initialized():
+        if self.canary.initialized():
             # Running inside IPython
 
             # Detect if embed shell or not and display a message
-            if isinstance(canary, InteractiveShellEmbed):
+            if isinstance(self.canary, InteractiveShellEmbed):
                 sys.stderr.write(
                     "\nYou are currently in an embedded IPython shell,\n"
                     "the configuration will not be loaded.\n\n"
@@ -67,23 +67,62 @@ class Dynamic:
             # profile_default is beneath the spot it initializes in. ...aka it will leave log files and a history.sqlite
             # in this repo.
 
+    @staticmethod
+    def ensure_dir_exists(path, mode=0o755):
+        """Ensure that a directory exists.
+
+        If it doesn't exist, try to create it and protect against a race
+        condition if another process is doing the same.
+
+        The default permissions are :data:`0o755`, which differ from
+        :func:`os.makedirs()` default of :data:`0o777`.
+
+        Parameters
+        ----------
+        todo
+
+        Returns
+        -------
+        None
+        """
+        if not os.path.exists(path):
+            try:
+                os.makedirs(path, mode=mode)
+            except OSError as e:
+                if e.errno != errno.EEXIST:
+                    raise
+        elif not os.path.isdir(path):
+            raise IOError("%r exists but is not a directory" % path)
+
     def initialize_profile(self):
+        """Initialize the profile but sidestep the IPython.core.ProfileDir().
+
+        The class searches for directories named profile_default and if found
+        uses that as a profile which I dislike.
+        """
         profile_to_load = Path('~/.ipython/profile_default')
 
-        if ensure_dir_exists(profile_to_load):
-            ipapp.profile_dir = os.path.expanduser('~/.ipython/profile_default')
+        try:
+            self.ensure_dir_exists(profile_to_load)
+        except OSError as e:
+            LOGGER.error(e)
         else:
-            LOGGER.error('%s does not exist' % profile_to_load)
+            self.canary.profile_dir = os.path.expanduser(
+                    '~/.ipython/profile_default'
+                )
 
-    def begin_eventloop(self, ipapp=None):
-        ipapp.initialize([])
-        shell = ipapp.shell
+            # kinda lost track of why this module exists.
+#     def begin_eventloop(self, ipapp=None):
+#         try:
+#             ipapp.initialize([])
+#         except AttributeError as e:
+#             LOGGER.error(e)
 
 
 def main():
     dynamically = Dynamic()
     dynamically.initialize_profile()
-    dynamically.begin_eventloop()
+    # dynamically.begin_eventloop(dynamically.canary)
 
 
 main()
