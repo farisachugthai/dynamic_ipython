@@ -14,8 +14,7 @@ from IPython.paths import get_ipython_dir
 # import
 from traitlets.config import get_config
 
-
-logging.basicConfig(level=logging.INFO)
+c_logger = logging.getLogger(name='profile_default.ipython_config')
 
 c = get_config()
 
@@ -422,10 +421,10 @@ if platform.system() == 'Windows':
 else:
     if os.environ.get("TMUX"):
         c.TerminalInteractiveShell.editing_mode = 'vi'
-        logging.info("c.TerminalInteractiveShell.editing_mode = 'vi'")
     else:
         c.TerminalInteractiveShell.editing_mode = 'emacs'
-        logging.info("c.TerminalInteractiveShell.editing_mode = 'emacs'")
+
+c_logger.info("Editing Mode:\t {!s}", c.TerminalInteractiveShell.editing_mode)
 
 # Set the editor used by IPython (default to $EDITOR/vi/notepad).
 c.TerminalInteractiveShell.editor = 'nvim'

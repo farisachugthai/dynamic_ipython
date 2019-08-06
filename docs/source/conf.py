@@ -24,10 +24,10 @@ import sys
 from profile_default.__about__ import __version__
 # from profile_default.startup import *  # noqa F0403
 
-from gruvbox.style import GruvboxStyle
+from gruvbox.style import GruvboxDarkHard
 
-LOGGER = logging.getLogger(name=__name__)
-LOGGER.setLevel(level=logging.DEBUG)
+DOCS_LOGGER = logging.getLogger(name=__name__)
+DOCS_LOGGER.setLevel(level=logging.DEBUG)
 
 
 def _path_build(root, suffix, validate=True):
@@ -37,9 +37,9 @@ def _path_build(root, suffix, validate=True):
 
     Parameters
     ----------
-    root : str or b(Path-like)
+    root : str or bytes (path-like)
         Directory to build on
-    suffix : str, bytes or Path (Path-like)
+    suffix : str, bytes (Path-like)
         What to add to the root directory
     validate : bool, Optional
         Whether to check that the root dir exists first. Defaults to False.
@@ -59,13 +59,13 @@ def _path_build(root, suffix, validate=True):
             new = root.joinpath(suffix)
             return new
         else:
-            LOGGER.error('%s: does not exist. Returning None.' % root)
+            DOCS_LOGGER.error('%s: does not exist. Returning None.' % root)
 
     else:
         return root.joinpath(suffix)
 
 
-ROOT = Path('../..').resolve()
+ROOT = Path('..').resolve()
 PD = _path_build(ROOT, 'profile_default')
 STARTUP = _path_build(PD, 'startup')
 
@@ -150,7 +150,7 @@ today_fmt = '%B %d, %Y'
 
 # The name of the Pygments (syntax highlighting) style to use.
 # Specified in theme.conf
-pygments_style = GruvboxStyle
+pygments_style = GruvboxDarkHard
 
 rst_prolog = """
 .. |ip| replace:: :class:`~IPython.core.interactiveshell.InteractiveShell`
@@ -382,8 +382,8 @@ def add_css(func):
         custom_css = CONF_PATH.joinpath('..', '_static', 'pyramid.css')
 
         if not custom_css:
-            LOGGER.warning('%s is not a file' % custom_css)
-        LOGGER.debug(custom_css)
+            DOCS_LOGGER.warning('%s is not a file' % custom_css)
+        DOCS_LOGGER.debug(custom_css)
         return custom_css
 
 

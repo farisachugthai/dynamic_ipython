@@ -20,7 +20,7 @@ The class can be easily initialized with:
 
     >>> from profile_default.util.machine import Platform
     >>> users_machine = Platform()
-    >>> env = users_machine.get_env()
+    >>> env = users_machine.update_env()
     >>> assert env is not None
 
 .. note::
@@ -84,7 +84,7 @@ class Platform:
         self.is_win = is_windows()
         self.is_conemu = is_conemu_ansi()
         self.Path = Path
-        self.env = get_env()
+        self.env = env
 
     def __repr__(self):
         return '{!r}: {!r}.'.format(
@@ -113,10 +113,7 @@ class Platform:
         env : dict
             The user's environment variables.
         `"""
-        user_env = self.env
-        if user_env is None:
-            user_env = os.environ.copy()
-        return user_env
+        return self.env
 
     def update_env(self, env=None, **kwargs):
         """Add more arguments to the environment.
@@ -129,8 +126,8 @@ class Platform:
             Extra arguments to the env.
 
         """
-        if env is None:
-            env = self.get_env()
+        if self.env is None:
+            env = os.environ.copy()
         return env.update(kwargs)
 
 
@@ -152,8 +149,8 @@ class Shell(Platform):
 
 if __name__ == "__main__":
     # Modules kept importing this and ending up with 2 loggers and i was confused
-    LOGGER = module_log.stream_logger(
-        logger=logging.getLogger(name=__name__),
+    MACHINE_LOGGER = module_log.stream_logger(
+        logger=logging.getLogger(name='util.machine'),
         msg_format='%(asctime)s : %(levelname)s : %(module)s %(message)s',
         log_level=logging.INFO
     )

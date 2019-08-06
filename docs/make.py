@@ -2,11 +2,23 @@
 # -*- coding: utf-8 -*-
 """Expedite documentation builds.
 
+=======================================
+Make --- Automated Documentation Builds
+=======================================
+
 .. module:: make
     :synopsis: Expedite documentation builds.
 
-We attempt to automate documentation builds with this module.
+Usage
+======
+This module has a similar API to the command :command:`sphinx-build` as it
+passes user provided arguments along to it.
 
+It simply differs in making the process simpler and allows one to run it in
+the debugger if a problem arises with doc builds.
+
+Documentation TODO
+==================
 Still need to add an option to recursively move the html files out of the
 currently git-ignored directory `_build/html/` into this directory.
 
@@ -23,7 +35,8 @@ Update the options you can give to the parser:
 
 #) remove python path [x]
 #) Add open in browser as an option [x]
-#) Fix the output for the `commands` argument when this is run with :data:`sys.argv` == 0
+#) Fix the output for the `commands` argument when this is run with
+   :data:`sys.argv` == 0
 
 """
 import argparse
@@ -37,8 +50,8 @@ import webbrowser
 from IPython.core.error import UsageError
 
 DOC_PATH = os.path.dirname(os.path.abspath(__file__))
-BUILD_PATH = os.path.join(DOC_PATH, '_build')
-LOGGER = logging.getLogger(name=__name__)
+BUILD_PATH = os.path.join(DOC_PATH, 'build')
+MAKE_LOGGER = logging.getLogger(name=__name__)
 
 
 def _parse_arguments(cmds=None):
@@ -71,7 +84,7 @@ def _parse_arguments(cmds=None):
                         default='html',
                         choices=['html', 'latex'],
                         metavar='builder: (html or latex)',
-                        help='command to run: {}'.format(', '.join(cmds)))
+                        help='command to run: {}'.format(',\t '.join(cmds)))
 
     parser.add_argument('-j',
                         '--num-jobs',
@@ -84,7 +97,6 @@ def _parse_arguments(cmds=None):
     parser.add_argument('-s',
                         '--single',
                         metavar='FILENAME',
-                        type=str,
                         default=None,
                         help='filename of section or method name to build.')
 
@@ -99,17 +111,21 @@ def _parse_arguments(cmds=None):
                         '--log',
                         default=sys.stdout,
                         type=argparse.FileType('w'),
-                        help='File to write logging messages to.')
+                        help='Where to write log records to. Defaults to'
+                        ' stdout.')
 
     parser.add_argument('-ll',
                         '--log-level',
                         dest='log_level',
                         default='INFO',
                         help='Log level. Defaults to INFO. Implies logging.')
-
+    # reasonably should mention what the purpose of some of these are.
+    # they primarily seem like toggles since they don't provide much else
     parser.add_argument(
         '-V',
         '--verbose',
+        nargs='?',
+        const=True,
         default=False,
         help='Enable verbose logging and increase level to `debug`.')
 
@@ -197,10 +213,10 @@ class DocBuilder:
         return cmd
         return subprocess.run([self._cmd])
 
-    def open_browser(self, single_doc_html):
-        """Open a browser tab showing the single doc html option."""
+    def open_browser(self, doc):
+        """Open a browser tab to the provided document."""
         url = os.path.join('file://', DOC_PATH, 'build', 'html',
-                           single_doc_html)
+                           doc)
         webbrowser.open(url, new=2)
 
 
@@ -217,7 +233,7 @@ def termux_hack():
             '_build/html/',
             '/data/data/com.termux/files/home/storage/downloads/html')
     except FileNotFoundError:
-        logging.error("The build directory currently doesn't exist. Exiting.")
+        MAKE_LOGGER.error("The build directory currently doesn't exist. Exiting.")
 
 
 def main():
@@ -226,16 +242,16 @@ def main():
 
     # there's a default for all arguments so no need for try/excepts
     log_level = args.log_level.upper()
-    LOGGER.setLevel(log_level)
+    MAKE_LOGGER.setLevel(log_level)
     jobs = args.jobs
     verbosity = args.verbose
     builder = args.builder
 
     sphinx_shell = DocBuilder(kind=builder, num_jobs=jobs, verbosity=verbosity)
-    try:
-        sphinx_shell.sphinx_build()
-    except shutil.ExecError  as e:  # i think this is the right one
-        LOGGER.error(e)
+    # try:
+    sphinx_shell.sphinx_build()
+    # except shutil.Error  as e:  # i think this is the right one
+    #     MAKE_LOGGER.error(e)
 
     if os.environ.get('ANDROID_ROOT'):
         termux_hack()
