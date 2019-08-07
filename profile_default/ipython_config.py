@@ -99,7 +99,12 @@ home = get_home()
 #     widget', 'wx']
 #     Configure matplotlib for interactive use with the default matplotlib
 #     backend.
-# c.InteractiveShellApp.matplotlib = None
+try:
+    import matplotlib
+except (ImportError, ModuleNotFoundError):
+    c.InteractiveShellApp.matplotlib = None
+else:
+    c.InteractiveShellApp.matplotlib = 'auto'
 
 # Run the module as a script.
 # c.InteractiveShellApp.module_to_run = ''
@@ -424,7 +429,8 @@ else:
     else:
         c.TerminalInteractiveShell.editing_mode = 'emacs'
 
-c_logger.info("Editing Mode:\t {!s}", c.TerminalInteractiveShell.editing_mode)
+# TODO:
+# c_logger.info("Editing Mode:\t {!s}", c.TerminalInteractiveShell.editing_mode)
 
 # Set the editor used by IPython (default to $EDITOR/vi/notepad).
 c.TerminalInteractiveShell.editor = 'nvim'

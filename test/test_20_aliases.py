@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """Test that the :class:`IPython.core.AliasManager` behaves as expected.
 
