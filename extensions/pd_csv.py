@@ -28,9 +28,9 @@ It also shows the following simpler example:
                     print("Hello world!")
 
 """
-from io import StringIO
 import logging
 import sys
+from io import StringIO
 
 logging.basicConfig()
 

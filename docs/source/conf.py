@@ -153,7 +153,7 @@ today_fmt = '%B %d, %Y'
 pygments_style = GruvboxDarkHard
 
 rst_prolog = """
-.. |ip| replace:: :class:`~IPython.core.interactiveshell.InteractiveShell`
+.. |ip| replace:: :class:`IPython.core.interactiveshell.InteractiveShell`
 """
 
 # -- Options for HTML output -------------------------------------------------

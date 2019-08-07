@@ -40,23 +40,23 @@ import logging
 
 from IPython import get_ipython
 from IPython.terminal.shortcuts import create_ipython_shortcuts
-
 from prompt_toolkit.enums import DEFAULT_BUFFER
 from prompt_toolkit.filters import HasFocus, ViInsertMode, ViNavigationMode
 from prompt_toolkit.key_binding import KeyBindings, merge_key_bindings
+from prompt_toolkit.key_binding.bindings import named_commands, vi
+from prompt_toolkit.key_binding.bindings.named_commands import get_by_name
 # commented out but we could refactor with Keys.Ctrl-a to avoid using strings
 # for an enumerated data type
 # from prompt_toolkit.keys import KEY_ALIASES, Keys
 from prompt_toolkit.key_binding.vi_state import InputMode
-from prompt_toolkit.key_binding.bindings import named_commands, vi
-from prompt_toolkit.key_binding.bindings.named_commands import get_by_name
+
+from profile_default.util import module_log
 
 try:
     from ipykernel.zmqshell import ZMQInteractiveShell
 except (ImportError,ModuleNotFoundError):
     ZMQInteractiveShell = None
 
-from profile_default.util import module_log
 
 
 def switch_to_navigation_mode(event):
