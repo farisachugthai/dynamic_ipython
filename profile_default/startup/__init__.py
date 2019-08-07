@@ -12,9 +12,9 @@ Python3 and IPython 7+
 """
 import importlib
 import logging
-from logging import NullHandler
 import os
 import sys
+from logging import NullHandler
 
 from profile_default.util import module_log
 

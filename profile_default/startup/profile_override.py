@@ -12,10 +12,9 @@ often enough that it should be toggleable behavior.
 import os
 import shutil
 
-from traitlets.config import Unicode, LoggingConfigurable, Bool, observe
-
 from IPython import get_ipython, start_ipython
 from IPython.utils.path import ensure_dir_exists
+from traitlets.config import Bool, LoggingConfigurable, Unicode, observe
 
 
 class ProfileDirError(Exception):

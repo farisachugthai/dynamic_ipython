@@ -44,9 +44,9 @@ and then configure a globally available :class:`logging.StreamHandler()`.
 """
 import logging
 import os
-from os import path
 import sys
 import time
+from os import path
 
 from IPython import get_ipython
 

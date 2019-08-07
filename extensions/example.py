@@ -44,7 +44,7 @@ import sys
 import time
 
 from IPython import get_ipython
-from IPython.core.magic import Magics, magics_class, line_magic
+from IPython.core.magic import Magics, line_magic, magics_class
 
 
 @magics_class

@@ -27,14 +27,14 @@ an :func:`IPython.get_ipython()` call is doing.::
 import errno
 import logging
 import os
-from pathlib import Path
 import sys  # unresolved import sys??
+from pathlib import Path
 
 from IPython import get_ipython
 # from IPython.core.debugger import BdbQuit_excepthook
 from IPython.core.interactiveshell import InteractiveShell
-from IPython.terminal.ipapp import TerminalIPythonApp
 from IPython.terminal.embed import InteractiveShellEmbed
+from IPython.terminal.ipapp import TerminalIPythonApp
 
 from profile_default.util.module_log import stream_logger
 

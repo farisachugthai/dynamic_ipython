@@ -161,7 +161,6 @@ To put back the default options, you can use:
 
 
 """
-import logging
 import doctest
 import logging
 

@@ -10,8 +10,8 @@ Won't get autodoc'ed so add more elsewhere.
 
 """
 import logging
-from logging import NullHandler
 import os
 import sys
+from logging import NullHandler
 
 logging.getLogger(__name__).addHandler(NullHandler())

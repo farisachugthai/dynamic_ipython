@@ -47,8 +47,8 @@ import sys
 from importlib import import_module
 
 import IPython
-from IPython.utils import importstring
 from IPython.lib.deepreload import reload as __reload
+from IPython.utils import importstring
 
 
 def dreload(
