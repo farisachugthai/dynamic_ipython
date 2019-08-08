@@ -45,6 +45,7 @@ an error, so an empty str is passed to the function.
 
 """
 import logging
+from platform import system
 import sys
 
 from IPython import get_ipython
@@ -54,7 +55,12 @@ from profile_default.util.timer import timer
 
 
 def blacklisted_aliases(shell=None):
-    """Remove aliases that would otherwise raise errors."""
+    """Remove aliases that would otherwise raise errors.
+
+    Poop more and man aren't aliases on Windows. less is incidentally an alias because I
+    have it installed but that's not canon. cls is windows version of clear so this function is
+    actually very platform specific *sigh*.
+    """
     blacklist = ['more', 'less', 'clear', 'man']
     for i in blacklist:
         try:
@@ -67,8 +73,8 @@ def blacklisted_aliases(shell=None):
 def main(shell=None):
     """Check if :mod:`IPython` was initialized and if so, ``%rehashx``."""
     shell.run_line_magic('rehashx', '')
-
-    blacklisted_aliases(shell)
+    if system() != 'Windows':
+        blacklisted_aliases(shell)
 
     return shell
 
