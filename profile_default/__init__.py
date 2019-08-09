@@ -29,4 +29,4 @@ try:
 except (ImportError, ModuleNotFoundError):
     pass
 
-logging.getLogger(__name__).addHandler(NullHandler())
+PROFILE_DEFAULT_LOG = logging.getLogger('profile_default')

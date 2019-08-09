@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 """Initialize the global IPython instance and begin configuring.
 
-Imports all files in this directory to avoid import problems as
+Imports all files in this directory by utilizing the
+:mod:`importlib` API to avoid import problems as
 Python modules can't begin with numbers.
 
 Requires
@@ -18,7 +19,7 @@ from logging import NullHandler
 
 from profile_default.util import module_log
 
-logging.getLogger(__name__).addHandler(NullHandler())
+STARTUP_LOGGER = logging.getLogger('profile_default.startup')
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 

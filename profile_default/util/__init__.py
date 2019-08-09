@@ -16,4 +16,4 @@ from profile_default.util import module_log
 from profile_default.util import machine
 from profile_default.util import timer
 
-logging.getLogger(__name__).addHandler(NullHandler())
+UTIL_LOGGER = logging.getLogger('profile_default.util')

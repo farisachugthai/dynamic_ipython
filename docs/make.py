@@ -87,9 +87,9 @@ def _parse_arguments(cmds=None):
     cmds = [method for method in dir(DocBuilder) if not method.startswith('_')]
 
     parser = argparse.ArgumentParser(
-                            prog="Pure Python Makefile",
-                            description="Dynamic IPython doc builder.",
-                            epilog="Commands: {}".format(', '.join(cmds)))
+                        prog="Pure Python Makefile",
+                        description="Dynamic IPython doc builder.",
+                        epilog="Commands: {}".format(', '.join(cmds)))
 
     parser.add_argument('builder',
                         nargs='?',
@@ -196,6 +196,20 @@ class DocBuilder:
     def __repr__(self):
         return '{}\t{}'.format(self.__class__.__name__, self.kind)
 
+    @staticmethod
+    def status(output):
+        """Print output in bold."""
+        print('\033[1m{0}\033[0m'.format(output))
+
+    def cleanup(self):
+        """Clean the working tree."""
+        try:
+            self.status('Removing previous builds…')
+            shutil.rmtree(os.path.join(str(self.root), 'dist'))
+        except OSError:
+            pass
+
+
     def sphinx_build(self):
         """Build docs.
 
@@ -261,6 +275,7 @@ def main():
 
     sphinx_shell = DocBuilder(kind=builder, num_jobs=jobs, verbosity=verbosity)
     # try:
+    sphinx_shell.cleanup()
     sphinx_shell.sphinx_build()
     # except shutil.Error  as e:  # i think this is the right one
     #     MAKE_LOGGER.error(e)
@@ -269,7 +284,7 @@ def main():
         termux_hack()
 
     if args.open_browser:
-        sphinx_shell._open_browser()
+        sphinx_shell.open_browser()
 
 
 if __name__ == "__main__":
