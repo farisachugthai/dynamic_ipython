@@ -9,11 +9,12 @@ I get why it's difficult to run it selectively but it automatically creates them
 often enough that it should be toggleable behavior.
 
 """
+import errno
 import os
 import shutil
 
 from IPython import get_ipython, start_ipython
-from IPython.utils.path import ensure_dir_exists
+from IPython.utils.path import ensure_dir_exists, get_ipython_package_dir
 from traitlets.config import Bool, LoggingConfigurable, Unicode, observe
 
 
@@ -51,7 +52,7 @@ class ReprProfileDir(LoggingConfigurable):
     def __repr__(self):
         """I'll admit this is unnecessary. Oh well."""
         return '{}'.format(self.location)
-        
+
     _location_isset = Bool(False) # flag for detecting multiply set location
     @observe('location')
     def _location_changed(self, change):
@@ -68,7 +69,7 @@ class ReprProfileDir(LoggingConfigurable):
         self.pid_dir = os.path.join(new, self.pid_dir_name)
         self.static_dir = os.path.join(new, self.static_dir_name)
         self.check_dirs()
-    
+
     def _mkdir(self, path, mode=None):
         """Ensure a directory exists at a given path.
 
@@ -103,11 +104,11 @@ class ReprProfileDir(LoggingConfigurable):
                 raise
 
         return True
-    
+
     @observe('log_dir')
     def check_log_dir(self, change=None):
         self._mkdir(self.log_dir)
-    
+
     @observe('startup_dir')
     def check_startup_dir(self, change=None):
         self._mkdir(self.startup_dir)

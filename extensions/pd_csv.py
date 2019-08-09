@@ -18,8 +18,7 @@ It also shows the following simpler example:
 
 .. ipython::
 
-    In [1]: from IPython.core.magic import (register_line_magic,
-    register_cell_magic)
+    In [1]: from IPython.core.magic import (register_line_magic, register_cell_magic)
     In [2]: @register_line_magic
             def hello(line):
                 if line == 'french':

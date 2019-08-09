@@ -16,12 +16,12 @@ interpreter and prepends a timestamp to commands.
 
 The timestamp is particularly convenient for concurrent instances of IPython.
 
-.. versionchanged:: 0.0.1
+.. versionchanged:: Version Changed
 
     :func:`IPython.core.interactiveshell.InteractiveShell.magic()`
     to :func:`IPython.core.interactiveshell.InteractiveShell.run_line_magic()`
 
-.. todo::
+.. todo:: Logging TODOs
 
     - Truncate output if it exceeds a certain threshold.
         - Run **dir(np)** or **dir(pd)** a couple of times and the logs
@@ -32,12 +32,12 @@ The timestamp is particularly convenient for concurrent instances of IPython.
 
 
 Roadmap
---------
+========
 
 05/18/2019:
 
-Should consider using that ipython_logger_05 as a :class:`logging.FileHandler()`
-and then configure a globally available :class:`logging.StreamHandler()`.
+Should consider using that ipython_logger_05 as a :class:`logging.FileHandler`
+and then configure a globally available :class:`logging.StreamHandler`.
 
 -----------
 

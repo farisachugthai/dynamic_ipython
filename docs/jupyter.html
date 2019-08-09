@@ -16,7 +16,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Extensions" href="extensions.html" />
-    <link rel="prev" title="profile_default.util package" href="profile/util.html" />
+    <link rel="prev" title="32_vi_modes module" href="profile/vi_modes.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <!--[if lte IE 6]>
@@ -38,7 +38,7 @@
           <a href="extensions.html" title="Extensions"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="profile/util.html" title="profile_default.util package"
+          <a href="profile/vi_modes.html" title="32_vi_modes module"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li> 
       </ul>
@@ -55,7 +55,48 @@
 suite. These have been commented and marked up as appropriate.</p>
 <div class="section" id="jupyter-qtconsole">
 <h2>Jupyter QTConsole<a class="headerlink" href="#jupyter-qtconsole" title="Permalink to this headline">¶</a></h2>
-<p><code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_qtconsole_config</span></code></p>
+<p><code class="xref py py-mod docutils literal notranslate"><span class="pre">jupyter_conf.jupyter_qtconsole_config</span></code></p>
+<div class="section" id="connectionfilemixin-loggingconfigurable-configuration">
+<h3>connectionFileMixin(LoggingConfigurable) configuration<a class="headerlink" href="#connectionfilemixin-loggingconfigurable-configuration" title="Permalink to this headline">¶</a></h3>
+<p><code class="xref py py-class docutils literal notranslate"><span class="pre">jupyter.qtconsole.connectionFileMixin</span></code> — Mixin for configurable
+classes that work with connection files</p>
+<p><code class="xref py py-mod docutils literal notranslate"><span class="pre">JSON</span></code> file in which to store connection info.</p>
+<p>[default: kernel-&lt;pid&gt;.json]</p>
+<p>This file will contain the IP, ports, and authentication key needed to connect
+clients to this kernel. By default, this file will be created in the security
+dir of the current profile, but can be specified by absolute path.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">ConnectionFileMixin</span><span class="o">.</span><span class="n">connection_file</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
+<p>Set the control (ROUTER) port [default: random]:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">ConnectionFileMixin</span><span class="o">.</span><span class="n">control_port</span> <span class="o">=</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p>Set the heartbeat port [default: random]:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">ConnectionFileMixin</span><span class="o">.</span><span class="n">hb_port</span> <span class="o">=</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p>Set the iopub (PUB) port [default: random]:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">ConnectionFileMixin</span><span class="o">.</span><span class="n">iopub_port</span> <span class="o">=</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p>Set the kernel’s IP address [default localhost]. If the IP address is
+something other than localhost, then Consoles on other machines will be able
+to connect to the Kernel, so be careful!:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">ConnectionFileMixin</span><span class="o">.</span><span class="n">ip</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
+<p>Set the shell (ROUTER) port [default: random]:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">ConnectionFileMixin</span><span class="o">.</span><span class="n">shell_port</span> <span class="o">=</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p>Set the stdin (ROUTER) port [default: random]:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">ConnectionFileMixin</span><span class="o">.</span><span class="n">stdin_port</span> <span class="o">=</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="keyboard-errors">
+<h3>Keyboard Errors<a class="headerlink" href="#keyboard-errors" title="Permalink to this headline">¶</a></h3>
 <p>May 27, 2019:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(ins)(navigator) faris@faris-U56E:~$ jupyter-qtconsole
 xkbcommon: ERROR: failed to add default include path
@@ -66,9 +107,10 @@ make sure that XKB configuration data directory contains recent enough
 contents, to update please see http://cgit.freedesktop.org/xkeyboard-config/ .
 </pre></div>
 </div>
-<p>So we have to debug that because the keyboard isn’t working on jupyter
-qtconsole :/</p>
+<p>So we have to debug that because the keyboard isn’t working on Jupyter
+QTConsole :/</p>
 <p>In a rare turn of events, it <strong>IS</strong> however, working just fine on Windows.</p>
+</div>
 <div class="section" id="initializing-jupyter-qtconsole">
 <h3>Initializing Jupyter QTConsole<a class="headerlink" href="#initializing-jupyter-qtconsole" title="Permalink to this headline">¶</a></h3>
 <p>The initial entry point for <strong class="command">jupyter-qtconsole</strong> is in the following:</p>
@@ -86,24 +128,23 @@ qtconsole :/</p>
 <h2>Display<a class="headerlink" href="#display" title="Permalink to this headline">¶</a></h2>
 <p>For example, if using the IPython kernel, there are functions available for
 object display:</p>
-<blockquote>
-<div><p>In [4]: from IPython.display import display</p>
-<p>In [5]: from IPython.display import display_png, display_svg</p>
-</div></blockquote>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span>
+<span class="gp">In [5]: </span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display_png</span><span class="p">,</span> <span class="n">display_svg</span>
+</pre></div>
+</div>
 <p>Python objects can simply be passed to these functions and the appropriate
 representations will be displayed in the console as long as the objects know
 how to compute those representations. The easiest way of teaching objects how
 to format themselves in various representations is to define special methods
 such as: <code class="docutils literal notranslate"><span class="pre">_repr_svg_</span></code> and <code class="docutils literal notranslate"><span class="pre">_repr_png_</span></code>. IPython’s display formatters
 can also be given custom formatter functions for various types:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [6]: </span><span class="n">ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go">In [#]: from IPython import get_ipython</span>
+<span class="gp">In [6]: </span><span class="n">ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
 <span class="gp">In [7]: </span><span class="n">png_formatter</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">display_formatter</span><span class="o">.</span><span class="n">formatters</span><span class="p">[</span><span class="s1">&#39;image/png&#39;</span><span class="p">]</span>
-
 <span class="gp">In [8]: </span><span class="n">png_formatter</span><span class="o">.</span><span class="n">for_type</span><span class="p">(</span><span class="n">Foo</span><span class="p">,</span> <span class="n">foo_to_png</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>For further details, see <code class="docutils literal notranslate"><span class="pre">IPython.core.formatters</span></code>.</p>
+<p>For further details, see <span class="xref std std-ref">IPython.core.formatters</span>.</p>
 </div>
 <div class="section" id="jupyter-notebook">
 <h2>Jupyter Notebook<a class="headerlink" href="#jupyter-notebook" title="Permalink to this headline">¶</a></h2>
@@ -115,8 +156,7 @@ can also be given custom formatter functions for various types:</p>
 </div>
 <div class="section" id="jupyterapp-application-configuration">
 <h3>JupyterApp(Application) configuration<a class="headerlink" href="#jupyterapp-application-configuration" title="Permalink to this headline">¶</a></h3>
-<p>Base class for Jupyter applications
-Answer yes to any prompts.:</p>
+<p>Answer yes to any prompts.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">JupyterApp</span><span class="o">.</span><span class="n">answer_yes</span> <span class="o">=</span> <span class="bp">False</span>
 </pre></div>
 </div>
@@ -311,8 +351,8 @@ they are limited.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">iopub_data_rate_limit</span> <span class="o">=</span> <span class="mi">1000000</span>
 </pre></div>
 </div>
-<p>(msgs/sec) Maximum rate at which messages can be sent on iopub before they are
-limited.:</p>
+<p>Maximum rate at which messages can be sent on iopub before they are
+limited. (Msgs/sec):</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">iopub_msg_rate_limit</span> <span class="o">=</span> <span class="mi">1000</span>
 </pre></div>
 </div>
@@ -324,7 +364,7 @@ limited.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">jinja_environment_options</span> <span class="o">=</span> <span class="p">{}</span>
 </pre></div>
 </div>
-<p>Extra variables to supply to jinja templates when rendering.:</p>
+<p>Extra variables to supply to Jinja templates when rendering.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">jinja_template_vars</span> <span class="o">=</span> <span class="p">{}</span>
 </pre></div>
 </div>
@@ -500,7 +540,7 @@ for details.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">websocket_compression_options</span> <span class="o">=</span> <span class="bp">None</span>
 </pre></div>
 </div>
-<p>The base URL for websockets, if it differs from the HTTP server (hint: it
+<p>The base URL for <code class="docutils literal notranslate"><span class="pre">websockets</span></code>, if it differs from the HTTP server (hint: it
 almost certainly doesn’t).:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">websocket_url</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
 </pre></div>
@@ -518,10 +558,10 @@ Webpack’s hot reloading server at <a class="reference external" href="http://l
 </div>
 <p>To serve your assets. This is only useful if NteractApp is installed
 in editable mode e.g., using:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install -e .</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">%</span>pip install -e .
 </pre></div>
 </div>
-<p>Then in the Jupyter configuration file modifying:</p>
+<p>In addition, the Jupyter configuration file must be modified like so:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NteractApp</span><span class="o">.</span><span class="n">dev_mode</span> <span class="o">=</span> <span class="bp">False</span>
 </pre></div>
 </div>
@@ -539,34 +579,33 @@ should return <a class="reference external" href="https://docs.python.org/3/libr
 <p>Handler for image type output.  This is useful, for example, when connecting
 to the kernel in which pylab inline back-end is activated.</p>
 <p>There are four handlers defined.</p>
-<ul>
+<ol class="arabic simple">
 <li><p>‘PIL’: Use Python Imaging Library to pop-up image;</p></li>
-<li><p>stream’: Use an external program to show the image.  Image will be fed into
-the STDIN  of the program.</p>
+<li><p>stream’: Use an external program to show the image.  Image will be fed into</p></li>
+</ol>
+<blockquote>
+<div><p>the STDIN  of the program.</p>
 <ul class="simple">
 <li><p>You will need to configure <code class="docutils literal notranslate"><span class="pre">stream_image_handler</span></code></p></li>
 </ul>
-</li>
-<li><p>‘tempfile’: Use an external program to show the image.
-Image will be saved in a temporary file and the program will be
-called with that file.</p>
+</div></blockquote>
+<ol class="arabic">
+<li><p>‘tempfile’: Use an external program to show the image.  Image will be saved in
+a temporary file and the program will be called with that file.</p>
 <ul class="simple">
 <li><p>You will need to configure <code class="docutils literal notranslate"><span class="pre">tempfile_image_handler</span></code></p></li>
 </ul>
 </li>
-<li><p>‘callable’: You can set any Python callable which is called with the
-image data.</p>
-<blockquote>
-<div><ul>
+<li><p>‘callable’: You can set any Python callable which is called with the image data.</p>
+<ul>
 <li><p>You will need to configure <code class="docutils literal notranslate"><span class="pre">callable_image_handler</span></code>.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">ZMQTerminalInteractiveShell</span><span class="o">.</span><span class="n">image_handler</span> <span class="o">=</span> <span class="s1">&#39;PIL&#39;</span>
 </pre></div>
 </div>
 </li>
 </ul>
-</div></blockquote>
 </li>
-</ul>
+</ol>
 <p>That’s the default text for the Jupyter consoles (both non-GUI and QT).</p>
 </div>
 </div>
@@ -579,7 +618,7 @@ image data.</p>
         <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="profile/util.html" title="previous chapter">profile_default.util package</a></li>
+      <li>Previous: <a href="profile/vi_modes.html" title="previous chapter">32_vi_modes module</a></li>
       <li>Next: <a href="extensions.html" title="next chapter">Extensions</a></li>
   </ul></li>
 </ul>
@@ -612,6 +651,8 @@ image data.</p>
   <ul>
 <li><a class="reference internal" href="#">Jupyter</a><ul>
 <li><a class="reference internal" href="#jupyter-qtconsole">Jupyter QTConsole</a><ul>
+<li><a class="reference internal" href="#connectionfilemixin-loggingconfigurable-configuration">connectionFileMixin(LoggingConfigurable) configuration</a></li>
+<li><a class="reference internal" href="#keyboard-errors">Keyboard Errors</a></li>
 <li><a class="reference internal" href="#initializing-jupyter-qtconsole">Initializing Jupyter QTConsole</a></li>
 </ul>
 </li>
@@ -663,13 +704,14 @@ image data.</p>
           <a href="extensions.html" title="Extensions"
              >next</a> |</li>
         <li class="right" >
-          <a href="profile/util.html" title="profile_default.util package"
+          <a href="profile/vi_modes.html" title="32_vi_modes module"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright (C) 2018-2019 Faris Chugthai.
+      Last updated on Aug 08, 2019.
     </div>
   </body>
 </html>
