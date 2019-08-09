@@ -41,7 +41,7 @@ As the help outlines above, the second required positional argument to
 
 This is more easily understood as 'remaining arguments to the magic'.
 `%rehashx` takes none, but leaving it blank causes the function call to raise
-an error, so an empty str is passed to the function.
+an error, so an empty `str` is passed to the function.
 
 """
 import logging
@@ -57,9 +57,7 @@ from profile_default.util.timer import timer
 def blacklisted_aliases(shell=None):
     """Remove aliases that would otherwise raise errors.
 
-    Poop more and man aren't aliases on Windows. less is incidentally an alias because I
-    have it installed but that's not canon. cls is windows version of clear so this function is
-    actually very platform specific *sigh*.
+    Function is checked to ensure that it only runs when using Windows.
     """
     blacklist = ['more', 'less', 'clear', 'man']
     for i in blacklist:
@@ -80,9 +78,9 @@ def main(shell=None):
 
 
 if __name__ == "__main__":
-    LOGGER = logging.getLogger(name='01_rehashx')
+    REHASHX_LOGGER = logging.getLogger(name='01_rehashx')
     LOG_LEVEL = logging.INFO
-    LOGGER.setLevel(LOG_LEVEL)
+    REHASHX_LOGGER.setLevel(LOG_LEVEL)
 
     _ip = get_ipython()
 

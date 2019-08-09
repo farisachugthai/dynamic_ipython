@@ -10,7 +10,7 @@ Make --- Automated Documentation Builds
     :synopsis: Expedite documentation builds.
 
 Usage
-======
+------
 This module has a similar API to the command :command:`sphinx-build` as it
 passes user provided arguments along to it.
 
@@ -18,7 +18,7 @@ It simply differs in making the process simpler and allows one to run it in
 the debugger if a problem arises with doc builds.
 
 Documentation TODO
-==================
+------------------
 Still need to add an option to recursively move the html files out of the
 currently git-ignored directory `_build/html/` into this directory.
 
@@ -31,7 +31,18 @@ So we may have to :func:`os.walk()`, copy them into the correct relative
 section of the directory tree, recursively delete the old
 directories and attempt to not lose all the metadata along the way.
 
-Update the options you can give to the parser:
+See Also
+--------
+sphinx.cmd.build : mod
+    The main entrypoint for sphinx and a good module to get comfortable with.
+sphinx.cmd.make_main : mod
+    The pure python replacement for a ``Makefile``.
+sphinx.util.osutil : mod
+    Will definitely help with your problem below.
+
+.. todo:: Argparse update.
+
+    Update the options you can give to the parser:
 
 #) remove python path [x]
 #) Add open in browser as an option [x]
@@ -75,9 +86,10 @@ def _parse_arguments(cmds=None):
     """
     cmds = [method for method in dir(DocBuilder) if not method.startswith('_')]
 
-    parser = argparse.ArgumentParser(description="Dynamic IPython doc builder.",
-                                     epilog="Commands: {}".format(
-                                         ','.join(cmds)))
+    parser = argparse.ArgumentParser(
+                            prog="Pure Python Makefile",
+                            description="Dynamic IPython doc builder.",
+                            epilog="Commands: {}".format(', '.join(cmds)))
 
     parser.add_argument('builder',
                         nargs='?',

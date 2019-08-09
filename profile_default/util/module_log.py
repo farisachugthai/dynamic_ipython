@@ -94,8 +94,13 @@ def stream_logger(logger, log_level=logging.INFO, msg_format=None):
     See Also
     --------
     profile_default.startup.32_vi_modes : module
-        In profile_default.startup.32_vi_modes we call this func.
-        Why is this the output? 3 slightly different LogRecords?:
+        In :ref:`profile_default.startup.32_vi_modes` we call this function.
+
+    .. todo:: Understand triple log records and prevent cause.
+
+        Why is this the output? 3 slightly different LogRecords?
+
+    .. code-block:: none
 
             INFO:root:Number of keybindings 359:
             2019-07-26 09:55:49,450 : INFO : 32_vi_modes Number of keybindings 359:
@@ -104,17 +109,21 @@ def stream_logger(logger, log_level=logging.INFO, msg_format=None):
     """
     handler = logging.StreamHandler(stream=sys.stderr)
 
+    if isinstance(logger, str):
+        logger = logging.getLogger(logger)
+
+    # TODO: Come up with else. What if they pass a string?
     if isinstance(log_level, int):
         level = log_level
-    # TODO: Come up with else. What if they pass a string?
-    logger = logging.getLogger()
+
+    # logger = logging.getLogger()
     logger.setLevel(level)
     handler.setLevel(level)
 
     if msg_format is not None:
         formatter = logging.Formatter(msg_format)
     else:
-        formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+        formatter = logging.Formatter('%(asctime)s : %(levelname)s : %(message)s : ')
 
     handler.setFormatter(formatter)
 
@@ -155,7 +164,7 @@ def file_logger(
         shell, (IPython.core.interactiveshell.InteractiveShell, None)
     )
 
-    if shell is not None:
+    if shell is None:
         shell = get_ipython()
 
     logdir = shell.profile_dir.log_dir
@@ -172,7 +181,7 @@ def file_logger(
     if msg_format is not None:
         formatter = logging.Formatter(msg_format)
     else:
-        formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+        formatter = logging.Formatter('%(asctime)s : %(levelname)s : %(message)s : ')
 
     handler.setFormatter(formatter)
 

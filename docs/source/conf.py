@@ -65,11 +65,12 @@ def _path_build(root, suffix, validate=True):
         return root.joinpath(suffix)
 
 
-ROOT = Path('..').resolve()
+ROOT = Path('../..')
 PD = _path_build(ROOT, 'profile_default')
 STARTUP = _path_build(PD, 'startup')
 
-DOCS_DIR = _path_build(ROOT, 'docs')
+# DOCS_DIR = _path_build(ROOT, 'docs')
+DOCS_DIR = Path(__file__).parent
 BUILD_DIR = _path_build(DOCS_DIR, 'build')
 CONF_PATH = _path_build(DOCS_DIR, 'source')
 
@@ -150,7 +151,7 @@ today_fmt = '%B %d, %Y'
 
 # The name of the Pygments (syntax highlighting) style to use.
 # Specified in theme.conf
-pygments_style = GruvboxDarkHard
+pygments_style = 'GruvboxDarkHard'
 
 rst_prolog = """
 .. |ip| replace:: :class:`IPython.core.interactiveshell.InteractiveShell`

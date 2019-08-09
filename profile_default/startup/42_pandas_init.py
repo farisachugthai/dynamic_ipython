@@ -26,7 +26,7 @@ Here's an interesting blurb from pandas/docs/conf.py::
 import logging
 import sys
 
-from profile_default.util import module_log
+from dynamic_ipython.profile_default.util import module_log
 
 
 def pandas_init():
@@ -71,7 +71,7 @@ if __name__ == '__main__':
         sys.exit("This module requires Python 3.6+")
 
     log = logging.getLogger(name='profile_default.startup.pandas_init')
-    LOGGER = module_log.stream_logger(logger=log, log_level=logging.INFO)
+    PANDAS_LOGGER = module_log.stream_logger(logger=log, log_level=logging.INFO)
 
     try:
         import pandas as pd
@@ -79,6 +79,6 @@ if __name__ == '__main__':
         # jesus christ this just printed the error like 8 times. need to fix
         # LOGGER.warning("Import error: %s" % e, exc_info=1)
         # sys.exit()
-        LOGGER.warning("Import error: %s", e)
+        PANDAS_LOGGER.warning("Import error: %s", e)
     else:
         pandas_init()

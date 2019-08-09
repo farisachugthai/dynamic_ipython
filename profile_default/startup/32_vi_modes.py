@@ -54,9 +54,8 @@ from profile_default.util import module_log
 
 try:
     from ipykernel.zmqshell import ZMQInteractiveShell
-except (ImportError,ModuleNotFoundError):
+except (ImportError, ModuleNotFoundError):
     ZMQInteractiveShell = None
-
 
 
 def switch_to_navigation_mode(event):
@@ -116,12 +115,14 @@ def emacs_alt_bindings():
 
     .. ipython::
 
-        In [1]: timeit emacs_alt_bindings()
+        In [#]: from profile_default.startup import vi_mode_keybindings
+        In [#]: %timeit vi_mode_keybindings.emacs_alt_bindings()
         762 µs ± 911 ns per loop (mean ± std. dev. of 7 runs, 1000 loops each)
 
     Returns
     -------
-    kb : :class:`~prompt_toolkit.key_bindings.KeyBindings()`
+    kb : :class:`prompt_toolkit.key_bindings.KeyBindings()`
+        Extra Emacs keys for the console.
 
     """
     kb = KeyBindings()
@@ -221,9 +222,8 @@ def main():
 if __name__ == "__main__":
     insert_mode = (HasFocus(DEFAULT_BUFFER) & ViInsertMode())
 
-    level = 10
-    RSI_LOG = logging.getLogger(name='32_vi_modes')
-
-    RSI_LOGGER = module_log.stream_logger(logger=RSI_LOG, log_level=level)
-
+    RSI_LOGGER = module_log.stream_logger(
+            logger="RSI",
+            log_level=10
+        )
     main()
