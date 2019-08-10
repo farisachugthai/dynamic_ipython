@@ -47,98 +47,8 @@
 <span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;Give a detailed, colored traceback and drop into pdb on exceptions.</span>
 
-<span class="sd">=====================</span>
-<span class="sd">Customized Exceptions</span>
-<span class="sd">=====================</span>
-
 <span class="sd">.. module:: 50_sysexception</span>
 <span class="sd">   :synopsis: Specify a handler for IPython&#39;s traceback formatting.</span>
-
-<span class="sd">.. versionchanged:: Testing out :class:`IPython.core.ultratb.AutoFormattedTb()`</span>
-
-<span class="sd">This is excessively long but look at how cute and personal this</span>
-<span class="sd">help doc is for :ref:`IPython.core.ultratb`!!:</span>
-
-
-<span class="sd">Help on module IPython.core.ultratb in IPython.core:</span>
-<span class="sd">====================================================</span>
-
-<span class="sd">NAME</span>
-<span class="sd">    IPython.core.ultratb - Verbose and colourful traceback formatting.</span>
-
-<span class="sd">DESCRIPTION:</span>
-<span class="sd">------------</span>
-
-<span class="sd">**ColorTB**</span>
-
-<span class="sd">I&#39;ve always found it a bit hard to visually parse tracebacks in Python.  The</span>
-<span class="sd">ColorTB class is a solution to that problem.  It colors the different parts of a</span>
-<span class="sd">traceback in a manner similar to what you would expect from a syntax-highlighting</span>
-<span class="sd">text editor.</span>
-
-<span class="sd">Installation instructions for ColorTB::</span>
-
-<span class="sd">    import sys,ultratb</span>
-<span class="sd">    sys.excepthook = ultratb.ColorTB()</span>
-
-
-<span class="sd">**VerboseTB**</span>
-<span class="sd">=============</span>
-
-<span class="sd">I&#39;ve also included a port of Ka-Ping Yee&#39;s &quot;cgitb.py&quot; that produces all kinds</span>
-<span class="sd">of useful info when a traceback occurs.  Ping originally had it spit out HTML</span>
-<span class="sd">and intended it for CGI programmers, but why should they have all the fun?  I</span>
-<span class="sd">altered it to spit out colored text to the terminal.  It&#39;s a bit overwhelming,</span>
-<span class="sd">but kind of neat, and maybe useful for long-running programs that you believe</span>
-<span class="sd">are bug-free.  If a crash *does* occur in that type of program you want details.</span>
-<span class="sd">Give it a shot--you&#39;ll love it or you&#39;ll hate it.</span>
-
-<span class="sd">.. note::</span>
-
-<span class="sd">    The Verbose mode prints the variables currently visible where the exception</span>
-<span class="sd">    happened (shortening their strings if too long). This can potentially be</span>
-<span class="sd">    very slow, if you happen to have a huge data structure whose string</span>
-<span class="sd">    representation is complex to compute. Your computer may appear to freeze for</span>
-<span class="sd">    a while with cpu usage at 100%. If this occurs, you can cancel the traceback</span>
-<span class="sd">    with Ctrl-C (maybe hitting it more than once).</span>
-
-<span class="sd">    If you encounter this kind of situation often, you may want to use the</span>
-<span class="sd">    Verbose_novars mode instead of the regular Verbose, which avoids formatting</span>
-<span class="sd">    variables (but otherwise includes the information and context given by</span>
-<span class="sd">    Verbose).</span>
-
-<span class="sd">.. note::</span>
-
-<span class="sd">    The Verbose mode print all variables in the stack, which means it can</span>
-<span class="sd">    potentially leak sensitive information like access keys, or unencrypted</span>
-<span class="sd">    password.</span>
-
-<span class="sd">    Note:  Much of the code in this module was lifted verbatim from the standard</span>
-<span class="sd">    library module &#39;traceback.py&#39; and Ka-Ping Yee&#39;s &#39;cgitb.py&#39;.</span>
-
-<span class="sd">-------------------------</span>
-
-<span class="sd">Color schemes</span>
-<span class="sd">-------------</span>
-<span class="sd">This guy was even so kind as to give us a full explanation for the color</span>
-<span class="sd">schemes! I never saw anything this thorough in the official docs so that&#39;s</span>
-<span class="sd">really cool.:</span>
-
-<span class="sd">    The colors are defined in the class TBTools through the use of the</span>
-<span class="sd">    ColorSchemeTable class. Currently the following exist:</span>
-
-<span class="sd">      - NoColor: allows all of this module to be used in any terminal (the color</span>
-<span class="sd">        escapes are just dummy blank strings).</span>
-<span class="sd">      - Linux: is meant to look good in a terminal like the Linux console</span>
-<span class="sd">        (black or very dark background).</span>
-<span class="sd">      - LightBG: similar to Linux but swaps dark/light colors to be more</span>
-<span class="sd">        readable in light background terminals.</span>
-<span class="sd">      - Neutral: a neutral color scheme that should be readable on both</span>
-<span class="sd">        light and dark background.</span>
-
-<span class="sd">    You can implement other color schemes easily, the syntax is fairly</span>
-<span class="sd">    self-explanatory. Please send back new schemes you develop to the author for</span>
-<span class="sd">    possible inclusion in future releases.</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">sys</span>
@@ -147,7 +57,7 @@
 <span class="kn">from</span> <span class="nn">IPython.core</span> <span class="k">import</span> <span class="n">ultratb</span>
 
 
-<div class="viewcode-block" id="ExceptionHook"><a class="viewcode-back" href="../../../profile/startup.html#profile_default.startup.50_sysexception.ExceptionHook">[docs]</a><span class="k">class</span> <span class="nc">ExceptionHook</span><span class="p">(</span><span class="ne">BaseException</span><span class="p">):</span>
+<div class="viewcode-block" id="ExceptionHook"><a class="viewcode-back" href="../../../profile/sysexcept.html#profile_default.startup.50_sysexception.ExceptionHook">[docs]</a><span class="k">class</span> <span class="nc">ExceptionHook</span><span class="p">(</span><span class="ne">BaseException</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Custom exception hook for IPython.</span>
 
 <span class="sd">    From the IPython official documentation:</span>
@@ -215,17 +125,17 @@
 <div id="sidebartoc">
     <p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../startup.html">Startup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ipython_keybindings.html">Keybindings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../magics.html">Built-in Magics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../custom_magics.html">Writing Your Own Magics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../exceptions.html">Customized Exceptions</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../profile/index.html">IPython Shell Initialization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../jupyter.html">Jupyter ZMQShell</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Notebook Extensions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev.html">Developers Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev.html">Contributors Notes</a></li>
 </ul>
 
 </div>
@@ -258,6 +168,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright (C) 2018-2019 Faris Chugthai.
+      Last updated on Aug 10, 2019.
     </div>
   </body>
 </html>

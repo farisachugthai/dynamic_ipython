@@ -186,6 +186,10 @@ suppress the seed line so it doesn't show up in the rendered output.:
           [0.22591016, 0.77731835],
           [0.0072729 , 0.34273127]])
 
+
+1)
+======
+
 For more information on @suppress and @doctest decorators, please refer
 to the end of this file in :ref:`Pseudo-Decorators` section.
 
@@ -274,6 +278,9 @@ settings to the entire block.  For example,
 You can create one or more pyplot plots and insert them with the
 ``@savefig`` decorator.
 
+2)
+====
+
 For more information on ``@savefig`` decorator, please refer to the end of this
 page in :ref:`Pseudo-Decorators` section.
 
@@ -323,6 +330,13 @@ Then call it from a subsequent section.
    In [5]: square(-2)
    Out [5]: 4
 
+
+3)
+====
+
+====================================================================
+Why does the sentence below appear no less than 3 times in this doc?
+====================================================================
 
 For more information on the ``@doctest`` decorator, please refer to the end of
 this page in the :ref:`Pseudo-Decorators` section.
@@ -431,6 +445,8 @@ And persist across sessions.:
 
 Pseudo-Decorators
 =================
+
+.. sooooo which ones are which? Please be more clear!
 
 Here are the supported decorators, and any optional arguments they
 take.  Some of the decorators can be used as options to the entire

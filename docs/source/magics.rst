@@ -2,6 +2,8 @@
 IPython Magics
 ================
 
+.. highlight:: ipython
+
 .. module:: ipython_magics
    :Synopsis: Summarizes IPython magics.
 
@@ -20,28 +22,27 @@ Which magics are defined here?
 Line:
 ------
 
-- ``%hist[ory]``
-- ``%pycat``
-- ``%recall``
-- ``%ed[it]``
-- ``%bookmark``
-- ``%run``
-- ``%store``
-- ``%save``
+- %hist[ory]
+- %pycat
+- %recall
+- %ed[it]
+- %bookmark
+- %run
+- %store
+- %save
 
 Cell:
 -----
 
-- ``%[write]file``
-- ``%timeit``
-- ``%macro``
+- %[write]file
+- %timeit
+- %macro
 
 
-
-``%timeit()``
-
--qqq means be very quiet.
--r 5 means repeat the whole cell block 5 times.
+%timeit
+=======
+:option:`qqq` means be very quiet.
+:option:`r` :kbd:`5` means repeat the whole cell block 5 times.
 
 .. code-block:: ipython
 
@@ -67,9 +68,10 @@ Cell:
 
 2018-09-07
 
-Speaking of ``%%timeit`` I just gave this a whirl to try and see.
+Speaking of %%timeit I just gave this a whirl to try and see.
 
 ``%%timeit``
+
 ``!nvim random-python-file.py +qall``
 
 Possibly a good way to profile nvim startup time.
@@ -92,8 +94,11 @@ great use of the magic system.
 Here's the official help.
 
 In[1]: store?
+
 Out[1]:
+
 * ``%store foo >a.txt``  - Store value of foo to new file a.txt
+
 * ``%store foo >>a.txt`` - Append value of foo to file a.txt
 
 It should be noted that if you change the value of a variable, you
@@ -104,7 +109,8 @@ python types can be safely ``%store``'d.
 
 Also aliases can be ``%store``'d across sessions.
 
-Cool. So we could make a file in :envvar:`$IPYTHON`/profile_default/startup/ for all of
+Cool. So we could make a file in
+:envvar:`$IPYTHON`/profile_default/startup/ for all of
 our aliases right? Should probably separate them out of the main config file as
 i can foresee that list BLOWING up.
 
@@ -150,13 +156,11 @@ Help docs on save.
     It adds a '.py' extension to the file if you don't do so yourself, and
     it asks for confirmation before overwriting existing files.
 
-    If `-r` option is used, the default extension is `.ipy`.
-    File:      ~/miniconda3/lib/python3.6/site-packages/IPython/core/magics/code.py
+    If :option:`-r` option is used, the default extension is `.ipy`.
 
 
 Revisiting Previously Run Commands
 ==================================
-
 Access previously run commands with the ``%history`` magic. Note that it can
 be abbreviated to ``%hist`` and used like so.::
 
@@ -280,22 +284,22 @@ whoo}
 
 Writing a file
 ~~~~~~~~~~~~~~
-Pay attention when trying to write to a file.
+Pay attention when trying to write to a file.::
 
-In [52]: written = %history -n 31-33
-    ...: %edit written
-    ...:
-    ...:
-  31: type(n)
-  32: type(len(slm))
-  33: type((len(slm))/n)
-  /data/data/com.termux/files/usr/lib/python3.6/site-packages/IPython/core/magics/code.py:491: UserWarning: The file where `None` was defined cannot be read or found.
-  'cannot be read or found.' % data)
+   In [52]: written = %history -n 31-33
+       ...: %edit written
+       ...:
+       ...:
+     31: type(n)
+     32: type(len(slm))
+     33: type((len(slm))/n)
+     /data/data/com.termux/files/usr/lib/python3.6/site-packages/IPython/core/magics/code.py:491: UserWarning: The file where `None` was defined cannot be read or found.
+     'cannot be read or found.' % data)
 
-The file where None was defined???
+   The file where None was defined???
 
-In [64]: type(writen)
-Out[64]: NoneType
+   In [64]: type(writen)
+   Out[64]: NoneType
 
 But you should be able to write history to a file by using:
 
@@ -304,42 +308,47 @@ But you should be able to write history to a file by using:
     %history -f file_to_write.py -n 1-3
 
 
-writefile
----------
-
-``%%writefile -a filename``
+%%writefile
+-----------
+%%writefile -a filename
 
 needs both percentage signs even with ``automagic`` since it's a cell magic
 the -a option is to append to a file
-But don't use quotes on the file or else it won't work. idk why not
-but i kept getting `FileDoesntExistError` until i got rid of the quotes
+
+But don't use quotes on the file or else it won't work. IDK why not
+but I kept getting `FileDoesntExistError` until i got rid of the quotes
 
 ``%%file`` as a cell magic means write everything I'm about to do to a file.
-so if you got some crazy history filtering in there I'm sure you could go do
-something like
+If you got some crazy history filtering in there I'm sure you could go do
+something like::
 
-``%%file``
-hist -n 5-10
+   %%file
+   hist -n 5-10
+
 {where -n means print output too}
 
-2018-08-26
-
-Came back to this section. That is not what it means. Let's try.
-
 %%file idk
+
 _i31-33
 
 $ cat idk
+
 # _i31-33
 
-edit
------
+%edit
+------
 
 ``%edit`` can take cell #'s as input like hist does, and creates a file to
 work with like ``%%file``.
 
 It always create temporary files unlike %%file so its REALLY important
-to use ``:saveas /path/youll/remember`` in nvim!
+to use
+
+.. code-block:: vim
+
+   saveas /path/youll/remember
+
+in nvim!
 
 Outside of that little gotcha it can take functions you defined in your
 :mod:`IPython` interactive namespace and you can fuck with them, modify
@@ -527,7 +536,7 @@ Back to ``%run``!
    Disable shell-like glob expansion of arguments.
 
 
-``%pycat`` [filename]
+%pycat [filename]
 ---------------------
 
 Works like cat but assumes a python source-code file.

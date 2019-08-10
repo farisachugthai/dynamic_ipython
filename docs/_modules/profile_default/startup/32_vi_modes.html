@@ -72,40 +72,45 @@
 
 <span class="sd">    This is quite hard to follow as is.</span>
 
-<span class="sd">---------------------</span>
-
-<span class="sd">Before we begin defining functions:</span>
 
 <span class="sd">See Also</span>
 <span class="sd">---------</span>
 <span class="sd">:mod:`prompt_toolkit.key_binding.defaults` : str (path)</span>
 <span class="sd">    Has all the named commands implemented here and possibly more.</span>
 
+<span class="sd">---------------------</span>
+
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 
 <span class="kn">from</span> <span class="nn">IPython</span> <span class="k">import</span> <span class="n">get_ipython</span>
 <span class="kn">from</span> <span class="nn">IPython.terminal.shortcuts</span> <span class="k">import</span> <span class="n">create_ipython_shortcuts</span>
-
 <span class="kn">from</span> <span class="nn">prompt_toolkit.enums</span> <span class="k">import</span> <span class="n">DEFAULT_BUFFER</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.filters</span> <span class="k">import</span> <span class="n">HasFocus</span><span class="p">,</span> <span class="n">ViInsertMode</span><span class="p">,</span> <span class="n">ViNavigationMode</span>
+
+<span class="c1"># Might not be a bad idea to add</span>
+<span class="c1"># from prompt_toolkit.filters.base import Condition</span>
+
 <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding</span> <span class="k">import</span> <span class="n">KeyBindings</span><span class="p">,</span> <span class="n">merge_key_bindings</span>
-<span class="c1"># commented out but we could refactor with Keys.Ctrl-a to avoid using strings</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings</span> <span class="k">import</span> <span class="n">named_commands</span><span class="p">,</span> <span class="n">vi</span>
+
+<span class="c1"># we could refactor all bindings with Keys.Ctrl-a to avoid using strings</span>
 <span class="c1"># for an enumerated data type</span>
 <span class="c1"># from prompt_toolkit.keys import KEY_ALIASES, Keys</span>
+
 <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.vi_state</span> <span class="k">import</span> <span class="n">InputMode</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings</span> <span class="k">import</span> <span class="n">named_commands</span><span class="p">,</span> <span class="n">vi</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.named_commands</span> <span class="k">import</span> <span class="n">get_by_name</span>
 
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">ipykernel.zmqshell</span> <span class="k">import</span> <span class="n">ZMQInteractiveShell</span>
-<span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span><span class="n">ModuleNotFoundError</span><span class="p">):</span>
-    <span class="n">ZMQInteractiveShell</span> <span class="o">=</span> <span class="kc">None</span>
-
 <span class="kn">from</span> <span class="nn">profile_default.util</span> <span class="k">import</span> <span class="n">module_log</span>
 
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">ipykernel.zmqshell</span> <span class="k">import</span> <span class="n">ZMQInteractiveShell</span>
+<span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="n">ModuleNotFoundError</span><span class="p">):</span>
+    <span class="n">ZMQInteractiveShell</span> <span class="o">=</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="switch_to_navigation_mode"><a class="viewcode-back" href="../../../profile/startup.html#profile_default.startup.32_vi_modes.switch_to_navigation_mode">[docs]</a><span class="k">def</span> <span class="nf">switch_to_navigation_mode</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+
+<div class="viewcode-block" id="switch_to_navigation_mode"><a class="viewcode-back" href="../../../profile/vi_modes.html#profile_default.startup.32_vi_modes.switch_to_navigation_mode">[docs]</a><span class="k">def</span> <span class="nf">switch_to_navigation_mode</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Switches :mod:`IPython` from Vim insert mode to Vim normal mode.</span>
 
 <span class="sd">    The function we can work with in the future if we want to change the</span>
@@ -116,19 +121,15 @@
     <span class="n">vi_state</span><span class="o">.</span><span class="n">input_mode</span> <span class="o">=</span> <span class="n">InputMode</span><span class="o">.</span><span class="n">NAVIGATION</span></div>
 
 
-<div class="viewcode-block" id="get_default_vim_bindings"><a class="viewcode-back" href="../../../profile/startup.html#profile_default.startup.32_vi_modes.get_default_vim_bindings">[docs]</a><span class="k">def</span> <span class="nf">get_default_vim_bindings</span><span class="p">():</span>
+<div class="viewcode-block" id="get_default_vim_bindings"><a class="viewcode-back" href="../../../profile/vi_modes.html#profile_default.startup.32_vi_modes.get_default_vim_bindings">[docs]</a><span class="k">def</span> <span class="nf">get_default_vim_bindings</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Adds 300 bindings to IPython! Merge any existing KeyBindings classes.</span>
 
 <span class="sd">    Before we keep going we should figure out if we can use the + operator</span>
 <span class="sd">    and just add the vi bindings that way.</span>
-<span class="sd">    In addition, how do we add these instances of keybindings from the vi</span>
-<span class="sd">    and emacs classes to our keybindings class?</span>
-
-<span class="sd">    Just merge them and keep merging? Idk.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    MergedKeys : :class:`~prompt_toolkit.key_bindings.MergedKeyBindings()`</span>
+<span class="sd">    MergedKeys : :class:`prompt_toolkit.key_bindings.MergedKeyBindings`</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">merge_key_bindings</span><span class="p">([</span>
@@ -137,10 +138,8 @@
     <span class="p">])</span></div>
 
 
-<div class="viewcode-block" id="emacs_bindings"><a class="viewcode-back" href="../../../profile/startup.html#profile_default.startup.32_vi_modes.emacs_bindings">[docs]</a><span class="k">def</span> <span class="nf">emacs_bindings</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Load emacs bindings in Vim&#39;s insert mode.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="emacs_bindings"><a class="viewcode-back" href="../../../profile/vi_modes.html#profile_default.startup.32_vi_modes.emacs_bindings">[docs]</a><span class="k">def</span> <span class="nf">emacs_bindings</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Load emacs bindings in Vim&#39;s insert mode.&quot;&quot;&quot;</span>
     <span class="n">kb</span> <span class="o">=</span> <span class="n">KeyBindings</span><span class="p">()</span>
     <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;c-a&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">insert_mode</span><span class="p">))(</span><span class="n">named_commands</span><span class="o">.</span><span class="n">beginning_of_line</span><span class="p">)</span>
     <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;c-b&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">insert_mode</span><span class="p">))(</span><span class="n">named_commands</span><span class="o">.</span><span class="n">backward_char</span><span class="p">)</span>
@@ -157,17 +156,19 @@
     <span class="k">return</span> <span class="n">kb</span></div>
 
 
-<div class="viewcode-block" id="emacs_alt_bindings"><a class="viewcode-back" href="../../../profile/startup.html#profile_default.startup.32_vi_modes.emacs_alt_bindings">[docs]</a><span class="k">def</span> <span class="nf">emacs_alt_bindings</span><span class="p">():</span>
+<div class="viewcode-block" id="emacs_alt_bindings"><a class="viewcode-back" href="../../../profile/vi_modes.html#profile_default.startup.32_vi_modes.emacs_alt_bindings">[docs]</a><span class="k">def</span> <span class="nf">emacs_alt_bindings</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;TODO: Docstring for emacs_alt_bindings.</span>
 
 <span class="sd">    .. ipython::</span>
 
-<span class="sd">        In [1]: timeit emacs_alt_bindings()</span>
+<span class="sd">        In [#]: from profile_default.startup import vi_mode_keybindings</span>
+<span class="sd">        In [#]: %timeit vi_mode_keybindings.emacs_alt_bindings()</span>
 <span class="sd">        762 µs ± 911 ns per loop (mean ± std. dev. of 7 runs, 1000 loops each)</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    kb : :class:`~prompt_toolkit.key_bindings.KeyBindings()`</span>
+<span class="sd">    kb : :class:`prompt_toolkit.key_bindings.KeyBindings()`</span>
+<span class="sd">        Extra Emacs keys for the console.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">kb</span> <span class="o">=</span> <span class="n">KeyBindings</span><span class="p">()</span>
@@ -188,7 +189,7 @@
     <span class="k">return</span> <span class="n">kb</span></div>
 
 
-<div class="viewcode-block" id="base_keys"><a class="viewcode-back" href="../../../profile/startup.html#profile_default.startup.32_vi_modes.base_keys">[docs]</a><span class="k">def</span> <span class="nf">base_keys</span><span class="p">(</span><span class="n">escape_keys</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="base_keys"><a class="viewcode-back" href="../../../profile/vi_modes.html#profile_default.startup.32_vi_modes.base_keys">[docs]</a><span class="k">def</span> <span class="nf">base_keys</span><span class="p">(</span><span class="n">escape_keys</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Set up the easy ones.&quot;&quot;&quot;</span>
     <span class="n">kb</span> <span class="o">=</span> <span class="n">KeyBindings</span><span class="p">()</span>
 
@@ -218,7 +219,7 @@
     <span class="k">return</span> <span class="n">rsi</span></div>
 
 
-<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../profile/startup.html#profile_default.startup.32_vi_modes.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../profile/vi_modes.html#profile_default.startup.32_vi_modes.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Begin initializing keybindings for `IPython`.</span>
 
 <span class="sd">    This function delegates the extra bindings.</span>
@@ -230,17 +231,10 @@
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    rsi : :class:`~prompt_toolkit.key_bindings.KeyBindings()`</span>
+<span class="sd">    rsi : :class:`prompt_toolkit.key_bindings.KeyBindings()`</span>
 <span class="sd">        Readline bindings in Vim &#39;s insert mode.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">insert_mode</span> <span class="o">=</span> <span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">ViInsertMode</span><span class="p">())</span>
-
-    <span class="n">level</span> <span class="o">=</span> <span class="mi">10</span>
-    <span class="n">LOG</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="vm">__name__</span><span class="p">)</span>
-
-    <span class="n">LOGGER</span> <span class="o">=</span> <span class="n">module_log</span><span class="o">.</span><span class="n">stream_logger</span><span class="p">(</span><span class="n">logger</span><span class="o">=</span><span class="n">LOG</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="n">level</span><span class="p">)</span>
-
     <span class="n">almost_all_keys</span> <span class="o">=</span> <span class="n">base_keys</span><span class="p">(</span><span class="n">escape_keys</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
@@ -248,22 +242,36 @@
     <span class="c1"># IPython &lt; 7.0</span>
     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_ip</span><span class="p">,</span> <span class="s1">&#39;pt_cli&#39;</span><span class="p">):</span>
         <span class="n">_ip</span><span class="o">.</span><span class="n">pt_cli</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">key_bindings_registry</span> <span class="o">=</span> <span class="n">merge_key_bindings</span><span class="p">([</span><span class="n">almost_all_keys</span><span class="p">,</span> <span class="n">create_ipython_shortcuts</span><span class="p">(</span><span class="n">_ip</span><span class="p">)])</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Number of keybindings:&#39;</span>
+        <span class="n">RSI_LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Number of keybindings:&#39;</span>
                 <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">:</span><span class="se">\t</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_ip</span><span class="o">.</span><span class="n">pt_cli</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">key_bindings_registry</span><span class="o">.</span><span class="n">bindings</span><span class="p">))</span>
     <span class="c1"># IPython &gt;= 7.0</span>
     <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_ip</span><span class="p">,</span> <span class="s1">&#39;pt_app&#39;</span><span class="p">):</span>
+
+        <span class="c1"># Here&#39;s one that might blow your mind.</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="p">)</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>  <span class="c1"># ran into this while running pytest.</span>
+            <span class="c1"># If you start IPython from something like pytest i guess it starts</span>
+            <span class="c1"># the machinery with a few parts missing...I don&#39;t know.</span>
+
         <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">key_bindings</span> <span class="o">=</span> <span class="n">merge_key_bindings</span><span class="p">([</span><span class="n">almost_all_keys</span><span class="p">,</span> <span class="n">create_ipython_shortcuts</span><span class="p">(</span><span class="n">_ip</span><span class="p">)])</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Number of keybindings </span><span class="si">{}</span><span class="s1">:</span><span class="se">\t</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">key_bindings</span><span class="o">.</span><span class="n">bindings</span><span class="p">)))</span>
+        <span class="n">RSI_LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Number of keybindings </span><span class="si">{}</span><span class="s1">:</span><span class="se">\t</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">key_bindings</span><span class="o">.</span><span class="n">bindings</span><span class="p">)))</span>
 
     <span class="c1"># Jupyter QTConsole</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">_ip</span><span class="p">,</span> <span class="n">ZMQInteractiveShell</span><span class="p">):</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
 
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Is this being run in IPython?:</span><span class="se">\n</span><span class="s1">Type: </span><span class="si">%s</span><span class="s1"> &#39;</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">_ip</span><span class="p">),</span> <span class="n">exc_info</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+        <span class="n">RSI_LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Is this being run in IPython?:</span><span class="se">\n</span><span class="s1">Type: </span><span class="si">%s</span><span class="s1"> &#39;</span><span class="p">,</span>
+                          <span class="nb">type</span><span class="p">(</span><span class="n">_ip</span><span class="p">),</span> <span class="n">exc_info</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">insert_mode</span> <span class="o">=</span> <span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">ViInsertMode</span><span class="p">())</span>
+
+    <span class="n">RSI_LOGGER</span> <span class="o">=</span> <span class="n">module_log</span><span class="o">.</span><span class="n">stream_logger</span><span class="p">(</span>
+            <span class="n">logger</span><span class="o">=</span><span class="s2">&quot;RSI&quot;</span><span class="p">,</span>
+            <span class="n">log_level</span><span class="o">=</span><span class="mi">30</span>
+        <span class="p">)</span>
     <span class="n">main</span><span class="p">()</span>
 </pre></div>
 
@@ -285,17 +293,17 @@
 <div id="sidebartoc">
     <p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../startup.html">Startup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ipython_keybindings.html">Keybindings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../magics.html">Built-in Magics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../custom_magics.html">Writing Your Own Magics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../exceptions.html">Customized Exceptions</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../profile/index.html">IPython Shell Initialization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../jupyter.html">Jupyter ZMQShell</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Notebook Extensions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev.html">Developers Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev.html">Contributors Notes</a></li>
 </ul>
 
 </div>
@@ -328,6 +336,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright (C) 2018-2019 Faris Chugthai.
+      Last updated on Aug 10, 2019.
     </div>
   </body>
 </html>
