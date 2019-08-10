@@ -30,7 +30,7 @@ DOCS_LOGGER = logging.getLogger(name=__name__)
 DOCS_LOGGER.setLevel(level=logging.DEBUG)
 
 
-def _path_build(root, suffix, validate=True):
+def _path_build(root, suffix):
     """Join parts of paths together and ensure they exist.
 
     Log nonexistant paths.
@@ -41,8 +41,6 @@ def _path_build(root, suffix, validate=True):
         Directory to build on
     suffix : str, bytes (Path-like)
         What to add to the root directory
-    validate : bool, Optional
-        Whether to check that the root dir exists first. Defaults to False.
 
     Returns
     -------
@@ -50,27 +48,23 @@ def _path_build(root, suffix, validate=True):
         Path object with suffix joined onto root.
 
     """
-    if validate:
-        if isinstance(root, str):
-            root = Path(root)
+    if isinstance(root, str):
+        root = Path(root)
 
-        # TODO: Should probably add one in for bytes
-        if root.joinpath(suffix).exists():
-            new = root.joinpath(suffix)
-            return new
-        else:
-            DOCS_LOGGER.error('%s: does not exist. Returning None.' % root)
-
+    # TODO: Should probably add one in for bytes
+    if root.joinpath(suffix).exists():
+        new = root.joinpath(suffix)
+        return new
     else:
-        return root.joinpath(suffix)
+        DOCS_LOGGER.error('%s: does not exist. Returning None.' % root)
 
 
-ROOT = Path('../..')
+ROOT = Path('../..').resolve()
 PD = _path_build(ROOT, 'profile_default')
 STARTUP = _path_build(PD, 'startup')
 
 # DOCS_DIR = _path_build(ROOT, 'docs')
-DOCS_DIR = Path(__file__).parent
+DOCS_DIR = Path('.').resolve().parent
 BUILD_DIR = _path_build(DOCS_DIR, 'build')
 CONF_PATH = _path_build(DOCS_DIR, 'source')
 
