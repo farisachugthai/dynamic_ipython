@@ -42,13 +42,20 @@ from IPython import get_ipython
 from IPython.terminal.shortcuts import create_ipython_shortcuts
 from prompt_toolkit.enums import DEFAULT_BUFFER
 from prompt_toolkit.filters import HasFocus, ViInsertMode, ViNavigationMode
+
+# Might not be a bad idea to add
+# from prompt_toolkit.filters.base import Condition
+
 from prompt_toolkit.key_binding import KeyBindings, merge_key_bindings
 from prompt_toolkit.key_binding.bindings import named_commands, vi
-from prompt_toolkit.key_binding.bindings.named_commands import get_by_name
-# commented out but we could refactor with Keys.Ctrl-a to avoid using strings
+
+# we could refactor all bindings with Keys.Ctrl-a to avoid using strings
 # for an enumerated data type
 # from prompt_toolkit.keys import KEY_ALIASES, Keys
+
 from prompt_toolkit.key_binding.vi_state import InputMode
+from prompt_toolkit.key_binding.bindings import named_commands, vi
+from prompt_toolkit.key_binding.bindings.named_commands import get_by_name
 
 from profile_default.util import module_log
 
@@ -74,14 +81,10 @@ def get_default_vim_bindings():
 
     Before we keep going we should figure out if we can use the + operator
     and just add the vi bindings that way.
-    In addition, how do we add these instances of keybindings from the vi
-    and emacs classes to our keybindings class?
-
-    Just merge them and keep merging? Idk.
 
     Returns
     -------
-    MergedKeys : :class:`~prompt_toolkit.key_bindings.MergedKeyBindings()`
+    MergedKeys : :class:`prompt_toolkit.key_bindings.MergedKeyBindings`
 
     """
     return merge_key_bindings([
@@ -91,9 +94,7 @@ def get_default_vim_bindings():
 
 
 def emacs_bindings():
-    """Load emacs bindings in Vim's insert mode.
-
-    """
+    """Load emacs bindings in Vim's insert mode."""
     kb = KeyBindings()
     kb.add('c-a', filter=(insert_mode))(named_commands.beginning_of_line)
     kb.add('c-b', filter=(insert_mode))(named_commands.backward_char)
@@ -224,6 +225,6 @@ if __name__ == "__main__":
 
     RSI_LOGGER = module_log.stream_logger(
             logger="RSI",
-            log_level=10
+            log_level=30
         )
     main()

@@ -60,17 +60,9 @@
 Visualization Cookbook by Cyrille Roussou.</strong></p>
 <p>The example specifically is from pages 32 to 35.</p>
 <p>It also shows the following simpler example:</p>
-<div class="highlight-ipython notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3
-4
-5</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">from</span> <span class="nn">IPython.core.magic</span> <span class="kn">import</span> <span class="p">(</span><span class="n">register_line_magic</span><span class="p">,</span>
-<span class="gt">  File</span><span class="nn"> &quot;&lt;ipython-input-1-b60d1d5ddd48&gt;&quot;</span><span class="gt">, line </span><span class="mi">1</span>
-    <span class="kn">from</span> <span class="nn">IPython.core.magic</span> <span class="kn">import</span> <span class="p">(</span><span class="n">register_line_magic</span><span class="p">,</span>
-                                                        <span class="o">^</span>
-<span class="ne">SyntaxError</span>: unexpected EOF while parsing
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">from</span> <span class="nn">IPython.core.magic</span> <span class="kn">import</span> <span class="p">(</span><span class="n">register_line_magic</span><span class="p">,</span> <span class="n">register_cell_magic</span><span class="p">)</span>
 </pre></div>
-</td></tr></table></div>
+</div>
 <dl class="function">
 <dt id="extensions.pd_csv.csv">
 <code class="sig-prename descclassname">extensions.pd_csv.</code><code class="sig-name descname">csv</code><span class="sig-paren">(</span><em class="sig-param">cell</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/extensions/pd_csv.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/extensions/pd_csv.html#csv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#extensions.pd_csv.csv" title="Permalink to this definition">¶</a></dt>
@@ -151,22 +143,7 @@ membership of a package.</p>
 <dl class="function">
 <dt id="extensions.site_pkgs.all_site_pkgs">
 <code class="sig-prename descclassname">extensions.site_pkgs.</code><code class="sig-name descname">all_site_pkgs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/extensions/site_pkgs.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/extensions/site_pkgs.html#all_site_pkgs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#extensions.site_pkgs.all_site_pkgs" title="Permalink to this definition">¶</a></dt>
-<dd><p>Display every package in site-packages.</p>
-<p>…..wow. This is uh something else.
-<em>sigh</em></p>
-<p>Alright so we gotta make a variable with a sane default for where we’re
-checking things. Hopefully sys.executable or sys.prefix…*or is it
-sys.base_prefix?* will lead us in the right direction.</p>
-<p>Then we’ll check that the user gave us the right # of arguments with
-len(sys.argv) and <code class="docutils literal notranslate"><span class="pre">raise</span> <span class="pre">IndexError</span></code> if we get something weird.</p>
-<p>Possibly wanna think about standardizing something for argparse.
-Definitely wanna think about standardizing something for logging.</p>
-<p>Also literally what is that return value??? You didn’t use it anywhere.
-Man this is crazy confusing and it shouldn’t have been a particularly hard
-thing to write.</p>
-<p>Delete all this off and use pathlib and i suppose build in a sys.version_info
-check as a result.</p>
-</dd></dl>
+<dd></dd></dl>
 
 </div>
 </div>
@@ -228,17 +205,21 @@ invoked as <code class="xref py py-obj docutils literal notranslate"><span class
 <div id="sidebartoc">
     <p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="startup.html">Startup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ipython_keybindings.html">Keybindings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="magics.html">Built-in Magics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="custom_magics.html">Writing Your Own Magics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exceptions.html">Customized Exceptions</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="sphinxext.html">IPython Sphinx Directive</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sphinxext.html#why-does-the-sentence-below-appear-no-less-than-3-times-in-this-doc">Why does the sentence below appear no less than 3 times in this doc?</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="profile/index.html">IPython Shell Initialization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="jupyter.html">Jupyter ZMQShell</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Notebook Extensions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="dev.html">Developers Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev.html">Contributors Notes</a></li>
 </ul>
 
 </div>
@@ -314,7 +295,7 @@ invoked as <code class="xref py py-obj docutils literal notranslate"><span class
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright (C) 2018-2019 Faris Chugthai.
-      Last updated on Aug 08, 2019.
+      Last updated on Aug 10, 2019.
     </div>
   </body>
 </html>

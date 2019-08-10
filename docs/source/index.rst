@@ -135,12 +135,13 @@ form of rst docs and ipynb notebooks.
    Writing Your Own Magics <custom_magics>
    exceptions
 
-.. ifconfig:: HAS_MPL
+.. apparently we haven't defined HAS_MPL correctly
+.. .. ifconfig:: HAS_MPL
 
-   .. toctree::
-      :maxdepth: 2
+..    .. toctree::
+..       :maxdepth: 2
 
-      The Sphinx Extension <sphinxext>
+..       The Sphinx Extension <sphinxext>
 
 
 .. toctree::

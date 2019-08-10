@@ -101,6 +101,8 @@ def stream_logger(logger, log_level=logging.INFO, msg_format=None):
 
     if isinstance(logger, str):
         logger = logging.getLogger(logger)
+    elif isinstance(logger, logging.Logger):
+        pass
 
     # TODO: Come up with else. What if they pass a string?
     if isinstance(log_level, int):

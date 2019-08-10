@@ -20,9 +20,11 @@ import os
 from pathlib import Path
 import sys
 
+sys.path.insert(0, os.path.abspath('..'))
+
 import profile_default
 from profile_default.__about__ import __version__
-# from profile_default.startup import *  # noqa F0403
+from docs.sphinx_extensions import magics
 
 from gruvbox.style import GruvboxDarkHard
 
@@ -59,7 +61,8 @@ def _path_build(root, suffix):
         DOCS_LOGGER.error('%s: does not exist. Returning None.' % root)
 
 
-ROOT = Path('../..').resolve()
+SOURCE = Path(__file__).resolve().parent
+ROOT = Path(SOURCE).parent.parent
 PD = _path_build(ROOT, 'profile_default')
 STARTUP = _path_build(PD, 'startup')
 
@@ -67,9 +70,6 @@ STARTUP = _path_build(PD, 'startup')
 DOCS_DIR = Path('.').resolve().parent
 BUILD_DIR = _path_build(DOCS_DIR, 'build')
 CONF_PATH = _path_build(DOCS_DIR, 'source')
-
-sys.path.insert(0, os.path.abspath('.'))
-sys.path.insert(0, os.path.abspath(PD))
 
 # -- Project information -----------------------------------------------------
 
@@ -274,9 +274,9 @@ manpages_url = 'https://linux.die.net/man/'
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
-    'python': ('https://docs.python.org/3/', None),
-    'ipython': ('https://ipython.readthedocs.io/en/stable/', None),
-    'prompt_toolkit': ('https://python-prompt-toolkit.readthedocs.io/en/stable/', None),
+    'python': ('https://docs.python.org/3/', ('python-inv.txt', None)),
+    'ipython': ('https://ipython.readthedocs.io/en/stable/', ('python-inv.txt', None)),
+    'prompt_toolkit': ('https://python-prompt-toolkit.readthedocs.io/en/stable/', ('python-inv.txt', None)),
 }
 
 # -- Options for todo extension ----------------------------------------------
@@ -286,10 +286,39 @@ todo_include_todos = False
 
 # -- Viewcode ----------------------------------------------------------------
 
-# Apr 28, 2019
-# RemovedInSphinx30Warning:
-# viewcode_import was renamed to viewcode_follow_imported_members.
-# Please update your configuration.
+"""Viewcode:
+
+Apr 28, 2019: RemovedInSphinx30Warning:
+``viewcode_import`` was renamed to ``viewcode_follow_imported_members``.
+Please update your configuration.
+
+
+viewcode-find-source(app, modname)
+
+    New in version 1.8.
+
+    Find the source code for a module. An event handler for this event
+    should return a tuple of the source code itself and a dictionary of
+    tags. The dictionary maps the name of a class, function, attribute, etc.
+    to a tuple of its type, the start line number, and the end line number.
+    The type should be one of “class”, “def”, or “other”.
+
+    Parameters
+        app – The Sphinx application object.
+        modname – The name of the module to find source code for.
+
+viewcode-follow-imported(app, modname, attribute)
+
+    New in version 1.8.
+    Find the name of the original module for an attribute.
+
+    Parameters
+        app – The Sphinx application object.
+        modname – The name of the module that the attribute belongs to.
+        attribute – The name of the member to follow.
+
+"""
+
 viewcode_follow_imported_members = False
 
 # -- IPython directive -------------------------------------------------------
