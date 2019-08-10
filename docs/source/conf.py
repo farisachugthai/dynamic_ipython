@@ -20,7 +20,7 @@ import os
 from pathlib import Path
 import sys
 
-# import profile_default
+import profile_default
 from profile_default.__about__ import __version__
 # from profile_default.startup import *  # noqa F0403
 
@@ -393,4 +393,5 @@ def setup(app):
     if hasattr(CONF_PATH, 'joinpath'):
         extra_css = str(add_css())
         app.add_stylesheet(extra_css)
+        app.add_stylesheet(os.path.join('..', '_static', 'anaconda.css'))
     app.add_config_value(HAS_MPL, True, 'env')

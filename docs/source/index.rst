@@ -9,7 +9,6 @@
 Welcome to Dynamic IPython's documentation!
 ============================================
 
-
 :date: |today|
 
 .. highlight:: ipython
@@ -18,6 +17,16 @@ Welcome to Dynamic IPython's documentation!
 
 .. module:: root_index
    :synopsis: Index
+
+
+Startup Scripts
+================
+
+This repository hosts startup scripts that can be used during IPython's startup.
+
+The scripts add well over 1000 aliases to the namespace, import commonly used
+modules, configure the data analysis library Pandas, add multiple application
+specific loggers, and more.
 
 This repository contains a collection of different scripts written over the
 course of the last year modifying `IPython <docs/profile_default.html>`_
@@ -52,8 +61,6 @@ These aliases depend on the operating system used as Linux OSes will default
 to a bash system shell, and Windows will have ``dosbatch`` or ``powershell``
 shells.
 
-Therefore the value of the environment variable :envvar:`shell` is checked
-in addition to the observed platform.
 
 ``%rehashx``
 -------------
@@ -123,17 +130,17 @@ form of rst docs and ipynb notebooks.
    :caption: Tutorial
    :maxdepth: 2
 
-   Startup <startup>
    Keybindings <ipython_keybindings>
    Built-in Magics <magics>
    Writing Your Own Magics <custom_magics>
+   exceptions
 
-.. .. ifconfig:: HAS_MPL
+.. ifconfig:: HAS_MPL
 
-..    .. toctree::
-..       :maxdepth: 2
+   .. toctree::
+      :maxdepth: 2
 
-..       The Sphinx Extension <sphinxext>
+      The Sphinx Extension <sphinxext>
 
 
 .. toctree::
@@ -144,7 +151,7 @@ form of rst docs and ipynb notebooks.
    IPython Shell Initialization <profile/index>
    Jupyter ZMQShell <jupyter>
    Notebook Extensions <extensions>
-   Developers Notes <dev>
+   Contributors Notes <dev>
 
 
 Indices and tables

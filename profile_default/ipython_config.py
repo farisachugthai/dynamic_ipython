@@ -15,6 +15,8 @@ from IPython.paths import get_ipython_dir
 from traitlets.config import get_config
 
 c_logger = logging.getLogger(name='profile_default.ipython_config')
+c_logger.setLevel(logging.INFO)
+# c_logger.addHandler()
 
 c = get_config()
 

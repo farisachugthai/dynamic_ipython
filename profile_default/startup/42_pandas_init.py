@@ -26,7 +26,7 @@ Here's an interesting blurb from pandas/docs/conf.py::
 import logging
 import sys
 
-from dynamic_ipython.profile_default.util import module_log
+from profile_default.util import module_log
 
 
 def pandas_init():

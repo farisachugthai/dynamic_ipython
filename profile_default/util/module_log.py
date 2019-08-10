@@ -96,16 +96,6 @@ def stream_logger(logger, log_level=logging.INFO, msg_format=None):
     profile_default.startup.32_vi_modes : module
         In :ref:`profile_default.startup.32_vi_modes` we call this function.
 
-    .. todo:: Understand triple log records and prevent cause.
-
-        Why is this the output? 3 slightly different LogRecords?
-
-    .. code-block:: none
-
-            INFO:root:Number of keybindings 359:
-            2019-07-26 09:55:49,450 : INFO : 32_vi_modes Number of keybindings 359:
-            2019-07-26 09:55:49,450 INFO Number of keybindings 359:
-
     """
     handler = logging.StreamHandler(stream=sys.stderr)
 

@@ -6,10 +6,8 @@
 IPython Aliases
 ===============
 
-.. module:: aliases
+.. module:: 20_aliases
     :synopsis: Create aliases for :mod:`IPython` to ease use as a system shell.
-
-.. rubric:: Moved git aliases into new :func:`common_aliases()`
 
 Overview
 ========
@@ -138,14 +136,8 @@ def linux_specific_aliases(_ip=None):
     number of GNU/Linux built-ins to exist on Windows, and as a result, this
     list may not be comprehensive.
 
-    Parameters
-    ----------
-    _ip : |ip|
-        The global instance of :mod:`IPython`.
-
-    Below is the source code for the function that is invoked here.
-
-    .. code-block:: python3
+    Below is the source code for the function
+    :func:`IPython.core.magics.define_alias()` that is invoked here.::
 
         def define_alias(self, name, cmd):
             # Define a new alias after validating it.
@@ -154,6 +146,11 @@ def linux_specific_aliases(_ip=None):
             caller = Alias(shell=self.shell, name=name, cmd=cmd)
             self.shell.magics_manager.register_function(caller, magic_kind='line',
             magic_name=name)
+
+    Parameters
+    ----------
+    _ip : |ip|
+        The global instance of :mod:`IPython`.
 
     Returns
     -------
@@ -214,6 +211,9 @@ def common_aliases(_ip=None):
 
     The only real requirement is Git being installed and working. Docker
     commands possibly going to be added.
+
+    .. versionchanged:: Moved git aliases from linux_aliases
+                        into new :func:`20_aliases.common_aliases()`.
 
     .. todo:: :command:`git show`
 
