@@ -1,5 +1,6 @@
 import logging
 
+from . import magics
 try:
     import sphinx
 except (ImportError, ModuleNotFoundError):

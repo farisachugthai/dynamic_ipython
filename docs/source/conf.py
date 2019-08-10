@@ -24,7 +24,6 @@ sys.path.insert(0, os.path.abspath('..'))
 
 import profile_default
 from profile_default.__about__ import __version__
-from docs.sphinx_extensions import magics
 
 from gruvbox.style import GruvboxDarkHard
 
@@ -110,6 +109,7 @@ extensions = [
     'IPython.sphinxext.ipython_console_highlighting',
     'IPython.sphinxext.ipython_directive',
     'numpydoc.numpydoc',
+    'sphinx_extensions.magics',
 ]
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
