@@ -51,10 +51,8 @@
 <span class="sd">IPython Aliases</span>
 <span class="sd">===============</span>
 
-<span class="sd">.. module:: aliases</span>
+<span class="sd">.. module:: 20_aliases</span>
 <span class="sd">    :synopsis: Create aliases for :mod:`IPython` to ease use as a system shell.</span>
-
-<span class="sd">.. rubric:: Moved git aliases into new :func:`common_aliases()`</span>
 
 <span class="sd">Overview</span>
 <span class="sd">========</span>
@@ -170,7 +168,7 @@
 <span class="p">)</span>
 
 
-<div class="viewcode-block" id="linux_specific_aliases"><a class="viewcode-back" href="../../../profile/startup.html#profile_default.startup.20_aliases.linux_specific_aliases">[docs]</a><span class="k">def</span> <span class="nf">linux_specific_aliases</span><span class="p">(</span><span class="n">_ip</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="linux_specific_aliases"><a class="viewcode-back" href="../../../profile/aliases.html#profile_default.startup.20_aliases.linux_specific_aliases">[docs]</a><span class="k">def</span> <span class="nf">linux_specific_aliases</span><span class="p">(</span><span class="n">_ip</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Add Linux specific aliases.</span>
 
 <span class="sd">    Aliases that have either:</span>
@@ -183,14 +181,8 @@
 <span class="sd">    number of GNU/Linux built-ins to exist on Windows, and as a result, this</span>
 <span class="sd">    list may not be comprehensive.</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    _ip : |ip|</span>
-<span class="sd">        The global instance of :mod:`IPython`.</span>
-
-<span class="sd">    Below is the source code for the function that is invoked here.</span>
-
-<span class="sd">    .. code-block:: python3</span>
+<span class="sd">    Below is the source code for the function</span>
+<span class="sd">    :func:`IPython.core.magics.define_alias()` that is invoked here.::</span>
 
 <span class="sd">        def define_alias(self, name, cmd):</span>
 <span class="sd">            # Define a new alias after validating it.</span>
@@ -199,6 +191,11 @@
 <span class="sd">            caller = Alias(shell=self.shell, name=name, cmd=cmd)</span>
 <span class="sd">            self.shell.magics_manager.register_function(caller, magic_kind=&#39;line&#39;,</span>
 <span class="sd">            magic_name=name)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    _ip : |ip|</span>
+<span class="sd">        The global instance of :mod:`IPython`.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -251,7 +248,7 @@
     <span class="k">return</span> <span class="n">_user_aliases</span></div>
 
 
-<div class="viewcode-block" id="common_aliases"><a class="viewcode-back" href="../../../profile/startup.html#profile_default.startup.20_aliases.common_aliases">[docs]</a><span class="k">def</span> <span class="nf">common_aliases</span><span class="p">(</span><span class="n">_ip</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="common_aliases"><a class="viewcode-back" href="../../../profile/aliases.html#profile_default.startup.20_aliases.common_aliases">[docs]</a><span class="k">def</span> <span class="nf">common_aliases</span><span class="p">(</span><span class="n">_ip</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Add aliases common to all OSes. Overwhelmingly :command:`Git` aliases.</span>
 
 <span class="sd">    This method adds around 70 to 80 aliases that can be implemented on most</span>
@@ -259,6 +256,9 @@
 
 <span class="sd">    The only real requirement is Git being installed and working. Docker</span>
 <span class="sd">    commands possibly going to be added.</span>
+
+<span class="sd">    .. versionchanged:: Moved git aliases from linux_aliases</span>
+<span class="sd">                        into new :func:`20_aliases.common_aliases()`.</span>
 
 <span class="sd">    .. todo:: :command:`git show`</span>
 
@@ -363,221 +363,231 @@
     <span class="p">]</span>
     <span class="k">return</span> <span class="n">_user_aliases</span></div>
 
+<div class="viewcode-block" id="WindowsAliases"><a class="viewcode-back" href="../../../profile/aliases.html#profile_default.startup.20_aliases.WindowsAliases">[docs]</a><span class="k">class</span> <span class="nc">WindowsAliases</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Aggregated Window aliases.&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="cmd_aliases"><a class="viewcode-back" href="../../../profile/startup.html#profile_default.startup.20_aliases.cmd_aliases">[docs]</a><span class="k">def</span> <span class="nf">cmd_aliases</span><span class="p">(</span><span class="n">_ip</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Aliases for the :command:`cmd` shell.</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_ip</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">_ip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ip</span> <span class="o">=</span> <span class="n">_ip</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
 
-<span class="sd">    .. todo:: Cmd, :envvar:`COPYCMD` and IPython</span>
+<div class="viewcode-block" id="WindowsAliases.cmd_aliases"><a class="viewcode-back" href="../../../profile/aliases.html#profile_default.startup.20_aliases.WindowsAliases.cmd_aliases">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">cmd_aliases</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Aliases for the :command:`cmd` shell.</span>
 
-<span class="sd">        Need to consider how to handle env vars. Still working out how</span>
-<span class="sd">        IPython&#39;s logic for Window&#39;s shells works, but that&#39;ll determine</span>
-<span class="sd">        how :envvar:`SHELL` and :envvar:`COMSPEC` are handled.</span>
+<span class="sd">        .. todo:: Cmd, :envvar:`COPYCMD` and IPython</span>
 
-<span class="sd">        However it&#39;ll also take some consideration to figure out how to</span>
-<span class="sd">        handle env vars like COPYCMD. Should we build them into the aliases</span>
-<span class="sd">        we have here because that&#39;ll affect :data:`_ip.user_aliases.mv`.</span>
+<span class="sd">            Need to consider how to handle env vars. Still working out how</span>
+<span class="sd">            IPython&#39;s logic for Window&#39;s shells works, but that&#39;ll determine</span>
+<span class="sd">            how :envvar:`SHELL` and :envvar:`COMSPEC` are handled.</span>
 
-<span class="sd">        Also note DIRCMD for :command:`dir`.</span>
+<span class="sd">            However it&#39;ll also take some consideration to figure out how to</span>
+<span class="sd">            handle env vars like COPYCMD. Should we build them into the aliases</span>
+<span class="sd">            we have here because that&#39;ll affect :data:`_ip.user_aliases.mv`?</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    _ip : IPython shell</span>
+<span class="sd">            Also note DIRCMD for :command:`dir`.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">_ip</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="p">(</span><span class="s1">&#39;copy&#39;</span><span class="p">,</span> <span class="s1">&#39;copy </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;ddir&#39;</span><span class="p">,</span> <span class="s1">&#39;dir /ad /on %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;ldir&#39;</span><span class="p">,</span> <span class="s1">&#39;dir /ad /on %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;ll&#39;</span><span class="p">,</span> <span class="s1">&#39;dir /Q %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;ln&#39;</span><span class="p">,</span>
-         <span class="s1">&#39;mklink </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">),</span>  <span class="c1"># I know this really isn&#39;t the same but I need it</span>
-        <span class="p">(</span><span class="s1">&#39;make&#39;</span><span class="p">,</span> <span class="s1">&#39;make.bat %l&#39;</span><span class="p">),</span>  <span class="c1"># Useful when we&#39;re building docs</span>
-        <span class="p">(</span><span class="s1">&#39;mklink&#39;</span><span class="p">,</span> <span class="s1">&#39;mklink </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;move&#39;</span><span class="p">,</span> <span class="s1">&#39;move </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;mv&#39;</span><span class="p">,</span> <span class="s1">&#39;move </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;ren&#39;</span><span class="p">,</span> <span class="s1">&#39;ren&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;rmdir&#39;</span><span class="p">,</span> <span class="s1">&#39;rmdir %l&#39;</span><span class="p">),</span>
-    <span class="p">]</span>
-    <span class="k">return</span> <span class="n">_ip</span><span class="o">.</span><span class="n">user_aliases</span></div>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        _ip : IPython shell</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_ip</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="s1">&#39;cp&#39;</span><span class="p">,</span> <span class="s1">&#39;copy </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;copy&#39;</span><span class="p">,</span> <span class="s1">&#39;copy </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;ddir&#39;</span><span class="p">,</span> <span class="s1">&#39;dir /ad /on %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;ldir&#39;</span><span class="p">,</span> <span class="s1">&#39;dir /ad /on %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;ll&#39;</span><span class="p">,</span> <span class="s1">&#39;dir /Q %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;ln&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;mklink </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">),</span>  <span class="c1"># I know this really isn&#39;t the same but I need it</span>
+            <span class="p">(</span><span class="s1">&#39;make&#39;</span><span class="p">,</span> <span class="s1">&#39;make.bat %l&#39;</span><span class="p">),</span>  <span class="c1"># Useful when we&#39;re building docs</span>
+            <span class="p">(</span><span class="s1">&#39;mklink&#39;</span><span class="p">,</span> <span class="s1">&#39;mklink </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;move&#39;</span><span class="p">,</span> <span class="s1">&#39;move </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;mv&#39;</span><span class="p">,</span> <span class="s1">&#39;move </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;ren&#39;</span><span class="p">,</span> <span class="s1">&#39;ren&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;rmdir&#39;</span><span class="p">,</span> <span class="s1">&#39;rmdir %l&#39;</span><span class="p">),</span>
+        <span class="p">]</span>
+        <span class="k">return</span> <span class="n">_ip</span><span class="o">.</span><span class="n">user_aliases</span></div>
+
+<div class="viewcode-block" id="WindowsAliases.powershell_aliases"><a class="viewcode-back" href="../../../profile/aliases.html#profile_default.startup.20_aliases.WindowsAliases.powershell_aliases">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">powershell_aliases</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Aliases for Windows OSes using :command:`powershell`.</span>
+
+<span class="sd">        Has only been tested on Windows 10 in a heavily configured environment.</span>
+
+<span class="sd">        Niceties such as Git for Windows, ag-silversearcher, ripgrep,</span>
+<span class="sd">        ConEmu and others have been added.</span>
+
+<span class="sd">        The minimum number of assumptions possible have been made; however, note</span>
+<span class="sd">        that this section is still under development and frequently changes.</span>
+
+<span class="sd">        .. warning:: Warning: 5 aliases have been commented out as they emit</span>
+<span class="sd">                     warnings upon being set. They&#39;re unfortunately aliases to</span>
+<span class="sd">                     cmd commands and don&#39;t run correctly in PowerShell.</span>
 
 
-<div class="viewcode-block" id="powershell_aliases"><a class="viewcode-back" href="../../../profile/startup.html#profile_default.startup.20_aliases.powershell_aliases">[docs]</a><span class="k">def</span> <span class="nf">powershell_aliases</span><span class="p">(</span><span class="n">_ip</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Aliases for Windows OSes using :command:`powershell`.</span>
+<span class="sd">        .. code-block:: powershell</span>
 
-<span class="sd">    Has only been tested on Windows 10 in a heavily configured environment.</span>
+<span class="sd">            Alias           % -&gt; ForEach-Object</span>
+<span class="sd">            Alias           ? -&gt; Where-Object</span>
+<span class="sd">            Alias           clhy -&gt; Clear-History</span>
+<span class="sd">            Alias           cli -&gt; Clear-Item</span>
+<span class="sd">            Alias           clp -&gt; Clear-ItemProperty</span>
+<span class="sd">            Alias           cls -&gt; Clear-Host</span>
+<span class="sd">            Alias           clv -&gt; Clear-Variable</span>
+<span class="sd">            Alias           cnsn -&gt; Connect-PSSession</span>
+<span class="sd">            Alias           compare -&gt; Compare-Object</span>
+<span class="sd">            Alias           cpi -&gt; Copy-Item</span>
+<span class="sd">            Alias           cpp -&gt; Copy-ItemProperty</span>
+<span class="sd">            Alias           curl -&gt; Invoke-WebRequest</span>
+<span class="sd">            Alias           cvpa -&gt; Convert-Path</span>
+<span class="sd">            Alias           dbp -&gt; Disable-PSBreakpoint</span>
+<span class="sd">            Alias           diff -&gt; Compare-Object</span>
+<span class="sd">            Alias           dnsn -&gt; Disconnect-PSSession</span>
+<span class="sd">            Alias           ebp -&gt; Enable-PSBreakpoint</span>
+<span class="sd">            Alias           epal -&gt; Export-Alias</span>
+<span class="sd">            Alias           epcsv -&gt; Export-Csv</span>
+<span class="sd">            Alias           epsn -&gt; Export-PSSession</span>
+<span class="sd">            Alias           erase -&gt; Remove-Item</span>
+<span class="sd">            Alias           etsn -&gt; Enter-PSSession</span>
+<span class="sd">            Alias           exsn -&gt; Exit-PSSession</span>
+<span class="sd">            Alias           fc -&gt; Format-Custom</span>
+<span class="sd">            Alias           fl -&gt; Format-List</span>
+<span class="sd">            Alias           foreach -&gt; ForEach-Object</span>
+<span class="sd">            Alias           ft -&gt; Format-Table</span>
+<span class="sd">            Alias           fw -&gt; Format-Wide</span>
+<span class="sd">            Alias           gal -&gt; Get-Alias</span>
+<span class="sd">            Alias           gbp -&gt; Get-PSBreakpoint</span>
+<span class="sd">            Alias           gc -&gt; Get-Content</span>
+<span class="sd">            Alias           gci -&gt; Get-ChildItem</span>
+<span class="sd">            Alias           gcm -&gt; Get-Command</span>
+<span class="sd">            Alias           gcs -&gt; Get-PSCallStack</span>
+<span class="sd">            Alias           gdr -&gt; Get-PSDrive</span>
+<span class="sd">            Alias           ghy -&gt; Get-History</span>
+<span class="sd">            Alias           gi -&gt; Get-Item</span>
+<span class="sd">            Alias           gjb -&gt; Get-Job</span>
+<span class="sd">            Alias           gl -&gt; Get-Location</span>
+<span class="sd">            Alias           gm -&gt; Get-Member</span>
+<span class="sd">            Alias           gmo -&gt; Get-Module</span>
+<span class="sd">            Alias           gp -&gt; Get-ItemProperty</span>
+<span class="sd">            Alias           gps -&gt; Get-Process</span>
+<span class="sd">            Alias           gpv -&gt; Get-ItemPropertyValue</span>
+<span class="sd">            Alias           group -&gt; Group-Object</span>
+<span class="sd">            Alias           gsn -&gt; Get-PSSession</span>
+<span class="sd">            Alias           gsnp -&gt; Get-PSSnapin</span>
+<span class="sd">            Alias           gsv -&gt; Get-Service</span>
+<span class="sd">            Alias           gu -&gt; Get-Unique</span>
+<span class="sd">            Alias           gv -&gt; Get-Variable</span>
+<span class="sd">            Alias           gwmi -&gt; Get-WmiObject</span>
+<span class="sd">            Alias           h -&gt; Get-History</span>
+<span class="sd">            Alias           icm -&gt; Invoke-Command</span>
+<span class="sd">            Alias           iex -&gt; Invoke-Expression</span>
+<span class="sd">            Alias           ihy -&gt; Invoke-History</span>
+<span class="sd">            Alias           ii -&gt; Invoke-Item</span>
+<span class="sd">            Alias           ipal -&gt; Import-Alias</span>
+<span class="sd">            Alias           ipcsv -&gt; Import-Csv</span>
+<span class="sd">            Alias           ipmo -&gt; Import-Module</span>
+<span class="sd">            Alias           ipsn -&gt; Import-PSSession</span>
+<span class="sd">            Alias           irm -&gt; Invoke-RestMethod</span>
+<span class="sd">            Alias           ise -&gt; powershell_ise.exe</span>
+<span class="sd">            Alias           iwmi -&gt; Invoke-WMIMethod</span>
+<span class="sd">            Alias           iwr -&gt; Invoke-WebRequest</span>
+<span class="sd">            Alias           lp -&gt; Out-Printer</span>
+<span class="sd">            Alias           man -&gt; help</span>
+<span class="sd">            Alias           md -&gt; mkdir</span>
+<span class="sd">            Alias           measure -&gt; Measure-Object</span>
+<span class="sd">            Alias           mi -&gt; Move-Item</span>
+<span class="sd">            Alias           mount -&gt; New-PSDrive</span>
+<span class="sd">            Alias           mp -&gt; Move-ItemProperty</span>
+<span class="sd">            Alias           nal -&gt; New-Alias</span>
+<span class="sd">            Alias           ndr -&gt; New-PSDrive</span>
+<span class="sd">            Alias           ni -&gt; New-Item</span>
+<span class="sd">            Alias           nmo -&gt; New-Module</span>
+<span class="sd">            Alias           npssc -&gt; New-PSSessionConfigurationFile</span>
+<span class="sd">            Alias           nsn -&gt; New-PSSession</span>
+<span class="sd">            Alias           nv -&gt; New-Variable</span>
+<span class="sd">            Alias           ogv -&gt; Out-GridView</span>
+<span class="sd">            Alias           oh -&gt; Out-Host</span>
+<span class="sd">            Alias           r -&gt; Invoke-History</span>
+<span class="sd">            Alias           rbp -&gt; Remove-PSBreakpoint</span>
+<span class="sd">            Alias           rcjb -&gt; Receive-Job</span>
+<span class="sd">            Alias           rcsn -&gt; Receive-PSSession</span>
+<span class="sd">            Alias           rd -&gt; Remove-Item</span>
+<span class="sd">            Alias           rdr -&gt; Remove-PSDrive</span>
+<span class="sd">            Alias           ri -&gt; Remove-Item</span>
+<span class="sd">            Alias           rjb -&gt; Remove-Job</span>
+<span class="sd">            Alias           rmo -&gt; Remove-Module</span>
+<span class="sd">            Alias           rni -&gt; Rename-Item</span>
+<span class="sd">            Alias           rnp -&gt; Rename-ItemProperty</span>
 
-<span class="sd">    Niceties such as Git for Windows, ag-silversearcher, ripgrep,</span>
-<span class="sd">    ConEmu and others have been added.</span>
+<span class="sd">        That&#39;s some non-trivial stuff right there! First try on all 4 of them!</span>
 
-<span class="sd">    The minimum number of assumptions possible have been made; however, note</span>
-<span class="sd">    that this section is still under development and frequently changes.</span>
-
-<span class="sd">    .. warning:: Warning: 5 aliases have been commented out as they emit</span>
-<span class="sd">                 warnings upon being set. They&#39;re unfortunately aliases to</span>
-<span class="sd">                 cmd commands and don&#39;t run correctly in PowerShell.</span>
-
-
-<span class="sd">    .. code-block:: powershell</span>
-
-<span class="sd">        Alias           % -&gt; ForEach-Object</span>
-<span class="sd">        Alias           ? -&gt; Where-Object</span>
-<span class="sd">        Alias           clhy -&gt; Clear-History</span>
-<span class="sd">        Alias           cli -&gt; Clear-Item</span>
-<span class="sd">        Alias           clp -&gt; Clear-ItemProperty</span>
-<span class="sd">        Alias           cls -&gt; Clear-Host</span>
-<span class="sd">        Alias           clv -&gt; Clear-Variable</span>
-<span class="sd">        Alias           cnsn -&gt; Connect-PSSession</span>
-<span class="sd">        Alias           compare -&gt; Compare-Object</span>
-<span class="sd">        Alias           cpi -&gt; Copy-Item</span>
-<span class="sd">        Alias           cpp -&gt; Copy-ItemProperty</span>
-<span class="sd">        Alias           curl -&gt; Invoke-WebRequest</span>
-<span class="sd">        Alias           cvpa -&gt; Convert-Path</span>
-<span class="sd">        Alias           dbp -&gt; Disable-PSBreakpoint</span>
-<span class="sd">        Alias           diff -&gt; Compare-Object</span>
-<span class="sd">        Alias           dnsn -&gt; Disconnect-PSSession</span>
-<span class="sd">        Alias           ebp -&gt; Enable-PSBreakpoint</span>
-<span class="sd">        Alias           epal -&gt; Export-Alias</span>
-<span class="sd">        Alias           epcsv -&gt; Export-Csv</span>
-<span class="sd">        Alias           epsn -&gt; Export-PSSession</span>
-<span class="sd">        Alias           erase -&gt; Remove-Item</span>
-<span class="sd">        Alias           etsn -&gt; Enter-PSSession</span>
-<span class="sd">        Alias           exsn -&gt; Exit-PSSession</span>
-<span class="sd">        Alias           fc -&gt; Format-Custom</span>
-<span class="sd">        Alias           fl -&gt; Format-List</span>
-<span class="sd">        Alias           foreach -&gt; ForEach-Object</span>
-<span class="sd">        Alias           ft -&gt; Format-Table</span>
-<span class="sd">        Alias           fw -&gt; Format-Wide</span>
-<span class="sd">        Alias           gal -&gt; Get-Alias</span>
-<span class="sd">        Alias           gbp -&gt; Get-PSBreakpoint</span>
-<span class="sd">        Alias           gc -&gt; Get-Content</span>
-<span class="sd">        Alias           gci -&gt; Get-ChildItem</span>
-<span class="sd">        Alias           gcm -&gt; Get-Command</span>
-<span class="sd">        Alias           gcs -&gt; Get-PSCallStack</span>
-<span class="sd">        Alias           gdr -&gt; Get-PSDrive</span>
-<span class="sd">        Alias           ghy -&gt; Get-History</span>
-<span class="sd">        Alias           gi -&gt; Get-Item</span>
-<span class="sd">        Alias           gjb -&gt; Get-Job</span>
-<span class="sd">        Alias           gl -&gt; Get-Location</span>
-<span class="sd">        Alias           gm -&gt; Get-Member</span>
-<span class="sd">        Alias           gmo -&gt; Get-Module</span>
-<span class="sd">        Alias           gp -&gt; Get-ItemProperty</span>
-<span class="sd">        Alias           gps -&gt; Get-Process</span>
-<span class="sd">        Alias           gpv -&gt; Get-ItemPropertyValue</span>
-<span class="sd">        Alias           group -&gt; Group-Object</span>
-<span class="sd">        Alias           gsn -&gt; Get-PSSession</span>
-<span class="sd">        Alias           gsnp -&gt; Get-PSSnapin</span>
-<span class="sd">        Alias           gsv -&gt; Get-Service</span>
-<span class="sd">        Alias           gu -&gt; Get-Unique</span>
-<span class="sd">        Alias           gv -&gt; Get-Variable</span>
-<span class="sd">        Alias           gwmi -&gt; Get-WmiObject</span>
-<span class="sd">        Alias           h -&gt; Get-History</span>
-<span class="sd">        Alias           icm -&gt; Invoke-Command</span>
-<span class="sd">        Alias           iex -&gt; Invoke-Expression</span>
-<span class="sd">        Alias           ihy -&gt; Invoke-History</span>
-<span class="sd">        Alias           ii -&gt; Invoke-Item</span>
-<span class="sd">        Alias           ipal -&gt; Import-Alias</span>
-<span class="sd">        Alias           ipcsv -&gt; Import-Csv</span>
-<span class="sd">        Alias           ipmo -&gt; Import-Module</span>
-<span class="sd">        Alias           ipsn -&gt; Import-PSSession</span>
-<span class="sd">        Alias           irm -&gt; Invoke-RestMethod</span>
-<span class="sd">        Alias           ise -&gt; powershell_ise.exe</span>
-<span class="sd">        Alias           iwmi -&gt; Invoke-WMIMethod</span>
-<span class="sd">        Alias           iwr -&gt; Invoke-WebRequest</span>
-<span class="sd">        Alias           lp -&gt; Out-Printer</span>
-<span class="sd">        Alias           man -&gt; help</span>
-<span class="sd">        Alias           md -&gt; mkdir</span>
-<span class="sd">        Alias           measure -&gt; Measure-Object</span>
-<span class="sd">        Alias           mi -&gt; Move-Item</span>
-<span class="sd">        Alias           mount -&gt; New-PSDrive</span>
-<span class="sd">        Alias           mp -&gt; Move-ItemProperty</span>
-<span class="sd">        Alias           nal -&gt; New-Alias</span>
-<span class="sd">        Alias           ndr -&gt; New-PSDrive</span>
-<span class="sd">        Alias           ni -&gt; New-Item</span>
-<span class="sd">        Alias           nmo -&gt; New-Module</span>
-<span class="sd">        Alias           npssc -&gt; New-PSSessionConfigurationFile</span>
-<span class="sd">        Alias           nsn -&gt; New-PSSession</span>
-<span class="sd">        Alias           nv -&gt; New-Variable</span>
-<span class="sd">        Alias           ogv -&gt; Out-GridView</span>
-<span class="sd">        Alias           oh -&gt; Out-Host</span>
-<span class="sd">        Alias           r -&gt; Invoke-History</span>
-<span class="sd">        Alias           rbp -&gt; Remove-PSBreakpoint</span>
-<span class="sd">        Alias           rcjb -&gt; Receive-Job</span>
-<span class="sd">        Alias           rcsn -&gt; Receive-PSSession</span>
-<span class="sd">        Alias           rd -&gt; Remove-Item</span>
-<span class="sd">        Alias           rdr -&gt; Remove-PSDrive</span>
-<span class="sd">        Alias           ri -&gt; Remove-Item</span>
-<span class="sd">        Alias           rjb -&gt; Remove-Job</span>
-<span class="sd">        Alias           rmo -&gt; Remove-Module</span>
-<span class="sd">        Alias           rni -&gt; Rename-Item</span>
-<span class="sd">        Alias           rnp -&gt; Rename-ItemProperty</span>
-
-<span class="sd">    That&#39;s some non-trivial stuff right there! First try on all 4 of them!</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">_ip</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="p">(</span><span class="s1">&#39;ac&#39;</span><span class="p">,</span> <span class="s1">&#39;Add-Content %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;asnp&#39;</span><span class="p">,</span> <span class="s1">&#39;Add-PSSnapin %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;cat&#39;</span><span class="p">,</span> <span class="s1">&#39;Get-Content %l&#39;</span><span class="p">),</span>
-        <span class="c1"># (&#39;cd&#39;, &#39;Set-Location %l&#39;),</span>
-        <span class="p">(</span><span class="s1">&#39;clc&#39;</span><span class="p">,</span> <span class="s1">&#39;Clear-Content %l&#39;</span><span class="p">),</span>
-        <span class="c1"># (&#39;clear&#39;, &#39;Clear-History %l&#39;),</span>
-        <span class="p">(</span><span class="s1">&#39;conda env&#39;</span><span class="p">,</span> <span class="s1">&#39;Get-Conda-Environment %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;copy&#39;</span><span class="p">,</span> <span class="s1">&#39;Copy-Item %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;cp&#39;</span><span class="p">,</span> <span class="s1">&#39;Copy-Item %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;del&#39;</span><span class="p">,</span> <span class="s1">&#39;Remove-Item %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;dir&#39;</span><span class="p">,</span> <span class="s1">&#39;Get-ChildItem %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;echo&#39;</span><span class="p">,</span> <span class="s1">&#39;Write-Output %l&#39;</span><span class="p">),</span>
-        <span class="c1"># (&#39;history&#39;, &#39;Get-History %l&#39;),</span>
-        <span class="p">(</span><span class="s1">&#39;kill&#39;</span><span class="p">,</span> <span class="s1">&#39;Stop-Process&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;l&#39;</span><span class="p">,</span> <span class="s1">&#39;Get-ChildItem %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;ll&#39;</span><span class="p">,</span> <span class="s1">&#39;GetChildItem -Verbose %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;ls&#39;</span><span class="p">,</span> <span class="s1">&#39;Get-ChildItem %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;man&#39;</span><span class="p">,</span> <span class="s1">&#39;Get-Help %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;md&#39;</span><span class="p">,</span> <span class="s1">&#39;mkdir %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;move&#39;</span><span class="p">,</span> <span class="s1">&#39;Move-Item %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;mv&#39;</span><span class="p">,</span> <span class="s1">&#39;Move-Item %l&#39;</span><span class="p">),</span>
-        <span class="c1"># (&#39;popd&#39;, &#39;Pop-Location %l&#39;),</span>
-        <span class="p">(</span><span class="s1">&#39;pro&#39;</span><span class="p">,</span> <span class="s1">&#39;nvim $Profile.CurrentUserAllHosts&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;ps&#39;</span><span class="p">,</span> <span class="s1">&#39;Get-Process %l&#39;</span><span class="p">),</span>
-        <span class="c1"># (&#39;pushd&#39;, &#39;Push-Location %l&#39;),</span>
-        <span class="c1"># (&#39;pwd&#39;, &#39;Get-Location %l&#39;),</span>
-        <span class="p">(</span><span class="s1">&#39;ren&#39;</span><span class="p">,</span> <span class="s1">&#39;Rename-Item %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;rm&#39;</span><span class="p">,</span> <span class="s1">&#39;Remove-Item %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;rmdir&#39;</span><span class="p">,</span> <span class="s1">&#39;Remove-Item %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;rp&#39;</span><span class="p">,</span> <span class="s1">&#39;Remove-ItemProperty %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;rsn&#39;</span><span class="p">,</span> <span class="s1">&#39;Remove-PSSession %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;rv&#39;</span><span class="p">,</span> <span class="s1">&#39;Remove-Variable %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;rvpa&#39;</span><span class="p">,</span> <span class="s1">&#39;Resolve-Path %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;sajb&#39;</span><span class="p">,</span> <span class="s1">&#39;Start-Job %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;sal&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-Alias %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;saps&#39;</span><span class="p">,</span> <span class="s1">&#39;Start-Process %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;sasv&#39;</span><span class="p">,</span> <span class="s1">&#39;Start-Service %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;sbp&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-PSBreakpoint %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;select&#39;</span><span class="p">,</span> <span class="s1">&#39;Select-Object %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;set&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-Variable %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;si&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-Item %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;sl&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-Location %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;sleep&#39;</span><span class="p">,</span> <span class="s1">&#39;Start-Sleep %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;sls&#39;</span><span class="p">,</span> <span class="s1">&#39;Select-String %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;sort&#39;</span><span class="p">,</span> <span class="s1">&#39;Sort-Object %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;sp&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-ItemProperty %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;spjb&#39;</span><span class="p">,</span> <span class="s1">&#39;Stop-Job %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;spps&#39;</span><span class="p">,</span> <span class="s1">&#39;Stop-Process %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;spsv&#39;</span><span class="p">,</span> <span class="s1">&#39;Stop-Service %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;start&#39;</span><span class="p">,</span> <span class="s1">&#39;Start-Process %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;stz&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-TimeZone %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;sv&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-Variable %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;tee&#39;</span><span class="p">,</span> <span class="s1">&#39;Tee-Object %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span>
-            <span class="s1">&#39;tree&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;tree /F /A %l&#39;</span><span class="p">,</span>
-        <span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">,</span> <span class="s1">&#39;Get-Content %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;where&#39;</span><span class="p">,</span> <span class="s1">&#39;Where-Object %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;wjb&#39;</span><span class="p">,</span> <span class="s1">&#39;Wait-Job %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;write&#39;</span><span class="p">,</span> <span class="s1">&#39;Write-Output %l&#39;</span><span class="p">),</span>
-    <span class="p">]</span>
-    <span class="k">return</span> <span class="n">_ip</span><span class="o">.</span><span class="n">user_aliases</span></div>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_ip</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="s1">&#39;ac&#39;</span><span class="p">,</span> <span class="s1">&#39;Add-Content %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;asnp&#39;</span><span class="p">,</span> <span class="s1">&#39;Add-PSSnapin %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;cat&#39;</span><span class="p">,</span> <span class="s1">&#39;Get-Content %l&#39;</span><span class="p">),</span>
+            <span class="c1"># (&#39;cd&#39;, &#39;Set-Location %l&#39;),</span>
+            <span class="p">(</span><span class="s1">&#39;clc&#39;</span><span class="p">,</span> <span class="s1">&#39;Clear-Content %l&#39;</span><span class="p">),</span>
+            <span class="c1"># (&#39;clear&#39;, &#39;Clear-History %l&#39;),</span>
+            <span class="p">(</span><span class="s1">&#39;conda env&#39;</span><span class="p">,</span> <span class="s1">&#39;Get-Conda-Environment %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;copy&#39;</span><span class="p">,</span> <span class="s1">&#39;Copy-Item %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;cp&#39;</span><span class="p">,</span> <span class="s1">&#39;Copy-Item %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;del&#39;</span><span class="p">,</span> <span class="s1">&#39;Remove-Item %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;dir&#39;</span><span class="p">,</span> <span class="s1">&#39;Get-ChildItem %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;echo&#39;</span><span class="p">,</span> <span class="s1">&#39;Write-Output %l&#39;</span><span class="p">),</span>
+            <span class="c1"># (&#39;history&#39;, &#39;Get-History %l&#39;),</span>
+            <span class="p">(</span><span class="s1">&#39;kill&#39;</span><span class="p">,</span> <span class="s1">&#39;Stop-Process&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;l&#39;</span><span class="p">,</span> <span class="s1">&#39;Get-ChildItem %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;ll&#39;</span><span class="p">,</span> <span class="s1">&#39;GetChildItem -Verbose %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;ls&#39;</span><span class="p">,</span> <span class="s1">&#39;Get-ChildItem %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;man&#39;</span><span class="p">,</span> <span class="s1">&#39;Get-Help %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;md&#39;</span><span class="p">,</span> <span class="s1">&#39;mkdir %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;move&#39;</span><span class="p">,</span> <span class="s1">&#39;Move-Item %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;mv&#39;</span><span class="p">,</span> <span class="s1">&#39;Move-Item %l&#39;</span><span class="p">),</span>
+            <span class="c1"># (&#39;popd&#39;, &#39;Pop-Location %l&#39;),</span>
+            <span class="p">(</span><span class="s1">&#39;pro&#39;</span><span class="p">,</span> <span class="s1">&#39;nvim $Profile.CurrentUserAllHosts&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;ps&#39;</span><span class="p">,</span> <span class="s1">&#39;Get-Process %l&#39;</span><span class="p">),</span>
+            <span class="c1"># (&#39;pushd&#39;, &#39;Push-Location %l&#39;),</span>
+            <span class="c1"># (&#39;pwd&#39;, &#39;Get-Location %l&#39;),</span>
+            <span class="p">(</span><span class="s1">&#39;ren&#39;</span><span class="p">,</span> <span class="s1">&#39;Rename-Item %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;rm&#39;</span><span class="p">,</span> <span class="s1">&#39;Remove-Item %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;rmdir&#39;</span><span class="p">,</span> <span class="s1">&#39;Remove-Item %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;rp&#39;</span><span class="p">,</span> <span class="s1">&#39;Remove-ItemProperty %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;rsn&#39;</span><span class="p">,</span> <span class="s1">&#39;Remove-PSSession %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;rv&#39;</span><span class="p">,</span> <span class="s1">&#39;Remove-Variable %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;rvpa&#39;</span><span class="p">,</span> <span class="s1">&#39;Resolve-Path %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;sajb&#39;</span><span class="p">,</span> <span class="s1">&#39;Start-Job %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;sal&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-Alias %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;saps&#39;</span><span class="p">,</span> <span class="s1">&#39;Start-Process %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;sasv&#39;</span><span class="p">,</span> <span class="s1">&#39;Start-Service %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;sbp&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-PSBreakpoint %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;select&#39;</span><span class="p">,</span> <span class="s1">&#39;Select-Object %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;set&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-Variable %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;si&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-Item %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;sl&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-Location %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;sleep&#39;</span><span class="p">,</span> <span class="s1">&#39;Start-Sleep %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;sls&#39;</span><span class="p">,</span> <span class="s1">&#39;Select-String %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;sort&#39;</span><span class="p">,</span> <span class="s1">&#39;Sort-Object %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;sp&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-ItemProperty %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;spjb&#39;</span><span class="p">,</span> <span class="s1">&#39;Stop-Job %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;spps&#39;</span><span class="p">,</span> <span class="s1">&#39;Stop-Process %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;spsv&#39;</span><span class="p">,</span> <span class="s1">&#39;Stop-Service %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;start&#39;</span><span class="p">,</span> <span class="s1">&#39;Start-Process %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;stz&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-TimeZone %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;sv&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-Variable %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;tee&#39;</span><span class="p">,</span> <span class="s1">&#39;Tee-Object %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s1">&#39;tree&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;tree /F /A %l&#39;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">,</span> <span class="s1">&#39;Get-Content %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;where&#39;</span><span class="p">,</span> <span class="s1">&#39;Where-Object %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;wjb&#39;</span><span class="p">,</span> <span class="s1">&#39;Wait-Job %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;write&#39;</span><span class="p">,</span> <span class="s1">&#39;Write-Output %l&#39;</span><span class="p">),</span>
+        <span class="p">]</span>
+        <span class="k">return</span> <span class="n">_ip</span><span class="o">.</span><span class="n">user_aliases</span></div></div>
 
 
 <span class="k">def</span> <span class="nf">__setup_fzf</span><span class="p">(</span><span class="n">user_aliases</span><span class="p">):</span>
@@ -614,25 +624,23 @@
     <span class="k">return</span> <span class="n">user_aliases</span>
 
 
-<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../profile/startup.html#profile_default.startup.20_aliases.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../profile/aliases.html#profile_default.startup.20_aliases.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Set up aliases for the user namespace for IPython.&quot;&quot;&quot;</span>
-    <span class="c1"># if not isinstance(_ip, IPython.terminal.interactiveshell.InteractiveShell):</span>
-    <span class="c1">#     raise Exception(&#39;Are you running in IPython?&#39;)</span>
-    <span class="c1"># so let&#39;s not do isinstance. embrace the interface not the type!</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_ip</span><span class="p">,</span> <span class="s1">&#39;magics_manager&#39;</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Are you running in IPython?&#39;</span><span class="p">)</span>
 
     <span class="n">user_aliases</span> <span class="o">=</span> <span class="p">[]</span>
-
     <span class="n">machine</span> <span class="o">=</span> <span class="n">Platform</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">machine</span><span class="o">.</span><span class="n">is_linux</span><span class="p">:</span>
         <span class="n">user_aliases</span> <span class="o">+=</span> <span class="n">linux_specific_aliases</span><span class="p">(</span><span class="n">_ip</span><span class="p">)</span>
-
-    <span class="c1"># elif machine.is_conemu:  # should check for &#39;nix-tools as an env var</span>
-    <span class="c1">#     user_aliases += powershell_aliases(_ip)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">user_aliases</span> <span class="o">+=</span> <span class="n">cmd_aliases</span><span class="p">(</span><span class="n">_ip</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">machine</span><span class="o">.</span><span class="n">is_win</span><span class="p">:</span>
+        <span class="c1"># finish the shell class in profile_default.util.machine</span>
+        <span class="c1"># then we can create a shell class that determines if</span>
+        <span class="c1"># we&#39;re in cmd or pwsh</span>
+        <span class="c1"># win_ = WindowsAliases(_ip)</span>
+        <span class="c1"># if win</span>
+        <span class="n">user_aliases</span> <span class="o">+=</span> <span class="n">WindowsAliases</span><span class="p">(</span><span class="n">_ip</span><span class="p">)</span><span class="o">.</span><span class="n">cmd_aliases</span><span class="p">()</span>
 
     <span class="n">user_aliases</span> <span class="o">+=</span> <span class="n">common_aliases</span><span class="p">(</span><span class="n">_ip</span><span class="p">)</span>
     <span class="n">__setup_fzf</span><span class="p">(</span><span class="n">user_aliases</span><span class="p">)</span>
@@ -671,17 +679,17 @@
 <div id="sidebartoc">
     <p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../startup.html">Startup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ipython_keybindings.html">Keybindings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../magics.html">Built-in Magics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../custom_magics.html">Writing Your Own Magics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../exceptions.html">Customized Exceptions</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../profile/index.html">IPython Shell Initialization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../jupyter.html">Jupyter ZMQShell</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Notebook Extensions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev.html">Developers Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev.html">Contributors Notes</a></li>
 </ul>
 
 </div>
@@ -714,6 +722,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright (C) 2018-2019 Faris Chugthai.
+      Last updated on Aug 10, 2019.
     </div>
   </body>
 </html>
