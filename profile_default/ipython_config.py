@@ -14,8 +14,9 @@ from IPython.paths import get_ipython_dir
 # import
 from traitlets.config import get_config
 
-c_logger = logging.getLogger(name='profile_default.ipython_config')
-c_logger.setLevel(logging.INFO)
+logging.basicConfig(level=logging.INFO, format=logging.BASIC_FORMAT)
+# c_logger = logging.getLogger(name='profile_default.ipython_config')
+# c_logger.setLevel(logging.INFO)
 # c_logger.addHandler()
 
 c = get_config()
@@ -373,29 +374,29 @@ def sphinxify(obj):
     webbrowser.open_new_tab(url)
 
 
-try:
-    import docrepr
+# try:
+#     import docrepr
 
-    def ipython_sphinxify(doc):
-        """The official way IPython does it in :ref:`IPython.core.interactiveshell`."""
-        with TemporaryDirectory() as dirname:
-            return {
-                'text/html': sphinxify.sphinxify(doc, dirname),
-                'text/plain': doc
-            }
+#     def ipython_sphinxify(doc):
+#         """The official way IPython does it in :ref:`IPython.core.interactiveshell`."""
+#         with TemporaryDirectory() as dirname:
+#             return {
+#                 'text/html': sphinxify.sphinxify(doc, dirname),
+#                 'text/plain': doc
+#             }
 
-except (ImportError,ModuleNotFoundError):
-    ipython_sphinxify = None
+# except (ImportError,ModuleNotFoundError):
+#     ipython_sphinxify = None
 
-# Now do it the way spyder does it!
-import importlib  # noqa E402
-try:
-    importlib.import_module("docrepr")  # noqa E402
-except (ImportError, ModuleNotFoundError):
-    c.InteractiveShell.sphinxify_docstring = False
-else:
-    # print("Sphinxify docstrings with sphinxify(obj)")
-    c.InteractiveShell.sphinxify_docstring = True
+# # Now do it the way spyder does it!
+# import importlib  # noqa E402
+# try:
+#     importlib.import_module("docrepr")  # noqa E402
+# except (ImportError, ModuleNotFoundError):
+#     c.InteractiveShell.sphinxify_docstring = False
+# else:
+#     # print("Sphinxify docstrings with sphinxify(obj)")
+#     c.InteractiveShell.sphinxify_docstring = True
 
 c.InteractiveShell.wildcards_case_sensitive = False
 

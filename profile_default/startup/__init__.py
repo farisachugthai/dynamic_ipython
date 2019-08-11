@@ -6,10 +6,6 @@ Imports all files in this directory by utilizing the
 :mod:`importlib` API to avoid import problems as
 Python modules can't begin with numbers.
 
-Requires
----------
-Python3 and IPython 7+
-
 """
 import importlib
 import logging
@@ -18,6 +14,8 @@ import sys
 from logging import NullHandler
 
 from profile_default.util import module_log
+
+logging.BASIC_FORMAT = '%(asctime)s : %(levelname)s : %(message)s'
 
 STARTUP_LOGGER = logging.getLogger('profile_default.startup')
 

@@ -13,34 +13,6 @@
 This imports a few utility functions from :ref:`IPython` and imports the python
 package neovim is served in.
 
-Overlap between IPython and traitlets
-======================================
-
-It seems that :mod:`IPython` and :mod:`traitlets` share a module!
-
-:mod:`traitlets.utils.importstring` == :mod:`IPython.utils.importstring`.
-
-They both export 1 function: :func:`IPython.utils.importstring.import_item()`
-
-This could be used here to dynamically import strings based on user
-configuration, environment variables and configuration files.
-
-.. warning: Pending Deprecation: The functionality here is duplicated in
-            :mod:`profile_default.extensions.easy_import`.
-
-
-The Importance of Clean Namespaces
-==================================
-
-May 07, 2019:
-
-If the last line in the module didn't have ``del mod`` in it, then
-the magic `%pylab` would crash!
-
-It uses the same keyword behind the scenes interestingly enough.
-
-.. todo:: Could add in `wcwidth.wcswidth()` to determine width of output
-          device and print that many :kbd:`***` for the nvim part.
 
 """
 import sys
@@ -74,7 +46,7 @@ def dreload(
     if extra_excludes is not None:
         return __reload(mod, excludes=excludes + set(extra_excludes))
     else:
-        return __reload(mod, excludes=excludes)
+        return __reload(mod, excludes)
 
 
 def import_nvim(mod):

@@ -78,9 +78,8 @@ def main(shell=None):
 
 
 if __name__ == "__main__":
-    REHASHX_LOGGER = logging.getLogger(name='01_rehashx')
-    LOG_LEVEL = logging.INFO
-    REHASHX_LOGGER.setLevel(LOG_LEVEL)
+    logging.basicConfig(level=logging.INFO,
+                        format='%(asctime)s : %(levelname)s : %(message)s')
 
     _ip = get_ipython()
 

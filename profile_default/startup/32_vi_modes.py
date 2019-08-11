@@ -59,11 +59,6 @@ from prompt_toolkit.key_binding.bindings.named_commands import get_by_name
 
 from profile_default.util import module_log
 
-try:
-    from ipykernel.zmqshell import ZMQInteractiveShell
-except (ImportError, ModuleNotFoundError):
-    ZMQInteractiveShell = None
-
 
 def switch_to_navigation_mode(event):
     """Switches :mod:`IPython` from Vim insert mode to Vim normal mode.
@@ -211,13 +206,17 @@ def main():
         _ip.pt_app.key_bindings = merge_key_bindings([almost_all_keys, create_ipython_shortcuts(_ip)])
         RSI_LOGGER.info('Number of keybindings {}:\t'.format(len(_ip.pt_app.key_bindings.bindings)))
 
-    # Jupyter QTConsole
-    elif isinstance(_ip, ZMQInteractiveShell):
-        sys.exit()
-
     else:
-        RSI_LOGGER.error('Is this being run in IPython?:\nType: %s ',
-                          type(_ip), exc_info=1)
+        try:
+            from ipykernel.zmqshell import ZMQInteractiveShell
+        except (ImportError, ModuleNotFoundError):
+            ZMQInteractiveShell = None
+            RSI_LOGGER.error('Is this being run in IPython?:\nType: %s ',
+                              type(_ip), exc_info=1)
+        else:
+            # Jupyter QTConsole
+            if isinstance(_ip, ZMQInteractiveShell):
+                sys.exit()
 
 
 if __name__ == "__main__":
