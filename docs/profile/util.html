@@ -54,10 +54,23 @@
 <h1>profile_default.util package<a class="headerlink" href="#profile-default-util-package" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-profile_default.util">
 <span id="module-contents"></span><span id="util-contents"></span><h2>Module contents<a class="headerlink" href="#module-profile_default.util" title="Permalink to this headline">¶</a></h2>
-<p>Initialize the global IPython instance and begin configuring.</p>
-<div class="section" id="requires">
-<h3>Requires<a class="headerlink" href="#requires" title="Permalink to this headline">¶</a></h3>
-<p>Python3 and IPython 7+</p>
+<p>This module contains a collection of utility scripts.</p>
+<p>Generally they’re modules that are functionally useful for a user
+running IPython interactively, but none of the scripts havet been fleshed out
+to the extent that they could be easily changed to IPython extensions.</p>
+<p>Currently the module aims to:</p>
+<ol class="arabic simple">
+<li><p>Create consistent <a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Logger" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">logging.Logger</span></code></a> objects</p></li>
+<li><p>Make a better pager on Windows</p></li>
+<li><p>Create a collection of classes that can more easily remove
+platform-specific issues that continue to arise.</p></li>
+</ol>
+<p>In addition, configure a module-wide logger by equating <code class="xref py py-obj docutils literal notranslate"><span class="pre">logging.BASIC_FORMAT</span></code>
+with a pre-determined template string like so:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">logging</span><span class="o">.</span><span class="n">BASIC_FORMAT</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> : </span><span class="si">%(levelname)s</span><span class="s1"> : </span><span class="si">%(message)s</span><span class="s1">&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">UTIL_LOGGER</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;profile_default.util&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">UTIL_LOGGER</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
+</pre></div>
 </div>
 </div>
 <div class="section" id="submodules">
@@ -65,29 +78,33 @@
 </div>
 <div class="section" id="module-profile_default.util.copytree">
 <span id="profile-default-util-copytree-module"></span><h2>profile_default.util.copytree module<a class="headerlink" href="#module-profile_default.util.copytree" title="Permalink to this headline">¶</a></h2>
-<dl class="exception">
-<dt id="profile_default.util.copytree.Error">
-<em class="property">exception </em><code class="sig-prename descclassname">profile_default.util.copytree.</code><code class="sig-name descname">Error</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/profile_default/util/copytree.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/profile_default/util/copytree.html#Error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profile_default.util.copytree.Error" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OSError" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">OSError</span></code></a></p>
-<p>Idk a class that <a class="reference external" href="https://docs.python.org/3/library/shutil.html#module-shutil" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shutil</span></code></a> defines.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="profile_default.util.copytree.copystat">
-<code class="sig-prename descclassname">profile_default.util.copytree.</code><code class="sig-name descname">copystat</code><span class="sig-paren">(</span><em class="sig-param">src</em>, <em class="sig-param">dst</em>, <em class="sig-param">*</em>, <em class="sig-param">follow_symlinks=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/profile_default/util/copytree.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/profile_default/util/copytree.html#copystat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profile_default.util.copytree.copystat" title="Permalink to this definition">¶</a></dt>
-<dd><p>Copy file metadata.</p>
-<p>Copy the permission bits, last access time, last modification time, and
-flags from <code class="xref py py-obj docutils literal notranslate"><span class="pre">src</span></code> to <code class="xref py py-obj docutils literal notranslate"><span class="pre">dst</span></code>. On Linux, copystat() also copies the “extended
-attributes” where possible. The file contents, owner, and group are
-unaffected. <code class="xref py py-obj docutils literal notranslate"><span class="pre">src</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">dst</span></code> are path names given as strings.</p>
-<p>If the optional flag <code class="xref py py-obj docutils literal notranslate"><span class="pre">follow_symlinks</span></code> is not set, symlinks aren’t
-followed if and only if both <code class="xref py py-obj docutils literal notranslate"><span class="pre">src</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">dst</span></code> are symlinks.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="profile_default.util.copytree.copytree">
-<code class="sig-prename descclassname">profile_default.util.copytree.</code><code class="sig-name descname">copytree</code><span class="sig-paren">(</span><em class="sig-param">src</em>, <em class="sig-param">dst</em>, <em class="sig-param">symlinks=False</em>, <em class="sig-param">ignore=None</em>, <em class="sig-param">copy_function=&lt;function copy2 at 0x0000023218C21E18&gt;</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/profile_default/util/copytree.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/profile_default/util/copytree.html#copytree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profile_default.util.copytree.copytree" title="Permalink to this definition">¶</a></dt>
+<dl class="class">
+<dt id="profile_default.util.copytree.CopyTree">
+<em class="property">class </em><code class="sig-prename descclassname">profile_default.util.copytree.</code><code class="sig-name descname">CopyTree</code><span class="sig-paren">(</span><em class="sig-param">src</em>, <em class="sig-param">dst</em>, <em class="sig-param">symlinks=False</em>, <em class="sig-param">ignore=None</em>, <em class="sig-param">copy_function=&lt;function copy2&gt;</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/profile_default/util/copytree.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/profile_default/util/copytree.html#CopyTree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profile_default.util.copytree.CopyTree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="profile_default.util.copytree.CopyTree.copytree">
+<code class="sig-name descname">copytree</code><span class="sig-paren">(</span><em class="sig-param">src</em>, <em class="sig-param">dst</em>, <em class="sig-param">symlinks=False</em>, <em class="sig-param">ignore=None</em>, <em class="sig-param">copy_function=&lt;function copy2 at 0x0000027F503F1D90&gt;</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/profile_default/util/copytree.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/profile_default/util/copytree.html#CopyTree.copytree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profile_default.util.copytree.CopyTree.copytree" title="Permalink to this definition">¶</a></dt>
 <dd><p>Let’s try and do <code class="xref py py-obj docutils literal notranslate"><span class="pre">shutil.copytree()</span></code> a little better.</p>
+<p>First let’s do everyone the courtesy of checking whether <code class="xref py py-obj docutils literal notranslate"><span class="pre">src</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">dest</span></code>
+are pathlib.Path objects.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="profile_default.util.copytree.CopyTree.destination_files">
+<em class="property">property </em><code class="sig-name descname">destination_files</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/profile_default/util/copytree.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/profile_default/util/copytree.html#CopyTree.destination_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profile_default.util.copytree.CopyTree.destination_files" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="profile_default.util.copytree.CopyTree.errors">
+<code class="sig-name descname">errors</code><em class="property"> = []</em><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/profile_default/util/copytree.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profile_default.util.copytree.CopyTree.errors" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="profile_default.util.copytree.CopyTree.make_dest_dirs">
+<code class="sig-name descname">make_dest_dirs</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/profile_default/util/copytree.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/profile_default/util/copytree.html#CopyTree.make_dest_dirs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profile_default.util.copytree.CopyTree.make_dest_dirs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 </div>
@@ -402,10 +419,7 @@ formatting. Defaults to <code class="docutils literal notranslate"><span class="
 <div id="sidebartoc">
   <ul>
 <li><a class="reference internal" href="#">profile_default.util package</a><ul>
-<li><a class="reference internal" href="#module-profile_default.util">Module contents</a><ul>
-<li><a class="reference internal" href="#requires">Requires</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#module-profile_default.util">Module contents</a></li>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
 <li><a class="reference internal" href="#module-profile_default.util.copytree">profile_default.util.copytree module</a></li>
 <li><a class="reference internal" href="#module-profile_default.util.machine">profile_default.util.machine module</a><ul>
@@ -467,7 +481,7 @@ formatting. Defaults to <code class="docutils literal notranslate"><span class="
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright (C) 2018-2019 Faris Chugthai.
-      Last updated on Aug 10, 2019.
+      Last updated on Aug 13, 2019.
     </div>
   </body>
 </html>

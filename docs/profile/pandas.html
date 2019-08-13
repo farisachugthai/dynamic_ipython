@@ -55,6 +55,84 @@
 <p>Initialize desired parameters for <code class="xref py py-mod docutils literal notranslate"><span class="pre">pandas</span></code> at startup.</p>
 <div class="section" id="module-42_pandas_init">
 <span id="pandas-initialization"></span><h2>Pandas Initialization<a class="headerlink" href="#module-42_pandas_init" title="Permalink to this headline">¶</a></h2>
+<p>As of version 0.25, there’s currently a large number of options that can
+be set to modify Pandas’ behavior.</p>
+<p>An example of this:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [8]: </span><span class="n">pd</span><span class="o">.</span><span class="n">options</span>
+<span class="gh">Out[8]: </span><span class="go">&lt;pandas._config.config.DictWrapper at 0x1f2facfdd68</span>
+<span class="go">        compute=&lt;pandas._config.config.DictWrapper at 0x1f2fbfc1d30</span>
+<span class="go">        use_bottleneck=True,</span>
+<span class="go">        use_numexpr=True&gt;,</span>
+<span class="go">        display=&lt;pandas._config.config.DictWrapper at 0x1f2fbfc1c18</span>
+<span class="go">                chop_threshold=None,</span>
+<span class="go">                colheader_justify=&#39;right&#39;,</span>
+<span class="go">                column_space=12,</span>
+<span class="go">                date_dayfirst=False,</span>
+<span class="go">                date_yearfirst=False,</span>
+<span class="go">                encoding=&#39;utf-8&#39;,</span>
+<span class="go">                expand_frame_repr=False,</span>
+<span class="go">                float_format=None,</span>
+<span class="go">        html=&lt;pandas._config.config.DictWrapper at 0x1f2fbfc1c50</span>
+<span class="go">            border=1,</span>
+<span class="go">            table_schema=True,</span>
+<span class="go">            use_mathjax=True&gt;,</span>
+<span class="go">        large_repr=&#39;truncate&#39;,</span>
+<span class="go">        latex=&lt;pandas._config.config.DictWrapper at 0x1f2fbfc1c50</span>
+<span class="go">             escape=True,</span>
+<span class="go">             longtable=False,</span>
+<span class="go">             multicolumn=True,</span>
+<span class="go">             multicolumn_format=&#39;l&#39;,</span>
+<span class="go">             multirow=False,</span>
+<span class="go">             repr=False&gt;,</span>
+<span class="go">        max_categories=8,</span>
+<span class="go">        max_columns=None,</span>
+<span class="go">        max_colwidth=25,</span>
+<span class="go">        max_info_columns=100,</span>
+<span class="go">        max_info_rows=1690785,</span>
+<span class="go">        max_rows=30,</span>
+<span class="go">        max_seq_items=50,</span>
+<span class="go">        memory_usage=True,</span>
+<span class="go">        min_rows=10,</span>
+<span class="go">        multi_sparse=True,</span>
+<span class="go">        notebook_repr_html=True,</span>
+<span class="go">        pprint_nest_depth=3,</span>
+<span class="go">        precision=6,</span>
+<span class="go">        show_dimensions=&#39;truncate&#39;,</span>
+<span class="go">        unicode=&lt;pandas._config.config.DictWrapper at 0x1f2fbfc1c50</span>
+<span class="go">                ambiguous_as_wide=False,</span>
+<span class="go">                east_asian_width=False&gt;,</span>
+<span class="go">                width=80&gt;,</span>
+<span class="go">        io=&lt;pandas._config.config.DictWrapper at 0x1f2fbfc1d30</span>
+<span class="go">        excel=&lt;pandas._config.config.DictWrapper at 0x1f2fce37f98</span>
+<span class="go">        ods=&lt;pandas._config.config.DictWrapper at 0x1f2fce37ac8</span>
+<span class="go">             reader=&#39;auto&#39;&gt;,</span>
+<span class="go">        xls=&lt;pandas._config.config.DictWrapper at 0x1f2fce37978</span>
+<span class="go">             reader=&#39;auto&#39;,</span>
+<span class="go">             writer=&#39;auto&#39;&gt;,</span>
+<span class="go">        xlsm=&lt;pandas._config.config.DictWrapper at 0x1f2fce37ac8</span>
+<span class="go">              reader=&#39;auto&#39;,</span>
+<span class="go">              writer=&#39;auto&#39;&gt;,</span>
+<span class="go">        xlsx=&lt;pandas._config.config.DictWrapper at 0x1f2fce37978</span>
+<span class="go">              reader=&#39;auto&#39;,</span>
+<span class="go">              writer=&#39;auto&#39;&gt;&gt;,</span>
+<span class="go">        hdf=&lt;pandas._config.config.DictWrapper at 0x1f2fce379e8</span>
+<span class="go">            default_format=None,</span>
+<span class="go">            dropna_table=False&gt;,</span>
+<span class="go">        parquet=&lt;pandas._config.config.DictWrapper at 0x1f2fce37978</span>
+<span class="go">                engine=&#39;auto&#39;&gt;&gt;,</span>
+<span class="go">        mode=&lt;pandas._config.config.DictWrapper at 0x1f2fbfc1c18</span>
+<span class="go">                chained_assignment=None,</span>
+<span class="go">                sim_interactive=False,</span>
+<span class="go">                use_inf_as_na=False,</span>
+<span class="go">                use_inf_as_null=False&gt;,</span>
+<span class="go">                plotting=&lt;pandas._config.config.DictWrapper at</span>
+<span class="go">                0x1f2fbfc1d30</span>
+<span class="go">                backend=&#39;matplotlib&#39;,</span>
+<span class="go">                matplotlib=&lt;pandas._config.config.DictWrapper at</span>
+<span class="go">                0x1f2fce37978</span>
+<span class="go">                register_converters=True&gt;&gt;&gt;</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">URL</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://realpython.com/python-pandas-tricks/#1-configure-options-settings-at-interpreter-startup">https://realpython.com/python-pandas-tricks/#1-configure-options-settings-at-interpreter-startup</a></p>
@@ -180,7 +258,7 @@ well truncated. [1]</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright (C) 2018-2019 Faris Chugthai.
-      Last updated on Aug 10, 2019.
+      Last updated on Aug 13, 2019.
     </div>
   </body>
 </html>
