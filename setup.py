@@ -13,7 +13,6 @@ See Also
 numpy.distutils.core
 numpy.distutils.misc_utils
 
-
 """
 import codecs
 import os
