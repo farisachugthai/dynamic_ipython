@@ -40,19 +40,27 @@ changed like so::
 
 Building Documentation
 ======================
+While working in Vim, the following commands can be useful for building
+documentation.::
 
-.. tip::
-
-   While working in Vim, the following commands can be useful for building documentation.
-
-.. code-block::
-
-   :let &makeprg = 'sphinx-build '
-   :cd docs                " assuming set shellslash has been run if necessary
-   :make -b html . ../build
+   let &makeprg = 'sphinx-build '
+   cd docs                " assuming set shellslash has been run if $OS=='Windows_NT'
+   make -b html . ../build
 
 Generally it's more difficult to specify parameters in the ``makeprg`` option
-than it is to write them out manually on the cmdline.
+than it is to write them out manually on the cmdline and allows for less
+configurability.
 
-In addition, ``makeprg`` is not an option one is allowed to set in a modeline.
-pygmentize -S GruvboxDarkHard -f html > _static/pygments.css 
+Therefore it's best to leave ``&makeprg`` as minimal as possible, and if
+necessary, build arguments into a mapping.
+
+In addition, ``makeprg`` is not an option one is allowed to set in a modeline
+so it's important to take that into consideration.
+
+Generating CSS
+==============
+Pygments can generate CSS with the following command in the shell:
+
+.. code-block:: shell
+
+   pygmentize -S GruvboxDarkHard -f html > _static/pygments.css 

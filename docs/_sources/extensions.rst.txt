@@ -5,16 +5,12 @@ Extensions
 .. highlight:: ipython
    :linenothreshold: 5
 
+Here are the varying `%magic` extensions that are bundled with this
+repository.
 
-.. sphinx breaks from this. TODO
-.. :mod:`example`
-.. --------------
+.. let's see how this works
 
-.. .. automodule:: extensions.example
-..     :members:
-..     :undoc-members:
-..     :show-inheritance:
-
+.. magic:: pd_csv
 
 :mod:`pd_csv`
 -------------
@@ -32,6 +28,7 @@ Extensions
     :members:
     :undoc-members:
     :show-inheritance:
+
 
 :mod:`site_pkgs`
 ----------------
