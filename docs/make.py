@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Expedite documentation builds.
-
+"""
 =======================================
 Make --- Automated Documentation Builds
 =======================================
@@ -17,10 +16,11 @@ passes user provided arguments along to it.
 It simply differs in making the process simpler and allows one to run it in
 the debugger if a problem arises with doc builds.
 
+
 Documentation TODO
 ------------------
 Still need to add an option to recursively move the html files out of the
-currently git-ignored directory `_build/html/` into this directory.
+currently git-ignored directory `build/html/` into this directory.
 
 Unfortunately that's probably going to be a really ugly fight.
 
@@ -30,6 +30,7 @@ dangerous overwrites like :command:`mv` does.
 So we may have to :func:`os.walk()`, copy them into the correct relative
 section of the directory tree, recursively delete the old
 directories and attempt to not lose all the metadata along the way.
+
 
 See Also
 --------
@@ -42,7 +43,9 @@ sphinx.util.osutil : mod
 
 .. todo:: Argparse update.
 
-    Update the options you can give to the parser:
+    Update the options you can give to the parser.
+
+Other Random Errands Include:
 
 #) remove python path [x]
 #) Add open in browser as an option [x]
@@ -53,12 +56,20 @@ sphinx.util.osutil : mod
 import argparse
 import logging
 import os
+import shlex
 import shutil
 import subprocess
 import sys
 import webbrowser
 
+try:
+    import sphinx
+except (ImportError, ModuleNotFoundError):
+    sys.exit("Sphinx documentation module not found. Exiting.")
+
 from IPython.core.error import UsageError
+
+from profile_default.__about__ import __version__
 
 DOC_PATH = os.path.dirname(os.path.abspath(__file__))
 BUILD_PATH = os.path.join(DOC_PATH, 'build')
@@ -115,7 +126,8 @@ def _parse_arguments(cmds=None):
     parser.add_argument('-b', '--open_browser',
                         metavar='BROWSER',
                         type=bool,
-                        default=False, dest='open_browser',
+                        default=False,
+                        dest='open_browser',
                         help='Toggle opening the docs in the default'
                         ' browser after a successful build.')
 
@@ -130,6 +142,7 @@ def _parse_arguments(cmds=None):
                         '--log-level',
                         dest='log_level',
                         default='INFO',
+                        choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'],
                         help='Log level. Defaults to INFO. Implies logging.')
     # reasonably should mention what the purpose of some of these are.
     # they primarily seem like toggles since they don't provide much else
@@ -141,15 +154,13 @@ def _parse_arguments(cmds=None):
         default=False,
         help='Enable verbose logging and increase level to `debug`.')
 
-    # parser.add_argument('--version', action='version', version=__version__)
+    parser.add_argument('--version', action='version', version=__version__)
 
     user_args = parser.parse_args()
 
-    if len(sys.argv[1:]) == 0:
-        parser.print_help()
-        sys.exit()
-    # from ipdb import set_trace
-    # set_trace()
+    # if len(sys.argv[1:]) == 0:
+    #     parser.print_help()
+    #     sys.exit()
 
     return user_args
 
@@ -205,10 +216,9 @@ class DocBuilder:
         """Clean the working tree."""
         try:
             self.status('Removing previous builds…')
-            shutil.rmtree(os.path.join(str(self.root), 'dist'))
-        except OSError:
-            pass
-
+            shutil.rmtree('build')
+        except OSError as e:
+            MAKE_LOGGER.info(e)
 
     def sphinx_build(self):
         """Build docs.
@@ -221,6 +231,21 @@ class DocBuilder:
         Examples
         --------
         >>> DocBuilder(num_jobs=4).sphinx_build('html')
+
+        raise child_exception_type(errno_num, err_msg, err_filename)
+        FileNotFoundError: [Errno 2] No such file or directory:
+
+    sphinx-build
+    -b html
+    -c .
+    -j 4
+    -d /data/data/com.termux/files/home/projects/dynamic_ipython/docs/build/doctrees
+
+    /data/data/com.termux/files/home/projects/dynamic_ipython/docs
+
+    /data/data/com.termux/files/home/projects/dynamic_ipython/docs/build/html
+
+    sphinx-build -b html -c . -j 4 -d /data/data/com.termux/files/home/projects/dynamic_ipython/docs/build/doctrees /data/data/com.termux/files/home/projects/dynamic_ipython/docs /data/data/com.termux/files/home/projects/dynamic_ipython/docs/build/html
 
         """
         if self.kind not in ('html', 'latex'):
@@ -236,8 +261,27 @@ class DocBuilder:
             os.path.join(BUILD_PATH, 'doctrees'), DOC_PATH,
             os.path.join(BUILD_PATH, self.kind)
         ]
-        return cmd
-        return subprocess.run([self._cmd])
+
+        return subprocess.list2cmdline(cmd)
+
+    def run(self):
+        """Run :command:`sphinx-build`.
+
+        The :attr:`check` argument to :func:`subprocess.run()`
+        is not enabled so there's no
+        need to catch
+        :class:`subprocess.CalledProcessError()`.
+        """
+        self.status("Running sphinx-build.")
+        output = subprocess.run(
+                        [self.sphinx_build()],
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE,
+                        universal_newlines=True,
+                        # capture_output=True,
+                    )
+
+        return output
 
     def open_browser(self, doc):
         """Open a browser tab to the provided document."""
@@ -274,17 +318,16 @@ def main():
     builder = args.builder
 
     sphinx_shell = DocBuilder(kind=builder, num_jobs=jobs, verbosity=verbosity)
-    # try:
-    sphinx_shell.cleanup()
-    sphinx_shell.sphinx_build()
-    # except shutil.Error  as e:  # i think this is the right one
-    #     MAKE_LOGGER.error(e)
+    output = sphinx_shell.run()
 
     if os.environ.get('ANDROID_ROOT'):
         termux_hack()
 
     if args.open_browser:
         sphinx_shell.open_browser()
+        sphinx_shell.status('Opening browser!')
+
+    return sphinx_shell.output
 
 
 if __name__ == "__main__":

@@ -55,3 +55,4 @@ Generally it's more difficult to specify parameters in the ``makeprg`` option
 than it is to write them out manually on the cmdline.
 
 In addition, ``makeprg`` is not an option one is allowed to set in a modeline.
+pygmentize -S GruvboxDarkHard -f html > _static/pygments.css 
