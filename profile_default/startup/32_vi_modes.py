@@ -40,6 +40,8 @@ import logging
 
 from IPython import get_ipython
 from IPython.terminal.shortcuts import create_ipython_shortcuts
+
+from prompt_toolkit import PromptSession
 from prompt_toolkit.enums import DEFAULT_BUFFER
 from prompt_toolkit.filters import HasFocus, ViInsertMode, ViNavigationMode
 
@@ -169,26 +171,8 @@ def base_keys(escape_keys=False):
     return rsi
 
 
-def main():
-    """Begin initializing keybindings for `IPython`.
-
-    This function delegates the extra bindings.
-
-    Parameters
-    ----------
-    escape_keys : bool, Optional
-        Whether to load :kbd:`Esc` or :kbd:`Alt` key bindings.
-
-    Returns
-    -------
-    rsi : :class:`prompt_toolkit.key_bindings.KeyBindings()`
-        Readline bindings in Vim 's insert mode.
-
-    """
-    almost_all_keys = base_keys(escape_keys=False)
-
-    _ip = get_ipython()
-
+def merge_ipython_rsi_kb(_ip=None):
+    """This really needs to be redone so I don't have to keep passing around this global not global _ip."""
     # IPython < 7.0
     if hasattr(_ip, 'pt_cli'):
         _ip.pt_cli.application.key_bindings_registry = merge_key_bindings([almost_all_keys, create_ipython_shortcuts(_ip)])
@@ -218,6 +202,52 @@ def main():
             if isinstance(_ip, ZMQInteractiveShell):
                 sys.exit()
 
+    return _ip
+
+
+def main():
+    """Begin initializing keybindings for `IPython`.
+
+    This function delegates the extra bindings.
+
+    Here's the super long init signature from PromptSession().:
+
+         __init__(self, message, multiline, wrap_lines, is_password, vi_mode,
+        editing_mode, complete_while_typing, validate_while_typing,
+        enable_history_search, search_ignore_case, lexer, enable_system_prompt,
+        enable_suspend, enable_open_in_editor, validator, completer,
+        complete_in_thread, reserve_space_for_menu, complete_style, auto_suggest,
+        style, style_transformation, swap_light_and_dark_colors, color_depth,
+        include_default_pygments_style, history, clipboard, prompt_continuation,
+        rprompt, bottom_toolbar, mouse_support, input_processors, key_bindings,
+        erase_when_done, tempfile_suffix, inputhook, refresh_interval, input,
+        output)
+
+
+    Parameters
+    ----------
+    escape_keys : bool, Optional
+        Whether to load :kbd:`Esc` or :kbd:`Alt` key bindings.
+
+    Returns
+    -------
+    rsi : :class:`prompt_toolkit.key_bindings.KeyBindings()`
+        Readline bindings in Vim 's insert mode.
+
+    """
+    almost_all_keys = base_keys(escape_keys=False)
+
+    _ip = get_ipython()
+
+    # _ip = merge_ipython_rsi_kb(_ip)  # TODO: ugh
+    kb = base_keys()
+
+    _ip.pt_app = PromptSession(complete_while_typing=True,
+                       editing_mode=_ip.editing_mode,
+                       bottom_toolbar=None,  # todo
+                       key_bindings=kb,
+                       style=_ip.highlighting_style)
+    return _ip
 
 if __name__ == "__main__":
     insert_mode = (HasFocus(DEFAULT_BUFFER) & ViInsertMode())
@@ -226,4 +256,4 @@ if __name__ == "__main__":
             logger="RSI",
             log_level=30
         )
-    main()
+    _ip = main()

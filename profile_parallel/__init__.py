@@ -1,4 +1,4 @@
-
+"""Initialize a IPyParallel profile for IPython."""
 import logging
 import os
 import sys
@@ -12,8 +12,13 @@ except (ImportError, ModuleNotFoundError):
     pass
 
 try:
-    import ipdb
+    import ipdb as pdb
 except (ImportError, ModuleNotFoundError):
     import pdb
 
-logging.getLogger(__name__).addHandler(NullHandler())
+logging.basicConfig(level=logging.WARNING)
+
+try:
+    import ipyparallel
+except (ImportError, ModuleNotFoundError) as e:
+    logging.warning(e)

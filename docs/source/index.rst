@@ -134,6 +134,10 @@ form of rst docs and ipynb notebooks.
    Built-in Magics <magics>
    Writing Your Own Magics <custom_magics>
    exceptions
+   colorschemes
+   debuggers
+   prompt-toolkit
+   sphinxext
 
 .. apparently we haven't defined HAS_MPL correctly
 .. .. ifconfig:: HAS_MPL
@@ -150,8 +154,8 @@ form of rst docs and ipynb notebooks.
    :titlesonly:
 
    IPython Shell Initialization <profile/index>
-   Jupyter ZMQShell <jupyter>
-   Notebook Extensions <extensions>
+   jupyter
+   extensions
    Contributors Notes <dev>
 
 
