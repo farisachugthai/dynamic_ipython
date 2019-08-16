@@ -246,7 +246,7 @@ def main():
                        editing_mode=_ip.editing_mode,
                        bottom_toolbar=None,  # todo
                        key_bindings=kb,
-                       style=_ip.highlighting_style)
+                       style=_ip.style)
     return _ip
 
 if __name__ == "__main__":

@@ -337,6 +337,9 @@ def get_home():
 # HANDLE of the parent process, otherwise it is simply boolean.
 # c.IPKernelApp.parent_handle = 0
 
+# Only send stdout/stderr to output stream
+# c.IPKernelApp.quiet = True
+
 # -----------------------------------------------------------------------------
 # Kernel(SingletonConfigurable) configuration
 # -----------------------------------------------------------------------------
@@ -349,6 +352,15 @@ def get_home():
 # c.Kernel._execute_sleep = 0.0005
 
 # c.Kernel._poll_interval = 0.05
+
+# time (in seconds) to wait for messages to arrive when aborting queued requests
+# after an error.
+# Requests that arrive within this window after an error will be cancelled.
+
+# Increase in the event of unusually slow network causing significant delays,
+# which can manifest as e.g. "Run all" in a notebook aborting some, but not all,
+# messages after an error.
+# c.Kernel.stop_on_error_timeout = 0.1
 
 # -----------------------------------------------------------------------------
 # IPythonKernel(Kernel) configuration
@@ -380,6 +392,9 @@ c.IPythonKernel.use_experimental_completions = True
 # A list of ast.NodeTransformer subclass instances, which will be applied to
 # user input before code is run.
 # c.InteractiveShell.ast_transformers = []
+
+# Automatically run await statement in the top level repl.
+# c.InteractiveShell.autoawait = True
 
 # Make IPython automatically call any callable object even if you didn't type
 # explicit parentheses. For example, 'str 43' becomes 'str(43)' automatically.

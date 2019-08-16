@@ -13,6 +13,7 @@
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/profile_default/startup/01_rehashx.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
@@ -99,7 +100,7 @@
 <span class="kn">from</span> <span class="nn">profile_default.util.timer</span> <span class="k">import</span> <span class="n">timer</span>
 
 
-<div class="viewcode-block" id="blacklisted_aliases"><a class="viewcode-back" href="../../../profile/rehashx.html#profile_default.startup.01_rehashx.blacklisted_aliases">[docs]</a><span class="k">def</span> <span class="nf">blacklisted_aliases</span><span class="p">(</span><span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="blacklisted_aliases"><a class="viewcode-back" href="../../../startup/rehashx.html#profile_default.startup.01_rehashx.blacklisted_aliases">[docs]</a><span class="k">def</span> <span class="nf">blacklisted_aliases</span><span class="p">(</span><span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Remove aliases that would otherwise raise errors.</span>
 
 <span class="sd">    Function is checked to ensure that it only runs when using Windows.</span>
@@ -112,7 +113,7 @@
             <span class="k">pass</span></div>
 
 
-<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../profile/rehashx.html#profile_default.startup.01_rehashx.main">[docs]</a><span class="nd">@timer</span>
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../startup/rehashx.html#profile_default.startup.01_rehashx.main">[docs]</a><span class="nd">@timer</span>
 <span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Check if :mod:`IPython` was initialized and if so, ``%rehashx``.&quot;&quot;&quot;</span>
     <span class="n">shell</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s1">&#39;rehashx&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
@@ -123,9 +124,8 @@
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">REHASHX_LOGGER</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;01_rehashx&#39;</span><span class="p">)</span>
-    <span class="n">LOG_LEVEL</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">INFO</span>
-    <span class="n">REHASHX_LOGGER</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">LOG_LEVEL</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span>
+                        <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> : </span><span class="si">%(levelname)s</span><span class="s1"> : </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
 
     <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
 
@@ -157,9 +157,9 @@
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../profile/index.html">IPython Shell Initialization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../jupyter.html">Jupyter ZMQShell</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Notebook Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../startup/index.html">IPython Shell Initialization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../jupyter.html">Jupyter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Extensions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../dev.html">Contributors Notes</a></li>
 </ul>
 
@@ -193,7 +193,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright (C) 2018-2019 Faris Chugthai.
-      Last updated on Aug 10, 2019.
+      Last updated on Aug 16, 2019.
     </div>
   </body>
 </html>

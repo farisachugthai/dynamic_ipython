@@ -6,7 +6,8 @@
 module_log
 ==========
 
-.. currentmodule:: module_log
+.. module:: module_log
+    :synopsis: Provide uniform logging for the whole package.
 
 .. highlight:: ipython
 
@@ -128,14 +129,14 @@ def file_logger(
         filename, logger=None, shell=None, log_level=logging.INFO,
         msg_format=None
 ):
-    r"""Logging that emits a :class:`logging.LogRecord` to `filename`.
+    r"""Logging that emits a :class:`logging.LogRecord` to ``filename``.
 
     Parameters
     ----------
     filename : str
-        File to log :class:`logging.LogRecord`s to.
+        File to log a :class:`logging.LogRecord` to.
     logger : :class:`logging.Logger(), optional
-        Instance of a :class:`logging.Logger() instantiated in the calling
+        Instance of a :class:`logging.Logger()` instantiated in the calling
         module.
     shell : |ip|, optional
         Global instance of IPython. Can be none if not run in IPython though this

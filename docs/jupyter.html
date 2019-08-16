@@ -13,10 +13,11 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/jupyter.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Extensions" href="extensions.html" />
-    <link rel="prev" title="Customized Exceptions" href="exceptions.html" />
+    <link rel="prev" title="32_vi_modes module" href="startup/vi_modes.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <!--[if lte IE 6]>
@@ -38,7 +39,7 @@
           <a href="extensions.html" title="Extensions"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="exceptions.html" title="Customized Exceptions"
+          <a href="startup/vi_modes.html" title="32_vi_modes module"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li> 
       </ul>
@@ -49,8 +50,8 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="jupyter">
-<h1>Jupyter<a class="headerlink" href="#jupyter" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-jupyter">
+<span id="jupyter"></span><h1>Jupyter<a class="headerlink" href="#module-jupyter" title="Permalink to this headline">¶</a></h1>
 <p>Here are the default configuration files for the Jupyter application
 suite. These have been commented and marked up as appropriate.</p>
 <div class="section" id="jupyter-qtconsole">
@@ -120,12 +121,11 @@ QTConsole :/</p>
 <span class="n">the_sauce</span> <span class="o">=</span> <span class="nb">dir</span><span class="p">(</span><span class="n">qtconsole</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Worth skimming.</p>
-<p>The following is from the Jupyter QTConsole help.</p>
 </div>
 </div>
 <div class="section" id="display">
 <h2>Display<a class="headerlink" href="#display" title="Permalink to this headline">¶</a></h2>
+<p>The following is from the Jupyter QTConsole help.</p>
 <p>For example, if using the IPython kernel, there are functions available for
 object display:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span>
@@ -433,7 +433,7 @@ will be loaded in alphabetical order.:</p>
 </div>
 <p>Whether to open in a browser after starting. The specific browser used is
 platform dependent and determined by the python standard library <a class="reference external" href="https://docs.python.org/3/library/webbrowser.html#module-webbrowser" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">webbrowser</span></code></a>
-module, unless it is overridden using the <code class="xref std std-option docutils literal notranslate"><span class="pre">browser</span></code>
+module, unless it is overridden using the <code class="docutils literal notranslate"><span class="pre">browser</span></code>
 (NotebookApp.browser) configuration option.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">open_browser</span> <span class="o">=</span> <span class="bp">True</span>
 </pre></div>
@@ -449,7 +449,7 @@ module, unless it is overridden using the <code class="xref std std-option docut
 </div>
 <p>Forces users to use a password for the Notebook server. This is useful in a
 multi user environment, for instance when everybody in the LAN can access each
-other’s machine through ssh.</p>
+other’s machine through <strong class="command">ssh</strong>.</p>
 <p>In such a case, server the notebook server on localhost is not secure since
 any user can connect to the notebook server via <strong class="command">ssh</strong>.</p>
 <blockquote>
@@ -463,7 +463,7 @@ any user can connect to the notebook server via <strong class="command">ssh</str
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">port_retries</span> <span class="o">=</span> <span class="mi">50</span>
 </pre></div>
 </div>
-<p>DISABLED: use %pylab or %matplotlib in the notebook to enable matplotlib.:</p>
+<p>DISABLED: use <code class="xref py py-obj docutils literal notranslate"><span class="pre">%pylab</span></code> or <code class="xref py py-obj docutils literal notranslate"><span class="pre">%matplotlib</span></code> in the notebook to enable matplotlib.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">pylab</span> <span class="o">=</span> <span class="s1">&#39;disabled&#39;</span>
 </pre></div>
 </div>
@@ -532,7 +532,7 @@ SSL.:</p>
 </div>
 <p>Set the tornado compression options for <code class="docutils literal notranslate"><span class="pre">websocket</span></code> connections.</p>
 <p>This value will be returned from
-<a href="#id1"><span class="problematic" id="id2">:method:`WebSocketHandler.get_compression_options`</span></a>.</p>
+<code class="docutils literal notranslate"><span class="pre">WebSocketHandler.get_compression_options</span></code>.</p>
 <p>None (default) will disable compression.</p>
 <p>A dict (even an empty one) will enable compression.</p>
 <p>See the tornado docs for <code class="docutils literal notranslate"><span class="pre">WebSocketHandler.get_compression_options</span></code>
@@ -581,11 +581,11 @@ to the kernel in which pylab inline back-end is activated.</p>
 <p>There are four handlers defined.</p>
 <ol class="arabic simple">
 <li><p>‘PIL’: Use Python Imaging Library to pop-up image;</p></li>
-<li><p>stream’: Use an external program to show the image.  Image will be fed into</p></li>
+<li><p>stream’: Use an external program to show the image.  Image will be fed into
+the STDIN  of the program.</p></li>
 </ol>
 <blockquote>
-<div><p>the STDIN  of the program.</p>
-<ul class="simple">
+<div><ul class="simple">
 <li><p>You will need to configure <code class="docutils literal notranslate"><span class="pre">stream_image_handler</span></code></p></li>
 </ul>
 </div></blockquote>
@@ -618,7 +618,7 @@ a temporary file and the program will be called with that file.</p>
         <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="exceptions.html" title="previous chapter">Customized Exceptions</a></li>
+      <li>Previous: <a href="startup/vi_modes.html" title="previous chapter">32_vi_modes module</a></li>
       <li>Next: <a href="extensions.html" title="next chapter">Extensions</a></li>
   </ul></li>
 </ul>
@@ -636,6 +636,7 @@ a temporary file and the program will be called with that file.</p>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="startup/index.html">IPython Shell Initialization</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Jupyter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="extensions.html">Extensions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dev.html">Contributors Notes</a></li>
@@ -703,14 +704,14 @@ a temporary file and the program will be called with that file.</p>
           <a href="extensions.html" title="Extensions"
              >next</a> |</li>
         <li class="right" >
-          <a href="exceptions.html" title="Customized Exceptions"
+          <a href="startup/vi_modes.html" title="32_vi_modes module"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright (C) 2018-2019 Faris Chugthai.
-      Last updated on Aug 15, 2019.
+      Last updated on Aug 16, 2019.
     </div>
   </body>
 </html>

@@ -339,9 +339,22 @@ c.InteractiveShell.history_load_length = 10000
 # Automatically call the pdb debugger after every exception.
 # c.InteractiveShell.pdb = False
 
-# Since it's all been deprecated i deleted the section on IPython's str
-# methods for prompt. Don't change the prompt regardless because you'll destroy
-# the chance to use sphinx and stuff.
+# Deprecated since IPython 4.0 and ignored since 5.0, set
+# TerminalInteractiveShell.prompts object directly.
+# c.InteractiveShell.prompt_in1 = 'In [\\#]: '
+
+# Deprecated since IPython 4.0 and ignored since 5.0, set
+# TerminalInteractiveShell.prompts object directly.
+# c.InteractiveShell.prompt_in2 = '   .\\D.: '
+
+# Deprecated since IPython 4.0 and ignored since 5.0, set
+# TerminalInteractiveShell.prompts object directly.
+# c.InteractiveShell.prompt_out = 'Out[\\#]: '
+
+# Deprecated since IPython 4.0 and ignored since 5.0, set
+# TerminalInteractiveShell.prompts object directly.
+# c.InteractiveShell.prompts_pad_left = True
+
 c.InteractiveShell.quiet = False
 
 # c.InteractiveShell.separate_in = '\n'

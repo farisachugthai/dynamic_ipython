@@ -14,14 +14,11 @@ IPython Magics
 
 ------------------------------------------
 
-.. _defined_magics:
-
-Which magics are defined here?
-==============================
+Built-in Magics
+===============
 
 Line:
 ------
-
 - %hist[ory]
 - %pycat
 - %recall
@@ -33,7 +30,6 @@ Line:
 
 Cell:
 -----
-
 - %[write]file
 - %timeit
 - %macro
@@ -85,7 +81,6 @@ Jan 31, 2019:
 
 store
 ------
-
 ``%store 'widen_jupyter_cells'``
 
 As a heads up that's in your db. Figured I'd mention it as it was a
@@ -128,10 +123,10 @@ alias is for shell commands and macro for ipython commands?
 
 save
 -----
-
 Help docs on save.
 
 ``In [43]: save?``:
+
     Docstring:
     Save a set of lines or a macro to a given filename.
 
@@ -166,12 +161,14 @@ be abbreviated to ``%hist`` and used like so.::
 
    %hist ~1/
 
-.. admonition:: Remember that ``%hist ~1`` outputs nothing! Don't forget the :kbd:`/`!
+.. admonition:: Remember that ``%hist ~1`` outputs nothing!
+
+   When using the `%hist` magic, don't forget the :kbd:`/`!
 
 Use the following to to reload every command you ran last session into your
 current cell.
 
-``recall ~1/``
+`%recall ~1/`
 
 hist
 ------
@@ -198,9 +195,8 @@ Ranges of history can be indicated using the syntax:
 Multiple ranges can be specified by separating with spaces.
 
 
-viewing recently run commands
+Viewing Recently Run Commands
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 If you run ``_i`` or ``__i`` you see the last two commands inputs.
 
 If you run ``_`` or ``__`` you get to see the last 2 commands outputs.
@@ -217,9 +213,9 @@ The exec command means run the above input again.
 
 This is interrelated with the *%recall* command.
 
+
 %recall
 -------
-
 This is one of the IPython conveniences that makes you understand why they're called
 *magics*.
 
@@ -241,7 +237,6 @@ As a result, this magic works as it's own pipeline.
 
 output
 ~~~~~~~
-
 Oddly harder than just input.
 You can easily access relative previous input with `_i`,  `_ii` and `_iii_`
 
@@ -255,11 +250,11 @@ The only way I can find output by cell is `_oh`
 That returns a dict with your entire output history. so you can go `_oh.keys()`
 
 But the cell I wanted wasn't there and wasn't saved. Huh. Print statements
-might not get saved in the history. Makes sense
+might not get saved in the history. Makes sense.
 
-In IPython run
+In IPython run:
 
-``print(Out[1])``
+>>> print(Out[1])
 
 And you have access to output now. Easy.
 
@@ -337,7 +332,6 @@ $ cat idk
 
 %edit
 ------
-
 ``%edit`` can take cell #'s as input like hist does, and creates a file to
 work with like ``%%file``.
 
@@ -366,9 +360,9 @@ Probably happens because it doesn't take filenames as arguments.
 
 To explain that let's look at the help pages.
 
+
 edit?
 ~~~~~
-
 This is an example of creating a simple function inside the editor and
 then modifying it. First, start up the editor::
 
@@ -396,14 +390,15 @@ And if we call foo() again we get the modified version::
 **tldr;** input ipython objects as arguments. it also takes the same input for
 cells as history does. but wait how does that work?
 
+
 Fun fact about edit
 ~~~~~~~~~~~~~~~~~~~
 If you run ``edit -x`` in the jupyter console it doesn't do anything! fun fact.
 Because it launched a GUI app you don't have bi-directional communication
 
+
 Honorary Mention
 ----------------
-
 :func:`exec` is not a magic but I actually thought it was!
 
 .. code-block:: none
@@ -433,7 +428,6 @@ Executing Commands with Magics
 
 Help Docs for %run
 ------------------
-
 -t
    print timing information at the end of the run.  IPython will give
    you an estimated CPU time consumption for your script, which under
@@ -445,7 +439,7 @@ Help Docs for %run
    must be an integer indicating how many times you want the script to
    run.  The final timing report will include total and per run results.
 
-   For example (testing the script uniq_stable.py)::
+   For example (testing the script uniq_stable.py):
 
    In [1]: %run -t uniq_stable
 
@@ -457,9 +451,9 @@ Help Docs for %run
 
    IPython CPU timings (estimated):
    Total runs performed: 5
-     Times :      Total       Per run
-     User  :   0.910862 s,  0.1821724 s.
-     System:        0.0 s,        0.0 s.
+   Times :      Total       Per run
+   User  :   0.910862 s,  0.1821724 s.
+   System:        0.0 s,        0.0 s.
 
 -d
    run your program under the control of :mod:`pdb`, the Python debugger.
@@ -492,7 +486,6 @@ Help Docs for %run
 
 Momentary Detour
 ~~~~~~~~~~~~~~~~
-
 So this magic should create a similar output to ``%debug`` but for some reason
 whenever I invoke debug, it doesn't show any relevant code when using :kbd:`l`,
 :kbd:`ll`, :kbd:`list` or anything.
@@ -500,9 +493,9 @@ whenever I invoke debug, it doesn't show any relevant code when using :kbd:`l`,
 Unsure what I'm doing wrong, but running ``%run -d -b [line_number]`` works
 perfectly enough that honestly I might not care for the time being.
 
+
 Back to ``%run``!
 ~~~~~~~~~~~~~~~~~
-
 -p
    run program under the control of the Python profiler module (which
    prints a detailed report of execution times, function calls, etc).
@@ -538,16 +531,15 @@ Back to ``%run``!
 
 %pycat [filename]
 ---------------------
-
 Works like cat but assumes a python source-code file.
 Runs it through a color syntax highlighting pager.
 The source code for the syntax highlighting can be found in the combination
 of files in :mod:`IPython.utils.PyColorize`, :mod:`IPython.utils.coloransi`,
 :mod:`IPython.core.colorable` and others.
 
+
 Bookmark
 --------
-
 In [13]: bookmark?
 
 .. code-block:: none

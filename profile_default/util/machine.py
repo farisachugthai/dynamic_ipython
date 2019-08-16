@@ -112,7 +112,8 @@ class Platform:
         --------
         env : dict
             The user's environment variables.
-        `"""
+
+        """
         return self.env
 
     def update_env(self, env=None, **kwargs):

@@ -261,7 +261,8 @@ class DocBuilder:
             os.path.join(BUILD_PATH, 'doctrees'), DOC_PATH,
             os.path.join(BUILD_PATH, self.kind)
         ]
-
+        MAKE_LOGGER.debug('Cmd is ', cmd)
+        MAKE_LOGGER.debug('retval Cmd is ', subprocess.list2cmdline(cmd))
         return subprocess.list2cmdline(cmd)
 
     def run(self):

@@ -13,6 +13,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/magics.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Defining custom magics" href="custom_magics.html" />
@@ -54,7 +55,7 @@
 <span class="target" id="module-ipython_magics"></span><div class="contents local topic" id="table-of-contents">
 <p class="topic-title first">Table of Contents</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#which-magics-are-defined-here" id="id2">Which magics are defined here?</a></p>
+<li><p><a class="reference internal" href="#built-in-magics" id="id2">Built-in Magics</a></p>
 <ul>
 <li><p><a class="reference internal" href="#line" id="id3">Line:</a></p></li>
 <li><p><a class="reference internal" href="#cell" id="id4">Cell:</a></p></li>
@@ -85,8 +86,8 @@
 </ul>
 </div>
 <hr class="docutils" />
-<div class="section" id="which-magics-are-defined-here">
-<span id="defined-magics"></span><h2><a class="toc-backref" href="#id2">Which magics are defined here?</a><a class="headerlink" href="#which-magics-are-defined-here" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="built-in-magics">
+<h2><a class="toc-backref" href="#id2">Built-in Magics</a><a class="headerlink" href="#built-in-magics" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="line">
 <h3><a class="toc-backref" href="#id3">Line:</a><a class="headerlink" href="#line" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
@@ -176,8 +177,9 @@ alias is for shell commands and macro for ipython commands?</p>
 <div class="section" id="save">
 <h3><a class="toc-backref" href="#id7">save</a><a class="headerlink" href="#save" title="Permalink to this headline">¶</a></h3>
 <p>Help docs on save.</p>
-<dl>
-<dt><code class="docutils literal notranslate"><span class="pre">In</span> <span class="pre">[43]:</span> <span class="pre">save?</span></code>:</dt><dd><p>Docstring:
+<p><code class="docutils literal notranslate"><span class="pre">In</span> <span class="pre">[43]:</span> <span class="pre">save?</span></code>:</p>
+<blockquote>
+<div><p>Docstring:
 Save a set of lines or a macro to a given filename.</p>
 <p>Usage:
 %save [options] filename n1-n2 n3-n4 … n5 .. n6 …</p>
@@ -194,8 +196,7 @@ then saves the lines to the filename you specify.</p>
 <p>It adds a ‘.py’ extension to the file if you don’t do so yourself, and
 it asks for confirmation before overwriting existing files.</p>
 <p>If <code class="xref std std-option docutils literal notranslate"><span class="pre">-r</span></code> option is used, the default extension is <code class="xref py py-obj docutils literal notranslate"><span class="pre">ipy</span></code>.</p>
-</dd>
-</dl>
+</div></blockquote>
 </div>
 </div>
 <div class="section" id="revisiting-previously-run-commands">
@@ -205,9 +206,13 @@ be abbreviated to <code class="docutils literal notranslate"><span class="pre">%
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">hist</span> ~1/
 </pre></div>
 </div>
+<div class="admonition-remember-that-hist-1-outputs-nothing admonition">
+<p class="admonition-title">Remember that <code class="docutils literal notranslate"><span class="pre">%hist</span> <span class="pre">~1</span></code> outputs nothing!</p>
+<p>When using the <code class="xref py py-obj docutils literal notranslate"><span class="pre">%hist</span></code> magic, don’t forget the <kbd class="kbd docutils literal notranslate">/</kbd>!</p>
+</div>
 <p>Use the following to to reload every command you ran last session into your
 current cell.</p>
-<p><code class="docutils literal notranslate"><span class="pre">recall</span> <span class="pre">~1/</span></code></p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">%recall</span> <span class="pre">~1/</span></code></p>
 <div class="section" id="hist">
 <h3><a class="toc-backref" href="#id9">hist</a><a class="headerlink" href="#hist" title="Permalink to this headline">¶</a></h3>
 <p>The syntax for accessing history is admittedly wonky.</p>
@@ -231,7 +236,7 @@ sessions ago.</p>
 <p>Multiple ranges can be specified by separating with spaces.</p>
 </div>
 <div class="section" id="viewing-recently-run-commands">
-<h4>viewing recently run commands<a class="headerlink" href="#viewing-recently-run-commands" title="Permalink to this headline">¶</a></h4>
+<h4>Viewing Recently Run Commands<a class="headerlink" href="#viewing-recently-run-commands" title="Permalink to this headline">¶</a></h4>
 <p>If you run <code class="docutils literal notranslate"><span class="pre">_i</span></code> or <code class="docutils literal notranslate"><span class="pre">__i</span></code> you see the last two commands inputs.</p>
 <p>If you run <code class="docutils literal notranslate"><span class="pre">_</span></code> or <code class="docutils literal notranslate"><span class="pre">__</span></code> you get to see the last 2 commands outputs.</p>
 <p>This works for only the last 3 commands though!</p>
@@ -267,9 +272,11 @@ previous output.</p>
 <p>The only way I can find output by cell is <code class="xref py py-obj docutils literal notranslate"><span class="pre">_oh</span></code></p>
 <p>That returns a dict with your entire output history. so you can go <code class="xref py py-obj docutils literal notranslate"><span class="pre">_oh.keys()</span></code></p>
 <p>But the cell I wanted wasn’t there and wasn’t saved. Huh. Print statements
-might not get saved in the history. Makes sense</p>
-<p>In IPython run</p>
-<p><code class="docutils literal notranslate"><span class="pre">print(Out[1])</span></code></p>
+might not get saved in the history. Makes sense.</p>
+<p>In IPython run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">Out</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
 <p>And you have access to output now. Easy.</p>
 <p>07/08/18</p>
 <p>I guess I needed to step away for a little.</p>
@@ -425,12 +432,10 @@ System:        0.0 s.</p>
 </dl>
 <p>In [2]: run -t -N5 uniq_stable</p>
 <p>IPython CPU timings (estimated):
-Total runs performed: 5</p>
-<blockquote>
-<div><p>Times :      Total       Per run
+Total runs performed: 5
+Times :      Total       Per run
 User  :   0.910862 s,  0.1821724 s.
 System:        0.0 s,        0.0 s.</p>
-</div></blockquote>
 </dd>
 <dt><kbd><span class="option">-d</span></kbd></dt>
 <dd><p>run your program under the control of <a class="reference external" href="https://docs.python.org/3/library/pdb.html#module-pdb" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pdb</span></code></a>, the Python debugger.
@@ -558,7 +563,7 @@ associated with each profile.
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="ipython_keybindings.html">Keybindings</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Built-in Magics</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#which-magics-are-defined-here">Which magics are defined here?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#built-in-magics">Built-in Magics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#timeit">%timeit</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#revisiting-previously-run-commands">Revisiting Previously Run Commands</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#executing-commands-with-magics">Executing Commands with Magics</a></li>
@@ -569,6 +574,7 @@ associated with each profile.
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="startup/index.html">IPython Shell Initialization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="jupyter.html">Jupyter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="extensions.html">Extensions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dev.html">Contributors Notes</a></li>
@@ -582,7 +588,7 @@ associated with each profile.
 <div id="sidebartoc">
   <ul>
 <li><a class="reference internal" href="#">IPython Magics</a><ul>
-<li><a class="reference internal" href="#which-magics-are-defined-here">Which magics are defined here?</a><ul>
+<li><a class="reference internal" href="#built-in-magics">Built-in Magics</a><ul>
 <li><a class="reference internal" href="#line">Line:</a></li>
 <li><a class="reference internal" href="#cell">Cell:</a></li>
 </ul>
@@ -595,7 +601,7 @@ associated with each profile.
 <li><a class="reference internal" href="#revisiting-previously-run-commands">Revisiting Previously Run Commands</a><ul>
 <li><a class="reference internal" href="#hist">hist</a><ul>
 <li><a class="reference internal" href="#history-call-signature">history call signature</a></li>
-<li><a class="reference internal" href="#viewing-recently-run-commands">viewing recently run commands</a></li>
+<li><a class="reference internal" href="#viewing-recently-run-commands">Viewing Recently Run Commands</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#recall">%recall</a><ul>
@@ -668,7 +674,7 @@ associated with each profile.
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright (C) 2018-2019 Faris Chugthai.
-      Last updated on Aug 15, 2019.
+      Last updated on Aug 16, 2019.
     </div>
   </body>
 </html>

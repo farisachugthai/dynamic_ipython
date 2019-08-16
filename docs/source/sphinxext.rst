@@ -334,9 +334,7 @@ Then call it from a subsequent section.
 3)
 ====
 
-====================================================================
 Why does the sentence below appear no less than 3 times in this doc?
-====================================================================
 
 For more information on the ``@doctest`` decorator, please refer to the end of
 this page in the :ref:`Pseudo-Decorators` section.

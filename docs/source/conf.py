@@ -199,10 +199,12 @@ html_show_sphinx = False
 # using the given strftime format.
 html_last_updated_fmt = '%b %d, %Y'
 
+html_baseurl = 'https://farisachugthai.github.io/dynamic-ipython'
+
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'site-packages-doc'
+# htmlhelp_basename = 'site-packages-doc'
 
 # -- Options for LaTeX output ------------------------------------------------
 
@@ -345,6 +347,7 @@ autosummary_imported_members = False
 
 numpydoc_show_class_members = False  # Otherwise Sphinx emits thousands of warnings
 numpydoc_class_members_toctree = False
+warning_is_error = False
 
 # -- linkcode ----------------------------------------------------------------
 
