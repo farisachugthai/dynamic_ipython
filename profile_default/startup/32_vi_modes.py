@@ -256,4 +256,4 @@ if __name__ == "__main__":
             logger="RSI",
             log_level=30
         )
-    _ip = main()
+    # shell = main()

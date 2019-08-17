@@ -1,5 +1,6 @@
 {{ fullname | escape | underline}}
 
-.. currentmodule:: {{ module }}
+.. module:: {{ module }}
+   :synopsis: todo
 
 .. auto{{ objtype }}:: {{ objname }}

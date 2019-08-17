@@ -89,6 +89,12 @@ So whats page.page?
 
 Found some platform specific code. I think we're in the right direction.
 
+Aug 17, 2019:
+
+Think I got it.
+
+>>> from IPython.core.page import get_pager_cmd
+
 """
 import sys
 
