@@ -8,6 +8,16 @@ repository.
 _`Kenneth Reitz setup.py template
 <https://raw.githubusercontent.com/kennethreitz/setup.py/master/setup.py>`_
 
+Currently this setuptools file invokes the IPython interpreter when running
+:command:`python setup.py test`. In turn, the interpreter uses `profile_default
+<profile_default>`_ as the shell's profile.
+
+As a result, this leaves behind artifacts from the tests, such as a
+history.sqlite database, log files, and a connection to the kernel via
+security and PID.
+
+How do we prevent this?
+
 See Also
 --------
 numpy.distutils.core

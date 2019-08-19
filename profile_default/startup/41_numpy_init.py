@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Set some print options for :mod:`numpy`.
-
+"""
 ==========
 Numpy Init
 ==========
@@ -9,10 +8,10 @@ Numpy Init
 .. module:: 41_numpy_init
     :synopsis: Configure and modify numpy's print options.
 
-This could be a starting point for practicing module configuration with
-traits.
+This could be a starting point for practicing module
+configuration with traits.
 
-Help on function :func:`numpy.set_printoptions()` in numpy::
+Help on function :func:`numpy.set_printoptions()` in numpy:
 
     numpy.set_printoptions = set_printoptions(
         precision=None, threshold=None, edgeitems=None, linewidth=None,
@@ -86,19 +85,19 @@ floatmode : str, optional
     floating-point types. Can take the following values:
 
     * 'fixed': Always print exactly `precision` fractional digits,
-            even if this would print more or fewer digits than
-            necessary to specify the value uniquely.
+        even if this would print more or fewer digits than
+        necessary to specify the value uniquely.
     * 'unique': Print the minimum number of fractional digits necessary
-            to represent each value uniquely. Different elements may
-            have a different number of digits. The value of the
-            `precision` option is ignored.
+        to represent each value uniquely. Different elements may
+        have a different number of digits. The value of the
+        `precision` option is ignored.
     * 'maxprec': Print at most `precision` fractional digits, but if
-            an element can be uniquely represented with fewer digits
-            only print it with that many.
+        an element can be uniquely represented with fewer digits
+        only print it with that many.
     * 'maxprec_equal': Print at most `precision` fractional digits,
-            but if every element in the array can be uniquely
-            represented with an equal number of fewer digits, use that
-            many digits for all elements.
+        but if every element in the array can be uniquely
+        represented with an equal number of fewer digits, use that
+        many digits for all elements.
 legacy : string or `False`, optional
     If set to the string `'1.13'` enables 1.13 legacy printing mode. This
     approximates numpy 1.13 print output by including a space in the sign
@@ -120,6 +119,7 @@ Examples
 --------
 Floating point precision can be set:
 
+>>> import numpy as np
 >>> np.set_printoptions(precision=4)
 >>> print(np.array([1.123456789]))
 [1.1235]
@@ -129,9 +129,6 @@ Long arrays can be summarised:
 >>> np.set_printoptions(threshold=5)
 >>> print(np.arange(10))
 [0 1 2 ... 7 8 9]
-
-This doctest fails with the exact numbers it's supposed to have.
-How do you fix a whitespace issue?
 
 Small results can be suppressed:
 

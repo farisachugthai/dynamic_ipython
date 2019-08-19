@@ -65,13 +65,13 @@
 <ul>
 <li><p><a class="reference internal" href="#line" id="id3">Line:</a></p></li>
 <li><p><a class="reference internal" href="#cell" id="id4">Cell:</a></p></li>
-<li><p><a class="reference internal" href="#timeit" id="id5">%timeit</a></p></li>
-<li><p><a class="reference internal" href="#store" id="id6"><code class="xref py py-obj docutils literal notranslate"><span class="pre">%store</span></code></a></p></li>
-<li><p><a class="reference internal" href="#save" id="id7"><code class="xref py py-obj docutils literal notranslate"><span class="pre">%save</span></code></a></p></li>
+<li><p><a class="reference internal" href="#store" id="id5"><code class="xref py py-obj docutils literal notranslate"><span class="pre">%store</span></code></a></p></li>
+<li><p><a class="reference internal" href="#save" id="id6"><code class="xref py py-obj docutils literal notranslate"><span class="pre">%save</span></code></a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#revisiting-previously-run-commands" id="id8">Revisiting Previously Run Commands</a></p>
+<li><p><a class="reference internal" href="#revisiting-previously-run-commands" id="id7">Revisiting Previously Run Commands</a></p>
 <ul>
+<li><p><a class="reference internal" href="#history" id="id8"><code class="xref py py-obj docutils literal notranslate"><span class="pre">%history</span></code></a></p></li>
 <li><p><a class="reference internal" href="#recall" id="id9">%recall</a></p></li>
 <li><p><a class="reference internal" href="#writefile" id="id10">%%writefile</a></p></li>
 <li><p><a class="reference internal" href="#edit" id="id11">%edit</a></p></li>
@@ -109,40 +109,56 @@
 <li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">%timeit</span></code></p></li>
 <li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">%macro</span></code></p></li>
 </ul>
-</div>
-<div class="section" id="timeit">
-<h3><a class="toc-backref" href="#id5">%timeit</a><a class="headerlink" href="#timeit" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [20]: </span><span class="o">%%time</span>it -qqq -r 5
-<span class="go">...:</span>
-<span class="go">...: env_var = sorted(os.environ.keys())</span>
-<span class="go">...: for i in env_var:</span>
-<span class="go">...:     match = re.match(&#39;CONDA*&#39;, i)</span>
-<span class="go">...:     if match:</span>
-<span class="go">...:         i</span>
-<span class="gh">Out[20]: </span><span class="go">&lt;TimeitResult : 185 µs ± 890 ns per loop (mean ± std. dev. of 5 runs, 10000 loops each)&gt;</span>
-
-<span class="gp">In [21]: </span><span class="o">%%time</span>it -qqq -r 5 -o
-<span class="go">...: for i in os.environ.keys():</span>
-<span class="go">...:     match = re.match(&#39;CONDA*&#39;, i)</span>
-<span class="go">...:     if match:</span>
-<span class="go">...:         i</span>
-<span class="gh">Out[21]: </span><span class="go">&lt;TimeitResult : 207 µs ± 2.31 µs per loop (mean ± std. dev. of 5 runs, 1000 loops each)&gt;</span>
+<p>%timeit
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; Updated upstream
+——-
+.. code-block:: ipython
+||||||| merged common ancestors
+=======
+<code class="xref std std-option docutils literal notranslate"><span class="pre">qqq</span></code> means be very quiet.
+<code class="xref std std-option docutils literal notranslate"><span class="pre">r</span></code> <kbd class="kbd docutils literal notranslate">5</kbd> means repeat the whole cell block 5 times.</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
+<dl class="magic">
+<dt id="magic-timeit">
+<code class="sig-name descname">%timeit</code><a class="headerlink" href="#magic-timeit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Let’s observe the example below.
+The option <code class="docutils literal notranslate"><span class="pre">-qqq</span></code> means be very quiet.
+The option <code class="docutils literal notranslate"><span class="pre">-r</span></code> <kbd class="kbd docutils literal notranslate">5</kbd> means repeat the whole cell block 5 times.::
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; Stashed changes</p>
+<blockquote>
+<div><p>In [20]: %%timeit -qqq -r 5
+…:
+…: env_var = sorted(os.environ.keys())
+…: for i in env_var:
+…:     match = re.match(‘CONDA*’, i)
+…:     if match:
+…:         i
+Out[20]: &lt;TimeitResult : 185 µs ± 890 ns per loop (mean ± std. dev. of 5 runs, 10000 loops each)&gt;</p>
+<p>In [21]: %%timeit -qqq -r 5 -o
+…: for i in os.environ.keys():
+…:     match = re.match(‘CONDA*’, i)
+…:     if match:
+…:         i
+Out[21]: &lt;TimeitResult : 207 µs ± 2.31 µs per loop (mean ± std. dev. of 5 runs, 1000 loops each)&gt;</p>
+</div></blockquote>
 <p>2018-09-07</p>
-<p>Speaking of %%timeit I just gave this a whirl to try and see.</p>
-<p><code class="docutils literal notranslate"><span class="pre">%%timeit</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">!nvim</span> <span class="pre">random-python-file.py</span> <span class="pre">+qall</span></code></p>
+<p>Speaking of <code class="xref py py-obj docutils literal notranslate"><span class="pre">%%timeit</span></code> I just gave this a whirl to try and see.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="o">%%time</span>it
+<span class="o">&gt;&gt;&gt;</span> <span class="err">!</span><span class="n">nvim</span> <span class="n">random</span><span class="o">-</span><span class="n">python</span><span class="o">-</span><span class="nb">file</span><span class="o">.</span><span class="n">py</span> <span class="o">+</span><span class="n">qall</span>
+</pre></div>
+</div>
 <p>Possibly a good way to profile nvim startup time.
 You could also add in the option <code class="xref py py-obj docutils literal notranslate"><span class="pre">--startuptime</span> <span class="pre">anything.txt</span></code>.</p>
 <p>Jan 31, 2019:</p>
-<blockquote>
-<div><p>Now we can choose between <code class="docutils literal notranslate"><span class="pre">%nvim</span> <span class="pre">file.filetype</span></code> and
-<code class="docutils literal notranslate"><span class="pre">%edit</span> <span class="pre">file.filetype</span></code> as well!</p>
-</div></blockquote>
+<p>Now we can choose between <code class="xref py py-obj docutils literal notranslate"><span class="pre">%nvim</span> <span class="pre">file.filetype</span></code> or <code class="xref py py-obj docutils literal notranslate"><span class="pre">%edit</span> <span class="pre">file.filetype</span></code>
+as well!</p>
 </div>
 <div class="section" id="store">
-<h3><a class="toc-backref" href="#id6"><code class="xref py py-obj docutils literal notranslate"><span class="pre">%store</span></code></a><a class="headerlink" href="#store" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id5"><code class="xref py py-obj docutils literal notranslate"><span class="pre">%store</span></code></a><a class="headerlink" href="#store" title="Permalink to this headline">¶</a></h3>
 <dl class="magic">
 <dt id="magic-store">
 <code class="sig-name descname">%store</code><a class="headerlink" href="#magic-store" title="Permalink to this definition">¶</a></dt>
@@ -165,7 +181,7 @@ python types can be safely <code class="docutils literal notranslate"><span clas
 </div></blockquote>
 </div>
 <div class="section" id="save">
-<h3><a class="toc-backref" href="#id7"><code class="xref py py-obj docutils literal notranslate"><span class="pre">%save</span></code></a><a class="headerlink" href="#save" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id6"><code class="xref py py-obj docutils literal notranslate"><span class="pre">%save</span></code></a><a class="headerlink" href="#save" title="Permalink to this headline">¶</a></h3>
 <p>Help docs on save.:</p>
 <blockquote>
 <div><p>Docstring:
@@ -189,9 +205,11 @@ it asks for confirmation before overwriting existing files.</p>
 </div>
 </div>
 <div class="section" id="revisiting-previously-run-commands">
-<h2><a class="toc-backref" href="#id8">Revisiting Previously Run Commands</a><a class="headerlink" href="#revisiting-previously-run-commands" title="Permalink to this headline">¶</a></h2>
-<p>Access previously run commands with the <code class="docutils literal notranslate"><span class="pre">%history</span></code> magic. Note that it can
-be abbreviated to <code class="docutils literal notranslate"><span class="pre">%hist</span></code> and used like so.:</p>
+<h2><a class="toc-backref" href="#id7">Revisiting Previously Run Commands</a><a class="headerlink" href="#revisiting-previously-run-commands" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="history">
+<h3><a class="toc-backref" href="#id8"><code class="xref py py-obj docutils literal notranslate"><span class="pre">%history</span></code></a><a class="headerlink" href="#history" title="Permalink to this headline">¶</a></h3>
+<p>Access previously run commands with the <code class="xref py py-obj docutils literal notranslate"><span class="pre">%history</span></code> magic. Note that it can
+be abbreviated to <code class="xref py py-obj docutils literal notranslate"><span class="pre">%hist</span></code> and used like so.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">hist</span> ~1/
 </pre></div>
 </div>
@@ -199,9 +217,8 @@ be abbreviated to <code class="docutils literal notranslate"><span class="pre">%
 <p class="admonition-title">Remember that <code class="docutils literal notranslate"><span class="pre">%hist</span> <span class="pre">~1</span></code> outputs nothing!</p>
 <p>When using the <code class="xref py py-obj docutils literal notranslate"><span class="pre">%hist</span></code> magic, don’t forget the <kbd class="kbd docutils literal notranslate">/</kbd>!</p>
 </div>
-<p>Use the following to to reload every command you ran last session into your
-current cell.</p>
-<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">%recall</span> <span class="pre">~1/</span></code></p>
+<div class="section" id="history-call-signature">
+<h4><code class="xref py py-obj docutils literal notranslate"><span class="pre">%history</span></code> call signature<a class="headerlink" href="#history-call-signature" title="Permalink to this headline">¶</a></h4>
 <p>By default, all input history from the current session is displayed.
 Ranges of history can be indicated using the syntax:</p>
 <dl class="simple">
@@ -218,28 +235,27 @@ sessions ago.</p>
 </dd>
 </dl>
 <p>Multiple ranges can be specified by separating with spaces.</p>
-<p>If you run <code class="docutils literal notranslate"><span class="pre">_i</span></code> or <code class="docutils literal notranslate"><span class="pre">__i</span></code> you see the last two commands inputs.
-If you run <code class="docutils literal notranslate"><span class="pre">_</span></code> or <code class="docutils literal notranslate"><span class="pre">__</span></code> you get to see the last 2 commands outputs.
-This works for only the last 3 commands though!
-You can also give cell numbers so <code class="docutils literal notranslate"><span class="pre">_i10</span></code> gives the input for cell 10 as a string.</p>
-<p><code class="docutils literal notranslate"><span class="pre">%exec</span> <span class="pre">_i</span></code></p>
-<p>The exec command means run the above input again.
-This is interrelated with the <em>%recall</em> command.</p>
+</div>
+</div>
 <div class="section" id="recall">
 <h3><a class="toc-backref" href="#id9">%recall</a><a class="headerlink" href="#recall" title="Permalink to this headline">¶</a></h3>
 <p>This is one of the IPython conveniences that makes you understand why
 they’re called <em>magics</em>.</p>
-<p>All too often, one will run into the problem of manipulating some data in the REPL,
-and need a way of interacting with it in a manner similar to a pipeline.</p>
-<p>Storing the data may be difficult, or if it simply prints out to console,
-may be impossible.</p>
+<p>All too often, one will run into the problem of manipulating some
+data in the REPL, and need a way of interacting with it in a manner
+similar to a pipeline.</p>
+<p>Storing the data may be difficult, or if it simply prints out to
+console, may be impossible.</p>
 <p><em>%recall</em> takes the <strong>output</strong>, not the input, of the last run command and
-autoinserts it at the next input prompt.</p>
+auto-inserts it at the next input prompt.</p>
 <p>As a result, this magic works as it’s own pipeline.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>recall is also aliased to <code class="docutils literal notranslate"><span class="pre">rep</span></code> for repeat.</p>
 </div>
+<p>Tldr; Use the following to to reload every command you ran last session into your
+current cell.</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">%recall</span> <span class="pre">~1/</span></code></p>
 <div class="section" id="output">
 <h4>output<a class="headerlink" href="#output" title="Permalink to this headline">¶</a></h4>
 <p>Oddly harder than just input.
@@ -368,8 +384,10 @@ cells as history does. but wait how does that work?</p>
 </div>
 <div class="section" id="fun-fact-about-edit">
 <h4>Fun fact about edit<a class="headerlink" href="#fun-fact-about-edit" title="Permalink to this headline">¶</a></h4>
-<p>If you run <code class="docutils literal notranslate"><span class="pre">edit</span> <span class="pre">-x</span></code> in the jupyter console it doesn’t do anything! fun fact.
-Because it launched a GUI app you don’t have bi-directional communication</p>
+<p>If you run <code class="xref py py-obj docutils literal notranslate"><span class="pre">%edit</span> <span class="pre">-x</span></code> in the jupyter console it doesn’t do
+anything! Fun fact.</p>
+<p>Because it launched a GUI app you don’t have bi-directional
+communication.</p>
 </div>
 </div>
 <div class="section" id="honorary-mention">
@@ -477,9 +495,9 @@ the <kbd class="kbd docutils literal notranslate">-m</kbd> option for the python
 last if you want to combine with other %run options. Unlike the
 python interpreter only source modules are allowed no .pyc or .pyo files.
 For example:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="sb">``</span><span class="o">%</span><span class="k">run</span> -m example``
-</pre></div>
-</div>
+<blockquote>
+<div><p>%run -m example</p>
+</div></blockquote>
 <p>will run the example module.</p>
 </dd>
 <dt><kbd><span class="option">-G</span></kbd></dt>
@@ -571,12 +589,15 @@ associated with each profile.
 <li><a class="reference internal" href="#a-summary-of-ipython-s-built-in-magics">A Summary of IPython’s Built In Magics</a><ul>
 <li><a class="reference internal" href="#line">Line:</a></li>
 <li><a class="reference internal" href="#cell">Cell:</a></li>
-<li><a class="reference internal" href="#timeit">%timeit</a></li>
 <li><a class="reference internal" href="#store"><code class="xref py py-obj docutils literal notranslate"><span class="pre">%store</span></code></a></li>
 <li><a class="reference internal" href="#save"><code class="xref py py-obj docutils literal notranslate"><span class="pre">%save</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#revisiting-previously-run-commands">Revisiting Previously Run Commands</a><ul>
+<li><a class="reference internal" href="#history"><code class="xref py py-obj docutils literal notranslate"><span class="pre">%history</span></code></a><ul>
+<li><a class="reference internal" href="#history-call-signature"><code class="xref py py-obj docutils literal notranslate"><span class="pre">%history</span></code> call signature</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#recall">%recall</a><ul>
 <li><a class="reference internal" href="#output">output</a></li>
 <li><a class="reference internal" href="#writing-a-file">Writing a file</a></li>
@@ -647,7 +668,7 @@ associated with each profile.
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright (C) 2018-2019 Faris Chugthai.
-      Last updated on Aug 18, 2019.
+      Last updated on Aug 19, 2019.
     </div>
   </body>
 </html>

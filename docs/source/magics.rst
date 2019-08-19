@@ -36,8 +36,24 @@ Cell:
 - `%macro`
 
 %timeit
+<<<<<<< Updated upstream
 -------
 .. code-block:: ipython
+||||||| merged common ancestors
+=======
+:option:`qqq` means be very quiet.
+:option:`r` :kbd:`5` means repeat the whole cell block 5 times.
+
+.. code-block:: ipython
+=======
+-------
+.. magic:: timeit
+
+
+Let's observe the example below.
+The option ``-qqq`` means be very quiet.
+The option ``-r`` :kbd:`5` means repeat the whole cell block 5 times.::
+>>>>>>> Stashed changes
 
     In [20]: %%timeit -qqq -r 5
     ...:
@@ -55,21 +71,21 @@ Cell:
     ...:         i
     Out[21]: <TimeitResult : 207 µs ± 2.31 µs per loop (mean ± std. dev. of 5 runs, 1000 loops each)>
 
+
 2018-09-07
 
-Speaking of %%timeit I just gave this a whirl to try and see.
+Speaking of `%%timeit` I just gave this a whirl to try and see.::
 
-``%%timeit``
-
-``!nvim random-python-file.py +qall``
+>>> %%timeit
+>>> !nvim random-python-file.py +qall
 
 Possibly a good way to profile nvim startup time.
 You could also add in the option `--startuptime anything.txt`.
 
 Jan 31, 2019:
 
-    Now we can choose between ``%nvim file.filetype`` and
-    ``%edit file.filetype`` as well!
+Now we can choose between `%nvim file.filetype` or `%edit file.filetype` 
+as well!
 
 
 `%store`
@@ -132,8 +148,8 @@ Revisiting Previously Run Commands
 
 `%history`
 ----------
-Access previously run commands with the ``%history`` magic. Note that it can
-be abbreviated to ``%hist`` and used like so.::
+Access previously run commands with the `%history` magic. Note that it can
+be abbreviated to `%hist` and used like so.::
 
    %hist ~1/
 
@@ -166,14 +182,15 @@ Multiple ranges can be specified by separating with spaces.
 This is one of the IPython conveniences that makes you understand why
 they're called *magics*.
 
-All too often, one will run into the problem of manipulating some data in the REPL,
-and need a way of interacting with it in a manner similar to a pipeline.
+All too often, one will run into the problem of manipulating some 
+data in the REPL, and need a way of interacting with it in a manner 
+similar to a pipeline.
 
-Storing the data may be difficult, or if it simply prints out to console,
-may be impossible.
+Storing the data may be difficult, or if it simply prints out to 
+console, may be impossible.
 
 *%recall* takes the **output**, not the input, of the last run command and
-autoinserts it at the next input prompt.
+auto-inserts it at the next input prompt.
 
 As a result, this magic works as it's own pipeline.
 
@@ -339,8 +356,11 @@ cells as history does. but wait how does that work?
 
 Fun fact about edit
 ~~~~~~~~~~~~~~~~~~~
-If you run ``edit -x`` in the jupyter console it doesn't do anything! fun fact.
-Because it launched a GUI app you don't have bi-directional communication
+If you run `%edit -x` in the jupyter console it doesn't do 
+anything! Fun fact.
+
+Because it launched a GUI app you don't have bi-directional 
+communication.
 
 
 Honorary Mention
@@ -465,9 +485,9 @@ Back to ``%run``!
    the :kbd:`-m` option for the python interpreter. Use this option
    last if you want to combine with other %run options. Unlike the
    python interpreter only source modules are allowed no .pyc or .pyo files.
-   For example::
+   For example:
 
-         ``%run -m example``
+         %run -m example
 
    will run the example module.
 

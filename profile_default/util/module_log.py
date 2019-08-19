@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Set up easily instantied :class:logging.Logger()` instances.
-
+"""
 ==========
 module_log
 ==========
@@ -10,6 +9,8 @@ module_log
     :synopsis: Provide uniform logging for the whole package.
 
 .. highlight:: ipython
+
+Set up easily instantied :class:logging.Logger()` instances.
 
 Create a few formatters and logging instances that can be easily
 imported and utilized across the package.
@@ -89,12 +90,13 @@ def stream_logger(logger, log_level=logging.INFO, msg_format=None):
 
     Examples
     --------
+    >>> import logging
     >>> from profile_default.util.module_log import stream_logger
     >>> LOGGER = stream_logger(logging.getLogger(name=__name__))
 
     See Also
     --------
-    profile_default.startup.32_vi_modes : module
+    :ref:`profile_default.startup.32_vi_modes`
         In :ref:`profile_default.startup.32_vi_modes` we call this function.
 
     """
@@ -139,8 +141,8 @@ def file_logger(
         Instance of a :class:`logging.Logger()` instantiated in the calling
         module.
     shell : |ip|, optional
-        Global instance of IPython. Can be none if not run in IPython though this
-        hasn't been tested.
+        Global instance of IPython. Can be :keyword:`None` if not run in
+        :mod:`IPython` though this hasn't been tested.
     log_level : int, optional
         Level of log records.
     msg_format : str, optional
@@ -183,12 +185,14 @@ def file_logger(
     return logger
 
 
-def json_logger(JSONFormatter=None):
+def json_logger(logger=None, JSONFormatter=None):
     """Set up a logger that returns properly formatted JSON.
 
     Parameters
     ----------
-    JSONFormatter : :class:`logging.Formatter()`, optional
+    logger : str or :class:`logging.Logger()`, optional
+        Either a named Logger instance or the string representing the desired instance
+    JsonFormatter : :class:`logging.Formatter()`, optional
         :ref:`profile_default.util.module_log.JsonFormatter()` instance.
         Included in the listed parameters to be explicit; however, it's
         probably easier to not include the parameter as one is configured
@@ -201,11 +205,9 @@ def json_logger(JSONFormatter=None):
 
     Examples
     --------
-    >>> root_logger = json_logger(JSONFormatter=JSONFormatter())
-    >>> try:
-    >>>     raise Exception('This is an exception')
-    >>> except:
-    >>>    root_logger.exception('caught exception')
+    >>> import logging
+    >>> from profile_default.util.module_log import json_logger, JsonFormatter
+    >>> root_logger = json_logger(JsonFormatter=JsonFormatter())
     >>> root_logger.warn('this is a test message')
     >>> root_logger.debug('this request_id=%d name=%s', 1, 'John')
 
@@ -213,9 +215,16 @@ def json_logger(JSONFormatter=None):
     handler = logging.StreamHandler()
 
     fmt = JsonFormatter()
-    # add the formatter to the handler
 
-    root_logger = logging.getLogger()
+    if not logger:
+        root_logger = logging.getLogger()
+    elif isinstance(logger, str):
+        root_logger = logging.getLogger(name=logger)
+    elif isinstance(logger, logging.Logger):
+        root_logger = logger
+    else:
+        raise Exception
+
     root_logger.setLevel(logging.DEBUG)
     handler.setFormatter(fmt)
     root_logger.addHandler(handler)
