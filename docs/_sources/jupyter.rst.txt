@@ -2,6 +2,9 @@
 Jupyter
 =======
 
+.. module:: jupyter
+   :synopsis: Documentation for jupyter.
+
 .. highlight:: ipython
 
 Here are the default configuration files for the Jupyter application
@@ -10,12 +13,11 @@ suite. These have been commented and marked up as appropriate.
 
 Jupyter QTConsole
 =================
-
 :mod:`jupyter_conf.jupyter_qtconsole_config`
+
 
 connectionFileMixin(LoggingConfigurable) configuration
 ------------------------------------------------------
-
 :class:`jupyter.qtconsole.connectionFileMixin` --- Mixin for configurable
 classes that work with connection files
 
@@ -58,7 +60,6 @@ Set the stdin (ROUTER) port [default: random]::
 
 Keyboard Errors
 ---------------
-
 May 27, 2019:
 
 .. code-block:: none
@@ -79,7 +80,6 @@ In a rare turn of events, it **IS** however, working just fine on Windows.
 
 Initializing Jupyter QTConsole
 --------------------------------
-
 The initial entry point for :command:`jupyter-qtconsole` is in the following::
 
     from qtconsole.qtconsole.app import main
@@ -87,13 +87,10 @@ The initial entry point for :command:`jupyter-qtconsole` is in the following::
     from qtconsole import qtconsole
     the_sauce = dir(qtconsole)
 
-Worth skimming.
-
-
-The following is from the Jupyter QTConsole help.
 
 Display
 =======
+The following is from the Jupyter QTConsole help.
 
 For example, if using the IPython kernel, there are functions available for
 object display::
@@ -118,7 +115,6 @@ For further details, see :ref:`IPython.core.formatters`.
 
 Jupyter Notebook
 ================
-
 :mod:`jupyter_conf.jupyter_notebook_config`
 
 .. ipython:: python
@@ -129,7 +125,6 @@ Jupyter Notebook
 
 JupyterApp(Application) configuration
 -------------------------------------
-
 Answer yes to any prompts.::
 
    c.JupyterApp.answer_yes = False
@@ -149,7 +144,6 @@ Generate default config file.::
 
 NotebookApp(JupyterApp) configuration
 -------------------------------------
-
 Set the Access-Control-Allow-Credentials: true header::
 
    c.NotebookApp.allow_credentials = False
@@ -408,7 +402,7 @@ The directory to use for notebooks and kernels.::
 
 Whether to open in a browser after starting. The specific browser used is
 platform dependent and determined by the python standard library `webbrowser`
-module, unless it is overridden using the :option:`browser`
+module, unless it is overridden using the ``browser``
 (NotebookApp.browser) configuration option.::
 
     c.NotebookApp.open_browser = True
@@ -425,7 +419,7 @@ The string should be of the form ``type:salt:hashed-password``.::
 
 Forces users to use a password for the Notebook server. This is useful in a
 multi user environment, for instance when everybody in the LAN can access each
-other's machine through ssh.
+other's machine through :command:`ssh`.
 
 In such a case, server the notebook server on localhost is not secure since
 any user can connect to the notebook server via :command:`ssh`.
@@ -440,7 +434,7 @@ The number of additional ports to try if the specified port is not available.::
 
     c.NotebookApp.port_retries = 50
 
-DISABLED: use %pylab or %matplotlib in the notebook to enable matplotlib.::
+DISABLED: use `%pylab` or `%matplotlib` in the notebook to enable matplotlib.::
 
     c.NotebookApp.pylab = 'disabled'
 
@@ -460,7 +454,6 @@ The directory for user settings.::
 
 fswatcher
 --------------
-
 Whether to serve the app in watch mode.::
 
     c.LabApp.watch = False
@@ -511,7 +504,7 @@ DEPRECATED, use tornado_settings.::
 Set the tornado compression options for ``websocket`` connections.
 
 This value will be returned from
-:method:`WebSocketHandler.get_compression_options`.
+``WebSocketHandler.get_compression_options``.
 
 None (default) will disable compression.
 
@@ -533,8 +526,7 @@ Should be in the form of an HTTP origin:
 
 
 NteractApp(NotebookApp) configuration
---------------------------------------------------------------------------
-
+-------------------------------------
 Application for running :command:`nteract` on a jupyter notebook server.
 
 Whether to start the app in dev mode. Expects resources to be loaded from
@@ -555,9 +547,9 @@ In addition, the Jupyter configuration file must be modified like so::
 
    c.NteractApp.dev_mode = False
 
+
 Image Handlers
 ==============
-
 Need to set something up for the Jupyter Console image handler.
 Same thing for QTConsole.
 
@@ -575,7 +567,7 @@ There are four handlers defined.
 #) 'PIL': Use Python Imaging Library to pop-up image;
 
 #) stream': Use an external program to show the image.  Image will be fed into
-  the STDIN  of the program.
+   the STDIN  of the program.
 
   - You will need to configure ``stream_image_handler``
 

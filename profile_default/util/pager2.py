@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Rewrite how IPython implements pagers on Windows.
+"""
 =======
 Pager
 =======
@@ -8,6 +8,7 @@ Pager
     :synopsis: Rewrite how IPython pages things.
 
 .. highlight:: ipython
+    :linenothreshold: 5
 
 So would it be easier to do this as a magic or using Traitlets?
 

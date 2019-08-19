@@ -2,6 +2,9 @@
 Keybindings in IPython
 =======================
 
+.. module:: keybindings
+   :synopsis: Document the way keybindings are set up.
+
 .. highlight:: ipython
    :linenothreshold: 5
 
@@ -10,7 +13,6 @@ This document will summarize how to rebind keys in IPython since IPython 5.0.
 
 Interactively Binding Keys
 ==========================
-
 If we would like to add extra keybindings to the IPython shell, we can utilize
 a few functions built into the :mod:`IPython.terminal.interactiveshell` module,
 in addition, to utilizing the expansive :mod:`prompt_toolkit` library.
@@ -27,7 +29,8 @@ The attributes associated with
 :func:`IPython.terminal.interactiveshell.create_ipython_shortcuts()`
 are as follows:
 
-.. code-block:: none
+.. ipython::
+   :verbatim:
 
    ['_KeyBindings__version',
    ...
@@ -75,7 +78,6 @@ Up at the top you have the keybindings :mod:`IPython` ships with!
 
 Official IPython Documentation
 ==============================
-
 Before we dive straight into the source code, let's check out how IPython
 describes the process of re-binding keys.
 
@@ -476,7 +478,6 @@ seen before and found pretty creative.::
 
 Side Effects
 ====================
-
 I wanted to try experimenting with the code to dynamically set up a toggle
 between Emacs and Vim.
 
@@ -488,7 +489,8 @@ But I was curious what would happen.
 Doing so actually created an embedded IPython instance that you can now
 toggle on and off.
 
-.. code-block:: none
+.. ipython::
+   :verbatim:
 
    Type:        DynamicKeyBindings
    Docstring:

@@ -243,8 +243,12 @@ def main():
     kb = base_keys()
 
     _ip.pt_app = PromptSession(complete_while_typing=True,
-                       editing_mode=_ip.editing_mode,
+                       editing_mode=getattr(EditingMode, _ip.editing_mode.upper()),
                        bottom_toolbar=None,  # todo
+                       mouse_support=_ip.mouse_support,
+                       complete_style=_ip.pt_complete_style,
+                       inputhook=_ip.inputhook,
+                       color_depth=_ip.color_depth,
                        key_bindings=kb,
                        style=_ip.style)
     return _ip

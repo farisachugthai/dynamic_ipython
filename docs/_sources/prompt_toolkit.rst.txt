@@ -8,10 +8,6 @@ This shows us where the entry point for prompt_toolkit is in IPython.
 ``ip.init_**`` gives a ton of
 different places, seemingly to muck around.
 
-.. ipython::
-
-   In [28]: ip.init_prompt_toolkit_cli??
-
 .. code-block:: none
 
    Signature: ip.init_prompt_toolkit_cli()
@@ -66,7 +62,7 @@ different places, seemingly to muck around.
 The `prompt toolkit tutorial`_ does a fairly thorough job of explaining how most
 everything here works.
 
-.. _`prompt toolkit tutorial: https://prompt-toolkit.read-the-docs.com/prompts/
+.. _`prompt toolkit tutorial`: https://prompt-toolkit.read-the-docs.com/prompts/
 
 Where we come in is by taking the `self.pt_app` object and initializing an
 instance of the module's class :class:`prompt_toolkit.key_bindings.KeyBindings()`

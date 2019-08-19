@@ -138,7 +138,7 @@ form of rst docs and ipynb notebooks.
    :maxdepth: 2
    :titlesonly:
 
-   IPython Shell Initialization <profile/index>
+   IPython Shell Initialization <startup/index>
    jupyter
    extensions
    Contributors Notes <dev>

@@ -61,7 +61,10 @@ But wow did they do this in a clever way!::
 
 seems too simple for something I've never thought of!
 
-The initialization of the PromptSession class happens in the method
-:ref:`TerminalPdb.pt_init`. It's a mightly unweildy class, and it would do
-a lot better if we simply subclassed the TerminalPdb class and then broke up that
+The initialization of the :class:`prompt_toolkit.PromptSession` class
+happens in the method :ref:`IPython.terminal.debugger.TerminalPdb.pt_init`. 
+
+It's a mighty unwieldy class, and it would do
+a lot better if we simply sub-classed the
+:ref:`IPython.terminal.debugger.TerminalPdb` class and then broke up that
 method into like 20 separate and easily modifiable parts.

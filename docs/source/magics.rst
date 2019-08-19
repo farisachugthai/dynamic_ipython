@@ -12,34 +12,31 @@ IPython Magics
     :backlinks: entry
     :local:
 
-------------------------------------------
 
-Built-in Magics
-===============
+.. _defined_magics:
+
+A Summary of IPython's Built In Magics
+=======================================
 
 Line:
 ------
-- %hist[ory]
-- %pycat
-- %recall
-- %ed[it]
-- %bookmark
-- %run
-- %store
-- %save
+- `%hist[ory]`
+- `%pycat`
+- `%recall`
+- `%ed[it]`
+- `%bookmark`
+- `%run`
+- `%store`
+- `%save`
 
 Cell:
 -----
-- %[write]file
-- %timeit
-- %macro
-
+- `%[write]file`
+- `%timeit`
+- `%macro`
 
 %timeit
-=======
-:option:`qqq` means be very quiet.
-:option:`r` :kbd:`5` means repeat the whole cell block 5 times.
-
+-------
 .. code-block:: ipython
 
     In [20]: %%timeit -qqq -r 5
@@ -49,17 +46,13 @@ Cell:
     ...:     match = re.match('CONDA*', i)
     ...:     if match:
     ...:         i
-    ...:
-    ...:
     Out[20]: <TimeitResult : 185 µs ± 890 ns per loop (mean ± std. dev. of 5 runs, 10000 loops each)>
 
     In [21]: %%timeit -qqq -r 5 -o
-    ...:
     ...: for i in os.environ.keys():
     ...:     match = re.match('CONDA*', i)
     ...:     if match:
     ...:         i
-    ...:
     Out[21]: <TimeitResult : 207 µs ± 2.31 µs per loop (mean ± std. dev. of 5 runs, 1000 loops each)>
 
 2018-09-07
@@ -79,53 +72,33 @@ Jan 31, 2019:
     ``%edit file.filetype`` as well!
 
 
-store
-------
+`%store`
+---------
+.. magic:: store
+
 ``%store 'widen_jupyter_cells'``
 
 As a heads up that's in your db. Figured I'd mention it as it was a
 great use of the magic system.
 
-Here's the official help.
+Here's the official help.:
 
-In[1]: store?
+    * ``%store foo >a.txt``  - Store value of foo to new file a.txt
 
-Out[1]:
+    * ``%store foo >>a.txt`` - Append value of foo to file a.txt
 
-* ``%store foo >a.txt``  - Store value of foo to new file a.txt
+    It should be noted that if you change the value of a variable, you
+    need to ``%store`` it again if you want to persist the new value.
 
-* ``%store foo >>a.txt`` - Append value of foo to file a.txt
+    Note also that the variables will need to be pickleable; however, most basic
+    python types can be safely ``%store``'d.
 
-It should be noted that if you change the value of a variable, you
-need to ``%store`` it again if you want to persist the new value.
-
-Note also that the variables will need to be pickleable; however, most basic
-python types can be safely ``%store``'d.
-
-Also aliases can be ``%store``'d across sessions.
-
-Cool. So we could make a file in
-:envvar:`$IPYTHON`/profile_default/startup/ for all of
-our aliases right? Should probably separate them out of the main config file as
-i can foresee that list BLOWING up.
-
-Then we'd have a command like
-
-``%store new_alias >> $IPYTHON/profile_default/startup/40_alias.py``
-
-Then we'd make a persistent macro like so
-
-``%macro add_alias 'store...'``
-
-At least I think. The difference between macro and alias is that
-alias is for shell commands and macro for ipython commands?
+    Also aliases can be ``%store``'d across sessions.
 
 
-save
------
-Help docs on save.
-
-``In [43]: save?``:
+`%save`
+--------
+Help docs on save.:
 
     Docstring:
     Save a set of lines or a macro to a given filename.
@@ -156,6 +129,9 @@ Help docs on save.
 
 Revisiting Previously Run Commands
 ==================================
+
+`%history`
+----------
 Access previously run commands with the ``%history`` magic. Note that it can
 be abbreviated to ``%hist`` and used like so.::
 
@@ -165,18 +141,9 @@ be abbreviated to ``%hist`` and used like so.::
 
    When using the `%hist` magic, don't forget the :kbd:`/`!
 
-Use the following to to reload every command you ran last session into your
-current cell.
 
-`%recall ~1/`
-
-hist
-------
-The syntax for accessing history is admittedly wonky.
-
-
-history call signature
-~~~~~~~~~~~~~~~~~~~~~~
+`%history` call signature
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 By default, all input history from the current session is displayed.
 Ranges of history can be indicated using the syntax:
 
@@ -194,30 +161,10 @@ Ranges of history can be indicated using the syntax:
 
 Multiple ranges can be specified by separating with spaces.
 
-
-Viewing Recently Run Commands
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-If you run ``_i`` or ``__i`` you see the last two commands inputs.
-
-If you run ``_`` or ``__`` you get to see the last 2 commands outputs.
-
-This works for only the last 3 commands though!
-
-You can also give cell numbers so
-
-``_i10`` gives the input for cell 10 as a string.
-
-``exec _i``
-
-The exec command means run the above input again.
-
-This is interrelated with the *%recall* command.
-
-
 %recall
 -------
-This is one of the IPython conveniences that makes you understand why they're called
-*magics*.
+This is one of the IPython conveniences that makes you understand why
+they're called *magics*.
 
 All too often, one will run into the problem of manipulating some data in the REPL,
 and need a way of interacting with it in a manner similar to a pipeline.
@@ -233,6 +180,11 @@ As a result, this magic works as it's own pipeline.
 .. tip::
 
    recall is also aliased to ``rep`` for repeat.
+
+Tldr; Use the following to to reload every command you ran last session into your
+current cell.
+
+`%recall ~1/`
 
 
 output
@@ -257,10 +209,6 @@ In IPython run:
 >>> print(Out[1])
 
 And you have access to output now. Easy.
-
-07/08/18
-
-I guess I needed to step away for a little.
 
 # hist_list =[]
 # for i in range(2):
@@ -305,7 +253,9 @@ But you should be able to write history to a file by using:
 
 %%writefile
 -----------
-%%writefile -a filename
+.. magic:: writefile
+
+`%%writefile` -a filename
 
 needs both percentage signs even with ``automagic`` since it's a cell magic
 the -a option is to append to a file
@@ -321,13 +271,9 @@ something like::
    hist -n 5-10
 
 {where -n means print output too}
-
 %%file idk
-
 _i31-33
-
 $ cat idk
-
 # _i31-33
 
 %edit
