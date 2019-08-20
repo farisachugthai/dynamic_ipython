@@ -84,10 +84,9 @@ def get_default_vim_bindings():
     MergedKeys : :class:`prompt_toolkit.key_bindings.MergedKeyBindings`
 
     """
-    return merge_key_bindings([
-        vi.load_vi_bindings(),
-        vi.load_vi_search_bindings()
-    ])
+    return merge_key_bindings(
+        [vi.load_vi_bindings(),
+         vi.load_vi_search_bindings()])
 
 
 def emacs_bindings():
@@ -131,12 +130,10 @@ def emacs_alt_bindings():
     kb.add('escape', 'l', filter=(insert_mode))(named_commands.downcase_word)
     kb.add('escape', 'u', filter=(insert_mode))(named_commands.uppercase_word)
     kb.add('escape', 'y', filter=(insert_mode))(named_commands.yank_pop)
-    kb.add(
-        'escape', 'backspace', filter=(insert_mode)
-    )(named_commands.backward_kill_word)
-    kb.add(
-        'escape', '\\', filter=(insert_mode)
-    )(named_commands.delete_horizontal_space)
+    kb.add('escape', 'backspace',
+           filter=(insert_mode))(named_commands.backward_kill_word)
+    kb.add('escape', '\\',
+           filter=(insert_mode))(named_commands.delete_horizontal_space)
 
     return kb
 
@@ -149,16 +146,15 @@ def base_keys(escape_keys=False):
     nh = get_by_name('next-history')
 
     kb.add_binding(u'j', u'k', filter=(insert_mode))(switch_to_navigation_mode)
-    kb.add_binding(
-        'K', filter=(HasFocus(DEFAULT_BUFFER) & ViNavigationMode())
-    )(ph)
+    kb.add_binding('K',
+                   filter=(HasFocus(DEFAULT_BUFFER) & ViNavigationMode()))(ph)
 
-    kb.add_binding(
-        'J', filter=(HasFocus(DEFAULT_BUFFER) & ViNavigationMode())
-    )(nh)
+    kb.add_binding('J',
+                   filter=(HasFocus(DEFAULT_BUFFER) & ViNavigationMode()))(nh)
 
     if escape_keys:
-        emacs_keys = merge_key_bindings([emacs_bindings(), emacs_alt_bindings()])
+        emacs_keys = merge_key_bindings(
+            [emacs_bindings(), emacs_alt_bindings()])
     else:
         emacs_keys = emacs_bindings()
 
@@ -175,9 +171,12 @@ def merge_ipython_rsi_kb(_ip=None):
     """This really needs to be redone so I don't have to keep passing around this global not global _ip."""
     # IPython < 7.0
     if hasattr(_ip, 'pt_cli'):
-        _ip.pt_cli.application.key_bindings_registry = merge_key_bindings([almost_all_keys, create_ipython_shortcuts(_ip)])
-        RSI_LOGGER.info('Number of keybindings:'
-                '{}:\t'.format(_ip.pt_cli.application.key_bindings_registry.bindings))
+        _ip.pt_cli.application.key_bindings_registry = merge_key_bindings(
+            [almost_all_keys, create_ipython_shortcuts(_ip)])
+        RSI_LOGGER.info(
+            'Number of keybindings:'
+            '{}:\t'.format(
+                _ip.pt_cli.application.key_bindings_registry.bindings))
     # IPython >= 7.0
     elif hasattr(_ip, 'pt_app'):
 
@@ -187,8 +186,10 @@ def merge_ipython_rsi_kb(_ip=None):
             # If you start IPython from something like pytest i guess it starts
             # the machinery with a few parts missing...I don't know.
 
-        _ip.pt_app.key_bindings = merge_key_bindings([almost_all_keys, create_ipython_shortcuts(_ip)])
-        RSI_LOGGER.info('Number of keybindings {}:\t'.format(len(_ip.pt_app.key_bindings.bindings)))
+        _ip.pt_app.key_bindings = merge_key_bindings(
+            [almost_all_keys, create_ipython_shortcuts(_ip)])
+        RSI_LOGGER.info('Number of keybindings {}:\t'.format(
+            len(_ip.pt_app.key_bindings.bindings)))
 
     else:
         try:
@@ -196,7 +197,8 @@ def merge_ipython_rsi_kb(_ip=None):
         except (ImportError, ModuleNotFoundError):
             ZMQInteractiveShell = None
             RSI_LOGGER.error('Is this being run in IPython?:\nType: %s ',
-                              type(_ip), exc_info=1)
+                             type(_ip),
+                             exc_info=1)
         else:
             # Jupyter QTConsole
             if isinstance(_ip, ZMQInteractiveShell):
@@ -210,9 +212,10 @@ def main():
 
     This function delegates the extra bindings.
 
-    Here's the super long init signature from PromptSession().:
+    Here's the super long init signature from
+    :class:`prompt_toolkit.PromptSession`.:
 
-         __init__(self, message, multiline, wrap_lines, is_password, vi_mode,
+        \_\_init\_\_(self, message, multiline, wrap_lines, is_password, vi_mode,
         editing_mode, complete_while_typing, validate_while_typing,
         enable_history_search, search_ignore_case, lexer, enable_system_prompt,
         enable_suspend, enable_open_in_editor, validator, completer,
@@ -242,22 +245,29 @@ def main():
     # _ip = merge_ipython_rsi_kb(_ip)  # TODO: ugh
     kb = base_keys()
 
-    _ip.pt_app = PromptSession(complete_while_typing=True,
-                       editing_mode=getattr(EditingMode, _ip.editing_mode.upper()),
-                       bottom_toolbar=None,  # todo
-                       mouse_support=_ip.mouse_support,
-                       complete_style=_ip.pt_complete_style,
-                       inputhook=_ip.inputhook,
-                       color_depth=_ip.color_depth,
-                       key_bindings=kb,
-                       style=_ip.style)
+    _ip.pt_app = PromptSession(
+        complete_while_typing=True,
+        editing_mode=getattr(EditingMode, _ip.editing_mode.upper()),
+        bottom_toolbar=None,  # todo
+        mouse_support=_ip.mouse_support,
+        complete_style=_ip.pt_complete_style,
+        inputhook=_ip.inputhook,
+        color_depth=_ip.color_depth,
+        key_bindings=kb,
+        style=_ip.style)
     return _ip
+
 
 if __name__ == "__main__":
     insert_mode = (HasFocus(DEFAULT_BUFFER) & ViInsertMode())
 
-    RSI_LOGGER = module_log.stream_logger(
-            logger="RSI",
-            log_level=30
-        )
+    RSI_LOGGER = module_log.stream_logger(logger="RSI", log_level=30)
     # shell = main()
+    try:
+        import readline
+    except (ImportError, ModuleNotFoundError):
+        readline = None
+
+    if hasattr(readline, 'read_init_file'):
+        readline.read_init_file(
+            os.path.expanduser(os.path.join('~', '.inputrc')))

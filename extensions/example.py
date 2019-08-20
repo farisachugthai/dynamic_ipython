@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Show an example of how to create line and cell magics.
-
+"""
 =============================================
 Example of Writing A Custom IPython Extension
 =============================================
 
-.. currentmodule:: extensions.example
+.. currentmodule:: example
 
 Usage
 =====
@@ -22,10 +21,10 @@ Writing Cell Magics
 While not utilized here, a similar execution path can be utilized for
 :func:`IPython.core.magic.cell_magic()`
 
-.. note::
+.. note:: Don't use register_cell_magic.
 
-    Don't use register_cell_magic. That decorator is for functions.
-    `~IPython.core.magic.register_magics` is only for classes as well.
+     That decorator is for functions.
+    `IPython.core.magic.register_magics` is only for classes as well.
 
 ::
 

@@ -42,6 +42,7 @@ log = logging.getLogger(name='profile_default.startup.__main__')
 
 LOGGER = stream_logger(logger=log)
 
+
 class Dynamic:
     """Organize personal configuration code into one class.
 
@@ -58,8 +59,7 @@ class Dynamic:
             if isinstance(self.canary, InteractiveShellEmbed):
                 sys.stderr.write(
                     "\nYou are currently in an embedded IPython shell,\n"
-                    "the configuration will not be loaded.\n\n"
-                )
+                    "the configuration will not be loaded.\n\n")
         else:
             # Not inside IPython
             # Build a terminal app in order to force ipython to load the configuration
@@ -111,10 +111,11 @@ class Dynamic:
             LOGGER.error(e)
         else:
             self.canary.profile_dir = os.path.expanduser(
-                    '~/.ipython/profile_default'
-                )
+                '~/.ipython/profile_default')
 
             # kinda lost track of why this module exists.
+
+
 #     def begin_eventloop(self, ipapp=None):
 #         try:
 #             ipapp.initialize([])

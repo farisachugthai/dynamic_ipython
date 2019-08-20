@@ -151,7 +151,8 @@ if __name__ == '__main__':
         sys.exit("This module requires Python 3.6+")
 
     name = 'profile_default.startup.pandas_init'
-    PANDAS_LOGGER = module_log.stream_logger(logger=name, log_level=logging.INFO)
+    PANDAS_LOGGER = module_log.stream_logger(logger=name,
+                                             log_level=logging.INFO)
 
     try:
         import pandas as pd

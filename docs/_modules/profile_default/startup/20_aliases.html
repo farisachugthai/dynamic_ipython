@@ -171,8 +171,7 @@
 <span class="n">LOGGER</span> <span class="o">=</span> <span class="n">module_log</span><span class="o">.</span><span class="n">stream_logger</span><span class="p">(</span>
     <span class="n">logger</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="vm">__name__</span><span class="p">),</span>
     <span class="n">msg_format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> : </span><span class="si">%(levelname)s</span><span class="s1"> : </span><span class="si">%(module)s</span><span class="s1"> </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span>
-    <span class="n">log_level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span>
-<span class="p">)</span>
+    <span class="n">log_level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="linux_specific_aliases"><a class="viewcode-back" href="../../../startup/aliases.html#profile_default.startup.20_aliases.linux_specific_aliases">[docs]</a><span class="k">def</span> <span class="nf">linux_specific_aliases</span><span class="p">(</span><span class="n">_ip</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -215,18 +214,15 @@
         <span class="p">(</span><span class="s1">&#39;cp&#39;</span><span class="p">,</span> <span class="s1">&#39;cp -iv %l&#39;</span><span class="p">),</span>  <span class="c1"># cp mv mkdir and rmdir are all overridden</span>
         <span class="p">(</span><span class="s1">&#39;dus&#39;</span><span class="p">,</span> <span class="s1">&#39;du -d 1 -ha %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;echo&#39;</span><span class="p">,</span> <span class="s1">&#39;echo -e %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span>
-            <span class="s1">&#39;gpip&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;export PIP_REQUIRE_VIRTUALENV=0; python -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 &gt; /dev/null&#39;</span>
-        <span class="p">),</span>
-        <span class="p">(</span>
-            <span class="s1">&#39;gpip2&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;export PIP_REQUIRE_VIRTUALENV=0; python2 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 &gt; /dev/null&#39;</span>
-        <span class="p">),</span>
-        <span class="p">(</span>
-            <span class="s1">&#39;gpip3&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;export PIP_REQUIRE_VIRTUALENV=0; python3 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 &gt; /dev/null&#39;</span>
-        <span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gpip&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;export PIP_REQUIRE_VIRTUALENV=0; python -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 &gt; /dev/null&#39;</span>
+         <span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gpip2&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;export PIP_REQUIRE_VIRTUALENV=0; python2 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 &gt; /dev/null&#39;</span>
+         <span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;gpip3&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;export PIP_REQUIRE_VIRTUALENV=0; python3 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 &gt; /dev/null&#39;</span>
+         <span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;head&#39;</span><span class="p">,</span> <span class="s1">&#39;head -n 30 %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;la&#39;</span><span class="p">,</span> <span class="s1">&#39;ls -AF --color=always %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;l&#39;</span><span class="p">,</span> <span class="s1">&#39;ls -CF --color=always %l&#39;</span><span class="p">),</span>
@@ -241,14 +237,10 @@
         <span class="p">(</span><span class="s1">&#39;redo&#39;</span><span class="p">,</span> <span class="s1">&#39;fc -s&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;rm&#39;</span><span class="p">,</span> <span class="s1">&#39;rm -v %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;rmdir&#39;</span><span class="p">,</span> <span class="s1">&#39;rmdir -v %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span>
-            <span class="s1">&#39;profile_default&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;cd ~/projects/dotfiles/unix/.ipython/profile_default&#39;</span>
-        <span class="p">),</span>
-        <span class="p">(</span>
-            <span class="s1">&#39;startup&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;cd ~/projects/dotfiles/unix/.ipython/profile_default/startup&#39;</span>
-        <span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;profile_default&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;cd ~/projects/dotfiles/unix/.ipython/profile_default&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;startup&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;cd ~/projects/dotfiles/unix/.ipython/profile_default/startup&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;tail&#39;</span><span class="p">,</span> <span class="s1">&#39;tail -n 30 %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;tre&#39;</span><span class="p">,</span> <span class="s1">&#39;tree -ashFC -I .git -I __pycache__ --filelimit 25&#39;</span><span class="p">),</span>
     <span class="p">]</span>
@@ -312,17 +304,14 @@
         <span class="p">(</span><span class="s1">&#39;ggc&#39;</span><span class="p">,</span> <span class="s1">&#39;git gc %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;ggcp&#39;</span><span class="p">,</span> <span class="s1">&#39;git gc --prune %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;git&#39;</span><span class="p">,</span> <span class="s1">&#39;git %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span>
-            <span class="s1">&#39;git hist&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;git log --pretty=&quot;format:%h </span><span class="si">%a</span><span class="s1">d | </span><span class="si">%d</span><span class="s1"> [</span><span class="si">%a</span><span class="s1">n]&quot; --graph --date=short &#39;</span>
-            <span class="s1">&#39;--branches --abbrev-commit --oneline %l&#39;</span>
-        <span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;git hist&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;git log --pretty=&quot;format:%h </span><span class="si">%a</span><span class="s1">d | </span><span class="si">%d</span><span class="s1"> [</span><span class="si">%a</span><span class="s1">n]&quot; --graph --date=short &#39;</span>
+         <span class="s1">&#39;--branches --abbrev-commit --oneline %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;git last&#39;</span><span class="p">,</span> <span class="s1">&#39;git log -1 HEAD %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;gl&#39;</span><span class="p">,</span> <span class="s1">&#39;git log %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span>
-            <span class="s1">&#39;glo&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;git log --graph --decorate --abbrev-commit --oneline --branches --all&#39;</span>
-        <span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;glo&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;git log --graph --decorate --abbrev-commit --oneline --branches --all&#39;</span>
+         <span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;gls&#39;</span><span class="p">,</span> <span class="s1">&#39;git ls-tree master %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;git ls&#39;</span><span class="p">,</span> <span class="s1">&#39;git ls-tree master %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;gm&#39;</span><span class="p">,</span> <span class="s1">&#39;git merge --no-ff %l&#39;</span><span class="p">),</span>
@@ -370,9 +359,9 @@
     <span class="p">]</span>
     <span class="k">return</span> <span class="n">_user_aliases</span></div>
 
+
 <div class="viewcode-block" id="WindowsAliases"><a class="viewcode-back" href="../../../startup/aliases.html#profile_default.startup.20_aliases.WindowsAliases">[docs]</a><span class="k">class</span> <span class="nc">WindowsAliases</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Aggregated Window aliases.&quot;&quot;&quot;</span>
-
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_ip</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">_ip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_ip</span> <span class="o">=</span> <span class="n">_ip</span>
@@ -406,8 +395,8 @@
             <span class="p">(</span><span class="s1">&#39;ddir&#39;</span><span class="p">,</span> <span class="s1">&#39;dir /ad /on %l&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;ldir&#39;</span><span class="p">,</span> <span class="s1">&#39;dir /ad /on %l&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;ll&#39;</span><span class="p">,</span> <span class="s1">&#39;dir /Q %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;ln&#39;</span><span class="p">,</span>
-             <span class="s1">&#39;mklink </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">),</span>  <span class="c1"># I know this really isn&#39;t the same but I need it</span>
+            <span class="p">(</span><span class="s1">&#39;ln&#39;</span><span class="p">,</span> <span class="s1">&#39;mklink </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span>
+             <span class="p">),</span>  <span class="c1"># I know this really isn&#39;t the same but I need it</span>
             <span class="p">(</span><span class="s1">&#39;make&#39;</span><span class="p">,</span> <span class="s1">&#39;make.bat %l&#39;</span><span class="p">),</span>  <span class="c1"># Useful when we&#39;re building docs</span>
             <span class="p">(</span><span class="s1">&#39;mklink&#39;</span><span class="p">,</span> <span class="s1">&#39;mklink </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;move&#39;</span><span class="p">,</span> <span class="s1">&#39;move </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">),</span>
@@ -615,18 +604,17 @@
     <span class="k">if</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s1">&#39;fzf&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s1">&#39;rg&#39;</span><span class="p">):</span>
         <span class="c1"># user_aliases.extend(</span>
         <span class="c1">#     (&#39;fzf&#39;, &#39;$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS&#39;))</span>
-        <span class="n">user_aliases</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
-            <span class="p">(</span><span class="s1">&#39;fzf&#39;</span><span class="p">,</span> <span class="s1">&#39;rg --pretty --hidden --max-columns=300 --max-columns-preview &#39;</span>
+        <span class="n">user_aliases</span><span class="o">.</span><span class="n">extend</span><span class="p">((</span>
+            <span class="s1">&#39;fzf&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;rg --pretty --hidden --max-columns=300 --max-columns-preview &#39;</span>
             <span class="s1">&#39;.*[a-zA-Z]* --no-heading -m=30 --no-messages --color=ansi --no-column &#39;</span>
-            <span class="s1">&#39; --no-line-number -C 0 | fzf --ansi&#39;</span><span class="p">)</span>
-        <span class="p">)</span>
+            <span class="s1">&#39; --no-line-number -C 0 | fzf --ansi&#39;</span><span class="p">))</span>
 
     <span class="k">elif</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s1">&#39;fzf&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s1">&#39;ag&#39;</span><span class="p">):</span>
         <span class="c1"># user_aliases.extend(</span>
         <span class="c1">#     (&#39;fzf&#39;, &#39;$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS&#39;))</span>
         <span class="n">user_aliases</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
-            <span class="p">(</span><span class="s1">&#39;fzf&#39;</span><span class="p">,</span> <span class="s1">&#39;ag -C 0 --color-win-ansi --noheading | fzf --ansi&#39;</span><span class="p">)</span>
-        <span class="p">)</span>
+            <span class="p">(</span><span class="s1">&#39;fzf&#39;</span><span class="p">,</span> <span class="s1">&#39;ag -C 0 --color-win-ansi --noheading | fzf --ansi&#39;</span><span class="p">))</span>
 
     <span class="k">return</span> <span class="n">user_aliases</span>
 
@@ -663,9 +651,8 @@
     <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
 
     <span class="n">main</span><span class="p">()</span>
-    <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
-        <span class="s1">&#39;Number of aliases is: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">_ip</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s1">&#39;alias&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
-    <span class="p">)</span>
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Number of aliases is: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span>
+                 <span class="nb">len</span><span class="p">(</span><span class="n">_ip</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s1">&#39;alias&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)))</span>
 </pre></div>
 
           </div>

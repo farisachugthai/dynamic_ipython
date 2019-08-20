@@ -36,24 +36,15 @@ Cell:
 - `%macro`
 
 %timeit
-<<<<<<< Updated upstream
--------
-.. code-block:: ipython
-||||||| merged common ancestors
-=======
-:option:`qqq` means be very quiet.
-:option:`r` :kbd:`5` means repeat the whole cell block 5 times.
-
-.. code-block:: ipython
-=======
 -------
 .. magic:: timeit
 
-
 Let's observe the example below.
-The option ``-qqq`` means be very quiet.
-The option ``-r`` :kbd:`5` means repeat the whole cell block 5 times.::
->>>>>>> Stashed changes
+:kbd:`qqq` means be very quiet.
+:kbd:`r` :kbd:`5` means repeat the whole cell block 5 times.
+
+.. ipython::
+   :verbatim:
 
     In [20]: %%timeit -qqq -r 5
     ...:
@@ -80,11 +71,11 @@ Speaking of `%%timeit` I just gave this a whirl to try and see.::
 >>> !nvim random-python-file.py +qall
 
 Possibly a good way to profile nvim startup time.
-You could also add in the option `--startuptime anything.txt`.
+You could also add in the option ``--startuptime anything.txt``.
 
 Jan 31, 2019:
 
-Now we can choose between `%nvim file.filetype` or `%edit file.filetype` 
+Now we can choose between ``%nvim file.filetype`` or `%edit` file.filetype
 as well!
 
 
@@ -92,28 +83,25 @@ as well!
 ---------
 .. magic:: store
 
-``%store 'widen_jupyter_cells'``
-
-As a heads up that's in your db. Figured I'd mention it as it was a
-great use of the magic system.
-
 Here's the official help.:
 
-    * ``%store foo >a.txt``  - Store value of foo to new file a.txt
+    * `%store` foo > a.txt  - Store value of foo to new file a.txt
 
-    * ``%store foo >>a.txt`` - Append value of foo to file a.txt
+    * `%store` foo >> a.txt - Append value of foo to file a.txt
 
     It should be noted that if you change the value of a variable, you
-    need to ``%store`` it again if you want to persist the new value.
+    need to `%store` it again if you want to persist the new value.
 
     Note also that the variables will need to be pickleable; however, most basic
-    python types can be safely ``%store``'d.
+    python types can be safely `%store`'d.
 
-    Also aliases can be ``%store``'d across sessions.
+    Also aliases can be `%store`'d across sessions.
 
 
 `%save`
 --------
+.. magic:: save
+
 Help docs on save.:
 
     Docstring:
@@ -140,7 +128,7 @@ Help docs on save.:
     It adds a '.py' extension to the file if you don't do so yourself, and
     it asks for confirmation before overwriting existing files.
 
-    If :option:`-r` option is used, the default extension is `.ipy`.
+    If :kbd:`-r` option is used, the default extension is *.ipy*.
 
 
 Revisiting Previously Run Commands
@@ -374,26 +362,23 @@ Honorary Mention
 :func:`exec` is a Python built-in that just takes strings, but it can
 operate on history syntax.
 
-.. code-block:: none
+.. ipython::
+   :verbatim:
 
-   ``%hist ~2/4``
+   %hist ~2/4
 
 successfully printed the 4th line from 2 sessions ago that I wanted.
-
-Unfortunately, it wouldn't redirect to :func:`exec()` correctly.
-
-``var = %history ~2/4``
-
-``exec(var)``
-
-would work better?
 
 
 Executing Commands with Magics
 ==============================
+.. magic:: run
+
 
 Help Docs for %run
 ------------------
+Here are all the listed options for the `%run` magic.:
+
 -t
    print timing information at the end of the run.  IPython will give
    you an estimated CPU time consumption for your script, which under
@@ -487,7 +472,7 @@ Back to ``%run``!
    python interpreter only source modules are allowed no .pyc or .pyo files.
    For example:
 
-         %run -m example
+         `%run` -m example
 
    will run the example module.
 

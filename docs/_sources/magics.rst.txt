@@ -37,7 +37,14 @@ Cell:
 
 %timeit
 -------
-.. code-block:: ipython
+.. magic:: timeit
+
+Let's observe the example below.
+:kbd:`qqq` means be very quiet.
+:kbd:`r` :kbd:`5` means repeat the whole cell block 5 times.
+
+.. ipython::
+   :verbatim:
 
     In [20]: %%timeit -qqq -r 5
     ...:
@@ -55,49 +62,46 @@ Cell:
     ...:         i
     Out[21]: <TimeitResult : 207 µs ± 2.31 µs per loop (mean ± std. dev. of 5 runs, 1000 loops each)>
 
+
 2018-09-07
 
-Speaking of %%timeit I just gave this a whirl to try and see.
+Speaking of `%%timeit` I just gave this a whirl to try and see.::
 
-``%%timeit``
-
-``!nvim random-python-file.py +qall``
+>>> %%timeit
+>>> !nvim random-python-file.py +qall
 
 Possibly a good way to profile nvim startup time.
-You could also add in the option `--startuptime anything.txt`.
+You could also add in the option ``--startuptime anything.txt``.
 
 Jan 31, 2019:
 
-    Now we can choose between ``%nvim file.filetype`` and
-    ``%edit file.filetype`` as well!
+Now we can choose between ``%nvim file.filetype`` or `%edit` file.filetype
+as well!
 
 
 `%store`
 ---------
 .. magic:: store
 
-``%store 'widen_jupyter_cells'``
-
-As a heads up that's in your db. Figured I'd mention it as it was a
-great use of the magic system.
-
 Here's the official help.:
 
-    * ``%store foo >a.txt``  - Store value of foo to new file a.txt
+    * `%store` foo > a.txt  - Store value of foo to new file a.txt
 
-    * ``%store foo >>a.txt`` - Append value of foo to file a.txt
+    * `%store` foo >> a.txt - Append value of foo to file a.txt
 
     It should be noted that if you change the value of a variable, you
-    need to ``%store`` it again if you want to persist the new value.
+    need to `%store` it again if you want to persist the new value.
 
     Note also that the variables will need to be pickleable; however, most basic
-    python types can be safely ``%store``'d.
+    python types can be safely `%store`'d.
 
-    Also aliases can be ``%store``'d across sessions.
+    Also aliases can be `%store`'d across sessions.
 
 
 `%save`
 --------
+.. magic:: save
+
 Help docs on save.:
 
     Docstring:
@@ -124,7 +128,7 @@ Help docs on save.:
     It adds a '.py' extension to the file if you don't do so yourself, and
     it asks for confirmation before overwriting existing files.
 
-    If :option:`-r` option is used, the default extension is `.ipy`.
+    If :kbd:`-r` option is used, the default extension is *.ipy*.
 
 
 Revisiting Previously Run Commands
@@ -132,8 +136,8 @@ Revisiting Previously Run Commands
 
 `%history`
 ----------
-Access previously run commands with the ``%history`` magic. Note that it can
-be abbreviated to ``%hist`` and used like so.::
+Access previously run commands with the `%history` magic. Note that it can
+be abbreviated to `%hist` and used like so.::
 
    %hist ~1/
 
@@ -166,14 +170,15 @@ Multiple ranges can be specified by separating with spaces.
 This is one of the IPython conveniences that makes you understand why
 they're called *magics*.
 
-All too often, one will run into the problem of manipulating some data in the REPL,
-and need a way of interacting with it in a manner similar to a pipeline.
+All too often, one will run into the problem of manipulating some 
+data in the REPL, and need a way of interacting with it in a manner 
+similar to a pipeline.
 
-Storing the data may be difficult, or if it simply prints out to console,
-may be impossible.
+Storing the data may be difficult, or if it simply prints out to 
+console, may be impossible.
 
 *%recall* takes the **output**, not the input, of the last run command and
-autoinserts it at the next input prompt.
+auto-inserts it at the next input prompt.
 
 As a result, this magic works as it's own pipeline.
 
@@ -339,8 +344,11 @@ cells as history does. but wait how does that work?
 
 Fun fact about edit
 ~~~~~~~~~~~~~~~~~~~
-If you run ``edit -x`` in the jupyter console it doesn't do anything! fun fact.
-Because it launched a GUI app you don't have bi-directional communication
+If you run `%edit -x` in the jupyter console it doesn't do 
+anything! Fun fact.
+
+Because it launched a GUI app you don't have bi-directional 
+communication.
 
 
 Honorary Mention
@@ -354,26 +362,23 @@ Honorary Mention
 :func:`exec` is a Python built-in that just takes strings, but it can
 operate on history syntax.
 
-.. code-block:: none
+.. ipython::
+   :verbatim:
 
-   ``%hist ~2/4``
+   %hist ~2/4
 
 successfully printed the 4th line from 2 sessions ago that I wanted.
-
-Unfortunately, it wouldn't redirect to :func:`exec()` correctly.
-
-``var = %history ~2/4``
-
-``exec(var)``
-
-would work better?
 
 
 Executing Commands with Magics
 ==============================
+.. magic:: run
+
 
 Help Docs for %run
 ------------------
+Here are all the listed options for the `%run` magic.:
+
 -t
    print timing information at the end of the run.  IPython will give
    you an estimated CPU time consumption for your script, which under
@@ -465,9 +470,9 @@ Back to ``%run``!
    the :kbd:`-m` option for the python interpreter. Use this option
    last if you want to combine with other %run options. Unlike the
    python interpreter only source modules are allowed no .pyc or .pyo files.
-   For example::
+   For example:
 
-         ``%run -m example``
+         `%run` -m example
 
    will run the example module.
 

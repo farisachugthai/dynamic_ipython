@@ -13,6 +13,7 @@
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/profile_default/util/copytree.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
@@ -22,6 +23,11 @@
 <![endif]-->
 
   </head><body>
+
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="../../../index.html"><h1 style="font-size: 3em;">Dynamic IPython</h1></a>
+</div>
 
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -35,7 +41,8 @@
         <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
-    </div>  
+    </div>
+  
 
     <div class="document">
       <div class="documentwrapper">
@@ -45,130 +52,93 @@
   <h1>Source code for profile_default.util.copytree</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">from</span> <span class="nn">shutil</span> <span class="k">import</span> <span class="n">Error</span>
 <span class="kn">import</span> <span class="nn">stat</span>
 
+<div class="viewcode-block" id="CopyTree"><a class="viewcode-back" href="../../../profile_default/util/util.html#profile_default.util.copytree.CopyTree">[docs]</a><span class="k">class</span> <span class="nc">CopyTree</span><span class="p">:</span>
 
-<div class="viewcode-block" id="Error"><a class="viewcode-back" href="../../../profile/util.html#profile_default.util.copytree.Error">[docs]</a><span class="k">class</span> <span class="nc">Error</span><span class="p">(</span><span class="ne">OSError</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Idk a class that :mod:`shutil` defines.&quot;&quot;&quot;</span>
-    <span class="k">pass</span></div>
-
-
-<div class="viewcode-block" id="copystat"><a class="viewcode-back" href="../../../profile/util.html#profile_default.util.copytree.copystat">[docs]</a><span class="k">def</span> <span class="nf">copystat</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">follow_symlinks</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Copy file metadata.</span>
-
-<span class="sd">    Copy the permission bits, last access time, last modification time, and</span>
-<span class="sd">    flags from `src` to `dst`. On Linux, copystat() also copies the &quot;extended</span>
-<span class="sd">    attributes&quot; where possible. The file contents, owner, and group are</span>
-<span class="sd">    unaffected. `src` and `dst` are path names given as strings.</span>
-
-<span class="sd">    If the optional flag `follow_symlinks` is not set, symlinks aren&#39;t</span>
-<span class="sd">    followed if and only if both `src` and `dst` are symlinks.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">_nop</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">ns</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">follow_symlinks</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="k">pass</span>
-
-    <span class="c1"># follow symlinks (aka don&#39;t not follow symlinks)</span>
-    <span class="n">follow</span> <span class="o">=</span> <span class="n">follow_symlinks</span> <span class="ow">or</span> <span class="ow">not</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">islink</span><span class="p">(</span><span class="n">src</span><span class="p">)</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">islink</span><span class="p">(</span><span class="n">dst</span><span class="p">))</span>
-    <span class="k">if</span> <span class="n">follow</span><span class="p">:</span>
-        <span class="c1"># use the real function if it exists</span>
-        <span class="k">def</span> <span class="nf">lookup</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-            <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">os</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">_nop</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="c1"># use the real function only if it exists</span>
-        <span class="c1"># *and* it supports follow_symlinks</span>
-        <span class="k">def</span> <span class="nf">lookup</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-            <span class="n">fn</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">os</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">_nop</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">supports_follow_symlinks</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">fn</span>
-            <span class="k">return</span> <span class="n">_nop</span>
-
-    <span class="n">st</span> <span class="o">=</span> <span class="n">lookup</span><span class="p">(</span><span class="s2">&quot;stat&quot;</span><span class="p">)(</span><span class="n">src</span><span class="p">,</span> <span class="n">follow_symlinks</span><span class="o">=</span><span class="n">follow</span><span class="p">)</span>
-    <span class="n">mode</span> <span class="o">=</span> <span class="n">stat</span><span class="o">.</span><span class="n">S_IMODE</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">st_mode</span><span class="p">)</span>
-    <span class="n">lookup</span><span class="p">(</span><span class="s2">&quot;utime&quot;</span><span class="p">)(</span><span class="n">dst</span><span class="p">,</span> <span class="n">ns</span><span class="o">=</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">st_atime_ns</span><span class="p">,</span> <span class="n">st</span><span class="o">.</span><span class="n">st_mtime_ns</span><span class="p">),</span>
-        <span class="n">follow_symlinks</span><span class="o">=</span><span class="n">follow</span><span class="p">)</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">lookup</span><span class="p">(</span><span class="s2">&quot;chmod&quot;</span><span class="p">)(</span><span class="n">dst</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">follow_symlinks</span><span class="o">=</span><span class="n">follow</span><span class="p">)</span>
-    <span class="k">except</span> <span class="ne">NotImplementedError</span><span class="p">:</span>
-        <span class="c1"># if we got a NotImplementedError, it&#39;s because</span>
-        <span class="c1">#   * follow_symlinks=False,</span>
-        <span class="c1">#   * lchown() is unavailable, and</span>
-        <span class="c1">#   * either</span>
-        <span class="c1">#       * fchownat() is unavailable or</span>
-        <span class="c1">#       * fchownat() doesn&#39;t implement AT_SYMLINK_NOFOLLOW.</span>
-        <span class="c1">#         (it returned ENOSUP.)</span>
-        <span class="c1"># therefore we&#39;re out of options--we simply cannot chown the</span>
-        <span class="c1"># symlink.  give up, suppress the error.</span>
-        <span class="c1"># (which is what shutil always did in this circumstance.)</span>
-        <span class="k">pass</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">st</span><span class="p">,</span> <span class="s1">&#39;st_flags&#39;</span><span class="p">):</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">lookup</span><span class="p">(</span><span class="s2">&quot;chflags&quot;</span><span class="p">)(</span><span class="n">dst</span><span class="p">,</span> <span class="n">st</span><span class="o">.</span><span class="n">st_flags</span><span class="p">,</span> <span class="n">follow_symlinks</span><span class="o">=</span><span class="n">follow</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">why</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">err</span> <span class="ow">in</span> <span class="s1">&#39;EOPNOTSUPP&#39;</span><span class="p">,</span> <span class="s1">&#39;ENOTSUP&#39;</span><span class="p">:</span>
-                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">errno</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span> <span class="ow">and</span> <span class="n">why</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">errno</span><span class="p">,</span> <span class="n">err</span><span class="p">):</span>
-                    <span class="k">break</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span>
-    <span class="n">_copyxattr</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="n">follow_symlinks</span><span class="o">=</span><span class="n">follow</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="copytree"><a class="viewcode-back" href="../../../profile/util.html#profile_default.util.copytree.copytree">[docs]</a><span class="k">def</span> <span class="nf">copytree</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="n">symlinks</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ignore</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">copy_function</span><span class="o">=</span><span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Let&#39;s try and do `shutil.copytree()` a little better.&quot;&quot;&quot;</span>
-    <span class="n">names</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">ignore</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">ignored_names</span> <span class="o">=</span> <span class="n">ignore</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">names</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">ignored_names</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
-
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">dst</span><span class="p">)</span>
-    <span class="k">except</span> <span class="ne">FileExistsError</span><span class="p">:</span>
-        <span class="k">pass</span>
     <span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">ignored_names</span><span class="p">:</span>
-            <span class="k">continue</span>
-        <span class="n">srcname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
-        <span class="n">dstname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dst</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="n">symlinks</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ignore</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">copy_function</span><span class="o">=</span><span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">src</span> <span class="o">=</span> <span class="n">src</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dst</span> <span class="o">=</span> <span class="n">dst</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">symlinks</span> <span class="o">=</span> <span class="n">symlinks</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ignore</span> <span class="o">=</span> <span class="n">ignore</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">copy_function</span><span class="o">=</span> <span class="n">copy_function</span>
+
+<div class="viewcode-block" id="CopyTree.destination_files"><a class="viewcode-back" href="../../../profile_default/util/util.html#profile_default.util.copytree.CopyTree.destination_files">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">destination_files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">src</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignore</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ignored_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignore</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">src</span><span class="p">,</span> <span class="n">names</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ignored_names</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">ignored_names</span></div>
+
+    <span class="k">def</span> <span class="nf">_str_to_path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">src</span><span class="p">,</span> <span class="n">__fspath__</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">src</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">src</span><span class="o">.</span><span class="n">__fspath__</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dst</span><span class="p">,</span> <span class="n">__fspath__</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dst</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dst</span><span class="o">.</span><span class="n">__fspath__</span><span class="p">()</span>
+
+<div class="viewcode-block" id="CopyTree.make_dest_dirs"><a class="viewcode-back" href="../../../profile_default/util/util.html#profile_default.util.copytree.CopyTree.make_dest_dirs">[docs]</a>    <span class="k">def</span> <span class="nf">make_dest_dirs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">islink</span><span class="p">(</span><span class="n">srcname</span><span class="p">):</span>
-                <span class="n">linkto</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">readlink</span><span class="p">(</span><span class="n">srcname</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">symlinks</span><span class="p">:</span>
-                    <span class="c1"># We can&#39;t just leave it to `copy_function` because legacy</span>
-                    <span class="c1"># code with a custom `copy_function` may rely on copytree</span>
-                    <span class="c1"># doing the right thing.</span>
-                    <span class="n">os</span><span class="o">.</span><span class="n">symlink</span><span class="p">(</span><span class="n">linkto</span><span class="p">,</span> <span class="n">dstname</span><span class="p">)</span>
-                    <span class="n">copystat</span><span class="p">(</span><span class="n">srcname</span><span class="p">,</span> <span class="n">dstname</span><span class="p">,</span> <span class="n">follow_symlinks</span><span class="o">=</span><span class="ow">not</span> <span class="n">symlinks</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="c1"># ignore dangling symlink if the flag is on</span>
-                    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">linkto</span><span class="p">)</span> <span class="ow">and</span> <span class="n">ignore_dangling_symlinks</span><span class="p">:</span>
-                        <span class="k">continue</span>
-                    <span class="c1"># otherwise let the copy occurs. copy2 will raise an error</span>
-                    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">srcname</span><span class="p">):</span>
-                        <span class="n">copytree</span><span class="p">(</span><span class="n">srcname</span><span class="p">,</span> <span class="n">dstname</span><span class="p">,</span> <span class="n">symlinks</span><span class="p">,</span> <span class="n">ignore</span><span class="p">,</span>
-                                 <span class="n">copy_function</span><span class="p">)</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dst</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">FileExistsError</span><span class="p">:</span>
+            <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="CopyTree.copytree"><a class="viewcode-back" href="../../../profile_default/util/util.html#profile_default.util.copytree.CopyTree.copytree">[docs]</a>    <span class="k">def</span> <span class="nf">copytree</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="n">symlinks</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ignore</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">copy_function</span><span class="o">=</span><span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Let&#39;s try and do `shutil.copytree()` a little better.</span>
+
+<span class="sd">        First let&#39;s do everyone the courtesy of checking whether `src` and `dest`</span>
+<span class="sd">        are pathlib.Path objects.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">ignored_names</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">srcname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="n">dstname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dst</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">islink</span><span class="p">(</span><span class="n">srcname</span><span class="p">):</span>
+                    <span class="n">linkto</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">readlink</span><span class="p">(</span><span class="n">srcname</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">symlinks</span><span class="p">:</span>
+                        <span class="c1"># We can&#39;t just leave it to `copy_function` because legacy</span>
+                        <span class="c1"># code with a custom `copy_function` may rely on copytree</span>
+                        <span class="c1"># doing the right thing.</span>
+                        <span class="n">os</span><span class="o">.</span><span class="n">symlink</span><span class="p">(</span><span class="n">linkto</span><span class="p">,</span> <span class="n">dstname</span><span class="p">)</span>
+                        <span class="n">copystat</span><span class="p">(</span><span class="n">srcname</span><span class="p">,</span> <span class="n">dstname</span><span class="p">,</span> <span class="n">follow_symlinks</span><span class="o">=</span><span class="ow">not</span> <span class="n">symlinks</span><span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="n">copy_function</span><span class="p">(</span><span class="n">srcname</span><span class="p">,</span> <span class="n">dstname</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">srcname</span><span class="p">):</span>
-                <span class="n">copytree</span><span class="p">(</span><span class="n">srcname</span><span class="p">,</span> <span class="n">dstname</span><span class="p">,</span> <span class="n">symlinks</span><span class="p">,</span> <span class="n">ignore</span><span class="p">,</span> <span class="n">copy_function</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="c1"># Will raise a SpecialFileError for unsupported file types</span>
-                <span class="n">copy_function</span><span class="p">(</span><span class="n">srcname</span><span class="p">,</span> <span class="n">dstname</span><span class="p">)</span>
-        <span class="c1"># catch the Error from the recursive copytree so that we can</span>
-        <span class="c1"># continue with other files</span>
-        <span class="k">except</span> <span class="n">Error</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
-            <span class="n">errors</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">err</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                        <span class="c1"># ignore dangling symlink if the flag is on</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">linkto</span><span class="p">)</span> <span class="ow">and</span> <span class="n">ignore_dangling_symlinks</span><span class="p">:</span>
+                            <span class="k">continue</span>
+                        <span class="c1"># otherwise let the copy occurs. copy2 will raise an error</span>
+                        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">srcname</span><span class="p">):</span>
+                            <span class="n">copytree</span><span class="p">(</span><span class="n">srcname</span><span class="p">,</span> <span class="n">dstname</span><span class="p">,</span> <span class="n">symlinks</span><span class="p">,</span> <span class="n">ignore</span><span class="p">,</span>
+                                     <span class="n">copy_function</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">copy_function</span><span class="p">(</span><span class="n">srcname</span><span class="p">,</span> <span class="n">dstname</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">srcname</span><span class="p">):</span>
+                    <span class="n">copytree</span><span class="p">(</span><span class="n">srcname</span><span class="p">,</span> <span class="n">dstname</span><span class="p">,</span> <span class="n">symlinks</span><span class="p">,</span> <span class="n">ignore</span><span class="p">,</span> <span class="n">copy_function</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># Will raise a SpecialFileError for unsupported file types</span>
+                    <span class="n">copy_function</span><span class="p">(</span><span class="n">srcname</span><span class="p">,</span> <span class="n">dstname</span><span class="p">)</span>
+            <span class="c1"># catch the Error from the recursive copytree so that we can</span>
+            <span class="c1"># continue with other files</span>
+            <span class="k">except</span> <span class="n">Error</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                <span class="n">errors</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">err</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">why</span><span class="p">:</span>
+                <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">srcname</span><span class="p">,</span> <span class="n">dstname</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">why</span><span class="p">)))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">copystat</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">why</span><span class="p">:</span>
-            <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">srcname</span><span class="p">,</span> <span class="n">dstname</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">why</span><span class="p">)))</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">copystat</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">)</span>
-    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">why</span><span class="p">:</span>
-        <span class="c1"># Copying file access times may fail on Windows</span>
-        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">why</span><span class="p">,</span> <span class="s1">&#39;winerror&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">why</span><span class="p">)))</span>
-    <span class="k">if</span> <span class="n">errors</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">dst</span></div>
+            <span class="c1"># Copying file access times may fail on Windows</span>
+            <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">why</span><span class="p">,</span> <span class="s1">&#39;winerror&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">why</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="n">errors</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">dst</span></div></div>
 </pre></div>
 
           </div>
@@ -196,9 +166,9 @@
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../profile/index.html">IPython Shell Initialization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../jupyter.html">Jupyter ZMQShell</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Notebook Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../startup/index.html">IPython Shell Initialization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../jupyter.html">Jupyter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Extensions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../dev.html">Contributors Notes</a></li>
 </ul>
 
@@ -232,7 +202,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright (C) 2018-2019 Faris Chugthai.
-      Last updated on Aug 10, 2019.
+      Last updated on Aug 19, 2019.
     </div>
   </body>
 </html>

@@ -119,8 +119,7 @@ from profile_default.util.machine import Platform
 LOGGER = module_log.stream_logger(
     logger=logging.getLogger(name=__name__),
     msg_format='%(asctime)s : %(levelname)s : %(module)s %(message)s',
-    log_level=logging.INFO
-)
+    log_level=logging.INFO)
 
 
 def linux_specific_aliases(_ip=None):
@@ -163,18 +162,15 @@ def linux_specific_aliases(_ip=None):
         ('cp', 'cp -iv %l'),  # cp mv mkdir and rmdir are all overridden
         ('dus', 'du -d 1 -ha %l'),
         ('echo', 'echo -e %l'),
-        (
-            'gpip',
-            'export PIP_REQUIRE_VIRTUALENV=0; python -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null'
-        ),
-        (
-            'gpip2',
-            'export PIP_REQUIRE_VIRTUALENV=0; python2 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null'
-        ),
-        (
-            'gpip3',
-            'export PIP_REQUIRE_VIRTUALENV=0; python3 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null'
-        ),
+        ('gpip',
+         'export PIP_REQUIRE_VIRTUALENV=0; python -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null'
+         ),
+        ('gpip2',
+         'export PIP_REQUIRE_VIRTUALENV=0; python2 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null'
+         ),
+        ('gpip3',
+         'export PIP_REQUIRE_VIRTUALENV=0; python3 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null'
+         ),
         ('head', 'head -n 30 %l'),
         ('la', 'ls -AF --color=always %l'),
         ('l', 'ls -CF --color=always %l'),
@@ -189,14 +185,10 @@ def linux_specific_aliases(_ip=None):
         ('redo', 'fc -s'),
         ('rm', 'rm -v %l'),
         ('rmdir', 'rmdir -v %l'),
-        (
-            'profile_default',
-            'cd ~/projects/dotfiles/unix/.ipython/profile_default'
-        ),
-        (
-            'startup',
-            'cd ~/projects/dotfiles/unix/.ipython/profile_default/startup'
-        ),
+        ('profile_default',
+         'cd ~/projects/dotfiles/unix/.ipython/profile_default'),
+        ('startup',
+         'cd ~/projects/dotfiles/unix/.ipython/profile_default/startup'),
         ('tail', 'tail -n 30 %l'),
         ('tre', 'tree -ashFC -I .git -I __pycache__ --filelimit 25'),
     ]
@@ -260,17 +252,14 @@ def common_aliases(_ip=None):
         ('ggc', 'git gc %l'),
         ('ggcp', 'git gc --prune %l'),
         ('git', 'git %l'),
-        (
-            'git hist',
-            'git log --pretty="format:%h %ad | %d [%an]" --graph --date=short '
-            '--branches --abbrev-commit --oneline %l'
-        ),
+        ('git hist',
+         'git log --pretty="format:%h %ad | %d [%an]" --graph --date=short '
+         '--branches --abbrev-commit --oneline %l'),
         ('git last', 'git log -1 HEAD %l'),
         ('gl', 'git log %l'),
-        (
-            'glo',
-            'git log --graph --decorate --abbrev-commit --oneline --branches --all'
-        ),
+        ('glo',
+         'git log --graph --decorate --abbrev-commit --oneline --branches --all'
+         ),
         ('gls', 'git ls-tree master %l'),
         ('git ls', 'git ls-tree master %l'),
         ('gm', 'git merge --no-ff %l'),
@@ -318,9 +307,9 @@ def common_aliases(_ip=None):
     ]
     return _user_aliases
 
+
 class WindowsAliases:
     """Aggregated Window aliases."""
-
     def __init__(self, _ip=None):
         if _ip is not None:
             self._ip = _ip
@@ -354,8 +343,8 @@ class WindowsAliases:
             ('ddir', 'dir /ad /on %l'),
             ('ldir', 'dir /ad /on %l'),
             ('ll', 'dir /Q %l'),
-            ('ln',
-             'mklink %s %s'),  # I know this really isn't the same but I need it
+            ('ln', 'mklink %s %s'
+             ),  # I know this really isn't the same but I need it
             ('make', 'make.bat %l'),  # Useful when we're building docs
             ('mklink', 'mklink %s %s'),
             ('move', 'move %s %s'),
@@ -563,18 +552,17 @@ def __setup_fzf(user_aliases):
     if shutil.which('fzf') and shutil.which('rg'):
         # user_aliases.extend(
         #     ('fzf', '$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS'))
-        user_aliases.extend(
-            ('fzf', 'rg --pretty --hidden --max-columns=300 --max-columns-preview '
+        user_aliases.extend((
+            'fzf',
+            'rg --pretty --hidden --max-columns=300 --max-columns-preview '
             '.*[a-zA-Z]* --no-heading -m=30 --no-messages --color=ansi --no-column '
-            ' --no-line-number -C 0 | fzf --ansi')
-        )
+            ' --no-line-number -C 0 | fzf --ansi'))
 
     elif shutil.which('fzf') and shutil.which('ag'):
         # user_aliases.extend(
         #     ('fzf', '$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS'))
         user_aliases.extend(
-            ('fzf', 'ag -C 0 --color-win-ansi --noheading | fzf --ansi')
-        )
+            ('fzf', 'ag -C 0 --color-win-ansi --noheading | fzf --ansi'))
 
     return user_aliases
 
@@ -611,6 +599,5 @@ if __name__ == "__main__":
     _ip = get_ipython()
 
     main()
-    LOGGER.debug(
-        'Number of aliases is: %s' % len(_ip.run_line_magic('alias', ''))
-    )
+    LOGGER.debug('Number of aliases is: %s' %
+                 len(_ip.run_line_magic('alias', '')))

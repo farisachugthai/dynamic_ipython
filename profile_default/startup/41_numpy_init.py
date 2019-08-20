@@ -168,6 +168,7 @@ try:
 except (ImportError, ModuleNotFoundError):
     pass
 else:
+
     def set_numpy_printoptions(**kwargs):
         """Define this function only if numpy can be imported.
 
@@ -187,7 +188,6 @@ else:
     # you'll raise an error if it gets called from a different scope
     set_numpy_printoptions()
     doctest.testmod()  # why not?
-
 
 if __name__ == "__main__":
     logging.basicConfig()

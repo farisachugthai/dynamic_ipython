@@ -136,10 +136,9 @@
 <span class="sd">    MergedKeys : :class:`prompt_toolkit.key_bindings.MergedKeyBindings`</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">merge_key_bindings</span><span class="p">([</span>
-        <span class="n">vi</span><span class="o">.</span><span class="n">load_vi_bindings</span><span class="p">(),</span>
-        <span class="n">vi</span><span class="o">.</span><span class="n">load_vi_search_bindings</span><span class="p">()</span>
-    <span class="p">])</span></div>
+    <span class="k">return</span> <span class="n">merge_key_bindings</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">vi</span><span class="o">.</span><span class="n">load_vi_bindings</span><span class="p">(),</span>
+         <span class="n">vi</span><span class="o">.</span><span class="n">load_vi_search_bindings</span><span class="p">()])</span></div>
 
 
 <div class="viewcode-block" id="emacs_bindings"><a class="viewcode-back" href="../../../startup/vi_modes.html#profile_default.startup.32_vi_modes.emacs_bindings">[docs]</a><span class="k">def</span> <span class="nf">emacs_bindings</span><span class="p">():</span>
@@ -183,12 +182,10 @@
     <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;escape&#39;</span><span class="p">,</span> <span class="s1">&#39;l&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">insert_mode</span><span class="p">))(</span><span class="n">named_commands</span><span class="o">.</span><span class="n">downcase_word</span><span class="p">)</span>
     <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;escape&#39;</span><span class="p">,</span> <span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">insert_mode</span><span class="p">))(</span><span class="n">named_commands</span><span class="o">.</span><span class="n">uppercase_word</span><span class="p">)</span>
     <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;escape&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">insert_mode</span><span class="p">))(</span><span class="n">named_commands</span><span class="o">.</span><span class="n">yank_pop</span><span class="p">)</span>
-    <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
-        <span class="s1">&#39;escape&#39;</span><span class="p">,</span> <span class="s1">&#39;backspace&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">insert_mode</span><span class="p">)</span>
-    <span class="p">)(</span><span class="n">named_commands</span><span class="o">.</span><span class="n">backward_kill_word</span><span class="p">)</span>
-    <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
-        <span class="s1">&#39;escape&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">insert_mode</span><span class="p">)</span>
-    <span class="p">)(</span><span class="n">named_commands</span><span class="o">.</span><span class="n">delete_horizontal_space</span><span class="p">)</span>
+    <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;escape&#39;</span><span class="p">,</span> <span class="s1">&#39;backspace&#39;</span><span class="p">,</span>
+           <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">insert_mode</span><span class="p">))(</span><span class="n">named_commands</span><span class="o">.</span><span class="n">backward_kill_word</span><span class="p">)</span>
+    <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;escape&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span>
+           <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">insert_mode</span><span class="p">))(</span><span class="n">named_commands</span><span class="o">.</span><span class="n">delete_horizontal_space</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">kb</span></div>
 
@@ -201,16 +198,15 @@
     <span class="n">nh</span> <span class="o">=</span> <span class="n">get_by_name</span><span class="p">(</span><span class="s1">&#39;next-history&#39;</span><span class="p">)</span>
 
     <span class="n">kb</span><span class="o">.</span><span class="n">add_binding</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;j&#39;</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">insert_mode</span><span class="p">))(</span><span class="n">switch_to_navigation_mode</span><span class="p">)</span>
-    <span class="n">kb</span><span class="o">.</span><span class="n">add_binding</span><span class="p">(</span>
-        <span class="s1">&#39;K&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">ViNavigationMode</span><span class="p">())</span>
-    <span class="p">)(</span><span class="n">ph</span><span class="p">)</span>
+    <span class="n">kb</span><span class="o">.</span><span class="n">add_binding</span><span class="p">(</span><span class="s1">&#39;K&#39;</span><span class="p">,</span>
+                   <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">ViNavigationMode</span><span class="p">()))(</span><span class="n">ph</span><span class="p">)</span>
 
-    <span class="n">kb</span><span class="o">.</span><span class="n">add_binding</span><span class="p">(</span>
-        <span class="s1">&#39;J&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">ViNavigationMode</span><span class="p">())</span>
-    <span class="p">)(</span><span class="n">nh</span><span class="p">)</span>
+    <span class="n">kb</span><span class="o">.</span><span class="n">add_binding</span><span class="p">(</span><span class="s1">&#39;J&#39;</span><span class="p">,</span>
+                   <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">ViNavigationMode</span><span class="p">()))(</span><span class="n">nh</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">escape_keys</span><span class="p">:</span>
-        <span class="n">emacs_keys</span> <span class="o">=</span> <span class="n">merge_key_bindings</span><span class="p">([</span><span class="n">emacs_bindings</span><span class="p">(),</span> <span class="n">emacs_alt_bindings</span><span class="p">()])</span>
+        <span class="n">emacs_keys</span> <span class="o">=</span> <span class="n">merge_key_bindings</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">emacs_bindings</span><span class="p">(),</span> <span class="n">emacs_alt_bindings</span><span class="p">()])</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">emacs_keys</span> <span class="o">=</span> <span class="n">emacs_bindings</span><span class="p">()</span>
 
@@ -227,9 +223,12 @@
     <span class="sd">&quot;&quot;&quot;This really needs to be redone so I don&#39;t have to keep passing around this global not global _ip.&quot;&quot;&quot;</span>
     <span class="c1"># IPython &lt; 7.0</span>
     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_ip</span><span class="p">,</span> <span class="s1">&#39;pt_cli&#39;</span><span class="p">):</span>
-        <span class="n">_ip</span><span class="o">.</span><span class="n">pt_cli</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">key_bindings_registry</span> <span class="o">=</span> <span class="n">merge_key_bindings</span><span class="p">([</span><span class="n">almost_all_keys</span><span class="p">,</span> <span class="n">create_ipython_shortcuts</span><span class="p">(</span><span class="n">_ip</span><span class="p">)])</span>
-        <span class="n">RSI_LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Number of keybindings:&#39;</span>
-                <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">:</span><span class="se">\t</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_ip</span><span class="o">.</span><span class="n">pt_cli</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">key_bindings_registry</span><span class="o">.</span><span class="n">bindings</span><span class="p">))</span>
+        <span class="n">_ip</span><span class="o">.</span><span class="n">pt_cli</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">key_bindings_registry</span> <span class="o">=</span> <span class="n">merge_key_bindings</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">almost_all_keys</span><span class="p">,</span> <span class="n">create_ipython_shortcuts</span><span class="p">(</span><span class="n">_ip</span><span class="p">)])</span>
+        <span class="n">RSI_LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s1">&#39;Number of keybindings:&#39;</span>
+            <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">:</span><span class="se">\t</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">_ip</span><span class="o">.</span><span class="n">pt_cli</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">key_bindings_registry</span><span class="o">.</span><span class="n">bindings</span><span class="p">))</span>
     <span class="c1"># IPython &gt;= 7.0</span>
     <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_ip</span><span class="p">,</span> <span class="s1">&#39;pt_app&#39;</span><span class="p">):</span>
 
@@ -239,8 +238,10 @@
             <span class="c1"># If you start IPython from something like pytest i guess it starts</span>
             <span class="c1"># the machinery with a few parts missing...I don&#39;t know.</span>
 
-        <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">key_bindings</span> <span class="o">=</span> <span class="n">merge_key_bindings</span><span class="p">([</span><span class="n">almost_all_keys</span><span class="p">,</span> <span class="n">create_ipython_shortcuts</span><span class="p">(</span><span class="n">_ip</span><span class="p">)])</span>
-        <span class="n">RSI_LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Number of keybindings </span><span class="si">{}</span><span class="s1">:</span><span class="se">\t</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">key_bindings</span><span class="o">.</span><span class="n">bindings</span><span class="p">)))</span>
+        <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">key_bindings</span> <span class="o">=</span> <span class="n">merge_key_bindings</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">almost_all_keys</span><span class="p">,</span> <span class="n">create_ipython_shortcuts</span><span class="p">(</span><span class="n">_ip</span><span class="p">)])</span>
+        <span class="n">RSI_LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Number of keybindings </span><span class="si">{}</span><span class="s1">:</span><span class="se">\t</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">key_bindings</span><span class="o">.</span><span class="n">bindings</span><span class="p">)))</span>
 
     <span class="k">else</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
@@ -248,7 +249,8 @@
         <span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="n">ModuleNotFoundError</span><span class="p">):</span>
             <span class="n">ZMQInteractiveShell</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="n">RSI_LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Is this being run in IPython?:</span><span class="se">\n</span><span class="s1">Type: </span><span class="si">%s</span><span class="s1"> &#39;</span><span class="p">,</span>
-                              <span class="nb">type</span><span class="p">(</span><span class="n">_ip</span><span class="p">),</span> <span class="n">exc_info</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                             <span class="nb">type</span><span class="p">(</span><span class="n">_ip</span><span class="p">),</span>
+                             <span class="n">exc_info</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># Jupyter QTConsole</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">_ip</span><span class="p">,</span> <span class="n">ZMQInteractiveShell</span><span class="p">):</span>
@@ -262,9 +264,10 @@
 
 <span class="sd">    This function delegates the extra bindings.</span>
 
-<span class="sd">    Here&#39;s the super long init signature from PromptSession().:</span>
+<span class="sd">    Here&#39;s the super long init signature from</span>
+<span class="sd">    :class:`prompt_toolkit.PromptSession`.:</span>
 
-<span class="sd">         __init__(self, message, multiline, wrap_lines, is_password, vi_mode,</span>
+<span class="sd">        \_\_init\_\_(self, message, multiline, wrap_lines, is_password, vi_mode,</span>
 <span class="sd">        editing_mode, complete_while_typing, validate_while_typing,</span>
 <span class="sd">        enable_history_search, search_ignore_case, lexer, enable_system_prompt,</span>
 <span class="sd">        enable_suspend, enable_open_in_editor, validator, completer,</span>
@@ -294,25 +297,32 @@
     <span class="c1"># _ip = merge_ipython_rsi_kb(_ip)  # TODO: ugh</span>
     <span class="n">kb</span> <span class="o">=</span> <span class="n">base_keys</span><span class="p">()</span>
 
-    <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span> <span class="o">=</span> <span class="n">PromptSession</span><span class="p">(</span><span class="n">complete_while_typing</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                       <span class="n">editing_mode</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">EditingMode</span><span class="p">,</span> <span class="n">_ip</span><span class="o">.</span><span class="n">editing_mode</span><span class="o">.</span><span class="n">upper</span><span class="p">()),</span>
-                       <span class="n">bottom_toolbar</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># todo</span>
-                       <span class="n">mouse_support</span><span class="o">=</span><span class="n">_ip</span><span class="o">.</span><span class="n">mouse_support</span><span class="p">,</span>
-                       <span class="n">complete_style</span><span class="o">=</span><span class="n">_ip</span><span class="o">.</span><span class="n">pt_complete_style</span><span class="p">,</span>
-                       <span class="n">inputhook</span><span class="o">=</span><span class="n">_ip</span><span class="o">.</span><span class="n">inputhook</span><span class="p">,</span>
-                       <span class="n">color_depth</span><span class="o">=</span><span class="n">_ip</span><span class="o">.</span><span class="n">color_depth</span><span class="p">,</span>
-                       <span class="n">key_bindings</span><span class="o">=</span><span class="n">kb</span><span class="p">,</span>
-                       <span class="n">style</span><span class="o">=</span><span class="n">_ip</span><span class="o">.</span><span class="n">style</span><span class="p">)</span>
+    <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span> <span class="o">=</span> <span class="n">PromptSession</span><span class="p">(</span>
+        <span class="n">complete_while_typing</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">editing_mode</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">EditingMode</span><span class="p">,</span> <span class="n">_ip</span><span class="o">.</span><span class="n">editing_mode</span><span class="o">.</span><span class="n">upper</span><span class="p">()),</span>
+        <span class="n">bottom_toolbar</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># todo</span>
+        <span class="n">mouse_support</span><span class="o">=</span><span class="n">_ip</span><span class="o">.</span><span class="n">mouse_support</span><span class="p">,</span>
+        <span class="n">complete_style</span><span class="o">=</span><span class="n">_ip</span><span class="o">.</span><span class="n">pt_complete_style</span><span class="p">,</span>
+        <span class="n">inputhook</span><span class="o">=</span><span class="n">_ip</span><span class="o">.</span><span class="n">inputhook</span><span class="p">,</span>
+        <span class="n">color_depth</span><span class="o">=</span><span class="n">_ip</span><span class="o">.</span><span class="n">color_depth</span><span class="p">,</span>
+        <span class="n">key_bindings</span><span class="o">=</span><span class="n">kb</span><span class="p">,</span>
+        <span class="n">style</span><span class="o">=</span><span class="n">_ip</span><span class="o">.</span><span class="n">style</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">_ip</span></div>
+
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">insert_mode</span> <span class="o">=</span> <span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">ViInsertMode</span><span class="p">())</span>
 
-    <span class="n">RSI_LOGGER</span> <span class="o">=</span> <span class="n">module_log</span><span class="o">.</span><span class="n">stream_logger</span><span class="p">(</span>
-            <span class="n">logger</span><span class="o">=</span><span class="s2">&quot;RSI&quot;</span><span class="p">,</span>
-            <span class="n">log_level</span><span class="o">=</span><span class="mi">30</span>
-        <span class="p">)</span>
+    <span class="n">RSI_LOGGER</span> <span class="o">=</span> <span class="n">module_log</span><span class="o">.</span><span class="n">stream_logger</span><span class="p">(</span><span class="n">logger</span><span class="o">=</span><span class="s2">&quot;RSI&quot;</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
     <span class="c1"># shell = main()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">readline</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="n">ModuleNotFoundError</span><span class="p">):</span>
+        <span class="n">readline</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">readline</span><span class="p">,</span> <span class="s1">&#39;read_init_file&#39;</span><span class="p">):</span>
+        <span class="n">readline</span><span class="o">.</span><span class="n">read_init_file</span><span class="p">(</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;~&#39;</span><span class="p">,</span> <span class="s1">&#39;.inputrc&#39;</span><span class="p">)))</span>
 </pre></div>
 
           </div>

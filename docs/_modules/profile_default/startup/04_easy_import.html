@@ -75,14 +75,10 @@
 <span class="kn">from</span> <span class="nn">IPython.utils</span> <span class="k">import</span> <span class="n">importstring</span>
 
 
-<div class="viewcode-block" id="dreload"><a class="viewcode-back" href="../../../startup/easy_import.html#profile_default.startup.04_easy_import.dreload">[docs]</a><span class="k">def</span> <span class="nf">dreload</span><span class="p">(</span>
-        <span class="n">mod</span><span class="p">,</span>
-        <span class="n">extra_excludes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">excludes</span><span class="o">=</span><span class="p">(</span>
-            <span class="s1">&#39;sys&#39;</span><span class="p">,</span> <span class="s1">&#39;os.path&#39;</span><span class="p">,</span> <span class="s1">&#39;builtins&#39;</span><span class="p">,</span> <span class="s1">&#39;__main__&#39;</span><span class="p">,</span> <span class="s1">&#39;io&#39;</span><span class="p">,</span> <span class="s1">&#39;numpy&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;numpy._globals&#39;</span><span class="p">,</span> <span class="s1">&#39;IPython&#39;</span>
-        <span class="p">)</span>
-<span class="p">):</span>
+<div class="viewcode-block" id="dreload"><a class="viewcode-back" href="../../../startup/easy_import.html#profile_default.startup.04_easy_import.dreload">[docs]</a><span class="k">def</span> <span class="nf">dreload</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span>
+            <span class="n">extra_excludes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">excludes</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;sys&#39;</span><span class="p">,</span> <span class="s1">&#39;os.path&#39;</span><span class="p">,</span> <span class="s1">&#39;builtins&#39;</span><span class="p">,</span> <span class="s1">&#39;__main__&#39;</span><span class="p">,</span> <span class="s1">&#39;io&#39;</span><span class="p">,</span> <span class="s1">&#39;numpy&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;numpy._globals&#39;</span><span class="p">,</span> <span class="s1">&#39;IPython&#39;</span><span class="p">)):</span>
     <span class="sd">&quot;&quot;&quot;Import IPython&#39;s deepreload magic and modify the :param:`excludes` set.</span>
 
 <span class="sd">    Parameters</span>
@@ -123,17 +119,16 @@
         <span class="n">pynvim</span> <span class="o">=</span> <span class="n">import_module</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;************************************************************&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span>
-            <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> import failed. Only ignore this if you plan on going&quot;</span>
-            <span class="s2">&quot; the entire session without using </span><span class="si">%e</span><span class="s2">dit&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span>
-        <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> import failed. Only ignore this if you plan on going&quot;</span>
+              <span class="s2">&quot; the entire session without using </span><span class="si">%e</span><span class="s2">dit&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mod</span><span class="p">))</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;************************************************************&quot;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">pynvim</span></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">):</span>  <span class="c1"># actually shouldn&#39;t happen IPy requires 3.5&gt;</span>
+    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span>
+                           <span class="mi">5</span><span class="p">):</span>  <span class="c1"># actually shouldn&#39;t happen IPy requires 3.5&gt;</span>
         <span class="n">mod</span> <span class="o">=</span> <span class="s1">&#39;pynvim&#39;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">mod</span> <span class="o">=</span> <span class="s1">&#39;neovim&#39;</span>
