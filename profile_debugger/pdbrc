@@ -29,40 +29,47 @@ import subprocess
 import sys
 
 try:
-    import ipdb
+    import ipdb as pdb
 except (ImportError, ModuleNotFoundError):
     import pdb
+
+try:
+    from IPython.terminal.debugger import TerminalPdb
+except (ImportError, ModuleNotFoundError):
+    TerminalPdb = None
+
 
 # https://github.com/python/cpython/blob/3.7/Lib/pdb.py#L1380
 # in the do_alias() function it mentions some examples and they sounded like
 # useful alias to tack on!
 
-# def create_aliases():
-
 # Print instance variables (usage "pi classInst")
-# alias pi for k in % 1.__dict__.keys(): print("%1.", k, "=", % 1.__dict__[k])  # noqa
+alias pi for k in % 1.__dict__.keys(): print("%1.", k, "=", % 1.__dict__[k])  # noqa
 # # Print instance variables in self
-# alias ps pi self
+alias ps pi self
 
 # # Apr 07, 2019
 # # How in the world have I gone this long without noticing this isn't set up
-# alias ? pinfo
+alias ? pinfo
 # # Kinda sucks now only ?func is valid not func?
-# alias ?? pinfo2
+alias ?? pinfo2
 
-# # this is probably not how we wanna do this
-# # if '%1':
-# #     alias ls os.listdir('%l')
-# # else:
-# #     alias ls os.listdir(os.curdir) '%l'
+class DynamicPDB(TerminalPdb):
+    """Subclass the :class:`IPython.terminal.debugger.TerminalPdb`. """
 
-# # alias cd os.chdir('%s')
-# # TODO: fix this
-# # alias nvim subprocess.run(['nvim', '%1', '%2', '%3'], sys.stdout='DEV.NULL')
+    def pt_init(self):
+        """The IPython team got 99% of it right but I don't get why this.
 
-# # I wonder/hope this is recursive
-# alias ~ os.expanduser('~')
+        The original implementation of this was very odd to me so I'm just gonna
+        redo it.
 
-# # if os.environ.get('PREFIX'):
-# #     subprocess.run([])
+        Parameters
+        ----------
+
+        Returns
+        -------
+
+        """
+
+
 # # Vim: set ft=python:

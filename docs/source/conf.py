@@ -192,6 +192,8 @@ html_sidebars = {
     ]
 }
 
+html_title = 'Dynamic IPython'
+
 # If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
 html_show_sphinx = False
 

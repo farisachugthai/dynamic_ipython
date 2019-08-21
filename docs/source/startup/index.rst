@@ -6,6 +6,7 @@ These are the auto-generated API docs for IPython's startup.
 
 .. toctree::
    :maxdepth: 1
+   :titlesonly:
 
    rehashx
    easy_import
