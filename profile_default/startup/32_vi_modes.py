@@ -37,6 +37,7 @@ See Also
 
 """
 import logging
+from pathlib import Path
 
 from IPython import get_ipython
 from IPython.terminal.shortcuts import create_ipython_shortcuts
@@ -60,6 +61,24 @@ from prompt_toolkit.key_binding.bindings import named_commands, vi
 from prompt_toolkit.key_binding.bindings.named_commands import get_by_name
 
 from profile_default.util import module_log
+
+class AddRLBindings:
+    """A class to add readline bindings independently of prompt toolkit."""
+
+    def __init__(self):
+        """Initialize the class and check for readline."""
+        try:
+            import readline
+        except (ImportError, ModuleNotFoundError):
+            # hmmm what do we fall back to?
+            readline = None
+        else:
+            readline.read_init_file(str(self.get_home().joinpath('.inputrc')))
+
+    @staticmethod
+    def get_home(self):
+        """Return the user's home dir."""
+        return Path(home)
 
 
 def switch_to_navigation_mode(event):
@@ -262,7 +281,9 @@ if __name__ == "__main__":
     insert_mode = (HasFocus(DEFAULT_BUFFER) & ViInsertMode())
 
     RSI_LOGGER = module_log.stream_logger(logger="RSI", log_level=30)
+    # So this hijacks the event loop and jams everything...
     # shell = main()
+
     try:
         import readline
     except (ImportError, ModuleNotFoundError):
@@ -271,3 +292,5 @@ if __name__ == "__main__":
     if hasattr(readline, 'read_init_file'):
         readline.read_init_file(
             os.path.expanduser(os.path.join('~', '.inputrc')))
+
+    AddRLBindings()
