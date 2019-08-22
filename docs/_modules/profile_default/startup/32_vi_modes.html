@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>profile_default.startup.32_vi_modes &#8212; Dynamic IPython 0.0.1 documentation</title>
+    <title>profile_default.startup.32_vi_modes &#8212; Dynamic IPython</title>
     <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -24,11 +24,6 @@
 
   </head><body>
 
-
-<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
-<a href="../../../index.html"><h1 style="font-size: 3em;">Dynamic IPython</h1></a>
-</div>
-
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -38,11 +33,10 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
-    </div>
-  
+    </div>  
 
     <div class="document">
       <div class="documentwrapper">
@@ -79,16 +73,43 @@
 
 <span class="sd">    This is quite hard to follow as is.</span>
 
+<span class="sd">.. admonition:: Setting the completer</span>
+
+<span class="sd">    The readline class :class:`readline.Completer` throws a TypeError</span>
+<span class="sd">    when given the output of dir().</span>
+
+<span class="sd">Needs a different implementation.</span>
+
+<span class="sd">.. ipython::</span>
+<span class="sd">    :okexcept:</span>
+
+<span class="sd">    In [79]: readline.set_completer(Completer(dir()).complete)</span>
+<span class="sd">    ---------------------------------------------------------------------------</span>
+<span class="sd">    TypeError                                 Traceback (most recent call last)</span>
+<span class="sd">    &lt;ipython-input-79-40916f0ed896&gt; in &lt;module&gt;</span>
+<span class="sd">    ----&gt; 1 readline.set_completer(Completer(dir()).complete)</span>
+<span class="sd">    /usr/lib/python3.7/rlcompleter.py in __init__(self, namespace)</span>
+<span class="sd">         53</span>
+<span class="sd">         54         if namespace and not isinstance(namespace, dict):</span>
+<span class="sd">    ---&gt; 55             raise TypeError(&#39;namespace must be a dictionary&#39;)</span>
+<span class="sd">         56</span>
+
+<span class="sd">    TypeError: namespace must be a dictionary</span>
 
 <span class="sd">See Also</span>
 <span class="sd">---------</span>
-<span class="sd">:mod:`prompt_toolkit.key_binding.defaults` : str (path)</span>
+<span class="sd">See Also:</span>
+
+<span class="sd">- :mod:`IPython.core.completer`</span>
+
+<span class="sd">- :mod:`prompt_toolkit.key_binding.defaults` : str (path)</span>
 <span class="sd">    Has all the named commands implemented here and possibly more.</span>
 
 <span class="sd">---------------------</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
 
 <span class="kn">from</span> <span class="nn">IPython</span> <span class="k">import</span> <span class="n">get_ipython</span>
 <span class="kn">from</span> <span class="nn">IPython.terminal.shortcuts</span> <span class="k">import</span> <span class="n">create_ipython_shortcuts</span>
@@ -112,6 +133,29 @@
 <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.named_commands</span> <span class="k">import</span> <span class="n">get_by_name</span>
 
 <span class="kn">from</span> <span class="nn">profile_default.util</span> <span class="k">import</span> <span class="n">module_log</span>
+
+
+<div class="viewcode-block" id="AddRLBindings"><a class="viewcode-back" href="../../../startup/vi_modes.html#profile_default.startup.32_vi_modes.AddRLBindings">[docs]</a><span class="k">class</span> <span class="nc">AddRLBindings</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;A class to add readline bindings independently of prompt toolkit.</span>
+
+<span class="sd">    There is a Completer class in IPython.core.completer that will need</span>
+<span class="sd">    to be looked into shortly.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize the class and check for readline.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">import</span> <span class="nn">readline</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="n">ModuleNotFoundError</span><span class="p">):</span>
+            <span class="c1"># hmmm what do we fall back to?</span>
+            <span class="n">readline</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">readline</span><span class="o">.</span><span class="n">read_init_file</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_home</span><span class="p">()</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="s1">&#39;.inputrc&#39;</span><span class="p">)))</span>
+
+<div class="viewcode-block" id="AddRLBindings.get_home"><a class="viewcode-back" href="../../../startup/vi_modes.html#profile_default.startup.32_vi_modes.AddRLBindings.get_home">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_home</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot;Return the user&#39;s home dir. Raises a typeerror if self is passed?&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">()</span></div></div>
 
 
 <div class="viewcode-block" id="switch_to_navigation_mode"><a class="viewcode-back" href="../../../startup/vi_modes.html#profile_default.startup.32_vi_modes.switch_to_navigation_mode">[docs]</a><span class="k">def</span> <span class="nf">switch_to_navigation_mode</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
@@ -138,7 +182,8 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">merge_key_bindings</span><span class="p">(</span>
         <span class="p">[</span><span class="n">vi</span><span class="o">.</span><span class="n">load_vi_bindings</span><span class="p">(),</span>
-         <span class="n">vi</span><span class="o">.</span><span class="n">load_vi_search_bindings</span><span class="p">()])</span></div>
+         <span class="n">vi</span><span class="o">.</span><span class="n">load_vi_search_bindings</span><span class="p">()]</span>
+    <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="emacs_bindings"><a class="viewcode-back" href="../../../startup/vi_modes.html#profile_default.startup.32_vi_modes.emacs_bindings">[docs]</a><span class="k">def</span> <span class="nf">emacs_bindings</span><span class="p">():</span>
@@ -182,10 +227,12 @@
     <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;escape&#39;</span><span class="p">,</span> <span class="s1">&#39;l&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">insert_mode</span><span class="p">))(</span><span class="n">named_commands</span><span class="o">.</span><span class="n">downcase_word</span><span class="p">)</span>
     <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;escape&#39;</span><span class="p">,</span> <span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">insert_mode</span><span class="p">))(</span><span class="n">named_commands</span><span class="o">.</span><span class="n">uppercase_word</span><span class="p">)</span>
     <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;escape&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">insert_mode</span><span class="p">))(</span><span class="n">named_commands</span><span class="o">.</span><span class="n">yank_pop</span><span class="p">)</span>
-    <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;escape&#39;</span><span class="p">,</span> <span class="s1">&#39;backspace&#39;</span><span class="p">,</span>
-           <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">insert_mode</span><span class="p">))(</span><span class="n">named_commands</span><span class="o">.</span><span class="n">backward_kill_word</span><span class="p">)</span>
-    <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;escape&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span>
-           <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">insert_mode</span><span class="p">))(</span><span class="n">named_commands</span><span class="o">.</span><span class="n">delete_horizontal_space</span><span class="p">)</span>
+    <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+        <span class="s1">&#39;escape&#39;</span><span class="p">,</span> <span class="s1">&#39;backspace&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">insert_mode</span><span class="p">)</span>
+    <span class="p">)(</span><span class="n">named_commands</span><span class="o">.</span><span class="n">backward_kill_word</span><span class="p">)</span>
+    <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+        <span class="s1">&#39;escape&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">insert_mode</span><span class="p">)</span>
+    <span class="p">)(</span><span class="n">named_commands</span><span class="o">.</span><span class="n">delete_horizontal_space</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">kb</span></div>
 
@@ -198,15 +245,18 @@
     <span class="n">nh</span> <span class="o">=</span> <span class="n">get_by_name</span><span class="p">(</span><span class="s1">&#39;next-history&#39;</span><span class="p">)</span>
 
     <span class="n">kb</span><span class="o">.</span><span class="n">add_binding</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;j&#39;</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">insert_mode</span><span class="p">))(</span><span class="n">switch_to_navigation_mode</span><span class="p">)</span>
-    <span class="n">kb</span><span class="o">.</span><span class="n">add_binding</span><span class="p">(</span><span class="s1">&#39;K&#39;</span><span class="p">,</span>
-                   <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">ViNavigationMode</span><span class="p">()))(</span><span class="n">ph</span><span class="p">)</span>
+    <span class="n">kb</span><span class="o">.</span><span class="n">add_binding</span><span class="p">(</span>
+        <span class="s1">&#39;K&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">ViNavigationMode</span><span class="p">())</span>
+    <span class="p">)(</span><span class="n">ph</span><span class="p">)</span>
 
-    <span class="n">kb</span><span class="o">.</span><span class="n">add_binding</span><span class="p">(</span><span class="s1">&#39;J&#39;</span><span class="p">,</span>
-                   <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">ViNavigationMode</span><span class="p">()))(</span><span class="n">nh</span><span class="p">)</span>
+    <span class="n">kb</span><span class="o">.</span><span class="n">add_binding</span><span class="p">(</span>
+        <span class="s1">&#39;J&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">ViNavigationMode</span><span class="p">())</span>
+    <span class="p">)(</span><span class="n">nh</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">escape_keys</span><span class="p">:</span>
         <span class="n">emacs_keys</span> <span class="o">=</span> <span class="n">merge_key_bindings</span><span class="p">(</span>
-            <span class="p">[</span><span class="n">emacs_bindings</span><span class="p">(),</span> <span class="n">emacs_alt_bindings</span><span class="p">()])</span>
+            <span class="p">[</span><span class="n">emacs_bindings</span><span class="p">(),</span> <span class="n">emacs_alt_bindings</span><span class="p">()]</span>
+        <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">emacs_keys</span> <span class="o">=</span> <span class="n">emacs_bindings</span><span class="p">()</span>
 
@@ -224,11 +274,14 @@
     <span class="c1"># IPython &lt; 7.0</span>
     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_ip</span><span class="p">,</span> <span class="s1">&#39;pt_cli&#39;</span><span class="p">):</span>
         <span class="n">_ip</span><span class="o">.</span><span class="n">pt_cli</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">key_bindings_registry</span> <span class="o">=</span> <span class="n">merge_key_bindings</span><span class="p">(</span>
-            <span class="p">[</span><span class="n">almost_all_keys</span><span class="p">,</span> <span class="n">create_ipython_shortcuts</span><span class="p">(</span><span class="n">_ip</span><span class="p">)])</span>
+            <span class="p">[</span><span class="n">almost_all_keys</span><span class="p">,</span> <span class="n">create_ipython_shortcuts</span><span class="p">(</span><span class="n">_ip</span><span class="p">)]</span>
+        <span class="p">)</span>
         <span class="n">RSI_LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
             <span class="s1">&#39;Number of keybindings:&#39;</span>
             <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">:</span><span class="se">\t</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="n">_ip</span><span class="o">.</span><span class="n">pt_cli</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">key_bindings_registry</span><span class="o">.</span><span class="n">bindings</span><span class="p">))</span>
+                <span class="n">_ip</span><span class="o">.</span><span class="n">pt_cli</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">key_bindings_registry</span><span class="o">.</span><span class="n">bindings</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
     <span class="c1"># IPython &gt;= 7.0</span>
     <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_ip</span><span class="p">,</span> <span class="s1">&#39;pt_app&#39;</span><span class="p">):</span>
 
@@ -239,18 +292,24 @@
             <span class="c1"># the machinery with a few parts missing...I don&#39;t know.</span>
 
         <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">key_bindings</span> <span class="o">=</span> <span class="n">merge_key_bindings</span><span class="p">(</span>
-            <span class="p">[</span><span class="n">almost_all_keys</span><span class="p">,</span> <span class="n">create_ipython_shortcuts</span><span class="p">(</span><span class="n">_ip</span><span class="p">)])</span>
-        <span class="n">RSI_LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Number of keybindings </span><span class="si">{}</span><span class="s1">:</span><span class="se">\t</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="nb">len</span><span class="p">(</span><span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">key_bindings</span><span class="o">.</span><span class="n">bindings</span><span class="p">)))</span>
+            <span class="p">[</span><span class="n">almost_all_keys</span><span class="p">,</span> <span class="n">create_ipython_shortcuts</span><span class="p">(</span><span class="n">_ip</span><span class="p">)]</span>
+        <span class="p">)</span>
+        <span class="n">RSI_LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s1">&#39;Number of keybindings </span><span class="si">{}</span><span class="s1">:</span><span class="se">\t</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="nb">len</span><span class="p">(</span><span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">key_bindings</span><span class="o">.</span><span class="n">bindings</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
 
     <span class="k">else</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="kn">from</span> <span class="nn">ipykernel.zmqshell</span> <span class="k">import</span> <span class="n">ZMQInteractiveShell</span>
         <span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="n">ModuleNotFoundError</span><span class="p">):</span>
             <span class="n">ZMQInteractiveShell</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="n">RSI_LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Is this being run in IPython?:</span><span class="se">\n</span><span class="s1">Type: </span><span class="si">%s</span><span class="s1"> &#39;</span><span class="p">,</span>
-                             <span class="nb">type</span><span class="p">(</span><span class="n">_ip</span><span class="p">),</span>
-                             <span class="n">exc_info</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">RSI_LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                <span class="s1">&#39;Is this being run in IPython?:</span><span class="se">\n</span><span class="s1">Type: </span><span class="si">%s</span><span class="s1"> &#39;</span><span class="p">,</span>
+                <span class="nb">type</span><span class="p">(</span><span class="n">_ip</span><span class="p">),</span>
+                <span class="n">exc_info</span><span class="o">=</span><span class="mi">1</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># Jupyter QTConsole</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">_ip</span><span class="p">,</span> <span class="n">ZMQInteractiveShell</span><span class="p">):</span>
@@ -306,7 +365,8 @@
         <span class="n">inputhook</span><span class="o">=</span><span class="n">_ip</span><span class="o">.</span><span class="n">inputhook</span><span class="p">,</span>
         <span class="n">color_depth</span><span class="o">=</span><span class="n">_ip</span><span class="o">.</span><span class="n">color_depth</span><span class="p">,</span>
         <span class="n">key_bindings</span><span class="o">=</span><span class="n">kb</span><span class="p">,</span>
-        <span class="n">style</span><span class="o">=</span><span class="n">_ip</span><span class="o">.</span><span class="n">style</span><span class="p">)</span>
+        <span class="n">style</span><span class="o">=</span><span class="n">_ip</span><span class="o">.</span><span class="n">style</span>
+    <span class="p">)</span>
     <span class="k">return</span> <span class="n">_ip</span></div>
 
 
@@ -314,7 +374,9 @@
     <span class="n">insert_mode</span> <span class="o">=</span> <span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">ViInsertMode</span><span class="p">())</span>
 
     <span class="n">RSI_LOGGER</span> <span class="o">=</span> <span class="n">module_log</span><span class="o">.</span><span class="n">stream_logger</span><span class="p">(</span><span class="n">logger</span><span class="o">=</span><span class="s2">&quot;RSI&quot;</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+    <span class="c1"># So this hijacks the event loop and jams everything...</span>
     <span class="c1"># shell = main()</span>
+
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">import</span> <span class="nn">readline</span>
     <span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="n">ModuleNotFoundError</span><span class="p">):</span>
@@ -322,7 +384,10 @@
 
     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">readline</span><span class="p">,</span> <span class="s1">&#39;read_init_file&#39;</span><span class="p">):</span>
         <span class="n">readline</span><span class="o">.</span><span class="n">read_init_file</span><span class="p">(</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;~&#39;</span><span class="p">,</span> <span class="s1">&#39;.inputrc&#39;</span><span class="p">)))</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;~&#39;</span><span class="p">,</span> <span class="s1">&#39;.inputrc&#39;</span><span class="p">))</span>
+        <span class="p">)</span>
+
+    <span class="n">rl</span> <span class="o">=</span> <span class="n">AddRLBindings</span><span class="p">()</span>
 </pre></div>
 
           </div>
@@ -380,13 +445,13 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright (C) 2018-2019 Faris Chugthai.
-      Last updated on Aug 19, 2019.
+      Last updated on Aug 22, 2019.
     </div>
   </body>
 </html>

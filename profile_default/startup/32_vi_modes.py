@@ -27,10 +27,36 @@ to Vim's insert mode.
 
     This is quite hard to follow as is.
 
+.. admonition:: Setting the completer
+
+    The readline class :class:`readline.Completer` throws a TypeError
+    when given the output of dir().
+
+Needs a different implementation.
+
+.. ipython::
+    :okexcept:
+
+    In [79]: readline.set_completer(Completer(dir()).complete)
+    ---------------------------------------------------------------------------
+    TypeError                                 Traceback (most recent call last)
+    <ipython-input-79-40916f0ed896> in <module>
+    ----> 1 readline.set_completer(Completer(dir()).complete)
+    /usr/lib/python3.7/rlcompleter.py in __init__(self, namespace)
+         53
+         54         if namespace and not isinstance(namespace, dict):
+    ---> 55             raise TypeError('namespace must be a dictionary')
+         56
+
+    TypeError: namespace must be a dictionary
 
 See Also
 ---------
-:mod:`prompt_toolkit.key_binding.defaults` : str (path)
+See Also:
+
+- :mod:`IPython.core.completer`
+
+- :mod:`prompt_toolkit.key_binding.defaults` : str (path)
     Has all the named commands implemented here and possibly more.
 
 ---------------------
@@ -62,8 +88,13 @@ from prompt_toolkit.key_binding.bindings.named_commands import get_by_name
 
 from profile_default.util import module_log
 
+
 class AddRLBindings:
-    """A class to add readline bindings independently of prompt toolkit."""
+    """A class to add readline bindings independently of prompt toolkit.
+
+    There is a Completer class in IPython.core.completer that will need
+    to be looked into shortly.
+    """
 
     def __init__(self):
         """Initialize the class and check for readline."""
@@ -76,9 +107,9 @@ class AddRLBindings:
             readline.read_init_file(str(self.get_home().joinpath('.inputrc')))
 
     @staticmethod
-    def get_home(self):
-        """Return the user's home dir."""
-        return Path(home)
+    def get_home():
+        """Return the user's home dir. Raises a typeerror if self is passed?"""
+        return Path.home()
 
 
 def switch_to_navigation_mode(event):
@@ -105,7 +136,8 @@ def get_default_vim_bindings():
     """
     return merge_key_bindings(
         [vi.load_vi_bindings(),
-         vi.load_vi_search_bindings()])
+         vi.load_vi_search_bindings()]
+    )
 
 
 def emacs_bindings():
@@ -149,10 +181,12 @@ def emacs_alt_bindings():
     kb.add('escape', 'l', filter=(insert_mode))(named_commands.downcase_word)
     kb.add('escape', 'u', filter=(insert_mode))(named_commands.uppercase_word)
     kb.add('escape', 'y', filter=(insert_mode))(named_commands.yank_pop)
-    kb.add('escape', 'backspace',
-           filter=(insert_mode))(named_commands.backward_kill_word)
-    kb.add('escape', '\\',
-           filter=(insert_mode))(named_commands.delete_horizontal_space)
+    kb.add(
+        'escape', 'backspace', filter=(insert_mode)
+    )(named_commands.backward_kill_word)
+    kb.add(
+        'escape', '\\', filter=(insert_mode)
+    )(named_commands.delete_horizontal_space)
 
     return kb
 
@@ -165,15 +199,18 @@ def base_keys(escape_keys=False):
     nh = get_by_name('next-history')
 
     kb.add_binding(u'j', u'k', filter=(insert_mode))(switch_to_navigation_mode)
-    kb.add_binding('K',
-                   filter=(HasFocus(DEFAULT_BUFFER) & ViNavigationMode()))(ph)
+    kb.add_binding(
+        'K', filter=(HasFocus(DEFAULT_BUFFER) & ViNavigationMode())
+    )(ph)
 
-    kb.add_binding('J',
-                   filter=(HasFocus(DEFAULT_BUFFER) & ViNavigationMode()))(nh)
+    kb.add_binding(
+        'J', filter=(HasFocus(DEFAULT_BUFFER) & ViNavigationMode())
+    )(nh)
 
     if escape_keys:
         emacs_keys = merge_key_bindings(
-            [emacs_bindings(), emacs_alt_bindings()])
+            [emacs_bindings(), emacs_alt_bindings()]
+        )
     else:
         emacs_keys = emacs_bindings()
 
@@ -191,11 +228,14 @@ def merge_ipython_rsi_kb(_ip=None):
     # IPython < 7.0
     if hasattr(_ip, 'pt_cli'):
         _ip.pt_cli.application.key_bindings_registry = merge_key_bindings(
-            [almost_all_keys, create_ipython_shortcuts(_ip)])
+            [almost_all_keys, create_ipython_shortcuts(_ip)]
+        )
         RSI_LOGGER.info(
             'Number of keybindings:'
             '{}:\t'.format(
-                _ip.pt_cli.application.key_bindings_registry.bindings))
+                _ip.pt_cli.application.key_bindings_registry.bindings
+            )
+        )
     # IPython >= 7.0
     elif hasattr(_ip, 'pt_app'):
 
@@ -206,18 +246,24 @@ def merge_ipython_rsi_kb(_ip=None):
             # the machinery with a few parts missing...I don't know.
 
         _ip.pt_app.key_bindings = merge_key_bindings(
-            [almost_all_keys, create_ipython_shortcuts(_ip)])
-        RSI_LOGGER.info('Number of keybindings {}:\t'.format(
-            len(_ip.pt_app.key_bindings.bindings)))
+            [almost_all_keys, create_ipython_shortcuts(_ip)]
+        )
+        RSI_LOGGER.info(
+            'Number of keybindings {}:\t'.format(
+                len(_ip.pt_app.key_bindings.bindings)
+            )
+        )
 
     else:
         try:
             from ipykernel.zmqshell import ZMQInteractiveShell
         except (ImportError, ModuleNotFoundError):
             ZMQInteractiveShell = None
-            RSI_LOGGER.error('Is this being run in IPython?:\nType: %s ',
-                             type(_ip),
-                             exc_info=1)
+            RSI_LOGGER.error(
+                'Is this being run in IPython?:\nType: %s ',
+                type(_ip),
+                exc_info=1
+            )
         else:
             # Jupyter QTConsole
             if isinstance(_ip, ZMQInteractiveShell):
@@ -273,7 +319,8 @@ def main():
         inputhook=_ip.inputhook,
         color_depth=_ip.color_depth,
         key_bindings=kb,
-        style=_ip.style)
+        style=_ip.style
+    )
     return _ip
 
 
@@ -291,6 +338,7 @@ if __name__ == "__main__":
 
     if hasattr(readline, 'read_init_file'):
         readline.read_init_file(
-            os.path.expanduser(os.path.join('~', '.inputrc')))
+            os.path.expanduser(os.path.join('~', '.inputrc'))
+        )
 
-    AddRLBindings()
+    rl = AddRLBindings()
