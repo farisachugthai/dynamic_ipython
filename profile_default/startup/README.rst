@@ -54,7 +54,6 @@ of this, and it hugely eases utilizing :mod:`IPython` as a system shell.
 
 Convenience Functions
 -----------------------
-
 :ref:`IPython` provides the functions :func:`IPython.Application.initialized()`
 and :func:`IPython.Application.instance()`. As a result, each script can easily
 implement the following as a check to ensure that the global :mod:`IPython`

@@ -1,3 +1,4 @@
+
 .. _ipython_directive:
 
 ========================
@@ -49,7 +50,6 @@ will be rendered as
 
 Persisting the session across IPython directive blocks
 =============================================================
-
 The state from previous code-blocks is stored, and carries over from section
 to section. The IPython shell will maintain and continue to execute in the same
 namespace so long as it remains in the same document.
@@ -81,16 +81,14 @@ block from above.
   SyntaxError: invalid syntax
 
 
-
 Multi-line input
 ================
-
 Multi-line input is supported, and particularly lengthy blocks of text can be
 parsed correctly.
 
 .. **TODO**
 .. is this parsed correctly because the last character is the continuation
-   character or because of a property intrinsic to IPython??
+   character or because of a property intrinsic to IPython's sphinx extension??
 
 .. ipython::
    :verbatim:
@@ -101,11 +99,15 @@ parsed correctly.
    In [131]: print(url.split('&'))
    ['http://ichart.finance.yahoo.com/table.csv?s=CROX', 'd=9', 'e=22',
 
+
 Testing directive outputs
 =========================
+The extension supports a few limited parameters to configure the running
+shell. These parameters are exposed as reStructured text options to the
+``.. ipython`` directive, decorators for the source code directly, and 
+configurable options that are given directly to Sphinx in a projects conf.py.
 
-The embedded interpreter supports some limited markup.  For example,
-you can put comments in your IPython sessions, which are reported
+For example, you can put comments in your IPython sessions, which are reported
 verbatim.  There are some handy "pseudo-decorators" that let you
 wrap a function with ``@doctest`` and utilize the :mod:`doctest` module on
 the output. The inputs are fed to an embedded IPython
@@ -139,7 +141,7 @@ match on a doctest assertion, an error will occur.
 
 ..   * list directives here
 
-If an IPython doctest decorator is found, it will take these steps when your
+If the `@doctest` decorator is found, it will take these steps when your
 documentation is built:
 
 1. Execute the *input* lines in your IPython directive block.
@@ -160,14 +162,22 @@ documentation is built:
 
 You can doctest multi-line output as well. Just be careful
 when using non-deterministic inputs like random numbers in the IPython
-directive, because your inputs are run through a live interpreter, so
-if you are doctesting random output you will get an error.  Here we
-"seed" the random number generator for deterministic output, and we
+directive.
+
+Because your inputs are run through a live interpreter, the random numbers
+that are generated on the fly will likely differ from run to run.
+
+Therefore the output IPython will compare the present run to will likely differ,
+raising errors and causing mayhem.
+
+How can we avoid this?
+
+Here we "seed" the random number generator for deterministic output, and we
 suppress the seed line so it doesn't show up in the rendered output.:
 
 .. ipython::
 
-   In [133]: import numpy.random
+   In [133]: import numpy
 
    @suppress
    In [134]: numpy.random.seed(2358)
@@ -281,7 +291,7 @@ You can create one or more pyplot plots and insert them with the
 2)
 ====
 
-For more information on ``@savefig`` decorator, please refer to the end of this
+For more information on `@savefig` decorator, please refer to the end of this
 page in :ref:`Pseudo-Decorators` section.
 
 .. ipython::
@@ -374,7 +384,6 @@ suppress output with a semicolon.:
 For more information on ``@savefig`` decorator,
 please refer to the end of this page in Pseudo-Decorators section.
 
-.. wth guys this is the 3rd time that sentence is in this doc
 
 Similarly, :data:`sys.stderr` is inserted.:
 
@@ -384,9 +393,9 @@ Similarly, :data:`sys.stderr` is inserted.:
    foo = 'bar'
    foo[)
 
+
 Handling Comments
 ==================
-
 Comments are handled and state is preserved.:
 
 .. ipython:: python
@@ -406,9 +415,9 @@ decorator is behaving as expected.:
    ioff()
    ion()
 
+
 Splitting Python statements across lines
 ========================================
-
 Multi-line input is handled.:
 
 .. ipython:: python
@@ -443,7 +452,6 @@ And persist across sessions.:
 
 Pseudo-Decorators
 =================
-
 .. sooooo which ones are which? Please be more clear!
 
 Here are the supported decorators, and any optional arguments they
@@ -482,6 +490,11 @@ line just below them (eg ``@savefig``).
     generated at doc build time, and raise errors if they don't
     match. Also, can be applied to the entire ``.. ipython`` block as a
     directive option with ``:doctest:``.
+
+
+.. todo:: Document the magics.py sphinx extension!!
+
+   The ``.. magic::`` directive doesn't appear to be documented at all.
 
 
 Automatically generated documentation

@@ -21,6 +21,41 @@ def get_home():
         return home
 
 
+#------------------------------------------------------------------------------
+# ConnectionFileMixin(LoggingConfigurable) configuration
+#------------------------------------------------------------------------------
+
+# Mixin for configurable classes that work with connection files
+
+# JSON file in which to store connection info [default: kernel-<pid>.json]
+
+# This file will contain the IP, ports, and authentication key needed to connect
+# clients to this kernel. By default, this file will be created in the security
+# dir of the current profile, but can be specified by absolute path.
+# c.ConnectionFileMixin.connection_file = ''
+
+# set the control (ROUTER) port [default: random]
+# c.ConnectionFileMixin.control_port = 0
+
+# set the heartbeat port [default: random]
+# c.ConnectionFileMixin.hb_port = 0
+
+# set the iopub (PUB) port [default: random]
+# c.ConnectionFileMixin.iopub_port = 0
+
+# Set the kernel's IP address [default localhost]. If the IP address is
+# something other than localhost, then Consoles on other machines will be able
+# to connect to the Kernel, so be careful!
+# c.ConnectionFileMixin.ip = ''
+
+# set the shell (ROUTER) port [default: random]
+# c.ConnectionFileMixin.shell_port = 0
+
+# set the stdin (ROUTER) port [default: random]
+# c.ConnectionFileMixin.stdin_port = 0
+
+# c.ConnectionFileMixin.transport = 'tcp'
+
 # ------------------------------------------------------------------------------
 # JupyterConsoleApp(ConnectionFileMixin) configuration
 # ------------------------------------------------------------------------------
@@ -281,7 +316,7 @@ else:
 # If not empty, use this Pygments style for syntax highlighting. Otherwise, the
 #  style sheet is queried for Pygments style information.
 try:
-    c.JupyterWidget.syntax_style = 'Gruvbox'
+    c.JupyterWidget.syntax_style = 'GruvboxDarkHard'
 except Exception:  # noqa
     c.JupyterWidget.syntax_style = 'Solarized Dark'
 
@@ -291,7 +326,7 @@ except Exception:  # noqa
 
 # Manages a single kernel in a subprocess on this host.
 #
-#  This version starts kernels with Popen.
+# This version starts kernels with Popen.
 
 # Should we autorestart the kernel if it dies.
 # c.KernelManager.autorestart = True
@@ -317,7 +352,7 @@ except Exception:  # noqa
 
 # Whether to include every poll event in debugging output.
 #
-#  Has to be set explicitly, because there will be *a lot* of output.
+# Has to be set explicitly, because there will be *a lot* of output.
 # c.KernelRestarter.debug = False
 
 # Whether to choose new random ports when restarting before
@@ -372,12 +407,12 @@ except Exception:  # noqa
 #      to the contents of the file.
 
 # Threshold (in bytes) beyond which an object's buffer should be extracted to
-#  avoid pickling.
+# avoid pickling.
 # c.Session.buffer_threshold = 1024
 
 # Whether to check PID to protect against calls after fork.
-#
-#  This check can be disabled if fork-safety is handled elsewhere.
+
+# This check can be disabled if fork-safety is handled elsewhere.
 # c.Session.check_pid = True
 
 # Threshold (in bytes) beyond which a buffer should be sent without copying.
@@ -387,12 +422,11 @@ except Exception:  # noqa
 # c.Session.debug = False
 
 # The maximum number of digests to remember.
-#
-#  The digest history will be culled when it exceeds this value.
+# The digest history will be culled when it exceeds this value.
 # c.Session.digest_history_size = 65536
 
 # The maximum number of items for a container to be introspected for custom
-#  serialization. Containers larger than this are pickled outright.
+# serialization. Containers larger than this are pickled outright.
 # c.Session.item_threshold = 64
 
 # execution key, for signing messages.
@@ -402,22 +436,22 @@ except Exception:  # noqa
 # c.Session.keyfile = ''
 
 # Metadata dictionary, which serves as the default top-level metadata dict for
-#  each message.
+# each message.
 # c.Session.metadata = {}
 
 # The name of the packer for serializing messages. Should be one of 'json',
-#  'pickle', or an import name for a custom callable serializer.
+# 'pickle', or an import name for a custom callable serializer.
 # c.Session.packer = 'json'
 
 # The UUID identifying this session.
 # c.Session.session = ''
 
 # The digest scheme used to construct the message signatures. Must have the form
-#  'hmac-HASH'.
+# 'hmac-HASH'.
 # c.Session.signature_scheme = 'hmac-sha256'
 
 # The name of the unpacker for unserializing messages. Only used with custom
-#  functions for `packer`.
+# functions for `packer`.
 # c.Session.unpacker = 'json'
 
 # Username for the Session. Default is your system username.

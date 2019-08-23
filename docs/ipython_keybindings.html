@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Keybindings in IPython &#8212; Dynamic IPython</title>
+    <title>Keybindings in IPython &#8212; Dynamic IPython: version0.0.1</title>
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
@@ -16,7 +16,7 @@
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/ipython_keybindings.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="IPython Magics" href="magics.html" />
+    <link rel="next" title="Built-In Magics" href="magics.html" />
     <link rel="prev" title="Welcome to Dynamic IPython’s documentation!" href="index.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
@@ -36,7 +36,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="magics.html" title="IPython Magics"
+          <a href="magics.html" title="Built-In Magics"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="index.html" title="Welcome to Dynamic IPython’s documentation!"
@@ -50,13 +50,13 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-keybindings">
-<span id="keybindings-in-ipython"></span><h1>Keybindings in IPython<a class="headerlink" href="#module-keybindings" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-Keybindings">
+<span id="keybindings-in-ipython"></span><h1>Keybindings in IPython<a class="headerlink" href="#module-Keybindings" title="Permalink to this headline">¶</a></h1>
 <p>This document will summarize how to rebind keys in IPython since IPython 5.0.</p>
 <div class="section" id="interactively-binding-keys">
 <h2>Interactively Binding Keys<a class="headerlink" href="#interactively-binding-keys" title="Permalink to this headline">¶</a></h2>
 <p>If we would like to add extra keybindings to the IPython shell, we can utilize
-a few functions built into the <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.terminal.interactiveshell.html#module-IPython.terminal.interactiveshell" title="(in IPython v7.7.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython.terminal.interactiveshell</span></code></a> module,
+a few functions built into the <code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython.terminal.interactiveshell</span></code> module,
 in addition, to utilizing the expansive <code class="xref py py-mod docutils literal notranslate"><span class="pre">prompt_toolkit</span></code> library.</p>
 <p>First we’ll initialize a global instance of the shell.</p>
 <p>Then import the function
@@ -77,9 +77,9 @@ ourselves a frame of reference.:</p>
 <p>Go to the directory where IPython is installed. You can use the code above
 to check its location.</p>
 <p>This could be named something to the effect of
-<code class="xref py py-obj docutils literal notranslate"><span class="pre">&lt;~/miniconda3/lib/python3.7/site-packages/IPython/&gt;</span></code> for example.</p>
+<code class="docutils literal notranslate"><span class="pre">~/miniconda3/lib/python3.7/site-packages/IPython/</span></code> for example.</p>
 <p>Then navigate to the root of that directory and go to the terminal package.</p>
-<p>Up at the top you have the keybindings <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.7.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> ships with!</p>
+<p>Up at the top you have the keybindings <code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code> ships with!</p>
 </div>
 </div>
 <div class="section" id="official-ipython-documentation">
@@ -133,35 +133,36 @@ shows how to bind keys.</p>
 <span class="gp">   ...: </span>
 </pre></div>
 </td></tr></table></div>
-<p>The documentation also shows a way of adding a <code class="xref py py-obj docutils literal notranslate"><span class="pre">Conditional</span></code> Filter
+<p>The documentation also shows a way of adding a <code class="docutils literal notranslate"><span class="pre">Conditional</span></code> Filter
 <em>a la Prompt Toolkit</em> to the Enter key.</p>
 <p>Continue on in this fashion for as long as you need. In my opinion,
 IPython barely comes with any keybindings.</p>
 <p>The source code does provide this however:</p>
-<div class="highlight-ipython notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="go"># Ctrl+J == Enter, seemingly</span>
-<span class="gp">In [10]: </span><span class="n">registry</span><span class="o">.</span><span class="n">add_binding</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlJ</span><span class="p">,</span>
-<span class="gp">   ....: </span>                     <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span>
-<span class="gp">   ....: </span>                     <span class="o">&amp;</span> <span class="o">~</span><span class="n">HasSelection</span><span class="p">()</span> <span class="o">&amp;</span> <span class="n">insert_mode</span><span class="p">))</span>
-<span class="gp">   ....: </span>                     <span class="p">(</span><span class="n">return_handler</span><span class="p">)</span>
-<span class="gp">   ....: </span>
-<span class="gt">  File</span><span class="nn"> &quot;&lt;ipython-input-10-0ef99c458d66&gt;&quot;</span><span class="gt">, line </span><span class="mi">4</span>
-    <span class="p">(</span><span class="n">return_handler</span><span class="p">)</span>
-    <span class="o">^</span>
-<span class="ne">IndentationError</span>: unexpected indent
-</pre></div>
-</td></tr></table></div>
+<pre class="literal-block">In [10]: from IPython import get_ipython
+
+In [11]: from IPython.terminal import interactiveshell
+
+In [12]: ip = get_ipython
+
+In [13]: registry = ip.pt_cli.application.key_bindings_registry
+---------------------------------------------------------------------------
+AttributeError                            Traceback (most recent call last)
+&lt;ipython-input-13-de3cd0eaaf7f&gt; in &lt;module&gt;
+----&gt; 1 registry = ip.pt_cli.application.key_bindings_registry
+
+AttributeError: 'function' object has no attribute 'pt_cli'
+
+# Ctrl+J == Enter, seemingly
+In [14]: registry.add_binding(Keys.ControlJ, filter=(HasFocus(DEFAULT_BUFFER) &amp; ~HasSelection() &amp; insert_mode))
+---------------------------------------------------------------------------
+NameError                                 Traceback (most recent call last)
+&lt;ipython-input-14-bf506f8fc0bf&gt; in &lt;module&gt;
+----&gt; 1 registry.add_binding(Keys.ControlJ, filter=(HasFocus(DEFAULT_BUFFER) &amp; ~HasSelection() &amp; insert_mode))
+
+NameError: name 'registry' is not defined</pre>
 <p>This displays a few useful ways of doing things.</p>
-<ol class="arabic simple">
-<li><p>Importing <code class="xref py py-class docutils literal notranslate"><span class="pre">Keys()</span></code> as a more
+<ol class="arabic">
+<li><p>Importing <code class="xref py py-class docutils literal notranslate"><span class="pre">prompt_toolkit.key_bindings.bindings.Keys()</span></code> as a more
 consistent interface than passing strings to represent keys.</p></li>
 <li><p>Utilizing a function <code class="docutils literal notranslate"><span class="pre">return_handler</span></code> inline to decorate the keybinding.</p></li>
 </ol>
@@ -230,8 +231,7 @@ without nesting functions.</p>
 <div class="section" id="enable-key-bindings-according-to-a-condition">
 <h4>Enable key bindings according to a condition<a class="headerlink" href="#enable-key-bindings-according-to-a-condition" title="Permalink to this headline">¶</a></h4>
 <p>Then key_bindings are discussed in the context of being filtered through
-certain conditions.</p>
-<p>:</p>
+certain conditions.:</p>
 <blockquote>
 <div><p>Often, some key bindings can be enabled or disabled according to a certain
 condition. For instance, the Emacs and Vi bindings will never be active at
@@ -359,7 +359,7 @@ EditingMode.EMACS.:</p>
 <h4>Using control-space for completion<a class="headerlink" href="#using-control-space-for-completion" title="Permalink to this headline">¶</a></h4>
 <p>Here’s a general overview with more examples on how to rebind keys.:</p>
 <blockquote>
-<div><p>A popular short cut that people sometimes use is <kbd class="kbd docutils literal notranslate">Ctrl</kbd>-<kbd class="kbd docutils literal notranslate">Space</kbd>
+<div><p>A popular short cut that people sometimes use is <kbd class="kbd docutils literal notranslate">Ctrl</kbd> <kbd class="kbd docutils literal notranslate">Space</kbd>
 for opening the autocompletion menu instead of the tab key.
 This can be done with the following key binding.:</p>
 <div class="highlight-ipython notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
@@ -485,7 +485,7 @@ This can be done with the following key binding.:</p>
 <div><p>It is also possible to combine multiple registries. We do this in the default
 key bindings. There are some registries that contain Emacs bindings, while
 others contain the Vi bindings. They are merged together using a
-<code class="xref py py-class docutils literal notranslate"><span class="pre">prompt_toolkit.bindings.MergedRegistry`</span></code>.</p>
+<code class="xref py py-class docutils literal notranslate"><span class="pre">prompt_toolkit.bindings.MergedRegistry</span></code>.</p>
 <p>We also have a <code class="docutils literal notranslate"><span class="pre">ConditionalRegistry</span></code> object that can enable/disable a group
 of key bindings at once.</p>
 <div class="highlight-python3 notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
@@ -604,7 +604,7 @@ to simply the source code where this is implemented.</p>
 during <span class="xref std std-ref">IPython.terminal.ptutil.create_ipython_shortcuts</span> but if you
 choose to create your own registry then you get access to everything.</p>
 <p>It might not be hard to bind to if we do it the same way we did with
-that one <a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pathlib.Path</span></code></a> class.</p>
+that one <code class="xref py py-class docutils literal notranslate"><span class="pre">pathlib.Path</span></code> class.</p>
 <p>Literally:</p>
 <div class="highlight-ipython notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
@@ -630,9 +630,9 @@ that one <a class="reference external" href="https://docs.python.org/3/library/p
 <p>Once the user initializes that class, then your
 <code class="xref py py-class docutils literal notranslate"><span class="pre">prompt_toolkit.key_bindings.keybinding.KeyBindings()</span></code>
 statement in the <code class="docutils literal notranslate"><span class="pre">__init__</span></code> func was execute and you’ll have access
-to everything. Cool!</p>
+to everything. Cool!:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">registry</span> <span class="o">=</span> <span class="n">load_key_bindings</span><span class="p">()</span>
-<span class="k">return</span> <span class="n">registry</span><span class="o">.</span><span class="n">key_bindings</span>
+<span class="nb">dir</span><span class="p">(</span><span class="n">registry</span><span class="o">.</span><span class="n">key_bindings</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -688,79 +688,37 @@ take a callable” that they meant the IPython global instance.</p>
 <p>Doing so actually created an embedded IPython instance that you can now
 toggle on and off.</p>
 <p>When run in the REPL:</p>
-<div class="highlight-none notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36</pre></div></td><td class="code"><div class="highlight"><pre><span></span>In[10]: t
-In[11]: dir(t)
-Out[11]:
-[&#39;_DynamicKeyBindings__version&#39;,
-&#39;_abc_impl&#39;,
-&#39;_dummy&#39;,
-&#39;_last_child_version&#39;,
-&#39;_update_cache&#39;,
-&#39;_version&#39;,
-&#39;bindings&#39;,
-&#39;get_bindings_for_keys&#39;,
-&#39;get_bindings_starting_with_keys&#39;,
-&#39;get_key_bindings&#39;]
-
-In[13]: type(t)
-Out[13]: prompt_toolkit.key_binding.key_bindings.DynamicKeyBindings
-In[14]: t.get_key_bindings()
-In[15]: t.get_key_bindings?
-Signature: t.get_key_bindings(header=&#39;&#39;, local_ns=None, module=None, dummy=None, stack_depth=1, global_ns=None, compile_flags=None, **kw,)
-
-Type:            InteractiveShellEmbed
+<p>The output of <code class="docutils literal notranslate"><span class="pre">dir(t)</span></code> is as follows:</p>
+<blockquote>
+<div><p>[‘_DynamicKeyBindings__version’,
+‘_abc_impl’,
+‘_dummy’,
+‘_last_child_version’,
+‘_update_cache’,
+‘_version’,
+‘bindings’,
+‘get_bindings_for_keys’,
+‘get_bindings_starting_with_keys’,
+‘get_key_bindings’]</p>
+</div></blockquote>
+<p>The help for <code class="xref py py-func docutils literal notranslate"><span class="pre">prompt_toolkit.key_binding.key_bindings.DynamicKeyBindings.get_key_bindings()</span></code>:</p>
+<blockquote>
+<div><p>print(help(t.get_key_bindings))
+Signature: t.get_key_bindings(header=’’, local_ns=None, module=None, dummy=None, stack_depth=1, global_ns=None, compile_flags=None, **kw,)</p>
+<p>Type:            InteractiveShellEmbed
 Docstring:       &lt;no docstring&gt;
-Class docstring: An enhanced, interactive shell for Python.
-
-__call__(self,header=&#39;&#39;,local_ns=None,module=None,dummy=None) -&gt; Start
+Class docstring: An enhanced, interactive shell for Python.</p>
+<p>__call__(self,header=’’,local_ns=None,module=None,dummy=None) -&gt; Start
 the interpreter shell with the given local and global namespaces, and
-optionally print a header string at startup.
-
-The shell can be globally activated/deactivated using the
+optionally print a header string at startup.</p>
+<p>The shell can be globally activated/deactivated using the
 dummy_mode attribute. This allows you to turn off a shell used
-for debugging globally.
-
-However, *each* time you call the shell you can override the current
-state of dummy_mode with the optional keyword parameter &#39;dummy&#39;. For
+for debugging globally.</p>
+<p>However, <em>each</em> time you call the shell you can override the current
+state of dummy_mode with the optional keyword parameter ‘dummy’. For
 example, if you set dummy mode on with IPShell.dummy_mode = True, you
-can still have a specific call work by making it as IPShell(dummy=False).
-</pre></div>
-</td></tr></table></div>
+can still have a specific call work by making it as IPShell(dummy=False).</p>
+</div></blockquote>
 </div>
 <div class="section" id="source-code-for-creating-ipython-shortcuts">
 <h2>Source code for creating IPython shortcuts<a class="headerlink" href="#source-code-for-creating-ipython-shortcuts" title="Permalink to this headline">¶</a></h2>
@@ -961,7 +919,7 @@ Distributed under the terms of the Modified BSD License.</p>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="index.html" title="previous chapter">Welcome to Dynamic IPython’s documentation!</a></li>
-      <li>Next: <a href="magics.html" title="next chapter">IPython Magics</a></li>
+      <li>Next: <a href="magics.html" title="next chapter">Built-In Magics</a></li>
   </ul></li>
 </ul>
 
@@ -981,13 +939,14 @@ Distributed under the terms of the Modified BSD License.</p>
 <li class="toctree-l1"><a class="reference internal" href="magics.html">Built-in Magics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="custom_magics.html">Writing Your Own Magics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="exceptions.html">Customized Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sphinxext.html">IPython Sphinx Directive</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="startup/index.html">IPython Shell Initialization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="jupyter.html">Jupyter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="extensions.html">Extensions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="dev.html">Contributors Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev.html">Developers Notes</a></li>
 </ul>
 
 </div>
@@ -1058,7 +1017,7 @@ Distributed under the terms of the Modified BSD License.</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="magics.html" title="IPython Magics"
+          <a href="magics.html" title="Built-In Magics"
              >next</a> |</li>
         <li class="right" >
           <a href="index.html" title="Welcome to Dynamic IPython’s documentation!"
@@ -1068,7 +1027,7 @@ Distributed under the terms of the Modified BSD License.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright (C) 2018-2019 Faris Chugthai.
-      Last updated on Aug 22, 2019.
+      Last updated on Aug 23, 2019.
     </div>
   </body>
 </html>

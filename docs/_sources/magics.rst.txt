@@ -1,10 +1,10 @@
 ================
-IPython Magics
+Built-In Magics
 ================
 
 .. highlight:: ipython
 
-.. module:: ipython_magics
+.. module:: built-in_magics
    :Synopsis: Summarizes IPython magics.
 
 .. contents:: Table of Contents
@@ -35,8 +35,12 @@ Cell:
 - `%timeit`
 - `%macro`
 
-%timeit
--------
+
+Line Magics
+============
+
+`%timeit`
+---------
 .. magic:: timeit
 
 Let's observe the example below.
@@ -165,8 +169,10 @@ Ranges of history can be indicated using the syntax:
 
 Multiple ranges can be specified by separating with spaces.
 
-%recall
--------
+`%recall`
+---------
+.. magic:: recall
+
 This is one of the IPython conveniences that makes you understand why
 they're called *magics*.
 
@@ -199,8 +205,8 @@ You can easily access relative previous input with `_i`,  `_ii` and `_iii_`
 
 You can also call specific cell numbers with `_i[cell]`
 
-But you can't call cell numbers for output. `_` , `__` and `___` access
-previous output.
+But you can't call cell numbers for output. :kbd:`_` , :kbd:`__` append
+:kbd:`___` access previous output.
 
 The only way I can find output by cell is `_oh`
 
@@ -211,28 +217,23 @@ might not get saved in the history. Makes sense.
 
 In IPython run:
 
->>> print(Out[1])
+.. ipython::
+   :verbatim:
 
-And you have access to output now. Easy.
+   >>> print(Out[1])
+   >>> hist_list =[]
+   >>> for i in range(2):
+      >>> hist_list.append(In[i])
+      >>> try:
+          >>> hist_list.append(Out[i])
+      >>> except KeyError:
+          >>> pass
 
-# hist_list =[]
-# for i in range(2):
-#    hist_list.append(In[i])
-#    try:
-#        hist_list.append(Out[i])
-#    except KeyError:
-#        pass
-
-Wrote that and got what I assume was the best I could. Then :kbd:`VolUp-W`
-to pick the previous line, :kbd:`Esc` to go to Vim normal mode, and ('v')
-to load the cell in an editor. Whoo that was awesome!
-
-{Also termux now has arrows in the extra keys section of the keyboard so
-whoo}
 
 Writing a file
 ~~~~~~~~~~~~~~
-Pay attention when trying to write to a file.::
+There are a handful of different ways to take IPython history and code
+previously ran in the console, and save it to a file on disk.::
 
    In [52]: written = %history -n 31-33
        ...: %edit written
@@ -252,15 +253,18 @@ Pay attention when trying to write to a file.::
 But you should be able to write history to a file by using:
 
 .. ipython::
+   :verbatim:
 
     %history -f file_to_write.py -n 1-3
 
 
-%%writefile
------------
+`%%writefile`
+-------------
 .. magic:: writefile
 
-`%%writefile` -a filename
+Usage:
+
+   `%%writefile` -a filename
 
 needs both percentage signs even with ``automagic`` since it's a cell magic
 the -a option is to append to a file
@@ -268,26 +272,28 @@ the -a option is to append to a file
 But don't use quotes on the file or else it won't work. IDK why not
 but I kept getting `FileDoesntExistError` until i got rid of the quotes
 
-``%%file`` as a cell magic means write everything I'm about to do to a file.
+`%%file` as a cell magic means write everything I'm about to do to a file.
 If you got some crazy history filtering in there I'm sure you could go do
-something like::
+something like
+
+.. ipython::
+   :verbatim:
 
    %%file
    hist -n 5-10
+   # where -n means print output too
+   %%file idk
+   _i31-33
+   %pycat idk
+   # _i31-33
 
-{where -n means print output too}
-%%file idk
-_i31-33
-$ cat idk
-# _i31-33
+`%edit`
+-------
+`%edit` can take cell #'s as input like hist does, and creates a file to
+work with like `%%file`.
 
-%edit
-------
-``%edit`` can take cell #'s as input like hist does, and creates a file to
-work with like ``%%file``.
-
-It always create temporary files unlike %%file so its REALLY important
-to use
+It always create temporary files unlike `%%file` so its REALLY important
+to use:
 
 .. code-block:: vim
 
@@ -303,17 +309,18 @@ deserves being saved!!
 And if you do this over and over you'd end up saving like 10 files so its better
 it defaults to saving in /tmp/
 
-Interesting behavior i just noticed
-``%edit [file_that_doesn't_exist]``
+Interesting behavior i just noticed:
+
+   `%edit` [file_that_doesn't_exist]
+
 this command fails so apparently you HAVE to run it on an existing file.
 
 Probably happens because it doesn't take filenames as arguments.
 
 To explain that let's look at the help pages.
 
-
-edit?
-~~~~~
+IPython Help Pages on `%edit`
+-----------------------------
 This is an example of creating a simple function inside the editor and
 then modifying it. First, start up the editor::
 
@@ -375,8 +382,10 @@ Executing Commands with Magics
 .. magic:: run
 
 
-Help Docs for %run
-------------------
+Help Docs for `%run`
+--------------------
+.. magic:: run
+
 Here are all the listed options for the `%run` magic.:
 
 -t
@@ -480,20 +489,26 @@ Back to ``%run``!
    Disable shell-like glob expansion of arguments.
 
 
-%pycat [filename]
----------------------
-Works like cat but assumes a python source-code file.
+`%pycat` [filename]
+-------------------
+.. magic:: pycat
+
+Works like :command:`cat` but assumes a python source-code file.
+
 Runs it through a color syntax highlighting pager.
+
 The source code for the syntax highlighting can be found in the combination
 of files in :mod:`IPython.utils.PyColorize`, :mod:`IPython.utils.coloransi`,
 :mod:`IPython.core.colorable` and others.
 
 
-Bookmark
---------
+`%bookmark`
+-----------
+
 In [13]: bookmark?
 
-.. code-block:: none
+.. ipython::
+   :verbatim:
 
     Docstring:
     Manage IPython's bookmark system.

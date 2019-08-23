@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Rehash immediately to add everything in :envvar:`$PATH` as a line alias.
-
+"""
 =======
 Rehash
 =======
 
-.. module:: 01_rehashx
-    :synopsis: Rehash everything on $PATH and make available in the user namespace.
+.. currentmodule:: 01_rehashx
+
+.. magic:: rehashx
 
 This is an incredible little gem I just ran into, and hugely useful for
 making `IPython` work as a more versatile system shell.
@@ -19,20 +19,19 @@ magic_name : str
 line : str
     The rest of the input line as a single string.
 _stack_depth : int
-    If :func:`IPython.core.magics.run_line_magic()` is called from
-    :func:`IPython.core.magics.magic()` then
-    `_stack_depth` = 2. This is added to ensure backward compatibility for use
-    of :func:`IPython.core.magics.get_ipython().magic()`
+    Number of recursive calls to an IPython magic.
 
 Notes
 -----
 `run_line_magic()`
-    A method of the |ip| instance.
+    A method of the |ip| instance to run a specific magic currently in the
+    `user_ns` or user namespace.
 
-.. code-block:: none
+.. ipython::
 
-    run_line_magic(magic_name, line, _stack_depth=1)
-    Execute the given line magic.
+    from IPython.core import get_ipython
+    shell = get_ipython()
+    shell.run_line_magic('ls', '')
 
 Usage
 ------
@@ -42,6 +41,15 @@ As the help outlines above, the second required positional argument to
 This is more easily understood as 'remaining arguments to the magic'.
 `%rehashx` takes none, but leaving it blank causes the function call to raise
 an error, so an empty `str` is passed to the function.
+
+_stack_depth
+~~~~~~~~~~~~~
+The `_stack_depth` parameter can be understood like so:
+
+If :func:`IPython.core.magics.run_line_magic()` is called from
+:func:`IPython.core.magics.magic()` then
+`_stack_depth` = 2. This is added to ensure backward compatibility for use
+of :func:`IPython.core.magics.get_ipython().magic()`
 
 """
 import logging
@@ -55,9 +63,21 @@ from profile_default.util.timer import timer
 
 
 def blacklisted_aliases(shell=None):
-    """Remove aliases that would otherwise raise errors.
+    """Blacklist certain aliases.
 
-    Function is checked to ensure that it only runs when using Windows.
+    On Windows, it's assumed that the commands *more*, *less*, *clear* and
+    *man* are undefined. However, the Git-For-Windows package provides all
+    of these and by adding it to the :envvar:`PATH`, `rehashx` will attempt
+    to alias them, resulting in a UsageError.
+
+    Parameters
+    ----------
+    shell : |ip|, optional
+
+    Raises
+    ------
+    AliasError
+
     """
     blacklist = ['more', 'less', 'clear', 'man']
     for i in blacklist:
@@ -69,12 +89,10 @@ def blacklisted_aliases(shell=None):
 
 @timer
 def main(shell=None):
-    """Check if :mod:`IPython` was initialized and if so, ``%rehashx``."""
+    """Add all executables on the user's $PATH into the IPython namespace."""
     shell.run_line_magic('rehashx', '')
     if system() != 'Windows':
         blacklisted_aliases(shell)
-
-    return shell
 
 
 if __name__ == "__main__":
@@ -82,5 +100,4 @@ if __name__ == "__main__":
                         format='%(asctime)s : %(levelname)s : %(message)s')
 
     _ip = get_ipython()
-
-    _ip = main(_ip)
+    main(_ip)

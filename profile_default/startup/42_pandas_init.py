@@ -156,10 +156,7 @@ if __name__ == '__main__':
 
     try:
         import pandas as pd
-    except (ImportError, ModuleNotFoundError) as e:
-        # jesus christ this just printed the error like 8 times. need to fix
-        # LOGGER.warning("Import error: %s" % e, exc_info=1)
-        # sys.exit()
-        PANDAS_LOGGER.warning("Import error: %s", e)
+    except (ImportError, ModuleNotFoundError):
+        pass
     else:
         pandas_init()

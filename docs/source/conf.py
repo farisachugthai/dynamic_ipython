@@ -110,7 +110,9 @@ extensions = [
     'IPython.sphinxext.ipython_directive',
     'numpydoc.numpydoc',
     'sphinx_extensions.magics',
+    'sphinx_extensions.configtraits',
 ]
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
@@ -192,7 +194,9 @@ html_sidebars = {
     ]
 }
 
-html_title = 'Dynamic IPython'
+html_title = u'Dynamic IPython: version' + __version__
+
+html_short_title = u'Dynamic IPython'
 
 # If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
 html_show_sphinx = False
@@ -202,6 +206,8 @@ html_show_sphinx = False
 html_last_updated_fmt = '%b %d, %Y'
 
 html_baseurl = 'https://farisachugthai.github.io/dynamic-ipython'
+
+html_compact_lists = False
 
 # -- Options for HTMLHelp output ---------------------------------------------
 
@@ -241,9 +247,11 @@ html_baseurl = 'https://farisachugthai.github.io/dynamic-ipython'
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [(master_doc, 'site-packages', 'site-packages Documentation',
-    [ author ], 1)]
+              [author], 1)]
 
 manpages_url = 'https://linux.die.net/man/'
+
+man_show_urls = True
 
 # -- Options for Texinfo output ----------------------------------------------
 
@@ -272,6 +280,14 @@ manpages_url = 'https://linux.die.net/man/'
 # A list of files that should not be packed into the epub file.
 # epub_exclude_files = ['search.html']
 
+# -- Options for text output -------------------------------------------------
+
+text_newlines = 'native'
+
+text_add_secnumbers = False
+
+text_secnumber_suffix = ''
+
 # -- Extension configuration -------------------------------------------------
 
 # -- Options for intersphinx extension ---------------------------------------
@@ -279,8 +295,11 @@ manpages_url = 'https://linux.die.net/man/'
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3/', ('python-inv.txt', None)),
-    'ipython': ('https://ipython.readthedocs.io/en/stable/', ('python-inv.txt', None)),
-    'prompt_toolkit': ('https://python-prompt-toolkit.readthedocs.io/en/stable/', ('python-inv.txt', None)),
+    'ipython':
+    ('https://ipython.readthedocs.io/en/stable/', ('python-inv.txt', None)),
+    'prompt_toolkit':
+    ('https://python-prompt-toolkit.readthedocs.io/en/stable/',
+     ('python-inv.txt', None)),
 }
 
 # -- Options for todo extension ----------------------------------------------
@@ -289,7 +308,6 @@ intersphinx_mapping = {
 todo_include_todos = False
 
 # -- Viewcode ----------------------------------------------------------------
-
 """Viewcode:
 
 Apr 28, 2019: RemovedInSphinx30Warning:
@@ -381,9 +399,9 @@ plot_formats = [('png', 96), 'pdf']
 plot_html_show_formats = False
 
 import math
-phi = (math.sqrt(5) + 1)/2
+phi = (math.sqrt(5) + 1) / 2
 
-font_size = 13*72/96.0  # 13 px
+font_size = 13 * 72 / 96.0  # 13 px
 
 plot_rcparams = {
     'font.size': font_size,
@@ -392,7 +410,7 @@ plot_rcparams = {
     'xtick.labelsize': font_size,
     'ytick.labelsize': font_size,
     'legend.fontsize': font_size,
-    'figure.figsize': (3*phi, 3),
+    'figure.figsize': (3 * phi, 3),
     'figure.subplot.bottom': 0.2,
     'figure.subplot.left': 0.2,
     'figure.subplot.right': 0.9,
@@ -403,9 +421,9 @@ plot_rcparams = {
 
 # -- Setup -------------------------------------------------------------------
 
+
 def add_css(func):
     """Add a CSS file to Sphinx."""
-
     @functools.wraps(func)
     def decorate_css(*args, **kwargs):
         custom_css = CONF_PATH.joinpath('..', '_static', 'pyramid.css')

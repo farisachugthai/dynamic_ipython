@@ -2,7 +2,7 @@
 Keybindings in IPython
 =======================
 
-.. module:: keybindings
+.. module:: Keybindings
    :synopsis: Document the way keybindings are set up.
 
 .. highlight:: ipython
@@ -50,7 +50,6 @@ are as follows:
 
 Original File Implementation
 ----------------------------
-
 Let's first check out how keybindings were originally implemented to give
 ourselves a frame of reference.:
 
@@ -63,12 +62,12 @@ Go to the directory where IPython is installed. You can use the code above
 to check its location.
 
 This could be named something to the effect of
-`<~/miniconda3/lib/python3.7/site-packages/IPython/>` for example.
+``~/miniconda3/lib/python3.7/site-packages/IPython/`` for example.
 
 Then navigate to the root of that directory and go to the terminal package.
 
 .. ipython::
-   :okexcept:
+   :verbatim:
 
     %cd /usr/lib/python3.7/site-packages/IPython
     %cd terminal
@@ -76,15 +75,16 @@ Then navigate to the root of that directory and go to the terminal package.
 
 Up at the top you have the keybindings :mod:`IPython` ships with!
 
+
 Official IPython Documentation
 ==============================
 Before we dive straight into the source code, let's check out how IPython
 describes the process of re-binding keys.
 
+
 Conditional Filters
 -------------------
-
-.. todo add in a link to the original docs
+.. todo:: add in a link to the original docs
 
 The code block below is taken from the IPython documentation and
 shows how to bind keys.
@@ -113,7 +113,7 @@ shows how to bind keys.
                              & insert_mode))(insert_unexpected)
 
 
-The documentation also shows a way of adding a `Conditional` Filter
+The documentation also shows a way of adding a ``Conditional`` Filter
 *a la Prompt Toolkit* to the Enter key.
 
 Continue on in this fashion for as long as you need. In my opinion,
@@ -123,27 +123,31 @@ The source code does provide this however:
 
 .. ipython:: python
 
+   from IPython import get_ipython
+   from IPython.terminal import interactiveshell
+   
+   ip = get_ipython
+   registry = ip.pt_cli.application.key_bindings_registry
    # Ctrl+J == Enter, seemingly
-   registry.add_binding(Keys.ControlJ,
-                        filter=(HasFocus(DEFAULT_BUFFER)
-                        & ~HasSelection() & insert_mode))
-                        (return_handler)
+   @(return_handler)
+   registry.add_binding(Keys.ControlJ, filter=(HasFocus(DEFAULT_BUFFER) & ~HasSelection() & insert_mode))
 
 This displays a few useful ways of doing things.
 
-1. Importing :class:`~prompt_toolkit.key_bindings.bindings.Keys()` as a more
+1. Importing :class:`prompt_toolkit.key_bindings.bindings.Keys()` as a more
    consistent interface than passing strings to represent keys.
 2. Utilizing a function ``return_handler`` inline to decorate the keybinding.
 
+.. i don't think _ip has the ``pt_cli`` attribute anymore
+
 Pure Prompt Toolkit Way of Rebinding Keys
 --------------------------------------------
-
 There are 3 different sections in the Prompt Toolkit Official Documentation
 on how to rebind keys using the package.
 
+
 Adding custom key bindings
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 The first time it's mentioned is in the :doc:`prompt_toolkit.asking_for_input`
 document.:
 
@@ -183,11 +187,8 @@ document.:
 
 Enable key bindings according to a condition
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 Then key_bindings are discussed in the context of being filtered through
-certain conditions.
-
-:
+certain conditions.:
 
     Often, some key bindings can be enabled or disabled according to a certain
     condition. For instance, the Emacs and Vi bindings will never be active at
@@ -218,7 +219,6 @@ certain conditions.
 
 Dynamically switch between Emacs and Vi mode
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 This is the part I'm most interested in, as we're going to try coming up with
 a new set of keybindings that blends together Emacs insert mode and
 Vim command mode.
@@ -269,10 +269,9 @@ might be useful. Bring it together with
 
 Using control-space for completion
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 Here's a general overview with more examples on how to rebind keys.:
 
-    A popular short cut that people sometimes use is :kbd:`Ctrl`-:kbd:`Space`
+    A popular short cut that people sometimes use is :kbd:`Ctrl` :kbd:`Space`
     for opening the autocompletion menu instead of the tab key.
     This can be done with the following key binding.::
 
@@ -290,7 +289,6 @@ Here's a general overview with more examples on how to rebind keys.:
 
 Progress Bar Section
 ~~~~~~~~~~~~~~~~~~~~
-
 This continues in the section on progress bars.::
 
     from prompt_toolkit import HTML
@@ -341,13 +339,12 @@ This continues in the section on progress bars.::
 
 Conditional Key Bindings
 ~~~~~~~~~~~~~~~~~~~~~~~~
-
 Then again as a more advanced section.:
 
     It is also possible to combine multiple registries. We do this in the default
     key bindings. There are some registries that contain Emacs bindings, while
     others contain the Vi bindings. They are merged together using a
-    :class:`prompt_toolkit.bindings.MergedRegistry``.
+    :class:`prompt_toolkit.bindings.MergedRegistry`.
 
     We also have a ``ConditionalRegistry`` object that can enable/disable a group
     of key bindings at once.
@@ -443,12 +440,10 @@ Literally::
 Once the user initializes that class, then your
 :class:`prompt_toolkit.key_bindings.keybinding.KeyBindings()`
 statement in the ``__init__`` func was execute and you'll have access
-to everything. Cool!
-
-::
+to everything. Cool!::
 
    registry = load_key_bindings()
-   return registry.key_bindings
+   dir(registry.key_bindings)
 
 
 Ptpython and autocorrection
@@ -500,11 +495,13 @@ toggle on and off.
 
 When run in the REPL:
 
-.. code-block:: none
+.. ipython::
+   :verbatim:
 
    In[10]: t
-   In[11]: dir(t)
-   Out[11]:
+
+The output of ``dir(t)`` is as follows:
+
    ['_DynamicKeyBindings__version',
    '_abc_impl',
    '_dummy',
@@ -516,11 +513,10 @@ When run in the REPL:
    'get_bindings_starting_with_keys',
    'get_key_bindings']
 
-   In[13]: type(t)
-   Out[13]: prompt_toolkit.key_binding.key_bindings.DynamicKeyBindings
-   In[14]: t.get_key_bindings()
-   In[15]: t.get_key_bindings?
-   Signature: t.get_key_bindings(header='', local_ns=None, module=None, dummy=None, stack_depth=1, global_ns=None, compile_flags=None, **kw,)
+The help for :func:`prompt_toolkit.key_binding.key_bindings.DynamicKeyBindings.get_key_bindings()`:
+
+   print(help(t.get_key_bindings))
+   Signature: t.get_key_bindings(header='', local_ns=None, module=None, dummy=None, stack_depth=1, global_ns=None, compile_flags=None, \*\*kw,)
 
    Type:            InteractiveShellEmbed
    Docstring:       <no docstring>
