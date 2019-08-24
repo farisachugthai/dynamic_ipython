@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Magic that reads in a string and parses it as a :mod:`CSV` with :mod:`pandas`.
-
+"""
 ============
 Pandas CSV
 ============
 
 .. module:: pd_csv
     :synopsis: Utilize pandas to read in CSV files.
+
+Magic that reads in a string and parses it as a :mod:`CSV` with :mod:`pandas`.
 
 Example of creating a magic from **IPython Interactive Computing and
 Visualization Cookbook by Cyrille Roussou.**
@@ -35,12 +36,23 @@ logging.basicConfig()
 
 try:
     import pandas as pd
-except (ImportError,ModuleNotFoundError):
-    logging.error("{lib} not installed.", lib='Pandas')
+except (ImportError, ModuleNotFoundError):
+    logging.error("{lib} not installed.".format(lib='Pandas'))
 
 
 def csv(cell):
-    """Read in an :class:`io.StringIO()` and parse it with pandas."""
+    """Read in an :class:`io.StringIO()` and parse it with pandas.
+
+    Parameters
+    ----------
+    cell : str
+        User input.
+
+    Returns
+    -------
+    df : pandas.DataFrame
+
+    """
     sio = StringIO(cell)
     return pd.read_csv(sio)
 
@@ -48,7 +60,13 @@ def csv(cell):
 def load_ipython_extension(ip):
     """This function is called when the extension is loaded.
 
-    It accepts an IPython |ip| instance. We can register the magic with the
-    `IPython.core.magics.register_magic_function()` method.
+    It accepts an IPython |ip| instance. We can register the magic
+    with the :func:`IPython.core.magics.register_magic_function()`
+    method.
+
+    Parameters
+    -----------
+    ip : |ip|
+
     """
     ip.register_magic_function(csv, 'cell')

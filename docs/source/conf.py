@@ -15,6 +15,7 @@ documentation root, use os.path.abspath to make it absolute, like shown here.
 """
 from datetime import datetime
 import functools
+from importlib import import_module
 import logging
 import os
 from pathlib import Path
@@ -58,6 +59,14 @@ def _path_build(root, suffix):
         return new
     else:
         DOCS_LOGGER.error('%s: does not exist. Returning None.' % root)
+
+
+def ask_for_import(mod):
+    """Try/except for importing modules."""
+    try:
+        return import_module(mod)
+    except (ImportError, ModuleNotFoundError):
+        pass
 
 
 SOURCE = Path(__file__).resolve().parent
@@ -108,10 +117,12 @@ extensions = [
     'sphinx.ext.viewcode',
     'IPython.sphinxext.ipython_console_highlighting',
     'IPython.sphinxext.ipython_directive',
-    'numpydoc.numpydoc',
     'sphinx_extensions.magics',
     'sphinx_extensions.configtraits',
 ]
+
+if ask_for_import('numpydoc'):
+    extensions.append('numpydoc.numpydoc')
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

@@ -57,6 +57,14 @@ necessary, build arguments into a mapping.
 In addition, ``makeprg`` is not an option one is allowed to set in a modeline
 so it's important to take that into consideration.
 
+Automatically Generating Docs
+-----------------------------
+Below is the automatically generated documentation for a script that generates
+documentation for this project.::
+
+
+.. autoclass:: make
+
 Generating CSS
 ==============
 Pygments can generate CSS with the following command in the shell:

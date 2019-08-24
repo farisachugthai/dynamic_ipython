@@ -31,16 +31,24 @@ Line:
 
 Cell:
 -----
-- `%[write]file`
-- `%timeit`
-- `%macro`
+- `%%[write]file`
+- `%%timeit`
+- `%%macro`
 
+<<<<<<< Updated upstream
 
 Line Magics
 ============
 
 `%timeit`
 ---------
+||||||| merged common ancestors
+%timeit
+-------
+=======
+`%%timeit`
+----------
+>>>>>>> Stashed changes
 .. magic:: timeit
 
 Let's observe the example below.
@@ -72,7 +80,7 @@ Let's observe the example below.
 Speaking of `%%timeit` I just gave this a whirl to try and see.::
 
 >>> %%timeit
->>> !nvim random-python-file.py +qall
+>>> %nvim random-python-file.py +qall
 
 Possibly a good way to profile nvim startup time.
 You could also add in the option ``--startuptime anything.txt``.
@@ -198,7 +206,7 @@ current cell.
 `%recall ~1/`
 
 
-output
+Output
 ~~~~~~~
 Oddly harder than just input.
 You can easily access relative previous input with `_i`,  `_ii` and `_iii_`
@@ -215,6 +223,7 @@ That returns a dict with your entire output history. so you can go `_oh.keys()`
 But the cell I wanted wasn't there and wasn't saved. Huh. Print statements
 might not get saved in the history. Makes sense.
 
+<<<<<<< Updated upstream
 In IPython run:
 
 .. ipython::
@@ -293,13 +302,11 @@ something like
 work with like `%%file`.
 
 It always create temporary files unlike `%%file` so its REALLY important
-to use:
+to use: the following in Vim.:
 
 .. code-block:: vim
 
    saveas /path/youll/remember
-
-in nvim!
 
 Outside of that little gotcha it can take functions you defined in your
 :mod:`IPython` interactive namespace and you can fuck with them, modify
@@ -345,8 +352,9 @@ And if we call foo() again we get the modified version::
   In [4]: foo()
   foo() has now been changed!
 
-**tldr;** input ipython objects as arguments. it also takes the same input for
-cells as history does. but wait how does that work?
+**tldr;** input ipython objects as arguments.
+It also takes the same input for cells as history does. But wait 
+how does that work?
 
 
 Fun fact about edit
@@ -379,13 +387,9 @@ successfully printed the 4th line from 2 sessions ago that I wanted.
 
 Executing Commands with Magics
 ==============================
-.. magic:: run
-
 
 Help Docs for `%run`
 --------------------
-.. magic:: run
-
 Here are all the listed options for the `%run` magic.:
 
 -t

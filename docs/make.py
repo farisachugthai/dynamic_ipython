@@ -215,7 +215,7 @@ class DocBuilder:
 
     @staticmethod
     def status(output):
-        """Print output in bold."""
+        """Print output in bold. Emits ANSI escape sequences to sys.stdout"""
         print('\033[1m{0}\033[0m'.format(output))
 
     def cleanup(self):
@@ -243,7 +243,7 @@ class DocBuilder:
             raise ValueError(
                 'kind must be one of: {}'.format(str(self.kinds)) +
                 'not {}'.format(self.kind))
-        cmd = ['sphinx-build', '-b', self.kind, SOURCE_PATH]
+        cmd = ['sphinx-build', '-b', self.kind, '.', '-c', SOURCE_PATH]
         if self.num_jobs:
             cmd += ['-j', str(self.num_jobs)]
         if self.verbosity:
@@ -253,7 +253,7 @@ class DocBuilder:
             os.path.join(BUILD_PATH, 'doctrees'),
             os.path.join(BUILD_PATH, self.kind)
         ]
-        MAKE_LOGGER.info('Cmd is ', cmd)
+        MAKE_LOGGER.debug('Cmd is ', cmd)
         return cmd
 
     def run(self):
@@ -278,6 +278,19 @@ class DocBuilder:
         """Open a browser tab to the provided document."""
         url = os.path.join('file://', DOC_PATH, 'build', 'html', doc)
         webbrowser.open(url, new=2)
+
+    def html(self):
+        """Build HTML documentation."""
+        ret_code = self.sphinx_build('html')
+        zip_fname = os.path.join(BUILD_PATH, 'html', 'pandas.zip')
+        if os.path.exists(zip_fname):
+            os.remove(zip_fname)
+
+        if self.single_doc_html is not None:
+            self._open_browser(self.single_doc_html)
+        else:
+            self._add_redirects()
+        return ret_code
 
 
 def termux_hack():
