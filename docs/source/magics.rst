@@ -35,20 +35,9 @@ Cell:
 - `%%timeit`
 - `%%macro`
 
-<<<<<<< Updated upstream
-
-Line Magics
-============
 
 `%timeit`
 ---------
-||||||| merged common ancestors
-%timeit
--------
-=======
-`%%timeit`
-----------
->>>>>>> Stashed changes
 .. magic:: timeit
 
 Let's observe the example below.
@@ -223,7 +212,6 @@ That returns a dict with your entire output history. so you can go `_oh.keys()`
 But the cell I wanted wasn't there and wasn't saved. Huh. Print statements
 might not get saved in the history. Makes sense.
 
-<<<<<<< Updated upstream
 In IPython run:
 
 .. ipython::

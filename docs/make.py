@@ -103,44 +103,55 @@ def _parse_arguments(cmds=None):
     parser = argparse.ArgumentParser(
         prog="Pure Python Makefile",
         description="Dynamic IPython doc builder.",
-        epilog="Commands: {}".format(', '.join(cmds)))
+        epilog="Commands: {}".format(', '.join(cmds))
+    )
 
-    parser.add_argument('builder',
-                        nargs='?',
-                        default='html',
-                        choices=['html', 'latex'],
-                        metavar='builder: (html or latex)',
-                        help='command to run: {}'.format(',\t '.join(cmds)))
+    parser.add_argument(
+        'builder',
+        nargs='?',
+        default='html',
+        choices=['html', 'latex'],
+        metavar='builder: (html or latex)',
+        help='command to run: {}'.format(',\t '.join(cmds))
+    )
 
-    parser.add_argument('-j',
-                        '--num-jobs',
-                        metavar='num-jobs',
-                        dest='jobs',
-                        type=int,
-                        default=os.cpu_count(),
-                        help='Number of parallel jobs used by `sphinx-build`.')
+    parser.add_argument(
+        '-j',
+        '--num-jobs',
+        metavar='num-jobs',
+        dest='jobs',
+        type=int,
+        default=os.cpu_count(),
+        help='Number of parallel jobs used by `sphinx-build`.'
+    )
 
-    parser.add_argument('-s',
-                        '--single',
-                        metavar='FILENAME',
-                        default=None,
-                        help='filename of section or method name to build.')
+    parser.add_argument(
+        '-s',
+        '--single',
+        metavar='FILENAME',
+        default=None,
+        help='filename of section or method name to build.'
+    )
 
-    parser.add_argument('-b',
-                        '--open_browser',
-                        metavar='BROWSER',
-                        type=bool,
-                        default=False,
-                        dest='open_browser',
-                        help='Toggle opening the docs in the default'
-                        ' browser after a successful build.')
+    parser.add_argument(
+        '-b',
+        '--open_browser',
+        metavar='BROWSER',
+        type=bool,
+        default=False,
+        dest='open_browser',
+        help='Toggle opening the docs in the default'
+        ' browser after a successful build.'
+    )
 
-    parser.add_argument('-l',
-                        '--log',
-                        default=sys.stdout,
-                        type=argparse.FileType('w'),
-                        help='Where to write log records to. Defaults to'
-                        ' stdout.')
+    parser.add_argument(
+        '-l',
+        '--log',
+        default=sys.stdout,
+        type=argparse.FileType('w'),
+        help='Where to write log records to. Defaults to'
+        ' stdout.'
+    )
 
     parser.add_argument(
         '-ll',
@@ -148,7 +159,8 @@ def _parse_arguments(cmds=None):
         dest='log_level',
         default='INFO',
         choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'],
-        help='Log level. Defaults to INFO. Implies logging.')
+        help='Log level. Defaults to INFO. Implies logging.'
+    )
     # reasonably should mention what the purpose of some of these are.
     # they primarily seem like toggles since they don't provide much else
     parser.add_argument(
@@ -157,15 +169,16 @@ def _parse_arguments(cmds=None):
         nargs='?',
         const=True,
         default=False,
-        help='Enable verbose logging and increase level to `debug`.')
+        help='Enable verbose logging and increase level to `debug`.'
+    )
 
     parser.add_argument('--version', action='version', version=__version__)
 
     user_args = parser.parse_args()
 
-    # if len(sys.argv[1:]) == 0:
-    #     parser.print_help()
-    #     sys.exit()
+    if len(sys.argv[1:]) == 0:
+        parser.print_help()
+        sys.exit()
 
     return user_args
 
@@ -182,6 +195,7 @@ class DocBuilder:
         The filetype :command:`make` invokes :command:`sphinx-build` to create.
 
     """
+
     def __init__(self, kind='html', num_jobs=1, verbosity=0):
         """Kind has to be first in case the user uses the class with a positional parameter.
 
@@ -189,6 +203,7 @@ class DocBuilder:
         ----------
         kind : str, optional
             The kind of document ``sphinx-build`` will create.
+            Defaults to html.
         num_job : int, optional
             Number of jobs to run the build in parallel with.
         verbose : bool, optional
@@ -242,7 +257,8 @@ class DocBuilder:
         if self.kind not in self.kinds:
             raise ValueError(
                 'kind must be one of: {}'.format(str(self.kinds)) +
-                'not {}'.format(self.kind))
+                'not {}'.format(self.kind)
+            )
         cmd = ['sphinx-build', '-b', self.kind, '.', '-c', SOURCE_PATH]
         if self.num_jobs:
             cmd += ['-j', str(self.num_jobs)]
@@ -297,16 +313,35 @@ def termux_hack():
     """Android permissions don't allow viewing files in app specific files."""
     try:
         shutil.copytree(
-            '_build/html/',
-            '/data/data/com.termux/files/home/storage/downloads/html')
+            BUILD_PATH,
+            '/data/data/com.termux/files/home/storage/downloads/html'
+        )
     except FileExistsError:
-        shutil.rmtree(
-            '/data/data/com.termux/files/home/storage/downloads/html')
-        shutil.copytree(
-            '_build/html/',
-            '/data/data/com.termux/files/home/storage/downloads/html')
+        try:
+            shutil.rmtree(
+                '/data/data/com.termux/files/home/storage/downloads/html'
+            )
+            shutil.copytree(
+                BUILD_PATH,
+                '/data/data/com.termux/files/home/storage/downloads/html'
+            )
+        except Exception as e:
+            raise e
     except FileNotFoundError:
         MAKE_LOGGER.error("Sphinx was unable to create the build directory.")
+
+
+def rsync():
+    """Move docs into the right location with rsync
+
+    Returns
+    -------
+    None
+
+    """
+    if shutil.which('rsync'):
+        output = subprocess.run(['rsync', '-hv8r', BUILD_PATH, DOC_PATH])
+        return output
 
 
 def main():
@@ -334,5 +369,7 @@ if __name__ == "__main__":
     status = main()
     pprint(status)
 
-    if os.environ.get('ANDROID_ROOT'):
-        termux_hack()
+    # if os.environ.get('ANDROID_ROOT'):
+    #     termux_hack()
+
+    print(rsync())
