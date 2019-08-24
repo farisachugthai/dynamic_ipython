@@ -31,6 +31,23 @@ So we may have to :func:`os.walk()`, copy them into the correct relative
 section of the directory tree, recursively delete the old
 directories and attempt to not lose all the metadata along the way.
 
+Possible Workaround
+-------------------
+Here's something I got to work from within WSL.::
+
+>>> import shutil
+>>> from os.path import pjoin
+>>> import subprocess
+>>> BUILD_DIR = pjoin('build', 'html')
+>>> if shutil.which('rsync'):
+    >>> subprocess.run(['rsync', '-hv8r', BUILD_DIR, '.'])
+
+You could even add one of the *delete on destination* options that rsync has.
+
+One of them specifies to delete anything at the destination not in source.
+Obviously be careful beforehand but that could be a really simple way to
+automatically keep the documentation fresh.
+
 
 See Also
 ========
