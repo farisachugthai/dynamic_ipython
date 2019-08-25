@@ -46,17 +46,18 @@
   <h1>Source code for profile_default.startup.01_rehashx</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;Rehash immediately to add everything in :envvar:`$PATH` as a line alias.</span>
-
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">=======</span>
 <span class="sd">Rehash</span>
 <span class="sd">=======</span>
 
-<span class="sd">.. module:: 01_rehashx</span>
-<span class="sd">    :synopsis: Rehash everything on $PATH and make available in the user namespace.</span>
+<span class="sd">.. currentmodule:: 01_rehashx</span>
+
+<span class="sd">.. magic:: rehashx</span>
 
 <span class="sd">This is an incredible little gem I just ran into, and hugely useful for</span>
 <span class="sd">making `IPython` work as a more versatile system shell.</span>
+
 
 <span class="sd">Parameters</span>
 <span class="sd">----------</span>
@@ -65,20 +66,22 @@
 <span class="sd">line : str</span>
 <span class="sd">    The rest of the input line as a single string.</span>
 <span class="sd">_stack_depth : int</span>
-<span class="sd">    If :func:`IPython.core.magics.run_line_magic()` is called from</span>
-<span class="sd">    :func:`IPython.core.magics.magic()` then</span>
-<span class="sd">    `_stack_depth` = 2. This is added to ensure backward compatibility for use</span>
-<span class="sd">    of :func:`IPython.core.magics.get_ipython().magic()`</span>
+<span class="sd">    Number of recursive calls to an IPython magic.</span>
+
 
 <span class="sd">Notes</span>
 <span class="sd">-----</span>
 <span class="sd">`run_line_magic()`</span>
-<span class="sd">    A method of the |ip| instance.</span>
+<span class="sd">    A method of the |ip| instance to run a specific magic currently in the</span>
+<span class="sd">    `user_ns` or user namespace.</span>
 
-<span class="sd">.. code-block:: none</span>
+<span class="sd">.. ipython::</span>
+<span class="sd">    :okexcept:</span>
 
-<span class="sd">    run_line_magic(magic_name, line, _stack_depth=1)</span>
-<span class="sd">    Execute the given line magic.</span>
+<span class="sd">    from IPython.core import get_ipython</span>
+<span class="sd">    shell = get_ipython()</span>
+<span class="sd">    shell.run_line_magic(&#39;ls&#39;, &#39;&#39;)</span>
+
 
 <span class="sd">Usage</span>
 <span class="sd">------</span>
@@ -88,6 +91,18 @@
 <span class="sd">This is more easily understood as &#39;remaining arguments to the magic&#39;.</span>
 <span class="sd">`%rehashx` takes none, but leaving it blank causes the function call to raise</span>
 <span class="sd">an error, so an empty `str` is passed to the function.</span>
+
+
+<span class="sd">_stack_depth</span>
+<span class="sd">~~~~~~~~~~~~~</span>
+<span class="sd">The `_stack_depth` parameter can be understood like so:</span>
+
+<span class="sd">If :func:`IPython.core.magics.run_line_magic()` is called from</span>
+<span class="sd">:func:`IPython.core.magics.magic()` then</span>
+<span class="sd">`_stack_depth` = 2.</span>
+
+<span class="sd">This is added to ensure backward compatibility for use</span>
+<span class="sd">of :func:`IPython.core.magics.get_ipython().magic()`</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">logging</span>
@@ -101,9 +116,21 @@
 
 
 <div class="viewcode-block" id="blacklisted_aliases"><a class="viewcode-back" href="../../../startup/rehashx.html#profile_default.startup.01_rehashx.blacklisted_aliases">[docs]</a><span class="k">def</span> <span class="nf">blacklisted_aliases</span><span class="p">(</span><span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Remove aliases that would otherwise raise errors.</span>
+    <span class="sd">&quot;&quot;&quot;Blacklist certain aliases.</span>
 
-<span class="sd">    Function is checked to ensure that it only runs when using Windows.</span>
+<span class="sd">    On Windows, it&#39;s assumed that the commands *more*, *less*, *clear* and</span>
+<span class="sd">    *man* are undefined. However, the Git-For-Windows package provides all</span>
+<span class="sd">    of these and by adding it to the :envvar:`PATH`, `rehashx` will attempt</span>
+<span class="sd">    to alias them, resulting in a UsageError.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    shell : |ip|, optional</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    AliasError</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">blacklist</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;more&#39;</span><span class="p">,</span> <span class="s1">&#39;less&#39;</span><span class="p">,</span> <span class="s1">&#39;clear&#39;</span><span class="p">,</span> <span class="s1">&#39;man&#39;</span><span class="p">]</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">blacklist</span><span class="p">:</span>
@@ -115,21 +142,18 @@
 
 <div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../startup/rehashx.html#profile_default.startup.01_rehashx.main">[docs]</a><span class="nd">@timer</span>
 <span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Check if :mod:`IPython` was initialized and if so, ``%rehashx``.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Add all executables on the user&#39;s $PATH into the IPython namespace.&quot;&quot;&quot;</span>
     <span class="n">shell</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s1">&#39;rehashx&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">system</span><span class="p">()</span> <span class="o">!=</span> <span class="s1">&#39;Windows&#39;</span><span class="p">:</span>
-        <span class="n">blacklisted_aliases</span><span class="p">(</span><span class="n">shell</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">shell</span></div>
+    <span class="k">if</span> <span class="n">system</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;Windows&#39;</span><span class="p">:</span>
+        <span class="n">blacklisted_aliases</span><span class="p">(</span><span class="n">shell</span><span class="p">)</span></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span>
-                        <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> : </span><span class="si">%(levelname)s</span><span class="s1"> : </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">BASIC_FORMAT</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%(created)f</span><span class="s1"> : </span><span class="si">%(levelname)s</span><span class="s1"> : </span><span class="si">%(module)s</span><span class="s1"> : </span><span class="si">%(message)s</span><span class="s1"> : &#39;</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">BASIC_FORMAT</span><span class="p">)</span>
 
     <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-
-    <span class="n">_ip</span> <span class="o">=</span> <span class="n">main</span><span class="p">(</span><span class="n">_ip</span><span class="p">)</span>
+    <span class="n">main</span><span class="p">(</span><span class="n">_ip</span><span class="p">)</span>
 </pre></div>
 
           </div>
@@ -194,7 +218,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright (C) 2018-2019 Faris Chugthai.
-      Last updated on Aug 22, 2019.
+      Last updated on Aug 25, 2019.
     </div>
   </body>
 </html>

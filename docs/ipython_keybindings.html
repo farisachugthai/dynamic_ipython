@@ -86,95 +86,14 @@ to check its location.</p>
 <h2>Official IPython Documentation<a class="headerlink" href="#official-ipython-documentation" title="Permalink to this headline">¶</a></h2>
 <p>Before we dive straight into the source code, let’s check out how IPython
 describes the process of re-binding keys.</p>
-<div class="section" id="conditional-filters">
-<h3>Conditional Filters<a class="headerlink" href="#conditional-filters" title="Permalink to this headline">¶</a></h3>
-<p>The code block below is taken from the IPython documentation and
-shows how to bind keys.</p>
-<div class="highlight-ipython notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="gp">In [2]: </span><span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.defaults</span> <span class="kn">import</span> <span class="n">load_key_bindings</span>
-
-<span class="gp">In [3]: </span><span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
-
-<span class="gp">In [4]: </span><span class="kn">from</span> <span class="nn">prompt_toolkit.enums</span> <span class="kn">import</span> <span class="n">DEFAULT_BUFFER</span>
-
-<span class="gp">In [5]: </span><span class="kn">from</span> <span class="nn">prompt_toolkit.keys</span> <span class="kn">import</span> <span class="n">Keys</span>
-
-<span class="gp">In [6]: </span><span class="kn">from</span> <span class="nn">prompt_toolkit.filters</span> <span class="kn">import</span> <span class="n">HasFocus</span><span class="p">,</span> <span class="n">HasSelection</span><span class="p">,</span> <span class="n">ViInsertMode</span>
-
-<span class="gp">In [7]: </span><span class="n">ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-
-<span class="gp">In [8]: </span><span class="n">insert_mode</span> <span class="o">=</span> <span class="n">ViInsertMode</span><span class="p">()</span>
-
-<span class="gp">In [9]: </span><span class="k">def</span> <span class="nf">insert_unexpected</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
-<span class="gp">   ...: </span>    <span class="sd">&quot;&quot;&quot;From the IPython examples on keybinding configuration.&quot;&quot;&quot;</span>
-<span class="gp">   ...: </span>    <span class="n">buf</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span>
-<span class="gp">   ...: </span>    <span class="n">buf</span><span class="o">.</span><span class="n">insert_text</span><span class="p">(</span><span class="s1">&#39;The Spanish Inquisition&#39;</span><span class="p">)</span>
-<span class="gp">   ...: </span>    <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ip</span><span class="p">,</span> <span class="s1">&#39;pt_cli&#39;</span><span class="p">):</span>
-<span class="gp">   ...: </span>        <span class="n">registry</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">pt_cli</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">key_bindings_registry</span>
-<span class="gp">   ...: </span>
-</pre></div>
-</td></tr></table></div>
-<p>The documentation also shows a way of adding a <code class="docutils literal notranslate"><span class="pre">Conditional</span></code> Filter
-<em>a la Prompt Toolkit</em> to the Enter key.</p>
-<p>Continue on in this fashion for as long as you need. In my opinion,
-IPython barely comes with any keybindings.</p>
-<p>The source code does provide this however:</p>
-<pre class="literal-block">In [10]: from IPython import get_ipython
-
-In [11]: from IPython.terminal import interactiveshell
-
-In [12]: ip = get_ipython
-
-In [13]: registry = ip.pt_cli.application.key_bindings_registry
----------------------------------------------------------------------------
-AttributeError                            Traceback (most recent call last)
-&lt;ipython-input-13-de3cd0eaaf7f&gt; in &lt;module&gt;
-----&gt; 1 registry = ip.pt_cli.application.key_bindings_registry
-
-AttributeError: 'function' object has no attribute 'pt_cli'
-
-# Ctrl+J == Enter, seemingly
-In [14]: registry.add_binding(Keys.ControlJ, filter=(HasFocus(DEFAULT_BUFFER) &amp; ~HasSelection() &amp; insert_mode))
----------------------------------------------------------------------------
-NameError                                 Traceback (most recent call last)
-&lt;ipython-input-14-bf506f8fc0bf&gt; in &lt;module&gt;
-----&gt; 1 registry.add_binding(Keys.ControlJ, filter=(HasFocus(DEFAULT_BUFFER) &amp; ~HasSelection() &amp; insert_mode))
-
-NameError: name 'registry' is not defined</pre>
-<p>This displays a few useful ways of doing things.</p>
-<ol class="arabic">
-<li><p>Importing <code class="xref py py-class docutils literal notranslate"><span class="pre">prompt_toolkit.key_bindings.bindings.Keys()</span></code> as a more
-consistent interface than passing strings to represent keys.</p></li>
-<li><p>Utilizing a function <code class="docutils literal notranslate"><span class="pre">return_handler</span></code> inline to decorate the keybinding.</p></li>
-</ol>
-</div>
+<p>The source code provides this example:</p>
 <div class="section" id="pure-prompt-toolkit-way-of-rebinding-keys">
 <h3>Pure Prompt Toolkit Way of Rebinding Keys<a class="headerlink" href="#pure-prompt-toolkit-way-of-rebinding-keys" title="Permalink to this headline">¶</a></h3>
 <p>There are 3 different sections in the Prompt Toolkit Official Documentation
 on how to rebind keys using the package.</p>
 <div class="section" id="adding-custom-key-bindings">
 <h4>Adding custom key bindings<a class="headerlink" href="#adding-custom-key-bindings" title="Permalink to this headline">¶</a></h4>
-<p>The first time it’s mentioned is in the <span class="xref std std-doc">prompt_toolkit.asking_for_input</span>
-document.:</p>
+<p>The first time it’s mentioned is in the asking_for_input document.:</p>
 <blockquote>
 <div><p>By default, every prompt already has a set of key bindings which implements
 the usual Vi or Emacs behaviour.</p>
@@ -546,7 +465,7 @@ of key bindings at once.</p>
 to simply the source code where this is implemented.</p>
 <div class="section" id="load-all-default-keybindings">
 <h4>Load all default keybindings<a class="headerlink" href="#load-all-default-keybindings" title="Permalink to this headline">¶</a></h4>
-<p>From <span class="xref std std-ref">prompt_toolkit.key_bindings.bindings.defaults</span></p>
+<p>From <code class="xref py py-mod docutils literal notranslate"><span class="pre">prompt_toolkit.key_bindings.bindings.defaults</span></code>:</p>
 <div class="highlight-ipython notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
@@ -687,38 +606,7 @@ take a callable” that they meant the IPython global instance.</p>
 <p>But I was curious what would happen.</p>
 <p>Doing so actually created an embedded IPython instance that you can now
 toggle on and off.</p>
-<p>When run in the REPL:</p>
-<p>The output of <code class="docutils literal notranslate"><span class="pre">dir(t)</span></code> is as follows:</p>
-<blockquote>
-<div><p>[‘_DynamicKeyBindings__version’,
-‘_abc_impl’,
-‘_dummy’,
-‘_last_child_version’,
-‘_update_cache’,
-‘_version’,
-‘bindings’,
-‘get_bindings_for_keys’,
-‘get_bindings_starting_with_keys’,
-‘get_key_bindings’]</p>
-</div></blockquote>
 <p>The help for <code class="xref py py-func docutils literal notranslate"><span class="pre">prompt_toolkit.key_binding.key_bindings.DynamicKeyBindings.get_key_bindings()</span></code>:</p>
-<blockquote>
-<div><p>print(help(t.get_key_bindings))
-Signature: t.get_key_bindings(header=’’, local_ns=None, module=None, dummy=None, stack_depth=1, global_ns=None, compile_flags=None, **kw,)</p>
-<p>Type:            InteractiveShellEmbed
-Docstring:       &lt;no docstring&gt;
-Class docstring: An enhanced, interactive shell for Python.</p>
-<p>__call__(self,header=’’,local_ns=None,module=None,dummy=None) -&gt; Start
-the interpreter shell with the given local and global namespaces, and
-optionally print a header string at startup.</p>
-<p>The shell can be globally activated/deactivated using the
-dummy_mode attribute. This allows you to turn off a shell used
-for debugging globally.</p>
-<p>However, <em>each</em> time you call the shell you can override the current
-state of dummy_mode with the optional keyword parameter ‘dummy’. For
-example, if you set dummy mode on with IPShell.dummy_mode = True, you
-can still have a specific call work by making it as IPShell(dummy=False).</p>
-</div></blockquote>
 </div>
 <div class="section" id="source-code-for-creating-ipython-shortcuts">
 <h2>Source code for creating IPython shortcuts<a class="headerlink" href="#source-code-for-creating-ipython-shortcuts" title="Permalink to this headline">¶</a></h2>
@@ -962,7 +850,6 @@ Distributed under the terms of the Modified BSD License.</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#official-ipython-documentation">Official IPython Documentation</a><ul>
-<li><a class="reference internal" href="#conditional-filters">Conditional Filters</a></li>
 <li><a class="reference internal" href="#pure-prompt-toolkit-way-of-rebinding-keys">Pure Prompt Toolkit Way of Rebinding Keys</a><ul>
 <li><a class="reference internal" href="#adding-custom-key-bindings">Adding custom key bindings</a></li>
 <li><a class="reference internal" href="#enable-key-bindings-according-to-a-condition">Enable key bindings according to a condition</a></li>
@@ -1027,7 +914,7 @@ Distributed under the terms of the Modified BSD License.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright (C) 2018-2019 Faris Chugthai.
-      Last updated on Aug 24, 2019.
+      Last updated on Aug 25, 2019.
     </div>
   </body>
 </html>

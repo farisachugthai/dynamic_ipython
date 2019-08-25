@@ -47,7 +47,7 @@ c = get_config()
 
 # Set to display confirmation dialog on exit. You can always use 'exit' or
 #  'quit', to force a direct exit without any confirmation.
-c.JupyterConsoleApp.confirm_exit = "False"
+c.JupyterConsoleApp.confirm_exit = False
 
 # Connect to an already running kernel
 # c.JupyterConsoleApp.existing = ''
@@ -71,7 +71,7 @@ c.JupyterConsoleApp.confirm_exit = "False"
 c.Application.log_datefmt = '%Y-%m-%d %H:%M:%S'
 
 # The Logging format template
-c.Application.log_format = '[%(name)s]%(highlevel)s %(message)s'
+c.Application.log_format = '[%(name)s] : %(highlevel)s : %(message)s : '
 
 # Set the log level by value or name.
 c.Application.log_level = 20
@@ -106,9 +106,6 @@ c.Application.log_level = 20
 #  {version} and {kernel_banner}.
 c.ZMQTerminalInteractiveShell.banner = ''
 
-
-
-
 # c.ZMQTerminalInteractiveShell.callable_image_handler = None
 
 # Set to display confirmation dialog on exit. You can always use 'exit' or
@@ -119,14 +116,18 @@ c.ZMQTerminalInteractiveShell.confirm_exit = False
 # c.ZMQTerminalInteractiveShell.editing_mode = 'emacs'
 
 # The name of a Pygments style to use for syntax highlighting
-c.ZMQTerminalInteractiveShell.highlighting_style = 'Gruvbox'
+try:
+    from gruvbox.style import GruvboxDarkHard
+except (ImportError, ModuleNotFoundError):
+    c.ZMQTerminalInteractiveShell.highlighting_style = 'Solarized Dark'
+else:
+    c.ZMQTerminalInteractiveShell.highlighting_style = 'Gruvbox'
 
 # Override highlighting format for specific tokens
 # c.ZMQTerminalInteractiveShell.highlighting_style_overrides = {}
 
 # How many history items to load into memory
 c.ZMQTerminalInteractiveShell.history_load_length = 5000
-
 
 # Whether to include output from clients other than this one sharing the same
 #  kernel.

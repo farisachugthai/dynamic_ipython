@@ -8,17 +8,17 @@ from traitlets.config import get_config
 
 c = get_config()
 
-LOGGER = logging.basicConfig(level=logging.WARNING)
+QTCONSOLE_LOGGER = logging.basicConfig(level=logging.WARNING)
 
 
 def get_home():
     """Returns the user's home directory."""
     try:
-        home = Path().home()
+        return Path.home()
     except Exception as e:
-        LOGGER.error("There was an error determining home directory: %s" % e)
-    else:
-        return home
+        QTCONSOLE_LOGGER.error(
+            "There was an error determining home directory: %s" % e
+        )
 
 
 #------------------------------------------------------------------------------

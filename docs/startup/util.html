@@ -85,7 +85,7 @@ with a pre-determined template string like so:</p>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <dl class="method">
 <dt id="profile_default.util.copytree.CopyTree.copytree">
-<code class="sig-name descname">copytree</code><span class="sig-paren">(</span><em class="sig-param">src</em>, <em class="sig-param">dst</em>, <em class="sig-param">symlinks=False</em>, <em class="sig-param">ignore=None</em>, <em class="sig-param">copy_function=&lt;function copy2 at 0x7e61029170&gt;</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/profile_default/util/copytree.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/profile_default/util/copytree.html#CopyTree.copytree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profile_default.util.copytree.CopyTree.copytree" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">copytree</code><span class="sig-paren">(</span><em class="sig-param">src</em>, <em class="sig-param">dst</em>, <em class="sig-param">symlinks=False</em>, <em class="sig-param">ignore=None</em>, <em class="sig-param">copy_function=&lt;function copy2 at 0x7faf963c7bf8&gt;</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/profile_default/util/copytree.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/profile_default/util/copytree.html#CopyTree.copytree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profile_default.util.copytree.CopyTree.copytree" title="Permalink to this definition">¶</a></dt>
 <dd><p>Let’s try and do <code class="xref py py-obj docutils literal notranslate"><span class="pre">shutil.copytree()</span></code> a little better.</p>
 <p>First let’s do everyone the courtesy of checking whether <code class="xref py py-obj docutils literal notranslate"><span class="pre">src</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">dest</span></code>
 are pathlib.Path objects.</p>
@@ -111,15 +111,18 @@ are pathlib.Path objects.</p>
 </div>
 <div class="section" id="module-profile_default.util.machine">
 <span id="profile-default-util-machine-module"></span><h2>profile_default.util.machine module<a class="headerlink" href="#module-profile_default.util.machine" title="Permalink to this headline">¶</a></h2>
-<p>Create a class for all <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.7.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> instances to utilize.</p>
-<div class="section" id="module-machine">
-<span id="machine"></span><h3>Machine<a class="headerlink" href="#module-machine" title="Permalink to this headline">¶</a></h3>
-<p>This class leverages <code class="xref py py-mod docutils literal notranslate"><span class="pre">prompt_toolkit</span></code> and a few of it’s methods to abstract
+<span class="target" id="module-machine"></span><p>This class leverages <code class="xref py py-mod docutils literal notranslate"><span class="pre">prompt_toolkit</span></code> and a few of it’s methods to abstract
 away differences in operating systems and filesystems.</p>
 <p>The class can be easily initialized with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">profile_default.util.machine</span> <span class="k">import</span> <span class="n">Platform</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">users_machine</span> <span class="o">=</span> <span class="n">Platform</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">env</span> <span class="o">=</span> <span class="n">users_machine</span><span class="o">.</span><span class="n">update_env</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">env</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+</pre></div>
+</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Don’t name the instance <code class="docutils literal notranslate"><span class="pre">platform</span></code> as that’s a module in the standard
+<p>Don’t name the instance <a class="reference external" href="https://docs.python.org/3/library/platform.html#module-platform" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">platform</span></code></a> as that’s a module in the standard
 library.</p>
 </div>
 <div class="admonition seealso">
@@ -129,10 +132,9 @@ library.</p>
 </dd>
 </dl>
 </div>
-<hr class="docutils" />
 <dl class="class">
 <dt id="profile_default.util.machine.Platform">
-<em class="property">class </em><code class="sig-prename descclassname">profile_default.util.machine.</code><code class="sig-name descname">Platform</code><span class="sig-paren">(</span><em class="sig-param">shell=None</em>, <em class="sig-param">env=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/profile_default/util/machine.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/profile_default/util/machine.html#Platform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profile_default.util.machine.Platform" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">profile_default.util.machine.</code><code class="sig-name descname">Platform</code><span class="sig-paren">(</span><em class="sig-param">shell=None</em>, <em class="sig-param">user_env=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/profile_default/util/machine.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/profile_default/util/machine.html#Platform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profile_default.util.machine.Platform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Abstract away platform differences.</p>
 <p>After toying with the initial implementation, I realized I could simply
@@ -144,11 +146,16 @@ act in an appropriate manner without knowing what the
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul>
-<li><p><strong>shell</strong> (<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.7.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.interactiveshell.InteractiveShell</span></code></a>, optional) – Global IPython Instance</p></li>
-<li><p><strong>env</strong> (<em>Dict</em>) – Environment variables to add to the instance</p></li>
+<li><p><strong>shell</strong> (<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.7.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.interactiveshell.InteractiveShell</span></code></a>, optional) – Global IPython instance.</p></li>
+<li><p><strong>user_env</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Environment variables to add to the instance.</p></li>
 </ul>
 </dd>
 </dl>
+<dl class="attribute">
+<dt id="profile_default.util.machine.Platform.LOGGER">
+<code class="sig-name descname">LOGGER</code><em class="property"> = &lt;Logger util.machine.Platform (INFO)&gt;</em><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/profile_default/util/machine.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profile_default.util.machine.Platform.LOGGER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="profile_default.util.machine.Platform.get_env">
 <code class="sig-name descname">get_env</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/profile_default/util/machine.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/profile_default/util/machine.html#Platform.get_env"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profile_default.util.machine.Platform.get_env" title="Permalink to this definition">¶</a></dt>
@@ -164,6 +171,11 @@ act in an appropriate manner without knowing what the
 </dd></dl>
 
 <dl class="method">
+<dt id="profile_default.util.machine.Platform.is_conemu_ansi">
+<em class="property">static </em><code class="sig-name descname">is_conemu_ansi</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/profile_default/util/machine.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/profile_default/util/machine.html#Platform.is_conemu_ansi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profile_default.util.machine.Platform.is_conemu_ansi" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="profile_default.util.machine.Platform.is_linux">
 <em class="property">property </em><code class="sig-name descname">is_linux</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/profile_default/util/machine.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/profile_default/util/machine.html#Platform.is_linux"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profile_default.util.machine.Platform.is_linux" title="Permalink to this definition">¶</a></dt>
 <dd><p>True when <code class="xref py py-func docutils literal notranslate"><span class="pre">sys.platform()</span></code> returns linux.</p>
@@ -175,6 +187,11 @@ act in an appropriate manner without knowing what the
 <dd><p>True when we are using Windows, but with VT100 esc sequences.</p>
 <p>Import needs to be inline. Windows libraries are not always available.</p>
 </dd></dl>
+
+<dl class="method">
+<dt id="profile_default.util.machine.Platform.is_windows">
+<em class="property">static </em><code class="sig-name descname">is_windows</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/profile_default/util/machine.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/profile_default/util/machine.html#Platform.is_windows"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profile_default.util.machine.Platform.is_windows" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="profile_default.util.machine.Platform.update_env">
@@ -194,7 +211,7 @@ act in an appropriate manner without knowing what the
 
 <dl class="class">
 <dt id="profile_default.util.machine.Shell">
-<em class="property">class </em><code class="sig-prename descclassname">profile_default.util.machine.</code><code class="sig-name descname">Shell</code><span class="sig-paren">(</span><em class="sig-param">shell=None</em>, <em class="sig-param">env=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/profile_default/util/machine.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/profile_default/util/machine.html#Shell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profile_default.util.machine.Shell" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">profile_default.util.machine.</code><code class="sig-name descname">Shell</code><span class="sig-paren">(</span><em class="sig-param">shell=None</em>, <em class="sig-param">user_env=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/profile_default/util/machine.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/profile_default/util/machine.html#Shell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profile_default.util.machine.Shell" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#profile_default.util.machine.Platform" title="profile_default.util.machine.Platform"><code class="xref py py-class docutils literal notranslate"><span class="pre">profile_default.util.machine.Platform</span></code></a></p>
 <p>Subclass Platform to gain information about the user’s shell.</p>
 <dl class="method">
@@ -214,7 +231,6 @@ act in an appropriate manner without knowing what the
 
 </dd></dl>
 
-</div>
 </div>
 <div class="section" id="module-profile_default.util.module_log">
 <span id="profile-default-util-module-log-module"></span><h2>profile_default.util.module_log module<a class="headerlink" href="#module-profile_default.util.module_log" title="Permalink to this headline">¶</a></h2>
@@ -241,7 +257,7 @@ is the easiest and most oft used entry point in this module.</p>
 <dl class="function">
 <dt id="profile_default.util.module_log.file_logger">
 <code class="sig-prename descclassname">profile_default.util.module_log.</code><code class="sig-name descname">file_logger</code><span class="sig-paren">(</span><em class="sig-param">filename</em>, <em class="sig-param">logger=None</em>, <em class="sig-param">shell=None</em>, <em class="sig-param">log_level=20</em>, <em class="sig-param">msg_format=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/profile_default/util/module_log.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/profile_default/util/module_log.html#file_logger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profile_default.util.module_log.file_logger" title="Permalink to this definition">¶</a></dt>
-<dd><p>Logging that emits a <a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.LogRecord" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">logging.LogRecord</span></code></a> to <code class="docutils literal notranslate"><span class="pre">filename</span></code>.</p>
+<dd><p>Logging that emits a <code class="xref py py-class docutils literal notranslate"><span class="pre">logging.LogRecord()</span></code> to <code class="docutils literal notranslate"><span class="pre">filename</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul>
@@ -253,7 +269,7 @@ module.</p></li>
 <li><p><strong>log_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em>) – Level of log records.</p></li>
 <li><p><strong>msg_format</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Representation of logging messages. Uses standard <kbd class="kbd docutils literal notranslate">%</kbd> style
 string formatting.
-Defaults to <code class="docutils literal notranslate"><span class="pre">%(asctime)s</span> <span class="pre">%(levelname)s</span> <span class="pre">%(message)s</span></code></p></li>
+Defaults to <a href="#id3"><span class="problematic" id="id4">``</span></a>%(asctime)s : %(levelname)s : %(message)s : ``</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -273,7 +289,7 @@ Defaults to <code class="docutils literal notranslate"><span class="pre">%(ascti
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul>
 <li><p><strong>logger</strong> (str or <code class="xref py py-class docutils literal notranslate"><span class="pre">logging.Logger()</span></code>, optional) – Either a named Logger instance or the string representing the desired instance</p></li>
-<li><p><strong>JsonFormatter</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">logging.Formatter()</span></code>, optional) – <span class="xref std std-ref">profile_default.util.module_log.JsonFormatter()</span> instance.
+<li><p><strong>JsonFormatter</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">logging.Formatter()</span></code>, optional) – <span class="xref std std-ref">module_log.JsonFormatter()</span> instance.
 Included in the listed parameters to be explicit; however, it’s
 probably easier to not include the parameter as one is configured
 in the function anyway.</p></li>
@@ -319,7 +335,7 @@ formatting. Defaults to <code class="docutils literal notranslate"><span class="
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>logger</strong> – Defaults to <code class="docutils literal notranslate"><span class="pre">logging.INFO</span></code> and ‘%(asctime)s %(levelname)s %(message)s’</p>
+<dd class="field-even"><p><strong>logger</strong> – Defaults to <code class="docutils literal notranslate"><span class="pre">logging.INFO</span></code> and ‘%(asctime)s : %(levelname)s : %(message)s : ‘</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">logging.Logger()</span></code> instance</p>
@@ -330,14 +346,6 @@ formatting. Defaults to <code class="docutils literal notranslate"><span class="
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">profile_default.util.module_log</span> <span class="k">import</span> <span class="n">stream_logger</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">LOGGER</span> <span class="o">=</span> <span class="n">stream_logger</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="vm">__name__</span><span class="p">))</span>
 </pre></div>
-</div>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p><span class="xref std std-ref">profile_default.startup.32_vi_modes</span></p>
-<dl class="simple">
-<dt><code class="xref py py-func docutils literal notranslate"><span class="pre">In()</span></code></dt><dd><p>ref:<a class="reference internal" href="vi_modes.html#module-profile_default.startup.32_vi_modes" title="profile_default.startup.32_vi_modes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">profile_default.startup.32_vi_modes</span></code></a> we call this function.</p>
-</dd>
-</dl>
 </div>
 </dd></dl>
 
@@ -413,7 +421,6 @@ formatting. Defaults to <code class="docutils literal notranslate"><span class="
 <li class="toctree-l2"><a class="reference internal" href="log.html">Logging</a></li>
 <li class="toctree-l2"><a class="reference internal" href="help_helpers.html">Help Helpers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="aliases.html">System Shell Aliases</a></li>
-<li class="toctree-l2"><a class="reference internal" href="vi_modes.html">32_vi_modes module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="numpy.html"><code class="docutils literal notranslate"><span class="pre">41_numpy_init</span></code> module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pandas.html"><code class="docutils literal notranslate"><span class="pre">42_pandas_init</span></code> module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sysexcept.html">50_sysexception module</a></li>
@@ -436,10 +443,7 @@ formatting. Defaults to <code class="docutils literal notranslate"><span class="
 <li><a class="reference internal" href="#module-profile_default.util">Module contents</a></li>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
 <li><a class="reference internal" href="#module-profile_default.util.copytree">profile_default.util.copytree module</a></li>
-<li><a class="reference internal" href="#module-profile_default.util.machine">profile_default.util.machine module</a><ul>
-<li><a class="reference internal" href="#module-machine">Machine</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#module-profile_default.util.machine">profile_default.util.machine module</a></li>
 <li><a class="reference internal" href="#module-profile_default.util.module_log">profile_default.util.module_log module</a><ul>
 <li><a class="reference internal" href="#module-module_log">module_log</a></li>
 </ul>
@@ -495,7 +499,7 @@ formatting. Defaults to <code class="docutils literal notranslate"><span class="
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright (C) 2018-2019 Faris Chugthai.
-      Last updated on Aug 23, 2019.
+      Last updated on Aug 25, 2019.
     </div>
   </body>
 </html>

@@ -68,7 +68,7 @@ def path_logger(logger=None):
 
 
 def stream_logger(logger, log_level=logging.INFO, msg_format=None):
-    """Set up a :class:`logging.Logger()` instance, add a stream handler.
+    r"""Set up a :class:`logging.Logger()` instance, add a stream handler.
 
     Should do some validation on the log level there. There's a really
     useful block of code in the tutorial.
@@ -86,18 +86,13 @@ def stream_logger(logger, log_level=logging.INFO, msg_format=None):
     Returns
     -------
     logger : :class:`logging.Logger()` instance
-        Defaults to ``logging.INFO`` and '%(asctime)s %(levelname)s %(message)s'
+        Defaults to ``logging.INFO`` and '%(asctime)s : %(levelname)s : %(message)s : '
 
     Examples
     --------
     >>> import logging
     >>> from profile_default.util.module_log import stream_logger
     >>> LOGGER = stream_logger(logging.getLogger(name=__name__))
-
-    See Also
-    --------
-    :ref:`profile_default.startup.32_vi_modes`
-        In :ref:`profile_default.startup.32_vi_modes` we call this function.
 
     """
     handler = logging.StreamHandler(stream=sys.stderr)
@@ -118,7 +113,9 @@ def stream_logger(logger, log_level=logging.INFO, msg_format=None):
     if msg_format is not None:
         formatter = logging.Formatter(msg_format)
     else:
-        formatter = logging.Formatter('%(asctime)s : %(levelname)s : %(message)s : ')
+        formatter = logging.Formatter(
+            '%(asctime)s : %(levelname)s : %(message)s : '
+        )
 
     handler.setFormatter(formatter)
 
@@ -131,7 +128,7 @@ def file_logger(
         filename, logger=None, shell=None, log_level=logging.INFO,
         msg_format=None
 ):
-    r"""Logging that emits a :class:`logging.LogRecord` to ``filename``.
+    r"""Logging that emits a :class:`logging.LogRecord()` to ``filename``.
 
     Parameters
     ----------
@@ -148,7 +145,7 @@ def file_logger(
     msg_format : str, optional
         Representation of logging messages. Uses standard :kbd:`%` style
         string formatting.
-        Defaults to ``%(asctime)s %(levelname)s %(message)s``
+        Defaults to ``%(asctime)s : %(levelname)s : %(message)s : ``
 
     Returns
     -------
@@ -176,7 +173,9 @@ def file_logger(
     if msg_format is not None:
         formatter = logging.Formatter(msg_format)
     else:
-        formatter = logging.Formatter('%(asctime)s : %(levelname)s : %(message)s : ')
+        formatter = logging.Formatter(
+            '%(asctime)s : %(levelname)s : %(message)s : '
+        )
 
     handler.setFormatter(formatter)
 
@@ -193,7 +192,7 @@ def json_logger(logger=None, JSONFormatter=None):
     logger : str or :class:`logging.Logger()`, optional
         Either a named Logger instance or the string representing the desired instance
     JsonFormatter : :class:`logging.Formatter()`, optional
-        :ref:`profile_default.util.module_log.JsonFormatter()` instance.
+        :ref:`module_log.JsonFormatter()` instance.
         Included in the listed parameters to be explicit; however, it's
         probably easier to not include the parameter as one is configured
         in the function anyway.
@@ -242,10 +241,13 @@ class JsonFormatter(logging.Formatter):
         else:
             exc = None
 
-        return json.dumps({
-            'msg': record.msg % record.args, 'timestamp':
-                datetime.utcfromtimestamp(record.created).isoformat() + 'Z',
-            'func': record.funcName, 'level': record.levelname, 'module':
-                record.module, 'process_id': record.process, 'thread_id':
-                    record.thread, 'exception': exc
-        })
+        return json.dumps(
+            {
+                'msg': record.msg % record.args, 'timestamp':
+                    datetime.utcfromtimestamp(record.created).isoformat() +
+                    'Z',
+                'func': record.funcName, 'level': record.levelname, 'module':
+                    record.module, 'process_id': record.process, 'thread_id':
+                        record.thread, 'exception': exc
+            }
+        )

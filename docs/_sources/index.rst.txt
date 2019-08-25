@@ -111,7 +111,7 @@ For further reading, feel free to see the output of any of the following::
 
 Which features descriptions of functions relevant to startup such as
 :func:`IPython.core.interactiveshell.register_magic_function()` and literally
-every option available through the ``%config`` magic.
+every option available through the `%config` magic.
 
 For commands that are more related to the interactive aspect of the shell,
 see the following::
@@ -132,6 +132,7 @@ form of rst docs and ipynb notebooks.
    Built-in Magics <magics>
    Writing Your Own Magics <custom_magics>
    exceptions
+   sphinxext
 
 .. toctree::
    :caption: API Docs
@@ -141,7 +142,7 @@ form of rst docs and ipynb notebooks.
    IPython Shell Initialization <startup/index>
    jupyter
    extensions
-   Contributors Notes <dev>
+   Developers Notes <dev>
 
 
 Indices and tables

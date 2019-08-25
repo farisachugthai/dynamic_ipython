@@ -1,12 +1,15 @@
 ======================
-Defining custom magics
+Custom Magics
 ======================
+
+.. module:: custom-magics
+   :synopsis: Defininng custom magics. 
 
 .. highlight:: ipython
 
+
 Creating IPython Extensions
 ===============================
-
 *Summarized from "Learning IPython for Interactive Computing and Data
 Visualization 1st ed.pdf"*:
 
@@ -26,6 +29,7 @@ Visualization 1st ed.pdf"*:
    happens when the command is executed.
 
 .. ipython::
+   :verbatim:
 
    %load_ext  # or
    %reload_ext magic
@@ -85,17 +89,14 @@ magic_name : optional str
 This affords users the ability to create a magic, line or cell, out of
 any function.
 
-
 The second is simply named **register_magics**.
 
+
 register_magics
----------------
-
-
+----------------
 Signature: ``register_magics(*magic_objects)``
 
 Docstring:
-
    Register one or more instances of Magics.
 
    Take one or more classes or instances of classes that subclass the main
@@ -104,26 +105,27 @@ Docstring:
 
    The registration process will then ensure that
    any methods that have decorated to provide line and/or cell magics will
-   be recognized with the `%x`/`%%x` syntax as a line/cell magic
+   be recognized with the ``%x``/``%%x`` syntax as a line/cell magic
    respectively.
 
    If classes are given, they will be instantiated with the default
    constructor.  If your classes need a custom constructor, you should
-   instanitate them first and pass the instance.
+   instantiate them first and pass the instance.
 
    The provided arguments can be an arbitrary mix of classes and instances.
 
 
 register_magic Parameters
 ~~~~~~~~~~~~~~~~~~~~~~~~~
-magic_objects : one or more classes or instances
+.. todo:: register_magic
 
+magic_objects : one or more classes or instances
 
 Example usage exists on the official website as well.
 
+
 Tldr
 ----
-
 Writing the extension:
 
 - Import the global :mod:`IPython` instance with::
@@ -136,25 +138,27 @@ Writing the extension:
 
 If you want to try out your ipython magics you can do the following:
 
-- Load your magic with:
+- Load your magic with::
 
-    ``ip.magic('load_ext your_magic_name')``
+    _ip.magic('load_ext your_magic_name')
 
-- Run your magic with:
+- Run your magic with::
 
-    ``ip.run_line_magic('your_magic_function', 'your_magic_arguments')``
+    _ip.run_line_magic('your_magic_function', 'your_magic_arguments')
 
-*(Optional) Access results of your magic with :attr:`ip.user_ns`
-in the IPython user namespace.*
+**(Optional)**:
+
+Access results of your magic with the ``user_ns`` attribute of |ip|
+in the IPython user namespace.
 
 Admittedly I regularly flood my ``user_ns`` so this might not be viable in all
 cases.
 
 However in a testing situation this could prove beneficial.
 
+
 Alternative Method of Defining Magics with Arguments
 ----------------------------------------------------
-
 From the IPython team directly. The following is the module docstring for
 :mod:`IPython.core.magic_arguments`.
 
@@ -207,7 +211,6 @@ Inheritance diagram:
 
 Writing Custom Magics
 ======================
-
 `Custom Magics <https://raw.githubusercontent.com/ipython/ipython/523ed2fe58ea5ee9971d2b21df1de33b8cdfa924/docs/source/config/custommagics.rst>`_:
 
 There are two main ways to define your own magic functions. From standalone
@@ -249,10 +252,6 @@ magic, a cell one and one that works in both modes, using just plain functions:
         else:
             print("Called as cell magic")
             return line, cell
-
-    # In an interactive session, we need to delete these to avoid
-    # name conflicts for automagic to work on line magics.
-    del lmagic, lcmagic
 
 
 You can also create magics of all three kinds by inheriting from the
@@ -298,11 +297,12 @@ doesn't instantiate it yet.
                 print("Called as cell magic")
                 return line, cell
 
+
 In order to actually use these magics, you must register them with a
 running IPython instance.
 
-Any module file that define a function named `load_ipython_extension`
-can be loaded via `%load_ext module.path` or be configured to be
+Any module file that define a function named ``load_ipython_extension``
+can be loaded via `%load_ext` module.path or be configured to be
 autoloaded by IPython at startup time.
 
 You can register the class itself without instantiating it.  IPython will
@@ -321,8 +321,8 @@ instantiate the class yourself before registration:
 
 .. ipython:: python
 
-    from IPython.core.magic import (Magics, magics_class, line_magic,
-                                    cell_magic, line_cell_magic)
+    from IPython.core.magic import Magics, magics_class, line_magic
+    from IPython.core.magic import cell_magic, line_cell_magic
 
     @magics_class
     class StatefulMagics(Magics):
@@ -332,8 +332,6 @@ instantiate the class yourself before registration:
             # You must call the parent constructor
             super(StatefulMagics, self).__init__(shell)
             self.data = data
-
-        # etc...
 
     def load_ipython_extension(ipython):
         # This class must then be registered with a manually created instance,
@@ -367,11 +365,13 @@ setuptools, distutils, or any other distribution tools like `flit
    │   └── abracadabra.py
    └── setup.py
 
+
 .. sourcecode:: bash
 
    $ cat example_magic/__init__.py
 
-.. code-block:: python
+
+.. code-block:: python3
 
    """An example magic"""
    __version__ = '0.0.1'
@@ -381,11 +381,13 @@ setuptools, distutils, or any other distribution tools like `flit
    def load_ipython_extension(_ip):
        ipython.register_magics(Abracadabra)
 
+
 .. sourcecode:: bash
 
     $ cat example_magic/abracadabra.py
 
-.. code-block:: python
+
+.. code-block:: python3
 
     from IPython.core.magic import (Magics, magics_class, line_magic, cell_magic)
 
@@ -399,12 +401,3 @@ setuptools, distutils, or any other distribution tools like `flit
         @cell_magic
         def cadabra(self, line, cell):
             return line, cell
-
-
-Exception Handling
-------------------
-
-Inspiration on how to handle errors.::
-
-   from IPython.core.error import UsageError
-   UsageError?

@@ -45,7 +45,117 @@
   <h1>Source code for profile_default.ipython_config</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;Configuration file for :mod:`IPython`.&quot;&quot;&quot;</span>
+<span class="sd">&quot;&quot;&quot;Configuration file for :mod:`IPython`.</span>
+
+<span class="sd">==============</span>
+<span class="sd">IPython Config</span>
+<span class="sd">==============</span>
+
+<span class="sd">Heavily drawn from documentation at `ipython_docs`_.  In addition to source</span>
+<span class="sd">code found on GitHub.</span>
+
+
+<span class="sd">.. _ipython_docs: `&lt;https://ipython.readthedocs.io/en/stable/config/intro.html#python-config-files&gt;`_</span>
+
+<span class="sd">Overview</span>
+<span class="sd">=========</span>
+
+<span class="sd">This module provides convenience functions, adds typical Linux shell</span>
+<span class="sd">commands to `user_ns`, or the global namespace, in addition to Git aliases.</span>
+
+<span class="sd">In addition, pygments is directly invoked to ensure comments are</span>
+<span class="sd">clearly visible in :mod:`IPython` cells.</span>
+
+
+<span class="sd">get_config and :mod:`traitlets`</span>
+<span class="sd">-------------------------------</span>
+
+<span class="sd">In the online examples, it&#39;s not clearly shown what the `c` represents when</span>
+<span class="sd">setting varying configuration values.</span>
+
+
+<span class="sd">From :mod:`traitlets/config/application`::</span>
+
+<span class="sd">    # so as to not break the Sphinx shell</span>
+<span class="sd">    from traitlets import config</span>
+<span class="sd">    from traitlets.config import Config, Application</span>
+
+<span class="sd">    def get_config():</span>
+<span class="sd">        # Get the config object for the global Application instance, if there is one</span>
+<span class="sd">        # otherwise return an empty config object</span>
+<span class="sd">        if Application.initialized():</span>
+<span class="sd">            return Application.instance().config</span>
+<span class="sd">        else:</span>
+<span class="sd">            return Config()</span>
+
+
+<span class="sd">`c` subclasses the :class:`traitlets.config.Configurable()` object</span>
+<span class="sd">in order to build up the declarative syntax used by IPython</span>
+<span class="sd">to make easy to modify values for users. This is setup by initializing</span>
+<span class="sd">classes with predefined attributes is a fundamental part of IPython.</span>
+
+<span class="sd">Everything in the following module, therefore, is a way of interacting</span>
+<span class="sd">with the varying traits classes IPython exports as it&#39;s API.</span>
+
+<span class="sd">It&#39;s easy and doesn&#39;t require re-initializing</span>
+<span class="sd">:mod:`IPython` on simple things like creating a new prompt after every</span>
+<span class="sd">command increments it.</span>
+
+
+<span class="sd">Class parameters</span>
+<span class="sd">----------------</span>
+
+<span class="sd">Parameters are set from command-line arguments of the form:</span>
+
+
+<span class="sd">``--Class.trait=value``.</span>
+
+
+<span class="sd">This line is evaluated in Python, so simple expressions</span>
+<span class="sd">are allowed, e.g.::</span>
+
+
+<span class="sd">    --C.a=&#39;range(3)&#39;</span>
+
+
+<span class="sd">For setting ``C.a=[0,1,2]``.</span>
+
+
+<span class="sd">Notable Expressions</span>
+<span class="sd">--------------------</span>
+
+<span class="sd">With the background laid, there are a few expressions worth noting:</span>
+
+<span class="sd">    ``c.InteractiveShellApp.reraise_ipython_extension_failures = False``</span>
+
+<span class="sd">Initially, one would assume this means something to effect of &quot;Don&#39;t stop</span>
+<span class="sd">raising errors caused by faulty extensions.&quot;</span>
+
+<span class="sd">In actuality, it refers to crashing the interpreter if there are extension</span>
+<span class="sd">issues, which one will notice when reading the traitlets source code.</span>
+
+<span class="sd">From traitlets/config/application.py:</span>
+
+<span class="sd">    # Whether failing to load config files should prevent startup</span>
+<span class="sd">    raise_config_file_errors = Bool(TRAITLETS_APPLICATION_RAISE_CONFIG_FILE_ERROR)</span>
+
+
+<span class="sd">Parameters</span>
+<span class="sd">------------</span>
+
+<span class="sd">c : :class:`IPython.terminal.interactiveshell.TerminalInteractiveShell()`</span>
+<span class="sd">    Global IPython instance.</span>
+
+
+<span class="sd">Attributes (Non-method parameters)</span>
+<span class="sd">----------------------------------</span>
+
+<span class="sd">:envvar:`IPYTHONDIR` : str (path-like)</span>
+<span class="sd">    Environment variable defined before runtime to indicate where the</span>
+<span class="sd">    :mod:`IPython` profile directory is.</span>
+
+
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
@@ -835,12 +945,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../../ipython_keybindings.html">Keybindings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../magics.html">Built-in Magics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../custom_magics.html">Writing Your Own Magics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../sphinxext.html">The Sphinx Extension</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../profile/index.html">IPython Shell Initialization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../profile_default.html">Startup Files and IPython Shell Initialization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../jupyter.html">Jupyter ZMQShell</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../extensions.html">Notebook Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../extensions.html">IPython Extensions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../dev.html">Developers Notes</a></li>
 </ul>
 

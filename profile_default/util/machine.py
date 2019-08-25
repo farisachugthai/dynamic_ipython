@@ -1,13 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Create a class for all :mod:`IPython` instances to utilize.
-
+"""
 =========
 Machine
 =========
 
 .. module:: machine
-    :synopsis: Abstracts away platform differences.
+    :synopsis: Create a class for all :mod:`IPython` instances to utilize.
 
 .. highlight:: ipython
 
@@ -16,24 +15,20 @@ away differences in operating systems and filesystems.
 
 The class can be easily initialized with:
 
-.. ipython::
-
-    >>> from profile_default.util.machine import Platform
-    >>> users_machine = Platform()
-    >>> env = users_machine.update_env()
-    >>> assert env is not None
+>>> from profile_default.util.machine import Platform
+>>> users_machine = Platform()
+>>> env = users_machine.update_env()
+>>> assert env is not None
 
 .. note::
-    Don't name the instance ``platform`` as that's a module in the standard
+
+    Don't name the instance `platform` as that's a module in the standard
     library.
 
 See Also
 --------
 :mod:`profile_default.startup.20_aliases`
     Shows an example use case
-
-
--------------------------------------------
 
 """
 import doctest
@@ -44,7 +39,7 @@ import sys
 from pathlib import Path
 
 from IPython import get_ipython
-from prompt_toolkit.utils import is_conemu_ansi, is_windows
+from prompt_toolkit.utils import is_conemu_ansi
 
 from profile_default.util import module_log
 
@@ -63,33 +58,48 @@ class Platform:
     Parameters
     ----------
     shell : |ip|, optional
-        Global IPython Instance
-    env : Dict
-        Environment variables to add to the instance
+        Global IPython instance.
+    user_env : dict, optional
+        Environment variables to add to the instance.
 
     """
+    LOGGER = module_log.stream_logger(
+        logger='util.machine.Platform',
+        msg_format='%(asctime)s : %(levelname)s : %(lineNo)d : %(message)s : ',
+        log_level=logging.INFO
+    )
 
-    def __init__(self, shell=None, env=None):
-        """Initialize the platform class."""
+    def __init__(self, shell=None, user_env=None):
         if not shell:
             try:
-                shell = get_ipython()
+                self.shell = get_ipython()
             except Exception as e:
                 LOGGER.error(e, exc_info=True)
 
-        # so let's leave this commented out until we figure out...init param or property
-        # self.env = dict(os.environ)
+            if shell:
+                self.shell = shell
+
+        self.env = self.get_env()
         self._sys_platform = sys.platform.lower()
         self._sys_check = platform.uname().system
-        self.is_win = is_windows()
-        self.is_conemu = is_conemu_ansi()
+        self.is_win = self.is_windows()
+        self.is_conemu = self.is_conemu_ansi()
         self.Path = Path
-        self.env = env
 
     def __repr__(self):
         return '{!r}: {!r}.'.format(
             self.__class__.__name__, self._sys_platform
         )
+
+    @staticmethod
+    def is_windows(self):
+        return self._sys_platform.startswith('win')
+
+    @staticmethod
+    def is_conemu_ansi(self):
+        # refactor to self.env.keys().index('ConEmuAnsi')?
+        return self.is_windows(
+        ) and os.environ.get('ConEmuANSI', 'OFF') == 'ON'
 
     @property
     def is_win_vt100(self):
@@ -114,7 +124,7 @@ class Platform:
             The user's environment variables.
 
         """
-        return self.env
+        return os.environ.copy()
 
     def update_env(self, env=None, **kwargs):
         """Add more arguments to the environment.
@@ -129,7 +139,7 @@ class Platform:
         """
         if self.env is None:
             env = os.environ.copy()
-        return env.update(kwargs)
+        return env.update(**kwargs)
 
 
 class Shell(Platform):
@@ -151,9 +161,9 @@ class Shell(Platform):
 if __name__ == "__main__":
     # Modules kept importing this and ending up with 2 loggers and i was confused
     MACHINE_LOGGER = module_log.stream_logger(
-        logger=logging.getLogger(name='util.machine'),
-        msg_format='%(asctime)s : %(levelname)s : %(module)s %(message)s',
+        logger='util.machine',
+        msg_format='%(asctime)s : %(levelname)s : %(module)s : %(message)s : ',
         log_level=logging.INFO
     )
 
-    doctest.testmod()
+    # doctest.testmod()

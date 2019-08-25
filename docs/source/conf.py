@@ -22,6 +22,7 @@ from pathlib import Path
 import sys
 
 sys.path.insert(0, os.path.abspath('..'))
+# from ..doc.make import DocBuilder
 
 import profile_default
 from profile_default.__about__ import __version__
@@ -30,6 +31,27 @@ from gruvbox.style import GruvboxDarkHard
 
 DOCS_LOGGER = logging.getLogger(name=__name__)
 DOCS_LOGGER.setLevel(level=logging.DEBUG)
+
+# Let's try setting up an embedded IPython shell from here
+from traitlets.config import Config
+c = Config()
+
+c.InteractiveShellApp.exec_lines = [
+    'from sphinx.application import Sphinx',
+    # need to initialize this guy correctly
+    # class Sphinx(__builtin__.object)
+    #  |  Methods defined here:
+    #  |
+    #  |  __init__(self, srcdir, confdir, outdir, doctreedir, buildername, confoverrides=None, status=<open file '<stdout>', mode 'w'>, warning=<open file '<stderr>', mode 'w'>, freshenv=False, warningiserror=False, tags=None, verbosity=0, parallel=0)
+
+    # 'app = Sphinx'
+]
+c.InteractiveShell.confirm_exit = False
+c.TerminalIPythonApp.display_banner = False
+
+from IPython import start_ipython
+
+# _ip = start_ipython()
 
 
 def _path_build(root, suffix):
@@ -70,10 +92,12 @@ def ask_for_import(mod):
 
 
 SOURCE = Path(__file__).resolve().parent
+
 ROOT = Path(SOURCE).parent.parent
-PD = _path_build(ROOT, 'profile_default')
+PD = ROOT.joinpath('profile_default')
 STARTUP = _path_build(PD, 'startup')
 
+sys.path.insert(0, PD)
 # DOCS_DIR = _path_build(ROOT, 'docs')
 DOCS_DIR = Path('.').resolve().parent
 BUILD_DIR = _path_build(DOCS_DIR, 'build')
@@ -196,13 +220,14 @@ html_static_path = ['../_static']
 # 'searchbox.html']``.
 #
 html_sidebars = {
-    '**': [
-        'relations.html',
-        'globaltoc.html',
-        'localtoc.html',
-        'searchbox.html',
-        'sourcelink.html',
-    ]
+    '**':
+        [
+            'relations.html',
+            'globaltoc.html',
+            'localtoc.html',
+            'searchbox.html',
+            'sourcelink.html',
+        ]
 }
 
 html_title = u'Dynamic IPython: version' + __version__
@@ -216,7 +241,7 @@ html_show_sphinx = False
 # using the given strftime format.
 html_last_updated_fmt = '%b %d, %Y'
 
-html_baseurl = 'https://farisachugthai.github.io/dynamic-ipython'
+html_baseurl = u'https://farisachugthai.github.io/dynamic-ipython'
 
 html_compact_lists = False
 
@@ -257,8 +282,9 @@ html_compact_lists = False
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [(master_doc, 'site-packages', 'site-packages Documentation',
-              [author], 1)]
+man_pages = [
+    (master_doc, 'site-packages', 'site-packages Documentation', [author], 1)
+]
 
 manpages_url = 'https://linux.die.net/man/'
 
@@ -305,12 +331,10 @@ text_secnumber_suffix = ''
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
-    'python': ('https://docs.python.org/3/', ('python-inv.txt', None)),
-    'ipython':
-    ('https://ipython.readthedocs.io/en/stable/', ('python-inv.txt', None)),
+    'python': ('https://docs.python.org/3/', None),
+    'ipython': ('https://ipython.readthedocs.io/en/stable/', None),
     'prompt_toolkit':
-    ('https://python-prompt-toolkit.readthedocs.io/en/stable/',
-     ('python-inv.txt', None)),
+        ('https://python-prompt-toolkit.readthedocs.io/en/stable/', None),
 }
 
 # -- Options for todo extension ----------------------------------------------
@@ -358,15 +382,22 @@ viewcode_follow_imported_members = False
 
 ipython_warning_is_error = False
 
-# need to determine if we have matplotlib
-try:
-    import matplotlib
-except (ImportError, ModuleNotFoundError):
-    ipython_mplbackend = 'None'
-    HAS_MPL = False
-else:
+ipython_execlines = [
+    'import numpy as np',
+    'import IPython',
+    'import profile_default',
+]
+
+if ask_for_import('matplotlib'):
     HAS_MPL = True
     extensions.extend(['matplotlib.sphinxext.plot_directive'])
+    ipython_execlines.append(
+        'import matplotlib as mpl; import matplotlib.pyplot as plt'
+    )
+    # TODO: what mplbackend?
+else:
+    ipython_mplbackend = 'None'
+    HAS_MPL = False
 
 # -- autosummary -------------------------------------------------------------
 
@@ -378,6 +409,12 @@ autosummary_imported_members = False
 
 numpydoc_show_class_members = False  # Otherwise Sphinx emits thousands of warnings
 numpydoc_class_members_toctree = False
+
+# Whether to create cross-references for the parameter types in the
+# Parameters, Other Parameters, Returns and Yields sections of the docstring.
+# False by default.
+numpydoc_xref_param_type = True
+
 warning_is_error = False
 
 # -- linkcode ----------------------------------------------------------------
@@ -435,6 +472,7 @@ plot_rcparams = {
 
 def add_css(func):
     """Add a CSS file to Sphinx."""
+
     @functools.wraps(func)
     def decorate_css(*args, **kwargs):
         custom_css = CONF_PATH.joinpath('..', '_static', 'pyramid.css')

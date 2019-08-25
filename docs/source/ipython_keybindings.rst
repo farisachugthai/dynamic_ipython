@@ -81,64 +81,8 @@ Official IPython Documentation
 Before we dive straight into the source code, let's check out how IPython
 describes the process of re-binding keys.
 
+The source code provides this example:
 
-Conditional Filters
--------------------
-.. todo:: add in a link to the original docs
-
-The code block below is taken from the IPython documentation and
-shows how to bind keys.
-
-.. ipython:: python
-
-    from prompt_toolkit.key_binding.defaults import load_key_bindings
-    from IPython import get_ipython
-    from prompt_toolkit.enums import DEFAULT_BUFFER
-    from prompt_toolkit.keys import Keys
-    from prompt_toolkit.filters import HasFocus, HasSelection, ViInsertMode
-    ip = get_ipython()
-    insert_mode = ViInsertMode()
-
-    def insert_unexpected(event):
-        """From the IPython examples on keybinding configuration."""
-        buf = event.current_buffer
-        buf.insert_text('The Spanish Inquisition')
-        # Register the shortcut if IPython is using prompt_toolkit
-        if getattr(ip, 'pt_cli'):
-            registry = ip.pt_cli.application.key_bindings_registry
-
-            registry.add_binding(Keys.ControlN,
-                     filter=(HasFocus(DEFAULT_BUFFER)
-                                  & ~HasSelection()
-                             & insert_mode))(insert_unexpected)
-
-
-The documentation also shows a way of adding a ``Conditional`` Filter
-*a la Prompt Toolkit* to the Enter key.
-
-Continue on in this fashion for as long as you need. In my opinion,
-IPython barely comes with any keybindings.
-
-The source code does provide this however:
-
-.. ipython:: python
-
-   from IPython import get_ipython
-   from IPython.terminal import interactiveshell
-   
-   ip = get_ipython
-   registry = ip.pt_cli.application.key_bindings_registry
-   # Ctrl+J == Enter, seemingly
-   @(return_handler)
-   registry.add_binding(Keys.ControlJ, filter=(HasFocus(DEFAULT_BUFFER) & ~HasSelection() & insert_mode))
-
-This displays a few useful ways of doing things.
-
-1. Importing :class:`prompt_toolkit.key_bindings.bindings.Keys()` as a more
-   consistent interface than passing strings to represent keys.
-2. Utilizing a function ``return_handler`` inline to decorate the keybinding.
-
-.. i don't think _ip has the ``pt_cli`` attribute anymore
 
 Pure Prompt Toolkit Way of Rebinding Keys
 --------------------------------------------
@@ -148,8 +92,7 @@ on how to rebind keys using the package.
 
 Adding custom key bindings
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
-The first time it's mentioned is in the :doc:`prompt_toolkit.asking_for_input`
-document.:
+The first time it's mentioned is in the asking_for_input document.:
 
     By default, every prompt already has a set of key bindings which implements
     the usual Vi or Emacs behaviour.
@@ -379,16 +322,13 @@ Then again as a more advanced section.:
 
 Reviewing Source Code
 ---------------------
-
 Whew! Well that was a lot take in. But now we'll move from their official documents
 to simply the source code where this is implemented.
 
+
 Load all default keybindings
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-From :ref:`prompt_toolkit.key_bindings.bindings.defaults`
-
-::
+From :mod:`prompt_toolkit.key_bindings.bindings.defaults`::
 
      def load_key_bindings():
          # Create a KeyBindings object that contains the default key bindings.
@@ -493,27 +433,10 @@ toggle on and off.
 
    :param get_key_bindings: Callable that returns a :class:`.KeyBindings` instance.
 
-When run in the REPL:
+The help for :func:`prompt_toolkit.key_binding.key_bindings.DynamicKeyBindings.get_key_bindings()`:
 
 .. ipython::
    :verbatim:
-
-   In[10]: t
-
-The output of ``dir(t)`` is as follows:
-
-   ['_DynamicKeyBindings__version',
-   '_abc_impl',
-   '_dummy',
-   '_last_child_version',
-   '_update_cache',
-   '_version',
-   'bindings',
-   'get_bindings_for_keys',
-   'get_bindings_starting_with_keys',
-   'get_key_bindings']
-
-The help for :func:`prompt_toolkit.key_binding.key_bindings.DynamicKeyBindings.get_key_bindings()`:
 
    print(help(t.get_key_bindings))
    Signature: t.get_key_bindings(header='', local_ns=None, module=None, dummy=None, stack_depth=1, global_ns=None, compile_flags=None, \*\*kw,)

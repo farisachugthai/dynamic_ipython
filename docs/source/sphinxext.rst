@@ -450,14 +450,16 @@ And persist across sessions.:
    print(square(3))
    print(square(-2))
 
+
 Pseudo-Decorators
 =================
+
 .. sooooo which ones are which? Please be more clear!
 
 Here are the supported decorators, and any optional arguments they
 take.  Some of the decorators can be used as options to the entire
 block (e.g. ``@verbatim`` and ``@suppress``), and some only apply to the
-line just below them (eg ``@savefig``).
+line just below them (eg ``@savefig``).:
 
 @suppress
     Execute the IPython input block, but suppress the input and output
@@ -465,7 +467,6 @@ line just below them (eg ``@savefig``).
     ``.. ipython`` block as a directive option with ``:suppress:``.
 
 @verbatim
-
     Insert the input and output block in verbatim, but auto-increment
     the line numbers. Internally, the interpreter will be fed an empty
     string, so it is a no-op that keeps line numbering consistent.
@@ -473,7 +474,6 @@ line just below them (eg ``@savefig``).
     directive option with ``:verbatim:``.
 
 @savefig OUTFILE [IMAGE_OPTIONS]
-
     Save the figure to the static directory and insert it into the
     document, possibly binding it into a mini-page and/or putting
     code/figure label/references to associate the code and the
@@ -485,7 +485,6 @@ line just below them (eg ``@savefig``).
 .. i have no idea what the above is saying holy hell
 
 @doctest
-
     Compare the pasted in output in the IPython block with the output
     generated at doc build time, and raise errors if they don't
     match. Also, can be applied to the entire ``.. ipython`` block as a

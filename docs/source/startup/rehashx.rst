@@ -11,7 +11,7 @@ and also adds system commands to the namespace!
 Insofar, I haven't noticed any significant slowdown in startup time as a result
 of this, and it hugely eases utilizing IPython as a system shell.
 
-.. automodule:: 01_rehashx
+.. automodule:: profile_default.startup.01_rehashx
    :members:
    :undoc-members:
    :show-inheritance:

@@ -1,17 +1,17 @@
 #!/usr/bin/env python
 """
 ========================================================================
-%load_ext --- Import commonly used modules into the IPython namespace.
+`%load_ext` --- Import commonly used modules into the IPython namespace.
 ========================================================================
 
-This module is a slightly different way of importing things into the user's
-interactive namespace.
+.. magic:: load_ext
 
-Currently a module in this repository already exists and is launched on
-startup.
+.. module:: load_ext
+    :synopsis: Import commonly used modules into the IPython namespace.
 
-As it stands, it may be preferable to use that over defining arbitrary
-magic functions in ``extensions``.
+This module is a slightly different way of accomplishing what
+:ref:`04_easy_import` attempts to do. Specifically, it sets up
+importing things into the user's interactive namespace.
 
 """
 import logging
@@ -20,7 +20,7 @@ import sys
 from IPython import get_ipython
 from IPython.core.magic import line_magic
 
-logging.getLogger(name=__name__)
+logging.basicConfig(level=logging.WARNING, format=logging.BASIC_FORMAT)
 
 
 @line_magic
@@ -29,7 +29,7 @@ def load_ext(module_str, shell=None):
     if not module_str:
         raise RuntimeError('Missing module name.')
     else:
-        res = _ip.extension_manager.load_extension(module_str)
+        res = shell.extension_manager.load_extension(module_str)
         if res == 'already loaded':
             logging.warning(
                 "The %s extension is already loaded. To reload it, use:" %
@@ -68,6 +68,7 @@ if __name__ == "__main__":
     _ip = get_ipython()
     args = sys.argv[1:]
     if len(args) == 0:
+        # TODO: Use magic_arguments decorator
         sys.exit('E127')
     elif len(args) > 0:
         for i in args:

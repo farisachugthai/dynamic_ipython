@@ -2,11 +2,14 @@
 Developer's Notes
 =================
 
-.. highlight:: vim
+.. module:: developers-notes
+   :synopsis: Notes to aid anyone interested in working with this source code.
+
+.. highlight:: console
+
 
 Installing
 ===========
-
 All of the resources necessary for installing the contents of this repository
 have been moved to the directory `tools <tools>`_.
 
@@ -19,9 +22,9 @@ as well as a `tox.ini <tools/tox.ini>`_.
 Therefore the number of files that one can use to install this repository grew
 large enough that they've all been moved to their own separate folder.
 
+
 Installation Assumptions
 ------------------------
-
 In addition, the scripts therein make a few assumptions. One is that
 the repository at `<https://github.com/farisachugthai/Gruvbox-IPython>`_
 has been installed.
@@ -37,6 +40,7 @@ changed like so::
    from traitlets import get_config
    c = get_config()
    c.TerminalInteractiveShell.editor = 'nvim'
+
 
 Building Documentation
 ======================
@@ -57,13 +61,14 @@ necessary, build arguments into a mapping.
 In addition, ``makeprg`` is not an option one is allowed to set in a modeline
 so it's important to take that into consideration.
 
+
 Automatically Generating Docs
 -----------------------------
 Below is the automatically generated documentation for a script that generates
-documentation for this project.::
+documentation for this project.:
 
+.. autoclass:: docs.make.DocBuilder
 
-.. autoclass:: make
 
 Generating CSS
 ==============
