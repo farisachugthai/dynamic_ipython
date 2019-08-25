@@ -91,15 +91,12 @@ class Platform:
             self.__class__.__name__, self._sys_platform
         )
 
-    @staticmethod
     def is_windows(self):
         return self._sys_platform.startswith('win')
 
-    @staticmethod
     def is_conemu_ansi(self):
         # refactor to self.env.keys().index('ConEmuAnsi')?
-        return self.is_windows(
-        ) and os.environ.get('ConEmuANSI', 'OFF') == 'ON'
+        return self.is_windows() and os.environ.get('ConEmuANSI', 'OFF') == 'ON'
 
     @property
     def is_win_vt100(self):

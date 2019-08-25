@@ -380,6 +380,7 @@ viewcode_follow_imported_members = False
 
 # -- IPython directive -------------------------------------------------------
 
+ipython_savefig_dir = os.path.join('..', '_images')
 ipython_warning_is_error = False
 
 ipython_execlines = [
