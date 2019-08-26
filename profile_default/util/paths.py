@@ -1,3 +1,15 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""Module for working with paths regardless of platform."""
+import logging
+import os
+from pathlib import Path
+import platform
+
+logging.BASIC_FORMAT = '%(created)f : %(module)s : %(levelname)s : %(message)s'
+
+PATHS_LOGGER = logging.getLogger(name='profile_default.util.paths')
+PATHS_LOGGER.setLevel(logging.WARNING)
 
 
 def _path_build(root, suffix):
@@ -26,28 +38,51 @@ def _path_build(root, suffix):
         new = root.joinpath(suffix)
         return new
     else:
-        DOCS_LOGGER.error('%s: does not exist. Returning None.' % root)
-class PathValidator():
-    """A simpler and easier way to view the PATH env var on Windows. Work with Unix as well."""
+        PATHS_LOGGER.error('%s: does not exist. Returning None.' % root)
+
+
+class PathValidator:
+    """A simpler and easier way to view the :envvar:`PATH` env var on Windows.
+
+    Work with Unix as well.
+
+    .. todo:: Reassigning the var programatically.
+
+        Do we have to escape all the folders with white space like
+        C:\\Program Files\\ and their ilk?
+
+    """
+
     def __init__(self):
         """Initialize with parameters. Which parameters though?"""
         self.env = dict(os.environ.copy())
-        
+
     def __repr__(self):
         """TODO. If you run the following nothing displays.
-        
+
         Examples
         --------
+        >>> from profile_default.util.paths import PathValidator
         >>> PathValidator()
-        
+
         """
-        return ''.format(self.__class__.__name__)
+        return '{}\t{}'.format(self.__class__.__name__, self.OS)
+
+    @property
+    def OS(self):
+        return platform.system().lower()
+
+    @property
+    def _is_win(self):
+        return self.OS == 'windows'
 
     @property
     def path(self):
         """Break the path up into a list and replace the double back slashes."""
-        if platform.system()=='Windows':
+        if self._is_win:
             return self.env["PATH"].replace('\\', '/').split(';')
         else:
             return self.env["PATH"].split(':')
-            
+
+
+path = PathValidator().path

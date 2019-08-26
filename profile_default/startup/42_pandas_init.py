@@ -1,15 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Initialize desired parameters for :mod:`pandas` at startup.
-
+"""
 =====================
 Pandas Initialization
 =====================
 
 .. module:: 42_pandas_init
-    :synopsis: Set display options for pandas.
+    :synopsis: Initialize desired parameters for :mod:`pandas` at startup.
 
 .. highlight:: ipython
+    :linenothreshold: 5
 
 As of version 0.25, there's currently a large number of options that can
 be set to modify Pandas' behavior.
@@ -119,7 +119,7 @@ def pandas_init():
         ``truncate`` indicates to only display it when the DataFrame is...
         well truncated. [1]
 
-        .. [1] https://pandas.pydata.org/pandas-docs/stable/user-guide/options.html
+        .. [1]https://pandas.pydata.org/pandas-docs/stable/user-guide/options.html
 
     """
     options = {

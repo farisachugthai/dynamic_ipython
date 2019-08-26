@@ -12,5 +12,6 @@ try:
 except (ImportError, ModuleNotFoundError):
     pass
 
+logging.BASIC_FORMAT = '%(created)f : %(module)s : %(levelname)s : %(message)s'
 PROFILE_DEFAULT_LOG = logging.getLogger('profile_default')
-PROFILE_DEFAULT_LOG.setLevel = logging.WARNING
+PROFILE_DEFAULT_LOG.setLevel(logging.WARNING)
