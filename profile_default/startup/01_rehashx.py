@@ -5,9 +5,8 @@
 Rehash
 =======
 
-.. currentmodule:: 01_rehashx
-
-.. magic:: rehashx
+.. module:: 01_rehashx
+    :synopsis: Add everything on the user's $PATH.
 
 This is an incredible little gem I just ran into, and hugely useful for
 making `IPython` work as a more versatile system shell.
@@ -16,7 +15,7 @@ making `IPython` work as a more versatile system shell.
 Parameters
 ----------
 magic_name : str
-    Name of the desired magic function, without '%' prefix.
+    Name of the desired magic function, without :kbd:`%` prefix.
 line : str
     The rest of the input line as a single string.
 _stack_depth : int
@@ -25,9 +24,10 @@ _stack_depth : int
 
 Notes
 -----
-`run_line_magic()`
+:ref:`IPython.core.magic.run_line_magic()`
     A method of the |ip| instance to run a specific magic currently in the
-    `user_ns` or user namespace.
+    `IPython.core.interactiveshell.InteractiveShell.user_ns` or user namespace.
+
 
 .. ipython::
     :okexcept:

@@ -30,7 +30,7 @@ from profile_default.util import module_log
 from profile_default.util import machine
 from profile_default.util import timer
 
-logging.BASIC_FORMAT = '%(asctime)s : %(levelname)s : %(message)s'
+logging.BASIC_FORMAT = '%(created)f : %(module)s : %(levelname)s : %(message)s'
 
 UTIL_LOGGER = logging.getLogger('profile_default.util')
 UTIL_LOGGER.setLevel(logging.WARNING)

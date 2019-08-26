@@ -133,6 +133,7 @@ form of rst docs and ipynb notebooks.
    Writing Your Own Magics <custom_magics>
    exceptions
    sphinxext
+   Developers Notes <dev>
 
 .. toctree::
    :caption: API Docs
@@ -142,7 +143,6 @@ form of rst docs and ipynb notebooks.
    IPython Shell Initialization <startup/index>
    jupyter
    extensions
-   Developers Notes <dev>
 
 
 Indices and tables

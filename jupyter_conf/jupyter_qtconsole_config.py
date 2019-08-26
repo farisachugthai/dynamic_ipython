@@ -315,10 +315,13 @@ else:
 
 # If not empty, use this Pygments style for syntax highlighting. Otherwise, the
 #  style sheet is queried for Pygments style information.
+
 try:
-    c.JupyterWidget.syntax_style = 'GruvboxDarkHard'
-except Exception:  # noqa
+    from gruvbox.style import GruvboxDarkHard
+except (ImportError, ModuleNotFoundError):
     c.JupyterWidget.syntax_style = 'Solarized Dark'
+else:
+    c.JupyterWidget.syntax_style = 'GruvboxDarkHard'
 
 # ------------------------------------------------------------------------------
 # KernelManager(ConnectionFileMixin) configuration
@@ -371,40 +374,41 @@ except Exception:  # noqa
 
 # Object for handling serialization and sending of messages.
 #
-#  The Session object handles building messages and sending them with ZMQ sockets
-#  or ZMQStream objects.  Objects can communicate with each other over the
-#  network via Session objects, and only need to work with the dict-based IPython
-#  message spec. The Session will handle serialization/deserialization, security,
-#  and metadata.
+# The Session object handles building messages and sending them with ZMQ sockets
+# or ZMQStream objects.  Objects can communicate with each other over the
+# network via Session objects, and only need to work with the dict-based IPython
+# message spec. The Session will handle serialization/deserialization, security,
+
+# and metadata.
 #
-#  Sessions support configurable serialization via packer/unpacker traits, and
-#  signing with HMAC digests via the key/keyfile traits.
+# Sessions support configurable serialization via packer/unpacker traits, and
+# signing with HMAC digests via the key/keyfile traits.
 #
-#  Parameters ----------
+# Parameters ----------
 #
-#  debug : bool
-#      whether to trigger extra debugging statements
-#  packer/unpacker : str : 'json', 'pickle' or import_string
-#      importstrings for methods to serialize message parts.  If just
-#      'json' or 'pickle', predefined JSON and pickle packers will be used.
-#      Otherwise, the entire importstring must be used.
+# debug : bool
+#     whether to trigger extra debugging statements
+# packer/unpacker : str : 'json', 'pickle' or import_string
+#     importstrings for methods to serialize message parts.  If just
+#     'json' or 'pickle', predefined JSON and pickle packers will be used.
+#     Otherwise, the entire importstring must be used.
 #
-#      The functions must accept at least valid JSON input, and output *bytes*.
+#     The functions must accept at least valid JSON input, and output *bytes*.
 #
-#      For example, to use msgpack:
-#      packer = 'msgpack.packb', unpacker='msgpack.unpackb'
-#  pack/unpack : callables
-#      You can also set the pack/unpack callables for serialization directly.
-#  session : bytes
-#      the ID of this Session object.  The default is to generate a new UUID.
-#  username : unicode
-#      username added to message headers.  The default is to ask the OS.
-#  key : bytes
-#      The key used to initialize an HMAC signature.  If unset, messages
-#      will not be signed or checked.
-#  keyfile : filepath
-#      The file containing a key.  If this is set, `key` will be initialized
-#      to the contents of the file.
+#     For example, to use msgpack:
+#     packer = 'msgpack.packb', unpacker='msgpack.unpackb'
+# pack/unpack : callables
+#     You can also set the pack/unpack callables for serialization directly.
+# session : bytes
+#     the ID of this Session object.  The default is to generate a new UUID.
+# username : unicode
+#     username added to message headers.  The default is to ask the OS.
+# key : bytes
+#     The key used to initialize an HMAC signature.  If unset, messages
+#     will not be signed or checked.
+# keyfile : filepath
+#     The file containing a key.  If this is set, `key` will be initialized
+#     to the contents of the file.
 
 # Threshold (in bytes) beyond which an object's buffer should be extracted to
 # avoid pickling.
