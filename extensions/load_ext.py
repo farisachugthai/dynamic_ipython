@@ -4,20 +4,20 @@
 `%load_ext` --- Import commonly used modules into the IPython namespace.
 ========================================================================
 
-.. magic:: load_ext
-
 .. module:: load_ext
     :synopsis: Import commonly used modules into the IPython namespace.
 
 This module is a slightly different way of accomplishing what
-:ref:`04_easy_import` attempts to do. Specifically, it sets up
-importing things into the user's interactive namespace.
+:ref:`profile_default.startup.04_easy_import` attempts to do.
+
+Specifically, it sets up importing things into the user's interactive namespace.
 
 """
 import logging
 import sys
 
 from IPython import get_ipython
+from IPython.core.error import UsageError
 from IPython.core.magic import line_magic
 
 logging.basicConfig(level=logging.WARNING, format=logging.BASIC_FORMAT)
@@ -27,7 +27,7 @@ logging.basicConfig(level=logging.WARNING, format=logging.BASIC_FORMAT)
 def load_ext(module_str, shell=None):
     """Load an IPython extension by its module name."""
     if not module_str:
-        raise RuntimeError('Missing module name.')
+        raise UsageError('Missing module name.')
     else:
         res = shell.extension_manager.load_extension(module_str)
         if res == 'already loaded':
@@ -44,7 +44,7 @@ def load_ext(module_str, shell=None):
 
 
 def load_ipython_extension(shell=None):
-    """Register :ref:`load_ext` as an extension.
+    """Register load_ext as an extension.
 
     From :func:`IPython.core.magic.MagicsManager.register_function()`:
 
@@ -56,9 +56,8 @@ def load_ipython_extension(shell=None):
         * For cell magics: `def f(line, cell)`
         * For a function that does both: `def f(line, cell=None)`
 
-        In the latter case, the function will be called with `cell==None` when
-        invoked as `%f`, and with cell as a string when invoked as `%%f`.
-
+        In the latter case, the function will be called with ``cell==None`` when
+        invoked as ``%f``, and with cell as a string when invoked as ``%%f``.
 
     """
     shell.magics_manager.register_function(load_ext, magic_name='load_ext')
