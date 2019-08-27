@@ -67,7 +67,7 @@ Automatically Generating Docs
 Below is the automatically generated documentation for a script that generates
 documentation for this project.:
 
-.. autoclass:: docs.make.DocBuilder
+.. autoclass:: sphinx_extensions.make.DocBuilder
 
 
 Generating CSS

@@ -10,12 +10,12 @@ module_log
 
 .. highlight:: ipython
 
-Set up easily instantied :class:logging.Logger()` instances.
+Set up easily instantied :class:`logging.Logger()` instances.
 
 Create a few formatters and logging instances that can be easily
 imported and utilized across the package.
 
-Currently :func:`profile_default.util.module_log.stream_logger()`
+Currently module_log.stream_logger()
 is the easiest and most oft used entry point in this module.
 
 """
@@ -68,7 +68,7 @@ def path_logger(logger=None):
 
 
 def stream_logger(logger, log_level=logging.INFO, msg_format=None):
-    r"""Set up a :class:`logging.Logger()` instance, add a stream handler.
+    """Set up a :class:`logging.Logger` instance, add a stream handler.
 
     Should do some validation on the log level there. There's a really
     useful block of code in the tutorial.
@@ -128,28 +128,28 @@ def file_logger(
         filename, logger=None, shell=None, log_level=logging.INFO,
         msg_format=None
 ):
-    r"""Logging that emits a :class:`logging.LogRecord()` to ``filename``.
+    """Logging that emits a :class:`logging.LogRecord` to ``filename``.
 
     Parameters
     ----------
     filename : str
         File to log a :class:`logging.LogRecord` to.
     logger : :class:`logging.Logger(), optional
-        Instance of a :class:`logging.Logger()` instantiated in the calling
+        Instance of a :class:`logging.Logger` instantiated in the calling
         module.
     shell : |ip|, optional
-        Global instance of IPython. Can be :keyword:`None` if not run in
+        Global instance of IPython. Can be **None** if not run in
         :mod:`IPython` though this hasn't been tested.
-    log_level : int, optional
+    ``log_level`` : int, optional
         Level of log records.
-    msg_format : str, optional
+    ``msg_format`` : str, optional
         Representation of logging messages. Uses standard :kbd:`%` style
         string formatting.
         Defaults to ``%(asctime)s : %(levelname)s : %(message)s : ``
 
     Returns
     -------
-    logger : :class:`logging.Logger()` instance
+    logger : :class:`logging.Logger` instance
 
     """
     assert isinstance(
@@ -192,7 +192,7 @@ def json_logger(logger=None, JSONFormatter=None):
     logger : str or :class:`logging.Logger()`, optional
         Either a named Logger instance or the string representing the desired instance
     JsonFormatter : :class:`logging.Formatter()`, optional
-        :ref:`module_log.JsonFormatter()` instance.
+        module_log.JsonFormatter() instance.
         Included in the listed parameters to be explicit; however, it's
         probably easier to not include the parameter as one is configured
         in the function anyway.

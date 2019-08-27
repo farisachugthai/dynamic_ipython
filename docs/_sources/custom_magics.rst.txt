@@ -3,51 +3,57 @@ Custom Magics
 ======================
 
 .. module:: custom-magics
-   :synopsis: Defininng custom magics. 
+   :synopsis: Defining your own custom magics. 
 
 .. highlight:: ipython
+   :linenothreshold: 5
+
+The general flow of creating your own magic in a file breaks down to a few
+simple steps.
+
+#) Creating an executable with a function named ``load_ipython_extension``.
+#) Registering the magic with the IPython shell.
+#) Wrapping it in decorators so that the magic accepts the shell as an argument
+   upon initialization.
 
 
-Creating IPython Extensions
-===============================
-*Summarized from "Learning IPython for Interactive Computing and Data
-Visualization 1st ed.pdf"*:
+Registering the magic
+=====================
 
-   To create an extension, we need to create a Python module in a
-   directory, which is in the Python path. A possibility is to put it in
-   the current directory, or in your `IPython extensions dir
-   <../../extensions>`_
-
-   An extension implements a function load_ipython_extension.
-   :func:`IPython.core.magics.extension.load_ipython_extension(ipython)`,
-   takes the current |ip| instance as an argument (and possibly
-   :func:`IPython.core.magics.extension.unload_ipython_extension(ipython)`,
-   which is called when the extension is unloaded). This instance can be
-   used to register new magic commands, access the user namespace, execute
-   code, and so on.
-   This loading function is called when the extension is loaded, which
-   happens when the command is executed.
-
-.. ipython::
-   :verbatim:
-
-   %load_ext  # or
-   %reload_ext magic
-
-To automatically load a module when :mod:`IPython` starts,
-we need to add the module name to the ``c.TerminalIPythonApp.extensions``
-list in the :mod:`IPython` configuration file.
-
-The |ip| instance represents the active
-IPython interpreter. Useful methods and attributes include
-:func:`IPython.core.magic.register_magics()`, to create new magic commands,
-and ``user_ns``, to access the user namespace. You can
-explore all the instance's attributes interactively from
-:mod:`IPython` with tab completion. For that, you need to execute
-the following command to get the current instance
-
-Here are 2 useful functions for registering a magic with the global IPython
+There are 2 useful functions for registering a magic with the global IPython
 instance.
+
+The first is called **register_magics**.
+
+register_magics
+----------------
+
+Signature: ``register_magics(*magic_objects)``
+
+Docstring:
+   Register one or more instances of Magics.
+
+   Take one or more classes or instances of classes that subclass the main
+   :class:`IPython.core.magic.Magic()` class, and register them with
+   IPython to use the magic functions they provide.
+
+   The registration process will then ensure that
+   any methods that have decorated to provide line and/or cell magics will
+   be recognized with the ``%x``/``%%x`` syntax as a line/cell magic
+   respectively.
+
+   If classes are given, they will be instantiated with the default
+   constructor.  If your classes need a custom constructor, you should
+   instantiate them first and pass the instance.
+
+   The provided arguments can be an arbitrary mix of classes and instances.
+
+
+``register_magic`` Parameters
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+magic : object
+   The decorated magic class or function.
 
 register_magic_function
 -----------------------
@@ -88,40 +94,6 @@ magic_name : optional str
 
 This affords users the ability to create a magic, line or cell, out of
 any function.
-
-The second is simply named **register_magics**.
-
-
-register_magics
-----------------
-Signature: ``register_magics(*magic_objects)``
-
-Docstring:
-   Register one or more instances of Magics.
-
-   Take one or more classes or instances of classes that subclass the main
-   :class:`IPython.core.magic.Magic()` class, and register them with
-   IPython to use the magic functions they provide.
-
-   The registration process will then ensure that
-   any methods that have decorated to provide line and/or cell magics will
-   be recognized with the ``%x``/``%%x`` syntax as a line/cell magic
-   respectively.
-
-   If classes are given, they will be instantiated with the default
-   constructor.  If your classes need a custom constructor, you should
-   instantiate them first and pass the instance.
-
-   The provided arguments can be an arbitrary mix of classes and instances.
-
-
-register_magic Parameters
-~~~~~~~~~~~~~~~~~~~~~~~~~
-.. todo:: register_magic
-
-magic_objects : one or more classes or instances
-
-Example usage exists on the official website as well.
 
 
 Tldr
@@ -210,7 +182,7 @@ Inheritance diagram:
 .. _extensions-and-custom-magics:
 
 Writing Custom Magics
-======================
+----------------------
 `Custom Magics <https://raw.githubusercontent.com/ipython/ipython/523ed2fe58ea5ee9971d2b21df1de33b8cdfa924/docs/source/config/custommagics.rst>`_:
 
 There are two main ways to define your own magic functions. From standalone
@@ -401,3 +373,45 @@ setuptools, distutils, or any other distribution tools like `flit
         @cell_magic
         def cadabra(self, line, cell):
             return line, cell
+
+
+To round this out, we'll finish with an example from Cyrille Rossant.
+
+Creating IPython Extensions
+===============================
+*Summarized from "Learning IPython for Interactive Computing and Data
+Visualization 1st ed.pdf"*:
+
+   To create an extension, we need to create a Python module in a
+   directory, which is in the Python path. A possibility is to put it in
+   the current directory, or in your `IPython extensions dir
+   <../../extensions>`_
+
+   An extension implements a function load_ipython_extension.
+   :func:`IPython.core.magics.extension.load_ipython_extension(ipython)`,
+   takes the current |ip| instance as an argument (and possibly
+   :func:`IPython.core.magics.extension.unload_ipython_extension(ipython)`,
+   which is called when the extension is unloaded). This instance can be
+   used to register new magic commands, access the user namespace, execute
+   code, and so on.
+   This loading function is called when the extension is loaded, which
+   happens when the command is executed.
+
+.. ipython::
+   :verbatim:
+
+   %load_ext  # or
+   %reload_ext magic
+
+To automatically load a module when :mod:`IPython` starts,
+we need to add the module name to the ``c.TerminalIPythonApp.extensions``
+list in the :mod:`IPython` configuration file.
+
+The |ip| instance represents the active
+IPython interpreter. Useful methods and attributes include
+:func:`IPython.core.magic.register_magics()`, to create new magic commands,
+and ``user_ns``, to access the user namespace. You can
+explore all the instance's attributes interactively from
+:mod:`IPython` with tab completion. For that, you need to execute
+the following command to get the current instance
+

@@ -22,10 +22,11 @@ from pathlib import Path
 import sys
 
 sys.path.insert(0, os.path.abspath('..'))
-# from ..doc.make import DocBuilder
 
 import profile_default
 from profile_default.__about__ import __version__
+
+from sphinx_extensions import make
 
 from gruvbox.style import GruvboxDarkHard
 

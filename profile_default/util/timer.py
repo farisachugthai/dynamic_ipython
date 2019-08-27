@@ -1,26 +1,22 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Create a timer decorator.
-
-======
-Timer
-======
-
+"""
+===================================
+Timer --- Create a timer decorator.
+===================================
 .. module:: timer
+    :synopsis: Create a decorator to time the execution time of modules.
 
 .. highlight:: ipython
 
 Largely this module was simply practice on writing decorators.
 
-.. todo::
-
-    Explore the module :mod:`timeit()` or IPython's ``%timeit`` magic.
-
 See Also
 --------
-:mod:`profile_default.01_rehashx` : module
-    Module where :ref:`profile_default.01_rehashx.main` is wrapped with the
-    timer decorator.
+:mod:`cProfile`
+:mod:`pstats`
+:mod:`timeit`
+:magic:`timeit`
 
 """
 import functools

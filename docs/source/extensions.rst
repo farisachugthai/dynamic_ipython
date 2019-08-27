@@ -25,12 +25,6 @@ repository.
     :show-inheritance:
 
 
-.. automodule:: extensions.site_pkgs
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-
 .. automodule:: extensions.load_ext
     :members:
     :undoc-members:

@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>profile_default.util.machine &#8212; Dynamic IPython 0.0.1 documentation</title>
+    <title>profile_default.util.machine &#8212; Dynamic IPython: version0.0.1</title>
     <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -33,7 +33,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -46,14 +46,13 @@
   <h1>Source code for profile_default.util.machine</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;Create a class for all :mod:`IPython` instances to utilize.</span>
-
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">=========</span>
 <span class="sd">Machine</span>
 <span class="sd">=========</span>
 
 <span class="sd">.. module:: machine</span>
-<span class="sd">    :synopsis: Abstracts away platform differences.</span>
+<span class="sd">    :synopsis: Create a class for all :mod:`IPython` instances to utilize.</span>
 
 <span class="sd">.. highlight:: ipython</span>
 
@@ -62,24 +61,20 @@
 
 <span class="sd">The class can be easily initialized with:</span>
 
-<span class="sd">.. ipython::</span>
-
-<span class="sd">    &gt;&gt;&gt; from profile_default.util.machine import Platform</span>
-<span class="sd">    &gt;&gt;&gt; users_machine = Platform()</span>
-<span class="sd">    &gt;&gt;&gt; env = users_machine.update_env()</span>
-<span class="sd">    &gt;&gt;&gt; assert env is not None</span>
+<span class="sd">&gt;&gt;&gt; from profile_default.util.machine import Platform</span>
+<span class="sd">&gt;&gt;&gt; users_machine = Platform()</span>
+<span class="sd">&gt;&gt;&gt; env = users_machine.update_env()</span>
+<span class="sd">&gt;&gt;&gt; assert env is not None</span>
 
 <span class="sd">.. note::</span>
-<span class="sd">    Don&#39;t name the instance ``platform`` as that&#39;s a module in the standard</span>
+
+<span class="sd">    Don&#39;t name the instance `platform` as that&#39;s a module in the standard</span>
 <span class="sd">    library.</span>
 
 <span class="sd">See Also</span>
 <span class="sd">--------</span>
 <span class="sd">:mod:`profile_default.startup.20_aliases`</span>
 <span class="sd">    Shows an example use case</span>
-
-
-<span class="sd">-------------------------------------------</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">doctest</span>
@@ -90,12 +85,12 @@
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
 
 <span class="kn">from</span> <span class="nn">IPython</span> <span class="k">import</span> <span class="n">get_ipython</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.utils</span> <span class="k">import</span> <span class="n">is_conemu_ansi</span><span class="p">,</span> <span class="n">is_windows</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.utils</span> <span class="k">import</span> <span class="n">is_conemu_ansi</span>
 
 <span class="kn">from</span> <span class="nn">profile_default.util</span> <span class="k">import</span> <span class="n">module_log</span>
 
 
-<div class="viewcode-block" id="Platform"><a class="viewcode-back" href="../../../profile_default/util/util.html#profile_default.util.machine.Platform">[docs]</a><span class="k">class</span> <span class="nc">Platform</span><span class="p">:</span>
+<div class="viewcode-block" id="Platform"><a class="viewcode-back" href="../../../startup/util.html#profile_default.util.machine.Platform">[docs]</a><span class="k">class</span> <span class="nc">Platform</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Abstract away platform differences.</span>
 
 <span class="sd">    After toying with the initial implementation, I realized I could simply</span>
@@ -109,35 +104,47 @@
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    shell : |ip|, optional</span>
-<span class="sd">        Global IPython Instance</span>
-<span class="sd">    env : Dict</span>
-<span class="sd">        Environment variables to add to the instance</span>
+<span class="sd">        Global IPython instance.</span>
+<span class="sd">    user_env : dict, optional</span>
+<span class="sd">        Environment variables to add to the instance.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">LOGGER</span> <span class="o">=</span> <span class="n">module_log</span><span class="o">.</span><span class="n">stream_logger</span><span class="p">(</span>
+        <span class="n">logger</span><span class="o">=</span><span class="s1">&#39;util.machine.Platform&#39;</span><span class="p">,</span>
+        <span class="n">msg_format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> : </span><span class="si">%(levelname)s</span><span class="s1"> : </span><span class="si">%(lineNo)d</span><span class="s1"> : </span><span class="si">%(message)s</span><span class="s1"> : &#39;</span><span class="p">,</span>
+        <span class="n">log_level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span>
+    <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Initialize the platform class.&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">user_env</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">shell</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-        <span class="c1"># so let&#39;s leave this commented out until we figure out...init param or property</span>
-        <span class="c1"># self.env = dict(os.environ)</span>
+            <span class="k">if</span> <span class="n">shell</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">shell</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_env</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_sys_platform</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_sys_check</span> <span class="o">=</span> <span class="n">platform</span><span class="o">.</span><span class="n">uname</span><span class="p">()</span><span class="o">.</span><span class="n">system</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">is_win</span> <span class="o">=</span> <span class="n">is_windows</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">is_conemu</span> <span class="o">=</span> <span class="n">is_conemu_ansi</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_win</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_windows</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_conemu</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_conemu_ansi</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Path</span> <span class="o">=</span> <span class="n">Path</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="n">env</span>
 
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{!r}</span><span class="s1">: </span><span class="si">{!r}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sys_platform</span>
         <span class="p">)</span>
 
-<div class="viewcode-block" id="Platform.is_win_vt100"><a class="viewcode-back" href="../../../profile_default/util/util.html#profile_default.util.machine.Platform.is_win_vt100">[docs]</a>    <span class="nd">@property</span>
+<div class="viewcode-block" id="Platform.is_windows"><a class="viewcode-back" href="../../../startup/util.html#profile_default.util.machine.Platform.is_windows">[docs]</a>    <span class="k">def</span> <span class="nf">is_windows</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sys_platform</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;win&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Platform.is_conemu_ansi"><a class="viewcode-back" href="../../../startup/util.html#profile_default.util.machine.Platform.is_conemu_ansi">[docs]</a>    <span class="k">def</span> <span class="nf">is_conemu_ansi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># refactor to self.env.keys().index(&#39;ConEmuAnsi&#39;)?</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_windows</span><span class="p">()</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ConEmuANSI&#39;</span><span class="p">,</span> <span class="s1">&#39;OFF&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;ON&#39;</span></div>
+
+<div class="viewcode-block" id="Platform.is_win_vt100"><a class="viewcode-back" href="../../../startup/util.html#profile_default.util.machine.Platform.is_win_vt100">[docs]</a>    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">is_win_vt100</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;True when we are using Windows, but with VT100 esc sequences.</span>
 
@@ -146,12 +153,12 @@
         <span class="kn">from</span> <span class="nn">prompt_toolkit.output.windows10</span> <span class="k">import</span> <span class="n">is_win_vt100_enabled</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_win</span> <span class="ow">and</span> <span class="n">is_win_vt100_enabled</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Platform.is_linux"><a class="viewcode-back" href="../../../profile_default/util/util.html#profile_default.util.machine.Platform.is_linux">[docs]</a>    <span class="nd">@property</span>
+<div class="viewcode-block" id="Platform.is_linux"><a class="viewcode-back" href="../../../startup/util.html#profile_default.util.machine.Platform.is_linux">[docs]</a>    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">is_linux</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;True when :func:`sys.platform` returns linux.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sys_platform</span> <span class="o">==</span> <span class="s1">&#39;linux&#39;</span></div>
 
-<div class="viewcode-block" id="Platform.get_env"><a class="viewcode-back" href="../../../profile_default/util/util.html#profile_default.util.machine.Platform.get_env">[docs]</a>    <span class="k">def</span> <span class="nf">get_env</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Platform.get_env"><a class="viewcode-back" href="../../../startup/util.html#profile_default.util.machine.Platform.get_env">[docs]</a>    <span class="k">def</span> <span class="nf">get_env</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Unsurprisingly stolen from IPython.</span>
 
 <span class="sd">        Returns</span>
@@ -160,9 +167,9 @@
 <span class="sd">            The user&#39;s environment variables.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span></div>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Platform.update_env"><a class="viewcode-back" href="../../../profile_default/util/util.html#profile_default.util.machine.Platform.update_env">[docs]</a>    <span class="k">def</span> <span class="nf">update_env</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Platform.update_env"><a class="viewcode-back" href="../../../startup/util.html#profile_default.util.machine.Platform.update_env">[docs]</a>    <span class="k">def</span> <span class="nf">update_env</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Add more arguments to the environment.</span>
 
 <span class="sd">        Parameters</span>
@@ -175,21 +182,21 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">env</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">env</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="n">env</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="Shell"><a class="viewcode-back" href="../../../profile_default/util/util.html#profile_default.util.machine.Shell">[docs]</a><span class="k">class</span> <span class="nc">Shell</span><span class="p">(</span><span class="n">Platform</span><span class="p">):</span>
+<div class="viewcode-block" id="Shell"><a class="viewcode-back" href="../../../startup/util.html#profile_default.util.machine.Shell">[docs]</a><span class="k">class</span> <span class="nc">Shell</span><span class="p">(</span><span class="n">Platform</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Subclass Platform to gain information about the user&#39;s shell.&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Shell.is_cmd"><a class="viewcode-back" href="../../../profile_default/util/util.html#profile_default.util.machine.Shell.is_cmd">[docs]</a>    <span class="nd">@property</span>
+<div class="viewcode-block" id="Shell.is_cmd"><a class="viewcode-back" href="../../../startup/util.html#profile_default.util.machine.Shell.is_cmd">[docs]</a>    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">is_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span></div>
 
-<div class="viewcode-block" id="Shell.is_powershell"><a class="viewcode-back" href="../../../profile_default/util/util.html#profile_default.util.machine.Shell.is_powershell">[docs]</a>    <span class="nd">@property</span>
+<div class="viewcode-block" id="Shell.is_powershell"><a class="viewcode-back" href="../../../startup/util.html#profile_default.util.machine.Shell.is_powershell">[docs]</a>    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">is_powershell</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span></div>
 
-<div class="viewcode-block" id="Shell.is_pwsh"><a class="viewcode-back" href="../../../profile_default/util/util.html#profile_default.util.machine.Shell.is_pwsh">[docs]</a>    <span class="nd">@property</span>
+<div class="viewcode-block" id="Shell.is_pwsh"><a class="viewcode-back" href="../../../startup/util.html#profile_default.util.machine.Shell.is_pwsh">[docs]</a>    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">is_pwsh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span></div></div>
 
@@ -197,12 +204,12 @@
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="c1"># Modules kept importing this and ending up with 2 loggers and i was confused</span>
     <span class="n">MACHINE_LOGGER</span> <span class="o">=</span> <span class="n">module_log</span><span class="o">.</span><span class="n">stream_logger</span><span class="p">(</span>
-        <span class="n">logger</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;util.machine&#39;</span><span class="p">),</span>
-        <span class="n">msg_format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> : </span><span class="si">%(levelname)s</span><span class="s1"> : </span><span class="si">%(module)s</span><span class="s1"> </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span>
+        <span class="n">logger</span><span class="o">=</span><span class="s1">&#39;util.machine&#39;</span><span class="p">,</span>
+        <span class="n">msg_format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> : </span><span class="si">%(levelname)s</span><span class="s1"> : </span><span class="si">%(module)s</span><span class="s1"> : </span><span class="si">%(message)s</span><span class="s1"> : &#39;</span><span class="p">,</span>
         <span class="n">log_level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span>
     <span class="p">)</span>
 
-    <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
+    <span class="c1"># doctest.testmod()</span>
 </pre></div>
 
           </div>
@@ -227,13 +234,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../magics.html">Built-in Magics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../custom_magics.html">Writing Your Own Magics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../exceptions.html">Customized Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sphinxext.html">IPython Sphinx Directive</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev.html">Developers Notes</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../startup/index.html">IPython Shell Initialization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../jupyter.html">Jupyter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Extensions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev.html">Contributors Notes</a></li>
 </ul>
 
 </div>
@@ -260,13 +268,13 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython 0.0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright (C) 2018-2019 Faris Chugthai.
-      Last updated on Aug 16, 2019.
+      Last updated on Aug 26, 2019.
     </div>
   </body>
 </html>

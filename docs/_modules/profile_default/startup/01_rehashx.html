@@ -64,7 +64,7 @@
 <span class="sd">    Name of the desired magic function, without :kbd:`%` prefix.</span>
 <span class="sd">line : str</span>
 <span class="sd">    The rest of the input line as a single string.</span>
-<span class="sd">_stack_depth : int</span>
+<span class="sd">``_stack_depth`` : int, optional</span>
 <span class="sd">    Number of recursive calls to an IPython magic.</span>
 
 
@@ -72,11 +72,12 @@
 <span class="sd">-----</span>
 <span class="sd">:ref:`IPython.core.magic.run_line_magic()`</span>
 <span class="sd">    A method of the |ip| instance to run a specific magic currently in the</span>
-<span class="sd">    `IPython.core.interactiveshell.InteractiveShell.user_ns` or user namespace.</span>
+<span class="sd">    :ref:`IPython.core.interactiveshell.InteractiveShell.user_ns`</span>
+<span class="sd">    or user namespace.</span>
 
 
 <span class="sd">.. ipython::</span>
-<span class="sd">    :okexcept:</span>
+<span class="sd">    :verbatim:</span>
 
 <span class="sd">    from IPython.core import get_ipython</span>
 <span class="sd">    shell = get_ipython()</span>
@@ -103,6 +104,8 @@
 
 <span class="sd">This is added to ensure backward compatibility for use</span>
 <span class="sd">of :func:`IPython.core.magics.get_ipython().magic()`</span>
+
+<span class="sd">-----------------</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">logging</span>
@@ -142,7 +145,7 @@
 
 <div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../startup/rehashx.html#profile_default.startup.01_rehashx.main">[docs]</a><span class="nd">@timer</span>
 <span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Add all executables on the user&#39;s $PATH into the IPython namespace.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Add all executables on the user&#39;s :envvar:`PATH` into the IPython ns.&quot;&quot;&quot;</span>
     <span class="n">shell</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s1">&#39;rehashx&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">system</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;Windows&#39;</span><span class="p">:</span>
         <span class="n">blacklisted_aliases</span><span class="p">(</span><span class="n">shell</span><span class="p">)</span></div>

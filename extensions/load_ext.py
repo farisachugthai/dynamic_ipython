@@ -3,12 +3,13 @@
 ========================================================================
 `%load_ext` --- Import commonly used modules into the IPython namespace.
 ========================================================================
+.. magic:: load_ext
 
 .. module:: load_ext
     :synopsis: Import commonly used modules into the IPython namespace.
 
 This module is a slightly different way of accomplishing what
-:ref:`profile_default.startup.04_easy_import` attempts to do.
+:mod:`profile_default.startup.04_easy_import` attempts to do.
 
 Specifically, it sets up importing things into the user's interactive namespace.
 

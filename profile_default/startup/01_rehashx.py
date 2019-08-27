@@ -18,7 +18,7 @@ magic_name : str
     Name of the desired magic function, without :kbd:`%` prefix.
 line : str
     The rest of the input line as a single string.
-_stack_depth : int
+``_stack_depth`` : int, optional
     Number of recursive calls to an IPython magic.
 
 
@@ -26,11 +26,12 @@ Notes
 -----
 :ref:`IPython.core.magic.run_line_magic()`
     A method of the |ip| instance to run a specific magic currently in the
-    `IPython.core.interactiveshell.InteractiveShell.user_ns` or user namespace.
+    :ref:`IPython.core.interactiveshell.InteractiveShell.user_ns`
+    or user namespace.
 
 
 .. ipython::
-    :okexcept:
+    :verbatim:
 
     from IPython.core import get_ipython
     shell = get_ipython()
@@ -57,6 +58,8 @@ If :func:`IPython.core.magics.run_line_magic()` is called from
 
 This is added to ensure backward compatibility for use
 of :func:`IPython.core.magics.get_ipython().magic()`
+
+-----------------
 
 """
 import logging
@@ -96,7 +99,7 @@ def blacklisted_aliases(shell=None):
 
 @timer
 def main(shell=None):
-    """Add all executables on the user's $PATH into the IPython namespace."""
+    """Add all executables on the user's :envvar:`PATH` into the IPython ns."""
     shell.run_line_magic('rehashx', '')
     if system() == 'Windows':
         blacklisted_aliases(shell)
