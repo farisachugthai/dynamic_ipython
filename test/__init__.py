@@ -18,13 +18,13 @@ except ImportError as e:
 
 
 if __name__ == "__main__":
-    _ip = get_ipython()
-
-    if _ip is None:
-        _ip = start_ipython()
-
+    # _ip = get_ipython()
+    #     if _ip is None:
+    #         _ip = start_ipython()
     logger = logging.getLogger(name=__name__).addHandler(NullHandler)
 
     sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 
     doctest_finder = doctest.DocTestFinder()
+    unittest.main()
+    doctest.DocTestSuite('__main__', globs='*')
