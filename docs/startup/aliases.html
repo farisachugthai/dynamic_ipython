@@ -53,7 +53,6 @@
             
   <div class="section" id="module-profile_default.startup.20_aliases">
 <span id="system-shell-aliases"></span><h1>System Shell Aliases<a class="headerlink" href="#module-profile_default.startup.20_aliases" title="Permalink to this headline">¶</a></h1>
-<p>File for all shell aliases.</p>
 <div class="section" id="module-20_aliases">
 <span id="ipython-aliases"></span><h2>IPython Aliases<a class="headerlink" href="#module-20_aliases" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="overview">
@@ -68,7 +67,7 @@ in pipelines will vary greatly.</p>
 and what executables are available on the <span class="target" id="index-0"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PATH</span></code>.</p>
 <p>On Unix platforms, it is assumed that the user is using a bash shell.</p>
 <p>However on Windows, it is possible that the user has a shell that runs
-<code class="docutils literal notranslate"><span class="pre">dosbatch</span></code>, <code class="docutils literal notranslate"><span class="pre">powershell</span></code>, or <code class="docutils literal notranslate"><span class="pre">bash</span></code>.</p>
+<strong class="command">dosbatch</strong>, <strong class="command">powershell</strong>, or <strong class="command">bash</strong>.</p>
 <p>As a result, the environment variable <span class="target" id="index-1"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ComSpec</span></code> will be checked,
 and if present, that value is used.</p>
 <dl class="attribute">
@@ -84,13 +83,8 @@ Doesn’t need to be defined in advance during an interactive session.</p>
 </dl>
 </dd></dl>
 
-<p class="rubric">Examples</p>
-<p>The source code of the implementation, module <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.alias.html#module-IPython.core.alias" title="(in IPython v7.7.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython.core.alias</span></code></a>
-implementation, has been provided for reference.:</p>
-</div>
-<div class="section" id="tips">
-<h3>Tips<a class="headerlink" href="#tips" title="Permalink to this headline">¶</a></h3>
-<p>When writing aliases, an <code class="docutils literal notranslate"><span class="pre">%alias</span></code> definition can take various string
+<p class="rubric">Notes</p>
+<p>When writing aliases, an <code class="xref py py-obj docutils literal notranslate"><span class="pre">%alias</span></code> definition can take various string
 placeholders. As per the official documentation:</p>
 <div class="topic">
 <p class="topic-title first"><code class="docutils literal notranslate"><span class="pre">%l</span></code> parameter</p>
@@ -113,9 +107,16 @@ interactively the syntax <code class="docutils literal notranslate"><span class=
 </div>
 <dl class="class">
 <dt id="profile_default.startup.20_aliases.WindowsAliases">
-<em class="property">class </em><code class="sig-prename descclassname">profile_default.startup.20_aliases.</code><code class="sig-name descname">WindowsAliases</code><span class="sig-paren">(</span><em class="sig-param">_ip=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/profile_default/startup/20_aliases.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/profile_default/startup/20_aliases.html#WindowsAliases"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profile_default.startup.20_aliases.WindowsAliases" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">profile_default.startup.20_aliases.</code><code class="sig-name descname">WindowsAliases</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/profile_default/startup/20_aliases.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/profile_default/startup/20_aliases.html#WindowsAliases"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profile_default.startup.20_aliases.WindowsAliases" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<p>Aggregated Window aliases.</p>
+<p>Aggregated Window aliases. Provides simplified system calls for NT.</p>
+<dl class="method">
+<dt>
+<code class="sig-name descname">Implements aliases specific to cmd or powershell.</code></dt>
+<dd></dd></dl>
+
+<p class="rubric">Notes</p>
+<p>Would it be useful to subclass <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a> here?</p>
 <dl class="method">
 <dt id="profile_default.startup.20_aliases.WindowsAliases.cmd_aliases">
 <em class="property">classmethod </em><code class="sig-name descname">cmd_aliases</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/profile_default/startup/20_aliases.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/profile_default/startup/20_aliases.html#WindowsAliases.cmd_aliases"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profile_default.startup.20_aliases.WindowsAliases.cmd_aliases" title="Permalink to this definition">¶</a></dt>
@@ -136,106 +137,6 @@ interactively the syntax <code class="docutils literal notranslate"><span class=
 ConEmu and others have been added.</p>
 <p>The minimum number of assumptions possible have been made; however, note
 that this section is still under development and frequently changes.</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Warning: 5 aliases have been commented out as they emit
-warnings upon being set. They’re unfortunately aliases to
-cmd commands and don’t run correctly in PowerShell.</p>
-</div>
-<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="k">Alias</span>           <span class="p">%</span> <span class="p">-&gt;</span> <span class="k">ForEach</span><span class="n">-Object</span>
-<span class="k">Alias</span>           <span class="p">?</span> <span class="p">-&gt;</span> <span class="nb">Where-Object</span>
-<span class="k">Alias</span>           <span class="nb">clhy </span><span class="p">-&gt;</span> <span class="nb">Clear-History</span>
-<span class="k">Alias</span>           <span class="nb">cli </span><span class="p">-&gt;</span> <span class="nb">Clear-Item</span>
-<span class="k">Alias</span>           <span class="nb">clp </span><span class="p">-&gt;</span> <span class="nb">Clear-ItemProperty</span>
-<span class="k">Alias</span>           <span class="nb">cls </span><span class="p">-&gt;</span> <span class="nb">Clear-Host</span>
-<span class="k">Alias</span>           <span class="nb">clv </span><span class="p">-&gt;</span> <span class="nb">Clear-Variable</span>
-<span class="k">Alias</span>           <span class="nb">cnsn </span><span class="p">-&gt;</span> <span class="nb">Connect-PSSession</span>
-<span class="k">Alias</span>           <span class="nb">compare </span><span class="p">-&gt;</span> <span class="nb">Compare-Object</span>
-<span class="k">Alias</span>           <span class="nb">cpi </span><span class="p">-&gt;</span> <span class="nb">Copy-Item</span>
-<span class="k">Alias</span>           <span class="nb">cpp </span><span class="p">-&gt;</span> <span class="nb">Copy-ItemProperty</span>
-<span class="k">Alias</span>           <span class="nb">curl </span><span class="p">-&gt;</span> <span class="nb">Invoke-WebRequest</span>
-<span class="k">Alias</span>           <span class="nb">cvpa </span><span class="p">-&gt;</span> <span class="nb">Convert-Path</span>
-<span class="k">Alias</span>           <span class="nb">dbp </span><span class="p">-&gt;</span> <span class="nb">Disable-PSBreakpoint</span>
-<span class="k">Alias</span>           <span class="nb">diff </span><span class="p">-&gt;</span> <span class="nb">Compare-Object</span>
-<span class="k">Alias</span>           <span class="nb">dnsn </span><span class="p">-&gt;</span> <span class="nb">Disconnect-PSSession</span>
-<span class="k">Alias</span>           <span class="nb">ebp </span><span class="p">-&gt;</span> <span class="nb">Enable-PSBreakpoint</span>
-<span class="k">Alias</span>           <span class="nb">epal </span><span class="p">-&gt;</span> <span class="nb">Export-Alias</span>
-<span class="k">Alias</span>           <span class="nb">epcsv </span><span class="p">-&gt;</span> <span class="nb">Export-Csv</span>
-<span class="k">Alias</span>           <span class="nb">epsn </span><span class="p">-&gt;</span> <span class="nb">Export-PSSession</span>
-<span class="k">Alias</span>           <span class="nb">erase </span><span class="p">-&gt;</span> <span class="nb">Remove-Item</span>
-<span class="k">Alias</span>           <span class="nb">etsn </span><span class="p">-&gt;</span> <span class="nb">Enter-PSSession</span>
-<span class="k">Alias</span>           <span class="nb">exsn </span><span class="p">-&gt;</span> <span class="nb">Exit-PSSession</span>
-<span class="k">Alias</span>           <span class="nb">fc </span><span class="p">-&gt;</span> <span class="nb">Format-Custom</span>
-<span class="k">Alias</span>           <span class="nb">fl </span><span class="p">-&gt;</span> <span class="nb">Format-List</span>
-<span class="k">Alias</span>           <span class="k">foreach</span> <span class="p">-&gt;</span> <span class="k">ForEach</span><span class="n">-Object</span>
-<span class="k">Alias</span>           <span class="nb">ft </span><span class="p">-&gt;</span> <span class="nb">Format-Table</span>
-<span class="k">Alias</span>           <span class="nb">fw </span><span class="p">-&gt;</span> <span class="nb">Format-Wide</span>
-<span class="k">Alias</span>           <span class="nb">gal </span><span class="p">-&gt;</span> <span class="nb">Get-Alias</span>
-<span class="k">Alias</span>           <span class="nb">gbp </span><span class="p">-&gt;</span> <span class="nb">Get-PSBreakpoint</span>
-<span class="k">Alias</span>           <span class="nb">gc </span><span class="p">-&gt;</span> <span class="nb">Get-Content</span>
-<span class="k">Alias</span>           <span class="nb">gci </span><span class="p">-&gt;</span> <span class="nb">Get-ChildItem</span>
-<span class="k">Alias</span>           <span class="nb">gcm </span><span class="p">-&gt;</span> <span class="nb">Get-Command</span>
-<span class="k">Alias</span>           <span class="nb">gcs </span><span class="p">-&gt;</span> <span class="nb">Get-PSCallStack</span>
-<span class="k">Alias</span>           <span class="nb">gdr </span><span class="p">-&gt;</span> <span class="nb">Get-PSDrive</span>
-<span class="k">Alias</span>           <span class="nb">ghy </span><span class="p">-&gt;</span> <span class="nb">Get-History</span>
-<span class="k">Alias</span>           <span class="nb">gi </span><span class="p">-&gt;</span> <span class="nb">Get-Item</span>
-<span class="k">Alias</span>           <span class="nb">gjb </span><span class="p">-&gt;</span> <span class="nb">Get-Job</span>
-<span class="k">Alias</span>           <span class="nb">gl </span><span class="p">-&gt;</span> <span class="nb">Get-Location</span>
-<span class="k">Alias</span>           <span class="nb">gm </span><span class="p">-&gt;</span> <span class="nb">Get-Member</span>
-<span class="k">Alias</span>           <span class="nb">gmo </span><span class="p">-&gt;</span> <span class="nb">Get-Module</span>
-<span class="k">Alias</span>           <span class="nb">gp </span><span class="p">-&gt;</span> <span class="nb">Get-ItemProperty</span>
-<span class="k">Alias</span>           <span class="nb">gps </span><span class="p">-&gt;</span> <span class="nb">Get-Process</span>
-<span class="k">Alias</span>           <span class="nb">gpv </span><span class="p">-&gt;</span> <span class="nb">Get-ItemPropertyValue</span>
-<span class="k">Alias</span>           <span class="nb">group </span><span class="p">-&gt;</span> <span class="nb">Group-Object</span>
-<span class="k">Alias</span>           <span class="nb">gsn </span><span class="p">-&gt;</span> <span class="nb">Get-PSSession</span>
-<span class="k">Alias</span>           <span class="nb">gsnp </span><span class="p">-&gt;</span> <span class="nb">Get-PSSnapin</span>
-<span class="k">Alias</span>           <span class="nb">gsv </span><span class="p">-&gt;</span> <span class="nb">Get-Service</span>
-<span class="k">Alias</span>           <span class="nb">gu </span><span class="p">-&gt;</span> <span class="nb">Get-Unique</span>
-<span class="k">Alias</span>           <span class="nb">gv </span><span class="p">-&gt;</span> <span class="nb">Get-Variable</span>
-<span class="k">Alias</span>           <span class="nb">gwmi </span><span class="p">-&gt;</span> <span class="nb">Get-WmiObject</span>
-<span class="k">Alias</span>           <span class="nb">h </span><span class="p">-&gt;</span> <span class="nb">Get-History</span>
-<span class="k">Alias</span>           <span class="nb">icm </span><span class="p">-&gt;</span> <span class="nb">Invoke-Command</span>
-<span class="k">Alias</span>           <span class="nb">iex </span><span class="p">-&gt;</span> <span class="nb">Invoke-Expression</span>
-<span class="k">Alias</span>           <span class="nb">ihy </span><span class="p">-&gt;</span> <span class="nb">Invoke-History</span>
-<span class="k">Alias</span>           <span class="nb">ii </span><span class="p">-&gt;</span> <span class="nb">Invoke-Item</span>
-<span class="k">Alias</span>           <span class="nb">ipal </span><span class="p">-&gt;</span> <span class="nb">Import-Alias</span>
-<span class="k">Alias</span>           <span class="nb">ipcsv </span><span class="p">-&gt;</span> <span class="nb">Import-Csv</span>
-<span class="k">Alias</span>           <span class="nb">ipmo </span><span class="p">-&gt;</span> <span class="nb">Import-Module</span>
-<span class="k">Alias</span>           <span class="nb">ipsn </span><span class="p">-&gt;</span> <span class="nb">Import-PSSession</span>
-<span class="k">Alias</span>           <span class="nb">irm </span><span class="p">-&gt;</span> <span class="nb">Invoke-RestMethod</span>
-<span class="k">Alias</span>           <span class="nb">ise </span><span class="p">-&gt;</span> <span class="n">powershell_ise</span><span class="p">.</span><span class="n">exe</span>
-<span class="k">Alias</span>           <span class="nb">iwmi </span><span class="p">-&gt;</span> <span class="nb">Invoke-WMIMethod</span>
-<span class="k">Alias</span>           <span class="nb">iwr </span><span class="p">-&gt;</span> <span class="nb">Invoke-WebRequest</span>
-<span class="k">Alias</span>           <span class="nb">lp </span><span class="p">-&gt;</span> <span class="nb">Out-Printer</span>
-<span class="k">Alias</span>           <span class="nb">man </span><span class="p">-&gt;</span> <span class="n">help</span>
-<span class="k">Alias</span>           <span class="nb">md </span><span class="p">-&gt;</span> <span class="n">mkdir</span>
-<span class="k">Alias</span>           <span class="nb">measure </span><span class="p">-&gt;</span> <span class="nb">Measure-Object</span>
-<span class="k">Alias</span>           <span class="nb">mi </span><span class="p">-&gt;</span> <span class="nb">Move-Item</span>
-<span class="k">Alias</span>           <span class="nb">mount </span><span class="p">-&gt;</span> <span class="nb">New-PSDrive</span>
-<span class="k">Alias</span>           <span class="nb">mp </span><span class="p">-&gt;</span> <span class="nb">Move-ItemProperty</span>
-<span class="k">Alias</span>           <span class="nb">nal </span><span class="p">-&gt;</span> <span class="nb">New-Alias</span>
-<span class="k">Alias</span>           <span class="nb">ndr </span><span class="p">-&gt;</span> <span class="nb">New-PSDrive</span>
-<span class="k">Alias</span>           <span class="nb">ni </span><span class="p">-&gt;</span> <span class="nb">New-Item</span>
-<span class="k">Alias</span>           <span class="nb">nmo </span><span class="p">-&gt;</span> <span class="nb">New-Module</span>
-<span class="k">Alias</span>           <span class="nb">npssc </span><span class="p">-&gt;</span> <span class="nb">New-PSSessionConfigurationFile</span>
-<span class="k">Alias</span>           <span class="nb">nsn </span><span class="p">-&gt;</span> <span class="nb">New-PSSession</span>
-<span class="k">Alias</span>           <span class="nb">nv </span><span class="p">-&gt;</span> <span class="nb">New-Variable</span>
-<span class="k">Alias</span>           <span class="nb">ogv </span><span class="p">-&gt;</span> <span class="nb">Out-GridView</span>
-<span class="k">Alias</span>           <span class="nb">oh </span><span class="p">-&gt;</span> <span class="nb">Out-Host</span>
-<span class="k">Alias</span>           <span class="nb">r </span><span class="p">-&gt;</span> <span class="nb">Invoke-History</span>
-<span class="k">Alias</span>           <span class="nb">rbp </span><span class="p">-&gt;</span> <span class="nb">Remove-PSBreakpoint</span>
-<span class="k">Alias</span>           <span class="nb">rcjb </span><span class="p">-&gt;</span> <span class="nb">Receive-Job</span>
-<span class="k">Alias</span>           <span class="nb">rcsn </span><span class="p">-&gt;</span> <span class="nb">Receive-PSSession</span>
-<span class="k">Alias</span>           <span class="nb">rd </span><span class="p">-&gt;</span> <span class="nb">Remove-Item</span>
-<span class="k">Alias</span>           <span class="nb">rdr </span><span class="p">-&gt;</span> <span class="nb">Remove-PSDrive</span>
-<span class="k">Alias</span>           <span class="nb">ri </span><span class="p">-&gt;</span> <span class="nb">Remove-Item</span>
-<span class="k">Alias</span>           <span class="nb">rjb </span><span class="p">-&gt;</span> <span class="nb">Remove-Job</span>
-<span class="k">Alias</span>           <span class="nb">rmo </span><span class="p">-&gt;</span> <span class="nb">Remove-Module</span>
-<span class="k">Alias</span>           <span class="nb">rni </span><span class="p">-&gt;</span> <span class="nb">Rename-Item</span>
-<span class="k">Alias</span>           <span class="nb">rnp </span><span class="p">-&gt;</span> <span class="nb">Rename-ItemProperty</span>
-</pre></div>
-</div>
-<p>That’s some non-trivial stuff right there! First try on all 4 of them!</p>
 </dd></dl>
 
 </dd></dl>
@@ -282,7 +183,13 @@ number of GNU/Linux built-ins to exist on Windows, and as a result, this
 list may not be comprehensive.</p>
 <p>Below is the source code for the function
 <code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.core.magics.define_alias()</span></code> that is invoked here.:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">define_alias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">cmd</span><span class="p">):</span>
+<div class="highlight-ipython notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">define_alias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">cmd</span><span class="p">):</span>
     <span class="c1"># Define a new alias after validating it.</span>
     <span class="c1"># This will raise an :exc:`AliasError` if there are validation</span>
     <span class="c1"># problems.</span>
@@ -290,7 +197,7 @@ list may not be comprehensive.</p>
     <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">magics_manager</span><span class="o">.</span><span class="n">register_function</span><span class="p">(</span><span class="n">caller</span><span class="p">,</span> <span class="n">magic_kind</span><span class="o">=</span><span class="s1">&#39;line&#39;</span><span class="p">,</span>
     <span class="n">magic_name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
 </pre></div>
-</div>
+</td></tr></table></div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>_ip</strong> (<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.7.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.interactiveshell.InteractiveShell</span></code></a>) – The global instance of <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.7.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a>.</p>
@@ -370,7 +277,6 @@ list may not be comprehensive.</p>
 <li><a class="reference internal" href="#">System Shell Aliases</a><ul>
 <li><a class="reference internal" href="#module-20_aliases">IPython Aliases</a><ul>
 <li><a class="reference internal" href="#overview">Overview</a></li>
-<li><a class="reference internal" href="#tips">Tips</a></li>
 </ul>
 </li>
 </ul>

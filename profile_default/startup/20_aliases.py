@@ -1,13 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""File for all shell aliases.
-
+"""
 ===============
 IPython Aliases
 ===============
 
 .. module:: 20_aliases
     :synopsis: Create aliases for :mod:`IPython` to ease use as a system shell.
+
+.. highlight:: ipython
+    :linenothreshold: 3
+
 
 Overview
 ========
@@ -26,7 +29,7 @@ and what executables are available on the :envvar:`PATH`.
 On Unix platforms, it is assumed that the user is using a bash shell.
 
 However on Windows, it is possible that the user has a shell that runs
-``dosbatch``, ``powershell``, or ``bash``.
+:command:`dosbatch`, :command:`powershell`, or :command:`bash`.
 
 As a result, the environment variable :envvar:`ComSpec` will be checked,
 and if present, that value is used.
@@ -40,16 +43,10 @@ _ip : |ip|
     Doesn't need to be defined in advance during an interactive session.
 
 
-Examples
-========
+Notes
+======
 
-The source code of the implementation, module :mod:`IPython.core.alias`
-implementation, has been provided for reference.:
-
-Tips
-====
-
-When writing aliases, an ``%alias`` definition can take various string
+When writing aliases, an `%alias` definition can take various string
 placeholders. As per the official documentation:
 
 .. topic:: ``%l`` parameter
@@ -123,7 +120,7 @@ LOGGER = module_log.stream_logger(
 
 
 def linux_specific_aliases(_ip=None):
-    r"""Add Linux specific aliases.
+    """Add Linux specific aliases.
 
     Aliases that have either:
 
@@ -309,12 +306,21 @@ def common_aliases(_ip=None):
 
 
 class WindowsAliases:
-    """Aggregated Window aliases."""
-    def __init__(self, _ip=None):
-        if _ip is not None:
-            self._ip = _ip
-        else:
-            self._ip = get_ipython()
+    """Aggregated Window aliases. Provides simplified system calls for NT.
+
+    Methods
+    -------
+    Implements aliases specific to cmd or powershell.
+
+    Notes
+    -----
+    Would it be useful to subclass :class:`enum.Enum` here?
+
+    """
+
+    def __init__(self):
+        """Initialize the platform specific alias manager with IPython."""
+        self._ip = get_ipython()
 
     @classmethod
     def cmd_aliases(self):
@@ -365,108 +371,6 @@ class WindowsAliases:
 
         The minimum number of assumptions possible have been made; however, note
         that this section is still under development and frequently changes.
-
-        .. warning:: Warning: 5 aliases have been commented out as they emit
-                     warnings upon being set. They're unfortunately aliases to
-                     cmd commands and don't run correctly in PowerShell.
-
-
-        .. code-block:: powershell
-
-            Alias           % -> ForEach-Object
-            Alias           ? -> Where-Object
-            Alias           clhy -> Clear-History
-            Alias           cli -> Clear-Item
-            Alias           clp -> Clear-ItemProperty
-            Alias           cls -> Clear-Host
-            Alias           clv -> Clear-Variable
-            Alias           cnsn -> Connect-PSSession
-            Alias           compare -> Compare-Object
-            Alias           cpi -> Copy-Item
-            Alias           cpp -> Copy-ItemProperty
-            Alias           curl -> Invoke-WebRequest
-            Alias           cvpa -> Convert-Path
-            Alias           dbp -> Disable-PSBreakpoint
-            Alias           diff -> Compare-Object
-            Alias           dnsn -> Disconnect-PSSession
-            Alias           ebp -> Enable-PSBreakpoint
-            Alias           epal -> Export-Alias
-            Alias           epcsv -> Export-Csv
-            Alias           epsn -> Export-PSSession
-            Alias           erase -> Remove-Item
-            Alias           etsn -> Enter-PSSession
-            Alias           exsn -> Exit-PSSession
-            Alias           fc -> Format-Custom
-            Alias           fl -> Format-List
-            Alias           foreach -> ForEach-Object
-            Alias           ft -> Format-Table
-            Alias           fw -> Format-Wide
-            Alias           gal -> Get-Alias
-            Alias           gbp -> Get-PSBreakpoint
-            Alias           gc -> Get-Content
-            Alias           gci -> Get-ChildItem
-            Alias           gcm -> Get-Command
-            Alias           gcs -> Get-PSCallStack
-            Alias           gdr -> Get-PSDrive
-            Alias           ghy -> Get-History
-            Alias           gi -> Get-Item
-            Alias           gjb -> Get-Job
-            Alias           gl -> Get-Location
-            Alias           gm -> Get-Member
-            Alias           gmo -> Get-Module
-            Alias           gp -> Get-ItemProperty
-            Alias           gps -> Get-Process
-            Alias           gpv -> Get-ItemPropertyValue
-            Alias           group -> Group-Object
-            Alias           gsn -> Get-PSSession
-            Alias           gsnp -> Get-PSSnapin
-            Alias           gsv -> Get-Service
-            Alias           gu -> Get-Unique
-            Alias           gv -> Get-Variable
-            Alias           gwmi -> Get-WmiObject
-            Alias           h -> Get-History
-            Alias           icm -> Invoke-Command
-            Alias           iex -> Invoke-Expression
-            Alias           ihy -> Invoke-History
-            Alias           ii -> Invoke-Item
-            Alias           ipal -> Import-Alias
-            Alias           ipcsv -> Import-Csv
-            Alias           ipmo -> Import-Module
-            Alias           ipsn -> Import-PSSession
-            Alias           irm -> Invoke-RestMethod
-            Alias           ise -> powershell_ise.exe
-            Alias           iwmi -> Invoke-WMIMethod
-            Alias           iwr -> Invoke-WebRequest
-            Alias           lp -> Out-Printer
-            Alias           man -> help
-            Alias           md -> mkdir
-            Alias           measure -> Measure-Object
-            Alias           mi -> Move-Item
-            Alias           mount -> New-PSDrive
-            Alias           mp -> Move-ItemProperty
-            Alias           nal -> New-Alias
-            Alias           ndr -> New-PSDrive
-            Alias           ni -> New-Item
-            Alias           nmo -> New-Module
-            Alias           npssc -> New-PSSessionConfigurationFile
-            Alias           nsn -> New-PSSession
-            Alias           nv -> New-Variable
-            Alias           ogv -> Out-GridView
-            Alias           oh -> Out-Host
-            Alias           r -> Invoke-History
-            Alias           rbp -> Remove-PSBreakpoint
-            Alias           rcjb -> Receive-Job
-            Alias           rcsn -> Receive-PSSession
-            Alias           rd -> Remove-Item
-            Alias           rdr -> Remove-PSDrive
-            Alias           ri -> Remove-Item
-            Alias           rjb -> Remove-Job
-            Alias           rmo -> Remove-Module
-            Alias           rni -> Rename-Item
-            Alias           rnp -> Rename-ItemProperty
-
-        That's some non-trivial stuff right there! First try on all 4 of them!
-
         """
         _ip.user_aliases = [
             ('ac', 'Add-Content %l'),
@@ -583,7 +487,7 @@ def main():
         # we're in cmd or pwsh
         # win_ = WindowsAliases(_ip)
         # if win
-        user_aliases += WindowsAliases(_ip).cmd_aliases()
+        user_aliases += WindowsAliases().cmd_aliases()
 
     user_aliases += common_aliases(_ip)
     __setup_fzf(user_aliases)

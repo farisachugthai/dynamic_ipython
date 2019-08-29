@@ -41,20 +41,20 @@ Notes
 Usage
 ------
 As the help outlines above, the second required positional argument to
-:func:`IPython.core.TerminalInteractiveShell.run_line_magic()` is `line`.
+:func:`IPython.core.TerminalInteractiveShell.run_line_magic()` is ``line``.
 
 This is more easily understood as 'remaining arguments to the magic'.
 `%rehashx` takes none, but leaving it blank causes the function call to raise
 an error, so an empty `str` is passed to the function.
 
 
-_stack_depth
-~~~~~~~~~~~~~
-The `_stack_depth` parameter can be understood like so:
+``_stack_depth``
+~~~~~~~~~~~~~~~~
+The ``_stack_depth`` parameter can be understood like so:
 
 If :func:`IPython.core.magics.run_line_magic()` is called from
 :func:`IPython.core.magics.magic()` then
-`_stack_depth` = 2.
+``_stack_depth`` = 2.
 
 This is added to ensure backward compatibility for use
 of :func:`IPython.core.magics.get_ipython().magic()`
@@ -102,7 +102,8 @@ def main(shell=None):
     """Add all executables on the user's :envvar:`PATH` into the IPython ns."""
     shell.run_line_magic('rehashx', '')
     if system() == 'Windows':
-        blacklisted_aliases(shell)
+        # blacklisted_aliases(shell)
+        pass
 
 
 if __name__ == "__main__":
