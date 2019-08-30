@@ -24,9 +24,9 @@ line : str
 
 Notes
 -----
-:ref:`IPython.core.magic.run_line_magic()`
+IPython.core.magic.run_line_magic
     A method of the |ip| instance to run a specific magic currently in the
-    :ref:`IPython.core.interactiveshell.InteractiveShell.user_ns`
+    IPython.core.interactiveshell.InteractiveShell.user_ns
     or user namespace.
 
 
