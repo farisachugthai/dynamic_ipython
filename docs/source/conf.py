@@ -183,7 +183,7 @@ today_fmt = '%B %d, %Y'
 
 # The name of the Pygments (syntax highlighting) style to use.
 # Specified in theme.conf
-pygments_style = 'Friendly'
+# pygments_style = 'Friendly'
 
 rst_prolog = """
 .. |ip| replace:: :class:`IPython.core.interactiveshell.InteractiveShell`

@@ -165,7 +165,7 @@
     <span class="n">log_level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">linux_specific_aliases</span><span class="p">(</span><span class="n">_ip</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">linux_specific_aliases</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Add Linux specific aliases.</span>
 
 <span class="sd">    Aliases that have either:</span>
@@ -191,8 +191,7 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    _ip : |ip|</span>
-<span class="sd">        The global instance of :mod:`IPython`.</span>
+<span class="sd">    None</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -238,7 +237,7 @@
     <span class="k">return</span> <span class="n">_user_aliases</span>
 
 
-<span class="k">def</span> <span class="nf">common_aliases</span><span class="p">(</span><span class="n">_ip</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">common_aliases</span><span class="p">():</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Add aliases common to all OSes. Overwhelmingly :command:`Git` aliases.</span>
 
 <span class="sd">    This method adds around 70 to 80 aliases that can be implemented on most</span>
@@ -247,20 +246,8 @@
 <span class="sd">    The only real requirement is Git being installed and working. Docker</span>
 <span class="sd">    commands possibly going to be added.</span>
 
-<span class="sd">    .. versionchanged:: Moved git aliases from linux_aliases</span>
-<span class="sd">                        into new :func:`20_aliases.common_aliases()`.</span>
-
 <span class="sd">    .. todo:: :command:`git show`</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    _ip : |ip|</span>
-<span class="sd">        The global instance of IPython.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    _ip.user_aliases : List of tuples</span>
-<span class="sd">        User aliases.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_user_aliases</span> <span class="o">=</span> <span class="p">[</span>
         <span class="p">(</span><span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff --staged --stat %l&#39;</span><span class="p">),</span>
@@ -383,11 +370,6 @@
 <span class="sd">            we have here because that&#39;ll affect :data:`_ip.user_aliases.mv`?</span>
 
 <span class="sd">            Also note DIRCMD for :command:`dir`.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        _ip : IPython shell</span>
-
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">_ip</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="p">[</span>
             <span class="p">(</span><span class="s1">&#39;cp&#39;</span><span class="p">,</span> <span class="s1">&#39;copy </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">),</span>
@@ -418,7 +400,7 @@
 <span class="sd">        The minimum number of assumptions possible have been made; however, note</span>
 <span class="sd">        that this section is still under development and frequently changes.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">_ip</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="p">[</span>
             <span class="p">(</span><span class="s1">&#39;ac&#39;</span><span class="p">,</span> <span class="s1">&#39;Add-Content %l&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;asnp&#39;</span><span class="p">,</span> <span class="s1">&#39;Add-PSSnapin %l&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;cat&#39;</span><span class="p">,</span> <span class="s1">&#39;Get-Content %l&#39;</span><span class="p">),</span>
@@ -522,7 +504,7 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_ip</span><span class="p">,</span> <span class="s1">&#39;magics_manager&#39;</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Are you running in IPython?&#39;</span><span class="p">)</span>
 
-    <span class="n">user_aliases</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">user_aliases</span> <span class="o">=</span> <span class="n">common_aliases</span><span class="p">()</span>
     <span class="n">machine</span> <span class="o">=</span> <span class="n">Platform</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">machine</span><span class="o">.</span><span class="n">is_linux</span><span class="p">:</span>
@@ -535,7 +517,6 @@
         <span class="c1"># if win</span>
         <span class="n">user_aliases</span> <span class="o">+=</span> <span class="n">WindowsAliases</span><span class="p">()</span><span class="o">.</span><span class="n">cmd_aliases</span><span class="p">()</span>
 
-    <span class="n">user_aliases</span> <span class="o">+=</span> <span class="n">common_aliases</span><span class="p">(</span><span class="n">_ip</span><span class="p">)</span>
     <span class="n">__setup_fzf</span><span class="p">(</span><span class="n">user_aliases</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">user_aliases</span><span class="p">:</span>
@@ -615,7 +596,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright (C) 2018-2019 Faris Chugthai.
-      Last updated on Aug 30, 2019.
+      Last updated on Aug 31, 2019.
     </div>
   </body>
 </html>

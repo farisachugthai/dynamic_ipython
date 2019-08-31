@@ -183,7 +183,7 @@ today_fmt = '%B %d, %Y'
 
 # The name of the Pygments (syntax highlighting) style to use.
 # Specified in theme.conf
-pygments_style = 'GruvboxDarkHard'
+# pygments_style = 'Friendly'
 
 rst_prolog = """
 .. |ip| replace:: :class:`IPython.core.interactiveshell.InteractiveShell`
@@ -334,8 +334,7 @@ text_secnumber_suffix = ''
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3/', None),
     'ipython': ('https://ipython.readthedocs.io/en/stable/', None),
-    'prompt_toolkit':
-        ('https://python-prompt-toolkit.readthedocs.io/en/stable/', None),
+    'prompt_toolkit': ('https://python-prompt-toolkit.readthedocs.io/en/stable/', None),
 }
 
 # -- Options for todo extension ----------------------------------------------
@@ -381,7 +380,7 @@ viewcode_follow_imported_members = False
 
 # -- IPython directive -------------------------------------------------------
 
-ipython_savefig_dir = os.path.join('..', '_images')
+ipython_savefig_dir = SOURCE.joinpath('_images').__fspath__()
 ipython_warning_is_error = False
 
 ipython_execlines = [
