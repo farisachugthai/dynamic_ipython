@@ -1,17 +1,16 @@
-from . import magics
+"""Todo: Cleanup."""
 import importlib
-import logging
+from . import magics
 
 
 def ask_for_import(mod, package=None):
-    """Try/except for importing modules."""
     try:
-        return importlib.import_module(mod)
-    except (ImportError, ModuleNotFoundError):
+        return importlib.import_module(mod, package=package)
+    except (ImportError, ModuleNotFoundEdrror):
         pass
 
 
-ask_for_import('sphinx')
 ask_for_import('IPython')
+ask_for_import('sphinx')
 profile_default = ask_for_import('profile_default')
 ask_for_import('startup', package=profile_default)

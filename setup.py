@@ -77,7 +77,7 @@ README = os.path.join(ROOT_PATH, '', 'README.rst')
 REQUIRED = ['IPython>=7.7']
 
 EXTRAS = {
-    'develop': ['flake8==3.7.2', 'yapf==0.28.0'],
+    'develop': ['pipenv', 'flake8>=3.7.1', 'pylint', 'yapf>=0.27.0'],
     'docs': [
         'sphinx>=2.2',
         # Project uses reStructuredText, so ensure that the docutils get
@@ -85,15 +85,14 @@ EXTRAS = {
         'docutils>=0.3',
         'numpydoc>=0.9',
         'flake8-rst',
-    ]
+    ],
+    'test': ['nose', 'tox']
 }
 
 with codecs.open(README, encoding="utf-8") as f:
     LONG_DESCRIPTION = "\n" + f.read()
 
 # }}}}
-
-
 class UploadCommand(Command):  # {{{1
     """Support setup.py upload."""
 
@@ -135,8 +134,6 @@ class UploadCommand(Command):  # {{{1
         os.system('git push --tags')
 
         sys.exit()
-
-
 # }}}
 # Where the magic happens: {{{1
 setup(
@@ -197,3 +194,5 @@ setup(
     }
     # could also include long_description, download_url, classifiers, etc.
 )
+
+# Vim: set fdm=marker:
