@@ -2,21 +2,24 @@
 # -*- coding: utf-8 -*-
 """Create an installable package for this repository.
 
+.. module:: setup
+    :synopsis: Installs everything.
+
+:URL: https://docs.conda.io/projects/conda-build/en/latest/user-guide/recipes/build-without-recipe.html
+
+bdist_conda
+-----------
+Now let's add support for ``python setup.py bdist_conda``.
+
+
+
+Acknowledgements
+----------------
 Largely based off of the work done by @kennethreitz in his `setup.py`_
 repository.
 
 _`Kenneth Reitz setup.py template
 <https://raw.githubusercontent.com/kennethreitz/setup.py/master/setup.py>`_
-
-Currently this setuptools file invokes the IPython interpreter when running
-:command:`python setup.py test`. In turn, the interpreter uses `profile_default
-<profile_default>`_ as the shell's profile.
-
-As a result, this leaves behind artifacts from the tests, such as a
-history.sqlite database, log files, and a connection to the kernel via
-security and PID.
-
-How do we prevent this?
 
 See Also
 --------
@@ -29,11 +32,22 @@ import os
 from pathlib import Path
 from runpy import run_path, run_module
 from shutil import rmtree
+# Why does Coc keep complaining about resolving the import sys???
 import sys
 
-from setuptools import setup, find_packages, Command
+from setuptools import setup, find_packages, Command, Extension
 
 from profile_default import __about__
+
+# Conda Support: {{{1
+
+try:
+    import distutils.command.bdist_conda
+except (ImportError, ModuleNotFoundError):
+    distclass = None,
+else:
+    distclass = distutils.command.bdist_conda.CondaDistribution
+
 
 # Metadata: {{{1
 NAME = 'dynamic_ipython'
@@ -53,12 +67,12 @@ BUILD_PATH = os.path.join(CONF_PATH, 'build')
 SOURCE_PATH = os.path.join(CONF_PATH, 'source')
 
 README = os.path.join(ROOT_PATH, '', 'README.rst')
-REQUIRED = ['IPython>=7.6.1']
+REQUIRED = ['IPython>=7.7']
 
 EXTRAS = {
-    'develop': ['flake8==3.7.1', 'pylint', 'yapf==0.27.0'],
+    'develop': ['flake8==3.7.2', 'yapf==0.28.0'],
     'docs': [
-        'sphinx>=2.1.2',
+        'sphinx>=2.2',
         # Project uses reStructuredText, so ensure that the docutils get
         # installed or upgraded on the target machine
         'docutils>=0.3',
@@ -67,7 +81,7 @@ EXTRAS = {
     ]
 }
 
-with codecs.open(README, encoding = "utf-8") as f:
+with codecs.open(README, encoding="utf-8") as f:
     LONG_DESCRIPTION = "\n" + f.read()
 
 # }}}}

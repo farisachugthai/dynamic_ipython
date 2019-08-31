@@ -119,7 +119,7 @@ LOGGER = module_log.stream_logger(
     log_level=logging.INFO)
 
 
-def linux_specific_aliases(_ip=None):
+def linux_specific_aliases():
     """Add Linux specific aliases.
 
     Aliases that have either:
@@ -145,8 +145,7 @@ def linux_specific_aliases(_ip=None):
 
     Parameters
     ----------
-    _ip : |ip|
-        The global instance of :mod:`IPython`.
+    None
 
     Returns
     -------
@@ -192,7 +191,7 @@ def linux_specific_aliases(_ip=None):
     return _user_aliases
 
 
-def common_aliases(_ip=None):
+def common_aliases():
     r"""Add aliases common to all OSes. Overwhelmingly :command:`Git` aliases.
 
     This method adds around 70 to 80 aliases that can be implemented on most
@@ -201,20 +200,8 @@ def common_aliases(_ip=None):
     The only real requirement is Git being installed and working. Docker
     commands possibly going to be added.
 
-    .. versionchanged:: Moved git aliases from linux_aliases
-                        into new :func:`20_aliases.common_aliases()`.
-
     .. todo:: :command:`git show`
 
-    Parameters
-    ----------
-    _ip : |ip|
-        The global instance of IPython.
-
-    Returns
-    -------
-    _ip.user_aliases : List of tuples
-        User aliases.
     """
     _user_aliases = [
         ('g', 'git diff --staged --stat %l'),
@@ -337,11 +324,6 @@ class WindowsAliases:
             we have here because that'll affect :data:`_ip.user_aliases.mv`?
 
             Also note DIRCMD for :command:`dir`.
-
-        Parameters
-        ----------
-        _ip : IPython shell
-
         """
         _ip.user_aliases = [
             ('cp', 'copy %s %s'),
@@ -372,7 +354,7 @@ class WindowsAliases:
         The minimum number of assumptions possible have been made; however, note
         that this section is still under development and frequently changes.
         """
-        _ip.user_aliases = [
+        self.user_aliases = [
             ('ac', 'Add-Content %l'),
             ('asnp', 'Add-PSSnapin %l'),
             ('cat', 'Get-Content %l'),
@@ -476,7 +458,7 @@ def main():
     if not hasattr(_ip, 'magics_manager'):
         raise Exception('Are you running in IPython?')
 
-    user_aliases = []
+    user_aliases = common_aliases()
     machine = Platform()
 
     if machine.is_linux:
@@ -489,7 +471,6 @@ def main():
         # if win
         user_aliases += WindowsAliases().cmd_aliases()
 
-    user_aliases += common_aliases(_ip)
     __setup_fzf(user_aliases)
 
     for i in user_aliases:
