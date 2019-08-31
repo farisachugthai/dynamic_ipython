@@ -46,17 +46,14 @@
   <h1>Source code for profile_default.startup.20_aliases</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">&quot;&quot;&quot;File for all shell aliases.</span>
+
 <span class="sd">===============</span>
 <span class="sd">IPython Aliases</span>
 <span class="sd">===============</span>
 
 <span class="sd">.. module:: 20_aliases</span>
 <span class="sd">    :synopsis: Create aliases for :mod:`IPython` to ease use as a system shell.</span>
-
-<span class="sd">.. highlight:: ipython</span>
-<span class="sd">    :linenothreshold: 3</span>
-
 
 <span class="sd">Overview</span>
 <span class="sd">========</span>
@@ -75,7 +72,7 @@
 <span class="sd">On Unix platforms, it is assumed that the user is using a bash shell.</span>
 
 <span class="sd">However on Windows, it is possible that the user has a shell that runs</span>
-<span class="sd">:command:`dosbatch`, :command:`powershell`, or :command:`bash`.</span>
+<span class="sd">``dosbatch``, ``powershell``, or ``bash``.</span>
 
 <span class="sd">As a result, the environment variable :envvar:`ComSpec` will be checked,</span>
 <span class="sd">and if present, that value is used.</span>
@@ -89,10 +86,16 @@
 <span class="sd">    Doesn&#39;t need to be defined in advance during an interactive session.</span>
 
 
-<span class="sd">Notes</span>
-<span class="sd">======</span>
+<span class="sd">Examples</span>
+<span class="sd">========</span>
 
-<span class="sd">When writing aliases, an `%alias` definition can take various string</span>
+<span class="sd">The source code of the implementation, module :mod:`IPython.core.alias`</span>
+<span class="sd">implementation, has been provided for reference.:</span>
+
+<span class="sd">Tips</span>
+<span class="sd">====</span>
+
+<span class="sd">When writing aliases, an ``%alias`` definition can take various string</span>
 <span class="sd">placeholders. As per the official documentation:</span>
 
 <span class="sd">.. topic:: ``%l`` parameter</span>
@@ -165,8 +168,8 @@
     <span class="n">log_level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="linux_specific_aliases"><a class="viewcode-back" href="../../../startup/aliases.html#profile_default.startup.20_aliases.linux_specific_aliases">[docs]</a><span class="k">def</span> <span class="nf">linux_specific_aliases</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Add Linux specific aliases.</span>
+<div class="viewcode-block" id="linux_specific_aliases"><a class="viewcode-back" href="../../../startup/aliases.html#profile_default.startup.20_aliases.linux_specific_aliases">[docs]</a><span class="k">def</span> <span class="nf">linux_specific_aliases</span><span class="p">(</span><span class="n">_ip</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Add Linux specific aliases.</span>
 
 <span class="sd">    Aliases that have either:</span>
 
@@ -191,7 +194,8 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    None</span>
+<span class="sd">    _ip : |ip|</span>
+<span class="sd">        The global instance of :mod:`IPython`.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -237,7 +241,7 @@
     <span class="k">return</span> <span class="n">_user_aliases</span></div>
 
 
-<div class="viewcode-block" id="common_aliases"><a class="viewcode-back" href="../../../startup/aliases.html#profile_default.startup.20_aliases.common_aliases">[docs]</a><span class="k">def</span> <span class="nf">common_aliases</span><span class="p">():</span>
+<div class="viewcode-block" id="common_aliases"><a class="viewcode-back" href="../../../startup/aliases.html#profile_default.startup.20_aliases.common_aliases">[docs]</a><span class="k">def</span> <span class="nf">common_aliases</span><span class="p">(</span><span class="n">_ip</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Add aliases common to all OSes. Overwhelmingly :command:`Git` aliases.</span>
 
 <span class="sd">    This method adds around 70 to 80 aliases that can be implemented on most</span>
@@ -246,8 +250,20 @@
 <span class="sd">    The only real requirement is Git being installed and working. Docker</span>
 <span class="sd">    commands possibly going to be added.</span>
 
+<span class="sd">    .. versionchanged:: Moved git aliases from linux_aliases</span>
+<span class="sd">                        into new :func:`20_aliases.common_aliases()`.</span>
+
 <span class="sd">    .. todo:: :command:`git show`</span>
 
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    _ip : |ip|</span>
+<span class="sd">        The global instance of IPython.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    _ip.user_aliases : List of tuples</span>
+<span class="sd">        User aliases.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_user_aliases</span> <span class="o">=</span> <span class="p">[</span>
         <span class="p">(</span><span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff --staged --stat %l&#39;</span><span class="p">),</span>
@@ -339,21 +355,12 @@
 
 
 <div class="viewcode-block" id="WindowsAliases"><a class="viewcode-back" href="../../../startup/aliases.html#profile_default.startup.20_aliases.WindowsAliases">[docs]</a><span class="k">class</span> <span class="nc">WindowsAliases</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Aggregated Window aliases. Provides simplified system calls for NT.</span>
-
-<span class="sd">    Methods</span>
-<span class="sd">    -------</span>
-<span class="sd">    Implements aliases specific to cmd or powershell.</span>
-
-<span class="sd">    Notes</span>
-<span class="sd">    -----</span>
-<span class="sd">    Would it be useful to subclass :class:`enum.Enum` here?</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Initialize the platform specific alias manager with IPython.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+    <span class="sd">&quot;&quot;&quot;Aggregated Window aliases.&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_ip</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">_ip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ip</span> <span class="o">=</span> <span class="n">_ip</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
 
 <div class="viewcode-block" id="WindowsAliases.cmd_aliases"><a class="viewcode-back" href="../../../startup/aliases.html#profile_default.startup.20_aliases.WindowsAliases.cmd_aliases">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">cmd_aliases</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -370,6 +377,11 @@
 <span class="sd">            we have here because that&#39;ll affect :data:`_ip.user_aliases.mv`?</span>
 
 <span class="sd">            Also note DIRCMD for :command:`dir`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        _ip : IPython shell</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">_ip</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="p">[</span>
             <span class="p">(</span><span class="s1">&#39;cp&#39;</span><span class="p">,</span> <span class="s1">&#39;copy </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">),</span>
@@ -399,8 +411,110 @@
 
 <span class="sd">        The minimum number of assumptions possible have been made; however, note</span>
 <span class="sd">        that this section is still under development and frequently changes.</span>
+
+<span class="sd">        .. warning:: Warning: 5 aliases have been commented out as they emit</span>
+<span class="sd">                     warnings upon being set. They&#39;re unfortunately aliases to</span>
+<span class="sd">                     cmd commands and don&#39;t run correctly in PowerShell.</span>
+
+
+<span class="sd">        .. code-block:: powershell</span>
+
+<span class="sd">            Alias           % -&gt; ForEach-Object</span>
+<span class="sd">            Alias           ? -&gt; Where-Object</span>
+<span class="sd">            Alias           clhy -&gt; Clear-History</span>
+<span class="sd">            Alias           cli -&gt; Clear-Item</span>
+<span class="sd">            Alias           clp -&gt; Clear-ItemProperty</span>
+<span class="sd">            Alias           cls -&gt; Clear-Host</span>
+<span class="sd">            Alias           clv -&gt; Clear-Variable</span>
+<span class="sd">            Alias           cnsn -&gt; Connect-PSSession</span>
+<span class="sd">            Alias           compare -&gt; Compare-Object</span>
+<span class="sd">            Alias           cpi -&gt; Copy-Item</span>
+<span class="sd">            Alias           cpp -&gt; Copy-ItemProperty</span>
+<span class="sd">            Alias           curl -&gt; Invoke-WebRequest</span>
+<span class="sd">            Alias           cvpa -&gt; Convert-Path</span>
+<span class="sd">            Alias           dbp -&gt; Disable-PSBreakpoint</span>
+<span class="sd">            Alias           diff -&gt; Compare-Object</span>
+<span class="sd">            Alias           dnsn -&gt; Disconnect-PSSession</span>
+<span class="sd">            Alias           ebp -&gt; Enable-PSBreakpoint</span>
+<span class="sd">            Alias           epal -&gt; Export-Alias</span>
+<span class="sd">            Alias           epcsv -&gt; Export-Csv</span>
+<span class="sd">            Alias           epsn -&gt; Export-PSSession</span>
+<span class="sd">            Alias           erase -&gt; Remove-Item</span>
+<span class="sd">            Alias           etsn -&gt; Enter-PSSession</span>
+<span class="sd">            Alias           exsn -&gt; Exit-PSSession</span>
+<span class="sd">            Alias           fc -&gt; Format-Custom</span>
+<span class="sd">            Alias           fl -&gt; Format-List</span>
+<span class="sd">            Alias           foreach -&gt; ForEach-Object</span>
+<span class="sd">            Alias           ft -&gt; Format-Table</span>
+<span class="sd">            Alias           fw -&gt; Format-Wide</span>
+<span class="sd">            Alias           gal -&gt; Get-Alias</span>
+<span class="sd">            Alias           gbp -&gt; Get-PSBreakpoint</span>
+<span class="sd">            Alias           gc -&gt; Get-Content</span>
+<span class="sd">            Alias           gci -&gt; Get-ChildItem</span>
+<span class="sd">            Alias           gcm -&gt; Get-Command</span>
+<span class="sd">            Alias           gcs -&gt; Get-PSCallStack</span>
+<span class="sd">            Alias           gdr -&gt; Get-PSDrive</span>
+<span class="sd">            Alias           ghy -&gt; Get-History</span>
+<span class="sd">            Alias           gi -&gt; Get-Item</span>
+<span class="sd">            Alias           gjb -&gt; Get-Job</span>
+<span class="sd">            Alias           gl -&gt; Get-Location</span>
+<span class="sd">            Alias           gm -&gt; Get-Member</span>
+<span class="sd">            Alias           gmo -&gt; Get-Module</span>
+<span class="sd">            Alias           gp -&gt; Get-ItemProperty</span>
+<span class="sd">            Alias           gps -&gt; Get-Process</span>
+<span class="sd">            Alias           gpv -&gt; Get-ItemPropertyValue</span>
+<span class="sd">            Alias           group -&gt; Group-Object</span>
+<span class="sd">            Alias           gsn -&gt; Get-PSSession</span>
+<span class="sd">            Alias           gsnp -&gt; Get-PSSnapin</span>
+<span class="sd">            Alias           gsv -&gt; Get-Service</span>
+<span class="sd">            Alias           gu -&gt; Get-Unique</span>
+<span class="sd">            Alias           gv -&gt; Get-Variable</span>
+<span class="sd">            Alias           gwmi -&gt; Get-WmiObject</span>
+<span class="sd">            Alias           h -&gt; Get-History</span>
+<span class="sd">            Alias           icm -&gt; Invoke-Command</span>
+<span class="sd">            Alias           iex -&gt; Invoke-Expression</span>
+<span class="sd">            Alias           ihy -&gt; Invoke-History</span>
+<span class="sd">            Alias           ii -&gt; Invoke-Item</span>
+<span class="sd">            Alias           ipal -&gt; Import-Alias</span>
+<span class="sd">            Alias           ipcsv -&gt; Import-Csv</span>
+<span class="sd">            Alias           ipmo -&gt; Import-Module</span>
+<span class="sd">            Alias           ipsn -&gt; Import-PSSession</span>
+<span class="sd">            Alias           irm -&gt; Invoke-RestMethod</span>
+<span class="sd">            Alias           ise -&gt; powershell_ise.exe</span>
+<span class="sd">            Alias           iwmi -&gt; Invoke-WMIMethod</span>
+<span class="sd">            Alias           iwr -&gt; Invoke-WebRequest</span>
+<span class="sd">            Alias           lp -&gt; Out-Printer</span>
+<span class="sd">            Alias           man -&gt; help</span>
+<span class="sd">            Alias           md -&gt; mkdir</span>
+<span class="sd">            Alias           measure -&gt; Measure-Object</span>
+<span class="sd">            Alias           mi -&gt; Move-Item</span>
+<span class="sd">            Alias           mount -&gt; New-PSDrive</span>
+<span class="sd">            Alias           mp -&gt; Move-ItemProperty</span>
+<span class="sd">            Alias           nal -&gt; New-Alias</span>
+<span class="sd">            Alias           ndr -&gt; New-PSDrive</span>
+<span class="sd">            Alias           ni -&gt; New-Item</span>
+<span class="sd">            Alias           nmo -&gt; New-Module</span>
+<span class="sd">            Alias           npssc -&gt; New-PSSessionConfigurationFile</span>
+<span class="sd">            Alias           nsn -&gt; New-PSSession</span>
+<span class="sd">            Alias           nv -&gt; New-Variable</span>
+<span class="sd">            Alias           ogv -&gt; Out-GridView</span>
+<span class="sd">            Alias           oh -&gt; Out-Host</span>
+<span class="sd">            Alias           r -&gt; Invoke-History</span>
+<span class="sd">            Alias           rbp -&gt; Remove-PSBreakpoint</span>
+<span class="sd">            Alias           rcjb -&gt; Receive-Job</span>
+<span class="sd">            Alias           rcsn -&gt; Receive-PSSession</span>
+<span class="sd">            Alias           rd -&gt; Remove-Item</span>
+<span class="sd">            Alias           rdr -&gt; Remove-PSDrive</span>
+<span class="sd">            Alias           ri -&gt; Remove-Item</span>
+<span class="sd">            Alias           rjb -&gt; Remove-Job</span>
+<span class="sd">            Alias           rmo -&gt; Remove-Module</span>
+<span class="sd">            Alias           rni -&gt; Rename-Item</span>
+<span class="sd">            Alias           rnp -&gt; Rename-ItemProperty</span>
+
+<span class="sd">        That&#39;s some non-trivial stuff right there! First try on all 4 of them!</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">_ip</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="p">[</span>
             <span class="p">(</span><span class="s1">&#39;ac&#39;</span><span class="p">,</span> <span class="s1">&#39;Add-Content %l&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;asnp&#39;</span><span class="p">,</span> <span class="s1">&#39;Add-PSSnapin %l&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;cat&#39;</span><span class="p">,</span> <span class="s1">&#39;Get-Content %l&#39;</span><span class="p">),</span>
@@ -504,7 +618,7 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_ip</span><span class="p">,</span> <span class="s1">&#39;magics_manager&#39;</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Are you running in IPython?&#39;</span><span class="p">)</span>
 
-    <span class="n">user_aliases</span> <span class="o">=</span> <span class="n">common_aliases</span><span class="p">()</span>
+    <span class="n">user_aliases</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">machine</span> <span class="o">=</span> <span class="n">Platform</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">machine</span><span class="o">.</span><span class="n">is_linux</span><span class="p">:</span>
@@ -515,8 +629,9 @@
         <span class="c1"># we&#39;re in cmd or pwsh</span>
         <span class="c1"># win_ = WindowsAliases(_ip)</span>
         <span class="c1"># if win</span>
-        <span class="n">user_aliases</span> <span class="o">+=</span> <span class="n">WindowsAliases</span><span class="p">()</span><span class="o">.</span><span class="n">cmd_aliases</span><span class="p">()</span>
+        <span class="n">user_aliases</span> <span class="o">+=</span> <span class="n">WindowsAliases</span><span class="p">(</span><span class="n">_ip</span><span class="p">)</span><span class="o">.</span><span class="n">cmd_aliases</span><span class="p">()</span>
 
+    <span class="n">user_aliases</span> <span class="o">+=</span> <span class="n">common_aliases</span><span class="p">(</span><span class="n">_ip</span><span class="p">)</span>
     <span class="n">__setup_fzf</span><span class="p">(</span><span class="n">user_aliases</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">user_aliases</span><span class="p">:</span>
@@ -538,7 +653,17 @@
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><h3>Related Topics</h3>
 <ul>
   <li><a href="../../../index.html">Documentation overview</a><ul>
   <li><a href="../../index.html">Module code</a><ul>
@@ -567,16 +692,6 @@
 </ul>
 
 </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>

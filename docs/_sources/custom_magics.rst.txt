@@ -25,8 +25,8 @@ instance.
 
 The first is called **register_magics**.
 
-register_magics
-----------------
+``register_magics``
+-------------------
 
 Signature: ``register_magics(*magic_objects)``
 
@@ -52,11 +52,12 @@ Docstring:
 ``register_magic`` Parameters
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-magic : object
+``magic`` : object
    The decorated magic class or function.
 
-register_magic_function
------------------------
+
+``register_magic_function``
+---------------------------
 
 The first is the: **register_magic_function** bound to the |ip| instance.
 
@@ -79,16 +80,16 @@ Docstring:
    In the latter case, the function will be called with `cell==None` when
    invoked as `%f`, and with cell as a string when invoked as `%%f`.
 
-Magic Function Parameters
-~~~~~~~~~~~~~~~~~~~~~~~~~
+Parameters
+----------
 
-func : callable
+``func`` : callable
  Function to be registered as a magic.
 
-magic_kind : str
+``magic_kind`` : str
  Kind of magic, one of 'line', 'cell' or 'line_cell'
 
-magic_name : optional str
+``magic_name`` : str, optional
  If given, the name the magic will have in the IPython namespace.  By
  default, the name of the function itself is used.
 
@@ -98,6 +99,7 @@ any function.
 
 Tldr
 ----
+
 Writing the extension:
 
 - Import the global :mod:`IPython` instance with::
@@ -131,6 +133,7 @@ However in a testing situation this could prove beneficial.
 
 Alternative Method of Defining Magics with Arguments
 ----------------------------------------------------
+
 From the IPython team directly. The following is the module docstring for
 :mod:`IPython.core.magic_arguments`.
 
@@ -183,10 +186,11 @@ Inheritance diagram:
 
 Writing Custom Magics
 ----------------------
-`Custom Magics <https://raw.githubusercontent.com/ipython/ipython/523ed2fe58ea5ee9971d2b21df1de33b8cdfa924/docs/source/config/custommagics.rst>`_:
+`Custom Magics
+<https://raw.githubusercontent.com/ipython/ipython/523ed2fe58ea5ee9971d2b21df1de33b8cdfa924/docs/source/config/custommagics.rst>`_:
 
 There are two main ways to define your own magic functions. From standalone
-functions and by inheriting from a base class provided by `IPython`:
+functions and by inheriting from a base class provided by :mod:`IPython`:
 
 :class:`IPython.core.magic.Magics`
 
@@ -227,7 +231,7 @@ magic, a cell one and one that works in both modes, using just plain functions:
 
 
 You can also create magics of all three kinds by inheriting from the
-:class:`IPython.core.magic.Magics()` class.
+:class:`IPython.core.magic.Magics` class.
 
 This lets you create magics that can potentially hold state in between
 calls, and that have full access to the main IPython object:

@@ -2,7 +2,9 @@
 System Shell Aliases
 ====================
 
-.. automodule:: profile_default.startup.20_aliases
-   :members:
-   :undoc-members:
-   :show-inheritance:
+:source: `<../../../profile_default/startup/20_aliases.py>`_
+
+.. autosummary::
+   :template: module.rst
+
+    20_aliases

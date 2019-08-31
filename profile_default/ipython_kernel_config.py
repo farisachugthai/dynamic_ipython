@@ -249,6 +249,7 @@ KernelSpecManager options
 
 
 """
+import logging
 import os
 from pathlib import Path
 
@@ -259,7 +260,9 @@ c = get_config()  # noqa
 c.Application.log_datefmt = '%Y-%m-%d %H:%M:%S'
 
 # The Logging format template
-c.Application.log_format = '%(asctime)s [%(name)s]  %(highlevel)s %(message)s'
+
+logging.BASIC_FORMAT = '%(created)f : %(levelname)s : %(module)s : %(message)s : '
+c.Application.log_format = '%(created)f : %(levelname)s : %(module)s : %(message)s : '
 
 # Set the log level by value or name.
 c.Application.log_level = 30

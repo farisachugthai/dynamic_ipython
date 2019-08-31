@@ -50,6 +50,7 @@ will be rendered as
 
 Persisting the session across IPython directive blocks
 =============================================================
+
 The state from previous code-blocks is stored, and carries over from section
 to section. The IPython shell will maintain and continue to execute in the same
 namespace so long as it remains in the same document.
@@ -83,6 +84,7 @@ block from above.
 
 Multi-line input
 ================
+
 Multi-line input is supported, and particularly lengthy blocks of text can be
 parsed correctly.
 
@@ -100,8 +102,10 @@ parsed correctly.
    ['http://ichart.finance.yahoo.com/table.csv?s=CROX', 'd=9', 'e=22',
 
 
+
 Testing directive outputs
 =========================
+
 The extension supports a few limited parameters to configure the running
 shell. These parameters are exposed as reStructured text options to the
 ``.. ipython`` directive, decorators for the source code directly, and 
@@ -196,9 +200,6 @@ suppress the seed line so it doesn't show up in the rendered output.:
           [0.22591016, 0.77731835],
           [0.0072729 , 0.34273127]])
 
-
-1)
-======
 
 For more information on @suppress and @doctest decorators, please refer
 to the end of this file in :ref:`Pseudo-Decorators` section.
@@ -450,6 +451,9 @@ And persist across sessions.:
    print(square(3))
    print(square(-2))
 
+
+
+.. _supported-pseudo-decorators:
 
 Pseudo-Decorators
 =================

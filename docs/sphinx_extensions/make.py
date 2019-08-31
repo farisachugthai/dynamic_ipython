@@ -1,39 +1,24 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-=======================================
-Make --- Automated Documentation Builds
-=======================================
+========================================
+Make --- Automated Documentation Builder
+========================================
 
-.. module:: docs.make
-    :synopsis: Automated Documentation Builds
+.. module:: make
+    :synopsis: Automated Documentation Builder.
 
 Usage
 ======
+
 This module has a similar API to the command :command:`sphinx-build` as it
 passes user provided arguments along to it.
 
 It simply differs in making the process simpler and allows one to run it in
 the debugger if a problem arises with doc builds.
 
-
-Documentation TODO
-==================
-Still need to add an option to recursively move the html files out of the
-currently git-ignored directory `build/html/` into this directory.
-
-Unfortunately that's probably going to be a really ugly fight.
-
-:func:`shutil.copytree()` and :func:`os.rename()` don't allow for
-dangerous overwrites like :command:`mv` does.
-
-So we may have to :func:`os.walk()`, copy them into the correct relative
-section of the directory tree, recursively delete the old
-directories and attempt to not lose all the metadata along the way.
-
-Possible Workaround
+Moving output files
 -------------------
-Here's something I got to work from within WSL.::
 
 >>> import shutil
 >>> from os.path import pjoin
@@ -51,23 +36,11 @@ automatically keep the documentation fresh.
 
 See Also
 ========
-sphinx.cmd.build : mod
+sphinx.cmd.build
     The main entrypoint for sphinx and a good module to get comfortable with.
-sphinx.cmd.make_main : mod
+sphinx.cmd.make_main
     The pure python replacement for a ``Makefile``.
-sphinx.util.osutil : mod
-    Will definitely help with your problem below.
-
-.. todo:: Argparse update.
-
-    Update the options you can give to the parser.
-
-Other Random Errands Include:
-=============================
-#) remove python path [x]
-#) Add open in browser as an option [x]
-#) Fix the output for the `commands` argument when this is run with
-   :data:`sys.argv` == 0
+sphinx.util.osutil
 
 """
 import argparse
@@ -88,8 +61,7 @@ except (ImportError, ModuleNotFoundError):
 from IPython.core.error import UsageError
 
 from profile_default.__about__ import __version__
-
-DOC_PATH = os.path.dirname(os.path.abspath(__file__))
+DOC_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BUILD_PATH = os.path.join(DOC_PATH, 'build')
 SOURCE_PATH = os.path.join(DOC_PATH, 'source')
 MAKE_LOGGER = logging.getLogger(name='docs.make')

@@ -47,39 +47,24 @@
 <span></span><span class="ch">#!/usr/bin/env python3</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">=======================================</span>
-<span class="sd">Make --- Automated Documentation Builds</span>
-<span class="sd">=======================================</span>
+<span class="sd">========================================</span>
+<span class="sd">Make --- Automated Documentation Builder</span>
+<span class="sd">========================================</span>
 
-<span class="sd">.. module:: docs.make</span>
-<span class="sd">    :synopsis: Automated Documentation Builds</span>
+<span class="sd">.. module:: make</span>
+<span class="sd">    :synopsis: Automated Documentation Builder.</span>
 
 <span class="sd">Usage</span>
 <span class="sd">======</span>
+
 <span class="sd">This module has a similar API to the command :command:`sphinx-build` as it</span>
 <span class="sd">passes user provided arguments along to it.</span>
 
 <span class="sd">It simply differs in making the process simpler and allows one to run it in</span>
 <span class="sd">the debugger if a problem arises with doc builds.</span>
 
-
-<span class="sd">Documentation TODO</span>
-<span class="sd">==================</span>
-<span class="sd">Still need to add an option to recursively move the html files out of the</span>
-<span class="sd">currently git-ignored directory `build/html/` into this directory.</span>
-
-<span class="sd">Unfortunately that&#39;s probably going to be a really ugly fight.</span>
-
-<span class="sd">:func:`shutil.copytree()` and :func:`os.rename()` don&#39;t allow for</span>
-<span class="sd">dangerous overwrites like :command:`mv` does.</span>
-
-<span class="sd">So we may have to :func:`os.walk()`, copy them into the correct relative</span>
-<span class="sd">section of the directory tree, recursively delete the old</span>
-<span class="sd">directories and attempt to not lose all the metadata along the way.</span>
-
-<span class="sd">Possible Workaround</span>
+<span class="sd">Moving output files</span>
 <span class="sd">-------------------</span>
-<span class="sd">Here&#39;s something I got to work from within WSL.::</span>
 
 <span class="sd">&gt;&gt;&gt; import shutil</span>
 <span class="sd">&gt;&gt;&gt; from os.path import pjoin</span>
@@ -97,23 +82,11 @@
 
 <span class="sd">See Also</span>
 <span class="sd">========</span>
-<span class="sd">sphinx.cmd.build : mod</span>
+<span class="sd">sphinx.cmd.build</span>
 <span class="sd">    The main entrypoint for sphinx and a good module to get comfortable with.</span>
-<span class="sd">sphinx.cmd.make_main : mod</span>
+<span class="sd">sphinx.cmd.make_main</span>
 <span class="sd">    The pure python replacement for a ``Makefile``.</span>
-<span class="sd">sphinx.util.osutil : mod</span>
-<span class="sd">    Will definitely help with your problem below.</span>
-
-<span class="sd">.. todo:: Argparse update.</span>
-
-<span class="sd">    Update the options you can give to the parser.</span>
-
-<span class="sd">Other Random Errands Include:</span>
-<span class="sd">=============================</span>
-<span class="sd">#) remove python path [x]</span>
-<span class="sd">#) Add open in browser as an option [x]</span>
-<span class="sd">#) Fix the output for the `commands` argument when this is run with</span>
-<span class="sd">   :data:`sys.argv` == 0</span>
+<span class="sd">sphinx.util.osutil</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">argparse</span>
@@ -134,8 +107,7 @@
 <span class="kn">from</span> <span class="nn">IPython.core.error</span> <span class="k">import</span> <span class="n">UsageError</span>
 
 <span class="kn">from</span> <span class="nn">profile_default.__about__</span> <span class="k">import</span> <span class="n">__version__</span>
-
-<span class="n">DOC_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+<span class="n">DOC_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)))</span>
 <span class="n">BUILD_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">DOC_PATH</span><span class="p">,</span> <span class="s1">&#39;build&#39;</span><span class="p">)</span>
 <span class="n">SOURCE_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">DOC_PATH</span><span class="p">,</span> <span class="s1">&#39;source&#39;</span><span class="p">)</span>
 <span class="n">MAKE_LOGGER</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;docs.make&#39;</span><span class="p">)</span>
@@ -442,7 +414,17 @@
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation overview</a><ul>
   <li><a href="../index.html">Module code</a><ul>
@@ -471,16 +453,6 @@
 </ul>
 
 </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>

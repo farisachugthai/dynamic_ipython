@@ -59,67 +59,7 @@
 
 
 <div class="viewcode-block" id="ExceptionHook"><a class="viewcode-back" href="../../../startup/sysexcept.html#profile_default.startup.50_sysexception.ExceptionHook">[docs]</a><span class="k">class</span> <span class="nc">ExceptionHook</span><span class="p">(</span><span class="ne">BaseException</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Custom exception hook for IPython.</span>
-
-<span class="sd">    From the IPython official documentation:</span>
-
-<span class="sd">        Print out a formatted exception traceback.</span>
-<span class="sd">        Optional arguments:</span>
-<span class="sd">          - out: an open file-like object to direct output to.</span>
-
-<span class="sd">          - tb_offset: the number of frames to skip over in the stack, on a</span>
-<span class="sd">            per-call basis (this overrides temporarily the instance&#39;s tb_offset</span>
-<span class="sd">            given at initialization time.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    ``*args``, ``**kwargs`` : list or dict</span>
-<span class="sd">        The least useful call signature. Give it any length iterable.</span>
-
-<span class="sd">    See Also</span>
-<span class="sd">    --------</span>
-<span class="sd">    :class:`IPython.core.ultratb.FormattedTB` : IPython.utils.colorable.Colorable</span>
-<span class="sd">        Displays all accepted keyword arguments. Idk if I specified the type</span>
-<span class="sd">        right but if you follow the MRU...</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    The following is the aforementioned FormattedTB class.::</span>
-
-<span class="sd">        class FormattedTB(VerboseTB, ListTB):</span>
-<span class="sd">            # Subclass ListTB but allow calling with a traceback.</span>
-
-<span class="sd">            # It can thus be used as a sys.excepthook for Python &gt; 2.1.</span>
-
-<span class="sd">            # Also adds &#39;Context&#39; and &#39;Verbose&#39; modes, not available in ListTB.</span>
-
-<span class="sd">            # Allows a tb_offset to be specified. This is useful for situations where</span>
-<span class="sd">            # one needs to remove a number of topmost frames from the traceback (such as</span>
-<span class="sd">            # occurs with python programs that themselves execute other python code,</span>
-<span class="sd">            # like Python shells).</span>
-
-<span class="sd">            def __init__(self, mode=&#39;Plain&#39;, color_scheme=&#39;Linux&#39;, call_pdb=False,</span>
-<span class="sd">                         ostream=None,</span>
-<span class="sd">                         tb_offset=0, long_header=False, include_vars=False,</span>
-<span class="sd">                         check_cache=None, debugger_cls=None,</span>
-<span class="sd">                         parent=None, config=None):</span>
-
-<span class="sd">                # NEVER change the order of this list. Put new modes at the end:</span>
-<span class="sd">                self.valid_modes = [&#39;Plain&#39;, &#39;Context&#39;, &#39;Verbose&#39;, &#39;Minimal&#39;]</span>
-<span class="sd">                self.verbose_modes = self.valid_modes[1:3]</span>
-
-<span class="sd">                VerboseTB.__init__(self, color_scheme=color_scheme, call_pdb=call_pdb,</span>
-<span class="sd">                                   ostream=ostream, tb_offset=tb_offset,</span>
-<span class="sd">                                   long_header=long_header, include_vars=include_vars,</span>
-<span class="sd">                                   check_cache=check_cache, debugger_cls=debugger_cls,</span>
-<span class="sd">                                   parent=parent, config=config)</span>
-
-<span class="sd">                # Different types of tracebacks are joined with different separators to</span>
-<span class="sd">                # form a single string.  They are taken from this dict</span>
-<span class="sd">                self._join_chars = dict(Plain=&#39;&#39;, Context=&#39;\n&#39;, Verbose=&#39;\n&#39;,</span>
-<span class="sd">                                        Minimal=&#39;&#39;)</span>
-<span class="sd">                # set_mode also sets the tb_join_char attribute</span>
-<span class="sd">                self.set_mode(mode)</span>
+    <span class="sd">&quot;&quot;&quot;Custom exception hook for IPython.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -150,7 +90,17 @@
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><h3>Related Topics</h3>
 <ul>
   <li><a href="../../../index.html">Documentation overview</a><ul>
   <li><a href="../../index.html">Module code</a><ul>
@@ -179,16 +129,6 @@
 </ul>
 
 </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>

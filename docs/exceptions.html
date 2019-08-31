@@ -131,6 +131,76 @@ the author for possible inclusion in future releases.</p>
 </div></blockquote>
 </div>
 </div>
+<div class="section" id="sys-excepthook-exceptionhook">
+<h2><a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.excepthook" title="(in Python v3.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">sys.excepthook()</span></code></a> — ExceptionHook<a class="headerlink" href="#sys-excepthook-exceptionhook" title="Permalink to this headline">¶</a></h2>
+<p>From the IPython official documentation for <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.ultratb.html#module-IPython.core.ultratb" title="(in IPython v7.8.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython.core.ultratb</span></code></a>
+and specifically the <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.ultratb.html#IPython.core.ultratb.AutoFormattedTB" title="(in IPython v7.8.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.ultratb.AutoFormattedTB</span></code></a>.:</p>
+<p>Print out a formatted exception traceback.
+Optional arguments:</p>
+<blockquote>
+<div><ul>
+<li><p>out: an open file-like object to direct output to.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tb_offset</span></code>: the number of frames to skip over in the stack, on a
+per-call basis (this overrides temporarily the instance’s tb_offset
+given at initialization time.</p></li>
+</ul>
+</div></blockquote>
+<div class="section" id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">*args</span></code>, <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code><span class="classifier">list or dict</span></dt><dd><p>The least useful call signature. Give it any length iterable.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="see-also">
+<h3>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h3>
+<dl>
+<dt><a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.ultratb.html#IPython.core.ultratb.FormattedTB" title="(in IPython v7.8.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.ultratb.FormattedTB</span></code></a><span class="classifier"><a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.utils.colorable.html#IPython.utils.colorable.Colorable" title="(in IPython v7.8.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.utils.colorable.Colorable</span></code></a></span></dt><dd><p>Displays all accepted keyword arguments. I don’t know if I specified the type
+right but if you follow the MRU…</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="examples">
+<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
+<p>The following is the aforementioned FormattedTB class.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">FormattedTB</span><span class="p">(</span><span class="n">VerboseTB</span><span class="p">,</span> <span class="n">ListTB</span><span class="p">):</span>
+    <span class="c1"># Subclass ListTB but allow calling with a traceback.</span>
+
+    <span class="c1"># It can thus be used as a sys.excepthook for Python &gt; 2.1.</span>
+
+    <span class="c1"># Also adds &#39;Context&#39; and &#39;Verbose&#39; modes, not available in ListTB.</span>
+
+    <span class="c1"># Allows a tb_offset to be specified. This is useful for situations where</span>
+    <span class="c1"># one needs to remove a number of topmost frames from the traceback (such as</span>
+    <span class="c1"># occurs with python programs that themselves execute other python code,</span>
+    <span class="c1"># like Python shells).</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;Plain&#39;</span><span class="p">,</span> <span class="n">color_scheme</span><span class="o">=</span><span class="s1">&#39;Linux&#39;</span><span class="p">,</span> <span class="n">call_pdb</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">ostream</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">tb_offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">long_header</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">include_vars</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">check_cache</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">debugger_cls</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="c1"># NEVER change the order of this list. Put new modes at the end:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">valid_modes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Plain&#39;</span><span class="p">,</span> <span class="s1">&#39;Context&#39;</span><span class="p">,</span> <span class="s1">&#39;Verbose&#39;</span><span class="p">,</span> <span class="s1">&#39;Minimal&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose_modes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_modes</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+
+        <span class="n">VerboseTB</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">color_scheme</span><span class="o">=</span><span class="n">color_scheme</span><span class="p">,</span> <span class="n">call_pdb</span><span class="o">=</span><span class="n">call_pdb</span><span class="p">,</span>
+                           <span class="n">ostream</span><span class="o">=</span><span class="n">ostream</span><span class="p">,</span> <span class="n">tb_offset</span><span class="o">=</span><span class="n">tb_offset</span><span class="p">,</span>
+                           <span class="n">long_header</span><span class="o">=</span><span class="n">long_header</span><span class="p">,</span> <span class="n">include_vars</span><span class="o">=</span><span class="n">include_vars</span><span class="p">,</span>
+                           <span class="n">check_cache</span><span class="o">=</span><span class="n">check_cache</span><span class="p">,</span> <span class="n">debugger_cls</span><span class="o">=</span><span class="n">debugger_cls</span><span class="p">,</span>
+                           <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+
+        <span class="c1"># Different types of tracebacks are joined with different separators to</span>
+        <span class="c1"># form a single string.  They are taken from this dict</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_join_chars</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">Plain</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">Context</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">Verbose</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span>
+                                <span class="n">Minimal</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="c1"># set_mode also sets the tb_join_char attribute</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_mode</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 
 
@@ -168,6 +238,7 @@ the author for possible inclusion in future releases.</p>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Customized Exceptions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#help-on-module-ipython-core-ultratb-in-ipython-core">Help on module IPython.core.ultratb in IPython.core:</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#verbosetb"><strong>VerboseTB</strong></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sys-excepthook-exceptionhook"><code class="xref py py-func docutils literal notranslate"><span class="pre">sys.excepthook()</span></code> — ExceptionHook</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="sphinxext.html">IPython Sphinx Directive</a></li>
@@ -194,6 +265,12 @@ the author for possible inclusion in future releases.</p>
 </li>
 <li><a class="reference internal" href="#verbosetb"><strong>VerboseTB</strong></a><ul>
 <li><a class="reference internal" href="#color-schemes">Color schemes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sys-excepthook-exceptionhook"><code class="xref py py-func docutils literal notranslate"><span class="pre">sys.excepthook()</span></code> — ExceptionHook</a><ul>
+<li><a class="reference internal" href="#parameters">Parameters</a></li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
 </ul>
 </li>
 </ul>

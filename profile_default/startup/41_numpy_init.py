@@ -15,8 +15,9 @@ Help on function :func:`numpy.set_printoptions()` in numpy:
 
     numpy.set_printoptions = set_printoptions(
         precision=None, threshold=None, edgeitems=None, linewidth=None,
-        suppress=None, nanstr=None, infstr=None, formatter=None, sign=None,
-        floatmode=None, **kwarg
+        suppress=None, nanstr=None, infstr=None, formatter=None,
+        sign=None,
+        floatmode=None, \*\*kwarg
     )
 
 Set printing options.
@@ -73,7 +74,7 @@ formatter : dict of callables, optional
     - 'object' : `np.object_` arrays
     - 'str' : all other strings
 
-    Other keys that can be used to set a group of types at once are:
+Other keys that can be used to set a group of types at once are:
 
     - 'all' : sets all types
     - 'int_kind' : sets 'int'
@@ -184,10 +185,6 @@ else:
         """
         np.set_printoptions(threshold=20)
 
-    # Don't put this in the ifmain block because if it's only defined here
-    # you'll raise an error if it gets called from a different scope
-    set_numpy_printoptions()
-    doctest.testmod()  # why not?
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.WARNING,
@@ -195,3 +192,5 @@ if __name__ == "__main__":
 
     if set_numpy_printoptions:
         set_numpy_printoptions()
+
+    doctest.testmod()  # why not?

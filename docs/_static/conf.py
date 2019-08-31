@@ -13,6 +13,13 @@ add these directories to sys.path here. If the directory is relative to the
 documentation root, use os.path.abspath to make it absolute, like shown here.
 
 """
+import math
+from IPython import start_ipython
+from traitlets.config import Config
+from gruvbox.style import GruvboxDarkHard
+from sphinx_extensions import make
+from profile_default.__about__ import __version__
+import profile_default
 from datetime import datetime
 import functools
 from importlib import import_module
@@ -23,18 +30,11 @@ import sys
 
 sys.path.insert(0, os.path.abspath('..'))
 
-import profile_default
-from profile_default.__about__ import __version__
-
-from sphinx_extensions import make
-
-from gruvbox.style import GruvboxDarkHard
 
 DOCS_LOGGER = logging.getLogger(name=__name__)
 DOCS_LOGGER.setLevel(level=logging.DEBUG)
 
 # Let's try setting up an embedded IPython shell from here
-from traitlets.config import Config
 c = Config()
 
 c.InteractiveShellApp.exec_lines = [
@@ -50,7 +50,6 @@ c.InteractiveShellApp.exec_lines = [
 c.InteractiveShell.confirm_exit = False
 c.TerminalIPythonApp.display_banner = False
 
-from IPython import start_ipython
 
 # _ip = start_ipython()
 
@@ -223,10 +222,10 @@ html_static_path = [str(Path().resolve('../_static'))]
 html_sidebars = {
     '**':
         [
+            'searchbox.html',
             'relations.html',
             'globaltoc.html',
             'localtoc.html',
-            'searchbox.html',
             'sourcelink.html',
         ]
 }
@@ -406,6 +405,13 @@ autosummary_generate = True
 
 autosummary_imported_members = False
 
+autoclass_content = u'both'
+autodoc_member_order = u'bysource'
+
+# -- autosection label extension ---------------------------------------------
+
+autosectionlabel_prefix_document = True
+
 # -- numpydoc extension ------------------------------------------------------
 
 numpydoc_show_class_members = False  # Otherwise Sphinx emits thousands of warnings
@@ -433,7 +439,7 @@ def linkcode_resolve(domain, info):
 
 
 # Plot style
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 # Nabbed from scipy:
 # https://github.com/scipy/scipy-sphinx-theme/blob/master/conf.py
@@ -447,7 +453,6 @@ plot_include_source = True
 plot_formats = [('png', 96), 'pdf']
 plot_html_show_formats = False
 
-import math
 phi = (math.sqrt(5) + 1) / 2
 
 font_size = 13 * 72 / 96.0  # 13 px
@@ -496,8 +501,6 @@ def setup(app):
         extra_css = str(add_css())
 
     app.add_stylesheet(extra_css)
-    app.add_stylesheet(os.path.join('..', '_static', 'anaconda.css'))
     app.add_stylesheet(os.path.join('..', '_static', 'custom.css'))
-    app.add_stylesheet(os.path.join('..', '_static', 'pyramid.css'))
-    app.add_stylesheet(os.path.join('..', '_static', 'pygments.css'))
+
     app.add_config_value(HAS_MPL, True, 'env')
