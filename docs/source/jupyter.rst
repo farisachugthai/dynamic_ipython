@@ -110,7 +110,7 @@ can also be given custom formatter functions for various types::
     In [7]: png_formatter = ip.display_formatter.formatters['image/png']
     In [8]: png_formatter.for_type(Foo, foo_to_png)
 
-For further details, see :ref:`IPython.core.formatters`.
+For further details, see :mod:`IPython.core.formatters`.
 
 
 Jupyter Notebook

@@ -1,6 +1,15 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Configuration file for :mod:`IPython`."""
+"""Configuration file for :mod:`IPython`.
+
+Notes
+-----
+The standard :func:`IPython.get_ipython` function returns `None`
+so I suppose IPython hasn't officially instantiated yet.:
+
+    _ip = get_ipython()
+
+"""
 import logging
 import os
 from pathlib import Path
@@ -8,6 +17,7 @@ import platform
 import shutil
 from tempfile import TemporaryDirectory
 
+from IPython import version_info
 from IPython.paths import get_ipython_dir
 # THIS IS THE MODULE! Its too exciting to able to execute this script
 # directly from within python and not get an error for a func call with no
@@ -15,15 +25,7 @@ from IPython.paths import get_ipython_dir
 from traitlets.config import get_config
 
 logging.basicConfig(level=logging.INFO, format=logging.BASIC_FORMAT)
-# c_logger = logging.getLogger(name='profile_default.ipython_config')
-# c_logger.setLevel(logging.INFO)
-# c_logger.addHandler()
-
 c = get_config()
-
-# not allowed in this file. func returns None so I suppose IPython hasn't
-# officially instantiated yet
-# _ip = get_ipython()
 
 
 def get_home():
@@ -144,7 +146,7 @@ c.Application.log_datefmt = '%Y-%m-%d %H:%M:%S'
 
 # The Logging format template
 #Default: '[%(name)s]%(highlevel)s %(message)s'
-c.Application.log_format = '%(asctime)s [%(name)s]%(highlevel)s %(message)s'
+c.Application.log_format = '%(created)f : [%(name)s] : %(highlevel)s : %(message)s : '
 
 # Set the log level by value or name.
 c.Application.log_level = 30
@@ -232,9 +234,11 @@ except Exception:
 #  user input before code is run.
 # c.InteractiveShell.ast_transformers = []
 
-# New in IPy 7.2. TODO: Should probably do some kind of check directly on the
-# _ip object to ensure that the version is above 7.2 first.
-c.InteractiveShell.autoawait = True
+# New in IPy 7.2!
+if version_info > (7,2):
+    c.InteractiveShell.autoawait = True
+else:
+    c.InteractiveShell.autoawait = False
 
 # Make IPython automatically call any callable object even if you didn't type
 # explicit parentheses. For example, 'str 43' becomes 'str(43)' automatically.
@@ -296,7 +300,8 @@ c.InteractiveShell.colors = 'Linux'
 
 # If True, anything that would be passed to the pager will be displayed as
 #  regular output instead.
-# Only if we don't have bat
+# Only if we don't have bat.
+
 if shutil.which('bat'):
     c.InteractiveShell.display_page = False
 else:
@@ -371,45 +376,7 @@ c.InteractiveShell.quiet = False
 # Need to debug later.
 # c.InteractiveShell.sphinxify_docstring = False
 #  module).
-def sphinxify(obj):
-    """Enables rich html representation of docstrings.
 
-    .. note:: This requires the docrepr module.
-
-    """
-    import webbrowser
-    from docrepr import sphinxify  # html generator
-    from IPython.core.oinspect import Inspector  # oinfo generator
-
-    oinfo = Inspector().info(obj)
-    url = sphinxify.rich_repr(oinfo)
-
-    webbrowser.open_new_tab(url)
-
-
-# try:
-#     import docrepr
-
-#     def ipython_sphinxify(doc):
-#         """The official way IPython does it in :ref:`IPython.core.interactiveshell`."""
-#         with TemporaryDirectory() as dirname:
-#             return {
-#                 'text/html': sphinxify.sphinxify(doc, dirname),
-#                 'text/plain': doc
-#             }
-
-# except (ImportError,ModuleNotFoundError):
-#     ipython_sphinxify = None
-
-# # Now do it the way spyder does it!
-# import importlib  # noqa E402
-# try:
-#     importlib.import_module("docrepr")  # noqa E402
-# except (ImportError, ModuleNotFoundError):
-#     c.InteractiveShell.sphinxify_docstring = False
-# else:
-#     # print("Sphinxify docstrings with sphinxify(obj)")
-#     c.InteractiveShell.sphinxify_docstring = True
 
 c.InteractiveShell.wildcards_case_sensitive = False
 
@@ -438,7 +405,7 @@ c.TerminalInteractiveShell.display_completions = 'multicolumn'
 # Well windows doesn't get tmux so.
 
 if platform.system() == 'Windows':
-    c.TerminalInteractiveShell.editing_mode = 'vi'
+    c.TerminalInteractiveShell.editing_mode = 'emacs'
 else:
     if os.environ.get("TMUX"):
         c.TerminalInteractiveShell.editing_mode = 'vi'
@@ -581,7 +548,7 @@ c.TerminalInteractiveShell.true_color = True
 
 # Write to database every x commands (higher values save disk access & power).
 # Values of 1 or less effectively disable caching.
-c.HistoryManager.db_cache_size = 6
+c.HistoryManager.db_cache_size = 16
 
 # Should the history database include output? (default: no)
 c.HistoryManager.db_log_output = True
@@ -671,7 +638,7 @@ c.ProfileDir.location = os.path.join(home, '', 'ipython')
 
 #  Set to 0 to disable truncation.
 # Default is 1000 but that floods a terminal.
-c.PlainTextFormatter.max_seq_length = 100
+# c.PlainTextFormatter.max_seq_length = 100
 
 # Default value
 # c.PlainTextFormatter.max_width = 79
@@ -680,7 +647,7 @@ c.PlainTextFormatter.max_seq_length = 100
 
 # c.PlainTextFormatter.pprint = True
 
-c.PlainTextFormatter.verbose = True
+# c.PlainTextFormatter.verbose = True
 
 # ----------------------------------------------------------------------------
 # Completer(Configurable) configuration
@@ -784,9 +751,3 @@ c.LoggingMagics.quiet = True
 # If True, any %store-d variables will be automatically restored when IPython
 # starts.
 # c.StoreMagics.autorestore = False
-
-# ----------------------------------------------------------------------------
-# Cleanup
-# ----------------------------------------------------------------------------
-
-del home

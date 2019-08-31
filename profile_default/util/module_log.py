@@ -134,7 +134,7 @@ def file_logger(
     ----------
     filename : str
         File to log a :class:`logging.LogRecord` to.
-    logger : :class:`logging.Logger(), optional
+    logger : :class:`logging.Logger`, optional
         Instance of a :class:`logging.Logger` instantiated in the calling
         module.
     shell : |ip|, optional
@@ -189,17 +189,17 @@ def json_logger(logger=None, JSONFormatter=None):
 
     Parameters
     ----------
-    logger : str or :class:`logging.Logger()`, optional
+    logger : str or :class:`logging.Logger`, optional
         Either a named Logger instance or the string representing the desired instance
-    JsonFormatter : :class:`logging.Formatter()`, optional
-        module_log.JsonFormatter() instance.
+    JsonFormatter : :class:`logging.Formatter`, optional
+        module_log.JsonFormatter instance.
         Included in the listed parameters to be explicit; however, it's
         probably easier to not include the parameter as one is configured
         in the function anyway.
 
     Returns
     -------
-    root_logger : :class:`logging.Logger()`
+    root_logger : :class:`logging.Logger`
         Instance of a :class:`logging.Logger()`.
 
     Examples

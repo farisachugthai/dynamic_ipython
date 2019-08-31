@@ -9,7 +9,7 @@
 .. module:: 04_easy_import
     :synopsis: Import frequently used modules in the user namespace.
 
-This imports a few utility functions from :ref:`IPython` and imports the python
+This imports a few utility functions from :mod:`IPython` and imports the python
 package neovim is served in.
 
 
@@ -43,14 +43,14 @@ class DeepReload:
     def dreload(self, mod, extra_excludes=None):
         """Import IPython's `%deepreload` magic.
 
-        This function exists to modify the :param:`excludes` set.
+        This function exists to modify the ``excludes`` set.
 
         Parameters
         ----------
         mod : mod
             Module to reload
         extra_excludes : set of str, optional
-            Extra modules to exclude from `dreload`.
+            Extra modules to exclude from `IPython.lib.deepreload.dreload`.
         """
         if extra_excludes is not None:
             return _reload(mod, self.excludes + set(extra_excludes))

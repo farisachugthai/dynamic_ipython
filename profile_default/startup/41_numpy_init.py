@@ -190,5 +190,8 @@ else:
     doctest.testmod()  # why not?
 
 if __name__ == "__main__":
-    logging.basicConfig()
-    _ip = get_ipython()
+    logging.basicConfig(level=logging.WARNING,
+                        stream=sys.stdout, format=logging.BASIC_FORMAT)
+
+    if set_numpy_printoptions:
+        set_numpy_printoptions()

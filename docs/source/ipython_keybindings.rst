@@ -358,7 +358,7 @@ From :mod:`prompt_toolkit.key_bindings.bindings.defaults`::
          ])
 
 That's literally everything. IPython chooses to add their own stuff
-during :ref:`IPython.terminal.ptutil.create_ipython_shortcuts` but if you
+during :func:`IPython.terminal.ptutil.create_ipython_shortcuts` but if you
 choose to create your own registry then you get access to everything.
 
 It might not be hard to bind to if we do it the same way we did with

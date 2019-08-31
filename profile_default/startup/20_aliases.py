@@ -13,7 +13,7 @@ IPython Aliases
 
 
 Overview
-========
+--------
 
 This module utilizes `_ip`, the global :mod:`IPython` |ip|
 instance, and fills the ``user_ns`` with aliases that are available
@@ -35,7 +35,7 @@ As a result, the environment variable :envvar:`ComSpec` will be checked,
 and if present, that value is used.
 
 Attributes
-==========
+----------
 
 _ip : |ip|
     A global object representing the active IPython session.
@@ -44,13 +44,16 @@ _ip : |ip|
 
 
 Notes
-======
+------
 
 When writing aliases, an `%alias` definition can take various string
 placeholders. As per the official documentation:
 
-.. topic:: ``%l`` parameter
 
+Parameters
+----------
+
+``%l`` : Command-line argument.
     You can use the ``%l`` specifier in an ``%alias`` definition to represent the
     whole line when the alias is called.
 
@@ -68,7 +71,7 @@ interactively the syntax ``%alias alias_name cmd`` doesn't require quoting.
 
 
 See Also
-========
+--------
 
 :mod:`IPython.core.alias`
     Module where the alias functionality for IPython is defined and the basic
@@ -86,29 +89,13 @@ Todo
 - A function that wraps around :func:|ip|`.MagicsManager.define_alias()` and
   checks for whether the executable is on the :envvar:`PATH` all in one swoop.
 
-This module will need refactoring soon as POSIX standard builtins and packages
-from the Ubuntu repository and pypi.org are intermixed haphazardly.
-
-Should break this up into 2 modules, built-in or not built-in or possibly even
-break it up on an OS basis. Actually that'll probably be the cleanest.
-
-In addition if we break up, let's say powershell aliases, into it's own module;
-then we can break that module up into 2 main sections for built-ins and not.
-
-Then, if we organized it that way, could we attempt multi-threading the define_alias
-calls? Or potentially make a shutil.which() decorator over possible aliases, then only
-return it if assert shutil.which(func) and have that running in a different process entirely?
-Idk.
-
-Doesn't seem easy especially with 'Modify the namespace of a SingletonInstance'
-as our end goal.
-
 """
 import logging
 import shutil
 
 from IPython import get_ipython
-from IPython.core.alias import AliasError
+from IPython.core.alias import AliasError, AliasManager
+from traitlets.traitlets import List
 
 from profile_default.util import module_log
 from profile_default.util.machine import Platform
@@ -304,7 +291,6 @@ class WindowsAliases:
     Would it be useful to subclass :class:`enum.Enum` here?
 
     """
-
     def __init__(self):
         """Initialize the platform specific alias manager with IPython."""
         self._ip = get_ipython()
@@ -454,7 +440,37 @@ def __setup_fzf(user_aliases):
 
 
 def main():
-    """Set up aliases for the user namespace for IPython."""
+    """Set up aliases for the user namespace for IPython.
+
+    Planning on coming up with a new way of introducing the aliases into the user namespace.
+
+    Here's an interesting problem I ran into.
+
+    .. ipython::
+
+        from traitlets.traitlets import list
+        user_aliases = [  # let's just fill this with some filler text
+            ('ls', 'ls')
+        ]
+        # Then tried running what would be the equivalent of running
+        # %config AliasManager.user_aliases = user_aliases
+
+    .. ipython::
+        :okexcept:
+
+        ~\.ipython\profile_default\startup\20_aliases.py in main()
+            461
+            462     user_aliases_traitlets = List(user_aliases)
+        --> 463     _ip.run_line_magic('config', AliasManager.user_aliases+user_aliases_traitlets)
+            464
+            465
+
+        TypeError: unsupported operand type(s) for +: 'List' and 'List'
+
+    Wait what? A :class:`traitlets.traitlets.List` can't be added with itself?
+    If that's true then that's definitely a bug right?
+
+    """
     if not hasattr(_ip, 'magics_manager'):
         raise Exception('Are you running in IPython?')
 
@@ -473,16 +489,15 @@ def main():
 
     __setup_fzf(user_aliases)
 
-    for i in user_aliases:
-        try:
-            _ip.alias_manager.define_alias(i[0], i[1])
-        except AliasError as e:
-            LOGGER.error(e)
+    user_aliases_traitlets = List(user_aliases)
+    _ip.run_line_magic('config',
+                       AliasManager.user_aliases + user_aliases_traitlets)
 
 
 if __name__ == "__main__":
     _ip = get_ipython()
 
-    main()
+    if _ip is not None:
+        main()
     LOGGER.debug('Number of aliases is: %s' %
                  len(_ip.run_line_magic('alias', '')))

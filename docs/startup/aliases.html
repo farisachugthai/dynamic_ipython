@@ -51,154 +51,21 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-profile_default.startup.20_aliases">
-<span id="system-shell-aliases"></span><h1>System Shell Aliases<a class="headerlink" href="#module-profile_default.startup.20_aliases" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-20_aliases">
-<span id="ipython-aliases"></span><h2>IPython Aliases<a class="headerlink" href="#module-20_aliases" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="overview">
-<h3>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h3>
-<p>This module utilizes <a class="reference internal" href="#20_aliases._ip" title="20_aliases._ip"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_ip</span></code></a>, the global <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.8.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.8.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.interactiveshell.InteractiveShell</span></code></a>
-instance, and fills the <code class="docutils literal notranslate"><span class="pre">user_ns</span></code> with aliases that are available
-in a typical system shell.</p>
-<p>Unfortunately, the exact definition of what a system shell is, what language
-it responds to, and it’s ability to receive and pass along input and output
-in pipelines will vary greatly.</p>
-<p>As a result, the module needs to test the user’s OS, what shell they’re using
-and what executables are available on the <span class="target" id="index-0"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PATH</span></code>.</p>
-<p>On Unix platforms, it is assumed that the user is using a bash shell.</p>
-<p>However on Windows, it is possible that the user has a shell that runs
-<strong class="command">dosbatch</strong>, <strong class="command">powershell</strong>, or <strong class="command">bash</strong>.</p>
-<p>As a result, the environment variable <span class="target" id="index-1"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ComSpec</span></code> will be checked,
-and if present, that value is used.</p>
-<dl class="attribute">
-<dt id="20_aliases._ip">
-<code class="sig-prename descclassname">20_aliases.</code><code class="sig-name descname">_ip</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/20_aliases.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#20_aliases._ip" title="Permalink to this definition">¶</a></dt>
-<dd><p>A global object representing the active IPython session.
-Contains varying packages as well as the current global namespace.
-Doesn’t need to be defined in advance during an interactive session.</p>
+  <div class="section" id="system-shell-aliases">
+<h1>System Shell Aliases<a class="headerlink" href="#system-shell-aliases" title="Permalink to this headline">¶</a></h1>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.8.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.interactiveshell.InteractiveShell</span></code></a></p>
+<dt class="field-odd">source</dt>
+<dd class="field-odd"><p><a class="reference external" href="../../../profile_default/startup/20_aliases.py">../../../profile_default/startup/20_aliases.py</a></p>
 </dd>
 </dl>
-</dd></dl>
-
-<p class="rubric">Notes</p>
-<p>When writing aliases, an <code class="xref py py-obj docutils literal notranslate"><span class="pre">%alias</span></code> definition can take various string
-placeholders. As per the official documentation:</p>
-<div class="topic">
-<p class="topic-title first"><code class="docutils literal notranslate"><span class="pre">%l</span></code> parameter</p>
-<p>You can use the <code class="docutils literal notranslate"><span class="pre">%l</span></code> specifier in an <code class="docutils literal notranslate"><span class="pre">%alias</span></code> definition to represent the
-whole line when the alias is called.</p>
-</div>
-<p>Meaning that it behaves similarly to the parameter <code class="docutils literal notranslate"><span class="pre">$*</span></code> in typical POSIX shells.
-The documentation goes on to say:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="o">%</span><span class="k">alias</span> bracket echo &quot;Input in brackets: &lt;%l&gt;&quot;
-</pre></div>
-</div>
-<p>Note that we quote when in the configuration file but when running alias
-interactively the syntax <code class="docutils literal notranslate"><span class="pre">%alias</span> <span class="pre">alias_name</span> <span class="pre">cmd</span></code> doesn’t require quoting.</p>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<dl class="simple">
-<dt><a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.alias.html#module-IPython.core.alias" title="(in IPython v7.8.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython.core.alias</span></code></a></dt><dd><p>Module where the alias functionality for IPython is defined and the basic implementation scaffolded.</p>
-</dd>
-</dl>
-</div>
-<dl class="class">
-<dt id="profile_default.startup.20_aliases.WindowsAliases">
-<em class="property">class </em><code class="sig-prename descclassname">profile_default.startup.20_aliases.</code><code class="sig-name descname">WindowsAliases</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/profile_default/startup/20_aliases.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/profile_default/startup/20_aliases.html#WindowsAliases"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profile_default.startup.20_aliases.WindowsAliases" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<p>Aggregated Window aliases. Provides simplified system calls for NT.</p>
-<dl class="method">
-<dt>
-<code class="sig-name descname">Implements aliases specific to cmd or powershell.</code></dt>
-<dd></dd></dl>
-
-<p class="rubric">Notes</p>
-<p>Would it be useful to subclass <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a> here?</p>
-<dl class="method">
-<dt id="profile_default.startup.20_aliases.WindowsAliases.cmd_aliases">
-<em class="property">classmethod </em><code class="sig-name descname">cmd_aliases</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/profile_default/startup/20_aliases.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/profile_default/startup/20_aliases.html#WindowsAliases.cmd_aliases"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profile_default.startup.20_aliases.WindowsAliases.cmd_aliases" title="Permalink to this definition">¶</a></dt>
-<dd><p>Aliases for the <strong class="command">cmd</strong> shell.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="profile_default.startup.20_aliases.WindowsAliases.powershell_aliases">
-<em class="property">classmethod </em><code class="sig-name descname">powershell_aliases</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/profile_default/startup/20_aliases.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/profile_default/startup/20_aliases.html#WindowsAliases.powershell_aliases"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profile_default.startup.20_aliases.WindowsAliases.powershell_aliases" title="Permalink to this definition">¶</a></dt>
-<dd><p>Aliases for Windows OSes using <strong class="command">powershell</strong>.</p>
-<p>Has only been tested on Windows 10 in a heavily configured environment.</p>
-<p>Niceties such as Git for Windows, ag-silversearcher, ripgrep,
-ConEmu and others have been added.</p>
-<p>The minimum number of assumptions possible have been made; however, note
-that this section is still under development and frequently changes.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="function">
-<dt id="profile_default.startup.20_aliases.common_aliases">
-<code class="sig-prename descclassname">profile_default.startup.20_aliases.</code><code class="sig-name descname">common_aliases</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/profile_default/startup/20_aliases.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/profile_default/startup/20_aliases.html#common_aliases"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profile_default.startup.20_aliases.common_aliases" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add aliases common to all OSes. Overwhelmingly <strong class="command">Git</strong> aliases.</p>
-<p>This method adds around 70 to 80 aliases that can be implemented on most
-of the major platforms.</p>
-<p>The only real requirement is Git being installed and working. Docker
-commands possibly going to be added.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="profile_default.startup.20_aliases.linux_specific_aliases">
-<code class="sig-prename descclassname">profile_default.startup.20_aliases.</code><code class="sig-name descname">linux_specific_aliases</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/profile_default/startup/20_aliases.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/profile_default/startup/20_aliases.html#linux_specific_aliases"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profile_default.startup.20_aliases.linux_specific_aliases" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add Linux specific aliases.</p>
-<p>Aliases that have either:</p>
-<blockquote>
-<div><ul>
-<li><p>Only been tested on Linux</p></li>
-<li><p>Only natively exist on Linux</p></li>
-<li><p>Clobber an existing Windows command (cmd in particular)</p></li>
-</ul>
-</div></blockquote>
-<p>Convenience packages exist such as ConEmu or Cmder which allow a large
-number of GNU/Linux built-ins to exist on Windows, and as a result, this
-list may not be comprehensive.</p>
-<p>Below is the source code for the function
-<code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.core.magics.define_alias()</span></code> that is invoked here.:</p>
-<div class="highlight-ipython notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3
-4
-5
-6
-7</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">define_alias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">cmd</span><span class="p">):</span>
-    <span class="c1"># Define a new alias after validating it.</span>
-    <span class="c1"># This will raise an :exc:`AliasError` if there are validation</span>
-    <span class="c1"># problems.</span>
-    <span class="n">caller</span> <span class="o">=</span> <span class="n">Alias</span><span class="p">(</span><span class="n">shell</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">cmd</span><span class="o">=</span><span class="n">cmd</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">magics_manager</span><span class="o">.</span><span class="n">register_function</span><span class="p">(</span><span class="n">caller</span><span class="p">,</span> <span class="n">magic_kind</span><span class="o">=</span><span class="s1">&#39;line&#39;</span><span class="p">,</span>
-    <span class="n">magic_name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
-</pre></div>
-</td></tr></table></div>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>None</strong> – </p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>_ip.user_aliases</strong></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>list of (‘alias’, ‘system command’) tuples</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="profile_default.startup.20_aliases.main">
-<code class="sig-prename descclassname">profile_default.startup.20_aliases.</code><code class="sig-name descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/profile_default/startup/20_aliases.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/profile_default/startup/20_aliases.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profile_default.startup.20_aliases.main" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set up aliases for the user namespace for IPython.</p>
-</dd></dl>
-
-</div>
-</div>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+</tbody>
+</table>
 </div>
 
 
@@ -245,22 +112,6 @@ list may not be comprehensive.</p>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../jupyter.html">Jupyter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../extensions.html">Extensions</a></li>
-</ul>
-
-</div>
-
-<h3><a href="../index.html">On This Page:</a></h3>
-
-<div>&nbsp;</div>
-<div id="sidebartoc">
-  <ul>
-<li><a class="reference internal" href="#">System Shell Aliases</a><ul>
-<li><a class="reference internal" href="#module-20_aliases">IPython Aliases</a><ul>
-<li><a class="reference internal" href="#overview">Overview</a></li>
-</ul>
-</li>
-</ul>
-</li>
 </ul>
 
 </div>

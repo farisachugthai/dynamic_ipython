@@ -11,6 +11,13 @@ bdist_conda
 -----------
 Now let's add support for ``python setup.py bdist_conda``.
 
+Ran that command with a :kbd:`-h` flag and got these 2 relevant options.
+
+  --buildnum          The build number of     the conda package. Defaults to
+                      0, or the conda_buildnum specified in the     setup()
+                      function. The command line flag overrides the option to
+                      setup().
+  --anaconda-upload   Upload the finished package to anaconda.org
 
 
 Acknowledgements
@@ -141,6 +148,8 @@ setup(
     python_requires=REQUIRES_PYTHON,
     author=AUTHOR,
     author_email=EMAIL,
+    maintainer=AUTHOR,
+    maintainer_email=EMAIL,
     url=URL,
     packages=find_packages(where='.'),
     # If your package is a single module, use this instead of 'packages':
