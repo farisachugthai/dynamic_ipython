@@ -18,7 +18,6 @@ from importlib import import_module
 from pathlib import Path
 import functools
 import logging
-import math
 import os
 import sys
 
@@ -58,7 +57,6 @@ c.InteractiveShellApp.exec_lines = [
 c.InteractiveShell.confirm_exit = False
 c.TerminalIPythonApp.display_banner = False
 
-# _ip = start_ipython(config=c)
 
 
 def _path_build(root, suffix):
@@ -98,9 +96,7 @@ def ask_for_import(mod):
         pass
 
 
-STARTUP = _path_build(DP, 'startup')
 
-ask_for_import('jinja')
 
 # -- Project information -----------------------------------------------------
 
@@ -156,6 +152,9 @@ templates_path = ['_templates']
 # source_suffix = ['.rst', '.md']
 source_suffix = '.rst'
 
+# The encoding of source files.
+source_encoding = 'utf-8'
+
 # The master toctree document.
 master_doc = 'index'
 
@@ -169,7 +168,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ['.ipynb_checkpoints', 'tags']
+exclude_patterns = ['build', 'dist', '.tox', '.ipynb_checkpoints', 'tags']
 
 default_role = 'py:obj'
 
@@ -182,6 +181,7 @@ today_fmt = '%B %d, %Y'
 # The name of the Pygments (syntax highlighting) style to use.
 # Specified in theme.conf
 # pygments_style = 'Friendly'
+pygments_style = 'sphinx'
 
 rst_prolog = """
 .. |ip| replace:: :class:`IPython.core.interactiveshell.InteractiveShell`
@@ -332,12 +332,10 @@ text_secnumber_suffix = ''
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3/', None),
     'ipython': ('https://ipython.readthedocs.io/en/stable/', None),
-    'prompt_toolkit':
-        ('https://python-prompt-toolkit.readthedocs.io/en/stable/', None),
-    'prompt_toolkit':
-        ('https://python-prompt-toolkit.readthedocs.io/en/stable/', None),
-    'prompt_toolkit':
-        ('https://python-prompt-toolkit.readthedocs.io/en/stable/', None),
+    'prompt_toolkit': ('https://python-prompt-toolkit.readthedocs.io/en/stable/', None),
+    'scipy': ('https://docs.scipy.org/doc/scipy/reference', None),
+    'matplotlib': ('https://matplotlib.org', None),
+    'numpy': ('https://docs.scipy.org/doc/numpy/', None),
 }
 
 # -- Options for todo extension ----------------------------------------------

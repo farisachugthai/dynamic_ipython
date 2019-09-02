@@ -16,7 +16,6 @@ import shutil
 
 from IPython import get_ipython
 from IPython.core.alias import AliasError, AliasManager
-# from traitlets.traitlets import List
 
 from default_profile.util import module_log
 from default_profile.util.machine import Platform
@@ -212,7 +211,6 @@ class WindowsAliases:
     Would it be useful to subclass :class:`enum.Enum` here?
 
     """
-
     def __init__(self):
         """Initialize the platform specific alias manager with IPython."""
         self._ip = get_ipython()
@@ -384,7 +382,7 @@ def main():
     .. ipython::
         :okexcept:
 
-        ~\.ipython\default_profile\startup\20_aliases.py in main()
+        ~/.ipython/default_profile/startup/20_aliases.py in main()
             461
             462     user_aliases_traitlets = List(user_aliases)
         --> 463     _ip.run_line_magic('config', AliasManager.user_aliases+user_aliases_traitlets)
@@ -416,6 +414,7 @@ def main():
     _ip.alias_manager.user_aliases = user_aliases
     # Apparently the big part i was missing was rerunning the init_aliases method
     _ip.alias_manager.init_aliases()
+
 
 
 if __name__ == "__main__":
