@@ -26,6 +26,15 @@ from IPython import start_ipython
 from gruvbox.style import GruvboxDarkHard
 from traitlets.config import Config
 
+DOCS = Path(__file__).resolve().parent.parent
+BUILD_DIR = DOCS.joinpath('build')
+CONF_PATH = DOCS.joinpath('source')
+
+ROOT = Path(DOCS).parent
+DP = ROOT.joinpath('default_profile')
+sys.path.insert(0, DP)
+sys.path.insert(0, DOCS)
+
 from default_profile.__about__ import __version__
 from sphinx_extensions import make
 
@@ -89,17 +98,9 @@ def ask_for_import(mod):
         pass
 
 
-SOURCE = Path(__file__).resolve().parent
-
-ROOT = Path(SOURCE).parent.parent
-DP = ROOT.joinpath('default_profile')
 STARTUP = _path_build(DP, 'startup')
 
-sys.path.insert(0, DP)
 # DOCS_DIR = _path_build(ROOT, 'docs')
-DOCS_DIR = Path('.').resolve().parent
-BUILD_DIR = _path_build(DOCS_DIR, 'build')
-CONF_PATH = _path_build(DOCS_DIR, 'source')
 
 # -- Project information -----------------------------------------------------
 
@@ -382,7 +383,7 @@ viewcode_follow_imported_members = False
 
 # -- IPython directive -------------------------------------------------------
 
-ipython_savefig_dir = SOURCE.joinpath('_images').__fspath__()
+ipython_savefig_dir = DOCS.joinpath('_images').__fspath__()
 ipython_warning_is_error = False
 
 ipython_execlines = [
