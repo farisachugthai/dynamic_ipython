@@ -8,77 +8,7 @@ IPython Aliases
 .. module:: 20_aliases
     :synopsis: Create aliases for :mod:`IPython` to ease use as a system shell.
 
-.. highlight:: ipython
-    :linenothreshold: 3
-
-
-Overview
---------
-
-This module utilizes `_ip`, the global :mod:`IPython` |ip|
-instance, and fills the ``user_ns`` with aliases that are available
-in a typical system shell.
-
-Unfortunately, the exact definition of what a system shell is, what language
-it responds to, and it's ability to receive and pass along input and output
-in pipelines will vary greatly.
-
-As a result, the module needs to test the user's OS, what shell they're using
-and what executables are available on the :envvar:`PATH`.
-
-On Unix platforms, it is assumed that the user is using a bash shell.
-
-However on Windows, it is possible that the user has a shell that runs
-:command:`dosbatch`, :command:`powershell`, or :command:`bash`.
-
-As a result, the environment variable :envvar:`ComSpec` will be checked,
-and if present, that value is used.
-
-Attributes
-----------
-
-_ip : |ip|
-    A global object representing the active IPython session.
-    Contains varying packages as well as the current global namespace.
-    Doesn't need to be defined in advance during an interactive session.
-
-
-Notes
-------
-
-When writing aliases, an `%alias` definition can take various string
-placeholders. As per the official documentation:
-
-
-Parameters
-----------
-
-``%l`` : Command-line argument.
-    You can use the ``%l`` specifier in an ``%alias`` definition to represent the
-    whole line when the alias is called.
-
-Meaning that it behaves similarly to the parameter :kbd:`$*`
-in typical POSIX shells.
-
-The documentation goes on to say::
-
-    In [2]: %alias bracket echo "Input in brackets: <%l>"
-    In [3]: bracket hello world
-    Input in brackets: <hello world>
-
-Note that we quote when in the configuration file but when running `%alias`
-interactively the syntax '`%alias` alias_name cmd' doesn't require quoting.
-
-
-See Also
---------
-:mod:`IPython.core.alias`
-    Module where the alias functionality for IPython is defined and the basic
-    implementation scaffolded.
-
-
-- A function that wraps around :func:|ip|`.MagicsManager.define_alias()` and
-  checks for whether the executable is on the :envvar:`PATH` all in one swoop.
+Documentation moved to :doc:`<../../docs/startup/aliases.html>`_.
 
 """
 import logging
@@ -110,17 +40,6 @@ def linux_specific_aliases():
     Convenience packages exist such as ConEmu or Cmder which allow a large
     number of GNU/Linux built-ins to exist on Windows, and as a result, this
     list may not be comprehensive.
-
-    Below is the source code for the function
-    :func:`IPython.core.magics.define_alias()` that is invoked here.::
-
-        def define_alias(self, name, cmd):
-            # Define a new alias after validating it.
-            # This will raise an :exc:`AliasError` if there are validation
-            # problems.
-            caller = Alias(shell=self.shell, name=name, cmd=cmd)
-            self.shell.magics_manager.register_function(caller, magic_kind='line',
-            magic_name=name)
 
     Parameters
     ----------
@@ -494,14 +413,9 @@ def main():
         # if win
         user_aliases += WindowsAliases().cmd_aliases()
 
-    __setup_fzf(user_aliases)
-
-    # user_aliases_traitlets = List(user_aliases)
-
-    AliasManager.user_aliases = user_aliases
-    # _ip.run_line_magic(
-    #     'config', 'AliasManager.user_aliases =' user_aliases
-    # )
+    _ip.alias_manager.user_aliases = user_aliases
+    # Apparently the big part i was missing was rerunning the init_aliases method
+    _ip.alias_manager.init_aliases()
 
 
 if __name__ == "__main__":

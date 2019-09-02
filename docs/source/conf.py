@@ -100,7 +100,7 @@ def ask_for_import(mod):
 
 STARTUP = _path_build(DP, 'startup')
 
-# DOCS_DIR = _path_build(ROOT, 'docs')
+ask_for_import('jinja')
 
 # -- Project information -----------------------------------------------------
 
@@ -493,6 +493,20 @@ def add_css(func):
         return custom_css
 
 
+def rstjinja(app, docname, source):
+    """
+    Render our pages as a jinja template for fancy templating goodness.
+    """
+    # Make sure we're outputting HTML
+    if app.builder.format != 'html':
+        return
+    src = source[0]
+    rendered = app.builder.templates.render_string(
+        src, app.config.html_context
+    )
+    source[0] = rendered
+
+
 @add_css
 def setup(app):
     """Add pyramid CSS to the docs.
@@ -504,6 +518,7 @@ def setup(app):
     if hasattr(CONF_PATH, 'joinpath'):
         extra_css = str(add_css())
 
+    app.connect("source-read", rstjinja)
     app.add_stylesheet(extra_css)
     app.add_stylesheet(os.path.join('..', '_static', 'custom.css'))
 

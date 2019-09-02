@@ -52,12 +52,92 @@
           <div class="body" role="main">
             
   <div class="section" id="system-shell-aliases">
-<h1>System Shell Aliases<a class="headerlink" href="#system-shell-aliases" title="Permalink to this headline">¶</a></h1>
+<span id="aliases"></span><h1>System Shell Aliases<a class="headerlink" href="#system-shell-aliases" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<span id="aliases-overview"></span><h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>This module utilizes <code class="xref py py-obj docutils literal notranslate"><span class="pre">_ip</span></code>, the global <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.8.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.8.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.interactiveshell.InteractiveShell</span></code></a>
+instance, and fills the <code class="docutils literal notranslate"><span class="pre">user_ns</span></code> with aliases that are available
+in a typical system shell.</p>
+<p>Unfortunately, the exact definition of what a system shell is, what language
+it responds to, and it’s ability to receive and pass along input and output
+in pipelines will vary greatly.</p>
+<p>As a result, the module needs to test the user’s OS, what shell they’re using
+and what executables are available on the <span class="target" id="index-0"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PATH</span></code>.</p>
+<p>On Unix platforms, it is assumed that the user is using a bash shell.</p>
+<p>However on Windows, it is possible that the user has a shell that runs
+<strong class="command">dosbatch</strong>, <strong class="command">powershell</strong>, or <strong class="command">bash</strong>.</p>
+<p>As a result, the environment variable <span class="target" id="index-1"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ComSpec</span></code> will be checked,
+and if present, that value is used.</p>
+</div>
+<div class="section" id="notes">
+<span id="aliases-notes"></span><h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
+<p>When writing aliases, an <code class="xref py py-obj docutils literal notranslate"><span class="pre">%alias</span></code> definition can take various string
+placeholders. As per the official documentation:</p>
+</div>
+<div class="section" id="attributes">
+<span id="aliases-attributes"></span><h2>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h2>
+<dl>
+<dt>_ip<span class="classifier"><a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.8.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.interactiveshell.InteractiveShell</span></code></a></span></dt><dd><p>A global object representing the active IPython session.
+Contains varying packages as well as the current global namespace.
+Doesn’t need to be defined in advance during an interactive session.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="parameters">
+<span id="aliases-parmeters"></span><h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">%l</span></code><span class="classifier">Command-line argument.</span></dt><dd><p>You can use the <code class="docutils literal notranslate"><span class="pre">%l</span></code> specifier in an <code class="docutils literal notranslate"><span class="pre">%alias</span></code> definition to represent the
+whole line when the alias is called.</p>
+</dd>
+</dl>
+<p>Meaning that it behaves similarly to the parameter <kbd class="kbd docutils literal notranslate">$*</kbd>
+in typical POSIX shells.</p>
+<p>The documentation goes on to say:</p>
+<div class="highlight-ipython notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="gp">In [2]: </span><span class="o">%</span><span class="k">alias</span> bracket echo &quot;Input in brackets: &lt;%l&gt;&quot;
+<span class="gp">In [3]: </span><span class="n">bracket</span> <span class="n">hello</span> <span class="n">world</span>
+<span class="go">Input in brackets: &lt;hello world&gt;</span>
+</pre></div>
+</td></tr></table></div>
+<p>Note that we quote when in the configuration file but when running <code class="xref py py-obj docutils literal notranslate"><span class="pre">%alias</span></code>
+interactively the syntax ‘<code class="xref py py-obj docutils literal notranslate"><span class="pre">%alias</span></code> alias_name cmd’ doesn’t require quoting.</p>
+</div>
+<div class="section" id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.alias.html#module-IPython.core.alias" title="(in IPython v7.8.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython.core.alias</span></code></a></dt><dd><p>Module where the alias functionality for IPython is defined and the basic
+implementation scaffolded.</p>
+</dd>
+</dl>
+</div>
+<p>Below is the source code for the function
+<code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.core.magics.define_alias()</span></code> that is invoked here.:</p>
+<div class="highlight-ipython notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">define_alias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">cmd</span><span class="p">):</span>
+    <span class="c1"># Define a new alias after validating it.</span>
+    <span class="c1"># This will raise an :exc:`AliasError` if there are validation</span>
+    <span class="c1"># problems.</span>
+    <span class="n">caller</span> <span class="o">=</span> <span class="n">Alias</span><span class="p">(</span><span class="n">shell</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">cmd</span><span class="o">=</span><span class="n">cmd</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">magics_manager</span><span class="o">.</span><span class="n">register_function</span><span class="p">(</span><span class="n">caller</span><span class="p">,</span> <span class="n">magic_kind</span><span class="o">=</span><span class="s1">&#39;line&#39;</span><span class="p">,</span>
+    <span class="n">magic_name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
 <dl class="field-list simple">
 <dt class="field-odd">source</dt>
 <dd class="field-odd"><p><a class="reference external" href="../../../default_profile/startup/20_aliases.py">../../../default_profile/startup/20_aliases.py</a></p>
 </dd>
 </dl>
+</div>
+<div class="section" id="autogenerated-documentation">
+<h2>Autogenerated Documentation<a class="headerlink" href="#autogenerated-documentation" title="Permalink to this headline">¶</a></h2>
 <table class="longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
@@ -69,6 +149,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 </div>
 
 
@@ -125,6 +206,24 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../jupyter.html">Jupyter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../extensions.html">Extensions</a></li>
+</ul>
+
+</div>
+
+<h3><a href="../index.html">On This Page:</a></h3>
+
+<div>&nbsp;</div>
+<div id="sidebartoc">
+  <ul>
+<li><a class="reference internal" href="#">System Shell Aliases</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#notes">Notes</a></li>
+<li><a class="reference internal" href="#attributes">Attributes</a></li>
+<li><a class="reference internal" href="#parameters">Parameters</a></li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+<li><a class="reference internal" href="#autogenerated-documentation">Autogenerated Documentation</a></li>
+</ul>
+</li>
 </ul>
 
 </div>

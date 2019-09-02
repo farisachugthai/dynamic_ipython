@@ -11,7 +11,7 @@ have no reason to be loaded at start up time.
 .. toctree::
    :maxdepth: 1
    :titlesonly:
-   :caption: IPython Startup
+   :caption: List of IPython startup files
 
    rehashx
    easy_import
@@ -21,5 +21,9 @@ have no reason to be loaded at start up time.
    numpy
    pandas
    sysexcept
+
+
+.. toctree::
+   :maxdepth: 1
 
    util

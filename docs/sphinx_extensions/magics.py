@@ -49,12 +49,14 @@ class CellMagicRole(LineMagicRole):
 
 
 def setup(app):
-    app.add_object_type('magic', 'magic', 'pair: %s; magic command',
-                        parse_magic)
-    app.add_role_to_domain('std', 'magic', LineMagicRole(), override=True)
+    app.add_object_type(
+        'magic', 'magic', 'pair: %s; magic command', parse_magic
+    )
+    app.add_role_to_domain('std', 'linemagic', LineMagicRole(), override=True)
 
-    app.add_object_type('cellmagic', 'cellmagic', 'pair: %s; cell magic',
-                        parse_cell_magic)
+    app.add_object_type(
+        'cellmagic', 'cellmagic', 'pair: %s; cell magic', parse_cell_magic
+    )
     app.add_role_to_domain('std', 'cellmagic', CellMagicRole(), override=True)
 
     metadata = {'parallel_read_safe': True, 'parallel_write_safe': True}

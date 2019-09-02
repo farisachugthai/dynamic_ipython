@@ -68,6 +68,7 @@ Give it a shot--you'll love it or you'll hate it.
 
 Color schemes
 -------------
+
 This guy was even so kind as to give us a full explanation for the color
 schemes! I never saw anything this thorough in the official docs so that's
 really cool.:
@@ -96,26 +97,38 @@ From the IPython official documentation for :mod:`IPython.core.ultratb`
 and specifically the :class:`IPython.core.ultratb.AutoFormattedTB`.:
 
 Print out a formatted exception traceback.
+
 Optional arguments:
+
   - out: an open file-like object to direct output to.
 
   - ``tb_offset``: the number of frames to skip over in the stack, on a
     per-call basis (this overrides temporarily the instance's tb_offset
     given at initialization time.
 
+
+.. _exception-parameters:
+
 Parameters
 ----------
+
 ``*args``, ``**kwargs`` : list or dict
     The least useful call signature. Give it any length iterable.
 
+.. _exception-see-also:
+
 See Also
 --------
+
 :class:`IPython.core.ultratb.FormattedTB` : :class:`IPython.utils.colorable.Colorable`
     Displays all accepted keyword arguments. I don't know if I specified the type
     right but if you follow the MRU...
 
+.. _exception-examples:
+
 Examples
 --------
+
 The following is the aforementioned FormattedTB class.::
 
     class FormattedTB(VerboseTB, ListTB):
