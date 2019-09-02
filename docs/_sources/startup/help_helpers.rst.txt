@@ -15,4 +15,4 @@ to a file or output to :data:`sys.stdout`.
 .. autosummary::
    :template: module.rst
 
-   profile_default.startup.06_help_helpers
+   default_profile.startup.06_help_helpers

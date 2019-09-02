@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>%rehashx — Rehash everything on $PATH and make available in the user namespace. &#8212; Dynamic IPython: version0.0.1</title>
+    <title>%rehashx &#8212; Dynamic IPython: version0.0.1</title>
     <link rel="stylesheet" href="../_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -51,8 +51,8 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="rehashx-rehash-everything-on-path-and-make-available-in-the-user-namespace">
-<h1><code class="xref py py-obj docutils literal notranslate"><span class="pre">%rehashx</span></code> — Rehash everything on $PATH and make available in the user namespace.<a class="headerlink" href="#rehashx-rehash-everything-on-path-and-make-available-in-the-user-namespace" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="rehashx">
+<h1><code class="xref py py-obj docutils literal notranslate"><span class="pre">%rehashx</span></code><a class="headerlink" href="#rehashx" title="Permalink to this headline">¶</a></h1>
 <dl class="magic">
 <dt id="magic-rehashx">
 <code class="sig-name descname">%rehashx</code><a class="headerlink" href="#magic-rehashx" title="Permalink to this definition">¶</a></dt>
@@ -62,77 +62,6 @@
 and also adds system commands to the namespace!</p>
 <p>Insofar, I haven’t noticed any significant slowdown in startup time as a result
 of this, and it hugely eases utilizing IPython as a system shell.</p>
-<span class="target" id="module-profile_default.startup.01_rehashx"></span><span class="target" id="module-01_rehashx"></span><p>This is an incredible little gem I just ran into, and hugely useful for
-making <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.8.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IPython</span></code></a> work as a more versatile system shell.</p>
-<dl class="field-list simple">
-<dt class="field-odd">param magic_name</dt>
-<dd class="field-odd"><p>Name of the desired magic function, without <kbd class="kbd docutils literal notranslate">%</kbd> prefix.</p>
-</dd>
-<dt class="field-even">type magic_name</dt>
-<dd class="field-even"><p>str</p>
-</dd>
-<dt class="field-odd">param line</dt>
-<dd class="field-odd"><p>The rest of the input line as a single string.</p>
-</dd>
-<dt class="field-even">type line</dt>
-<dd class="field-even"><p>str</p>
-</dd>
-<dt class="field-odd">param <code class="docutils literal notranslate"><span class="pre">_stack_depth</span></code></dt>
-<dd class="field-odd"><p>Number of recursive calls to an IPython magic.</p>
-</dd>
-<dt class="field-even">type <code class="docutils literal notranslate"><span class="pre">_stack_depth</span></code></dt>
-<dd class="field-even"><p>int, optional</p>
-</dd>
-</dl>
-<p class="rubric">Notes</p>
-<dl class="simple">
-<dt>IPython.core.magic.run_line_magic</dt><dd><p>A method of the <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.8.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.interactiveshell.InteractiveShell</span></code></a> instance to run a specific magic currently in the
-IPython.core.interactiveshell.InteractiveShell.user_ns
-or user namespace.</p>
-</dd>
-</dl>
-<div class="section" id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
-<p>As the help outlines above, the second required positional argument to
-<code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.core.TerminalInteractiveShell.run_line_magic()</span></code> is <code class="docutils literal notranslate"><span class="pre">line</span></code>.</p>
-<p>This is more easily understood as ‘remaining arguments to the magic’.
-<code class="xref py py-obj docutils literal notranslate"><span class="pre">%rehashx</span></code> takes none, but leaving it blank causes the function call to raise
-an error, so an empty <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a> is passed to the function.</p>
-<div class="section" id="stack-depth">
-<h3><code class="docutils literal notranslate"><span class="pre">_stack_depth</span></code><a class="headerlink" href="#stack-depth" title="Permalink to this headline">¶</a></h3>
-<p>The <code class="docutils literal notranslate"><span class="pre">_stack_depth</span></code> parameter can be understood like so:</p>
-<p>If <code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.core.magics.run_line_magic()</span></code> is called from
-<code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.core.magics.magic()</span></code> then
-<code class="docutils literal notranslate"><span class="pre">_stack_depth</span></code> = 2.</p>
-<p>This is added to ensure backward compatibility for use
-of <code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.core.magics.get_ipython().magic()</span></code></p>
-<hr class="docutils" />
-<dl class="function">
-<dt id="profile_default.startup.01_rehashx.blacklisted_aliases">
-<code class="sig-prename descclassname">profile_default.startup.01_rehashx.</code><code class="sig-name descname">blacklisted_aliases</code><span class="sig-paren">(</span><em class="sig-param">shell=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/profile_default/startup/01_rehashx.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/profile_default/startup/01_rehashx.html#blacklisted_aliases"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profile_default.startup.01_rehashx.blacklisted_aliases" title="Permalink to this definition">¶</a></dt>
-<dd><p>Blacklist certain aliases.</p>
-<p>On Windows, it’s assumed that the commands <em>more</em>, <em>less</em>, <em>clear</em> and
-<em>man</em> are undefined. However, the Git-For-Windows package provides all
-of these and by adding it to the <span class="target" id="index-0"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PATH</span></code>, <a class="reference internal" href="#module-rehashx" title="rehashx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rehashx</span></code></a> will attempt
-to alias them, resulting in a UsageError.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>shell</strong> (<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.8.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.interactiveshell.InteractiveShell</span></code></a>, optional) – </p>
-</dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>AliasError</strong> – </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="profile_default.startup.01_rehashx.main">
-<code class="sig-prename descclassname">profile_default.startup.01_rehashx.</code><code class="sig-name descname">main</code><span class="sig-paren">(</span><em class="sig-param">shell=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/profile_default/startup/01_rehashx.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/profile_default/startup/01_rehashx.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profile_default.startup.01_rehashx.main" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add all executables on the user’s <span class="target" id="index-1"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PATH</span></code> into the IPython ns.</p>
-</dd></dl>
-
-</div>
-</div>
 </div>
 
 
@@ -176,35 +105,19 @@ to alias them, resulting in a UsageError.</p>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">IPython Shell Initialization</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="xref py py-obj docutils literal notranslate"><span class="pre">%rehashx</span></code> — Rehash everything on $PATH and make available in the user namespace.</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="xref py py-obj docutils literal notranslate"><span class="pre">%rehashx</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="easy_import.html">Importing Commonly Used Modules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="log.html">Logging</a></li>
 <li class="toctree-l2"><a class="reference internal" href="help_helpers.html">Help Helpers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="aliases.html">System Shell Aliases</a></li>
 <li class="toctree-l2"><a class="reference internal" href="numpy.html"><code class="docutils literal notranslate"><span class="pre">41_numpy_init</span></code> module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pandas.html"><code class="docutils literal notranslate"><span class="pre">42_pandas_init</span></code> module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sysexcept.html">50_sysexception module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sysexcept.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">50_sysexception</span></code> module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="util.html">profile_default.util package</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../jupyter.html">Jupyter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../extensions.html">Extensions</a></li>
-</ul>
-
-</div>
-
-<h3><a href="../index.html">On This Page:</a></h3>
-
-<div>&nbsp;</div>
-<div id="sidebartoc">
-  <ul>
-<li><a class="reference internal" href="#"><code class="xref py py-obj docutils literal notranslate"><span class="pre">%rehashx</span></code> — Rehash everything on $PATH and make available in the user namespace.</a><ul>
-<li><a class="reference internal" href="#usage">Usage</a><ul>
-<li><a class="reference internal" href="#stack-depth"><code class="docutils literal notranslate"><span class="pre">_stack_depth</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
 </ul>
 
 </div>
@@ -240,7 +153,7 @@ to alias them, resulting in a UsageError.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright (C) 2018-2019 Faris Chugthai.
-      Last updated on Aug 31, 2019.
+      Last updated on Sep 02, 2019.
     </div>
   </body>
 </html>

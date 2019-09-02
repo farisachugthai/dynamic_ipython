@@ -1,6 +1,12 @@
+.. _ipython-logger:
+
 =======
 Logging
 =======
+
+.. currentmodule:: ipython-logger
+
+:source: default_profile.startup.05_log
 
 This uses the IPython core :class:`IPython.core.logger.LoggingConfigurable`
 to create a :class:`logging.handler.FileHandler()` that creates one new log
@@ -18,11 +24,10 @@ file as the older ones.
    maintain multiple connections to the same file.
 
 
-05\_log module
---------------
+:mod:`05_log` module
+--------------------
 
-.. automodule:: profile_default.startup.05_log
+.. automodule:: default_profile.startup.05_log
    :members:
    :undoc-members:
    :show-inheritance:
-

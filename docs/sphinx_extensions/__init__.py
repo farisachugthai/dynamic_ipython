@@ -12,5 +12,5 @@ def ask_for_import(mod, package=None):
 
 ask_for_import('IPython')
 ask_for_import('sphinx')
-profile_default = ask_for_import('profile_default')
-ask_for_import('startup', package=profile_default)
+default_profile = ask_for_import('default_profile')
+ask_for_import('startup', package=default_profile)

@@ -1,15 +1,7 @@
 import logging
 
 docs_logger = logging.getLogger(name='docs')
+docs_logger.setLevel(logging.WARNING)
+docs_logger.addHandler(logging.StreamHandler)
 
-import profile_default
-from profile_default import startup
-
-# Cross your fingers I guess
-from .sphinx_extensions import *
-
-import sphinx
-
-# # Oh also we need this
-# import make
-# from make import DocBuilder
+import default_profile

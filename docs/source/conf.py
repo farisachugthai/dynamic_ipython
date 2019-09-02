@@ -13,26 +13,34 @@ add these directories to sys.path here. If the directory is relative to the
 documentation root, use os.path.abspath to make it absolute, like shown here.
 
 """
-import math
-from IPython import start_ipython
-from traitlets.config import Config
-from gruvbox.style import GruvboxDarkHard
-from sphinx_extensions import make
-from profile_default.__about__ import __version__
-import profile_default
 from datetime import datetime
-import functools
 from importlib import import_module
-import logging
-import os
 from pathlib import Path
+import functools
+import logging
+import math
+import os
 import sys
 
-sys.path.insert(0, os.path.abspath('..'))
+from IPython import start_ipython
+from gruvbox.style import GruvboxDarkHard
+from traitlets.config import Config
 
+DOCS = Path(__file__).resolve().parent.parent
+BUILD_DIR = DOCS.joinpath('build')
+CONF_PATH = DOCS.joinpath('source')
 
-DOCS_LOGGER = logging.getLogger(name=__name__)
+ROOT = Path(DOCS).parent
+DP = ROOT.joinpath('default_profile')
+sys.path.insert(0, DP)
+sys.path.insert(0, DOCS)
+
+from default_profile.__about__ import __version__
+from sphinx_extensions import make
+
+DOCS_LOGGER = logging.getLogger('docs').getChild('conf')
 DOCS_LOGGER.setLevel(level=logging.DEBUG)
+DOCS_LOGGER.addHandler(logging.StreamHandler)
 
 # Let's try setting up an embedded IPython shell from here
 c = Config()
@@ -50,8 +58,7 @@ c.InteractiveShellApp.exec_lines = [
 c.InteractiveShell.confirm_exit = False
 c.TerminalIPythonApp.display_banner = False
 
-
-# _ip = start_ipython()
+# _ip = start_ipython(config=c)
 
 
 def _path_build(root, suffix):
@@ -91,17 +98,9 @@ def ask_for_import(mod):
         pass
 
 
-SOURCE = Path(__file__).resolve().parent
+STARTUP = _path_build(DP, 'startup')
 
-ROOT = Path(SOURCE).parent.parent
-PD = ROOT.joinpath('profile_default')
-STARTUP = _path_build(PD, 'startup')
-
-sys.path.insert(0, PD)
 # DOCS_DIR = _path_build(ROOT, 'docs')
-DOCS_DIR = Path('.').resolve().parent
-BUILD_DIR = _path_build(DOCS_DIR, 'build')
-CONF_PATH = _path_build(DOCS_DIR, 'source')
 
 # -- Project information -----------------------------------------------------
 
@@ -333,7 +332,12 @@ text_secnumber_suffix = ''
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3/', None),
     'ipython': ('https://ipython.readthedocs.io/en/stable/', None),
-    'prompt_toolkit': ('https://python-prompt-toolkit.readthedocs.io/en/stable/', None),
+    'prompt_toolkit':
+        ('https://python-prompt-toolkit.readthedocs.io/en/stable/', None),
+    'prompt_toolkit':
+        ('https://python-prompt-toolkit.readthedocs.io/en/stable/', None),
+    'prompt_toolkit':
+        ('https://python-prompt-toolkit.readthedocs.io/en/stable/', None),
 }
 
 # -- Options for todo extension ----------------------------------------------
@@ -379,13 +383,13 @@ viewcode_follow_imported_members = False
 
 # -- IPython directive -------------------------------------------------------
 
-ipython_savefig_dir = SOURCE.joinpath('_images').__fspath__()
+ipython_savefig_dir = DOCS.joinpath('_images').__fspath__()
 ipython_warning_is_error = False
 
 ipython_execlines = [
     'import numpy as np',
     'import IPython',
-    'import profile_default',
+    'import default_profile',
 ]
 
 if ask_for_import('matplotlib'):

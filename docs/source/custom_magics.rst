@@ -198,7 +198,7 @@ Below, there will be code displayed that demonstrates how to write an extension
 and allow it to be automatically loaded.
 
 Start by changing to IPython's startup directory. This can be found as the
-`startup <../../profile_default/startup>`_ subdirectory of your default
+`startup <../../default_profile/startup>`_ subdirectory of your default
 IPython profile.
 
 First, let us see the simplest case. The following shows how to create a line

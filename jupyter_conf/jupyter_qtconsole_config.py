@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 import shutil
 
+import traitlets
 from traitlets.config import get_config
 
 c = get_config()
@@ -21,9 +22,9 @@ def get_home():
         )
 
 
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # ConnectionFileMixin(LoggingConfigurable) configuration
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 # Mixin for configurable classes that work with connection files
 
@@ -184,7 +185,9 @@ c.ConsoleWidget.console_width = 120
 #  platforms the default is Monospace.
 
 # I wonder if we can give multiple values
-c.ConsoleWidget.font_family = 'Fira Mono, Hack, Consolas'
+c.ConsoleWidget.font_family = [
+        'Source Code Pro Light', 'Fira Mono', 'Hack', 'Monospace', 'Consolas',
+    ]
 # c.ConsoleWidget.font_family = 'Fira Mono'
 
 # The font size. If unconfigured, Qt will be entrusted with the size of the
@@ -206,7 +209,8 @@ c.ConsoleWidget.gui_completion = 'droplist'
 #  kernel.
 #
 #  Outputs are not displayed until enter is pressed.
-# c.ConsoleWidget.include_other_output = False
+# Now needs to be true due to jupyter-vim plugin
+c.ConsoleWidget.include_other_output = True
 
 # The type of underlying text widget to use. Valid values are 'plain', which
 #  specifies a QPlainTextEdit, and 'rich', which specifies a QTextEdit.
@@ -215,7 +219,7 @@ c.ConsoleWidget.kind = 'rich'
 # Prefix to add to outputs coming from clients other than this one.
 #
 #  Only relevant if include_other_output is True.
-# c.ConsoleWidget.other_output_prefix = '[remote] '
+c.ConsoleWidget.other_output_prefix = '[Nvim:] '
 
 # The type of paging to use. Valid values are:
 #
@@ -247,8 +251,7 @@ c.HistoryConsoleWidget.history_lock = True
 # ------------------------------------------------------------------------------
 
 # A Qt frontend for a generic Python kernel.
-
-# c.FrontendWidget.banner = ''
+c.FrontendWidget.banner = ''
 
 # Whether to clear the console when the kernel is restarted
 # c.FrontendWidget.clear_on_kernel_restart = True
@@ -260,7 +263,33 @@ c.HistoryConsoleWidget.history_lock = True
 # c.FrontendWidget.enable_calltips = True
 
 # The pygments lexer class to use.
-# c.FrontendWidget.lexer_class = traitlets.Undefined
+
+
+def ipylexer():
+    """
+    Help on module IPython.sphinxext.ipython_console_highlighting in IPython.sphinxext:
+
+    NAME
+        IPython.sphinxext.ipython_console_highlighting - reST directive for syntax-highlighting ipython interactive sessions.
+
+    FUNCTIONS
+        setup(app)
+            Setup as a sphinx extension.
+
+    DATA
+        ipy2 = <pygments.lexers.IPyLexer with {'python3': False}>
+        ipy3 = <pygments.lexers.IPyLexer with {'python3': True}>
+    """
+    pass
+
+
+try:
+    from IPython.lib import lexers
+    # ~/src/ipython/IPython/lib/lexers.py
+except (ImportError, ModuleNotFoundError):
+     c.FrontendWidget.lexer_class = traitlets.Undefined
+else:
+    c.FrontendWidget.lexer_class = 'lexers.IPyLexer'
 
 # ------------------------------------------------------------------------------
 # IPythonWidget(FrontendWidget) configuration
@@ -295,7 +324,10 @@ else:
 # The editor command to use when a specific line number is requested. The string
 # should contain two format specifiers: {line} and {filename}. If this parameter
 # is not specified, the line number option to the %edit magic will be ignored.
-# c.JupyterWidget.editor_line = ''
+
+# Uh gotta check the man page h/o. So you can do it with -c for command, or +
+# Let's do -c because + with no argument sends you to the end of file
+c.JupyterWidget.editor_line = '-c {line} -- {filename}'
 
 # c.JupyterWidget.in_prompt = 'In [<span class="in-prompt-number">%i</span>]: '
 

@@ -13,26 +13,25 @@ add these directories to sys.path here. If the directory is relative to the
 documentation root, use os.path.abspath to make it absolute, like shown here.
 
 """
-import math
-from IPython import start_ipython
-from traitlets.config import Config
-from gruvbox.style import GruvboxDarkHard
-from sphinx_extensions import make
-from profile_default.__about__ import __version__
-import profile_default
 from datetime import datetime
-import functools
 from importlib import import_module
-import logging
-import os
 from pathlib import Path
+import functools
+import logging
+import math
+import os
 import sys
 
-sys.path.insert(0, os.path.abspath('..'))
+from IPython import start_ipython
+from gruvbox.style import GruvboxDarkHard
+from traitlets.config import Config
 
+from default_profile.__about__ import __version__
+from sphinx_extensions import make
 
-DOCS_LOGGER = logging.getLogger(name=__name__)
+DOCS_LOGGER = logging.getLogger('docs').getChild('conf')
 DOCS_LOGGER.setLevel(level=logging.DEBUG)
+DOCS_LOGGER.addHandler(logging.StreamHandler)
 
 # Let's try setting up an embedded IPython shell from here
 c = Config()
@@ -50,8 +49,7 @@ c.InteractiveShellApp.exec_lines = [
 c.InteractiveShell.confirm_exit = False
 c.TerminalIPythonApp.display_banner = False
 
-
-# _ip = start_ipython()
+# _ip = start_ipython(config=c)
 
 
 def _path_build(root, suffix):
@@ -94,10 +92,10 @@ def ask_for_import(mod):
 SOURCE = Path(__file__).resolve().parent
 
 ROOT = Path(SOURCE).parent.parent
-PD = ROOT.joinpath('profile_default')
-STARTUP = _path_build(PD, 'startup')
+DP = ROOT.joinpath('default_profile')
+STARTUP = _path_build(DP, 'startup')
 
-sys.path.insert(0, PD)
+sys.path.insert(0, DP)
 # DOCS_DIR = _path_build(ROOT, 'docs')
 DOCS_DIR = Path('.').resolve().parent
 BUILD_DIR = _path_build(DOCS_DIR, 'build')
@@ -333,7 +331,12 @@ text_secnumber_suffix = ''
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3/', None),
     'ipython': ('https://ipython.readthedocs.io/en/stable/', None),
-    'prompt_toolkit': ('https://python-prompt-toolkit.readthedocs.io/en/stable/', None),
+    'prompt_toolkit':
+        ('https://python-prompt-toolkit.readthedocs.io/en/stable/', None),
+    'prompt_toolkit':
+        ('https://python-prompt-toolkit.readthedocs.io/en/stable/', None),
+    'prompt_toolkit':
+        ('https://python-prompt-toolkit.readthedocs.io/en/stable/', None),
 }
 
 # -- Options for todo extension ----------------------------------------------
@@ -385,7 +388,7 @@ ipython_warning_is_error = False
 ipython_execlines = [
     'import numpy as np',
     'import IPython',
-    'import profile_default',
+    'import default_profile',
 ]
 
 if ask_for_import('matplotlib'):

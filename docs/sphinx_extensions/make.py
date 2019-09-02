@@ -60,7 +60,8 @@ except (ImportError, ModuleNotFoundError):
 
 from IPython.core.error import UsageError
 
-from profile_default.__about__ import __version__
+from default_profile.__about__ import __version__
+
 DOC_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BUILD_PATH = os.path.join(DOC_PATH, 'build')
 SOURCE_PATH = os.path.join(DOC_PATH, 'source')

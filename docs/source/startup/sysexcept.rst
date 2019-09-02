@@ -1,8 +1,8 @@
-=======================
-50\_sysexception module
-=======================
+=============================
+:mod:`50_sysexception` module
+=============================
 
-.. automodule:: profile_default.startup.50_sysexception
+.. automodule:: default_profile.startup.50_sysexcept
    :members:
    :undoc-members:
    :show-inheritance:

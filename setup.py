@@ -44,7 +44,7 @@ import sys
 
 from setuptools import setup, find_packages, Command, Extension
 
-from profile_default import __about__
+from default_profile import __about__
 
 # Conda Support: {{{1
 
