@@ -35,13 +35,16 @@ In addition, 2 classes have been taken verbatim from the Pandas dev team.
 The classes are used to create :keyword:`dict` style objects that also
 allow for attribute-style access.
 
+.. todo:: What does __main__ is not a package mean?
+
 """
 import logging
 import os
 import sys
 from logging import NullHandler
 
-from . import module_log, machine, timer
+# from .module_log import stream_logger
+# from .timer import timer  # so you can from default_profile.util import timer
 
 logging.BASIC_FORMAT = '%(created)f : %(module)s : %(levelname)s : %(message)s'
 

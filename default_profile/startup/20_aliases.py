@@ -211,9 +211,18 @@ class WindowsAliases:
     Would it be useful to subclass :class:`enum.Enum` here?
 
     """
-    def __init__(self):
+
+    def __init__(self, _ip=None):
         """Initialize the platform specific alias manager with IPython."""
-        self._ip = get_ipython()
+        if _ip is None:
+            self._ip = get_ipython()
+        else:
+            self._ip = _ip
+
+    def __repr__(self):
+        return 'Windows Aliases: {r!}'.format(
+            len(self._ip.alias_manager.aliases)
+        )
 
     @classmethod
     def cmd_aliases(self):
@@ -414,7 +423,6 @@ def main():
     _ip.alias_manager.user_aliases = user_aliases
     # Apparently the big part i was missing was rerunning the init_aliases method
     _ip.alias_manager.init_aliases()
-
 
 
 if __name__ == "__main__":

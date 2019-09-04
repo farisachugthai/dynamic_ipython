@@ -58,7 +58,6 @@ c.InteractiveShell.confirm_exit = False
 c.TerminalIPythonApp.display_banner = False
 
 
-
 def _path_build(root, suffix):
     """Join parts of paths together and ensure they exist.
 
@@ -96,7 +95,7 @@ def ask_for_import(mod):
         pass
 
 
-
+ask_for_import('jinja2')
 
 # -- Project information -----------------------------------------------------
 
@@ -332,7 +331,8 @@ text_secnumber_suffix = ''
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3/', None),
     'ipython': ('https://ipython.readthedocs.io/en/stable/', None),
-    'prompt_toolkit': ('https://python-prompt-toolkit.readthedocs.io/en/stable/', None),
+    'prompt_toolkit':
+        ('https://python-prompt-toolkit.readthedocs.io/en/stable/', None),
     'scipy': ('https://docs.scipy.org/doc/scipy/reference', None),
     'matplotlib': ('https://matplotlib.org', None),
     'numpy': ('https://docs.scipy.org/doc/numpy/', None),
@@ -449,6 +449,8 @@ def linkcode_resolve(domain, info):
 plot_pre_code = """
 import numpy as np
 # import scipy as sp
+import matplotlib as mpl
+import matplotlib.pyplot as plt
 np.random.seed(123)
 """
 plot_include_source = True
