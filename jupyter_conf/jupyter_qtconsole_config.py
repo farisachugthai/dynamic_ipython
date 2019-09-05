@@ -3,9 +3,15 @@ import logging
 import os
 from pathlib import Path
 import shutil
+import sys
 
 import traitlets
 from traitlets.config import get_config
+
+try:
+    import qtconsole  # kinda a prerequisite wouldn't you say?
+except (ImportError, ModuleNotFoundError):
+    sys.exit()
 
 c = get_config()
 
@@ -17,9 +23,7 @@ def get_home():
     try:
         return Path.home()
     except Exception as e:
-        QTCONSOLE_LOGGER.error(
-            "There was an error determining home directory: %s" % e
-        )
+        QTCONSOLE_LOGGER.error("There was an error determining home directory: %s" % e)
 
 
 # ------------------------------------------------------------------------------
@@ -69,7 +73,7 @@ c.JupyterConsoleApp.confirm_exit = False
 # c.JupyterConsoleApp.existing = ''
 
 # The name of the default kernel to start.
-c.JupyterConsoleApp.kernel_name = 'python3'
+c.JupyterConsoleApp.kernel_name = "python3"
 
 # Path to the ssh key to use for logging in to the ssh server.
 # c.JupyterConsoleApp.sshkey = ''
@@ -84,10 +88,10 @@ c.JupyterConsoleApp.kernel_name = 'python3'
 # This is an application.
 
 # The date format used by logging formatters for %(asctime)s
-c.Application.log_datefmt = '%Y-%m-%d %H:%M:%S'
+c.Application.log_datefmt = "%Y-%m-%d %H:%M:%S"
 
 # The Logging format template
-c.Application.log_format = '%(pid)s - [%(name)s] : %(highlevel)s %(message)s'
+c.Application.log_format = "%(pid)s - [%(name)s] : %(highlevel)s %(message)s"
 
 # Set the log level by value or name.
 c.Application.log_level = 20
@@ -157,6 +161,22 @@ def consoleWidgetconf():
 
     # The maximum number of lines of text before truncation. Specifying a non-
     #  positive number disables text truncation (not recommended).
+
+
+    # Here's some inspiration for decorating the console
+    >>> from qtconsole import styles
+    >>> styles.default_template
+
+    I think it's JSON but it doesn't load from json.loads(). Here's what it
+    looks like.
+
+    .. ipython::
+        :okexcept:
+
+    >>> json.loads(styles.default_template)
+    >>> from pprint import pprint
+    >>> pprint(styles.default_template)
+
     """
     pass
 
@@ -185,7 +205,7 @@ c.ConsoleWidget.console_width = 120
 #  platforms the default is Monospace.
 
 # I wonder if we can give multiple values
-c.ConsoleWidget.font_family = 'Source Code Pro Light'
+c.ConsoleWidget.font_family = "Source Code Pro Light"
 
 # The font size. If unconfigured, Qt will be entrusted with the size of the
 #  font.
@@ -200,7 +220,7 @@ c.ConsoleWidget.font_size = 14
 #              completion by pressing Return.
 #  'ncurses' : Show the completion as a text list which is navigable by
 #              `tab` and arrow keys.
-c.ConsoleWidget.gui_completion = 'droplist'
+c.ConsoleWidget.gui_completion = "droplist"
 
 # Whether to include output from clients other than this one sharing the same
 #  kernel.
@@ -211,12 +231,12 @@ c.ConsoleWidget.include_other_output = True
 
 # The type of underlying text widget to use. Valid values are 'plain', which
 #  specifies a QPlainTextEdit, and 'rich', which specifies a QTextEdit.
-c.ConsoleWidget.kind = 'rich'
+c.ConsoleWidget.kind = "rich"
 
 # Prefix to add to outputs coming from clients other than this one.
 #
 #  Only relevant if include_other_output is True.
-c.ConsoleWidget.other_output_prefix = '[Nvim:] '
+c.ConsoleWidget.other_output_prefix = "[Nvim:] "
 
 # The type of paging to use. Valid values are:
 #
@@ -232,7 +252,7 @@ c.ConsoleWidget.other_output_prefix = '[Nvim:] '
 #     'custom_page_requested(str)' signal.
 #  'none'
 #     The text is written directly to the console.
-c.ConsoleWidget.paging = 'vsplit'
+c.ConsoleWidget.paging = "vsplit"
 
 # ------------------------------------------------------------------------------
 # HistoryConsoleWidget(ConsoleWidget) configuration
@@ -248,7 +268,7 @@ c.HistoryConsoleWidget.history_lock = True
 # ------------------------------------------------------------------------------
 
 # A Qt frontend for a generic Python kernel.
-c.FrontendWidget.banner = ''
+c.FrontendWidget.banner = ""
 
 # Whether to clear the console when the kernel is restarted
 # c.FrontendWidget.clear_on_kernel_restart = True
@@ -278,16 +298,16 @@ c.FrontendWidget.banner = ''
 
 # Shit we have to specify the terminal too? This just got 40000 more complicated.
 # Gotta determine OS, version, what terminal I'm using ugh
-if os.name != 'Windows-NT':
-    if shutil.which('nvim-qt'):
-        c.JupyterWidget.editor = 'nvim-qt'
+if os.name != "Windows-NT":
+    if shutil.which("nvim-qt"):
+        c.JupyterWidget.editor = "nvim-qt"
     else:
-        c.JupyterWidget.editor = 'nvim'
+        c.JupyterWidget.editor = "nvim"
 else:
-    if shutil.which('nvim-qt'):
-        c.JupyterWidget.editor = 'nvim-qt.exe'
+    if shutil.which("nvim-qt"):
+        c.JupyterWidget.editor = "nvim-qt.exe"
     else:
-        c.JupyterWidget.editor = 'nvim.exe'
+        c.JupyterWidget.editor = "nvim.exe"
 
 # The editor command to use when a specific line number is requested. The string
 # should contain two format specifiers: {line} and {filename}. If this parameter
@@ -295,7 +315,7 @@ else:
 
 # Uh gotta check the man page h/o. So you can do it with -c for command, or +
 # Let's do -c because + with no argument sends you to the end of file
-c.JupyterWidget.editor_line = '-c {line} -- {filename}'
+c.JupyterWidget.editor_line = "-c {line} -- {filename}"
 
 # c.JupyterWidget.in_prompt = 'In [<span class="in-prompt-number">%i</span>]: '
 
@@ -319,9 +339,9 @@ c.JupyterWidget.editor_line = '-c {line} -- {filename}'
 try:
     from gruvbox.style import GruvboxDarkHard
 except (ImportError, ModuleNotFoundError):
-    c.JupyterWidget.syntax_style = 'Solarized Dark'
+    c.JupyterWidget.syntax_style = "Solarized Dark"
 else:
-    c.JupyterWidget.syntax_style = 'GruvboxDarkHard'
+    c.JupyterWidget.syntax_style = "GruvboxDarkHard"
 
 # ------------------------------------------------------------------------------
 # KernelManager(ConnectionFileMixin) configuration
@@ -459,4 +479,4 @@ else:
 # c.Session.unpacker = 'json'
 
 # Username for the Session. Default is your system username.
-c.Session.username = 'faris'
+c.Session.username = "faris"

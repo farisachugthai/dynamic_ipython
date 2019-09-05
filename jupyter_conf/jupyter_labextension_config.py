@@ -36,10 +36,10 @@ check
 """
 # Configuration file for jupyter labextension.
 from traitlets.config import get_config
+
 c = get_config()
 
 import jupyter
-
 
 
 # ------------------------------------------------------------------------------
@@ -49,10 +49,10 @@ import jupyter
 # This is an application.
 
 # The date format used by logging formatters for %(asctime)s
-c.Application.log_datefmt = '%Y-%m-%d %H:%M:%S'
+c.Application.log_datefmt = "%Y-%m-%d %H:%M:%S"
 
 # The Logging format template
-c.Application.log_format = '[ %(created)f : %(name)s : %(highlevel)s : %(message)s : ]'
+c.Application.log_format = "[ %(created)f : %(name)s : %(highlevel)s : %(message)s : ]"
 
 # Set the log level by value or name.
 c.Application.log_level = 20
@@ -152,7 +152,9 @@ class Foo(Bar):
         Default: False
         Whether temporary files should be cleaned up after building jupyterlab
     """
+
     pass
+
 
 # Wait some of those were solid
 c.CheckLabExtensionsApp.should_clean = True

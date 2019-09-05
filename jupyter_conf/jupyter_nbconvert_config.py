@@ -9,10 +9,10 @@ c = get_config()
 # This is an application.
 
 # The date format used by logging formatters for %(asctime)s
-c.Application.log_datefmt = '%Y-%m-%d %H:%M:%S'
+c.Application.log_datefmt = "%Y-%m-%d %H:%M:%S"
 
 # The Logging format template
-c.Application.log_format = '[%(name)s]%(highlevel)s %(message)s'
+c.Application.log_format = "[%(name)s]%(highlevel)s %(message)s"
 
 # Set the log level by value or name.
 c.Application.log_level = 20
@@ -50,7 +50,7 @@ c.Application.log_level = 20
 # 'pdf', 'python', 'rst', 'script', 'selectLanguage', 'slides',
 # 'slides_with_lenvs'] or a dotted object name that represents the import path
 # for an `Exporter` class
-#c.NbConvertApp.export_format = 'html'
+# c.NbConvertApp.export_format = 'html'
 
 # read a single notebook from stdin.
 # c.NbConvertApp.from_stdin = False
@@ -250,7 +250,7 @@ c.TemplateExporter.exclude_code_cell = True
 # c.PDFExporter.bib_command = ['bibtex', '{filename}']
 
 # Shell command used to compile latex.
-#c.PDFExporter.latex_command = ['xelatex', '{filename}', '-quiet']
+# c.PDFExporter.latex_command = ['xelatex', '{filename}', '-quiet']
 
 # How many times latex will be called.
 # c.PDFExporter.latex_count = 3
@@ -362,7 +362,7 @@ c.TemplateExporter.exclude_code_cell = True
 # c.CSSHTMLHeaderPreprocessor.highlight_class = '.highlight'
 
 # Name of the pygments style to use
-#c.CSSHTMLHeaderPreprocessor.style = 'default'
+# c.CSSHTMLHeaderPreprocessor.style = 'default'
 
 # ------------------------------------------------------------------------------
 # ClearMetadataPreprocessor(Preprocessor) configuration
@@ -447,7 +447,7 @@ c.TemplateExporter.exclude_code_cell = True
 
 # If `True` (default), then the state of the Jupyter widgets created at the
 #  kernel will be stored in the metadata of the notebook.
-#c.ExecutePreprocessor.store_widget_state = True
+# c.ExecutePreprocessor.store_widget_state = True
 
 # The time to wait (in seconds) for output from executions. If a cell execution
 #  takes longer, an exception (TimeoutError on python 3+, RuntimeError on python
