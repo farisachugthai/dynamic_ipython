@@ -5,9 +5,6 @@
 Pandas Initialization
 =====================
 
-.. module:: 42_pandas_init
-    :synopsis: Initialize desired parameters for :mod:`pandas` at startup.
-
 .. highlight:: ipython
     :linenothreshold: 5
 
@@ -149,9 +146,6 @@ def pandas_init():
 
 
 if __name__ == '__main__':
-    if sys.version_info < (3, 6, 0):
-        sys.exit("This module requires Python 3.6+")
-
     name = 'default_profile.startup.pandas_init'
     PANDAS_LOGGER = module_log.stream_logger(
         logger=name, log_level=logging.INFO
@@ -160,6 +154,6 @@ if __name__ == '__main__':
     try:
         import pandas as pd
     except (ImportError, ModuleNotFoundError):
-        pass
+        PANDAS_LOGGER.error('Pandas not installed.')
     else:
         pandas_init()

@@ -1,4 +1,56 @@
-"""Jupyter Console config."""
+"""
+=======================
+Jupyter Console config
+=======================
+
+.. currentmodule:: jupyter_console_config
+
+.. highlight:: ipython
+
+Sep 05, 2019:
+
+This is quite the odd program.
+
+>>> from jupyter_console.ptshell import ZMQTerminalIPythonApp, ZMQTerminalInteractiveShell
+
+If you read the help for the ZMQTerminalInteractiveShell it indicates that you
+can retrieve the global instance with ZMQTerminalInteractiveShell(self).instance.
+
+As a guess I'd imagine this is true because that class specifically subclasses
+the traitlets object, SingletonConfigurable.
+
+Running that raised an error for me however.
+
+And oddly, running:
+
+>>> from traitlets.config import get_config
+>>> c = get_config()
+
+Only returned information about IPython...
+
+So I ran some information about the ZMQTerminalIPythonApp to see if that
+fared any better and::
+
+    In [47]: jup = ZMQTerminalIPythonApp()
+    In [48]: jup.aliases
+    Out[48]:
+    {'log-level': 'Application.log_level',
+    'config': 'JupyterApp.config_file',
+    'ip': 'JupyterConsoleApp.ip',
+    'transport': 'JupyterConsoleApp.transport',
+    'hb': 'JupyterConsoleApp.hb_port',
+    'shell': 'JupyterConsoleApp.shell_port',
+    'iopub': 'JupyterConsoleApp.iopub_port',
+    'stdin': 'JupyterConsoleApp.stdin_port',
+    'existing': 'JupyterConsoleApp.existing',
+    'f': 'JupyterConsoleApp.connection_file',
+    'kernel': 'JupyterConsoleApp.kernel_name',
+    'ssh': 'JupyterConsoleApp.sshserver'}
+
+Needless to say none of those aliases worked in the shell for me.
+..what the hell is this?
+
+"""
 from traitlets.config import get_config
 
 c = get_config()
@@ -110,7 +162,8 @@ c.ZMQTerminalInteractiveShell.banner = ''
 
 # Set to display confirmation dialog on exit. You can always use 'exit' or
 #  'quit', to force a direct exit without any confirmation.
-c.ZMQTerminalInteractiveShell.confirm_exit = False
+# Jupyter Console is complaining that ZMQTerminal doesn't recognize this option?
+# c.ZMQTerminalInteractiveShell.confirm_exit = False
 
 # Shortcut style to use at the prompt. 'vi' or 'emacs'.
 # c.ZMQTerminalInteractiveShell.editing_mode = 'emacs'
@@ -119,7 +172,8 @@ c.ZMQTerminalInteractiveShell.confirm_exit = False
 try:
     from gruvbox.style import GruvboxDarkHard
 except (ImportError, ModuleNotFoundError):
-    c.ZMQTerminalInteractiveShell.highlighting_style = 'Solarized Dark'
+    # c.ZMQTerminalInteractiveShell.highlighting_style = 'Solarized Dark'
+    pass
 else:
     c.ZMQTerminalInteractiveShell.highlighting_style = 'Gruvbox'
 

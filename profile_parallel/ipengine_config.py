@@ -31,7 +31,7 @@
 #c.BaseIPythonApplication.copy_config_files = False
 
 ## Path to an extra config file to load.
-#  
+#
 #  If specified, load this config file in addition to any other IPython config.
 #c.BaseIPythonApplication.extra_config_file = ''
 
@@ -62,9 +62,9 @@
 
 ## String id to add to runtime files, to prevent name collisions when using
 #  multiple clusters with a single profile simultaneously.
-#  
+#
 #  When set, files will be named like: 'ipcontroller-<cluster_id>-engine.json'
-#  
+#
 #  Since this is text inserted into filenames, typical recommendations apply:
 #  Simple character strings are ideal, and spaces are not recommended (but should
 #  generally work).
@@ -99,7 +99,7 @@
 #  `profile_dir` options.
 #c.IPEngineApp.url_file = ''
 
-## 
+##
 #c.IPEngineApp.url_file_name = 'ipcontroller-engine.json'
 
 ## The maximum number of seconds to wait for url_file to exist. This is useful
@@ -161,7 +161,7 @@
 ## Set the color scheme (NoColor, Neutral, Linux, or LightBG).
 #c.InteractiveShell.colors = 'Neutral'
 
-## 
+##
 #c.InteractiveShell.debug = False
 
 ## Don't call post-execute functions that have failed in the past.
@@ -181,7 +181,7 @@
 #  startup.
 #c.InteractiveShell.history_load_length = 1000
 
-## 
+##
 #c.InteractiveShell.ipython_dir = ''
 
 ## Start logging to the given file in append mode. Use `logfile` to specify a log
@@ -199,7 +199,7 @@
 #  code
 #c.InteractiveShell.loop_runner = 'IPython.core.interactiveshell._asyncio_runner'
 
-## 
+##
 #c.InteractiveShell.object_info_string_level = 0
 
 ## Automatically call the pdb debugger after every exception.
@@ -221,16 +221,16 @@
 #  TerminalInteractiveShell.prompts object directly.
 #c.InteractiveShell.prompts_pad_left = True
 
-## 
+##
 #c.InteractiveShell.quiet = False
 
-## 
+##
 #c.InteractiveShell.separate_in = '\n'
 
-## 
+##
 #c.InteractiveShell.separate_out = ''
 
-## 
+##
 #c.InteractiveShell.separate_out2 = ''
 
 ## Show rewritten input, e.g. for autocall.
@@ -240,7 +240,7 @@
 #  module).
 #c.InteractiveShell.sphinxify_docstring = False
 
-## 
+##
 #c.InteractiveShell.wildcards_case_sensitive = True
 
 ## Switch modes for the IPython exception handlers.
@@ -257,10 +257,10 @@
 #------------------------------------------------------------------------------
 
 ## An object to manage the profile directory and its resources.
-#  
+#
 #  The profile directory is used by all IPython applications, to manage
 #  configuration, logging and security.
-#  
+#
 #  This object knows how to find, create and manage these directories. This
 #  should be used by any code that wants to handle profiles.
 
@@ -273,27 +273,27 @@
 #------------------------------------------------------------------------------
 
 ## Object for handling serialization and sending of messages.
-#  
+#
 #  The Session object handles building messages and sending them with ZMQ sockets
 #  or ZMQStream objects.  Objects can communicate with each other over the
 #  network via Session objects, and only need to work with the dict-based IPython
 #  message spec. The Session will handle serialization/deserialization, security,
 #  and metadata.
-#  
+#
 #  Sessions support configurable serialization via packer/unpacker traits, and
 #  signing with HMAC digests via the key/keyfile traits.
-#  
+#
 #  Parameters ----------
-#  
+#
 #  debug : bool
 #      whether to trigger extra debugging statements
 #  packer/unpacker : str : 'json', 'pickle' or import_string
 #      importstrings for methods to serialize message parts.  If just
 #      'json' or 'pickle', predefined JSON and pickle packers will be used.
 #      Otherwise, the entire importstring must be used.
-#  
+#
 #      The functions must accept at least valid JSON input, and output *bytes*.
-#  
+#
 #      For example, to use msgpack:
 #      packer = 'msgpack.packb', unpacker='msgpack.unpackb'
 #  pack/unpack : callables
@@ -314,7 +314,7 @@
 #c.Session.buffer_threshold = 1024
 
 ## Whether to check PID to protect against calls after fork.
-#  
+#
 #  This check can be disabled if fork-safety is handled elsewhere.
 #c.Session.check_pid = True
 
@@ -325,7 +325,7 @@
 #c.Session.debug = False
 
 ## The maximum number of digests to remember.
-#  
+#
 #  The digest history will be culled when it exceeds this value.
 #c.Session.digest_history_size = 65536
 
@@ -393,7 +393,7 @@
 #c.EngineFactory.display_hook_factory = 'ipykernel.displayhook.ZMQDisplayHook'
 
 ## Request this engine ID.
-#  
+#
 #  If run in MPI, will use the MPI rank. Otherwise, let the Hub decide what our
 #  rank should be.
 #c.EngineFactory.id = None
@@ -408,7 +408,7 @@
 
 ## The maximum number of times a check for the heartbeat ping of a  controller
 #  can be missed before shutting down the engine.
-#  
+#
 #  If set to 0, the check is disabled.
 #c.EngineFactory.max_heartbeat_misses = 50
 
@@ -430,7 +430,7 @@
 #c.EngineFactory.timeout = 5.0
 
 ## Enable MPI integration.
-#  
+#
 #  If set, MPI rank will be requested for my rank, and additionally `mpi_init`
 #  will be executed in the interactive shell.
 #c.EngineFactory.use_mpi = False
@@ -440,21 +440,21 @@
 #------------------------------------------------------------------------------
 
 ## Whether to use appnope for compatibility with OS X App Nap.
-#  
+#
 #  Only affects OS X >= 10.9.
 #c.Kernel._darwin_app_nap = True
 
-## 
+##
 #c.Kernel._execute_sleep = 0.0005
 
-## 
+##
 #c.Kernel._poll_interval = 0.01
 
 ## time (in seconds) to wait for messages to arrive when aborting queued requests
 #  after an error.
-#  
+#
 #  Requests that arrive within this window after an error will be cancelled.
-#  
+#
 #  Increase in the event of unusually slow network causing significant delays,
 #  which can manifest as e.g. "Run all" in a notebook aborting some, but not all,
 #  messages after an error.
@@ -464,14 +464,14 @@
 # IPythonKernel(Kernel) configuration
 #------------------------------------------------------------------------------
 
-# 
+#
 # c.IPythonKernel.help_links = [
 # {'text': 'Python Reference', 'url': 'https://docs.python.org/3.7'},
-# {'text': 'IPython Reference', 'url': 'https://ipython.org/documentation.html'}, 
+# {'text': 'IPython Reference', 'url': 'https://ipython.org/documentation.html'},
 # {'text': 'NumPy Reference', 'url': 'https://docs.scipy.org/doc/numpy/reference/'},
-# {'text': 'SciPy Reference', 'url': 'https://docs.scipy.org/doc/scipy/reference/'}, 
-# {'text': 'Matplotlib Reference', 'url': 'https://matplotlib.org/contents.html'}, 
-# {'text': 'SymPy Reference', 'url': 'http://docs.sympy.org/latest/index.html'}, 
+# {'text': 'SciPy Reference', 'url': 'https://docs.scipy.org/doc/scipy/reference/'},
+# {'text': 'Matplotlib Reference', 'url': 'https://matplotlib.org/contents.html'},
+# {'text': 'SymPy Reference', 'url': 'http://docs.sympy.org/latest/index.html'},
 # {'text': 'pandas Reference', 'url': 'https://pandas.pydata.org/pandas-docs/stable/'}
 # ]
 

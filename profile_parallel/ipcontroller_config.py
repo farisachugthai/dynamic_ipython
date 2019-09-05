@@ -31,7 +31,7 @@
 #c.BaseIPythonApplication.copy_config_files = False
 
 ## Path to an extra config file to load.
-#  
+#
 #  If specified, load this config file in addition to any other IPython config.
 #c.BaseIPythonApplication.extra_config_file = ''
 
@@ -62,9 +62,9 @@
 
 ## String id to add to runtime files, to prevent name collisions when using
 #  multiple clusters with a single profile simultaneously.
-#  
+#
 #  When set, files will be named like: 'ipcontroller-<cluster_id>-engine.json'
-#  
+#
 #  Since this is text inserted into filenames, typical recommendations apply:
 #  Simple character strings are ideal, and spaces are not recommended (but should
 #  generally work).
@@ -124,10 +124,10 @@
 #------------------------------------------------------------------------------
 
 ## An object to manage the profile directory and its resources.
-#  
+#
 #  The profile directory is used by all IPython applications, to manage
 #  configuration, logging and security.
-#  
+#
 #  This object knows how to find, create and manage these directories. This
 #  should be used by any code that wants to handle profiles.
 
@@ -140,27 +140,27 @@
 #------------------------------------------------------------------------------
 
 ## Object for handling serialization and sending of messages.
-#  
+#
 #  The Session object handles building messages and sending them with ZMQ sockets
 #  or ZMQStream objects.  Objects can communicate with each other over the
 #  network via Session objects, and only need to work with the dict-based IPython
 #  message spec. The Session will handle serialization/deserialization, security,
 #  and metadata.
-#  
+#
 #  Sessions support configurable serialization via packer/unpacker traits, and
 #  signing with HMAC digests via the key/keyfile traits.
-#  
+#
 #  Parameters ----------
-#  
+#
 #  debug : bool
 #      whether to trigger extra debugging statements
 #  packer/unpacker : str : 'json', 'pickle' or import_string
 #      importstrings for methods to serialize message parts.  If just
 #      'json' or 'pickle', predefined JSON and pickle packers will be used.
 #      Otherwise, the entire importstring must be used.
-#  
+#
 #      The functions must accept at least valid JSON input, and output *bytes*.
-#  
+#
 #      For example, to use msgpack:
 #      packer = 'msgpack.packb', unpacker='msgpack.unpackb'
 #  pack/unpack : callables
@@ -181,7 +181,7 @@
 #c.Session.buffer_threshold = 1024
 
 ## Whether to check PID to protect against calls after fork.
-#  
+#
 #  This check can be disabled if fork-safety is handled elsewhere.
 #c.Session.check_pid = True
 
@@ -192,7 +192,7 @@
 #c.Session.debug = False
 
 ## The maximum number of digests to remember.
-#  
+#
 #  The digest history will be culled when it exceeds this value.
 #c.Session.digest_history_size = 65536
 
@@ -265,9 +265,9 @@
 #c.HubFactory.control = ()
 
 ## The class to use for the DB backend
-#  
+#
 #  Options include:
-#  
+#
 #  SQLiteDB: SQLite MongoDB : use MongoDB DictDB  : in-memory storage (fastest,
 #  but be mindful of memory growth of the Hub) NoDB    : disable database
 #  altogether (default)
@@ -312,7 +312,7 @@
 #------------------------------------------------------------------------------
 
 ## Python TaskScheduler object.
-#  
+#
 #  This is the simplest object that supports msg_id based DAG dependencies.
 #  *Only* task msg_ids are checked, not msg_ids of jobs submitted via the MUX
 #  queue.
@@ -320,7 +320,7 @@
 ## specify the High Water Mark (HWM) for the downstream socket in the Task
 #  scheduler. This is the maximum number of allowed outstanding tasks on each
 #  engine.
-#  
+#
 #  The default (1) means that only one task can be outstanding on each engine.
 #  Setting TaskScheduler.hwm=0 means there is no limit, and the engines continue
 #  to be assigned tasks while they are working, effectively hiding network
@@ -341,7 +341,7 @@
 #  stream period: the period of the heartbeat in milliseconds
 
 ## Whether to include every heartbeat in debugging output.
-#  
+#
 #  Has to be set explicitly, because there will be *a lot* of output.
 #c.HeartMonitor.debug = False
 
@@ -357,30 +357,30 @@
 #------------------------------------------------------------------------------
 
 ## Basic in-memory dict-based object for saving Task Records.
-#  
+#
 #  This is the first object to present the DB interface for logging tasks out of
 #  memory.
-#  
+#
 #  The interface is based on MongoDB, so adding a MongoDB backend should be
 #  straightforward.
 
 ## The fraction by which the db should culled when one of the limits is exceeded
-#  
+#
 #  In general, the db size will spend most of its time with a size in the range:
-#  
+#
 #  [limit * (1-cull_fraction), limit]
-#  
+#
 #  for each of size_limit and record_limit.
 #c.DictDB.cull_fraction = 0.1
 
 ## The maximum number of records in the db
-#  
+#
 #  When the history exceeds this size, the first record_limit * cull_fraction
 #  records will be culled.
 #c.DictDB.record_limit = 1024
 
 ## The maximum total size (in bytes) of the buffers stored in the db
-#  
+#
 #  When the db exceeds this size, the oldest records will be culled until the
 #  total size is under size_limit * (1-cull_fraction). default: 1 GB
 #c.DictDB.size_limit = 1073741824

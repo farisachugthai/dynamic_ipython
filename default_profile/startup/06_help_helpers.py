@@ -46,7 +46,7 @@ def save_help(arg=None, output_file=sys.stdout):
 
 def page_help(arg=None):
     """WIP."""
-    if hasattr(_ip, pinfo):
+    if hasattr(_ip, 'pinfo'):
         _ip.pinfo(arg)
 
 

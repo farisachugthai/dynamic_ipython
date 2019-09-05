@@ -259,37 +259,6 @@ c.FrontendWidget.banner = ''
 # Whether to draw information calltips on open-parentheses.
 # c.FrontendWidget.enable_calltips = True
 
-# The pygments lexer class to use.
-
-
-def ipylexer():
-    """
-    Help on module IPython.sphinxext.ipython_console_highlighting in IPython.sphinxext:
-
-    NAME
-        IPython.sphinxext.ipython_console_highlighting - reST directive for syntax-highlighting ipython interactive sessions.
-
-    FUNCTIONS
-        setup(app)
-            Setup as a sphinx extension.
-
-    DATA
-        ipy2 = <pygments.lexers.IPyLexer with {'python3': False}>
-        ipy3 = <pygments.lexers.IPyLexer with {'python3': True}>
-    """
-    pass
-
-
-try:
-    import IPython
-    import IPython.lib.lexers
-    from IPython.lib import lexers
-    # ~/src/ipython/IPython/lib/lexers.py
-except (ImportError, ModuleNotFoundError):
-    c.FrontendWidget.lexer_class = 'traitlets.Undefined'
-else:
-    c.FrontendWidget.lexer_class = 'lexers.IPyLexer'
-
 # ------------------------------------------------------------------------------
 # IPythonWidget(FrontendWidget) configuration
 # ------------------------------------------------------------------------------

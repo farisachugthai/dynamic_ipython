@@ -107,75 +107,75 @@ def _parse_arguments(cmds=None):
     cmds = [method for method in dir(DocBuilder) if not method.startswith('_')]
 
     parser = argparse.ArgumentParser(
-            prog="Pure Python Makefile",
-            description="Dynamic IPython doc builder.",
-            epilog="Commands: {}".format(', '.join(cmds))
+        prog="Pure Python Makefile",
+        description="Dynamic IPython doc builder.",
+        epilog="Commands: {}".format(', '.join(cmds))
     )
 
     parser.add_argument(
-            'builder',
-            nargs='?',
-            default='html',
-            choices=['html', 'latex'],
-            metavar='builder: (html or latex)',
-            help='command to run: {}'.format(',\t '.join(cmds))
+        'builder',
+        nargs='?',
+        default='html',
+        choices=['html', 'latex'],
+        metavar='builder: (html or latex)',
+        help='command to run: {}'.format(',\t '.join(cmds))
     )
 
     parser.add_argument(
-            '-j',
-            '--num-jobs',
-            metavar='num-jobs',
-            dest='jobs',
-            type=int,
-            default=os.cpu_count(),
-            help='Number of parallel jobs used by `sphinx-build`.'
+        '-j',
+        '--num-jobs',
+        metavar='num-jobs',
+        dest='jobs',
+        type=int,
+        default=os.cpu_count(),
+        help='Number of parallel jobs used by `sphinx-build`.'
     )
 
     parser.add_argument(
-            '-s',
-            '--single',
-            metavar='FILENAME',
-            default=None,
-            help='filename of section or method name to build.'
+        '-s',
+        '--single',
+        metavar='FILENAME',
+        default=None,
+        help='filename of section or method name to build.'
     )
 
     parser.add_argument(
-            '-b',
-            '--open_browser',
-            metavar='BROWSER',
-            type=bool,
-            default=False,
-            dest='open_browser',
-            help='Toggle opening the docs in the default'
-                 ' browser after a successful build.'
+        '-b',
+        '--open_browser',
+        metavar='BROWSER',
+        type=bool,
+        default=False,
+        dest='open_browser',
+        help='Toggle opening the docs in the default'
+        ' browser after a successful build.'
     )
 
     parser.add_argument(
-            '-l',
-            '--log',
-            default=sys.stdout,
-            type=argparse.FileType('w'),
-            help='Where to write log records to. Defaults to'
-                 ' stdout.'
+        '-l',
+        '--log',
+        default=sys.stdout,
+        type=argparse.FileType('w'),
+        help='Where to write log records to. Defaults to'
+        ' stdout.'
     )
 
     parser.add_argument(
-            '-ll',
-            '--log-level',
-            dest='log_level',
-            default='INFO',
-            choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'],
-            help='Log level. Defaults to INFO. Implies logging.'
+        '-ll',
+        '--log-level',
+        dest='log_level',
+        default='INFO',
+        choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'],
+        help='Log level. Defaults to INFO. Implies logging.'
     )
     # reasonably should mention what the purpose of some of these are.
     # they primarily seem like toggles since they don't provide much else
     parser.add_argument(
-            '-V',
-            '--verbose',
-            nargs='?',
-            const=True,
-            default=False,
-            help='Enable verbose logging and increase level to `debug`.'
+        '-V',
+        '--verbose',
+        nargs='?',
+        const=True,
+        default=False,
+        help='Enable verbose logging and increase level to `debug`.'
     )
 
     parser.add_argument('--version', action='version', version=__version__)
@@ -259,8 +259,8 @@ class DocBuilder:
         """
         if self.kind not in self.kinds:
             raise ValueError(
-                    'kind must be one of: {}'.format(str(self.kinds)) +
-                    'not {}'.format(self.kind)
+                'kind must be one of: {}'.format(str(self.kinds)) +
+                'not {}'.format(self.kind)
             )
         cmd = ['sphinx-build', '-b', self.kind, '.', '-c', SOURCE_PATH]
         if self.num_jobs:
@@ -268,9 +268,9 @@ class DocBuilder:
         if self.verbosity:
             cmd.append('-{}'.format('v' * self.verbosity))
         cmd += [
-                '-d',
-                os.path.join(BUILD_PATH, 'doctrees'),
-                os.path.join(BUILD_PATH, self.kind)
+            '-d',
+            os.path.join(BUILD_PATH, 'doctrees'),
+            os.path.join(BUILD_PATH, self.kind)
         ]
         MAKE_LOGGER.debug('Cmd is ', cmd)
         return cmd
@@ -285,10 +285,10 @@ class DocBuilder:
         """
         self.status("Running sphinx-build.")
         output = subprocess.run(
-                self.sphinx_build(),
-                universal_newlines=True,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
+            self.sphinx_build(),
+            universal_newlines=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
         )
 
         return output
@@ -327,17 +327,17 @@ def termux_hack():
     """Android permissions don't allow viewing files in app specific files."""
     try:
         shutil.copytree(
-                BUILD_PATH,
-                '/data/data/com.termux/files/home/storage/downloads/html'
+            BUILD_PATH,
+            '/data/data/com.termux/files/home/storage/downloads/html'
         )
     except FileExistsError:
         try:
             shutil.rmtree(
-                    '/data/data/com.termux/files/home/storage/downloads/html'
+                '/data/data/com.termux/files/home/storage/downloads/html'
             )
             shutil.copytree(
-                    BUILD_PATH,
-                    '/data/data/com.termux/files/home/storage/downloads/html'
+                BUILD_PATH,
+                '/data/data/com.termux/files/home/storage/downloads/html'
             )
         except Exception as e:
             raise e
@@ -371,6 +371,12 @@ def main():
 
     sphinx_shell = DocBuilder(kind=builder, num_jobs=jobs, verbosity=verbosity)
     output = sphinx_shell.run()
+
+    if output.returncode != 0:
+        print(
+            'Command failed with return code: {} '.format(output.returncode)
+        )
+        sys.exit(output.stderr)
 
     if args.open_browser:
         sphinx_shell.open_browser()

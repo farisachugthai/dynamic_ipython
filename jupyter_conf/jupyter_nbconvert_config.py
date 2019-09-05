@@ -87,15 +87,17 @@ c.Application.log_level = 20
 
 # Global configurable class for shared config
 #
-#  Useful for display data priority that might be used by many transformers
+# Useful for display data priority that might be used by many transformers
 
 # Deprecated default highlight language as of 5.0, please use language_info
-#  metadata instead
+# metadata instead
 # c.NbConvertBase.default_language = 'ipython'
 
 # An ordered list of preferred output type, the first encountered will usually
-#  be used when converting discarding the others.
-# c.NbConvertBase.display_data_priority = ['text/html', 'application/pdf', 'text/latex', 'image/svg+xml', 'image/png', 'image/jpeg', 'text/markdown', 'text/plain']
+# be used when converting discarding the others.
+# c.NbConvertBase.display_data_priority = ['text/html', 'application/pdf',
+# 'text/latex', 'image/svg+xml', 'image/png', 'image/jpeg', 'text/markdown',
+# 'text/plain']
 
 # ------------------------------------------------------------------------------
 # Exporter(LoggingConfigurable) configuration
@@ -111,12 +113,12 @@ c.Application.log_level = 20
 #       'nbconvert.preprocessors.TagRemovePreprocessor',
 #       'nbconvert.preprocessors.RegexRemovePreprocessor',
 #       'nbconvert.preprocessors.ClearOutputPreprocessor',
-#       'nbconvert.preprocessors.ExecutePreprocessor', 
-#       'nbconvert.preprocessors.coalesce_streams', 
-#       'nbconvert.preprocessors.SVG2PDFPreprocessor', 
+#       'nbconvert.preprocessors.ExecutePreprocessor',
+#       'nbconvert.preprocessors.coalesce_streams',
+#       'nbconvert.preprocessors.SVG2PDFPreprocessor',
 #       'nbconvert.preprocessors.CSSHTMLHeaderPreprocessor',
 #       'nbconvert.preprocessors.LatexPreprocessor',
-#       'nbconvert.preprocessors.HighlightMagicsPreprocessor', 
+#       'nbconvert.preprocessors.HighlightMagicsPreprocessor',
 #       'nbconvert.preprocessors.ExtractOutputPreprocessor'
 # ]
 
@@ -281,15 +283,17 @@ c.TemplateExporter.exclude_code_cell = True
 # URL to load font awesome from.
 #
 #  Defaults to loading from cdnjs.
-# c.SlidesExporter.font_awesome_url = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css'
+# c.SlidesExporter.font_awesome_url =
+# 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css'
 
 # URL to load jQuery from.
-#
+
 #  Defaults to loading from cdnjs.
-# c.SlidesExporter.jquery_url = 'https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js'
+# c.SlidesExporter.jquery_url =
+# 'https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js'
 
 # URL to load require.js from.
-#
+
 #  Defaults to loading from cdnjs.
 # c.SlidesExporter.require_js_url = 'https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js'
 
