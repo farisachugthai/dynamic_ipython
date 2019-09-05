@@ -38,7 +38,12 @@ class DeepReload:
     )
 
     def __init__(self, excludes=None):
-        self.excludes = excludes
+        """How do we set an instance attribute with a class attribute?"""
+        if excludes == None:
+            self.excludes = excludes
+
+    def __repr__(self):
+        return '{!r}'.format(repr(self.excludes))
 
     def dreload(self, mod, extra_excludes=None):
         """Import IPython's `%deepreload` magic.

@@ -249,7 +249,7 @@ c.TemplateExporter.exclude_code_cell = True
 # Shell command used to run bibtex.
 # c.PDFExporter.bib_command = ['bibtex', '{filename}']
 
-## Shell command used to compile latex.
+# Shell command used to compile latex.
 #c.PDFExporter.latex_command = ['xelatex', '{filename}', '-quiet']
 
 # How many times latex will be called.
@@ -361,16 +361,16 @@ c.TemplateExporter.exclude_code_cell = True
 # CSS highlight class identifier
 # c.CSSHTMLHeaderPreprocessor.highlight_class = '.highlight'
 
-## Name of the pygments style to use
+# Name of the pygments style to use
 #c.CSSHTMLHeaderPreprocessor.style = 'default'
 
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # ClearMetadataPreprocessor(Preprocessor) configuration
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
-## Removes all the metadata from all code cells in a notebook.
+# Removes all the metadata from all code cells in a notebook.
 
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # ClearOutputPreprocessor(Preprocessor) configuration
 # ------------------------------------------------------------------------------
 
@@ -445,11 +445,11 @@ c.TemplateExporter.exclude_code_cell = True
 #  longer, a RuntimeError is raised.
 # c.ExecutePreprocessor.startup_timeout = 60
 
-## If `True` (default), then the state of the Jupyter widgets created at the
+# If `True` (default), then the state of the Jupyter widgets created at the
 #  kernel will be stored in the metadata of the notebook.
 #c.ExecutePreprocessor.store_widget_state = True
 
-## The time to wait (in seconds) for output from executions. If a cell execution
+# The time to wait (in seconds) for output from executions. If a cell execution
 #  takes longer, an exception (TimeoutError on python 3+, RuntimeError on python
 #  2) is raised.
 #

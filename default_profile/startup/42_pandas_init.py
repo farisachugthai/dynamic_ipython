@@ -5,6 +5,7 @@
 Pandas Initialization
 =====================
 
+:URL: https://realpython.com/python-pandas-tricks/#1-configure-options-settings-at-interpreter-startup
 .. highlight:: ipython
     :linenothreshold: 5
 
@@ -87,7 +88,6 @@ An example of this::
                     0x1f2fce37978
                     register_converters=True>>>
 
-:URL: https://realpython.com/python-pandas-tricks/#1-configure-options-settings-at-interpreter-startup
 
 Here's an interesting blurb from pandas/docs/conf.py::
 

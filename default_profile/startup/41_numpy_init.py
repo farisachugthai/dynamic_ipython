@@ -5,9 +5,6 @@
 Numpy Init
 ==========
 
-.. module:: 41_numpy_init
-    :synopsis: Configure and modify numpy's print options.
-
 This could be a starting point for practicing module
 configuration with traits.
 
@@ -62,43 +59,46 @@ formatter : dict of callables, optional
     by the default formatters.  Individual types for which a formatter
     can be set are:
 
-    - 'bool'
-    - 'int'
-    - 'timedelta' : a `numpy.timedelta64`
-    - 'datetime' : a `numpy.datetime64`
-    - 'float'
-    - 'longfloat' : 128-bit floats
-    - 'complexfloat'
-    - 'longcomplexfloat' : composed of two 128-bit floats
-    - 'numpystr' : types `numpy.string_` and `numpy.unicode_`
-    - 'object' : `np.object_` arrays
-    - 'str' : all other strings
+- 'bool'
+- 'int'
+- 'timedelta' : a `numpy.timedelta64`
+- 'datetime' : a `numpy.datetime64`
+- 'float'
+- 'longfloat' : 128-bit floats
+- 'complexfloat'
+- 'longcomplexfloat' : composed of two 128-bit floats
+- 'numpystr' : types `numpy.string_` and `numpy.unicode_`
+- 'object' : `np.object_` arrays
+- 'str' : all other strings
 
 Other keys that can be used to set a group of types at once are:
 
-    - 'all' : sets all types
-    - 'int_kind' : sets 'int'
-    - 'float_kind' : sets 'float' and 'longfloat'
-    - 'complex_kind' : sets 'complexfloat' and 'longcomplexfloat'
-    - 'str_kind' : sets 'str' and 'numpystr'
+- 'all' : sets all types
+- 'int_kind' : sets 'int'
+- 'float_kind' : sets 'float' and 'longfloat'
+- 'complex_kind' : sets 'complexfloat' and 'longcomplexfloat'
+- 'str_kind' : sets 'str' and 'numpystr'
+
+
 floatmode : str, optional
     Controls the interpretation of the `precision` option for
     floating-point types. Can take the following values:
 
-    * 'fixed': Always print exactly `precision` fractional digits,
-        even if this would print more or fewer digits than
-        necessary to specify the value uniquely.
-    * 'unique': Print the minimum number of fractional digits necessary
-        to represent each value uniquely. Different elements may
-        have a different number of digits. The value of the
-        `precision` option is ignored.
-    * 'maxprec': Print at most `precision` fractional digits, but if
-        an element can be uniquely represented with fewer digits
-        only print it with that many.
-    * 'maxprec_equal': Print at most `precision` fractional digits,
-        but if every element in the array can be uniquely
-        represented with an equal number of fewer digits, use that
-        many digits for all elements.
+* 'fixed': Always print exactly `precision` fractional digits,
+   even if this would print more or fewer digits than
+   necessary to specify the value uniquely.
+* 'unique': Print the minimum number of fractional digits necessary
+   to represent each value uniquely. Different elements may
+   have a different number of digits. The value of the
+   `precision` option is ignored.
+* 'maxprec': Print at most `precision` fractional digits, but if
+   an element can be uniquely represented with fewer digits
+   only print it with that many.
+* 'maxprec_equal': Print at most `precision` fractional digits,
+   but if every element in the array can be uniquely
+   represented with an equal number of fewer digits, use that
+   many digits for all elements.
+
 legacy : string or `False`, optional
     If set to the string `'1.13'` enables 1.13 legacy printing mode. This
     approximates numpy 1.13 print output by including a space in the sign
@@ -106,7 +106,8 @@ legacy : string or `False`, optional
     `False`, disables legacy mode. Unrecognized strings will be ignored
     with a warning for forward compatibility.
 
-    .. versionadded:: 1.14.0
+.. versionadded:: 1.14.0
+
 
 See Also
 --------
@@ -196,4 +197,3 @@ if __name__ == "__main__":
     if set_numpy_printoptions:
         set_numpy_printoptions()
         doctest.testmod()  # why not?
-

@@ -1,6 +1,6 @@
-======================
+=============
 Custom Magics
-======================
+=============
 
 .. module:: custom-magics
    :synopsis: Defining your own custom magics. 
@@ -84,14 +84,14 @@ Parameters
 ----------
 
 ``func`` : callable
- Function to be registered as a magic.
+   Function to be registered as a magic.
 
 ``magic_kind`` : str
- Kind of magic, one of 'line', 'cell' or 'line_cell'
+   Kind of magic, one of 'line', 'cell' or 'line_cell'
 
 ``magic_name`` : str, optional
- If given, the name the magic will have in the IPython namespace.  By
- default, the name of the function itself is used.
+   If given, the name the magic will have in the IPython namespace.  By
+   default, the name of the function itself is used.
 
 This affords users the ability to create a magic, line or cell, out of
 any function.
@@ -114,11 +114,11 @@ If you want to try out your ipython magics you can do the following:
 
 - Load your magic with::
 
-    _ip.magic('load_ext your_magic_name')
+   _ip.magic('load_ext your_magic_name')
 
 - Run your magic with::
 
-    _ip.run_line_magic('your_magic_function', 'your_magic_arguments')
+   _ip.run_line_magic('your_magic_function', 'your_magic_arguments')
 
 **(Optional)**:
 
@@ -155,7 +155,7 @@ The `@magic_arguments` decorator marks the function as having
 :mod:`argparse` arguments.
 
 The `@argument` decorator adds an argument using the same syntax as
-:mod:`argparse`'s `add_argument()` method.
+:mod:`argparse`'s ``add_argument`` method.
 
 More sophisticated uses may also require the `@argument_group` or
 `@kwds` decorator to customize the formatting and the parsing.
@@ -163,7 +163,8 @@ More sophisticated uses may also require the `@argument_group` or
 Help text for the magic is automatically generated from the docstring and the
 arguments
 
-.. code-block:: none
+.. ipython::
+   :verbatim:
 
     In[1]: %cool?
            %cool [-o OPTION] arg
@@ -175,11 +176,6 @@ arguments
 
            optional arguments:
              -o OPTION, --option OPTION      An optional argument.
-
-Inheritance diagram:
-
-.. inheritance-diagram: IPython.core.magic_arguments
-   :parts: 3
 
 
 .. _extensions-and-custom-magics:
@@ -281,7 +277,7 @@ Any module file that define a function named ``load_ipython_extension``
 can be loaded via `%load_ext` module.path or be configured to be
 autoloaded by IPython at startup time.
 
-You can register the class itself without instantiating it.  IPython will
+You can register the class itself without instantiating it. IPython will
 call the default constructor on it.::
 
    from IPython import get_ipython
@@ -383,6 +379,7 @@ To round this out, we'll finish with an example from Cyrille Rossant.
 
 Creating IPython Extensions
 ===============================
+
 *Summarized from "Learning IPython for Interactive Computing and Data
 Visualization 1st ed.pdf"*:
 
@@ -401,6 +398,8 @@ Visualization 1st ed.pdf"*:
    This loading function is called when the extension is loaded, which
    happens when the command is executed.
 
+So how can we load the IPython extension while running interactively?
+
 .. ipython::
    :verbatim:
 
@@ -416,6 +415,4 @@ IPython interpreter. Useful methods and attributes include
 :func:`IPython.core.magic.register_magics()`, to create new magic commands,
 and ``user_ns``, to access the user namespace. You can
 explore all the instance's attributes interactively from
-:mod:`IPython` with tab completion. For that, you need to execute
-the following command to get the current instance
-
+:mod:`IPython` with tab completion.

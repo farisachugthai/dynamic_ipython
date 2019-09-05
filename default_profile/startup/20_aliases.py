@@ -5,9 +5,6 @@
 IPython Aliases
 ===============
 
-.. module:: 20_aliases
-    :synopsis: Create aliases for :mod:`IPython` to ease use as a system shell.
-
 Documentation moved to :doc:`<../../docs/startup/aliases.html>`_.
 
 """
@@ -388,8 +385,7 @@ def main():
         # Then tried running what would be the equivalent of running
         # %config AliasManager.user_aliases = user_aliases
 
-    .. ipython::
-        :okexcept:
+    .. ipython3-traceback::
 
         ~/.ipython/default_profile/startup/20_aliases.py in main()
             461

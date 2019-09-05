@@ -15,6 +15,7 @@ documentation root, use os.path.abspath to make it absolute, like shown here.
 """
 from datetime import datetime
 from importlib import import_module
+import math
 from pathlib import Path
 import functools
 import logging

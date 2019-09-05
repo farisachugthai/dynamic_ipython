@@ -108,7 +108,7 @@ class CopyTree:
                                 glob(self.ignore), self.copy_function
                             )
                         else:
-                            copy_function(srcname, dstname)
+                            self.copy_function(srcname, dstname)
                 elif os.path.isdir(srcname):
                     copytree(
                         srcname, dstname, self.symlinks, self.ignore,
@@ -120,14 +120,14 @@ class CopyTree:
             # catch the Error from the recursive copytree so that we can
             # continue with other files
             except Error as err:
-                errors.extend(err.args[0])
+                self.errors.extend(err.args[0])
             except OSError as why:
-                errors.append((srcname, dstname, str(why)))
+                self.errors.append((srcname, dstname, str(why)))
         try:
-            copystat(src, dst)
+            copystat(self.src, self.dst)
         except OSError as why:
             if getattr(why, 'winerror', None) is None:
-                errors.append((src, dst, str(why)))
-        if errors:
-            raise Error(errors)
-        return dst
+                self.errors.append((self.src, self.dst, str(why)))
+        if self.errors:  # do i need to do len(self.errors) > 0?
+            raise Error(self.errors)
+        return self.dst

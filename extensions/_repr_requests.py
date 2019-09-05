@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
+.. magic:: _repr_request
+
 Utilize the _repr_pretty method to generate a display for
 requests.models.Response objects.
 """
@@ -33,9 +35,13 @@ def repr_request(r, p, cycle):
 
 
 def load_ipython_extension(ip):
-    ip.display_formatter.formatters['text/plain'].for_type('requests.models.Response', repr_request)
+    """Load the pretty printed Response objects."""
+    ip.display_formatter.formatters['text/plain'].for_type(
+        'requests.models.Response', repr_request
+    )
+
 
 if __name__ == "__main__":
-    shell = get_ipython
+    shell = get_ipython()
     if shell is not None:
         load_ipython_extension(shell)

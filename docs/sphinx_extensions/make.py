@@ -52,6 +52,8 @@ Wait why don't we just do something like:
 Or whatever it's called and run that? It'd be way easier...
 
 """
+from sphinx.jinja2glue import SphinxFileSystemLoader
+from jinja2.environment import Environment
 import argparse
 import logging
 import os
@@ -73,11 +75,9 @@ BUILD_PATH = os.path.join(DOC_PATH, 'build')
 SOURCE_PATH = os.path.join(DOC_PATH, 'source')
 TEMPLATES_PATH = os.path.join(SOURCE_PATH, '_templates')
 
-from jinja2.environment import Environment
 
 # Probably should initialize in a different/ better way but eh
 env = Environment()
-from sphinx.jinja2glue import SphinxFileSystemLoader
 
 sphinx_fs = SphinxFileSystemLoader(searchpath=TEMPLATES_PATH)
 
