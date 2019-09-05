@@ -20,6 +20,7 @@ except (ImportError, ModuleNotFoundError):
 else:
     NO_NOSE = None
 
+global _ip
 _ip = get_ipython()
 if _ip is None:
     _ip = start_ipython()

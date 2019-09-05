@@ -22,6 +22,7 @@ import os
 from pathlib import Path
 import platform
 import shutil
+import sys
 from tempfile import TemporaryDirectory
 
 from IPython import version_info
@@ -448,11 +449,21 @@ c.TerminalInteractiveShell.extra_open_editor_shortcuts = True
 
 # Try to import my Gruvbox class. Can be found at
 # https://github.com/farisachugthai/Gruvbox_IPython
+if sys.version_info[0:2] <= (3,6):
+    if ModuleNotFoundError not in __builtins__:
+
+        class ModuleNotFoundError(ImportError):
+            """Subclass ImportErrors."""
+
+            def __init__(self, *args, **kwargs):
+                " I wouldn't limit this section of code to only py3 up but I think that py2 doesn't accept that super() use below so I will for now."""
+                super().__init__(self, *args, **kwargs)
+
+
 try:
     from gruvbox.style import GruvboxDarkHard
-except ModuleNotFoundError:
+except (ImportError, ModuleNotFoundError):
     c.TerminalInteractiveShell.highlighting_style = 'monokai'
-
 else:
     c.TerminalInteractiveShell.highlighting_style = GruvboxDarkHard
 

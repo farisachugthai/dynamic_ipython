@@ -152,3 +152,7 @@ class Foo(Bar):
         Default: False
         Whether temporary files should be cleaned up after building jupyterlab
     """
+    pass
+
+# Wait some of those were solid
+c.CheckLabExtensionsApp.should_clean = True

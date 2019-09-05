@@ -17,7 +17,7 @@ numpy.set_printoptions = set_printoptions(
     precision=None, threshold=None, edgeitems=None, linewidth=None,
     suppress=None, nanstr=None, infstr=None, formatter=None,
     sign=None,
-    floatmode=None, \*\*kwarg
+    floatmode=None, ``**kwarg``
 )
 
 Set printing options.
@@ -163,8 +163,7 @@ To put back the default options, you can use:
 """
 import doctest
 import logging
-
-from IPython import get_ipython
+import sys
 
 try:
     import numpy as np
@@ -186,6 +185,7 @@ else:
 
         """
         np.set_printoptions(threshold=20)
+        np.set_printoptions(**kwargs)
 
 
 if __name__ == "__main__":

@@ -185,10 +185,7 @@ c.ConsoleWidget.console_width = 120
 #  platforms the default is Monospace.
 
 # I wonder if we can give multiple values
-c.ConsoleWidget.font_family = [
-        'Source Code Pro Light', 'Fira Mono', 'Hack', 'Monospace', 'Consolas',
-    ]
-# c.ConsoleWidget.font_family = 'Fira Mono'
+c.ConsoleWidget.font_family = 'Source Code Pro Light'
 
 # The font size. If unconfigured, Qt will be entrusted with the size of the
 #  font.
@@ -284,10 +281,12 @@ def ipylexer():
 
 
 try:
+    import IPython
+    import IPython.lib.lexers
     from IPython.lib import lexers
     # ~/src/ipython/IPython/lib/lexers.py
 except (ImportError, ModuleNotFoundError):
-     c.FrontendWidget.lexer_class = traitlets.Undefined
+    c.FrontendWidget.lexer_class = 'traitlets.Undefined'
 else:
     c.FrontendWidget.lexer_class = 'lexers.IPyLexer'
 

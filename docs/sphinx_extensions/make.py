@@ -21,7 +21,7 @@ Moving output files
 -------------------
 
 >>> import shutil
->>> from os.path import pjoin
+>>> from os.path import join as pjoin
 >>> import subprocess
 >>> BUILD_DIR = pjoin('build', 'html')
 >>> if shutil.which('rsync'):
@@ -33,7 +33,6 @@ One of them specifies to delete anything at the destination not in source.
 Obviously be careful beforehand but that could be a really simple way to
 automatically keep the documentation fresh.
 
-
 See Also
 ========
 sphinx.cmd.build
@@ -42,12 +41,21 @@ sphinx.cmd.make_main
     The pure python replacement for a ``Makefile``.
 sphinx.util.osutil
 
+
+Notes
+-----
+Wait why don't we just do something like:
+
+>>> import sphinx
+>>> from sphinx.cmd.build import make
+
+Or whatever it's called and run that? It'd be way easier...
+
 """
 import argparse
 import logging
 import os
 from pprint import pprint
-import shlex
 import shutil
 import subprocess
 import sys
@@ -58,13 +66,21 @@ try:
 except (ImportError, ModuleNotFoundError):
     sys.exit("Sphinx documentation module not found. Exiting.")
 
-from IPython.core.error import UsageError
-
 from default_profile.__about__ import __version__
 
 DOC_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BUILD_PATH = os.path.join(DOC_PATH, 'build')
 SOURCE_PATH = os.path.join(DOC_PATH, 'source')
+TEMPLATES_PATH = os.path.join(SOURCE_PATH, '_templates')
+
+from jinja2.environment import Environment
+
+# Probably should initialize in a different/ better way but eh
+env = Environment()
+from sphinx.jinja2glue import SphinxFileSystemLoader
+
+sphinx_fs = SphinxFileSystemLoader(searchpath=TEMPLATES_PATH)
+
 MAKE_LOGGER = logging.getLogger(name='docs.make')
 MAKE_LOGGER.setLevel(logging.DEBUG)
 
@@ -91,75 +107,75 @@ def _parse_arguments(cmds=None):
     cmds = [method for method in dir(DocBuilder) if not method.startswith('_')]
 
     parser = argparse.ArgumentParser(
-        prog="Pure Python Makefile",
-        description="Dynamic IPython doc builder.",
-        epilog="Commands: {}".format(', '.join(cmds))
+            prog="Pure Python Makefile",
+            description="Dynamic IPython doc builder.",
+            epilog="Commands: {}".format(', '.join(cmds))
     )
 
     parser.add_argument(
-        'builder',
-        nargs='?',
-        default='html',
-        choices=['html', 'latex'],
-        metavar='builder: (html or latex)',
-        help='command to run: {}'.format(',\t '.join(cmds))
+            'builder',
+            nargs='?',
+            default='html',
+            choices=['html', 'latex'],
+            metavar='builder: (html or latex)',
+            help='command to run: {}'.format(',\t '.join(cmds))
     )
 
     parser.add_argument(
-        '-j',
-        '--num-jobs',
-        metavar='num-jobs',
-        dest='jobs',
-        type=int,
-        default=os.cpu_count(),
-        help='Number of parallel jobs used by `sphinx-build`.'
+            '-j',
+            '--num-jobs',
+            metavar='num-jobs',
+            dest='jobs',
+            type=int,
+            default=os.cpu_count(),
+            help='Number of parallel jobs used by `sphinx-build`.'
     )
 
     parser.add_argument(
-        '-s',
-        '--single',
-        metavar='FILENAME',
-        default=None,
-        help='filename of section or method name to build.'
+            '-s',
+            '--single',
+            metavar='FILENAME',
+            default=None,
+            help='filename of section or method name to build.'
     )
 
     parser.add_argument(
-        '-b',
-        '--open_browser',
-        metavar='BROWSER',
-        type=bool,
-        default=False,
-        dest='open_browser',
-        help='Toggle opening the docs in the default'
-        ' browser after a successful build.'
+            '-b',
+            '--open_browser',
+            metavar='BROWSER',
+            type=bool,
+            default=False,
+            dest='open_browser',
+            help='Toggle opening the docs in the default'
+                 ' browser after a successful build.'
     )
 
     parser.add_argument(
-        '-l',
-        '--log',
-        default=sys.stdout,
-        type=argparse.FileType('w'),
-        help='Where to write log records to. Defaults to'
-        ' stdout.'
+            '-l',
+            '--log',
+            default=sys.stdout,
+            type=argparse.FileType('w'),
+            help='Where to write log records to. Defaults to'
+                 ' stdout.'
     )
 
     parser.add_argument(
-        '-ll',
-        '--log-level',
-        dest='log_level',
-        default='INFO',
-        choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'],
-        help='Log level. Defaults to INFO. Implies logging.'
+            '-ll',
+            '--log-level',
+            dest='log_level',
+            default='INFO',
+            choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'],
+            help='Log level. Defaults to INFO. Implies logging.'
     )
     # reasonably should mention what the purpose of some of these are.
     # they primarily seem like toggles since they don't provide much else
     parser.add_argument(
-        '-V',
-        '--verbose',
-        nargs='?',
-        const=True,
-        default=False,
-        help='Enable verbose logging and increase level to `debug`.'
+            '-V',
+            '--verbose',
+            nargs='?',
+            const=True,
+            default=False,
+            help='Enable verbose logging and increase level to `debug`.'
     )
 
     parser.add_argument('--version', action='version', version=__version__)
@@ -168,7 +184,7 @@ def _parse_arguments(cmds=None):
 
     if len(sys.argv[1:]) == 0:
         parser.print_help()
-        sys.exit()
+        sys.exit('Args not provided.')
 
     return user_args
 
@@ -181,12 +197,12 @@ class DocBuilder:
 
     Attributes
     -----------
-    builder : str
+    kind : str
         The filetype :command:`make` invokes :command:`sphinx-build` to create.
 
     """
 
-    def __init__(self, kind='html', num_jobs=1, verbosity=0):
+    def __init__(self, kind=None, num_jobs=1, verbosity=0):
         """Kind has to be first in case the user uses the class with a positional parameter.
 
         Parameters
@@ -194,9 +210,9 @@ class DocBuilder:
         kind : str, optional
             The kind of document ``sphinx-build`` will create.
             Defaults to html.
-        num_job : int, optional
+        num_jobs : int, optional
             Number of jobs to run the build in parallel with.
-        verbose : bool, optional
+        verbosity : bool, optional
             Run verbosely
 
         Examples
@@ -206,6 +222,8 @@ class DocBuilder:
         'html'
 
         """
+        if kind is None:
+            kind = 'html'
         self.kind = kind
         self.num_jobs = num_jobs
         self.verbosity = verbosity
@@ -234,11 +252,6 @@ class DocBuilder:
     def sphinx_build(self):
         """Build docs.
 
-        Parameters
-        ----------
-        kind : {'html', 'singlehtml', 'doctest', 'text'}
-            Kind of docs to build.
-
         Examples
         --------
         >>> DocBuilder(num_jobs=4).sphinx_build('html')
@@ -246,8 +259,8 @@ class DocBuilder:
         """
         if self.kind not in self.kinds:
             raise ValueError(
-                'kind must be one of: {}'.format(str(self.kinds)) +
-                'not {}'.format(self.kind)
+                    'kind must be one of: {}'.format(str(self.kinds)) +
+                    'not {}'.format(self.kind)
             )
         cmd = ['sphinx-build', '-b', self.kind, '.', '-c', SOURCE_PATH]
         if self.num_jobs:
@@ -255,9 +268,9 @@ class DocBuilder:
         if self.verbosity:
             cmd.append('-{}'.format('v' * self.verbosity))
         cmd += [
-            '-d',
-            os.path.join(BUILD_PATH, 'doctrees'),
-            os.path.join(BUILD_PATH, self.kind)
+                '-d',
+                os.path.join(BUILD_PATH, 'doctrees'),
+                os.path.join(BUILD_PATH, self.kind)
         ]
         MAKE_LOGGER.debug('Cmd is ', cmd)
         return cmd
@@ -272,30 +285,41 @@ class DocBuilder:
         """
         self.status("Running sphinx-build.")
         output = subprocess.run(
-            self.sphinx_build(),
-            universal_newlines=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
+                self.sphinx_build(),
+                universal_newlines=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
         )
 
         return output
 
-    def open_browser(self, doc):
+    def open_browser(self, doc=None):
         """Open a browser tab to the provided document."""
+        if doc is None:
+            doc = 'index.html'
         url = os.path.join('file://', DOC_PATH, 'build', 'html', doc)
+        self.status('Opening path to: {!s}'.format(url))
         webbrowser.open(url, new=2)
 
-    def html(self):
-        """Build HTML documentation."""
-        ret_code = self.sphinx_build('html')
-        zip_fname = os.path.join(BUILD_PATH, 'html', 'pandas.zip')
-        if os.path.exists(zip_fname):
-            os.remove(zip_fname)
+    @classmethod
+    def html(cls):
+        """Build HTML documentation.
 
-        if self.single_doc_html is not None:
-            self._open_browser(self.single_doc_html)
-        else:
-            self._add_redirects()
+        .. todo:: Practice making classmethods
+
+            Double check that this is created correctly.
+            Probably should review the git log if you're wondering why this is
+            so bare.
+
+        Parameters
+        ----------
+        cls : class
+            By convention?
+
+        """
+        # so do we not set self.kind to html? Just pass it in like that?
+        ret_code = cls.sphinx_build('html')
+
         return ret_code
 
 
@@ -303,17 +327,17 @@ def termux_hack():
     """Android permissions don't allow viewing files in app specific files."""
     try:
         shutil.copytree(
-            BUILD_PATH,
-            '/data/data/com.termux/files/home/storage/downloads/html'
+                BUILD_PATH,
+                '/data/data/com.termux/files/home/storage/downloads/html'
         )
     except FileExistsError:
         try:
             shutil.rmtree(
-                '/data/data/com.termux/files/home/storage/downloads/html'
+                    '/data/data/com.termux/files/home/storage/downloads/html'
             )
             shutil.copytree(
-                BUILD_PATH,
-                '/data/data/com.termux/files/home/storage/downloads/html'
+                    BUILD_PATH,
+                    '/data/data/com.termux/files/home/storage/downloads/html'
             )
         except Exception as e:
             raise e

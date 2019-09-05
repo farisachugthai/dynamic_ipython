@@ -39,7 +39,6 @@ import sys
 from pathlib import Path
 
 from IPython import get_ipython
-from prompt_toolkit.utils import is_conemu_ansi
 
 from default_profile.util import module_log
 
@@ -63,13 +62,31 @@ class Platform:
         Environment variables to add to the instance.
 
     """
+
     LOGGER = module_log.stream_logger(
         logger='util.machine.Platform',
         msg_format='%(asctime)s : %(levelname)s : %(lineNo)d : %(message)s : ',
         log_level=logging.INFO
     )
 
-    def __init__(self, shell=None, user_env=None):
+    def __init__(self, shell=None, env=None, LOGGER=None):
+        """Initialize a user specific object.
+
+        Parameters
+        ----------
+        shell : |ip|, optional
+            Global IPython instance.
+        env : dict, optional
+            User environment variables.
+
+        Attributes
+        ----------
+        LOGGER : :class:`logging.Logger`
+            Class attribute. Logger for the class
+        _sys_platform : TODO (type?)
+            Value returned by sys.platform
+
+        """
         if not shell:
             try:
                 self.shell = get_ipython()
@@ -79,7 +96,11 @@ class Platform:
             if shell:
                 self.shell = shell
 
-        self.env = self.get_env()
+        if env is None:
+            self.env = self.get_env()
+        else:
+            self.env = env
+
         self._sys_platform = sys.platform.lower()
         self._sys_check = platform.uname().system
         self.is_win = self.is_windows()
@@ -113,7 +134,8 @@ class Platform:
         """True when :func:`sys.platform` returns linux."""
         return self._sys_platform == 'linux'
 
-    def get_env(self):
+    @staticmethod
+    def get_env():
         """Unsurprisingly stolen from IPython.
 
         Returns
@@ -145,6 +167,7 @@ class Shell(Platform):
 
     @property
     def is_cmd(self):
+        """Unsure of how to implement this. TODO:"""
         pass
 
     @property
@@ -163,5 +186,3 @@ if __name__ == "__main__":
         msg_format='%(asctime)s : %(levelname)s : %(module)s : %(message)s : ',
         log_level=logging.INFO
     )
-
-    # doctest.testmod()

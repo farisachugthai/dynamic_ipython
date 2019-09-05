@@ -220,12 +220,12 @@ class WindowsAliases:
             self._ip = _ip
 
     def __repr__(self):
-        return 'Windows Aliases: {r!}'.format(
+        return 'Windows Aliases: {!r}'.format(
             len(self._ip.alias_manager.aliases)
         )
 
     @classmethod
-    def cmd_aliases(self):
+    def cmd_aliases(cls):
         r"""Aliases for the :command:`cmd` shell.
 
         .. todo:: Cmd, :envvar:`COPYCMD` and IPython
@@ -240,7 +240,7 @@ class WindowsAliases:
 
             Also note DIRCMD for :command:`dir`.
         """
-        _ip.user_aliases = [
+        cls.user_aliases = [
             ('cp', 'copy %s %s'),
             ('copy', 'copy %s %s'),
             ('ddir', 'dir /ad /on %l'),
@@ -255,10 +255,10 @@ class WindowsAliases:
             ('ren', 'ren'),
             ('rmdir', 'rmdir %l'),
         ]
-        return _ip.user_aliases
+        return cls.user_aliases
 
     @classmethod
-    def powershell_aliases(self):
+    def powershell_aliases(cls):
         r"""Aliases for Windows OSes using :command:`powershell`.
 
         Has only been tested on Windows 10 in a heavily configured environment.
@@ -269,7 +269,7 @@ class WindowsAliases:
         The minimum number of assumptions possible have been made; however, note
         that this section is still under development and frequently changes.
         """
-        self.user_aliases = [
+        cls.user_aliases = [
             ('ac', 'Add-Content %l'),
             ('asnp', 'Add-PSSnapin %l'),
             ('cat', 'Get-Content %l'),
@@ -332,7 +332,7 @@ class WindowsAliases:
             ('wjb', 'Wait-Job %l'),
             ('write', 'Write-Output %l'),
         ]
-        return _ip.user_aliases
+        return cls.user_aliases
 
 
 def __setup_fzf(user_aliases):

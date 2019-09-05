@@ -74,7 +74,7 @@ BUILD_PATH = os.path.join(CONF_PATH, 'build')
 SOURCE_PATH = os.path.join(CONF_PATH, 'source')
 
 README = os.path.join(ROOT_PATH, '', 'README.rst')
-REQUIRED = ['IPython>=7.7']
+REQUIRED = ['IPython>=7.7', 'prompt_toolkit', 'numpy', 'pandas', 'jinja2']
 
 EXTRAS = {
     'develop': ['pipenv', 'flake8>=3.7.1', 'pylint', 'yapf>=0.27.0'],
@@ -86,13 +86,14 @@ EXTRAS = {
         'numpydoc>=0.9',
         'flake8-rst',
     ],
-    'test': ['nose', 'tox']
+    'test': ['pytest', 'tox', 'nose']
 }
 
 with codecs.open(README, encoding="utf-8") as f:
     LONG_DESCRIPTION = "\n" + f.read()
-
 # }}}}
+
+
 class UploadCommand(Command):  # {{{1
     """Support setup.py upload."""
 
@@ -136,6 +137,8 @@ class UploadCommand(Command):  # {{{1
         sys.exit()
 # }}}
 # Where the magic happens: {{{1
+
+
 setup(
     name=NAME,
     version=__about__.__version__,
