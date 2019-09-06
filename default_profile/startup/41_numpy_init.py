@@ -8,14 +8,14 @@ Numpy Init
 This could be a starting point for practicing module
 configuration with traits.
 
-Help on function :func:`numpy.set_printoptions()` in numpy:
+.. ipython::
+   :verbatim:
 
-numpy.set_printoptions = set_printoptions(
-    precision=None, threshold=None, edgeitems=None, linewidth=None,
-    suppress=None, nanstr=None, infstr=None, formatter=None,
-    sign=None,
-    floatmode=None, ``**kwarg``
-)
+   numpy.set_printoptions = set_printoptions(
+       precision=None, threshold=None, edgeitems=None, linewidth=None,
+       suppress=None, nanstr=None, infstr=None, formatter=None, sign=None,
+       floatmode=None, ``**kwarg``
+   )
 
 Set printing options.
 

@@ -122,10 +122,12 @@ match on a doctest assertion, an error will occur.
 
 
 .. ipython::
+   :okexcept:
 
    In [1]: x = 'hello world'
 
    # This will raise an error if the IPython output is different.
+
    @doctest
    In [2]: x.upper()
    Out[2]: 'HELLO WORLD'
@@ -133,6 +135,7 @@ match on a doctest assertion, an error will occur.
    # Some readline features cannot be supported, so we allow
    # "verbatim" blocks, which are dumped verbatim except for the prompts
    # as they are continuously numbered.
+
    @verbatim
    In [3]: x.st<TAB>
    x.startswith  x.strip
@@ -289,9 +292,6 @@ settings to the entire block.  For example,
 You can create one or more pyplot plots and insert them with the
 ``@savefig`` decorator.
 
-2)
-====
-
 For more information on `@savefig` decorator, please refer to the end of this
 page in :ref:`Pseudo-Decorators` section.
 
@@ -342,10 +342,7 @@ Then call it from a subsequent section.
    Out [5]: 4
 
 
-3)
-====
-
-Why does the sentence below appear no less than 3 times in this doc?
+**Why does the sentence below appear no less than 3 times in this doc?**
 
 For more information on the ``@doctest`` decorator, please refer to the end of
 this page in the :ref:`Pseudo-Decorators` section.

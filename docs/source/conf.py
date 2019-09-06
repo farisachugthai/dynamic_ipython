@@ -23,7 +23,17 @@ import math
 import os
 import sys
 
-from IPython import start_ipython
+# Eh didn't work
+# from IPython import embed
+
+# THIS DID! It halted output enough to allow the traceback to propagate up!
+# Holy hell that was actually neat
+# import ipdb
+# if hasattr(sys, 'last_traceback'):
+#     ipdb.pm()  # how about this instead?
+# else:
+#     ipdb.set_trace()
+
 from gruvbox.style import GruvboxDarkHard
 from traitlets.config import Config
 
@@ -44,6 +54,8 @@ DOCS_LOGGER.setLevel(level=logging.DEBUG)
 DOCS_LOGGER.addHandler(logging.StreamHandler)
 
 # Let's try setting up an embedded IPython shell from here
+# This file needs debugging but I don't know where to correctly enter.
+# Regardless don't give me one of the usual shells that'll be too much
 c = Config()
 
 c.InteractiveShellApp.exec_lines = [

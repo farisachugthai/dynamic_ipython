@@ -1,21 +1,27 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-========================================
 Make --- Automated Documentation Builder
 ========================================
-
-.. module:: make
-    :synopsis: Automated Documentation Builder.
-
-Usage
-======
 
 This module has a similar API to the command :command:`sphinx-build` as it
 passes user provided arguments along to it.
 
 It simply differs in making the process simpler and allows one to run it in
 the debugger if a problem arises with doc builds.
+
+Usage
+------
+
+While still being actively worked on, the ideal usage would begin with the user
+in the `<../docs>`_ directory of the repository and running.:
+
+.. code-block:: console
+
+    python3 sphinx_extensions/make html
+
+Where *html* can be replaced with one of *html*, *singlehtml*, *doctest* or
+*linkcheck*. Not all :command:`sphinx-build` options are currently supported.
 
 Moving output files
 -------------------
@@ -52,8 +58,6 @@ Wait why don't we just do something like:
 Or whatever it's called and run that? It'd be way easier...
 
 """
-from sphinx.jinja2glue import SphinxFileSystemLoader
-from jinja2.environment import Environment
 import argparse
 import logging
 import os
@@ -61,12 +65,18 @@ from pprint import pprint
 import shutil
 import subprocess
 import sys
+from typing import List, Any
 import webbrowser
 
 try:
     import sphinx
 except (ImportError, ModuleNotFoundError):
     sys.exit("Sphinx documentation module not found. Exiting.")
+
+from sphinx.jinja2glue import SphinxFileSystemLoader
+from jinja2.environment import Environment
+
+from sphinx.cmd.make_mode import run_make_mode
 
 from default_profile.__about__ import __version__
 
@@ -85,7 +95,7 @@ MAKE_LOGGER = logging.getLogger(name='docs.make')
 MAKE_LOGGER.setLevel(logging.DEBUG)
 
 
-def _parse_arguments(cmds=None):
+def _parse_arguments(cmds=None) -> argparse.ArgumentParser:
     """Parse user arguments.
 
     Parameters
@@ -116,8 +126,9 @@ def _parse_arguments(cmds=None):
         'builder',
         nargs='?',
         default='html',
-        choices=['html', 'latex'],
-        metavar='builder: (html or latex)',
+        # ugh this shouldn't be independent of DocBuilder.kinds
+        choices = ['html', 'singlehtml', 'text', 'linkcheck', 'doctest'],
+        metavar='builder: ',
         help='command to run: {}'.format(',\t '.join(cmds))
     )
 
@@ -129,14 +140,6 @@ def _parse_arguments(cmds=None):
         type=int,
         default=os.cpu_count(),
         help='Number of parallel jobs used by `sphinx-build`.'
-    )
-
-    parser.add_argument(
-        '-s',
-        '--single',
-        metavar='FILENAME',
-        default=None,
-        help='filename of section or method name to build.'
     )
 
     parser.add_argument(
@@ -358,6 +361,28 @@ def rsync():
         return output
 
 
+def gather_sphinx_options(argv: List[str]) -> Any:
+    """Gather parsed arguments and hand them to sphinx-build in a more direct manner.
+
+    Parameters
+    ----------
+    argv : list
+        User provided arguments
+
+    Returns
+    -------
+    ret : int (? or maybe just the parsed options?)
+        Return code from sphinx-build
+
+    """
+    args = _parse_arguments()
+    jobs = args.jobs
+    verbosity = args.verbose
+    builder = args.builder
+
+    ret = run_make_mode(['-b', builder, SOURCE_PATH, BUILD_PATH, '-j', jobs, '-' + verbosity*'v'])
+    return ret
+
 def main():
     """Set everything up."""
     args = _parse_arguments()
@@ -385,11 +410,10 @@ def main():
     return output
 
 
+
 if __name__ == "__main__":
-    status = main()
-    pprint(status)
-
-    # if os.environ.get('ANDROID_ROOT'):
-    #     termux_hack()
-
-    print(rsync())
+    # status = main()
+    # pprint(status)
+    # print(rsync())
+    argv = sys.argv[1:]
+    pprint(gather_sphinx_options(argv))

@@ -1,12 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-=======
 Rehash
 =======
-
-.. module:: 01_rehashx
-    :synopsis: Add everything on the user's $PATH.
 
 This is an incredible little gem I just ran into, and hugely useful for
 making `IPython` work as a more versatile system shell.

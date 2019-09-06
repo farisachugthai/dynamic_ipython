@@ -2,14 +2,19 @@
 # -*- coding: utf-8 -*-
 # Vim: set ft=python:
 """Run ipdb and capture args."""
-import runpy
 import sys
 
 try:
     import ipdb
 except (ImportError, ModuleNotFoundError):
     # Execute the beginning of ipdb's __main__ mod.
-    shell = get_ipython()
+    try:
+        from IPython import get_ipython
+    except (ImportError, ModuleNotFoundError):
+        sys.exit('Neither ipython nor ipdb installed. Use pdb.')
+    else:
+        shell = get_ipython()
+
     if shell is None:
         # Not inside IPython
         # Build a terminal app in order to force ipython to load the
@@ -29,4 +34,4 @@ except (ImportError, ModuleNotFoundError):
                 "the configuration will not be loaded.\n\n"
             )
 else:
-    ns = runpy.run_module(ipdb)
+    ipdb.run(str(sys.argv[1:]))
