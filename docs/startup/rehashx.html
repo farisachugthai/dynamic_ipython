@@ -17,7 +17,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Importing Commonly Used Modules" href="easy_import.html" />
-    <link rel="prev" title="IPython Initialization Files" href="index.html" />
+    <link rel="prev" title="IPython’s Startup" href="index.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <!--[if lte IE 6]>
@@ -39,10 +39,10 @@
           <a href="easy_import.html" title="Importing Commonly Used Modules"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="index.html" title="IPython Initialization Files"
+          <a href="index.html" title="IPython’s Startup"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Dynamic IPython</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">IPython Initialization Files</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">IPython’s Startup</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -62,7 +62,9 @@
 and also adds system commands to the namespace!</p>
 <p>Insofar, I haven’t noticed any significant slowdown in startup time as a result
 of this, and it hugely eases utilizing IPython as a system shell.</p>
-<span class="target" id="module-default_profile.startup.01_rehashx"></span><span class="target" id="module-01_rehashx"></span><p>This is an incredible little gem I just ran into, and hugely useful for
+<span class="target" id="module-default_profile.startup.01_rehashx"></span><div class="section" id="rehash">
+<h2>Rehash<a class="headerlink" href="#rehash" title="Permalink to this headline">¶</a></h2>
+<p>This is an incredible little gem I just ran into, and hugely useful for
 making <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.8.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IPython</span></code></a> work as a more versatile system shell.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param magic_name</dt>
@@ -92,14 +94,14 @@ or user namespace.</p>
 </dd>
 </dl>
 <div class="section" id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<h3>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h3>
 <p>As the help outlines above, the second required positional argument to
 <code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.core.TerminalInteractiveShell.run_line_magic()</span></code> is <code class="docutils literal notranslate"><span class="pre">line</span></code>.</p>
 <p>This is more easily understood as ‘remaining arguments to the magic’.
 <code class="xref py py-obj docutils literal notranslate"><span class="pre">%rehashx</span></code> takes none, but leaving it blank causes the function call to raise
 an error, so an empty <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a> is passed to the function.</p>
 <div class="section" id="stack-depth">
-<h3><code class="docutils literal notranslate"><span class="pre">_stack_depth</span></code><a class="headerlink" href="#stack-depth" title="Permalink to this headline">¶</a></h3>
+<h4><code class="docutils literal notranslate"><span class="pre">_stack_depth</span></code><a class="headerlink" href="#stack-depth" title="Permalink to this headline">¶</a></h4>
 <p>The <code class="docutils literal notranslate"><span class="pre">_stack_depth</span></code> parameter can be understood like so:</p>
 <p>If <code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.core.magics.run_line_magic()</span></code> is called from
 <code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.core.magics.magic()</span></code> then
@@ -113,7 +115,7 @@ of <code class="xref py py-func docutils literal notranslate"><span class="pre">
 <dd><p>Blacklist certain aliases.</p>
 <p>On Windows, it’s assumed that the commands <em>more</em>, <em>less</em>, <em>clear</em> and
 <em>man</em> are undefined. However, the Git-For-Windows package provides all
-of these and by adding it to the <span class="target" id="index-0"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PATH</span></code>, <a class="reference internal" href="#module-rehashx" title="rehashx: Rehash everything on $PATH and make available in the user namespace."><code class="xref py py-obj docutils literal notranslate"><span class="pre">rehashx</span></code></a> will attempt
+of these and by adding it to the <span class="target" id="index-0"></span><a class="reference external" href="https://matplotlib.org/faq/environment_variables_faq.html#envvar-PATH" title="(in Matplotlib v3.1.1)"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PATH</span></code></a>, <a class="reference internal" href="#module-rehashx" title="rehashx: Rehash everything on $PATH and make available in the user namespace."><code class="xref py py-obj docutils literal notranslate"><span class="pre">rehashx</span></code></a> will attempt
 to alias them, resulting in a UsageError.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -128,9 +130,10 @@ to alias them, resulting in a UsageError.</p>
 <dl class="function">
 <dt id="default_profile.startup.01_rehashx.main">
 <code class="sig-prename descclassname">default_profile.startup.01_rehashx.</code><code class="sig-name descname">main</code><span class="sig-paren">(</span><em class="sig-param">shell=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/01_rehashx.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/01_rehashx.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.01_rehashx.main" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add all executables on the user’s <span class="target" id="index-1"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PATH</span></code> into the IPython ns.</p>
+<dd><p>Add all executables on the user’s <span class="target" id="index-1"></span><a class="reference external" href="https://matplotlib.org/faq/environment_variables_faq.html#envvar-PATH" title="(in Matplotlib v3.1.1)"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PATH</span></code></a> into the IPython ns.</p>
 </dd></dl>
 
+</div>
 </div>
 </div>
 </div>
@@ -153,8 +156,8 @@ to alias them, resulting in a UsageError.</p>
 <script type="text/javascript">$('#searchbox').show(0);</script><h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
-  <li><a href="index.html">IPython Initialization Files</a><ul>
-      <li>Previous: <a href="index.html" title="previous chapter">IPython Initialization Files</a></li>
+  <li><a href="index.html">IPython’s Startup</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">IPython’s Startup</a></li>
       <li>Next: <a href="easy_import.html" title="next chapter">Importing Commonly Used Modules</a></li>
   </ul></li>
   </ul></li>
@@ -180,31 +183,15 @@ to alias them, resulting in a UsageError.</p>
 <li class="toctree-l2"><a class="reference internal" href="easy_import.html">Importing Commonly Used Modules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="log.html">Logging</a></li>
 <li class="toctree-l2"><a class="reference internal" href="help_helpers.html">Help Helpers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="aliases.html">System Shell Aliases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aliases.html">20_aliases</a></li>
 <li class="toctree-l2"><a class="reference internal" href="numpy.html"><code class="docutils literal notranslate"><span class="pre">41_numpy_init</span></code> module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pandas.html"><code class="docutils literal notranslate"><span class="pre">42_pandas_init</span></code> module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sysexcept.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">50_sysexception</span></code> module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">util</span></code> package</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../util.html">General Utility Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../jupyter.html">Jupyter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../extensions.html">Extensions</a></li>
-</ul>
-
-</div>
-
-<h3><a href="../index.html">On This Page:</a></h3>
-
-<div>&nbsp;</div>
-<div id="sidebartoc">
-  <ul>
-<li><a class="reference internal" href="#"><code class="xref py py-obj docutils literal notranslate"><span class="pre">%rehashx</span></code></a><ul>
-<li><a class="reference internal" href="#usage">Usage</a><ul>
-<li><a class="reference internal" href="#stack-depth"><code class="docutils literal notranslate"><span class="pre">_stack_depth</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
 </ul>
 
 </div>
@@ -232,15 +219,15 @@ to alias them, resulting in a UsageError.</p>
           <a href="easy_import.html" title="Importing Commonly Used Modules"
              >next</a> |</li>
         <li class="right" >
-          <a href="index.html" title="IPython Initialization Files"
+          <a href="index.html" title="IPython’s Startup"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Dynamic IPython</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" >IPython Initialization Files</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="index.html" >IPython’s Startup</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright (C) 2018-2019 Faris Chugthai.
-      Last updated on Sep 02, 2019.
+      Last updated on Sep 06, 2019.
     </div>
   </body>
 </html>

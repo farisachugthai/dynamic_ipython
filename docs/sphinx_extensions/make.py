@@ -4,12 +4,6 @@
 Make --- Automated Documentation Builder
 ========================================
 
-This module has a similar API to the command :command:`sphinx-build` as it
-passes user provided arguments along to it.
-
-It simply differs in making the process simpler and allows one to run it in
-the debugger if a problem arises with doc builds.
-
 Usage
 ------
 
@@ -39,8 +33,19 @@ One of them specifies to delete anything at the destination not in source.
 Obviously be careful beforehand but that could be a really simple way to
 automatically keep the documentation fresh.
 
+Todo
+-----
+Incorporate this in.
+
+>>> from sphinx.application import Sphinx
+>>> srcdir=confdir='source'
+>>> doctreedir='build/.doctrees'
+>>> outdir='build/html'
+>>> app = Sphinx(buildername='html', srcdir=srcdir, outdir=outdir, doctreedir=doctreedir, confdir=confdir)
+
+
 See Also
-========
+--------
 sphinx.cmd.build
     The main entrypoint for sphinx and a good module to get comfortable with.
 sphinx.cmd.make_main
@@ -127,7 +132,7 @@ def _parse_arguments(cmds=None) -> argparse.ArgumentParser:
         nargs='?',
         default='html',
         # ugh this shouldn't be independent of DocBuilder.kinds
-        choices = ['html', 'singlehtml', 'text', 'linkcheck', 'doctest'],
+        choices=['html', 'singlehtml', 'text', 'linkcheck', 'doctest'],
         metavar='builder: ',
         help='command to run: {}'.format(',\t '.join(cmds))
     )
@@ -380,8 +385,9 @@ def gather_sphinx_options(argv: List[str]) -> Any:
     verbosity = args.verbose
     builder = args.builder
 
-    ret = run_make_mode(['-b', builder, SOURCE_PATH, BUILD_PATH, '-j', jobs, '-' + verbosity*'v'])
+    ret = run_make_mode(['-b', builder, SOURCE_PATH, BUILD_PATH, '-j', jobs, '-' + verbosity * 'v'])
     return ret
+
 
 def main():
     """Set everything up."""
@@ -408,7 +414,6 @@ def main():
         sphinx_shell.status('Opening browser!')
 
     return output
-
 
 
 if __name__ == "__main__":

@@ -47,27 +47,27 @@
 <span></span><span class="ch">#!/usr/bin/env python3</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">========================================</span>
 <span class="sd">Make --- Automated Documentation Builder</span>
 <span class="sd">========================================</span>
 
-<span class="sd">.. module:: make</span>
-<span class="sd">    :synopsis: Automated Documentation Builder.</span>
-
 <span class="sd">Usage</span>
-<span class="sd">======</span>
+<span class="sd">------</span>
 
-<span class="sd">This module has a similar API to the command :command:`sphinx-build` as it</span>
-<span class="sd">passes user provided arguments along to it.</span>
+<span class="sd">While still being actively worked on, the ideal usage would begin with the user</span>
+<span class="sd">in the `&lt;../docs&gt;`_ directory of the repository and running.:</span>
 
-<span class="sd">It simply differs in making the process simpler and allows one to run it in</span>
-<span class="sd">the debugger if a problem arises with doc builds.</span>
+<span class="sd">.. code-block:: console</span>
+
+<span class="sd">    python3 sphinx_extensions/make html</span>
+
+<span class="sd">Where *html* can be replaced with one of *html*, *singlehtml*, *doctest* or</span>
+<span class="sd">*linkcheck*. Not all :command:`sphinx-build` options are currently supported.</span>
 
 <span class="sd">Moving output files</span>
 <span class="sd">-------------------</span>
 
 <span class="sd">&gt;&gt;&gt; import shutil</span>
-<span class="sd">&gt;&gt;&gt; from os.path import pjoin</span>
+<span class="sd">&gt;&gt;&gt; from os.path import join as pjoin</span>
 <span class="sd">&gt;&gt;&gt; import subprocess</span>
 <span class="sd">&gt;&gt;&gt; BUILD_DIR = pjoin(&#39;build&#39;, &#39;html&#39;)</span>
 <span class="sd">&gt;&gt;&gt; if shutil.which(&#39;rsync&#39;):</span>
@@ -79,24 +79,44 @@
 <span class="sd">Obviously be careful beforehand but that could be a really simple way to</span>
 <span class="sd">automatically keep the documentation fresh.</span>
 
+<span class="sd">Todo</span>
+<span class="sd">-----</span>
+<span class="sd">Incorporate this in.</span>
+
+<span class="sd">&gt;&gt;&gt; from sphinx.application import Sphinx</span>
+<span class="sd">&gt;&gt;&gt; srcdir=confdir=&#39;source&#39;</span>
+<span class="sd">&gt;&gt;&gt; doctreedir=&#39;build/.doctrees&#39;</span>
+<span class="sd">&gt;&gt;&gt; outdir=&#39;build/html&#39;</span>
+<span class="sd">&gt;&gt;&gt; app = Sphinx(buildername=&#39;html&#39;, srcdir=srcdir, outdir=outdir, doctreedir=doctreedir, confdir=confdir)</span>
+
 
 <span class="sd">See Also</span>
-<span class="sd">========</span>
+<span class="sd">--------</span>
 <span class="sd">sphinx.cmd.build</span>
 <span class="sd">    The main entrypoint for sphinx and a good module to get comfortable with.</span>
 <span class="sd">sphinx.cmd.make_main</span>
 <span class="sd">    The pure python replacement for a ``Makefile``.</span>
 <span class="sd">sphinx.util.osutil</span>
 
+
+<span class="sd">Notes</span>
+<span class="sd">-----</span>
+<span class="sd">Wait why don&#39;t we just do something like:</span>
+
+<span class="sd">&gt;&gt;&gt; import sphinx</span>
+<span class="sd">&gt;&gt;&gt; from sphinx.cmd.build import make</span>
+
+<span class="sd">Or whatever it&#39;s called and run that? It&#39;d be way easier...</span>
+
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">argparse</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">pprint</span> <span class="k">import</span> <span class="n">pprint</span>
-<span class="kn">import</span> <span class="nn">shlex</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">import</span> <span class="nn">subprocess</span>
 <span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Any</span>
 <span class="kn">import</span> <span class="nn">webbrowser</span>
 
 <span class="k">try</span><span class="p">:</span>
@@ -104,18 +124,29 @@
 <span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="n">ModuleNotFoundError</span><span class="p">):</span>
     <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s2">&quot;Sphinx documentation module not found. Exiting.&quot;</span><span class="p">)</span>
 
-<span class="kn">from</span> <span class="nn">IPython.core.error</span> <span class="k">import</span> <span class="n">UsageError</span>
+<span class="kn">from</span> <span class="nn">sphinx.jinja2glue</span> <span class="k">import</span> <span class="n">SphinxFileSystemLoader</span>
+<span class="kn">from</span> <span class="nn">jinja2.environment</span> <span class="k">import</span> <span class="n">Environment</span>
+
+<span class="kn">from</span> <span class="nn">sphinx.cmd.make_mode</span> <span class="k">import</span> <span class="n">run_make_mode</span>
 
 <span class="kn">from</span> <span class="nn">default_profile.__about__</span> <span class="k">import</span> <span class="n">__version__</span>
 
 <span class="n">DOC_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)))</span>
 <span class="n">BUILD_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">DOC_PATH</span><span class="p">,</span> <span class="s1">&#39;build&#39;</span><span class="p">)</span>
 <span class="n">SOURCE_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">DOC_PATH</span><span class="p">,</span> <span class="s1">&#39;source&#39;</span><span class="p">)</span>
+<span class="n">TEMPLATES_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">SOURCE_PATH</span><span class="p">,</span> <span class="s1">&#39;_templates&#39;</span><span class="p">)</span>
+
+
+<span class="c1"># Probably should initialize in a different/ better way but eh</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">Environment</span><span class="p">()</span>
+
+<span class="n">sphinx_fs</span> <span class="o">=</span> <span class="n">SphinxFileSystemLoader</span><span class="p">(</span><span class="n">searchpath</span><span class="o">=</span><span class="n">TEMPLATES_PATH</span><span class="p">)</span>
+
 <span class="n">MAKE_LOGGER</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;docs.make&#39;</span><span class="p">)</span>
 <span class="n">MAKE_LOGGER</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_parse_arguments</span><span class="p">(</span><span class="n">cmds</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_parse_arguments</span><span class="p">(</span><span class="n">cmds</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Parse user arguments.</span>
 
 <span class="sd">    Parameters</span>
@@ -146,8 +177,9 @@
         <span class="s1">&#39;builder&#39;</span><span class="p">,</span>
         <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;?&#39;</span><span class="p">,</span>
         <span class="n">default</span><span class="o">=</span><span class="s1">&#39;html&#39;</span><span class="p">,</span>
-        <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;html&#39;</span><span class="p">,</span> <span class="s1">&#39;latex&#39;</span><span class="p">],</span>
-        <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;builder: (html or latex)&#39;</span><span class="p">,</span>
+        <span class="c1"># ugh this shouldn&#39;t be independent of DocBuilder.kinds</span>
+        <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;html&#39;</span><span class="p">,</span> <span class="s1">&#39;singlehtml&#39;</span><span class="p">,</span> <span class="s1">&#39;text&#39;</span><span class="p">,</span> <span class="s1">&#39;linkcheck&#39;</span><span class="p">,</span> <span class="s1">&#39;doctest&#39;</span><span class="p">],</span>
+        <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;builder: &#39;</span><span class="p">,</span>
         <span class="n">help</span><span class="o">=</span><span class="s1">&#39;command to run: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;,</span><span class="se">\t</span><span class="s1"> &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cmds</span><span class="p">))</span>
     <span class="p">)</span>
 
@@ -159,14 +191,6 @@
         <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
         <span class="n">default</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">(),</span>
         <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Number of parallel jobs used by `sphinx-build`.&#39;</span>
-    <span class="p">)</span>
-
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-        <span class="s1">&#39;-s&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;--single&#39;</span><span class="p">,</span>
-        <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;FILENAME&#39;</span><span class="p">,</span>
-        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;filename of section or method name to build.&#39;</span>
     <span class="p">)</span>
 
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
@@ -214,7 +238,7 @@
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">parser</span><span class="o">.</span><span class="n">print_help</span><span class="p">()</span>
-        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s1">&#39;Args not provided.&#39;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">user_args</span>
 
@@ -227,12 +251,12 @@
 
 <span class="sd">    Attributes</span>
 <span class="sd">    -----------</span>
-<span class="sd">    builder : str</span>
+<span class="sd">    kind : str</span>
 <span class="sd">        The filetype :command:`make` invokes :command:`sphinx-build` to create.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;html&#39;</span><span class="p">,</span> <span class="n">num_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbosity</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbosity</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Kind has to be first in case the user uses the class with a positional parameter.</span>
 
 <span class="sd">        Parameters</span>
@@ -240,9 +264,9 @@
 <span class="sd">        kind : str, optional</span>
 <span class="sd">            The kind of document ``sphinx-build`` will create.</span>
 <span class="sd">            Defaults to html.</span>
-<span class="sd">        num_job : int, optional</span>
+<span class="sd">        num_jobs : int, optional</span>
 <span class="sd">            Number of jobs to run the build in parallel with.</span>
-<span class="sd">        verbose : bool, optional</span>
+<span class="sd">        verbosity : bool, optional</span>
 <span class="sd">            Run verbosely</span>
 
 <span class="sd">        Examples</span>
@@ -252,6 +276,8 @@
 <span class="sd">        &#39;html&#39;</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">kind</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">kind</span> <span class="o">=</span> <span class="s1">&#39;html&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">kind</span> <span class="o">=</span> <span class="n">kind</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_jobs</span> <span class="o">=</span> <span class="n">num_jobs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">=</span> <span class="n">verbosity</span>
@@ -259,31 +285,26 @@
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="se">\t</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kind</span><span class="p">)</span>
 
-    <span class="nd">@property</span>
+<div class="viewcode-block" id="DocBuilder.kinds"><a class="viewcode-back" href="../../dev.html#sphinx_extensions.make.DocBuilder.kinds">[docs]</a>    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">kinds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Allowable sphinx-build outputs.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;html&#39;</span><span class="p">,</span> <span class="s1">&#39;singlehtml&#39;</span><span class="p">,</span> <span class="s1">&#39;text&#39;</span><span class="p">,</span> <span class="s1">&#39;linkcheck&#39;</span><span class="p">,</span> <span class="s1">&#39;doctest&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;html&#39;</span><span class="p">,</span> <span class="s1">&#39;singlehtml&#39;</span><span class="p">,</span> <span class="s1">&#39;text&#39;</span><span class="p">,</span> <span class="s1">&#39;linkcheck&#39;</span><span class="p">,</span> <span class="s1">&#39;doctest&#39;</span><span class="p">]</span></div>
 
-    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="DocBuilder.status"><a class="viewcode-back" href="../../dev.html#sphinx_extensions.make.DocBuilder.status">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">status</span><span class="p">(</span><span class="n">output</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Print output in bold. Emits ANSI escape sequences to sys.stdout&quot;&quot;&quot;</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[1m</span><span class="si">{0}</span><span class="se">\033</span><span class="s1">[0m&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">output</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[1m</span><span class="si">{0}</span><span class="se">\033</span><span class="s1">[0m&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">output</span><span class="p">))</span></div>
 
-    <span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DocBuilder.cleanup"><a class="viewcode-back" href="../../dev.html#sphinx_extensions.make.DocBuilder.cleanup">[docs]</a>    <span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Clean the working tree.&quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="p">(</span><span class="s1">&#39;Removing previous builds…&#39;</span><span class="p">)</span>
             <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="s1">&#39;build&#39;</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="n">MAKE_LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="n">MAKE_LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">sphinx_build</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DocBuilder.sphinx_build"><a class="viewcode-back" href="../../dev.html#sphinx_extensions.make.DocBuilder.sphinx_build">[docs]</a>    <span class="k">def</span> <span class="nf">sphinx_build</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Build docs.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        kind : {&#39;html&#39;, &#39;singlehtml&#39;, &#39;doctest&#39;, &#39;text&#39;}</span>
-<span class="sd">            Kind of docs to build.</span>
 
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
@@ -306,9 +327,9 @@
             <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BUILD_PATH</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kind</span><span class="p">)</span>
         <span class="p">]</span>
         <span class="n">MAKE_LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Cmd is &#39;</span><span class="p">,</span> <span class="n">cmd</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">cmd</span>
+        <span class="k">return</span> <span class="n">cmd</span></div>
 
-    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DocBuilder.run"><a class="viewcode-back" href="../../dev.html#sphinx_extensions.make.DocBuilder.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Run :command:`sphinx-build`.</span>
 
 <span class="sd">        The :attr:`check` argument to :func:`subprocess.run()`</span>
@@ -324,25 +345,36 @@
             <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">output</span>
+        <span class="k">return</span> <span class="n">output</span></div>
 
-    <span class="k">def</span> <span class="nf">open_browser</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">):</span>
+<div class="viewcode-block" id="DocBuilder.open_browser"><a class="viewcode-back" href="../../dev.html#sphinx_extensions.make.DocBuilder.open_browser">[docs]</a>    <span class="k">def</span> <span class="nf">open_browser</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Open a browser tab to the provided document.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">doc</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">doc</span> <span class="o">=</span> <span class="s1">&#39;index.html&#39;</span>
         <span class="n">url</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;file://&#39;</span><span class="p">,</span> <span class="n">DOC_PATH</span><span class="p">,</span> <span class="s1">&#39;build&#39;</span><span class="p">,</span> <span class="s1">&#39;html&#39;</span><span class="p">,</span> <span class="n">doc</span><span class="p">)</span>
-        <span class="n">webbrowser</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">new</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="p">(</span><span class="s1">&#39;Opening path to: </span><span class="si">{!s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">url</span><span class="p">))</span>
+        <span class="n">webbrowser</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">new</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">html</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Build HTML documentation.&quot;&quot;&quot;</span>
-        <span class="n">ret_code</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sphinx_build</span><span class="p">(</span><span class="s1">&#39;html&#39;</span><span class="p">)</span>
-        <span class="n">zip_fname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BUILD_PATH</span><span class="p">,</span> <span class="s1">&#39;html&#39;</span><span class="p">,</span> <span class="s1">&#39;pandas.zip&#39;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">zip_fname</span><span class="p">):</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">zip_fname</span><span class="p">)</span>
+<div class="viewcode-block" id="DocBuilder.html"><a class="viewcode-back" href="../../dev.html#sphinx_extensions.make.DocBuilder.html">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">html</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Build HTML documentation.</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">single_doc_html</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_open_browser</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">single_doc_html</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_add_redirects</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">ret_code</span></div>
+<span class="sd">        .. todo:: Practice making classmethods</span>
+
+<span class="sd">            Double check that this is created correctly.</span>
+<span class="sd">            Probably should review the git log if you&#39;re wondering why this is</span>
+<span class="sd">            so bare.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        cls : class</span>
+<span class="sd">            By convention?</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># so do we not set self.kind to html? Just pass it in like that?</span>
+        <span class="n">ret_code</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">sphinx_build</span><span class="p">(</span><span class="s1">&#39;html&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">ret_code</span></div></div>
 
 
 <span class="k">def</span> <span class="nf">termux_hack</span><span class="p">():</span>
@@ -380,6 +412,29 @@
         <span class="k">return</span> <span class="n">output</span>
 
 
+<span class="k">def</span> <span class="nf">gather_sphinx_options</span><span class="p">(</span><span class="n">argv</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Gather parsed arguments and hand them to sphinx-build in a more direct manner.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    argv : list</span>
+<span class="sd">        User provided arguments</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ret : int (? or maybe just the parsed options?)</span>
+<span class="sd">        Return code from sphinx-build</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">_parse_arguments</span><span class="p">()</span>
+    <span class="n">jobs</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">jobs</span>
+    <span class="n">verbosity</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span>
+    <span class="n">builder</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">builder</span>
+
+    <span class="n">ret</span> <span class="o">=</span> <span class="n">run_make_mode</span><span class="p">([</span><span class="s1">&#39;-b&#39;</span><span class="p">,</span> <span class="n">builder</span><span class="p">,</span> <span class="n">SOURCE_PATH</span><span class="p">,</span> <span class="n">BUILD_PATH</span><span class="p">,</span> <span class="s1">&#39;-j&#39;</span><span class="p">,</span> <span class="n">jobs</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="n">verbosity</span> <span class="o">*</span> <span class="s1">&#39;v&#39;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">ret</span>
+
+
 <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Set everything up.&quot;&quot;&quot;</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">_parse_arguments</span><span class="p">()</span>
@@ -394,6 +449,12 @@
     <span class="n">sphinx_shell</span> <span class="o">=</span> <span class="n">DocBuilder</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="n">builder</span><span class="p">,</span> <span class="n">num_jobs</span><span class="o">=</span><span class="n">jobs</span><span class="p">,</span> <span class="n">verbosity</span><span class="o">=</span><span class="n">verbosity</span><span class="p">)</span>
     <span class="n">output</span> <span class="o">=</span> <span class="n">sphinx_shell</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 
+    <span class="k">if</span> <span class="n">output</span><span class="o">.</span><span class="n">returncode</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s1">&#39;Command failed with return code: </span><span class="si">{}</span><span class="s1"> &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">returncode</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">open_browser</span><span class="p">:</span>
         <span class="n">sphinx_shell</span><span class="o">.</span><span class="n">open_browser</span><span class="p">()</span>
         <span class="n">sphinx_shell</span><span class="o">.</span><span class="n">status</span><span class="p">(</span><span class="s1">&#39;Opening browser!&#39;</span><span class="p">)</span>
@@ -402,13 +463,11 @@
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">status</span> <span class="o">=</span> <span class="n">main</span><span class="p">()</span>
-    <span class="n">pprint</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
-
-    <span class="c1"># if os.environ.get(&#39;ANDROID_ROOT&#39;):</span>
-    <span class="c1">#     termux_hack()</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="n">rsync</span><span class="p">())</span>
+    <span class="c1"># status = main()</span>
+    <span class="c1"># pprint(status)</span>
+    <span class="c1"># print(rsync())</span>
+    <span class="n">argv</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="n">pprint</span><span class="p">(</span><span class="n">gather_sphinx_options</span><span class="p">(</span><span class="n">argv</span><span class="p">))</span>
 </pre></div>
 
           </div>
@@ -449,6 +508,7 @@
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../startup/index.html">IPython Shell Initialization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../util.html">General Utility Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../jupyter.html">Jupyter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../extensions.html">Extensions</a></li>
 </ul>
@@ -473,7 +533,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright (C) 2018-2019 Faris Chugthai.
-      Last updated on Sep 02, 2019.
+      Last updated on Sep 06, 2019.
     </div>
   </body>
 </html>

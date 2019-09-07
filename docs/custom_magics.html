@@ -202,33 +202,11 @@ cases.</p>
 <p>The <code class="xref py py-obj docutils literal notranslate"><span class="pre">&#64;magic_arguments</span></code> decorator marks the function as having
 <a class="reference external" href="https://docs.python.org/3/library/argparse.html#module-argparse" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">argparse</span></code></a> arguments.</p>
 <p>The <code class="xref py py-obj docutils literal notranslate"><span class="pre">&#64;argument</span></code> decorator adds an argument using the same syntax as
-<a class="reference external" href="https://docs.python.org/3/library/argparse.html#module-argparse" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">argparse</span></code></a>’s <code class="xref py py-obj docutils literal notranslate"><span class="pre">add_argument()</span></code> method.</p>
+<a class="reference external" href="https://docs.python.org/3/library/argparse.html#module-argparse" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">argparse</span></code></a>’s <code class="docutils literal notranslate"><span class="pre">add_argument</span></code> method.</p>
 <p>More sophisticated uses may also require the <code class="xref py py-obj docutils literal notranslate"><span class="pre">&#64;argument_group</span></code> or
 <code class="xref py py-obj docutils literal notranslate"><span class="pre">&#64;kwds</span></code> decorator to customize the formatting and the parsing.</p>
 <p>Help text for the magic is automatically generated from the docstring and the
 arguments</p>
-<div class="highlight-none notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10</pre></div></td><td class="code"><div class="highlight"><pre><span></span>In[1]: %cool?
-       %cool [-o OPTION] arg
-
-       A really cool magic command.
-
-       positional arguments:
-         arg                   An integer positional argument.
-
-       optional arguments:
-         -o OPTION, --option OPTION      An optional argument.
-</pre></div>
-</td></tr></table></div>
-<p>Inheritance diagram:</p>
 </div>
 <div class="section" id="writing-custom-magics">
 <span id="extensions-and-custom-magics"></span><h3>Writing Custom Magics<a class="headerlink" href="#writing-custom-magics" title="Permalink to this headline">¶</a></h3>
@@ -343,7 +321,7 @@ running IPython instance.</p>
 <p>Any module file that define a function named <code class="docutils literal notranslate"><span class="pre">load_ipython_extension</span></code>
 can be loaded via <code class="xref py py-obj docutils literal notranslate"><span class="pre">%load_ext</span></code> module.path or be configured to be
 autoloaded by IPython at startup time.</p>
-<p>You can register the class itself without instantiating it.  IPython will
+<p>You can register the class itself without instantiating it. IPython will
 call the default constructor on it.:</p>
 <div class="highlight-ipython notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
@@ -485,6 +463,7 @@ code, and so on.
 This loading function is called when the extension is loaded, which
 happens when the command is executed.</p>
 </div></blockquote>
+<p>So how can we load the IPython extension while running interactively?</p>
 <p>To automatically load a module when <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.8.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> starts,
 we need to add the module name to the <code class="docutils literal notranslate"><span class="pre">c.TerminalIPythonApp.extensions</span></code>
 list in the <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.8.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> configuration file.</p>
@@ -493,8 +472,7 @@ IPython interpreter. Useful methods and attributes include
 <code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.core.magic.register_magics()</span></code>, to create new magic commands,
 and <code class="docutils literal notranslate"><span class="pre">user_ns</span></code>, to access the user namespace. You can
 explore all the instance’s attributes interactively from
-<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.8.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> with tab completion. For that, you need to execute
-the following command to get the current instance</p>
+<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.8.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> with tab completion.</p>
 </div>
 </div>
 
@@ -542,34 +520,9 @@ the following command to get the current instance</p>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="startup/index.html">IPython Shell Initialization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">General Utility Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="jupyter.html">Jupyter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="extensions.html">Extensions</a></li>
-</ul>
-
-</div>
-
-<h3><a href="index.html">On This Page:</a></h3>
-
-<div>&nbsp;</div>
-<div id="sidebartoc">
-  <ul>
-<li><a class="reference internal" href="#">Custom Magics</a><ul>
-<li><a class="reference internal" href="#registering-the-magic">Registering the magic</a><ul>
-<li><a class="reference internal" href="#register-magics"><code class="docutils literal notranslate"><span class="pre">register_magics</span></code></a><ul>
-<li><a class="reference internal" href="#register-magic-parameters"><code class="docutils literal notranslate"><span class="pre">register_magic</span></code> Parameters</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#register-magic-function"><code class="docutils literal notranslate"><span class="pre">register_magic_function</span></code></a></li>
-<li><a class="reference internal" href="#parameters">Parameters</a></li>
-<li><a class="reference internal" href="#tldr">Tldr</a></li>
-<li><a class="reference internal" href="#alternative-method-of-defining-magics-with-arguments">Alternative Method of Defining Magics with Arguments</a></li>
-<li><a class="reference internal" href="#writing-custom-magics">Writing Custom Magics</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#complete-example">Complete Example</a></li>
-<li><a class="reference internal" href="#creating-ipython-extensions">Creating IPython Extensions</a></li>
-</ul>
-</li>
 </ul>
 
 </div>
@@ -604,7 +557,7 @@ the following command to get the current instance</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright (C) 2018-2019 Faris Chugthai.
-      Last updated on Sep 02, 2019.
+      Last updated on Sep 06, 2019.
     </div>
   </body>
 </html>

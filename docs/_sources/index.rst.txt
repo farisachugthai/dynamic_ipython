@@ -141,8 +141,24 @@ form of rst docs and ipynb notebooks.
    :titlesonly:
 
    IPython Shell Initialization <startup/index>
+   General Utility Functions <util>
    jupyter
    extensions
+
+
+
+.. .. _ipyparallel:
+
+.. IPyParallel
+.. ============
+
+.. .. autosummary::
+..    :toctree: modules
+
+..    profile_parallel/ipcluster_config
+..    profile_parallel/ipcontroller_config
+..    profile_parallel/ipengine_config
+
 
 
 Indices and tables

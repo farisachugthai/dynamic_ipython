@@ -13,16 +13,29 @@ add these directories to sys.path here. If the directory is relative to the
 documentation root, use os.path.abspath to make it absolute, like shown here.
 
 """
+from default_profile.__about__ import __version__
+from sphinx import application
+import sphinx
 from datetime import datetime
 from importlib import import_module
-from pathlib import Path
 import functools
 import logging
 import math
+from pathlib import Path
 import os
 import sys
 
-from IPython import start_ipython
+# Eh didn't work
+# from IPython import embed
+
+# THIS DID! It halted output enough to allow the traceback to propagate up!
+# Holy hell that was actually neat
+# import ipdb
+# if hasattr(sys, 'last_traceback'):
+#     ipdb.pm()  # how about this instead?
+# else:
+#     ipdb.set_trace()
+
 from gruvbox.style import GruvboxDarkHard
 from traitlets.config import Config
 
@@ -30,19 +43,24 @@ DOCS = Path(__file__).resolve().parent.parent
 BUILD_DIR = DOCS.joinpath('build')
 CONF_PATH = DOCS.joinpath('source')
 
-ROOT = Path(DOCS).parent
-DP = ROOT.joinpath('default_profile')
-sys.path.insert(0, DP)
 sys.path.insert(0, DOCS)
 
-from default_profile.__about__ import __version__
-from sphinx_extensions import make
+SOURCE = Path(__file__).resolve().parent
+ROOT = Path(SOURCE).parent.parent
+
+sys.path.insert(0, ROOT.__fspath__())
+
+default = ROOT.joinpath('default_profile')
+sys.path.insert(0, default)
+
 
 DOCS_LOGGER = logging.getLogger('docs').getChild('conf')
 DOCS_LOGGER.setLevel(level=logging.DEBUG)
 DOCS_LOGGER.addHandler(logging.StreamHandler)
 
 # Let's try setting up an embedded IPython shell from here
+# This file needs debugging but I don't know where to correctly enter.
+# Regardless don't give me one of the usual shells that'll be too much
 c = Config()
 
 c.InteractiveShellApp.exec_lines = [
@@ -58,37 +76,6 @@ c.InteractiveShellApp.exec_lines = [
 c.InteractiveShell.confirm_exit = False
 c.TerminalIPythonApp.display_banner = False
 
-# _ip = start_ipython(config=c)
-
-
-def _path_build(root, suffix):
-    """Join parts of paths together and ensure they exist.
-
-    Log nonexistant paths.
-
-    Parameters
-    ----------
-    root : str or bytes (path-like)
-        Directory to build on
-    suffix : str, bytes (Path-like)
-        What to add to the root directory
-
-    Returns
-    -------
-    new : Path
-        Path object with suffix joined onto root.
-
-    """
-    if isinstance(root, str):
-        root = Path(root)
-
-    # TODO: Should probably add one in for bytes
-    if root.joinpath(suffix).exists():
-        new = root.joinpath(suffix)
-        return new
-    else:
-        DOCS_LOGGER.error('%s: does not exist. Returning None.' % root)
-
 
 def ask_for_import(mod):
     """Try/except for importing modules."""
@@ -98,9 +85,14 @@ def ask_for_import(mod):
         pass
 
 
-STARTUP = _path_build(DP, 'startup')
+ask_for_import('jinja2')
+# app = application.Sphinx(outdir=BUILD_DIR, srcdir=SOURCE, buildername='html', confdir=SOURCE, doctreedir=BUILD_DIR)
+# Yeah apparently don't do this
 
-# DOCS_DIR = _path_build(ROOT, 'docs')
+# your_app = application.Sphinx(outdir=BUILD_DIR, srcdir=SOURCE, buildername='html', confdir=SOURCE, doctreedir=BUILD_DIR)
+# damn it wasn't even a naming issue. initializing that object jams the
+# invocation of ``make html``
+
 
 # -- Project information -----------------------------------------------------
 
@@ -148,13 +140,16 @@ if ask_for_import('numpydoc'):
     extensions.append('numpydoc.numpydoc')
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = [os.path.join(os.path.curdir, '_templates')]
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 #
 # source_suffix = ['.rst', '.md']
 source_suffix = '.rst'
+
+# The encoding of source files.
+source_encoding = 'utf-8'
 
 # The master toctree document.
 master_doc = 'index'
@@ -169,7 +164,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ['.ipynb_checkpoints', 'tags']
+exclude_patterns = ['build', 'dist', '.tox', '.ipynb_checkpoints', 'tags']
 
 default_role = 'py:obj'
 
@@ -182,6 +177,7 @@ today_fmt = '%B %d, %Y'
 # The name of the Pygments (syntax highlighting) style to use.
 # Specified in theme.conf
 # pygments_style = 'Friendly'
+pygments_style = 'sphinx'
 
 rst_prolog = """
 .. |ip| replace:: :class:`IPython.core.interactiveshell.InteractiveShell`
@@ -219,14 +215,12 @@ html_static_path = [str(Path().resolve('../_static'))]
 # 'searchbox.html']``.
 #
 html_sidebars = {
-    '**':
-        [
-            'searchbox.html',
-            'relations.html',
-            'globaltoc.html',
-            'localtoc.html',
-            'sourcelink.html',
-        ]
+    '**': [
+        'searchbox.html',
+        'relations.html',
+        'globaltoc.html',
+        'sourcelink.html',
+    ]
 }
 
 html_title = u'Dynamic IPython: version' + __version__
@@ -334,10 +328,9 @@ intersphinx_mapping = {
     'ipython': ('https://ipython.readthedocs.io/en/stable/', None),
     'prompt_toolkit':
         ('https://python-prompt-toolkit.readthedocs.io/en/stable/', None),
-    'prompt_toolkit':
-        ('https://python-prompt-toolkit.readthedocs.io/en/stable/', None),
-    'prompt_toolkit':
-        ('https://python-prompt-toolkit.readthedocs.io/en/stable/', None),
+    'scipy': ('https://docs.scipy.org/doc/scipy/reference', None),
+    'matplotlib': ('https://matplotlib.org', None),
+    'numpy': ('https://docs.scipy.org/doc/numpy/', None),
 }
 
 # -- Options for todo extension ----------------------------------------------
@@ -405,12 +398,21 @@ else:
 
 # -- autosummary -------------------------------------------------------------
 
+autodoc_mock_imports = ['profile_default', 'profile_parallel']
 autosummary_generate = True
 
 autosummary_imported_members = False
 
 autoclass_content = u'both'
 autodoc_member_order = u'bysource'
+
+autodoc_docstring_signature = True
+
+if sphinx.version_info < (1, 8):
+    autodoc_default_flags = ['members', 'undoc-members']
+else:
+    autodoc_default_options = {'members': None, 'undoc-members': None}
+
 
 # -- autosection label extension ---------------------------------------------
 
@@ -451,6 +453,8 @@ def linkcode_resolve(domain, info):
 plot_pre_code = """
 import numpy as np
 # import scipy as sp
+import matplotlib as mpl
+import matplotlib.pyplot as plt
 np.random.seed(123)
 """
 plot_include_source = True

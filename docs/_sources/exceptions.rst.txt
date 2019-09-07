@@ -1,14 +1,22 @@
+.. _customized-exceptions:
+
 =====================
 Customized Exceptions
 =====================
 
-The help docs from IPython's core module `ultratb` is phenomenally helpful.
+The help docs from IPython's core module :mod:`IPython.core.ultratb`
+is phenomenally helpful.
+
+**Source code**: :source:`default_profile/startup/50_sysexception.py`
+
+-------------------------
 
 Help on module IPython.core.ultratb in IPython.core:
 ====================================================
 
-NAME
-    IPython.core.ultratb - Verbose and colourful traceback formatting.
+NAME:
+
+IPython.core.ultratb - Verbose and colourful traceback formatting.
 
 DESCRIPTION:
 ------------
@@ -64,7 +72,6 @@ Give it a shot--you'll love it or you'll hate it.
     Note:  Much of the code in this module was lifted verbatim from the standard
     library module 'traceback.py' and Ka-Ping Yee's 'cgitb.py'.
 
--------------------------
 
 Color schemes
 -------------
@@ -100,11 +107,11 @@ Print out a formatted exception traceback.
 
 Optional arguments:
 
-  - out: an open file-like object to direct output to.
+- out: an open file-like object to direct output to.
 
-  - ``tb_offset``: the number of frames to skip over in the stack, on a
-    per-call basis (this overrides temporarily the instance's tb_offset
-    given at initialization time.
+- ``tb_offset``: the number of frames to skip over in the stack, on a
+  per-call basis (this overrides temporarily the instance's tb_offset
+  given at initialization time.
 
 
 .. _exception-parameters:
@@ -115,6 +122,7 @@ Parameters
 ``*args``, ``**kwargs`` : list or dict
     The least useful call signature. Give it any length iterable.
 
+
 .. _exception-see-also:
 
 See Also
@@ -123,6 +131,7 @@ See Also
 :class:`IPython.core.ultratb.FormattedTB` : :class:`IPython.utils.colorable.Colorable`
     Displays all accepted keyword arguments. I don't know if I specified the type
     right but if you follow the MRU...
+
 
 .. _exception-examples:
 

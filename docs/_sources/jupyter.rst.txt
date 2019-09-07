@@ -13,11 +13,13 @@ suite. These have been commented and marked up as appropriate.
 
 Jupyter QTConsole
 =================
+
 :mod:`jupyter_conf.jupyter_qtconsole_config`
 
 
 connectionFileMixin(LoggingConfigurable) configuration
 ------------------------------------------------------
+
 :class:`jupyter.qtconsole.connectionFileMixin` --- Mixin for configurable
 classes that work with connection files
 
@@ -58,28 +60,9 @@ Set the stdin (ROUTER) port [default: random]::
    c.ConnectionFileMixin.stdin_port = 0
 
 
-Keyboard Errors
----------------
-May 27, 2019:
-
-.. code-block:: none
-
-    (ins)(navigator) faris@faris-U56E:~$ jupyter-qtconsole
-    xkbcommon: ERROR: failed to add default include path
-    Qt: Failed to create XKB context!
-    Use QT_XKB_CONFIG_ROOT environmental variable to provide an additional
-    search path, add ':' as separator to provide several search paths and/or
-    make sure that XKB configuration data directory contains recent enough
-    contents, to update please see http://cgit.freedesktop.org/xkeyboard-config/ .
-
-
-So we have to debug that because the keyboard isn't working on Jupyter
-QTConsole :/
-
-In a rare turn of events, it **IS** however, working just fine on Windows.
-
 Initializing Jupyter QTConsole
 --------------------------------
+
 The initial entry point for :command:`jupyter-qtconsole` is in the following::
 
     from qtconsole.qtconsole.app import main
@@ -89,7 +72,8 @@ The initial entry point for :command:`jupyter-qtconsole` is in the following::
 
 
 Display
-=======
+-------
+
 The following is from the Jupyter QTConsole help.
 
 For example, if using the IPython kernel, there are functions available for
@@ -115,6 +99,7 @@ For further details, see :mod:`IPython.core.formatters`.
 
 Jupyter Notebook
 ================
+
 :mod:`jupyter_conf.jupyter_notebook_config`
 
 .. ipython:: python
@@ -125,6 +110,7 @@ Jupyter Notebook
 
 JupyterApp(Application) configuration
 -------------------------------------
+
 Answer yes to any prompts.::
 
    c.JupyterApp.answer_yes = False
@@ -144,6 +130,7 @@ Generate default config file.::
 
 NotebookApp(JupyterApp) configuration
 -------------------------------------
+
 Set the Access-Control-Allow-Credentials: true header::
 
    c.NotebookApp.allow_credentials = False
@@ -453,7 +440,8 @@ The directory for user settings.::
 
 
 fswatcher
---------------
+---------
+
 Whether to serve the app in watch mode.::
 
     c.LabApp.watch = False
@@ -527,6 +515,7 @@ Should be in the form of an HTTP origin:
 
 NteractApp(NotebookApp) configuration
 -------------------------------------
+
 Application for running :command:`nteract` on a jupyter notebook server.
 
 Whether to start the app in dev mode. Expects resources to be loaded from
@@ -550,6 +539,7 @@ In addition, the Jupyter configuration file must be modified like so::
 
 Image Handlers
 ==============
+
 Need to set something up for the Jupyter Console image handler.
 Same thing for QTConsole.
 

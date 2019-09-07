@@ -1,15 +1,16 @@
-============================
-IPython Initialization Files
-============================
+=================
+IPython's Startup
+=================
 
 These are the auto-generated API docs for IPython's startup.
 
 In addition, documentation for utility functions can be found at :doc:`util`.
-These modules are all globally available classes and functions, but currently
-have no reason to be loaded at start up time.
+
+Those modules specifically are globally available classes and functions,
+but currently have no reason to be loaded at start up time.
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :titlesonly:
    :caption: List of IPython startup files
 
@@ -21,7 +22,6 @@ have no reason to be loaded at start up time.
    numpy
    pandas
    sysexcept
-
 
 .. toctree::
    :maxdepth: 1

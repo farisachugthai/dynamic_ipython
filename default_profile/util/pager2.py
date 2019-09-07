@@ -15,9 +15,7 @@ So would it be easier to do this as a magic or using Traitlets?
 Original Implementation
 ========================
 
-In [72]: pycat??
-
-Source::
+Below is the source code for how the original :ref:`pycat` was implemented.::
 
     from IPython import get_ipython
     from IPython.core.magics import line_magic
@@ -54,7 +52,23 @@ Source::
 
 File:   /usr/lib/python3.7/site-packages/IPython/core/magics/osm.py
 
-What's that page.page line?
+
+Breaking it down
+================
+
+Here's the docstring from :mod:`IPython.utils.openpy`, specifically
+the function ``read_py_file``.::
+
+    skip_encoding_cookie : bool
+      If True (the default), and the encoding declaration is found in the first
+      two lines, that line will be excluded from the output - compiling a
+      unicode string with an encoding declaration is a SyntaxError in Python 2.
+
+
+page.page
+---------
+
+What's that ``page.page`` line?
 
 >>> from IPython.core.magics.basic import BasicMagics
 >>> BasicMagics.page??
@@ -88,6 +102,12 @@ So whats page.page?
 
 >>> from IPython.core import page
 
+Eh I don't know if that was it.
+
+
+Rewriting the pager
+===================
+
 Found some platform specific code. I think we're in the right direction.
 
 Aug 17, 2019:
@@ -96,10 +116,33 @@ Think I got it.
 
 >>> from IPython.core.page import get_pager_cmd
 
+**Note that that isn't the page.page method; however, it does
+show how IPython setup the pager.
+
+See Also
+--------
+:func:`numpy.info`
+:func:`numpy.source`
+
+Also worth noting is how Numpy and Scipy entirely
+circumvent it with their numpy.info() and numpy.source() functions.
+
+
+Implementing the rewrite
+========================
+
+It might be best if we design this using traitlets.
+They have the linking functions in the utils directory
+so that we can observe if sphinxify_docstring changes, or
+the value of editor changes, or handful of other things that we'll
+be expected to respond to.
+
+
 """
 import sys
 
 from pygments.lexers.python import PythonLexer
+from IPython.lib.lexers import IPyLexer, IPython3Lexer
 
 from IPython import get_ipython
 # Might need some of the funcs from IPython.utils.{PyColorize,coloransi,colorable}

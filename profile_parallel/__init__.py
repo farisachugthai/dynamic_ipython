@@ -1,4 +1,13 @@
-"""Initialize a IPyParallel profile for IPython."""
+"""
+===========
+IPyParallel
+===========
+
+.. currentmodule:: ipyparallel
+
+Initialize a IPyParallel profile for IPython.
+
+"""
 import logging
 import os
 import sys

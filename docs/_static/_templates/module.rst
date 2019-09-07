@@ -7,6 +7,7 @@
    .. rubric:: Functions
 
    .. autosummary::
+
    {% for item in functions %}
       {{ item }}
    {%- endfor %}
@@ -18,6 +19,7 @@
    .. rubric:: Classes
 
    .. autosummary::
+
    {% for item in classes %}
       {{ item }}
    {%- endfor %}
@@ -29,6 +31,7 @@
    .. rubric:: Exceptions
 
    .. autosummary::
+
    {% for item in exceptions %}
       {{ item }}
    {%- endfor %}

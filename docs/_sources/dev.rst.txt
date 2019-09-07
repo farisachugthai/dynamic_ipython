@@ -44,6 +44,7 @@ changed like so::
 
 Building Documentation
 ======================
+
 While working in Vim, the following commands can be useful for building
 documentation.::
 
@@ -62,8 +63,22 @@ In addition, ``makeprg`` is not an option one is allowed to set in a modeline
 so it's important to take that into consideration.
 
 
+While not in Vim
+----------------
+
+The following is a good invocation for building docs with sphinx inside of IPython.
+
+Need to double check what env var can be used to set ipdb as the default debugger instead of pdb
+so that we can use magics like pinfo and pdoc while inside the debugger. I'm too spoiled at this point
+to go without.::
+
+    !sphinx-build source build/html -b html -a -j8 -n --color -v -w sphinx.log -P
+    
+
+
 Automatically Generating Docs
 -----------------------------
+
 Below is the automatically generated documentation for a script that generates
 documentation for this project.:
 

@@ -13,13 +13,15 @@ add these directories to sys.path here. If the directory is relative to the
 documentation root, use os.path.abspath to make it absolute, like shown here.
 
 """
+from default_profile.__about__ import __version__
+from sphinx import application
+import sphinx
 from datetime import datetime
 from importlib import import_module
-import math
-from pathlib import Path
 import functools
 import logging
 import math
+from pathlib import Path
 import os
 import sys
 
@@ -41,13 +43,16 @@ DOCS = Path(__file__).resolve().parent.parent
 BUILD_DIR = DOCS.joinpath('build')
 CONF_PATH = DOCS.joinpath('source')
 
-ROOT = Path(DOCS).parent
-DP = ROOT.joinpath('default_profile')
-sys.path.insert(0, DP)
 sys.path.insert(0, DOCS)
 
-from default_profile.__about__ import __version__
-from sphinx_extensions import make
+SOURCE = Path(__file__).resolve().parent
+ROOT = Path(SOURCE).parent.parent
+
+sys.path.insert(0, ROOT.__fspath__())
+
+default = ROOT.joinpath('default_profile')
+sys.path.insert(0, default)
+
 
 DOCS_LOGGER = logging.getLogger('docs').getChild('conf')
 DOCS_LOGGER.setLevel(level=logging.DEBUG)
@@ -72,35 +77,6 @@ c.InteractiveShell.confirm_exit = False
 c.TerminalIPythonApp.display_banner = False
 
 
-def _path_build(root, suffix):
-    """Join parts of paths together and ensure they exist.
-
-    Log nonexistant paths.
-
-    Parameters
-    ----------
-    root : str or bytes (path-like)
-        Directory to build on
-    suffix : str, bytes (Path-like)
-        What to add to the root directory
-
-    Returns
-    -------
-    new : Path
-        Path object with suffix joined onto root.
-
-    """
-    if isinstance(root, str):
-        root = Path(root)
-
-    # TODO: Should probably add one in for bytes
-    if root.joinpath(suffix).exists():
-        new = root.joinpath(suffix)
-        return new
-    else:
-        DOCS_LOGGER.error('%s: does not exist. Returning None.' % root)
-
-
 def ask_for_import(mod):
     """Try/except for importing modules."""
     try:
@@ -110,6 +86,13 @@ def ask_for_import(mod):
 
 
 ask_for_import('jinja2')
+# app = application.Sphinx(outdir=BUILD_DIR, srcdir=SOURCE, buildername='html', confdir=SOURCE, doctreedir=BUILD_DIR)
+# Yeah apparently don't do this
+
+# your_app = application.Sphinx(outdir=BUILD_DIR, srcdir=SOURCE, buildername='html', confdir=SOURCE, doctreedir=BUILD_DIR)
+# damn it wasn't even a naming issue. initializing that object jams the
+# invocation of ``make html``
+
 
 # -- Project information -----------------------------------------------------
 
@@ -232,14 +215,12 @@ html_static_path = [str(Path().resolve('../_static'))]
 # 'searchbox.html']``.
 #
 html_sidebars = {
-    '**':
-        [
-            'searchbox.html',
-            'relations.html',
-            'globaltoc.html',
-            'localtoc.html',
-            'sourcelink.html',
-        ]
+    '**': [
+        'searchbox.html',
+        'relations.html',
+        'globaltoc.html',
+        'sourcelink.html',
+    ]
 }
 
 html_title = u'Dynamic IPython: version' + __version__
@@ -417,12 +398,21 @@ else:
 
 # -- autosummary -------------------------------------------------------------
 
+autodoc_mock_imports = ['profile_default', 'profile_parallel']
 autosummary_generate = True
 
 autosummary_imported_members = False
 
 autoclass_content = u'both'
 autodoc_member_order = u'bysource'
+
+autodoc_docstring_signature = True
+
+if sphinx.version_info < (1, 8):
+    autodoc_default_flags = ['members', 'undoc-members']
+else:
+    autodoc_default_options = {'members': None, 'undoc-members': None}
+
 
 # -- autosection label extension ---------------------------------------------
 

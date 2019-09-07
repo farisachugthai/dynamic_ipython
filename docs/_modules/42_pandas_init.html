@@ -51,9 +51,7 @@
 <span class="sd">Pandas Initialization</span>
 <span class="sd">=====================</span>
 
-<span class="sd">.. module:: 42_pandas_init</span>
-<span class="sd">    :synopsis: Initialize desired parameters for :mod:`pandas` at startup.</span>
-
+<span class="sd">:URL: https://realpython.com/python-pandas-tricks/#1-configure-options-settings-at-interpreter-startup</span>
 <span class="sd">.. highlight:: ipython</span>
 <span class="sd">    :linenothreshold: 5</span>
 
@@ -136,7 +134,6 @@
 <span class="sd">                    0x1f2fce37978</span>
 <span class="sd">                    register_converters=True&gt;&gt;&gt;</span>
 
-<span class="sd">:URL: https://realpython.com/python-pandas-tricks/#1-configure-options-settings-at-interpreter-startup</span>
 
 <span class="sd">Here&#39;s an interesting blurb from pandas/docs/conf.py::</span>
 
@@ -171,6 +168,7 @@
     <span class="n">options</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s1">&#39;display&#39;</span><span class="p">:</span>
             <span class="p">{</span>
+                <span class="s1">&#39;colheader_justify&#39;</span><span class="p">:</span> <span class="s1">&#39;right&#39;</span><span class="p">,</span>
                 <span class="s1">&#39;encoding&#39;</span><span class="p">:</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">,</span>
                 <span class="s1">&#39;expand_frame_repr&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>  <span class="c1"># Don&#39;t wrap to multiple pages</span>
                 <span class="s1">&#39;html.table_schema&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
@@ -194,9 +192,6 @@
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
-        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s2">&quot;This module requires Python 3.6+&quot;</span><span class="p">)</span>
-
     <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;default_profile.startup.pandas_init&#39;</span>
     <span class="n">PANDAS_LOGGER</span> <span class="o">=</span> <span class="n">module_log</span><span class="o">.</span><span class="n">stream_logger</span><span class="p">(</span>
         <span class="n">logger</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span>
@@ -205,7 +200,7 @@
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
     <span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="n">ModuleNotFoundError</span><span class="p">):</span>
-        <span class="k">pass</span>
+        <span class="n">PANDAS_LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Pandas not installed.&#39;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">pandas_init</span><span class="p">()</span>
 </pre></div>
@@ -248,6 +243,7 @@
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../startup/index.html">IPython Shell Initialization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../util.html">General Utility Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../jupyter.html">Jupyter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../extensions.html">Extensions</a></li>
 </ul>
@@ -272,7 +268,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright (C) 2018-2019 Faris Chugthai.
-      Last updated on Sep 02, 2019.
+      Last updated on Sep 06, 2019.
     </div>
   </body>
 </html>

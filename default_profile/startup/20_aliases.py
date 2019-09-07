@@ -13,6 +13,7 @@ import shutil
 
 from IPython import get_ipython
 from IPython.core.alias import AliasError, AliasManager
+from IPython.core.error import UsageError
 
 from default_profile.util import module_log
 from default_profile.util.machine import Platform
@@ -36,6 +37,17 @@ def linux_specific_aliases():
     Convenience packages exist such as ConEmu or Cmder which allow a large
     number of GNU/Linux built-ins to exist on Windows, and as a result, this
     list may not be comprehensive.
+
+    Below is the source code for the function
+    :func:`IPython.core.magics.define_alias()` that is invoked here.::
+
+        def define_alias(self, name, cmd):
+            # Define a new alias after validating it.
+            # This will raise an :exc:`AliasError` if there are validation
+            # problems.
+            caller = Alias(shell=self.shell, name=name, cmd=cmd)
+            self.shell.magics_manager.register_function(caller, magic_kind='line',
+            magic_name=name)
 
     Parameters
     ----------
@@ -209,12 +221,32 @@ class WindowsAliases:
 
     """
 
-    def __init__(self, _ip=None):
-        """Initialize the platform specific alias manager with IPython."""
-        if _ip is None:
+    def __init__(self, shell=None):
+        """Initialize the platform specific alias manager with IPython.
+
+        Parameters
+        ----------
+        shell : external command, optional
+            The command used to invoke the sytem shell. Either
+            :command:`cmd`, :command:`powershell` or :command:`pwsh`.
+
+        """
             self._ip = get_ipython()
-        else:
-            self._ip = _ip
+        self.shell = shell
+
+    @staticmethod
+    def _find_exe(self, exe=None):
+        """Use :func:`shutil.which` to determine whether an executable exists.
+
+        Parameters
+        ----------
+        exe : command, optional
+            The command to check.
+
+        Returns
+        -------
+        path : str (path-like)
+            Where the executable is located.
 
     def __repr__(self):
         return 'Windows Aliases: {!r}'.format(
@@ -329,7 +361,18 @@ class WindowsAliases:
             ('wjb', 'Wait-Job %l'),
             ('write', 'Write-Output %l'),
         ]
-        return cls.user_aliases
+        return _ip.user_aliases
+
+    def user_shell(self):
+        """Determine the user's shell."""
+        if self.shell:
+            return self.shell
+        elif os.environ.get('SHELL'):
+            return os.environ.get('SHELL')
+        elif os.environ.get('COMSPEC'):
+            return os.environ.get('COMSPEC')
+        else:
+            raise
 
 
 def __setup_fzf(user_aliases):
@@ -378,7 +421,7 @@ def main():
 
     .. ipython::
 
-        from traitlets.traitlets import list
+        from traitlets.traitlets import List
         user_aliases = [  # let's just fill this with some filler text
             ('ls', 'ls')
         ]
@@ -398,6 +441,20 @@ def main():
 
     Wait what? A :class:`traitlets.traitlets.List` can't be added with itself?
     If that's true then that's definitely a bug right?
+
+    Aug 31, 2019:
+
+    So now I don't know if it's a bug but it's certainly odd behavior.
+    The output of ``print(dir(traitlets.traitlets.List))`` contains
+    ``__set__``. What? No ``__add__`` or anything?
+
+    And none of the methods looked like they intended on allowing multiple
+    assignments.
+
+    Whoa so is the :class:`traitlets.traitlets.List` supposed to be used
+    as an immutable set?
+
+    Gotta understand what I' saying when I say that that's confusing.
 
     """
     if not hasattr(_ip, 'magics_manager'):

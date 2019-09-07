@@ -2,6 +2,7 @@
 from traitlets.config import get_config
 
 c = get_config()
+
 # ------------------------------------------------------------------------------
 # Application(SingletonConfigurable) configuration
 # ------------------------------------------------------------------------------
@@ -502,6 +503,9 @@ c.TemplateExporter.exclude_code_cell = True
 #  Mainly populates the `latex` key in the resources dict, adding definitions for
 #  pygments highlight styles.
 
+# Name of the pygments style to use
+# c.LatexPreprocessor.style = 'default'
+
 # ------------------------------------------------------------------------------
 # RegexRemovePreprocessor(Preprocessor) configuration
 # ------------------------------------------------------------------------------
@@ -630,6 +634,7 @@ c.TemplateExporter.exclude_code_cell = True
 
 # ------------------------------------------------------------------------------
 # ServePostProcessor(PostProcessorBase) configuration
+# ------------------------------------------------------------------------------
 
 # Post processor designed to serve files
 #

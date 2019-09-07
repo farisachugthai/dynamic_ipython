@@ -16,8 +16,8 @@
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/profile_default/util/copytree.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <!--[if lte IE 6]>
 <link rel="stylesheet" href="../../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
 <![endif]-->
@@ -51,7 +51,7 @@
 <span class="kn">import</span> <span class="nn">stat</span>
 
 
-<div class="viewcode-block" id="CopyTree"><a class="viewcode-back" href="../../../startup/util.html#profile_default.util.copytree.CopyTree">[docs]</a><span class="k">class</span> <span class="nc">CopyTree</span><span class="p">:</span>
+<div class="viewcode-block" id="CopyTree"><a class="viewcode-back" href="../../../util.html#profile_default.util.copytree.CopyTree">[docs]</a><span class="k">class</span> <span class="nc">CopyTree</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Rewrite :func:`shutil.copytree()`.</span>
 
 <span class="sd">    Parameters</span>
@@ -94,7 +94,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">ignore</span> <span class="o">=</span> <span class="n">ignore</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">copy_function</span> <span class="o">=</span> <span class="n">copy_function</span>
 
-<div class="viewcode-block" id="CopyTree.destination_files"><a class="viewcode-back" href="../../../startup/util.html#profile_default.util.copytree.CopyTree.destination_files">[docs]</a>    <span class="nd">@property</span>
+<div class="viewcode-block" id="CopyTree.destination_files"><a class="viewcode-back" href="../../../util.html#profile_default.util.copytree.CopyTree.destination_files">[docs]</a>    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">destination_files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">names</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">src</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignore</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -111,14 +111,14 @@
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dst</span><span class="p">,</span> <span class="n">__fspath__</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dst</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dst</span><span class="o">.</span><span class="n">__fspath__</span><span class="p">()</span>
 
-<div class="viewcode-block" id="CopyTree.make_dest_dirs"><a class="viewcode-back" href="../../../startup/util.html#profile_default.util.copytree.CopyTree.make_dest_dirs">[docs]</a>    <span class="k">def</span> <span class="nf">make_dest_dirs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="CopyTree.make_dest_dirs"><a class="viewcode-back" href="../../../util.html#profile_default.util.copytree.CopyTree.make_dest_dirs">[docs]</a>    <span class="k">def</span> <span class="nf">make_dest_dirs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create the dirs needed in the destination.&quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dst</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">FileExistsError</span><span class="p">:</span>
             <span class="k">pass</span></div>
 
-<div class="viewcode-block" id="CopyTree.copytree"><a class="viewcode-back" href="../../../startup/util.html#profile_default.util.copytree.CopyTree.copytree">[docs]</a>    <span class="k">def</span> <span class="nf">copytree</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="CopyTree.copytree"><a class="viewcode-back" href="../../../util.html#profile_default.util.copytree.CopyTree.copytree">[docs]</a>    <span class="k">def</span> <span class="nf">copytree</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Let&#39;s try and do `shutil.copytree()` a little better.</span>
 
 <span class="sd">        First let&#39;s do everyone the courtesy of checking whether `src` and `dest`</span>
@@ -217,6 +217,7 @@
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../startup/index.html">IPython Shell Initialization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../util.html">General Utility Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../jupyter.html">Jupyter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Extensions</a></li>
 </ul>
@@ -241,7 +242,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright (C) 2018-2019 Faris Chugthai.
-      Last updated on Sep 02, 2019.
+      Last updated on Sep 01, 2019.
     </div>
   </body>
 </html>
