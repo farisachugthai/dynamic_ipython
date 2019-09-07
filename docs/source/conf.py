@@ -36,7 +36,6 @@ import sys
 # else:
 #     ipdb.set_trace()
 
-from gruvbox.style import GruvboxDarkHard
 from traitlets.config import Config
 
 DOCS = Path(__file__).resolve().parent.parent
@@ -65,13 +64,10 @@ c = Config()
 
 c.InteractiveShellApp.exec_lines = [
     'from sphinx.application import Sphinx',
-    # need to initialize this guy correctly
-    # class Sphinx(__builtin__.object)
-    #  |  Methods defined here:
-    #  |
-    #  |  __init__(self, srcdir, confdir, outdir, doctreedir, buildername, confoverrides=None, status=<open file '<stdout>', mode 'w'>, warning=<open file '<stderr>', mode 'w'>, freshenv=False, warningiserror=False, tags=None, verbosity=0, parallel=0)
-
-    # 'app = Sphinx'
+    'import default_profile',
+    'import ipdb; ipdb.set_trace()',
+    'import numpy as np; import pandas as pd',
+    'import sphinx_extensions'
 ]
 c.InteractiveShell.confirm_exit = False
 c.TerminalIPythonApp.display_banner = False

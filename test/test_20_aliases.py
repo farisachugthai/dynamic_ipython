@@ -20,13 +20,8 @@ except (ImportError, ModuleNotFoundError):
 else:
     NO_NOSE = None
 
-global _ip
-_ip = get_ipython()
-if _ip is None:
-    _ip = start_ipython()
 
-
-def test_alias_lifecycle():
+def test_alias_lifecycle(_ip):
     name = 'test_alias1'
     cmd = 'echo "Hello"'
     am = _ip.alias_manager
@@ -55,7 +50,7 @@ def test_alias_lifecycle():
     nt.assert_not_in((name, cmd), am.aliases)
 
 
-def test_alias_args_error():
+def test_alias_args_error(_ip):
     """Error expanding with wrong number of arguments."""
     _ip.alias_manager.define_alias('parts', 'echo first %s second %s')
     # capture stderr:
@@ -65,7 +60,7 @@ def test_alias_args_error():
     nt.assert_equal(cap.stderr.split(':')[0], 'UsageError')
 
 
-def test_alias_args_commented():
+def test_alias_args_commented(_ip):
     """Check that alias correctly ignores 'commented out' args"""
     _ip.magic('alias commetarg echo this is %%s a commented out arg')
 
@@ -89,6 +84,8 @@ def test_alias_args_commented_nargs():
 
 
 if __name__ == "__main__":
+    _ip = get_ipython()
+    unittest.skipIf(_ip is None)
     unittest.skipIf(NO_NOSE, 'Nose not installed.')
     unittest.main()
     nose.run()

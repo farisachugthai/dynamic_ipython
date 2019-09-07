@@ -43,8 +43,8 @@ import os
 import sys
 from logging import NullHandler
 
-# from .module_log import stream_logger
-# from .timer import timer  # so you can from default_profile.util import timer
+from .module_log import stream_logger
+from .timer import timer as _itimer
 
 logging.BASIC_FORMAT = '%(created)f : %(module)s : %(levelname)s : %(message)s'
 

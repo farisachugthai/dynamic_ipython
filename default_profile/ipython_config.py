@@ -449,8 +449,9 @@ c.TerminalInteractiveShell.extra_open_editor_shortcuts = True
 
 # Try to import my Gruvbox class. Can be found at
 # https://github.com/farisachugthai/Gruvbox_IPython
+import builtins
 if sys.version_info[0:2] <= (3,6):
-    if ModuleNotFoundError not in __builtins__:
+    if ModuleNotFoundError not in builtins:
 
         class ModuleNotFoundError(ImportError):
             """Subclass ImportErrors."""

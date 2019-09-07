@@ -231,8 +231,7 @@ class WindowsAliases:
             :command:`cmd`, :command:`powershell` or :command:`pwsh`.
 
         """
-            self._ip = get_ipython()
-        self.shell = shell
+        self.shell = shell or get_ipython()
 
     @staticmethod
     def _find_exe(self, exe=None):
@@ -247,6 +246,7 @@ class WindowsAliases:
         -------
         path : str (path-like)
             Where the executable is located.
+        """
 
     def __repr__(self):
         return 'Windows Aliases: {!r}'.format(

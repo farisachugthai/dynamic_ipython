@@ -5,8 +5,6 @@
 Example of Writing A Custom IPython Extension
 =============================================
 
-.. currentmodule:: example
-
 Usage
 =====
 
@@ -21,15 +19,6 @@ Writing Cell Magics
 While not utilized here, a similar execution path can be utilized for
 :func:`IPython.core.magic.cell_magic()`
 
-.. note:: Don't use register_cell_magic.
-
-     That decorator is for functions.
-    `IPython.core.magic.register_magics` is only for classes as well.
-
-::
-
-    from IPython.core.magic import register_cell_magic
-    from IPython.core.magic import register_magic
 
 Those lines specifically.
 

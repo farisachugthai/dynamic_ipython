@@ -3,18 +3,18 @@ Custom Magics
 =============
 
 .. module:: custom-magics
-   :synopsis: Defining your own custom magics. 
+   :synopsis: Defining your own custom magics.
 
 .. highlight:: ipython
-   :linenothreshold: 5
+   :linenothreshold: 1
 
 The general flow of creating your own magic in a file breaks down to a few
 simple steps.
 
-#) Creating an executable with a function named ``load_ipython_extension``.
-#) Registering the magic with the IPython shell.
+#) Creating a function or class with some desired functionality.
 #) Wrapping it in decorators so that the magic accepts the shell as an argument
    upon initialization.
+#) Registering the magic with the IPython shell.
 
 
 Registering the magic
@@ -24,6 +24,7 @@ There are 2 useful functions for registering a magic with the global IPython
 instance.
 
 The first is called **register_magics**.
+
 
 ``register_magics``
 -------------------
@@ -48,18 +49,22 @@ Docstring:
 
    The provided arguments can be an arbitrary mix of classes and instances.
 
+.. admonition:: Note how many times they said classes or instances. Passing a function will
+                raise an exception.
 
-``register_magic`` Parameters
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-``magic`` : object
+.. _register-magic-parameters:
+
+Parameters
+----------
+'magic' : object
    The decorated magic class or function.
 
 
 ``register_magic_function``
 ---------------------------
 
-The first is the: **register_magic_function** bound to the |ip| instance.
+The first is the function *register_magic_function* bound to the |ip| instance.
 
 Signature: register_magic_function(func, magic_kind='line', magic_name=None)
 
@@ -79,6 +84,8 @@ Docstring:
 
    In the latter case, the function will be called with `cell==None` when
    invoked as `%f`, and with cell as a string when invoked as `%%f`.
+
+.. _register-magic-function-parameters:
 
 Parameters
 ----------
