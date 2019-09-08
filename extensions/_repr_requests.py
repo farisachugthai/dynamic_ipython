@@ -1,17 +1,22 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
+
 .. magic:: _repr_request
 
-Utilize the _repr_pretty method to generate a display for
+
+Utilize the :ref:`_repr_pretty` method to generate a display for
 requests.models.Response objects.
+
 """
+import sys
+
 import IPython
 from IPython import get_ipython
-import requests
 
 
 def repr_request(r, p, cycle):
+    """Generate a :func:`repr` for requests.models.Response objects."""
     p.text('{} {}\n'.format(r.status_code, r.url))
     p.text('headers: ')
     for name in sorted(r.headers):
@@ -43,5 +48,11 @@ def load_ipython_extension(ip):
 
 if __name__ == "__main__":
     shell = get_ipython()
+
     if shell is not None:
-        load_ipython_extension(shell)
+        try:
+            import requests
+        except (ImportError, ModuleNotFoundError):
+            sys.exit()
+        else:
+            load_ipython_extension(shell)

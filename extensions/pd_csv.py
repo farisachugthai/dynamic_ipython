@@ -5,9 +5,6 @@
 Pandas CSV
 ============
 
-.. module:: pd_csv
-    :synopsis: Utilize pandas to read in CSV files.
-
 Magic that reads in a string and parses it as a :mod:`CSV` with :mod:`pandas`.
 
 Example of creating a magic from **IPython Interactive Computing and
@@ -32,15 +29,10 @@ import logging
 import sys
 from io import StringIO
 
-logging.basicConfig()
-
-try:
-    import pandas as pd
-except (ImportError, ModuleNotFoundError):
-    logging.error("{lib} not installed.".format(lib='Pandas'))
+from IPython import get_ipython
 
 
-def csv(cell):
+def pd_csv(cell):
     """Read in an :class:`io.StringIO()` and parse it with pandas.
 
     Parameters
@@ -70,3 +62,14 @@ def load_ipython_extension(ip):
 
     """
     ip.register_magic_function(csv, 'cell')
+
+
+if __name__ == '__main__':
+    try:
+        import pandas as pd
+    except (ImportError, ModuleNotFoundError):
+        logging.error("{lib} not installed.".format(lib='Pandas'))
+    else:
+        shell = get_ipython()
+        if shell is not None:
+            load_ipython_extension(shell)

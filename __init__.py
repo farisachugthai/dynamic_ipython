@@ -38,6 +38,8 @@ logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
 REPO_ROOT = dirname(abspath(__file__))
 
+# This kills everything on termux and makes run pytest or tox in the root
+# of this repo impossible. hmmmmm.
 declare_namespace(REPO_ROOT)
 
 found_packages = find_packages(where='.')
