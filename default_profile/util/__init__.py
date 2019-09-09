@@ -43,7 +43,15 @@ import os
 import sys
 from logging import NullHandler
 
+import default_profile
+import default_profile.util
+import default_profile.util.module_log
+
+from .copytree import CopyTree
+from .machine import Platform
 from .module_log import stream_logger
+from .paths import PathValidator
+from .profile_override import ReprProfileDir
 from .timer import timer as _itimer
 
 logging.BASIC_FORMAT = '%(created)f : %(module)s : %(levelname)s : %(message)s'

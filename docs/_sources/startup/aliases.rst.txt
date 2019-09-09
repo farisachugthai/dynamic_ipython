@@ -11,7 +11,7 @@
 System Shell Aliases
 ====================
 
-**Source Code:** :source:`default_profile/startup/20_aliases.py`
+**Source Code:** `default_profile/startup/20_aliases.py`
 
 .. currentmodule:: default_profile.startup.20_aliases
 

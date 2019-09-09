@@ -155,19 +155,6 @@ form of rst docs and ipynb notebooks.
 
 
 
-.. .. _ipyparallel:
-
-.. IPyParallel
-.. ============
-
-.. .. autosummary::
-..    :toctree: modules
-
-..    profile_parallel/ipcluster_config
-..    profile_parallel/ipcontroller_config
-..    profile_parallel/ipengine_config
-
-
 
 Indices and tables
 ==================

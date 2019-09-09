@@ -49,15 +49,8 @@
 <span class="sd">========================================================================</span>
 <span class="sd">`%load_ext` --- Import commonly used modules into the IPython namespace.</span>
 <span class="sd">========================================================================</span>
+
 <span class="sd">.. magic:: load_ext</span>
-
-<span class="sd">.. module:: load_ext</span>
-<span class="sd">    :synopsis: Import commonly used modules into the IPython namespace.</span>
-
-<span class="sd">This module is a slightly different way of accomplishing what</span>
-<span class="sd">:mod:`profile_default.startup.04_easy_import` attempts to do.</span>
-
-<span class="sd">Specifically, it sets up importing things into the user&#39;s interactive namespace.</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">logging</span>
@@ -99,12 +92,12 @@
 <span class="sd">        standalone function.  The functions should have the following</span>
 <span class="sd">        signatures:</span>
 
-<span class="sd">        * For line magics: `def f(line)`</span>
-<span class="sd">        * For cell magics: `def f(line, cell)`</span>
-<span class="sd">        * For a function that does both: `def f(line, cell=None)`</span>
+<span class="sd">    * For line magics: `def f(line)`</span>
+<span class="sd">    * For cell magics: `def f(line, cell)`</span>
+<span class="sd">    * For a function that does both: `def f(line, cell=None)`</span>
 
-<span class="sd">        In the latter case, the function will be called with ``cell==None`` when</span>
-<span class="sd">        invoked as ``%f``, and with cell as a string when invoked as ``%%f``.</span>
+<span class="sd">    In the latter case, the function will be called with ``cell==None`` when</span>
+<span class="sd">    invoked as ``%f``, and with cell as a string when invoked as ``%%f``.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">shell</span><span class="o">.</span><span class="n">magics_manager</span><span class="o">.</span><span class="n">register_function</span><span class="p">(</span><span class="n">load_ext</span><span class="p">,</span> <span class="n">magic_name</span><span class="o">=</span><span class="s1">&#39;load_ext&#39;</span><span class="p">)</span></div>
@@ -112,14 +105,14 @@
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-    <span class="n">args</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="k">if</span> <span class="n">_ip</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="c1"># TODO: Use magic_arguments decorator</span>
-        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s1">&#39;E127&#39;</span><span class="p">)</span>
+        <span class="n">load_ipython_extension</span><span class="p">(</span><span class="n">_ip</span><span class="p">)</span>
     <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
-            <span class="n">module_str</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-            <span class="n">load_ext</span><span class="p">(</span><span class="n">module_str</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="n">_ip</span><span class="p">)</span>
+            <span class="n">load_ext</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="n">_ip</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">IndexError</span>
 </pre></div>
@@ -154,7 +147,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../ipython_keybindings.html">Keybindings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../magics.html">Built-in Magics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../custom_magics.html">Writing Your Own Magics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../custom_magics.html">Custom Magics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../exceptions.html">Customized Exceptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../sphinxext.html">IPython Sphinx Directive</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../dev.html">Developers Notes</a></li>
@@ -187,7 +180,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright (C) 2018-2019 Faris Chugthai.
-      Last updated on Sep 06, 2019.
+      Last updated on Sep 09, 2019.
     </div>
   </body>
 </html>

@@ -4,12 +4,6 @@
 Pager
 =======
 
-.. module:: pager2
-    :synopsis: Rewrite how IPython pages things.
-
-.. highlight:: ipython
-    :linenothreshold: 5
-
 So would it be easier to do this as a magic or using Traitlets?
 
 Original Implementation

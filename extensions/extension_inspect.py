@@ -42,10 +42,11 @@ Released under the MIT License.
 http://opensource.org/licenses/MIT
 
 """
-from __future__ import print_function  # doubt this is relevant IPython is 3.5+ only
-
-from IPython.core.magic import Magics, magics_class, line_magic
 from pprint import pformat
+
+from IPython import get_ipython
+from IPython.core.magic import Magics, magics_class, line_magic
+
 from pygments import highlight
 from pygments.formatters import Terminal256Formatter  # Or TerminalFormatter
 from pygments.lexers import PythonLexer

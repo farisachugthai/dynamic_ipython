@@ -38,7 +38,7 @@ import sphinx
 # else:
 #     ipdb.set_trace()
 
-from IPython.lib.lexers import IPython3Lexer, IPython3TracebackLexer
+from IPython.lib.lexers import IPyLexer, IPythonTracebackLexer
 
 from traitlets.config import Config
 
@@ -415,7 +415,12 @@ else:
 
 # -- autosummary -------------------------------------------------------------
 
-autodoc_mock_imports = ['default_profile', 'default_profile.util', 'default_profile.sphinxext']
+autodoc_mock_imports = [
+    'default_profile',
+    'default_profile.util',
+    'default_profile.sphinxext',
+    'extensions',
+]
 autosummary_generate = True
 
 autosummary_imported_members = False
@@ -429,18 +434,33 @@ if sphinx.version_info < (1, 8):
     autodoc_default_flags = ['members', 'undoc-members']
 else:
     autodoc_default_options = {
-            'members': True,
-            'member-order': 'bysource',
-            'special-members': '__init__',
-            'exclude-members': '__weakref__',
-            'synopsis': '',
-            'platform': '',
-            'deprecated': '',
-        }
+        'members': True,
+        'member-order': 'bysource',
+        'special-members': '__init__',
+        'exclude-members': '__weakref__',
+        'synopsis': '',
+        'platform': '',
+        'deprecated': '',
+    }
 
 # -- autosection label extension ---------------------------------------------
 
 autosectionlabel_prefix_document = True
+
+
+# -- doctest ----------------------
+
+doctest_global_setup = '''
+import IPython
+from IPython import get_ipython
+_ip = get_ipython()
+try:
+    import numpy as np
+    import matplotlib as mpl
+    import matplotlib.pyplot as plt
+except Exception:
+    pass
+'''
 
 # -- numpydoc extension ------------------------------------------------------
 
@@ -549,6 +569,6 @@ def setup(app):
     app.connect("source-read", rstjinja)
     app.add_stylesheet(extra_css)
     app.add_stylesheet(os.path.join('..', '_static', 'custom.css'))
-    app.add_lexer('ipythontb', IPython3TracebackLexer())
-    app.add_lexer('ipython', IPython3Lexer())
+    app.add_lexer('ipythontb', IPythonTracebackLexer())
+    app.add_lexer('ipython', IPyLexer())
     app.add_config_value(HAS_MPL, True, 'env')
