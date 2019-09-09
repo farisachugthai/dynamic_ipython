@@ -51,14 +51,14 @@
           <div class="body" role="main">
             
   <div class="section" id="module-custom-magics">
-<span id="custom-magics"></span><h1>Custom Magics<a class="headerlink" href="#module-custom-magics" title="Permalink to this headline">¶</a></h1>
+<span id="id1"></span><span id="custom-magics"></span><h1>Custom Magics<a class="headerlink" href="#module-custom-magics" title="Permalink to this headline">¶</a></h1>
 <p>The general flow of creating your own magic in a file breaks down to a few
 simple steps.</p>
 <ol class="arabic">
-<li><p>Creating an executable with a function named <code class="docutils literal notranslate"><span class="pre">load_ipython_extension</span></code>.</p></li>
-<li><p>Registering the magic with the IPython shell.</p></li>
+<li><p>Creating a function or class with some desired functionality.</p></li>
 <li><p>Wrapping it in decorators so that the magic accepts the shell as an argument
 upon initialization.</p></li>
+<li><p>Registering the magic with the IPython shell.</p></li>
 </ol>
 <div class="section" id="registering-the-magic">
 <h2>Registering the magic<a class="headerlink" href="#registering-the-magic" title="Permalink to this headline">¶</a></h2>
@@ -83,17 +83,21 @@ instantiate them first and pass the instance.</p>
 <p>The provided arguments can be an arbitrary mix of classes and instances.</p>
 </dd>
 </dl>
-<div class="section" id="register-magic-parameters">
-<h4><code class="docutils literal notranslate"><span class="pre">register_magic</span></code> Parameters<a class="headerlink" href="#register-magic-parameters" title="Permalink to this headline">¶</a></h4>
+<div class="admonition-note-how-many-times-they-said-classes-or-instances admonition">
+<p class="admonition-title">Note how many times they said classes or instances.</p>
+<p>Passing a function will raise an exception.</p>
+</div>
+</div>
+<div class="section" id="parameters">
+<span id="register-magic-parameters"></span><h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h3>
 <dl class="simple">
-<dt><code class="docutils literal notranslate"><span class="pre">magic</span></code><span class="classifier">object</span></dt><dd><p>The decorated magic class or function.</p>
+<dt>‘magic’<span class="classifier">object</span></dt><dd><p>The decorated magic class or function.</p>
 </dd>
 </dl>
 </div>
-</div>
 <div class="section" id="register-magic-function">
 <h3><code class="docutils literal notranslate"><span class="pre">register_magic_function</span></code><a class="headerlink" href="#register-magic-function" title="Permalink to this headline">¶</a></h3>
-<p>The first is the: <strong>register_magic_function</strong> bound to the <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.8.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.interactiveshell.InteractiveShell</span></code></a> instance.</p>
+<p>The first is the function <em>register_magic_function</em> bound to the <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.8.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.interactiveshell.InteractiveShell</span></code></a> instance.</p>
 <p>Signature: register_magic_function(func, magic_kind=’line’, magic_name=None)</p>
 <p>Docstring:</p>
 <div class="highlight-rst notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
@@ -122,8 +126,8 @@ invoked as <span class="nv">`%f`</span>, and with cell as a string when invoked 
 </pre></div>
 </td></tr></table></div>
 </div>
-<div class="section" id="parameters">
-<h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="register-magic-function-parameters">
+<span id="id2"></span><h3>Parameters<a class="headerlink" href="#register-magic-function-parameters" title="Permalink to this headline">¶</a></h3>
 <dl class="simple">
 <dt><code class="docutils literal notranslate"><span class="pre">func</span></code><span class="classifier">callable</span></dt><dd><p>Function to be registered as a magic.</p>
 </dd>
@@ -141,27 +145,27 @@ any function.</p>
 <p>Writing the extension:</p>
 <ul>
 <li><p>Import the global <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.8.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> instance with:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+<div class="highlight-ipython notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 </pre></div>
-</div>
+</td></tr></table></div>
 </li>
 <li><p>Create an object with the global ipython app with:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+<div class="highlight-ipython notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
 </pre></div>
-</div>
+</td></tr></table></div>
 </li>
 </ul>
 <p>If you want to try out your ipython magics you can do the following:</p>
 <ul>
 <li><p>Load your magic with:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">_ip</span><span class="o">.</span><span class="n">magic</span><span class="p">(</span><span class="s1">&#39;load_ext your_magic_name&#39;</span><span class="p">)</span>
+<div class="highlight-ipython notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="n">_ip</span><span class="o">.</span><span class="n">magic</span><span class="p">(</span><span class="s1">&#39;load_ext your_magic_name&#39;</span><span class="p">)</span>
 </pre></div>
-</div>
+</td></tr></table></div>
 </li>
 <li><p>Run your magic with:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">_ip</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s1">&#39;your_magic_function&#39;</span><span class="p">,</span> <span class="s1">&#39;your_magic_arguments&#39;</span><span class="p">)</span>
+<div class="highlight-ipython notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="n">_ip</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s1">&#39;your_magic_function&#39;</span><span class="p">,</span> <span class="s1">&#39;your_magic_arguments&#39;</span><span class="p">)</span>
 </pre></div>
-</div>
+</td></tr></table></div>
 </li>
 </ul>
 <p><strong>(Optional)</strong>:</p>
@@ -397,9 +401,9 @@ setuptools, distutils, or any other distribution tools like <a class="reference 
 └── setup.py
 </pre></div>
 </td></tr></table></div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cat example_magic/__init__.py
+<div class="highlight-bash notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>$ cat example_magic/__init__.py
 </pre></div>
-</div>
+</td></tr></table></div>
 <div class="highlight-python3 notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
 3
@@ -415,9 +419,9 @@ setuptools, distutils, or any other distribution tools like <a class="reference 
     <span class="n">ipython</span><span class="o">.</span><span class="n">register_magics</span><span class="p">(</span><span class="n">Abracadabra</span><span class="p">)</span>
 </pre></div>
 </td></tr></table></div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cat example_magic/abracadabra.py
+<div class="highlight-bash notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>$ cat example_magic/abracadabra.py
 </pre></div>
-</div>
+</td></tr></table></div>
 <div class="highlight-python3 notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
@@ -507,7 +511,7 @@ explore all the instance’s attributes interactively from
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="ipython_keybindings.html">Keybindings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="magics.html">Built-in Magics</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Writing Your Own Magics</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Custom Magics</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#registering-the-magic">Registering the magic</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#complete-example">Complete Example</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#creating-ipython-extensions">Creating IPython Extensions</a></li>
@@ -557,7 +561,7 @@ explore all the instance’s attributes interactively from
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright (C) 2018-2019 Faris Chugthai.
-      Last updated on Sep 06, 2019.
+      Last updated on Sep 09, 2019.
     </div>
   </body>
 </html>

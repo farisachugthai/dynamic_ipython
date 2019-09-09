@@ -10,6 +10,7 @@ Developer's Notes
 
 Installing
 ===========
+
 All of the resources necessary for installing the contents of this repository
 have been moved to the directory `tools <tools>`_.
 
@@ -25,6 +26,7 @@ large enough that they've all been moved to their own separate folder.
 
 Installation Assumptions
 ------------------------
+
 In addition, the scripts therein make a few assumptions. One is that
 the repository at `<https://github.com/farisachugthai/Gruvbox-IPython>`_
 has been installed.
@@ -32,7 +34,7 @@ has been installed.
 The other assumption, the subject of many online debates, is that the user
 wants to use the text editor Neovim as their default editor.
 
-The editor will be invoked whenever the user runs the line magic ``%edit``.
+The editor will be invoked whenever the user runs the line magic `%edit`.
 
 If this behavior isn't desired, the following parameter needs to be
 changed like so::
@@ -63,30 +65,9 @@ In addition, ``makeprg`` is not an option one is allowed to set in a modeline
 so it's important to take that into consideration.
 
 
-While not in Vim
-----------------
-
-The following is a good invocation for building docs with sphinx inside of IPython.
-
-Need to double check what env var can be used to set ipdb as the default debugger instead of pdb
-so that we can use magics like pinfo and pdoc while inside the debugger. I'm too spoiled at this point
-to go without.::
-
-    !sphinx-build source build/html -b html -a -j8 -n --color -v -w sphinx.log -P
-    
-
-
-Automatically Generating Docs
------------------------------
-
-Below is the automatically generated documentation for a script that generates
-documentation for this project.:
-
-.. autoclass:: sphinx_extensions.make.DocBuilder
-
-
 Generating CSS
 ==============
+
 Pygments can generate CSS with the following command in the shell:
 
 .. code-block:: shell

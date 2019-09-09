@@ -13,18 +13,20 @@ add these directories to sys.path here. If the directory is relative to the
 documentation root, use os.path.abspath to make it absolute, like shown here.
 
 """
-from default_profile.__about__ import __version__
-from sphinx import application
-import sphinx
+# Stdlib imports
 from datetime import datetime
 from importlib import import_module
 import functools
 import logging
 import math
 from pathlib import Path
+from pprint import pprint
 import os
 import sys
 
+# Third party
+from sphinx import application
+import sphinx
 # Eh didn't work
 # from IPython import embed
 
@@ -36,7 +38,16 @@ import sys
 # else:
 #     ipdb.set_trace()
 
+from IPython.lib.lexers import IPython3Lexer, IPython3TracebackLexer
+
 from traitlets.config import Config
+
+# On to my imports
+try:
+    import default_profile
+    from default_profile.__about__ import __version__
+except Exception as e:
+    print(e)
 
 DOCS = Path(__file__).resolve().parent.parent
 BUILD_DIR = DOCS.joinpath('build')
@@ -53,9 +64,12 @@ default = ROOT.joinpath('default_profile')
 sys.path.insert(0, default)
 
 
-DOCS_LOGGER = logging.getLogger('docs').getChild('conf')
+DOCS_LOGGER = logging.getLogger('docs.source').getChild('conf')
 DOCS_LOGGER.setLevel(level=logging.DEBUG)
-DOCS_LOGGER.addHandler(logging.StreamHandler)
+CONF_HANDLER = logging.StreamHandler(stream=sys.stdout)
+CONF_HANDLER.setFormatter(logging.Formatter())
+CONF_HANDLER.setLevel(logging.DEBUG)
+DOCS_LOGGER.addHandler(CONF_HANDLER)
 
 # Let's try setting up an embedded IPython shell from here
 # This file needs debugging but I don't know where to correctly enter.
@@ -67,7 +81,6 @@ c.InteractiveShellApp.exec_lines = [
     'import default_profile',
     'import ipdb; ipdb.set_trace()',
     'import numpy as np; import pandas as pd',
-    'import sphinx_extensions'
 ]
 c.InteractiveShell.confirm_exit = False
 c.TerminalIPythonApp.display_banner = False
@@ -128,12 +141,20 @@ extensions = [
     'sphinx.ext.viewcode',
     'IPython.sphinxext.ipython_console_highlighting',
     'IPython.sphinxext.ipython_directive',
-    'sphinx_extensions.magics',
-    'sphinx_extensions.configtraits',
 ]
 
 if ask_for_import('numpydoc'):
     extensions.append('numpydoc.numpydoc')
+
+if ask_for_import('default_profile.sphinxext.magics'):
+    magics = ask_for_import('default_profile.sphinxext.magics')
+    extensions.append('default_profile.sphinxext.magics')
+
+if ask_for_import('default_profile.sphinxext.configtraits'):
+    configtraits = ask_for_import('default_profile.sphinxext.configtraits')
+    extensions.append('default_profile.sphinxext.configtraits')
+
+pprint(extensions)
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = [os.path.join(os.path.curdir, '_templates')]
@@ -394,7 +415,7 @@ else:
 
 # -- autosummary -------------------------------------------------------------
 
-autodoc_mock_imports = ['profile_default', 'profile_parallel']
+autodoc_mock_imports = ['default_profile', 'default_profile.util', 'default_profile.sphinxext']
 autosummary_generate = True
 
 autosummary_imported_members = False
@@ -407,8 +428,15 @@ autodoc_docstring_signature = True
 if sphinx.version_info < (1, 8):
     autodoc_default_flags = ['members', 'undoc-members']
 else:
-    autodoc_default_options = {'members': None, 'undoc-members': None}
-
+    autodoc_default_options = {
+            'members': True,
+            'member-order': 'bysource',
+            'special-members': '__init__',
+            'exclude-members': '__weakref__',
+            'synopsis': '',
+            'platform': '',
+            'deprecated': '',
+        }
 
 # -- autosection label extension ---------------------------------------------
 
@@ -521,5 +549,6 @@ def setup(app):
     app.connect("source-read", rstjinja)
     app.add_stylesheet(extra_css)
     app.add_stylesheet(os.path.join('..', '_static', 'custom.css'))
-
+    app.add_lexer('ipythontb', IPython3TracebackLexer())
+    app.add_lexer('ipython', IPython3Lexer())
     app.add_config_value(HAS_MPL, True, 'env')

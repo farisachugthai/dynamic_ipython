@@ -1,4 +1,3 @@
-
 .. _ipython_directive:
 
 ========================
@@ -12,10 +11,10 @@ IPython Sphinx Directive
 
 The IPython directive is a stateful shell that can be useful for parsing
 valid IPython code, auto-generating documentation based on the docstrings in
-source code, and embedding featureful plots based on live data in
-Sphinx documents.
+source code, and embedding plots based on live data in Sphinx documents.
 
 .. is featureful a word?
+.. doubt it. Deleting
 
 The IPython Sphinx extension can correctly parse standard IPython prompts, and
 extracts the input and output lines to generate HTML.
@@ -118,7 +117,7 @@ the output. The inputs are fed to an embedded IPython
 session and the outputs are inserted into your documentation automatically.
 
 If the output in your doc and the output from the embedded shell don't
-match on a doctest assertion, an error will occur.
+match on a :mod:`doctest` assertion, an error will occur.
 
 
 .. ipython::
@@ -204,8 +203,89 @@ suppress the seed line so it doesn't show up in the rendered output.:
           [0.0072729 , 0.34273127]])
 
 
-For more information on @suppress and @doctest decorators, please refer
+For more information on `@suppress` and `@doctest` decorators, please refer
 to the end of this file in :ref:`Pseudo-Decorators` section.
+
+
+Registering Your Own Doctest Handlers
+-------------------------------------
+
+.. holy hell is this bad.
+
+The Sphinx extension that provides support for embedded IPython code provides
+a pseudo-decorator @doctest, which treats the input/output block as a
+doctest, raising a RuntimeError during doc generation if the actual output
+(after running the input) does not match the expected output.
+
+An example usage is:
+
+.. code-block:: rst
+
+   .. ipython::
+
+        In [1]: x = 1
+
+        @doctest
+        In [2]: x + 2
+        Out[3]: 3
+
+One can also provide arguments to the decorator. The first argument should be
+the name of a custom handler. The specification of any other arguments is
+determined by the handler. For example,
+
+.. code-block:: rst
+
+      .. ipython::
+
+         @doctest float
+         In [154]: 0.1 + 0.2
+         Out[154]: 0.3
+
+allows the actual output ``0.30000000000000004`` to match the expected output
+due to a comparison with `np.allclose`.
+
+This is detailed in the module :mod:`IPython.sphinxext.custom_doctests`.
+
+Handlers should have the following function signature::
+
+    handler(sphinx_shell, args, input_lines, found, submitted)
+
+
+.. glossary::
+
+   sphinx_shell
+      Embedded Sphinx shell
+
+   args 
+      The list of arguments that follow '@doctest handler_name',
+
+   input_lines
+      A list of the lines relevant to the current doctest,
+
+   found
+      A string containing the output from the IPython shell
+
+   submitted
+      A string containing the expected output from the IPython shell.
+
+
+Handlers must be registered in the `doctests` dict at the end of the
+`custom_doctests` module.
+
+I quite honestly don't know how you're supposed to add handlers to the dict though.
+
+But here's the sauce::
+
+   # dict of allowable doctest handlers. The key represents the first argument
+   # that must be given to @doctest in order to activate the handler.
+   doctests = {
+       'float': float_doctest,
+   }
+
+
+
+Directive Options
+-----------------
 
 Another demonstration of multi-line input and output.:
 
@@ -404,6 +484,13 @@ Comments are handled and state is preserved.:
 The following section attempts to execute faulty code, namely the calling
 the functions ``ioff()`` and ``ion`` which haven't been defined.
 
+
+.. todo:: Remove this sentence below like wth?
+
+   Let's at least print the literal text and then show how we suppress the error
+   rather than just silently doing so.
+
+
 If you don't see the next code block then we can surmise that the ``@surpress``
 decorator is behaving as expected.:
 
@@ -450,10 +537,10 @@ And persist across sessions.:
 
 
 
-.. _supported-pseudo-decorators:
+.. _pseudo-decorators:
 
-Pseudo-Decorators
-=================
+Supported Pseudo-Decorators
+============================
 
 .. sooooo which ones are which? Please be more clear!
 
@@ -501,3 +588,11 @@ Automatically generated documentation
 =====================================
 
 .. automodule:: IPython.sphinxext.ipython_directive
+
+
+.. automodule:: IPython.sphinxext.ipython_console_highlighting
+
+
+.. autosummary::
+
+   IPython.testing.plugin

@@ -2,39 +2,42 @@
 # -*- coding: utf-8 -*-
 """Create an installable package for this repository.
 
-.. module:: setup
-    :synopsis: Installs everything.
+Setuptools + Setup
+==================
 
-:URL: https://docs.conda.io/projects/conda-build/en/latest/user-guide/recipes/build-without-recipe.html
+The file in which we make this project:
 
-bdist_conda
------------
+#) Installable from pypi
+#) An official python package
+#) Able to import modules from one folder above itself....
+
+``bdist_conda``
+----------------
+
 Now let's add support for ``python setup.py bdist_conda``.
 
 Ran that command with a :kbd:`-h` flag and got these 2 relevant options.
 
-  --buildnum          The build number of     the conda package. Defaults to
-                      0, or the conda_buildnum specified in the     setup()
+  --buildnum          The build number of the conda package. Defaults to
+                      0, or the ``conda_buildnum`` specified in the `setup`
                       function. The command line flag overrides the option to
-                      setup().
+                      `setup`.
   --anaconda-upload   Upload the finished package to anaconda.org
 
 
-Acknowledgements
-----------------
-Largely based off of the work done by @kennethreitz in his `setup.py`_
-repository.
-
-_`Kenneth Reitz setup.py template
-<https://raw.githubusercontent.com/kennethreitz/setup.py/master/setup.py>`_
 
 See Also
 --------
+
 numpy.distutils.core
 numpy.distutils.misc_utils
 
+`Conda builds with a recipe
+<https://docs.conda.io/projects/conda-build/en/latest/user-guide/recipes/build-without-recipe.html>`_
+
 """
 import codecs
+import logging
 import os
 from pathlib import Path
 from runpy import run_path, run_module
@@ -44,7 +47,10 @@ import sys
 
 from setuptools import setup, find_packages, Command, Extension
 
-from default_profile import __about__
+# how are we allowed to do this you can't force a dependency before installation
+# from default_profile import __about__.__version__
+__about__ = {}
+__about__['__version__'] = '0.0.1'
 
 # Conda Support: {{{1
 
@@ -55,18 +61,19 @@ except (ImportError, ModuleNotFoundError):
 else:
     distclass = distutils.command.bdist_conda.CondaDistribution
 
-
 # Metadata: {{{1
 NAME = 'dynamic_ipython'
 AUTHOR = "Faris Chugthai"
 EMAIL = "farischugthai@gmail.com"
-DESCRIPTION = "A gruvbox colorscheme for pygments."
+DESCRIPTION = "An IPython configuration system."
 LICENSE = "MIT"
-KEYWORDS = ["ipython", "configuration", "pygments"]
+KEYWORDS = [
+    "ipython", "configuration", "ipython_extensions", "jupyter", "frameworks"
+]
 URL = "https://github.com/farisachugthai/dynamic_ipython"
 REQUIRES_PYTHON = '>=3.6.0'
 
-VERSION = __about__.__version__
+VERSION = __about__['__version__']
 
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 CONF_PATH = os.path.dirname(os.path.abspath('docs'))
@@ -124,6 +131,8 @@ class UploadCommand(Command):  # {{{1
 
         self.status('Building Source and Wheel (universal) distribution…')
 
+        # I really dislike the idea of forking a new process from python to make
+        # a new python process....will this work the same way with exec(compile)?
         os.system('{0} setup.py sdist bdist_wheel --universal'.format(
             sys.executable))
 
@@ -135,13 +144,14 @@ class UploadCommand(Command):  # {{{1
         os.system('git push --tags')
 
         sys.exit()
+
+
 # }}}
 # Where the magic happens: {{{1
 
-
 setup(
     name=NAME,
-    version=__about__.__version__,
+    version=__about__['__version__'],
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
     long_description_content_type='text/restructuredtext',
@@ -177,9 +187,18 @@ setup(
     classifiers=[
         # Trove classifiers
         # Full list: https://pypi.python.org/pypi?%3Aaction=list_classifiers
+        'Environment :: Console',
+        'Framework :: IPython',
+        'Framework :: Jupyter',
+        'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
+        'Natural Language :: English',
+        'Operating System :: Android',
+        'Operating System :: Microsoft :: Windows :: Windows 10',
+        'OperatingSystem ::POSIX:: Linux',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3 :: Only',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: Implementation :: CPython',

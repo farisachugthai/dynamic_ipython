@@ -9,6 +9,7 @@ Documentation moved to :doc:`<../../docs/startup/aliases.html>`_.
 
 """
 import logging
+import os
 import shutil
 
 from IPython import get_ipython
@@ -19,7 +20,7 @@ from default_profile.util import module_log
 from default_profile.util.machine import Platform
 
 LOGGER = module_log.stream_logger(
-    logger=logging.getLogger(name=__name__),
+    logger='default_profile.startup.20_aliases',
     msg_format='%(asctime)s : %(levelname)s : %(module)s %(message)s',
     log_level=logging.INFO
 )

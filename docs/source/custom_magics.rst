@@ -1,3 +1,5 @@
+.. _custom-magics:
+
 =============
 Custom Magics
 =============
@@ -49,14 +51,16 @@ Docstring:
 
    The provided arguments can be an arbitrary mix of classes and instances.
 
-.. admonition:: Note how many times they said classes or instances. Passing a function will
-                raise an exception.
+.. admonition:: Note how many times they said classes or instances.
+
+   Passing a function will raise an exception.
 
 
 .. _register-magic-parameters:
 
 Parameters
 ----------
+
 'magic' : object
    The decorated magic class or function.
 

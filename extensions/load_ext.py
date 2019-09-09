@@ -3,15 +3,8 @@
 ========================================================================
 `%load_ext` --- Import commonly used modules into the IPython namespace.
 ========================================================================
+
 .. magic:: load_ext
-
-.. module:: load_ext
-    :synopsis: Import commonly used modules into the IPython namespace.
-
-This module is a slightly different way of accomplishing what
-:mod:`profile_default.startup.04_easy_import` attempts to do.
-
-Specifically, it sets up importing things into the user's interactive namespace.
 
 """
 import logging
@@ -53,12 +46,12 @@ def load_ipython_extension(shell=None):
         standalone function.  The functions should have the following
         signatures:
 
-        * For line magics: `def f(line)`
-        * For cell magics: `def f(line, cell)`
-        * For a function that does both: `def f(line, cell=None)`
+    * For line magics: `def f(line)`
+    * For cell magics: `def f(line, cell)`
+    * For a function that does both: `def f(line, cell=None)`
 
-        In the latter case, the function will be called with ``cell==None`` when
-        invoked as ``%f``, and with cell as a string when invoked as ``%%f``.
+    In the latter case, the function will be called with ``cell==None`` when
+    invoked as ``%f``, and with cell as a string when invoked as ``%%f``.
 
     """
     shell.magics_manager.register_function(load_ext, magic_name='load_ext')
@@ -66,13 +59,13 @@ def load_ipython_extension(shell=None):
 
 if __name__ == "__main__":
     _ip = get_ipython()
-    args = sys.argv[1:]
+    if _ip is None:
+        sys.exit()
+
     if len(args) == 0:
-        # TODO: Use magic_arguments decorator
-        sys.exit('E127')
+        load_ipython_extension(_ip)
     elif len(args) > 0:
         for i in args:
-            module_str = sys.argv[i]
-            load_ext(module_str, shell=_ip)
+            load_ext(i, shell=_ip)
     else:
         raise IndexError

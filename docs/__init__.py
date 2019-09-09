@@ -1,3 +1,4 @@
+from pkgutil import extend_path
 import logging
 import sys
 
@@ -5,11 +6,12 @@ docs_logger = logging.getLogger(name='docs')
 docs_logger.setLevel(logging.WARNING)
 docs_handler = logging.StreamHandler(sys.stdout)
 docs_handler.setLevel(logging.WARNING)
+docs_handler.setFormatter(logging.Formatter())
 docs_logger.addHandler(docs_handler)
 
-import default_profile
+if hasattr(locals(), '__path__'):
+    __path__ = extend_path(__path__, __name__)
 
-try:
-    from .sphinx_extensions import make
-except Exception as e:
-    docs_logger.error(e, sys.exc_info=1)
+    print('\nPath is: {}\n'.format(__path__))
+else:
+    pass

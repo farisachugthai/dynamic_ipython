@@ -7,12 +7,12 @@ Customized Exceptions
 The help docs from IPython's core module :mod:`IPython.core.ultratb`
 is phenomenally helpful.
 
-**Source code**: :source:`default_profile/startup/50_sysexception.py`
+**Source code**: `default_profile/startup/50_sysexception.py`
 
 -------------------------
 
-Help on module IPython.core.ultratb in IPython.core:
-====================================================
+Help on module :mod:`IPython.core.ultratb` in :mod:`IPython.core`:
+==================================================================
 
 NAME:
 
@@ -21,13 +21,13 @@ IPython.core.ultratb - Verbose and colourful traceback formatting.
 DESCRIPTION:
 ------------
 
-**ColorTB**
+.. py:class:: IPython.core.ultratb.ColorTB
 
-I've always found it a bit hard to visually parse tracebacks in Python.  The
-ColorTB class is a solution to that problem.
+   I've always found it a bit hard to visually parse tracebacks in Python.  The
+   ColorTB class is a solution to that problem.
 
-It colors the different parts of a traceback in a manner similar to what
-you would expect from a syntax-highlighting text editor.
+   It colors the different parts of a traceback in a manner similar to what
+   you would expect from a syntax-highlighting text editor.
 
 Installation instructions for ColorTB::
 

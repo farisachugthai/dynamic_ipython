@@ -59,8 +59,7 @@ active development. Improvements to the code or documentation are welcome!</p>
 </div>
 <p>The IPython directive is a stateful shell that can be useful for parsing
 valid IPython code, auto-generating documentation based on the docstrings in
-source code, and embedding featureful plots based on live data in
-Sphinx documents.</p>
+source code, and embedding plots based on live data in Sphinx documents.</p>
 <p>The IPython Sphinx extension can correctly parse standard IPython prompts, and
 extracts the input and output lines to generate HTML.
 These prompts will be renumbered starting at <code class="docutils literal notranslate"><span class="pre">1</span></code> regardless of the actual
@@ -141,7 +140,7 @@ wrap a function with <code class="docutils literal notranslate"><span class="pre
 the output. The inputs are fed to an embedded IPython
 session and the outputs are inserted into your documentation automatically.</p>
 <p>If the output in your doc and the output from the embedded shell don’t
-match on a doctest assertion, an error will occur.</p>
+match on a <a class="reference external" href="https://docs.python.org/3/library/doctest.html#module-doctest" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">doctest</span></code></a> assertion, an error will occur.</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [9]: </span><span class="n">x</span> <span class="o">=</span> <span class="s1">&#39;hello world&#39;</span>
 
 <span class="go"># This will raise an error if the IPython output is different.</span>
@@ -198,8 +197,67 @@ suppress the seed line so it doesn’t show up in the rendered output.:</p>
 <span class="go">       [0.0072729 , 0.34273127]])</span>
 </pre></div>
 </div>
-<p>For more information on &#64;suppress and &#64;doctest decorators, please refer
-to the end of this file in <span class="xref std std-ref">Pseudo-Decorators</span> section.</p>
+<p>For more information on <code class="xref py py-obj docutils literal notranslate"><span class="pre">&#64;suppress</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">&#64;doctest</span></code> decorators, please refer
+to the end of this file in <a class="reference internal" href="#pseudo-decorators"><span class="std std-ref">Supported Pseudo-Decorators</span></a> section.</p>
+<div class="section" id="registering-your-own-doctest-handlers">
+<h3>Registering Your Own Doctest Handlers<a class="headerlink" href="#registering-your-own-doctest-handlers" title="Permalink to this headline">¶</a></h3>
+<p>The Sphinx extension that provides support for embedded IPython code provides
+a pseudo-decorator &#64;doctest, which treats the input/output block as a
+doctest, raising a RuntimeError during doc generation if the actual output
+(after running the input) does not match the expected output.</p>
+<p>An example usage is:</p>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">ipython</span><span class="p">::</span>
+
+     In [1]: x = 1
+
+     @doctest
+     In [2]: x + 2
+     Out[3]: 3
+</pre></div>
+</div>
+<p>One can also provide arguments to the decorator. The first argument should be
+the name of a custom handler. The specification of any other arguments is
+determined by the handler. For example,</p>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">ipython</span><span class="p">::</span>
+
+   @doctest float
+   In [154]: 0.1 + 0.2
+   Out[154]: 0.3
+</pre></div>
+</div>
+<p>allows the actual output <code class="docutils literal notranslate"><span class="pre">0.30000000000000004</span></code> to match the expected output
+due to a comparison with <code class="xref py py-obj docutils literal notranslate"><span class="pre">np.allclose</span></code>.</p>
+<p>This is detailed in the module <code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython.sphinxext.custom_doctests</span></code>.</p>
+<p>Handlers should have the following function signature:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">handler</span><span class="p">(</span><span class="n">sphinx_shell</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">input_lines</span><span class="p">,</span> <span class="n">found</span><span class="p">,</span> <span class="n">submitted</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="glossary simple">
+<dt id="term-sphinx-shell">sphinx_shell</dt><dd><p>Embedded Sphinx shell</p>
+</dd>
+<dt id="term-args">args</dt><dd><p>The list of arguments that follow <a class="reference external" href="mailto:'&#37;&#52;&#48;doctest">‘<span>&#64;</span>doctest</a> handler_name’,</p>
+</dd>
+<dt id="term-input-lines">input_lines</dt><dd><p>A list of the lines relevant to the current doctest,</p>
+</dd>
+<dt id="term-found">found</dt><dd><p>A string containing the output from the IPython shell</p>
+</dd>
+<dt id="term-submitted">submitted</dt><dd><p>A string containing the expected output from the IPython shell.</p>
+</dd>
+</dl>
+<p>Handlers must be registered in the <code class="xref py py-obj docutils literal notranslate"><span class="pre">doctests</span></code> dict at the end of the
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">custom_doctests</span></code> module.</p>
+<p>I quite honestly don’t know how you’re supposed to add handlers to the dict though.</p>
+<p>But here’s the sauce:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># dict of allowable doctest handlers. The key represents the first argument</span>
+<span class="c1"># that must be given to @doctest in order to activate the handler.</span>
+<span class="n">doctests</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;float&#39;</span><span class="p">:</span> <span class="n">float_doctest</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="directive-options">
+<h3>Directive Options<a class="headerlink" href="#directive-options" title="Permalink to this headline">¶</a></h3>
 <p>Another demonstration of multi-line input and output.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [14]: </span><span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 <span class="go">jdh</span>
@@ -269,25 +327,25 @@ settings to the entire block.  For example,</p>
 <p>You can create one or more pyplot plots and insert them with the
 <code class="docutils literal notranslate"><span class="pre">&#64;savefig</span></code> decorator.</p>
 <p>For more information on <code class="xref py py-obj docutils literal notranslate"><span class="pre">&#64;savefig</span></code> decorator, please refer to the end of this
-page in <span class="xref std std-ref">Pseudo-Decorators</span> section.</p>
+page in <a class="reference internal" href="#pseudo-decorators"><span class="std std-ref">Supported Pseudo-Decorators</span></a> section.</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [21]: </span><span class="n">plot</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]);</span>
 
 <span class="go"># use a semicolon to suppress the output</span>
 <span class="gp">In [22]: </span><span class="n">hist</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">10000</span><span class="p">),</span> <span class="mi">100</span><span class="p">);</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href=".._imagesplot_simple.png"><img alt=".._imagesplot_simple.png" src=".._imagesplot_simple.png" style="width: 4in;" /></a>
-<a class="reference internal image-reference" href=".._imageshist_simple.png"><img alt=".._imageshist_simple.png" src=".._imageshist_simple.png" style="width: 4in;" /></a>
+<a class="reference internal image-reference" href="_images/plot_simple.png"><img alt="_images/plot_simple.png" src="_images/plot_simple.png" style="width: 4in;" /></a>
+<a class="reference internal image-reference" href="_images/hist_simple.png"><img alt="_images/hist_simple.png" src="_images/hist_simple.png" style="width: 4in;" /></a>
 <p>In a subsequent session, we can update the current figure with some
 text, and then resave.:</p>
 <pre class="literal-block">In [23]: ylabel('number')
-Out[23]: Text(38.222222222222214, 0.5, 'number')
+Out[23]: Text(38.347222222222214, 0.5, 'number')
 
 In [24]: title('normal distribution')
 Out[24]: Text(0.5, 1, 'normal distribution')
 
 In [25]: grid(True)</pre>
-<a class="reference internal image-reference" href=".._imageshist_with_text.png"><img alt=".._imageshist_with_text.png" src=".._imageshist_with_text.png" style="width: 4in;" /></a>
+<a class="reference internal image-reference" href="_images/hist_with_text.png"><img alt="_images/hist_with_text.png" src="_images/hist_with_text.png" style="width: 4in;" /></a>
 <p>You can also have function definitions included in the source.</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [26]: </span><span class="k">def</span> <span class="nf">square</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 <span class="gp">   ....: </span>    <span class="sd">&quot;&quot;&quot;</span>
@@ -308,7 +366,8 @@ In [28]: square(-2)
 Out[28]: 4</pre>
 <p><strong>Why does the sentence below appear no less than 3 times in this doc?</strong></p>
 <p>For more information on the <code class="docutils literal notranslate"><span class="pre">&#64;doctest</span></code> decorator, please refer to the end of
-this page in the <span class="xref std std-ref">Pseudo-Decorators</span> section.</p>
+this page in the <a class="reference internal" href="#pseudo-decorators"><span class="std std-ref">Supported Pseudo-Decorators</span></a> section.</p>
+</div>
 <div class="section" id="writing-pure-python-code">
 <h3>Writing Pure Python Code<a class="headerlink" href="#writing-pure-python-code" title="Permalink to this headline">¶</a></h3>
 <p>Pure python code is supported by the optional argument <code class="xref py py-obj docutils literal notranslate"><span class="pre">python</span></code>. In this pure
@@ -339,7 +398,7 @@ suppress output with a semicolon.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [33]: </span><span class="n">plot</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]);</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href=".._imagesplot_simple_python.png"><img alt=".._imagesplot_simple_python.png" src=".._imagesplot_simple_python.png" style="width: 4in;" /></a>
+<a class="reference internal image-reference" href="_images/plot_simple_python.png"><img alt="_images/plot_simple_python.png" src="_images/plot_simple_python.png" style="width: 4in;" /></a>
 <p>For more information on <code class="docutils literal notranslate"><span class="pre">&#64;savefig</span></code> decorator,
 please refer to the end of this page in Pseudo-Decorators section.</p>
 <p>Similarly, <a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stderr" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stderr</span></code></a> is inserted.:</p>
@@ -399,8 +458,8 @@ decorator is behaving as expected.:</p>
 In [41]: print(square(-2))
 4</pre>
 </div>
-<div class="section" id="pseudo-decorators">
-<span id="supported-pseudo-decorators"></span><h2>Pseudo-Decorators<a class="headerlink" href="#pseudo-decorators" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="supported-pseudo-decorators">
+<span id="pseudo-decorators"></span><h2>Supported Pseudo-Decorators<a class="headerlink" href="#supported-pseudo-decorators" title="Permalink to this headline">¶</a></h2>
 <p>Here are the supported decorators, and any optional arguments they
 take.  Some of the decorators can be used as options to the entire
 block (e.g. <code class="docutils literal notranslate"><span class="pre">&#64;verbatim</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;suppress</span></code>), and some only apply to the
@@ -450,13 +509,13 @@ Out[1]: 2
 In [2]: import datetime
    ...: datetime.datetime.now()
    ...: 
-Out[2]: datetime.datetime(2019, 9, 6, 19, 58, 52, 979499)</pre>
+Out[2]: datetime.datetime(2019, 9, 9, 4, 5, 12, 5920)</pre>
 <p>It supports IPython construct that plain
 Python does not understand (like magics):</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [3]: </span><span class="kn">import</span> <span class="nn">time</span>
 
 <span class="gp">In [4]: </span><span class="o">%</span><span class="k">timeit</span> time.sleep(0.05)
-<span class="go">61.9 ms +- 857 us per loop (mean +- std. dev. of 7 runs, 10 loops each)</span>
+<span class="go">50.4 ms +- 30.2 us per loop (mean +- std. dev. of 7 runs, 10 loops each)</span>
 </pre></div>
 </div>
 <p>This will also support top-level async when using IPython 7.0+</p>
@@ -568,8 +627,8 @@ one sets the backend to <a class="reference external" href="https://docs.python.
 <p>See <a class="reference external" href="http://matplotlib.org/sampledoc/ipython_directive.html">http://matplotlib.org/sampledoc/ipython_directive.html</a> for additional
 documentation.</p>
 </div>
-<div class="section" id="id2">
-<h3>Pseudo-Decorators<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id3">
+<h3>Pseudo-Decorators<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <p>Note: Only one decorator is supported per input. If more than one decorator
 is specified, then only the last one is used.</p>
 <p>In addition to the Pseudo-Decorators/options described at the above link,
@@ -621,29 +680,20 @@ data is, depending on the type of token:</p>
 <em class="property">class </em><code class="sig-prename descclassname">IPython.sphinxext.ipython_directive.</code><code class="sig-name descname">EmbeddedSphinxShell</code><span class="sig-paren">(</span><em class="sig-param">exec_lines=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/IPython/sphinxext/ipython_directive.html#EmbeddedSphinxShell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.EmbeddedSphinxShell" title="Permalink to this definition">¶</a></dt>
 <dd><p>An embedded IPython instance to run inside Sphinx</p>
 <dl class="method">
-<dt id="IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.cleanup">
-<code class="sig-name descname">cleanup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/IPython/sphinxext/ipython_directive.html#EmbeddedSphinxShell.cleanup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.cleanup" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.clear_cout">
-<code class="sig-name descname">clear_cout</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/IPython/sphinxext/ipython_directive.html#EmbeddedSphinxShell.clear_cout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.clear_cout" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.process_input_line">
-<code class="sig-name descname">process_input_line</code><span class="sig-paren">(</span><em class="sig-param">line</em>, <em class="sig-param">store_history</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/IPython/sphinxext/ipython_directive.html#EmbeddedSphinxShell.process_input_line"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.process_input_line" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">exec_lines=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/IPython/sphinxext/ipython_directive.html#EmbeddedSphinxShell.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.process_input_lines">
-<code class="sig-name descname">process_input_lines</code><span class="sig-paren">(</span><em class="sig-param">lines</em>, <em class="sig-param">store_history=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/IPython/sphinxext/ipython_directive.html#EmbeddedSphinxShell.process_input_lines"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.process_input_lines" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">process_input_lines</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">lines</em>, <em class="sig-param">store_history=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/IPython/sphinxext/ipython_directive.html#EmbeddedSphinxShell.process_input_lines"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.process_input_lines" title="Permalink to this definition">¶</a></dt>
 <dd><p>process the input, capturing stdout</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.process_image">
-<code class="sig-name descname">process_image</code><span class="sig-paren">(</span><em class="sig-param">decorator</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/IPython/sphinxext/ipython_directive.html#EmbeddedSphinxShell.process_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.process_image" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">process_image</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">decorator</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/IPython/sphinxext/ipython_directive.html#EmbeddedSphinxShell.process_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.process_image" title="Permalink to this definition">¶</a></dt>
 <dd><p># build out an image directive like
 # .. image:: somefile.png
 #    :width 4in
@@ -654,44 +704,44 @@ data is, depending on the type of token:</p>
 
 <dl class="method">
 <dt id="IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.process_input">
-<code class="sig-name descname">process_input</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">input_prompt</em>, <em class="sig-param">lineno</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/IPython/sphinxext/ipython_directive.html#EmbeddedSphinxShell.process_input"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.process_input" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">process_input</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">data</em>, <em class="sig-param">input_prompt</em>, <em class="sig-param">lineno</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/IPython/sphinxext/ipython_directive.html#EmbeddedSphinxShell.process_input"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.process_input" title="Permalink to this definition">¶</a></dt>
 <dd><p>Process data block for INPUT token.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.process_output">
-<code class="sig-name descname">process_output</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">output_prompt</em>, <em class="sig-param">input_lines</em>, <em class="sig-param">output</em>, <em class="sig-param">is_doctest</em>, <em class="sig-param">decorator</em>, <em class="sig-param">image_file</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/IPython/sphinxext/ipython_directive.html#EmbeddedSphinxShell.process_output"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.process_output" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">process_output</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">data</em>, <em class="sig-param">output_prompt</em>, <em class="sig-param">input_lines</em>, <em class="sig-param">output</em>, <em class="sig-param">is_doctest</em>, <em class="sig-param">decorator</em>, <em class="sig-param">image_file</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/IPython/sphinxext/ipython_directive.html#EmbeddedSphinxShell.process_output"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.process_output" title="Permalink to this definition">¶</a></dt>
 <dd><p>Process data block for OUTPUT token.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.process_comment">
-<code class="sig-name descname">process_comment</code><span class="sig-paren">(</span><em class="sig-param">data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/IPython/sphinxext/ipython_directive.html#EmbeddedSphinxShell.process_comment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.process_comment" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">process_comment</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/IPython/sphinxext/ipython_directive.html#EmbeddedSphinxShell.process_comment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.process_comment" title="Permalink to this definition">¶</a></dt>
 <dd><p>Process data fPblock for COMMENT token.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.save_image">
-<code class="sig-name descname">save_image</code><span class="sig-paren">(</span><em class="sig-param">image_file</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/IPython/sphinxext/ipython_directive.html#EmbeddedSphinxShell.save_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.save_image" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">save_image</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">image_file</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/IPython/sphinxext/ipython_directive.html#EmbeddedSphinxShell.save_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.save_image" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves the image file to disk.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.process_block">
-<code class="sig-name descname">process_block</code><span class="sig-paren">(</span><em class="sig-param">block</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/IPython/sphinxext/ipython_directive.html#EmbeddedSphinxShell.process_block"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.process_block" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">process_block</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">block</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/IPython/sphinxext/ipython_directive.html#EmbeddedSphinxShell.process_block"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.process_block" title="Permalink to this definition">¶</a></dt>
 <dd><p>process block from the block_parser and return a list of processed lines</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.ensure_pyplot">
-<code class="sig-name descname">ensure_pyplot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/IPython/sphinxext/ipython_directive.html#EmbeddedSphinxShell.ensure_pyplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.ensure_pyplot" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">ensure_pyplot</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/IPython/sphinxext/ipython_directive.html#EmbeddedSphinxShell.ensure_pyplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.ensure_pyplot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Ensures that pyplot has been imported into the embedded IPython shell.</p>
 <p>Also, makes sure to set the backend appropriately if not set already.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.process_pure_python">
-<code class="sig-name descname">process_pure_python</code><span class="sig-paren">(</span><em class="sig-param">content</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/IPython/sphinxext/ipython_directive.html#EmbeddedSphinxShell.process_pure_python"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.process_pure_python" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">process_pure_python</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">content</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/IPython/sphinxext/ipython_directive.html#EmbeddedSphinxShell.process_pure_python"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.process_pure_python" title="Permalink to this definition">¶</a></dt>
 <dd><p>content is a list of strings. it is unedited directive content</p>
 <p>This runs it line by line in the InteractiveShell, prepends
 prompts as needed capturing stderr and stdout, then returns
@@ -700,7 +750,7 @@ the content as a list as if it were ipython code</p>
 
 <dl class="method">
 <dt id="IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.custom_doctest">
-<code class="sig-name descname">custom_doctest</code><span class="sig-paren">(</span><em class="sig-param">decorator</em>, <em class="sig-param">input_lines</em>, <em class="sig-param">found</em>, <em class="sig-param">submitted</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/IPython/sphinxext/ipython_directive.html#EmbeddedSphinxShell.custom_doctest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.custom_doctest" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">custom_doctest</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">decorator</em>, <em class="sig-param">input_lines</em>, <em class="sig-param">found</em>, <em class="sig-param">submitted</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/IPython/sphinxext/ipython_directive.html#EmbeddedSphinxShell.custom_doctest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.custom_doctest" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform a specialized doctest.</p>
 </dd></dl>
 
@@ -709,74 +759,27 @@ the content as a list as if it were ipython code</p>
 <dl class="class">
 <dt id="IPython.sphinxext.ipython_directive.IPythonDirective">
 <em class="property">class </em><code class="sig-prename descclassname">IPython.sphinxext.ipython_directive.</code><code class="sig-name descname">IPythonDirective</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">arguments</em>, <em class="sig-param">options</em>, <em class="sig-param">content</em>, <em class="sig-param">lineno</em>, <em class="sig-param">content_offset</em>, <em class="sig-param">block_text</em>, <em class="sig-param">state</em>, <em class="sig-param">state_machine</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/IPython/sphinxext/ipython_directive.html#IPythonDirective"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.IPythonDirective" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="attribute">
-<dt id="IPython.sphinxext.ipython_directive.IPythonDirective.has_content">
-<code class="sig-name descname">has_content</code><em class="property"> = True</em><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.IPythonDirective.has_content" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="IPython.sphinxext.ipython_directive.IPythonDirective.required_arguments">
-<code class="sig-name descname">required_arguments</code><em class="property"> = 0</em><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.IPythonDirective.required_arguments" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="IPython.sphinxext.ipython_directive.IPythonDirective.optional_arguments">
-<code class="sig-name descname">optional_arguments</code><em class="property"> = 4</em><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.IPythonDirective.optional_arguments" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="IPython.sphinxext.ipython_directive.IPythonDirective.final_argumuent_whitespace">
-<code class="sig-name descname">final_argumuent_whitespace</code><em class="property"> = True</em><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.IPythonDirective.final_argumuent_whitespace" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="IPython.sphinxext.ipython_directive.IPythonDirective.option_spec">
-<code class="sig-name descname">option_spec</code><em class="property"> = {'doctest': &lt;function flag&gt;, 'okexcept': &lt;function flag&gt;, 'okwarning': &lt;function flag&gt;, 'python': &lt;function unchanged&gt;, 'suppress': &lt;function flag&gt;, 'verbatim': &lt;function flag&gt;}</em><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.IPythonDirective.option_spec" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="IPython.sphinxext.ipython_directive.IPythonDirective.shell">
-<code class="sig-name descname">shell</code><em class="property"> = None</em><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.IPythonDirective.shell" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="IPython.sphinxext.ipython_directive.IPythonDirective.seen_docs">
-<code class="sig-name descname">seen_docs</code><em class="property"> = {'C:\\Users\\faris\\projects\\dynamic_ipython\\docs\\source\\custom_magics.rst', 'C:\\Users\\faris\\projects\\dynamic_ipython\\docs\\source\\ipython_keybindings.rst', 'C:\\Users\\faris\\projects\\dynamic_ipython\\docs\\source\\jupyter.rst', 'C:\\Users\\faris\\projects\\dynamic_ipython\\docs\\source\\magics.rst', 'C:\\Users\\faris\\projects\\dynamic_ipython\\docs\\source\\sphinxext.rst', 'C:\\Users\\faris\\projects\\dynamic_ipython\\extensions\\pd_csv.py:docstring of extensions.pd_csv.csv'}</em><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.IPythonDirective.seen_docs" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="IPython.sphinxext.ipython_directive.IPythonDirective.get_config_options">
-<code class="sig-name descname">get_config_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/IPython/sphinxext/ipython_directive.html#IPythonDirective.get_config_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.IPythonDirective.get_config_options" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="IPython.sphinxext.ipython_directive.IPythonDirective.setup">
-<code class="sig-name descname">setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/IPython/sphinxext/ipython_directive.html#IPythonDirective.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.IPythonDirective.setup" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="IPython.sphinxext.ipython_directive.IPythonDirective.teardown">
-<code class="sig-name descname">teardown</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/IPython/sphinxext/ipython_directive.html#IPythonDirective.teardown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.IPythonDirective.teardown" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="IPython.sphinxext.ipython_directive.IPythonDirective.run">
-<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/IPython/sphinxext/ipython_directive.html#IPythonDirective.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.IPythonDirective.run" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="function">
-<dt id="IPython.sphinxext.ipython_directive.setup">
-<code class="sig-prename descclassname">IPython.sphinxext.ipython_directive.</code><code class="sig-name descname">setup</code><span class="sig-paren">(</span><em class="sig-param">app</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/IPython/sphinxext/ipython_directive.html#setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.setup" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="IPython.sphinxext.ipython_directive.test">
-<code class="sig-prename descclassname">IPython.sphinxext.ipython_directive.</code><code class="sig-name descname">test</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/IPython/sphinxext/ipython_directive.html#test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.test" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>
+<span class="target" id="module-IPython.sphinxext.ipython_console_highlighting"></span><p>reST directive for syntax-highlighting ipython interactive sessions.</p>
+<dl class="function">
+<dt id="IPython.sphinxext.ipython_console_highlighting.setup">
+<code class="sig-prename descclassname">IPython.sphinxext.ipython_console_highlighting.</code><code class="sig-name descname">setup</code><span class="sig-paren">(</span><em class="sig-param">app</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_console_highlighting.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/IPython/sphinxext/ipython_console_highlighting.html#setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_console_highlighting.setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setup as a sphinx extension.</p>
+</dd></dl>
+
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">IPython.testing.plugin</span></code></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 
@@ -811,7 +814,7 @@ the content as a list as if it were ipython code</p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="ipython_keybindings.html">Keybindings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="magics.html">Built-in Magics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="custom_magics.html">Writing Your Own Magics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_magics.html">Custom Magics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="exceptions.html">Customized Exceptions</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">IPython Sphinx Directive</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#persisting-the-session-across-ipython-directive-blocks">Persisting the session across IPython directive blocks</a></li>
@@ -819,7 +822,7 @@ the content as a list as if it were ipython code</p>
 <li class="toctree-l2"><a class="reference internal" href="#testing-directive-outputs">Testing directive outputs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#handling-comments">Handling Comments</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#splitting-python-statements-across-lines">Splitting Python statements across lines</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#pseudo-decorators">Pseudo-Decorators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#supported-pseudo-decorators">Supported Pseudo-Decorators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-IPython.sphinxext.ipython_directive">Automatically generated documentation</a></li>
 </ul>
 </li>
@@ -865,7 +868,7 @@ the content as a list as if it were ipython code</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright (C) 2018-2019 Faris Chugthai.
-      Last updated on Sep 06, 2019.
+      Last updated on Sep 09, 2019.
     </div>
   </body>
 </html>

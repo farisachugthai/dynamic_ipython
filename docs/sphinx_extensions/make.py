@@ -81,7 +81,7 @@ except (ImportError, ModuleNotFoundError):
 from sphinx.jinja2glue import SphinxFileSystemLoader
 from jinja2.environment import Environment
 
-from sphinx.cmd.make_mode import run_make_mode
+from sphinx.cmd.make_mode import build_main
 
 from default_profile.__about__ import __version__
 
@@ -96,8 +96,17 @@ env = Environment()
 
 sphinx_fs = SphinxFileSystemLoader(searchpath=TEMPLATES_PATH)
 
-MAKE_LOGGER = logging.getLogger(name='docs.make')
-MAKE_LOGGER.setLevel(logging.DEBUG)
+
+def _setup_make_logging():
+    logging.BASIC_FORMAT = '%(created)f : %(module)s : %(levelname)s : %(message)s'
+
+    MAKE_LOGGER = logging.getLogger(name='docs').getChild('make')
+    MAKE_LOGGER.setLevel(logging.DEBUG)
+    make_handler = logging.StreamHandler(stream=sys.stdout)
+    make_handler.setLevel(logging.DEBUG)
+    make_handler.setFormatter(logging.Formatter(fmt=logging.BASIC_FORMAT))
+    MAKE_LOGGER.addHandler(make_handler)
+    return MAKE_LOGGER
 
 
 def _parse_arguments(cmds=None) -> argparse.ArgumentParser:
@@ -385,7 +394,13 @@ def gather_sphinx_options(argv: List[str]) -> Any:
     verbosity = args.verbose
     builder = args.builder
 
-    ret = run_make_mode(['-b', builder, SOURCE_PATH, BUILD_PATH, '-j', jobs, '-' + verbosity * 'v'])
+    # Necessary enough to justify not making a logrecord.
+    pprint('Your sphinx-build command was: ' + str(
+                ['-b', builder,
+                SOURCE_PATH, BUILD_PATH,
+                '-j', jobs, '-' + verbosity * 'v'
+            ]))
+    ret = build_main(['-b', builder, SOURCE_PATH, BUILD_PATH])
     return ret
 
 
@@ -420,5 +435,6 @@ if __name__ == "__main__":
     # status = main()
     # pprint(status)
     # print(rsync())
+    DOCS_MAKE_LOGGER = _setup_make_logging()
     argv = sys.argv[1:]
     pprint(gather_sphinx_options(argv))

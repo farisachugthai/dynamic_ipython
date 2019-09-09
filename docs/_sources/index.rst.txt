@@ -21,6 +21,7 @@ Welcome to Dynamic IPython's documentation!
 
 Startup Scripts
 ================
+
 This repository hosts startup scripts that can be used during IPython's startup.
 
 The scripts add well over 1000 aliases to the namespace, import commonly used
@@ -35,8 +36,10 @@ and `Jupyter <docs/jupyter.html>`_.
 Features
 ==========
 
+
 Portability
 ------------
+
 Portability was a major factor while writing these scripts.
 
 Therefore, any script should work on:
@@ -54,6 +57,7 @@ following scripts while within in an unmodified :command:`cmd` shell.
 
 System Agnostic Aliases
 ========================
+
 To date there are well over 100 aliases manually added to the shell.
 
 These aliases depend on the operating system used as Linux OSes will default
@@ -63,6 +67,7 @@ shells.
 
 `%rehashx`
 -------------
+
 The first script to run invokes `%rehashx%` which initializes
 :mod:`IPython` with all of the commands that the system shell knows.
 
@@ -74,6 +79,7 @@ In addition 50+ aliases have been added for Git.
 
 Key Bindings
 ============
+
 These scripts allow for hybrid use of Vim and Emacs keybindings.
 
 Approximately 50 Emacs keybindings are added to Vim's insert mode through
@@ -87,6 +93,7 @@ The source code can be found `here`_ with documentation at `this site`_.
 
 Motivation
 ===========
+
 The intent was to create a system that worked on any relatively
 modern platform.
 
@@ -100,6 +107,7 @@ written a few scripts that are run during the initialization stage of
 IPython's `startup <profile_default/startup/README.rst>`_.
 If this is not true, the ``highlighting_color`` parameter will fallback
 to Monokai.
+
 
 See Also
 ==========
@@ -130,7 +138,7 @@ form of rst docs and ipynb notebooks.
 
    Keybindings <ipython_keybindings>
    Built-in Magics <magics>
-   Writing Your Own Magics <custom_magics>
+   custom_magics
    exceptions
    sphinxext
    Developers Notes <dev>
