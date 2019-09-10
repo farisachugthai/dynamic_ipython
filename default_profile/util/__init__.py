@@ -41,23 +41,24 @@ allow for attribute-style access.
 import logging
 import os
 import sys
-from logging import NullHandler
 
 import default_profile
-import default_profile.util
-import default_profile.util.module_log
 
 from .copytree import CopyTree
 from .machine import Platform
+from .copytree import CopyTree
 from .module_log import stream_logger
-from .paths import PathValidator
 from .profile_override import ReprProfileDir
 from .timer import timer as _itimer
+from .paths import _path_build, PathValidator
 
 logging.BASIC_FORMAT = '%(created)f : %(module)s : %(levelname)s : %(message)s'
 
 UTIL_LOGGER = logging.getLogger('default_profile').getChild('util')
 UTIL_LOGGER.setLevel(logging.WARNING)
+util_handler = logging.StreamHandler()
+util_handler.setLevel(30)
+UTIL_LOGGER.addHandler(util_handler)
 
 
 class DictWrapper(object):

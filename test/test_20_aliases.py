@@ -89,3 +89,4 @@ if __name__ == "__main__":
     unittest.skipIf(NO_NOSE, 'Nose not installed.')
     unittest.main()
     nose.run()
+

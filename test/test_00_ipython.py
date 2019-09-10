@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+"""Arguably the best canary in the coal mine that something's wrong with setup.
+"""
 import logging
 import unittest
 

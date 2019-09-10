@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-=====================
+
 Pandas Initialization
 =====================
 
 :URL: https://realpython.com/python-pandas-tricks/#1-configure-options-settings-at-interpreter-startup
+
 .. highlight:: ipython
     :linenothreshold: 5
 
@@ -114,7 +115,7 @@ def pandas_init():
         ``'show_dimensions'`` means show the size of the `pd.DataFrame` object.
 
         ``truncate`` indicates to only display it when the DataFrame is...
-        well truncated. [1]
+        well truncated. [1]_
 
         .. [1]https://pandas.pydata.org/pandas-docs/stable/user-guide/options.html
 
@@ -150,6 +151,7 @@ if __name__ == '__main__':
     PANDAS_LOGGER = module_log.stream_logger(
         logger=name, log_level=logging.INFO
     )
+    PANDAS_LOGGER = logging.getLogger(name=name)
 
     try:
         import pandas as pd

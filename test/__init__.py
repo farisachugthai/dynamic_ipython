@@ -29,17 +29,21 @@ import unittest
 import warnings
 
 import IPython
-from IPython import get_ipython, start_ipython
 
 try:
     import nose  # noqa F401
 except ImportError as e:
-    pass
+    warnings.warn(e)
+
+try:
+    import pytest  # noqa F401
+except ImportError as e:
+    warnings.warn(e)
 
 
 def setup_test_logging():
     """Set up some logging so we can see what's happening."""
-    logger = logging.getLogger(name='test')
+    logger = logging.getLogger(name=__name__)
     test_handler = logging.StreamHandler(stream=sys.stdout)
     test_formatter = logging.Formatter(
         fmt='%(created)f : %(module)s : %(levelname)s : %(message)s'

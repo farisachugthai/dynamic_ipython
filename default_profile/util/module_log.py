@@ -5,9 +5,6 @@
 module_log
 ==========
 
-.. module:: module_log
-    :synopsis: Provide uniform logging for the whole package.
-
 .. highlight:: ipython
 
 Set up easily instantied :class:`logging.Logger()` instances.
@@ -29,42 +26,6 @@ import warnings
 
 import IPython
 from IPython import get_ipython
-
-
-def _setup_logging(
-        log_level=logging.WARNING,
-        time_format='%(asctime)s - %(name)s - %(message)s'
-):
-    """Enable logging. TODO: Need to add more to the formatter."""
-    logger = logging.getLogger(name=__name__)
-    logger.setLevel(log_level)
-
-    stream_handler_instance = logging.StreamHandler(sys.stdout)
-    stream_handler_instance.setLevel(log_level)
-    formatter = logging.Formatter(time_format)
-    stream_handler_instance.setFormatter(formatter)
-    logger.addHandler(stream_handler_instance)
-    return logger
-
-
-def path_logger(logger=None):
-    """Stream logger. Emits a warning from :func:`warnings.warn()`.
-
-    DEPRECATED.
-    """
-    warnings.warn('This function is deprecated.')
-
-    if logger is None:
-        logger = logging.getLogger(name=__name__)
-
-    logger.setLevel(logging.WARNING)
-
-    handler = logging.StreamHandler(sys.stdout)
-    handler.setLevel(logging.WARNING)
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(message)s')
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
-    return logger
 
 
 def stream_logger(logger, log_level=logging.INFO, msg_format=None):
@@ -95,7 +56,6 @@ def stream_logger(logger, log_level=logging.INFO, msg_format=None):
     >>> LOGGER = stream_logger(logging.getLogger(name=__name__))
 
     """
-    handler = logging.StreamHandler(stream=sys.stderr)
 
     if isinstance(logger, str):
         logger = logging.getLogger(logger)
@@ -106,8 +66,8 @@ def stream_logger(logger, log_level=logging.INFO, msg_format=None):
     if isinstance(log_level, int):
         level = log_level
 
-    # logger = logging.getLogger()
     logger.setLevel(level)
+    handler = logging.StreamHandler(stream=sys.stderr)
     handler.setLevel(level)
 
     if msg_format is not None:
@@ -118,7 +78,6 @@ def stream_logger(logger, log_level=logging.INFO, msg_format=None):
         )
 
     handler.setFormatter(formatter)
-
     logger.addHandler(handler)
 
     return logger
