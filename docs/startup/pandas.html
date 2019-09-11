@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="../_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
@@ -53,6 +55,191 @@
             
   <div class="section" id="module-default_profile.startup.42_pandas_init">
 <span id="pandas-init-module"></span><h1><code class="docutils literal notranslate"><span class="pre">42_pandas_init</span></code> module<a class="headerlink" href="#module-default_profile.startup.42_pandas_init" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="pandas-initialization">
+<h2>Pandas Initialization<a class="headerlink" href="#pandas-initialization" title="Permalink to this headline">¶</a></h2>
+<dl class="field-list simple">
+<dt class="field-odd">URL</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://realpython.com/python-pandas-tricks/#1-configure-options-settings-at-interpreter-startup">https://realpython.com/python-pandas-tricks/#1-configure-options-settings-at-interpreter-startup</a></p>
+</dd>
+</dl>
+<p>As of version 0.25, there’s currently a large number of options that can
+be set to modify Pandas’ behavior.</p>
+<p>An example of this:</p>
+<div class="highlight-ipython notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="gp">In [8]: </span><span class="n">pd</span><span class="o">.</span><span class="n">options</span>
+<span class="gh">Out[8]: </span><span class="go">&lt;pandas._config.config.DictWrapper at 0x1f2facfdd68</span>
+<span class="go">        compute=&lt;pandas._config.config.DictWrapper at 0x1f2fbfc1d30</span>
+<span class="go">        use_bottleneck=True,</span>
+<span class="go">        use_numexpr=True&gt;,</span>
+<span class="go">        display=&lt;pandas._config.config.DictWrapper at 0x1f2fbfc1c18</span>
+<span class="go">                chop_threshold=None,</span>
+<span class="go">                colheader_justify=&#39;right&#39;,</span>
+<span class="go">                column_space=12,</span>
+<span class="go">                date_dayfirst=False,</span>
+<span class="go">                date_yearfirst=False,</span>
+<span class="go">                encoding=&#39;utf-8&#39;,</span>
+<span class="go">                expand_frame_repr=False,</span>
+<span class="go">                float_format=None,</span>
+<span class="go">        html=&lt;pandas._config.config.DictWrapper at 0x1f2fbfc1c50</span>
+<span class="go">            border=1,</span>
+<span class="go">            table_schema=True,</span>
+<span class="go">            use_mathjax=True&gt;,</span>
+<span class="go">        large_repr=&#39;truncate&#39;,</span>
+<span class="go">        latex=&lt;pandas._config.config.DictWrapper at 0x1f2fbfc1c50</span>
+<span class="go">             escape=True,</span>
+<span class="go">             longtable=False,</span>
+<span class="go">             multicolumn=True,</span>
+<span class="go">             multicolumn_format=&#39;l&#39;,</span>
+<span class="go">             multirow=False,</span>
+<span class="go">             repr=False&gt;,</span>
+<span class="go">        max_categories=8,</span>
+<span class="go">        max_columns=None,</span>
+<span class="go">        max_colwidth=25,</span>
+<span class="go">        max_info_columns=100,</span>
+<span class="go">        max_info_rows=1690785,</span>
+<span class="go">        max_rows=30,</span>
+<span class="go">        max_seq_items=50,</span>
+<span class="go">        memory_usage=True,</span>
+<span class="go">        min_rows=10,</span>
+<span class="go">        multi_sparse=True,</span>
+<span class="go">        notebook_repr_html=True,</span>
+<span class="go">        pprint_nest_depth=3,</span>
+<span class="go">        precision=6,</span>
+<span class="go">        show_dimensions=&#39;truncate&#39;,</span>
+<span class="go">        unicode=&lt;pandas._config.config.DictWrapper at 0x1f2fbfc1c50</span>
+<span class="go">                ambiguous_as_wide=False,</span>
+<span class="go">                east_asian_width=False&gt;,</span>
+<span class="go">                width=80&gt;,</span>
+<span class="go">        io=&lt;pandas._config.config.DictWrapper at 0x1f2fbfc1d30</span>
+<span class="go">        excel=&lt;pandas._config.config.DictWrapper at 0x1f2fce37f98</span>
+<span class="go">        ods=&lt;pandas._config.config.DictWrapper at 0x1f2fce37ac8</span>
+<span class="go">             reader=&#39;auto&#39;&gt;,</span>
+<span class="go">        xls=&lt;pandas._config.config.DictWrapper at 0x1f2fce37978</span>
+<span class="go">             reader=&#39;auto&#39;,</span>
+<span class="go">             writer=&#39;auto&#39;&gt;,</span>
+<span class="go">        xlsm=&lt;pandas._config.config.DictWrapper at 0x1f2fce37ac8</span>
+<span class="go">              reader=&#39;auto&#39;,</span>
+<span class="go">              writer=&#39;auto&#39;&gt;,</span>
+<span class="go">        xlsx=&lt;pandas._config.config.DictWrapper at 0x1f2fce37978</span>
+<span class="go">              reader=&#39;auto&#39;,</span>
+<span class="go">              writer=&#39;auto&#39;&gt;&gt;,</span>
+<span class="go">        hdf=&lt;pandas._config.config.DictWrapper at 0x1f2fce379e8</span>
+<span class="go">            default_format=None,</span>
+<span class="go">            dropna_table=False&gt;,</span>
+<span class="go">        parquet=&lt;pandas._config.config.DictWrapper at 0x1f2fce37978</span>
+<span class="go">                engine=&#39;auto&#39;&gt;&gt;,</span>
+<span class="go">        mode=&lt;pandas._config.config.DictWrapper at 0x1f2fbfc1c18</span>
+<span class="go">                chained_assignment=None,</span>
+<span class="go">                sim_interactive=False,</span>
+<span class="go">                use_inf_as_na=False,</span>
+<span class="go">                use_inf_as_null=False&gt;,</span>
+<span class="go">                plotting=&lt;pandas._config.config.DictWrapper at</span>
+<span class="go">                0x1f2fbfc1d30</span>
+<span class="go">                backend=&#39;matplotlib&#39;,</span>
+<span class="go">                matplotlib=&lt;pandas._config.config.DictWrapper at</span>
+<span class="go">                0x1f2fce37978</span>
+<span class="go">                register_converters=True&gt;&gt;&gt;</span>
+</pre></div>
+</td></tr></table></div>
+<p>Here’s an interesting blurb from pandas/docs/conf.py:</p>
+<div class="highlight-ipython notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="c1"># This ensures correct rendering on system with console encoding != utf8</span>
+<span class="c1"># (windows). It forces pandas to encode its output reprs using utf8</span>
+<span class="c1"># wherever the docs are built. The docs&#39; target is the browser, not</span>
+<span class="c1"># the console, so this is fine.</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf8&quot;</span>
+</pre></div>
+</td></tr></table></div>
+<dl class="function">
+<dt id="default_profile.startup.42_pandas_init.pandas_init">
+<code class="sig-name descname">pandas_init</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/42_pandas_init.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/42_pandas_init.html#pandas_init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.42_pandas_init.pandas_init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define options for <code class="xref py py-mod docutils literal notranslate"><span class="pre">pandas</span></code> startup.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Don’t set <code class="xref py py-obj docutils literal notranslate"><span class="pre">start.options['show_dimensions']</span> <span class="pre">to</span> <span class="pre">``False`</span></code>.
+<code class="docutils literal notranslate"><span class="pre">'show_dimensions'</span></code> means show the size of the <code class="xref py py-obj docutils literal notranslate"><span class="pre">pd.DataFrame</span></code> object.</p>
+<p><code class="docutils literal notranslate"><span class="pre">truncate</span></code> indicates to only display it when the DataFrame is…
+well truncated. <span id="id1">[R51d9e47a24f2-1]</span></p>
+</div>
+</dd></dl>
+
+</div>
 </div>
 
 
@@ -62,29 +249,23 @@
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script><h3>Related Topics</h3>
-<ul>
-  <li><a href="../index.html">Documentation overview</a><ul>
-  <li><a href="index.html">IPython’s Startup</a><ul>
-      <li>Previous: <a href="numpy.html" title="previous chapter"><code class="docutils literal notranslate"><span class="pre">41_numpy_init</span></code> module</a></li>
-      <li>Next: <a href="sysexcept.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">50_sysexception</span></code> module</a></li>
-  </ul></li>
-  </ul></li>
-</ul>
-
+<script type="text/javascript">$('#searchbox').show(0);</script>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="numpy.html"
+                        title="previous chapter"><code class="docutils literal notranslate"><span class="pre">41_numpy_init</span></code> module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="sysexcept.html"
+                        title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">50_sysexception</span></code> module</a></p>
 <h3><a href="../index.html">Table of Contents</a></h3>
-
-<div>&nbsp;</div>
-<div id="sidebartoc">
-    <p class="caption"><span class="caption-text">Tutorial</span></p>
+<p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../ipython_keybindings.html">Keybindings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../custom_magics.html">Custom Magics</a></li>
@@ -110,7 +291,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../extensions.html">Extensions</a></li>
 </ul>
 
-</div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">

@@ -5,8 +5,6 @@
 IPython Aliases
 ===============
 
-Documentation moved to :doc:`<../../docs/startup/aliases.html>`_.
-
 Refactoring TODO:
 
 Move the aliases out of the func linux_specific_aliases.
@@ -465,7 +463,8 @@ def main():
         # Then tried running what would be the equivalent of running
         # %config AliasManager.user_aliases = user_aliases
 
-    .. ipython3-traceback::
+    .. ipython::
+        :okexcept:
 
         ~/.ipython/default_profile/startup/20_aliases.py in main()
             461

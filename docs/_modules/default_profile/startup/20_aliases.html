@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
@@ -51,7 +53,41 @@
 <span class="sd">IPython Aliases</span>
 <span class="sd">===============</span>
 
-<span class="sd">Documentation moved to :doc:`&lt;../../docs/startup/aliases.html&gt;`_.</span>
+<span class="sd">Refactoring TODO:</span>
+
+<span class="sd">Move the aliases out of the func linux_specific_aliases.</span>
+
+<span class="sd">Create a class with instance attributes for sys.platform and uh I don&#39;t know.</span>
+<span class="sd">Break linux up like so::</span>
+
+<span class="sd">    class AliasOSAgnostic:</span>
+
+<span class="sd">        def __init__(self):</span>
+<span class="sd">            self._sys.platform = sys.platform().lower()</span>
+
+<span class="sd">        @property</span>
+<span class="sd">        def has_alias(self):</span>
+<span class="sd">            return ....</span>
+
+<span class="sd">    class LinuxAlias(AliasOSAgnostic):</span>
+
+<span class="sd">        def busybox(self):</span>
+<span class="sd">            aliases = [</span>
+<span class="sd">                (&#39;cd&#39;, &#39;cd foo %l&#39;),</span>
+<span class="sd">                ...</span>
+<span class="sd">                (&#39;ls&#39;, &#39;ls -F --color=always %l)</span>
+<span class="sd">            ]</span>
+
+<span class="sd">        def standardubuntu(self):</span>
+<span class="sd">            aliases = [</span>
+<span class="sd">                (&#39;ag&#39;, &#39;ag -l %l&#39;)</span>
+<span class="sd">                (&#39;rg&#39;, &#39;way too many options&#39;)</span>
+<span class="sd">            ]</span>
+
+<span class="sd">Then maybe implement either a factory function or a factory manager but I haven&#39;t</span>
+<span class="sd">fleshed that part out in my head.</span>
+
+<span class="sd">This may have to take the backburner as I reorganize the rest of the repo.</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">logging</span>
@@ -72,7 +108,7 @@
 <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">linux_specific_aliases</span><span class="p">():</span>
+<div class="viewcode-block" id="linux_specific_aliases"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.linux_specific_aliases">[docs]</a><span class="k">def</span> <span class="nf">linux_specific_aliases</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Add Linux specific aliases.</span>
 
 <span class="sd">    Aliases that have either:</span>
@@ -148,10 +184,10 @@
         <span class="p">(</span><span class="s1">&#39;tail&#39;</span><span class="p">,</span> <span class="s1">&#39;tail -n 30 %l&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;tre&#39;</span><span class="p">,</span> <span class="s1">&#39;tree -ashFC -I .git -I __pycache__ --filelimit 25&#39;</span><span class="p">),</span>
     <span class="p">]</span>
-    <span class="k">return</span> <span class="n">_user_aliases</span>
+    <span class="k">return</span> <span class="n">_user_aliases</span></div>
 
 
-<span class="k">def</span> <span class="nf">common_aliases</span><span class="p">():</span>
+<div class="viewcode-block" id="common_aliases"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.common_aliases">[docs]</a><span class="k">def</span> <span class="nf">common_aliases</span><span class="p">():</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Add aliases common to all OSes. Overwhelmingly :command:`Git` aliases.</span>
 
 <span class="sd">    This method adds around 70 to 80 aliases that can be implemented on most</span>
@@ -252,10 +288,10 @@
         <span class="p">(</span><span class="s1">&#39;..&#39;</span><span class="p">,</span> <span class="s1">&#39;cd ..&#39;</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;...&#39;</span><span class="p">,</span> <span class="s1">&#39;cd ../..&#39;</span><span class="p">),</span>
     <span class="p">]</span>
-    <span class="k">return</span> <span class="n">_user_aliases</span>
+    <span class="k">return</span> <span class="n">_user_aliases</span></div>
 
 
-<span class="k">class</span> <span class="nc">WindowsAliases</span><span class="p">:</span>
+<div class="viewcode-block" id="WindowsAliases"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.WindowsAliases">[docs]</a><span class="k">class</span> <span class="nc">WindowsAliases</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Aggregated Window aliases. Provides simplified system calls for NT.</span>
 
 <span class="sd">    Methods</span>
@@ -268,7 +304,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="WindowsAliases.__init__"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.WindowsAliases.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize the platform specific alias manager with IPython.</span>
 
 <span class="sd">        Parameters</span>
@@ -278,7 +314,7 @@
 <span class="sd">            :command:`cmd`, :command:`powershell` or :command:`pwsh`.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">shell</span> <span class="ow">or</span> <span class="n">get_ipython</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">shell</span> <span class="ow">or</span> <span class="n">get_ipython</span><span class="p">()</span></div>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_find_exe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exe</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -300,7 +336,7 @@
             <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ip</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">aliases</span><span class="p">)</span>
         <span class="p">)</span>
 
-    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="WindowsAliases.cmd_aliases"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.WindowsAliases.cmd_aliases">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">cmd_aliases</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Aliases for the :command:`cmd` shell.</span>
 
@@ -331,9 +367,9 @@
             <span class="p">(</span><span class="s1">&#39;ren&#39;</span><span class="p">,</span> <span class="s1">&#39;ren&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;rmdir&#39;</span><span class="p">,</span> <span class="s1">&#39;rmdir %l&#39;</span><span class="p">),</span>
         <span class="p">]</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">user_aliases</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">user_aliases</span></div>
 
-    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="WindowsAliases.powershell_aliases"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.WindowsAliases.powershell_aliases">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">powershell_aliases</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Aliases for Windows OSes using :command:`powershell`.</span>
 
@@ -408,9 +444,9 @@
             <span class="p">(</span><span class="s1">&#39;wjb&#39;</span><span class="p">,</span> <span class="s1">&#39;Wait-Job %l&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;write&#39;</span><span class="p">,</span> <span class="s1">&#39;Write-Output %l&#39;</span><span class="p">),</span>
         <span class="p">]</span>
-        <span class="k">return</span> <span class="n">_ip</span><span class="o">.</span><span class="n">user_aliases</span>
+        <span class="k">return</span> <span class="n">_ip</span><span class="o">.</span><span class="n">user_aliases</span></div>
 
-    <span class="k">def</span> <span class="nf">user_shell</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="WindowsAliases.user_shell"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.WindowsAliases.user_shell">[docs]</a>    <span class="k">def</span> <span class="nf">user_shell</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Determine the user&#39;s shell.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span>
@@ -419,7 +455,7 @@
         <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;COMSPEC&#39;</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;COMSPEC&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span>
+            <span class="k">raise</span></div></div>
 
 
 <span class="k">def</span> <span class="nf">__setup_fzf</span><span class="p">(</span><span class="n">user_aliases</span><span class="p">):</span>
@@ -459,7 +495,7 @@
     <span class="k">return</span> <span class="n">user_aliases</span>
 
 
-<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Set up aliases for the user namespace for IPython.</span>
 
 <span class="sd">    Planning on coming up with a new way of introducing the aliases into the user namespace.</span>
@@ -475,7 +511,8 @@
 <span class="sd">        # Then tried running what would be the equivalent of running</span>
 <span class="sd">        # %config AliasManager.user_aliases = user_aliases</span>
 
-<span class="sd">    .. ipython3-traceback::</span>
+<span class="sd">    .. ipython::</span>
+<span class="sd">        :okexcept:</span>
 
 <span class="sd">        ~/.ipython/default_profile/startup/20_aliases.py in main()</span>
 <span class="sd">            461</span>
@@ -522,7 +559,7 @@
 
     <span class="n">_ip</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="n">user_aliases</span>
     <span class="c1"># Apparently the big part i was missing was rerunning the init_aliases method</span>
-    <span class="n">_ip</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">init_aliases</span><span class="p">()</span>
+    <span class="n">_ip</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">init_aliases</span><span class="p">()</span></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
@@ -541,30 +578,19 @@
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script><h3>Related Topics</h3>
-<ul>
-  <li><a href="../../../index.html">Documentation overview</a><ul>
-  <li><a href="../../index.html">Module code</a><ul>
-  </ul></li>
-  </ul></li>
-</ul>
-
+<script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table of Contents</a></h3>
-
-<div>&nbsp;</div>
-<div id="sidebartoc">
-    <p class="caption"><span class="caption-text">Tutorial</span></p>
+<p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../ipython_keybindings.html">Keybindings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../magics.html">Built-in Magics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../custom_magics.html">Custom Magics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../exceptions.html">Customized Exceptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../sphinxext.html">IPython Sphinx Directive</a></li>
@@ -578,7 +604,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Extensions</a></li>
 </ul>
 
-</div>
         </div>
       </div>
       <div class="clearer"></div>
@@ -597,8 +622,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright (C) 2018-2019 Faris Chugthai.
-      Last updated on Sep 09, 2019.
+      Last updated on Sep 11, 2019.
     </div>
   </body>
 </html>

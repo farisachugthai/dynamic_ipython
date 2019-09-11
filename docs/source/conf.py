@@ -376,9 +376,11 @@ ipython_savefig_dir = DOCS.joinpath('_images').__fspath__()
 ipython_warning_is_error = False
 
 ipython_execlines = [
-    'import numpy as np',
+    'import numpy',
     'import IPython',
     'import matplotlib as mpl',
+    'import matplotlib.pyplot',
+    'import pandas as pd',
     'import default_profile',
 ]
 
@@ -388,7 +390,6 @@ if ask_for_import('matplotlib'):
     ipython_execlines.append(
         'import matplotlib as mpl; import matplotlib.pyplot as plt'
     )
-    # TODO: what mplbackend?
 else:
     ipython_mplbackend = 'None'
     HAS_MPL = False
@@ -418,10 +419,9 @@ else:
         'member-order': 'bysource',
         'special-members': '__init__',
         'exclude-members': '__weakref__',
-        'synopsis': '',
-        'platform': '',
-        'deprecated': '',
     }
+
+autodoc_inherit_docstrings = False
 
 # -- autosection label extension ---------------------------------------------
 
@@ -507,19 +507,6 @@ plot_rcparams = {
 # -- Setup -------------------------------------------------------------------
 
 
-def add_css(func):
-    """Add a CSS file to Sphinx."""
-
-    @functools.wraps(func)
-    def decorate_css(*args, **kwargs):
-        custom_css = CONF_PATH.joinpath('..', '_static', 'pyramid.css')
-
-        if not custom_css:
-            DOCS_LOGGER.warning('%s is not a file' % custom_css)
-        DOCS_LOGGER.debug(custom_css)
-        return custom_css
-
-
 def rstjinja(app, docname, source):
     """
     Render our pages as a jinja template for fancy templating goodness.
@@ -534,7 +521,6 @@ def rstjinja(app, docname, source):
     source[0] = rendered
 
 
-@add_css
 def setup(app):
     """Add pyramid CSS to the docs.
 
@@ -542,12 +528,8 @@ def setup(app):
     drop it. Plus we have pathlib all over so simply utilize that.
 
     """
-    if hasattr(CONF_PATH, 'joinpath'):
-        extra_css = str(add_css())
-
     app.connect("source-read", rstjinja)
-    app.add_stylesheet(extra_css)
-    app.add_stylesheet(os.path.join('..', '_static', 'custom.css'))
+    app.add_css_file("pygments.css")
+    app.add_css_file("custom.css")
     app.add_lexer('ipythontb', IPythonTracebackLexer())
     app.add_lexer('ipython', IPyLexer())
-    app.add_config_value(HAS_MPL, True, 'env')

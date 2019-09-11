@@ -1,13 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Export functions to redirect :func:`help` output.
-
+"""
 ============
 Help Helpers
 ============
 
-.. module:: 06_help_helpers
-    :synopsis: Export functions that aide working with the :keyword:`help` builtin.
+Export functions to redirect :func:`help` output.
 
 This module utilizes the examples given in the official documentation
 for :mod:`contextlib`.

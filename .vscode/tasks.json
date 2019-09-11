@@ -66,22 +66,26 @@
             ]
         },
         {
-            "label": "sphinx",
-            "type": "process",
-            "command": "pwsh",
+            "label": "sphinx-build",
+            "type": "shell",
+            "command": "sphinx-build",
             "windows": {
                 "args": [
                     "sphinx-build",
+                    "-n",
                     "-b",
                     "html",
                     "-o",
                     "docs\\build\\html",
-                    "docs\\source"
+                    "docs\\source",
+                    "-d",
+                    "docs\\build\\doctrees"
                 ]
             },
             "options": {
                 "shell": {
-                    "executable": "pwsh"
+                    "executable": "pwsh",
+                    "args": ["-NoProfile", "-NoLogo", "-NoExit"]
                 }
             },
             "group": {

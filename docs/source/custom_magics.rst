@@ -340,7 +340,8 @@ Here is a full example of a magic package. You can distribute magics using
 setuptools, distutils, or any other distribution tools like `flit
 <http://flit.readthedocs.io>`_ for pure Python packages.
 
-.. sourcecode:: none
+.. ipython::
+    :verbatim:
 
    .
    ├── example_magic
