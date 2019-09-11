@@ -69,8 +69,8 @@ Parameters
 ----------
 
 ``%l`` : Command-line argument.
-    You can use the ``%l`` specifier in an ``%alias`` definition to represent the
-    whole line when the alias is called.
+    You can use the ``%l`` specifier in an ``%alias`` definition
+    to represent the whole line when the alias is called.
 
 Meaning that it behaves similarly to the parameter :kbd:`$*`
 in typical POSIX shells.

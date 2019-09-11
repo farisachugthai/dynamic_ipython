@@ -120,30 +120,13 @@ If the output in your doc and the output from the embedded shell don't
 match on a :mod:`doctest` assertion, an error will occur.
 
 
-.. ipython::
-   :okexcept:
-
-   In [1]: x = 'hello world'
-
-   # This will raise an error if the IPython output is different.
-
-   @doctest
-   In [2]: x.upper()
-   Out[2]: 'HELLO WORLD'
-
-   # Some readline features cannot be supported, so we allow
-   # "verbatim" blocks, which are dumped verbatim except for the prompts
-   # as they are continuously numbered.
-
-   @verbatim
-   In [3]: x.st<TAB>
-   x.startswith  x.strip
+.. literally what does the below say?????
 
 .. The IPython Sphinx Directive makes it possible to test the outputs that you
 .. provide with your code. To do this,
 .. decorate the contents in your directive block with one of the following:
 
-.. .. ...?????
+.. guys are you serious this line has been in here for like 5 years
 
 ..   * list directives here
 

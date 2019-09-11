@@ -205,11 +205,13 @@ c.ConsoleWidget.console_width = 120
 #  platforms the default is Monospace.
 
 # I wonder if we can give multiple values
-c.ConsoleWidget.font_family = "Source Code Pro Light"
+# We cant. Also don't use this it's genuinely impossible to read
+# c.ConsoleWidget.font_family = "Source Code Pro Light"
+c.ConsoleWidget.font_family = 'Hack'
 
 # The font size. If unconfigured, Qt will be entrusted with the size of the
 #  font.
-c.ConsoleWidget.font_size = 14
+c.ConsoleWidget.font_size = 11
 
 # The type of completer to use. Valid values are:
 #

@@ -7,6 +7,42 @@ IPython Aliases
 
 Documentation moved to :doc:`<../../docs/startup/aliases.html>`_.
 
+Refactoring TODO:
+
+Move the aliases out of the func linux_specific_aliases.
+
+Create a class with instance attributes for sys.platform and uh I don't know.
+Break linux up like so::
+
+    class AliasOSAgnostic:
+
+        def __init__(self):
+            self._sys.platform = sys.platform().lower()
+
+        @property
+        def has_alias(self):
+            return ....
+
+    class LinuxAlias(AliasOSAgnostic):
+
+        def busybox(self):
+            aliases = [
+                ('cd', 'cd foo %l'),
+                ...
+                ('ls', 'ls -F --color=always %l)
+            ]
+
+        def standardubuntu(self):
+            aliases = [
+                ('ag', 'ag -l %l')
+                ('rg', 'way too many options')
+            ]
+
+Then maybe implement either a factory function or a factory manager but I haven't
+fleshed that part out in my head.
+
+This may have to take the backburner as I reorganize the rest of the repo.
+
 """
 import logging
 import os

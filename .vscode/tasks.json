@@ -19,7 +19,7 @@
             }
         },
         {
-            "label": "sphinx",
+            "label": "doesn't work sphinx",
             "type": "process",
             "command": "${config:python.pythonPath}",
             "windows": {
@@ -33,7 +33,15 @@
                     "docs\\source"
                 ]
             },
-            "group": "build"
+            "options": {
+                "shell": {
+                    "executable": "pwsh"
+                }
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         },
         {
             "label": "autopep8 current file",
@@ -58,13 +66,34 @@
             ]
         },
         {
-            "type": "npm",
-            "script": "install",
-            "path": "jupyter_conf/",
+            "label": "sphinx",
+            "type": "process",
+            "command": "pwsh",
+            "windows": {
+                "args": [
+                    "sphinx-build",
+                    "-b",
+                    "html",
+                    "-o",
+                    "docs\\build\\html",
+                    "docs\\source"
+                ]
+            },
+            "options": {
+                "shell": {
+                    "executable": "pwsh"
+                }
+            },
             "group": {
                 "kind": "build",
                 "isDefault": true
             }
+        },
+        {
+            "label": "npm",
+            "type": "npm",
+            "script": "install",
+            "path": "jupyter_conf/"
         }
     ]
 }

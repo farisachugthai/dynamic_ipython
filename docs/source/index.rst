@@ -137,7 +137,6 @@ form of rst docs and ipynb notebooks.
    :maxdepth: 2
 
    Keybindings <ipython_keybindings>
-   Built-in Magics <magics>
    custom_magics
    exceptions
    sphinxext

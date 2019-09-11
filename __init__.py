@@ -49,8 +49,7 @@ found_namespace_packages = find_namespace_packages(where='.')
 
 logging.debug('Found packages were: {}'.format(found_packages))
 logging.debug(
-    'Found namespace packages were: {}'.format(found_namespace_packages)
-)
+    'Found namespace packages were: {}'.format(found_namespace_packages))
 
 logging.debug('Sys.path before:' + str(sys.path))
 sys.path = sys.path + [REPO_ROOT]

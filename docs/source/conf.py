@@ -16,27 +16,20 @@ documentation root, use os.path.abspath to make it absolute, like shown here.
 # Stdlib imports
 from datetime import datetime
 from importlib import import_module
+from pathlib import Path
+from pprint import pprint
 import functools
 import logging
 import math
-from pathlib import Path
-from pprint import pprint
 import os
 import sys
+import time
+
 
 # Third party
 from sphinx import application
 import sphinx
-# Eh didn't work
-# from IPython import embed
-
-# THIS DID! It halted output enough to allow the traceback to propagate up!
-# Holy hell that was actually neat
-# import ipdb
-# if hasattr(sys, 'last_traceback'):
-#     ipdb.pm()  # how about this instead?
-# else:
-#     ipdb.set_trace()
+import ipdb
 
 from IPython.lib.lexers import IPyLexer, IPythonTracebackLexer
 
@@ -399,6 +392,7 @@ ipython_warning_is_error = False
 ipython_execlines = [
     'import numpy as np',
     'import IPython',
+    'import matplotlib as mpl',
     'import default_profile',
 ]
 

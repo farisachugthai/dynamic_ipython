@@ -1,3 +1,4 @@
+import sphinx
 import logging
 from pathlib import Path
 import pkgutil
@@ -10,7 +11,3 @@ else:
 
 
 source_docs_logger = logging.getLogger(name='docs').getChild('source')
-
-import sphinx
-
-import default_profile

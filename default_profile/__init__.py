@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Initialize the global IPython instance and begin configuring."""
+"""Initialize the global IPython instance and begin configuring.
+
+The heart of all IPython and console related code lives here.
+"""
 import logging
 import os
 import sys
