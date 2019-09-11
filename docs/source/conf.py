@@ -25,7 +25,6 @@ import os
 import sys
 import time
 
-
 # Third party
 from sphinx import application
 import sphinx
@@ -56,7 +55,6 @@ sys.path.insert(0, ROOT.__fspath__())
 default = ROOT.joinpath('default_profile')
 sys.path.insert(0, default)
 
-
 DOCS_LOGGER = logging.getLogger('docs.source').getChild('conf')
 DOCS_LOGGER.setLevel(level=logging.DEBUG)
 CONF_HANDLER = logging.StreamHandler(stream=sys.stdout)
@@ -72,8 +70,8 @@ c = Config()
 c.InteractiveShellApp.exec_lines = [
     'from sphinx.application import Sphinx',
     'import default_profile',
-    'import ipdb; ipdb.set_trace()',
-    'import numpy as np; import pandas as pd',
+    'import ipdb; ipdb.set_trace(); ipdb.pm()',
+    'import numpy; import pandas as pd',
 ]
 c.InteractiveShell.confirm_exit = False
 c.TerminalIPythonApp.display_banner = False
@@ -94,7 +92,6 @@ ask_for_import('jinja2')
 # your_app = application.Sphinx(outdir=BUILD_DIR, srcdir=SOURCE, buildername='html', confdir=SOURCE, doctreedir=BUILD_DIR)
 # damn it wasn't even a naming issue. initializing that object jams the
 # invocation of ``make html``
-
 
 # -- Project information -----------------------------------------------------
 
@@ -209,12 +206,13 @@ html_static_path = ['_static']
 # 'searchbox.html']``.
 #
 html_sidebars = {
-    '**': [
-        'searchbox.html',
-        'relations.html',
-        'globaltoc.html',
-        'sourcelink.html',
-    ]
+    '**':
+        [
+            'searchbox.html',
+            'relations.html',
+            'globaltoc.html',
+            'sourcelink.html',
+        ]
 }
 
 html_title = u'Dynamic IPython: version' + __version__
@@ -235,7 +233,6 @@ html_baseurl = u'https://farisachugthai.github.io/dynamic-ipython'
 html_compact_lists = False
 
 html_secnumber_suffix = ' '
-
 
 # -- Options for HTMLHelp output ---------------------------------------------
 
@@ -429,7 +426,6 @@ else:
 # -- autosection label extension ---------------------------------------------
 
 autosectionlabel_prefix_document = True
-
 
 # -- doctest ----------------------
 
