@@ -34,6 +34,8 @@ from os.path import abspath, dirname, join
 from pkg_resources import declare_namespace
 from setuptools import find_packages, find_namespace_packages
 
+import default_profile
+
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
 REPO_ROOT = dirname(abspath(__file__))

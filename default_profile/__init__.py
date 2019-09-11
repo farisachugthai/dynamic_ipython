@@ -12,7 +12,12 @@ try:
 except (ImportError, ModuleNotFoundError):
     pass
 
+from . import ipython_config
+from . import ipython_kernel_config
+
+from .__about__ import *  # noqa
+
 default_log_format = '%(created)f : %(module)s : %(levelname)s : %(message)s'
 PROFILE_DEFAULT_LOG = logging.getLogger('default_profile')
 PROFILE_DEFAULT_LOG.setLevel(logging.WARNING)
-PROFILE_DEFAULT_LOG.addHandler(logging.StreamHandler)
+PROFILE_DEFAULT_LOG.addHandler(logging.StreamHandler().setLevel(logging.WARNING))

@@ -13,10 +13,7 @@ else:
 
 
 def ask_for_import(mod, package=None):
-    try:
-        return importlib.import_module(mod, package=package)
-    except (ImportError, ModuleNotFoundError):
-        pass
+    return importlib.import_module(mod, package=package) or None
 
 
 ask_for_import('IPython')
