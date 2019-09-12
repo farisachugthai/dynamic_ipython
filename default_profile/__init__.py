@@ -15,10 +15,19 @@ try:
 except (ImportError, ModuleNotFoundError):
     pass
 
+# Are you allowed to do something like this?
+# import default_profile
+# Because this should be the default_profile package ya know lol
+# from default_profile.__about__ import *
+# from default_profile.__about__ import __version__
+# Which invocation?
+# from .__about__ import *  # noqa
+
+from . import extensions, profile_debugger, profile_parallel, sphinxext, startup, util
+from .__about__ import __version__
 from . import ipython_config
 from . import ipython_kernel_config
 
-from .__about__ import *  # noqa
 
 default_log_format = '%(created)f : %(module)s : %(levelname)s : %(message)s'
 PROFILE_DEFAULT_LOG = logging.getLogger('default_profile')

@@ -17,4 +17,6 @@ try:
 except (ImportError, ModuleNotFoundError):
     import pdb
 
+from . import ipd
+
 logging.getLogger(__name__).addHandler(NullHandler())

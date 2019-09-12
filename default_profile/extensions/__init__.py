@@ -23,9 +23,11 @@ extensions_handler.setFormatter(logging.Formatter())
 extensions_logger.setLevel(logging.WARNING)
 extensions_logger.addHandler(extensions_handler)
 
-import extensions
-# from .repr_request import repr_request
-import extensions.repr_requests
 from .extension_inspect import PrettyColorfulInspector
 from .pd_csv import pd_csv
 from .termux_clipboard import termux_clipboard_get
+
+try:
+    from . import repr_requests
+except Exception as e:
+    print(e)

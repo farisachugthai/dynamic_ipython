@@ -4,12 +4,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Help Helpers &#8212; Dynamic IPython: version0.0.1</title>
+    <title>06_Help_Helpers &#8212; Dynamic IPython: version0.0.1</title>
     <link rel="stylesheet" href="../_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
@@ -54,22 +52,36 @@
           <div class="body" role="main">
             
   <div class="section" id="help-helpers">
-<span id="autogen-help-helpers"></span><h1>Help Helpers<a class="headerlink" href="#help-helpers" title="Permalink to this headline">¶</a></h1>
+<h1>06_Help_Helpers<a class="headerlink" href="#help-helpers" title="Permalink to this headline">¶</a></h1>
 <p>Creates 2 functions in userspace to save the output of <code class="docutils literal notranslate"><span class="pre">help(python_object)</span></code>
 to a file or output to <a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stdout" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stdout</span></code></a>.</p>
-<div class="section" id="help-helpers-module">
-<h2><code class="docutils literal notranslate"><span class="pre">06_help_helpers</span></code> module<a class="headerlink" href="#help-helpers-module" title="Permalink to this headline">¶</a></h2>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">default_profile.startup.06_help_helpers</span></code></p></td>
-<td><p>Export functions to redirect <a class="reference external" href="https://docs.python.org/3/library/functions.html#help" title="(in Python v3.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">help()</span></code></a> output.</p></td>
-</tr>
-</tbody>
-</table>
+<div class="section" id="module-default_profile.startup.06_help_helpers">
+<span id="help-helpers-module"></span><h2><code class="docutils literal notranslate"><span class="pre">06_help_helpers</span></code> module<a class="headerlink" href="#module-default_profile.startup.06_help_helpers" title="Permalink to this headline">¶</a></h2>
+<p>Export functions to redirect <a class="reference external" href="https://docs.python.org/3/library/functions.html#help" title="(in Python v3.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">help()</span></code></a> output.</p>
+<p>This module utilizes the examples given in the official documentation
+for <a class="reference external" href="https://docs.python.org/3/library/contextlib.html#module-contextlib" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">contextlib</span></code></a>.</p>
+<p>In addition to utilizing <a class="reference external" href="https://docs.python.org/3/library/contextlib.html#module-contextlib" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">contextlib</span></code></a>, create a function that allows
+for an easier “grep-like” interface for objects that are too large
+to be quickly and easily understood based on the output of <code class="xref std std-keyword docutils literal notranslate"><span class="pre">dir</span></code>.</p>
+<hr class="docutils" />
+<dl class="function">
+<dt id="default_profile.startup.06_help_helpers.print_help">
+<code class="sig-name descname">print_help</code><span class="sig-paren">(</span><em class="sig-param">arg=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/06_help_helpers.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/06_help_helpers.html#print_help"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.06_help_helpers.print_help" title="Permalink to this definition">¶</a></dt>
+<dd><p>Redirect <a class="reference external" href="https://docs.python.org/3/library/functions.html#help" title="(in Python v3.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">help()</span></code></a> to <code class="docutils literal notranslate"><span class="pre">sys.stderr</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="default_profile.startup.06_help_helpers.save_help">
+<code class="sig-name descname">save_help</code><span class="sig-paren">(</span><em class="sig-param">arg=None</em>, <em class="sig-param">output_file=&lt;colorama.ansitowin32.StreamWrapper object at 0x0000029F09BFCB70&gt;</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/06_help_helpers.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/06_help_helpers.html#save_help"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.06_help_helpers.save_help" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write <a class="reference external" href="https://docs.python.org/3/library/functions.html#help" title="(in Python v3.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">help()</span></code></a> to a file. Defaults to <code class="docutils literal notranslate"><span class="pre">sys.stdout</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="default_profile.startup.06_help_helpers.page_help">
+<code class="sig-name descname">page_help</code><span class="sig-paren">(</span><em class="sig-param">arg=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/06_help_helpers.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/06_help_helpers.html#page_help"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.06_help_helpers.page_help" title="Permalink to this definition">¶</a></dt>
+<dd><p>WIP.</p>
+</dd></dl>
+
 </div>
 </div>
 
@@ -110,7 +122,7 @@ to a file or output to <a class="reference external" href="https://docs.python.o
 <li class="toctree-l2"><a class="reference internal" href="rehashx.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">%rehashx</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="easy_import.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">04_easy_import</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="log.html">Logging</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Help Helpers</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">06_Help_Helpers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="aliases.html">20_aliases</a></li>
 <li class="toctree-l2"><a class="reference internal" href="numpy.html"><code class="docutils literal notranslate"><span class="pre">41_numpy_init</span></code> module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pandas.html"><code class="docutils literal notranslate"><span class="pre">42_pandas_init</span></code> module</a></li>
@@ -118,7 +130,7 @@ to a file or output to <a class="reference external" href="https://docs.python.o
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../util.html">General Utility Functions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../jupyter.html">Jupyter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../jupyter.html">Jupyter Suite</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../extensions.html">Extensions</a></li>
 </ul>
 

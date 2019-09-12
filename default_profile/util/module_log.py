@@ -49,6 +49,7 @@ def stream_logger(logger, log_level=logging.INFO, msg_format=None):
     logger : :class:`logging.Logger()` instance
         Defaults to ``logging.INFO`` and '%(asctime)s : %(levelname)s : %(message)s : '
 
+
     Examples
     --------
     >>> import logging

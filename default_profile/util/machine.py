@@ -5,9 +5,6 @@
 Machine
 =========
 
-.. module:: machine
-    :synopsis: Create a class for all :mod:`IPython` instances to utilize.
-
 .. highlight:: ipython
 
 This class leverages :mod:`prompt_toolkit` and a few of it's methods to abstract
@@ -186,3 +183,5 @@ if __name__ == "__main__":
         msg_format='%(asctime)s : %(levelname)s : %(module)s : %(message)s : ',
         log_level=logging.INFO
     )
+
+    Platform()

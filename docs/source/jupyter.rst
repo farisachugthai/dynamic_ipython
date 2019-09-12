@@ -1,8 +1,8 @@
-=======
-Jupyter
-=======
+=============
+Jupyter Suite
+=============
 
-.. module:: jupyter
+.. module:: jupyter_conf
    :synopsis: Documentation for jupyter.
 
 .. highlight:: ipython

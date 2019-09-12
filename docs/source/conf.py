@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """Configuration file for the Sphinx documentation builder.
 
@@ -35,11 +36,9 @@ from IPython.lib.lexers import IPyLexer, IPythonTracebackLexer
 from traitlets.config import Config
 
 # On to my imports
-try:
-    import default_profile
-    from default_profile.__about__ import __version__
-except Exception as e:
-    print(e)
+import default_profile
+from default_profile.__about__ import __version__
+from default_profile.startup import *
 
 DOCS = Path(__file__).resolve().parent.parent
 BUILD_DIR = DOCS.joinpath('build')
@@ -529,7 +528,5 @@ def setup(app):
 
     """
     app.connect("source-read", rstjinja)
-    app.add_css_file("pygments.css")
-    app.add_css_file("custom.css")
     app.add_lexer('ipythontb', IPythonTracebackLexer())
     app.add_lexer('ipython', IPyLexer())

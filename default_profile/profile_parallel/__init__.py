@@ -31,3 +31,7 @@ try:
     import ipyparallel
 except (ImportError, ModuleNotFoundError) as e:
     logging.warning(e)
+
+import default_profile
+
+from . import ipcluster_config, ipcontroller_config, ipengine_config
