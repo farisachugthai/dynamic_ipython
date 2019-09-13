@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Rehash
+Rehashx
 =======
+.. magic:: rehashx
 
 This is an incredible little gem I just ran into, and hugely useful for
 making `IPython` work as a more versatile system shell.
@@ -65,7 +66,10 @@ import sys
 from IPython import get_ipython
 from IPython.core.alias import AliasError
 
-from default_profile.util.timer import timer
+try:
+    from default_profile.util.timer import timer
+except Exception:
+    from timeit import default_timer as timer
 
 
 def blacklisted_aliases(shell=None):

@@ -61,7 +61,7 @@ def load_ipython_extension(ip):
     ip : |ip|
 
     """
-    ip.register_magic_function(csv, 'cell')
+    ip.register_magic_function('pd_csv')
 
 
 if __name__ == '__main__':

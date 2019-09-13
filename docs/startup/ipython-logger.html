@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>06_Help_Helpers &#8212; Dynamic IPython: version0.0.1</title>
+    <title>Logging &#8212; Dynamic IPython: version0.0.1</title>
     <link rel="stylesheet" href="../_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -13,11 +13,11 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/language_data.js"></script>
-    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/startup/help_helpers.html" />
+    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/startup/ipython-logger.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="System Aliases" href="aliases.html" />
-    <link rel="prev" title="Logging" href="ipython-logger.html" />
+    <link rel="next" title="06_Help_Helpers" href="help_helpers.html" />
+    <link rel="prev" title="04_easy_import" href="easy_import.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <!--[if lte IE 6]>
@@ -36,10 +36,10 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="aliases.html" title="System Aliases"
+          <a href="help_helpers.html" title="06_Help_Helpers"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="ipython-logger.html" title="Logging"
+          <a href="easy_import.html" title="04_easy_import"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Dynamic IPython</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">IPython’s Startup</a> &#187;</li> 
@@ -51,35 +51,50 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="help-helpers">
-<h1>06_Help_Helpers<a class="headerlink" href="#help-helpers" title="Permalink to this headline">¶</a></h1>
-<p>Creates 2 functions in userspace to save the output of <code class="docutils literal notranslate"><span class="pre">help(python_object)</span></code>
-to a file or output to <a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stdout" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stdout</span></code></a>.</p>
-<div class="section" id="module-default_profile.startup.06_help_helpers">
-<span id="help-helpers-module"></span><h2><code class="docutils literal notranslate"><span class="pre">06_help_helpers</span></code> module<a class="headerlink" href="#module-default_profile.startup.06_help_helpers" title="Permalink to this headline">¶</a></h2>
-<p>Export functions to redirect <a class="reference external" href="https://docs.python.org/3/library/functions.html#help" title="(in Python v3.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">help()</span></code></a> output.</p>
-<p>This module utilizes the examples given in the official documentation
-for <a class="reference external" href="https://docs.python.org/3/library/contextlib.html#module-contextlib" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">contextlib</span></code></a>.</p>
-<p>In addition to utilizing <a class="reference external" href="https://docs.python.org/3/library/contextlib.html#module-contextlib" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">contextlib</span></code></a>, create a function that allows
-for an easier “grep-like” interface for objects that are too large
-to be quickly and easily understood based on the output of <code class="xref std std-keyword docutils literal notranslate"><span class="pre">dir</span></code>.</p>
-<hr class="docutils" />
+  <div class="section" id="logging">
+<span id="ipython-logger"></span><h1>Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h1>
+<dl class="field-list simple">
+<dt class="field-odd">source</dt>
+<dd class="field-odd"><p>default_profile.startup.05_log</p>
+</dd>
+</dl>
+<p>This uses the IPython core <code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.logger.LoggingConfigurable</span></code>
+to create a <code class="xref py py-class docutils literal notranslate"><span class="pre">logging.handler.FileHandler()</span></code> that creates one new log
+file for every calendar day of the year.</p>
+<p>Running IPython instances will continue to write to the log file if the
+session continues after the point when the logfile rolls over.</p>
+<p>If multiple sessions are started, the new instances will append onto the same
+file as the older ones.</p>
+<div class="admonition-linux-only admonition">
+<p class="admonition-title">Linux Only</p>
+<p>This only works on Linux. The Win API seemingly isn’t able to
+maintain multiple connections to the same file.</p>
+</div>
+<div class="section" id="module-default_profile.startup.05_log">
+<span id="log-module"></span><h2><a class="reference internal" href="#module-05_log" title="05_log: Create a logfile for the day and append to it if one already exists."><code class="xref py py-mod docutils literal notranslate"><span class="pre">05_log</span></code></a> module<a class="headerlink" href="#module-default_profile.startup.05_log" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-05_log"></span><p>Establish a file-logger for IPython.</p>
+<p>Collects both the input and output of every command run through the IPython
+interpreter, prepends a timestamp to the commands, and save the untransformed
+output to a file.</p>
 <dl class="function">
-<dt id="default_profile.startup.06_help_helpers.print_help">
-<code class="sig-name descname">print_help</code><span class="sig-paren">(</span><em class="sig-param">arg=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/06_help_helpers.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/06_help_helpers.html#print_help"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.06_help_helpers.print_help" title="Permalink to this definition">¶</a></dt>
-<dd><p>Redirect <a class="reference external" href="https://docs.python.org/3/library/functions.html#help" title="(in Python v3.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">help()</span></code></a> to <code class="docutils literal notranslate"><span class="pre">sys.stderr</span></code>.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="default_profile.startup.06_help_helpers.save_help">
-<code class="sig-name descname">save_help</code><span class="sig-paren">(</span><em class="sig-param">arg=None</em>, <em class="sig-param">output_file=&lt;colorama.ansitowin32.StreamWrapper object at 0x0000027E8B4360B8&gt;</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/06_help_helpers.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/06_help_helpers.html#save_help"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.06_help_helpers.save_help" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write <a class="reference external" href="https://docs.python.org/3/library/functions.html#help" title="(in Python v3.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">help()</span></code></a> to a file. Defaults to <code class="docutils literal notranslate"><span class="pre">sys.stdout</span></code>.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="default_profile.startup.06_help_helpers.page_help">
-<code class="sig-name descname">page_help</code><span class="sig-paren">(</span><em class="sig-param">arg=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/06_help_helpers.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/06_help_helpers.html#page_help"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.06_help_helpers.page_help" title="Permalink to this definition">¶</a></dt>
-<dd><p>WIP.</p>
+<dt id="default_profile.startup.05_log.ipython_logger_05">
+<code class="sig-name descname">ipython_logger_05</code><span class="sig-paren">(</span><em class="sig-param">shell=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/05_log.html#ipython_logger_05"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.ipython_logger_05" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves all commands run in the interactive namespace as valid IPython code.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is not necessarily valid python code.</p>
+</div>
+<p>The commands are appended to a file in the directory of the
+profile in <span class="target" id="index-0"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">$IPYTHONDIR</span></code> or fallback ~/.ipython. This file is
+named based on the date.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>shell</strong> (<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.8.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.interactiveshell.InteractiveShell</span></code></a>) – Global IPython instance.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.7)"><strong>RuntimeError</strong></a> – If the configured logger is already logging to todays date.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -102,11 +117,11 @@ to be quickly and easily understood based on the output of <code class="xref std
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
   <h4>Previous topic</h4>
-  <p class="topless"><a href="ipython-logger.html"
-                        title="previous chapter">Logging</a></p>
+  <p class="topless"><a href="easy_import.html"
+                        title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">04_easy_import</span></code></a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="aliases.html"
-                        title="next chapter">System Aliases</a></p>
+  <p class="topless"><a href="help_helpers.html"
+                        title="next chapter">06_Help_Helpers</a></p>
 <h3><a href="../index.html">Table of Contents</a></h3>
 <p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul>
@@ -121,8 +136,8 @@ to be quickly and easily understood based on the output of <code class="xref std
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">IPython Shell Initialization</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="rehashx.html">01_rehashx</a></li>
 <li class="toctree-l2"><a class="reference internal" href="easy_import.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">04_easy_import</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="ipython-logger.html">Logging</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">06_Help_Helpers</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="help_helpers.html">06_Help_Helpers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="aliases.html">System Aliases</a></li>
 <li class="toctree-l2"><a class="reference internal" href="41_numpy.html"><code class="docutils literal notranslate"><span class="pre">41_numpy_init</span></code> module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="42_pandas.html"><code class="docutils literal notranslate"><span class="pre">42_pandas_init</span></code> module</a></li>
@@ -137,7 +152,7 @@ to be quickly and easily understood based on the output of <code class="xref std
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../_sources/startup/help_helpers.rst.txt"
+      <li><a href="../_sources/startup/ipython-logger.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -155,10 +170,10 @@ to be quickly and easily understood based on the output of <code class="xref std
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="aliases.html" title="System Aliases"
+          <a href="help_helpers.html" title="06_Help_Helpers"
              >next</a> |</li>
         <li class="right" >
-          <a href="ipython-logger.html" title="Logging"
+          <a href="easy_import.html" title="04_easy_import"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Dynamic IPython</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >IPython’s Startup</a> &#187;</li> 

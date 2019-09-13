@@ -6,9 +6,14 @@
 
 """
 import re
-from sphinx import addnodes
-# from sphinx.domains.std import StandardDomain
-from sphinx.roles import XRefRole
+import sys
+
+try:
+    from sphinx import addnodes
+    # from sphinx.domains.std import StandardDomain
+    from sphinx.roles import XRefRole
+except (ImportError, ModuleNotFoundError):
+    sys.exit()
 
 name_re = re.compile(r"[\w_]+")
 

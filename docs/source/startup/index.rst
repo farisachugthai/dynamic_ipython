@@ -11,9 +11,9 @@ These are the auto-generated API docs for IPython's startup.
 
    rehashx
    easy_import
-   log
+   ipython-logger
    help_helpers
    aliases
-   numpy
-   pandas
+   41_numpy
+   42_pandas
    sysexcept

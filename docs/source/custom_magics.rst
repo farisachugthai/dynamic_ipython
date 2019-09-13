@@ -1,14 +1,9 @@
-.. _custom-magics:
-
 =============
 Custom Magics
 =============
 
-.. module:: custom-magics
-   :synopsis: Defining your own custom magics.
-
 .. highlight:: ipython
-   :linenothreshold: 1
+   :linenothreshold: 3
 
 The general flow of creating your own magic in a file breaks down to a few
 simple steps.
@@ -60,7 +55,6 @@ Docstring:
 
 Parameters
 ----------
-
 'magic' : object
    The decorated magic class or function.
 
@@ -82,18 +76,17 @@ Docstring:
    standalone function.  The functions should have the following
    signatures:
 
-       + For line magics: `def f(line)`
-       + For cell magics: `def f(line, cell)`
-       + For a function that does both: `def f(line, cell=None)`
+       + For line magics: ``def f(line)`..
+       + For cell magics: ``def f(line, cell)``.
+       + For a function that does both: ``def f(line, cell=None)``.
 
-   In the latter case, the function will be called with `cell==None` when
-   invoked as `%f`, and with cell as a string when invoked as `%%f`.
+   In the latter case, the function will be called with ``cell==None`` when
+   invoked as ``%f``, and with cell as a string when invoked as ``%%f``.
 
 .. _register-magic-function-parameters:
 
 Parameters
 ----------
-
 ``func`` : callable
    Function to be registered as a magic.
 
@@ -193,6 +186,7 @@ arguments
 
 Writing Custom Magics
 ----------------------
+
 `Custom Magics
 <https://raw.githubusercontent.com/ipython/ipython/523ed2fe58ea5ee9971d2b21df1de33b8cdfa924/docs/source/config/custommagics.rst>`_:
 
@@ -248,7 +242,7 @@ itself to be running already.  It only creates the magics subclass but
 doesn't instantiate it yet.
 
 .. note::
-    The class MUST call this class decorator at creation time
+    The class MUST call this class decorator at creation time.
 
 .. ipython:: python
 

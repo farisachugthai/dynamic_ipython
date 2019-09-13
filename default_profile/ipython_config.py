@@ -16,7 +16,27 @@ so I suppose IPython hasn't officially instantiated yet.:
 
 Therefore that the function shouldn't be used anywhere in this file.
 
+Raises
+------
+Didn't see this coming.
+
+.. ipython::
+    :verbatim:
+
+    File "/home/farbuntu/.ipython/profile_default/ipython_config.py", line 454, in <module>
+        if ModuleNotFoundError not in builtins:
+    TypeError: argument of type 'module' is not iterable
+
+So we have a python3.6 error. The problem is more that the only reason I noticed
+it is because the default python ran, and by default in 3.7 it never does.
+
+So fix that so we can maintain some {minimal} 3.6 compatability.
+
+
+
+
 """
+import builtins
 import logging
 import os
 from pathlib import Path
@@ -449,8 +469,7 @@ c.TerminalInteractiveShell.extra_open_editor_shortcuts = True
 
 # Try to import my Gruvbox class. Can be found at
 # https://github.com/farisachugthai/Gruvbox_IPython
-import builtins
-if sys.version_info[0:2] <= (3,6):
+if sys.version_info[0:2] <= (3, 6):
     if ModuleNotFoundError not in builtins:
 
         class ModuleNotFoundError(ImportError):

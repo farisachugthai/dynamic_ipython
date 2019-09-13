@@ -1,25 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Create a logfile for the day and append to it if one already exists.
-
+"""
 ==============
 IPython Logger
 ==============
 
 .. module:: 05_log
-    :synopsis: Establish a file-logger for IPython.
+    :synopsis: Create a logfile for the day and append to it if one already exists.
 
-.. highlight:: ipython3
+Establish a file-logger for IPython.
 
 Collects both the input and output of every command run through the IPython
-interpreter and prepends a timestamp to commands.
-
-The timestamp is particularly convenient for concurrent instances of IPython.
-
-.. versionchanged:: Version Changed
-
-    :func:`IPython.core.interactiveshell.InteractiveShell.magic()`
-    to :func:`IPython.core.interactiveshell.InteractiveShell.run_line_magic()`
+interpreter, prepends a timestamp to the commands, and save the untransformed
+output to a file.
 
 .. todo:: Logging TODOs
 
@@ -29,17 +22,6 @@ The timestamp is particularly convenient for concurrent instances of IPython.
     - Possibly change that section under the shebang to also include 3
       double quotes and in the comment add system info like py version, venv,
       conda, any of the 1000000 things you could add.
-
-
-Roadmap
-========
-
-05/18/2019:
-
-Should consider using that ipython_logger_05 as a :class:`logging.FileHandler`
-and then configure a globally available :class:`logging.StreamHandler`.
-
------------
 
 """
 import logging
@@ -54,7 +36,7 @@ from IPython import get_ipython
 def ipython_logger_05(shell=None):
     """Saves all commands run in the interactive namespace as valid IPython code.
 
-    .. note:: This is not necessarily valid python code.
+    .. warning:: This is not necessarily valid python code.
 
     The commands are appended to a file in the directory of the
     profile in :envvar:`$IPYTHONDIR` or fallback ~/.ipython. This file is
@@ -62,10 +44,13 @@ def ipython_logger_05(shell=None):
 
     Parameters
     -----------
-    _ip : |ip|
+    shell : |ip|
         Global IPython instance.
-        :param shell:
-        :type shell:
+
+    Raises
+    ------
+    RuntimeError
+        If the configured logger is already logging to todays date.
 
     """
     if shell is None:
@@ -99,4 +84,5 @@ def ipython_logger_05(shell=None):
 
 if __name__ == "__main__":
     _ip = get_ipython()
-    ipython_logger_05(_ip)
+    if _ip is not None:
+        ipython_logger_05(_ip)

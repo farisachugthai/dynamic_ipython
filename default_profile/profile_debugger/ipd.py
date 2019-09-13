@@ -7,12 +7,18 @@ Currently crashing on IPD.pt_init line with IPCompleter.
 
 Can we implement differently?
 """
+import signal
 import sys
 
 from IPython import get_ipython
 # from IPython.core.magics import MagicsClass, cell_magics, line_magics
 from IPython.core.completer import IPCompleter
-from IPython.terminal.debugger import TerminalPdb, Pdb
+from IPython.core.debugger import Pdb
+# from IPython.core.interactiveshell import InteractiveShell
+from IPython.terminal.embed import InteractiveShellEmbed
+from IPython.terminal.debugger import TerminalPdb
+from IPython.terminal.ipapp import TerminalIPythonApp
+from IPython.terminal.ptutils import IPythonPTCompleter
 from IPython.terminal.shortcuts import suspend_to_bg, cursor_in_leading_ws, create_ipython_shortcuts
 
 from prompt_toolkit import patch_stdout

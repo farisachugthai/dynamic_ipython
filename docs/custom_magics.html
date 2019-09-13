@@ -50,8 +50,8 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-custom-magics">
-<span id="id1"></span><span id="custom-magics"></span><h1>Custom Magics<a class="headerlink" href="#module-custom-magics" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="custom-magics">
+<h1>Custom Magics<a class="headerlink" href="#custom-magics" title="Permalink to this headline">¶</a></h1>
 <p>The general flow of creating your own magic in a file breaks down to a few
 simple steps.</p>
 <ol class="arabic">
@@ -117,17 +117,17 @@ This will create an IPython magic (line, cell or both) from a
 standalone function.  The functions should have the following
 signatures:
 
-    <span class="m">+</span> For line magics: <span class="nv">`def f(line)`</span>
-    <span class="m">+</span> For cell magics: <span class="nv">`def f(line, cell)`</span>
-    <span class="m">+</span> For a function that does both: <span class="nv">`def f(line, cell=None)`</span>
+    <span class="m">+</span> For line magics: <span class="s">``def f(line)`..</span>
+    <span class="m">+</span> For cell magics: <span class="s">``def f(line, cell)``</span>.
+    <span class="m">+</span> For a function that does both: <span class="s">``def f(line, cell=None)``</span>.
 
-In the latter case, the function will be called with <span class="nv">`cell==None`</span> when
-invoked as <span class="nv">`%f`</span>, and with cell as a string when invoked as <span class="nv">`%%f`</span>.
+In the latter case, the function will be called with <span class="s">``cell==None``</span> when
+invoked as <span class="s">``%f``</span>, and with cell as a string when invoked as <span class="s">``%%f``</span>.
 </pre></div>
 </td></tr></table></div>
 </div>
 <div class="section" id="register-magic-function-parameters">
-<span id="id2"></span><h3>Parameters<a class="headerlink" href="#register-magic-function-parameters" title="Permalink to this headline">¶</a></h3>
+<span id="id1"></span><h3>Parameters<a class="headerlink" href="#register-magic-function-parameters" title="Permalink to this headline">¶</a></h3>
 <dl class="simple">
 <dt><code class="docutils literal notranslate"><span class="pre">func</span></code><span class="classifier">callable</span></dt><dd><p>Function to be registered as a magic.</p>
 </dd>
@@ -145,27 +145,27 @@ any function.</p>
 <p>Writing the extension:</p>
 <ul>
 <li><p>Import the global <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.8.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> instance with:</p>
-<div class="highlight-ipython notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 </pre></div>
-</td></tr></table></div>
+</div>
 </li>
 <li><p>Create an object with the global ipython app with:</p>
-<div class="highlight-ipython notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
 </pre></div>
-</td></tr></table></div>
+</div>
 </li>
 </ul>
 <p>If you want to try out your ipython magics you can do the following:</p>
 <ul>
 <li><p>Load your magic with:</p>
-<div class="highlight-ipython notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="n">_ip</span><span class="o">.</span><span class="n">magic</span><span class="p">(</span><span class="s1">&#39;load_ext your_magic_name&#39;</span><span class="p">)</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">_ip</span><span class="o">.</span><span class="n">magic</span><span class="p">(</span><span class="s1">&#39;load_ext your_magic_name&#39;</span><span class="p">)</span>
 </pre></div>
-</td></tr></table></div>
+</div>
 </li>
 <li><p>Run your magic with:</p>
-<div class="highlight-ipython notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="n">_ip</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s1">&#39;your_magic_function&#39;</span><span class="p">,</span> <span class="s1">&#39;your_magic_arguments&#39;</span><span class="p">)</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">_ip</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s1">&#39;your_magic_function&#39;</span><span class="p">,</span> <span class="s1">&#39;your_magic_arguments&#39;</span><span class="p">)</span>
 </pre></div>
-</td></tr></table></div>
+</div>
 </li>
 </ul>
 <p><strong>(Optional)</strong>:</p>
@@ -281,7 +281,7 @@ itself to be running already.  It only creates the magics subclass but
 doesn’t instantiate it yet.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The class MUST call this class decorator at creation time</p>
+<p>The class MUST call this class decorator at creation time.</p>
 </div>
 <div class="highlight-ipython notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
@@ -390,9 +390,9 @@ for the current API.</p>
 <h2>Complete Example<a class="headerlink" href="#complete-example" title="Permalink to this headline">¶</a></h2>
 <p>Here is a full example of a magic package. You can distribute magics using
 setuptools, distutils, or any other distribution tools like <a class="reference external" href="http://flit.readthedocs.io">flit</a> for pure Python packages.</p>
-<div class="highlight-bash notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>$ cat example_magic/__init__.py
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cat example_magic/__init__.py
 </pre></div>
-</td></tr></table></div>
+</div>
 <div class="highlight-python3 notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
 3
@@ -408,9 +408,9 @@ setuptools, distutils, or any other distribution tools like <a class="reference 
     <span class="n">ipython</span><span class="o">.</span><span class="n">register_magics</span><span class="p">(</span><span class="n">Abracadabra</span><span class="p">)</span>
 </pre></div>
 </td></tr></table></div>
-<div class="highlight-bash notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>$ cat example_magic/abracadabra.py
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cat example_magic/abracadabra.py
 </pre></div>
-</td></tr></table></div>
+</div>
 <div class="highlight-python3 notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
@@ -543,7 +543,7 @@ explore all the instance’s attributes interactively from
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Sep 11, 2019.
+      Last updated on Sep 14, 2019.
     </div>
   </body>
 </html>

@@ -1,7 +1,24 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # Vim: set ft=python:
-"""Run ipdb and capture args."""
+"""
+========
+ipdb_ipy
+========
+
+.. module:: ipdb_ipy
+    :synopsis: Run ipdb and capture args.
+
+If an import of the ipdb module doesn't work, then use a try/except to import
+:func:`IPython.get_ipython`. Return the IPython global instance or begin
+configuring a tailor made instance of :class:`IPython.terminal.ipapp.TerminalIPythonApp`.
+
+However, if the global IPython instance does exist, simply notify the user that they're
+already inside an IPython session.
+
+.. todo:: Pass arguments to this module to pre-existing IPython shell.
+
+"""
 import sys
 
 try:
@@ -17,6 +34,8 @@ except (ImportError, ModuleNotFoundError):
 
     if shell is None:
         # Not inside IPython
+        from IPython.terminal.ipapp import TerminalIPythonApp
+        from IPython.terminal.embed import InteractiveShellEmbed
         # Build a terminal app in order to force ipython to load the
         # configuration
         ipapp = TerminalIPythonApp()
@@ -27,7 +46,8 @@ except (ImportError, ModuleNotFoundError):
     else:
         # Running inside IPython
 
-        # Detect if embed shell or not and display a message
+        # Detect if we're inside of an embedded shell or not and display a message
+        # TODO: Pass args to shell. maybe shell.run_cell(sys.argv[1:]) or something?
         if isinstance(shell, InteractiveShellEmbed):
             sys.stderr.write(
                 "\nYou are currently into an embedded ipython shell,\n"

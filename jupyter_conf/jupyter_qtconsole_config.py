@@ -10,7 +10,7 @@ from traitlets.config import get_config
 
 try:
     import qtconsole  # kinda a prerequisite wouldn't you say?
-except (ImportError, ModuleNotFoundError):
+except ImportError:
     sys.exit()
 
 c = get_config()

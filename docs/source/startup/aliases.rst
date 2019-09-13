@@ -1,10 +1,8 @@
-.. _system-aliases:
+==============
+System Aliases
+==============
 
-==========
-20_aliases
-==========
-
-.. module:: 20_aliases
+.. module:: system-aliases
    :synopsis: Gather information, determine platform and set appropriate aliases.
 
 

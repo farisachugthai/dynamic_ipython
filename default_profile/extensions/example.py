@@ -6,7 +6,7 @@ Example of Writing A Custom IPython Extension
 =============================================
 
 Usage
-=====
+-----
 
 .. ipython::
 
@@ -14,7 +14,7 @@ Usage
 
 
 Writing Cell Magics
-====================
+--------------------
 
 While not utilized here, a similar execution path can be utilized for
 :func:`IPython.core.magic.cell_magic()`
@@ -23,7 +23,7 @@ While not utilized here, a similar execution path can be utilized for
 Those lines specifically.
 
 See Also
-========
+--------
 IPython.core.magic
 IPython.terminal.magic
 

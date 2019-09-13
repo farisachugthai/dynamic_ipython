@@ -17,7 +17,7 @@ import IPython
 from IPython import get_ipython
 from IPython.core.error import UsageError
 
-_ip = get_ipython()
+# _ip = get_ipython()
 
 # Don't do this because it'll cause Sphinx to raise an error and the docs
 # won't build
@@ -36,7 +36,7 @@ rehashx_mod = importlib.import_module('default_profile.startup.01_rehashx')
 # Actually really useful when building docs so leave the sys.path hack
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-easy_import = importlib.import_module('default_profile.startup.04_easy_import')
+easy_import_mod = importlib.import_module('default_profile.startup.04_easy_import')
 ipython_file_logger = importlib.import_module('default_profile.startup.05_log')
 help_helpers = importlib.import_module(
     'default_profile.startup.06_help_helpers'

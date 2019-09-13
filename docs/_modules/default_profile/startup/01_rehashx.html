@@ -47,8 +47,9 @@
 <span></span><span class="ch">#!/usr/bin/env python3</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Rehash</span>
+<span class="sd">Rehashx</span>
 <span class="sd">=======</span>
+<span class="sd">.. magic:: rehashx</span>
 
 <span class="sd">This is an incredible little gem I just ran into, and hugely useful for</span>
 <span class="sd">making `IPython` work as a more versatile system shell.</span>
@@ -111,7 +112,10 @@
 <span class="kn">from</span> <span class="nn">IPython</span> <span class="k">import</span> <span class="n">get_ipython</span>
 <span class="kn">from</span> <span class="nn">IPython.core.alias</span> <span class="k">import</span> <span class="n">AliasError</span>
 
-<span class="kn">from</span> <span class="nn">default_profile.util.timer</span> <span class="k">import</span> <span class="n">timer</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">default_profile.util.timer</span> <span class="k">import</span> <span class="n">timer</span>
+<span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">timeit</span> <span class="k">import</span> <span class="n">default_timer</span> <span class="k">as</span> <span class="n">timer</span>
 
 
 <div class="viewcode-block" id="blacklisted_aliases"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.blacklisted_aliases">[docs]</a><span class="k">def</span> <span class="nf">blacklisted_aliases</span><span class="p">(</span><span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -213,7 +217,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Sep 11, 2019.
+      Last updated on Sep 14, 2019.
     </div>
   </body>
 </html>

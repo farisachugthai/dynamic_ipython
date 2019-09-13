@@ -46,26 +46,19 @@
   <h1>Source code for default_profile.startup.05_log</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;Create a logfile for the day and append to it if one already exists.</span>
-
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">==============</span>
 <span class="sd">IPython Logger</span>
 <span class="sd">==============</span>
 
 <span class="sd">.. module:: 05_log</span>
-<span class="sd">    :synopsis: Establish a file-logger for IPython.</span>
+<span class="sd">    :synopsis: Create a logfile for the day and append to it if one already exists.</span>
 
-<span class="sd">.. highlight:: ipython3</span>
+<span class="sd">Establish a file-logger for IPython.</span>
 
 <span class="sd">Collects both the input and output of every command run through the IPython</span>
-<span class="sd">interpreter and prepends a timestamp to commands.</span>
-
-<span class="sd">The timestamp is particularly convenient for concurrent instances of IPython.</span>
-
-<span class="sd">.. versionchanged:: Version Changed</span>
-
-<span class="sd">    :func:`IPython.core.interactiveshell.InteractiveShell.magic()`</span>
-<span class="sd">    to :func:`IPython.core.interactiveshell.InteractiveShell.run_line_magic()`</span>
+<span class="sd">interpreter, prepends a timestamp to the commands, and save the untransformed</span>
+<span class="sd">output to a file.</span>
 
 <span class="sd">.. todo:: Logging TODOs</span>
 
@@ -75,17 +68,6 @@
 <span class="sd">    - Possibly change that section under the shebang to also include 3</span>
 <span class="sd">      double quotes and in the comment add system info like py version, venv,</span>
 <span class="sd">      conda, any of the 1000000 things you could add.</span>
-
-
-<span class="sd">Roadmap</span>
-<span class="sd">========</span>
-
-<span class="sd">05/18/2019:</span>
-
-<span class="sd">Should consider using that ipython_logger_05 as a :class:`logging.FileHandler`</span>
-<span class="sd">and then configure a globally available :class:`logging.StreamHandler`.</span>
-
-<span class="sd">-----------</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">logging</span>
@@ -97,10 +79,10 @@
 <span class="kn">from</span> <span class="nn">IPython</span> <span class="k">import</span> <span class="n">get_ipython</span>
 
 
-<div class="viewcode-block" id="ipython_logger_05"><a class="viewcode-back" href="../../../startup/log.html#default_profile.startup.05_log.ipython_logger_05">[docs]</a><span class="k">def</span> <span class="nf">ipython_logger_05</span><span class="p">(</span><span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ipython_logger_05"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.ipython_logger_05">[docs]</a><span class="k">def</span> <span class="nf">ipython_logger_05</span><span class="p">(</span><span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Saves all commands run in the interactive namespace as valid IPython code.</span>
 
-<span class="sd">    .. note:: This is not necessarily valid python code.</span>
+<span class="sd">    .. warning:: This is not necessarily valid python code.</span>
 
 <span class="sd">    The commands are appended to a file in the directory of the</span>
 <span class="sd">    profile in :envvar:`$IPYTHONDIR` or fallback ~/.ipython. This file is</span>
@@ -108,10 +90,13 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    -----------</span>
-<span class="sd">    _ip : |ip|</span>
+<span class="sd">    shell : |ip|</span>
 <span class="sd">        Global IPython instance.</span>
-<span class="sd">        :param shell:</span>
-<span class="sd">        :type shell:</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    RuntimeError</span>
+<span class="sd">        If the configured logger is already logging to todays date.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">shell</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -145,7 +130,8 @@
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-    <span class="n">ipython_logger_05</span><span class="p">(</span><span class="n">_ip</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">_ip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ipython_logger_05</span><span class="p">(</span><span class="n">_ip</span><span class="p">)</span>
 </pre></div>
 
           </div>
@@ -198,7 +184,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Sep 11, 2019.
+      Last updated on Sep 14, 2019.
     </div>
   </body>
 </html>

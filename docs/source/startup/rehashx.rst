@@ -1,10 +1,10 @@
 ==========
-`%rehashx`
+01_rehashx
 ==========
-.. magic:: rehashx
 
-.. module:: rehashx
-   :synopsis: Rehash everything on $PATH and make available in the user namespace.
+.. currentmodule:: 01_rehashx
+
+.. magic:: rehashx
 
 The IPython magic `%rehashx` allows you to reload all of your startup files
 and also adds system commands to the namespace!

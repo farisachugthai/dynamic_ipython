@@ -56,6 +56,7 @@ class DeepReload:
             Module to reload
         extra_excludes : set of str, optional
             Extra modules to exclude from `IPython.lib.deepreload.dreload`.
+
         """
         if extra_excludes is not None:
             return _reload(mod, self.excludes + set(extra_excludes))
@@ -77,21 +78,20 @@ def easy_import(mod):
 
     Returns
     -------
-    pynvim : mod
-        Neovim's python module.
+    ret_mod : mod
+        Imported module. Specifically used for neovim in this instance but can
+        be interactively used for any module the user needs to import.
 
     """
     try:
-        pynvim = import_module(mod)
+        return import_module(mod)
     except ImportError:
         print("************************************************************")
         print(
             "{} import failed. Only ignore this if you plan on going"
-            " the entire session without using %edit".format(mod)
+            " the entire session without using it".format(mod)
         )
         print("************************************************************")
-    else:
-        return pynvim
 
 
 if __name__ == "__main__":

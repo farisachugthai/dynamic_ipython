@@ -7,6 +7,7 @@ Event Watcher
 ================
 
 .. module:: event_watcher_example
+    :synopsis: Create an extension for IPython 7.0's new event handlers.
 
 :URL: https://ipython.readthedocs.io/en/stable/config/callbacks.html#ipython-events
 
@@ -25,13 +26,19 @@ callback prototype functions defined in IPython.core.events.
 To register callbacks, use `IPython.core.events.EventManager.register().`
 
 """
+from IPython import get_ipython
 
 
 class VarWatcher:
+    """Initialize an object that tracks different variables in the user namespace."""
 
-    def __init__(self, ip):
-        self.shell = ip
-        self.last_x = None
+    def __init__(self, ip=None, last_x=None):
+        """Set :attr:`self.shell` to the global IPython instance and :attr:`self.last_x` to some var."""
+        if ip is not None:
+            self.shell = ip
+        else:
+            self.shell = get_ipython()
+        self.last_x = last_x or None
 
     def pre_execute(self):
         self.last_x = self.shell.user_ns.get('x', None)

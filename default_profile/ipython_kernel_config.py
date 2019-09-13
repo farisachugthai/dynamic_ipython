@@ -7,7 +7,6 @@ IPython Kernel Configuration
 .. module:: ipython_kernel_config
     :synopsis: Configure the kernel that comminucates via the Jupyter protocol.
 
-.. highlight:: ipython
 
 
 IPython Kernel Config
