@@ -106,6 +106,21 @@
 <span class="p">)</span>
 
 
+<div class="viewcode-block" id="Executable"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.Executable">[docs]</a><span class="k">class</span> <span class="nc">Executable</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;An object representing some executable on a user computer.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Executable.__init__"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.Executable.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize with &#39;command&#39;.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">command</span> <span class="o">=</span> <span class="n">command</span></div>
+
+<div class="viewcode-block" id="Executable.runs"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.Executable.runs">[docs]</a>    <span class="k">def</span> <span class="nf">runs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Check for the executability of a system command.</span>
+
+<span class="sd">        Same signature as :func:`shutil.which`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="p">)</span></div></div>
+
+
 <div class="viewcode-block" id="linux_specific_aliases"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.linux_specific_aliases">[docs]</a><span class="k">def</span> <span class="nf">linux_specific_aliases</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Add Linux specific aliases.</span>
 
@@ -501,6 +516,7 @@
 <span class="sd">    Here&#39;s an interesting problem I ran into.</span>
 
 <span class="sd">    .. ipython::</span>
+<span class="sd">        :verbatim:</span>
 
 <span class="sd">        from traitlets.traitlets import List</span>
 <span class="sd">        user_aliases = [  # let&#39;s just fill this with some filler text</span>
@@ -510,7 +526,7 @@
 <span class="sd">        # %config AliasManager.user_aliases = user_aliases</span>
 
 <span class="sd">    .. ipython::</span>
-<span class="sd">        :okexcept:</span>
+<span class="sd">        :verbatim:</span>
 
 <span class="sd">        ~/.ipython/default_profile/startup/20_aliases.py in main()</span>
 <span class="sd">            461</span>
@@ -576,17 +592,27 @@
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
+  <h3>Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script type="text/javascript">$('#searchbox').show(0);</script><h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+
 <h3><a href="../../../index.html">Table of Contents</a></h3>
-<p class="caption"><span class="caption-text">Tutorial</span></p>
+
+<div>&nbsp;</div>
+<div id="sidebartoc">
+    <p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../ipython_keybindings.html">Keybindings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../custom_magics.html">Custom Magics</a></li>
@@ -594,14 +620,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../sphinxext.html">IPython Sphinx Directive</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../dev.html">Developers Notes</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Docs</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../startup/index.html">IPython Shell Initialization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../util.html">General Utility Functions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../jupyter.html">Jupyter Suite</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Extensions</a></li>
-</ul>
 
+</div>
         </div>
       </div>
       <div class="clearer"></div>
@@ -620,7 +640,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Sep 14, 2019.
+      Last updated on Sep 15, 2019.
     </div>
   </body>
 </html>

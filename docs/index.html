@@ -50,12 +50,13 @@
 <span id="root-index"></span><h1>Welcome to Dynamic IPython’s documentation!<a class="headerlink" href="#welcome-to-dynamic-ipython-s-documentation" title="Permalink to this headline">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">date</dt>
-<dd class="field-odd"><p>September 14, 2019</p>
+<dd class="field-odd"><p>September 15, 2019</p>
 </dd>
 </dl>
 <span class="target" id="module-root_index"></span><div class="section" id="startup-scripts">
 <h2>Startup Scripts<a class="headerlink" href="#startup-scripts" title="Permalink to this headline">¶</a></h2>
-<p>This repository hosts startup scripts that can be used during IPython’s startup.</p>
+<p>This repository hosts startup scripts that can be used during
+IPython’s startup.</p>
 <p>The scripts add well over 1000 aliases to the namespace, import commonly used
 modules, configure the data analysis library Pandas, add multiple application
 specific loggers, and more.</p>
@@ -63,10 +64,13 @@ specific loggers, and more.</p>
 course of the last year modifying <a class="reference external" href="docs/profile_default.html">IPython</a>
 and <a class="reference external" href="docs/jupyter.html">Jupyter</a>.</p>
 </div>
-<div class="section" id="features">
-<h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="extensions">
+<span id="root-extensions"></span><h2>Extensions<a class="headerlink" href="#extensions" title="Permalink to this headline">¶</a></h2>
+<p>In addition this repository handles a growing number of IPython extensions.
+To see more, continue reading about <span class="xref std std-ref">custom-magics</span> and <span class="xref std std-ref">extensions</span>.</p>
+</div>
 <div class="section" id="portability">
-<h3>Portability<a class="headerlink" href="#portability" title="Permalink to this headline">¶</a></h3>
+<h2>Portability<a class="headerlink" href="#portability" title="Permalink to this headline">¶</a></h2>
 <p>Portability was a major factor while writing these scripts.</p>
 <p>Therefore, any script should work on:</p>
 <ul>
@@ -78,29 +82,6 @@ and <a class="reference external" href="docs/jupyter.html">Jupyter</a>.</p>
 windows or in a shell with either ConEmu or Cmder.</p>
 <p>As a result, there may be unexpected behavior that arises when running the
 following scripts while within in an unmodified <strong class="command">cmd</strong> shell.</p>
-</div>
-</div>
-<div class="section" id="system-agnostic-aliases">
-<h2>System Agnostic Aliases<a class="headerlink" href="#system-agnostic-aliases" title="Permalink to this headline">¶</a></h2>
-<p>To date there are well over 100 aliases manually added to the shell.</p>
-<p>These aliases depend on the operating system used as Linux OSes will default
-to a bash system shell, and Windows will have <code class="docutils literal notranslate"><span class="pre">dosbatch</span></code> or <code class="docutils literal notranslate"><span class="pre">powershell</span></code>
-shells.</p>
-<div class="section" id="rehashx">
-<h3><code class="xref py py-obj docutils literal notranslate"><span class="pre">%rehashx</span></code><a class="headerlink" href="#rehashx" title="Permalink to this headline">¶</a></h3>
-<p>The first script to run invokes <code class="xref py py-obj docutils literal notranslate"><span class="pre">%rehashx%</span></code> which initializes
-<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.8.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> with all of the commands that the system shell knows.</p>
-<p>By invoking <code class="docutils literal notranslate"><span class="pre">%rehashx</span></code> at the beginning of startup, all system commands
-are added as well, which regularly adds well over 1000 commands to the shell.</p>
-<p>In addition 50+ aliases have been added for Git.</p>
-</div>
-</div>
-<div class="section" id="key-bindings">
-<h2>Key Bindings<a class="headerlink" href="#key-bindings" title="Permalink to this headline">¶</a></h2>
-<p>These scripts allow for hybrid use of Vim and Emacs keybindings.</p>
-<p>Approximately 50 Emacs keybindings are added to Vim’s insert mode through
-the use of <code class="xref py py-mod docutils literal notranslate"><span class="pre">prompt_toolkit</span></code>.</p>
-<p>The source code can be found <a class="reference external" href="profile_default/startup/32_vi_modes.py">here</a> with documentation at <a class="reference external" href="https://farisachugthai.github.io/dynamic_ipython/profile_default.html#module-profile_default.startup.32_vi_mode">this site</a>.</p>
 </div>
 <div class="section" id="motivation">
 <h2>Motivation<a class="headerlink" href="#motivation" title="Permalink to this headline">¶</a></h2>
@@ -128,18 +109,25 @@ to Monokai.</p>
 every option available through the <code class="xref py py-obj docutils literal notranslate"><span class="pre">%config</span></code> magic.</p>
 <p>For commands that are more related to the interactive aspect of the shell,
 see the following:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span><span class="p">()</span>
+<div class="highlight-ipython notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span><span class="p">()</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">help</span><span class="p">(</span><span class="n">_ip</span><span class="p">)</span>  <span class="c1">#doctest: +SKIP</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="nb">dir</span><span class="p">(</span><span class="n">_ip</span><span class="p">):</span> <span class="c1">#doctest: +SKIP</span>
 </pre></div>
-</div>
+</td></tr></table></div>
 <p>In addition, there’s an abundance of documentation online in the
 form of rst docs and ipynb notebooks.</p>
+</div>
+<div class="section" id="table-of-contents">
+<h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="ipython_keybindings.html">Keybindings</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ipython_keybindings.html#key-bindings">Key Bindings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ipython_keybindings.html#interactively-binding-keys">Interactively Binding Keys</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ipython_keybindings.html#official-ipython-documentation">Official IPython Documentation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ipython_keybindings.html#side-effects">Side Effects</a></li>
@@ -153,6 +141,7 @@ form of rst docs and ipynb notebooks.</p>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="exceptions.html">Customized Exceptions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#debugging">Debugging</a></li>
 <li class="toctree-l2"><a class="reference internal" href="exceptions.html#help-on-module-ipython-core-ultratb-in-ipython-core">Help on module <code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython.core.ultratb</span></code> in <code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython.core</span></code>:</a></li>
 <li class="toctree-l2"><a class="reference internal" href="exceptions.html#verbosetb"><strong>VerboseTB</strong></a></li>
 <li class="toctree-l2"><a class="reference internal" href="exceptions.html#sys-excepthook-exceptionhook"><code class="xref py py-func docutils literal notranslate"><span class="pre">sys.excepthook()</span></code> — ExceptionHook</a></li>
@@ -177,23 +166,6 @@ form of rst docs and ipynb notebooks.</p>
 </ul>
 </div>
 <div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">API Docs</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="startup/index.html">IPython Shell Initialization</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="startup/rehashx.html">01_rehashx</a></li>
-<li class="toctree-l2"><a class="reference internal" href="startup/easy_import.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">04_easy_import</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="startup/ipython-logger.html">Logging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="startup/help_helpers.html">06_Help_Helpers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="startup/aliases.html">System Aliases</a></li>
-<li class="toctree-l2"><a class="reference internal" href="startup/41_numpy.html"><code class="docutils literal notranslate"><span class="pre">41_numpy_init</span></code> module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="startup/42_pandas.html"><code class="docutils literal notranslate"><span class="pre">42_pandas_init</span></code> module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="startup/sysexcept.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">50_sysexception</span></code> module</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="util.html">General Utility Functions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="jupyter.html">Jupyter Suite</a></li>
-<li class="toctree-l1"><a class="reference internal" href="extensions.html">Extensions</a></li>
-</ul>
 </div>
 </div>
 <div class="section" id="indices-and-tables">
@@ -213,20 +185,26 @@ form of rst docs and ipynb notebooks.</p>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
+  <h3>Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="ipython_keybindings.html"
-                        title="next chapter">Keybindings in IPython</a></p>
+<script type="text/javascript">$('#searchbox').show(0);</script><h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="ipython_keybindings.html" title="next chapter">Keybindings in IPython</a></li>
+  </ul></li>
+</ul>
+
 <h3><a href="#">Table of Contents</a></h3>
-<p class="caption"><span class="caption-text">Tutorial</span></p>
+
+<div>&nbsp;</div>
+<div id="sidebartoc">
+    <p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="ipython_keybindings.html">Keybindings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="custom_magics.html">Custom Magics</a></li>
@@ -234,14 +212,8 @@ form of rst docs and ipynb notebooks.</p>
 <li class="toctree-l1"><a class="reference internal" href="sphinxext.html">IPython Sphinx Directive</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dev.html">Developers Notes</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Docs</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="startup/index.html">IPython Shell Initialization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="util.html">General Utility Functions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="jupyter.html">Jupyter Suite</a></li>
-<li class="toctree-l1"><a class="reference internal" href="extensions.html">Extensions</a></li>
-</ul>
 
+</div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -269,7 +241,7 @@ form of rst docs and ipynb notebooks.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Sep 14, 2019.
+      Last updated on Sep 15, 2019.
     </div>
   </body>
 </html>

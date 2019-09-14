@@ -196,7 +196,7 @@ Registering Your Own Doctest Handlers
 
 The Sphinx extension that provides support for embedded IPython code provides
 a pseudo-decorator `@doctest`, which treats the input/output block as a
-doctest, raising a :keyword:`RuntimeError` during doc generation if the actual output
+doctest, raising a :py:exc:`RuntimeError` during doc generation if the actual output
 (after running the input) does not match the expected output.
 
 An example usage is:

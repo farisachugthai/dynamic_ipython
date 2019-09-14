@@ -146,7 +146,7 @@ documentation is built:</p>
 <ol class="arabic">
 <li><p>Execute the <em>input</em> lines in your IPython directive block.</p></li>
 <li><p>Compare the <em>output</em> of this with the output text that you’ve put in the
-IPython directive block (I.E. what comes after <code class="xref py py-obj docutils literal notranslate"><span class="pre">Out[NN]</span></code>);</p></li>
+IPython directive block (I.E. what comes after <code class="docutils literal notranslate"><span class="pre">Out[NN]</span></code>);</p></li>
 <li><p>If there is a difference, the embedded shell will raise an error and
 halt building the documentation.</p></li>
 </ol>
@@ -189,8 +189,8 @@ to the end of this file in <a class="reference internal" href="#pseudo-decorator
 <div class="section" id="registering-your-own-doctest-handlers">
 <h3>Registering Your Own Doctest Handlers<a class="headerlink" href="#registering-your-own-doctest-handlers" title="Permalink to this headline">¶</a></h3>
 <p>The Sphinx extension that provides support for embedded IPython code provides
-a pseudo-decorator &#64;doctest, which treats the input/output block as a
-doctest, raising a RuntimeError during doc generation if the actual output
+a pseudo-decorator <code class="xref py py-obj docutils literal notranslate"><span class="pre">&#64;doctest</span></code>, which treats the input/output block as a
+doctest, raising a <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">RuntimeError</span></code></a> during doc generation if the actual output
 (after running the input) does not match the expected output.</p>
 <p>An example usage is:</p>
 <div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">ipython</span><span class="p">::</span>
@@ -214,7 +214,7 @@ determined by the handler. For example,</p>
 </div>
 <p>allows the actual output <code class="docutils literal notranslate"><span class="pre">0.30000000000000004</span></code> to match the expected output
 due to a comparison with <code class="xref py py-obj docutils literal notranslate"><span class="pre">np.allclose</span></code>.</p>
-<p>This is detailed in the module <code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython.sphinxext.custom_doctests</span></code>.</p>
+<p>This is detailed in the module <a class="reference internal" href="#module-IPython.sphinxext.custom_doctests" title="IPython.sphinxext.custom_doctests"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython.sphinxext.custom_doctests</span></code></a>.</p>
 <p>Handlers should have the following function signature:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">handler</span><span class="p">(</span><span class="n">sphinx_shell</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">input_lines</span><span class="p">,</span> <span class="n">found</span><span class="p">,</span> <span class="n">submitted</span><span class="p">)</span>
 </pre></div>
@@ -380,7 +380,7 @@ following markup:</p>
 <span class="go">4</span>
 </pre></div>
 </div>
-<p>We can even plot from python, using the <code class="docutils literal notranslate"><span class="pre">&#64;savefig</span></code> decorator, as well as
+<p>We can even plot from python, using the <code class="xref py py-obj docutils literal notranslate"><span class="pre">&#64;savefig</span></code> decorator, as well as
 suppress output with a semicolon.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [30]: </span><span class="n">plot</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]);</span>
 </pre></div>
@@ -451,32 +451,35 @@ In [38]: print(square(-2))
 take.  Some of the decorators can be used as options to the entire
 block (e.g. <code class="docutils literal notranslate"><span class="pre">&#64;verbatim</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;suppress</span></code>), and some only apply to the
 line just below them (eg <code class="docutils literal notranslate"><span class="pre">&#64;savefig</span></code>).:</p>
-<dl class="simple">
-<dt>&#64;suppress</dt><dd><p>Execute the IPython input block, but suppress the input and output
+<dl class="glossary simple">
+<dt id="term-suppress">&#64;suppress</dt><dd><p>Execute the IPython input block, but suppress the input and output
 block from the rendered output.  Also, can be applied to the entire
 <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">ipython</span></code> block as a directive option with <code class="docutils literal notranslate"><span class="pre">:suppress:</span></code>.</p>
 </dd>
-<dt>&#64;verbatim</dt><dd><p>Insert the input and output block in verbatim, but auto-increment
+<dt id="term-verbatim">&#64;verbatim</dt><dd><p>Insert the input and output block in verbatim, but auto-increment
 the line numbers. Internally, the interpreter will be fed an empty
 string, so it is a no-op that keeps line numbering consistent.
 Also, can be applied to the entire <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">ipython</span></code> block as a
 directive option with <code class="docutils literal notranslate"><span class="pre">:verbatim:</span></code>.</p>
 </dd>
-<dt>&#64;savefig OUTFILE [IMAGE_OPTIONS]</dt><dd><p>Save the figure to the static directory and insert it into the
+<dt id="term-savefig">&#64;savefig</dt><dd><p>Save the target of the directive to <em class="dfn">outfile</em>.
+<em>I think I’m just gonna rewrite this entire paragraph.</em>
+Save the figure to the static directory and insert it into the
 document, possibly binding it into a mini-page and/or putting
-code/figure label/references to associate the code and the
-figure. Takes args to pass to the image directive (<em>scale</em>,
-<em>width</em>, etc can be <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code>); see <a class="reference external" href="http://docutils.sourceforge.net/docs/ref/rst/directives.html#image">image options</a>
-for details.</p>
+code/figure label/references to associate the code and the figure.
+Takes args to pass to the image directive (<em>scale</em>,
+<em>width</em>, etc can be <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code>)</p>
 </dd>
-</dl>
-<dl class="simple">
-<dt>&#64;doctest</dt><dd><p>Compare the pasted in output in the IPython block with the output
+<dt id="term-doctest">&#64;doctest</dt><dd><p>Compare the pasted in output in the IPython block with the output
 generated at doc build time, and raise errors if they don’t
 match. Also, can be applied to the entire <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">ipython</span></code> block as a
 directive option with <code class="docutils literal notranslate"><span class="pre">:doctest:</span></code>.</p>
 </dd>
 </dl>
+<div class="section" id="see-also">
+<h3>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="http://docutils.sourceforge.net/docs/ref/rst/directives.html#image">Image Options for rst directives from docutils</a> for details.</p>
+</div>
 </div>
 <div class="section" id="module-IPython.sphinxext.ipython_directive">
 <span id="automatically-generated-documentation"></span><h2>Automatically generated documentation<a class="headerlink" href="#module-IPython.sphinxext.ipython_directive" title="Permalink to this headline">¶</a></h2>
@@ -496,13 +499,13 @@ like an interactive ipython section.</p>
 In [2]: import datetime
    ...: datetime.datetime.now()
    ...: 
-datetime.datetime(2019, 9, 14, 10, 29, 20, 732632)</pre>
+datetime.datetime(2019, 9, 15, 8, 29, 43, 961737)</pre>
 <p>It supports IPython construct that plain
 Python does not understand (like magics):</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [3]: </span><span class="kn">import</span> <span class="nn">time</span>
 
 <span class="gp">In [4]: </span><span class="o">%</span><span class="k">timeit</span> time.sleep(0.05)
-<span class="go">60.5 ms +- 6.03 ms per loop (mean +- std. dev. of 7 runs, 10 loops each)</span>
+<span class="go">60.6 ms +- 563 us per loop (mean +- std. dev. of 7 runs, 10 loops each)</span>
 </pre></div>
 </div>
 <p>This will also support top-level async when using IPython 7.0+</p>
@@ -745,17 +748,75 @@ the content as a list as if it were ipython code</p>
 <dd><p>Setup as a sphinx extension.</p>
 </dd></dl>
 
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">IPython.testing.plugin</span></code></p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
+<span class="target" id="module-IPython.sphinxext.custom_doctests"></span><p>Handlers for IPythonDirective’s &#64;doctest pseudo-decorator.</p>
+<p>The Sphinx extension that provides support for embedded IPython code provides
+a pseudo-decorator &#64;doctest, which treats the input/output block as a
+doctest, raising a RuntimeError during doc generation if the actual output
+(after running the input) does not match the expected output.</p>
+<p>An example usage is:</p>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">ipython</span><span class="p">::</span>
+
+     In [1]: x = 1
+
+     @doctest
+     In [2]: x + 2
+     Out[3]: 3
+</pre></div>
+</div>
+<p>One can also provide arguments to the decorator. The first argument should be
+the name of a custom handler. The specification of any other arguments is
+determined by the handler. For example,</p>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">ipython</span><span class="p">::</span>
+
+   @doctest float
+   In [154]: 0.1 + 0.2
+   Out[154]: 0.3
+</pre></div>
+</div>
+<p>allows the actual output <code class="docutils literal notranslate"><span class="pre">0.30000000000000004</span></code> to match the expected output
+due to a comparison with <code class="xref py py-obj docutils literal notranslate"><span class="pre">np.allclose</span></code>.</p>
+<p>This module contains handlers for the &#64;doctest pseudo-decorator. Handlers
+should have the following function signature:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">handler</span><span class="p">(</span><span class="n">sphinx_shell</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">input_lines</span><span class="p">,</span> <span class="n">found</span><span class="p">,</span> <span class="n">submitted</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where <code class="xref py py-obj docutils literal notranslate"><span class="pre">sphinx_shell</span></code> is the embedded Sphinx shell, <code class="xref py py-obj docutils literal notranslate"><span class="pre">args</span></code> contains the list
+of arguments that follow: <a class="reference external" href="mailto:'&#37;&#52;&#48;doctest">‘<span>&#64;</span>doctest</a> handler_name’, <code class="xref py py-obj docutils literal notranslate"><span class="pre">input_lines</span></code> contains
+a list of the lines relevant to the current doctest, <code class="xref py py-obj docutils literal notranslate"><span class="pre">found</span></code> is a string
+containing the output from the IPython shell, and <code class="xref py py-obj docutils literal notranslate"><span class="pre">submitted</span></code> is a string
+containing the expected output from the IPython shell.</p>
+<p>Handlers must be registered in the <code class="xref py py-obj docutils literal notranslate"><span class="pre">doctests</span></code> dict at the end of this module.</p>
+<dl class="function">
+<dt id="IPython.sphinxext.custom_doctests.str_to_array">
+<code class="sig-name descname">str_to_array</code><span class="sig-paren">(</span><em class="sig-param">s</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/custom_doctests.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/IPython/sphinxext/custom_doctests.html#str_to_array"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.custom_doctests.str_to_array" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simplistic converter of strings from repr to float NumPy arrays.</p>
+<p>If the repr representation has ellipsis in it, then this will fail.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>s</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The repr version of a NumPy array.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;array([ 0.3,  inf,  nan])&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">str_to_array</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="IPython.sphinxext.custom_doctests.float_doctest">
+<code class="sig-name descname">float_doctest</code><span class="sig-paren">(</span><em class="sig-param">sphinx_shell</em>, <em class="sig-param">args</em>, <em class="sig-param">input_lines</em>, <em class="sig-param">found</em>, <em class="sig-param">submitted</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/custom_doctests.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/IPython/sphinxext/custom_doctests.html#float_doctest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.custom_doctests.float_doctest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Doctest which allow the submitted output to vary slightly from the input.</p>
+<p>Here is how it might appear in an rst file:</p>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">ipython</span><span class="p">::</span>
+
+   @doctest float
+   In [1]: 0.1 + 0.2
+   Out[1]: 0.3
+</pre></div>
+</div>
+</dd></dl>
+
 </div>
 </div>
 
@@ -766,23 +827,27 @@ the content as a list as if it were ipython code</p>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
+  <h3>Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="exceptions.html"
-                        title="previous chapter">Customized Exceptions</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="dev.html"
-                        title="next chapter">Developer’s Notes</a></p>
+<script type="text/javascript">$('#searchbox').show(0);</script><h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="exceptions.html" title="previous chapter">Customized Exceptions</a></li>
+      <li>Next: <a href="dev.html" title="next chapter">Developer’s Notes</a></li>
+  </ul></li>
+</ul>
+
 <h3><a href="index.html">Table of Contents</a></h3>
-<p class="caption"><span class="caption-text">Tutorial</span></p>
+
+<div>&nbsp;</div>
+<div id="sidebartoc">
+    <p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="ipython_keybindings.html">Keybindings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="custom_magics.html">Custom Magics</a></li>
@@ -799,14 +864,8 @@ the content as a list as if it were ipython code</p>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="dev.html">Developers Notes</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Docs</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="startup/index.html">IPython Shell Initialization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="util.html">General Utility Functions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="jupyter.html">Jupyter Suite</a></li>
-<li class="toctree-l1"><a class="reference internal" href="extensions.html">Extensions</a></li>
-</ul>
 
+</div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -837,7 +896,7 @@ the content as a list as if it were ipython code</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Sep 14, 2019.
+      Last updated on Sep 15, 2019.
     </div>
   </body>
 </html>

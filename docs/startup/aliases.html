@@ -51,13 +51,15 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-system-aliases">
-<span id="system-aliases"></span><h1>System Aliases<a class="headerlink" href="#module-system-aliases" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="system-shell-aliases">
-<h2>System Shell Aliases<a class="headerlink" href="#system-shell-aliases" title="Permalink to this headline">¶</a></h2>
+  <div class="section" id="system-aliases">
+<h1>System Aliases<a class="headerlink" href="#system-aliases" title="Permalink to this headline">¶</a></h1>
 <p><strong>Source Code:</strong> <code class="xref py py-obj docutils literal notranslate"><span class="pre">default_profile/startup/20_aliases.py</span></code></p>
+<span class="target" id="module-system-aliases"></span><p>To date there are well over 100 aliases manually added to the shell.</p>
+<p>These aliases depend on the operating system used as Linux OSes will default
+to a <strong class="command">bash</strong> system shell, and Windows will have <strong class="command">dosbatch</strong> or
+<strong class="command">powershell</strong> shells.</p>
 <div class="section" id="overview">
-<span id="aliases-overview"></span><h3>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h3>
+<span id="aliases-overview"></span><h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
 <p>This module utilizes <code class="docutils literal notranslate"><span class="pre">_ip</span></code>, the global <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.8.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.8.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.interactiveshell.InteractiveShell</span></code></a>
 instance, and fills the <code class="docutils literal notranslate"><span class="pre">user_ns</span></code> with aliases that are available
 in a typical system shell.</p>
@@ -69,16 +71,16 @@ and what executables are available on the <span class="target" id="index-0"></sp
 <p>On Unix platforms, it is assumed that the user is using a bash shell.</p>
 <p>However on Windows, it is possible that the user has a shell that runs
 <strong class="command">dosbatch</strong>, <strong class="command">powershell</strong>, or <strong class="command">bash</strong>.</p>
-<p>As a result, the environment variable <span class="target" id="index-1"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ComSpec</span></code> will be checked,
+<p>As a result, the environment variable <span class="target" id="index-1"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">COMSPEC</span></code> will be checked,
 and if present, that value is used.</p>
 </div>
 <div class="section" id="notes">
-<span id="aliases-notes"></span><h3>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h3>
+<span id="aliases-notes"></span><h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
 <p>When writing aliases, an <code class="xref py py-obj docutils literal notranslate"><span class="pre">%alias</span></code> definition can take various string
 placeholders. As per the official documentation:</p>
 </div>
 <div class="section" id="attributes">
-<span id="aliases-attributes"></span><h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h3>
+<span id="aliases-attributes"></span><h2>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h2>
 <dl>
 <dt>_ip<span class="classifier"><a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.8.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.interactiveshell.InteractiveShell</span></code></a></span></dt><dd><p>A global object representing the active IPython session.
 Contains varying packages as well as the current global namespace.
@@ -87,7 +89,7 @@ Doesn’t need to be defined in advance during an interactive session.</p>
 </dl>
 </div>
 <div class="section" id="parameters">
-<span id="aliases-parmeters"></span><h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h3>
+<span id="aliases-parmeters"></span><h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
 <dl class="simple">
 <dt><code class="docutils literal notranslate"><span class="pre">%l</span></code><span class="classifier">Command-line argument.</span></dt><dd><p>You can use the <code class="docutils literal notranslate"><span class="pre">%l</span></code> specifier in an <code class="docutils literal notranslate"><span class="pre">%alias</span></code> definition
 to represent the whole line when the alias is called.</p>
@@ -96,18 +98,16 @@ to represent the whole line when the alias is called.</p>
 <p>Meaning that it behaves similarly to the parameter <kbd class="kbd docutils literal notranslate">$*</kbd>
 in typical POSIX shells.</p>
 <p>The documentation goes on to say:</p>
-<div class="highlight-ipython notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="gp">In [2]: </span><span class="o">%</span><span class="k">alias</span> bracket echo &quot;Input in brackets: &lt;%l&gt;&quot;
-<span class="gp">In [3]: </span><span class="n">bracket</span> <span class="n">hello</span> <span class="n">world</span>
-<span class="go">Input in brackets: &lt;hello world&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="o">%</span><span class="n">alias</span> <span class="n">bracket</span> <span class="n">echo</span> <span class="s2">&quot;Input in brackets: &lt;%l&gt;&quot;</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">bracket</span> <span class="n">hello</span> <span class="n">world</span>
+<span class="n">Input</span> <span class="ow">in</span> <span class="n">brackets</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">hello</span> <span class="n">world</span><span class="o">&gt;</span>
 </pre></div>
-</td></tr></table></div>
+</div>
 <p>Note that we quote when in the configuration file but when running <code class="xref py py-obj docutils literal notranslate"><span class="pre">%alias</span></code>
 interactively the syntax ‘<code class="xref py py-obj docutils literal notranslate"><span class="pre">%alias</span></code> alias_name cmd’ doesn’t require quoting.</p>
 </div>
 <div class="section" id="see-also">
-<h3>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h3>
+<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
@@ -118,13 +118,7 @@ implementation scaffolded.</p>
 </div>
 <p>Below is the source code for the function
 <code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.core.magics.define_alias()</span></code> that is invoked here.:</p>
-<div class="highlight-ipython notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3
-4
-5
-6
-7</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">define_alias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">cmd</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">define_alias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">cmd</span><span class="p">):</span>
     <span class="c1"># Define a new alias after validating it.</span>
     <span class="c1"># This will raise an :exc:`AliasError` if there are validation</span>
     <span class="c1"># problems.</span>
@@ -132,39 +126,17 @@ implementation scaffolded.</p>
     <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">magics_manager</span><span class="o">.</span><span class="n">register_function</span><span class="p">(</span><span class="n">caller</span><span class="p">,</span> <span class="n">magic_kind</span><span class="o">=</span><span class="s1">&#39;line&#39;</span><span class="p">,</span>
     <span class="n">magic_name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
 </pre></div>
-</td></tr></table></div>
+</div>
 </div>
 <div class="section" id="module-default_profile.startup.20_aliases">
-<span id="autogenerated-documentation"></span><span id="aliases-api-docs"></span><h3>Autogenerated Documentation<a class="headerlink" href="#module-default_profile.startup.20_aliases" title="Permalink to this headline">¶</a></h3>
+<span id="autogenerated-documentation"></span><span id="aliases-api-docs"></span><h2>Autogenerated Documentation<a class="headerlink" href="#module-default_profile.startup.20_aliases" title="Permalink to this headline">¶</a></h2>
 <p>Refactoring TODO:</p>
 <p>Move the aliases out of the func linux_specific_aliases.</p>
 <p>Create a class with instance attributes for sys.platform and uh I don’t know.
 Break linux up like so:</p>
-<div class="highlight-ipython notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">AliasOSAgnostic</span><span class="p">:</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">AliasOSAgnostic</span><span class="p">:</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
 
     <span class="nd">@property</span>
@@ -186,10 +158,31 @@ Break linux up like so:</p>
             <span class="p">(</span><span class="s1">&#39;rg&#39;</span><span class="p">,</span> <span class="s1">&#39;way too many options&#39;</span><span class="p">)</span>
         <span class="p">]</span>
 </pre></div>
-</td></tr></table></div>
+</div>
 <p>Then maybe implement either a factory function or a factory manager but I haven’t
 fleshed that part out in my head.</p>
 <p>This may have to take the backburner as I reorganize the rest of the repo.</p>
+<dl class="class">
+<dt id="default_profile.startup.20_aliases.Executable">
+<em class="property">class </em><code class="sig-name descname">Executable</code><span class="sig-paren">(</span><em class="sig-param">command</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/20_aliases.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/20_aliases.html#Executable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.20_aliases.Executable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>An object representing some executable on a user computer.</p>
+<p>Initialize with ‘command’.</p>
+<dl class="method">
+<dt id="default_profile.startup.20_aliases.Executable.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">command</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/20_aliases.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/20_aliases.html#Executable.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.20_aliases.Executable.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize with ‘command’.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="default_profile.startup.20_aliases.Executable.runs">
+<code class="sig-name descname">runs</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/20_aliases.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/20_aliases.html#Executable.runs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.20_aliases.Executable.runs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check for the executability of a system command.</p>
+<p>Same signature as <a class="reference external" href="https://docs.python.org/3/library/shutil.html#shutil.which" title="(in Python v3.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">shutil.which()</span></code></a>.</p>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="function">
 <dt id="default_profile.startup.20_aliases.linux_specific_aliases">
 <code class="sig-name descname">linux_specific_aliases</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/20_aliases.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/20_aliases.html#linux_specific_aliases"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.20_aliases.linux_specific_aliases" title="Permalink to this definition">¶</a></dt>
@@ -207,13 +200,7 @@ number of GNU/Linux built-ins to exist on Windows, and as a result, this
 list may not be comprehensive.</p>
 <p>Below is the source code for the function
 <code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.core.magics.define_alias()</span></code> that is invoked here.:</p>
-<div class="highlight-ipython notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3
-4
-5
-6
-7</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">define_alias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">cmd</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">define_alias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">cmd</span><span class="p">):</span>
     <span class="c1"># Define a new alias after validating it.</span>
     <span class="c1"># This will raise an :exc:`AliasError` if there are validation</span>
     <span class="c1"># problems.</span>
@@ -221,7 +208,7 @@ list may not be comprehensive.</p>
     <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">magics_manager</span><span class="o">.</span><span class="n">register_function</span><span class="p">(</span><span class="n">caller</span><span class="p">,</span> <span class="n">magic_kind</span><span class="o">=</span><span class="s1">&#39;line&#39;</span><span class="p">,</span>
     <span class="n">magic_name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
 </pre></div>
-</td></tr></table></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>None</strong> – </p>
@@ -326,7 +313,6 @@ as an immutable set?</p>
 
 </div>
 </div>
-</div>
 
 
           </div>
@@ -335,23 +321,29 @@ as an immutable set?</p>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
+  <h3>Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="help_helpers.html"
-                        title="previous chapter">06_Help_Helpers</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="41_numpy.html"
-                        title="next chapter"><code class="docutils literal notranslate"><span class="pre">41_numpy_init</span></code> module</a></p>
+<script type="text/javascript">$('#searchbox').show(0);</script><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">IPython’s Startup</a><ul>
+      <li>Previous: <a href="help_helpers.html" title="previous chapter">06_Help_Helpers</a></li>
+      <li>Next: <a href="41_numpy.html" title="next chapter"><code class="docutils literal notranslate"><span class="pre">41_numpy_init</span></code> module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+
 <h3><a href="../index.html">Table of Contents</a></h3>
-<p class="caption"><span class="caption-text">Tutorial</span></p>
+
+<div>&nbsp;</div>
+<div id="sidebartoc">
+    <p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../ipython_keybindings.html">Keybindings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../custom_magics.html">Custom Magics</a></li>
@@ -359,24 +351,8 @@ as an immutable set?</p>
 <li class="toctree-l1"><a class="reference internal" href="../sphinxext.html">IPython Sphinx Directive</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../dev.html">Developers Notes</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Docs</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="index.html">IPython Shell Initialization</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="rehashx.html">01_rehashx</a></li>
-<li class="toctree-l2"><a class="reference internal" href="easy_import.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">04_easy_import</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="ipython-logger.html">Logging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="help_helpers.html">06_Help_Helpers</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">System Aliases</a></li>
-<li class="toctree-l2"><a class="reference internal" href="41_numpy.html"><code class="docutils literal notranslate"><span class="pre">41_numpy_init</span></code> module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="42_pandas.html"><code class="docutils literal notranslate"><span class="pre">42_pandas_init</span></code> module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sysexcept.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">50_sysexception</span></code> module</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../util.html">General Utility Functions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../jupyter.html">Jupyter Suite</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../extensions.html">Extensions</a></li>
-</ul>
 
+</div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -408,7 +384,7 @@ as an immutable set?</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Sep 14, 2019.
+      Last updated on Sep 15, 2019.
     </div>
   </body>
 </html>

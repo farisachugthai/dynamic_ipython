@@ -62,58 +62,48 @@
 and also adds system commands to the namespace!</p>
 <p>Insofar, I haven’t noticed any significant slowdown in startup time as a result
 of this, and it hugely eases utilizing IPython as a system shell.</p>
-<span class="target" id="module-default_profile.startup.01_rehashx"></span><div class="section" id="id1">
-<h2>Rehashx<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<dl class="magic">
-<dt id="magic-rehashx">
-<code class="sig-name descname">%rehashx</code><a class="headerlink" href="#magic-rehashx" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<p>This is an incredible little gem I just ran into, and hugely useful for
-making <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.8.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IPython</span></code></a> work as a more versatile system shell.</p>
-<dl class="field-list simple">
-<dt class="field-odd">param magic_name</dt>
-<dd class="field-odd"><p>Name of the desired magic function, without <kbd class="kbd docutils literal notranslate">%</kbd> prefix.</p>
+<p>In addition 50+ aliases have been added for <strong class="command">git</strong>.</p>
+<div class="section" id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>magic_name<span class="classifier">str</span></dt><dd><p>Name of the desired magic function, without <kbd class="kbd docutils literal notranslate">%</kbd> prefix.</p>
 </dd>
-<dt class="field-even">type magic_name</dt>
-<dd class="field-even"><p>str</p>
+<dt>line<span class="classifier">str</span></dt><dd><p>The rest of the input line as a single string.</p>
 </dd>
-<dt class="field-odd">param line</dt>
-<dd class="field-odd"><p>The rest of the input line as a single string.</p>
-</dd>
-<dt class="field-even">type line</dt>
-<dd class="field-even"><p>str</p>
-</dd>
-<dt class="field-odd">param <code class="docutils literal notranslate"><span class="pre">_stack_depth</span></code></dt>
-<dd class="field-odd"><p>Number of recursive calls to an IPython magic.</p>
-</dd>
-<dt class="field-even">type <code class="docutils literal notranslate"><span class="pre">_stack_depth</span></code></dt>
-<dd class="field-even"><p>int, optional</p>
+<dt><code class="docutils literal notranslate"><span class="pre">_stack_depth</span></code><span class="classifier">int, optional</span></dt><dd><p>Number of recursive calls to an IPython magic.</p>
 </dd>
 </dl>
-<p class="rubric">Notes</p>
+</div>
+<div class="section" id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
 <dl class="simple">
 <dt>IPython.core.magic.run_line_magic</dt><dd><p>A method of the <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.8.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.interactiveshell.InteractiveShell</span></code></a> instance to run a specific magic currently in the
 IPython.core.interactiveshell.InteractiveShell.user_ns
 or user namespace.</p>
 </dd>
 </dl>
+</div>
 <div class="section" id="usage">
-<h3>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h3>
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <p>As the help outlines above, the second required positional argument to
 <code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.core.TerminalInteractiveShell.run_line_magic()</span></code> is <code class="docutils literal notranslate"><span class="pre">line</span></code>.</p>
 <p>This is more easily understood as ‘remaining arguments to the magic’.
 <code class="xref py py-obj docutils literal notranslate"><span class="pre">%rehashx</span></code> takes none, but leaving it blank causes the function call to raise
 an error, so an empty <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a> is passed to the function.</p>
 <div class="section" id="stack-depth">
-<h4><code class="docutils literal notranslate"><span class="pre">_stack_depth</span></code><a class="headerlink" href="#stack-depth" title="Permalink to this headline">¶</a></h4>
+<h3><code class="docutils literal notranslate"><span class="pre">_stack_depth</span></code><a class="headerlink" href="#stack-depth" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">_stack_depth</span></code> parameter can be understood like so:</p>
 <p>If <code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.core.magics.run_line_magic()</span></code> is called from
 <code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.core.magics.magic()</span></code> then
 <code class="docutils literal notranslate"><span class="pre">_stack_depth</span></code> = 2.</p>
 <p>This is added to ensure backward compatibility for use
 of <code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.core.magics.get_ipython().magic()</span></code></p>
-<hr class="docutils" />
+<span class="target" id="module-default_profile.startup.01_rehashx"></span><p>This is an incredible little gem that’s hugely useful for
+making IPython work as a more versatile system shell.</p>
+<p>For the future we should consider moving all imports from this package out and
+keeping only “<em>Mission Critical</em>” type code in the first file.</p>
+<p>The code that’s more important than anything should execute regardless of whether
+someone has <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span></code>-ed it.</p>
 <dl class="function">
 <dt id="default_profile.startup.01_rehashx.blacklisted_aliases">
 <code class="sig-name descname">blacklisted_aliases</code><span class="sig-paren">(</span><em class="sig-param">shell=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/01_rehashx.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/01_rehashx.html#blacklisted_aliases"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.01_rehashx.blacklisted_aliases" title="Permalink to this definition">¶</a></dt>
@@ -141,7 +131,6 @@ to alias them, resulting in a UsageError.</p>
 </div>
 </div>
 </div>
-</div>
 
 
           </div>
@@ -150,23 +139,29 @@ to alias them, resulting in a UsageError.</p>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
+  <h3>Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="index.html"
-                        title="previous chapter">IPython’s Startup</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="easy_import.html"
-                        title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">04_easy_import</span></code></a></p>
+<script type="text/javascript">$('#searchbox').show(0);</script><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">IPython’s Startup</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">IPython’s Startup</a></li>
+      <li>Next: <a href="easy_import.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">04_easy_import</span></code></a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+
 <h3><a href="../index.html">Table of Contents</a></h3>
-<p class="caption"><span class="caption-text">Tutorial</span></p>
+
+<div>&nbsp;</div>
+<div id="sidebartoc">
+    <p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../ipython_keybindings.html">Keybindings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../custom_magics.html">Custom Magics</a></li>
@@ -174,24 +169,8 @@ to alias them, resulting in a UsageError.</p>
 <li class="toctree-l1"><a class="reference internal" href="../sphinxext.html">IPython Sphinx Directive</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../dev.html">Developers Notes</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Docs</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="index.html">IPython Shell Initialization</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">01_rehashx</a></li>
-<li class="toctree-l2"><a class="reference internal" href="easy_import.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">04_easy_import</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="ipython-logger.html">Logging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="help_helpers.html">06_Help_Helpers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="aliases.html">System Aliases</a></li>
-<li class="toctree-l2"><a class="reference internal" href="41_numpy.html"><code class="docutils literal notranslate"><span class="pre">41_numpy_init</span></code> module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="42_pandas.html"><code class="docutils literal notranslate"><span class="pre">42_pandas_init</span></code> module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sysexcept.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">50_sysexception</span></code> module</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../util.html">General Utility Functions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../jupyter.html">Jupyter Suite</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../extensions.html">Extensions</a></li>
-</ul>
 
+</div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -223,7 +202,7 @@ to alias them, resulting in a UsageError.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Sep 14, 2019.
+      Last updated on Sep 15, 2019.
     </div>
   </body>
 </html>
