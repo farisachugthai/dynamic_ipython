@@ -13,9 +13,6 @@ The IPython directive is a stateful shell that can be useful for parsing
 valid IPython code, auto-generating documentation based on the docstrings in
 source code, and embedding plots based on live data in Sphinx documents.
 
-.. is featureful a word?
-.. doubt it. Deleting
-
 The IPython Sphinx extension can correctly parse standard IPython prompts, and
 extracts the input and output lines to generate HTML.
 These prompts will be renumbered starting at ``1`` regardless of the actual
@@ -107,7 +104,7 @@ Testing directive outputs
 
 The extension supports a few limited parameters to configure the running
 shell. These parameters are exposed as reStructured text options to the
-``.. ipython`` directive, decorators for the source code directly, and 
+``.. ipython`` directive, decorators for the source code directly, and
 configurable options that are given directly to Sphinx in a projects conf.py.
 
 For example, you can put comments in your IPython sessions, which are reported
@@ -136,7 +133,7 @@ documentation is built:
 1. Execute the *input* lines in your IPython directive block.
 
 2. Compare the *output* of this with the output text that you've put in the
-   IPython directive block (I.E. what comes after `Out[NN]`);
+   IPython directive block (I.E. what comes after ``Out[NN]``);
 
 3. If there is a difference, the embedded shell will raise an error and
    halt building the documentation.
@@ -194,10 +191,12 @@ Registering Your Own Doctest Handlers
 -------------------------------------
 
 .. holy hell is this bad.
+.. hey if it means anything the source code at IPython.sphinxext.custom_doctests
+   is actually crystal clear
 
 The Sphinx extension that provides support for embedded IPython code provides
-a pseudo-decorator @doctest, which treats the input/output block as a
-doctest, raising a RuntimeError during doc generation if the actual output
+a pseudo-decorator `@doctest`, which treats the input/output block as a
+doctest, raising a :keyword:`RuntimeError` during doc generation if the actual output
 (after running the input) does not match the expected output.
 
 An example usage is:
@@ -239,7 +238,7 @@ Handlers should have the following function signature::
    sphinx_shell
       Embedded Sphinx shell
 
-   args 
+   args
       The list of arguments that follow '@doctest handler_name',
 
    input_lines
@@ -434,7 +433,7 @@ Renders as
    foo = 2
    foo**2
 
-We can even plot from python, using the ``@savefig`` decorator, as well as
+We can even plot from python, using the `@savefig` decorator, as well as
 suppress output with a semicolon.:
 
 .. ipython:: python
@@ -457,6 +456,7 @@ Similarly, :data:`sys.stderr` is inserted.:
 
 Handling Comments
 ==================
+
 Comments are handled and state is preserved.:
 
 .. ipython:: python
@@ -486,6 +486,7 @@ decorator is behaving as expected.:
 
 Splitting Python statements across lines
 ========================================
+
 Multi-line input is handled.:
 
 .. ipython:: python
@@ -532,34 +533,45 @@ take.  Some of the decorators can be used as options to the entire
 block (e.g. ``@verbatim`` and ``@suppress``), and some only apply to the
 line just below them (eg ``@savefig``).:
 
-@suppress
-    Execute the IPython input block, but suppress the input and output
-    block from the rendered output.  Also, can be applied to the entire
-    ``.. ipython`` block as a directive option with ``:suppress:``.
+.. glossary::
 
-@verbatim
-    Insert the input and output block in verbatim, but auto-increment
-    the line numbers. Internally, the interpreter will be fed an empty
-    string, so it is a no-op that keeps line numbering consistent.
-    Also, can be applied to the entire ``.. ipython`` block as a
-    directive option with ``:verbatim:``.
+   @suppress
+      Execute the IPython input block, but suppress the input and output
+      block from the rendered output.  Also, can be applied to the entire
+      ``.. ipython`` block as a directive option with ``:suppress:``.
 
-@savefig OUTFILE [IMAGE_OPTIONS]
-    Save the figure to the static directory and insert it into the
-    document, possibly binding it into a mini-page and/or putting
-    code/figure label/references to associate the code and the
-    figure. Takes args to pass to the image directive (*scale*,
-    *width*, etc can be ``**kwargs``); see `image options
-    <http://docutils.sourceforge.net/docs/ref/rst/directives.html#image>`_
-    for details.
+   @verbatim
+      Insert the input and output block in verbatim, but auto-increment
+      the line numbers. Internally, the interpreter will be fed an empty
+      string, so it is a no-op that keeps line numbering consistent.
+      Also, can be applied to the entire ``.. ipython`` block as a
+      directive option with ``:verbatim:``.
 
-.. i have no idea what the above is saying holy hell
+   @savefig 
+      Save the target of the directive to :dfn:`outfile`.
+      *I think I'm just gonna rewrite this entire paragraph.*
+      Save the figure to the static directory and insert it into the
+      document, possibly binding it into a mini-page and/or putting
+      code/figure label/references to associate the code and the figure.
+      Takes args to pass to the image directive (*scale*,
+      *width*, etc can be ``**kwargs``)
 
-@doctest
-    Compare the pasted in output in the IPython block with the output
-    generated at doc build time, and raise errors if they don't
-    match. Also, can be applied to the entire ``.. ipython`` block as a
-    directive option with ``:doctest:``.
+
+   @doctest
+      Compare the pasted in output in the IPython block with the output
+      generated at doc build time, and raise errors if they don't
+      match. Also, can be applied to the entire ``.. ipython`` block as a
+      directive option with ``:doctest:``.
+
+   .. option:: @savefig OUTFILE [IMAGE_OPTIONS]
+
+   .. i'm sure that the above syntax is wrong
+
+
+See Also
+---------
+`Image Options for rst directives from docutils
+<http://docutils.sourceforge.net/docs/ref/rst/directives.html#image>`_ for details.
 
 
 .. todo:: Document the magics.py sphinx extension!!
@@ -572,10 +584,6 @@ Automatically generated documentation
 
 .. automodule:: IPython.sphinxext.ipython_directive
 
-
 .. automodule:: IPython.sphinxext.ipython_console_highlighting
 
-
-.. autosummary::
-
-   IPython.testing.plugin
+.. automodule:: IPython.sphinxext.custom_doctests

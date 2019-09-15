@@ -1,20 +1,17 @@
 ==============
 System Aliases
 ==============
+**Source Code:** `default_profile/startup/20_aliases.py`
 
 .. module:: system-aliases
    :synopsis: Gather information, determine platform and set appropriate aliases.
 
 
-System Shell Aliases
-====================
+To date there are well over 100 aliases manually added to the shell.
 
-**Source Code:** `default_profile/startup/20_aliases.py`
-
-.. currentmodule:: default_profile.startup.20_aliases
-
-.. highlight:: ipython
-    :linenothreshold: 3
+These aliases depend on the operating system used as Linux OSes will default
+to a :command:`bash` system shell, and Windows will have :command:`dosbatch` or
+:command:`powershell` shells.
 
 
 .. _aliases-overview:
@@ -38,7 +35,7 @@ On Unix platforms, it is assumed that the user is using a bash shell.
 However on Windows, it is possible that the user has a shell that runs
 :command:`dosbatch`, :command:`powershell`, or :command:`bash`.
 
-As a result, the environment variable :envvar:`ComSpec` will be checked,
+As a result, the environment variable :envvar:`COMSPEC` will be checked,
 and if present, that value is used.
 
 
@@ -55,6 +52,7 @@ placeholders. As per the official documentation:
 
 Attributes
 ----------
+
 _ip : |ip|
     A global object representing the active IPython session.
     Contains varying packages as well as the current global namespace.

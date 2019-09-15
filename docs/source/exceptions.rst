@@ -3,13 +3,14 @@
 =====================
 Customized Exceptions
 =====================
-
-The help docs from IPython's core module :mod:`IPython.core.ultratb`
-is phenomenally helpful.
-
 **Source code**: `default_profile/startup/50_sysexception.py`
 
--------------------------
+Debugging
+==========
+
+The help docs from IPython's core module :mod:`IPython.core.ultratb`
+are phenomenally helpful.
+
 
 Help on module :mod:`IPython.core.ultratb` in :mod:`IPython.core`:
 ==================================================================

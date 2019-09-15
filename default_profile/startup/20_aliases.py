@@ -60,6 +60,21 @@ LOGGER = module_log.stream_logger(
 )
 
 
+class Executable:
+    """An object representing some executable on a user computer."""
+
+    def __init__(self, command):
+        """Initialize with 'command'."""
+        self.command = command
+
+    def runs(self):
+        """Check for the executability of a system command.
+
+        Same signature as :func:`shutil.which`.
+        """
+        return shutil.which(self.command)
+
+
 def linux_specific_aliases():
     """Add Linux specific aliases.
 
@@ -455,6 +470,7 @@ def main():
     Here's an interesting problem I ran into.
 
     .. ipython::
+        :verbatim:
 
         from traitlets.traitlets import List
         user_aliases = [  # let's just fill this with some filler text
@@ -464,7 +480,7 @@ def main():
         # %config AliasManager.user_aliases = user_aliases
 
     .. ipython::
-        :okexcept:
+        :verbatim:
 
         ~/.ipython/default_profile/startup/20_aliases.py in main()
             461

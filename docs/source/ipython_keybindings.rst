@@ -2,17 +2,29 @@
 Keybindings in IPython
 =======================
 
-.. module:: Keybindings
+.. module:: keybindings
    :synopsis: Document the way keybindings are set up.
 
-.. highlight:: ipython
-   :linenothreshold: 5
+
+Key Bindings
+============
+
+This script allow for hybrid use of Vim and Emacs keybindings.
+
+Approximately 50 Emacs keybindings are added to Vim's insert mode through
+the use of :mod:`prompt_toolkit`.
+
+The source code can be found `here`_ with documentation at `this site`_.
+
+.. _here: profile_default/startup/32_vi_modes.py
+.. _this site: https://farisachugthai.github.io/dynamic_ipython/profile_default.html#module-profile_default.startup.32_vi_mode
 
 
 This document will summarize how to rebind keys in IPython since IPython 5.0.
 
 Interactively Binding Keys
 ==========================
+
 If we would like to add extra keybindings to the IPython shell, we can utilize
 a few functions built into the :mod:`IPython.terminal.interactiveshell` module,
 in addition, to utilizing the expansive :mod:`prompt_toolkit` library.
@@ -50,6 +62,7 @@ are as follows:
 
 Original File Implementation
 ----------------------------
+
 Let's first check out how keybindings were originally implemented to give
 ourselves a frame of reference.:
 
@@ -78,6 +91,7 @@ Up at the top you have the keybindings :mod:`IPython` ships with!
 
 Official IPython Documentation
 ==============================
+
 Before we dive straight into the source code, let's check out how IPython
 describes the process of re-binding keys.
 
@@ -86,12 +100,14 @@ The source code provides this example:
 
 Pure Prompt Toolkit Way of Rebinding Keys
 --------------------------------------------
+
 There are 3 different sections in the Prompt Toolkit Official Documentation
 on how to rebind keys using the package.
 
 
 Adding custom key bindings
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 The first time it's mentioned is in the asking_for_input document.:
 
     By default, every prompt already has a set of key bindings which implements
@@ -130,6 +146,7 @@ The first time it's mentioned is in the asking_for_input document.:
 
 Enable key bindings according to a condition
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Then key_bindings are discussed in the context of being filtered through
 certain conditions.:
 
@@ -162,6 +179,7 @@ certain conditions.:
 
 Dynamically switch between Emacs and Vi mode
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 This is the part I'm most interested in, as we're going to try coming up with
 a new set of keybindings that blends together Emacs insert mode and
 Vim command mode.

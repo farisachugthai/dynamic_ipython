@@ -1,62 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Rehashx
-=======
-.. magic:: rehashx
+This is an incredible little gem that's hugely useful for
+making IPython work as a more versatile system shell.
 
-This is an incredible little gem I just ran into, and hugely useful for
-making `IPython` work as a more versatile system shell.
+For the future we should consider moving all imports from this package out and
+keeping only "*Mission Critical*" type code in the first file.
 
-
-Parameters
-----------
-magic_name : str
-    Name of the desired magic function, without :kbd:`%` prefix.
-line : str
-    The rest of the input line as a single string.
-``_stack_depth`` : int, optional
-    Number of recursive calls to an IPython magic.
-
-
-Notes
------
-IPython.core.magic.run_line_magic
-    A method of the |ip| instance to run a specific magic currently in the
-    IPython.core.interactiveshell.InteractiveShell.user_ns
-    or user namespace.
-
-
-.. ipython::
-    :verbatim:
-
-    from IPython.core import get_ipython
-    shell = get_ipython()
-    shell.run_line_magic('ls', '')
-
-
-Usage
-------
-As the help outlines above, the second required positional argument to
-:func:`IPython.core.TerminalInteractiveShell.run_line_magic` is ``line``.
-
-This is more easily understood as 'remaining arguments to the magic'.
-`%rehashx` takes none, but leaving it blank causes the function call to raise
-an error, so an empty `str` is passed to the function.
-
-
-``_stack_depth``
-~~~~~~~~~~~~~~~~
-The ``_stack_depth`` parameter can be understood like so:
-
-If :func:`IPython.core.magics.run_line_magic` is called from
-:func:`IPython.core.magics.magic` then
-``_stack_depth`` = 2.
-
-This is added to ensure backward compatibility for use
-of :func:`IPython.core.magics.get_ipython().magic`
-
------------------
+The code that's more important than anything should execute regardless of whether
+someone has ``pip install``-ed it.
 
 """
 import logging
@@ -69,8 +21,8 @@ from IPython.core.alias import AliasError
 try:
     from default_profile.util.timer import timer
 except Exception:
-    from timeit import default_timer as timer
-
+    timer = None
+    # is this a way to "None" a decorator?
 
 def blacklisted_aliases(shell=None):
     """Blacklist certain aliases.
@@ -104,17 +56,6 @@ def main(shell=None):
 
 
 if __name__ == "__main__":
-    logging.BASIC_FORMAT = '%(created)f : %(levelname)s : %(module)s : %(message)s : '
-    rehashx_logger = logging.getLogger('default_profile'
-                                       ).getChild('startup.rehashx')
-
-    rehashx_stream = logging.StreamHandler()
-    rehashx_formatter = logging.Formatter(logging.BASIC_FORMAT)
-
-    rehashx_stream.setFormatter(rehashx_formatter)
-    rehashx_stream.setLevel(logging.WARNING)
-    rehashx_logger.addHandler(rehashx_stream)
-    rehashx_logger.setLevel(logging.WARNING)
 
     _ip = get_ipython()
     if _ip:

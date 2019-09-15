@@ -364,6 +364,9 @@ c.InteractiveShell.history_load_length = 10000
 # Automatically call the pdb debugger after every exception.
 # c.InteractiveShell.pdb = False
 
+from time import time
+# Is the prompt manager class ignored?
+c.PromptManager.in_template = u"{color.LightGreen}{time}{color.Yellow} {color.normal}>>>"
 # Deprecated since IPython 4.0 and ignored since 5.0, set
 # TerminalInteractiveShell.prompts object directly.
 # c.InteractiveShell.prompt_in1 = 'In [\\#]: '

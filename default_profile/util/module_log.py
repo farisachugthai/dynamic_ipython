@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-==========
-module_log
-==========
+===================
+Prepackaged Loggers
+===================
 
-.. highlight:: ipython
 
 Set up easily instantied :class:`logging.Logger()` instances.
 
@@ -48,7 +47,6 @@ def stream_logger(logger, log_level=logging.INFO, msg_format=None):
     -------
     logger : :class:`logging.Logger()` instance
         Defaults to ``logging.INFO`` and '%(asctime)s : %(levelname)s : %(message)s : '
-
 
     Examples
     --------
@@ -201,13 +199,45 @@ class JsonFormatter(logging.Formatter):
         else:
             exc = None
 
-        return json.dumps(
-            {
+        return json.dumps({
                 'msg': record.msg % record.args, 'timestamp':
-                    datetime.utcfromtimestamp(record.created).isoformat() +
-                    'Z',
+                    datetime.utcfromtimestamp(record.created).isoformat() + 'Z',
                 'func': record.funcName, 'level': record.levelname, 'module':
                     record.module, 'process_id': record.process, 'thread_id':
                         record.thread, 'exception': exc
             }
         )
+
+
+
+def betterConfig():
+    """Similar to logging.basicConfig().
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    anonymous :class:`logging.Logger()`
+
+    Notes
+    -----
+    If a :class:`logging.Filter` class is initialized with no args,
+    it's default behavior is to allow all :class:`logging.LogRecords` to pass.
+
+    """
+    logging.BASIC_FORMAT = '%(created)f : %(levelname)s : %(module)s : %(message)s : '
+    better_logger = logging.getLogger()
+    better_logger.setLevel(logging.WARNING)
+
+    better_stream = logging.StreamHandler()
+    better_stream.setLevel(logging.WARNING)
+    better_logger.addHandler(better_stream)
+
+    better_formatter = logging.Formatter(logging.BASIC_FORMAT)
+    better_stream.setFormatter(better_formatter)
+
+    better_logger.setFilterer(logging.Filter()) 
+
+    return better_logger
