@@ -44,14 +44,12 @@
           <div class="body" role="main">
             
   <h1>Source code for default_profile.util.module_log</h1><div class="highlight"><pre>
-<span></span><span class="ch">#!/usr/bin/env python</span>
+<span></span><span class="c1">#g!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">==========</span>
 <span class="sd">module_log</span>
 <span class="sd">==========</span>
-
-<span class="sd">.. highlight:: ipython</span>
 
 <span class="sd">Set up easily instantied :class:`logging.Logger()` instances.</span>
 
@@ -247,16 +245,32 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">exc</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
-            <span class="p">{</span>
-                <span class="s1">&#39;msg&#39;</span><span class="p">:</span> <span class="n">record</span><span class="o">.</span><span class="n">msg</span> <span class="o">%</span> <span class="n">record</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="s1">&#39;timestamp&#39;</span><span class="p">:</span>
-                    <span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">created</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="o">+</span>
-                    <span class="s1">&#39;Z&#39;</span><span class="p">,</span>
-                <span class="s1">&#39;func&#39;</span><span class="p">:</span> <span class="n">record</span><span class="o">.</span><span class="n">funcName</span><span class="p">,</span> <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="n">record</span><span class="o">.</span><span class="n">levelname</span><span class="p">,</span> <span class="s1">&#39;module&#39;</span><span class="p">:</span>
-                    <span class="n">record</span><span class="o">.</span><span class="n">module</span><span class="p">,</span> <span class="s1">&#39;process_id&#39;</span><span class="p">:</span> <span class="n">record</span><span class="o">.</span><span class="n">process</span><span class="p">,</span> <span class="s1">&#39;thread_id&#39;</span><span class="p">:</span>
-                        <span class="n">record</span><span class="o">.</span><span class="n">thread</span><span class="p">,</span> <span class="s1">&#39;exception&#39;</span><span class="p">:</span> <span class="n">exc</span>
-            <span class="p">}</span>
-        <span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
+                <span class="s1">&#39;msg&#39;</span><span class="p">:</span> <span class="n">record</span><span class="o">.</span><span class="n">msg</span> <span class="o">%</span> <span class="n">record</span><span class="o">.</span><span class="n">args</span><span class="p">,</span>
+                <span class="s1">&#39;timestamp&#39;</span><span class="p">:</span>
+                    <span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">created</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;Z&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;func&#39;</span><span class="p">:</span> <span class="n">record</span><span class="o">.</span><span class="n">funcName</span><span class="p">,</span>
+                <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="n">record</span><span class="o">.</span><span class="n">levelname</span><span class="p">,</span>
+                <span class="s1">&#39;module&#39;</span><span class="p">:</span> <span class="n">record</span><span class="o">.</span><span class="n">module</span><span class="p">,</span>
+                <span class="s1">&#39;process_id&#39;</span><span class="p">:</span> <span class="n">record</span><span class="o">.</span><span class="n">process</span><span class="p">,</span>
+                <span class="s1">&#39;thread_id&#39;</span><span class="p">:</span> <span class="n">record</span><span class="o">.</span><span class="n">thread</span><span class="p">,</span>
+                <span class="s1">&#39;exception&#39;</span><span class="p">:</span> <span class="n">exc</span><span class="p">})</span></div></div>
+
+
+<div class="viewcode-block" id="basic_log"><a class="viewcode-back" href="../../../util.html#default_profile.util.module_log.basic_log">[docs]</a><span class="k">def</span> <span class="nf">basic_log</span><span class="p">(</span><span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Set up some basic logging.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">logger</span><span class="p">:</span>
+        <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
+
+    <span class="n">file_handler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="p">(</span><span class="n">log_name</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+    <span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span>
+        <span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> : </span><span class="si">%(levelname)s</span><span class="s1"> : </span><span class="si">%(module)s</span><span class="s1"> : </span><span class="si">%(name)s</span><span class="s1"> : </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">file_handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">file_handler</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">logger</span></div>
 </pre></div>
 
           </div>
@@ -309,7 +323,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Sep 14, 2019.
+      Last updated on Sep 15, 2019.
     </div>
   </body>
 </html>

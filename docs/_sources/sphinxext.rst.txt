@@ -171,19 +171,17 @@ suppress the seed line so it doesn't show up in the rendered output.:
    @suppress
    In [134]: numpy.random.seed(2358)
 
-   @doctest
    In [135]: numpy.random.rand(10,2)
-   Out[135]:
-   array([[0.64524308, 0.59943846],
-          [0.47102322, 0.8715456 ],
-          [0.29370834, 0.74776844],
-          [0.99539577, 0.1313423 ],
-          [0.16250302, 0.21103583],
-          [0.81626524, 0.1312433 ],
-          [0.67338089, 0.72302393],
-          [0.7566368 , 0.07033696],
-          [0.22591016, 0.77731835],
-          [0.0072729 , 0.34273127]])
+   Out[135]: array([[0.64524308, 0.59943846],
+             [0.47102322, 0.8715456 ],
+             [0.29370834, 0.74776844],
+             [0.99539577, 0.1313423 ],
+             [0.16250302, 0.21103583],
+             [0.81626524, 0.1312433 ],
+             [0.67338089, 0.72302393],
+             [0.7566368 , 0.07033696],
+             [0.22591016, 0.77731835],
+             [0.0072729 , 0.34273127]])
 
 
 For more information on `@suppress` and `@doctest` decorators, please refer
@@ -457,6 +455,7 @@ Similarly, :data:`sys.stderr` is inserted.:
 
 Handling Comments
 ==================
+
 Comments are handled and state is preserved.:
 
 .. ipython:: python
@@ -480,12 +479,13 @@ decorator is behaving as expected.:
 .. ipython:: python
    :suppress:
 
-   ioff()
+ ipython_directiveipython_directiveipython_directiveipython_directive  ioff()
    ion()
 
 
 Splitting Python statements across lines
 ========================================
+
 Multi-line input is handled.:
 
 .. ipython:: python
@@ -527,18 +527,30 @@ Supported Pseudo-Decorators
 
 .. sooooo which ones are which? Please be more clear!
 
+.. Let's see if this works.
+
+.. rst:directive:: ipython
+
+   Create an IPython directive.   
+
+   .. rst:directive:option:: doctest: Run a doctest on IPython code blocks in rst.
+
+The URL you need to build off of that directive is here:
+
+http://www.sphinx-doc.org/en/master/usage/restructuredtext/domains.html#the-restructuredtext-domain
+
 Here are the supported decorators, and any optional arguments they
 take.  Some of the decorators can be used as options to the entire
 block (e.g. ``@verbatim`` and ``@suppress``), and some only apply to the
 line just below them (eg ``@savefig``).:
 
 @suppress
-    Execute the IPython input block, but suppress the input and output
+    Execute the IPython input block, but :dfn:`@suppress` the input and output
     block from the rendered output.  Also, can be applied to the entire
     ``.. ipython`` block as a directive option with ``:suppress:``.
 
 @verbatim
-    Insert the input and output block in verbatim, but auto-increment
+    Insert the input and output block in :dfn:`@verbatim`, but auto-increment
     the line numbers. Internally, the interpreter will be fed an empty
     string, so it is a no-op that keeps line numbering consistent.
     Also, can be applied to the entire ``.. ipython`` block as a
@@ -548,7 +560,7 @@ line just below them (eg ``@savefig``).:
     Save the figure to the static directory and insert it into the
     document, possibly binding it into a mini-page and/or putting
     code/figure label/references to associate the code and the
-    figure. Takes args to pass to the image directive (*scale*,
+    figure. Takes args to pass to the :rst:directive:`image` directive (*scale*,
     *width*, etc can be ``**kwargs``); see `image options
     <http://docutils.sourceforge.net/docs/ref/rst/directives.html#image>`_
     for details.
@@ -572,10 +584,7 @@ Automatically generated documentation
 
 .. automodule:: IPython.sphinxext.ipython_directive
 
-
 .. automodule:: IPython.sphinxext.ipython_console_highlighting
 
+.. automodule:: IPython.sphinxext.custom_doctests
 
-.. autosummary::
-
-   IPython.testing.plugin
