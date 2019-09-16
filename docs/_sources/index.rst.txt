@@ -12,17 +12,19 @@ Welcome to Dynamic IPython's documentation!
 :date: |today|
 
 .. highlight:: ipython
+   :linenothreshold: 3
 
 .. moduleauthor:: Faris Chugthai
 
 .. module:: root_index
-   :synopsis: Index
+   :synopsis: Main landing page for the documentation.
 
 
 Startup Scripts
 ================
 
-This repository hosts startup scripts that can be used during IPython's startup.
+This repository hosts startup scripts that can be used during
+IPython's startup.
 
 The scripts add well over 1000 aliases to the namespace, import commonly used
 modules, configure the data analysis library Pandas, add multiple application
@@ -33,12 +35,17 @@ course of the last year modifying `IPython <docs/profile_default.html>`_
 and `Jupyter <docs/jupyter.html>`_.
 
 
-Features
+.. _root-extensions:
+
+Extensions
 ==========
+
+In addition this repository handles a growing number of IPython extensions.
+To see more, continue reading about :ref:`custom-magics` and :ref:`extensions`.
 
 
 Portability
-------------
+============
 
 Portability was a major factor while writing these scripts.
 
@@ -53,42 +60,6 @@ windows or in a shell with either ConEmu or Cmder.
 
 As a result, there may be unexpected behavior that arises when running the
 following scripts while within in an unmodified :command:`cmd` shell.
-
-
-System Agnostic Aliases
-========================
-
-To date there are well over 100 aliases manually added to the shell.
-
-These aliases depend on the operating system used as Linux OSes will default
-to a bash system shell, and Windows will have ``dosbatch`` or ``powershell``
-shells.
-
-
-`%rehashx`
--------------
-
-The first script to run invokes `%rehashx%` which initializes
-:mod:`IPython` with all of the commands that the system shell knows.
-
-By invoking ``%rehashx`` at the beginning of startup, all system commands
-are added as well, which regularly adds well over 1000 commands to the shell.
-
-In addition 50+ aliases have been added for Git.
-
-
-Key Bindings
-============
-
-These scripts allow for hybrid use of Vim and Emacs keybindings.
-
-Approximately 50 Emacs keybindings are added to Vim's insert mode through
-the use of :mod:`prompt_toolkit`.
-
-The source code can be found `here`_ with documentation at `this site`_.
-
-.. _here: profile_default/startup/32_vi_modes.py
-.. _this site: https://farisachugthai.github.io/dynamic_ipython/profile_default.html#module-profile_default.startup.32_vi_mode
 
 
 Motivation
@@ -132,6 +103,10 @@ see the following::
 In addition, there's an abundance of documentation online in the
 form of rst docs and ipynb notebooks.
 
+
+Table of Contents
+==================
+
 .. toctree::
    :caption: Tutorial
    :maxdepth: 2
@@ -146,6 +121,7 @@ form of rst docs and ipynb notebooks.
    :caption: API Docs
    :maxdepth: 2
    :titlesonly:
+   :hidden:
 
    IPython Shell Initialization <startup/index>
    General Utility Functions <util>

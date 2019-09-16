@@ -107,11 +107,12 @@ shell. These parameters are exposed as reStructured text options to the
 ``.. ipython`` directive, decorators for the source code directly, and
 configurable options that are given directly to Sphinx in a projects conf.py.
 
-For example, you can put comments in your IPython sessions, which are reported
-verbatim.  There are some handy "pseudo-decorators" that let you
+For example, you can put comments in your IPython sessions, which are 
+reported verbatim.  There are some handy "pseudo-decorators" that let you
 wrap a function with ``@doctest`` and utilize the :mod:`doctest` module on
-the output. The inputs are fed to an embedded IPython
-session and the outputs are inserted into your documentation automatically.
+the output.
+
+The inputs are fed to an embedded IPython session and the outputs are inserted into your documentation automatically.
 
 If the output in your doc and the output from the embedded shell don't
 match on a :mod:`doctest` assertion, an error will occur.
@@ -142,32 +143,30 @@ documentation is built:
 
    All warnings are treated as errors in the default configuration which
    will lead to frequent crashes while building documentation.
-   The option where this behavior can be modified, `ipython_warning_is_error`
+   The option where this behavior can be modified, ``ipython_warning_is_error``
    is displayed in the :ref:`IPython Sphinx directive module` section at the
    bottom of the page.
 
-You can doctest multi-line output as well. Just be careful
+You can `doctest` multi-line output as well. Just be careful
 when using non-deterministic inputs like random numbers in the IPython
 directive.
 
 Because your inputs are run through a live interpreter, the random numbers
 that are generated on the fly will likely differ from run to run.
 
-Therefore the output IPython will compare the present run to will likely differ,
-raising errors and causing mayhem.
+Therefore the output IPython will compare the present run to will likely 
+differ, raising errors and causing mayhem.
 
 How can we avoid this?
 
-Here we "seed" the random number generator for deterministic output, and we
-suppress the seed line so it doesn't show up in the rendered output.:
+Here we "seed" the random number generator for deterministic output, and 
+we suppress the seed line so it doesn't show up in the rendered output.:
 
 .. ipython::
 
    In [133]: import numpy
-
    @suppress
    In [134]: numpy.random.seed(2358)
-
    @doctest
    In [135]: numpy.random.rand(10,2)
    Out[135]:
@@ -293,9 +292,11 @@ Another demonstration of multi-line input and output.:
    9
 
 
-Most of the "pseudo-decorators" can be used an options to IPython
-mode.  For example, to setup matplotlib pylab but suppress the output,
-you can do.  When using the matplotlib ``use`` directive, it should
+Most of the "pseudo-decorators" can be used as options to IPython
+mode.  For example, to setup matplotlib's ``pylab`` but suppress the 
+output, you can set things up in the following way.
+
+When using the matplotlib ``use`` directive, it should
 occur before any import of pylab.  This will not show up in the
 rendered docs, but the commands will be executed in the embedded
 interpreter and subsequent line numbers will be incremented to reflect
@@ -413,7 +414,8 @@ this page in the :ref:`Pseudo-Decorators` section.
 Writing Pure Python Code
 ------------------------
 
-Pure python code is supported by the optional argument `python`. In this pure
+Pure python code is supported by the optional argument `python`. In this 
+pure
 python syntax you do not include the output from the python interpreter. The
 following markup::
 
@@ -474,8 +476,8 @@ the functions ``ioff()`` and ``ion`` which haven't been defined.
    rather than just silently doing so.
 
 
-If you don't see the next code block then we can surmise that the ``@surpress``
-decorator is behaving as expected.:
+If you don't see the next code block then we can surmise that the
+`@suppress` decorator is behaving as expected.:
 
 .. ipython:: python
    :suppress:
@@ -520,12 +522,10 @@ And persist across sessions.:
    print(square(-2))
 
 
-
 .. _pseudo-decorators:
 
 Supported Pseudo-Decorators
 ============================
-
 .. sooooo which ones are which? Please be more clear!
 
 .. Let's see if this works.
@@ -536,6 +536,12 @@ Supported Pseudo-Decorators
 
    .. rst:directive:option:: doctest: Run a doctest on IPython code blocks in rst.
 
+   .. rst:directive:option:: python
+
+   .. rst:directive:option:: okexcept
+
+   .. rst:directive:option:: okwarning
+
 The URL you need to build off of that directive is here:
 
 http://www.sphinx-doc.org/en/master/usage/restructuredtext/domains.html#the-restructuredtext-domain
@@ -545,47 +551,19 @@ take.  Some of the decorators can be used as options to the entire
 block (e.g. ``@verbatim`` and ``@suppress``), and some only apply to the
 line just below them (eg ``@savefig``).:
 
-<<<<<<< Updated upstream
 .. glossary::
 
    @suppress
-      Execute the IPython input block, but suppress the input and output
-      block from the rendered output.  Also, can be applied to the entire
-      ``.. ipython`` block as a directive option with ``:suppress:``.
-||||||| merged common ancestors
-@suppress
-    Execute the IPython input block, but suppress the input and output
-    block from the rendered output.  Also, can be applied to the entire
-    ``.. ipython`` block as a directive option with ``:suppress:``.
-=======
-@suppress
-    Execute the IPython input block, but :dfn:`@suppress` the input and output
-    block from the rendered output.  Also, can be applied to the entire
-    ``.. ipython`` block as a directive option with ``:suppress:``.
->>>>>>> Stashed changes
+       Execute the IPython input block, but :dfn:`@suppress` the input and output
+       block from the rendered output.  Also, can be applied to the entire
+       ``.. ipython`` block as a directive option with ``:suppress:``.
 
-<<<<<<< Updated upstream
    @verbatim
-      Insert the input and output block in verbatim, but auto-increment
-      the line numbers. Internally, the interpreter will be fed an empty
-      string, so it is a no-op that keeps line numbering consistent.
-      Also, can be applied to the entire ``.. ipython`` block as a
-      directive option with ``:verbatim:``.
-||||||| merged common ancestors
-@verbatim
-    Insert the input and output block in verbatim, but auto-increment
-    the line numbers. Internally, the interpreter will be fed an empty
-    string, so it is a no-op that keeps line numbering consistent.
-    Also, can be applied to the entire ``.. ipython`` block as a
-    directive option with ``:verbatim:``.
-=======
-@verbatim
-    Insert the input and output block in :dfn:`@verbatim`, but auto-increment
-    the line numbers. Internally, the interpreter will be fed an empty
-    string, so it is a no-op that keeps line numbering consistent.
-    Also, can be applied to the entire ``.. ipython`` block as a
-    directive option with ``:verbatim:``.
->>>>>>> Stashed changes
+       Insert the input and output block in :dfn:`@verbatim`, but auto-increment
+       the line numbers. Internally, the interpreter will be fed an empty
+       string, so it is a no-op that keeps line numbering consistent.
+       Also, can be applied to the entire ``.. ipython`` block as a
+       directive option with ``:verbatim:``.
 
    @savefig 
       Save the target of the directive to :dfn:`outfile`.
@@ -596,7 +574,6 @@ line just below them (eg ``@savefig``).:
       Takes args to pass to the image directive (*scale*,
       *width*, etc can be ``**kwargs``)
 
-
    @doctest
       Compare the pasted in output in the IPython block with the output
       generated at doc build time, and raise errors if they don't
@@ -604,8 +581,6 @@ line just below them (eg ``@savefig``).:
       directive option with ``:doctest:``.
 
    .. option:: @savefig OUTFILE [IMAGE_OPTIONS]
-
-   .. i'm sure that the above syntax is wrong
 
 
 See Also

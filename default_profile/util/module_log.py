@@ -5,13 +5,12 @@
 Prepackaged Loggers
 ===================
 
-
-Set up easily instantied :class:`logging.Logger()` instances.
+Set up easily instantied :class:`logging.Logger` instances.
 
 Create a few formatters and logging instances that can be easily
 imported and utilized across the package.
 
-Currently module_log.stream_logger()
+Currently :ref:`module_log.stream_logger`
 is the easiest and most oft used entry point in this module.
 
 """
@@ -199,15 +198,16 @@ class JsonFormatter(logging.Formatter):
         else:
             exc = None
 
-        return json.dumps({
+        return json.dumps(
+            {
                 'msg': record.msg % record.args, 'timestamp':
-                    datetime.utcfromtimestamp(record.created).isoformat() + 'Z',
+                    datetime.utcfromtimestamp(record.created).isoformat() +
+                    'Z',
                 'func': record.funcName, 'level': record.levelname, 'module':
                     record.module, 'process_id': record.process, 'thread_id':
                         record.thread, 'exception': exc
             }
         )
-
 
 
 def betterConfig():
@@ -238,6 +238,6 @@ def betterConfig():
     better_formatter = logging.Formatter(logging.BASIC_FORMAT)
     better_stream.setFormatter(better_formatter)
 
-    better_logger.setFilterer(logging.Filter()) 
+    better_logger.setFilterer(logging.Filter())
 
     return better_logger

@@ -23,11 +23,10 @@ Here's some seemingly inconsistent behavior.::
 
 .. how does this directive work again?
 
-.. option::
-
-   trim
+.. option:: trim
        Trim the IPython history database to the last 1000 entries.
-   clear
+
+.. option:: clear
        Clear the IPython history database, deleting all entries.
 
 So there we have instructions to use the invocation ``ipython-history``.::
