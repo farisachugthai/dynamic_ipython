@@ -180,8 +180,8 @@ to the end of this file in <a class="reference internal" href="#pseudo-decorator
 <h3>Registering Your Own Doctest Handlers<a class="headerlink" href="#registering-your-own-doctest-handlers" title="Permalink to this headline">¶</a></h3>
 <p>The Sphinx extension that provides support for embedded IPython code provides
 a pseudo-decorator <code class="xref py py-obj docutils literal notranslate"><span class="pre">&#64;doctest</span></code>, which treats the input/output block as a
-doctest, raising a <code class="xref std std-keyword docutils literal notranslate"><span class="pre">RuntimeError</span></code> during doc generation if the actual output
-(after running the input) does not match the expected output.</p>
+doctest, raising a <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">RuntimeError</span></code></a> during doc generation if
+the actual output (after running the input) does not match the expected output.</p>
 <p>An example usage is:</p>
 <div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">ipython</span><span class="p">::</span>
 
@@ -303,7 +303,7 @@ settings to the entire block.  For example,</p>
 </pre></div>
 </div>
 <p>You can create one or more pyplot plots and insert them with the
-<code class="docutils literal notranslate"><span class="pre">&#64;savefig</span></code> decorator.</p>
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&#64;savefig`</span></code> decorator.</p>
 <p>For more information on <code class="xref py py-obj docutils literal notranslate"><span class="pre">&#64;savefig</span></code> decorator, please refer to the end of this
 page in <a class="reference internal" href="#pseudo-decorators"><span class="std std-ref">Supported Pseudo-Decorators</span></a> section.</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [17]: </span><span class="n">plot</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]);</span>
@@ -317,7 +317,7 @@ page in <a class="reference internal" href="#pseudo-decorators"><span class="std
 <p>In a subsequent session, we can update the current figure with some
 text, and then resave.:</p>
 <pre class="literal-block">In [19]: ylabel('number')
-Text(38.097222222222214, 0.5, 'number')
+Text(38.347222222222214, 0.5, 'number')
 
 In [20]: title('normal distribution')
 Text(0.5, 1, 'normal distribution')
@@ -378,8 +378,8 @@ suppress output with a semicolon.:</p>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="_images/plot_simple_python.png"><img alt="_images/plot_simple_python.png" src="_images/plot_simple_python.png" style="width: 4in;" /></a>
-<p>For more information on <code class="docutils literal notranslate"><span class="pre">&#64;savefig</span></code> decorator,
-please refer to the end of this page in Pseudo-Decorators section.</p>
+<p>For more information on <code class="xref py py-obj docutils literal notranslate"><span class="pre">&#64;savefig</span></code> decorator, please refer to the end of
+this page in Pseudo-Decorators section.</p>
 <p>Similarly, <a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stderr" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stderr</span></code></a> is inserted.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [30]: </span><span class="n">foo</span> <span class="o">=</span> <span class="s1">&#39;bar&#39;</span>
 
@@ -463,6 +463,16 @@ In [37]: print(square(-2))
 <code class="sig-name descname">:okwarning:</code><a class="headerlink" href="#directive:option-ipython-okwarning" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="directive:option">
+<dt id="directive:option-ipython-suppress">
+<code class="sig-name descname">:suppress:</code><a class="headerlink" href="#directive:option-ipython-suppress" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="directive:option">
+<dt id="directive:option-ipython-verbatim">
+<code class="sig-name descname">:verbatim:</code><a class="headerlink" href="#directive:option-ipython-verbatim" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <p>The URL you need to build off of that directive is here:</p>
@@ -519,13 +529,13 @@ like an interactive ipython section.</p>
 In [2]: import datetime
    ...: datetime.datetime.now()
    ...: 
-datetime.datetime(2019, 9, 16, 4, 27, 27, 354008)</pre>
+datetime.datetime(2019, 9, 16, 14, 45, 37, 89541)</pre>
 <p>It supports IPython construct that plain
 Python does not understand (like magics):</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [3]: </span><span class="kn">import</span> <span class="nn">time</span>
 
 <span class="gp">In [4]: </span><span class="o">%</span><span class="k">timeit</span> time.sleep(0.05)
-<span class="go">50.4 ms +- 83 us per loop (mean +- std. dev. of 7 runs, 10 loops each)</span>
+<span class="go">50.6 ms +- 55.2 us per loop (mean +- std. dev. of 7 runs, 10 loops each)</span>
 </pre></div>
 </div>
 <p>This will also support top-level async when using IPython 7.0+</p>
@@ -636,6 +646,9 @@ one sets the backend to <a class="reference external" href="https://docs.python.
 </div>
 <p>See <a class="reference external" href="http://matplotlib.org/sampledoc/ipython_directive.html">http://matplotlib.org/sampledoc/ipython_directive.html</a> for additional
 documentation.</p>
+</div>
+<div class="section" id="id3">
+<h3>Pseudo-Decorators<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <p>Note: Only one decorator is supported per input. If more than one decorator
 is specified, then only the last one is used.</p>
 <p>In addition to the Pseudo-Decorators/options described at the above link,
@@ -651,6 +664,14 @@ or :okwarning: options:</p>
     In [2]: # raise warning.
 </pre></div>
 </div>
+</div>
+<div class="section" id="to-do">
+<h3>To Do<a class="headerlink" href="#to-do" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p>Turn the ad-hoc test() function into a real test suite.</p></li>
+<li><p>Break up ipython-specific functionality from matplotlib stuff into better
+separated code.</p></li>
+</ul>
 <dl class="function">
 <dt id="IPython.sphinxext.ipython_directive.block_parser">
 <code class="sig-name descname">block_parser</code><span class="sig-paren">(</span><em class="sig-param">part</em>, <em class="sig-param">rgxin</em>, <em class="sig-param">rgxout</em>, <em class="sig-param">fmtin</em>, <em class="sig-param">fmtout</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/IPython/sphinxext/ipython_directive.html#block_parser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.block_parser" title="Permalink to this definition">¶</a></dt>

@@ -172,9 +172,9 @@ rst_prolog = """
 .. |ip| replace:: :class:`IPython.core.interactiveshell.InteractiveShell`
 """
 
-############# Cross your fingers
+# Cross your fingers
 add_module_names = False
-############# Cross your fingers
+# Cross your fingers
 
 # -- Options for HTML output -------------------------------------------------
 
@@ -328,6 +328,7 @@ intersphinx_mapping = {
         ('https://python-prompt-toolkit.readthedocs.io/en/stable/', None),
     'scipy': ('https://docs.scipy.org/doc/scipy/reference', None),
     'matplotlib': ('https://matplotlib.org', None),
+    'jupyter': ('https://jupyter.readthedocs.io/en/latest/', None),
     'numpy': ('https://docs.scipy.org/doc/numpy/', None),
 }
 
