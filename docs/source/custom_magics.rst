@@ -83,10 +83,9 @@ Docstring:
    In the latter case, the function will be called with ``cell==None`` when
    invoked as ``%f``, and with cell as a string when invoked as ``%%f``.
 
-.. _register-magic-function-parameters:
 
-Parameters
-----------
+Parameters (register-magic)
+---------------------------
 ``func`` : callable
    Function to be registered as a magic.
 

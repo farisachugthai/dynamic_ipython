@@ -528,6 +528,18 @@ Supported Pseudo-Decorators
 
 .. sooooo which ones are which? Please be more clear!
 
+.. Let's see if this works.
+
+.. rst:directive:: ipython
+
+   Create an IPython directive.   
+
+   .. rst:directive:option:: doctest: Run a doctest on IPython code blocks in rst.
+
+The URL you need to build off of that directive is here:
+
+http://www.sphinx-doc.org/en/master/usage/restructuredtext/domains.html#the-restructuredtext-domain
+
 Here are the supported decorators, and any optional arguments they
 take.  Some of the decorators can be used as options to the entire
 block (e.g. ``@verbatim`` and ``@suppress``), and some only apply to the
@@ -541,11 +553,11 @@ line just below them (eg ``@savefig``).:
       ``.. ipython`` block as a directive option with ``:suppress:``.
 
    @verbatim
-      Insert the input and output block in verbatim, but auto-increment
-      the line numbers. Internally, the interpreter will be fed an empty
-      string, so it is a no-op that keeps line numbering consistent.
-      Also, can be applied to the entire ``.. ipython`` block as a
-      directive option with ``:verbatim:``.
+       Insert the input and output block in :dfn:`@verbatim`, but auto-increment
+       the line numbers. Internally, the interpreter will be fed an empty
+       string, so it is a no-op that keeps line numbering consistent.
+       Also, can be applied to the entire ``.. ipython`` block as a
+       directive option with ``:verbatim:``.
 
    @savefig 
       Save the target of the directive to :dfn:`outfile`.
@@ -564,8 +576,6 @@ line just below them (eg ``@savefig``).:
       directive option with ``:doctest:``.
 
    .. option:: @savefig OUTFILE [IMAGE_OPTIONS]
-
-   .. i'm sure that the above syntax is wrong
 
 
 See Also
