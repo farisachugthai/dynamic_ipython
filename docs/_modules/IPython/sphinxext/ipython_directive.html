@@ -188,9 +188,6 @@
 <span class="sd">See http://matplotlib.org/sampledoc/ipython_directive.html for additional</span>
 <span class="sd">documentation.</span>
 
-<span class="sd">Pseudo-Decorators</span>
-<span class="sd">=================</span>
-
 <span class="sd">Note: Only one decorator is supported per input. If more than one decorator</span>
 <span class="sd">is specified, then only the last one is used.</span>
 
@@ -209,12 +206,6 @@
 <span class="sd">        In [1]: 1/0</span>
 <span class="sd">        In [2]: # raise warning.</span>
 
-<span class="sd">To Do</span>
-<span class="sd">=====</span>
-
-<span class="sd">- Turn the ad-hoc test() function into a real test suite.</span>
-<span class="sd">- Break up ipython-specific functionality from matplotlib stuff into better</span>
-<span class="sd">  separated code.</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 
@@ -672,7 +663,7 @@
                      <span class="s1">&#39;Output line(s):</span><span class="se">\n</span><span class="si">{TAB}{3}</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="p">)</span>
                 <span class="n">e</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">content</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_lines</span><span class="p">),</span>
                              <span class="nb">repr</span><span class="p">(</span><span class="n">found</span><span class="p">),</span> <span class="n">TAB</span><span class="o">=</span><span class="n">TAB</span><span class="p">)</span>
-                <span class="c1"># raise RuntimeError(e)</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
             <span class="n">found</span> <span class="o">=</span> <span class="n">found</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">output_prompt</span><span class="p">):]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 
             <span class="c1"># Handle the actual doctest comparison.</span>
@@ -687,7 +678,7 @@
                          <span class="s1">&#39;instead of the expected:</span><span class="se">\n</span><span class="si">{TAB}{4}</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="p">)</span>
                     <span class="n">e</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">content</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_lines</span><span class="p">),</span>
                                  <span class="nb">repr</span><span class="p">(</span><span class="n">found</span><span class="p">),</span> <span class="nb">repr</span><span class="p">(</span><span class="n">submitted</span><span class="p">),</span> <span class="n">TAB</span><span class="o">=</span><span class="n">TAB</span><span class="p">)</span>
-                    <span class="c1"># raise RuntimeError(e)</span>
+                    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">custom_doctest</span><span class="p">(</span><span class="n">decorator</span><span class="p">,</span> <span class="n">input_lines</span><span class="p">,</span> <span class="n">found</span><span class="p">,</span> <span class="n">submitted</span><span class="p">)</span>
 
@@ -1347,7 +1338,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Sep 14, 2019.
+      Last updated on Sep 15, 2019.
     </div>
   </body>
 </html>
