@@ -4,7 +4,8 @@
 :mod:`default_profile.util` package
 ===================================
 
-.. currentmodule:: default_profile.util
+.. module:: default_profile.util
+   :synopsis: General functions that don't directly depend on IPython or this repository.
 
 
 .. _util-contents:
@@ -51,13 +52,22 @@ default_profile.util.module\_log module
    :show-inheritance:
 
 
-:mod:`default_profile.util.pager2` module
------------------------------------------
-.. what options does autosummary take?
+:mod:`default_profile.util.paths` module
+----------------------------------------
 
-.. autosummary::
+.. automodule:: default_profile.util.paths
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
-   default_profile.util.pager2
+
+:mod:`default_profile.util.profile_override` module
+---------------------------------------------------
+
+.. automodule:: default_profile.util.profile_override
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 
 default_profile.util.timer module
