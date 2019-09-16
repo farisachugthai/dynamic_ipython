@@ -1,0 +1,257 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>IPython.sphinxext.custom_doctests &#8212; Dynamic IPython: version0.0.1</title>
+    <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/IPython/sphinxext/custom_doctests.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for IPython.sphinxext.custom_doctests</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Handlers for IPythonDirective&#39;s @doctest pseudo-decorator.</span>
+
+<span class="sd">The Sphinx extension that provides support for embedded IPython code provides</span>
+<span class="sd">a pseudo-decorator @doctest, which treats the input/output block as a</span>
+<span class="sd">doctest, raising a RuntimeError during doc generation if the actual output</span>
+<span class="sd">(after running the input) does not match the expected output.</span>
+
+<span class="sd">An example usage is:</span>
+
+<span class="sd">.. code-block:: rst</span>
+
+<span class="sd">   .. ipython::</span>
+
+<span class="sd">        In [1]: x = 1</span>
+
+<span class="sd">        @doctest</span>
+<span class="sd">        In [2]: x + 2</span>
+<span class="sd">        Out[3]: 3</span>
+
+<span class="sd">One can also provide arguments to the decorator. The first argument should be</span>
+<span class="sd">the name of a custom handler. The specification of any other arguments is</span>
+<span class="sd">determined by the handler. For example,</span>
+
+<span class="sd">.. code-block:: rst</span>
+
+<span class="sd">      .. ipython::</span>
+
+<span class="sd">         @doctest float</span>
+<span class="sd">         In [154]: 0.1 + 0.2</span>
+<span class="sd">         Out[154]: 0.3</span>
+
+<span class="sd">allows the actual output ``0.30000000000000004`` to match the expected output</span>
+<span class="sd">due to a comparison with `np.allclose`.</span>
+
+<span class="sd">This module contains handlers for the @doctest pseudo-decorator. Handlers</span>
+<span class="sd">should have the following function signature::</span>
+
+<span class="sd">    handler(sphinx_shell, args, input_lines, found, submitted)</span>
+
+<span class="sd">where `sphinx_shell` is the embedded Sphinx shell, `args` contains the list</span>
+<span class="sd">of arguments that follow: &#39;@doctest handler_name&#39;, `input_lines` contains</span>
+<span class="sd">a list of the lines relevant to the current doctest, `found` is a string</span>
+<span class="sd">containing the output from the IPython shell, and `submitted` is a string</span>
+<span class="sd">containing the expected output from the IPython shell.</span>
+
+<span class="sd">Handlers must be registered in the `doctests` dict at the end of this module.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="str_to_array"><a class="viewcode-back" href="../../../sphinxext.html#IPython.sphinxext.custom_doctests.str_to_array">[docs]</a><span class="k">def</span> <span class="nf">str_to_array</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Simplistic converter of strings from repr to float NumPy arrays.</span>
+
+<span class="sd">    If the repr representation has ellipsis in it, then this will fail.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    s : str</span>
+<span class="sd">        The repr version of a NumPy array.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; s = &quot;array([ 0.3,  inf,  nan])&quot;</span>
+<span class="sd">    &gt;&gt;&gt; a = str_to_array(s)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+    <span class="c1"># Need to make sure eval() knows about inf and nan.</span>
+    <span class="c1"># This also assumes default printoptions for NumPy.</span>
+    <span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">inf</span><span class="p">,</span> <span class="n">nan</span>
+
+    <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;array&#39;</span><span class="p">):</span>
+        <span class="c1"># Remove array( and )</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;[&#39;</span><span class="p">):</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Assume its a regular float. Force 1D so we can index into it.</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">a</span></div>
+
+<div class="viewcode-block" id="float_doctest"><a class="viewcode-back" href="../../../sphinxext.html#IPython.sphinxext.custom_doctests.float_doctest">[docs]</a><span class="k">def</span> <span class="nf">float_doctest</span><span class="p">(</span><span class="n">sphinx_shell</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">input_lines</span><span class="p">,</span> <span class="n">found</span><span class="p">,</span> <span class="n">submitted</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Doctest which allow the submitted output to vary slightly from the input.</span>
+
+<span class="sd">    Here is how it might appear in an rst file:</span>
+
+<span class="sd">    .. code-block:: rst</span>
+
+<span class="sd">       .. ipython::</span>
+
+<span class="sd">          @doctest float</span>
+<span class="sd">          In [1]: 0.1 + 0.2</span>
+<span class="sd">          Out[1]: 0.3</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">rtol</span> <span class="o">=</span> <span class="mf">1e-05</span>
+        <span class="n">atol</span> <span class="o">=</span> <span class="mf">1e-08</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Both must be specified if any are specified.</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">rtol</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+            <span class="n">atol</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+            <span class="n">e</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Both `rtol` and `atol` must be specified &quot;</span>
+                 <span class="s2">&quot;if either are specified: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">submitted</span> <span class="o">=</span> <span class="n">str_to_array</span><span class="p">(</span><span class="n">submitted</span><span class="p">)</span>
+        <span class="n">found</span> <span class="o">=</span> <span class="n">str_to_array</span><span class="p">(</span><span class="n">found</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="c1"># For example, if the array is huge and there are ellipsis in it.</span>
+        <span class="n">error</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">found_isnan</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">found</span><span class="p">)</span>
+        <span class="n">submitted_isnan</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">submitted</span><span class="p">)</span>
+        <span class="n">error</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">found_isnan</span><span class="p">,</span> <span class="n">submitted_isnan</span><span class="p">)</span>
+        <span class="n">error</span> <span class="o">|=</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">found</span><span class="p">[</span><span class="o">~</span><span class="n">found_isnan</span><span class="p">],</span>
+                                 <span class="n">submitted</span><span class="p">[</span><span class="o">~</span><span class="n">submitted_isnan</span><span class="p">],</span>
+                                 <span class="n">rtol</span><span class="o">=</span><span class="n">rtol</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">atol</span><span class="p">)</span>
+
+    <span class="n">TAB</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span> <span class="o">*</span> <span class="mi">4</span>
+    <span class="n">directive</span> <span class="o">=</span> <span class="n">sphinx_shell</span><span class="o">.</span><span class="n">directive</span>
+    <span class="k">if</span> <span class="n">directive</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">source</span> <span class="o">=</span> <span class="s1">&#39;Unavailable&#39;</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="s1">&#39;Unavailable&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">source</span> <span class="o">=</span> <span class="n">directive</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">current_source</span>
+        <span class="c1"># Add tabs and make into a single string.</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">TAB</span> <span class="o">+</span> <span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">directive</span><span class="o">.</span><span class="n">content</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">error</span><span class="p">:</span>
+
+        <span class="n">e</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;doctest float comparison failure</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+             <span class="s1">&#39;Document source: </span><span class="si">{0}</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+             <span class="s1">&#39;Raw content: </span><span class="se">\n</span><span class="si">{1}</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+             <span class="s1">&#39;On input line(s):</span><span class="se">\n</span><span class="si">{TAB}{2}</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+             <span class="s1">&#39;we found output:</span><span class="se">\n</span><span class="si">{TAB}{3}</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+             <span class="s1">&#39;instead of the expected:</span><span class="se">\n</span><span class="si">{TAB}{4}</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">content</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_lines</span><span class="p">),</span> <span class="nb">repr</span><span class="p">(</span><span class="n">found</span><span class="p">),</span>
+                     <span class="nb">repr</span><span class="p">(</span><span class="n">submitted</span><span class="p">),</span> <span class="n">TAB</span><span class="o">=</span><span class="n">TAB</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">e</span><span class="p">)</span></div>
+
+<span class="c1"># dict of allowable doctest handlers. The key represents the first argument</span>
+<span class="c1"># that must be given to @doctest in order to activate the handler.</span>
+<span class="n">doctests</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;float&#39;</span><span class="p">:</span> <span class="n">float_doctest</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../../../index.html">Table of Contents</a></h3>
+<p class="caption"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../ipython_keybindings.html">Keybindings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../custom_magics.html">Custom Magics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../exceptions.html">Customized Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sphinxext.html">IPython Sphinx Directive</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev.html">Developers Notes</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../startup/index.html">IPython Shell Initialization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../util.html">General Utility Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../jupyter.html">Jupyter Suite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Extensions</a></li>
+</ul>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+      Last updated on Sep 15, 2019.
+    </div>
+  </body>
+</html>
