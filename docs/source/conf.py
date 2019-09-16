@@ -29,7 +29,10 @@ import time
 # Third party
 from sphinx import application
 import sphinx
-import ipdb
+try:
+    import ipdb
+except ImportError:
+    pass
 
 from IPython.lib.lexers import IPyLexer, IPythonTracebackLexer
 

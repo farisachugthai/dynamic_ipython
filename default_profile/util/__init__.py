@@ -46,11 +46,10 @@ import default_profile
 
 from .copytree import CopyTree
 from .machine import Platform
-from .copytree import CopyTree
 from .module_log import stream_logger
+from .paths import _path_build, PathValidator
 from .profile_override import ReprProfileDir
 from .timer import timer as _itimer
-from .paths import _path_build, PathValidator
 
 logging.BASIC_FORMAT = '%(created)f : %(module)s : %(levelname)s : %(message)s'
 

@@ -59,11 +59,12 @@
 <span class="sd">This module utilizes the examples given in the official documentation</span>
 <span class="sd">for :mod:`contextlib`.</span>
 
-<span class="sd">In addition to utilizing `contextlib`, create a function that allows</span>
-<span class="sd">for an easier &quot;grep-like&quot; interface for objects that are too large</span>
-<span class="sd">to be quickly and easily understood based on the output of :keyword:`dir`.</span>
+<span class="sd">In addition to utilizing :mod:`contextlib`, we create a function that allows</span>
+<span class="sd">that allows searching through the members of an object.</span>
 
-<span class="sd">------------------</span>
+<span class="sd">This is intended to be exposed to the user as a quick, interactive tool</span>
+<span class="sd">with an easier &quot;grep-like&quot; interface for objects that are too large</span>
+<span class="sd">to be quickly and easily understood based on the output of :func:`dir`.</span>
 
 <span class="sd">.. todo:: :mod:`pydoc` actually has a giant API so we could also use that.</span>
 
@@ -72,10 +73,6 @@
 <span class="kn">import</span> <span class="nn">contextlib</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">sys</span>
-
-<span class="kn">from</span> <span class="nn">IPython</span> <span class="k">import</span> <span class="n">get_ipython</span>
-
-<span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
 
 
 <div class="viewcode-block" id="print_help"><a class="viewcode-back" href="../../../startup/help_helpers.html#default_profile.startup.06_help_helpers.print_help">[docs]</a><span class="k">def</span> <span class="nf">print_help</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -92,7 +89,13 @@
 
 
 <div class="viewcode-block" id="page_help"><a class="viewcode-back" href="../../../startup/help_helpers.html#default_profile.startup.06_help_helpers.page_help">[docs]</a><span class="k">def</span> <span class="nf">page_help</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;WIP.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Using IPython&#39;s `pinfo` magic to page information to the console.</span>
+
+<span class="sd">    Also noting it&#39;s the only function in this module that actually needs</span>
+<span class="sd">    the IPython instance so the imports were moved here.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">IPython</span> <span class="k">import</span> <span class="n">get_ipython</span>
+    <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_ip</span><span class="p">,</span> <span class="s1">&#39;pinfo&#39;</span><span class="p">):</span>
         <span class="n">_ip</span><span class="o">.</span><span class="n">pinfo</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span></div>
 

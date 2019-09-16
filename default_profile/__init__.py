@@ -15,11 +15,10 @@ try:
 except (ImportError, ModuleNotFoundError):
     pass
 
-from . import extensions, profile_debugger, profile_parallel, sphinxext, startup, util
+# from . import profile_debugger, profile_parallel, sphinxext, startup, util
+from . import ipython_config, ipython_kernel_config
 from .__about__ import __version__
-from . import ipython_config
-from . import ipython_kernel_config
-
+from .sphinxext import magics, configtraits
 
 default_log_format = '%(created)f : %(module)s : %(levelname)s : %(message)s'
 PROFILE_DEFAULT_LOG = logging.getLogger('default_profile')

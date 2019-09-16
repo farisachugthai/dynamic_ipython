@@ -195,8 +195,8 @@ Registering Your Own Doctest Handlers
 
 The Sphinx extension that provides support for embedded IPython code provides
 a pseudo-decorator `@doctest`, which treats the input/output block as a
-doctest, raising a :keyword:`RuntimeError` during doc generation if the actual output
-(after running the input) does not match the expected output.
+doctest, raising a :py:exc:`RuntimeError` during doc generation if 
+the actual output (after running the input) does not match the expected output.
 
 An example usage is:
 
@@ -353,7 +353,7 @@ settings to the entire block.  For example,
      450  1274 12457 total
 
 You can create one or more pyplot plots and insert them with the
-``@savefig`` decorator.
+`@savefig`` decorator.
 
 For more information on `@savefig` decorator, please refer to the end of this
 page in :ref:`Pseudo-Decorators` section.
@@ -443,8 +443,8 @@ suppress output with a semicolon.:
    @savefig plot_simple_python.png width=4in
    plot([1,2,3]);
 
-For more information on ``@savefig`` decorator,
-please refer to the end of this page in Pseudo-Decorators section.
+For more information on `@savefig` decorator, please refer to the end of
+this page in Pseudo-Decorators section.
 
 
 Similarly, :data:`sys.stderr` is inserted.:
@@ -541,6 +541,10 @@ Supported Pseudo-Decorators
    .. rst:directive:option:: okexcept
 
    .. rst:directive:option:: okwarning
+
+   .. rst:directive:option:: suppress
+
+   .. rst:directive:option:: verbatim
 
 The URL you need to build off of that directive is here:
 
