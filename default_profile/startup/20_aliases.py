@@ -7,9 +7,9 @@ IPython Aliases
 
 Refactoring TODO:
 
-Move the aliases out of the func linux_specific_aliases.
+Move the aliases out of the function ``linux_specific_aliases``.
 
-Create a class with instance attributes for sys.platform and uh I don't know.
+Create a class with instance attributes for `sys.platform`.
 Break linux up like so::
 
     class AliasOSAgnostic:
@@ -75,7 +75,7 @@ class Executable:
         return shutil.which(self.command)
 
 
-def linux_specific_aliases():
+class LinuxAliases:
     """Add Linux specific aliases.
 
     Aliases that have either:
@@ -99,59 +99,83 @@ def linux_specific_aliases():
             self.shell.magics_manager.register_function(caller, magic_kind='line',
             magic_name=name)
 
-    Parameters
-    ----------
-    None
-
-    Returns
-    -------
-    _ip.user_aliases : list of ('alias', 'system command') tuples
-
     """
-    _user_aliases = [
+
+    def __init__(self):
+        """The WindowsAliases implementation of this is odd so maybe branch off."""
+        pass
+
+    @classmethod
+    def busybox(cls):
+        """Commands that are available on any Unix-ish system.
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        _ip.user_aliases : list of ('alias', 'system command') tuples
+
+        """
+
+        _user_aliases = [
+            ('cs', 'cd %s && ls -F --color=always %s'),
+            ('cp', 'cp -iv %l'),  # cp mv mkdir and rmdir are all overridden
+            ('dus', 'du -d 1 -ha %l'),
+            ('echo', 'echo -e %l'),
+            (
+                'gpip',
+                'export PIP_REQUIRE_VIRTUALENV=0; python -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null'
+            ),
+            (
+                'gpip2',
+                'export PIP_REQUIRE_VIRTUALENV=0; python2 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null'
+            ),
+            (
+                'gpip3',
+                'export PIP_REQUIRE_VIRTUALENV=0; python3 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null'
+            ),
+            ('head', 'head -n 30 %l'),
+            ('la', 'ls -AF --color=always %l'),
+            ('l', 'ls -CF --color=always %l'),
+            ('ll', 'ls -AlF --color=always %l'),
+            ('ls', 'ls -F --color=always %l'),
+            ('lt', 'ls -Altcr --color=always %l'),
+            ('mk', 'mkdir -pv %l && cd %l'),  # check if this works. only mkdir
+            ('mkdir', 'mkdir -pv %l'),
+            ('mv', 'mv -iv %l'),
+            ('nman', 'nvim -c "Man %l" -c"wincmd T"'),
+            ('r', 'fc -s'),
+            ('redo', 'fc -s'),
+            ('rm', 'rm -v %l'),
+            ('rmdir', 'rmdir -v %l'),
+            (
+                'default_profile',
+                'cd ~/projects/dotfiles/unix/.ipython/default_profile'
+            ),
+            (
+                'startup',
+                'cd ~/projects/dotfiles/unix/.ipython/default_profile/startup'
+            ),
+            ('tail', 'tail -n 30 %l'),
+            ('tre', 'tree -ashFC -I .git -I __pycache__ --filelimit 25'),
+        ]
+        return _user_aliases
+
+    def __iter__(self):
+        return self._generator()
+
+    def _generator(self):
+        for itm in self.items():
+            yield itm
+
+    def thirdparty(self):
+        """Contrasted to busybox, these require external installation.
+
+        As a result it'll be of value to check that they're even in the namespace.
+        """
         ('ag', 'ag --hidden --color --no-column %l'),
-        ('cs', 'cd %s && ls -F --color=always %s'),
-        ('cp', 'cp -iv %l'),  # cp mv mkdir and rmdir are all overridden
-        ('dus', 'du -d 1 -ha %l'),
-        ('echo', 'echo -e %l'),
-        (
-            'gpip',
-            'export PIP_REQUIRE_VIRTUALENV=0; python -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null'
-        ),
-        (
-            'gpip2',
-            'export PIP_REQUIRE_VIRTUALENV=0; python2 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null'
-        ),
-        (
-            'gpip3',
-            'export PIP_REQUIRE_VIRTUALENV=0; python3 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null'
-        ),
-        ('head', 'head -n 30 %l'),
-        ('la', 'ls -AF --color=always %l'),
-        ('l', 'ls -CF --color=always %l'),
-        ('ll', 'ls -AlF --color=always %l'),
-        ('ls', 'ls -F --color=always %l'),
-        ('lt', 'ls -Altcr --color=always %l'),
-        ('mk', 'mkdir -pv %l && cd %l'),  # check if this works. only mkdir
-        ('mkdir', 'mkdir -pv %l'),
-        ('mv', 'mv -iv %l'),
-        ('nman', 'nvim -c "Man %l" -c"wincmd T"'),
-        ('r', 'fc -s'),
-        ('redo', 'fc -s'),
-        ('rm', 'rm -v %l'),
-        ('rmdir', 'rmdir -v %l'),
-        (
-            'default_profile',
-            'cd ~/projects/dotfiles/unix/.ipython/default_profile'
-        ),
-        (
-            'startup',
-            'cd ~/projects/dotfiles/unix/.ipython/default_profile/startup'
-        ),
-        ('tail', 'tail -n 30 %l'),
-        ('tre', 'tree -ashFC -I .git -I __pycache__ --filelimit 25'),
-    ]
-    return _user_aliases
 
 
 def common_aliases():
@@ -277,8 +301,9 @@ class WindowsAliases:
         Parameters
         ----------
         shell : external command, optional
-            The command used to invoke the sytem shell. Either
-            :command:`cmd`, :command:`powershell` or :command:`pwsh`.
+            The command used to invoke the system shell. If none is provided
+            during instantiation, the function will set :attr:`WindowsAliases.shell`
+            to the |ip| instance.
 
         """
         self.shell = shell or get_ipython()
@@ -414,7 +439,7 @@ class WindowsAliases:
         return _ip.user_aliases
 
     def user_shell(self):
-        """Determine the user's shell."""
+        """Determine the user's shell. Checks :envvar:`SHELL` and :envvar:`COMSPEC`."""
         if self.shell:
             return self.shell
         elif os.environ.get('SHELL'):
@@ -467,47 +492,6 @@ def main():
 
     Planning on coming up with a new way of introducing the aliases into the user namespace.
 
-    Here's an interesting problem I ran into.
-
-    .. ipython::
-        :verbatim:
-
-        from traitlets.traitlets import List
-        user_aliases = [  # let's just fill this with some filler text
-            ('ls', 'ls')
-        ]
-        # Then tried running what would be the equivalent of running
-        # %config AliasManager.user_aliases = user_aliases
-
-    .. ipython::
-        :verbatim:
-
-        ~/.ipython/default_profile/startup/20_aliases.py in main()
-            461
-            462     user_aliases_traitlets = List(user_aliases)
-        --> 463     _ip.run_line_magic('config', AliasManager.user_aliases+user_aliases_traitlets)
-            464
-            465
-
-        TypeError: unsupported operand type(s) for +: 'List' and 'List'
-
-    Wait what? A :class:`traitlets.traitlets.List` can't be added with itself?
-    If that's true then that's definitely a bug right?
-
-    Aug 31, 2019:
-
-    So now I don't know if it's a bug but it's certainly odd behavior.
-    The output of ``print(dir(traitlets.traitlets.List))`` contains
-    ``__set__``. What? No ``__add__`` or anything?
-
-    And none of the methods looked like they intended on allowing multiple
-    assignments.
-
-    Whoa so is the :class:`traitlets.traitlets.List` supposed to be used
-    as an immutable set?
-
-    Gotta understand what I' saying when I say that that's confusing.
-
     """
     if not hasattr(_ip, 'magics_manager'):
         raise Exception('Are you running in IPython?')
@@ -516,7 +500,7 @@ def main():
     machine = Platform()
 
     if machine.is_linux:
-        user_aliases += linux_specific_aliases()
+        user_aliases += LinuxAliases().busybox()
     elif machine.is_win:
         # finish the shell class in default_profile.util.machine
         # then we can create a shell class that determines if
@@ -529,12 +513,11 @@ def main():
     # Apparently the big part i was missing was rerunning the init_aliases method
     _ip.alias_manager.init_aliases()
 
+    LOGGER.debug('Number of aliases is: %s' % user_aliases)
+
 
 if __name__ == "__main__":
     _ip = get_ipython()
 
     if _ip is not None:
         main()
-        LOGGER.debug(
-            'Number of aliases is: %s' % len(_ip.run_line_magic('alias', ''))
-        )

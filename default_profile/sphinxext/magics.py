@@ -12,6 +12,8 @@ try:
     from sphinx import addnodes
     # from sphinx.domains.std import StandardDomain
     from sphinx.roles import XRefRole
+    # Let's get a more useful error than raising exception
+    from IPython.core.errors import UsageError
 except (ImportError, ModuleNotFoundError):
     sys.exit()
 
@@ -19,6 +21,19 @@ name_re = re.compile(r"[\w_]+")
 
 
 def parse_magic(env, sig, signode):
+    """Extend Sphinx to handle IPython magics.
+
+    Parameters
+    ----------
+    todo
+
+    Raises
+    ------
+    :exc:`IPython.core.errors.UsageError`
+        Raised when regular expression ``re.compile(r"[\w_]+")``
+        doesn't match the signature of interest.
+
+    """
     m = name_re.match(sig)
     if not m:
         raise Exception("Invalid magic command: %s" % sig)

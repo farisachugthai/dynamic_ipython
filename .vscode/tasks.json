@@ -16,7 +16,19 @@
             "isBackground": true,
             "windows": {
                 "command": "conda activate flask"
+            },
+            "linux": {
+                "command": "conda activate jupyterlab"
             }
+        },
+        {
+            "label": "pipenv",
+            "type": "shell",
+            "isBackground": true,
+            "command": "pipenv shell"
+            "dependsOn": [
+                "pipenv"
+            ]
         },
         {
             "label": "doesn't work sphinx",
@@ -37,6 +49,16 @@
                 "shell": {
                     "executable": "pwsh"
                 }
+            },
+            "linux": {
+                "args": [
+                    "-m",
+                    "sphinx-build",
+                    "-b",
+                    "html",
+                    "docs/source",
+                    "docs/build/html"
+                ]
             },
             "group": {
                 "kind": "build",
