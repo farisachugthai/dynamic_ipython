@@ -5,17 +5,21 @@
 :URL: `<https://github.com/ipython/ipython/blob/master/docs/sphinxext/magics.py>`_
 
 """
+import logging
 import re
 import sys
+
+logging.basiConfig()
 
 try:
     from sphinx import addnodes
     # from sphinx.domains.std import StandardDomain
     from sphinx.roles import XRefRole
     # Let's get a more useful error than raising exception
-    from IPython.core.errors import UsageError
-except (ImportError, ModuleNotFoundError):
-    sys.exit()
+    from IPython.core.error import UsageError
+except (ImportError, ModuleNotFoundError) as e:
+    logging.warn(e)
+
 
 name_re = re.compile(r"[\w_]+")
 
@@ -29,7 +33,7 @@ def parse_magic(env, sig, signode):
 
     Raises
     ------
-    :exc:`IPython.core.errors.UsageError`
+    :exc:`IPython.core.error.UsageError`
         Raised when regular expression ``re.compile(r"[\w_]+")``
         doesn't match the signature of interest.
 

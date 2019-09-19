@@ -100,13 +100,13 @@ sphinx_fs = SphinxFileSystemLoader(searchpath=TEMPLATES_PATH)
 def _setup_make_logging():
     logging.BASIC_FORMAT = '%(created)f : %(module)s : %(levelname)s : %(message)s'
 
-    MAKE_LOGGER = logging.getLogger(name='docs').getChild('make')
-    MAKE_LOGGER.setLevel(logging.DEBUG)
+    logger = logging.getLogger(name='docs').getChild('make')
+    logger.setLevel(logging.DEBUG)
     make_handler = logging.StreamHandler(stream=sys.stdout)
     make_handler.setLevel(logging.DEBUG)
     make_handler.setFormatter(logging.Formatter(fmt=logging.BASIC_FORMAT))
-    MAKE_LOGGER.addHandler(make_handler)
-    return MAKE_LOGGER
+    logger.addHandler(make_handler)
+    return logger
 
 
 def _parse_arguments(cmds=None) -> argparse.ArgumentParser:
@@ -218,6 +218,7 @@ class DocBuilder:
         The filetype :command:`make` invokes :command:`sphinx-build` to create.
 
     """
+    MAKE_LOGGER = _setup_make_logging()
 
     def __init__(self, kind=None, num_jobs=1, verbosity=0):
         """Kind has to be first in case the user uses the class with a positional parameter.
@@ -435,6 +436,6 @@ if __name__ == "__main__":
     # status = main()
     # pprint(status)
     # print(rsync())
-    DOCS_MAKE_LOGGER = _setup_make_logging()
+    MAKE_LOGGER = _setup_make_logging()
     argv = sys.argv[1:]
     pprint(gather_sphinx_options(argv))

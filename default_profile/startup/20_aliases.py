@@ -4,10 +4,10 @@
 ===============
 IPython Aliases
 ===============
+.. module:: 20_aliases
+    :synopsis: Set up additional alias managers and add user_aliases to the namespace.
 
 Refactoring TODO:
-
-Move the aliases out of the function ``linux_specific_aliases``.
 
 Create a class with instance attributes for `sys.platform`.
 Break linux up like so::

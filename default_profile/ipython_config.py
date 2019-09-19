@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Configuration file for :mod:`IPython`.
+"""
+==================================================
+IPython --- Configuration file for :mod:`IPython`.
+==================================================
 
 Parameters
 ----------
@@ -14,7 +17,7 @@ so I suppose IPython hasn't officially instantiated yet.:
 
     _ip = get_ipython()
 
-Therefore that the function shouldn't be used anywhere in this file.
+Therefore that function shouldn't be used anywhere in this file.
 
 Raises
 ------
@@ -473,7 +476,7 @@ c.TerminalInteractiveShell.extra_open_editor_shortcuts = True
 # Try to import my Gruvbox class. Can be found at
 # https://github.com/farisachugthai/Gruvbox_IPython
 if sys.version_info[0:2] <= (3, 6):
-    if ModuleNotFoundError not in builtins:
+    if ModuleNotFoundError not in dir(builtins):
 
         class ModuleNotFoundError(ImportError):
             """Subclass ImportErrors."""
@@ -538,7 +541,7 @@ c.TerminalInteractiveShell.true_color = True
 
 # *****************************************************************************
 # What this implies is that if you want to create your own tool for analyzing
-# your history logs in IPython start here!
+# your history logs in IPython, start here!
 # *****************************************************************************
 
 # Options for configuring the SQLite connection
@@ -616,78 +619,98 @@ c.ProfileDir.location = os.path.join(home, '', 'ipython')
 # BaseFormatter(Configurable) configuration
 # ----------------------------------------------------------------------------
 
-# A base formatter class that is configurable.
-#
-# This formatter should usually be used as the base class of all formatters. It
-# is a traited :class:`Configurable` class and includes an extensible API for
-# users to determine how their objects are formatted. The following logic is
-# used to find a function to format an given object.
-#
-# 1. The object is introspected to see if it has a method with the name
-#    :attr:`print_method`. If is does, that object is passed to that method
-#    for formatting.
-# 2. If no print method is found, three internal dictionaries are consulted
-#    to find print method: :attr:`singleton_printers`, :attr:`type_printers`
-#    and :attr:`deferred_printers`.
-#
-# Users should use these dictionaries to register functions that will be used
-# to compute the format data for their objects (if those objects don't have the
-# special print methods). The easiest way of using these dictionaries is
-# through the :meth:`for_type` and :meth:`for_type_by_name` methods.
-#
-#  If no function/callable is found to compute the format data, ``None`` is
-#  returned and this format type is not used.
+class BaseFormatterDoc(Configurable):
+    """A base formatter class that is configurable.
 
-# c.BaseFormatter.deferred_printers = {}
+    This formatter should usually be used as the base class of all formatters. It
+    is a traited :class:`Configurable` class and includes an extensible API for
+    users to determine how their objects are formatted. The following logic is
+    used to find a function to format an given object.
 
-# c.BaseFormatter.enabled = True
+    1. The object is introspected to see if it has a method with the name
+    :attr:`print_method`. If is does, that object is passed to that method
+    for formatting.
+    2. If no print method is found, three internal dictionaries are consulted
+    to find print method: :attr:`singleton_printers`, :attr:`type_printers`
+    and :attr:`deferred_printers`.
 
-# c.BaseFormatter.singleton_printers = {}
+    Users should use these dictionaries to register functions that will be used
+    to compute the format data for their objects (if those objects don't have the
+    special print methods). The easiest way of using these dictionaries is
+    through the :meth:`for_type` and :meth:`for_type_by_name` methods.
 
-# c.BaseFormatter.type_printers = {}
+    If no function/callable is found to compute the format data, ``None`` is
+    returned and this format type is not used.
 
-# -----------------------------------------------------------------------------
-# PlainTextFormatter(BaseFormatter) configuration
-# ----------------------------------------------------------------------------
+    .. seealso:: :mod:`IPython.lib.pretty`.
 
-# The default pretty-printer.
-#
-# This uses :mod:`IPython.lib.pretty` to compute the format data of the object.
-# If the object cannot be pretty printed, :func:`repr` is used. See the
-# documentation of :mod:`IPython.lib.pretty` for details on how to write pretty
-# printers.  Here is a simple example::
-#
-#      def dtype_pprinter(obj, p, cycle):
-#          if cycle:
-#              return p.text('dtype(...)')
-#          if hasattr(obj, 'fields'):
-#              if obj.fields is None:
-#                  p.text(repr(obj))
-#              else:
-#                  p.begin_group(7, 'dtype([')
-#                  for i, field in enumerate(obj.descr):
-#                      if i > 0:
-#                          p.text(',')
-#                          p.breakable()
-#                      p.pretty(field)
-#                  p.end_group(7, '])')
+    """
 
-# c.PlainTextFormatter.float_precision = ''
+    def __init__(self, *args, **kwargs):
+        """Initialize a BaseFormatter and get some Sphinx help.
 
-# Truncate large collections (lists, dicts, tuples, sets) to this size.
+        The remaining attributes from the config file are::
 
-#  Set to 0 to disable truncation.
-# Default is 1000 but that floods a terminal.
-# c.PlainTextFormatter.max_seq_length = 100
+            c.BaseFormatter.deferred_printers = {}
 
-# Default value
-# c.PlainTextFormatter.max_width = 79
+            c.BaseFormatter.enabled = True
 
-# c.PlainTextFormatter.newline = '\n'
+            c.BaseFormatter.singleton_printers = {}
 
-# c.PlainTextFormatter.pprint = True
+            c.BaseFormatter.type_printers = {}
 
-# c.PlainTextFormatter.verbose = True
+        """
+        super().__init__(self, *args, **kwargs)
+
+    def _example_subclass(self):
+        """
+        -----------------------------------------------------------------------------
+        PlainTextFormatter(BaseFormatter) configuration
+        ----------------------------------------------------------------------------
+
+        The default pretty-printer.
+
+        This uses :mod:`IPython.lib.pretty` to compute the format data of the object.
+        If the object cannot be pretty printed, :func:`repr` is used. See the
+        documentation of :mod:`IPython.lib.pretty` for details on how to write pretty
+        printers.  Here is a simple example::
+
+            def dtype_pprinter(obj, p, cycle):
+                if cycle:
+                    return p.text('dtype(...)')
+                if hasattr(obj, 'fields'):
+                    if obj.fields is None:
+                        p.text(repr(obj))
+                    else:
+                        p.begin_group(7, 'dtype([')
+                        for i, field in enumerate(obj.descr):
+                            if i > 0:
+                                p.text(',')
+                                p.breakable()
+                            p.pretty(field)
+                        p.end_group(7, '])')
+
+        c.PlainTextFormatter.float_precision = ''
+
+        Truncate large collections (lists, dicts, tuples, sets) to this size.
+
+        Set to 0 to disable truncation.
+        Default is 1000 but that floods a terminal.
+        c.PlainTextFormatter.max_seq_length = 100
+
+        Default value
+        c.PlainTextFormatter.max_width = 79
+
+        c.PlainTextFormatter.newline = '\n'
+
+        c.PlainTextFormatter.pprint = True
+
+        c.PlainTextFormatter.verbose = True
+        """
+        return repr(self.__doc__)
+
+    def __repr__(self):
+        return self._example_subclass()
 
 # ----------------------------------------------------------------------------
 # Completer(Configurable) configuration

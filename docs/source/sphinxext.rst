@@ -107,12 +107,13 @@ shell. These parameters are exposed as reStructured text options to the
 ``.. ipython`` directive, decorators for the source code directly, and
 configurable options that are given directly to Sphinx in a projects conf.py.
 
-For example, you can put comments in your IPython sessions, which are 
+For example, you can put comments in your IPython sessions, which are
 reported verbatim.  There are some handy "pseudo-decorators" that let you
 wrap a function with ``@doctest`` and utilize the :mod:`doctest` module on
 the output.
 
-The inputs are fed to an embedded IPython session and the outputs are inserted into your documentation automatically.
+The inputs are fed to an embedded IPython session and the outputs are
+inserted into your documentation automatically.
 
 If the output in your doc and the output from the embedded shell don't
 match on a :mod:`doctest` assertion, an error will occur.
@@ -154,12 +155,12 @@ directive.
 Because your inputs are run through a live interpreter, the random numbers
 that are generated on the fly will likely differ from run to run.
 
-Therefore the output IPython will compare the present run to will likely 
+Therefore the output IPython will compare the present run to will likely
 differ, raising errors and causing mayhem.
 
 How can we avoid this?
 
-Here we "seed" the random number generator for deterministic output, and 
+Here we "seed" the random number generator for deterministic output, and
 we suppress the seed line so it doesn't show up in the rendered output.:
 
 .. ipython::
@@ -195,7 +196,7 @@ Registering Your Own Doctest Handlers
 
 The Sphinx extension that provides support for embedded IPython code provides
 a pseudo-decorator `@doctest`, which treats the input/output block as a
-doctest, raising a :py:exc:`RuntimeError` during doc generation if 
+doctest, raising a :py:exc:`RuntimeError` during doc generation if
 the actual output (after running the input) does not match the expected output.
 
 An example usage is:
@@ -253,7 +254,10 @@ Handlers should have the following function signature::
 Handlers must be registered in the `doctests` dict at the end of the
 `custom_doctests` module.
 
-I quite honestly don't know how you're supposed to add handlers to the dict though.
+.. todo:: doctest handlers
+
+   I quite honestly don't know how you're supposed to add handlers
+   to the dict though.
 
 But here's the sauce::
 
@@ -293,7 +297,7 @@ Another demonstration of multi-line input and output.:
 
 
 Most of the "pseudo-decorators" can be used as options to IPython
-mode.  For example, to setup matplotlib's ``pylab`` but suppress the 
+mode.  For example, to setup matplotlib's ``pylab`` but suppress the
 output, you can set things up in the following way.
 
 When using the matplotlib ``use`` directive, it should
@@ -414,7 +418,7 @@ this page in the :ref:`Pseudo-Decorators` section.
 Writing Pure Python Code
 ------------------------
 
-Pure python code is supported by the optional argument `python`. In this 
+Pure python code is supported by the optional argument `python`. In this
 pure
 python syntax you do not include the output from the python interpreter. The
 following markup::
@@ -521,18 +525,15 @@ And persist across sessions.:
    print(square(3))
    print(square(-2))
 
-
 .. _pseudo-decorators:
 
 Supported Pseudo-Decorators
 ============================
-.. sooooo which ones are which? Please be more clear!
-
-.. Let's see if this works.
+TODO:
 
 .. rst:directive:: ipython
 
-   Create an IPython directive.   
+   Create an IPython directive.
 
    .. rst:directive:option:: doctest: Run a doctest on IPython code blocks in rst.
 
@@ -546,14 +547,20 @@ Supported Pseudo-Decorators
 
    .. rst:directive:option:: verbatim
 
+   .. rst:directive:option:: savefig: OUTFILE [IMAGE_OPTIONS]
+
 The URL you need to build off of that directive is here:
 
 http://www.sphinx-doc.org/en/master/usage/restructuredtext/domains.html#the-restructuredtext-domain
 
 Here are the supported decorators, and any optional arguments they
 take.  Some of the decorators can be used as options to the entire
-block (e.g. ``@verbatim`` and ``@suppress``), and some only apply to the
-line just below them (eg ``@savefig``).:
+block (e.g. `@verbatim` and `@suppress`), and some only apply to the
+line just below them (eg `@savefig`).:
+
+
+Decorators Glossary
+-------------------------
 
 .. glossary::
 
@@ -569,7 +576,7 @@ line just below them (eg ``@savefig``).:
        Also, can be applied to the entire ``.. ipython`` block as a
        directive option with ``:verbatim:``.
 
-   @savefig 
+   @savefig
       Save the target of the directive to :dfn:`outfile`.
       *I think I'm just gonna rewrite this entire paragraph.*
       Save the figure to the static directory and insert it into the
@@ -584,8 +591,19 @@ line just below them (eg ``@savefig``).:
       match. Also, can be applied to the entire ``.. ipython`` block as a
       directive option with ``:doctest:``.
 
-   .. option:: @savefig OUTFILE [IMAGE_OPTIONS]
+   @suppress
+      execute the ipython input block, but suppress the input and output
+      block from the rendered output.  Also, can be applied to the entire
+      ``..ipython`` block as a directive option with ``:suppress:``.
 
+   @okexcept
+      Actually is this a decorator?
+
+   @okwarning
+      What about this one?
+
+   @python
+      This can't be.
 
 See Also
 ---------
@@ -606,3 +624,6 @@ Automatically generated documentation
 .. automodule:: IPython.sphinxext.ipython_console_highlighting
 
 .. automodule:: IPython.sphinxext.custom_doctests
+
+
+.. Vim: set et:

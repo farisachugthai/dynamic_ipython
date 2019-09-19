@@ -1,125 +1,125 @@
 {
-    // See https://go.microsoft.com/fwlink/?LinkId=733558
-    // for the documentation about the tasks.json format
-    // idk what that is but here's the plaintext URL
-    // https://code.visualstudio.com/docs/editor/tasks#vscode
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "echo",
-            "type": "shell",
-            "command": "echo Hello"
-        },
-        {
-            "label": "conda",
-            "type": "shell",
-            "isBackground": true,
-            "windows": {
-                "command": "conda activate flask"
-            },
-            "linux": {
-                "command": "conda activate jupyterlab"
-            }
-        },
-        {
-            "label": "pipenv",
-            "type": "shell",
-            "isBackground": true,
-            "command": "pipenv shell"
-            "dependsOn": [
-                "pipenv"
-            ]
-        },
-        {
-            "label": "doesn't work sphinx",
-            "type": "process",
-            "command": "${config:python.pythonPath}",
-            "windows": {
-                "args": [
-                    "-m",
-                    "sphinx-build",
-                    "-b",
-                    "html",
-                    "-o",
-                    "docs\\build\\html",
-                    "docs\\source"
-                ]
-            },
-            "options": {
-                "shell": {
-                    "executable": "pwsh"
-                }
-            },
-            "linux": {
-                "args": [
-                    "-m",
-                    "sphinx-build",
-                    "-b",
-                    "html",
-                    "docs/source",
-                    "docs/build/html"
-                ]
-            },
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
-        },
-        {
-            "label": "autopep8 current file",
-            "type": "process",
-            "command": "${config:python.pythonPath}",
-            "args": [
-                "-m",
-                "autopep8",
-                "-i",
-                "${file}"
-            ]
-        },
-        {
-            "label": "YAPF current file",
-            "type": "process",
-            "command": "${config:python.pythonPath}",
-            "args": [
-                "-m",
-                "yapf",
-                "-i",
-                "${file}"
-            ]
-        },
-        {
-            "label": "sphinx-build",
-            "type": "shell",
-            "command": "sphinx-build",
-            "windows": {
-                "args": [
-                    "sphinx-build",
-                    "-n",
-                    "-b",
-                    "html",
-                    "-o",
-                    "docs\\build\\html",
-                    "docs\\source",
-                    "-d",
-                    "docs\\build\\doctrees"
-                ]
-            },
-            "options": {
-                "shell": {
-                    "executable": "pwsh",
-                    "args": ["-NoProfile", "-NoLogo", "-NoExit"]
-                }
-            },
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
-        },
-        {
-            "label": "npm",
-            "type": "npm",
-            "script": "install",
-            "path": "jupyter_conf/"
+  "tasks": [
+    {
+      "command": "echo Hello",
+      "label": "echo",
+      "type": "shell"
+    },
+    {
+      "isBackground": true,
+      "label": "conda",
+      "linux": {
+        "command": "conda activate jupyterlab"
+      },
+      "type": "shell",
+      "windows": {
+        "command": "conda activate flask"
+      }
+    },
+    {
+      "command": "pipenv shell",
+      "dependsOn": [
+        "pipenv"
+      ],
+      "isBackground": true,
+      "label": "pipenv",
+      "type": "shell"
+    },
+    {
+      "command": "${config:python.pythonPath}",
+      "group": {
+        "isDefault": true,
+        "kind": "build"
+      },
+      "label": "doesn't work sphinx",
+      "linux": {
+        "args": [
+          "-m",
+          "sphinx-build",
+          "-b",
+          "html",
+          "docs/source",
+          "docs/build/html"
+        ]
+      },
+      "options": {
+        "shell": {
+          "executable": "pwsh"
         }
-    ]
+      },
+      "type": "process",
+      "windows": {
+        "args": [
+          "-m",
+          "sphinx-build",
+          "-b",
+          "html",
+          "-o",
+          "docs\\build\\html",
+          "docs\\source"
+        ]
+      }
+    },
+    {
+      "args": [
+        "-m",
+        "autopep8",
+        "-i",
+        "${file}"
+      ],
+      "command": "${config:python.pythonPath}",
+      "label": "autopep8 current file",
+      "type": "process"
+    },
+    {
+      "args": [
+        "-m",
+        "yapf",
+        "-i",
+        "${file}"
+      ],
+      "command": "${config:python.pythonPath}",
+      "label": "YAPF current file",
+      "type": "process"
+    },
+    {
+      "command": "sphinx-build",
+      "group": {
+        "isDefault": true,
+        "kind": "build"
+      },
+      "label": "sphinx-build",
+      "options": {
+        "shell": {
+          "args": [
+            "-NoProfile",
+            "-NoLogo",
+            "-NoExit"
+          ],
+          "executable": "pwsh"
+        }
+      },
+      "type": "shell",
+      "windows": {
+        "args": [
+          "sphinx-build",
+          "-n",
+          "-b",
+          "html",
+          "-o",
+          "docs\\build\\html",
+          "docs\\source",
+          "-d",
+          "docs\\build\\doctrees"
+        ]
+      }
+    },
+    {
+      "label": "npm",
+      "path": "jupyter_conf/",
+      "script": "install",
+      "type": "npm"
+    }
+  ],
+  "version": "2.0.0"
 }
