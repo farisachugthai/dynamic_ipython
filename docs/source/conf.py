@@ -531,3 +531,4 @@ def setup(app):
     app.connect("source-read", rstjinja)
     app.add_lexer('ipythontb', IPythonTracebackLexer())
     app.add_lexer('ipython', IPyLexer())
+    app.add_js_file('copybutton.js')

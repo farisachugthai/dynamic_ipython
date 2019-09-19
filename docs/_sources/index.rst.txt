@@ -3,8 +3,6 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-.. _root-index:
-
 ============================================
 Welcome to Dynamic IPython's documentation!
 ============================================
@@ -121,7 +119,6 @@ Table of Contents
    :caption: API Docs
    :maxdepth: 2
    :titlesonly:
-   :hidden:
 
    IPython Shell Initialization <startup/index>
    General Utility Functions <util>

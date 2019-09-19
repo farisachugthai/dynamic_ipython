@@ -13,6 +13,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="_static/copybutton.js"></script>
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/sphinxext.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -128,7 +129,7 @@ number displayed in the source code.</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="n">x</span> <span class="o">=</span> <span class="mi">2</span>
 
 <span class="gp">In [2]: </span><span class="n">x</span><span class="o">**</span><span class="mi">3</span>
-<span class="go">8</span>
+<span class="gh">Out[2]: </span><span class="go">8</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -152,16 +153,16 @@ block from above.</p>
 <pre class="literal-block">In [3]: z = x*3   # x is recalled from previous block
 
 In [4]: z
-6
+Out[4]: 6
 
 In [5]: print(z)
 6
 
 In [6]: q = z[)   # this is a syntax error -- we trap ipy exceptions
-[0;36m  File [0;32m&quot;&lt;ipython-input-6-09b55afc8896&gt;&quot;[0;36m, line [0;32m1[0m
-[0;31m    q = z[)   # this is a syntax error -- we trap ipy exceptions[0m
-[0m          ^[0m
-[0;31mSyntaxError[0m[0;31m:[0m invalid syntax</pre>
+ File &quot;&lt;ipython-input-6-09b55afc8896&gt;&quot;, line 1
+    q = z[)   # this is a syntax error -- we trap ipy exceptions
+          ^
+SyntaxError: invalid syntax</pre>
 </div>
 <div class="section" id="multi-line-input">
 <h2>Multi-line input<a class="headerlink" href="#multi-line-input" title="Permalink to this headline">¶</a></h2>
@@ -356,18 +357,18 @@ page in <a class="reference internal" href="#pseudo-decorators"><span class="std
 <span class="gp">In [18]: </span><span class="n">hist</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">10000</span><span class="p">),</span> <span class="mi">100</span><span class="p">);</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="_images/plot_simple.png"><img alt="_images/plot_simple.png" src="_images/plot_simple.png" style="width: 4in;" /></a>
-<a class="reference internal image-reference" href="_images/hist_simple.png"><img alt="_images/hist_simple.png" src="_images/hist_simple.png" style="width: 4in;" /></a>
+<a class="reference internal image-reference" href=".._imagesplot_simple.png"><img alt=".._imagesplot_simple.png" src=".._imagesplot_simple.png" style="width: 4in;" /></a>
+<a class="reference internal image-reference" href=".._imageshist_simple.png"><img alt=".._imageshist_simple.png" src=".._imageshist_simple.png" style="width: 4in;" /></a>
 <p>In a subsequent session, we can update the current figure with some
 text, and then resave.:</p>
 <pre class="literal-block">In [19]: ylabel('number')
-Text(38.097222222222214, 0.5, 'number')
+Out[19]: Text(39.597222222222214, 0.5, 'number')
 
 In [20]: title('normal distribution')
-Text(0.5, 1, 'normal distribution')
+Out[20]: Text(0.5, 1, 'normal distribution')
 
 In [21]: grid(True)</pre>
-<a class="reference internal image-reference" href="_images/hist_with_text.png"><img alt="_images/hist_with_text.png" src="_images/hist_with_text.png" style="width: 4in;" /></a>
+<a class="reference internal image-reference" href=".._imageshist_with_text.png"><img alt=".._imageshist_with_text.png" src=".._imageshist_with_text.png" style="width: 4in;" /></a>
 <p>You can also have function definitions included in the source.</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [22]: </span><span class="k">def</span> <span class="nf">square</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 <span class="gp">   ....: </span>    <span class="sd">&quot;&quot;&quot;</span>
@@ -382,10 +383,10 @@ In [21]: grid(True)</pre>
 </div>
 <p>Then call it from a subsequent section.</p>
 <pre class="literal-block">In [23]: square(3)
-9
+Out[23]: 9
 
 In [24]: square(-2)
-4</pre>
+Out[24]: 4</pre>
 <p><strong>Why does the sentence below appear no less than 3 times in this doc?</strong></p>
 <p>For more information on the <code class="docutils literal notranslate"><span class="pre">&#64;doctest</span></code> decorator, please refer to the end of
 this page in the <a class="reference internal" href="#pseudo-decorators"><span class="std std-ref">Supported Pseudo-Decorators</span></a> section.</p>
@@ -413,7 +414,7 @@ following markup:</p>
 <span class="gp">In [27]: </span><span class="n">foo</span> <span class="o">=</span> <span class="mi">2</span>
 
 <span class="gp">In [28]: </span><span class="n">foo</span><span class="o">**</span><span class="mi">2</span>
-<span class="go">4</span>
+<span class="gh">Out[28]: </span><span class="go">4</span>
 </pre></div>
 </div>
 <p>We can even plot from python, using the <code class="xref py py-obj docutils literal notranslate"><span class="pre">&#64;savefig</span></code> decorator, as well as
@@ -421,17 +422,17 @@ suppress output with a semicolon.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [29]: </span><span class="n">plot</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]);</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="_images/plot_simple_python.png"><img alt="_images/plot_simple_python.png" src="_images/plot_simple_python.png" style="width: 4in;" /></a>
+<a class="reference internal image-reference" href=".._imagesplot_simple_python.png"><img alt=".._imagesplot_simple_python.png" src=".._imagesplot_simple_python.png" style="width: 4in;" /></a>
 <p>For more information on <code class="xref py py-obj docutils literal notranslate"><span class="pre">&#64;savefig</span></code> decorator, please refer to the end of
 this page in Pseudo-Decorators section.</p>
 <p>Similarly, <a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stderr" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stderr</span></code></a> is inserted.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [30]: </span><span class="n">foo</span> <span class="o">=</span> <span class="s1">&#39;bar&#39;</span>
 
 <span class="gp">In [31]: </span><span class="n">foo</span><span class="p">[)</span>
-<span class="go">[0;36m  File [0;32m&quot;&lt;ipython-input-31-edde7a2425af&gt;&quot;[0;36m, line [0;32m1[0m</span>
-<span class="go">[0;31m    foo[)[0m</span>
-<span class="go">[0m        ^[0m</span>
-<span class="go">[0;31mSyntaxError[0m[0;31m:[0m invalid syntax</span>
+<span class="gt">  File</span><span class="nn"> &quot;&lt;ipython-input-31-edde7a2425af&gt;&quot;</span><span class="gt">, line </span><span class="mi">1</span>
+    <span class="n">foo</span><span class="p">[)</span>
+        <span class="o">^</span>
+<span class="ne">SyntaxError</span>: invalid syntax
 </pre></div>
 </div>
 </div>
@@ -516,7 +517,7 @@ generated at doc build time, and raise errors if they don’t
 match. Also, can be applied to the entire <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">ipython</span></code> block as a
 directive option with <code class="docutils literal notranslate"><span class="pre">:doctest:</span></code>.</p>
 </dd>
-<dt id="term-0">&#64;suppress</dt><dd><p>execute the ipython input block, but suppress the input and output
+<dt id="term-9">&#64;suppress</dt><dd><p>execute the ipython input block, but suppress the input and output
 block from the rendered output.  Also, can be applied to the entire
 <code class="docutils literal notranslate"><span class="pre">..ipython</span></code> block as a directive option with <code class="docutils literal notranslate"><span class="pre">:suppress:</span></code>.</p>
 </dd>
@@ -546,18 +547,18 @@ like an interactive ipython section.</p>
 <p>Here is an example of how the IPython directive can
 <strong>run</strong> python code, at build time.</p>
 <pre class="literal-block">In [1]: 1+1
-2
+Out[1]: 2
 
 In [2]: import datetime
    ...: datetime.datetime.now()
    ...: 
-datetime.datetime(2019, 9, 19, 16, 33, 9, 959384)</pre>
+Out[2]: datetime.datetime(2019, 9, 19, 16, 49, 41, 654307)</pre>
 <p>It supports IPython construct that plain
 Python does not understand (like magics):</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [3]: </span><span class="kn">import</span> <span class="nn">time</span>
 
 <span class="gp">In [4]: </span><span class="o">%</span><span class="k">timeit</span> time.sleep(0.05)
-<span class="go">50.6 ms +- 78.2 us per loop (mean +- std. dev. of 7 runs, 10 loops each)</span>
+<span class="go">61.6 ms +- 1.07 ms per loop (mean +- std. dev. of 7 runs, 10 loops each)</span>
 </pre></div>
 </div>
 <p>This will also support top-level async when using IPython 7.0+</p>
@@ -582,12 +583,12 @@ Python does not understand (like magics):</p>
 <p>If the current section raises an exception, you can add the <code class="docutils literal notranslate"><span class="pre">:okexcept:</span></code> flag
 to the current block, otherwise the build will fail.</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [8]: </span><span class="mi">1</span><span class="o">/</span><span class="mi">0</span>
-<span class="go">[0;31m---------------------------------------------------------------------------[0m</span>
-<span class="go">[0;31mZeroDivisionError[0m                         Traceback (most recent call last)</span>
-<span class="go">[0;32m&lt;ipython-input-8-9e1622b385b6&gt;[0m in [0;36m&lt;module&gt;[0;34m[0m</span>
-<span class="go">[0;32m----&gt; 1[0;31m [0;36m1[0m[0;34m/[0m[0;36m0[0m[0;34m[0m[0;34m[0m[0m</span>
-<span class="go">[0m</span>
-<span class="go">[0;31mZeroDivisionError[0m: division by zero</span>
+<span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ZeroDivisionError</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
+<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">8</span><span class="o">-</span><span class="mf">9e1622</span><span class="n">b385b6</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="mi">1</span><span class="o">/</span><span class="mi">0</span>
+
+<span class="ne">ZeroDivisionError</span>: division by zero
 </pre></div>
 </div>
 <div class="section" id="ipython-sphinx-directive-module">
@@ -668,6 +669,9 @@ one sets the backend to <a class="reference external" href="https://docs.python.
 </div>
 <p>See <a class="reference external" href="http://matplotlib.org/sampledoc/ipython_directive.html">http://matplotlib.org/sampledoc/ipython_directive.html</a> for additional
 documentation.</p>
+</div>
+<div class="section" id="id4">
+<h3>Pseudo-Decorators<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
 <p>Note: Only one decorator is supported per input. If more than one decorator
 is specified, then only the last one is used.</p>
 <p>In addition to the Pseudo-Decorators/options described at the above link,
@@ -683,6 +687,14 @@ or :okwarning: options:</p>
     In [2]: # raise warning.
 </pre></div>
 </div>
+</div>
+<div class="section" id="to-do">
+<h3>To Do<a class="headerlink" href="#to-do" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p>Turn the ad-hoc test() function into a real test suite.</p></li>
+<li><p>Break up ipython-specific functionality from matplotlib stuff into better
+separated code.</p></li>
+</ul>
 <dl class="function">
 <dt id="IPython.sphinxext.ipython_directive.block_parser">
 <code class="sig-name descname">block_parser</code><span class="sig-paren">(</span><em class="sig-param">part</em>, <em class="sig-param">rgxin</em>, <em class="sig-param">rgxout</em>, <em class="sig-param">fmtin</em>, <em class="sig-param">fmtout</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/IPython/sphinxext/ipython_directive.html#block_parser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.block_parser" title="Permalink to this definition">¶</a></dt>
@@ -927,6 +939,23 @@ containing the expected output from the IPython shell.</p>
 <li class="toctree-l2"><a class="reference internal" href="dev.html#generating-css">Generating CSS</a></li>
 </ul>
 </li>
+</ul>
+<p class="caption"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="startup/index.html">IPython Shell Initialization</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="startup/rehashx.html">01_rehashx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="startup/easy_import.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">04_easy_import</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="startup/ipython-logger.html">Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="startup/help_helpers.html">06_Help_Helpers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="startup/aliases.html">System Aliases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="startup/41_numpy.html"><code class="docutils literal notranslate"><span class="pre">41_numpy_init</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="startup/42_pandas.html"><code class="docutils literal notranslate"><span class="pre">42_pandas_init</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="startup/sysexcept.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">50_sysexception</span></code> module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">General Utility Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jupyter.html">Jupyter Suite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extensions.html">Extensions</a></li>
 </ul>
 
 

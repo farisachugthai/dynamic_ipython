@@ -7,9 +7,6 @@ Pandas Initialization
 
 :URL: https://realpython.com/python-pandas-tricks/#1-configure-options-settings-at-interpreter-startup
 
-.. highlight:: ipython
-    :linenothreshold: 5
-
 As of version 0.25, there's currently a large number of options that can
 be set to modify Pandas' behavior.
 
@@ -114,10 +111,10 @@ def pandas_init():
         Don't set `start.options['show_dimensions'] to ``False``.
         ``'show_dimensions'`` means show the size of the `pd.DataFrame` object.
 
-        ``truncate`` indicates to only display it when the DataFrame is...
-        well truncated. [1]_
+    ``truncate`` indicates to only display it when the DataFrame is...
+    well truncated. [1]_
 
-        .. [1]https://pandas.pydata.org/pandas-docs/stable/user-guide/options.html
+    .. [1] https://pandas.pydata.org/pandas-docs/stable/user-guide/options.html
 
     """
     options = {

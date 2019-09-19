@@ -40,14 +40,15 @@ try:
 except ImportError as e:
     warnings.warn(e)
 
+import default_profile
+
 
 def setup_test_logging():
     """Set up some logging so we can see what's happening."""
     logger = logging.getLogger(name=__name__)
     test_handler = logging.StreamHandler(stream=sys.stdout)
     test_formatter = logging.Formatter(
-        fmt='%(created)f : %(module)s : %(levelname)s : %(message)s'
-    )
+        fmt='%(created)f : %(module)s : %(levelname)s : %(message)s')
     test_handler.setFormatter(test_formatter)
     test_handler.setLevel(logging.WARNING)
     logger.setLevel(logging.WARNING)

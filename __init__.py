@@ -29,10 +29,12 @@ indicating to me none of these lines run. Why is that?
 
 """
 import logging
-import sys
+import os
 from os.path import abspath, dirname, join
+import pkgutil
 from pkg_resources import declare_namespace
 from setuptools import find_packages, find_namespace_packages
+import sys
 
 import default_profile
 
@@ -54,3 +56,6 @@ logging.debug(
 logging.debug('Sys.path before:' + str(sys.path))
 sys.path = sys.path + [REPO_ROOT]
 logging.debug('Sys path after:' + str(sys.path))
+
+if hasattr(locals(), '__path__'):
+    ___path__ = pkgutil.extend_path(__path__, __name__)

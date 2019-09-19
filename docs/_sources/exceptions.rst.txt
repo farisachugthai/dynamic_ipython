@@ -132,7 +132,7 @@ See Also
 :class:`IPython.core.ultratb.FormattedTB` : :class:`IPython.utils.colorable.Colorable`
     Displays all accepted keyword arguments.
     I don't know if I specified the type right but if you follow the
-    :abbrev:`MRU`...
+    :abbr:`MRU`...
 
 
 .. _exception-examples:

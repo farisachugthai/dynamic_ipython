@@ -1,3 +1,5 @@
+.. _extensions:
+
 ===========
 Extensions
 ===========
@@ -23,14 +25,6 @@ repository.
 
 
 .. automodule:: extensions.load_ext
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-
-.. magic:: pd_csv
-
-.. automodule:: extensions.pd_csv
     :members:
     :undoc-members:
     :show-inheritance:
