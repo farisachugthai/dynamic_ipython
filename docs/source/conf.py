@@ -54,9 +54,6 @@ ROOT = Path(SOURCE).parent.parent
 
 sys.path.insert(0, ROOT.__fspath__())
 
-default = ROOT.joinpath('default_profile')
-sys.path.insert(0, default)
-
 DOCS_LOGGER = logging.getLogger('docs.source').getChild('conf')
 DOCS_LOGGER.setLevel(level=logging.DEBUG)
 CONF_HANDLER = logging.StreamHandler(stream=sys.stdout)

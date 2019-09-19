@@ -53,12 +53,12 @@
 <span class="sd">===============</span>
 <span class="sd">IPython Aliases</span>
 <span class="sd">===============</span>
+<span class="sd">.. module:: 20_aliases</span>
+<span class="sd">    :synopsis: Set up additional alias managers and add user_aliases to the namespace.</span>
 
 <span class="sd">Refactoring TODO:</span>
 
-<span class="sd">Move the aliases out of the func linux_specific_aliases.</span>
-
-<span class="sd">Create a class with instance attributes for sys.platform and uh I don&#39;t know.</span>
+<span class="sd">Create a class with instance attributes for `sys.platform`.</span>
 <span class="sd">Break linux up like so::</span>
 
 <span class="sd">    class AliasOSAgnostic:</span>
@@ -124,7 +124,7 @@
         <span class="k">return</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="linux_specific_aliases"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.linux_specific_aliases">[docs]</a><span class="k">def</span> <span class="nf">linux_specific_aliases</span><span class="p">():</span>
+<div class="viewcode-block" id="LinuxAliases"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.LinuxAliases">[docs]</a><span class="k">class</span> <span class="nc">LinuxAliases</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Add Linux specific aliases.</span>
 
 <span class="sd">    Aliases that have either:</span>
@@ -148,59 +148,83 @@
 <span class="sd">            self.shell.magics_manager.register_function(caller, magic_kind=&#39;line&#39;,</span>
 <span class="sd">            magic_name=name)</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    None</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    _ip.user_aliases : list of (&#39;alias&#39;, &#39;system command&#39;) tuples</span>
-
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">_user_aliases</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="p">(</span><span class="s1">&#39;ag&#39;</span><span class="p">,</span> <span class="s1">&#39;ag --hidden --color --no-column %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;cs&#39;</span><span class="p">,</span> <span class="s1">&#39;cd </span><span class="si">%s</span><span class="s1"> &amp;&amp; ls -F --color=always </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;cp&#39;</span><span class="p">,</span> <span class="s1">&#39;cp -iv %l&#39;</span><span class="p">),</span>  <span class="c1"># cp mv mkdir and rmdir are all overridden</span>
-        <span class="p">(</span><span class="s1">&#39;dus&#39;</span><span class="p">,</span> <span class="s1">&#39;du -d 1 -ha %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;echo&#39;</span><span class="p">,</span> <span class="s1">&#39;echo -e %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span>
-            <span class="s1">&#39;gpip&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;export PIP_REQUIRE_VIRTUALENV=0; python -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 &gt; /dev/null&#39;</span>
-        <span class="p">),</span>
-        <span class="p">(</span>
-            <span class="s1">&#39;gpip2&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;export PIP_REQUIRE_VIRTUALENV=0; python2 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 &gt; /dev/null&#39;</span>
-        <span class="p">),</span>
-        <span class="p">(</span>
-            <span class="s1">&#39;gpip3&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;export PIP_REQUIRE_VIRTUALENV=0; python3 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 &gt; /dev/null&#39;</span>
-        <span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;head&#39;</span><span class="p">,</span> <span class="s1">&#39;head -n 30 %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;la&#39;</span><span class="p">,</span> <span class="s1">&#39;ls -AF --color=always %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;l&#39;</span><span class="p">,</span> <span class="s1">&#39;ls -CF --color=always %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;ll&#39;</span><span class="p">,</span> <span class="s1">&#39;ls -AlF --color=always %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;ls&#39;</span><span class="p">,</span> <span class="s1">&#39;ls -F --color=always %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;lt&#39;</span><span class="p">,</span> <span class="s1">&#39;ls -Altcr --color=always %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;mk&#39;</span><span class="p">,</span> <span class="s1">&#39;mkdir -pv %l &amp;&amp; cd %l&#39;</span><span class="p">),</span>  <span class="c1"># check if this works. only mkdir</span>
-        <span class="p">(</span><span class="s1">&#39;mkdir&#39;</span><span class="p">,</span> <span class="s1">&#39;mkdir -pv %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;mv&#39;</span><span class="p">,</span> <span class="s1">&#39;mv -iv %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;nman&#39;</span><span class="p">,</span> <span class="s1">&#39;nvim -c &quot;Man %l&quot; -c&quot;wincmd T&quot;&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="s1">&#39;fc -s&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;redo&#39;</span><span class="p">,</span> <span class="s1">&#39;fc -s&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;rm&#39;</span><span class="p">,</span> <span class="s1">&#39;rm -v %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;rmdir&#39;</span><span class="p">,</span> <span class="s1">&#39;rmdir -v %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span>
-            <span class="s1">&#39;default_profile&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;cd ~/projects/dotfiles/unix/.ipython/default_profile&#39;</span>
-        <span class="p">),</span>
-        <span class="p">(</span>
-            <span class="s1">&#39;startup&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;cd ~/projects/dotfiles/unix/.ipython/default_profile/startup&#39;</span>
-        <span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;tail&#39;</span><span class="p">,</span> <span class="s1">&#39;tail -n 30 %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;tre&#39;</span><span class="p">,</span> <span class="s1">&#39;tree -ashFC -I .git -I __pycache__ --filelimit 25&#39;</span><span class="p">),</span>
-    <span class="p">]</span>
-    <span class="k">return</span> <span class="n">_user_aliases</span></div>
+
+<div class="viewcode-block" id="LinuxAliases.__init__"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.LinuxAliases.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The WindowsAliases implementation of this is odd so maybe branch off.&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="LinuxAliases.busybox"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.LinuxAliases.busybox">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">busybox</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Commands that are available on any Unix-ish system.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        _ip.user_aliases : list of (&#39;alias&#39;, &#39;system command&#39;) tuples</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">_user_aliases</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="s1">&#39;cs&#39;</span><span class="p">,</span> <span class="s1">&#39;cd </span><span class="si">%s</span><span class="s1"> &amp;&amp; ls -F --color=always </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;cp&#39;</span><span class="p">,</span> <span class="s1">&#39;cp -iv %l&#39;</span><span class="p">),</span>  <span class="c1"># cp mv mkdir and rmdir are all overridden</span>
+            <span class="p">(</span><span class="s1">&#39;dus&#39;</span><span class="p">,</span> <span class="s1">&#39;du -d 1 -ha %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;echo&#39;</span><span class="p">,</span> <span class="s1">&#39;echo -e %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s1">&#39;gpip&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;export PIP_REQUIRE_VIRTUALENV=0; python -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 &gt; /dev/null&#39;</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s1">&#39;gpip2&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;export PIP_REQUIRE_VIRTUALENV=0; python2 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 &gt; /dev/null&#39;</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s1">&#39;gpip3&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;export PIP_REQUIRE_VIRTUALENV=0; python3 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 &gt; /dev/null&#39;</span>
+            <span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;head&#39;</span><span class="p">,</span> <span class="s1">&#39;head -n 30 %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;la&#39;</span><span class="p">,</span> <span class="s1">&#39;ls -AF --color=always %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;l&#39;</span><span class="p">,</span> <span class="s1">&#39;ls -CF --color=always %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;ll&#39;</span><span class="p">,</span> <span class="s1">&#39;ls -AlF --color=always %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;ls&#39;</span><span class="p">,</span> <span class="s1">&#39;ls -F --color=always %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;lt&#39;</span><span class="p">,</span> <span class="s1">&#39;ls -Altcr --color=always %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;mk&#39;</span><span class="p">,</span> <span class="s1">&#39;mkdir -pv %l &amp;&amp; cd %l&#39;</span><span class="p">),</span>  <span class="c1"># check if this works. only mkdir</span>
+            <span class="p">(</span><span class="s1">&#39;mkdir&#39;</span><span class="p">,</span> <span class="s1">&#39;mkdir -pv %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;mv&#39;</span><span class="p">,</span> <span class="s1">&#39;mv -iv %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;nman&#39;</span><span class="p">,</span> <span class="s1">&#39;nvim -c &quot;Man %l&quot; -c&quot;wincmd T&quot;&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="s1">&#39;fc -s&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;redo&#39;</span><span class="p">,</span> <span class="s1">&#39;fc -s&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;rm&#39;</span><span class="p">,</span> <span class="s1">&#39;rm -v %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;rmdir&#39;</span><span class="p">,</span> <span class="s1">&#39;rmdir -v %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s1">&#39;default_profile&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;cd ~/projects/dotfiles/unix/.ipython/default_profile&#39;</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s1">&#39;startup&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;cd ~/projects/dotfiles/unix/.ipython/default_profile/startup&#39;</span>
+            <span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;tail&#39;</span><span class="p">,</span> <span class="s1">&#39;tail -n 30 %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;tre&#39;</span><span class="p">,</span> <span class="s1">&#39;tree -ashFC -I .git -I __pycache__ --filelimit 25&#39;</span><span class="p">),</span>
+        <span class="p">]</span>
+        <span class="k">return</span> <span class="n">_user_aliases</span></div>
+
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generator</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_generator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">itm</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">yield</span> <span class="n">itm</span>
+
+<div class="viewcode-block" id="LinuxAliases.thirdparty"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.LinuxAliases.thirdparty">[docs]</a>    <span class="k">def</span> <span class="nf">thirdparty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Contrasted to busybox, these require external installation.</span>
+
+<span class="sd">        As a result it&#39;ll be of value to check that they&#39;re even in the namespace.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="p">(</span><span class="s1">&#39;ag&#39;</span><span class="p">,</span> <span class="s1">&#39;ag --hidden --color --no-column %l&#39;</span><span class="p">),</span></div></div>
 
 
 <div class="viewcode-block" id="common_aliases"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.common_aliases">[docs]</a><span class="k">def</span> <span class="nf">common_aliases</span><span class="p">():</span>
@@ -326,8 +350,9 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        shell : external command, optional</span>
-<span class="sd">            The command used to invoke the sytem shell. Either</span>
-<span class="sd">            :command:`cmd`, :command:`powershell` or :command:`pwsh`.</span>
+<span class="sd">            The command used to invoke the system shell. If none is provided</span>
+<span class="sd">            during instantiation, the function will set :attr:`WindowsAliases.shell`</span>
+<span class="sd">            to the |ip| instance.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">shell</span> <span class="ow">or</span> <span class="n">get_ipython</span><span class="p">()</span></div>
@@ -463,7 +488,7 @@
         <span class="k">return</span> <span class="n">_ip</span><span class="o">.</span><span class="n">user_aliases</span></div>
 
 <div class="viewcode-block" id="WindowsAliases.user_shell"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.WindowsAliases.user_shell">[docs]</a>    <span class="k">def</span> <span class="nf">user_shell</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Determine the user&#39;s shell.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Determine the user&#39;s shell. Checks :envvar:`SHELL` and :envvar:`COMSPEC`.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span>
         <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;SHELL&#39;</span><span class="p">):</span>
@@ -516,47 +541,6 @@
 
 <span class="sd">    Planning on coming up with a new way of introducing the aliases into the user namespace.</span>
 
-<span class="sd">    Here&#39;s an interesting problem I ran into.</span>
-
-<span class="sd">    .. ipython::</span>
-<span class="sd">        :verbatim:</span>
-
-<span class="sd">        from traitlets.traitlets import List</span>
-<span class="sd">        user_aliases = [  # let&#39;s just fill this with some filler text</span>
-<span class="sd">            (&#39;ls&#39;, &#39;ls&#39;)</span>
-<span class="sd">        ]</span>
-<span class="sd">        # Then tried running what would be the equivalent of running</span>
-<span class="sd">        # %config AliasManager.user_aliases = user_aliases</span>
-
-<span class="sd">    .. ipython::</span>
-<span class="sd">        :verbatim:</span>
-
-<span class="sd">        ~/.ipython/default_profile/startup/20_aliases.py in main()</span>
-<span class="sd">            461</span>
-<span class="sd">            462     user_aliases_traitlets = List(user_aliases)</span>
-<span class="sd">        --&gt; 463     _ip.run_line_magic(&#39;config&#39;, AliasManager.user_aliases+user_aliases_traitlets)</span>
-<span class="sd">            464</span>
-<span class="sd">            465</span>
-
-<span class="sd">        TypeError: unsupported operand type(s) for +: &#39;List&#39; and &#39;List&#39;</span>
-
-<span class="sd">    Wait what? A :class:`traitlets.traitlets.List` can&#39;t be added with itself?</span>
-<span class="sd">    If that&#39;s true then that&#39;s definitely a bug right?</span>
-
-<span class="sd">    Aug 31, 2019:</span>
-
-<span class="sd">    So now I don&#39;t know if it&#39;s a bug but it&#39;s certainly odd behavior.</span>
-<span class="sd">    The output of ``print(dir(traitlets.traitlets.List))`` contains</span>
-<span class="sd">    ``__set__``. What? No ``__add__`` or anything?</span>
-
-<span class="sd">    And none of the methods looked like they intended on allowing multiple</span>
-<span class="sd">    assignments.</span>
-
-<span class="sd">    Whoa so is the :class:`traitlets.traitlets.List` supposed to be used</span>
-<span class="sd">    as an immutable set?</span>
-
-<span class="sd">    Gotta understand what I&#39; saying when I say that that&#39;s confusing.</span>
-
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_ip</span><span class="p">,</span> <span class="s1">&#39;magics_manager&#39;</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Are you running in IPython?&#39;</span><span class="p">)</span>
@@ -565,7 +549,7 @@
     <span class="n">machine</span> <span class="o">=</span> <span class="n">Platform</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">machine</span><span class="o">.</span><span class="n">is_linux</span><span class="p">:</span>
-        <span class="n">user_aliases</span> <span class="o">+=</span> <span class="n">linux_specific_aliases</span><span class="p">()</span>
+        <span class="n">user_aliases</span> <span class="o">+=</span> <span class="n">LinuxAliases</span><span class="p">()</span><span class="o">.</span><span class="n">busybox</span><span class="p">()</span>
     <span class="k">elif</span> <span class="n">machine</span><span class="o">.</span><span class="n">is_win</span><span class="p">:</span>
         <span class="c1"># finish the shell class in default_profile.util.machine</span>
         <span class="c1"># then we can create a shell class that determines if</span>
@@ -576,7 +560,9 @@
 
     <span class="n">_ip</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="n">user_aliases</span>
     <span class="c1"># Apparently the big part i was missing was rerunning the init_aliases method</span>
-    <span class="n">_ip</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">init_aliases</span><span class="p">()</span></div>
+    <span class="n">_ip</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">init_aliases</span><span class="p">()</span>
+
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Number of aliases is: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">user_aliases</span><span class="p">)</span></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
@@ -584,9 +570,6 @@
 
     <span class="k">if</span> <span class="n">_ip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">main</span><span class="p">()</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
-            <span class="s1">&#39;Number of aliases is: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">_ip</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s1">&#39;alias&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
-        <span class="p">)</span>
 </pre></div>
 
           </div>
@@ -615,16 +598,52 @@
 
 <div>&nbsp;</div>
 <div id="sidebartoc">
-    <p class="caption"><span class="caption-text">Tutorial</span></p>
+<p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../ipython_keybindings.html">Keybindings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../custom_magics.html">Custom Magics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../exceptions.html">Customized Exceptions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../sphinxext.html">IPython Sphinx Directive</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev.html">Developers Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ipython_keybindings.html">Keybindings</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../ipython_keybindings.html#key-bindings">Key Bindings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../ipython_keybindings.html#interactively-binding-keys">Interactively Binding Keys</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../ipython_keybindings.html#official-ipython-documentation">Official IPython Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../ipython_keybindings.html#side-effects">Side Effects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../ipython_keybindings.html#source-code-for-creating-ipython-shortcuts">Source code for creating IPython shortcuts</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../custom_magics.html">Custom Magics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../custom_magics.html#registering-the-magic">Registering the magic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../custom_magics.html#complete-example">Complete Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../custom_magics.html#creating-ipython-extensions">Creating IPython Extensions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../exceptions.html">Customized Exceptions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../exceptions.html#debugging">Debugging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../exceptions.html#help-on-module-ipython-core-ultratb-in-ipython-core">Help on module <code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython.core.ultratb</span></code> in <code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython.core</span></code>:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../exceptions.html#verbosetb"><strong>VerboseTB</strong></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../exceptions.html#sys-excepthook-exceptionhook"><code class="xref py py-func docutils literal notranslate"><span class="pre">sys.excepthook()</span></code> — ExceptionHook</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sphinxext.html">IPython Sphinx Directive</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../sphinxext.html#persisting-the-session-across-ipython-directive-blocks">Persisting the session across IPython directive blocks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../sphinxext.html#multi-line-input">Multi-line input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../sphinxext.html#testing-directive-outputs">Testing directive outputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../sphinxext.html#handling-comments">Handling Comments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../sphinxext.html#splitting-python-statements-across-lines">Splitting Python statements across lines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../sphinxext.html#supported-pseudo-decorators">Supported Pseudo-Decorators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../sphinxext.html#module-IPython.sphinxext.ipython_directive">Automatically generated documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev.html">Developers Notes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../dev.html#installing">Installing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../dev.html#building-documentation">Building Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../dev.html#generating-css">Generating CSS</a></li>
+</ul>
+</li>
 </ul>
 
+
+
 </div>
+
+
         </div>
       </div>
       <div class="clearer"></div>
@@ -643,7 +662,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Sep 16, 2019.
+      Last updated on Sep 19, 2019.
     </div>
   </body>
 </html>

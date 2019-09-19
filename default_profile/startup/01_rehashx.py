@@ -1,14 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
+==========
+`%rehashx`
+==========
+.. module:: 01_rehashx
+    :synopsis: Add all executables to $PATH.
+
 This is an incredible little gem that's hugely useful for
 making IPython work as a more versatile system shell.
 
 For the future we should consider moving all imports from this package out and
 keeping only "*Mission Critical*" type code in the first file.
 
-The code that's more important than anything should execute regardless of whether
-someone has ``pip install``-ed it.
+The code that's more important than anything should execute regardless
+of whether someone has ``pip install``-ed it.
 
 """
 import logging
@@ -22,7 +28,8 @@ try:
     from default_profile.util.timer import timer
 except Exception:
     timer = None
-    # is this a way to "None" a decorator?
+    # is this a way to "None" a decorator? Nope!
+
 
 def blacklisted_aliases(shell=None):
     """Blacklist certain aliases.
@@ -49,14 +56,12 @@ def blacklisted_aliases(shell=None):
             pass
 
 
-@timer
 def main(shell=None):
     """Add all executables on the user's :envvar:`PATH` into the IPython ns."""
     shell.run_line_magic('rehashx', '')
 
 
 if __name__ == "__main__":
-
     _ip = get_ipython()
     if _ip:
         main(_ip)

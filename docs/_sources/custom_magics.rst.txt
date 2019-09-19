@@ -9,8 +9,13 @@ The general flow of creating your own magic in a file breaks down to a few
 simple steps.
 
 #) Creating a function or class with some desired functionality.
-#) Wrapping it in decorators so that the magic accepts the shell as an argument
-   upon initialization.
+
+#) Decorating the function to associate the currently running IPython instance
+   with it.
+
+    #) A subpoint of this is adding more decorators to handle
+       :ref:`magic-arguments`.
+
 #) Registering the magic with the IPython shell.
 
 
@@ -133,6 +138,7 @@ cases.
 
 However in a testing situation this could prove beneficial.
 
+.. _magic-arguments:
 
 Alternative Method of Defining Magics with Arguments
 ----------------------------------------------------
@@ -149,9 +155,7 @@ New magic functions can be defined like so::
     @argument('-o', '--option', help='An optional argument.')
     @argument('arg', type=int, help='An integer positional argument.')
     def magic_cool(self, arg):
-        """ A really cool magic command.
-
-    """
+        """A really cool magic command."""
         args = parse_argstring(magic_cool, arg)
 
 The `@magic_arguments` decorator marks the function as having
@@ -400,13 +404,11 @@ Visualization 1st ed.pdf"*:
    which is called when the extension is unloaded). This instance can be
    used to register new magic commands, access the user namespace, execute
    code, and so on.
+
    This loading function is called when the extension is loaded, which
    happens when the command is executed.
 
-So how can we load the IPython extension while running interactively?
-
-.. ipython::
-   :verbatim:
+So how can we load the IPython extension while running interactively?:
 
    %load_ext  # or
    %reload_ext magic

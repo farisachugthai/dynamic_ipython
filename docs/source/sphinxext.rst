@@ -3,18 +3,45 @@
 ========================
 IPython Sphinx Directive
 ========================
+.. highlight:: ipython
 
-.. note::
+The IPython directive is a stateful shell that can be used in reStructured
+text files.
 
-   The IPython Sphinx Directive is in 'beta' and currently under
-   active development. Improvements to the code or documentation are welcome!
+The Sphinx documentation project, for those who are unfamiliar, can be used
+to automatically extract docstrings from valid python code and
+generate HTML.
 
-The IPython directive is a stateful shell that can be useful for parsing
-valid IPython code, auto-generating documentation based on the docstrings in
-source code, and embedding plots based on live data in Sphinx documents.
+The IPython directive builds on the functionality that Sphinx
+provides. This allows a user to, for example, copy and paste an 
+interactivevsession in an .rst document that can be useful for parsing
+and validating IPython code, auto-generating documentation based on the 
+docstrings in source code, and embedding plots based on live data in 
+Sphinx documents.
 
-The IPython Sphinx extension can correctly parse standard IPython prompts, and
-extracts the input and output lines to generate HTML.
+Specifically, the IPython Sphinx extension correctly parses standard
+IPython prompts, and extracts the input and output lines to generate HTML.
+
+.. rst:directive:: ipython
+
+   Create an IPython directive.
+
+   .. rst:directive:option:: doctest: Run a doctest on IPython code blocks in rst.
+
+   .. rst:directive:option:: python: Used to indicate that the relevant code
+                                     block does not have IPython prompts.
+
+   .. rst:directive:option:: okexcept: Allow the code block to raise an exception.
+
+   .. rst:directive:option:: okwarning: Allow the code block to emit an warning.
+
+   .. rst:directive:option:: suppress: Silence any warnings or expected errors.
+
+   .. rst:directive:option:: verbatim: A noop that allows for any text to be
+                                       syntax highlighted as valid IPython code.
+
+   .. rst:directive:option:: savefig: OUTFILE [IMAGE_OPTIONS]
+
 These prompts will be renumbered starting at ``1`` regardless of the actual
 number displayed in the source code.
 
@@ -56,11 +83,11 @@ lengthier examples rather than a handful of shorter snippets.
 
 In addition, IPython's output and :data:`sys.stderr` will be
 inserted at doc build time and the prompts will be renumbered starting
-from 1. For example, the prompt below is renumbered so as to follow the code
+from ``1``. For example, the prompt below is renumbered so as to follow the code
 block from above.
 
 .. ipython::
-  :verbatim:
+   :verbatim:
 
   In [138]: z = x*3   # x is recalled from previous block
 
@@ -98,7 +125,6 @@ parsed correctly.
    ['http://ichart.finance.yahoo.com/table.csv?s=CROX', 'd=9', 'e=22',
 
 
-
 Testing directive outputs
 =========================
 
@@ -109,7 +135,7 @@ configurable options that are given directly to Sphinx in a projects conf.py.
 
 For example, you can put comments in your IPython sessions, which are
 reported verbatim.  There are some handy "pseudo-decorators" that let you
-wrap a function with ``@doctest`` and utilize the :mod:`doctest` module on
+wrap a function with `@doctest` and utilize the :mod:`doctest` module on
 the output.
 
 The inputs are fed to an embedded IPython session and the outputs are
@@ -148,7 +174,7 @@ documentation is built:
    is displayed in the :ref:`IPython Sphinx directive module` section at the
    bottom of the page.
 
-You can `doctest` multi-line output as well. Just be careful
+You can `@doctest` multi-line output as well. Just be careful
 when using non-deterministic inputs like random numbers in the IPython
 directive.
 
@@ -196,7 +222,7 @@ Registering Your Own Doctest Handlers
 
 The Sphinx extension that provides support for embedded IPython code provides
 a pseudo-decorator `@doctest`, which treats the input/output block as a
-doctest, raising a :py:exc:`RuntimeError` during doc generation if
+doctest, raising a :exc:`RuntimeError` during doc generation if
 the actual output (after running the input) does not match the expected output.
 
 An example usage is:
@@ -217,14 +243,14 @@ determined by the handler. For example,
 
 .. code-block:: rst
 
-      .. ipython::
+   .. ipython::
 
-         @doctest float
-         In [154]: 0.1 + 0.2
-         Out[154]: 0.3
+      @doctest float
+      In [154]: 0.1 + 0.2
+      Out[154]: 0.3
 
 allows the actual output ``0.30000000000000004`` to match the expected output
-due to a comparison with `np.allclose`.
+due to a comparison with `numpy.allclose`.
 
 This is detailed in the module :mod:`IPython.sphinxext.custom_doctests`.
 
@@ -252,7 +278,7 @@ Handlers should have the following function signature::
 
 
 Handlers must be registered in the `doctests` dict at the end of the
-`custom_doctests` module.
+:mod:`~IPython.sphinxext.custom_doctests` module.
 
 .. todo:: doctest handlers
 
@@ -311,14 +337,12 @@ the inputs::
      :suppress:
 
      In [144]: from matplotlib.pylab import *
-
      In [145]: ion()
 
 .. ipython::
    :suppress:
 
    In [144]: from matplotlib.pylab import *
-
    In [145]: ion()
 
 Likewise, you can set ``:doctest:`` or ``:verbatim:`` to apply these
@@ -375,7 +399,6 @@ In a subsequent session, we can update the current figure with some
 text, and then resave.:
 
 .. ipython::
-
 
    In [151]: ylabel('number')
 
@@ -525,29 +548,12 @@ And persist across sessions.:
    print(square(3))
    print(square(-2))
 
+
 .. _pseudo-decorators:
 
 Supported Pseudo-Decorators
 ============================
 TODO:
-
-.. rst:directive:: ipython
-
-   Create an IPython directive.
-
-   .. rst:directive:option:: doctest: Run a doctest on IPython code blocks in rst.
-
-   .. rst:directive:option:: python
-
-   .. rst:directive:option:: okexcept
-
-   .. rst:directive:option:: okwarning
-
-   .. rst:directive:option:: suppress
-
-   .. rst:directive:option:: verbatim
-
-   .. rst:directive:option:: savefig: OUTFILE [IMAGE_OPTIONS]
 
 The URL you need to build off of that directive is here:
 
@@ -625,5 +631,5 @@ Automatically generated documentation
 
 .. automodule:: IPython.sphinxext.custom_doctests
 
-
 .. Vim: set et:
+

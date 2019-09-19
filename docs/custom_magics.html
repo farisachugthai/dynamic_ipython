@@ -59,8 +59,15 @@
 simple steps.</p>
 <ol class="arabic">
 <li><p>Creating a function or class with some desired functionality.</p></li>
-<li><p>Wrapping it in decorators so that the magic accepts the shell as an argument
-upon initialization.</p></li>
+<li><p>Decorating the function to associate the currently running IPython instance
+with it.</p>
+<blockquote>
+<div><ol class="arabic">
+<li><p>A subpoint of this is adding more decorators to handle
+<a class="reference internal" href="#magic-arguments"><span class="std std-ref">Alternative Method of Defining Magics with Arguments</span></a>.</p></li>
+</ol>
+</div></blockquote>
+</li>
 <li><p>Registering the magic with the IPython shell.</p></li>
 </ol>
 <div class="section" id="registering-the-magic">
@@ -179,30 +186,26 @@ cases.</p>
 <p>However in a testing situation this could prove beneficial.</p>
 </div>
 <div class="section" id="alternative-method-of-defining-magics-with-arguments">
-<h3>Alternative Method of Defining Magics with Arguments<a class="headerlink" href="#alternative-method-of-defining-magics-with-arguments" title="Permalink to this headline">¶</a></h3>
+<span id="magic-arguments"></span><h3>Alternative Method of Defining Magics with Arguments<a class="headerlink" href="#alternative-method-of-defining-magics-with-arguments" title="Permalink to this headline">¶</a></h3>
 <p>From the IPython team directly. The following is the module docstring for
 <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.magic_arguments.html#module-IPython.core.magic_arguments" title="(in IPython v7.8.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython.core.magic_arguments</span></code></a>.</p>
 <p>New magic functions can be defined like so:</p>
-<div class="highlight-ipython notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.core.magic_arguments</span> <span class="kn">import</span> <span class="p">(</span><span class="n">argument</span><span class="p">,</span> <span class="n">magic_arguments</span><span class="p">,</span>
+<div class="highlight-ipython notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.core.magic_arguments</span> <span class="kn">import</span> <span class="p">(</span><span class="n">argument</span><span class="p">,</span> <span class="n">magic_arguments</span><span class="p">,</span>
     <span class="n">parse_argstring</span><span class="p">)</span>
 
 <span class="nd">@magic_arguments</span><span class="p">()</span>
 <span class="nd">@argument</span><span class="p">(</span><span class="s1">&#39;-o&#39;</span><span class="p">,</span> <span class="s1">&#39;--option&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;An optional argument.&#39;</span><span class="p">)</span>
 <span class="nd">@argument</span><span class="p">(</span><span class="s1">&#39;arg&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;An integer positional argument.&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">magic_cool</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; A really cool magic command.</span>
-
-<span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;A really cool magic command.&quot;&quot;&quot;</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">parse_argstring</span><span class="p">(</span><span class="n">magic_cool</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
 </pre></div>
 </td></tr></table></div>
@@ -455,11 +458,15 @@ takes the current <a class="reference external" href="https://ipython.readthedoc
 <code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.core.magics.extension.unload_ipython_extension(ipython)()</span></code>,
 which is called when the extension is unloaded). This instance can be
 used to register new magic commands, access the user namespace, execute
-code, and so on.
-This loading function is called when the extension is loaded, which
+code, and so on.</p>
+<p>This loading function is called when the extension is loaded, which
 happens when the command is executed.</p>
 </div></blockquote>
-<p>So how can we load the IPython extension while running interactively?</p>
+<p>So how can we load the IPython extension while running interactively?:</p>
+<blockquote>
+<div><p>%load_ext  # or
+%reload_ext magic</p>
+</div></blockquote>
 <p>To automatically load a module when <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.8.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> starts,
 we need to add the module name to the <code class="docutils literal notranslate"><span class="pre">c.TerminalIPythonApp.extensions</span></code>
 list in the <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.8.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> configuration file.</p>
@@ -499,21 +506,52 @@ explore all the instance’s attributes interactively from
 
 <div>&nbsp;</div>
 <div id="sidebartoc">
-    <p class="caption"><span class="caption-text">Tutorial</span></p>
+<p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="ipython_keybindings.html">Keybindings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ipython_keybindings.html">Keybindings</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ipython_keybindings.html#key-bindings">Key Bindings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ipython_keybindings.html#interactively-binding-keys">Interactively Binding Keys</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ipython_keybindings.html#official-ipython-documentation">Official IPython Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ipython_keybindings.html#side-effects">Side Effects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ipython_keybindings.html#source-code-for-creating-ipython-shortcuts">Source code for creating IPython shortcuts</a></li>
+</ul>
+</li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Custom Magics</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#registering-the-magic">Registering the magic</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#complete-example">Complete Example</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#creating-ipython-extensions">Creating IPython Extensions</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="exceptions.html">Customized Exceptions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sphinxext.html">IPython Sphinx Directive</a></li>
-<li class="toctree-l1"><a class="reference internal" href="dev.html">Developers Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exceptions.html">Customized Exceptions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#debugging">Debugging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#help-on-module-ipython-core-ultratb-in-ipython-core">Help on module <code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython.core.ultratb</span></code> in <code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython.core</span></code>:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#verbosetb"><strong>VerboseTB</strong></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sys-excepthook-exceptionhook"><code class="xref py py-func docutils literal notranslate"><span class="pre">sys.excepthook()</span></code> — ExceptionHook</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sphinxext.html">IPython Sphinx Directive</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sphinxext.html#persisting-the-session-across-ipython-directive-blocks">Persisting the session across IPython directive blocks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sphinxext.html#multi-line-input">Multi-line input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sphinxext.html#testing-directive-outputs">Testing directive outputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sphinxext.html#handling-comments">Handling Comments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sphinxext.html#splitting-python-statements-across-lines">Splitting Python statements across lines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sphinxext.html#supported-pseudo-decorators">Supported Pseudo-Decorators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sphinxext.html#module-IPython.sphinxext.ipython_directive">Automatically generated documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dev.html">Developers Notes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dev.html#installing">Installing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev.html#building-documentation">Building Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev.html#generating-css">Generating CSS</a></li>
+</ul>
+</li>
 </ul>
 
+
+
 </div>
+
+
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -544,7 +582,7 @@ explore all the instance’s attributes interactively from
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Sep 16, 2019.
+      Last updated on Sep 19, 2019.
     </div>
   </body>
 </html>

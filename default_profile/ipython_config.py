@@ -35,9 +35,6 @@ it is because the default python ran, and by default in 3.7 it never does.
 
 So fix that so we can maintain some {minimal} 3.6 compatability.
 
-
-
-
 """
 import builtins
 import logging
@@ -103,7 +100,7 @@ home = get_home()
 # c.InteractiveShellApp.code_to_run = ''
 
 # Run the file referenced by the PYTHONSTARTUP environment variable at IPython
-#  startup.
+# startup.
 # c.InteractiveShellApp.exec_PYTHONSTARTUP = True
 
 # List of files to run at IPython startup.
@@ -122,11 +119,11 @@ home = get_home()
 # c.InteractiveShellApp.file_to_run = ''
 
 # Enable GUI event loop integration with any of ('glut', 'gtk', 'gtk2', 'gtk3',
-#  'osx', 'pyglet', 'qt', 'qt4', 'qt5', 'tk', 'wx', 'gtk2', 'qt4').
+# 'osx', 'pyglet', 'qt', 'qt4', 'qt5', 'tk', 'wx', 'gtk2', 'qt4').
 # c.InteractiveShellApp.gui ='qt5'
 
 # Should variables loaded at startup (by startup files, exec_lines, etc.) be
-#  hidden from tools like %who?
+# hidden from tools like %who?
 # c.InteractiveShellApp.hide_initial_ns = True
 
 # Configure matplotlib for interactive use with the default matplotlib backend.
@@ -144,12 +141,13 @@ except (ImportError, ModuleNotFoundError):
     c.InteractiveShellApp.matplotlib = None
 else:
     c.InteractiveShellApp.matplotlib = 'auto'
+    c.InteractiveShellApp.pylab = 'auto'
 
 # Run the module as a script.
 # c.InteractiveShellApp.module_to_run = ''
 
 # Pre-load matplotlib and numpy for interactive use, selecting a particular
-#  matplotlib backend and loop integration.
+# matplotlib backend and loop integration.
 # See matplotlib choices above:
 # c.InteractiveShellApp.pylab = None
 
@@ -402,9 +400,6 @@ c.InteractiveShell.quiet = False
 # c.InteractiveShell.sphinxify_docstring = False
 #  module).
 # c.InteractiveShell.separate_out2 = ''
-
-# Show rewritten input, e.g. for autocall.
-# c.InteractiveShell.show_rewritten_input = True
 
 # Jan 20, 2019: Even with docrepr installed this still ends up raising errors.
 # Need to debug later.

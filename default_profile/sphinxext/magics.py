@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 """Sphinx extension that allows us to properly use magics in the docs.
 
+.. module:: magics
+
 :URL: `<https://github.com/ipython/ipython/blob/master/docs/sphinxext/magics.py>`_
 
 """
@@ -9,7 +11,7 @@ import logging
 import re
 import sys
 
-logging.basiConfig()
+logging.basicConfig()
 
 try:
     from sphinx import addnodes
