@@ -4,6 +4,8 @@
 ==================================================
 IPython --- Configuration file for :mod:`IPython`.
 ==================================================
+.. module:: ipython_config
+    :synopsis: Main configuration file for IPython.
 
 Parameters
 ----------
@@ -47,7 +49,6 @@ from tempfile import TemporaryDirectory
 
 from IPython import version_info
 from IPython.paths import get_ipython_dir
-
 # THIS IS THE MODULE! Its too exciting to able to execute this script
 # directly from within python and not get an error for a func call with no
 # import
@@ -365,9 +366,9 @@ c.InteractiveShell.history_load_length = 10000
 # Automatically call the pdb debugger after every exception.
 # c.InteractiveShell.pdb = False
 
-from time import time
-# Is the prompt manager class ignored?
-c.PromptManager.in_template = u"{color.LightGreen}{time}{color.Yellow} {color.normal}>>>"
+# from time import time
+# Is the prompt manager class ignored? Yes!
+# c.PromptManager.in_template = u"{color.LightGreen}{time}{color.Yellow} {color.normal}>>>"
 # Deprecated since IPython 4.0 and ignored since 5.0, set
 # TerminalInteractiveShell.prompts object directly.
 # c.InteractiveShell.prompt_in1 = 'In [\\#]: '
@@ -437,6 +438,8 @@ if platform.system() == 'Windows':
 else:
     if os.environ.get("TMUX"):
         c.TerminalInteractiveShell.editing_mode = 'vi'
+        # I don't know if this is the right way to do this
+        c.TerminalInteractiveShell.prompt_includes_vi_mode = False
     else:
         c.TerminalInteractiveShell.editing_mode = 'emacs'
 

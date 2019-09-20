@@ -1,7 +1,7 @@
 .. _general-utility-functions:
 
 ===================================
-:mod:`default_profile.util` package
+General Utility Functions
 ===================================
 
 .. module:: default_profile.util

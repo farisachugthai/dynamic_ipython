@@ -10,7 +10,7 @@ Set up easily instantied :class:`logging.Logger` instances.
 Create a few formatters and logging instances that can be easily
 imported and utilized across the package.
 
-Currently :ref:`module_log.stream_logger`
+Currently :func:`~default_profile.util.module_log.stream_logger`
 is the easiest and most oft used entry point in this module.
 
 """
@@ -107,6 +107,11 @@ def file_logger(
     Returns
     -------
     logger : :class:`logging.Logger` instance
+
+    Raises
+    ------
+    AssertionError
+        *shell* is not :keyword:`isinstance` |ip|.
 
     """
     assert isinstance(

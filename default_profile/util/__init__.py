@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""This module contains a collection of utility scripts.
-
+"""
 ==========
 Utilities
 ==========
+.. currentmodule:: utilities
 
 The modules contained in this package are, generally speaking, a collection of
 scripts that I've found useful while working with IPython, but that unfortunately
@@ -28,14 +28,13 @@ with a pre-determined template string like so::
     >>> UTIL_LOGGER = logging.getLogger('default_profile.util')
     >>> UTIL_LOGGER.setLevel(logging.WARNING)
 
+
 Pandas
 ------
 
 In addition, 2 classes have been taken verbatim from the Pandas dev team.
 The classes are used to create :keyword:`dict` style objects that also
 allow for attribute-style access.
-
-.. todo:: What does __main__ is not a package mean?
 
 """
 import logging

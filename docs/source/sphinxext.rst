@@ -14,7 +14,7 @@ generate HTML.
 
 The IPython directive builds on the functionality that Sphinx
 provides. This allows a user to, for example, copy and paste an 
-interactivevsession in an .rst document that can be useful for parsing
+interactive session in an .rst document that can be useful for parsing
 and validating IPython code, auto-generating documentation based on the 
 docstrings in source code, and embedding plots based on live data in 
 Sphinx documents.
@@ -22,14 +22,17 @@ Sphinx documents.
 Specifically, the IPython Sphinx extension correctly parses standard
 IPython prompts, and extracts the input and output lines to generate HTML.
 
+
+Directive and options
+=====================
+
 .. rst:directive:: ipython
 
    Create an IPython directive.
 
    .. rst:directive:option:: doctest: Run a doctest on IPython code blocks in rst.
 
-   .. rst:directive:option:: python: Used to indicate that the relevant code
-                                     block does not have IPython prompts.
+   .. rst:directive:option:: python: Used to indicate that the relevant code block does not have IPython prompts.
 
    .. rst:directive:option:: okexcept: Allow the code block to raise an exception.
 
@@ -37,11 +40,27 @@ IPython prompts, and extracts the input and output lines to generate HTML.
 
    .. rst:directive:option:: suppress: Silence any warnings or expected errors.
 
-   .. rst:directive:option:: verbatim: A noop that allows for any text to be
-                                       syntax highlighted as valid IPython code.
+   .. rst:directive:option:: verbatim: A noop that allows for any text to be syntax highlighted as valid IPython code.
 
-   .. rst:directive:option:: savefig: OUTFILE [IMAGE_OPTIONS]
+   .. rst:directive:option:: savefig: Save output from matplotlib to *outfile*.
+                                      OUTFILE [IMAGE_OPTIONS]
 
+
+One may find it useful to reference the relevant documentation from the
+[Sphinx project]_ and Docutils.
+
+.. [Sphinx project] http://www.sphinx-doc.org/en/master/usage/restructuredtext/domains.html#the-restructuredtext-domain
+
+See Also
+---------
+`Sphinx <http://www.sphinx-doc.org/en/master/>`_
+
+`Image Options for rst directives from docutils
+<http://docutils.sourceforge.net/docs/ref/rst/directives.html#image>`_ for details.
+
+
+Directive Usage
+===============
 These prompts will be renumbered starting at ``1`` regardless of the actual
 number displayed in the source code.
 
@@ -54,7 +73,7 @@ For example, code blocks like the following::
      In [137]: x**3
      Out[137]: 8
 
-will be rendered as
+will be rendered as:
 
 .. ipython::
 
@@ -65,14 +84,14 @@ will be rendered as
 
 .. note::
 
-   This tutorial should be read side-by-side with the Sphinx source
-   that generated this document.
-   With the exception of the example given above, the literal ReStructured
-   Text will not be displayed alongside the rendered output.
+   This tutorial should be read side-by-side with the 
+   `Sphinx source <../_sources/sphinxext.rst.txt>`_ that generated this
+   document. With the exception of the example given above, the literal
+   ReStructured Text will not be displayed alongside the rendered output.
 
 
 Persisting the session across IPython directive blocks
-=============================================================
+======================================================
 
 The state from previous code-blocks is stored, and carries over from section
 to section. The IPython shell will maintain and continue to execute in the same
@@ -82,7 +101,7 @@ This can be useful for documentation that may need to build on a few
 lengthier examples rather than a handful of shorter snippets.
 
 In addition, IPython's output and :data:`sys.stderr` will be
-inserted at doc build time and the prompts will be renumbered starting
+inserted at doc build time, and the prompts will be renumbered starting
 from ``1``. For example, the prompt below is renumbered so as to follow the code
 block from above.
 
@@ -557,7 +576,6 @@ TODO:
 
 The URL you need to build off of that directive is here:
 
-http://www.sphinx-doc.org/en/master/usage/restructuredtext/domains.html#the-restructuredtext-domain
 
 Here are the supported decorators, and any optional arguments they
 take.  Some of the decorators can be used as options to the entire
@@ -610,11 +628,6 @@ Decorators Glossary
 
    @python
       This can't be.
-
-See Also
----------
-`Image Options for rst directives from docutils
-<http://docutils.sourceforge.net/docs/ref/rst/directives.html#image>`_ for details.
 
 
 .. todo:: Document the magics.py sphinx extension!!
