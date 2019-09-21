@@ -101,9 +101,15 @@ class LinuxAliases:
 
     """
 
-    def __init__(self):
+    def __init__(self, shell=None, aliases=None):
         """The WindowsAliases implementation of this is odd so maybe branch off."""
-        pass
+        self.aliases = aliases
+        self.shell = shell or get_ipython()
+
+    def __repr__(self):
+        return 'Linux Aliases: {!r}'.format(
+            len(self.shell.alias_manager.aliases)
+        )
 
     @classmethod
     def busybox(cls):
@@ -115,10 +121,10 @@ class LinuxAliases:
 
         Returns
         -------
-        _ip.user_aliases : list of ('alias', 'system command') tuples
+        user_aliases : list of ('alias', 'system command') tuples
+            User aliases to add the user's namespace.
 
         """
-
         _user_aliases = [
             ('cs', 'cd %s && ls -F --color=always %s'),
             ('cp', 'cp -iv %l'),  # cp mv mkdir and rmdir are all overridden
@@ -145,7 +151,6 @@ class LinuxAliases:
             ('mk', 'mkdir -pv %l && cd %l'),  # check if this works. only mkdir
             ('mkdir', 'mkdir -pv %l'),
             ('mv', 'mv -iv %l'),
-            ('nman', 'nvim -c "Man %l" -c"wincmd T"'),
             ('r', 'fc -s'),
             ('redo', 'fc -s'),
             ('rm', 'rm -v %l'),
@@ -159,7 +164,6 @@ class LinuxAliases:
                 'cd ~/projects/dotfiles/unix/.ipython/default_profile/startup'
             ),
             ('tail', 'tail -n 30 %l'),
-            ('tre', 'tree -ashFC -I .git -I __pycache__ --filelimit 25'),
         ]
         return _user_aliases
 
@@ -175,7 +179,11 @@ class LinuxAliases:
 
         As a result it'll be of value to check that they're even in the namespace.
         """
-        ('ag', 'ag --hidden --color --no-column %l'),
+        user_aliases = [
+            ('ag', 'ag --hidden --color --no-column %l'),
+            ('nman', 'nvim -c "Man %l" -c"wincmd T"'),
+            ('tre', 'tree -ashFC -I .git -I __pycache__ --filelimit 25'),
+        ]
 
 
 def common_aliases():
@@ -321,11 +329,13 @@ class WindowsAliases:
         -------
         path : str (path-like)
             Where the executable is located.
+
         """
+        return shutil.which(exe) or None
 
     def __repr__(self):
         return 'Windows Aliases: {!r}'.format(
-            len(self._ip.alias_manager.aliases)
+            len(self.shell.alias_manager.aliases)
         )
 
     @classmethod
@@ -436,7 +446,7 @@ class WindowsAliases:
             ('wjb', 'Wait-Job %l'),
             ('write', 'Write-Output %l'),
         ]
-        return _ip.user_aliases
+        return cls.user_aliases
 
     def user_shell(self):
         """Determine the user's shell. Checks :envvar:`SHELL` and :envvar:`COMSPEC`."""
