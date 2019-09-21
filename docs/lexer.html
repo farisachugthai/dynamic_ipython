@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Extensions &#8212; Dynamic IPython: version0.0.1</title>
+    <title>New IPython Console Lexer &#8212; Dynamic IPython: version0.0.1</title>
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
@@ -14,10 +14,11 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/language_data.js"></script>
     <script type="text/javascript" src="_static/copybutton.js"></script>
-    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/extensions.html" />
+    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/lexer.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Jupyter Suite" href="jupyter.html" />
+    <link rel="next" title="IPython’s Startup" href="startup/index.html" />
+    <link rel="prev" title="Developer’s Notes" href="dev.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css"
   media="screen" charset="utf-8" />
 <link rel="stylesheet"
@@ -39,7 +40,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="jupyter.html" title="Jupyter Suite"
+          <a href="startup/index.html" title="IPython’s Startup"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="dev.html" title="Developer’s Notes"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython</a> &#187;</li> 
       </ul>
@@ -50,26 +54,60 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="extensions">
-<span id="id1"></span><h1>Extensions<a class="headerlink" href="#extensions" title="Permalink to this headline">¶</a></h1>
-<p>Here are the varying <code class="xref py py-obj docutils literal notranslate"><span class="pre">%magic</span></code> extensions that are bundled with this
-repository.</p>
-<dl class="magic">
-<dt id="magic-pd_csv">
-<code class="sig-name descname">%pd_csv</code><a class="headerlink" href="#magic-pd_csv" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+  <div class="section" id="new-ipython-console-lexer">
+<span id="console-lexer"></span><h1>New IPython Console Lexer<a class="headerlink" href="#new-ipython-console-lexer" title="Permalink to this headline">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0.0.</span></p>
+</div>
+<p>The IPython console lexer has been rewritten and now supports tracebacks
+and customized input/output prompts. An entire suite of lexers is now
+available at <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.lib.lexers.html#module-IPython.lib.lexers" title="(in IPython v7.8.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython.lib.lexers</span></code></a>. These include:</p>
+<dl class="simple">
+<dt>IPythonLexer &amp; IPython3Lexer</dt><dd><p>Lexers for pure IPython (python + magic/shell commands)</p>
+</dd>
+<dt>IPythonPartialTracebackLexer &amp; IPythonTracebackLexer</dt><dd><p>Supports 2.x and 3.x via the keyword <code class="xref py py-obj docutils literal notranslate"><span class="pre">python3</span></code>. The partial traceback
+lexer reads everything but the Python code appearing in a traceback.
+The full lexer combines the partial lexer with an IPython lexer.</p>
+</dd>
+<dt>IPythonConsoleLexer</dt><dd><p>A lexer for IPython console sessions, with support for tracebacks.
+Supports 2.x and 3.x via the keyword <code class="xref py py-obj docutils literal notranslate"><span class="pre">python3</span></code>.</p>
+</dd>
+<dt>IPyLexer</dt><dd><p>A friendly lexer which examines the first line of text and from it,
+decides whether to use an IPython lexer or an IPython console lexer.
+Supports 2.x and 3.x via the keyword <code class="xref py py-obj docutils literal notranslate"><span class="pre">python3</span></code>.</p>
+</dd>
+</dl>
+<p>Previously, the <code class="xref py py-class docutils literal notranslate"><span class="pre">IPythonConsoleLexer</span></code> class was available at
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython.sphinxext.ipython_console_hightlight</span></code>.  It was inserted
+into Pygments’ list of available lexers under the name <code class="xref py py-obj docutils literal notranslate"><span class="pre">ipython</span></code>.  It should
+be mentioned that this name is inaccurate, since an IPython console session
+is not the same as IPython code (which itself is a superset of the Python
+language).</p>
+<p>Now, the Sphinx extension inserts two console lexers into Pygments’ list of
+available lexers. Both are IPyLexer instances under the names: <code class="xref py py-obj docutils literal notranslate"><span class="pre">ipython</span></code> and
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">ipython3</span></code>. Although the names can be confusing (as mentioned above), their
+continued use is, in part, to maintain backwards compatibility and to
+aid typical usage. If a project needs to make Pygments aware of more than just
+the IPyLexer class, then one should not make the IPyLexer class available under
+the name <code class="xref py py-obj docutils literal notranslate"><span class="pre">ipython</span></code> and use <code class="xref py py-obj docutils literal notranslate"><span class="pre">ipy</span></code> or some other non-conflicting value.</p>
+<p>Code blocks such as:</p>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">code-block</span><span class="p">::</span> <span class="k">ipython</span>
 
-<span class="target" id="module-extensions.pd_csv"></span><span class="target" id="module-extensions.event_watcher_example"></span><span class="target" id="module-extensions.load_ext"></span><dl class="magic">
-<dt id="magic-repr_requests">
-<code class="sig-name descname">%repr_requests</code><a class="headerlink" href="#magic-repr_requests" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+    <span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="mi">2</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">Out</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="mi">4</span>
+</pre></div>
+</div>
+<p>will continue to work as before, but now, they will also properly highlight
+tracebacks.  For pure IPython code, the same lexer will also work:</p>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">code-block</span><span class="p">::</span> <span class="k">ipython</span>
 
-<span class="target" id="module-extensions.repr_requests"></span><dl class="magic">
-<dt id="magic-termux_clipboard">
-<code class="sig-name descname">%termux_clipboard</code><a class="headerlink" href="#magic-termux_clipboard" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<span class="target" id="module-extensions.termux_clipboard"></span></div>
+    <span class="n">x</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)))</span>
+    <span class="o">!</span><span class="nb">echo</span> <span class="nv">$x</span>
+</pre></div>
+</div>
+<p>Since the first line of the block did not begin with a standard IPython console
+prompt, the entire block is assumed to consist of IPython code instead.</p>
+</div>
 
 
           </div>
@@ -89,7 +127,8 @@ repository.</p>
 <script type="text/javascript">$('#searchbox').show(0);</script><h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="jupyter.html" title="previous chapter">Jupyter Suite</a></li>
+      <li>Previous: <a href="dev.html" title="previous chapter">Developer’s Notes</a></li>
+      <li>Next: <a href="startup/index.html" title="next chapter">IPython’s Startup</a></li>
   </ul></li>
 </ul>
 
@@ -138,7 +177,7 @@ repository.</p>
 <li class="toctree-l2"><a class="reference internal" href="dev.html#generating-css">Generating CSS</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="lexer.html">New IPython Console Lexer</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">New IPython Console Lexer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="startup/index.html">IPython Shell Initialization</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="startup/rehashx.html">01_rehashx</a></li>
 <li class="toctree-l2"><a class="reference internal" href="startup/easy_import.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">04_easy_import</span></code></a></li>
@@ -167,7 +206,7 @@ repository.</p>
 <li class="toctree-l2"><a class="reference internal" href="jupyter.html#image-handlers">Image Handlers</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extensions.html">Extensions</a></li>
 </ul>
 
 
@@ -178,7 +217,7 @@ repository.</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/extensions.rst.txt"
+      <li><a href="_sources/lexer.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -196,7 +235,10 @@ repository.</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="jupyter.html" title="Jupyter Suite"
+          <a href="startup/index.html" title="IPython’s Startup"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="dev.html" title="Developer’s Notes"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython</a> &#187;</li> 
       </ul>

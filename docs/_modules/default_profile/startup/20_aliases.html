@@ -151,9 +151,15 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="LinuxAliases.__init__"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.LinuxAliases.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="LinuxAliases.__init__"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.LinuxAliases.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">aliases</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The WindowsAliases implementation of this is odd so maybe branch off.&quot;&quot;&quot;</span>
-        <span class="k">pass</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">aliases</span> <span class="o">=</span> <span class="n">aliases</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">shell</span> <span class="ow">or</span> <span class="n">get_ipython</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;Linux Aliases: </span><span class="si">{!r}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">aliases</span><span class="p">)</span>
+        <span class="p">)</span>
 
 <div class="viewcode-block" id="LinuxAliases.busybox"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.LinuxAliases.busybox">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">busybox</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
@@ -165,10 +171,10 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        _ip.user_aliases : list of (&#39;alias&#39;, &#39;system command&#39;) tuples</span>
+<span class="sd">        user_aliases : list of (&#39;alias&#39;, &#39;system command&#39;) tuples</span>
+<span class="sd">            User aliases to add the user&#39;s namespace.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="n">_user_aliases</span> <span class="o">=</span> <span class="p">[</span>
             <span class="p">(</span><span class="s1">&#39;cs&#39;</span><span class="p">,</span> <span class="s1">&#39;cd </span><span class="si">%s</span><span class="s1"> &amp;&amp; ls -F --color=always </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;cp&#39;</span><span class="p">,</span> <span class="s1">&#39;cp -iv %l&#39;</span><span class="p">),</span>  <span class="c1"># cp mv mkdir and rmdir are all overridden</span>
@@ -195,7 +201,6 @@
             <span class="p">(</span><span class="s1">&#39;mk&#39;</span><span class="p">,</span> <span class="s1">&#39;mkdir -pv %l &amp;&amp; cd %l&#39;</span><span class="p">),</span>  <span class="c1"># check if this works. only mkdir</span>
             <span class="p">(</span><span class="s1">&#39;mkdir&#39;</span><span class="p">,</span> <span class="s1">&#39;mkdir -pv %l&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;mv&#39;</span><span class="p">,</span> <span class="s1">&#39;mv -iv %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;nman&#39;</span><span class="p">,</span> <span class="s1">&#39;nvim -c &quot;Man %l&quot; -c&quot;wincmd T&quot;&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="s1">&#39;fc -s&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;redo&#39;</span><span class="p">,</span> <span class="s1">&#39;fc -s&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;rm&#39;</span><span class="p">,</span> <span class="s1">&#39;rm -v %l&#39;</span><span class="p">),</span>
@@ -209,7 +214,6 @@
                 <span class="s1">&#39;cd ~/projects/dotfiles/unix/.ipython/default_profile/startup&#39;</span>
             <span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;tail&#39;</span><span class="p">,</span> <span class="s1">&#39;tail -n 30 %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;tre&#39;</span><span class="p">,</span> <span class="s1">&#39;tree -ashFC -I .git -I __pycache__ --filelimit 25&#39;</span><span class="p">),</span>
         <span class="p">]</span>
         <span class="k">return</span> <span class="n">_user_aliases</span></div>
 
@@ -225,7 +229,11 @@
 
 <span class="sd">        As a result it&#39;ll be of value to check that they&#39;re even in the namespace.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="p">(</span><span class="s1">&#39;ag&#39;</span><span class="p">,</span> <span class="s1">&#39;ag --hidden --color --no-column %l&#39;</span><span class="p">),</span></div></div>
+        <span class="n">user_aliases</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="s1">&#39;ag&#39;</span><span class="p">,</span> <span class="s1">&#39;ag --hidden --color --no-column %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;nman&#39;</span><span class="p">,</span> <span class="s1">&#39;nvim -c &quot;Man %l&quot; -c&quot;wincmd T&quot;&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;tre&#39;</span><span class="p">,</span> <span class="s1">&#39;tree -ashFC -I .git -I __pycache__ --filelimit 25&#39;</span><span class="p">),</span>
+        <span class="p">]</span></div></div>
 
 
 <div class="viewcode-block" id="common_aliases"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.common_aliases">[docs]</a><span class="k">def</span> <span class="nf">common_aliases</span><span class="p">():</span>
@@ -371,11 +379,13 @@
 <span class="sd">        -------</span>
 <span class="sd">        path : str (path-like)</span>
 <span class="sd">            Where the executable is located.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="n">exe</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;Windows Aliases: </span><span class="si">{!r}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ip</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">aliases</span><span class="p">)</span>
+            <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">aliases</span><span class="p">)</span>
         <span class="p">)</span>
 
 <div class="viewcode-block" id="WindowsAliases.cmd_aliases"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.WindowsAliases.cmd_aliases">[docs]</a>    <span class="nd">@classmethod</span>
@@ -486,7 +496,7 @@
             <span class="p">(</span><span class="s1">&#39;wjb&#39;</span><span class="p">,</span> <span class="s1">&#39;Wait-Job %l&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;write&#39;</span><span class="p">,</span> <span class="s1">&#39;Write-Output %l&#39;</span><span class="p">),</span>
         <span class="p">]</span>
-        <span class="k">return</span> <span class="n">_ip</span><span class="o">.</span><span class="n">user_aliases</span></div>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">user_aliases</span></div>
 
 <div class="viewcode-block" id="WindowsAliases.user_shell"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.WindowsAliases.user_shell">[docs]</a>    <span class="k">def</span> <span class="nf">user_shell</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Determine the user&#39;s shell. Checks :envvar:`SHELL` and :envvar:`COMSPEC`.&quot;&quot;&quot;</span>
@@ -518,14 +528,12 @@
     <span class="k">if</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s1">&#39;fzf&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s1">&#39;rg&#39;</span><span class="p">):</span>
         <span class="c1"># user_aliases.extend(</span>
         <span class="c1">#     (&#39;fzf&#39;, &#39;$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS&#39;))</span>
-        <span class="n">user_aliases</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
-            <span class="p">(</span>
-                <span class="s1">&#39;fzf&#39;</span><span class="p">,</span>
-                <span class="s1">&#39;rg --pretty --hidden --max-columns=300 --max-columns-preview &#39;</span>
-                <span class="s1">&#39;.*[a-zA-Z]* --no-heading -m=30 --no-messages --color=ansi --no-column &#39;</span>
-                <span class="s1">&#39; --no-line-number -C 0 | fzf --ansi&#39;</span>
-            <span class="p">)</span>
-        <span class="p">)</span>
+        <span class="n">user_aliases</span><span class="o">.</span><span class="n">extend</span><span class="p">((</span>
+            <span class="s1">&#39;fzf&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;rg --pretty --hidden --max-columns=300 --max-columns-preview &#39;</span>
+            <span class="s1">&#39;.*[a-zA-Z]* --no-heading -m=30 --no-messages --color=ansi --no-column &#39;</span>
+            <span class="s1">&#39; --no-line-number -C 0 | fzf --ansi&#39;</span>
+        <span class="p">))</span>
 
     <span class="k">elif</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s1">&#39;fzf&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s1">&#39;ag&#39;</span><span class="p">):</span>
         <span class="c1"># user_aliases.extend(</span>
@@ -640,9 +648,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../dev.html#generating-css">Generating CSS</a></li>
 </ul>
 </li>
-</ul>
-<p class="caption"><span class="caption-text">API Docs</span></p>
-<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../lexer.html">New IPython Console Lexer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../startup/index.html">IPython Shell Initialization</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/rehashx.html">01_rehashx</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/easy_import.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">04_easy_import</span></code></a></li>
@@ -654,8 +660,23 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/sysexcept.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">50_sysexception</span></code> module</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../../util.html">General Utility Functions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../jupyter.html">Jupyter Suite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../util.html">General Utility Functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../util.html#module-default_profile.util">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util.html#module-default_profile.util.copytree">default_profile.util.copytree module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util.html#module-default_profile.util.machine">default_profile.util.machine module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util.html#module-default_profile.util.module_log">default_profile.util.module_log module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util.html#module-default_profile.util.paths"><code class="xref py py-mod docutils literal notranslate"><span class="pre">default_profile.util.paths</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util.html#module-default_profile.util.profile_override"><code class="xref py py-mod docutils literal notranslate"><span class="pre">default_profile.util.profile_override</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util.html#module-default_profile.util.timer">default_profile.util.timer module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../jupyter.html">Jupyter Suite</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../jupyter.html#jupyter-qtconsole">Jupyter QTConsole</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../jupyter.html#jupyter-notebook">Jupyter Notebook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../jupyter.html#image-handlers">Image Handlers</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Extensions</a></li>
 </ul>
 
@@ -682,7 +703,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Sep 20, 2019.
+      Last updated on Sep 21, 2019.
     </div>
   </body>
 </html>

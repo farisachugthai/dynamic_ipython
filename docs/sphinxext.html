@@ -63,12 +63,14 @@ to automatically extract docstrings from valid python code and
 generate HTML.</p>
 <p>The IPython directive builds on the functionality that Sphinx
 provides. This allows a user to, for example, copy and paste an
-interactivevsession in an .rst document that can be useful for parsing
+interactive session in an .rst document that can be useful for parsing
 and validating IPython code, auto-generating documentation based on the
 docstrings in source code, and embedding plots based on live data in
 Sphinx documents.</p>
 <p>Specifically, the IPython Sphinx extension correctly parses standard
 IPython prompts, and extracts the input and output lines to generate HTML.</p>
+<div class="section" id="directive-and-options">
+<h2>Directive and options<a class="headerlink" href="#directive-and-options" title="Permalink to this headline">¶</a></h2>
 <dl class="directive">
 <dt id="directive-ipython">
 <code class="sig-name descname">.. ipython::</code><a class="headerlink" href="#directive-ipython" title="Permalink to this definition">¶</a></dt>
@@ -80,9 +82,7 @@ IPython prompts, and extracts the input and output lines to generate HTML.</p>
 
 <dl class="directive:option">
 <dt id="directive:option-ipython-python">
-<code class="sig-name descname">:python:</code><em class="property"> Used to indicate that the relevant code</em><a class="headerlink" href="#directive:option-ipython-python" title="Permalink to this definition">¶</a></dt>
-<dt id="directive:option-ipython-block does not have IPython prompts.">
-<code class="sig-name descname">:block does not have IPython prompts.:</code><a class="headerlink" href="#directive:option-ipython-block does not have IPython prompts." title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">:python:</code><em class="property"> Used to indicate that the relevant code block does not have IPython prompts.</em><a class="headerlink" href="#directive:option-ipython-python" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="directive:option">
@@ -102,18 +102,28 @@ IPython prompts, and extracts the input and output lines to generate HTML.</p>
 
 <dl class="directive:option">
 <dt id="directive:option-ipython-verbatim">
-<code class="sig-name descname">:verbatim:</code><em class="property"> A noop that allows for any text to be</em><a class="headerlink" href="#directive:option-ipython-verbatim" title="Permalink to this definition">¶</a></dt>
-<dt id="directive:option-ipython-syntax highlighted as valid IPython code.">
-<code class="sig-name descname">:syntax highlighted as valid IPython code.:</code><a class="headerlink" href="#directive:option-ipython-syntax highlighted as valid IPython code." title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">:verbatim:</code><em class="property"> A noop that allows for any text to be syntax highlighted as valid IPython code.</em><a class="headerlink" href="#directive:option-ipython-verbatim" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="directive:option">
 <dt id="directive:option-ipython-savefig">
-<code class="sig-name descname">:savefig:</code><em class="property"> OUTFILE [IMAGE_OPTIONS]</em><a class="headerlink" href="#directive:option-ipython-savefig" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">:savefig:</code><em class="property"> Save output from matplotlib to *outfile*.</em><a class="headerlink" href="#directive:option-ipython-savefig" title="Permalink to this definition">¶</a></dt>
+<dt id="directive:option-ipython-OUTFILE [IMAGE_OPTIONS]">
+<code class="sig-name descname">:OUTFILE [IMAGE_OPTIONS]:</code><a class="headerlink" href="#directive:option-ipython-OUTFILE [IMAGE_OPTIONS]" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
+<p>One may find it useful to reference the relevant documentation from the
+[Sphinx project]_ and Docutils.</p>
+<div class="section" id="see-also">
+<h3>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="http://www.sphinx-doc.org/en/master/">Sphinx</a></p>
+<p><a class="reference external" href="http://docutils.sourceforge.net/docs/ref/rst/directives.html#image">Image Options for rst directives from docutils</a> for details.</p>
+</div>
+</div>
+<div class="section" id="directive-usage">
+<h2>Directive Usage<a class="headerlink" href="#directive-usage" title="Permalink to this headline">¶</a></h2>
 <p>These prompts will be renumbered starting at <code class="docutils literal notranslate"><span class="pre">1</span></code> regardless of the actual
 number displayed in the source code.</p>
 <p>For example, code blocks like the following:</p>
@@ -125,7 +135,7 @@ number displayed in the source code.</p>
 <span class="go">   Out[137]: 8</span>
 </pre></div>
 </div>
-<p>will be rendered as</p>
+<p>will be rendered as:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="n">x</span> <span class="o">=</span> <span class="mi">2</span>
 
 <span class="gp">In [2]: </span><span class="n">x</span><span class="o">**</span><span class="mi">3</span>
@@ -134,10 +144,11 @@ number displayed in the source code.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This tutorial should be read side-by-side with the Sphinx source
-that generated this document.
-With the exception of the example given above, the literal ReStructured
-Text will not be displayed alongside the rendered output.</p>
+<p>This tutorial should be read side-by-side with the
+<a class="reference external" href="../_sources/sphinxext.rst.txt">Sphinx source</a> that generated this
+document. With the exception of the example given above, the literal
+ReStructured Text will not be displayed alongside the rendered output.</p>
+</div>
 </div>
 <div class="section" id="persisting-the-session-across-ipython-directive-blocks">
 <h2>Persisting the session across IPython directive blocks<a class="headerlink" href="#persisting-the-session-across-ipython-directive-blocks" title="Permalink to this headline">¶</a></h2>
@@ -147,7 +158,7 @@ namespace so long as it remains in the same document.</p>
 <p>This can be useful for documentation that may need to build on a few
 lengthier examples rather than a handful of shorter snippets.</p>
 <p>In addition, IPython’s output and <a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stderr" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stderr</span></code></a> will be
-inserted at doc build time and the prompts will be renumbered starting
+inserted at doc build time, and the prompts will be renumbered starting
 from <code class="docutils literal notranslate"><span class="pre">1</span></code>. For example, the prompt below is renumbered so as to follow the code
 block from above.</p>
 <pre class="literal-block">In [3]: z = x*3   # x is recalled from previous block
@@ -486,7 +497,6 @@ In [37]: print(square(-2))
 <span id="pseudo-decorators"></span><h2>Supported Pseudo-Decorators<a class="headerlink" href="#supported-pseudo-decorators" title="Permalink to this headline">¶</a></h2>
 <p>TODO:</p>
 <p>The URL you need to build off of that directive is here:</p>
-<p><a class="reference external" href="http://www.sphinx-doc.org/en/master/usage/restructuredtext/domains.html#the-restructuredtext-domain">http://www.sphinx-doc.org/en/master/usage/restructuredtext/domains.html#the-restructuredtext-domain</a></p>
 <p>Here are the supported decorators, and any optional arguments they
 take.  Some of the decorators can be used as options to the entire
 block (e.g. <code class="xref py py-obj docutils literal notranslate"><span class="pre">&#64;verbatim</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">&#64;suppress</span></code>), and some only apply to the
@@ -517,7 +527,7 @@ generated at doc build time, and raise errors if they don’t
 match. Also, can be applied to the entire <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">ipython</span></code> block as a
 directive option with <code class="docutils literal notranslate"><span class="pre">:doctest:</span></code>.</p>
 </dd>
-<dt id="term-9">&#64;suppress</dt><dd><p>execute the ipython input block, but suppress the input and output
+<dt id="term-0">&#64;suppress</dt><dd><p>execute the ipython input block, but suppress the input and output
 block from the rendered output.  Also, can be applied to the entire
 <code class="docutils literal notranslate"><span class="pre">..ipython</span></code> block as a directive option with <code class="docutils literal notranslate"><span class="pre">:suppress:</span></code>.</p>
 </dd>
@@ -528,10 +538,6 @@ block from the rendered output.  Also, can be applied to the entire
 <dt id="term-python">&#64;python</dt><dd><p>This can’t be.</p>
 </dd>
 </dl>
-</div>
-<div class="section" id="see-also">
-<h3>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h3>
-<p><a class="reference external" href="http://docutils.sourceforge.net/docs/ref/rst/directives.html#image">Image Options for rst directives from docutils</a> for details.</p>
 </div>
 </div>
 <div class="section" id="module-IPython.sphinxext.ipython_directive">
@@ -552,13 +558,13 @@ Out[1]: 2
 In [2]: import datetime
    ...: datetime.datetime.now()
    ...: 
-Out[2]: datetime.datetime(2019, 9, 19, 16, 49, 41, 654307)</pre>
+Out[2]: datetime.datetime(2019, 9, 21, 17, 34, 44, 484236)</pre>
 <p>It supports IPython construct that plain
 Python does not understand (like magics):</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [3]: </span><span class="kn">import</span> <span class="nn">time</span>
 
 <span class="gp">In [4]: </span><span class="o">%</span><span class="k">timeit</span> time.sleep(0.05)
-<span class="go">61.6 ms +- 1.07 ms per loop (mean +- std. dev. of 7 runs, 10 loops each)</span>
+<span class="go">61.5 ms +- 1.65 ms per loop (mean +- std. dev. of 7 runs, 10 loops each)</span>
 </pre></div>
 </div>
 <p>This will also support top-level async when using IPython 7.0+</p>
@@ -670,8 +676,8 @@ one sets the backend to <a class="reference external" href="https://docs.python.
 <p>See <a class="reference external" href="http://matplotlib.org/sampledoc/ipython_directive.html">http://matplotlib.org/sampledoc/ipython_directive.html</a> for additional
 documentation.</p>
 </div>
-<div class="section" id="id4">
-<h3>Pseudo-Decorators<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id5">
+<h3>Pseudo-Decorators<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
 <p>Note: Only one decorator is supported per input. If more than one decorator
 is specified, then only the last one is used.</p>
 <p>In addition to the Pseudo-Decorators/options described at the above link,
@@ -924,6 +930,8 @@ containing the expected output from the IPython shell.</p>
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">IPython Sphinx Directive</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#directive-and-options">Directive and options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#directive-usage">Directive Usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#persisting-the-session-across-ipython-directive-blocks">Persisting the session across IPython directive blocks</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#multi-line-input">Multi-line input</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#testing-directive-outputs">Testing directive outputs</a></li>
@@ -939,9 +947,7 @@ containing the expected output from the IPython shell.</p>
 <li class="toctree-l2"><a class="reference internal" href="dev.html#generating-css">Generating CSS</a></li>
 </ul>
 </li>
-</ul>
-<p class="caption"><span class="caption-text">API Docs</span></p>
-<ul>
+<li class="toctree-l1"><a class="reference internal" href="lexer.html">New IPython Console Lexer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="startup/index.html">IPython Shell Initialization</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="startup/rehashx.html">01_rehashx</a></li>
 <li class="toctree-l2"><a class="reference internal" href="startup/easy_import.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">04_easy_import</span></code></a></li>
@@ -953,8 +959,23 @@ containing the expected output from the IPython shell.</p>
 <li class="toctree-l2"><a class="reference internal" href="startup/sysexcept.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">50_sysexception</span></code> module</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="util.html">General Utility Functions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="jupyter.html">Jupyter Suite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">General Utility Functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="util.html#module-default_profile.util">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html#module-default_profile.util.copytree">default_profile.util.copytree module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html#module-default_profile.util.machine">default_profile.util.machine module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html#module-default_profile.util.module_log">default_profile.util.module_log module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html#module-default_profile.util.paths"><code class="xref py py-mod docutils literal notranslate"><span class="pre">default_profile.util.paths</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html#module-default_profile.util.profile_override"><code class="xref py py-mod docutils literal notranslate"><span class="pre">default_profile.util.profile_override</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html#module-default_profile.util.timer">default_profile.util.timer module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="jupyter.html">Jupyter Suite</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="jupyter.html#jupyter-qtconsole">Jupyter QTConsole</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jupyter.html#jupyter-notebook">Jupyter Notebook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jupyter.html#image-handlers">Image Handlers</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="extensions.html">Extensions</a></li>
 </ul>
 
@@ -993,7 +1014,7 @@ containing the expected output from the IPython shell.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Sep 19, 2019.
+      Last updated on Sep 21, 2019.
     </div>
   </body>
 </html>

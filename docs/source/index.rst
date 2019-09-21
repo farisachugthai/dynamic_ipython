@@ -114,12 +114,7 @@ Table of Contents
    exceptions
    sphinxext
    Developers Notes <dev>
-
-.. toctree::
-   :caption: API Docs
-   :maxdepth: 2
-   :titlesonly:
-
+   lexer
    IPython Shell Initialization <startup/index>
    General Utility Functions <util>
    jupyter

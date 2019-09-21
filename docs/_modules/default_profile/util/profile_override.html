@@ -96,9 +96,8 @@
 
     <span class="n">location</span> <span class="o">=</span> <span class="n">Unicode</span><span class="p">(</span>
         <span class="sa">u</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span>
-        <span class="sd">&quot;&quot;&quot;Set the profile location directly. This overrides the logic used by the</span>
-<span class="sd">        `profile` option.&quot;&quot;&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;Set the profile location directly. This overrides the logic used by the</span>
+<span class="s2">        `profile` option.&quot;&quot;&quot;</span><span class="p">,</span>
     <span class="p">)</span><span class="o">.</span><span class="n">tag</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -164,13 +163,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_mkdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">startup_dir</span><span class="p">)</span>
 
         <span class="n">readme</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">startup_dir</span><span class="p">,</span> <span class="s1">&#39;README&#39;</span><span class="p">)</span>
-        <span class="n">src</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">get_ipython_package_dir</span><span class="p">(),</span> <span class="sa">u</span><span class="s1">&#39;core&#39;</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;profile&#39;</span><span class="p">,</span>
-                           <span class="sa">u</span><span class="s1">&#39;README_STARTUP&#39;</span><span class="p">)</span>
+        <span class="n">src</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="n">get_ipython_package_dir</span><span class="p">(),</span> <span class="sa">u</span><span class="s1">&#39;core&#39;</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;profile&#39;</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;README_STARTUP&#39;</span>
+        <span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">src</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
                 <span class="s2">&quot;Could not copy README_STARTUP to startup dir. Source file </span><span class="si">%s</span><span class="s2"> does not exist.&quot;</span><span class="p">,</span>
-                <span class="n">src</span><span class="p">)</span>
+                <span class="n">src</span>
+            <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">src</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">readme</span><span class="p">):</span>
             <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">readme</span><span class="p">)</span></div>
@@ -200,8 +201,9 @@
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">dst</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">overwrite</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
         <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">get_ipython_package_dir</span><span class="p">(),</span> <span class="sa">u</span><span class="s1">&#39;core&#39;</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;profile&#39;</span><span class="p">,</span>
-                                <span class="sa">u</span><span class="s1">&#39;default&#39;</span><span class="p">)</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="n">get_ipython_package_dir</span><span class="p">(),</span> <span class="sa">u</span><span class="s1">&#39;core&#39;</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;profile&#39;</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;default&#39;</span>
+            <span class="p">)</span>
         <span class="n">src</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">config_file</span><span class="p">)</span>
         <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">True</span></div>
@@ -236,10 +238,9 @@
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="n">profile_dir</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ReprProfileDir.find_profile_dir_by_name"><a class="viewcode-back" href="../../../util.html#default_profile.util.profile_override.ReprProfileDir.find_profile_dir_by_name">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">find_profile_dir_by_name</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span>
-                                 <span class="n">ipython_dir</span><span class="p">,</span>
-                                 <span class="n">name</span><span class="o">=</span><span class="sa">u</span><span class="s1">&#39;default&#39;</span><span class="p">,</span>
-                                 <span class="n">config</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">find_profile_dir_by_name</span><span class="p">(</span>
+            <span class="bp">cls</span><span class="p">,</span> <span class="n">ipython_dir</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="sa">u</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Find an existing profile dir by profile name, return its ProfileDir.</span>
 
 <span class="sd">        This searches through a sequence of paths for a profile dir.  If it</span>
@@ -264,8 +265,9 @@
             <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">profile_dir</span><span class="p">):</span>
                 <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="n">profile_dir</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">ProfileDirError</span><span class="p">(</span><span class="s1">&#39;Profile directory not found in paths: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span>
-                                  <span class="n">dirname</span><span class="p">)</span></div>
+            <span class="k">raise</span> <span class="n">ProfileDirError</span><span class="p">(</span>
+                <span class="s1">&#39;Profile directory not found in paths: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">dirname</span>
+            <span class="p">)</span></div>
 
 <div class="viewcode-block" id="ReprProfileDir.find_profile_dir"><a class="viewcode-back" href="../../../util.html#default_profile.util.profile_override.ReprProfileDir.find_profile_dir">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">find_profile_dir</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">profile_dir</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -280,8 +282,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">profile_dir</span> <span class="o">=</span> <span class="n">expand_path</span><span class="p">(</span><span class="n">profile_dir</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">profile_dir</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="n">ProfileDirError</span><span class="p">(</span><span class="s1">&#39;Profile directory not found: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span>
-                                  <span class="n">profile_dir</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">ProfileDirError</span><span class="p">(</span>
+                <span class="s1">&#39;Profile directory not found: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">profile_dir</span>
+            <span class="p">)</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="n">profile_dir</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span></div></div>
 </pre></div>
 
@@ -352,9 +355,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../dev.html#generating-css">Generating CSS</a></li>
 </ul>
 </li>
-</ul>
-<p class="caption"><span class="caption-text">API Docs</span></p>
-<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../lexer.html">New IPython Console Lexer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../startup/index.html">IPython Shell Initialization</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/rehashx.html">01_rehashx</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/easy_import.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">04_easy_import</span></code></a></li>
@@ -366,8 +367,23 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/sysexcept.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">50_sysexception</span></code> module</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../../util.html">General Utility Functions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../jupyter.html">Jupyter Suite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../util.html">General Utility Functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../util.html#module-default_profile.util">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util.html#module-default_profile.util.copytree">default_profile.util.copytree module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util.html#module-default_profile.util.machine">default_profile.util.machine module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util.html#module-default_profile.util.module_log">default_profile.util.module_log module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util.html#module-default_profile.util.paths"><code class="xref py py-mod docutils literal notranslate"><span class="pre">default_profile.util.paths</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util.html#module-default_profile.util.profile_override"><code class="xref py py-mod docutils literal notranslate"><span class="pre">default_profile.util.profile_override</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util.html#module-default_profile.util.timer">default_profile.util.timer module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../jupyter.html">Jupyter Suite</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../jupyter.html#jupyter-qtconsole">Jupyter QTConsole</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../jupyter.html#jupyter-notebook">Jupyter Notebook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../jupyter.html#image-handlers">Image Handlers</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Extensions</a></li>
 </ul>
 
@@ -394,7 +410,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Sep 20, 2019.
+      Last updated on Sep 21, 2019.
     </div>
   </body>
 </html>
