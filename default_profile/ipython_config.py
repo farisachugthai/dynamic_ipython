@@ -480,7 +480,7 @@ if sys.version_info[0:2] <= (3, 6):
             """Subclass ImportErrors."""
 
             def __init__(self, *args, **kwargs):
-                " I wouldn't limit this section of code to only py3 up but I think that py2 doesn't accept that super() use below so I will for now."""
+                " I wouldn't limit this section of code to only py3 up but I think that py2 doesn't accept that super() use below so I will for now." ""
                 super().__init__(self, *args, **kwargs)
 
 
@@ -617,6 +617,7 @@ c.ProfileDir.location = os.path.join(home, '', 'ipython')
 # BaseFormatter(Configurable) configuration
 # ----------------------------------------------------------------------------
 
+
 class BaseFormatterDoc(Configurable):
     """A base formatter class that is configurable.
 
@@ -709,6 +710,7 @@ class BaseFormatterDoc(Configurable):
 
     def __repr__(self):
         return self._example_subclass()
+
 
 # ----------------------------------------------------------------------------
 # Completer(Configurable) configuration

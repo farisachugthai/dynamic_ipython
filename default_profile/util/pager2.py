@@ -142,8 +142,9 @@ from IPython import get_ipython
 # Might need some of the funcs from IPython.utils.{PyColorize,coloransi,colorable}
 from IPython.core.error import UsageError
 from IPython.core.magic import Magics, magics_class, line_magic
-from IPython.core.magic_arguments import (argument, magic_arguments,
-                                          parse_argstring)
+from IPython.core.magic_arguments import (
+    argument, magic_arguments, parse_argstring
+)
 
 
 def load_ipython_docstring(shell):

@@ -118,19 +118,18 @@ def pandas_init():
 
     """
     options = {
-        'display':
-            {
-                'colheader_justify': 'right',
-                'encoding': 'utf-8',
-                'expand_frame_repr': False,  # Don't wrap to multiple pages
-                'html.table_schema': True,
-                'max_columns': None,
-                'max_colwidth': 25,
-                'max_rows': 30,
-                'max_seq_items': 50,
-                # Max length of printed sequence 'precision': 4,
-                'show_dimensions': 'truncate',
-            },
+        'display': {
+            'colheader_justify': 'right',
+            'encoding': 'utf-8',
+            'expand_frame_repr': False,  # Don't wrap to multiple pages
+            'html.table_schema': True,
+            'max_columns': None,
+            'max_colwidth': 25,
+            'max_rows': 30,
+            'max_seq_items': 50,
+            # Max length of printed sequence 'precision': 4,
+            'show_dimensions': 'truncate',
+        },
         'mode': {
             'chained_assignment': None
             # Controls SettingWithCopyWarning

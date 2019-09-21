@@ -478,14 +478,12 @@ def __setup_fzf(user_aliases):
     if shutil.which('fzf') and shutil.which('rg'):
         # user_aliases.extend(
         #     ('fzf', '$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS'))
-        user_aliases.extend(
-            (
-                'fzf',
-                'rg --pretty --hidden --max-columns=300 --max-columns-preview '
-                '.*[a-zA-Z]* --no-heading -m=30 --no-messages --color=ansi --no-column '
-                ' --no-line-number -C 0 | fzf --ansi'
-            )
-        )
+        user_aliases.extend((
+            'fzf',
+            'rg --pretty --hidden --max-columns=300 --max-columns-preview '
+            '.*[a-zA-Z]* --no-heading -m=30 --no-messages --color=ansi --no-column '
+            ' --no-line-number -C 0 | fzf --ansi'
+        ))
 
     elif shutil.which('fzf') and shutil.which('ag'):
         # user_aliases.extend(

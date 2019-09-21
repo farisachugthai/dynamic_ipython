@@ -23,4 +23,6 @@ from .sphinxext import magics, configtraits
 default_log_format = '%(created)f : %(module)s : %(levelname)s : %(message)s'
 PROFILE_DEFAULT_LOG = logging.getLogger('default_profile')
 PROFILE_DEFAULT_LOG.setLevel(logging.WARNING)
-PROFILE_DEFAULT_LOG.addHandler(logging.StreamHandler().setLevel(logging.WARNING))
+PROFILE_DEFAULT_LOG.addHandler(
+    logging.StreamHandler().setLevel(logging.WARNING)
+)

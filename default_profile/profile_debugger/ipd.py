@@ -25,8 +25,9 @@ from prompt_toolkit import patch_stdout
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.contrib.completers.system import SystemCompleter
 from prompt_toolkit.enums import DEFAULT_BUFFER
-from prompt_toolkit.filters import (Condition, has_focus, has_selection,
-    vi_insert_mode, emacs_insert_mode)
+from prompt_toolkit.filters import (
+    Condition, has_focus, has_selection, vi_insert_mode, emacs_insert_mode
+)
 from prompt_toolkit.key_binding.bindings.completion import display_completions_like_readline
 from prompt_toolkit.shortcuts.prompt import PromptSession
 from prompt_toolkit.enums import EditingMode
@@ -38,8 +39,9 @@ from pygments.token import Token
 class IPD(TerminalPdb):
     """Set up the IPython Debugger."""
 
-
-    def __init__(self, shell=None, change_keys=False, _ptcomp=None, *args, **kwargs):
+    def __init__(
+            self, shell=None, change_keys=False, _ptcomp=None, *args, **kwargs
+    ):
         """Add everything to call signature."""
         self._ptcomp = _ptcomp
         self.shell = shell
@@ -50,15 +52,17 @@ class IPD(TerminalPdb):
     def pt_init(self, change_keys=False):
         """Override the default initialization for prompt_toolkit."""
         pass
+
         def get_prompt_tokens():
             return [(Token.Prompt, self.prompt)]
 
         if self._ptcomp is None:
-            compl = IPCompleter(shell=self.shell,
-                                        namespace={},
-                                        global_namespace={},
-                                        parent=self.shell,
-                                       )
+            compl = IPCompleter(
+                shell=self.shell,
+                namespace={},
+                global_namespace={},
+                parent=self.shell,
+            )
             self._ptcomp = IPythonPTCompleter(compl)
 
         kb = KeyBindings()
@@ -67,26 +71,30 @@ class IPD(TerminalPdb):
             kb.add('c-z', filter=supports_suspend)(suspend_to_bg)
 
             if self.shell.display_completions == 'readlinelike':
-                kb.add('tab', filter=(has_focus(DEFAULT_BUFFER)
-                                      & ~has_selection
-                                      & vi_insert_mode | emacs_insert_mode
-                                      & ~cursor_in_leading_ws
-                                  ))(display_completions_like_readline)
+                kb.add(
+                    'tab',
+                    filter=(
+                        has_focus(DEFAULT_BUFFER)
+                        & ~has_selection
+                        & vi_insert_mode | emacs_insert_mode
+                        & ~cursor_in_leading_ws
+                    )
+                )(display_completions_like_readline)
         else:
             kb = create_ipython_shortcuts()
 
         self.pt_app = PromptSession(
-                            message=(lambda: PygmentsTokens(get_prompt_tokens())),
-                            editing_mode=getattr(EditingMode, self.shell.editing_mode.upper()),
-                            key_bindings=kb,
-                            history=self.shell.debugger_history,
-                            completer=self._ptcomp,
-                            enable_history_search=True,
-                            mouse_support=self.shell.mouse_support,
-                            complete_style=self.shell.pt_complete_style,
-                            style=self.shell.style,
-                            inputhook=self.shell.inputhook,
-                            color_depth=self.shell.color_depth,
+            message=(lambda: PygmentsTokens(get_prompt_tokens())),
+            editing_mode=getattr(EditingMode, self.shell.editing_mode.upper()),
+            key_bindings=kb,
+            history=self.shell.debugger_history,
+            completer=self._ptcomp,
+            enable_history_search=True,
+            mouse_support=self.shell.mouse_support,
+            complete_style=self.shell.pt_complete_style,
+            style=self.shell.style,
+            inputhook=self.shell.inputhook,
+            color_depth=self.shell.color_depth,
         )
 
 
