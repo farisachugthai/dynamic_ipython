@@ -108,9 +108,12 @@ Table of Contents
 .. toctree::
    :caption: Tutorial
    :maxdepth: 2
+   :titlesonly:
 
    Keybindings <ipython_keybindings>
    custom_magics
+   extensions
+   jobcontrol
    exceptions
    sphinxext
    Developers Notes <dev>
@@ -118,7 +121,6 @@ Table of Contents
    IPython Shell Initialization <startup/index>
    General Utility Functions <util>
    jupyter
-   extensions
 
 
 

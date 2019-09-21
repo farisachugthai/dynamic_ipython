@@ -4,6 +4,8 @@
 =======================
 PrettyColorfulInspector
 =======================
+.. module:: extension_inspect
+    :synopsis: Pretty print objects with syntax highlighting.
 
 An IPython magic function to pretty-print objects with syntax highlighting.
 
@@ -15,11 +17,13 @@ See, "Defining your own magics":
 
 For more on Pygments:
 
+
 See Also
 ---------
+
 pygments
 
-`http://pygments.org/docs/quickstart/`
+`Quickstart <http://pygments.org/docs/quickstart>`_
 
 
 Usage
@@ -27,15 +31,17 @@ Usage
 
 Place this file in your IPython startup directory. The default location is:
 
-    ~/.ipython/profile_default/startup/
+    ``~/.ipython/profile_default/startup/``
 
 NOTE for Django: Since django uses an embedded IPython shell, it may not
 load your default IPython profile. You'll need to run::
 
     %run ~/.ipython/profile_default/startup/ipython_magic_function_inspector.py
 
+
 License
 -------
+
 Original copyright (c) 2014, Brad Montgomery <brad@bradmontgomery.net>
 Updated copyright (c) 2016, Brian Bugh
 Released under the MIT License.

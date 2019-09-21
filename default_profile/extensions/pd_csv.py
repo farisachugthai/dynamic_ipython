@@ -5,6 +5,8 @@
 Pandas CSV
 ============
 
+.. magic:: pd_csv
+
 Magic that reads in a string and parses it as a :mod:`CSV` with :mod:`pandas`.
 
 Example of creating a magic from **IPython Interactive Computing and

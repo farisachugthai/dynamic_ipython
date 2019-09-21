@@ -4,10 +4,6 @@
 General Utility Functions
 ===================================
 
-.. module:: default_profile.util
-   :synopsis: General functions that don't directly depend on IPython or this repository.
-
-
 .. _util-contents:
 
 Module contents

@@ -43,6 +43,7 @@ from traitlets.config import Config
 import default_profile
 from default_profile.__about__ import __version__
 from default_profile.startup import *
+from default_profile import extensions
 
 DOCS = Path(__file__).resolve().parent.parent
 

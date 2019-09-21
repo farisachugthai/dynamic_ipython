@@ -4,18 +4,8 @@
 Extensions
 ===========
 
-.. highlight:: ipython
-   :linenothreshold: 5
-
 Here are the varying `%magic` extensions that are bundled with this
 repository.
-
-.. magic:: pd_csv
-
-.. automodule:: extensions.pd_csv
-    :members:
-    :undoc-members:
-    :show-inheritance:
 
 
 .. automodule:: extensions.event_watcher_example
@@ -30,7 +20,11 @@ repository.
     :show-inheritance:
 
 
-.. magic:: repr_requests
+.. automodule:: extensions.pd_csv
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 .. automodule:: extensions.repr_requests
     :members:
@@ -38,9 +32,13 @@ repository.
     :show-inheritance:
 
 
-.. magic:: termux_clipboard
-
 .. automodule:: extensions.termux_clipboard
     :members:
     :undoc-members:
     :show-inheritance:
+
+Continue reading at :doc:`jobcontrol` to see a well documented example
+provided by one of the original IPython authors, Brian Granger!
+
+
+`Next --- Job Control <jobcontrol.html>`_

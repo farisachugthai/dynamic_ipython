@@ -1,11 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
+=============
+repr_requests
+=============
 
 .. magic:: _repr_request
 
 
-Utilize the :ref:`_repr_pretty` method to generate a display for
+Utilize the :ref:`_repr_pretty` method to generate a display for a
 requests.models.Response objects.
 
 """

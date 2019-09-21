@@ -17,7 +17,7 @@
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/custom_magics.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Customized Exceptions" href="exceptions.html" />
+    <link rel="next" title="Extensions" href="extensions.html" />
     <link rel="prev" title="Keybindings in IPython" href="ipython_keybindings.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css"
   media="screen" charset="utf-8" />
@@ -40,7 +40,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="exceptions.html" title="Customized Exceptions"
+          <a href="extensions.html" title="Extensions"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="ipython_keybindings.html" title="Keybindings in IPython"
@@ -222,9 +222,15 @@ arguments</p>
 <div class="section" id="writing-custom-magics">
 <span id="extensions-and-custom-magics"></span><h3>Writing Custom Magics<a class="headerlink" href="#writing-custom-magics" title="Permalink to this headline">¶</a></h3>
 <p><a class="reference external" href="https://raw.githubusercontent.com/ipython/ipython/523ed2fe58ea5ee9971d2b21df1de33b8cdfa924/docs/source/config/custommagics.rst">Custom Magics</a>:</p>
-<p>There are two main ways to define your own magic functions. From standalone
-functions and by inheriting from a base class provided by <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.8.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a>:</p>
-<p><a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.magic.html#IPython.core.magic.Magics" title="(in IPython v7.8.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.magic.Magics</span></code></a></p>
+<p>There are two main ways to define your own magic functions.</p>
+<ol class="arabic">
+<li><p>From standalone functions</p></li>
+<li><p>Inheriting from a base class provided by <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.8.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a>:</p>
+<ol class="arabic">
+<li><p><a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.magic.html#IPython.core.magic.Magics" title="(in IPython v7.8.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.magic.Magics</span></code></a></p></li>
+</ol>
+</li>
+</ol>
 <p>Below, there will be code displayed that demonstrates how to write an extension
 and allow it to be automatically loaded.</p>
 <p>Start by changing to IPython’s startup directory. This can be found as the
@@ -333,18 +339,20 @@ running IPython instance.</p>
 can be loaded via <code class="xref py py-obj docutils literal notranslate"><span class="pre">%load_ext</span></code> module.path or be configured to be
 autoloaded by IPython at startup time.</p>
 <p>You can register the class itself without instantiating it. IPython will
-call the default constructor on it.:</p>
+call the default constructor on it.</p>
 <div class="highlight-ipython notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
 3
 4
 5
-6</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+6
+7</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="gp">In [10]: </span><span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 
-<span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+<span class="gp">In [11]: </span><span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
 
-<span class="k">def</span> <span class="nf">load_ipython_extension</span><span class="p">(</span><span class="n">shell</span><span class="p">):</span>
-    <span class="n">shell</span><span class="o">.</span><span class="n">register_magics</span><span class="p">(</span><span class="n">MyMagics</span><span class="p">)</span>
+<span class="gp">In [12]: </span><span class="k">def</span> <span class="nf">load_ipython_extension</span><span class="p">(</span><span class="n">shell</span><span class="p">):</span>
+<span class="gp">   ....: </span>    <span class="n">shell</span><span class="o">.</span><span class="n">register_magics</span><span class="p">(</span><span class="n">MyMagics</span><span class="p">)</span>
+<span class="gp">   ....: </span>
 </pre></div>
 </td></tr></table></div>
 <p>If you want to create a class with a different constructor that holds
@@ -364,15 +372,15 @@ instantiate the class yourself before registration:</p>
 12
 13
 14
-15</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="gp">In [10]: </span><span class="kn">from</span> <span class="nn">IPython.core.magic</span> <span class="kn">import</span> <span class="n">Magics</span><span class="p">,</span> <span class="n">magics_class</span><span class="p">,</span> <span class="n">line_magic</span>
+15</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="gp">In [13]: </span><span class="kn">from</span> <span class="nn">IPython.core.magic</span> <span class="kn">import</span> <span class="n">Magics</span><span class="p">,</span> <span class="n">magics_class</span><span class="p">,</span> <span class="n">line_magic</span>
 
-<span class="gp">In [11]: </span><span class="kn">from</span> <span class="nn">IPython.core.magic</span> <span class="kn">import</span> <span class="n">cell_magic</span><span class="p">,</span> <span class="n">line_cell_magic</span>
+<span class="gp">In [14]: </span><span class="kn">from</span> <span class="nn">IPython.core.magic</span> <span class="kn">import</span> <span class="n">cell_magic</span><span class="p">,</span> <span class="n">line_cell_magic</span>
 
-<span class="gp">In [12]: </span><span class="k">class</span> <span class="nc">StatefulMagics</span><span class="p">(</span><span class="n">Magics</span><span class="p">):</span>
+<span class="gp">In [15]: </span><span class="k">class</span> <span class="nc">StatefulMagics</span><span class="p">(</span><span class="n">Magics</span><span class="p">):</span>
 <span class="gp">   ....: </span>    <span class="s2">&quot;Magics that hold additional state&quot;</span>
 <span class="gp">   ....: </span>
 
-<span class="gp">In [13]: </span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<span class="gp">In [16]: </span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
 <span class="gp">   ....: </span>        <span class="nb">super</span><span class="p">(</span><span class="n">StatefulMagics</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">shell</span><span class="p">)</span>
 <span class="gp">   ....: </span>        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
 <span class="gp">   ....: </span>
@@ -397,9 +405,6 @@ for the current API.</p>
 <h2>Complete Example<a class="headerlink" href="#complete-example" title="Permalink to this headline">¶</a></h2>
 <p>Here is a full example of a magic package. You can distribute magics using
 setuptools, distutils, or any other distribution tools like <a class="reference external" href="http://flit.readthedocs.io">flit</a> for pure Python packages.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cat example_magic/__init__.py
-</pre></div>
-</div>
 <div class="highlight-python3 notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
 3
@@ -415,9 +420,7 @@ setuptools, distutils, or any other distribution tools like <a class="reference 
     <span class="n">ipython</span><span class="o">.</span><span class="n">register_magics</span><span class="p">(</span><span class="n">Abracadabra</span><span class="p">)</span>
 </pre></div>
 </td></tr></table></div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cat example_magic/abracadabra.py
-</pre></div>
-</div>
+<p>And here’s the Abracadabra class mentioned above.</p>
 <div class="highlight-python3 notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
@@ -499,7 +502,7 @@ explore all the instance’s attributes interactively from
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="ipython_keybindings.html" title="previous chapter">Keybindings in IPython</a></li>
-      <li>Next: <a href="exceptions.html" title="next chapter">Customized Exceptions</a></li>
+      <li>Next: <a href="extensions.html" title="next chapter">Extensions</a></li>
   </ul></li>
 </ul>
 
@@ -509,46 +512,15 @@ explore all the instance’s attributes interactively from
 <div id="sidebartoc">
 <p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="ipython_keybindings.html">Keybindings</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="ipython_keybindings.html#key-bindings">Key Bindings</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ipython_keybindings.html#interactively-binding-keys">Interactively Binding Keys</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ipython_keybindings.html#official-ipython-documentation">Official IPython Documentation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ipython_keybindings.html#side-effects">Side Effects</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ipython_keybindings.html#source-code-for-creating-ipython-shortcuts">Source code for creating IPython shortcuts</a></li>
-</ul>
-</li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Custom Magics</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#registering-the-magic">Registering the magic</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#complete-example">Complete Example</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#creating-ipython-extensions">Creating IPython Extensions</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="exceptions.html">Customized Exceptions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="exceptions.html#debugging">Debugging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="exceptions.html#help-on-module-ipython-core-ultratb-in-ipython-core">Help on module <code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython.core.ultratb</span></code> in <code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython.core</span></code>:</a></li>
-<li class="toctree-l2"><a class="reference internal" href="exceptions.html#verbosetb"><strong>VerboseTB</strong></a></li>
-<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sys-excepthook-exceptionhook"><code class="xref py py-func docutils literal notranslate"><span class="pre">sys.excepthook()</span></code> — ExceptionHook</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="sphinxext.html">IPython Sphinx Directive</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="sphinxext.html#directive-and-options">Directive and options</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sphinxext.html#directive-usage">Directive Usage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sphinxext.html#persisting-the-session-across-ipython-directive-blocks">Persisting the session across IPython directive blocks</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sphinxext.html#multi-line-input">Multi-line input</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sphinxext.html#testing-directive-outputs">Testing directive outputs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sphinxext.html#handling-comments">Handling Comments</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sphinxext.html#splitting-python-statements-across-lines">Splitting Python statements across lines</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sphinxext.html#supported-pseudo-decorators">Supported Pseudo-Decorators</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sphinxext.html#module-IPython.sphinxext.ipython_directive">Automatically generated documentation</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="dev.html">Developers Notes</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="dev.html#installing">Installing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="dev.html#building-documentation">Building Documentation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="dev.html#generating-css">Generating CSS</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="ipython_keybindings.html">Keybindings</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Custom Magics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extensions.html">Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jobcontrol.html">Job Control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exceptions.html">Customized Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sphinxext.html">IPython Sphinx Directive</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev.html">Developers Notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lexer.html">New IPython Console Lexer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lexer.html#see-also">See Also</a></li>
 <li class="toctree-l1"><a class="reference internal" href="startup/index.html">IPython Shell Initialization</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="startup/rehashx.html">01_rehashx</a></li>
 <li class="toctree-l2"><a class="reference internal" href="startup/easy_import.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">04_easy_import</span></code></a></li>
@@ -560,24 +532,8 @@ explore all the instance’s attributes interactively from
 <li class="toctree-l2"><a class="reference internal" href="startup/sysexcept.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">50_sysexception</span></code> module</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="util.html">General Utility Functions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="util.html#module-default_profile.util">Module contents</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.html#module-default_profile.util.copytree">default_profile.util.copytree module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.html#module-default_profile.util.machine">default_profile.util.machine module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.html#module-default_profile.util.module_log">default_profile.util.module_log module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.html#module-default_profile.util.paths"><code class="xref py py-mod docutils literal notranslate"><span class="pre">default_profile.util.paths</span></code> module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.html#module-default_profile.util.profile_override"><code class="xref py py-mod docutils literal notranslate"><span class="pre">default_profile.util.profile_override</span></code> module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.html#module-default_profile.util.timer">default_profile.util.timer module</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="jupyter.html">Jupyter Suite</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="jupyter.html#jupyter-qtconsole">Jupyter QTConsole</a></li>
-<li class="toctree-l2"><a class="reference internal" href="jupyter.html#jupyter-notebook">Jupyter Notebook</a></li>
-<li class="toctree-l2"><a class="reference internal" href="jupyter.html#image-handlers">Image Handlers</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="extensions.html">Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">General Utility Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jupyter.html">Jupyter Suite</a></li>
 </ul>
 
 
@@ -606,7 +562,7 @@ explore all the instance’s attributes interactively from
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="exceptions.html" title="Customized Exceptions"
+          <a href="extensions.html" title="Extensions"
              >next</a> |</li>
         <li class="right" >
           <a href="ipython_keybindings.html" title="Keybindings in IPython"

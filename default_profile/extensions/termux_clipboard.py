@@ -5,6 +5,8 @@
 .. module:: termux_clipboard_get
     :synopsis: Set up termux for the paste magic.
 
+.. magic:: termux_clipboard_get
+
 IPython will simply fail as tkinter can't be installed.
 
 See Also

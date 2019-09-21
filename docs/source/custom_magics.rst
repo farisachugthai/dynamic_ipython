@@ -195,10 +195,13 @@ Writing Custom Magics
 `Custom Magics
 <https://raw.githubusercontent.com/ipython/ipython/523ed2fe58ea5ee9971d2b21df1de33b8cdfa924/docs/source/config/custommagics.rst>`_:
 
-There are two main ways to define your own magic functions. From standalone
-functions and by inheriting from a base class provided by :mod:`IPython`:
+There are two main ways to define your own magic functions.
 
-:class:`IPython.core.magic.Magics`
+#) From standalone functions 
+
+#) Inheriting from a base class provided by :mod:`IPython`:
+
+   #) :class:`IPython.core.magic.Magics`
 
 Below, there will be code displayed that demonstrates how to write an extension
 and allow it to be automatically loaded.
@@ -288,7 +291,10 @@ can be loaded via `%load_ext` module.path or be configured to be
 autoloaded by IPython at startup time.
 
 You can register the class itself without instantiating it. IPython will
-call the default constructor on it.::
+call the default constructor on it.
+
+.. ipython:: python
+   :verbatim:
 
    from IPython import get_ipython
 
@@ -339,21 +345,6 @@ Here is a full example of a magic package. You can distribute magics using
 setuptools, distutils, or any other distribution tools like `flit
 <http://flit.readthedocs.io>`_ for pure Python packages.
 
-.. ipython::
-    :verbatim:
-
-   .
-   ├── example_magic
-   │   ├── __init__.py
-   │   └── abracadabra.py
-   └── setup.py
-
-
-.. sourcecode:: bash
-
-   $ cat example_magic/__init__.py
-
-
 .. code-block:: python3
 
    """An example magic"""
@@ -365,10 +356,7 @@ setuptools, distutils, or any other distribution tools like `flit
        ipython.register_magics(Abracadabra)
 
 
-.. sourcecode:: bash
-
-    $ cat example_magic/abracadabra.py
-
+And here's the Abracadabra class mentioned above.
 
 .. code-block:: python3
 

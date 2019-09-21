@@ -4,6 +4,8 @@
 ===========
 Extensions
 ===========
+.. module:: extensions
+    :synopsis: Expose the API for all IPython extensions I've created.
 
 This houses a collection of IPython extensions I've written.
 
@@ -25,11 +27,6 @@ extensions_logger.setLevel(logging.WARNING)
 extensions_logger.addHandler(extensions_handler)
 
 from .event_watcher_example import VarWatcher
-from .extension_inspect import PrettyColorfulInspector
 from .pd_csv import pd_csv
 from .termux_clipboard import termux_clipboard_get
-
-try:
-    from . import repr_requests
-except Exception as e:
-    print(e)
+from .job_control import install

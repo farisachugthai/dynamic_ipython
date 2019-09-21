@@ -13,6 +13,14 @@ imported and utilized across the package.
 Currently :func:`~default_profile.util.module_log.stream_logger`
 is the easiest and most oft used entry point in this module.
 
+.. doctest::
+
+    >>> import logging
+    >>> import default_profile
+    >>> from default_profile.util import module_log
+    >>> module_log.stream_logger(logging.getLogger(__name__))
+
+
 """
 from datetime import datetime
 import json
@@ -34,12 +42,12 @@ def stream_logger(logger, log_level=logging.INFO, msg_format=None):
 
     Parameters
     ----------
-    logger : :class:`logging.Logger()`
+    logger : :class:`logging.Logger`
         Configure a passed logger. See example below.
     log_level : int, optional
         Level of log records. Defaults to 20.
     msg_format : str, optional
-        Representation of logging messages. Uses standard %-style string
+        Representation of logging messages. Uses standard :kbd:`%` style string
         formatting. Defaults to ``%(asctime)s %(levelname)s %(message)s``
 
     Returns
@@ -87,6 +95,8 @@ def file_logger(
 ):
     """Logging that emits a :class:`logging.LogRecord` to ``filename``.
 
+    Logger uses the following formatting by default: ``%(asctime)s : %(levelname)s : %(message)s : ``
+
     Parameters
     ----------
     filename : str
@@ -100,9 +110,9 @@ def file_logger(
     ``log_level`` : int, optional
         Level of log records.
     ``msg_format`` : str, optional
-        Representation of logging messages. Uses standard :kbd:`%` style
+        Representation of logging messages using parameters accepted by
+        :class:`logging.Formatter`. Uses standard :kbd:`%` style
         string formatting.
-        Defaults to ``%(asctime)s : %(levelname)s : %(message)s : ``
 
     Returns
     -------
@@ -111,7 +121,7 @@ def file_logger(
     Raises
     ------
     AssertionError
-        *shell* is not :keyword:`isinstance` |ip|.
+        *shell* is not `isinstance` |ip|.
 
     """
     assert isinstance(

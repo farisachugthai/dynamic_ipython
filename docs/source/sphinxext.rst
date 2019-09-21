@@ -3,6 +3,7 @@
 ========================
 IPython Sphinx Directive
 ========================
+
 .. highlight:: ipython
 
 The IPython directive is a stateful shell that can be used in reStructured
@@ -106,22 +107,22 @@ from ``1``. For example, the prompt below is renumbered so as to follow the code
 block from above.
 
 .. ipython::
-   :verbatim:
+   :okexcept:
 
-  In [138]: z = x*3   # x is recalled from previous block
+   In [138]: z = x*3   # x is recalled from previous block
 
-  In [139]: z
-  Out[139]: 6
+   In [139]: z
+   Out[139]: 6
 
-  In [142]: print(z)
-  6
+   In [142]: print(z)
+   6
 
-  In [141]: q = z[)   # this is a syntax error -- we trap ipy exceptions
-  ------------------------------------------------------------
+   In [141]: q = z[)   # this is a syntax error -- we trap ipy exceptions
+   ------------------------------------------------------------
      File "<ipython console>", line 1
        q = z[)   # this is a syntax error -- we trap ipy exceptions
-	     ^
-  SyntaxError: invalid syntax
+             ^
+   SyntaxError: invalid syntax
 
 
 Multi-line input
@@ -190,7 +191,7 @@ documentation is built:
    All warnings are treated as errors in the default configuration which
    will lead to frequent crashes while building documentation.
    The option where this behavior can be modified, ``ipython_warning_is_error``
-   is displayed in the :ref:`IPython Sphinx directive module` section at the
+   is displayed in the IPython Sphinx directive module section at the
    bottom of the page.
 
 You can `@doctest` multi-line output as well. Just be careful
