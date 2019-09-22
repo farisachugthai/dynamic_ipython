@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>default_profile.startup.06_help_helpers &#8212; Dynamic IPython: version0.0.1</title>
+    <title>default_profile.extensions.termux_clipboard &#8212; Dynamic IPython: version0.0.1</title>
     <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../../_static/copybutton.js"></script>
-    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/startup/06_help_helpers.html" />
+    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/extensions/termux_clipboard.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
 
@@ -50,64 +50,67 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <h1>Source code for default_profile.startup.06_help_helpers</h1><div class="highlight"><pre>
+  <h1>Source code for default_profile.extensions.termux_clipboard</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">============</span>
-<span class="sd">Help Helpers</span>
-<span class="sd">============</span>
+<span class="sd">&quot;&quot;&quot;Implement the `%paste` magic on Termux.</span>
 
-<span class="sd">Export functions to redirect :func:`help` output.</span>
+<span class="sd">.. module:: termux_clipboard_get</span>
+<span class="sd">    :synopsis: Set up termux for the paste magic.</span>
 
-<span class="sd">This module utilizes the examples given in the official documentation</span>
-<span class="sd">for :mod:`contextlib`.</span>
+<span class="sd">.. magic:: termux_clipboard_get</span>
 
-<span class="sd">In addition to utilizing :mod:`contextlib`, we create a function that allows</span>
-<span class="sd">that allows searching through the members of an object.</span>
+<span class="sd">IPython will simply fail as tkinter can&#39;t be installed.</span>
 
-<span class="sd">This is intended to be exposed to the user as a quick, interactive tool</span>
-<span class="sd">with an easier &quot;grep-like&quot; interface for objects that are too large</span>
-<span class="sd">to be quickly and easily understood based on the output of :func:`dir`.</span>
-
-<span class="sd">.. todo:: :mod:`pydoc` actually has a giant API so we could also use that.</span>
-
+<span class="sd">See Also</span>
+<span class="sd">--------</span>
+<span class="sd">:mod:`IPython.lib.clipboard`</span>
+<span class="sd">:mod:`IPython.core.hooks`</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">contextlib</span>
-<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 
-
-<div class="viewcode-block" id="print_help"><a class="viewcode-back" href="../../../startup/help_helpers.html#default_profile.startup.06_help_helpers.print_help">[docs]</a><span class="k">def</span> <span class="nf">print_help</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Redirect :func:`help` to ``sys.stderr``.&quot;&quot;&quot;</span>
-    <span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">redirect_stdout</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">):</span>
-        <span class="n">help</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span></div>
+<span class="kn">from</span> <span class="nn">IPython.core.magic</span> <span class="kn">import</span> <span class="n">line_magic</span>
 
 
-<div class="viewcode-block" id="save_help"><a class="viewcode-back" href="../../../startup/help_helpers.html#default_profile.startup.06_help_helpers.save_help">[docs]</a><span class="k">def</span> <span class="nf">save_help</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">output_file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Write :func:`help` to a file. Defaults to ``sys.stdout``.&quot;&quot;&quot;</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="s1">&#39;xt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">redirect_stdout</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-            <span class="n">help</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span></div>
+<div class="viewcode-block" id="termux_clipboard_get"><a class="viewcode-back" href="../../../extensions.html#default_profile.extensions.termux_clipboard.termux_clipboard_get">[docs]</a><span class="nd">@line_magic</span>
+<span class="k">def</span> <span class="nf">termux_clipboard_get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Set the clipboard on termux using *termux_clipboard_get*.&quot;&quot;&quot;</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="s1">&#39;termux-clipboard-get&#39;</span><span class="p">],</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">stdout</span>
+    <span class="kn">from</span> <span class="nn">IPython.utils.py3compat</span> <span class="kn">import</span> <span class="n">cast_unicode</span><span class="p">,</span> <span class="n">DEFAULT_ENCODING</span>
+    <span class="n">unicode_text</span> <span class="o">=</span> <span class="n">cast_unicode</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">DEFAULT_ENCODING</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">unicode_text</span></div>
 
 
-<div class="viewcode-block" id="page_help"><a class="viewcode-back" href="../../../startup/help_helpers.html#default_profile.startup.06_help_helpers.page_help">[docs]</a><span class="k">def</span> <span class="nf">page_help</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Using IPython&#39;s `pinfo` magic to page information to the console.</span>
+<div class="viewcode-block" id="load_ipython_extension"><a class="viewcode-back" href="../../../extensions.html#default_profile.extensions.termux_clipboard.load_ipython_extension">[docs]</a><span class="k">def</span> <span class="nf">load_ipython_extension</span><span class="p">(</span><span class="n">ip</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Sep 20, 2019: Works!&quot;&quot;&quot;</span>
+    <span class="n">ip</span><span class="o">.</span><span class="n">set_hook</span><span class="p">(</span><span class="s1">&#39;clipboard_get&#39;</span><span class="p">,</span> <span class="n">termux_clipboard_get</span><span class="p">)</span></div>
 
-<span class="sd">    Also noting it&#39;s the only function in this module that actually needs</span>
-<span class="sd">    the IPython instance so the imports were moved here.</span>
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../extensions.html#default_profile.extensions.termux_clipboard.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Main function.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    TODO</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
-    <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_ip</span><span class="p">,</span> <span class="s1">&#39;pinfo&#39;</span><span class="p">):</span>
-        <span class="n">_ip</span><span class="o">.</span><span class="n">pinfo</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span></div>
+    <span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">shell</span><span class="p">:</span>
+        <span class="k">return</span>
+
+    <span class="k">if</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s1">&#39;termux-clipboard-get&#39;</span><span class="p">):</span>
+        <span class="c1"># shell.set_hook(termux_clipboard_get)</span>
+        <span class="n">load_ipython_extension</span><span class="p">(</span><span class="n">shell</span><span class="p">)</span></div>
 
 
-<span class="k">def</span> <span class="nf">grep</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;^a-z.*$&#39;</span><span class="p">]):</span>
-    <span class="n">compiled</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
-    <span class="n">attributes</span> <span class="o">=</span> <span class="nb">dir</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">attributes</span> <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">compiled</span><span class="p">,</span> <span class="n">i</span><span class="p">)))</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
 </pre></div>
 
           </div>

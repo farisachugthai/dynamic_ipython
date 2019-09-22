@@ -105,9 +105,9 @@ to represent the whole line when the alias is called.</p>
 <p>Meaning that it behaves similarly to the parameter <kbd class="kbd docutils literal notranslate">$*</kbd>
 in typical POSIX shells.</p>
 <p>The documentation goes on to say:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="o">%</span><span class="n">alias</span> <span class="n">bracket</span> <span class="n">echo</span> <span class="s2">&quot;Input in brackets: &lt;%l&gt;&quot;</span>
-<span class="n">In</span> <span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">bracket</span> <span class="n">hello</span> <span class="n">world</span>
-<span class="n">Input</span> <span class="ow">in</span> <span class="n">brackets</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">hello</span> <span class="n">world</span><span class="o">&gt;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="gp">In [2]: </span><span class="o">%</span><span class="k">alias</span> bracket echo &quot;Input in brackets: &lt;%l&gt;&quot;
+<span class="gp">In [3]: </span><span class="n">bracket</span> <span class="n">hello</span> <span class="n">world</span>
+<span class="go">Input in brackets: &lt;hello world&gt;</span>
 </pre></div>
 </div>
 <p>Note that we quote when in the configuration file but when running <code class="xref py py-obj docutils literal notranslate"><span class="pre">%alias</span></code>
@@ -125,7 +125,7 @@ implementation scaffolded.</p>
 </div>
 <p>Below is the source code for the function
 <code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.core.magics.define_alias()</span></code> that is invoked here.:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">define_alias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">cmd</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">define_alias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">cmd</span><span class="p">):</span>
     <span class="c1"># Define a new alias after validating it.</span>
     <span class="c1"># This will raise an :exc:`AliasError` if there are validation</span>
     <span class="c1"># problems.</span>
@@ -140,9 +140,9 @@ implementation scaffolded.</p>
 <span class="target" id="module-20_aliases"></span><p>Refactoring TODO:</p>
 <p>Create a class with instance attributes for <a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.platform" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sys.platform</span></code></a>.
 Break linux up like so:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">AliasOSAgnostic</span><span class="p">:</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">AliasOSAgnostic</span><span class="p">:</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
 
     <span class="nd">@property</span>
@@ -207,7 +207,7 @@ number of GNU/Linux built-ins to exist on Windows, and as a result, this
 list may not be comprehensive.</p>
 <p>Below is the source code for the function
 <code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.core.magics.define_alias()</span></code> that is invoked here.:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">define_alias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">cmd</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">define_alias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">cmd</span><span class="p">):</span>
     <span class="c1"># Define a new alias after validating it.</span>
     <span class="c1"># This will raise an :exc:`AliasError` if there are validation</span>
     <span class="c1"># problems.</span>

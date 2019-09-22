@@ -248,21 +248,21 @@
 <span class="kn">import</span> <span class="nn">ast</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
-<span class="kn">from</span> <span class="nn">io</span> <span class="k">import</span> <span class="n">StringIO</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
 
 <span class="c1"># Third-party</span>
-<span class="kn">from</span> <span class="nn">docutils.parsers.rst</span> <span class="k">import</span> <span class="n">directives</span>
-<span class="kn">from</span> <span class="nn">docutils.parsers.rst</span> <span class="k">import</span> <span class="n">Directive</span>
+<span class="kn">from</span> <span class="nn">docutils.parsers.rst</span> <span class="kn">import</span> <span class="n">directives</span>
+<span class="kn">from</span> <span class="nn">docutils.parsers.rst</span> <span class="kn">import</span> <span class="n">Directive</span>
 
 <span class="c1"># Our own</span>
-<span class="kn">from</span> <span class="nn">traitlets.config</span> <span class="k">import</span> <span class="n">Config</span>
-<span class="kn">from</span> <span class="nn">IPython</span> <span class="k">import</span> <span class="n">InteractiveShell</span>
-<span class="kn">from</span> <span class="nn">IPython.core.profiledir</span> <span class="k">import</span> <span class="n">ProfileDir</span>
+<span class="kn">from</span> <span class="nn">traitlets.config</span> <span class="kn">import</span> <span class="n">Config</span>
+<span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">InteractiveShell</span>
+<span class="kn">from</span> <span class="nn">IPython.core.profiledir</span> <span class="kn">import</span> <span class="n">ProfileDir</span>
 
-<span class="n">use_matplotlib</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">use_matplotlib</span> <span class="o">=</span> <span class="bp">False</span>
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">matplotlib</span>
-    <span class="n">use_matplotlib</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">use_matplotlib</span> <span class="o">=</span> <span class="bp">True</span>
 <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
     <span class="k">pass</span>
 
@@ -301,7 +301,7 @@
     <span class="n">lines</span> <span class="o">=</span> <span class="n">part</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
     <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
     <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">decorator</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">decorator</span> <span class="o">=</span> <span class="bp">None</span>
     <span class="k">while</span> <span class="mi">1</span><span class="p">:</span>
 
         <span class="k">if</span> <span class="n">i</span><span class="o">==</span><span class="n">N</span><span class="p">:</span>
@@ -383,18 +383,18 @@
 <div class="viewcode-block" id="EmbeddedSphinxShell"><a class="viewcode-back" href="../../../sphinxext.html#IPython.sphinxext.ipython_directive.EmbeddedSphinxShell">[docs]</a><span class="k">class</span> <span class="nc">EmbeddedSphinxShell</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;An embedded IPython instance to run inside Sphinx&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exec_lines</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exec_lines</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">cout</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="n">exec_lines</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">exec_lines</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">exec_lines</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># Create config object for IPython</span>
         <span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">()</span>
         <span class="n">config</span><span class="o">.</span><span class="n">HistoryManager</span><span class="o">.</span><span class="n">hist_file</span> <span class="o">=</span> <span class="s1">&#39;:memory:&#39;</span>
-        <span class="n">config</span><span class="o">.</span><span class="n">InteractiveShell</span><span class="o">.</span><span class="n">autocall</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="n">config</span><span class="o">.</span><span class="n">InteractiveShell</span><span class="o">.</span><span class="n">autoindent</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">InteractiveShell</span><span class="o">.</span><span class="n">autocall</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">InteractiveShell</span><span class="o">.</span><span class="n">autoindent</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="n">config</span><span class="o">.</span><span class="n">InteractiveShell</span><span class="o">.</span><span class="n">colors</span> <span class="o">=</span> <span class="s1">&#39;NoColor&#39;</span>
 
         <span class="c1"># create a profile so instance history isn&#39;t saved</span>
@@ -417,27 +417,27 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">output</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tmp_profile_dir</span> <span class="o">=</span> <span class="n">tmp_profile_dir</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">is_verbatim</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">is_doctest</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">is_suppress</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_verbatim</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_doctest</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_suppress</span> <span class="o">=</span> <span class="bp">False</span>
 
         <span class="c1"># Optionally, provide more detailed information to shell.</span>
         <span class="c1"># this is assigned by the SetUp method of IPythonDirective</span>
         <span class="c1"># to point at itself.</span>
         <span class="c1">#</span>
         <span class="c1"># So, you can access handy things at self.directive.state</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">directive</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">directive</span> <span class="o">=</span> <span class="bp">None</span>
 
         <span class="c1"># on the first call to the savefig decorator, we&#39;ll import</span>
         <span class="c1"># pyplot as plt so we can make a call to the plt.gcf().savefig</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_pyplot_imported</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pyplot_imported</span> <span class="o">=</span> <span class="bp">False</span>
 
         <span class="c1"># Prepopulate the namespace.</span>
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">exec_lines</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">process_input_line</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">store_history</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process_input_line</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">store_history</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tmp_profile_dir</span><span class="p">,</span> <span class="n">ignore_errors</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tmp_profile_dir</span><span class="p">,</span> <span class="n">ignore_errors</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">clear_cout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cout</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
@@ -446,7 +446,7 @@
     <span class="k">def</span> <span class="nf">process_input_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">store_history</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process_input_lines</span><span class="p">([</span><span class="n">line</span><span class="p">],</span> <span class="n">store_history</span><span class="o">=</span><span class="n">store_history</span><span class="p">)</span>
 
-<div class="viewcode-block" id="EmbeddedSphinxShell.process_input_lines"><a class="viewcode-back" href="../../../sphinxext.html#IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.process_input_lines">[docs]</a>    <span class="k">def</span> <span class="nf">process_input_lines</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lines</span><span class="p">,</span> <span class="n">store_history</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="EmbeddedSphinxShell.process_input_lines"><a class="viewcode-back" href="../../../sphinxext.html#IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.process_input_lines">[docs]</a>    <span class="k">def</span> <span class="nf">process_input_lines</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lines</span><span class="p">,</span> <span class="n">store_history</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;process the input, capturing stdout&quot;&quot;&quot;</span>
         <span class="n">stdout</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
         <span class="n">source_raw</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
@@ -494,16 +494,16 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">decorator</span><span class="p">,</span> <span class="nb">input</span><span class="p">,</span> <span class="n">rest</span> <span class="o">=</span> <span class="n">data</span>
-        <span class="n">image_file</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">image_directive</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">image_file</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">image_directive</span> <span class="o">=</span> <span class="bp">None</span>
 
         <span class="n">is_verbatim</span> <span class="o">=</span> <span class="n">decorator</span><span class="o">==</span><span class="s1">&#39;@verbatim&#39;</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_verbatim</span>
-        <span class="n">is_doctest</span> <span class="o">=</span> <span class="p">(</span><span class="n">decorator</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> \
+        <span class="n">is_doctest</span> <span class="o">=</span> <span class="p">(</span><span class="n">decorator</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> \
                      <span class="n">decorator</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;@doctest&#39;</span><span class="p">))</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_doctest</span>
         <span class="n">is_suppress</span> <span class="o">=</span> <span class="n">decorator</span><span class="o">==</span><span class="s1">&#39;@suppress&#39;</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_suppress</span>
         <span class="n">is_okexcept</span> <span class="o">=</span> <span class="n">decorator</span><span class="o">==</span><span class="s1">&#39;@okexcept&#39;</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_okexcept</span>
         <span class="n">is_okwarning</span> <span class="o">=</span> <span class="n">decorator</span><span class="o">==</span><span class="s1">&#39;@okwarning&#39;</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_okwarning</span>
-        <span class="n">is_savefig</span> <span class="o">=</span> <span class="n">decorator</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> \
+        <span class="n">is_savefig</span> <span class="o">=</span> <span class="n">decorator</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> \
                      <span class="n">decorator</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;@savefig&#39;</span><span class="p">)</span>
 
         <span class="n">input_lines</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
@@ -518,18 +518,18 @@
             <span class="n">image_file</span><span class="p">,</span> <span class="n">image_directive</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process_image</span><span class="p">(</span><span class="n">decorator</span><span class="p">)</span>
 
         <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">is_semicolon</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">is_semicolon</span> <span class="o">=</span> <span class="bp">False</span>
 
         <span class="c1"># Hold the execution count, if requested to do so.</span>
         <span class="k">if</span> <span class="n">is_suppress</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">hold_count</span><span class="p">:</span>
-            <span class="n">store_history</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">store_history</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">store_history</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">store_history</span> <span class="o">=</span> <span class="bp">True</span>
 
         <span class="c1"># Note: catch_warnings is not thread safe</span>
-        <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">(</span><span class="n">record</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">as</span> <span class="n">ws</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">(</span><span class="n">record</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="k">as</span> <span class="n">ws</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">input_lines</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">):</span>
-                <span class="n">is_semicolon</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="n">is_semicolon</span> <span class="o">=</span> <span class="bp">True</span>
             <span class="c1">#for i, line in enumerate(input_lines):</span>
 
             <span class="c1"># process the first input line</span>
@@ -620,7 +620,7 @@
             <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">processed_output</span><span class="p">)</span>
             <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&lt;&lt;&lt;&#39;</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;-&#39;</span> <span class="o">*</span> <span class="mi">73</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">warning_is_error</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Non Expected exception in `</span><span class="si">{}</span><span class="s1">` line </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">lineno</span><span class="p">))</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Non Expected exception in `{}` line {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">lineno</span><span class="p">))</span>
 
         <span class="c1"># output any warning raised during execution to stdout</span>
         <span class="c1"># unless :okwarning: has been specified.</span>
@@ -636,7 +636,7 @@
                 <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
                 <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&lt;&lt;&lt;&#39;</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;-&#39;</span> <span class="o">*</span> <span class="mi">73</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">warning_is_error</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Non Expected warning in `</span><span class="si">{}</span><span class="s1">` line </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">lineno</span><span class="p">))</span>
+                    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Non Expected warning in `{}` line {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">lineno</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">cout</span><span class="o">.</span><span class="n">truncate</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="n">input_lines</span><span class="p">,</span> <span class="n">processed_output</span><span class="p">,</span>
@@ -654,13 +654,13 @@
 
         <span class="n">TAB</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span> <span class="o">*</span> <span class="mi">4</span>
 
-        <span class="k">if</span> <span class="n">is_doctest</span> <span class="ow">and</span> <span class="n">output</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">is_doctest</span> <span class="ow">and</span> <span class="n">output</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
 
             <span class="n">found</span> <span class="o">=</span> <span class="n">output</span> <span class="c1"># This is the processed output</span>
             <span class="n">found</span> <span class="o">=</span> <span class="n">found</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
             <span class="n">submitted</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">directive</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">directive</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
                 <span class="n">source</span> <span class="o">=</span> <span class="s1">&#39;Unavailable&#39;</span>
                 <span class="n">content</span> <span class="o">=</span> <span class="s1">&#39;Unavailable&#39;</span>
             <span class="k">else</span><span class="p">:</span>
@@ -673,10 +673,10 @@
             <span class="n">ind</span> <span class="o">=</span> <span class="n">found</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">output_prompt</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">ind</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">e</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;output does not contain output prompt</span><span class="se">\n\n</span><span class="s1">&#39;</span>
-                     <span class="s1">&#39;Document source: </span><span class="si">{0}</span><span class="se">\n\n</span><span class="s1">&#39;</span>
-                     <span class="s1">&#39;Raw content: </span><span class="se">\n</span><span class="si">{1}</span><span class="se">\n\n</span><span class="s1">&#39;</span>
-                     <span class="s1">&#39;Input line(s):</span><span class="se">\n</span><span class="si">{TAB}{2}</span><span class="se">\n\n</span><span class="s1">&#39;</span>
-                     <span class="s1">&#39;Output line(s):</span><span class="se">\n</span><span class="si">{TAB}{3}</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                     <span class="s1">&#39;Document source: {0}</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+                     <span class="s1">&#39;Raw content: </span><span class="se">\n</span><span class="s1">{1}</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+                     <span class="s1">&#39;Input line(s):</span><span class="se">\n</span><span class="s1">{TAB}{2}</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+                     <span class="s1">&#39;Output line(s):</span><span class="se">\n</span><span class="s1">{TAB}{3}</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="p">)</span>
                 <span class="n">e</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">content</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_lines</span><span class="p">),</span>
                              <span class="nb">repr</span><span class="p">(</span><span class="n">found</span><span class="p">),</span> <span class="n">TAB</span><span class="o">=</span><span class="n">TAB</span><span class="p">)</span>
                 <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
@@ -687,11 +687,11 @@
                 <span class="c1"># Standard doctest</span>
                 <span class="k">if</span> <span class="n">found</span> <span class="o">!=</span> <span class="n">submitted</span><span class="p">:</span>
                     <span class="n">e</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;doctest failure</span><span class="se">\n\n</span><span class="s1">&#39;</span>
-                         <span class="s1">&#39;Document source: </span><span class="si">{0}</span><span class="se">\n\n</span><span class="s1">&#39;</span>
-                         <span class="s1">&#39;Raw content: </span><span class="se">\n</span><span class="si">{1}</span><span class="se">\n\n</span><span class="s1">&#39;</span>
-                         <span class="s1">&#39;On input line(s):</span><span class="se">\n</span><span class="si">{TAB}{2}</span><span class="se">\n\n</span><span class="s1">&#39;</span>
-                         <span class="s1">&#39;we found output:</span><span class="se">\n</span><span class="si">{TAB}{3}</span><span class="se">\n\n</span><span class="s1">&#39;</span>
-                         <span class="s1">&#39;instead of the expected:</span><span class="se">\n</span><span class="si">{TAB}{4}</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                         <span class="s1">&#39;Document source: {0}</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+                         <span class="s1">&#39;Raw content: </span><span class="se">\n</span><span class="s1">{1}</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+                         <span class="s1">&#39;On input line(s):</span><span class="se">\n</span><span class="s1">{TAB}{2}</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+                         <span class="s1">&#39;we found output:</span><span class="se">\n</span><span class="s1">{TAB}{3}</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+                         <span class="s1">&#39;instead of the expected:</span><span class="se">\n</span><span class="s1">{TAB}{4}</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="p">)</span>
                     <span class="n">e</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">content</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_lines</span><span class="p">),</span>
                                  <span class="nb">repr</span><span class="p">(</span><span class="n">found</span><span class="p">),</span> <span class="nb">repr</span><span class="p">(</span><span class="n">submitted</span><span class="p">),</span> <span class="n">TAB</span><span class="o">=</span><span class="n">TAB</span><span class="p">)</span>
                     <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
@@ -719,7 +719,7 @@
             <span class="c1"># prompt for now, and we might have to adjust if it doesn&#39;t work</span>
             <span class="c1"># in other cases. Finally, the submitted output does not have</span>
             <span class="c1"># a trailing newline, so we must add it manually.</span>
-            <span class="n">out_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2"> </span><span class="si">{1}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">output_prompt</span><span class="p">,</span> <span class="n">data</span><span class="p">))</span>
+            <span class="n">out_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;{0} {1}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">output_prompt</span><span class="p">,</span> <span class="n">data</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">out_data</span></div>
 
@@ -735,11 +735,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">ensure_pyplot</span><span class="p">()</span>
         <span class="n">command</span> <span class="o">=</span> <span class="s1">&#39;plt.gcf().savefig(&quot;</span><span class="si">%s</span><span class="s1">&quot;)&#39;</span><span class="o">%</span><span class="n">image_file</span>
         <span class="c1">#print &#39;SAVEFIG&#39;, command  # dbg</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">process_input_line</span><span class="p">(</span><span class="s1">&#39;bookmark ipy_thisdir&#39;</span><span class="p">,</span> <span class="n">store_history</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">process_input_line</span><span class="p">(</span><span class="s1">&#39;cd -b ipy_savedir&#39;</span><span class="p">,</span> <span class="n">store_history</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">process_input_line</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">store_history</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">process_input_line</span><span class="p">(</span><span class="s1">&#39;cd -b ipy_thisdir&#39;</span><span class="p">,</span> <span class="n">store_history</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">process_input_line</span><span class="p">(</span><span class="s1">&#39;bookmark -d ipy_thisdir&#39;</span><span class="p">,</span> <span class="n">store_history</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process_input_line</span><span class="p">(</span><span class="s1">&#39;bookmark ipy_thisdir&#39;</span><span class="p">,</span> <span class="n">store_history</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process_input_line</span><span class="p">(</span><span class="s1">&#39;cd -b ipy_savedir&#39;</span><span class="p">,</span> <span class="n">store_history</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process_input_line</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">store_history</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process_input_line</span><span class="p">(</span><span class="s1">&#39;cd -b ipy_thisdir&#39;</span><span class="p">,</span> <span class="n">store_history</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process_input_line</span><span class="p">(</span><span class="s1">&#39;bookmark -d ipy_thisdir&#39;</span><span class="p">,</span> <span class="n">store_history</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">clear_cout</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="EmbeddedSphinxShell.process_block"><a class="viewcode-back" href="../../../sphinxext.html#IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.process_block">[docs]</a>    <span class="k">def</span> <span class="nf">process_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block</span><span class="p">):</span>
@@ -747,21 +747,21 @@
 <span class="sd">        process block from the block_parser and return a list of processed lines</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">output</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">input_lines</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">input_lines</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="n">lineno</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">IP</span><span class="o">.</span><span class="n">execution_count</span>
 
         <span class="n">input_prompt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">promptin</span> <span class="o">%</span> <span class="n">lineno</span>
         <span class="n">output_prompt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">promptout</span> <span class="o">%</span> <span class="n">lineno</span>
-        <span class="n">image_file</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">image_directive</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">image_file</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">image_directive</span> <span class="o">=</span> <span class="bp">None</span>
 
-        <span class="n">found_input</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">found_input</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="k">for</span> <span class="n">token</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">block</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">token</span> <span class="o">==</span> <span class="n">COMMENT</span><span class="p">:</span>
                 <span class="n">out_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process_comment</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">token</span> <span class="o">==</span> <span class="n">INPUT</span><span class="p">:</span>
-                <span class="n">found_input</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="n">found_input</span> <span class="o">=</span> <span class="bp">True</span>
                 <span class="p">(</span><span class="n">out_data</span><span class="p">,</span> <span class="n">input_lines</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">is_doctest</span><span class="p">,</span>
                  <span class="n">decorator</span><span class="p">,</span> <span class="n">image_file</span><span class="p">,</span> <span class="n">image_directive</span><span class="p">)</span> <span class="o">=</span> \
                           <span class="bp">self</span><span class="o">.</span><span class="n">process_input</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">input_prompt</span><span class="p">,</span> <span class="n">lineno</span><span class="p">)</span>
@@ -781,9 +781,9 @@
 
                     <span class="n">e</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">Invalid block: Block contains an output prompt &#39;</span>
                          <span class="s1">&#39;without an input prompt.</span><span class="se">\n\n</span><span class="s1">&#39;</span>
-                         <span class="s1">&#39;Document source: </span><span class="si">{0}</span><span class="se">\n\n</span><span class="s1">&#39;</span>
-                         <span class="s1">&#39;Content begins at line </span><span class="si">{1}</span><span class="s1">: </span><span class="se">\n\n</span><span class="si">{2}</span><span class="se">\n\n</span><span class="s1">&#39;</span>
-                         <span class="s1">&#39;Problematic block within content: </span><span class="se">\n\n</span><span class="si">{TAB}{3}</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                         <span class="s1">&#39;Document source: {0}</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+                         <span class="s1">&#39;Content begins at line {1}: </span><span class="se">\n\n</span><span class="s1">{2}</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+                         <span class="s1">&#39;Problematic block within content: </span><span class="se">\n\n</span><span class="s1">{TAB}{3}</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="p">)</span>
                     <span class="n">e</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">linenumber</span><span class="p">,</span> <span class="n">content</span><span class="p">,</span> <span class="n">block</span><span class="p">,</span> <span class="n">TAB</span><span class="o">=</span><span class="n">TAB</span><span class="p">)</span>
 
                     <span class="c1"># Write, rather than include in exception, since Sphinx</span>
@@ -806,7 +806,7 @@
                 <span class="n">ret</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">out_data</span><span class="p">)</span>
 
         <span class="c1"># save the image files</span>
-        <span class="k">if</span> <span class="n">image_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">image_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">save_image</span><span class="p">(</span><span class="n">image_file</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">ret</span><span class="p">,</span> <span class="n">image_directive</span></div>
@@ -834,8 +834,8 @@
 
             <span class="c1"># Always import pyplot into embedded shell.</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process_input_line</span><span class="p">(</span><span class="s1">&#39;import matplotlib.pyplot as plt&#39;</span><span class="p">,</span>
-                                    <span class="n">store_history</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_pyplot_imported</span> <span class="o">=</span> <span class="kc">True</span></div>
+                                    <span class="n">store_history</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pyplot_imported</span> <span class="o">=</span> <span class="bp">True</span></div>
 
 <div class="viewcode-block" id="EmbeddedSphinxShell.process_pure_python"><a class="viewcode-back" href="../../../sphinxext.html#IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.process_pure_python">[docs]</a>    <span class="k">def</span> <span class="nf">process_pure_python</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -846,9 +846,9 @@
 <span class="sd">        the content as a list as if it were ipython code</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">savefig</span> <span class="o">=</span> <span class="kc">False</span> <span class="c1"># keep up with this to clear figure</span>
-        <span class="n">multiline</span> <span class="o">=</span> <span class="kc">False</span> <span class="c1"># to handle line continuation</span>
-        <span class="n">multiline_start</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">savefig</span> <span class="o">=</span> <span class="bp">False</span> <span class="c1"># keep up with this to clear figure</span>
+        <span class="n">multiline</span> <span class="o">=</span> <span class="bp">False</span> <span class="c1"># to handle line continuation</span>
+        <span class="n">multiline_start</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="n">fmtin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">promptin</span>
 
         <span class="n">ct</span> <span class="o">=</span> <span class="mi">0</span>
@@ -864,7 +864,7 @@
             <span class="k">if</span> <span class="n">line_stripped</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;@&#39;</span><span class="p">):</span>
                 <span class="n">output</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">line</span><span class="p">])</span>
                 <span class="k">if</span> <span class="s1">&#39;savefig&#39;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
-                    <span class="n">savefig</span> <span class="o">=</span> <span class="kc">True</span> <span class="c1"># and need to clear figure</span>
+                    <span class="n">savefig</span> <span class="o">=</span> <span class="bp">True</span> <span class="c1"># and need to clear figure</span>
                 <span class="k">continue</span>
 
             <span class="c1"># handle comments</span>
@@ -882,7 +882,7 @@
                     <span class="n">ast</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">line_stripped</span><span class="p">)</span>
                     <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
                 <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span> <span class="c1"># on a multiline</span>
-                    <span class="n">multiline</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="n">multiline</span> <span class="o">=</span> <span class="bp">True</span>
                     <span class="n">multiline_start</span> <span class="o">=</span> <span class="n">lineno</span>
             <span class="k">else</span><span class="p">:</span> <span class="c1"># still on a multiline</span>
                 <span class="n">modified</span> <span class="o">=</span> <span class="sa">u</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">continuation</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
@@ -900,18 +900,18 @@
                         <span class="c1"># check to see if we have the whole function</span>
                         <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">mod</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">body</span><span class="p">:</span>
                             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Return</span><span class="p">):</span>
-                                <span class="n">multiline</span> <span class="o">=</span> <span class="kc">False</span>
+                                <span class="n">multiline</span> <span class="o">=</span> <span class="bp">False</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-                        <span class="n">multiline</span> <span class="o">=</span> <span class="kc">False</span>
+                        <span class="n">multiline</span> <span class="o">=</span> <span class="bp">False</span>
                 <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
                     <span class="k">pass</span>
 
             <span class="k">if</span> <span class="n">savefig</span><span class="p">:</span> <span class="c1"># clear figure if plotted</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">ensure_pyplot</span><span class="p">()</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">process_input_line</span><span class="p">(</span><span class="s1">&#39;plt.clf()&#39;</span><span class="p">,</span> <span class="n">store_history</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">process_input_line</span><span class="p">(</span><span class="s1">&#39;plt.clf()&#39;</span><span class="p">,</span> <span class="n">store_history</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">clear_cout</span><span class="p">()</span>
-                <span class="n">savefig</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="n">savefig</span> <span class="o">=</span> <span class="bp">False</span>
 
         <span class="k">return</span> <span class="n">output</span></div>
 
@@ -920,23 +920,23 @@
 <span class="sd">        Perform a specialized doctest.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="kn">from</span> <span class="nn">.custom_doctests</span> <span class="k">import</span> <span class="n">doctests</span>
+        <span class="kn">from</span> <span class="nn">.custom_doctests</span> <span class="kn">import</span> <span class="n">doctests</span>
 
         <span class="n">args</span> <span class="o">=</span> <span class="n">decorator</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
         <span class="n">doctest_type</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">doctest_type</span> <span class="ow">in</span> <span class="n">doctests</span><span class="p">:</span>
             <span class="n">doctests</span><span class="p">[</span><span class="n">doctest_type</span><span class="p">](</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">input_lines</span><span class="p">,</span> <span class="n">found</span><span class="p">,</span> <span class="n">submitted</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">e</span> <span class="o">=</span> <span class="s2">&quot;Invalid option to @doctest: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">doctest_type</span><span class="p">)</span>
+            <span class="n">e</span> <span class="o">=</span> <span class="s2">&quot;Invalid option to @doctest: {0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">doctest_type</span><span class="p">)</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="n">e</span><span class="p">)</span></div></div>
 
 
 <span class="k">class</span> <span class="nc">IPythonDirective</span><span class="p">(</span><span class="n">Directive</span><span class="p">):</span>
 
-    <span class="n">has_content</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">has_content</span> <span class="o">=</span> <span class="bp">True</span>
     <span class="n">required_arguments</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">optional_arguments</span> <span class="o">=</span> <span class="mi">4</span> <span class="c1"># python, suppress, verbatim, doctest</span>
-    <span class="n">final_argumuent_whitespace</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">final_argumuent_whitespace</span> <span class="o">=</span> <span class="bp">True</span>
     <span class="n">option_spec</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;python&#39;</span><span class="p">:</span> <span class="n">directives</span><span class="o">.</span><span class="n">unchanged</span><span class="p">,</span>
                     <span class="s1">&#39;suppress&#39;</span> <span class="p">:</span> <span class="n">directives</span><span class="o">.</span><span class="n">flag</span><span class="p">,</span>
                     <span class="s1">&#39;verbatim&#39;</span> <span class="p">:</span> <span class="n">directives</span><span class="o">.</span><span class="n">flag</span><span class="p">,</span>
@@ -945,7 +945,7 @@
                     <span class="s1">&#39;okwarning&#39;</span><span class="p">:</span> <span class="n">directives</span><span class="o">.</span><span class="n">flag</span>
                   <span class="p">}</span>
 
-    <span class="n">shell</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">shell</span> <span class="o">=</span> <span class="bp">None</span>
 
     <span class="n">seen_docs</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
 
@@ -982,7 +982,7 @@
             <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">!=</span> <span class="n">errno</span><span class="o">.</span><span class="n">EEXIST</span><span class="p">:</span>
                 <span class="k">raise</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="c1"># We will be here many times.  However, when the</span>
             <span class="c1"># EmbeddedSphinxShell is created, its interactive shell member</span>
             <span class="c1"># is the same for each instance.</span>
@@ -1018,7 +1018,7 @@
 
         <span class="c1"># setup bookmark for saving figures directory</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">process_input_line</span><span class="p">(</span><span class="s1">&#39;bookmark ipy_savedir </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">savefig_dir</span><span class="p">,</span>
-                                      <span class="n">store_history</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                                      <span class="n">store_history</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">clear_cout</span><span class="p">()</span>
 
         <span class="k">return</span> <span class="n">rgxin</span><span class="p">,</span> <span class="n">rgxout</span><span class="p">,</span> <span class="n">promptin</span><span class="p">,</span> <span class="n">promptout</span>
@@ -1026,11 +1026,11 @@
     <span class="k">def</span> <span class="nf">teardown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># delete last bookmark</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">process_input_line</span><span class="p">(</span><span class="s1">&#39;bookmark -d ipy_savedir&#39;</span><span class="p">,</span>
-                                      <span class="n">store_history</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                                      <span class="n">store_history</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">clear_cout</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">debug</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">debug</span> <span class="o">=</span> <span class="bp">False</span>
 
         <span class="c1">#TODO, any reason block_parser can&#39;t be a method of embeddable shell</span>
         <span class="c1"># then we wouldn&#39;t have to carry these around</span>
@@ -1060,13 +1060,13 @@
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">block</span><span class="p">):</span>
                 <span class="n">rows</span><span class="p">,</span> <span class="n">figure</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">process_block</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
-                    <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s1">&#39;   </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+                    <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s1">&#39;   {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
                                   <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">row</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)])</span>
 
-                <span class="k">if</span> <span class="n">figure</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">figure</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
                     <span class="n">figures</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">figure</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">message</span> <span class="o">=</span> <span class="s1">&#39;Code input with no code at </span><span class="si">{}</span><span class="s1">, line </span><span class="si">{}</span><span class="s1">&#39;</span>\
+                <span class="n">message</span> <span class="o">=</span> <span class="s1">&#39;Code input with no code at {}, line {}&#39;</span>\
                             <span class="o">.</span><span class="n">format</span><span class="p">(</span>
                                 <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">current_source</span><span class="p">,</span>
                                 <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">current_line</span><span class="p">)</span>
@@ -1082,7 +1082,7 @@
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">))</span>
+                <span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="c1"># This has to do with input, not output. But if we comment</span>
                 <span class="c1"># these lines out, then no IPython code will appear in the</span>
@@ -1101,7 +1101,7 @@
 
     <span class="n">app</span><span class="o">.</span><span class="n">add_directive</span><span class="p">(</span><span class="s1">&#39;ipython&#39;</span><span class="p">,</span> <span class="n">IPythonDirective</span><span class="p">)</span>
     <span class="n">app</span><span class="o">.</span><span class="n">add_config_value</span><span class="p">(</span><span class="s1">&#39;ipython_savefig_dir&#39;</span><span class="p">,</span> <span class="s1">&#39;savefig&#39;</span><span class="p">,</span> <span class="s1">&#39;env&#39;</span><span class="p">)</span>
-    <span class="n">app</span><span class="o">.</span><span class="n">add_config_value</span><span class="p">(</span><span class="s1">&#39;ipython_warning_is_error&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;env&#39;</span><span class="p">)</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">add_config_value</span><span class="p">(</span><span class="s1">&#39;ipython_warning_is_error&#39;</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="s1">&#39;env&#39;</span><span class="p">)</span>
     <span class="n">app</span><span class="o">.</span><span class="n">add_config_value</span><span class="p">(</span><span class="s1">&#39;ipython_rgxin&#39;</span><span class="p">,</span>
                          <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;In \[(\d+)\]:\s?(.*)\s*&#39;</span><span class="p">),</span> <span class="s1">&#39;env&#39;</span><span class="p">)</span>
     <span class="n">app</span><span class="o">.</span><span class="n">add_config_value</span><span class="p">(</span><span class="s1">&#39;ipython_rgxout&#39;</span><span class="p">,</span>
@@ -1122,9 +1122,9 @@
         <span class="n">execlines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;import matplotlib.pyplot as plt&#39;</span><span class="p">)</span>
     <span class="n">app</span><span class="o">.</span><span class="n">add_config_value</span><span class="p">(</span><span class="s1">&#39;ipython_execlines&#39;</span><span class="p">,</span> <span class="n">execlines</span><span class="p">,</span> <span class="s1">&#39;env&#39;</span><span class="p">)</span>
 
-    <span class="n">app</span><span class="o">.</span><span class="n">add_config_value</span><span class="p">(</span><span class="s1">&#39;ipython_holdcount&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;env&#39;</span><span class="p">)</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">add_config_value</span><span class="p">(</span><span class="s1">&#39;ipython_holdcount&#39;</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="s1">&#39;env&#39;</span><span class="p">)</span>
 
-    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;parallel_read_safe&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;parallel_write_safe&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;parallel_read_safe&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="s1">&#39;parallel_write_safe&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
     <span class="k">return</span> <span class="n">metadata</span>
 
 <span class="c1"># Simple smoke test, needs to be converted to a proper automatic test.</span>
@@ -1290,10 +1290,10 @@
     <span class="n">options</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">example</span> <span class="ow">in</span> <span class="n">examples</span><span class="p">:</span>
         <span class="n">content</span> <span class="o">=</span> <span class="n">example</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-        <span class="n">IPythonDirective</span><span class="p">(</span><span class="s1">&#39;debug&#39;</span><span class="p">,</span> <span class="n">arguments</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">,</span>
+        <span class="n">IPythonDirective</span><span class="p">(</span><span class="s1">&#39;debug&#39;</span><span class="p">,</span> <span class="n">arguments</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">,</span>
                           <span class="n">content</span><span class="o">=</span><span class="n">content</span><span class="p">,</span> <span class="n">lineno</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                          <span class="n">content_offset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">block_text</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                          <span class="n">state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">state_machine</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                          <span class="n">content_offset</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">block_text</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                          <span class="n">state</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">state_machine</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                           <span class="p">)</span>
 
 <span class="c1"># Run test suite as a script</span>
@@ -1301,7 +1301,7 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="s1">&#39;_static&#39;</span><span class="p">):</span>
         <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="s1">&#39;_static&#39;</span><span class="p">)</span>
     <span class="n">test</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;All OK? Check figures in _static/&#39;</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;All OK? Check figures in _static/&#39;</span><span class="p">)</span>
 </pre></div>
 
           </div>

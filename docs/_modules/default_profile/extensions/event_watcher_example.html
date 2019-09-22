@@ -1,0 +1,198 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>default_profile.extensions.event_watcher_example &#8212; Dynamic IPython: version0.0.1</title>
+    <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
+    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/extensions/event_watcher_example.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" type="text/css"
+  media="screen" charset="utf-8" />
+
+<link rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" type="text/css" media="screen" charset="utf-8" />
+
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for default_profile.extensions.event_watcher_example</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;Interactively watch a variable.</span>
+
+<span class="sd">================</span>
+<span class="sd">Event Watcher</span>
+<span class="sd">================</span>
+
+<span class="sd">.. module:: event_watcher_example</span>
+<span class="sd">    :synopsis: Create an extension for IPython 7.0&#39;s new event handlers.</span>
+
+<span class="sd">:URL: https://ipython.readthedocs.io/en/stable/config/callbacks.html#ipython-events</span>
+
+<span class="sd">Provided by the IPython development team as an example of the new</span>
+<span class="sd">input parser for release 7.0!!!</span>
+
+<span class="sd">-----------------</span>
+
+<span class="sd">IPython Events:</span>
+<span class="sd">===============</span>
+
+<span class="sd">Extension code can register callbacks functions which will be called on</span>
+<span class="sd">specific events within the IPython code. You can see the current list of</span>
+<span class="sd">available callbacks, and the parameters that will be passed with each, in the</span>
+<span class="sd">callback prototype functions defined in IPython.core.events.</span>
+<span class="sd">To register callbacks, use `IPython.core.events.EventManager.register().`</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+
+
+<div class="viewcode-block" id="VarWatcher"><a class="viewcode-back" href="../../../extensions.html#default_profile.extensions.event_watcher_example.VarWatcher">[docs]</a><span class="k">class</span> <span class="nc">VarWatcher</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Initialize an object that tracks different variables in the user namespace.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="VarWatcher.__init__"><a class="viewcode-back" href="../../../extensions.html#default_profile.extensions.event_watcher_example.VarWatcher.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ip</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">last_x</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set :attr:`self.shell` to the global IPython instance and :attr:`self.last_x` to some var.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">ip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">ip</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_x</span> <span class="o">=</span> <span class="n">last_x</span> <span class="ow">or</span> <span class="bp">None</span></div>
+
+<div class="viewcode-block" id="VarWatcher.pre_execute"><a class="viewcode-back" href="../../../extensions.html#default_profile.extensions.event_watcher_example.VarWatcher.pre_execute">[docs]</a>    <span class="k">def</span> <span class="nf">pre_execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">user_ns</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VarWatcher.pre_run_cell"><a class="viewcode-back" href="../../../extensions.html#default_profile.extensions.event_watcher_example.VarWatcher.pre_run_cell">[docs]</a>    <span class="k">def</span> <span class="nf">pre_run_cell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Cell code: &quot;</span><span class="si">%s</span><span class="s1">&quot;&#39;</span> <span class="o">%</span> <span class="n">info</span><span class="o">.</span><span class="n">raw_cell</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VarWatcher.post_execute"><a class="viewcode-back" href="../../../extensions.html#default_profile.extensions.event_watcher_example.VarWatcher.post_execute">[docs]</a>    <span class="k">def</span> <span class="nf">post_execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">user_ns</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_x</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;x changed!&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VarWatcher.post_run_cell"><a class="viewcode-back" href="../../../extensions.html#default_profile.extensions.event_watcher_example.VarWatcher.post_run_cell">[docs]</a>    <span class="k">def</span> <span class="nf">post_run_cell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Cell code: &quot;</span><span class="si">%s</span><span class="s1">&quot;&#39;</span> <span class="o">%</span> <span class="n">result</span><span class="o">.</span><span class="n">info</span><span class="o">.</span><span class="n">raw_cell</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">error_before_exec</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Error before execution: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">result</span><span class="o">.</span><span class="n">error_before_exec</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VarWatcher.load_ipython_extension"><a class="viewcode-back" href="../../../extensions.html#default_profile.extensions.event_watcher_example.VarWatcher.load_ipython_extension">[docs]</a>    <span class="k">def</span> <span class="nf">load_ipython_extension</span><span class="p">(</span><span class="n">ip</span><span class="p">):</span>
+        <span class="n">vw</span> <span class="o">=</span> <span class="n">VarWatcher</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span>
+        <span class="n">ip</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s1">&#39;pre_execute&#39;</span><span class="p">,</span> <span class="n">vw</span><span class="o">.</span><span class="n">pre_execute</span><span class="p">)</span>
+        <span class="n">ip</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s1">&#39;pre_run_cell&#39;</span><span class="p">,</span> <span class="n">vw</span><span class="o">.</span><span class="n">pre_run_cell</span><span class="p">)</span>
+        <span class="n">ip</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s1">&#39;post_execute&#39;</span><span class="p">,</span> <span class="n">vw</span><span class="o">.</span><span class="n">post_execute</span><span class="p">)</span>
+        <span class="n">ip</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s1">&#39;post_run_cell&#39;</span><span class="p">,</span> <span class="n">vw</span><span class="o">.</span><span class="n">post_run_cell</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+
+<h3><a href="../../../index.html">Table of Contents</a></h3>
+
+<div>&nbsp;</div>
+<div id="sidebartoc">
+<p class="caption"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../ipython_keybindings.html">Keybindings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../custom_magics.html">Custom Magics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../jobcontrol.html">Job Control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../exceptions.html">Customized Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sphinxext.html">IPython Sphinx Directive</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev.html">Developers Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../lexer.html">New IPython Console Lexer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../lexer.html#see-also">See Also</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../startup/index.html">IPython Shell Initialization</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/rehashx.html">01_rehashx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/easy_import.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">04_easy_import</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/ipython-logger.html">Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/help_helpers.html">06_Help_Helpers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/aliases.html">System Aliases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/41_numpy.html"><code class="docutils literal notranslate"><span class="pre">41_numpy_init</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/42_pandas.html"><code class="docutils literal notranslate"><span class="pre">42_pandas_init</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/sysexcept.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">50_sysexception</span></code> module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../util.html">General Utility Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../jupyter.html">Jupyter Suite</a></li>
+</ul>
+
+
+
+</div>
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+      Last updated on Sep 21, 2019.
+    </div>
+  </body>
+</html>

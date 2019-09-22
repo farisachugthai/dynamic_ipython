@@ -21,6 +21,33 @@ If extensions (or modules to document with autodoc) are in another directory,
 add these directories to sys.path here. If the directory is relative to the
 documentation root, use os.path.abspath to make it absolute, like shown here.
 
+
+Here's a little info from the Sphinx website.
+
+.. confval:: trim_doctest_flags
+
+   If true, doctest flags (comments looking like ``# doctest: FLAG, ...``) at
+   the ends of lines and ``<BLANKLINE>`` markers are removed for all code
+   blocks showing interactive Python sessions (i.e. doctests).  Default is
+   ``True``.  See the extension :mod:`~sphinx.ext.doctest` for more
+   possibilities of including doctests.
+
+
+.. confval:: highlight_language
+
+   The default language to highlight source code in.  The default is
+   ``'python3'``.  The value should be a valid Pygments lexer name, see
+   :ref:`code-examples` for more details.
+
+   .. versionadded:: 0.5
+
+   .. versionchanged:: 1.4
+      The default is now ``'default'``. It is similar to ``'python3'``;
+      it is mostly a superset of ``'python'`` but it fallbacks to
+      ``'none'`` without warning if failed.  ``'python3'`` and other
+      languages will emit warning if failed.  If you prefer Python 2
+      only highlighting, you can set it back to ``'python'``.
+
 """
 # Stdlib imports
 from datetime import datetime
@@ -133,6 +160,25 @@ source_encoding = 'utf-8'
 master_doc = 'index'
 exclude_patterns = ['build', 'dist', '.tox', '.ipynb_checkpoints', 'tags']
 
+# primary_domain
+
+# The name of the default domain. Can also be None to disable a default domain.
+# The default is 'py'. Those objects in other domains (whether the domain name
+# is given explicitly, or selected by a default-domain directive) will have
+# the domain name explicitly prepended when named (e.g., when the default
+# domain is C, Python functions will be named “Python function”, not just
+# “function”).
+# New in version 1.0.
+primary_domain = 'py'
+
+# default_role 
+# The name of a reST role (builtin or Sphinx extension) to use as the
+# default role, that is, for text marked up `like this`. This can be set to
+# 'py:obj' to make `filter` a cross-reference to the Python function “filter”.
+# The default is None, which doesn’t reassign the default role.
+
+# The default role can always be set within individual documents using the
+# standard reST default-role directive.
 default_role = 'py:obj'
 
 today_fmt = '%B %d, %Y'
@@ -147,7 +193,19 @@ rst_prolog = """
 add_module_names = False
 
 # A list of ignored prefixes for module index sorting.
-# modindex_common_prefix = []
+# NOTE: lol you have to put a dot at the end otherwise all your modules will start
+# with a period
+modindex_common_prefix = [
+    'default_profile.',
+    'default_profile.extensions.',
+    'default_profile.startup.',
+]
+
+trim_doctest_flags = True
+
+highlight_language = 'ipython3'
+
+warning_is_error = False
 
 # -- Options for HTML output -------------------------------------------------
 
@@ -211,6 +269,8 @@ html_compact_lists = False
 html_secnumber_suffix = ' '
 
 html_js_files = ['copybutton.js']
+
+
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
@@ -350,7 +410,7 @@ viewcode_follow_imported_members = False
 
 # -- IPython directive -------------------------------------------------------
 
-ipython_savefig_dir = DOCS.joinpath('_images').__fspath__()
+ipython_savefig_dir = DOCS.joinpath('source', '_static', '_images').__fspath__()
 savefig_dir = ipython_savefig_dir
 
 ipython_warning_is_error = False
@@ -430,8 +490,6 @@ numpydoc_class_members_toctree = False
 # Parameters, Other Parameters, Returns and Yields sections of the docstring.
 # False by default.
 numpydoc_xref_param_type = True
-
-warning_is_error = False
 
 # -- linkcode ----------------------------------------------------------------
 

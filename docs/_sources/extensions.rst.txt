@@ -1,4 +1,4 @@
-.. _extensions:
+.. _default_profile.extensions:
 
 ===========
 Extensions
@@ -8,31 +8,31 @@ Here are the varying `%magic` extensions that are bundled with this
 repository.
 
 
-.. automodule:: extensions.event_watcher_example
+.. automodule:: default_profile.extensions.event_watcher_example
     :members:
     :undoc-members:
     :show-inheritance:
 
 
-.. automodule:: extensions.load_ext
+.. automodule:: default_profile.extensions.load_ext
     :members:
     :undoc-members:
     :show-inheritance:
 
 
-.. automodule:: extensions.pd_csv
+.. automodule:: default_profile.extensions.pd_csv
     :members:
     :undoc-members:
     :show-inheritance:
 
 
-.. automodule:: extensions.repr_requests
+.. automodule:: default_profile.extensions.repr_requests
     :members:
     :undoc-members:
     :show-inheritance:
 
 
-.. automodule:: extensions.termux_clipboard
+.. automodule:: default_profile.extensions.termux_clipboard
     :members:
     :undoc-members:
     :show-inheritance:

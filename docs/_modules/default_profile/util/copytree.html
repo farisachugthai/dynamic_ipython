@@ -51,10 +51,10 @@
           <div class="body" role="main">
             
   <h1>Source code for default_profile.util.copytree</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">glob</span> <span class="k">import</span> <span class="n">glob</span>
+<span></span><span class="kn">from</span> <span class="nn">glob</span> <span class="kn">import</span> <span class="n">glob</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
-<span class="kn">from</span> <span class="nn">shutil</span> <span class="k">import</span> <span class="n">Error</span><span class="p">,</span> <span class="n">copytree</span><span class="p">,</span> <span class="n">copystat</span>
+<span class="kn">from</span> <span class="nn">shutil</span> <span class="kn">import</span> <span class="n">Error</span><span class="p">,</span> <span class="n">copytree</span><span class="p">,</span> <span class="n">copystat</span>
 <span class="kn">import</span> <span class="nn">stat</span>
 
 
@@ -87,12 +87,12 @@
 
     <span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
 
-<div class="viewcode-block" id="CopyTree.__init__"><a class="viewcode-back" href="../../../util.html#default_profile.util.copytree.CopyTree.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+<div class="viewcode-block" id="CopyTree.__init__"><a class="viewcode-back" href="../../../util.html#default_profile.util.copytree.CopyTree.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
             <span class="n">src</span><span class="p">,</span>
             <span class="n">dst</span><span class="p">,</span>
-            <span class="n">symlinks</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">ignore</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">symlinks</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+            <span class="n">ignore</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
             <span class="n">copy_function</span><span class="o">=</span><span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">src</span> <span class="o">=</span> <span class="n">src</span>
@@ -104,7 +104,7 @@
 <div class="viewcode-block" id="CopyTree.destination_files"><a class="viewcode-back" href="../../../util.html#default_profile.util.copytree.CopyTree.destination_files">[docs]</a>    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">destination_files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">names</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">src</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignore</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignore</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">ignored_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignore</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">src</span><span class="p">,</span> <span class="n">names</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">ignored_names</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
@@ -122,7 +122,7 @@
         <span class="sd">&quot;&quot;&quot;Create the dirs needed in the destination.&quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dst</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">FileExistsError</span><span class="p">:</span>
+        <span class="k">except</span> <span class="n">FileExistsError</span><span class="p">:</span>
             <span class="k">pass</span></div>
 
 <div class="viewcode-block" id="CopyTree.copytree"><a class="viewcode-back" href="../../../util.html#default_profile.util.copytree.CopyTree.copytree">[docs]</a>    <span class="k">def</span> <span class="nf">copytree</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -182,7 +182,7 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="n">copystat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">src</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dst</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">why</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">why</span><span class="p">,</span> <span class="s2">&quot;winerror&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">why</span><span class="p">,</span> <span class="s2">&quot;winerror&quot;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">src</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dst</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">why</span><span class="p">)))</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="p">:</span>  <span class="c1"># do i need to do len(self.errors) &gt; 0?</span>
             <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="p">)</span>

@@ -58,10 +58,150 @@
           <div class="body" role="main">
             
   <div class="section" id="extensions">
-<span id="id1"></span><h1>Extensions<a class="headerlink" href="#extensions" title="Permalink to this headline">¶</a></h1>
+<span id="default-profile-extensions"></span><h1>Extensions<a class="headerlink" href="#extensions" title="Permalink to this headline">¶</a></h1>
 <p>Here are the varying <code class="xref py py-obj docutils literal notranslate"><span class="pre">%magic</span></code> extensions that are bundled with this
 repository.</p>
-<span class="target" id="module-extensions.event_watcher_example"></span><span class="target" id="module-extensions.load_ext"></span><span class="target" id="module-extensions.pd_csv"></span><span class="target" id="module-extensions.repr_requests"></span><span class="target" id="module-extensions.termux_clipboard"></span><p>Continue reading at <a class="reference internal" href="jobcontrol.html"><span class="doc">Job Control</span></a> to see a well documented example
+<span class="target" id="module-default_profile.extensions.event_watcher_example"></span><p>Interactively watch a variable.</p>
+<div class="section" id="module-event_watcher_example">
+<span id="event-watcher"></span><h2>Event Watcher<a class="headerlink" href="#module-event_watcher_example" title="Permalink to this headline">¶</a></h2>
+<dl class="field-list simple">
+<dt class="field-odd">URL</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://ipython.readthedocs.io/en/stable/config/callbacks.html#ipython-events">https://ipython.readthedocs.io/en/stable/config/callbacks.html#ipython-events</a></p>
+</dd>
+</dl>
+<p>Provided by the IPython development team as an example of the new
+input parser for release 7.0!!!</p>
+<hr class="docutils" />
+<div class="section" id="ipython-events">
+<h3>IPython Events:<a class="headerlink" href="#ipython-events" title="Permalink to this headline">¶</a></h3>
+<p>Extension code can register callbacks functions which will be called on
+specific events within the IPython code. You can see the current list of
+available callbacks, and the parameters that will be passed with each, in the
+callback prototype functions defined in IPython.core.events.
+To register callbacks, use <code class="xref py py-obj docutils literal notranslate"><span class="pre">IPython.core.events.EventManager.register().</span></code></p>
+<dl class="class">
+<dt id="default_profile.extensions.event_watcher_example.VarWatcher">
+<em class="property">class </em><code class="sig-name descname">VarWatcher</code><span class="sig-paren">(</span><em class="sig-param">ip=None</em>, <em class="sig-param">last_x=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/extensions/event_watcher_example.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/default_profile/extensions/event_watcher_example.html#VarWatcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.extensions.event_watcher_example.VarWatcher" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Initialize an object that tracks different variables in the user namespace.</p>
+<p>Set <code class="xref py py-attr docutils literal notranslate"><span class="pre">self.shell</span></code> to the global IPython instance and <code class="xref py py-attr docutils literal notranslate"><span class="pre">self.last_x</span></code> to some var.</p>
+<dl class="method">
+<dt id="default_profile.extensions.event_watcher_example.VarWatcher.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">ip=None</em>, <em class="sig-param">last_x=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/extensions/event_watcher_example.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/default_profile/extensions/event_watcher_example.html#VarWatcher.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.extensions.event_watcher_example.VarWatcher.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set <code class="xref py py-attr docutils literal notranslate"><span class="pre">self.shell</span></code> to the global IPython instance and <code class="xref py py-attr docutils literal notranslate"><span class="pre">self.last_x</span></code> to some var.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="default_profile.extensions.event_watcher_example.VarWatcher.pre_execute">
+<code class="sig-name descname">pre_execute</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/extensions/event_watcher_example.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/default_profile/extensions/event_watcher_example.html#VarWatcher.pre_execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.extensions.event_watcher_example.VarWatcher.pre_execute" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="default_profile.extensions.event_watcher_example.VarWatcher.pre_run_cell">
+<code class="sig-name descname">pre_run_cell</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">info</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/extensions/event_watcher_example.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/default_profile/extensions/event_watcher_example.html#VarWatcher.pre_run_cell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.extensions.event_watcher_example.VarWatcher.pre_run_cell" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="default_profile.extensions.event_watcher_example.VarWatcher.post_execute">
+<code class="sig-name descname">post_execute</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/extensions/event_watcher_example.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/default_profile/extensions/event_watcher_example.html#VarWatcher.post_execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.extensions.event_watcher_example.VarWatcher.post_execute" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="default_profile.extensions.event_watcher_example.VarWatcher.post_run_cell">
+<code class="sig-name descname">post_run_cell</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">result</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/extensions/event_watcher_example.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/default_profile/extensions/event_watcher_example.html#VarWatcher.post_run_cell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.extensions.event_watcher_example.VarWatcher.post_run_cell" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="default_profile.extensions.event_watcher_example.VarWatcher.load_ipython_extension">
+<code class="sig-name descname">load_ipython_extension</code><span class="sig-paren">(</span><em class="sig-param">ip</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/extensions/event_watcher_example.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/default_profile/extensions/event_watcher_example.html#VarWatcher.load_ipython_extension"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.extensions.event_watcher_example.VarWatcher.load_ipython_extension" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<span class="target" id="module-default_profile.extensions.load_ext"></span><span class="target" id="module-default_profile.extensions.pd_csv"></span><dl class="magic">
+<dt id="magic-pd_csv">
+<code class="sig-name descname">%pd_csv</code><a class="headerlink" href="#magic-pd_csv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Magic that reads in a string and parses it as a <code class="xref py py-mod docutils literal notranslate"><span class="pre">CSV</span></code> with <code class="xref py py-mod docutils literal notranslate"><span class="pre">pandas</span></code>.</p>
+<p>Example of creating a magic from <strong>IPython Interactive Computing and
+Visualization Cookbook by Cyrille Roussou.</strong></p>
+<p>The example specifically is from pages 32 to 35.</p>
+<p>It also shows the following simpler example:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">from</span> <span class="nn">IPython.core.magic</span> <span class="kn">import</span> <span class="p">(</span><span class="n">register_line_magic</span><span class="p">,</span> <span class="n">register_cell_magic</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="function">
+<dt id="default_profile.extensions.pd_csv.pd_csv">
+<code class="sig-name descname">pd_csv</code><span class="sig-paren">(</span><em class="sig-param">cell</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/extensions/pd_csv.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/default_profile/extensions/pd_csv.html#pd_csv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.extensions.pd_csv.pd_csv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read in an <code class="xref py py-class docutils literal notranslate"><span class="pre">io.StringIO()</span></code> and parse it with pandas.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>cell</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – User input.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>df</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="default_profile.extensions.pd_csv.load_ipython_extension">
+<code class="sig-name descname">load_ipython_extension</code><span class="sig-paren">(</span><em class="sig-param">ip</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/extensions/pd_csv.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/default_profile/extensions/pd_csv.html#load_ipython_extension"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.extensions.pd_csv.load_ipython_extension" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is called when the extension is loaded.</p>
+<p>It accepts an IPython <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.8.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.interactiveshell.InteractiveShell</span></code></a> instance. We can register the magic
+with the <code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.core.magics.register_magic_function()</span></code>
+method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ip</strong> (<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.8.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.interactiveshell.InteractiveShell</span></code></a>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-default_profile.extensions.repr_requests"></span><span class="target" id="module-default_profile.extensions.termux_clipboard"></span><p>Implement the <code class="xref py py-obj docutils literal notranslate"><span class="pre">%paste</span></code> magic on Termux.</p>
+<span class="target" id="module-termux_clipboard_get"></span><dl class="magic">
+<dt id="magic-termux_clipboard_get">
+<code class="sig-name descname">%termux_clipboard_get</code><a class="headerlink" href="#magic-termux_clipboard_get" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>IPython will simply fail as tkinter can’t be installed.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.lib.clipboard.html#module-IPython.lib.clipboard" title="(in IPython v7.8.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython.lib.clipboard</span></code></a>, <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.hooks.html#module-IPython.core.hooks" title="(in IPython v7.8.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython.core.hooks</span></code></a></p>
+</div>
+<dl class="function">
+<dt id="default_profile.extensions.termux_clipboard.termux_clipboard_get">
+<code class="sig-name descname">termux_clipboard_get</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/extensions/termux_clipboard.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/default_profile/extensions/termux_clipboard.html#termux_clipboard_get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.extensions.termux_clipboard.termux_clipboard_get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the clipboard on termux using <em>termux_clipboard_get</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="default_profile.extensions.termux_clipboard.load_ipython_extension">
+<code class="sig-name descname">load_ipython_extension</code><span class="sig-paren">(</span><em class="sig-param">ip</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/extensions/termux_clipboard.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/default_profile/extensions/termux_clipboard.html#load_ipython_extension"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.extensions.termux_clipboard.load_ipython_extension" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sep 20, 2019: Works!</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="default_profile.extensions.termux_clipboard.main">
+<code class="sig-name descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/extensions/termux_clipboard.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/default_profile/extensions/termux_clipboard.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.extensions.termux_clipboard.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>TODO</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>Continue reading at <a class="reference internal" href="jobcontrol.html"><span class="doc">Job Control</span></a> to see a well documented example
 provided by one of the original IPython authors, Brian Granger!</p>
 <p><a class="reference external" href="jobcontrol.html">Next — Job Control</a></p>
 </div>
@@ -131,6 +271,22 @@ provided by one of the original IPython authors, Brian Granger!</p>
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
+
+<h3><a href="index.html">On This Page:</a></h3>
+
+<div>&nbsp;</div>
+<div id="sidebartoc">
+  <ul>
+<li><a class="reference internal" href="#">Extensions</a><ul>
+<li><a class="reference internal" href="#module-event_watcher_example">Event Watcher</a><ul>
+<li><a class="reference internal" href="#ipython-events">IPython Events:</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+</div>
 
         </div>
       </div>

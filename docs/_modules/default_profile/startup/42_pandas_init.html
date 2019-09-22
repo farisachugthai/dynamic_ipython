@@ -153,7 +153,7 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 
-<span class="kn">from</span> <span class="nn">default_profile.util</span> <span class="k">import</span> <span class="n">module_log</span>
+<span class="kn">from</span> <span class="nn">default_profile.util</span> <span class="kn">import</span> <span class="n">module_log</span>
 
 
 <div class="viewcode-block" id="pandas_init"><a class="viewcode-back" href="../../../startup/42_pandas.html#default_profile.startup.42_pandas_init.pandas_init">[docs]</a><span class="k">def</span> <span class="nf">pandas_init</span><span class="p">():</span>
@@ -174,9 +174,9 @@
         <span class="s1">&#39;display&#39;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s1">&#39;colheader_justify&#39;</span><span class="p">:</span> <span class="s1">&#39;right&#39;</span><span class="p">,</span>
             <span class="s1">&#39;encoding&#39;</span><span class="p">:</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;expand_frame_repr&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>  <span class="c1"># Don&#39;t wrap to multiple pages</span>
-            <span class="s1">&#39;html.table_schema&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-            <span class="s1">&#39;max_columns&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s1">&#39;expand_frame_repr&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>  <span class="c1"># Don&#39;t wrap to multiple pages</span>
+            <span class="s1">&#39;html.table_schema&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+            <span class="s1">&#39;max_columns&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
             <span class="s1">&#39;max_colwidth&#39;</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span>
             <span class="s1">&#39;max_rows&#39;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
             <span class="s1">&#39;max_seq_items&#39;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
@@ -184,7 +184,7 @@
             <span class="s1">&#39;show_dimensions&#39;</span><span class="p">:</span> <span class="s1">&#39;truncate&#39;</span><span class="p">,</span>
         <span class="p">},</span>
         <span class="s1">&#39;mode&#39;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s1">&#39;chained_assignment&#39;</span><span class="p">:</span> <span class="kc">None</span>
+            <span class="s1">&#39;chained_assignment&#39;</span><span class="p">:</span> <span class="bp">None</span>
             <span class="c1"># Controls SettingWithCopyWarning</span>
         <span class="p">}</span>
     <span class="p">}</span>
@@ -192,7 +192,7 @@
     <span class="c1"># XXX: Did i mean to do this twice?</span>
     <span class="k">for</span> <span class="n">category</span><span class="p">,</span> <span class="n">option</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="k">for</span> <span class="n">op</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">option</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{category}</span><span class="s1">.</span><span class="si">{op}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>  <span class="c1"># Python 3.6+</span></div>
+            <span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;{category}.{op}&#39;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>  <span class="c1"># Python 3.6+</span></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
@@ -203,8 +203,8 @@
     <span class="n">PANDAS_LOGGER</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
 
     <span class="k">try</span><span class="p">:</span>
-        <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-    <span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="n">ModuleNotFoundError</span><span class="p">):</span>
+        <span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="ne">ModuleNotFoundError</span><span class="p">):</span>
         <span class="n">PANDAS_LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Pandas not installed.&#39;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">pandas_init</span><span class="p">()</span>

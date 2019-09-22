@@ -61,8 +61,8 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 
-<span class="kn">from</span> <span class="nn">IPython</span> <span class="k">import</span> <span class="n">get_ipython</span>
-<span class="kn">from</span> <span class="nn">IPython.core</span> <span class="k">import</span> <span class="n">ultratb</span>
+<span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+<span class="kn">from</span> <span class="nn">IPython.core</span> <span class="kn">import</span> <span class="n">ultratb</span>
 
 
 <div class="viewcode-block" id="ExceptionHook"><a class="viewcode-back" href="../../../startup/sysexcept.html#default_profile.startup.50_sysexception.ExceptionHook">[docs]</a><span class="k">class</span> <span class="nc">ExceptionHook</span><span class="p">(</span><span class="ne">BaseException</span><span class="p">):</span>
@@ -70,21 +70,21 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">instance</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">instance</span> <span class="o">=</span> <span class="bp">None</span>
 
-    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">instance</span> <span class="o">=</span> <span class="n">ultratb</span><span class="o">.</span><span class="n">AutoFormattedTB</span><span class="p">(</span>
                 <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;Context&#39;</span><span class="p">,</span>
                 <span class="n">color_scheme</span><span class="o">=</span><span class="s1">&#39;Linux&#39;</span><span class="p">,</span>
-                <span class="n">call_pdb</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">call_pdb</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
                 <span class="n">ostream</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
             <span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Don&#39;t actually know if it works this way.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="s2">&quot;&lt;</span><span class="si">{}</span><span class="s2"> &#39;</span><span class="si">{}</span><span class="s2">&#39;&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="s2">&quot;&lt;{} &#39;{}&#39;&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">)</span></div>
 
 
 <span class="n">sys</span><span class="o">.</span><span class="n">excepthook</span> <span class="o">=</span> <span class="n">ExceptionHook</span><span class="p">()</span>

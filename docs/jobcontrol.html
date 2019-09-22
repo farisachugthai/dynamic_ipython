@@ -65,17 +65,17 @@ you from continuing with your work and are just too stubborn to die with the usu
 <div class="section" id="killing-foreground-tasks">
 <h2>Killing foreground tasks<a class="headerlink" href="#killing-foreground-tasks" title="Permalink to this headline">¶</a></h2>
 <p>Launch IPython instance, run a blocking command:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">Q</span><span class="p">:</span><span class="o">/</span><span class="n">ipython</span><span class="p">]</span><span class="o">|</span><span class="mi">1</span><span class="o">&gt;</span> <span class="kn">import</span> <span class="nn">jobctrl</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">Q</span><span class="p">:</span><span class="o">/</span><span class="n">ipython</span><span class="p">]</span><span class="o">|</span><span class="mi">1</span><span class="o">&gt;</span> <span class="kn">import</span> <span class="nn">jobctrl</span>
 <span class="p">[</span><span class="n">Q</span><span class="p">:</span><span class="o">/</span><span class="n">ipython</span><span class="p">]</span><span class="o">|</span><span class="mi">2</span><span class="o">&gt;</span> <span class="n">cat</span>
 </pre></div>
 </div>
 <p>Observe that it starts blocking.</p>
 <p>Now launch a new IPython prompt and kill the ‘cat’ process:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">IPython</span> <span class="mf">0.8</span><span class="o">.</span><span class="mf">3.</span><span class="n">svn</span><span class="o">.</span><span class="n">r2919</span>   <span class="p">[</span><span class="n">on</span> <span class="n">Py</span> <span class="mf">2.5</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">IPython</span> <span class="mf">0.8</span><span class="o">.</span><span class="mf">3.</span><span class="n">svn</span><span class="o">.</span><span class="n">r2919</span>   <span class="p">[</span><span class="n">on</span> <span class="n">Py</span> <span class="mf">2.5</span><span class="p">]</span>
 <span class="p">[</span><span class="n">Q</span><span class="p">:</span><span class="o">/</span><span class="n">ipython</span><span class="p">]</span><span class="o">|</span><span class="mi">1</span><span class="o">&gt;</span> <span class="kn">import</span> <span class="nn">jobctrl</span>
-<span class="p">[</span><span class="n">Q</span><span class="p">:</span><span class="o">/</span><span class="n">ipython</span><span class="p">]</span><span class="o">|</span><span class="mi">2</span><span class="o">&gt;</span> <span class="o">%</span><span class="n">tasks</span>
+<span class="p">[</span><span class="n">Q</span><span class="p">:</span><span class="o">/</span><span class="n">ipython</span><span class="p">]</span><span class="o">|</span><span class="mi">2</span><span class="o">&gt;</span> <span class="o">%</span><span class="k">tasks</span>
 <span class="mi">6020</span><span class="p">:</span> <span class="s1">&#39;cat &#39;</span> <span class="p">(</span><span class="n">Q</span><span class="p">:</span>\<span class="n">ipython</span><span class="p">)</span>
-<span class="p">[</span><span class="n">Q</span><span class="p">:</span><span class="o">/</span><span class="n">ipython</span><span class="p">]</span><span class="o">|</span><span class="mi">3</span><span class="o">&gt;</span> <span class="o">%</span><span class="n">kill</span>
+<span class="p">[</span><span class="n">Q</span><span class="p">:</span><span class="o">/</span><span class="n">ipython</span><span class="p">]</span><span class="o">|</span><span class="mi">3</span><span class="o">&gt;</span> <span class="o">%</span><span class="k">kill</span>
 <span class="n">SUCCESS</span><span class="p">:</span> <span class="n">The</span> <span class="n">process</span> <span class="k">with</span> <span class="n">PID</span> <span class="mi">6020</span> <span class="n">has</span> <span class="n">been</span> <span class="n">terminated</span><span class="o">.</span>
 <span class="p">[</span><span class="n">Q</span><span class="p">:</span><span class="o">/</span><span class="n">ipython</span><span class="p">]</span><span class="o">|</span><span class="mi">4</span><span class="o">&gt;</span>
 </pre></div>
@@ -87,7 +87,7 @@ you from continuing with your work and are just too stubborn to die with the usu
 <h2>Background jobs<a class="headerlink" href="#background-jobs" title="Permalink to this headline">¶</a></h2>
 <p>See the example below. “IPython job” object is just a very thin wrapper over
 subprocess.Popen object, with an added __repr__ and “go” method.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">ipython</span><span class="p">]</span><span class="o">|</span><span class="mi">1</span><span class="o">&gt;</span> <span class="kn">import</span> <span class="nn">jobctrl</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">ipython</span><span class="p">]</span><span class="o">|</span><span class="mi">1</span><span class="o">&gt;</span> <span class="kn">import</span> <span class="nn">jobctrl</span>
 <span class="p">[</span><span class="n">ipython</span><span class="p">]</span><span class="o">|</span><span class="mi">2</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">ls</span> <span class="n">C</span><span class="o">*</span>
          <span class="o">&lt;</span><span class="mi">2</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">IPython</span> <span class="n">job</span> <span class="s2">&quot;ls C*&quot;</span><span class="o">&gt;</span>
 <span class="p">[</span><span class="n">ipython</span><span class="p">]</span><span class="o">|</span><span class="mi">3</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">ls</span> <span class="n">e</span><span class="o">*</span>
@@ -121,20 +121,20 @@ subprocess.Popen methods on the object, but this example just uses “go”.</p>
 <p>Here’s another example: I want to make a macro radio_trance that launches VLC on
 a net radio stream. I have the “vlc” alias that points to the actual binary of
 vlc, so I launch it via the alias:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">ipython</span><span class="p">]</span><span class="o">|</span><span class="mi">1</span><span class="o">&gt;</span> <span class="kn">import</span> <span class="nn">jobctrl</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">ipython</span><span class="p">]</span><span class="o">|</span><span class="mi">1</span><span class="o">&gt;</span> <span class="kn">import</span> <span class="nn">jobctrl</span>
 <span class="p">[</span><span class="n">ipython</span><span class="p">]</span><span class="o">|</span><span class="mi">2</span><span class="o">&gt;</span> <span class="n">vlc</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">di</span><span class="o">.</span><span class="n">fm</span><span class="o">/</span><span class="n">mp3</span><span class="o">/</span><span class="n">trance</span><span class="o">.</span><span class="n">pls</span>
 </pre></div>
 </div>
 <p>But this blocks the ipython window, while I want to listen to it on the background!</p>
 <p>I check out the command history to get the expanded version of the command:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">ipython</span><span class="p">]</span><span class="o">|</span><span class="mi">3</span><span class="o">&gt;</span> <span class="n">hist</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">ipython</span><span class="p">]</span><span class="o">|</span><span class="mi">3</span><span class="o">&gt;</span> <span class="n">hist</span>
 <span class="mi">1</span><span class="p">:</span> <span class="kn">import</span> <span class="nn">jobctrl</span>
 <span class="mi">2</span><span class="p">:</span> <span class="n">_ip</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;q:/opt/VLC/vlc.exe http://di.fm/mp3/trance.pls&quot;</span><span class="p">)</span>
 <span class="mi">3</span><span class="p">:</span> <span class="n">_ip</span><span class="o">.</span><span class="n">magic</span><span class="p">(</span><span class="s2">&quot;hist &quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>I copy-paste the command string from line #2 (and add ‘&amp;’ to make it a background process:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">ipython</span><span class="p">]</span><span class="o">|</span><span class="mi">4</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">q</span><span class="p">:</span><span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">VLC</span><span class="o">/</span><span class="n">vlc</span><span class="o">.</span><span class="n">exe</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">di</span><span class="o">.</span><span class="n">fm</span><span class="o">/</span><span class="n">mp3</span><span class="o">/</span><span class="n">trance</span><span class="o">.</span><span class="n">pls</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">ipython</span><span class="p">]</span><span class="o">|</span><span class="mi">4</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">q</span><span class="p">:</span><span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">VLC</span><span class="o">/</span><span class="n">vlc</span><span class="o">.</span><span class="n">exe</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">di</span><span class="o">.</span><span class="n">fm</span><span class="o">/</span><span class="n">mp3</span><span class="o">/</span><span class="n">trance</span><span class="o">.</span><span class="n">pls</span>
          <span class="o">&lt;</span><span class="mi">4</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">IPython</span> <span class="n">job</span> <span class="s2">&quot;q:/opt/VLC/vlc.exe http://di.fm/mp3/trance.pls&quot;</span><span class="o">&gt;</span>
 </pre></div>
 </div>
@@ -143,25 +143,25 @@ alias expansion, you can do this simply with aliases without having to resort to
 manual copy-paste)</p>
 <p>So far so good, I can hear the music playing in the background! Now I’ll make a
 macro that both imports jobctrl and launches vlc (lines 1 and 4), and %store it:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[ipython]|5&gt; hist
-1: import jobctrl
-2: _ip.system(&quot;q:/opt/VLC/vlc.exe http://di.fm/mp3/trance.pls&quot;)
-3: _ip.magic(&quot;hist &quot;)
-4: _ip.startjob(&quot;q:/opt/VLC/vlc.exe http://di.fm/mp3/trance.pls&quot;)
-5: _ip.magic(&quot;hist &quot;)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">ipython</span><span class="p">]</span><span class="o">|</span><span class="mi">5</span><span class="o">&gt;</span> <span class="n">hist</span>
+<span class="mi">1</span><span class="p">:</span> <span class="kn">import</span> <span class="nn">jobctrl</span>
+<span class="mi">2</span><span class="p">:</span> <span class="n">_ip</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;q:/opt/VLC/vlc.exe http://di.fm/mp3/trance.pls&quot;</span><span class="p">)</span>
+<span class="mi">3</span><span class="p">:</span> <span class="n">_ip</span><span class="o">.</span><span class="n">magic</span><span class="p">(</span><span class="s2">&quot;hist &quot;</span><span class="p">)</span>
+<span class="mi">4</span><span class="p">:</span> <span class="n">_ip</span><span class="o">.</span><span class="n">startjob</span><span class="p">(</span><span class="s2">&quot;q:/opt/VLC/vlc.exe http://di.fm/mp3/trance.pls&quot;</span><span class="p">)</span>
+<span class="mi">5</span><span class="p">:</span> <span class="n">_ip</span><span class="o">.</span><span class="n">magic</span><span class="p">(</span><span class="s2">&quot;hist &quot;</span><span class="p">)</span>
 
-[ipython]|6&gt; macro radio_trance 1 4
-Macro `radio_trance` created. To execute, type its name (without quotes).
-Macro contents:
-import jobctrl
-_ip.startjob(&quot;q:/opt/VLC/vlc.exe http://di.fm/mp3/trance.pls&quot;)
+<span class="p">[</span><span class="n">ipython</span><span class="p">]</span><span class="o">|</span><span class="mi">6</span><span class="o">&gt;</span> <span class="n">macro</span> <span class="n">radio_trance</span> <span class="mi">1</span> <span class="mi">4</span>
+<span class="n">Macro</span> <span class="sb">`radio_trance`</span> <span class="n">created</span><span class="o">.</span> <span class="n">To</span> <span class="n">execute</span><span class="p">,</span> <span class="nb">type</span> <span class="n">its</span> <span class="n">name</span> <span class="p">(</span><span class="n">without</span> <span class="n">quotes</span><span class="p">)</span><span class="o">.</span>
+<span class="n">Macro</span> <span class="n">contents</span><span class="p">:</span>
+<span class="kn">import</span> <span class="nn">jobctrl</span>
+<span class="n">_ip</span><span class="o">.</span><span class="n">startjob</span><span class="p">(</span><span class="s2">&quot;q:/opt/VLC/vlc.exe http://di.fm/mp3/trance.pls&quot;</span><span class="p">)</span>
 
-[ipython]|7&gt; store radio_trance
-Stored &#39;radio_trance&#39; (Macro)
+<span class="p">[</span><span class="n">ipython</span><span class="p">]</span><span class="o">|</span><span class="mi">7</span><span class="o">&gt;</span> <span class="n">store</span> <span class="n">radio_trance</span>
+<span class="n">Stored</span> <span class="s1">&#39;radio_trance&#39;</span> <span class="p">(</span><span class="n">Macro</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Now I restart ipython and try the macro:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Q</span><span class="p">:</span>\<span class="n">ipython</span><span class="o">&gt;</span><span class="n">python</span> <span class="n">IPython</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">p</span> <span class="n">sh</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Q</span><span class="p">:</span>\<span class="n">ipython</span><span class="o">&gt;</span><span class="n">python</span> <span class="n">IPython</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">p</span> <span class="n">sh</span>
 <span class="n">Py</span> <span class="mf">2.5</span> <span class="p">(</span><span class="n">r25</span><span class="p">:</span><span class="mi">51908</span><span class="p">,</span> <span class="n">Sep</span> <span class="mi">19</span> <span class="mi">2006</span><span class="p">,</span> <span class="mi">09</span><span class="p">:</span><span class="mi">52</span><span class="p">:</span><span class="mi">17</span><span class="p">)</span> <span class="p">[</span><span class="n">MSC</span> <span class="n">v</span><span class="o">.</span><span class="mi">1310</span> <span class="mi">32</span> <span class="n">bit</span> <span class="p">(</span><span class="n">Intel</span><span class="p">)]</span> <span class="n">IPy</span> <span class="mf">0.7</span><span class="o">.</span><span class="mf">3.</span><span class="n">svn</span>
 <span class="p">[</span><span class="n">ipython</span><span class="p">]</span><span class="o">|</span><span class="mi">1</span><span class="o">&gt;</span> <span class="n">radio_trance</span>
          <span class="o">&lt;</span><span class="mi">1</span><span class="o">&gt;</span> <span class="n">Executing</span> <span class="n">Macro</span><span class="o">...</span>
@@ -177,7 +177,7 @@ Stored &#39;radio_trance&#39; (Macro)
 </div>
 <div class="section" id="killing-jobs">
 <h2>Killing jobs<a class="headerlink" href="#killing-jobs" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">ipython</span><span class="p">]</span><span class="o">|</span><span class="mi">1</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">rad_trance</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">ipython</span><span class="p">]</span><span class="o">|</span><span class="mi">1</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">rad_trance</span>
          <span class="o">&lt;</span><span class="mi">1</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">IPython</span> <span class="n">job</span> <span class="s2">&quot;q:/opt/VLC/vlc.exe http://di.fm/mp3/harddance.pls &quot;</span> <span class="n">PID</span><span class="o">=</span><span class="mi">196</span><span class="o">&gt;</span>
 <span class="p">[</span><span class="n">ipython</span><span class="p">]</span><span class="o">|</span><span class="mi">2</span><span class="o">&gt;</span> <span class="c1"># this music is boring me.... I want it to stop right now!</span>
 <span class="p">[</span><span class="n">ipython</span><span class="p">]</span><span class="o">|</span><span class="mi">3</span><span class="o">&gt;</span> <span class="n">_1</span><span class="o">.</span><span class="n">kill</span>

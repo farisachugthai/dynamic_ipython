@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>default_profile.startup.06_help_helpers &#8212; Dynamic IPython: version0.0.1</title>
+    <title>default_profile.extensions.pd_csv &#8212; Dynamic IPython: version0.0.1</title>
     <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../../_static/copybutton.js"></script>
-    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/startup/06_help_helpers.html" />
+    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/extensions/pd_csv.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
 
@@ -50,64 +50,84 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <h1>Source code for default_profile.startup.06_help_helpers</h1><div class="highlight"><pre>
+  <h1>Source code for default_profile.extensions.pd_csv</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">============</span>
-<span class="sd">Help Helpers</span>
+<span class="sd">Pandas CSV</span>
 <span class="sd">============</span>
 
-<span class="sd">Export functions to redirect :func:`help` output.</span>
+<span class="sd">.. magic:: pd_csv</span>
 
-<span class="sd">This module utilizes the examples given in the official documentation</span>
-<span class="sd">for :mod:`contextlib`.</span>
+<span class="sd">Magic that reads in a string and parses it as a :mod:`CSV` with :mod:`pandas`.</span>
 
-<span class="sd">In addition to utilizing :mod:`contextlib`, we create a function that allows</span>
-<span class="sd">that allows searching through the members of an object.</span>
+<span class="sd">Example of creating a magic from **IPython Interactive Computing and</span>
+<span class="sd">Visualization Cookbook by Cyrille Roussou.**</span>
 
-<span class="sd">This is intended to be exposed to the user as a quick, interactive tool</span>
-<span class="sd">with an easier &quot;grep-like&quot; interface for objects that are too large</span>
-<span class="sd">to be quickly and easily understood based on the output of :func:`dir`.</span>
+<span class="sd">The example specifically is from pages 32 to 35.</span>
 
-<span class="sd">.. todo:: :mod:`pydoc` actually has a giant API so we could also use that.</span>
+<span class="sd">It also shows the following simpler example:</span>
 
+<span class="sd">.. ipython::</span>
+
+<span class="sd">    In [1]: from IPython.core.magic import (register_line_magic, register_cell_magic)</span>
+<span class="sd">    In [2]: @register_line_magic</span>
+<span class="sd">            def hello(line):</span>
+<span class="sd">                if line == &#39;french&#39;:</span>
+<span class="sd">                    print(&quot;Salut tout le monde!&quot;)</span>
+<span class="sd">                else:</span>
+<span class="sd">                    print(&quot;Hello world!&quot;)</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">contextlib</span>
-<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+
+<span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 
 
-<div class="viewcode-block" id="print_help"><a class="viewcode-back" href="../../../startup/help_helpers.html#default_profile.startup.06_help_helpers.print_help">[docs]</a><span class="k">def</span> <span class="nf">print_help</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Redirect :func:`help` to ``sys.stderr``.&quot;&quot;&quot;</span>
-    <span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">redirect_stdout</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">):</span>
-        <span class="n">help</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span></div>
+<div class="viewcode-block" id="pd_csv"><a class="viewcode-back" href="../../../extensions.html#default_profile.extensions.pd_csv.pd_csv">[docs]</a><span class="k">def</span> <span class="nf">pd_csv</span><span class="p">(</span><span class="n">cell</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Read in an :class:`io.StringIO()` and parse it with pandas.</span>
 
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    cell : str</span>
+<span class="sd">        User input.</span>
 
-<div class="viewcode-block" id="save_help"><a class="viewcode-back" href="../../../startup/help_helpers.html#default_profile.startup.06_help_helpers.save_help">[docs]</a><span class="k">def</span> <span class="nf">save_help</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">output_file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Write :func:`help` to a file. Defaults to ``sys.stdout``.&quot;&quot;&quot;</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="s1">&#39;xt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">redirect_stdout</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-            <span class="n">help</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span></div>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    df : pandas.DataFrame</span>
 
-
-<div class="viewcode-block" id="page_help"><a class="viewcode-back" href="../../../startup/help_helpers.html#default_profile.startup.06_help_helpers.page_help">[docs]</a><span class="k">def</span> <span class="nf">page_help</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Using IPython&#39;s `pinfo` magic to page information to the console.</span>
-
-<span class="sd">    Also noting it&#39;s the only function in this module that actually needs</span>
-<span class="sd">    the IPython instance so the imports were moved here.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
-    <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_ip</span><span class="p">,</span> <span class="s1">&#39;pinfo&#39;</span><span class="p">):</span>
-        <span class="n">_ip</span><span class="o">.</span><span class="n">pinfo</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span></div>
+    <span class="n">sio</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">sio</span><span class="p">)</span></div>
 
 
-<span class="k">def</span> <span class="nf">grep</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;^a-z.*$&#39;</span><span class="p">]):</span>
-    <span class="n">compiled</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
-    <span class="n">attributes</span> <span class="o">=</span> <span class="nb">dir</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">attributes</span> <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">compiled</span><span class="p">,</span> <span class="n">i</span><span class="p">)))</span>
+<div class="viewcode-block" id="load_ipython_extension"><a class="viewcode-back" href="../../../extensions.html#default_profile.extensions.pd_csv.load_ipython_extension">[docs]</a><span class="k">def</span> <span class="nf">load_ipython_extension</span><span class="p">(</span><span class="n">ip</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;This function is called when the extension is loaded.</span>
+
+<span class="sd">    It accepts an IPython |ip| instance. We can register the magic</span>
+<span class="sd">    with the :func:`IPython.core.magics.register_magic_function()`</span>
+<span class="sd">    method.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    -----------</span>
+<span class="sd">    ip : |ip|</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ip</span><span class="o">.</span><span class="n">register_magic_function</span><span class="p">(</span><span class="s1">&#39;pd_csv&#39;</span><span class="p">)</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="ne">ModuleNotFoundError</span><span class="p">):</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;{lib} not installed.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lib</span><span class="o">=</span><span class="s1">&#39;Pandas&#39;</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">shell</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">load_ipython_extension</span><span class="p">(</span><span class="n">shell</span><span class="p">)</span>
 </pre></div>
 
           </div>
