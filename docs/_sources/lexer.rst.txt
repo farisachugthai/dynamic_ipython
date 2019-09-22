@@ -1,7 +1,8 @@
 .. _console_lexer:
 
+=========================
 New IPython Console Lexer
--------------------------
+=========================
 
 .. versionadded:: 2.0.0
 
@@ -9,11 +10,11 @@ The IPython console lexer has been rewritten and now supports tracebacks
 and customized input/output prompts. An entire suite of lexers is now
 available at :mod:`IPython.lib.lexers`. These include:
 
-.. py:class:: IPythonLexer & IPython3Lexer
+.. py:class:: IPythonLexer, IPython3Lexer
 
   Lexers for pure IPython (python + magic/shell commands)
 
-.. py:class:: IPythonPartialTracebackLexer & IPythonTracebackLexer
+.. py:class:: IPythonPartialTracebackLexer, IPythonTracebackLexer
 
   Supports 2.x and 3.x via the keyword `python3`. The partial traceback
   lexer reads everything but the Python code appearing in a traceback.
@@ -30,6 +31,10 @@ available at :mod:`IPython.lib.lexers`. These include:
   decides whether to use an IPython lexer or an IPython console lexer.
   Supports 2.x and 3.x via the keyword `python3`.
 
+
+IPython Console Highlighting
+============================
+
 Previously, the :class:`IPythonConsoleLexer` class was available at
 :mod:`IPython.sphinxext.ipython_console_hightlight`.  It was inserted
 into Pygments' list of available lexers under the name `ipython`.  It should
@@ -42,8 +47,9 @@ available lexers. Both are IPyLexer instances under the names: `ipython` and
 `ipython3`. Although the names can be confusing (as mentioned above), their
 continued use is, in part, to maintain backwards compatibility and to
 aid typical usage. If a project needs to make Pygments aware of more than just
-the IPyLexer class, then one should not make the IPyLexer class available under
-the name `ipython` and use `ipy` or some other non-conflicting value.
+the :class:`IPyLexer` class, then one should not make the :class:`IPyLexer`
+class available under the name `ipython` and use `ipy` or some
+other non-conflicting value.
 
 Code blocks such as:
 
@@ -70,7 +76,8 @@ prompt, the entire block is assumed to consist of IPython code instead.
 
 See Also
 --------
-:mod:`IPython.sphinxext.ipython_console_hightlight`
+:mod:`IPython.sphinxext.ipython_console_highlight`
+
 :mod:`IPython.sphinxext.ipython_directive`
 
 

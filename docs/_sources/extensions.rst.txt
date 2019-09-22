@@ -1,4 +1,4 @@
-.. _default_profile.extensions:
+.. _extensions:
 
 ===========
 Extensions

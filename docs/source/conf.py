@@ -51,13 +51,14 @@ Here's a little info from the Sphinx website.
 """
 # Stdlib imports
 from datetime import datetime
-from importlib import import_module
-from pathlib import Path
-from pprint import pprint
 import functools
+from importlib import import_module
 import logging
 import math
 import os
+from pathlib import Path
+from pprint import pprint
+import re
 import sys
 import time
 
@@ -70,7 +71,7 @@ from traitlets.config import Config
 import default_profile
 from default_profile.__about__ import __version__
 from default_profile.startup import *
-from default_profile import extensions
+from default_profile import extensions, util
 
 DOCS = Path(__file__).resolve().parent.parent
 
@@ -199,6 +200,7 @@ modindex_common_prefix = [
     'default_profile.',
     'default_profile.extensions.',
     'default_profile.startup.',
+    'default_profile.util.',
 ]
 
 trim_doctest_flags = True
@@ -544,6 +546,24 @@ plot_rcparams = {
 
 # -- Setup -------------------------------------------------------------------
 
+from sphinx import addnodes  # noqa
+
+event_sig_re = re.compile(r'([a-zA-Z-]+)\s*\((.*)\)')
+
+
+def parse_event(env, sig, signode):
+    m = event_sig_re.match(sig)
+    if not m:
+        signode += addnodes.desc_name(sig, sig)
+        return sig
+    name, args = m.groups()
+    signode += addnodes.desc_name(name, name)
+    plist = addnodes.desc_parameterlist()
+    for arg in args.split(','):
+        arg = arg.strip()
+        plist += addnodes.desc_parameter(arg, arg)
+    signode += plist
+    return name
 
 def rstjinja(app, docname, source):
     """
@@ -569,3 +589,22 @@ def setup(app):
     app.connect("source-read", rstjinja)
     app.add_lexer('ipythontb', IPythonTracebackLexer())
     app.add_lexer('ipython', IPyLexer())
+
+    from sphinx.ext.autodoc import cut_lines
+    from sphinx.util.docfields import GroupedField
+    app.connect('autodoc-process-docstring', cut_lines(4, what=['module']))
+    app.add_object_type('confval', 'confval',
+                        objname='configuration value',
+                        indextemplate='pair: %s; configuration value')
+
+    fdesc = GroupedField('parameter', label='Parameters',
+                         names=['param'], can_collapse=True)
+    app.add_object_type('event', 'event', 'pair: %s; event', parse_event,
+                        doc_field_types=[fdesc])
+
+    # workaround for RTD
+    from sphinx.util import logging
+    logger = logging.getLogger(__name__)
+    app.info = lambda *args, **kwargs: logger.info(*args, **kwargs)
+    app.warn = lambda *args, **kwargs: logger.warning(*args, **kwargs)
+    app.debug = lambda *args, **kwargs: logger.debug(*args, **kwargs)

@@ -1,46 +1,54 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-""" Preliminary "job control" extensions for IPython
+"""
+=================================================================
+job_control --- Preliminary "job control" extensions for IPython.
+=================================================================
+.. module:: job_control
+    :synopsis: Provide job control for IPython.
 
-requires python 2.4 (or separate 'subprocess' module
+Synopsis
+--------
+**job-control** [*options*]
 
-This provides 2 features, launching background jobs and killing foreground jobs from another IPython instance.
+Requires python 2.4 (or separate 'subprocess' module).
+This provides 2 features, launching background jobs and killing
+foreground jobs from another IPython instance.
 
-Launching background jobs:
+Usage:
 
-    Usage:
+[ipython]|2> import jobctrl
+[ipython]|3> &ls
+            <3> <jobctrl.IpyPopen object at 0x00D87FD0>
+[ipython]|4> _3.go
+-----------> _3.go()
+ChangeLog
+IPython
+MANIFEST.in
+README
+README_Windows.txt
 
-    [ipython]|2> import jobctrl
-    [ipython]|3> &ls
-             <3> <jobctrl.IpyPopen object at 0x00D87FD0>
-    [ipython]|4> _3.go
-    -----------> _3.go()
-    ChangeLog
-    IPython
-    MANIFEST.in
-    README
-    README_Windows.txt
-
-    ...
+...
 
 Killing foreground tasks:
 
 Launch IPython instance, run a blocking command:
 
-    [Q:/ipython]|1> import jobctrl
-    [Q:/ipython]|2> cat
+[Q:/ipython]|1> import jobctrl
+[Q:/ipython]|2> cat
 
 Now launch a new IPython prompt and kill the process:
 
-    IPython 0.8.3.svn.r2919   [on Py 2.5]
-    [Q:/ipython]|1> import jobctrl
-    [Q:/ipython]|2> %tasks
-    6020: 'cat ' (Q:\ipython)
-    [Q:/ipython]|3> %kill
-    SUCCESS: The process with PID 6020 has been terminated.
-    [Q:/ipython]|4>
+IPython 0.8.3.svn.r2919   [on Py 2.5]
+[Q:/ipython]|1> import jobctrl
+[Q:/ipython]|2> %tasks
+6020: 'cat ' (Q:\ipython)
+[Q:/ipython]|3> %kill
+SUCCESS: The process with PID 6020 has been terminated.
+[Q:/ipython]|4>
 
-(you don't need to specify PID for %kill if only one task is running)
+.. note::
+    You don't need to specify PID for ``%kill`` if only one task is running.
 
 """
 import os
@@ -90,11 +98,23 @@ def startjob(job):
 
 
 class AsyncJobQ(threading.Thread):
-    def __init__(self):
-        threading.Thread.__init__(self)
-        self.q = Queue.Queue()
-        self.output = []
+    """An asynchronous job queue."""
+
+    def __init__(self, q=None, output=None, *args, **kwargs):
+        """Initialize the class.
+
+        Parameters
+        ----------
+        output : list, optional
+            ?
+        q : :class:`queue.Queue`, optional
+
+        """
+        # threading.Thread.__init__(self)
+        self.q = queue.Queue()
+        self.output = output or []
         self.stop = False
+        super().__init__(self, *args, **kwargs)
 
     def run(self):
         while 1:
