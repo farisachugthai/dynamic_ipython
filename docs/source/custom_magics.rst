@@ -160,7 +160,7 @@ New magic functions can be defined like so::
         """A really cool magic command."""
         args = parse_argstring(magic_cool, arg)
 
-The `@magic_arguments` decorator marks the function as having
+The `magic_arguments` decorator marks the function as having
 :mod:`argparse` arguments.
 
 The `@argument` decorator adds an argument using the same syntax as
@@ -197,7 +197,7 @@ Writing Custom Magics
 
 There are two main ways to define your own magic functions.
 
-#) From standalone functions 
+#) From standalone functions.
 
 #) Inheriting from a base class provided by :mod:`IPython`:
 
@@ -387,7 +387,8 @@ Visualization 1st ed.pdf"*:
    the current directory, or in your `IPython extensions dir
    <../../extensions>`_
 
-   An extension implements a function load_ipython_extension.
+   An extension implements a function :func:`load_ipython_extension`.
+
    :func:`IPython.core.magics.extension.load_ipython_extension(ipython)`,
    takes the current |ip| instance as an argument (and possibly
    :func:`IPython.core.magics.extension.unload_ipython_extension(ipython)`,
@@ -401,15 +402,19 @@ Visualization 1st ed.pdf"*:
 So how can we load the IPython extension while running interactively?:
 
    %load_ext  # or
+
    %reload_ext magic
 
 To automatically load a module when :mod:`IPython` starts,
-we need to add the module name to the ``c.TerminalIPythonApp.extensions``
-list in the :mod:`IPython` configuration file.
+we need to add the module name to the `list`
+``c.TerminalIPythonApp.extensions`` in the :mod:`IPython`
+ configuration file.
+
+.. this right here might be a great jumping off point to talk about traitlets
 
 The |ip| instance represents the active
 IPython interpreter. Useful methods and attributes include
-:func:`IPython.core.magic.register_magics()`, to create new magic commands,
+:func:`IPython.core.magic.register_magics`, to create new magic commands,
 and ``user_ns``, to access the user namespace. You can
 explore all the instance's attributes interactively from
 :mod:`IPython` with tab completion.

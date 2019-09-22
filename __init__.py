@@ -37,6 +37,7 @@ from setuptools import find_packages, find_namespace_packages
 import sys
 
 import default_profile
+from default_profile.__about__ import *
 
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
