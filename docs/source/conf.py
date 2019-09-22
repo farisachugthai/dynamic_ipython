@@ -187,6 +187,7 @@ html_sidebars = {
             'relations.html',
             'globaltoc.html',
             'sourcelink.html',
+            'localtoc.html',
         ]
 }
 
@@ -209,6 +210,7 @@ html_compact_lists = False
 
 html_secnumber_suffix = ' '
 
+html_js_files = ['copybutton.js']
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
@@ -509,4 +511,3 @@ def setup(app):
     app.connect("source-read", rstjinja)
     app.add_lexer('ipythontb', IPythonTracebackLexer())
     app.add_lexer('ipython', IPyLexer())
-    app.add_js_file('copybutton.js')
