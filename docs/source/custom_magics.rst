@@ -30,12 +30,13 @@ instance.
 The first is called **register_magics**.
 
 
-``register_magics``
--------------------
+:func:`IPython.core.magics.register_magics`
+-------------------------------------------
 
 Signature: ``register_magics(*magic_objects)``
 
-Docstring:
+.. func:: register_magics
+
    Register one or more instances of Magics.
 
    Take one or more classes or instances of classes that subclass the main
@@ -44,20 +45,16 @@ Docstring:
 
    The registration process will then ensure that
    any methods that have decorated to provide line and/or cell magics will
-   be recognized with the ``%x``/``%%x`` syntax as a line/cell magic
-   respectively.
+   be recognized with the :kbd:`%` and :kbd:`%%` syntax as a line or cell
+   magic respectively.
 
    If classes are given, they will be instantiated with the default
    constructor.  If your classes need a custom constructor, you should
    instantiate them first and pass the instance.
 
    The provided arguments can be an arbitrary mix of classes and instances.
-
-.. admonition:: Note how many times they said classes or instances.
-
-   Passing a function will raise an exception.
-
-
+   
+   
 .. _register-magic-parameters:
 
 Parameters
@@ -65,17 +62,22 @@ Parameters
 'magic' : object
    The decorated magic class or function.
 
+Alright that's pretty straightforward.
 
-``register_magic_function``
----------------------------
+.. admonition:: Note how many times they said classes or instances.
+
+   Passing a function will raise an exception.
+
+
+
+:func:`IPython.core.magic.register_magic_function`
+---------------------------------------------------
 
 The first is the function *register_magic_function* bound to the |ip| instance.
 
 Signature: register_magic_function(func, magic_kind='line', magic_name=None)
 
-Docstring:
-
-.. code-block:: rst
+.. func:: register_magic_function
 
    Expose a standalone function as magic function for IPython.
 

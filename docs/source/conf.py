@@ -126,7 +126,8 @@ extensions = [
     'sphinx.ext.inheritance_diagram',
     'sphinx.ext.intersphinx',
     'sphinx.ext.linkcode',
-    'sphinx.ext.mathjax',
+    # aren't using it currently
+    # 'sphinx.ext.mathjax',
     'sphinx.ext.napoleon',
     'sphinx.ext.todo',
     'sphinx.ext.viewcode',
@@ -159,7 +160,7 @@ source_encoding = 'utf-8'
 
 # The master toctree document.
 master_doc = 'index'
-exclude_patterns = ['build', 'dist', '.tox', '.ipynb_checkpoints', 'tags']
+exclude_patterns = ['build', 'dist', '.tox', '.ipynb_checkpoints', 'tags', '*.ipynb']
 
 # primary_domain
 
@@ -172,7 +173,6 @@ exclude_patterns = ['build', 'dist', '.tox', '.ipynb_checkpoints', 'tags']
 # New in version 1.0.
 primary_domain = 'py'
 
-# default_role 
 # The name of a reST role (builtin or Sphinx extension) to use as the
 # default role, that is, for text marked up `like this`. This can be set to
 # 'py:obj' to make `filter` a cross-reference to the Python function “filter”.

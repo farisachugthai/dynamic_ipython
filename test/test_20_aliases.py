@@ -70,7 +70,7 @@ def test_alias_args_commented(_ip):
     nt.assert_equal(cap.stdout, 'this is %s a commented out arg')
 
 
-def test_alias_args_commented_nargs():
+def test_alias_args_commented_nargs(_ip):
     """Check that alias correctly counts args, excluding those commented out"""
     am = _ip.alias_manager
     alias_name = 'comargcount'
@@ -89,4 +89,3 @@ if __name__ == "__main__":
     unittest.skipIf(NO_NOSE, 'Nose not installed.')
     unittest.main()
     nose.run()
-

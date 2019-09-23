@@ -379,18 +379,18 @@ page in <a class="reference internal" href="#pseudo-decorators"><span class="std
 <span class="gp">In [18]: </span><span class="n">hist</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">10000</span><span class="p">),</span> <span class="mi">100</span><span class="p">);</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="_static_imagesplot_simple.png"><img alt="_static_imagesplot_simple.png" src="_static_imagesplot_simple.png" style="width: 4in;" /></a>
-<a class="reference internal image-reference" href="_static_imageshist_simple.png"><img alt="_static_imageshist_simple.png" src="_static_imageshist_simple.png" style="width: 4in;" /></a>
+<a class="reference internal image-reference" href="_images/plot_simple.png"><img alt="_images/plot_simple.png" src="_images/plot_simple.png" style="width: 4in;" /></a>
+<a class="reference internal image-reference" href="_images/hist_simple.png"><img alt="_images/hist_simple.png" src="_images/hist_simple.png" style="width: 4in;" /></a>
 <p>In a subsequent session, we can update the current figure with some
 text, and then resave.:</p>
 <pre class="literal-block">In [19]: ylabel('number')
-Out[19]: Text(39.597222222222214, 0.5, 'number')
+Out[19]: Text(38.347222222222214, 0.5, 'number')
 
 In [20]: title('normal distribution')
 Out[20]: Text(0.5, 1, 'normal distribution')
 
 In [21]: grid(True)</pre>
-<a class="reference internal image-reference" href="_static_imageshist_with_text.png"><img alt="_static_imageshist_with_text.png" src="_static_imageshist_with_text.png" style="width: 4in;" /></a>
+<a class="reference internal image-reference" href="_images/hist_with_text.png"><img alt="_images/hist_with_text.png" src="_images/hist_with_text.png" style="width: 4in;" /></a>
 <p>You can also have function definitions included in the source.</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [22]: </span><span class="k">def</span> <span class="nf">square</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 <span class="gp">   ....: </span>    <span class="sd">&quot;&quot;&quot;</span>
@@ -444,7 +444,7 @@ suppress output with a semicolon.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [29]: </span><span class="n">plot</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]);</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="_static_imagesplot_simple_python.png"><img alt="_static_imagesplot_simple_python.png" src="_static_imagesplot_simple_python.png" style="width: 4in;" /></a>
+<a class="reference internal image-reference" href="_images/plot_simple_python.png"><img alt="_images/plot_simple_python.png" src="_images/plot_simple_python.png" style="width: 4in;" /></a>
 <p>For more information on <code class="xref py py-obj docutils literal notranslate"><span class="pre">&#64;savefig</span></code> decorator, please refer to the end of
 this page in Pseudo-Decorators section.</p>
 <p>Similarly, <a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stderr" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stderr</span></code></a> is inserted.:</p>
@@ -663,13 +663,13 @@ Out[1]: 2
 In [2]: import datetime
    ...: datetime.datetime.now()
    ...: 
-Out[2]: datetime.datetime(2019, 9, 21, 22, 40, 58, 715725)</pre>
+Out[2]: datetime.datetime(2019, 9, 23, 19, 26, 13, 72518)</pre>
 <p>It supports IPython construct that plain
 Python does not understand (like magics):</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [3]: </span><span class="kn">import</span> <span class="nn">time</span>
 
 <span class="gp">In [4]: </span><span class="o">%</span><span class="k">timeit</span> time.sleep(0.05)
-<span class="go">62.5 ms +- 109 us per loop (mean +- std. dev. of 7 runs, 10 loops each)</span>
+<span class="go">50.5 ms +- 46.5 us per loop (mean +- std. dev. of 7 runs, 10 loops each)</span>
 </pre></div>
 </div>
 <p>This will also support top-level async when using IPython 7.0+</p>
@@ -716,7 +716,59 @@ and the IPython directive:</p>
 if you do not have the syntax highlighting extension enabled as well, then
 all rendered code-blocks will be uncolored. By default this directive assumes
 that your prompts are unchanged IPython ones, but this can be customized.
-An example usage of the directive is:</p>
+The configurable options that can be placed in conf.py are:</p>
+<dl class="simple">
+<dt>ipython_savefig_dir:</dt><dd><p>The directory in which to save the figures. This is relative to the
+Sphinx source directory. The default is <code class="xref py py-obj docutils literal notranslate"><span class="pre">html_static_path</span></code>.</p>
+</dd>
+<dt>ipython_rgxin:</dt><dd><p>The compiled regular expression to denote the start of IPython input
+lines. The default is <code class="docutils literal notranslate"><span class="pre">re.compile('In</span> <span class="pre">\[(\d+)\]:\s?(.*)\s*')</span></code>. You
+shouldn’t need to change this.</p>
+</dd>
+<dt>ipython_warning_is_error: [default to True]</dt><dd><p>Fail the build if something unexpected happen, for example if a block raise
+an exception but does not have the <code class="xref py py-obj docutils literal notranslate"><span class="pre">:okexcept:</span></code> flag. The exact behavior of
+what is considered strict, may change between the sphinx directive version.</p>
+</dd>
+<dt>ipython_rgxout:</dt><dd><p>The compiled regular expression to denote the start of IPython output
+lines. The default is <code class="docutils literal notranslate"><span class="pre">re.compile('Out\[(\d+)\]:\s?(.*)\s*')</span></code>. You
+shouldn’t need to change this.</p>
+</dd>
+<dt>ipython_promptin:</dt><dd><p>The string to represent the IPython input prompt in the generated ReST.
+The default is <code class="docutils literal notranslate"><span class="pre">'In</span> <span class="pre">[%d]:'</span></code>. This expects that the line numbers are used
+in the prompt.</p>
+</dd>
+<dt>ipython_promptout:</dt><dd><p>The string to represent the IPython prompt in the generated ReST. The
+default is <code class="docutils literal notranslate"><span class="pre">'Out</span> <span class="pre">[%d]:'</span></code>. This expects that the line numbers are used
+in the prompt.</p>
+</dd>
+<dt>ipython_mplbackend:</dt><dd><p>The string which specifies if the embedded Sphinx shell should import
+Matplotlib and set the backend. The value specifies a backend that is
+passed to <code class="xref py py-obj docutils literal notranslate"><span class="pre">matplotlib.use()</span></code> before any lines in <code class="xref py py-obj docutils literal notranslate"><span class="pre">ipython_execlines</span></code> are
+executed. If not specified in conf.py, then the default value of ‘agg’ is
+used. To use the IPython directive without matplotlib as a dependency, set
+the value to <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>. It may end up that matplotlib is still imported
+if the user specifies so in <code class="xref py py-obj docutils literal notranslate"><span class="pre">ipython_execlines</span></code> or makes use of the
+&#64;savefig pseudo decorator.</p>
+</dd>
+<dt>ipython_execlines:</dt><dd><p>A list of strings to be exec’d in the embedded Sphinx shell. Typical
+usage is to make certain packages always available. Set this to an empty
+list if you wish to have no imports always available. If specified in
+<code class="docutils literal notranslate"><span class="pre">conf.py</span></code> as <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>, then it has the effect of making no imports available.
+If omitted from conf.py altogether, then the default value of
+[‘import numpy as np’, ‘import matplotlib.pyplot as plt’] is used.</p>
+</dd>
+<dt>ipython_holdcount</dt><dd><p>When the &#64;suppress pseudo-decorator is used, the execution count can be
+incremented or not. The default behavior is to hold the execution count,
+corresponding to a value of <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>. Set this to <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a> to increment
+the execution count after each suppressed command.</p>
+</dd>
+</dl>
+<p>As an example, to use the IPython directive when <code class="xref py py-obj docutils literal notranslate"><span class="pre">matplotlib</span></code> is not available,
+one sets the backend to <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">ipython_mplbackend</span> <span class="o">=</span> <span class="bp">None</span>
+</pre></div>
+</div>
+<p>An example usage of the directive is:</p>
 <div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">ipython</span><span class="p">::</span>
 
     In [1]: x = 1
@@ -746,6 +798,14 @@ or :okwarning: options:</p>
     In [2]: # raise warning.
 </pre></div>
 </div>
+</div>
+<div class="section" id="to-do">
+<h3>To Do<a class="headerlink" href="#to-do" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p>Turn the ad-hoc test() function into a real test suite.</p></li>
+<li><p>Break up ipython-specific functionality from matplotlib stuff into better
+separated code.</p></li>
+</ul>
 <dl class="function">
 <dt id="IPython.sphinxext.ipython_directive.block_parser">
 <code class="sig-name descname">block_parser</code><span class="sig-paren">(</span><em class="sig-param">part</em>, <em class="sig-param">rgxin</em>, <em class="sig-param">rgxout</em>, <em class="sig-param">fmtin</em>, <em class="sig-param">fmtout</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/IPython/sphinxext/ipython_directive.html#block_parser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.block_parser" title="Permalink to this definition">¶</a></dt>
@@ -1014,6 +1074,7 @@ containing the expected output from the IPython shell.</p>
 <li><a class="reference internal" href="#module-IPython.sphinxext.ipython_directive">Automatically generated documentation</a><ul>
 <li><a class="reference internal" href="#ipython-sphinx-directive-module">IPython Sphinx directive module</a></li>
 <li><a class="reference internal" href="#id5">Pseudo-Decorators</a></li>
+<li><a class="reference internal" href="#to-do">To Do</a></li>
 </ul>
 </li>
 </ul>
@@ -1045,7 +1106,7 @@ containing the expected output from the IPython shell.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Sep 21, 2019.
+      Last updated on Sep 23, 2019.
     </div>
   </body>
 </html>
