@@ -1,3 +1,5 @@
+.. _dev:
+
 =================
 Developer's Notes
 =================
@@ -62,16 +64,20 @@ To build the HTML documentation on Windows using :command:`cmd`, run::
 
     make html
 
-From PowerShell, run::
+From PowerShell, run.:
+
+.. code-block:: powershell
 
     PS> .\make html
 
 
-Notes for Working in Vim
+Setting ``&makeprg``
 ------------------------
 
 While working in Vim, the following commands can be useful for building
-documentation.::
+documentation.:
+
+.. code-block:: vim
 
    let &makeprg = 'sphinx-build '
    cd docs                " assuming set shellslash has been run if $OS=='Windows_NT'
@@ -88,6 +94,34 @@ In addition, ``makeprg`` is not an option one is allowed to set in a modeline
 so it's important to take that into consideration.
 
 .. wait can we specify everything and then override it?
+
+Utilizing Tagbar
+----------------
+
+Out of the box, Exuberant ctags and even Universal ctags 
+doesn't support rst documentation.
+
+An external dependency in rst2ctags is required which can be
+found at `this repo <https://github.com/jszakmeister/rst2ctags.git>`_.
+
+.. code-block:: vim
+
+   let g:tagbar_type_rst = {
+       \ 'ctagstype': 'rst',
+       \ 'ctagsbin' : expand('$HOME/src/rst2ctags/rst2ctags.py'),
+       \ 'ctagsargs' : '-f - --sort=yes',
+       \ 'kinds' : [
+       \ 's:sections',
+       \ 'i:images'
+       \ ],
+       \ 'sro' : '|',
+       \ 'kind2scope' : {
+       \ 's' : 'section',
+       \ },
+       \ 'sort': 0,
+       \ }
+
+
 
 Generating CSS
 ==============

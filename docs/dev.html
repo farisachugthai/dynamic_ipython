@@ -58,7 +58,7 @@
           <div class="body" role="main">
             
   <div class="section" id="module-developers-notes">
-<span id="developer-s-notes"></span><h1>Developer’s Notes<a class="headerlink" href="#module-developers-notes" title="Permalink to this headline">¶</a></h1>
+<span id="developer-s-notes"></span><span id="dev"></span><h1>Developer’s Notes<a class="headerlink" href="#module-developers-notes" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="installing">
 <h2>Installing<a class="headerlink" href="#installing" title="Permalink to this headline">¶</a></h2>
 <p>All of the resources necessary for installing the contents of this repository
@@ -103,17 +103,17 @@ can also be installed using either <code class="docutils literal notranslate"><s
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">make html</span>
 </pre></div>
 </div>
-<p>From PowerShell, run:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">PS&gt; .\make html</span>
+<p>From PowerShell, run.:</p>
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="n">PS</span><span class="p">&gt;</span> <span class="p">.\</span><span class="n">make</span> <span class="n">html</span>
 </pre></div>
 </div>
-<div class="section" id="notes-for-working-in-vim">
-<h3>Notes for Working in Vim<a class="headerlink" href="#notes-for-working-in-vim" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="setting-makeprg">
+<h3>Setting <code class="docutils literal notranslate"><span class="pre">&amp;makeprg</span></code><a class="headerlink" href="#setting-makeprg" title="Permalink to this headline">¶</a></h3>
 <p>While working in Vim, the following commands can be useful for building
 documentation.:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">let &amp;makeprg = &#39;sphinx-build &#39;</span>
-<span class="go">cd docs                &quot; assuming set shellslash has been run if $OS==&#39;Windows_NT&#39;</span>
-<span class="go">make -b html . ../build</span>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="k">let</span> &amp;<span class="nb">makeprg</span> <span class="p">=</span> <span class="s1">&#39;sphinx-build &#39;</span>
+<span class="k">cd</span> docs                <span class="c">&quot; assuming set shellslash has been run if $OS==&#39;Windows_NT&#39;</span>
+<span class="k">make</span> <span class="p">-</span><span class="k">b</span> html . ../build
 </pre></div>
 </div>
 <p>Generally it’s more difficult to specify parameters in the <code class="docutils literal notranslate"><span class="pre">makeprg</span></code> option
@@ -123,6 +123,29 @@ configurability.</p>
 necessary, build arguments into a mapping.</p>
 <p>In addition, <code class="docutils literal notranslate"><span class="pre">makeprg</span></code> is not an option one is allowed to set in a modeline
 so it’s important to take that into consideration.</p>
+</div>
+<div class="section" id="utilizing-tagbar">
+<h3>Utilizing Tagbar<a class="headerlink" href="#utilizing-tagbar" title="Permalink to this headline">¶</a></h3>
+<p>Out of the box, Exuberant ctags and even Universal ctags
+doesn’t support rst documentation.</p>
+<p>An external dependency in rst2ctags is required which can be
+found at <a class="reference external" href="https://github.com/jszakmeister/rst2ctags.git">this repo</a>.</p>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="k">g</span>:tagbar_type_rst <span class="p">=</span> {
+    \ <span class="s1">&#39;ctagstype&#39;</span>: <span class="s1">&#39;rst&#39;</span><span class="p">,</span>
+    \ <span class="s1">&#39;ctagsbin&#39;</span> : expand<span class="p">(</span><span class="s1">&#39;$HOME/src/rst2ctags/rst2ctags.py&#39;</span><span class="p">),</span>
+    \ <span class="s1">&#39;ctagsargs&#39;</span> : <span class="s1">&#39;-f - --sort=yes&#39;</span><span class="p">,</span>
+    \ <span class="s1">&#39;kinds&#39;</span> : [
+    \ <span class="s1">&#39;s:sections&#39;</span><span class="p">,</span>
+    \ <span class="s1">&#39;i:images&#39;</span>
+    \ ]<span class="p">,</span>
+    \ <span class="s1">&#39;sro&#39;</span> : <span class="s1">&#39;|&#39;</span><span class="p">,</span>
+    \ <span class="s1">&#39;kind2scope&#39;</span> : {
+    \ <span class="s1">&#39;s&#39;</span> : <span class="s1">&#39;section&#39;</span><span class="p">,</span>
+    \ }<span class="p">,</span>
+    \ <span class="s1">&#39;sort&#39;</span>: <span class="m">0</span><span class="p">,</span>
+    \ }
+</pre></div>
+</div>
 </div>
 </div>
 <div class="section" id="generating-css">
@@ -209,7 +232,8 @@ so it’s important to take that into consideration.</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#building-documentation">Building Documentation</a><ul>
-<li><a class="reference internal" href="#notes-for-working-in-vim">Notes for Working in Vim</a></li>
+<li><a class="reference internal" href="#setting-makeprg">Setting <code class="docutils literal notranslate"><span class="pre">&amp;makeprg</span></code></a></li>
+<li><a class="reference internal" href="#utilizing-tagbar">Utilizing Tagbar</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#generating-css">Generating CSS</a></li>
