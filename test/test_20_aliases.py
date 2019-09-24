@@ -6,6 +6,13 @@ Took this from the :mod:`IPython` team insofar.
 Should definitely consider rewriting it.
 But like partially because plagariasm, partially
 because wth is this saying?
+
+.. tip:: pytest
+
+    If you pass an argument to your functions and invoke pytest,
+    it will assume that the passed argument is a fixture you're feeding
+    to it. Interesting.
+
 """
 import unittest
 

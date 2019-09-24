@@ -12,13 +12,11 @@ simple steps.
 
 #) Creating a function or class with some desired functionality.
 
-#) Decorating the function to associate the currently running IPython instance
-   with it.
+#) Decorating the function to associate the running IPython instance with it.
 
-    #) A subpoint of this is adding more decorators to handle
-       :ref:`magic-arguments`.
+    #) In addition, adding more decorators to handle :ref:`magic-arguments`.
 
-#) Registering the magic with the IPython shell.
+#) Registering the magic with the shell.
 
 
 Registering the magic
@@ -29,13 +27,12 @@ instance.
 
 The first is called **register_magics**.
 
-
-:func:`IPython.core.magics.register_magics`
+:func:`register_magics`
 -------------------------------------------
 
 Signature: ``register_magics(*magic_objects)``
 
-.. func:: register_magics
+.. function:: register_magics
 
    Register one or more instances of Magics.
 
@@ -70,14 +67,14 @@ Alright that's pretty straightforward.
 
 
 
-:func:`IPython.core.magic.register_magic_function`
+:func:`register_magic_function`
 ---------------------------------------------------
 
 The first is the function *register_magic_function* bound to the |ip| instance.
 
 Signature: register_magic_function(func, magic_kind='line', magic_name=None)
 
-.. func:: register_magic_function
+.. function:: register_magic_function
 
    Expose a standalone function as magic function for IPython.
 
@@ -85,7 +82,7 @@ Signature: register_magic_function(func, magic_kind='line', magic_name=None)
    standalone function.  The functions should have the following
    signatures:
 
-       + For line magics: ``def f(line)`..
+       + For line magics: ``def f(line)``.
        + For cell magics: ``def f(line, cell)``.
        + For a function that does both: ``def f(line, cell=None)``.
 
@@ -165,7 +162,7 @@ New magic functions can be defined like so::
 The `magic_arguments` decorator marks the function as having
 :mod:`argparse` arguments.
 
-The `@argument` decorator adds an argument using the same syntax as
+The `argument` decorator adds an argument using the same syntax as
 :mod:`argparse`'s ``add_argument`` method.
 
 More sophisticated uses may also require the `@argument_group` or
@@ -212,33 +209,9 @@ Start by changing to IPython's startup directory. This can be found as the
 `startup <../../default_profile/startup>`_ subdirectory of your default
 IPython profile.
 
-First, let us see the simplest case. The following shows how to create a line
-magic, a cell one and one that works in both modes, using just plain functions:
+.. admonition:: Don't use print statements in Sphinx doc builds!
 
-.. ipython:: python
-
-    from IPython.core.magic import (register_line_magic, register_cell_magic,
-                                    register_line_cell_magic)
-
-    @register_line_magic
-    def lmagic(line):
-        "my line magic"
-        return line
-
-    @register_cell_magic
-    def cmagic(line, cell):
-        "my cell magic"
-        return line, cell
-
-    @register_line_cell_magic
-    def lcmagic(line, cell=None):
-        "Magic that works both as %lcmagic and as %%lcmagic"
-        if cell is None:
-            print("Called as line magic")
-            return line
-        else:
-            print("Called as cell magic")
-            return line, cell
+   That's what those "code block with no input" messages were!!!!
 
 
 You can also create magics of all three kinds by inheriting from the
@@ -257,17 +230,11 @@ doesn't instantiate it yet.
 .. ipython:: python
 
     from __future__ import print_function
-    from IPython.core.magic import Magics, magics_class, line_magic
+    from IPython.core.magic import Magics, magics_class
     from IPython.core.magic import cell_magic, line_cell_magic
 
     @magics_class
     class MyMagics(Magics):
-        @line_magic
-        def lmagic(self, line):
-            """My line magic."""
-            print("Full access to the main IPython object:", self.shell)
-            print("Variables in the user namespace:", list(self.shell.user_ns.keys()))
-            return line
 
         @cell_magic
         def cmagic(self, line, cell):
@@ -278,17 +245,15 @@ doesn't instantiate it yet.
         def lcmagic(self, line, cell=None):
             """Magic that works both as %lcmagic and as %%lcmagic."""
             if cell is None:
-                print("Called as line magic")
                 return line
             else:
-                print("Called as cell magic")
                 return line, cell
 
 
 In order to actually use these magics, you must register them with a
 running IPython instance.
 
-Any module file that define a function named ``load_ipython_extension``
+Any module file that define a function named `load_ipython_extension`
 can be loaded via `%load_ext` module.path or be configured to be
 autoloaded by IPython at startup time.
 
@@ -316,10 +281,10 @@ instantiate the class yourself before registration:
 
     @magics_class
     class StatefulMagics(Magics):
-        "Magics that hold additional state"
+        """Magics that hold additional state."""
 
         def __init__(self, shell, data):
-            # You must call the parent constructor
+            """You must call the parent constructor."""
             super(StatefulMagics, self).__init__(shell)
             self.data = data
 
@@ -403,9 +368,8 @@ Visualization 1st ed.pdf"*:
 
 So how can we load the IPython extension while running interactively?:
 
-   %load_ext  # or
-
-   %reload_ext magic
+Running ``%load_ext`` with the name of the extension of interest as the argument
+or ``%reload_ext magic``.
 
 To automatically load a module when :mod:`IPython` starts,
 we need to add the module name to the `list`

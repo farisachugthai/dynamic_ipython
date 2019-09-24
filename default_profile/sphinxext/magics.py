@@ -11,16 +11,38 @@ import logging
 import re
 import sys
 
-logging.basicConfig()
+logging.basicConfig(format='%(name)-12s: %(levelname)-8s %(message)s')
 
 try:
     from sphinx import addnodes
     # from sphinx.domains.std import StandardDomain
     from sphinx.roles import XRefRole
+except (ImportError, ModuleNotFoundError) as e:
+    logging.warning(e)
+    # This has to be defined or else the module, and as a result,
+    # the package come crashing down
+    XRefRole = object
+
+try:
     # Let's get a more useful error than raising exception
     from IPython.core.error import UsageError
 except (ImportError, ModuleNotFoundError) as e:
-    logging.warn(e)
+    logging.warning(e)
+
+    class UsageError(Exception):
+        def __init__(self, err=None, *args, **kwargs):
+            self.err = err
+            super().__init__(self, *args, **kwargs)
+
+        def __repr__(self):
+            return '{}\t \t{}'.format(
+                    self.__class__.__name__,
+                    self.err)
+
+
+        def __call__(self, err):
+            """KEEP IT MOVIN' OVA THERE"""
+            return self.__repr__(err)
 
 
 name_re = re.compile(r"[\w_]+")
@@ -31,7 +53,7 @@ def parse_magic(env, sig, signode):
 
     Parameters
     ----------
-    todo
+    env : 
 
     Raises
     ------
@@ -42,7 +64,7 @@ def parse_magic(env, sig, signode):
     """
     m = name_re.match(sig)
     if not m:
-        raise Exception("Invalid magic command: %s" % sig)
+        raise UsageError("Invalid magic command: %s" % sig)
     name = "%" + sig
     signode += addnodes.desc_name(name, name)
     return m.group(0)

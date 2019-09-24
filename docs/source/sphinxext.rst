@@ -3,8 +3,11 @@
 ========================
 IPython Sphinx Directive
 ========================
+.. module:: ipython_directive
+   :synopsis: An enhanced extension for Sphinx and rst use.
 
 .. highlight:: ipython
+   :linenothreshold: 3
 
 The IPython directive is a stateful shell that can be used in reStructured
 text files.
@@ -48,9 +51,9 @@ Directive and options
 
 
 One may find it useful to reference the relevant documentation from the
-[Sphinx project]_ and Docutils.
+[Sphinx]_  project and Docutils.
 
-.. [Sphinx project] http://www.sphinx-doc.org/en/master/usage/restructuredtext/domains.html#the-restructuredtext-domain
+.. [Sphinx] http://www.sphinx-doc.org/en/master/usage/restructuredtext/domains.html#the-restructuredtext-domain
 
 See Also
 ---------
@@ -578,6 +581,24 @@ And persist across sessions.:
 
    print(square(3))
    print(square(-2))
+
+
+
+Configuring the Build Environment
+=================================
+
+I want to put this in the docstrings of those functions with the `env`
+parameter that kept tripping me up. (ref)
+
+.. glossary::
+
+   environment
+      A structure where information about all documents under the root is saved,
+      and used for cross-referencing.  The environment is pickled after the
+      parsing stage, so that successive runs only need to read and parse new and
+      changed documents.
+
+
 
 
 .. _pseudo-decorators:

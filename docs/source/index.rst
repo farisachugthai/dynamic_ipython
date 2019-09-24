@@ -111,7 +111,6 @@ Table of Contents
    :titlesonly:
 
    Keybindings <ipython_keybindings>
-   custom_magics
    extensions
    jobcontrol
    exceptions

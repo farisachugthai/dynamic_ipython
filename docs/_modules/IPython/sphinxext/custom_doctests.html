@@ -101,6 +101,7 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
+
 <div class="viewcode-block" id="str_to_array"><a class="viewcode-back" href="../../../sphinxext.html#IPython.sphinxext.custom_doctests.str_to_array">[docs]</a><span class="k">def</span> <span class="nf">str_to_array</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Simplistic converter of strings from repr to float NumPy arrays.</span>
@@ -134,6 +135,7 @@
         <span class="c1"># Assume its a regular float. Force 1D so we can index into it.</span>
         <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">a</span></div>
+
 
 <div class="viewcode-block" id="float_doctest"><a class="viewcode-back" href="../../../sphinxext.html#IPython.sphinxext.custom_doctests.float_doctest">[docs]</a><span class="k">def</span> <span class="nf">float_doctest</span><span class="p">(</span><span class="n">sphinx_shell</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">input_lines</span><span class="p">,</span> <span class="n">found</span><span class="p">,</span> <span class="n">submitted</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -177,7 +179,8 @@
         <span class="n">error</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">found_isnan</span><span class="p">,</span> <span class="n">submitted_isnan</span><span class="p">)</span>
         <span class="n">error</span> <span class="o">|=</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">found</span><span class="p">[</span><span class="o">~</span><span class="n">found_isnan</span><span class="p">],</span>
                                  <span class="n">submitted</span><span class="p">[</span><span class="o">~</span><span class="n">submitted_isnan</span><span class="p">],</span>
-                                 <span class="n">rtol</span><span class="o">=</span><span class="n">rtol</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">atol</span><span class="p">)</span>
+                                 <span class="n">rtol</span><span class="o">=</span><span class="n">rtol</span><span class="p">,</span>
+                                 <span class="n">atol</span><span class="o">=</span><span class="n">atol</span><span class="p">)</span>
 
     <span class="n">TAB</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span> <span class="o">*</span> <span class="mi">4</span>
     <span class="n">directive</span> <span class="o">=</span> <span class="n">sphinx_shell</span><span class="o">.</span><span class="n">directive</span>
@@ -197,9 +200,14 @@
              <span class="s1">&#39;On input line(s):</span><span class="se">\n</span><span class="s1">{TAB}{2}</span><span class="se">\n\n</span><span class="s1">&#39;</span>
              <span class="s1">&#39;we found output:</span><span class="se">\n</span><span class="s1">{TAB}{3}</span><span class="se">\n\n</span><span class="s1">&#39;</span>
              <span class="s1">&#39;instead of the expected:</span><span class="se">\n</span><span class="s1">{TAB}{4}</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="p">)</span>
-        <span class="n">e</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">content</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_lines</span><span class="p">),</span> <span class="nb">repr</span><span class="p">(</span><span class="n">found</span><span class="p">),</span>
-                     <span class="nb">repr</span><span class="p">(</span><span class="n">submitted</span><span class="p">),</span> <span class="n">TAB</span><span class="o">=</span><span class="n">TAB</span><span class="p">)</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">source</span><span class="p">,</span>
+                     <span class="n">content</span><span class="p">,</span>
+                     <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_lines</span><span class="p">),</span>
+                     <span class="nb">repr</span><span class="p">(</span><span class="n">found</span><span class="p">),</span>
+                     <span class="nb">repr</span><span class="p">(</span><span class="n">submitted</span><span class="p">),</span>
+                     <span class="n">TAB</span><span class="o">=</span><span class="n">TAB</span><span class="p">)</span>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">e</span><span class="p">)</span></div>
+
 
 <span class="c1"># dict of allowable doctest handlers. The key represents the first argument</span>
 <span class="c1"># that must be given to @doctest in order to activate the handler.</span>
@@ -237,7 +245,6 @@
 <p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../ipython_keybindings.html">Keybindings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../custom_magics.html">Custom Magics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Extensions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../jobcontrol.html">Job Control</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../exceptions.html">Customized Exceptions</a></li>
@@ -283,7 +290,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Sep 23, 2019.
+      Last updated on Sep 24, 2019.
     </div>
   </body>
 </html>

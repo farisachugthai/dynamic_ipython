@@ -3,6 +3,8 @@
 ===========
 Job Control
 ===========
+.. module:: job_control
+    :synopsis: Provide job control for IPython.
 
 Import module 'jobctrl' to launch and interact with background processes by
 prepending system commands with '&', or to kill foreground tasks that are preventing

@@ -4,8 +4,6 @@
 =================================================================
 job_control --- Preliminary "job control" extensions for IPython.
 =================================================================
-.. module:: job_control
-    :synopsis: Provide job control for IPython.
 
 Synopsis
 --------
@@ -82,7 +80,7 @@ class IpyPopen(subprocess.Popen):
     """I didn't know you could subclass Popen but okay."""
 
     def go(self):
-        print(self.communicate()[0])
+        return self.communicate()[0]
 
     def __repr__(self):
         return '<IPython job "%s" PID=%d>' % (self.line, self.pid)
