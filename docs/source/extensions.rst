@@ -4,20 +4,29 @@
 Extensions
 ===========
 
+.. module:: ipython_extensions
+    :synopsis: Write additions to the IPython ecosystem and additional magics.
+
 Here are the varying `%magic` extensions that are bundled with this
 repository.
 
+
+Event Watcher
+=============
 
 .. automodule:: default_profile.extensions.event_watcher_example
     :members:
     :undoc-members:
     :show-inheritance:
 
+-------------------------------------------------------------------------
 
 .. automodule:: default_profile.extensions.load_ext
     :members:
     :undoc-members:
     :show-inheritance:
+
+-------------------------------------------------------------------------
 
 
 .. automodule:: default_profile.extensions.pd_csv
@@ -26,10 +35,16 @@ repository.
     :show-inheritance:
 
 
+-------------------------------------------------------------------------
+
+
 .. automodule:: default_profile.extensions.repr_requests
     :members:
     :undoc-members:
     :show-inheritance:
+
+
+-------------------------------------------------------------------------
 
 
 .. automodule:: default_profile.extensions.termux_clipboard
