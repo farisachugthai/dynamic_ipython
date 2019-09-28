@@ -150,7 +150,7 @@ class LinuxAliases:
         """
         _user_aliases = [
             ('cs', 'cd %s && ls -F --color=always %s'),
-            ('cp', 'cp -iv %l'),  # cp mv mkdir and rmdir are all overridden
+            ('cp', 'cp -v %l'),  # cp mv mkdir and rmdir are all overridden
             ('dus', 'du -d 1 -ha %l'),
             ('echo', 'echo -e %l'),
             (
@@ -166,14 +166,17 @@ class LinuxAliases:
                 'export PIP_REQUIRE_VIRTUALENV=0; python3 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null'
             ),
             ('head', 'head -n 30 %l'),
-            ('la', 'ls -AF --color=always %l'),
             ('l', 'ls -CF --color=always %l'),
-            ('ll', 'ls -AlF --color=always %l'),
-            ('ls', 'ls -F --color=always %l'),
-            ('lt', 'ls -Altcr --color=always %l'),
+            ('la', 'ls -AF --color=always %l'),
+            ('ldir', 'ls -Fhpo | grep /$ %l'),
+            ('lf', 'ls -Foh | grep ^- %l'),
+            ('ll', 'ls -AgFh --color=always %l'),
+            ('ls', 'ls -Fh --color=always %l'),
+            ('lt', 'ls -Altc --color=always %l'),
+            ('lr', 'ls -Altcr --color=always %l'),
             ('mk', 'mkdir -pv %l && cd %l'),  # check if this works. only mkdir
             ('mkdir', 'mkdir -pv %l'),
-            ('mv', 'mv -iv %l'),
+            ('mv', 'mv -v %l'),
             ('r', 'fc -s'),
             ('redo', 'fc -s'),
             ('rm', 'rm -v %l'),

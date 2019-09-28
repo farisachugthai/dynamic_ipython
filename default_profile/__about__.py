@@ -7,7 +7,7 @@ __copyright__ = u'Copyright (C) 2018-{} Faris Chugthai'.format(
 )
 __docformat__ = 'reStructuredText'
 __license__ = 'MIT'
-__version_info__ = (0, 0, 1)
+__version_info__ = (0, 0, 2)
 __version__ = ".".join(map(str, __version_info__))
 metadata = {
     '__author__': 'Faris Chugthai',
