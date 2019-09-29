@@ -90,10 +90,18 @@ class Executable:
         """Initialize with 'command'."""
         self.command = command
 
+    def __repr__(self):
+        return 'Executable: {!r}'.format(self.command)
+
     def runs(self):
         """Check for the executability of a system command.
 
         Same signature as :func:`shutil.which`.
+
+        Returns
+        -------
+        str (path-like)
+            Path to an executable if it's found. Otherwise `None`.
         """
         return shutil.which(self.command)
 
@@ -148,11 +156,14 @@ class LinuxAliases:
             User aliases to add the user's namespace.
 
         """
-        _user_aliases = [
+        self.aliases += [
             ('cs', 'cd %s && ls -F --color=always %s'),
             ('cp', 'cp -iv %l'),  # cp mv mkdir and rmdir are all overridden
-            ('dus', 'du -d 1 -ha %l'),
+            ('dus', 'du -d 1 -h --all %l'),
+            ('dU', 'du -d 1 -h --apparent-size --all | sort -h | tail -n 10'),
+            ('df', 'df -ah --total'),
             ('echo', 'echo -e %l'),
+            ('free', 'free -mt'),
             (
                 'gpip',
                 'export PIP_REQUIRE_VIRTUALENV=0; python -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null'
@@ -166,17 +177,23 @@ class LinuxAliases:
                 'export PIP_REQUIRE_VIRTUALENV=0; python3 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null'
             ),
             ('head', 'head -n 30 %l'),
-            ('la', 'ls -AF --color=always %l'),
             ('l', 'ls -CF --color=always %l'),
-            ('ll', 'ls -AlF --color=always %l'),
+            ('la', 'ls -AF --color=always %l'),
+            ('ldir', 'ls -Apo --color=always %l | grep /$'),
+            ('lf', 'ls -Fo --color=always | grep ^-'),
+            ('ll', 'ls -AFho --color=always %l'),
             ('ls', 'ls -F --color=always %l'),
-            ('lt', 'ls -Altcr --color=always %l'),
+            ('lr', 'ls -AgFhtr --color=always %l'),
+            ('lt', 'ls -AgFht --color=always %l'),
+            ('lx', 'ls -Fo --color=always | grep ^-..x'),
             ('mk', 'mkdir -pv %l && cd %l'),  # check if this works. only mkdir
             ('mkdir', 'mkdir -pv %l'),
             ('mv', 'mv -iv %l'),
             ('r', 'fc -s'),
             ('redo', 'fc -s'),
-            ('rm', 'rm -v %l'),
+            # Less annoying than -i but more safe
+            # only prompts with more than 3 files or recursed dirs.
+            ('rm', 'rm -Iv %l'),
             ('rmdir', 'rmdir -v %l'),
             (
                 'default_profile',
@@ -188,13 +205,13 @@ class LinuxAliases:
             ),
             ('tail', 'tail -n 30 %l'),
         ]
-        return _user_aliases
+        return self.aliases
 
     def __iter__(self):
         return self._generator()
 
     def _generator(self):
-        for itm in self.items():
+        for itm in self.aliases():
             yield itm
 
     def thirdparty(self):
@@ -202,11 +219,13 @@ class LinuxAliases:
 
         As a result it'll be of value to check that they're even in the namespace.
         """
-        user_aliases = [
+        self.aliases += [
             ('ag', 'ag --hidden --color --no-column %l'),
+            ('nvim', 'nvim %l'),
             ('nman', 'nvim -c "Man %l" -c"wincmd T"'),
-            ('tre', 'tree -ashFC -I .git -I __pycache__ --filelimit 25'),
+            ('tre', 'tree -DAshFC --prune -I .git %l'),
         ]
+        return self.aliases
 
 
 def common_aliases():
@@ -260,10 +279,14 @@ def common_aliases():
             '--branches --abbrev-commit --oneline %l'
         ),
         ('git last', 'git log -1 HEAD %l'),
+        ('git staged', 'git diff --cached %l'),
+        ('git rel', 'git rev-parse --show-prefix %l'),
+        ('git root', 'git rev-parse --show-toplevel %l'),
+        ('git unstage', 'git reset HEAD %l'),
+        ('git unstaged', 'git diff %l'),
         ('gl', 'git log %l'),
         (
-            'glo',
-            'git log --graph --decorate --abbrev-commit --oneline --branches --all'
+            'glo', 'git log --graph --decorate --abbrev -commit --oneline --branches --all% l'
         ),
         ('gls', 'git ls-tree master %l'),
         ('git ls', 'git ls-tree master %l'),
@@ -289,15 +312,10 @@ def common_aliases():
         ('gshd', 'git stash drop %l'),
         ('gshl', 'git stash list %l'),
         ('gshp', 'git stash pop %l'),
-        ('gshs', 'git stash show %l'),
+        ('gshs', 'git stash show --stat %l'),
         ('gshsp', 'git stash show --patch %l'),
         ('gss', 'git status -sb %l'),
         ('gst', 'git diff --stat %l'),
-        ('git staged', 'git diff --cached %l'),
-        ('git rel', 'git rev-parse --show-prefix %l'),
-        ('git root', 'git rev-parse --show-toplevel %l'),
-        ('git unstage', 'git reset HEAD %l'),
-        ('git unstaged', 'git diff %l'),
         ('gt', 'git tag --list %l'),
         ('lswitch', 'legit switch'),
         ('lsync', 'legit sync'),
@@ -333,8 +351,8 @@ class WindowsAliases:
         ----------
         shell : external command, optional
             The command used to invoke the system shell. If none is provided
-            during instantiation, the function will set :attr:`WindowsAliases.shell`
-            to the |ip| instance.
+            during instantiation, the function will set
+            :attr:`WindowsAliases.shell` to the |ip| instance.
 
         """
         self.shell = shell or get_ipython()

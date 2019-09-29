@@ -37,6 +37,27 @@ it is because the default python ran, and by default in 3.7 it never does.
 
 So fix that so we can maintain some {minimal} 3.6 compatability.
 
+See Also
+--------
+:mod:`IPython.core.profileapp`.
+I don't know if that would be where but figure out wjat expectation would
+be.
+
+.. code-block:: console
+
+    $: ipython locate profile --
+    --LocateIPythonApp.auto_create=
+    --LocateIPythonApp.copy_config_files=
+    --LocateIPythonApp.extra_config_file=
+    --LocateIPythonApp.ipython_dir=
+    --LocateIPythonApp.log_datefmt=
+    --LocateIPythonApp.log_format=
+    --LocateIPythonApp.log_level=
+    --LocateIPythonApp.overwrite=
+    --LocateIPythonApp.profile=
+    --LocateIPythonApp.verbose_crash=
+
+
 """
 import builtins
 import logging

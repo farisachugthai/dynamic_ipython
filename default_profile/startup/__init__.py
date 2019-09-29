@@ -5,6 +5,7 @@
 Imports all files in this directory by utilizing the :mod:`importlib` API
 to avoid import problems as Python modules can't begin with numbers.
 """
+import default_profile
 import importlib
 import logging
 import os
@@ -31,7 +32,6 @@ logging.BASIC_FORMAT = '%(created)f : %(module)s : %(levelname)s : %(message)s'
 STARTUP_LOGGER = logging.getLogger('default_profile').getChild('startup')
 STARTUP_LOGGER.setLevel(logging.WARNING)
 
-import default_profile
 rehashx_mod = importlib.import_module('default_profile.startup.01_rehashx')
 # Actually really useful when building docs so leave the sys.path hack
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
