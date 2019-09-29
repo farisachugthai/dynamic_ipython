@@ -1,0 +1,8 @@
+==================================
+default_profile.util.timer module
+==================================
+
+.. automodule:: default_profile.util.timer
+   :members:
+   :undoc-members:
+   :show-inheritance:

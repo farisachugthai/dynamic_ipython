@@ -18,7 +18,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Extensions" href="extensions.html" />
-    <link rel="prev" title="machine" href="util/machine.html" />
+    <link rel="prev" title="default_profile.util.timer module" href="util/timer.html" />
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" type="text/css"
   media="screen" charset="utf-8" />
@@ -46,7 +46,7 @@
           <a href="extensions.html" title="Extensions"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="util/machine.html" title="machine"
+          <a href="util/timer.html" title="default_profile.util.timer module"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython</a> &#187;</li> 
       </ul>
@@ -491,17 +491,18 @@ details.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">terminado_settings</span> <span class="o">=</span> <span class="p">{}</span>
 </pre></div>
 </div>
-<p>Set to False to disable terminals.
-This does <em>not</em> make the notebook server more secure by itself. Anything the
-user can in a terminal, they can also do in a notebook.
-Terminals may also be automatically disabled if the <code class="docutils literal notranslate"><span class="pre">terminado</span></code> package
+<p>Set to False to disable terminals.</p>
+<p>This does <em>not</em> make the notebook server more secure by itself. Anything the
+user can in a terminal, they can also do in a notebook.</p>
+<p>Terminals may also be automatically disabled if the <code class="docutils literal notranslate"><span class="pre">terminado</span></code> package
 is not available.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">terminals_enabled</span> <span class="o">=</span> <span class="bp">True</span>
 </pre></div>
 </div>
-<p>Token used for authenticating first-time connections to the server.
-When no password is enabled, the default is to generate a new, random token.
-Setting to an empty string disables authentication altogether, which is NOT
+<p>Token used for authenticating first-time connections to the server.</p>
+<p>When no password is enabled, the default is to generate a new, <a class="reference external" href="https://docs.python.org/3/library/random.html#module-random" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">random</span></code></a>
+token.</p>
+<p>Setting to an empty string disables authentication altogether, which is NOT
 RECOMMENDED.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">token</span> <span class="o">=</span> <span class="s1">&#39;&lt;generated&gt;&#39;</span>
 </pre></div>
@@ -525,18 +526,18 @@ SSL.:</p>
 <p>This value will be returned from
 <code class="docutils literal notranslate"><span class="pre">WebSocketHandler.get_compression_options</span></code>.</p>
 <p>None (default) will disable compression.</p>
-<p>A dict (even an empty one) will enable compression.</p>
+<p>A <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a> (even an empty one) will enable compression.</p>
 <p>See the tornado docs for <code class="docutils literal notranslate"><span class="pre">WebSocketHandler.get_compression_options</span></code>
 for details.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">websocket_compression_options</span> <span class="o">=</span> <span class="bp">None</span>
 </pre></div>
 </div>
-<p>The base URL for <code class="docutils literal notranslate"><span class="pre">websockets</span></code>, if it differs from the HTTP server (hint: it
-almost certainly doesn’t).:</p>
+<p>The base URL for <code class="docutils literal notranslate"><span class="pre">websockets</span></code>, if it differs from the <a class="reference external" href="https://docs.python.org/3/library/http.html#module-http" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">http</span></code></a>
+server (hint: it almost certainly doesn’t).:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">websocket_url</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
 </pre></div>
 </div>
-<p>Should be in the form of an HTTP origin:</p>
+<p>Should be in the form of an <a class="reference external" href="https://docs.python.org/3/library/http.html#module-http" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">http</span></code></a> origin:</p>
 <p><code class="docutils literal notranslate"><span class="pre">ws[s]://hostname[:port]</span></code></p>
 </div>
 <div class="section" id="nteractapp-notebookapp-configuration">
@@ -557,23 +558,24 @@ in editable mode e.g., using:</p>
 </pre></div>
 </div>
 </div>
-</div>
 <div class="section" id="image-handlers">
-<h2>Image Handlers<a class="headerlink" href="#image-handlers" title="Permalink to this headline">¶</a></h2>
+<h3>Image Handlers<a class="headerlink" href="#image-handlers" title="Permalink to this headline">¶</a></h3>
 <p>Need to set something up for the Jupyter Console image handler.
 Same thing for QTConsole.</p>
-<p>Callable object called via ‘callable’ image handler with one argument, <code class="xref py py-obj docutils literal notranslate"><span class="pre">data</span></code>,
-which is <strong>msg[“content”][“data”]</strong> where <strong>msg</strong> is the message from iopub
-channel.  For example, you can find <a class="reference external" href="https://docs.python.org/3/library/base64.html#module-base64" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">base64</span></code></a> encoded PNG data as
-<strong>data[‘image/png’]</strong>. If your function can’t handle the data supplied, it
+<p>Callable object called via ‘callable’ image handler with one argument, <code class="docutils literal notranslate"><span class="pre">data</span></code>,
+which is <code class="docutils literal notranslate"><span class="pre">msg[&quot;content&quot;][&quot;data&quot;]**</span></code> where <em>msg</em> is the message from the
+iopub channel.</p>
+<p>For example, you can find <a class="reference external" href="https://docs.python.org/3/library/base64.html#module-base64" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">base64</span></code></a> encoded PNG data as
+<em>data[‘image/png’]</em>. If your function can’t handle the data supplied, it
 should return <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a> to indicate this.</p>
-<p>Handler for image type output.  This is useful, for example, when connecting
-to the kernel in which pylab inline back-end is activated.</p>
+<p>Handler for image type output.</p>
+<p>This is useful, for example, when connecting to the kernel in which
+pylab inline back-end is activated.</p>
 <p>There are four handlers defined.</p>
 <ol class="arabic">
 <li><p>‘PIL’: Use Python Imaging Library to pop-up image;</p></li>
-<li><p>stream’: Use an external program to show the image.  Image will be fed into
-the STDIN  of the program.</p></li>
+<li><p>‘stream’: Use an external program to show the image.  Image will be fed into
+the <a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stdin" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stdin</span></code></a> of the program.</p></li>
 </ol>
 <blockquote>
 <div><ul>
@@ -600,6 +602,7 @@ a temporary file and the program will be called with that file.</p>
 <p>That’s the default text for the Jupyter consoles (both non-GUI and QT).</p>
 </div>
 </div>
+</div>
 
 
           </div>
@@ -619,7 +622,7 @@ a temporary file and the program will be called with that file.</p>
 <script type="text/javascript">$('#searchbox').show(0);</script><h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="util/machine.html" title="previous chapter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">machine</span></code></a></li>
+      <li>Previous: <a href="util/timer.html" title="previous chapter">default_profile.util.timer module</a></li>
       <li>Next: <a href="extensions.html" title="next chapter">Extensions</a></li>
   </ul></li>
 </ul>
@@ -629,18 +632,19 @@ a temporary file and the program will be called with that file.</p>
 <div>&nbsp;</div>
 <div id="sidebartoc">
 <p class="caption"><span class="caption-text">Tutorial</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="ipython_keybindings.html">Keybindings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="jobcontrol.html">Job Control</a></li>
 <li class="toctree-l1"><a class="reference internal" href="exceptions.html">Customized Exceptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sphinxext.html">IPython Sphinx Directive</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dev.html">Developers Notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lexer.html">New IPython Console Lexer</a></li>
+</ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="ipython.html">IPython Config</a></li>
-<li class="toctree-l1"><a class="reference internal" href="kernel.html">IPython Kernel Config</a></li>
-<li class="toctree-l1"><a class="reference internal" href="kernel.html#jupyter-kernel-config">Jupyter Kernel Config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="kernel.html">IPython Kernel</a></li>
 <li class="toctree-l1"><a class="reference internal" href="startup/index.html">IPython Shell Initialization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="util.html">General Utility Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util/index.html">General Utility Functions</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Jupyter Suite</a></li>
 <li class="toctree-l1"><a class="reference internal" href="extensions.html">Extensions</a></li>
 </ul>
@@ -675,9 +679,9 @@ a temporary file and the program will be called with that file.</p>
 <li><a class="reference internal" href="#notebookapp-jupyterapp-configuration">NotebookApp(JupyterApp) configuration</a></li>
 <li><a class="reference internal" href="#fswatcher">fswatcher</a></li>
 <li><a class="reference internal" href="#nteractapp-notebookapp-configuration">NteractApp(NotebookApp) configuration</a></li>
+<li><a class="reference internal" href="#image-handlers">Image Handlers</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#image-handlers">Image Handlers</a></li>
 </ul>
 </li>
 </ul>
@@ -701,7 +705,7 @@ a temporary file and the program will be called with that file.</p>
           <a href="extensions.html" title="Extensions"
              >next</a> |</li>
         <li class="right" >
-          <a href="util/machine.html" title="machine"
+          <a href="util/timer.html" title="default_profile.util.timer module"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython</a> &#187;</li> 
       </ul>

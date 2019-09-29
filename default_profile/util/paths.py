@@ -85,4 +85,4 @@ class PathValidator:
             return self.env["PATH"].split(':')
 
 
-path = PathValidator().path
+validate_path = PathValidator().path

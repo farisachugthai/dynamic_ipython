@@ -460,15 +460,20 @@ Supply overrides for ``terminado``. Currently only supports "shell_command".::
     c.NotebookApp.terminado_settings = {}
 
 Set to False to disable terminals.
+
 This does *not* make the notebook server more secure by itself. Anything the
 user can in a terminal, they can also do in a notebook.
+
 Terminals may also be automatically disabled if the ``terminado`` package
 is not available.::
 
     c.NotebookApp.terminals_enabled = True
 
 Token used for authenticating first-time connections to the server.
-When no password is enabled, the default is to generate a new, random token.
+
+When no password is enabled, the default is to generate a new, :mod:`random`
+token.
+
 Setting to an empty string disables authentication altogether, which is NOT
 RECOMMENDED.::
 
@@ -496,19 +501,19 @@ This value will be returned from
 
 None (default) will disable compression.
 
-A dict (even an empty one) will enable compression.
+A `dict` (even an empty one) will enable compression.
 
 See the tornado docs for ``WebSocketHandler.get_compression_options``
 for details.::
 
     c.NotebookApp.websocket_compression_options = None
 
-The base URL for ``websockets``, if it differs from the HTTP server (hint: it
-almost certainly doesn't).::
+The base URL for ``websockets``, if it differs from the :mod:`http`
+server (hint: it almost certainly doesn't).::
 
    c.NotebookApp.websocket_url = ''
 
-Should be in the form of an HTTP origin:
+Should be in the form of an :mod:`http` origin:
 
 ``ws[s]://hostname[:port]``
 
@@ -538,26 +543,30 @@ In addition, the Jupyter configuration file must be modified like so::
 
 
 Image Handlers
-==============
+--------------
 
 Need to set something up for the Jupyter Console image handler.
 Same thing for QTConsole.
 
-Callable object called via 'callable' image handler with one argument, `data`,
-which is **msg["content"]["data"]** where **msg** is the message from iopub
-channel.  For example, you can find :mod:`base64` encoded PNG data as
-**data['image/png']**. If your function can't handle the data supplied, it
+Callable object called via 'callable' image handler with one argument, ``data``,
+which is ``msg["content"]["data"]**`` where *msg* is the message from the
+iopub channel.
+
+For example, you can find :mod:`base64` encoded PNG data as
+*data['image/png']*. If your function can't handle the data supplied, it
 should return `False` to indicate this.
 
-Handler for image type output.  This is useful, for example, when connecting
-to the kernel in which pylab inline back-end is activated.
+Handler for image type output.
+
+This is useful, for example, when connecting to the kernel in which
+pylab inline back-end is activated.
 
 There are four handlers defined.
 
 #) 'PIL': Use Python Imaging Library to pop-up image;
 
-#) stream': Use an external program to show the image.  Image will be fed into
-   the STDIN  of the program.
+#) 'stream': Use an external program to show the image.  Image will be fed into
+   the :data:`sys.stdin` of the program.
 
   - You will need to configure ``stream_image_handler``
 

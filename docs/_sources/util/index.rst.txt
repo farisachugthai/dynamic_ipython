@@ -1,36 +1,26 @@
+.. _utilities-index:
+
+=================
+IPython Utilities
+=================
+.. currentmodule:: default_profile.util
 
 
-default_profile.util.module\_log module
-----------------------------------------
+.. _util-contents:
 
-.. automodule:: default_profile.util.module_log
+Module contents
+---------------
+
+.. automodule:: default_profile.util
    :members:
    :undoc-members:
    :show-inheritance:
 
 
-:mod:`default_profile.util.paths` module
-----------------------------------------
+The submodules contained in this package are as follows:
 
-.. automodule:: default_profile.util.paths
-   :members:
-   :undoc-members:
-   :show-inheritance:
+.. toctree::
+   :maxdepth: 1
+   :glob:
 
-
-:mod:`default_profile.util.profile_override` module
----------------------------------------------------
-
-.. automodule:: default_profile.util.profile_override
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-
-default_profile.util.timer module
-----------------------------------
-
-.. automodule:: default_profile.util.timer
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   *

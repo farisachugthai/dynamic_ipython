@@ -3,12 +3,14 @@
 ===========
 Job Control
 ===========
+
 .. module:: job_control
     :synopsis: Provide job control for IPython.
 
 Import module 'jobctrl' to launch and interact with background processes by
-prepending system commands with '&', or to kill foreground tasks that are preventing
-you from continuing with your work and are just too stubborn to die with the usual ctrl+C.
+prepending system commands with :kbd:`&`, or to kill foreground tasks
+that are preventing you from continuing with your work and are just
+too stubborn to die with the usual :kbd:`Ctrl-C`.
 
 Killing foreground tasks
 ------------------------
@@ -20,7 +22,7 @@ Launch IPython instance, run a blocking command::
 
 Observe that it starts blocking.
 
-Now launch a new IPython prompt and kill the 'cat' process::
+Now launch a new IPython prompt and kill the :command:`cat` process::
 
     IPython 0.8.3.svn.r2919   [on Py 2.5]
     [Q:/ipython]|1> import jobctrl
@@ -30,7 +32,7 @@ Now launch a new IPython prompt and kill the 'cat' process::
     SUCCESS: The process with PID 6020 has been terminated.
     [Q:/ipython]|4>
 
-(you don't need to specify PID for %kill if only one task is running)
+(You don't need to specify PID for `%kill` if only one task is running)
 
 Note that only the processes that are launched when 'jobctrl' is enabled are affected.
 
@@ -38,9 +40,8 @@ Background jobs
 ---------------
 
 See the example below. "IPython job" object is just a very thin wrapper over
-subprocess.Popen object, with an added __repr__ and "go" method.
-
-::
+:class:`subprocess.Popen` object, with an added ``__repr__``
+and "go" method.::
 
     [ipython]|1> import jobctrl
     [ipython]|2> &ls C*
@@ -66,22 +67,27 @@ subprocess.Popen object, with an added __repr__ and "go" method.
     ------------> _4.go()
     eggsetup.py
 
-Note how "jobs" are just objects in the output history. You can use all the
-subprocess.Popen methods on the object, but this example just uses "go".
 
-See http://docs.python.org/library/subprocess.html#popen-objects
+Note how "jobs" are just objects in the output history. You can use all the
+:class:`subprocess.Popen` methods on the object, but this example
+just uses "go".
+
+See `<http://docs.python.org/library/subprocess.html#popen-objects>`_.
 
 Net radio example
 -----------------
 
-Here's another example: I want to make a macro radio_trance that launches VLC on
+Here's another example:
+
+I want to make a `%macro` called 'radio_trance' that launches :command:`VLC` on
 a net radio stream. I have the "vlc" alias that points to the actual binary of
 vlc, so I launch it via the alias::
 
     [ipython]|1> import jobctrl
     [ipython]|2> vlc http://di.fm/mp3/trance.pls
 
-But this blocks the ipython window, while I want to listen to it on the background!
+But this blocks the ipython window, while I want to listen to
+it in the background!
 
 I check out the command history to get the expanded version of the command::
 
@@ -90,17 +96,20 @@ I check out the command history to get the expanded version of the command::
     2: _ip.system("q:/opt/VLC/vlc.exe http://di.fm/mp3/trance.pls")
     3: _ip.magic("hist ")
 
-I copy-paste the command string from line #2 (and add '&' to make it a background process::
+I copy-paste the command string from line #2 (and add :kbd:`&` to make it
+a background process::
 
     [ipython]|4> &q:/opt/VLC/vlc.exe http://di.fm/mp3/trance.pls
              <4> <IPython job "q:/opt/VLC/vlc.exe http://di.fm/mp3/trance.pls">
 
-(''' Note that this is unnecessarily hard'''. In fact, with the new recursive
-alias expansion, you can do this simply with aliases without having to resort to
-manual copy-paste)
+(Note that this is unnecessarily hard. In fact, with the new recursive
+`%alias` expansion, you can do this simply with aliases without having
+to resort to manual copy-paste)
 
-So far so good, I can hear the music playing in the background! Now I'll make a
-macro that both imports jobctrl and launches vlc (lines 1 and 4), and %store it::
+So far so good, I can hear the music playing in the background!
+
+Now I'll make a `%macro` that both imports jobctrl and launches vlc
+(lines 1 and 4), and `%store` it::
 
     [ipython]|5> hist
     1: import jobctrl
@@ -118,7 +127,7 @@ macro that both imports jobctrl and launches vlc (lines 1 and 4), and %store it:
     [ipython]|7> store radio_trance
     Stored 'radio_trance' (Macro)
 
-Now I restart ipython and try the macro::
+Now I restart ipython and try the `%macro`::
 
     Q:\ipython>python IPython.py -p sh
     Py 2.5 (r25:51908, Sep 19 2006, 09:52:17) [MSC v.1310 32 bit (Intel)] IPy 0.7.3.svn
@@ -133,10 +142,11 @@ Now I restart ipython and try the macro::
 
 And verify that it works.
 
+
 Killing jobs
 ------------
 
-::
+So now we know how to background jobs, but how do we end them?::
 
     [ipython]|1> &rad_trance
              <1> <IPython job "q:/opt/VLC/vlc.exe http://di.fm/mp3/harddance.pls " PID=196>
@@ -149,8 +159,12 @@ Killing jobs
 See Also
 --------
 
-See the source of `jobctrl.py <https://github.com/ipython/ipython/blob/0.10.2/IPython/Extensions/jobctrl.py>`_
+See the source of `jobctrl.py
+<https://github.com/ipython/ipython/blob/0.10.2/IPython/Extensions/jobctrl.py>`_
 
+.. todo:: Document IPython.lib.backgroundjobs
+
+   That module will probably be as, if not more, fruitful than this one.
 
 Autogenerated
 --------------

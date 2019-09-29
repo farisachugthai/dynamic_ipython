@@ -116,10 +116,17 @@ Table of Contents
    sphinxext
    Developers Notes <dev>
    lexer
+
+In addition the API has extensive documentation.
+
+.. toctree::
+   :maxdepth: 1
+   :titlesonly:
+
    ipython
    kernel
-   IPython Shell Initialization <startup/index>
-   General Utility Functions <util>
+   IPython Shell Initialization </startup/index>
+   General Utility Functions </util/index>
    jupyter
    extensions
 
