@@ -4,10 +4,6 @@
 ===================================
 Timer --- Create a timer decorator.
 ===================================
-.. module:: timer
-    :synopsis: Create a decorator to time the execution time of modules.
-
-.. highlight:: ipython
 
 Largely this module was simply practice on writing decorators.
 
@@ -29,7 +25,12 @@ logging.basicConfig(level=logging.INFO)
 def timer(func):
     """Print the runtime of the decorated function.
 
-    Is this the right way to profile something on Windows btw?
+    Utilizes `time.perf_counter`.
+
+    .. todo:: Begin using the :mod:`timeit` module.
+
+        There are more specialized ways of profiling things in other modules;
+        however, this works for a rough estimate.
 
     Parameters
     ----------

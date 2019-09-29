@@ -4,8 +4,6 @@
 ===============
 IPython Aliases
 ===============
-.. module:: 20_aliases
-    :synopsis: Set up additional alias managers and add user_aliases to the namespace.
 
 Refactoring TODO:
 
@@ -39,10 +37,11 @@ Break linux up like so::
 Then maybe implement either a factory function or a factory manager but I haven't
 fleshed that part out in my head.
 
-This may have to take the backburner as I reorganize the rest of the repo.
+This may have to take the backburner as I reorganize the rest of
+the repo.
 
-If you're breaking up Linux functionality, may I recommend the following man
-page to reference?
+If you're breaking up Linux functionality, may I recommend the
+following man page to reference?
 
 
 BASH-BUILTINS(7)          Miscellaneous Information Manual          BASH-BUILTINS(7)
@@ -60,14 +59,13 @@ SYNOPSIS
        unset, until, wait, while.
 
 
-I think that :command:`declare -f` could have a nice tie in to inspect.is_function()
-or whatever.
+I think that :command:`declare -f` could have a nice tie in to
+`inspect.is_function()` or whatever.
 
 """
 import logging
 import os
 import shutil
-
 
 from IPython import get_ipython
 from IPython.core.alias import AliasError, AliasManager
@@ -79,13 +77,11 @@ from default_profile.util.machine import Platform
 LOGGER = module_log.stream_logger(
     logger='default_profile.startup.20_aliases',
     msg_format='%(asctime)s : %(levelname)s : %(module)s %(message)s',
-    log_level=logging.INFO
-)
+    log_level=logging.INFO)
 
 
 class Executable:
     """An object representing some executable on a user computer."""
-
     def __init__(self, command):
         """Initialize with 'command'."""
         self.command = command
@@ -131,7 +127,6 @@ class LinuxAliases:
             magic_name=name)
 
     """
-
     def __init__(self, shell=None, aliases=None):
         """The WindowsAliases implementation of this is odd so maybe branch off."""
         self.aliases = aliases
@@ -139,8 +134,7 @@ class LinuxAliases:
 
     def __repr__(self):
         return 'Linux Aliases: {!r}'.format(
-            len(self.shell.alias_manager.aliases)
-        )
+            len(self.shell.alias_manager.aliases))
 
     @classmethod
     def busybox(cls):
@@ -158,51 +152,49 @@ class LinuxAliases:
         """
         self.aliases += [
             ('cs', 'cd %s && ls -F --color=always %s'),
-            ('cp', 'cp -iv %l'),  # cp mv mkdir and rmdir are all overridden
-            ('dus', 'du -d 1 -h --all %l'),
             ('dU', 'du -d 1 -h --apparent-size --all | sort -h | tail -n 10'),
             ('df', 'df -ah --total'),
+            ('cp', 'cp -v %l'),  # cp mv mkdir and rmdir are all overridden
+            ('dus', 'du -d 1 -ha %l'),
             ('echo', 'echo -e %l'),
             ('free', 'free -mt'),
-            (
-                'gpip',
-                'export PIP_REQUIRE_VIRTUALENV=0; python -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null'
-            ),
-            (
-                'gpip2',
-                'export PIP_REQUIRE_VIRTUALENV=0; python2 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null'
-            ),
-            (
-                'gpip3',
-                'export PIP_REQUIRE_VIRTUALENV=0; python3 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null'
-            ),
+            ('gpip',
+             'export PIP_REQUIRE_VIRTUALENV=0; python -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null'
+             ),
+            ('gpip2',
+             'export PIP_REQUIRE_VIRTUALENV=0; python2 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null'
+             ),
+            ('gpip3',
+             'export PIP_REQUIRE_VIRTUALENV=0; python3 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null'
+             ),
             ('head', 'head -n 30 %l'),
             ('l', 'ls -CF --color=always %l'),
             ('la', 'ls -AF --color=always %l'),
             ('ldir', 'ls -Apo --color=always %l | grep /$'),
-            ('lf', 'ls -Fo --color=always | grep ^-'),
-            ('ll', 'ls -AFho --color=always %l'),
+            # ('lf', 'ls -Fo --color=always | grep ^-'),
+            # ('ll', 'ls -AFho --color=always %l'),
             ('ls', 'ls -F --color=always %l'),
             ('lr', 'ls -AgFhtr --color=always %l'),
             ('lt', 'ls -AgFht --color=always %l'),
             ('lx', 'ls -Fo --color=always | grep ^-..x'),
+            # ('ldir', 'ls -Fhpo | grep /$ %l'),
+            ('lf', 'ls -Foh | grep ^- %l'),
+            ('ll', 'ls -AgFh --color=always %l'),
+            # ('lt', 'ls -Altc --color=always %l'),
+            # ('lr', 'ls -Altcr --color=always %l'),
             ('mk', 'mkdir -pv %l && cd %l'),  # check if this works. only mkdir
             ('mkdir', 'mkdir -pv %l'),
-            ('mv', 'mv -iv %l'),
+            ('mv', 'mv -v %l'),
             ('r', 'fc -s'),
             ('redo', 'fc -s'),
             # Less annoying than -i but more safe
             # only prompts with more than 3 files or recursed dirs.
             ('rm', 'rm -Iv %l'),
             ('rmdir', 'rmdir -v %l'),
-            (
-                'default_profile',
-                'cd ~/projects/dotfiles/unix/.ipython/default_profile'
-            ),
-            (
-                'startup',
-                'cd ~/projects/dotfiles/unix/.ipython/default_profile/startup'
-            ),
+            ('default_profile',
+             'cd ~/projects/dotfiles/unix/.ipython/default_profile'),
+            ('startup',
+             'cd ~/projects/dotfiles/unix/.ipython/default_profile/startup'),
             ('tail', 'tail -n 30 %l'),
         ]
         return self.aliases
@@ -217,7 +209,8 @@ class LinuxAliases:
     def thirdparty(self):
         """Contrasted to busybox, these require external installation.
 
-        As a result it'll be of value to check that they're even in the namespace.
+        As a result it'll be of value to check that they're even in
+        the namespace.
         """
         self.aliases += [
             ('ag', 'ag --hidden --color --no-column %l'),
@@ -231,8 +224,8 @@ class LinuxAliases:
 def common_aliases():
     r"""Add aliases common to all OSes. Overwhelmingly :command:`Git` aliases.
 
-    This method adds around 70 to 80 aliases that can be implemented on most
-    of the major platforms.
+    This method adds around 70 to 80 aliases that can le
+    implemented on most of the major platforms.
 
     The only real requirement is Git being installed and working. Docker
     commands possibly going to be added.
@@ -273,11 +266,9 @@ def common_aliases():
         ('ggc', 'git gc %l'),
         ('ggcp', 'git gc --prune %l'),
         ('git', 'git %l'),
-        (
-            'git hist',
-            'git log --pretty="format:%h %ad | %d [%an]" --graph --date=short '
-            '--branches --abbrev-commit --oneline %l'
-        ),
+        ('git hist',
+         'git log --pretty="format:%h %ad | %d [%an]" --graph --date=short '
+         '--branches --abbrev-commit --oneline %l'),
         ('git last', 'git log -1 HEAD %l'),
         ('git staged', 'git diff --cached %l'),
         ('git rel', 'git rev-parse --show-prefix %l'),
@@ -285,9 +276,9 @@ def common_aliases():
         ('git unstage', 'git reset HEAD %l'),
         ('git unstaged', 'git diff %l'),
         ('gl', 'git log %l'),
-        (
-            'glo', 'git log --graph --decorate --abbrev -commit --oneline --branches --all% l'
-        ),
+        ('glo',
+         'git log --graph --decorate --abbrev -commit --oneline --branches --all% l'
+         ),
         ('gls', 'git ls-tree master %l'),
         ('git ls', 'git ls-tree master %l'),
         ('gm', 'git merge --no-ff %l'),
@@ -343,7 +334,6 @@ class WindowsAliases:
     Would it be useful to subclass :class:`enum.Enum` here?
 
     """
-
     def __init__(self, shell=None):
         """Initialize the platform specific alias manager with IPython.
 
@@ -376,8 +366,7 @@ class WindowsAliases:
 
     def __repr__(self):
         return 'Windows Aliases: {!r}'.format(
-            len(self.shell.alias_manager.aliases)
-        )
+            len(self.shell.alias_manager.aliases))
 
     @classmethod
     def cmd_aliases(cls):
@@ -389,11 +378,15 @@ class WindowsAliases:
             IPython's logic for Window's shells works, but that'll determine
             how :envvar:`SHELL` and :envvar:`COMSPEC` are handled.
 
-            However it'll also take some consideration to figure out how to
-            handle env vars like COPYCMD. Should we build them into the aliases
-            we have here because that'll affect :data:`_ip.user_aliases.mv`?
+        .. note:: Windows environment variables
 
-            Also note DIRCMD for :command:`dir`.
+            However it'll also take some consideration to figure
+            out how to handle env vars like :envvar:`COPYCMD`. Should we
+            build them into the aliases we have here because
+            that'll affect :data:`_ip.user_aliases.mv`?
+
+        Also note :command:`DIRCMD` for :command:`dir`.
+
         """
         cls.user_aliases = [
             ('cp', 'copy %s %s'),
@@ -423,6 +416,7 @@ class WindowsAliases:
 
         The minimum number of assumptions possible have been made; however, note
         that this section is still under development and frequently changes.
+
         """
         cls.user_aliases = [
             ('ac', 'Add-Content %l'),
@@ -523,15 +517,13 @@ def __setup_fzf(user_aliases):
             'fzf',
             'rg --pretty --hidden --max-columns=300 --max-columns-preview '
             '.*[a-zA-Z]* --no-heading -m=30 --no-messages --color=ansi --no-column '
-            ' --no-line-number -C 0 | fzf --ansi'
-        ))
+            ' --no-line-number -C 0 | fzf --ansi'))
 
     elif shutil.which('fzf') and shutil.which('ag'):
         # user_aliases.extend(
         #     ('fzf', '$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS'))
         user_aliases.extend(
-            ('fzf', 'ag -C 0 --color-win-ansi --noheading | fzf --ansi')
-        )
+            ('fzf', 'ag -C 0 --color-win-ansi --noheading | fzf --ansi'))
 
     return user_aliases
 

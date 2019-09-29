@@ -39,7 +39,7 @@ Extensions
 ==========
 
 In addition this repository handles a growing number of IPython extensions.
-To see more, continue reading about :ref:`custom-magics` and :ref:`extensions`.
+To see more, continue reading about :ref:`extensions`.
 
 
 Portability
@@ -107,21 +107,21 @@ Table of Contents
 
 .. toctree::
    :caption: Tutorial
-   :maxdepth: 2
+   :maxdepth: 1
    :titlesonly:
 
    Keybindings <ipython_keybindings>
-   extensions
    jobcontrol
    exceptions
    sphinxext
    Developers Notes <dev>
    lexer
+   ipython
+   kernel
    IPython Shell Initialization <startup/index>
    General Utility Functions <util>
    jupyter
-
-
+   extensions
 
 
 Indices and tables

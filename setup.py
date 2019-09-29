@@ -50,7 +50,7 @@ from setuptools import setup, find_packages, Command, Extension
 # how are we allowed to do this you can't force a dependency before installation
 # from default_profile import __about__.__version__
 __about__ = {}
-__about__['__version__'] = '0.0.1'
+__about__['__version__'] = '0.0.2'
 
 # Conda Support: {{{1
 

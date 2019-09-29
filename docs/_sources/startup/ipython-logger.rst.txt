@@ -1,12 +1,12 @@
 .. _ipython-logger:
 
-=======
-Logging
-=======
+===========================
+`05_log` --- IPython logger
+===========================
 
-.. currentmodule:: ipython-logger
+.. currentmodule:: 05_log
 
-:source: default_profile.startup.05_log
+:ref:`default_profile.startup.05_log`
 
 This uses the IPython core :class:`IPython.core.logger.LoggingConfigurable`
 to create a :class:`logging.handler.FileHandler()` that creates one new log

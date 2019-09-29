@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>default_profile.util.timer &#8212; Dynamic IPython: version0.0.1</title>
+    <title>default_profile.util.timer &#8212; Dynamic IPython: version0.0.2</title>
     <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -57,10 +57,6 @@
 <span class="sd">===================================</span>
 <span class="sd">Timer --- Create a timer decorator.</span>
 <span class="sd">===================================</span>
-<span class="sd">.. module:: timer</span>
-<span class="sd">    :synopsis: Create a decorator to time the execution time of modules.</span>
-
-<span class="sd">.. highlight:: ipython</span>
 
 <span class="sd">Largely this module was simply practice on writing decorators.</span>
 
@@ -79,10 +75,15 @@
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="timer"><a class="viewcode-back" href="../../../util.html#default_profile.util.timer.timer">[docs]</a><span class="k">def</span> <span class="nf">timer</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+<div class="viewcode-block" id="timer"><a class="viewcode-back" href="../../../util/index.html#default_profile.util.timer.timer">[docs]</a><span class="k">def</span> <span class="nf">timer</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Print the runtime of the decorated function.</span>
 
-<span class="sd">    Is this the right way to profile something on Windows btw?</span>
+<span class="sd">    Utilizes `time.perf_counter`.</span>
+
+<span class="sd">    .. todo:: Begin using the :mod:`timeit` module.</span>
+
+<span class="sd">        There are more specialized ways of profiling things in other modules;</span>
+<span class="sd">        however, this works for a rough estimate.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -110,7 +111,7 @@
 
 <span class="c1"># class ModuleTimer()</span>
 <span class="c1"># I mean while we&#39;re practicing decorators throw this in the mix</span>
-<div class="viewcode-block" id="debug"><a class="viewcode-back" href="../../../util.html#default_profile.util.timer.debug">[docs]</a><span class="k">def</span> <span class="nf">debug</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+<div class="viewcode-block" id="debug"><a class="viewcode-back" href="../../../util/index.html#default_profile.util.timer.debug">[docs]</a><span class="k">def</span> <span class="nf">debug</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Print the function signature and return value&quot;&quot;&quot;</span>
 
     <span class="nd">@functools.wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
@@ -155,25 +156,18 @@
 <p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../ipython_keybindings.html">Keybindings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Extensions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../jobcontrol.html">Job Control</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../exceptions.html">Customized Exceptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../sphinxext.html">IPython Sphinx Directive</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../dev.html">Developers Notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../lexer.html">New IPython Console Lexer</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../startup/index.html">IPython Shell Initialization</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../startup/rehashx.html">01_rehashx</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../startup/easy_import.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">04_easy_import</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../startup/ipython-logger.html">Logging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../startup/help_helpers.html">06_Help_Helpers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../startup/aliases.html">System Aliases</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../startup/41_numpy.html"><code class="docutils literal notranslate"><span class="pre">41_numpy_init</span></code> module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../startup/42_pandas.html"><code class="docutils literal notranslate"><span class="pre">42_pandas_init</span></code> module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../startup/sysexcept.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">50_sysexception</span></code> module</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ipython.html">IPython Config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../kernel.html">IPython Kernel Config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../kernel.html#jupyter-kernel-config">Jupyter Kernel Config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../startup/index.html">IPython Shell Initialization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../util.html">General Utility Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../jupyter.html">Jupyter Suite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Extensions</a></li>
 </ul>
 
 
@@ -200,7 +194,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Sep 26, 2019.
+      Last updated on Sep 29, 2019.
     </div>
   </body>
 </html>

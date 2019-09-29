@@ -4,26 +4,11 @@
 ==================================================
 IPython --- Configuration file for :mod:`IPython`.
 ==================================================
-.. module:: ipython_config
-    :synopsis: Main configuration file for IPython.
-
-Parameters
-----------
-All parameters IPython accepts.
+.. highlight:: ipython
 
 
-Notes
------
-The standard :func:`IPython.get_ipython` function returns `None`
-so I suppose IPython hasn't officially instantiated yet.:
-
-    _ip = get_ipython()
-
-Therefore that function shouldn't be used anywhere in this file.
-
-Raises
-------
-Didn't see this coming.
+Python3.6
+=========
 
 .. ipython::
     :verbatim:
@@ -57,6 +42,19 @@ be.
     --LocateIPythonApp.profile=
     --LocateIPythonApp.verbose_crash=
 
+
+Notes
+-----
+
+The standard :func:`IPython.get_ipython` function returns `None`
+so I suppose IPython hasn't officially instantiated yet.
+
+.. code-block:: ipython
+
+    from IPython import get_ipython
+    _ip = get_ipython()
+
+Therefore that function shouldn't be used anywhere in this file.
 
 """
 import builtins
@@ -200,7 +198,7 @@ c.Application.log_datefmt = '%Y-%m-%d %H:%M:%S'
 
 # The Logging format template
 #Default: '[%(name)s]%(highlevel)s %(message)s'
-c.Application.log_format = '%(created)f : [%(name)s] : %(highlevel)s : %(message)s : '
+c.Application.log_format = '%(module) : %(created)f : [%(name)s] : %(highlevel)s : %(message)s : '
 
 # Set the log level by value or name.
 c.Application.log_level = 30

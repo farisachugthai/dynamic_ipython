@@ -18,7 +18,6 @@ to a :command:`bash` system shell, and Windows will have :command:`dosbatch` or
 
 Overview
 --------
-
 This module utilizes ``_ip``, the global :mod:`IPython` |ip|
 instance, and fills the ``user_ns`` with aliases that are available
 in a typical system shell.
@@ -61,17 +60,11 @@ _ip : |ip|
 
 .. _aliases-parmeters:
 
-Parameters
-----------
+`%alias` magic
+==============
+.. magic:: alias
 
-``%l`` : Command-line argument.
-    You can use the ``%l`` specifier in an ``%alias`` definition
-    to represent the whole line when the alias is called.
-
-Meaning that it behaves similarly to the parameter :kbd:`$*`
-in typical POSIX shells.
-
-The documentation goes on to say::
+The official IPython documentation notes::
 
     In [2]: %alias bracket echo "Input in brackets: <%l>"
     In [3]: bracket hello world
@@ -80,6 +73,27 @@ The documentation goes on to say::
 Note that we quote when in the configuration file but when running `%alias`
 interactively the syntax '`%alias` alias_name cmd' doesn't require quoting.
 
+Aliases expand Python variables just like system calls using ! or !!
+do: all expressions prefixed with '$' get expanded.  For details of
+the semantic rules, see :pep:`215`:
+
+This is the library used by IPython for variable expansion.
+
+Parameters
+----------
+``%l`` : Command-line argument.
+    You can use the ``%l`` specifier in an ``%alias`` definition
+    to represent the whole line when the alias is called.
+
+Meaning that it behaves similarly to the parameter :kbd:`$*`
+in typical POSIX shells.
+
+Alternatively the parameter:
+``%s``
+can be given.
+
+.. todo:: Does the magic directive allow for one to document parameters and
+          the like? If not, it should!
 
 See Also
 --------
