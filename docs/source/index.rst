@@ -39,7 +39,7 @@ Extensions
 ==========
 
 In addition this repository handles a growing number of IPython extensions.
-To see more, continue reading about :ref:`custom-magics` and :ref:`extensions`.
+To see more, continue reading about :ref:`extensions`.
 
 
 Portability

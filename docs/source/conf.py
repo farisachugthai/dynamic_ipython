@@ -658,8 +658,7 @@ def setup(app):
     app.add_object_type('event', 'event', 'pair: %s; event', parse_event,
                         doc_field_types=[fdesc])
 
-
-    app.add_css_file('custom.css')
-    app.add_css_file('pygments.css')
+    # app.add_css_file('custom.css')
+    # app.add_css_file('pygments.css')
     # There's a html.addjsfile call earlier in the file
     # app.add_js_file('copybutton.js')

@@ -93,9 +93,11 @@ def file_logger(
         filename, logger=None, shell=None, log_level=logging.INFO,
         msg_format=None
 ):
-    """Logging that emits a :class:`logging.LogRecord` to ``filename``.
+    u"""Logging that emits a :class:`logging.LogRecord` to ``filename``.
 
-    Logger uses the following formatting by default: ``%(asctime)s : %(levelname)s : %(message)s : ``
+    Logger uses the following formatting by default:
+
+    ``%(asctime)s : %(levelname)s : %(message)s : ``
 
     Parameters
     ----------

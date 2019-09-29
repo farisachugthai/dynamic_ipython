@@ -4,8 +4,6 @@
 ==========
 `%rehashx`
 ==========
-.. module:: 01_rehashx
-    :synopsis: Add all executables to $PATH.
 
 This is an incredible little gem that's hugely useful for
 making IPython work as a more versatile system shell.

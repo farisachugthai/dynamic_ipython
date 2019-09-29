@@ -166,6 +166,9 @@ import doctest
 import logging
 import sys
 
+# Not allowed to do this
+# from default_profile.startup import logging.BASIC_FORMAT
+
 try:
     import numpy as np
 except (ImportError, ModuleNotFoundError):

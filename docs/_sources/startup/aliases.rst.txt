@@ -18,7 +18,6 @@ to a :command:`bash` system shell, and Windows will have :command:`dosbatch` or
 
 Overview
 --------
-
 This module utilizes ``_ip``, the global :mod:`IPython` |ip|
 instance, and fills the ``user_ns`` with aliases that are available
 in a typical system shell.
@@ -63,6 +62,8 @@ _ip : |ip|
 
 Parameters
 ----------
+.. magic:: alias
+
 
 ``%l`` : Command-line argument.
     You can use the ``%l`` specifier in an ``%alias`` definition
