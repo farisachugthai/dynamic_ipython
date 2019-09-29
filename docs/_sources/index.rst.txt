@@ -107,7 +107,7 @@ Table of Contents
 
 .. toctree::
    :caption: Tutorial
-   :maxdepth: 2
+   :maxdepth: 1
    :titlesonly:
 
    Keybindings <ipython_keybindings>
@@ -120,8 +120,6 @@ Table of Contents
    IPython Shell Initialization <startup/index>
    General Utility Functions <util>
    jupyter
-
-
 
 
 Indices and tables

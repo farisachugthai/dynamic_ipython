@@ -5,9 +5,6 @@
 IPython Logger
 ==============
 
-.. module:: 05_log
-    :synopsis: Create a logfile for the day and append to it if one already exists.
-
 Establish a file-logger for IPython.
 
 Collects both the input and output of every command run through the IPython
@@ -33,7 +30,7 @@ from os import path
 from IPython import get_ipython
 
 
-def ipython_logger_05(shell=None):
+def ipython_logger(shell=None):
     """Saves all commands run in the interactive namespace as valid IPython code.
 
     .. warning:: This is not necessarily valid python code.
@@ -81,8 +78,10 @@ def ipython_logger_05(shell=None):
     except RuntimeError:
         print(" Already logging to " + logger.logfname)
 
+    return logger
+
 
 if __name__ == "__main__":
     _ip = get_ipython()
     if _ip is not None:
-        ipython_logger_05(_ip)
+        logger = ipython_logger(_ip)

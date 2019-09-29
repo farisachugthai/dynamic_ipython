@@ -3,6 +3,8 @@
 ===================================
 General Utility Functions
 ===================================
+.. currentmodule:: default_profile.util
+
 
 .. _util-contents:
 
@@ -15,61 +17,10 @@ Module contents
    :show-inheritance:
 
 
-.. _util-submodules:
+The submodules contained in this package are as follows:
 
-Submodules
-----------
+.. toctree::
+   :maxdepth: 1
+   :glob:
 
-
-default_profile.util.copytree module
--------------------------------------
-
-.. automodule:: default_profile.util.copytree
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-
-default_profile.util.machine module
-------------------------------------
-
-.. automodule:: default_profile.util.machine
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-
-default_profile.util.module\_log module
-----------------------------------------
-
-.. automodule:: default_profile.util.module_log
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-
-:mod:`default_profile.util.paths` module
-----------------------------------------
-
-.. automodule:: default_profile.util.paths
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-
-:mod:`default_profile.util.profile_override` module
----------------------------------------------------
-
-.. automodule:: default_profile.util.profile_override
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-
-default_profile.util.timer module
-----------------------------------
-
-.. automodule:: default_profile.util.timer
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   util/*

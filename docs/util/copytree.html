@@ -1,0 +1,219 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>copytree &#8212; Dynamic IPython: version0.0.2</title>
+    <link rel="stylesheet" href="../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/util/copytree.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="default_profile.util.module_log module" href="index.html" />
+    <link rel="prev" title="General Utility Functions" href="../util.html" />
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" type="text/css"
+  media="screen" charset="utf-8" />
+
+<link rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" type="text/css" media="screen" charset="utf-8" />
+
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="default_profile.util.module_log module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../util.html" title="General Utility Functions"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Dynamic IPython</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../util.html" accesskey="U">General Utility Functions</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="copytree">
+<h1><code class="xref py py-obj docutils literal notranslate"><span class="pre">copytree</span></code><a class="headerlink" href="#copytree" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-default_profile.util.copytree">
+<span id="default-profile-util-copytree-module"></span><h2>default_profile.util.copytree module<a class="headerlink" href="#module-default_profile.util.copytree" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="default_profile.util.copytree.CopyTree">
+<em class="property">class </em><code class="sig-name descname">CopyTree</code><span class="sig-paren">(</span><em class="sig-param">src</em>, <em class="sig-param">dst</em>, <em class="sig-param">symlinks=False</em>, <em class="sig-param">ignore=None</em>, <em class="sig-param">copy_function=&lt;function copy2&gt;</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/util/copytree.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/util/copytree.html#CopyTree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.copytree.CopyTree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Rewrite <a class="reference external" href="https://docs.python.org/3/library/shutil.html#shutil.copytree" title="(in Python v3.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">shutil.copytree()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul>
+<li><p><strong>src</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em> (</em><em>path-like</em><em>)</em>) – Directory tree to copy.</p></li>
+<li><p><strong>dest</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em> (</em><em>path-like</em><em>)</em>) – Directory to move tree to.</p></li>
+<li><p><strong>symlinks</strong> (<em>Bool</em><em>, </em><em>optional</em>) – Whether to follow symlinks. Defaults to False.</p></li>
+<li><p><strong>ignore</strong> (<a class="reference external" href="https://docs.python.org/3/library/glob.html#glob.glob" title="(in Python v3.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">glob.glob()</span></code></a> pattern) – Files to not copy.</p></li>
+<li><p><strong>copy_function</strong> (<a class="reference external" href="https://docs.python.org/3/library/shutil.html#module-shutil" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shutil</span></code></a> copy function, optional) – Defaults to <a class="reference external" href="https://docs.python.org/3/library/shutil.html#shutil.copy2" title="(in Python v3.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">shutil.copy2()</span></code></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>dst</strong> – TODO</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>TODO type</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Copying file access times may fail on Windows and if so ignore it.</p>
+<dl class="attribute">
+<dt id="default_profile.util.copytree.CopyTree.errors">
+<code class="sig-name descname">errors</code><em class="property"> = []</em><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/util/copytree.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.copytree.CopyTree.errors" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="default_profile.util.copytree.CopyTree.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">src</em>, <em class="sig-param">dst</em>, <em class="sig-param">symlinks=False</em>, <em class="sig-param">ignore=None</em>, <em class="sig-param">copy_function=&lt;function copy2 at 0x000002E24475F9D8&gt;</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/util/copytree.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/util/copytree.html#CopyTree.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.copytree.CopyTree.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="default_profile.util.copytree.CopyTree.destination_files">
+<em class="property">property </em><code class="sig-name descname">destination_files</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/util/copytree.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/util/copytree.html#CopyTree.destination_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.copytree.CopyTree.destination_files" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="default_profile.util.copytree.CopyTree.make_dest_dirs">
+<code class="sig-name descname">make_dest_dirs</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/util/copytree.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/util/copytree.html#CopyTree.make_dest_dirs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.copytree.CopyTree.make_dest_dirs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the dirs needed in the destination.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="default_profile.util.copytree.CopyTree.copytree">
+<code class="sig-name descname">copytree</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/util/copytree.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/util/copytree.html#CopyTree.copytree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.copytree.CopyTree.copytree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Let’s try and do <code class="xref py py-obj docutils literal notranslate"><span class="pre">shutil.copytree()</span></code> a little better.</p>
+<p>First let’s do everyone the courtesy of checking whether <code class="xref py py-obj docutils literal notranslate"><span class="pre">src</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">dest</span></code>
+are pathlib.Path objects.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../util.html">General Utility Functions</a><ul>
+      <li>Previous: <a href="../util.html" title="previous chapter">General Utility Functions</a></li>
+      <li>Next: <a href="index.html" title="next chapter">default_profile.util.module_log module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+
+<h3><a href="../index.html">Table of Contents</a></h3>
+
+<div>&nbsp;</div>
+<div id="sidebartoc">
+<p class="caption"><span class="caption-text">Tutorial</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../ipython_keybindings.html">Keybindings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../extensions.html">Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../jobcontrol.html">Job Control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../exceptions.html">Customized Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sphinxext.html">IPython Sphinx Directive</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev.html">Developers Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lexer.html">New IPython Console Lexer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../startup/index.html">IPython Shell Initialization</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../util.html">General Utility Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../jupyter.html">Jupyter Suite</a></li>
+</ul>
+
+
+
+</div>
+
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/util/copytree.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+
+<h3><a href="../index.html">On This Page:</a></h3>
+
+<div>&nbsp;</div>
+<div id="sidebartoc">
+  <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-obj docutils literal notranslate"><span class="pre">copytree</span></code></a><ul>
+<li><a class="reference internal" href="#module-default_profile.util.copytree">default_profile.util.copytree module</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="default_profile.util.module_log module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../util.html" title="General Utility Functions"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Dynamic IPython</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../util.html" >General Utility Functions</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+      Last updated on Sep 29, 2019.
+    </div>
+  </body>
+</html>

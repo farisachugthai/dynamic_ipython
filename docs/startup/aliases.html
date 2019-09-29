@@ -94,22 +94,14 @@ Contains varying packages as well as the current global namespace.
 Doesn’t need to be defined in advance during an interactive session.</p>
 </dd>
 </dl>
-</div>
-<div class="section" id="parameters">
-<span id="aliases-parmeters"></span><h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="alias-magic">
+<span id="aliases-parmeters"></span><h3><code class="xref py py-obj docutils literal notranslate"><span class="pre">%alias</span></code> magic<a class="headerlink" href="#alias-magic" title="Permalink to this headline">¶</a></h3>
 <dl class="magic">
 <dt id="magic-alias">
 <code class="sig-name descname">%alias</code><a class="headerlink" href="#magic-alias" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="simple">
-<dt><code class="docutils literal notranslate"><span class="pre">%l</span></code><span class="classifier">Command-line argument.</span></dt><dd><p>You can use the <code class="docutils literal notranslate"><span class="pre">%l</span></code> specifier in an <code class="docutils literal notranslate"><span class="pre">%alias</span></code> definition
-to represent the whole line when the alias is called.</p>
-</dd>
-</dl>
-<p>Meaning that it behaves similarly to the parameter <kbd class="kbd docutils literal notranslate">$*</kbd>
-in typical POSIX shells.</p>
-<p>The documentation goes on to say:</p>
+<p>The official IPython documentation notes:</p>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="gp">In [2]: </span><span class="o">%</span><span class="k">alias</span> bracket echo &quot;Input in brackets: &lt;%l&gt;&quot;
 <span class="gp">In [3]: </span><span class="n">bracket</span> <span class="n">hello</span> <span class="n">world</span>
 <span class="go">Input in brackets: &lt;hello world&gt;</span>
@@ -117,6 +109,24 @@ in typical POSIX shells.</p>
 </div>
 <p>Note that we quote when in the configuration file but when running <code class="xref py py-obj docutils literal notranslate"><span class="pre">%alias</span></code>
 interactively the syntax ‘<code class="xref py py-obj docutils literal notranslate"><span class="pre">%alias</span></code> alias_name cmd’ doesn’t require quoting.</p>
+<p>Aliases expand Python variables just like system calls using ! or !!
+do: all expressions prefixed with ‘$’ get expanded.  For details of
+the semantic rules, see <span class="target" id="index-2"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0215"><strong>PEP 215</strong></a>:</p>
+<p>This is the library used by IPython for variable expansion.</p>
+</div>
+</div>
+<div class="section" id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">%l</span></code><span class="classifier">Command-line argument.</span></dt><dd><p>You can use the <code class="docutils literal notranslate"><span class="pre">%l</span></code> specifier in an <code class="docutils literal notranslate"><span class="pre">%alias</span></code> definition
+to represent the whole line when the alias is called.</p>
+</dd>
+</dl>
+<p>Meaning that it behaves similarly to the parameter <kbd class="kbd docutils literal notranslate">$*</kbd>
+in typical POSIX shells.</p>
+<p>Alternatively the parameter:
+<code class="docutils literal notranslate"><span class="pre">%s</span></code>
+can be given.</p>
 </div>
 <div class="section" id="see-also">
 <h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
@@ -333,7 +343,7 @@ that this section is still under development and frequently changes.</p>
 <dl class="method">
 <dt id="default_profile.startup.20_aliases.WindowsAliases.user_shell">
 <code class="sig-name descname">user_shell</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/20_aliases.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/20_aliases.html#WindowsAliases.user_shell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.20_aliases.WindowsAliases.user_shell" title="Permalink to this definition">¶</a></dt>
-<dd><p>Determine the user’s shell. Checks <span class="target" id="index-6"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">SHELL</span></code> and <span class="target" id="index-7"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">COMSPEC</span></code>.</p>
+<dd><p>Determine the user’s shell. Checks <span class="target" id="index-7"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">SHELL</span></code> and <span class="target" id="index-8"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">COMSPEC</span></code>.</p>
 </dd></dl>
 
 </dd></dl>
@@ -386,17 +396,7 @@ that this section is still under development and frequently changes.</p>
 <li class="toctree-l1"><a class="reference internal" href="../sphinxext.html">IPython Sphinx Directive</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../dev.html">Developers Notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../lexer.html">New IPython Console Lexer</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="index.html">IPython Shell Initialization</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="rehashx.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">01_rehashx</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="easy_import.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">04_easy_import</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="ipython-logger.html">Logging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="help_helpers.html">06_Help_Helpers</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">System Aliases</a></li>
-<li class="toctree-l2"><a class="reference internal" href="41_numpy.html"><code class="docutils literal notranslate"><span class="pre">41_numpy_init</span></code> module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="42_pandas.html"><code class="docutils literal notranslate"><span class="pre">42_pandas_init</span></code> module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sysexcept.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">50_sysexception</span></code> module</a></li>
-</ul>
-</li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">IPython Shell Initialization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../util.html">General Utility Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../jupyter.html">Jupyter Suite</a></li>
 </ul>
@@ -422,7 +422,10 @@ that this section is still under development and frequently changes.</p>
 <li><a class="reference internal" href="#">System Aliases</a><ul>
 <li><a class="reference internal" href="#overview">Overview</a></li>
 <li><a class="reference internal" href="#notes">Notes</a></li>
-<li><a class="reference internal" href="#attributes">Attributes</a></li>
+<li><a class="reference internal" href="#attributes">Attributes</a><ul>
+<li><a class="reference internal" href="#alias-magic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">%alias</span></code> magic</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#parameters">Parameters</a></li>
 <li><a class="reference internal" href="#see-also">See Also</a></li>
 <li><a class="reference internal" href="#module-default_profile.startup.20_aliases">Autogenerated Documentation</a></li>

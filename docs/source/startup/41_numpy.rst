@@ -1,7 +1,8 @@
 ========================
 ``41_numpy_init`` module
 ========================
-.. module:: 41_numpy_init
+
+.. module:: `~default_profile.startup.41_numpy_init`
    :synopsis: Initialize numpy and configure display options.
 
 .. automodule:: default_profile.startup.41_numpy_init
