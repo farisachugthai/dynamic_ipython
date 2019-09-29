@@ -4,26 +4,11 @@
 ==================================================
 IPython --- Configuration file for :mod:`IPython`.
 ==================================================
-.. module:: ipython_config
-    :synopsis: Main configuration file for IPython.
-
-Parameters
-----------
-All parameters IPython accepts.
+.. highlight:: ipython
 
 
-Notes
------
-The standard :func:`IPython.get_ipython` function returns `None`
-so I suppose IPython hasn't officially instantiated yet.:
-
-    _ip = get_ipython()
-
-Therefore that function shouldn't be used anywhere in this file.
-
-Raises
-------
-Didn't see this coming.
+Python3.6
+=========
 
 .. ipython::
     :verbatim:
@@ -37,6 +22,19 @@ it is because the default python ran, and by default in 3.7 it never does.
 
 So fix that so we can maintain some {minimal} 3.6 compatability.
 
+
+Notes
+-----
+
+The standard :func:`IPython.get_ipython` function returns `None`
+so I suppose IPython hasn't officially instantiated yet.
+
+.. code-block:: ipython
+
+    from IPython import get_ipython
+    _ip = get_ipython()
+
+Therefore that function shouldn't be used anywhere in this file.
 """
 import builtins
 import logging

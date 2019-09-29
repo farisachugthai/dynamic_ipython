@@ -111,15 +111,17 @@ Table of Contents
    :titlesonly:
 
    Keybindings <ipython_keybindings>
-   extensions
    jobcontrol
    exceptions
    sphinxext
    Developers Notes <dev>
    lexer
+   ipython
+   kernel
    IPython Shell Initialization <startup/index>
    General Utility Functions <util>
    jupyter
+   extensions
 
 
 Indices and tables
