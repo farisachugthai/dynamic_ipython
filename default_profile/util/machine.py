@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-=========
-Machine
-=========
+.. _machine:
+
+==================
+Platform Utilities
+==================
 
 .. highlight:: ipython
 

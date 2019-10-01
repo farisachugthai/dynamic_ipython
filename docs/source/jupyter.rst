@@ -108,6 +108,102 @@ Jupyter Notebook
     c = get_config()
 
 
+Before we start the API documentation, let's quick go over a traceback
+I just got.
+
+.. code-block:: py3tb
+
+   [I 20:39:53.393 NotebookApp] Writing notebook-signing key to
+   C:\Users\faris\AppData\Roaming\jupyter\notebook_secret
+
+   [E 20:39:56.336 NotebookApp] Uncaught exception POST /api/sessions (::1)
+
+   HTTPServerRequest(protocol='http', host='localhost:8888', method='POST', uri='/api/sessions', version='HTTP/1.1', remote_ip='::1')
+
+   Traceback (most recent call last):
+
+   File "c:\users\faris\projects\dynamic_ipython\.venv\lib\site-packages\tornado\web.py", line 1699, in _execute
+
+   result = await result
+
+   File "c:\users\faris\projects\dynamic_ipython\.venv\lib\site-packages\tornado\gen.py", line 742, in run
+
+   yielded = self.gen.throw(\*exc_info)  # type: ignore
+
+   File "c:\users\faris\projects\dynamic_ipython\.venv\lib\site-packages\notebook\services\sessions\handlers.py", line 72, in post type=mtype))
+
+   File "c:\users\faris\projects\dynamic_ipython\.venv\lib\site-packages\tornado\gen.py", line 735, in run
+
+   value = future.result()
+
+   File "c:\users\faris\projects\dynamic_ipython\.venv\lib\site-packages\tornado\gen.py", line 742, in run
+
+   yielded = self.gen.throw(\*exc_info)  # type: ignore
+
+   File "c:\users\faris\projects\dynamic_ipython\.venv\lib\site-packages\notebook\services\sessions\sessionmanager.py", line 88, in create_session
+
+
+   kernel_id = yield self.start_kernel_for_session(session_id, path, name, type, kernel_name)
+
+   File "c:\users\faris\projects\dynamic_ipython\.venv\lib\site-packages\tornado\gen.py", line 735, in run
+
+   value = future.result()
+
+   File "c:\users\faris\projects\dynamic_ipython\.venv\lib\site-packages\tornado\gen.py", line 742, in run
+
+   yielded = self.gen.throw(\*exc_info)  # type: ignore
+
+   File "c:\users\faris\projects\dynamic_ipython\.venv\lib\site-packages\notebook\services\sessions\sessionmanager.py", line 101, in start_kernel_for_session
+
+   self.kernel_manager.start_kernel(path=kernel_path, kernel_name=kernel_name)
+
+   File "c:\users\faris\projects\dynamic_ipython\.venv\lib\site-packages\tornado\gen.py", line 735, in run
+
+   value = future.result()
+
+   File "c:\users\faris\projects\dynamic_ipython\.venv\lib\site-packages\tornado\gen.py", line 209, in wrapper
+
+   yielded = next(result)
+
+   File "c:\users\faris\projects\dynamic_ipython\.venv\lib\site-packages\notebook\services\kernels\kernelmanager.py", line 168, in start_kernel
+
+   super(MappingKernelManager, self).start_kernel(\*\*kwargs)
+
+   File "c:\users\faris\projects\dynamic_ipython\.venv\lib\site-packages\jupyter_client\multikernelmanager.py", line 110, in
+   start_kernel
+
+   km.start_kernel(\*\*kwargs)
+
+   File "c: \users\faris\projects\dynamic_ipython\.venv\lib\site-packages\jupyter_client\manager.py", line 240, in
+   start_kernel
+
+   self.write_connection_file()
+
+   File "c:\users\faris\projects\dynamic_ipython\.venv\lib\site-packages\jupyter_client\connect.py", line 547, in write_connection_file
+
+   kernel_name=self.kernel_name
+
+   File "c:\users\faris\projects\dynamic_ipython\.venv\lib\site-packages\jupyter_client\connect.py", line 212, in write_connection_file
+
+   with secure_write(fname) as f:
+
+   File "C:\tools\miniconda3\Lib\contextlib.py", line 112, in __enter__
+
+   return next(self. gen)
+
+   File "c:\users\faris\projects\dynamic_ipython\.venv\lib\site-packages\jupyter_client\connect.py", line 100, in secure_write
+
+   win32_restrict_file_to_user(fname)
+
+   File "c:\users\faris\projects\dynamic_ipython\.venv\lib\site-packages\jupyter_client\connect.py", line 53, in win32_restrict_file_to_user
+
+   import win32api
+
+   ImportError: DLL load failed: The specified procedure could not be found.
+
+Well that was absurd to read but what is that DLL that we need to load, why
+isn't it there and what can we do?
+
 JupyterApp(Application) configuration
 -------------------------------------
 
@@ -161,11 +257,14 @@ This can be set to false to prevent changing password from the UI/API.::
 
 Allow requests where the Host header doesn't point to a local server
 By default, requests get a 403 forbidden response if the 'Host' header shows
-that the browser thinks it's on a non-local domain. Setting this option to
-True disables this check.
+that the :envvar:`browser` thinks it's on a non-local domain.
+
+Setting this option to `True` disables this check.
+
 This protects against 'DNS rebinding' attacks, where a remote web server
 serves you a page and then changes its DNS to send later requests to a local
 IP, bypassing same-origin checks.
+
 Local IP addresses (such as 127.0.0.1 and ::1) are allowed as local, along
 with hostnames configured in local_hostnames.::
 
@@ -175,19 +274,26 @@ Whether to allow the user to run the notebook as root.::
 
    c.NotebookApp.allow_root = False
 
-DEPRECATED use `c.NotebookApp.base_url`::
+
+.. warning:: use `c.NotebookApp.base_url`
+
+
+::
 
    c.NotebookApp.base_project_url = '/'
 
 The base URL for the notebook server.
+
 Leading and trailing slashes can be omitted, and will automatically be added.::
 
    c.NotebookApp.base_url = '/'
 
-Specify what command to use to invoke a web browser when opening the notebook.
+Specify what command to use to invoke a web :envvar:`browser` when opening
+the notebook.
+
 If not specified, the default browser will be determined by
 the :mod:`webbrowser` standard library module, which allows setting
-of the :envvar:`$BROWSER` environment variable to override it.::
+of the :envvar:`browser` environment variable to override it.::
 
    c.NotebookApp.browser = ''
 
@@ -387,10 +493,12 @@ The directory to use for notebooks and kernels.::
 
    c.NotebookApp.notebook_dir = ''
 
-Whether to open in a browser after starting. The specific browser used is
+Whether to open in a :envvar:`browser` after starting.
+
+The specific :envvar:`browser` used is
 platform dependent and determined by the python standard library `webbrowser`
-module, unless it is overridden using the ``browser``
-(NotebookApp.browser) configuration option.::
+module, unless it is overridden using the :envvar:`browser` (NotebookApp.browser)
+configuration option.::
 
     c.NotebookApp.open_browser = True
 
