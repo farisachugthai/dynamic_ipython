@@ -9,6 +9,7 @@ IPython Sphinx Directive
 .. highlight:: ipython
    :linenothreshold: 3
 
+
 The IPython directive is a stateful shell that can be used in reStructured
 text files.
 
@@ -17,10 +18,10 @@ to automatically extract docstrings from valid python code and
 generate HTML.
 
 The IPython directive builds on the functionality that Sphinx
-provides. This allows a user to, for example, copy and paste an 
+provides. This allows a user to, for example, copy and paste an
 interactive session in an .rst document that can be useful for parsing
-and validating IPython code, auto-generating documentation based on the 
-docstrings in source code, and embedding plots based on live data in 
+and validating IPython code, auto-generating documentation based on the
+docstrings in source code, and embedding plots based on live data in
 Sphinx documents.
 
 Specifically, the IPython Sphinx extension correctly parses standard
@@ -50,23 +51,38 @@ Directive and options
                                       OUTFILE [IMAGE_OPTIONS]
 
 
+
+It's important to note that all of these options can be used for the entire
+directive block or they can decorate individual lines of code.
+
+.. todo:: Hmmmm should we document those decorators using the above syntax?
+
+   We emit warnings when we document both directives and pseudo-decorators.
+
 One may find it useful to reference the relevant documentation from the
 [Sphinx]_  project and Docutils.
 
 .. [Sphinx] http://www.sphinx-doc.org/en/master/usage/restructuredtext/domains.html#the-restructuredtext-domain
 
-See Also
----------
-`The Sphinx documentation project <http://www.sphinx-doc.org/en/master/>`_
-has phenomenal documentation and provides a good reference when working with
-rst files. In addition the source for each page of the documentation
-is easily obtainable from the "Show Source" button.
+.. seealso::
 
-`Image Options for rst directives from docutils
-<http://docutils.sourceforge.net/docs/ref/rst/directives.html#image>`_ for details.
+   `The Sphinx documentation project <http://www.sphinx-doc.org/en/master/>`_ has phenomenal documentation and provides a good reference when working with rst files.
 
-:ref:`configuration-values`
-Check towards the bottom of this document to view all IPython configuration options.
+
+   In addition the source for each page of the documentation
+   is easily obtainable from the "Show Source" button.
+
+.. seealso::
+
+   `Image Options for rst directives from docutils
+   <http://docutils.sourceforge.net/docs/ref/rst/directives.html#image>`_ for details.
+
+.. seealso:: :ref:`configuration-values`
+
+   Check towards the bottom of this document to view all IPython configuration options.
+
+
+
 
 .. _ipython-directive-usage:
 
@@ -96,7 +112,7 @@ will be rendered as:
 
 .. note::
 
-   This tutorial should be read side-by-side with the 
+   This tutorial should be read side-by-side with the
    `Sphinx source <../_sources/sphinxext.rst.txt>`_ that generated this
    document. With the exception of the example given above, the literal
    ReStructured Text will not be displayed alongside the rendered output.
@@ -117,10 +133,11 @@ inserted at doc build time, and the prompts will be renumbered starting
 from ``1``. For example, the prompt below is renumbered so as to follow the code
 block from above.
 
-.. yo why isn't this getting highlighted?
 
-.. ipython::
-   :okexcept:
+.. why isn't this directive working?
+.. .. ipythontb::
+
+.. code-block:: ipythontb
 
    In [138]: z = x*3   # x is recalled from previous block
 
@@ -328,10 +345,6 @@ But here's the sauce::
    }
 
 
-
-Directive Options
------------------
-
 Another demonstration of multi-line input and output.:
 
 .. ipython::
@@ -507,6 +520,9 @@ suppress output with a semicolon.:
 For more information on `@savefig` decorator, please refer to the end of
 this page in Pseudo-Decorators section.
 
+.. todo:: Alright instead of repeating ourselves multiple times and noting
+          that sys.stderr gets inserted, can we show an example of the
+          :class:`IPython.lib.IPythonTraceback` lexer?
 
 Similarly, :data:`sys.stderr` is inserted.:
 
@@ -535,7 +551,6 @@ the functions ``ioff()`` and ``ion`` which haven't been defined.
 
    Let's at least print the literal text and then show how we suppress the error
    rather than just silently doing so.
-
 
 If you don't see the next code block then we can surmise that the
 `@suppress` decorator is behaving as expected.:
@@ -599,22 +614,15 @@ parameter that kept tripping me up. (ref)
       changed documents.
 
 
-
-
-.. _pseudo-decorators:
-
 Supported Pseudo-Decorators
 ============================
-TODO:
-
-The URL you need to build off of that directive is here:
-
 
 Here are the supported decorators, and any optional arguments they
 take.  Some of the decorators can be used as options to the entire
 block (e.g. `@verbatim` and `@suppress`), and some only apply to the
 line just below them (eg `@savefig`).:
 
+.. _pseudo-decorators:
 
 Decorators Glossary
 -------------------------
@@ -677,36 +685,36 @@ The configurable options that can be placed in conf.py are:
 
 .. confval:: ipython_savefig_dir
 
-   The directory in which to save the figures. This is 
+   The directory in which to save the figures. This is
    relative to the
    Sphinx source directory. The default is `html_static_path`.
 
 .. confval:: ipython_rgxin
 
-   The compiled regular expression to denote the start of 
+   The compiled regular expression to denote the start of
    IPython input lines.
    The default is `re.compile('In \\[(\\d+)\\]:\\s?(.*)\\s*')`.
    You shouldn't need to change this.
 
 .. confval:: ipython_warning_is_error: [default to True]
 
-   Fail the build if something unexpected happen, for example 
+   Fail the build if something unexpected happen, for example
    if a block raise an exception but does not have the
    `:okexcept:` flag. The exact behavior of
-   what is considered strict, may change between the sphinx 
+   what is considered strict, may change between the sphinx
    directive version.
 
 .. confval:: ipython_rgxout
 
-   The compiled regular expression to denote the start of 
-   IPython output lines. The default is 
+   The compiled regular expression to denote the start of
+   IPython output lines. The default is
    `re.compile('Out\\[(\\d+)\\]:\\s?(.*)\\s*')`.
    You shouldn't need to change this.
 
 .. confval:: ipython_promptin
 
     The string to represent the IPython input prompt in the generated ReST.
-    The default is ``'In [%d]:'``. This expects that the line 
+    The default is ``'In [%d]:'``. This expects that the line
     numbers are used in the prompt.
 
 .. confval:: ipython_promptout
@@ -733,8 +741,10 @@ The configurable options that can be placed in conf.py are:
     list if you wish to have no imports always available. If specified in
     ``conf.py`` as `None`, then it has the effect of making no imports available.
 
-    If omitted from conf.py altogether, then the default value of:
+    If omitted from conf.py altogether, then the default value of::
+
        ['import numpy as np', 'import matplotlib.pyplot as plt']
+
     is used.
 
 .. confval:: ipython_holdcount
@@ -750,14 +760,6 @@ one sets the backend to `None`:
     `ipython_mplbackend` = `None`
 
 
-Automatically generated documentation
-=====================================
-
-.. automodule:: IPython.sphinxext.ipython_directive
-
-.. automodule:: IPython.sphinxext.ipython_console_highlighting
-
-.. automodule:: IPython.sphinxext.custom_doctests
+To view the API documentation, continue reading at `sphinx_ipython_api`.
 
 .. Vim: set et:
-

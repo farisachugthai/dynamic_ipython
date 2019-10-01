@@ -5,6 +5,9 @@
 IPython Aliases
 ===============
 
+.. module:: 20_aliases
+    :synopsis: Create system aliases.
+
 Refactoring TODO:
 
 Create a class with instance attributes for `sys.platform`.

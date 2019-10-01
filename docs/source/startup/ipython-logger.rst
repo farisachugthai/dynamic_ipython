@@ -1,7 +1,7 @@
 .. _ipython-logger:
 
 ===========================
-`05_log` --- IPython logger
+05_log --- IPython logger
 ===========================
 
 .. currentmodule:: 05_log
@@ -24,8 +24,8 @@ file as the older ones.
    maintain multiple connections to the same file.
 
 
-:mod:`05_log` module
---------------------
+:mod:`~default_profile.startup.05_log` module
+---------------------------------------------
 
 .. automodule:: default_profile.startup.05_log
    :members:

@@ -21,6 +21,9 @@ Event Watcher
 
 -------------------------------------------------------------------------
 
+load_ext
+========
+
 .. automodule:: default_profile.extensions.load_ext
     :members:
     :undoc-members:
@@ -28,6 +31,8 @@ Event Watcher
 
 -------------------------------------------------------------------------
 
+pd_csv
+======
 
 .. automodule:: default_profile.extensions.pd_csv
     :members:
@@ -37,6 +42,8 @@ Event Watcher
 
 -------------------------------------------------------------------------
 
+repr_requests
+=============
 
 .. automodule:: default_profile.extensions.repr_requests
     :members:
@@ -46,6 +53,8 @@ Event Watcher
 
 -------------------------------------------------------------------------
 
+termux_clipboard
+================
 
 .. automodule:: default_profile.extensions.termux_clipboard
     :members:

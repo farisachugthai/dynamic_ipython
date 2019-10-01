@@ -196,12 +196,12 @@ This can be set to false to prevent changing password from the UI/API.:</p>
 </div>
 <p>Allow requests where the Host header doesn’t point to a local server
 By default, requests get a 403 forbidden response if the ‘Host’ header shows
-that the browser thinks it’s on a non-local domain. Setting this option to
-True disables this check.
-This protects against ‘DNS rebinding’ attacks, where a remote web server
+that the <span class="target" id="index-0"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">browser</span></code> thinks it’s on a non-local domain.</p>
+<p>Setting this option to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a> disables this check.</p>
+<p>This protects against ‘DNS rebinding’ attacks, where a remote web server
 serves you a page and then changes its DNS to send later requests to a local
-IP, bypassing same-origin checks.
-Local IP addresses (such as 127.0.0.1 and ::1) are allowed as local, along
+IP, bypassing same-origin checks.</p>
+<p>Local IP addresses (such as 127.0.0.1 and ::1) are allowed as local, along
 with hostnames configured in local_hostnames.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">allow_remote_access</span> <span class="o">=</span> <span class="bp">False</span>
 </pre></div>
@@ -210,19 +210,23 @@ with hostnames configured in local_hostnames.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">allow_root</span> <span class="o">=</span> <span class="bp">False</span>
 </pre></div>
 </div>
-<p>DEPRECATED use <code class="xref py py-obj docutils literal notranslate"><span class="pre">c.NotebookApp.base_url</span></code>:</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>use <code class="xref py py-obj docutils literal notranslate"><span class="pre">c.NotebookApp.base_url</span></code></p>
+</div>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">base_project_url</span> <span class="o">=</span> <span class="s1">&#39;/&#39;</span>
 </pre></div>
 </div>
-<p>The base URL for the notebook server.
-Leading and trailing slashes can be omitted, and will automatically be added.:</p>
+<p>The base URL for the notebook server.</p>
+<p>Leading and trailing slashes can be omitted, and will automatically be added.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">base_url</span> <span class="o">=</span> <span class="s1">&#39;/&#39;</span>
 </pre></div>
 </div>
-<p>Specify what command to use to invoke a web browser when opening the notebook.
-If not specified, the default browser will be determined by
+<p>Specify what command to use to invoke a web <span class="target" id="index-1"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">browser</span></code> when opening
+the notebook.</p>
+<p>If not specified, the default browser will be determined by
 the <a class="reference external" href="https://docs.python.org/3/library/webbrowser.html#module-webbrowser" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">webbrowser</span></code></a> standard library module, which allows setting
-of the <span class="target" id="index-0"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">$BROWSER</span></code> environment variable to override it.:</p>
+of the <span class="target" id="index-2"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">browser</span></code> environment variable to override it.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">browser</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
 </pre></div>
 </div>
@@ -422,10 +426,11 @@ will be loaded in alphabetical order.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">notebook_dir</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
 </pre></div>
 </div>
-<p>Whether to open in a browser after starting. The specific browser used is
+<p>Whether to open in a <span class="target" id="index-3"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">browser</span></code> after starting.</p>
+<p>The specific <span class="target" id="index-4"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">browser</span></code> used is
 platform dependent and determined by the python standard library <a class="reference external" href="https://docs.python.org/3/library/webbrowser.html#module-webbrowser" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">webbrowser</span></code></a>
-module, unless it is overridden using the <code class="docutils literal notranslate"><span class="pre">browser</span></code>
-(NotebookApp.browser) configuration option.:</p>
+module, unless it is overridden using the <span class="target" id="index-5"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">browser</span></code> (NotebookApp.browser)
+configuration option.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">open_browser</span> <span class="o">=</span> <span class="bp">True</span>
 </pre></div>
 </div>
@@ -633,10 +638,10 @@ a temporary file and the program will be called with that file.</p>
 <div id="sidebartoc">
 <p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="ipython_keybindings.html">Keybindings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="jobcontrol.html">Job Control</a></li>
 <li class="toctree-l1"><a class="reference internal" href="exceptions.html">Customized Exceptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sphinxext.html">IPython Sphinx Directive</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sphinx_api_docs.html">Sphinx API docs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dev.html">Developers Notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lexer.html">New IPython Console Lexer</a></li>
 </ul>
@@ -711,7 +716,7 @@ a temporary file and the program will be called with that file.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Sep 29, 2019.
+      Last updated on Sep 30, 2019.
     </div>
   </body>
 </html>

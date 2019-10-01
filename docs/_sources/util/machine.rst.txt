@@ -2,13 +2,19 @@
 `machine`
 =========
 
-.. module:: default_profile.util.machine
+.. module:: machine
    :synopsis: Abstract away platform differences.
 
-default_profile.util.machine module
-------------------------------------
+:mod:`default_profile.util.machine` module
+------------------------------------------
 
-.. automodule:: machine
+.. not allowed to do it this way
+.. .. automodule:: machine
+..    :members:
+..    :undoc-members:
+..    :show-inheritance:
+
+.. automodule:: default_profile.util.machine
    :members:
    :undoc-members:
    :show-inheritance:

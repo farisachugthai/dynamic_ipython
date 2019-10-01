@@ -114,6 +114,7 @@ Table of Contents
    jobcontrol
    exceptions
    sphinxext
+   sphinx_api_docs
    Developers Notes <dev>
    lexer
 

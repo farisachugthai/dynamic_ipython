@@ -4,6 +4,8 @@
 ==========
 Numpy Init
 ==========
+.. module:: 41_numpy
+    :synopsis: Initialize numpy.
 
 This could be a starting point for practicing module
 configuration with traits.

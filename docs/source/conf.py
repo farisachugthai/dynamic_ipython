@@ -246,7 +246,7 @@ rst_prolog = """
 
 trim_doctest_flags = True
 
-highlight_language = 'ipython3'
+highlight_language = 'ipython'
 
 warning_is_error = False
 
@@ -643,8 +643,8 @@ def setup(app):
 
     """
     app.connect("source-read", rstjinja)
-    app.add_lexer('ipythontb', IPythonTracebackLexer())
-    app.add_lexer('ipython', IPyLexer())
+    app.add_lexer('ipythontb', IPythonTracebackLexer)
+    app.add_lexer('ipy', IPyLexer())
 
     from sphinx.ext.autodoc import cut_lines
     from sphinx.util.docfields import GroupedField

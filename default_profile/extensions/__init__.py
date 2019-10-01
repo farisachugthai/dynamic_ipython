@@ -26,6 +26,10 @@ extensions_handler.setFormatter(logging.Formatter())
 extensions_logger.setLevel(logging.WARNING)
 extensions_logger.addHandler(extensions_handler)
 
+# currently has a syntax error so fix that before we continue importing
+# from . import extension_inspect
+
+from . import cwd_prompt, example, load_ext
 from .event_watcher_example import VarWatcher
 from .pd_csv import pd_csv
 from .termux_clipboard import termux_clipboard_get
