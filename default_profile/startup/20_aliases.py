@@ -37,8 +37,8 @@ Break linux up like so::
                 ('rg', 'way too many options')
             ]
 
-Then maybe implement either a factory function or a factory manager but I haven't
-fleshed that part out in my head.
+Then maybe implement either a factory function or a factory manager but
+I haven't fleshed that part out in my head.
 
 This may have to take the backburner as I reorganize the rest of
 the repo.
@@ -132,16 +132,17 @@ class LinuxAliases:
     """
     def __init__(self, shell=None, aliases=None):
         """The WindowsAliases implementation of this is odd so maybe branch off."""
-        self.aliases = aliases
+        self.user_aliases = aliases or []
         self.shell = shell or get_ipython()
 
     def __repr__(self):
         return 'Linux Aliases: {!r}'.format(
             len(self.shell.alias_manager.aliases))
 
-    @classmethod
-    def busybox(cls):
+    def busybox(self):
         """Commands that are available on any Unix-ish system.
+
+        Apparently, I don't know how to use classmethods.
 
         Parameters
         ----------
@@ -153,7 +154,7 @@ class LinuxAliases:
             User aliases to add the user's namespace.
 
         """
-        self.aliases += [
+        self.user_aliases += [
             ('cs', 'cd %s && ls -F --color=always %s'),
             ('dU', 'du -d 1 -h --apparent-size --all | sort -h | tail -n 10'),
             ('df', 'df -ah --total'),
@@ -181,7 +182,7 @@ class LinuxAliases:
             ('lt', 'ls -AgFht --color=always %l'),
             ('lx', 'ls -Fo --color=always | grep ^-..x'),
             # ('ldir', 'ls -Fhpo | grep /$ %l'),
-            ('lf', 'ls -Foh | grep ^- %l'),
+            ('lf', 'ls -Foh --color=always | grep ^- %l'),
             ('ll', 'ls -AgFh --color=always %l'),
             # ('lt', 'ls -Altc --color=always %l'),
             # ('lr', 'ls -Altcr --color=always %l'),
@@ -200,7 +201,7 @@ class LinuxAliases:
              'cd ~/projects/dotfiles/unix/.ipython/default_profile/startup'),
             ('tail', 'tail -n 30 %l'),
         ]
-        return self.aliases
+        return self.user_aliases
 
     def __iter__(self):
         return self._generator()
@@ -544,7 +545,9 @@ def main():
     machine = Platform()
 
     if machine.is_linux:
-        user_aliases += LinuxAliases().busybox()
+        # user_aliases += LinuxAliases().busybox()
+        linux_aliases = LinuxAliases()
+        user_aliases.extend(linux_aliases.busybox())
     elif machine.is_win:
         # finish the shell class in default_profile.util.machine
         # then we can create a shell class that determines if

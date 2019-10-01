@@ -1,0 +1,10 @@
+
+========================================
+:mod:`default_profile.util.pager2` module
+========================================
+
+.. automodule:: default_profile.util.pager2
+   :members:
+   :undoc-members:
+   :show-inheritance:
+

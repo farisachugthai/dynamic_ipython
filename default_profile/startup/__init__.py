@@ -2,10 +2,11 @@
 # -*- coding: utf-8 -*-
 """Initialize the global IPython instance and begin configuring.
 
-Imports all files in this directory by utilizing the :mod:`importlib` API
+Imports all files in this directory by utilizing the
+:mod:`importlib` API
 to avoid import problems as Python modules can't begin with numbers.
+
 """
-import default_profile
 import importlib
 import logging
 import os
@@ -18,14 +19,8 @@ import IPython
 from IPython import get_ipython
 from IPython.core.error import UsageError
 
-# _ip = get_ipython()
+import default_profile
 
-# Don't do this because it'll cause Sphinx to raise an error and the docs
-# won't build
-# if not _ip:
-#     raise UsageError('IPython not successfully started.')
-
-# from default_profile.util import module_log
 
 logging.BASIC_FORMAT = '%(created)f : %(module)s : %(levelname)s : %(message)s'
 
