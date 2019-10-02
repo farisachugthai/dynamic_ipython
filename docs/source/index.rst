@@ -114,20 +114,24 @@ Table of Contents
    jobcontrol
    exceptions
    sphinxext
-   sphinx_api_docs
-   Developers Notes <dev>
    lexer
+   ipython_directive
+   sphinx_api_docs
+   sphinx_console_highlighting
+   custom_doctests
+   Developers Notes <dev>
 
 In addition the API has extensive documentation.
 
 .. toctree::
    :maxdepth: 1
    :titlesonly:
+   :caption: API
 
    ipython
    kernel
    IPython Shell Initialization </startup/index>
-   General Utility Functions </util/index>
+   IPython Utilities </util/index>
    jupyter
    extensions
 

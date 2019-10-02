@@ -1,9 +1,9 @@
-.. _ipython_directive:
+.. _ipython-sphinx-directive:
 
 ========================
 IPython Sphinx Directive
 ========================
-.. module:: ipython_directive
+.. module:: sphinx_directive
    :synopsis: An enhanced extension for Sphinx and rst use.
 
 .. highlight:: ipython
@@ -80,8 +80,6 @@ One may find it useful to reference the relevant documentation from the
 .. seealso:: :ref:`configuration-values`
 
    Check towards the bottom of this document to view all IPython configuration options.
-
-
 
 
 .. _ipython-directive-usage:

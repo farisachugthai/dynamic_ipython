@@ -16,7 +16,7 @@ except (ImportError, ModuleNotFoundError):
     pass
 
 # from . import profile_debugger, profile_parallel, sphinxext, startup, util
-from . import ipython_config, ipython_kernel_config
+from . import ipython_config, ipython_kernel_config, extensions
 from .__about__ import *
 from .sphinxext import magics, configtraits
 

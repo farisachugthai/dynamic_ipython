@@ -90,8 +90,8 @@
 <span class="sd">                (&#39;rg&#39;, &#39;way too many options&#39;)</span>
 <span class="sd">            ]</span>
 
-<span class="sd">Then maybe implement either a factory function or a factory manager but I haven&#39;t</span>
-<span class="sd">fleshed that part out in my head.</span>
+<span class="sd">Then maybe implement either a factory function or a factory manager but</span>
+<span class="sd">I haven&#39;t fleshed that part out in my head.</span>
 
 <span class="sd">This may have to take the backburner as I reorganize the rest of</span>
 <span class="sd">the repo.</span>
@@ -185,16 +185,17 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="LinuxAliases.__init__"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.LinuxAliases.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">aliases</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The WindowsAliases implementation of this is odd so maybe branch off.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">aliases</span> <span class="o">=</span> <span class="n">aliases</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="n">aliases</span> <span class="ow">or</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">shell</span> <span class="ow">or</span> <span class="n">get_ipython</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;Linux Aliases: {!r}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">aliases</span><span class="p">))</span>
 
-<div class="viewcode-block" id="LinuxAliases.busybox"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.LinuxAliases.busybox">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">busybox</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+<div class="viewcode-block" id="LinuxAliases.busybox"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.LinuxAliases.busybox">[docs]</a>    <span class="k">def</span> <span class="nf">busybox</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Commands that are available on any Unix-ish system.</span>
+
+<span class="sd">        Apparently, I don&#39;t know how to use classmethods.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -206,7 +207,7 @@
 <span class="sd">            User aliases to add the user&#39;s namespace.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">aliases</span> <span class="o">+=</span> <span class="p">[</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">+=</span> <span class="p">[</span>
             <span class="p">(</span><span class="s1">&#39;cs&#39;</span><span class="p">,</span> <span class="s1">&#39;cd </span><span class="si">%s</span><span class="s1"> &amp;&amp; ls -F --color=always </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;dU&#39;</span><span class="p">,</span> <span class="s1">&#39;du -d 1 -h --apparent-size --all | sort -h | tail -n 10&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;df&#39;</span><span class="p">,</span> <span class="s1">&#39;df -ah --total&#39;</span><span class="p">),</span>
@@ -234,7 +235,7 @@
             <span class="p">(</span><span class="s1">&#39;lt&#39;</span><span class="p">,</span> <span class="s1">&#39;ls -AgFht --color=always %l&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;lx&#39;</span><span class="p">,</span> <span class="s1">&#39;ls -Fo --color=always | grep ^-..x&#39;</span><span class="p">),</span>
             <span class="c1"># (&#39;ldir&#39;, &#39;ls -Fhpo | grep /$ %l&#39;),</span>
-            <span class="p">(</span><span class="s1">&#39;lf&#39;</span><span class="p">,</span> <span class="s1">&#39;ls -Foh | grep ^- %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;lf&#39;</span><span class="p">,</span> <span class="s1">&#39;ls -Foh --color=always | grep ^- %l&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;ll&#39;</span><span class="p">,</span> <span class="s1">&#39;ls -AgFh --color=always %l&#39;</span><span class="p">),</span>
             <span class="c1"># (&#39;lt&#39;, &#39;ls -Altc --color=always %l&#39;),</span>
             <span class="c1"># (&#39;lr&#39;, &#39;ls -Altcr --color=always %l&#39;),</span>
@@ -253,7 +254,7 @@
              <span class="s1">&#39;cd ~/projects/dotfiles/unix/.ipython/default_profile/startup&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;tail&#39;</span><span class="p">,</span> <span class="s1">&#39;tail -n 30 %l&#39;</span><span class="p">),</span>
         <span class="p">]</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">aliases</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span></div>
 
     <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generator</span><span class="p">()</span>
@@ -597,7 +598,9 @@
     <span class="n">machine</span> <span class="o">=</span> <span class="n">Platform</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">machine</span><span class="o">.</span><span class="n">is_linux</span><span class="p">:</span>
-        <span class="n">user_aliases</span> <span class="o">+=</span> <span class="n">LinuxAliases</span><span class="p">()</span><span class="o">.</span><span class="n">busybox</span><span class="p">()</span>
+        <span class="c1"># user_aliases += LinuxAliases().busybox()</span>
+        <span class="n">linux_aliases</span> <span class="o">=</span> <span class="n">LinuxAliases</span><span class="p">()</span>
+        <span class="n">user_aliases</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">linux_aliases</span><span class="o">.</span><span class="n">busybox</span><span class="p">())</span>
     <span class="k">elif</span> <span class="n">machine</span><span class="o">.</span><span class="n">is_win</span><span class="p">:</span>
         <span class="c1"># finish the shell class in default_profile.util.machine</span>
         <span class="c1"># then we can create a shell class that determines if</span>
@@ -651,15 +654,19 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../jobcontrol.html">Job Control</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../exceptions.html">Customized Exceptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../sphinxext.html">IPython Sphinx Directive</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../sphinx_api_docs.html">Sphinx API docs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev.html">Developers Notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../lexer.html">New IPython Console Lexer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ipython_directive.html">API Doc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sphinx_api_docs.html">Sphinx API docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sphinx_console_highlighting.html">Console Highlighting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../custom_doctests.html">Custom Doctests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev.html">Developers Notes</a></li>
 </ul>
+<p class="caption"><span class="caption-text">API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../ipython.html">IPython Config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../kernel.html">IPython Kernel</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../startup/index.html">IPython Shell Initialization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../util/index.html">General Utility Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../util/index.html">IPython Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../jupyter.html">Jupyter Suite</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Extensions</a></li>
 </ul>
@@ -688,7 +695,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Sep 30, 2019.
+      Last updated on Oct 01, 2019.
     </div>
   </body>
 </html>

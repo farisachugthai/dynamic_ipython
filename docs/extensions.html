@@ -119,6 +119,36 @@ To register callbacks, use <code class="xref py py-obj docutils literal notransl
 <hr class="docutils" />
 <div class="section" id="module-default_profile.extensions.load_ext">
 <span id="load-ext"></span><h2>load_ext<a class="headerlink" href="#module-default_profile.extensions.load_ext" title="Permalink to this headline">¶</a></h2>
+<dl class="magic">
+<dt id="magic-load_ext">
+<code class="sig-name descname">%load_ext</code><a class="headerlink" href="#magic-load_ext" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="default_profile.extensions.load_ext.load_ext">
+<code class="sig-name descname">load_ext</code><span class="sig-paren">(</span><em class="sig-param">module_str</em>, <em class="sig-param">shell=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/extensions/load_ext.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/default_profile/extensions/load_ext.html#load_ext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.extensions.load_ext.load_ext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load an IPython extension by its module name.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="default_profile.extensions.load_ext.load_ipython_extension">
+<code class="sig-name descname">load_ipython_extension</code><span class="sig-paren">(</span><em class="sig-param">shell=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/extensions/load_ext.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/default_profile/extensions/load_ext.html#load_ipython_extension"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.extensions.load_ext.load_ipython_extension" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register load_ext as an extension.</p>
+<p>From <code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.core.magic.MagicsManager.register_function()</span></code>:</p>
+<blockquote>
+<div><p>This will create an IPython magic (line, cell or both) from a
+standalone function.  The functions should have the following
+signatures:</p>
+</div></blockquote>
+<ul>
+<li><p>For line magics: <code class="xref py py-obj docutils literal notranslate"><span class="pre">def</span> <span class="pre">f(line)</span></code></p></li>
+<li><p>For cell magics: <code class="xref py py-obj docutils literal notranslate"><span class="pre">def</span> <span class="pre">f(line,</span> <span class="pre">cell)</span></code></p></li>
+<li><p>For a function that does both: <code class="xref py py-obj docutils literal notranslate"><span class="pre">def</span> <span class="pre">f(line,</span> <span class="pre">cell=None)</span></code></p></li>
+</ul>
+<p>In the latter case, the function will be called with <code class="docutils literal notranslate"><span class="pre">cell==None</span></code> when
+invoked as <code class="docutils literal notranslate"><span class="pre">%f</span></code>, and with cell as a string when invoked as <code class="docutils literal notranslate"><span class="pre">%%f</span></code>.</p>
+</dd></dl>
+
 </div>
 <hr class="docutils" />
 <div class="section" id="module-default_profile.extensions.pd_csv">
@@ -242,15 +272,19 @@ provided by one of the original IPython authors, Brian Granger!</p>
 <li class="toctree-l1"><a class="reference internal" href="jobcontrol.html">Job Control</a></li>
 <li class="toctree-l1"><a class="reference internal" href="exceptions.html">Customized Exceptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sphinxext.html">IPython Sphinx Directive</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sphinx_api_docs.html">Sphinx API docs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="dev.html">Developers Notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lexer.html">New IPython Console Lexer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ipython_directive.html">API Doc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sphinx_api_docs.html">Sphinx API docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sphinx_console_highlighting.html">Console Highlighting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_doctests.html">Custom Doctests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev.html">Developers Notes</a></li>
 </ul>
+<p class="caption"><span class="caption-text">API</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="ipython.html">IPython Config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="kernel.html">IPython Kernel</a></li>
 <li class="toctree-l1"><a class="reference internal" href="startup/index.html">IPython Shell Initialization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="util/index.html">General Utility Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util/index.html">IPython Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="jupyter.html">Jupyter Suite</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Extensions</a></li>
 </ul>
@@ -308,7 +342,7 @@ provided by one of the original IPython authors, Brian Granger!</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Sep 30, 2019.
+      Last updated on Oct 01, 2019.
     </div>
   </body>
 </html>
