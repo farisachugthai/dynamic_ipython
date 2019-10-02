@@ -113,11 +113,10 @@ Table of Contents
    Keybindings <ipython_keybindings>
    jobcontrol
    exceptions
+   subcommands
    sphinxext
    lexer
-   ipython_directive
    sphinx_api_docs
-   sphinx_console_highlighting
    custom_doctests
    Developers Notes <dev>
 
@@ -128,10 +127,9 @@ In addition the API has extensive documentation.
    :titlesonly:
    :caption: API
 
-   ipython
-   kernel
-   IPython Shell Initialization </startup/index>
+   IPython API </startup/index>
    IPython Utilities </util/index>
+   kernel
    jupyter
    extensions
 

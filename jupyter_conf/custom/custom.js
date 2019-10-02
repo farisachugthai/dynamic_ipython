@@ -63,20 +63,17 @@
  * @static
  */
 
-     define([
-         'base/js/namespace',
-         'base/js/events'
-     ], function(IPython, events) {
-         events.on('app_initialized.NotebookApp', function(){
-             IPython.toolbar.add_buttons_group([
-                 {
-                     'label'   : 'run qtconsole',
-                     'icon'    : 'icon-terminal', // select your icon from http://fortawesome.github.io/Font-Awesome/icons
-                     'callback': function () {
-                         IPython.notebook.kernel.execute('%qtconsole')
-                     }
-                 }
-                 // add more button here if needed.
-                 ]);
-         });
-     });
+define(["base/js/namespace", "base/js/events"], function(IPython, events) {
+  events.on("app_initialized.NotebookApp", function() {
+    IPython.toolbar.add_buttons_group([
+      {
+        label: "run qtconsole",
+        icon: "icon-terminal", // select your icon from http://fortawesome.github.io/Font-Awesome/icons
+        callback: function() {
+          IPython.notebook.kernel.execute("%qtconsole");
+        }
+      }
+      // add more button here if needed.
+    ]);
+  });
+});

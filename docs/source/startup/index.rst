@@ -1,8 +1,9 @@
 =================
-IPython's Startup
+IPython API
 =================
 
 These are the auto-generated API docs for IPython's startup.
+
 
 .. toctree::
    :maxdepth: 1
@@ -17,6 +18,25 @@ These are the auto-generated API docs for IPython's startup.
    41_numpy
    42_pandas
    sysexcept
+
+
+IPython Config
+==============
+
+Before delving into the startup files, the API for the main IPython config file
+will be discussed.
+
+This is simply the file that's generated when ``ipython --generate-config``
+is run on the command line.
+
+.. automodule:: default_profile.ipython_config
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+Startup
+=======
 
 The first script to run invokes `%rehashx` which initializes
 :mod:`IPython` with all of the commands that the system shell knows.

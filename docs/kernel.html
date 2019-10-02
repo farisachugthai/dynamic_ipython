@@ -1,14 +1,15 @@
-
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
+
+<head>
     <meta charset="utf-8" />
     <title>IPython Kernel &#8212; Dynamic IPython: version0.0.2</title>
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./"
+        src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
@@ -17,426 +18,634 @@
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/kernel.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="IPython’s Startup" href="startup/index.html" />
-    <link rel="prev" title="IPython Config" href="ipython.html" />
+    <link rel="next" title="Jupyter Suite" href="jupyter.html" />
+    <link rel="prev" title="default_profile.util.timer module" href="util/timer.html" />
 
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" type="text/css"
-  media="screen" charset="utf-8" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" type="text/css" media="screen"
+        charset="utf-8" />
 
-<link rel="stylesheet"
-  href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" type="text/css" media="screen" charset="utf-8" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic"
+        type="text/css" media="screen" charset="utf-8" />
 
-<!--[if lte IE 6]>
+    <!--[if lte IE 6]>
 <link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
 <![endif]-->
 
 
-  </head><body>
+</head>
+
+<body>
 
     <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="startup/index.html" title="IPython’s Startup"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="ipython.html" title="IPython Config"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython</a> &#187;</li> 
-      </ul>
-    </div>  
+        <h3>Navigation</h3>
+        <ul>
+            <li class="right" style="margin-right: 10px">
+                <a href="genindex.html" title="General Index" accesskey="I">index</a></li>
+            <li class="right">
+                <a href="py-modindex.html" title="Python Module Index">modules</a> |</li>
+            <li class="right">
+                <a href="jupyter.html" title="Jupyter Suite" accesskey="N">next</a> |</li>
+            <li class="right">
+                <a href="util/timer.html" title="default_profile.util.timer module" accesskey="P">previous</a> |</li>
+            <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython</a> &#187;</li>
+        </ul>
+    </div>
 
     <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
-  <div class="section" id="ipython-kernel">
-<span id="kernel"></span><h1>IPython Kernel<a class="headerlink" href="#ipython-kernel" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="initially-provided-configuration">
-<h2>Initially Provided Configuration<a class="headerlink" href="#initially-provided-configuration" title="Permalink to this headline">¶</a></h2>
-<p>From <code class="docutils literal notranslate"><span class="pre">ipython</span> <span class="pre">kernel</span> <span class="pre">--generate-config</span></code>.</p>
-<div class="section" id="connectionfilemixin-loggingconfigurable-configuration">
-<h3>ConnectionFileMixin(LoggingConfigurable) configuration<a class="headerlink" href="#connectionfilemixin-loggingconfigurable-configuration" title="Permalink to this headline">¶</a></h3>
-<p>Mixin for configurable classes that work with connection files.</p>
-<p><a class="reference external" href="https://docs.python.org/3/library/json.html#module-json" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">json</span></code></a> file in which to store connection info [default: kernel-&lt;pid&gt;.json]</p>
-<p>This file will contain the IP, ports, and authentication key needed to connect
-clients to this kernel.</p>
-<p>By default, this file will be created in the security
-dir of the current profile, but can be specified by absolute path.:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">ConnectionFileMixin</span><span class="o">.</span><span class="n">connection_file</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-</pre></div>
-</div>
-<p>Set the control (ROUTER) port. [default: random]:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">ConnectionFileMixin</span><span class="o">.</span><span class="n">control_port</span> <span class="o">=</span> <span class="mi">0</span>
-</pre></div>
-</div>
-<p>Set the heartbeat port. [default: random]:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">ConnectionFileMixin</span><span class="o">.</span><span class="n">hb_port</span> <span class="o">=</span> <span class="mi">0</span>
-</pre></div>
-</div>
-<p>Set the iopub (PUB) port [default: random]:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">ConnectionFileMixin</span><span class="o">.</span><span class="n">iopub_port</span> <span class="o">=</span> <span class="mi">0</span>
-</pre></div>
-</div>
-<p>Set the kernel’s IP address [default localhost]. If the IP address is
-something other than localhost, then consoles on other machines will be able
-to connect to the kernel, so be careful!:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">ConnectionFileMixin</span><span class="o">.</span><span class="n">ip</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-</pre></div>
-</div>
-<p>Set the shell (ROUTER) port [default: random]. What’s the difference between
-the shell_port, the control_port and the hb_port?:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">ConnectionFileMixin</span><span class="o">.</span><span class="n">shell_port</span> <span class="o">=</span> <span class="mi">0</span>
-</pre></div>
-</div>
-<p>Set the stdin (ROUTER) port [default: random]:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">ConnectionFileMixin</span><span class="o">.</span><span class="n">stdin_port</span> <span class="o">=</span> <span class="mi">0</span>
-</pre></div>
-</div>
-<p>Transport.:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">ConnectionFileMixin</span><span class="o">.</span><span class="n">transport</span> <span class="o">=</span> <span class="s1">&#39;tcp&#39;</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="interactiveshellapp-configurable-configuration">
-<h3>InteractiveShellApp(Configurable) configuration<a class="headerlink" href="#interactiveshellapp-configurable-configuration" title="Permalink to this headline">¶</a></h3>
-<p>A Mixin for applications that start InteractiveShell instances.</p>
-<p>Provides configurables for loading extensions and executing files as part of
-configuring a Shell environment.</p>
-<p>The following methods should be called by the <code class="xref py py-meth docutils literal notranslate"><span class="pre">initialize()</span></code> method of the
-subclass:</p>
-<blockquote>
-<div><ul>
-<li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">init_path()</span></code></p></li>
-<li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">init_shell()</span></code> (to be implemented by the subclass)</p></li>
-<li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">init_gui_pylab()</span></code></p></li>
-<li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">init_extensions()</span></code></p></li>
-<li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">init_code()</span></code></p></li>
-</ul>
-</div></blockquote>
-<p>Execute the given command string.:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">InteractiveShellApp</span><span class="o">.</span><span class="n">code_to_run</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-</pre></div>
-</div>
-<p>Run the file referenced by the <span class="target" id="index-0"></span><a class="reference external" href="https://docs.python.org/3/using/cmdline.html#envvar-PYTHONSTARTUP" title="(in Python v3.7)"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PYTHONSTARTUP</span></code></a> environment variable
-at IPython startup.:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">InteractiveShellApp</span><span class="o">.</span><span class="n">exec_PYTHONSTARTUP</span> <span class="o">=</span> <span class="bp">True</span>
-</pre></div>
-</div>
-<p>List of files to run at IPython startup.:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">InteractiveShellApp</span><span class="o">.</span><span class="n">exec_files</span> <span class="o">=</span> <span class="p">[]</span>
-</pre></div>
-</div>
-<p>Lines of code to run at IPython startup.:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">InteractiveShellApp</span><span class="o">.</span><span class="n">exec_lines</span> <span class="o">=</span> <span class="p">[]</span>
-</pre></div>
-</div>
-<p>A list of dotted module names of IPython extensions to load.:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">InteractiveShellApp</span><span class="o">.</span><span class="n">extensions</span> <span class="o">=</span> <span class="p">[]</span>
-</pre></div>
-</div>
-<p>Dotted module name of an IPython extension to load.:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">InteractiveShellApp</span><span class="o">.</span><span class="n">extra_extension</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-</pre></div>
-</div>
-<p>A file to be run.:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">InteractiveShellApp</span><span class="o">.</span><span class="n">file_to_run</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-</pre></div>
-</div>
-<p>Enable GUI event loop integration with any of (‘glut’, ‘gtk’, ‘gtk2’, ‘gtk3’,
-‘osx’, ‘pyglet’, ‘qt’, ‘qt4’, ‘qt5’, ‘tk’, ‘wx’, ‘gtk2’, ‘qt4’).:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">InteractiveShellApp</span><span class="o">.</span><span class="n">gui</span> <span class="o">=</span> <span class="bp">None</span>
-</pre></div>
-</div>
-<p>Should variables loaded at startup (by startup files, exec_lines, etc.) be
-hidden from tools like <code class="xref py py-obj docutils literal notranslate"><span class="pre">%who</span></code>?:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">InteractiveShellApp</span><span class="o">.</span><span class="n">hide_initial_ns</span> <span class="o">=</span> <span class="bp">True</span>
-</pre></div>
-</div>
-<p>Configure matplotlib for interactive use with the default matplotlib backend.:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">InteractiveShellApp</span><span class="o">.</span><span class="n">matplotlib</span> <span class="o">=</span> <span class="bp">None</span>
-</pre></div>
-</div>
-<p>Run the module as a script.:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">InteractiveShellApp</span><span class="o">.</span><span class="n">module_to_run</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-</pre></div>
-</div>
-<p>Pre-load matplotlib and numpy for interactive use, selecting a particular
-matplotlib backend and loop integration.:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">InteractiveShellApp</span><span class="o">.</span><span class="n">pylab</span> <span class="o">=</span> <span class="bp">None</span>
-</pre></div>
-</div>
-<p>If true, IPython will populate the user namespace with numpy, pylab, etc. and
-an <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">*</span></code> is done from numpy and pylab, when using pylab mode.</p>
-<p>When False, pylab mode should not import any names into the user namespace.:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">InteractiveShellApp</span><span class="o">.</span><span class="n">pylab_import_all</span> <span class="o">=</span> <span class="bp">True</span>
-</pre></div>
-</div>
-<p>Reraise exceptions encountered loading IPython extensions?:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">InteractiveShellApp</span><span class="o">.</span><span class="n">reraise_ipython_extension_failures</span> <span class="o">=</span> <span class="bp">True</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="jupyter-kernel-config">
-<h3>Jupyter Kernel Config<a class="headerlink" href="#jupyter-kernel-config" title="Permalink to this headline">¶</a></h3>
-<p>Run a kernel locally in a subprocess.</p>
-</div>
-<div class="section" id="options">
-<h3>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h3>
-<p>Arguments that take values are actually convenience aliases to full
-traitlets.config.Configurables, whose aliases are listed on the help line.</p>
-<p>For more information on full configurables, see <code class="docutils literal notranslate"><span class="pre">--help-all</span></code>.</p>
-<dl class="option-list">
-<dt><kbd><span class="option">--debug</span></kbd></dt>
-<dd><p>set log level to logging.DEBUG (maximize logging output)</p>
-</dd>
-</dl>
-<dl class="simple">
-<dt>–kernel=&lt;Unicode&gt; (KernelApp.kernel_name)</dt><dd><p>Default: ‘python3’
-The name of a kernel type to start</p>
-</dd>
-<dt>–ip=&lt;Unicode&gt; (KernelManager.ip)</dt><dd><p>Default: ‘’
-Set the kernel’s IP address [default localhost]. If the IP address is
-something other than localhost, then Consoles on other machines will be able
-to connect to the Kernel, so be careful!</p>
-</dd>
-</dl>
-</div>
-<div class="section" id="class-parameters">
-<h3>Class parameters<a class="headerlink" href="#class-parameters" title="Permalink to this headline">¶</a></h3>
-<p>Parameters are set from command-line arguments of the form:
-<code class="docutils literal notranslate"><span class="pre">--Class.trait=value</span></code>.</p>
-<p>This line is evaluated in Python, so simple expressions
-are allowed, e.g.:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">C</span><span class="o">.</span><span class="n">a</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>For setting C.a=[0,1,2].</p>
-</div>
-<div class="section" id="kernelapp-options">
-<h3>KernelApp options<a class="headerlink" href="#kernelapp-options" title="Permalink to this headline">¶</a></h3>
-<dl class="simple">
-<dt>–KernelApp.answer_yes=&lt;Bool&gt;</dt><dd><p>Default: False
-Answer yes to any prompts.</p>
-</dd>
-<dt>–KernelApp.config_file=&lt;Unicode&gt;</dt><dd><p>Default: ‘’
-Full path of a config file.</p>
-</dd>
-<dt>–KernelApp.config_file_name=&lt;Unicode&gt;</dt><dd><p>Default: ‘’
-Specify a config file to load.</p>
-</dd>
-<dt>–KernelApp.generate_config=&lt;Bool&gt;</dt><dd><p>Default: False
-Generate default config file.</p>
-</dd>
-<dt>–KernelApp.kernel_name=&lt;Unicode&gt;</dt><dd><p>Default: ‘python3’
-The name of a kernel type to start</p>
-</dd>
-<dt>–KernelApp.log_datefmt=&lt;Unicode&gt;</dt><dd><p>Default: ‘%Y-%m-%d %H:%M:%S’
-The date format used by logging formatters for %(asctime)s</p>
-</dd>
-<dt>–KernelApp.log_format=&lt;Unicode&gt;</dt><dd><p>Default: ‘[%(name)s]%(highlevel)s %(message)s’
-The Logging format template</p>
-</dd>
-<dt>–KernelApp.log_level=&lt;Enum&gt;</dt><dd><p>Default: 30
-Choices: (0, 10, 20, 30, 40, 50, ‘DEBUG’, ‘INFO’, ‘WARN’, ‘ERROR’, ‘CRITICAL’)
-Set the log level by value or name.</p>
-</dd>
-</dl>
-</div>
-<div class="section" id="kernelmanager-options">
-<h3>KernelManager options<a class="headerlink" href="#kernelmanager-options" title="Permalink to this headline">¶</a></h3>
-<dl class="simple">
-<dt>–KernelManager.autorestart=&lt;Bool&gt;</dt><dd><p>Default: True
-Should we autorestart the kernel if it dies.</p>
-</dd>
-<dt>–KernelManager.connection_file=&lt;Unicode&gt;</dt><dd><p>Default: ‘’
-JSON file in which to store connection info [default: kernel-&lt;pid&gt;.json]
-This file will contain the IP, ports, and authentication key needed to
-connect clients to this kernel. By default, this file will be created in the
-security dir of the current profile, but can be specified by absolute path.</p>
-</dd>
-<dt>–KernelManager.control_port=&lt;Int&gt;</dt><dd><p>Default: 0
-set the control (ROUTER) port [default: random]</p>
-</dd>
-<dt>–KernelManager.hb_port=&lt;Int&gt;</dt><dd><p>Default: 0
-set the heartbeat port [default: random]</p>
-</dd>
-<dt>–KernelManager.iopub_port=&lt;Int&gt;</dt><dd><p>Default: 0
-set the iopub (PUB) port [default: random]</p>
-</dd>
-<dt>–KernelManager.ip=&lt;Unicode&gt;</dt><dd><p>Default: ‘’
-Set the kernel’s IP address [default localhost]. If the IP address is
-something other than localhost, then Consoles on other machines will be able
-to connect to the Kernel, so be careful!</p>
-</dd>
-<dt>–KernelManager.kernel_cmd=&lt;List&gt;</dt><dd><p>Default: []
-DEPRECATED: Use kernel_name instead.
-The Popen Command to launch the kernel. Override this if you have a custom
-kernel. If kernel_cmd is specified in a configuration file, Jupyter does not
-pass any arguments to the kernel, because it cannot make any assumptions
-about the arguments that the kernel understands. In particular, this means
-that the kernel does not receive the option –debug if it given on the
-Jupyter command line.</p>
-</dd>
-<dt>–KernelManager.shell_port=&lt;Int&gt;</dt><dd><p>Default: 0
-set the shell (ROUTER) port [default: random]</p>
-</dd>
-<dt>–KernelManager.shutdown_wait_time=&lt;Float&gt;</dt><dd><p>Default: 5.0
-Time to wait for a kernel to terminate before killing it, in seconds.</p>
-</dd>
-<dt>–KernelManager.stdin_port=&lt;Int&gt;</dt><dd><p>Default: 0
-set the stdin (ROUTER) port [default: random]</p>
-</dd>
-<dt>–KernelManager.transport=&lt;CaselessStrEnum&gt;</dt><dd><p>Default: ‘tcp’
-Choices: [‘tcp’, ‘ipc’]</p>
-</dd>
-</dl>
-</div>
-<div class="section" id="kernelspecmanager-options">
-<h3>KernelSpecManager options<a class="headerlink" href="#kernelspecmanager-options" title="Permalink to this headline">¶</a></h3>
-<dl class="simple">
-<dt>–KernelSpecManager.ensure_native_kernel=&lt;Bool&gt;</dt><dd><p>Default: True
-If there is no Python kernelspec registered and the IPython kernel is
-available, ensure it is added to the spec list.</p>
-</dd>
-<dt>–KernelSpecManager.kernel_spec_class=&lt;Type&gt;</dt><dd><p>Default: ‘jupyter_client.kernelspec.KernelSpec’
-The kernel spec class.  This is configurable to allow subclassing of the
-KernelSpecManager for customized behavior.</p>
-</dd>
-<dt>–KernelSpecManager.whitelist=&lt;Set&gt;</dt><dd><p>Default: set()
-Whitelist of allowed kernel names.
-By default, all installed kernels are allowed.</p>
-</dd>
-</dl>
-</div>
-</div>
-<div class="section" id="module-default_profile.ipython_kernel_config">
-<span id="autogenerated-documentation"></span><h2>Autogenerated Documentation<a class="headerlink" href="#module-default_profile.ipython_kernel_config" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
-<dt id="default_profile.ipython_kernel_config.get_home">
-<code class="sig-name descname">get_home</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/ipython_kernel_config.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="_modules/default_profile/ipython_kernel_config.html#get_home"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.ipython_kernel_config.get_home" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+        <div class="documentwrapper">
+            <div class="bodywrapper">
+                <div class="body" role="main">
 
-</div>
-</div>
+                    <div class="section" id="ipython-kernel">
+                        <span id="kernel"></span>
+                        <h1>IPython Kernel<a class="headerlink" href="#ipython-kernel"
+                                title="Permalink to this headline">¶</a></h1>
+                        <div class="section" id="initially-provided-configuration">
+                            <h2>Initially Provided Configuration<a class="headerlink"
+                                    href="#initially-provided-configuration" title="Permalink to this headline">¶</a>
+                            </h2>
+                            <p>From <code
+                                    class="docutils literal notranslate"><span class="pre">ipython</span> <span class="pre">kernel</span> <span class="pre">--generate-config</span></code>.
+                            </p>
+                            <div class="section" id="connectionfilemixin-loggingconfigurable-configuration">
+                                <h3>ConnectionFileMixin(LoggingConfigurable) configuration<a class="headerlink"
+                                        href="#connectionfilemixin-loggingconfigurable-configuration"
+                                        title="Permalink to this headline">¶</a></h3>
+                                <p>Mixin for configurable classes that work with connection files.</p>
+                                <p><a class="reference external"
+                                        href="https://docs.python.org/3/library/json.html#module-json"
+                                        title="(in Python v3.7)"><code
+                                            class="xref py py-mod docutils literal notranslate"><span class="pre">json</span></code></a>
+                                    file in which to store connection info [default: kernel-&lt;pid&gt;.json]</p>
+                                <p>This file will contain the IP, ports, and authentication key needed to connect
+                                    clients to this kernel.</p>
+                                <p>By default, this file will be created in the security
+                                    dir of the current profile, but can be specified by absolute path.:</p>
+                                <div class="highlight-ipython notranslate">
+                                    <div class="highlight">
+                                        <pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">ConnectionFileMixin</span><span class="o">.</span><span class="n">connection_file</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</pre>
+                                    </div>
+                                </div>
+                                <p>Set the control (ROUTER) port. [default: random]:</p>
+                                <div class="highlight-ipython notranslate">
+                                    <div class="highlight">
+                                        <pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">ConnectionFileMixin</span><span class="o">.</span><span class="n">control_port</span> <span class="o">=</span> <span class="mi">0</span>
+</pre>
+                                    </div>
+                                </div>
+                                <p>Set the heartbeat port. [default: random]:</p>
+                                <div class="highlight-ipython notranslate">
+                                    <div class="highlight">
+                                        <pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">ConnectionFileMixin</span><span class="o">.</span><span class="n">hb_port</span> <span class="o">=</span> <span class="mi">0</span>
+</pre>
+                                    </div>
+                                </div>
+                                <p>Set the iopub (PUB) port [default: random]:</p>
+                                <div class="highlight-ipython notranslate">
+                                    <div class="highlight">
+                                        <pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">ConnectionFileMixin</span><span class="o">.</span><span class="n">iopub_port</span> <span class="o">=</span> <span class="mi">0</span>
+</pre>
+                                    </div>
+                                </div>
+                                <p>Set the kernel’s IP address [default localhost]. If the IP address is
+                                    something other than localhost, then consoles on other machines will be able
+                                    to connect to the kernel, so be careful!:</p>
+                                <div class="highlight-ipython notranslate">
+                                    <div class="highlight">
+                                        <pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">ConnectionFileMixin</span><span class="o">.</span><span class="n">ip</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</pre>
+                                    </div>
+                                </div>
+                                <p>Set the shell (ROUTER) port [default: random]. What’s the difference between
+                                    the shell_port, the control_port and the hb_port?:</p>
+                                <div class="highlight-ipython notranslate">
+                                    <div class="highlight">
+                                        <pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">ConnectionFileMixin</span><span class="o">.</span><span class="n">shell_port</span> <span class="o">=</span> <span class="mi">0</span>
+</pre>
+                                    </div>
+                                </div>
+                                <p>Set the stdin (ROUTER) port [default: random]:</p>
+                                <div class="highlight-ipython notranslate">
+                                    <div class="highlight">
+                                        <pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">ConnectionFileMixin</span><span class="o">.</span><span class="n">stdin_port</span> <span class="o">=</span> <span class="mi">0</span>
+</pre>
+                                    </div>
+                                </div>
+                                <p>Transport.:</p>
+                                <div class="highlight-ipython notranslate">
+                                    <div class="highlight">
+                                        <pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">ConnectionFileMixin</span><span class="o">.</span><span class="n">transport</span> <span class="o">=</span> <span class="s1">&#39;tcp&#39;</span>
+</pre>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="section" id="interactiveshellapp-configurable-configuration">
+                                <h3>InteractiveShellApp(Configurable) configuration<a class="headerlink"
+                                        href="#interactiveshellapp-configurable-configuration"
+                                        title="Permalink to this headline">¶</a></h3>
+                                <p>A Mixin for applications that start InteractiveShell instances.</p>
+                                <p>Provides configurables for loading extensions and executing files as part of
+                                    configuring a Shell environment.</p>
+                                <p>The following methods should be called by the <code
+                                        class="xref py py-meth docutils literal notranslate"><span class="pre">initialize()</span></code>
+                                    method of the
+                                    subclass:</p>
+                                <blockquote>
+                                    <div>
+                                        <ul>
+                                            <li>
+                                                <p><code
+                                                        class="xref py py-meth docutils literal notranslate"><span class="pre">init_path()</span></code>
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <p><code
+                                                        class="xref py py-meth docutils literal notranslate"><span class="pre">init_shell()</span></code>
+                                                    (to be implemented by the subclass)</p>
+                                            </li>
+                                            <li>
+                                                <p><code
+                                                        class="xref py py-meth docutils literal notranslate"><span class="pre">init_gui_pylab()</span></code>
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <p><code
+                                                        class="xref py py-meth docutils literal notranslate"><span class="pre">init_extensions()</span></code>
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <p><code
+                                                        class="xref py py-meth docutils literal notranslate"><span class="pre">init_code()</span></code>
+                                                </p>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </blockquote>
+                                <p>Execute the given command string.:</p>
+                                <div class="highlight-ipython notranslate">
+                                    <div class="highlight">
+                                        <pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">InteractiveShellApp</span><span class="o">.</span><span class="n">code_to_run</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</pre>
+                                    </div>
+                                </div>
+                                <p>Run the file referenced by the <span class="target" id="index-0"></span><a
+                                        class="reference external"
+                                        href="https://docs.python.org/3/using/cmdline.html#envvar-PYTHONSTARTUP"
+                                        title="(in Python v3.7)"><code
+                                            class="xref std std-envvar docutils literal notranslate"><span class="pre">PYTHONSTARTUP</span></code></a>
+                                    environment variable
+                                    at IPython startup.:</p>
+                                <div class="highlight-ipython notranslate">
+                                    <div class="highlight">
+                                        <pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">InteractiveShellApp</span><span class="o">.</span><span class="n">exec_PYTHONSTARTUP</span> <span class="o">=</span> <span class="bp">True</span>
+</pre>
+                                    </div>
+                                </div>
+                                <p>List of files to run at IPython startup.:</p>
+                                <div class="highlight-ipython notranslate">
+                                    <div class="highlight">
+                                        <pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">InteractiveShellApp</span><span class="o">.</span><span class="n">exec_files</span> <span class="o">=</span> <span class="p">[]</span>
+</pre>
+                                    </div>
+                                </div>
+                                <p>Lines of code to run at IPython startup.:</p>
+                                <div class="highlight-ipython notranslate">
+                                    <div class="highlight">
+                                        <pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">InteractiveShellApp</span><span class="o">.</span><span class="n">exec_lines</span> <span class="o">=</span> <span class="p">[]</span>
+</pre>
+                                    </div>
+                                </div>
+                                <p>A list of dotted module names of IPython extensions to load.:</p>
+                                <div class="highlight-ipython notranslate">
+                                    <div class="highlight">
+                                        <pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">InteractiveShellApp</span><span class="o">.</span><span class="n">extensions</span> <span class="o">=</span> <span class="p">[]</span>
+</pre>
+                                    </div>
+                                </div>
+                                <p>Dotted module name of an IPython extension to load.:</p>
+                                <div class="highlight-ipython notranslate">
+                                    <div class="highlight">
+                                        <pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">InteractiveShellApp</span><span class="o">.</span><span class="n">extra_extension</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</pre>
+                                    </div>
+                                </div>
+                                <p>A file to be run.:</p>
+                                <div class="highlight-ipython notranslate">
+                                    <div class="highlight">
+                                        <pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">InteractiveShellApp</span><span class="o">.</span><span class="n">file_to_run</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</pre>
+                                    </div>
+                                </div>
+                                <p>Enable GUI event loop integration with any of (‘glut’, ‘gtk’, ‘gtk2’, ‘gtk3’,
+                                    ‘osx’, ‘pyglet’, ‘qt’, ‘qt4’, ‘qt5’, ‘tk’, ‘wx’, ‘gtk2’, ‘qt4’).:</p>
+                                <div class="highlight-ipython notranslate">
+                                    <div class="highlight">
+                                        <pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">InteractiveShellApp</span><span class="o">.</span><span class="n">gui</span> <span class="o">=</span> <span class="bp">None</span>
+</pre>
+                                    </div>
+                                </div>
+                                <p>Should variables loaded at startup (by startup files, exec_lines, etc.) be
+                                    hidden from tools like <code
+                                        class="xref py py-obj docutils literal notranslate"><span class="pre">%who</span></code>?:
+                                </p>
+                                <div class="highlight-ipython notranslate">
+                                    <div class="highlight">
+                                        <pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">InteractiveShellApp</span><span class="o">.</span><span class="n">hide_initial_ns</span> <span class="o">=</span> <span class="bp">True</span>
+</pre>
+                                    </div>
+                                </div>
+                                <p>Configure matplotlib for interactive use with the default matplotlib backend.:</p>
+                                <div class="highlight-ipython notranslate">
+                                    <div class="highlight">
+                                        <pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">InteractiveShellApp</span><span class="o">.</span><span class="n">matplotlib</span> <span class="o">=</span> <span class="bp">None</span>
+</pre>
+                                    </div>
+                                </div>
+                                <p>Run the module as a script.:</p>
+                                <div class="highlight-ipython notranslate">
+                                    <div class="highlight">
+                                        <pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">InteractiveShellApp</span><span class="o">.</span><span class="n">module_to_run</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</pre>
+                                    </div>
+                                </div>
+                                <p>Pre-load matplotlib and numpy for interactive use, selecting a particular
+                                    matplotlib backend and loop integration.:</p>
+                                <div class="highlight-ipython notranslate">
+                                    <div class="highlight">
+                                        <pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">InteractiveShellApp</span><span class="o">.</span><span class="n">pylab</span> <span class="o">=</span> <span class="bp">None</span>
+</pre>
+                                    </div>
+                                </div>
+                                <p>If true, IPython will populate the user namespace with numpy, pylab, etc. and
+                                    an <code
+                                        class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">*</span></code>
+                                    is done from numpy and pylab, when using pylab mode.</p>
+                                <p>When False, pylab mode should not import any names into the user namespace.:</p>
+                                <div class="highlight-ipython notranslate">
+                                    <div class="highlight">
+                                        <pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">InteractiveShellApp</span><span class="o">.</span><span class="n">pylab_import_all</span> <span class="o">=</span> <span class="bp">True</span>
+</pre>
+                                    </div>
+                                </div>
+                                <p>Reraise exceptions encountered loading IPython extensions?:</p>
+                                <div class="highlight-ipython notranslate">
+                                    <div class="highlight">
+                                        <pre><span></span><span class="n">InteractiveShellApp</span><span class="o">.</span><span class="n">reraise_ipython_extension_failures</span> <span class="o">=</span> <span class="bp">True</span>
+</pre>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="section" id="jupyter-kernel-config">
+                                <h3>Jupyter Kernel Config<a class="headerlink" href="#jupyter-kernel-config"
+                                        title="Permalink to this headline">¶</a></h3>
+                                <p>Run a kernel locally in a subprocess.</p>
+                            </div>
+                            <div class="section" id="options">
+                                <h3>Options<a class="headerlink" href="#options"
+                                        title="Permalink to this headline">¶</a></h3>
+                                <p>Arguments that take values are actually convenience aliases to full
+                                    traitlets.config.Configurables, whose aliases are listed on the help line.</p>
+                                <p>For more information on full configurables, see <code
+                                        class="docutils literal notranslate"><span class="pre">--help-all</span></code>.
+                                </p>
+                                <dl class="option-list">
+                                    <dt><kbd><span class="option">--debug</span></kbd></dt>
+                                    <dd>
+                                        <p>set log level to logging.DEBUG (maximize logging output)</p>
+                                    </dd>
+                                </dl>
+                                <dl class="simple">
+                                    <dt>–kernel=&lt;Unicode&gt; (KernelApp.kernel_name)</dt>
+                                    <dd>
+                                        <p>Default: ‘python3’
+                                            The name of a kernel type to start</p>
+                                    </dd>
+                                    <dt>–ip=&lt;Unicode&gt; (KernelManager.ip)</dt>
+                                    <dd>
+                                        <p>Default: ‘’
+                                            Set the kernel’s IP address [default localhost]. If the IP address is
+                                            something other than localhost, then Consoles on other machines will be able
+                                            to connect to the Kernel, so be careful!</p>
+                                    </dd>
+                                </dl>
+                            </div>
+                            <div class="section" id="class-parameters">
+                                <h3>Class parameters<a class="headerlink" href="#class-parameters"
+                                        title="Permalink to this headline">¶</a></h3>
+                                <p>Parameters are set from command-line arguments of the form:
+                                    <code
+                                        class="docutils literal notranslate"><span class="pre">--Class.trait=value</span></code>.
+                                </p>
+                                <p>This line is evaluated in Python, so simple expressions
+                                    are allowed, e.g.:</p>
+                                <div class="highlight-ipython notranslate">
+                                    <div class="highlight">
+                                        <pre><span></span><span class="n">C</span><span class="o">.</span><span class="n">a</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</pre>
+                                    </div>
+                                </div>
+                                <p>For setting C.a=[0,1,2].</p>
+                            </div>
+                            <div class="section" id="kernelapp-options">
+                                <h3>KernelApp options<a class="headerlink" href="#kernelapp-options"
+                                        title="Permalink to this headline">¶</a></h3>
+                                <dl class="simple">
+                                    <dt>–KernelApp.answer_yes=&lt;Bool&gt;</dt>
+                                    <dd>
+                                        <p>Default: False
+                                            Answer yes to any prompts.</p>
+                                    </dd>
+                                    <dt>–KernelApp.config_file=&lt;Unicode&gt;</dt>
+                                    <dd>
+                                        <p>Default: ‘’
+                                            Full path of a config file.</p>
+                                    </dd>
+                                    <dt>–KernelApp.config_file_name=&lt;Unicode&gt;</dt>
+                                    <dd>
+                                        <p>Default: ‘’
+                                            Specify a config file to load.</p>
+                                    </dd>
+                                    <dt>–KernelApp.generate_config=&lt;Bool&gt;</dt>
+                                    <dd>
+                                        <p>Default: False
+                                            Generate default config file.</p>
+                                    </dd>
+                                    <dt>–KernelApp.kernel_name=&lt;Unicode&gt;</dt>
+                                    <dd>
+                                        <p>Default: ‘python3’
+                                            The name of a kernel type to start</p>
+                                    </dd>
+                                    <dt>–KernelApp.log_datefmt=&lt;Unicode&gt;</dt>
+                                    <dd>
+                                        <p>Default: ‘%Y-%m-%d %H:%M:%S’
+                                            The date format used by logging formatters for %(asctime)s</p>
+                                    </dd>
+                                    <dt>–KernelApp.log_format=&lt;Unicode&gt;</dt>
+                                    <dd>
+                                        <p>Default: ‘[%(name)s]%(highlevel)s %(message)s’
+                                            The Logging format template</p>
+                                    </dd>
+                                    <dt>–KernelApp.log_level=&lt;Enum&gt;</dt>
+                                    <dd>
+                                        <p>Default: 30
+                                            Choices: (0, 10, 20, 30, 40, 50, ‘DEBUG’, ‘INFO’, ‘WARN’, ‘ERROR’,
+                                            ‘CRITICAL’)
+                                            Set the log level by value or name.</p>
+                                    </dd>
+                                </dl>
+                            </div>
+                            <div class="section" id="kernelmanager-options">
+                                <h3>KernelManager options<a class="headerlink" href="#kernelmanager-options"
+                                        title="Permalink to this headline">¶</a></h3>
+                                <dl class="simple">
+                                    <dt>–KernelManager.autorestart=&lt;Bool&gt;</dt>
+                                    <dd>
+                                        <p>Default: True
+                                            Should we autorestart the kernel if it dies.</p>
+                                    </dd>
+                                    <dt>–KernelManager.connection_file=&lt;Unicode&gt;</dt>
+                                    <dd>
+                                        <p>Default: ‘’
+                                            JSON file in which to store connection info [default:
+                                            kernel-&lt;pid&gt;.json]
+                                            This file will contain the IP, ports, and authentication key needed to
+                                            connect clients to this kernel. By default, this file will be created in the
+                                            security dir of the current profile, but can be specified by absolute path.
+                                        </p>
+                                    </dd>
+                                    <dt>–KernelManager.control_port=&lt;Int&gt;</dt>
+                                    <dd>
+                                        <p>Default: 0
+                                            set the control (ROUTER) port [default: random]</p>
+                                    </dd>
+                                    <dt>–KernelManager.hb_port=&lt;Int&gt;</dt>
+                                    <dd>
+                                        <p>Default: 0
+                                            set the heartbeat port [default: random]</p>
+                                    </dd>
+                                    <dt>–KernelManager.iopub_port=&lt;Int&gt;</dt>
+                                    <dd>
+                                        <p>Default: 0
+                                            set the iopub (PUB) port [default: random]</p>
+                                    </dd>
+                                    <dt>–KernelManager.ip=&lt;Unicode&gt;</dt>
+                                    <dd>
+                                        <p>Default: ‘’
+                                            Set the kernel’s IP address [default localhost]. If the IP address is
+                                            something other than localhost, then Consoles on other machines will be able
+                                            to connect to the Kernel, so be careful!</p>
+                                    </dd>
+                                    <dt>–KernelManager.kernel_cmd=&lt;List&gt;</dt>
+                                    <dd>
+                                        <p>Default: []
+                                            DEPRECATED: Use kernel_name instead.
+                                            The Popen Command to launch the kernel. Override this if you have a custom
+                                            kernel. If kernel_cmd is specified in a configuration file, Jupyter does not
+                                            pass any arguments to the kernel, because it cannot make any assumptions
+                                            about the arguments that the kernel understands. In particular, this means
+                                            that the kernel does not receive the option –debug if it given on the
+                                            Jupyter command line.</p>
+                                    </dd>
+                                    <dt>–KernelManager.shell_port=&lt;Int&gt;</dt>
+                                    <dd>
+                                        <p>Default: 0
+                                            set the shell (ROUTER) port [default: random]</p>
+                                    </dd>
+                                    <dt>–KernelManager.shutdown_wait_time=&lt;Float&gt;</dt>
+                                    <dd>
+                                        <p>Default: 5.0
+                                            Time to wait for a kernel to terminate before killing it, in seconds.</p>
+                                    </dd>
+                                    <dt>–KernelManager.stdin_port=&lt;Int&gt;</dt>
+                                    <dd>
+                                        <p>Default: 0
+                                            set the stdin (ROUTER) port [default: random]</p>
+                                    </dd>
+                                    <dt>–KernelManager.transport=&lt;CaselessStrEnum&gt;</dt>
+                                    <dd>
+                                        <p>Default: ‘tcp’
+                                            Choices: [‘tcp’, ‘ipc’]</p>
+                                    </dd>
+                                </dl>
+                            </div>
+                            <div class="section" id="kernelspecmanager-options">
+                                <h3>KernelSpecManager options<a class="headerlink" href="#kernelspecmanager-options"
+                                        title="Permalink to this headline">¶</a></h3>
+                                <dl class="simple">
+                                    <dt>–KernelSpecManager.ensure_native_kernel=&lt;Bool&gt;</dt>
+                                    <dd>
+                                        <p>Default: True
+                                            If there is no Python kernelspec registered and the IPython kernel is
+                                            available, ensure it is added to the spec list.</p>
+                                    </dd>
+                                    <dt>–KernelSpecManager.kernel_spec_class=&lt;Type&gt;</dt>
+                                    <dd>
+                                        <p>Default: ‘jupyter_client.kernelspec.KernelSpec’
+                                            The kernel spec class. This is configurable to allow subclassing of the
+                                            KernelSpecManager for customized behavior.</p>
+                                    </dd>
+                                    <dt>–KernelSpecManager.whitelist=&lt;Set&gt;</dt>
+                                    <dd>
+                                        <p>Default: set()
+                                            Whitelist of allowed kernel names.
+                                            By default, all installed kernels are allowed.</p>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="section" id="module-default_profile.ipython_kernel_config">
+                            <span id="autogenerated-documentation"></span>
+                            <h2>Autogenerated Documentation<a class="headerlink"
+                                    href="#module-default_profile.ipython_kernel_config"
+                                    title="Permalink to this headline">¶</a></h2>
+                            <dl class="function">
+                                <dt id="default_profile.ipython_kernel_config.get_home">
+                                    <code class="sig-name descname">get_home</code><span class="sig-paren">(</span><span
+                                        class="sig-paren">)</span><a class="reference external"
+                                        href="https://github.com/farisachugthai/dynamic_ipython/default_profile/ipython_kernel_config.py"><span
+                                            class="viewcode-link">[source]</span></a><a class="reference internal"
+                                        href="_modules/default_profile/ipython_kernel_config.html#get_home"><span
+                                            class="viewcode-link">[source]</span></a><a class="headerlink"
+                                        href="#default_profile.ipython_kernel_config.get_home"
+                                        title="Permalink to this definition">¶</a></dt>
+                                <dd></dd>
+                            </dl>
+
+                        </div>
+                    </div>
 
 
-          </div>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script><h3>Related Topics</h3>
-<ul>
-  <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="ipython.html" title="previous chapter">IPython Config</a></li>
-      <li>Next: <a href="startup/index.html" title="next chapter">IPython’s Startup</a></li>
-  </ul></li>
-</ul>
+        <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+            <div class="sphinxsidebarwrapper">
+                <div id="searchbox" style="display: none" role="search">
+                    <h3>Quick search</h3>
+                    <div class="searchformwrapper">
+                        <form class="search" action="search.html" method="get">
+                            <input type="text" name="q" />
+                            <input type="submit" value="Go" />
+                        </form>
+                    </div>
+                </div>
+                <script type="text/javascript">$('#searchbox').show(0);</script>
+                <h3>Related Topics</h3>
+                <ul>
+                    <li><a href="index.html">Documentation overview</a>
+                        <ul>
+                            <li>Previous: <a href="util/timer.html" title="previous chapter">default_profile.util.timer
+                                    module</a></li>
+                            <li>Next: <a href="jupyter.html" title="next chapter">Jupyter Suite</a></li>
+                        </ul>
+                    </li>
+                </ul>
 
-<h3><a href="index.html">Table of Contents</a></h3>
+                <h3><a href="index.html">Table of Contents</a></h3>
 
-<div>&nbsp;</div>
-<div id="sidebartoc">
-<p class="caption"><span class="caption-text">Tutorial</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="jobcontrol.html">Job Control</a></li>
-<li class="toctree-l1"><a class="reference internal" href="exceptions.html">Customized Exceptions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sphinxext.html">IPython Sphinx Directive</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lexer.html">New IPython Console Lexer</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ipython_directive.html">API Doc</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sphinx_api_docs.html">Sphinx API docs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sphinx_console_highlighting.html">Console Highlighting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="custom_doctests.html">Custom Doctests</a></li>
-<li class="toctree-l1"><a class="reference internal" href="dev.html">Developers Notes</a></li>
-</ul>
-<p class="caption"><span class="caption-text">API</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="ipython.html">IPython Config</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">IPython Kernel</a></li>
-<li class="toctree-l1"><a class="reference internal" href="startup/index.html">IPython Shell Initialization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="util/index.html">IPython Utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="jupyter.html">Jupyter Suite</a></li>
-<li class="toctree-l1"><a class="reference internal" href="extensions.html">Extensions</a></li>
-</ul>
+                <div>&nbsp;</div>
+                <div id="sidebartoc">
+                    <p class="caption"><span class="caption-text">Tutorial</span></p>
+                    <ul>
+                        <li class="toctree-l1"><a class="reference internal" href="jobcontrol.html">Job Control</a></li>
+                        <li class="toctree-l1"><a class="reference internal" href="exceptions.html">Customized
+                                Exceptions</a></li>
+                        <li class="toctree-l1"><a class="reference internal" href="subcommands.html">Subcommands in
+                                IPython and Jupyter</a></li>
+                        <li class="toctree-l1"><a class="reference internal" href="sphinxext.html">IPython Sphinx
+                                Directive</a></li>
+                        <li class="toctree-l1"><a class="reference internal" href="lexer.html">New IPython Console
+                                Lexer</a></li>
+                        <li class="toctree-l1"><a class="reference internal" href="sphinx_api_docs.html">Sphinx API
+                                docs</a></li>
+                        <li class="toctree-l1"><a class="reference internal" href="custom_doctests.html">Custom
+                                Doctests</a></li>
+                        <li class="toctree-l1"><a class="reference internal" href="dev.html">Developers Notes</a></li>
+                    </ul>
+                    <p class="caption"><span class="caption-text">API</span></p>
+                    <ul class="current">
+                        <li class="toctree-l1"><a class="reference internal" href="startup/index.html">IPython API</a>
+                        </li>
+                        <li class="toctree-l1"><a class="reference internal" href="util/index.html">IPython
+                                Utilities</a></li>
+                        <li class="toctree-l1 current"><a class="current reference internal" href="#">IPython Kernel</a>
+                        </li>
+                        <li class="toctree-l1"><a class="reference internal" href="jupyter.html">Jupyter Suite</a></li>
+                        <li class="toctree-l1"><a class="reference internal" href="extensions.html">Extensions</a></li>
+                    </ul>
 
 
 
-</div>
+                </div>
 
 
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/kernel.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
+                <div role="note" aria-label="source link">
+                    <h3>This Page</h3>
+                    <ul class="this-page-menu">
+                        <li><a href="_sources/kernel.rst.txt" rel="nofollow">Show Source</a></li>
+                    </ul>
+                </div>
 
-<h3><a href="index.html">On This Page:</a></h3>
+                <h3><a href="index.html">On This Page:</a></h3>
 
-<div>&nbsp;</div>
-<div id="sidebartoc">
-  <ul>
-<li><a class="reference internal" href="#">IPython Kernel</a><ul>
-<li><a class="reference internal" href="#initially-provided-configuration">Initially Provided Configuration</a><ul>
-<li><a class="reference internal" href="#connectionfilemixin-loggingconfigurable-configuration">ConnectionFileMixin(LoggingConfigurable) configuration</a></li>
-<li><a class="reference internal" href="#interactiveshellapp-configurable-configuration">InteractiveShellApp(Configurable) configuration</a></li>
-<li><a class="reference internal" href="#jupyter-kernel-config">Jupyter Kernel Config</a></li>
-<li><a class="reference internal" href="#options">Options</a></li>
-<li><a class="reference internal" href="#class-parameters">Class parameters</a></li>
-<li><a class="reference internal" href="#kernelapp-options">KernelApp options</a></li>
-<li><a class="reference internal" href="#kernelmanager-options">KernelManager options</a></li>
-<li><a class="reference internal" href="#kernelspecmanager-options">KernelSpecManager options</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#module-default_profile.ipython_kernel_config">Autogenerated Documentation</a></li>
-</ul>
-</li>
-</ul>
+                <div>&nbsp;</div>
+                <div id="sidebartoc">
+                    <ul>
+                        <li><a class="reference internal" href="#">IPython Kernel</a>
+                            <ul>
+                                <li><a class="reference internal" href="#initially-provided-configuration">Initially
+                                        Provided Configuration</a>
+                                    <ul>
+                                        <li><a class="reference internal"
+                                                href="#connectionfilemixin-loggingconfigurable-configuration">ConnectionFileMixin(LoggingConfigurable)
+                                                configuration</a></li>
+                                        <li><a class="reference internal"
+                                                href="#interactiveshellapp-configurable-configuration">InteractiveShellApp(Configurable)
+                                                configuration</a></li>
+                                        <li><a class="reference internal" href="#jupyter-kernel-config">Jupyter Kernel
+                                                Config</a></li>
+                                        <li><a class="reference internal" href="#options">Options</a></li>
+                                        <li><a class="reference internal" href="#class-parameters">Class parameters</a>
+                                        </li>
+                                        <li><a class="reference internal" href="#kernelapp-options">KernelApp
+                                                options</a></li>
+                                        <li><a class="reference internal" href="#kernelmanager-options">KernelManager
+                                                options</a></li>
+                                        <li><a class="reference internal"
+                                                href="#kernelspecmanager-options">KernelSpecManager options</a></li>
+                                    </ul>
+                                </li>
+                                <li><a class="reference internal"
+                                        href="#module-default_profile.ipython_kernel_config">Autogenerated
+                                        Documentation</a></li>
+                            </ul>
+                        </li>
+                    </ul>
 
-</div>
+                </div>
 
+            </div>
         </div>
-      </div>
-      <div class="clearer"></div>
+        <div class="clearer"></div>
     </div>
     <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="startup/index.html" title="IPython’s Startup"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="ipython.html" title="IPython Config"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython</a> &#187;</li> 
-      </ul>
+        <h3>Navigation</h3>
+        <ul>
+            <li class="right" style="margin-right: 10px">
+                <a href="genindex.html" title="General Index">index</a></li>
+            <li class="right">
+                <a href="py-modindex.html" title="Python Module Index">modules</a> |</li>
+            <li class="right">
+                <a href="jupyter.html" title="Jupyter Suite">next</a> |</li>
+            <li class="right">
+                <a href="util/timer.html" title="default_profile.util.timer module">previous</a> |</li>
+            <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython</a> &#187;</li>
+        </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Oct 01, 2019.
+        Last updated on Oct 02, 2019.
     </div>
-  </body>
+</body>
+
 </html>

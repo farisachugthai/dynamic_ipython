@@ -9,20 +9,29 @@ IPython Sphinx Directive
 .. highlight:: ipython
    :linenothreshold: 3
 
+.. this one is probably overkill right?
 
-The IPython directive is a stateful shell that can be used in reStructured
+.. |IPython| replace:: :mod:`IPython`
+
+.. |rst| replace:: reStructured text
+
+The |IPython| directive is a stateful shell that can be used in reStructured
 text files.
 
-The Sphinx documentation project, for those who are unfamiliar, can be used
-to automatically extract docstrings from valid python code and
-generate HTML.
+The Sphinx project, for those who are unfamiliar, is used
+to create documentation from valid Python source in order to generate HTML.
 
-The IPython directive builds on the functionality that Sphinx
-provides. This allows a user to, for example, copy and paste an
-interactive session in an .rst document that can be useful for parsing
-and validating IPython code, auto-generating documentation based on the
-docstrings in source code, and embedding plots based on live data in
-Sphinx documents.
+The generated HTML can then be uploaded online and be served as the official
+documentation for software projects in the varying languages that Sphinx
+supports.
+
+The IPython directive builds on this functionality by creating an
+:rst:directive:`ipython` directive. This allows for a user to, for example,
+copy and paste their interactive session into an |rst| file.
+
+While generating the HTML, the IPython Sphinx shell can also parse
+and validate IPython code, syntax highlight source code that's been included
+literally, and embed plots based on the live embedded data.
 
 Specifically, the IPython Sphinx extension correctly parses standard
 IPython prompts, and extracts the input and output lines to generate HTML.
@@ -30,6 +39,8 @@ IPython prompts, and extracts the input and output lines to generate HTML.
 
 Directive and options
 =====================
+
+The IPython directive takes a number of options detailed here.
 
 .. rst:directive:: ipython
 
@@ -62,7 +73,7 @@ directive block or they can decorate individual lines of code.
 One may find it useful to reference the relevant documentation from the
 [Sphinx]_  project and Docutils.
 
-.. [Sphinx] http://www.sphinx-doc.org/en/master/usage/restructuredtext/domains.html#the-restructuredtext-domain
+.. [Sphinx] `<http://www.sphinx-doc.org/en/master/usage/restructuredtext/domains.html#the-restructuredtext-domain>`
 
 .. seealso::
 

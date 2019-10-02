@@ -1,0 +1,40 @@
+{% set name = "dynamic-ipython" %}
+{% set version = "0.0.2" %}
+
+package:
+  name: "{{ name|lower }}"
+  version: "{{ version }}"
+
+source:
+  url: "https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz"
+  sha256: "0c182be692427d4ab45b154209ef46bd7e682f5317e6b3a74d1c3a0ad254e6b7"
+
+build:
+  number: 0
+  script: "{{ PYTHON }} -m pip install . --no-deps --ignore-installed -vv "
+
+requirements:
+  host:
+    - pip
+    - ipython
+    - setuptools
+  run:
+    - python
+    - setuptools
+
+test:
+  imports:
+    - default_profile
+
+about:
+  home: "https://github.com/farisachugthai/dynamic-ipython.git"
+  license: "MIT"
+  license_family: "MIT"
+  license_file: ""
+  summary: "IPython and Jupyter scaffolding for use as a system shell."
+  doc_url: "https://farisachugthai.github.io/dynamic-ipython"
+  dev_url: ""
+
+extra:
+  recipe-maintainers:
+    - your-github-id-here
