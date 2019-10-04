@@ -1,9 +1,8 @@
 .. _41-numpy:
 
-====================
-Numpy Initialization
-====================
-
+============================
+:mod:`numpy` Initialization
+============================
 
 .. jesus christ you take away the title everything goes crazy
 

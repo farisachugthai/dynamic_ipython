@@ -71,26 +71,32 @@ directive block or they can decorate individual lines of code.
    We emit warnings when we document both directives and pseudo-decorators.
 
 One may find it useful to reference the relevant documentation from the
-[Sphinx]_  project and Docutils.
+`Sphinx`_  project and Docutils.
 
-.. [Sphinx] `<http://www.sphinx-doc.org/en/master/usage/restructuredtext/domains.html#the-restructuredtext-domain>`
+.. _Sphinx:: `<http://www.sphinx-doc.org/en/master/usage/restructuredtext/domains.html#the-restructuredtext-domain>`
 
+
+See Also
+---------
 .. seealso::
 
-   `The Sphinx documentation project <http://www.sphinx-doc.org/en/master/>`_ has phenomenal documentation and provides a good reference when working with rst files.
+   `The Sphinx documentation project <http://www.sphinx-doc.org/en/master/>`_
+   has phenomenal documentation and provides a good reference when working
+   with rst files.
 
-
-   In addition the source for each page of the documentation
-   is easily obtainable from the "Show Source" button.
+   In addition the source for each page of the documentation is easily
+   obtainable from the "Show Source" button.
 
 .. seealso::
 
    `Image Options for rst directives from docutils
-   <http://docutils.sourceforge.net/docs/ref/rst/directives.html#image>`_ for details.
+   <http://docutils.sourceforge.net/docs/ref/rst/directives.html#image>`_
+   for details.
 
 .. seealso:: :ref:`configuration-values`
 
-   Check towards the bottom of this document to view all IPython configuration options.
+   Check towards the bottom of this document to view all IPython
+   configuration options.
 
 
 .. _ipython-directive-usage:
@@ -142,9 +148,7 @@ inserted at doc build time, and the prompts will be renumbered starting
 from ``1``. For example, the prompt below is renumbered so as to follow the code
 block from above.
 
-
-.. why isn't this directive working?
-.. .. ipythontb::
+.. OH SHIT THIS DIRECTIVE WORKS!
 
 .. code-block:: ipythontb
 

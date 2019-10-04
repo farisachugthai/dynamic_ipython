@@ -1,71 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-===============
-IPython Aliases
-===============
-
-.. module:: 20_aliases
-    :synopsis: Create system aliases.
-
-Refactoring TODO:
-
-Create a class with instance attributes for `sys.platform`.
-Break linux up like so::
-
-    class AliasOSAgnostic:
-
-        def __init__(self):
-            self._sys.platform = sys.platform().lower()
-
-        @property
-        def has_alias(self):
-            return ....
-
-    class LinuxAlias(AliasOSAgnostic):
-
-        def busybox(self):
-            aliases = [
-                ('cd', 'cd foo %l'),
-                ...
-                ('ls', 'ls -F --color=always %l)
-            ]
-
-        def standardubuntu(self):
-            aliases = [
-                ('ag', 'ag -l %l')
-                ('rg', 'way too many options')
-            ]
-
-Then maybe implement either a factory function or a factory manager but
-I haven't fleshed that part out in my head.
-
-This may have to take the backburner as I reorganize the rest of
-the repo.
-
-If you're breaking up Linux functionality, may I recommend the
-following man page to reference?
-
-
-BASH-BUILTINS(7)          Miscellaneous Information Manual          BASH-BUILTINS(7)
-
-NAME
-       bash-builtins - bash built-in commands, see bash(1)
-
-SYNOPSIS
-       bash defines the following built-in commands: :, ., [, alias, bg, bind,
-       break, builtin, case, cd, command, compgen, complete, continue,
-       declare, dirs, disown, echo, enable, eval, exec, exit, export, fc, fg,
-       getopts, hash, help, history, if, jobs, kill, let, local, logout, popd,
-       printf, pushd, pwd, read, readonly, return, set, shift, shopt, source,
-       suspend, test, times, trap, type, typeset, ulimit, umask, unalias,
-       unset, until, wait, while.
-
-
-I think that :command:`declare -f` could have a nice tie in to
-`inspect.is_function()` or whatever.
-
-"""
+"""Create OS specific aliases to allow a user to use IPython anywhere."""
 import logging
 import os
 import shutil
@@ -85,6 +20,7 @@ LOGGER = module_log.stream_logger(
 
 class Executable:
     """An object representing some executable on a user computer."""
+
     def __init__(self, command):
         """Initialize with 'command'."""
         self.command = command
@@ -130,6 +66,7 @@ class LinuxAliases:
             magic_name=name)
 
     """
+
     def __init__(self, shell=None, aliases=None):
         """The WindowsAliases implementation of this is odd so maybe branch off."""
         self.user_aliases = aliases or []
@@ -338,6 +275,7 @@ class WindowsAliases:
     Would it be useful to subclass :class:`enum.Enum` here?
 
     """
+
     def __init__(self, shell=None):
         """Initialize the platform specific alias manager with IPython.
 
