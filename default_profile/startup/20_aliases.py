@@ -165,7 +165,7 @@ class LinuxAliases:
 def common_aliases():
     r"""Add aliases common to all OSes. Overwhelmingly :command:`Git` aliases.
 
-    This method adds around 70 to 80 aliases that can le
+    This method adds around 70 to 80 aliases that can be
     implemented on most of the major platforms.
 
     The only real requirement is Git being installed and working. Docker
@@ -218,8 +218,7 @@ def common_aliases():
         ('git unstaged', 'git diff %l'),
         ('gl', 'git log %l'),
         ('glo',
-         'git log --graph --decorate --abbrev -commit --oneline --branches --all% l'
-         ),
+         'git log --graph --decorate --abbrev-commit --oneline --branches -- all %l'),
         ('gls', 'git ls-tree master %l'),
         ('git ls', 'git ls-tree master %l'),
         ('gm', 'git merge --no-ff %l'),
@@ -227,10 +226,10 @@ def common_aliases():
         ('gmc', 'git merge --continue %l'),
         ('gmm', 'git merge master %l'),
         ('gmt', 'git mergetool %l'),
-        ('gp', 'git pull --all'),
-        ('gpo', 'git pull origin'),
-        ('gpom', 'git pull origin master'),
-        ('gpu', 'git push'),
+        ('gp', 'git pull --all %l'),
+        ('gpo', 'git pull origin %l'),
+        ('gpom', 'git pull origin master %l'),
+        ('gpu', 'git push %l'),
         ('gr', 'git remote -v %l'),
         ('gre', 'git remote %l'),
         ('grb', 'git rebase %l'),

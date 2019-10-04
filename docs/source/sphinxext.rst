@@ -26,7 +26,7 @@ documentation for software projects in the varying languages that Sphinx
 supports.
 
 The IPython directive builds on this functionality by creating an
-:rst:directive:`ipython` directive. This allows for a user to, for example,
+:rst:dir:`ipython` directive. This allows for a user to, for example,
 copy and paste their interactive session into an |rst| file.
 
 While generating the HTML, the IPython Sphinx shell can also parse
@@ -73,7 +73,7 @@ directive block or they can decorate individual lines of code.
 One may find it useful to reference the relevant documentation from the
 `Sphinx`_  project and Docutils.
 
-.. _Sphinx:: `<http://www.sphinx-doc.org/en/master/usage/restructuredtext/domains.html#the-restructuredtext-domain>`
+.. _Sphinx: `<http://www.sphinx-doc.org/en/master/usage/restructuredtext/domains.html#the-restructuredtext-domain>`
 
 
 See Also
