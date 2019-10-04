@@ -17,6 +17,8 @@
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/startup/matplotlib_rc.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="50_sysexception module" href="sysexcept.html" />
+    <link rel="prev" title="Pandas Initialization" href="42_pandas.html" />
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" type="text/css"
   media="screen" charset="utf-8" />
@@ -40,7 +42,14 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Dynamic IPython</a> &#187;</li> 
+        <li class="right" >
+          <a href="sysexcept.html" title="50_sysexception module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="42_pandas.html" title="Pandas Initialization"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Dynamic IPython</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">IPython API</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -50,21 +59,23 @@
           <div class="body" role="main">
             
   <div class="section" id="matplotlib-startup">
-<h1>Matplotlib Startup<a class="headerlink" href="#matplotlib-startup" title="Permalink to this headline">¶</a></h1>
+<span id="id1"></span><h1>Matplotlib Startup<a class="headerlink" href="#matplotlib-startup" title="Permalink to this headline">¶</a></h1>
 <p>We’ll begin documenting the configuration for <code class="xref py py-mod docutils literal notranslate"><span class="pre">matplotlib</span></code> and how the
-built-in <a class="reference external" href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.html#module-matplotlib.pyplot" title="(in Matplotlib v3.1.1)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">matplotlib.pyplot</span></code></a> API can be utilized for IPython’s configuration.</p>
-<pre class="literal-block">In [1]: import matplotlib as mpl
+built-in <a class="reference external" href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.html#module-matplotlib.pyplot" title="(in Matplotlib v3.1.1)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">matplotlib.pyplot</span></code></a> API can be utilized for
+IPython’s configuration.</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">matplotlib</span> <span class="kn">as</span> <span class="nn">mpl</span>
 
-In [2]: mpl.pyplot.rc
----------------------------------------------------------------------------
-AttributeError                            Traceback (most recent call last)
-&lt;ipython-input-2-3a15c655e491&gt; in &lt;module&gt;
-----&gt; 1 mpl.pyplot.rc
+<span class="gp">In [2]: </span><span class="n">mpl</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">rc</span>
+<span class="gh">Out[2]: </span><span class="go">&lt;function matplotlib.pyplot.rc(group, **kwargs)&gt;</span>
 
-AttributeError: module 'matplotlib' has no attribute 'pyplot'
-
-In [3]: pdoc mpl.pyplot.rc
-Object `mpl.pyplot.rc` not found.</pre>
+<span class="gp">In [3]: </span><span class="c1"># pdoc mpl.pyplot.rc</span>
+</pre></div>
+</div>
+<p>So fun fact: If you write a <a class="reference external" href="https://docs.python.org/3/library/functions.html#print" title="(in Python v3.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">print()</span></code></a> statement in a code-block
+it’ll generate error as no code is saved and you essentially created an
+empty block.</p>
+<p>But running <code class="xref py py-obj docutils literal notranslate"><span class="pre">%pdoc</span></code> will actually output a classes docstring to your terminal
+in the middle of a sphinx build!</p>
 </div>
 
 
@@ -85,6 +96,10 @@ Object `mpl.pyplot.rc` not found.</pre>
 <script type="text/javascript">$('#searchbox').show(0);</script><h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">IPython API</a><ul>
+      <li>Previous: <a href="42_pandas.html" title="previous chapter">Pandas Initialization</a></li>
+      <li>Next: <a href="sysexcept.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">50_sysexception</span></code> module</a></li>
+  </ul></li>
   </ul></li>
 </ul>
 
@@ -104,11 +119,11 @@ Object `mpl.pyplot.rc` not found.</pre>
 <li class="toctree-l1"><a class="reference internal" href="../dev.html">Developers Notes</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="index.html">IPython API</a></li>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">IPython API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../util/index.html">IPython Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../kernel.html">IPython Kernel</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../jupyter.html">Jupyter Suite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../jupyter/index.html">jupyter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../extensions.html">Extensions</a></li>
 </ul>
 
@@ -138,11 +153,18 @@ Object `mpl.pyplot.rc` not found.</pre>
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Dynamic IPython</a> &#187;</li> 
+        <li class="right" >
+          <a href="sysexcept.html" title="50_sysexception module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="42_pandas.html" title="Pandas Initialization"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Dynamic IPython</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >IPython API</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Oct 03, 2019.
+      Last updated on Oct 04, 2019.
     </div>
   </body>
 </html>

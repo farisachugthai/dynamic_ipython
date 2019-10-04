@@ -129,7 +129,7 @@ In addition the API has extensive documentation.
    IPython API </startup/index>
    IPython Utilities </util/index>
    kernel
-   jupyter
+   jupyter <jupyter/index>
    extensions
 
 
