@@ -93,10 +93,10 @@ every option available through the `%config` magic.
 For commands that are more related to the interactive aspect of the shell,
 see the following::
 
-   >>> from IPython import get_ipython()
+   >>> from IPython import get_ipython
    >>> _ip = get_ipython()
-   >>> help(_ip)  #doctest: +SKIP
-   >>> dir(_ip): #doctest: +SKIP
+   >>> help(_ip)  # doctest: +SKIP
+   >>> dir(_ip): # doctest: +SKIP
 
 In addition, there's an abundance of documentation online in the
 form of rst docs and ipynb notebooks.
@@ -110,7 +110,6 @@ Table of Contents
    :maxdepth: 1
    :titlesonly:
 
-   Keybindings <ipython_keybindings>
    jobcontrol
    exceptions
    subcommands
@@ -130,7 +129,7 @@ In addition the API has extensive documentation.
    IPython API </startup/index>
    IPython Utilities </util/index>
    kernel
-   jupyter
+   jupyter <jupyter/index>
    extensions
 
 

@@ -20,34 +20,48 @@ Python3.6
 So we have a python3.6 error. The problem is more that the only reason I noticed
 it is because the default python ran, and by default in 3.7 it never does.
 
-So fix that so we can maintain some {minimal} 3.6 compatability.
+So fix that so we can maintain *some* minimal 3.6 compatability.
 
 See Also
 --------
-:mod:`IPython.core.profileapp`.
-I don't know if that would be where but figure out wjat expectation would
-be.
+.. seealso::
+
+    :mod:`IPython.core.profileapp`.
+
+I don't know if that properly belongs here, so figure out what needs to
+be modified if so.
 
 .. code-block:: console
 
-    $: ipython locate profile --
+    $: ipython locate profile --<Tab>
+
     --LocateIPythonApp.auto_create=
+
     --LocateIPythonApp.copy_config_files=
+
     --LocateIPythonApp.extra_config_file=
+
     --LocateIPythonApp.ipython_dir=
+
     --LocateIPythonApp.log_datefmt=
+
     --LocateIPythonApp.log_format=
+
     --LocateIPythonApp.log_level=
+
     --LocateIPythonApp.overwrite=
+
     --LocateIPythonApp.profile=
+
     --LocateIPythonApp.verbose_crash=
 
 
 Notes
 -----
+.. note::
 
-The standard :func:`IPython.get_ipython` function returns `None`
-so I suppose IPython hasn't officially instantiated yet.
+    The standard :func:`IPython.get_ipython` function returns `None`
+    so I suppose IPython hasn't officially instantiated yet.
 
 .. code-block:: ipython
 

@@ -9,20 +9,29 @@ IPython Sphinx Directive
 .. highlight:: ipython
    :linenothreshold: 3
 
+.. this one is probably overkill right?
 
-The IPython directive is a stateful shell that can be used in reStructured
+.. |IPython| replace:: :mod:`IPython`
+
+.. |rst| replace:: reStructured text
+
+The |IPython| directive is a stateful shell that can be used in reStructured
 text files.
 
-The Sphinx documentation project, for those who are unfamiliar, can be used
-to automatically extract docstrings from valid python code and
-generate HTML.
+The Sphinx project, for those who are unfamiliar, is used
+to create documentation from valid Python source in order to generate HTML.
 
-The IPython directive builds on the functionality that Sphinx
-provides. This allows a user to, for example, copy and paste an
-interactive session in an .rst document that can be useful for parsing
-and validating IPython code, auto-generating documentation based on the
-docstrings in source code, and embedding plots based on live data in
-Sphinx documents.
+The generated HTML can then be uploaded online and be served as the official
+documentation for software projects in the varying languages that Sphinx
+supports.
+
+The IPython directive builds on this functionality by creating an
+:rst:dir:`ipython` directive. This allows for a user to, for example,
+copy and paste their interactive session into an |rst| file.
+
+While generating the HTML, the IPython Sphinx shell can also parse
+and validate IPython code, syntax highlight source code that's been included
+literally, and embed plots based on the live embedded data.
 
 Specifically, the IPython Sphinx extension correctly parses standard
 IPython prompts, and extracts the input and output lines to generate HTML.
@@ -30,6 +39,8 @@ IPython prompts, and extracts the input and output lines to generate HTML.
 
 Directive and options
 =====================
+
+The IPython directive takes a number of options detailed here.
 
 .. rst:directive:: ipython
 
@@ -60,26 +71,32 @@ directive block or they can decorate individual lines of code.
    We emit warnings when we document both directives and pseudo-decorators.
 
 One may find it useful to reference the relevant documentation from the
-[Sphinx]_  project and Docutils.
+`Sphinx`_  project and Docutils.
 
-.. [Sphinx] http://www.sphinx-doc.org/en/master/usage/restructuredtext/domains.html#the-restructuredtext-domain
+.. _Sphinx: `<http://www.sphinx-doc.org/en/master/usage/restructuredtext/domains.html#the-restructuredtext-domain>`
 
+
+See Also
+---------
 .. seealso::
 
-   `The Sphinx documentation project <http://www.sphinx-doc.org/en/master/>`_ has phenomenal documentation and provides a good reference when working with rst files.
+   `The Sphinx documentation project <http://www.sphinx-doc.org/en/master/>`_
+   has phenomenal documentation and provides a good reference when working
+   with rst files.
 
-
-   In addition the source for each page of the documentation
-   is easily obtainable from the "Show Source" button.
+   In addition the source for each page of the documentation is easily
+   obtainable from the "Show Source" button.
 
 .. seealso::
 
    `Image Options for rst directives from docutils
-   <http://docutils.sourceforge.net/docs/ref/rst/directives.html#image>`_ for details.
+   <http://docutils.sourceforge.net/docs/ref/rst/directives.html#image>`_
+   for details.
 
 .. seealso:: :ref:`configuration-values`
 
-   Check towards the bottom of this document to view all IPython configuration options.
+   Check towards the bottom of this document to view all IPython
+   configuration options.
 
 
 .. _ipython-directive-usage:
@@ -128,12 +145,10 @@ lengthier examples rather than a handful of shorter snippets.
 
 In addition, IPython's output and :data:`sys.stderr` will be
 inserted at doc build time, and the prompts will be renumbered starting
-from ``1``. For example, the prompt below is renumbered so as to follow the code
-block from above.
+from ``1``. For example, the prompt below is renumbered so as to follow
+the code block from above.
 
-
-.. why isn't this directive working?
-.. .. ipythontb::
+.. OH SHIT THIS DIRECTIVE WORKS!
 
 .. code-block:: ipythontb
 

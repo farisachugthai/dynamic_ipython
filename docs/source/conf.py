@@ -238,10 +238,10 @@ modindex_common_prefix = [
 # If true, keep warnings as "system message" paragraphs in the built documents.
 keep_warnings = False
 
-### Others:
+# Others:
 
 rst_prolog = """
-.. |ip| replace:: :class:`IPython.core.interactiveshell.InteractiveShell`
+.. |ip| replace:: :class:`~IPython.core.interactiveshell.InteractiveShell`
 """
 
 trim_doctest_flags = True
@@ -513,6 +513,7 @@ autosectionlabel_prefix_document = True
 # -- doctest ----------------------
 
 doctest_global_setup = '''
+import default_profile
 import IPython
 from IPython import get_ipython
 _ip = get_ipython()
@@ -559,6 +560,7 @@ import numpy as np
 # import scipy as sp
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+import default_profile
 np.random.seed(123)
 """
 plot_include_source = True
@@ -606,6 +608,7 @@ def parse_event(env, sig, signode):
     signode += plist
     return name
 
+
 def rstjinja(app, docname, source):
     """
     Render our pages as a jinja template for fancy templating goodness.
@@ -644,7 +647,7 @@ def setup(app):
     """
     app.connect("source-read", rstjinja)
     app.add_lexer('ipythontb', IPythonTracebackLexer)
-    app.add_lexer('ipy', IPyLexer())
+    app.add_lexer('ipy', IPyLexer)
 
     from sphinx.ext.autodoc import cut_lines
     from sphinx.util.docfields import GroupedField

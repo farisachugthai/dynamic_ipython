@@ -27,7 +27,7 @@ import sys
 import time
 from os import path
 
-from IPython import get_ipython
+from IPython import get_ipython, start_ipython
 
 
 def ipython_logger(shell=None):
@@ -50,9 +50,6 @@ def ipython_logger(shell=None):
         If the configured logger is already logging to todays date.
 
     """
-    if shell is None:
-        shell = get_ipython()
-
     log_dir = shell.profile_dir.log_dir
     fname = 'log-' + shell.profile + '-' + time.strftime('%Y-%m-%d') + ".py"
     logmode = 'append'
@@ -83,5 +80,4 @@ def ipython_logger(shell=None):
 
 if __name__ == "__main__":
     _ip = get_ipython()
-    if _ip is not None:
-        logger = ipython_logger(_ip)
+    logger = ipython_logger(_ip)

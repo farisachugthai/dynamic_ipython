@@ -17,6 +17,7 @@ These are the auto-generated API docs for IPython's startup.
    aliases
    41_numpy
    42_pandas
+   matplotlib_rc
    sysexcept
 
 

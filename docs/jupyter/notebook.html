@@ -1,0 +1,731 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Jupyter Notebook &#8212; Dynamic IPython: version0.0.2</title>
+    <link rel="stylesheet" href="../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/jupyter/notebook.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Extensions" href="../extensions.html" />
+    <link rel="prev" title="Jupyter QTConsole" href="qtconsole.html" />
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" type="text/css"
+  media="screen" charset="utf-8" />
+
+<link rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" type="text/css" media="screen" charset="utf-8" />
+
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../extensions.html" title="Extensions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="qtconsole.html" title="Jupyter QTConsole"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Dynamic IPython</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Jupyter Suite</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-jupyter_conf.jupyter_notebook_config">
+<span id="jupyter-notebook"></span><h1>Jupyter Notebook<a class="headerlink" href="#module-jupyter_conf.jupyter_notebook_config" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">from</span> <span class="nn">traitlets.config</span> <span class="kn">import</span> <span class="n">get_config</span>
+
+<span class="gp">In [2]: </span><span class="n">c</span> <span class="o">=</span> <span class="n">get_config</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Before we start the API documentation, let’s quick go over a traceback
+I just got.</p>
+<div class="highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">I</span> <span class="mi">20</span><span class="p">:</span><span class="mi">39</span><span class="p">:</span><span class="mf">53.393</span> <span class="n">NotebookApp</span><span class="p">]</span> <span class="n">Writing</span> <span class="n">notebook</span><span class="o">-</span><span class="n">signing</span> <span class="n">key</span> <span class="n">to</span>
+<span class="ne">C</span>:\Users\faris\AppData\Roaming\jupyter\notebook_secret
+
+<span class="p">[</span><span class="n">E</span> <span class="mi">20</span><span class="p">:</span><span class="mi">39</span><span class="p">:</span><span class="mf">56.336</span> <span class="n">NotebookApp</span><span class="p">]</span> <span class="n">Uncaught</span> <span class="n">exception</span> <span class="n">POST</span> <span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">sessions</span> <span class="p">(::</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">HTTPServerRequest</span><span class="p">(</span><span class="n">protocol</span><span class="o">=</span><span class="s1">&#39;http&#39;</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s1">&#39;localhost:8888&#39;</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="n">uri</span><span class="o">=</span><span class="s1">&#39;/api/sessions&#39;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;HTTP/1.1&#39;</span><span class="p">,</span> <span class="n">remote_ip</span><span class="o">=</span><span class="s1">&#39;::1&#39;</span><span class="p">)</span>
+
+<span class="n">Traceback</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">):</span>
+
+<span class="n">File</span> <span class="s2">&quot;c:\users</span><span class="se">\f</span><span class="s2">aris\projects\dynamic_ipython\.venv\lib\site-packages</span><span class="se">\t</span><span class="s2">ornado\web.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">1699</span><span class="p">,</span> <span class="ow">in</span> <span class="n">_execute</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">await</span> <span class="n">result</span>
+
+<span class="n">File</span> <span class="s2">&quot;c:\users</span><span class="se">\f</span><span class="s2">aris\projects\dynamic_ipython\.venv\lib\site-packages</span><span class="se">\t</span><span class="s2">ornado\gen.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">742</span><span class="p">,</span> <span class="ow">in</span> <span class="n">run</span>
+
+<span class="n">yielded</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gen</span><span class="o">.</span><span class="n">throw</span><span class="p">(</span>\<span class="o">*</span><span class="n">exc_info</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+<span class="n">File</span> <span class="s2">&quot;c:\users</span><span class="se">\f</span><span class="s2">aris\projects\dynamic_ipython\.venv\lib\site-packages</span><span class="se">\n</span><span class="s2">otebook\services\sessions\handlers.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">72</span><span class="p">,</span> <span class="ow">in</span> <span class="n">post</span> <span class="nb">type</span><span class="o">=</span><span class="n">mtype</span><span class="p">))</span>
+
+<span class="n">File</span> <span class="s2">&quot;c:\users</span><span class="se">\f</span><span class="s2">aris\projects\dynamic_ipython\.venv\lib\site-packages</span><span class="se">\t</span><span class="s2">ornado\gen.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">735</span><span class="p">,</span> <span class="ow">in</span> <span class="n">run</span>
+
+<span class="n">value</span> <span class="o">=</span> <span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+
+<span class="n">File</span> <span class="s2">&quot;c:\users</span><span class="se">\f</span><span class="s2">aris\projects\dynamic_ipython\.venv\lib\site-packages</span><span class="se">\t</span><span class="s2">ornado\gen.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">742</span><span class="p">,</span> <span class="ow">in</span> <span class="n">run</span>
+
+<span class="n">yielded</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gen</span><span class="o">.</span><span class="n">throw</span><span class="p">(</span>\<span class="o">*</span><span class="n">exc_info</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+<span class="n">File</span> <span class="s2">&quot;c:\users</span><span class="se">\f</span><span class="s2">aris\projects\dynamic_ipython\.venv\lib\site-packages</span><span class="se">\n</span><span class="s2">otebook\services\sessions\sessionmanager.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">88</span><span class="p">,</span> <span class="ow">in</span> <span class="n">create_session</span>
+
+
+<span class="n">kernel_id</span> <span class="o">=</span> <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_kernel_for_session</span><span class="p">(</span><span class="n">session_id</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">kernel_name</span><span class="p">)</span>
+
+<span class="n">File</span> <span class="s2">&quot;c:\users</span><span class="se">\f</span><span class="s2">aris\projects\dynamic_ipython\.venv\lib\site-packages</span><span class="se">\t</span><span class="s2">ornado\gen.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">735</span><span class="p">,</span> <span class="ow">in</span> <span class="n">run</span>
+
+<span class="n">value</span> <span class="o">=</span> <span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+
+<span class="n">File</span> <span class="s2">&quot;c:\users</span><span class="se">\f</span><span class="s2">aris\projects\dynamic_ipython\.venv\lib\site-packages</span><span class="se">\t</span><span class="s2">ornado\gen.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">742</span><span class="p">,</span> <span class="ow">in</span> <span class="n">run</span>
+
+<span class="n">yielded</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gen</span><span class="o">.</span><span class="n">throw</span><span class="p">(</span>\<span class="o">*</span><span class="n">exc_info</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+<span class="n">File</span> <span class="s2">&quot;c:\users</span><span class="se">\f</span><span class="s2">aris\projects\dynamic_ipython\.venv\lib\site-packages</span><span class="se">\n</span><span class="s2">otebook\services\sessions\sessionmanager.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">101</span><span class="p">,</span> <span class="ow">in</span> <span class="n">start_kernel_for_session</span>
+
+<span class="bp">self</span><span class="o">.</span><span class="n">kernel_manager</span><span class="o">.</span><span class="n">start_kernel</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">kernel_path</span><span class="p">,</span> <span class="n">kernel_name</span><span class="o">=</span><span class="n">kernel_name</span><span class="p">)</span>
+
+<span class="n">File</span> <span class="s2">&quot;c:\users</span><span class="se">\f</span><span class="s2">aris\projects\dynamic_ipython\.venv\lib\site-packages</span><span class="se">\t</span><span class="s2">ornado\gen.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">735</span><span class="p">,</span> <span class="ow">in</span> <span class="n">run</span>
+
+<span class="n">value</span> <span class="o">=</span> <span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+
+<span class="n">File</span> <span class="s2">&quot;c:\users</span><span class="se">\f</span><span class="s2">aris\projects\dynamic_ipython\.venv\lib\site-packages</span><span class="se">\t</span><span class="s2">ornado\gen.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">209</span><span class="p">,</span> <span class="ow">in</span> <span class="n">wrapper</span>
+
+<span class="n">yielded</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+<span class="n">File</span> <span class="s2">&quot;c:\users</span><span class="se">\f</span><span class="s2">aris\projects\dynamic_ipython\.venv\lib\site-packages</span><span class="se">\n</span><span class="s2">otebook\services\kernels\kernelmanager.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">168</span><span class="p">,</span> <span class="ow">in</span> <span class="n">start_kernel</span>
+
+<span class="nb">super</span><span class="p">(</span><span class="n">MappingKernelManager</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">start_kernel</span><span class="p">(</span>\<span class="o">*</span>\<span class="o">*</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="n">File</span> <span class="s2">&quot;c:\users</span><span class="se">\f</span><span class="s2">aris\projects\dynamic_ipython\.venv\lib\site-packages\jupyter_client\multikernelmanager.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">110</span><span class="p">,</span> <span class="ow">in</span>
+<span class="n">start_kernel</span>
+
+<span class="n">km</span><span class="o">.</span><span class="n">start_kernel</span><span class="p">(</span>\<span class="o">*</span>\<span class="o">*</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="n">File</span> <span class="s2">&quot;c: \users</span><span class="se">\f</span><span class="s2">aris\projects\dynamic_ipython\.venv\lib\site-packages\jupyter_client\manager.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">240</span><span class="p">,</span> <span class="ow">in</span>
+<span class="n">start_kernel</span>
+
+<span class="bp">self</span><span class="o">.</span><span class="n">write_connection_file</span><span class="p">()</span>
+
+<span class="n">File</span> <span class="s2">&quot;c:\users</span><span class="se">\f</span><span class="s2">aris\projects\dynamic_ipython\.venv\lib\site-packages\jupyter_client\connect.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">547</span><span class="p">,</span> <span class="ow">in</span> <span class="n">write_connection_file</span>
+
+<span class="n">kernel_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">kernel_name</span>
+
+<span class="n">File</span> <span class="s2">&quot;c:\users</span><span class="se">\f</span><span class="s2">aris\projects\dynamic_ipython\.venv\lib\site-packages\jupyter_client\connect.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">212</span><span class="p">,</span> <span class="ow">in</span> <span class="n">write_connection_file</span>
+
+<span class="k">with</span> <span class="n">secure_write</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+
+<span class="n">File</span> <span class="s2">&quot;C:</span><span class="se">\t</span><span class="s2">ools\miniconda3\Lib\contextlib.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">112</span><span class="p">,</span> <span class="ow">in</span> <span class="fm">__enter__</span>
+
+<span class="k">return</span> <span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span> <span class="n">gen</span><span class="p">)</span>
+
+<span class="n">File</span> <span class="s2">&quot;c:\users</span><span class="se">\f</span><span class="s2">aris\projects\dynamic_ipython\.venv\lib\site-packages\jupyter_client\connect.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">100</span><span class="p">,</span> <span class="ow">in</span> <span class="n">secure_write</span>
+
+<span class="n">win32_restrict_file_to_user</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+
+<span class="n">File</span> <span class="s2">&quot;c:\users</span><span class="se">\f</span><span class="s2">aris\projects\dynamic_ipython\.venv\lib\site-packages\jupyter_client\connect.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">53</span><span class="p">,</span> <span class="ow">in</span> <span class="n">win32_restrict_file_to_user</span>
+
+<span class="kn">import</span> <span class="nn">win32api</span>
+
+<span class="ne">ImportError</span>: DLL load failed: The specified procedure could not be found.
+</pre></div>
+</div>
+<p>Well that was absurd to read but what is that DLL that we need to load, why
+isn’t it there and what can we do?</p>
+<div class="section" id="jupyterapp-application-configuration">
+<h2>JupyterApp(Application) configuration<a class="headerlink" href="#jupyterapp-application-configuration" title="Permalink to this headline">¶</a></h2>
+<p>Answer yes to any prompts.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">JupyterApp</span><span class="o">.</span><span class="n">answer_yes</span> <span class="o">=</span> <span class="bp">False</span>
+</pre></div>
+</div>
+<p>Full path of a config file.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">JupyterApp</span><span class="o">.</span><span class="n">config_file</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
+<p>Specify a config file to load.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">JupyterApp</span><span class="o">.</span><span class="n">config_file_name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
+<p>Generate default config file.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">JupyterApp</span><span class="o">.</span><span class="n">generate_config</span> <span class="o">=</span> <span class="bp">False</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="notebookapp-jupyterapp-configuration">
+<h2>NotebookApp(JupyterApp) configuration<a class="headerlink" href="#notebookapp-jupyterapp-configuration" title="Permalink to this headline">¶</a></h2>
+<p>Set the Access-Control-Allow-Credentials: true header:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">allow_credentials</span> <span class="o">=</span> <span class="bp">False</span>
+</pre></div>
+</div>
+<p>Set the Access-Control-Allow-Origin header
+Use ‘*’ to allow any origin to access your server.
+Takes precedence over allow_origin_pat.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">allow_origin</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
+<p>Use a regular expression for the Access-Control-Allow-Origin header
+Requests from an origin matching the expression will get replies with:</p>
+<blockquote>
+<div><p>Access-Control-Allow-Origin: origin</p>
+</div></blockquote>
+<p>where <code class="xref py py-obj docutils literal notranslate"><span class="pre">origin</span></code> is the origin of the request.
+Ignored if allow_origin is set.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">allow_origin_pat</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
+<p>Allow password to be changed at login for the notebook server.
+While logging in with a token, the notebook server UI will give the opportunity
+to the user to enter a new password at the same time that will replace the
+token login mechanism.
+This can be set to false to prevent changing password from the UI/API.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">allow_password_change</span> <span class="o">=</span> <span class="bp">True</span>
+</pre></div>
+</div>
+<p>Allow requests where the Host header doesn’t point to a local server
+By default, requests get a 403 forbidden response if the ‘Host’ header shows
+that the <span class="target" id="index-0"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">browser</span></code> thinks it’s on a non-local domain.</p>
+<p>Setting this option to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a> disables this check.</p>
+<p>This protects against ‘DNS rebinding’ attacks, where a remote web server
+serves you a page and then changes its DNS to send later requests to a local
+IP, bypassing same-origin checks.</p>
+<p>Local IP addresses (such as 127.0.0.1 and ::1) are allowed as local, along
+with hostnames configured in local_hostnames.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">allow_remote_access</span> <span class="o">=</span> <span class="bp">False</span>
+</pre></div>
+</div>
+<p>Whether to allow the user to run the notebook as root.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">allow_root</span> <span class="o">=</span> <span class="bp">False</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>use <code class="xref py py-obj docutils literal notranslate"><span class="pre">c.NotebookApp.base_url</span></code></p>
+</div>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">base_project_url</span> <span class="o">=</span> <span class="s1">&#39;/&#39;</span>
+</pre></div>
+</div>
+<p>The base URL for the notebook server.</p>
+<p>Leading and trailing slashes can be omitted, and will automatically be added.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">base_url</span> <span class="o">=</span> <span class="s1">&#39;/&#39;</span>
+</pre></div>
+</div>
+<p>Specify what command to use to invoke a web <span class="target" id="index-1"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">browser</span></code> when opening
+the notebook.</p>
+<p>If not specified, the default browser will be determined by
+the <a class="reference external" href="https://docs.python.org/3/library/webbrowser.html#module-webbrowser" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">webbrowser</span></code></a> standard library module, which allows setting
+of the <span class="target" id="index-2"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">browser</span></code> environment variable to override it.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">browser</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
+<p>The full path to an SSL/TLS certificate file.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">certfile</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
+<p>The full path to a certificate authority certificate for SSL/TLS client
+authentication.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">client_ca</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
+<p>Full path of a config file.
+Default: ‘’:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">config_file</span><span class="o">=&lt;</span><span class="n">Unicode</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>Specify a config file to load.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">config_file_name</span><span class="o">=&lt;</span><span class="n">Unicode</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>The config manager class to use.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">config_manager_class</span> <span class="o">=</span> <span class="s1">&#39;notebook.services.config.manager.ConfigManager&#39;</span>
+</pre></div>
+</div>
+<p>The notebook manager class to use.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">contents_manager_class</span> <span class="o">=</span> <span class="s1">&#39;notebook.services.contents.largefilemanager.LargeFileManager&#39;</span>
+</pre></div>
+</div>
+<p>Extra keyword arguments to pass to <code class="xref py py-obj docutils literal notranslate"><span class="pre">set_secure_cookie</span></code>. See tornado’s
+set_secure_cookie docs for details.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">cookie_options</span> <span class="o">=</span> <span class="p">{}</span>
+</pre></div>
+</div>
+<p>The random bytes used to secure cookies. By default this is a new random
+number every time you start the Notebook. Set it to a value in a config file
+to enable logins to persist across server sessions.
+Note: Cookie secrets should be kept private, do not share config files with
+cookie_secret stored in plaintext (you can read the value from a file).:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">cookie_secret</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
+<p>The file where the cookie secret is stored.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">cookie_secret_file</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
+<p>Override URL shown to users.
+Replace actual URL, including protocol, address, port and base URL, with the
+given value when displaying URL to the users. Do not change the actual
+connection URL. If authentication token is enabled, the token is added to the
+custom URL automatically.</p>
+<p>This option is intended to be used when the URL to display to the user cannot
+be determined reliably by the Jupyter notebook server (proxified or
+containerized setups for example).:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">custom_display_url</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
+<p>The default URL to redirect to from <kbd class="kbd docutils literal notranslate">/</kbd>.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">default_url</span> <span class="o">=</span> <span class="s1">&#39;/tree&#39;</span>
+</pre></div>
+</div>
+<p>Disable cross-site-request-forgery protection
+Jupyter notebook 4.3.1 introduces protection from cross-site request
+forgeries, requiring API requests to either:
+Originate from pages served by this server (validated with XSRF cookie and
+token), or authenticate with a token</p>
+<p>Some anonymous compute resources still desire the ability to run code,
+completely without authentication. These services can disable
+all authentication and security checks, with the full knowledge of
+what that implies.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">disable_check_xsrf</span> <span class="o">=</span> <span class="bp">False</span>
+</pre></div>
+</div>
+<p>Whether to enable MathJax for typesetting math/Tex.
+MathJax is the javascript library Jupyter uses to render math/LaTeX. It is
+very large, so you may want to disable it if you have a slow internet
+connection, or for offline use of the notebook.
+When disabled, equations etj. Will appear as their untransformed TeX source.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">enable_mathjax</span> <span class="o">=</span> <span class="bp">True</span>
+</pre></div>
+</div>
+<p>Extra paths to look for Javascript notebook extensions:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">extra_nbextensions_path</span> <span class="o">=</span> <span class="p">[]</span>
+</pre></div>
+</div>
+<p>Handlers that should be loaded at higher priority than the default services.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">extra_services</span> <span class="o">=</span> <span class="p">[]</span>
+</pre></div>
+</div>
+<p>Extra paths to search for serving static files.
+This allows adding javascript/css to be available from the notebook server
+machine, or overriding individual files in the IPython notebook.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">extra_static_paths</span> <span class="o">=</span> <span class="p">[]</span>
+</pre></div>
+</div>
+<p>Extra paths to search for serving Jinja templates.
+Can be used to override templates from notebook.templates.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">extra_template_paths</span> <span class="o">=</span> <span class="p">[]</span>
+</pre></div>
+</div>
+<p>So apparently there’s no help text for this one.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">file_to_run</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
+<p>Extra keyword arguments to pass to <code class="xref py py-obj docutils literal notranslate"><span class="pre">get_secure_cookie</span></code>. See tornado’s
+get_secure_cookie docs for details.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">get_secure_cookie_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+</pre></div>
+</div>
+<p>Deprecated: Use minified JS file or not, mainly use during dev to avoid JS
+recompilation.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">ignore_minified_js</span> <span class="o">=</span> <span class="bp">False</span>
+</pre></div>
+</div>
+<p>(bytes/sec) Maximum rate at which stream output can be sent on iopub before
+they are limited.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">iopub_data_rate_limit</span> <span class="o">=</span> <span class="mi">1000000</span>
+</pre></div>
+</div>
+<p>Maximum rate at which messages can be sent on iopub before they are
+limited. (Msgs/sec):</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">iopub_msg_rate_limit</span> <span class="o">=</span> <span class="mi">1000</span>
+</pre></div>
+</div>
+<p>The IP address the notebook server will listen on.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">ip</span> <span class="o">=</span> <span class="s1">&#39;localhost&#39;</span>
+</pre></div>
+</div>
+<p>Supply extra arguments that will be passed to Jinja environment.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">jinja_environment_options</span> <span class="o">=</span> <span class="p">{}</span>
+</pre></div>
+</div>
+<p>Extra variables to supply to Jinja templates when rendering.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">jinja_template_vars</span> <span class="o">=</span> <span class="p">{}</span>
+</pre></div>
+</div>
+<p>The kernel manager class to use.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">kernel_manager_class</span> <span class="o">=</span> <span class="s1">&#39;notebook.services.kernels.kernelmanager.MappingKernelManager&#39;</span>
+</pre></div>
+</div>
+<p>The kernel spec manager class to use. Should be a subclass of
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">jupyter_client.kernelspej.KernelSpecManager</span></code>.
+The API of KernelSpecManager is provisional and might change without warning
+between this version of Jupyter and the next stable one.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">kernel_spec_manager_class</span> <span class="o">=</span> <span class="s1">&#39;jupyter_client.kernelspec.KernelSpecManager&#39;</span>
+</pre></div>
+</div>
+<p>The full path to a private key file for usage with SSL/TLS.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">keyfile</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
+<p>Hostnames to allow as local when allow_remote_access is False.
+Local IP addresses (such as 127.0.0.1 and ::1) are automatically accepted as
+local as well.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">local_hostnames</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;localhost&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The login handler class to use.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">login_handler_class</span> <span class="o">=</span> <span class="s1">&#39;notebook.auth.login.LoginHandler&#39;</span>
+</pre></div>
+</div>
+<p>The logout handler class to use.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">logout_handler_class</span> <span class="o">=</span> <span class="s1">&#39;notebook.auth.logout.LogoutHandler&#39;</span>
+</pre></div>
+</div>
+<p>The MathJax.js configuration file that is to be used.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">mathjax_config</span> <span class="o">=</span> <span class="s1">&#39;TeX-AMS-MML_HTMLorMML-full,Safe&#39;</span>
+</pre></div>
+</div>
+<p>A custom url for MathJax.js. Should be in the form of a case-sensitive url to
+MathJax, for example:  /static/components/MathJax/MathJax.js:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">mathjax_url</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>max_body_size is applied even in streaming mode.</p>
+</div>
+<p>Sets the maximum allowed size of the client request body, specified in  the
+Content-Length request header field. If the size in a request  exceeds the
+configured value, a malformed <code class="xref py py-mod docutils literal notranslate"><span class="pre">HTTP</span></code> message is returned to the client.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">max_body_size</span> <span class="o">=</span> <span class="mi">536870912</span>
+</pre></div>
+</div>
+<p>Gets or sets the maximum amount of memory, in bytes, that is allocated  for
+use by the buffer manager.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">max_buffer_size</span> <span class="o">=</span> <span class="mi">536870912</span>
+</pre></div>
+</div>
+<p>Dict of Python modules to load as notebook server extensions.Entry values can
+be used to enable and disable the loading of the extensions. The extensions
+will be loaded in alphabetical order.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">nbserver_extensions</span> <span class="o">=</span> <span class="p">{}</span>
+</pre></div>
+</div>
+<p>The directory to use for notebooks and kernels.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">notebook_dir</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
+<p>Whether to open in a <span class="target" id="index-3"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">browser</span></code> after starting.</p>
+<p>The specific <span class="target" id="index-4"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">browser</span></code> used is
+platform dependent and determined by the python standard library <a class="reference external" href="https://docs.python.org/3/library/webbrowser.html#module-webbrowser" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">webbrowser</span></code></a>
+module, unless it is overridden using the <span class="target" id="index-5"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">browser</span></code>
+(NotebookApp.browser) configuration option.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">open_browser</span> <span class="o">=</span> <span class="bp">True</span>
+</pre></div>
+</div>
+<p>Hashed password to use for web authentication.</p>
+<p>To generate, type in a python/IPython shell:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">notebook.auth</span> <span class="kn">import</span> <span class="n">passwd</span><span class="p">;</span> <span class="n">passwd</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The string should be of the form <code class="docutils literal notranslate"><span class="pre">type:salt:hashed-password</span></code>.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">password</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
+<p>Forces users to use a password for the Notebook server. This is useful in a
+multi user environment, for instance when everybody in the LAN can access each
+other’s machine through <strong class="command">ssh</strong>.</p>
+<p>In such a case, server the notebook server on localhost is not secure since
+any user can connect to the notebook server via <strong class="command">ssh</strong>.</p>
+<blockquote>
+<div><p>c.NotebookApp.password_required = False</p>
+</div></blockquote>
+<p>The port the notebook server will listen on.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="mi">8888</span>
+</pre></div>
+</div>
+<p>The number of additional ports to try if the specified port is not available.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">port_retries</span> <span class="o">=</span> <span class="mi">50</span>
+</pre></div>
+</div>
+<p>DISABLED: use <code class="xref py py-obj docutils literal notranslate"><span class="pre">%pylab</span></code> or <code class="xref py py-obj docutils literal notranslate"><span class="pre">%matplotlib</span></code> in the notebook to enable matplotlib.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">pylab</span> <span class="o">=</span> <span class="s1">&#39;disabled&#39;</span>
+</pre></div>
+</div>
+<p>If True, display a button in the dashboard to quit (shutdown the notebook
+server).:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">quit_button</span> <span class="o">=</span> <span class="bp">True</span>
+</pre></div>
+</div>
+<p>(sec) Time window used to check the message and data rate limits.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">rate_limit_window</span> <span class="o">=</span> <span class="mi">3</span>
+</pre></div>
+</div>
+<p>The directory for user settings.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">LabApp</span><span class="o">.</span><span class="n">user_settings_dir</span> <span class="o">=</span> <span class="s1">&#39;.jupyter/lab/user-settings&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="fswatcher">
+<h2>fswatcher<a class="headerlink" href="#fswatcher" title="Permalink to this headline">¶</a></h2>
+<p>Whether to serve the app in watch mode.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">LabApp</span><span class="o">.</span><span class="n">watch</span> <span class="o">=</span> <span class="bp">False</span>
+</pre></div>
+</div>
+<p>The directory for workspaces.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">LabApp</span><span class="o">.</span><span class="n">workspaces_dir</span> <span class="o">=</span> <span class="s1">&#39;.jupyter/lab/workspaces&#39;</span>
+</pre></div>
+</div>
+<p>Supply SSL options for the tornado HTTPServer. See the tornado docs for
+details.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">ssl_options</span> <span class="o">=</span> <span class="p">{}</span>
+</pre></div>
+</div>
+<p>Supply overrides for <code class="docutils literal notranslate"><span class="pre">terminado</span></code>. Currently only supports “shell_command”.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">terminado_settings</span> <span class="o">=</span> <span class="p">{}</span>
+</pre></div>
+</div>
+<p>Set to False to disable terminals.</p>
+<p>This does <em>not</em> make the notebook server more secure by itself. Anything the
+user can in a terminal, they can also do in a notebook.</p>
+<p>Terminals may also be automatically disabled if the <code class="docutils literal notranslate"><span class="pre">terminado</span></code> package
+is not available.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">terminals_enabled</span> <span class="o">=</span> <span class="bp">True</span>
+</pre></div>
+</div>
+<p>Token used for authenticating first-time connections to the server.</p>
+<p>When no password is enabled, the default is to generate a new, <a class="reference external" href="https://docs.python.org/3/library/random.html#module-random" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">random</span></code></a>
+token.</p>
+<p>Setting to an empty string disables authentication altogether, which is NOT
+RECOMMENDED.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">token</span> <span class="o">=</span> <span class="s1">&#39;&lt;generated&gt;&#39;</span>
+</pre></div>
+</div>
+<p>Supply overrides for the tornado.web.Application that the Jupyter notebook
+uses.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">tornado_settings</span> <span class="o">=</span> <span class="p">{}</span>
+</pre></div>
+</div>
+<p>Whether to trust or not X-Scheme/X-Forwarded-Proto and X-Real-Ip/X-Forwarded-
+For headers sent by the upstream reverse proxy. Necessary if the proxy handles
+SSL.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">trust_xheaders</span> <span class="o">=</span> <span class="bp">False</span>
+</pre></div>
+</div>
+<p>DEPRECATED, use tornado_settings.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">webapp_settings</span> <span class="o">=</span> <span class="p">{}</span>
+</pre></div>
+</div>
+<p>Set the tornado compression options for <code class="docutils literal notranslate"><span class="pre">websocket</span></code> connections.</p>
+<p>This value will be returned from
+<code class="docutils literal notranslate"><span class="pre">WebSocketHandler.get_compression_options</span></code>.</p>
+<p>None (default) will disable compression.</p>
+<p>A <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a> (even an empty one) will enable compression.</p>
+<p>See the tornado docs for <code class="docutils literal notranslate"><span class="pre">WebSocketHandler.get_compression_options</span></code>
+for details.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">websocket_compression_options</span> <span class="o">=</span> <span class="bp">None</span>
+</pre></div>
+</div>
+<p>The base URL for <code class="docutils literal notranslate"><span class="pre">websockets</span></code>, if it differs from the <a class="reference external" href="https://docs.python.org/3/library/http.html#module-http" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">http</span></code></a>
+server (hint: it almost certainly doesn’t).:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">websocket_url</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
+<p>Should be in the form of an <a class="reference external" href="https://docs.python.org/3/library/http.html#module-http" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">http</span></code></a> origin:</p>
+<p><code class="docutils literal notranslate"><span class="pre">ws[s]://hostname[:port]</span></code></p>
+</div>
+<div class="section" id="nteractapp-notebookapp-configuration">
+<h2>NteractApp(NotebookApp) configuration<a class="headerlink" href="#nteractapp-notebookapp-configuration" title="Permalink to this headline">¶</a></h2>
+<p>Application for running <strong class="command">nteract</strong> on a jupyter notebook server.</p>
+<p>Whether to start the app in dev mode. Expects resources to be loaded from
+Webpack’s hot reloading server at <a class="reference external" href="http://localhost:8357">http://localhost:8357</a>. Run</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">yarn workspace nteract-on-jupyter run hot --port 8357</span>
+</pre></div>
+</div>
+<p>To serve your assets. This is only useful if NteractApp is installed
+in editable mode e.g., using:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">%</span>pip install -e .
+</pre></div>
+</div>
+<p>In addition, the Jupyter configuration file must be modified like so:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NteractApp</span><span class="o">.</span><span class="n">dev_mode</span> <span class="o">=</span> <span class="bp">False</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="image-handlers">
+<h2>Image Handlers<a class="headerlink" href="#image-handlers" title="Permalink to this headline">¶</a></h2>
+<p>Need to set something up for the Jupyter Console image handler.
+Same thing for QTConsole.</p>
+<p>Callable object called via ‘callable’ image handler with one argument,
+<code class="docutils literal notranslate"><span class="pre">data</span></code>, which is <code class="docutils literal notranslate"><span class="pre">msg[&quot;content&quot;][&quot;data&quot;]**</span></code> where <em>msg</em> is the
+message from the iopub channel.</p>
+<p>For example, you can find <a class="reference external" href="https://docs.python.org/3/library/base64.html#module-base64" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">base64</span></code></a> encoded PNG data as
+<em>data[‘image/png’]</em>. If your function can’t handle the data supplied, it
+should return <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a> to indicate this.</p>
+<p>Handler for image type output.</p>
+<p>This is useful, for example, when connecting to the kernel in which
+pylab inline back-end is activated.</p>
+<p>There are four handlers defined.</p>
+<ol class="arabic">
+<li><p>‘PIL’: Use Python Imaging Library to pop-up image;</p></li>
+<li><p>‘stream’: Use an external program to show the image.  Image will be fed into
+the <a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stdin" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stdin</span></code></a> of the program.</p></li>
+</ol>
+<blockquote>
+<div><ul>
+<li><p>You will need to configure <code class="docutils literal notranslate"><span class="pre">stream_image_handler</span></code></p></li>
+</ul>
+</div></blockquote>
+<ol class="arabic">
+<li><p>‘tempfile’: Use an external program to show the image.  Image will be saved in
+a temporary file and the program will be called with that file.</p>
+<ul>
+<li><p>You will need to configure <code class="docutils literal notranslate"><span class="pre">tempfile_image_handler</span></code></p></li>
+</ul>
+</li>
+<li><p>‘callable’: You can set any Python callable which is called with the
+image data.</p>
+<ul>
+<li><p>You will need to configure <code class="docutils literal notranslate"><span class="pre">callable_image_handler</span></code>.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">ZMQTerminalInteractiveShell</span><span class="o">.</span><span class="n">image_handler</span> <span class="o">=</span> <span class="s1">&#39;PIL&#39;</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+</ol>
+<p>That’s the default text for the Jupyter consoles (both non-GUI and QT).</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Jupyter Suite</a><ul>
+      <li>Previous: <a href="qtconsole.html" title="previous chapter">Jupyter QTConsole</a></li>
+      <li>Next: <a href="../extensions.html" title="next chapter">Extensions</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+
+<h3><a href="../index.html">Table of Contents</a></h3>
+
+<div>&nbsp;</div>
+<div id="sidebartoc">
+<p class="caption"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../jobcontrol.html">Job Control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../exceptions.html">Customized Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../subcommands.html">Subcommands in IPython and Jupyter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sphinxext.html">IPython Sphinx Directive</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lexer.html">New IPython Console Lexer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sphinx_api_docs.html">Sphinx API docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../custom_doctests.html">Custom Doctests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev.html">Developers Notes</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../startup/index.html">IPython API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../util/index.html">IPython Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../kernel.html">IPython Kernel</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">jupyter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../extensions.html">Extensions</a></li>
+</ul>
+
+
+
+</div>
+
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/jupyter/notebook.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+
+<h3><a href="../index.html">On This Page:</a></h3>
+
+<div>&nbsp;</div>
+<div id="sidebartoc">
+  <ul>
+<li><a class="reference internal" href="#">Jupyter Notebook</a><ul>
+<li><a class="reference internal" href="#jupyterapp-application-configuration">JupyterApp(Application) configuration</a></li>
+<li><a class="reference internal" href="#notebookapp-jupyterapp-configuration">NotebookApp(JupyterApp) configuration</a></li>
+<li><a class="reference internal" href="#fswatcher">fswatcher</a></li>
+<li><a class="reference internal" href="#nteractapp-notebookapp-configuration">NteractApp(NotebookApp) configuration</a></li>
+<li><a class="reference internal" href="#image-handlers">Image Handlers</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../extensions.html" title="Extensions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="qtconsole.html" title="Jupyter QTConsole"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Dynamic IPython</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Jupyter Suite</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+      Last updated on Oct 04, 2019.
+    </div>
+  </body>
+</html>

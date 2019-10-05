@@ -18,7 +18,7 @@ to a :command:`bash` system shell, and Windows will have :command:`dosbatch` or
 
 Overview
 --------
-This module utilizes ``_ip``, the global :mod:`IPython` |ip|
+This module utilizes ``_ip``, the global |ip|
 instance, and fills the ``user_ns`` with aliases that are available
 in a typical system shell.
 
@@ -123,6 +123,64 @@ Below is the source code for the function
        magic_name=name)
 
 
+Roadmap
+-------
+
+Create a class with instance attributes for `sys.platform`.
+Break linux up like so::
+
+    class AliasOSAgnostic:
+
+        def __init__(self):
+            self._sys.platform = sys.platform().lower()
+
+        @property
+        def has_alias(self):
+            return ....
+
+    class LinuxAlias(AliasOSAgnostic):
+
+        def busybox(self):
+            aliases = [
+                ('cd', 'cd foo %l'),
+                ...
+                ('ls', 'ls -F --color=always %l)
+            ]
+
+        def standardubuntu(self):
+            aliases = [
+                ('ag', 'ag -l %l')
+                ('rg', 'way too many options')
+            ]
+
+Then maybe implement either a factory function or a factory manager but
+I haven't fleshed that part out in my head.
+
+This may have to take the backburner as I reorganize the rest of
+the repo.
+
+
+If you're breaking up Linux functionality, may I recommend the
+following man page to reference?:
+
+
+   BASH-BUILTINS(7)          Miscellaneous Information Manual          BASH-BUILTINS(7)
+
+   NAME
+         bash-builtins - bash built-in commands, see bash(1)
+
+   SYNOPSIS
+         bash defines the following built-in commands: :, ., [, alias, bg, bind,
+         break, builtin, case, cd, command, compgen, complete, continue,
+         declare, dirs, disown, echo, enable, eval, exec, exit, export, fc, fg,
+         getopts, hash, help, history, if, jobs, kill, let, local, logout, popd,
+         printf, pushd, pwd, read, readonly, return, set, shift, shopt, source,
+         suspend, test, times, trap, type, typeset, ulimit, umask, unalias,
+         unset, until, wait, while.
+
+
+I think that :command:`declare -f` could have a nice tie in to
+`inspect.is_function()` or whatever.
 
 .. _aliases-api-docs:
 

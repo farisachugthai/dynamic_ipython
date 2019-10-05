@@ -108,9 +108,27 @@
                 </p>
               </div>
               <p>
-                The IPython console lexer has been rewritten and now supports
-                tracebacks and customized input/output prompts. An entire suite
-                of lexers is now available at
+                The
+                <a
+                  class="reference external"
+                  href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython"
+                  title="(in IPython v7.8.0)"
+                  ><code class="xref py py-mod docutils literal notranslate"
+                    ><span class="pre">IPython</span></code
+                  ></a
+                >
+                console lexer has been rewritten and now supports syntax
+                highglighting and documentation builds for a
+                <a
+                  class="reference external"
+                  href="https://docs.python.org/3/library/traceback.html#module-traceback"
+                  title="(in Python v3.7)"
+                  ><code class="xref py py-mod docutils literal notranslate"
+                    ><span class="pre">traceback</span></code
+                  ></a
+                >
+                with customized input/output prompts. An entire suite of lexers
+                is now available at
                 <a
                   class="reference external"
                   href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.lib.lexers.html#module-IPython.lib.lexers"
@@ -121,9 +139,14 @@
                 >. These include:
               </p>
               <dl class="class">
-                <dt>
-                  <code class="sig-name descname"
-                    >IPythonLexer, IPython3Lexer</code
+                <dt id="IPythonLexer">
+                  <em class="property">class </em
+                  ><code class="sig-name descname">IPythonLexer</code
+                  ><a
+                    class="headerlink"
+                    href="#IPythonLexer"
+                    title="Permalink to this definition"
+                    >¶</a
                   >
                 </dt>
                 <dd>
@@ -132,9 +155,31 @@
               </dl>
 
               <dl class="class">
-                <dt>
-                  <code class="sig-name descname"
-                    >IPythonPartialTracebackLexer, IPythonTracebackLexer</code
+                <dt id="IPython3Lexer">
+                  <em class="property">class </em
+                  ><code class="sig-name descname">IPython3Lexer</code
+                  ><a
+                    class="headerlink"
+                    href="#IPython3Lexer"
+                    title="Permalink to this definition"
+                    >¶</a
+                  >
+                </dt>
+                <dd>
+                  <p>Lexers for pure IPython (python + magic/shell commands)</p>
+                </dd>
+              </dl>
+
+              <dl class="class">
+                <dt id="IPythonPartialTracebackLexer">
+                  <em class="property">class </em
+                  ><code class="sig-name descname"
+                    >IPythonPartialTracebackLexer</code
+                  ><a
+                    class="headerlink"
+                    href="#IPythonPartialTracebackLexer"
+                    title="Permalink to this definition"
+                    >¶</a
                   >
                 </dt>
                 <dd>
@@ -143,8 +188,29 @@
                     <code class="xref py py-obj docutils literal notranslate"
                       ><span class="pre">python3</span></code
                     >. The partial traceback lexer reads everything but the
-                    Python code appearing in a traceback. The full lexer
-                    combines the partial lexer with an IPython lexer.
+                    Python code appearing in a traceback.
+                  </p>
+                </dd>
+              </dl>
+
+              <dl class="class">
+                <dt id="IPythonTracebackLexer">
+                  <em class="property">class </em
+                  ><code class="sig-name descname">IPythonTracebackLexer</code
+                  ><a
+                    class="headerlink"
+                    href="#IPythonTracebackLexer"
+                    title="Permalink to this definition"
+                    >¶</a
+                  >
+                </dt>
+                <dd>
+                  <p>
+                    Supports 2.x and 3.x via the keyword
+                    <code class="xref py py-obj docutils literal notranslate"
+                      ><span class="pre">python3</span></code
+                    >. The full lexer combines the partial lexer with an IPython
+                    lexer.
                   </p>
                 </dd>
               </dl>
@@ -220,15 +286,29 @@
                     ></code
                   >. It was inserted into Pygments’ list of available lexers
                   under the name
-                  <code class="xref py py-obj docutils literal notranslate"
+                  <code class="docutils literal notranslate"
                     ><span class="pre">ipython</span></code
-                  >. It should be mentioned that this name is inaccurate, since
-                  an IPython console session is not the same as IPython code
-                  (which itself is a superset of the Python language).
+                  >.
                 </p>
+                <div class="admonition note">
+                  <p class="admonition-title">Note</p>
+                  <p>
+                    It should be mentioned that this name is inaccurate, since
+                    an IPython console session is not the same as IPython code
+                    (which itself is a superset of the Python language).
+                  </p>
+                </div>
                 <p>
                   Now, the Sphinx extension inserts two console lexers into
-                  Pygments’ list of available lexers. Both are IPyLexer
+                  Pygments’ list of available lexers. Both are
+                  <a
+                    class="reference internal"
+                    href="#IPyLexer"
+                    title="IPyLexer"
+                    ><code class="xref py py-obj docutils literal notranslate"
+                      ><span class="pre">IPyLexer</span></code
+                    ></a
+                  >
                   instances under the names:
                   <code class="xref py py-obj docutils literal notranslate"
                     ><span class="pre">ipython</span></code
@@ -236,38 +316,9 @@
                   and
                   <code class="xref py py-obj docutils literal notranslate"
                     ><span class="pre">ipython3</span></code
-                  >. Although the names can be confusing (as mentioned above),
-                  their continued use is, in part, to maintain backwards
-                  compatibility and to aid typical usage. If a project needs to
-                  make Pygments aware of more than just the
-                  <a
-                    class="reference internal"
-                    href="#IPyLexer"
-                    title="IPyLexer"
-                    ><code class="xref py py-class docutils literal notranslate"
-                      ><span class="pre">IPyLexer</span></code
-                    ></a
-                  >
-                  class, then one should not make the
-                  <a
-                    class="reference internal"
-                    href="#IPyLexer"
-                    title="IPyLexer"
-                    ><code class="xref py py-class docutils literal notranslate"
-                      ><span class="pre">IPyLexer</span></code
-                    ></a
-                  >
-                  class available under the name
-                  <code class="xref py py-obj docutils literal notranslate"
-                    ><span class="pre">ipython</span></code
-                  >
-                  and use
-                  <code class="xref py py-obj docutils literal notranslate"
-                    ><span class="pre">ipy</span></code
-                  >
-                  or some other non-conflicting value.
+                  >.
                 </p>
-                <p>Code blocks such as:</p>
+                <p>As a result, code blocks such as:</p>
                 <div class="highlight-rst notranslate">
                   <div class="highlight">
                     <pre><span></span><span class="p">..</span> <span class="ow">code-block</span><span class="p">::</span> <span class="k">ipython</span>
@@ -291,6 +342,148 @@
 </pre>
                   </div>
                 </div>
+              </div>
+              <div
+                class="section"
+                id="using-the-ipython-lexer-in-a-sphinx-project"
+              >
+                <h2>
+                  Using the IPython Lexer in a Sphinx Project<a
+                    class="headerlink"
+                    href="#using-the-ipython-lexer-in-a-sphinx-project"
+                    title="Permalink to this headline"
+                    >¶</a
+                  >
+                </h2>
+                <p>
+                  Let’s see an example of how to utilize the Sphinx project
+                  along with the IPython console lexer to highlight a
+                  <a
+                    class="reference external"
+                    href="https://docs.python.org/3/library/traceback.html#module-traceback"
+                    title="(in Python v3.7)"
+                    ><code class="xref py py-mod docutils literal notranslate"
+                      ><span class="pre">traceback</span></code
+                    ></a
+                  >
+                  and document issues any users may run into while working with
+                  some particular piece of software.
+                </p>
+                <p>
+                  In the
+                  <code class="docutils literal notranslate"
+                    ><span class="pre">conf.py</span></code
+                  >
+                  file that running
+                  <strong class="command">sphinx-quickstart</strong> will
+                  generate, let’s add a
+                  <a class="reference internal" href="#setup" title="setup"
+                    ><code class="xref py py-obj docutils literal notranslate"
+                      ><span class="pre">setup</span></code
+                    ></a
+                  >
+                  function.
+                </p>
+                <dl class="function">
+                  <dt id="setup">
+                    <code class="sig-name descname">setup</code
+                    ><span class="sig-paren">(</span
+                    ><span class="sig-paren">)</span
+                    ><a
+                      class="headerlink"
+                      href="#setup"
+                      title="Permalink to this definition"
+                      >¶</a
+                    >
+                  </dt>
+                  <dd>
+                    <p>
+                      Configures the sphinx shell that autogenerates
+                      documentation as needed.
+                    </p>
+                  </dd>
+                </dl>
+
+                <p>
+                  For a project that hasn’t defined a
+                  <a class="reference internal" href="#setup" title="setup"
+                    ><code class="xref py py-obj docutils literal notranslate"
+                      ><span class="pre">setup</span></code
+                    ></a
+                  >
+                  function in the
+                  <code class="docutils literal notranslate"
+                    ><span class="pre">conf.py</span></code
+                  >
+                  file, define a function that accepts a
+                  <code class="xref py py-obj docutils literal notranslate"
+                    ><span class="pre">sphinx.application.Sphinx</span></code
+                  >
+                  object like so.:
+                </p>
+                <div class="highlight-ipython notranslate">
+                  <div class="highlight">
+                    <pre><span></span><span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="n">app</span><span class="p">):</span>
+   <span class="sd">&quot;&quot;&quot;Use the IPyLexer.&quot;&quot;&quot;</span>
+ <span class="n">app</span><span class="o">.</span><span class="n">add_lexer</span><span class="p">(</span><span class="s1">&#39;ipythontb&#39;</span><span class="p">,</span> <span class="n">IPythonTracebackLexer</span><span class="p">)</span>
+ <span class="n">app</span><span class="o">.</span><span class="n">add_lexer</span><span class="p">(</span><span class="s1">&#39;ipy&#39;</span><span class="p">,</span> <span class="n">IPyLexer</span><span class="p">)</span>
+</pre>
+                  </div>
+                </div>
+                <p>Now one can use the following in an .rst file.</p>
+                <div class="highlight-rst notranslate">
+                  <div class="highlight">
+                    <pre><span></span><span class="p">..</span> <span class="ow">code-block</span><span class="p">::</span> <span class="k">ipythontb</span>
+
+<span class="s">   In [1]: x = 1/0</span>
+
+<span class="s">   ZeroDivisionError: invalid syntax</span>
+</pre>
+                  </div>
+                </div>
+                <p>
+                  Although the names can be confusing (as mentioned above),
+                  their continued use is, in part, to maintain backwards
+                  compatibility and to aid typical usage.
+                </p>
+                <p>
+                  If a project needs to make Pygments aware of more than just
+                  the
+                  <a
+                    class="reference internal"
+                    href="#IPyLexer"
+                    title="IPyLexer"
+                    ><code class="xref py py-class docutils literal notranslate"
+                      ><span class="pre">IPyLexer</span></code
+                    ></a
+                  >
+                  class, then one should not make the
+                  <a
+                    class="reference internal"
+                    href="#IPyLexer"
+                    title="IPyLexer"
+                    ><code class="xref py py-class docutils literal notranslate"
+                      ><span class="pre">IPyLexer</span></code
+                    ></a
+                  >
+                  class available under the name
+                  <code class="xref py py-obj docutils literal notranslate"
+                    ><span class="pre">ipython</span></code
+                  >.
+                </p>
+                <p>
+                  Use
+                  <code class="docutils literal notranslate"
+                    ><span class="pre">ipy</span></code
+                  >
+                  or some other non-conflicting value.
+                </p>
+                <p>
+                  <strong
+                    >WAIT WHAT? Read this out loud and tell me it doesn’t make
+                    sense.</strong
+                  >
+                </p>
                 <p>
                   Since the first line of the block did not begin with a
                   standard IPython console prompt, the entire block is assumed
@@ -305,28 +498,31 @@
                       >¶</a
                     >
                   </h3>
-                  <p>
-                    <code class="xref py py-mod docutils literal notranslate"
-                      ><span class="pre"
-                        >IPython.sphinxext.ipython_console_highlight</span
-                      ></code
-                    >
-                  </p>
-                  <p>
-                    <a
-                      class="reference internal"
-                      href="sphinx_api_docs.html#module-IPython.sphinxext.ipython_directive"
-                      title="IPython.sphinxext.ipython_directive"
-                      ><code class="xref py py-mod docutils literal notranslate"
+                  <div class="admonition seealso">
+                    <p class="admonition-title">See also</p>
+                    <p>
+                      <code class="xref py py-mod docutils literal notranslate"
                         ><span class="pre"
-                          >IPython.sphinxext.ipython_directive</span
+                          >IPython.sphinxext.ipython_console_highlighting</span
                         ></code
-                      ></a
-                    >
-                  </p>
+                      >
+                      <a
+                        class="reference internal"
+                        href="sphinx_api_docs.html#module-IPython.sphinxext.ipython_directive"
+                        title="IPython.sphinxext.ipython_directive"
+                        ><code
+                          class="xref py py-mod docutils literal notranslate"
+                          ><span class="pre"
+                            >IPython.sphinxext.ipython_directive</span
+                          ></code
+                        ></a
+                      >
+                    </p>
+                  </div>
                   <p>
                     To learn more about the IPython lexer and how it works in
-                    rst documents parsed by Docutils or Sphinx, see
+                    reStructured text documents parsed by Docutils or Sphinx,
+                    see
                     <a class="reference internal" href="sphinxext.html"
                       ><span class="doc">IPython Sphinx Directive</span></a
                     >.
@@ -437,8 +633,8 @@
                 >
               </li>
               <li class="toctree-l1">
-                <a class="reference internal" href="jupyter.html"
-                  >Jupyter Suite</a
+                <a class="reference internal" href="jupyter/index.html"
+                  >jupyter</a
                 >
               </li>
               <li class="toctree-l1">
@@ -473,6 +669,13 @@
                       class="reference internal"
                       href="#ipython-console-highlighting"
                       >IPython Console Highlighting</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      class="reference internal"
+                      href="#using-the-ipython-lexer-in-a-sphinx-project"
+                      >Using the IPython Lexer in a Sphinx Project</a
                     >
                     <ul>
                       <li>
@@ -512,7 +715,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Oct 02, 2019.
+      Last updated on Oct 04, 2019.
     </div>
   </body>
 </html>

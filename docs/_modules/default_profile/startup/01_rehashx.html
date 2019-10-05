@@ -72,50 +72,29 @@
 <span class="kn">from</span> <span class="nn">platform</span> <span class="kn">import</span> <span class="n">system</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 
-<span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
-<span class="kn">from</span> <span class="nn">IPython.core.alias</span> <span class="kn">import</span> <span class="n">AliasError</span>
-
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">default_profile.util.timer</span> <span class="kn">import</span> <span class="n">timer</span>
-<span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-    <span class="n">timer</span> <span class="o">=</span> <span class="bp">None</span>
-    <span class="c1"># is this a way to &quot;None&quot; a decorator? Nope!</span>
-
-
-<div class="viewcode-block" id="blacklisted_aliases"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.blacklisted_aliases">[docs]</a><span class="k">def</span> <span class="nf">blacklisted_aliases</span><span class="p">(</span><span class="n">shell</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Blacklist certain aliases.</span>
-
-<span class="sd">    On Windows, it&#39;s assumed that the commands *more*, *less*, *clear* and</span>
-<span class="sd">    *man* are undefined. However, the Git-For-Windows package provides all</span>
-<span class="sd">    of these and by adding it to the :envvar:`PATH`, `rehashx` will attempt</span>
-<span class="sd">    to alias them, resulting in a UsageError.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    shell : |ip|, optional</span>
-
-<span class="sd">    Raises</span>
-<span class="sd">    ------</span>
-<span class="sd">    AliasError</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">blacklist</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;more&#39;</span><span class="p">,</span> <span class="s1">&#39;less&#39;</span><span class="p">,</span> <span class="s1">&#39;clear&#39;</span><span class="p">,</span> <span class="s1">&#39;man&#39;</span><span class="p">]</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">blacklist</span><span class="p">:</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">shell</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s1">&#39;unalias&#39;</span><span class="p">,</span> <span class="s1">&#39;{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
-        <span class="k">except</span> <span class="n">AliasError</span><span class="p">:</span>
-            <span class="k">pass</span></div>
+<span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span><span class="p">,</span> <span class="n">start_ipython</span>
 
 
 <div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">shell</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Add all executables on the user&#39;s :envvar:`PATH` into the IPython ns.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Add all executables on the user&#39;s :envvar:`PATH` into the IPython ns.</span>
+
+<span class="sd">    As this is the first script in startup, it&#39;s assumed IPython has already</span>
+<span class="sd">    started. As a result, :func:`IPython.start_ipython` is called if not.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    shell : |ip| instance</span>
+<span class="sd">        IPython shell instance.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">shell</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">shell</span> <span class="o">=</span> <span class="n">start_ipython</span><span class="p">()</span>
     <span class="n">shell</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s1">&#39;rehashx&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">_ip</span><span class="p">:</span>
-        <span class="n">main</span><span class="p">(</span><span class="n">_ip</span><span class="p">)</span>
+    <span class="n">main</span><span class="p">(</span><span class="n">_ip</span><span class="p">)</span>
 </pre></div>
 
           </div>
@@ -160,7 +139,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../startup/index.html">IPython API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../util/index.html">IPython Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../kernel.html">IPython Kernel</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../jupyter.html">Jupyter Suite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../jupyter/index.html">jupyter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Extensions</a></li>
 </ul>
 
@@ -188,7 +167,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Oct 02, 2019.
+      Last updated on Oct 04, 2019.
     </div>
   </body>
 </html>
