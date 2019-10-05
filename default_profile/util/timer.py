@@ -7,17 +7,24 @@ Timer --- Create a timer decorator.
 
 Largely this module was simply practice on writing decorators.
 
+Might need to review logging best practices. I don't want the logger from
+this module to emit anything, but it seems tedious to place that burden
+on any module that imports from here.
+
 See Also
 --------
-:mod:`cProfile`
-:mod:`pstats`
-:mod:`timeit`
-:magic:`timeit`
+.. seealso::
+
+    :mod:`cProfile`
+    :mod:`pstats`
+    :mod:`timeit`
+    :magic:`timeit`
 
 """
 import functools
 import logging
 import time
+from timeit import Timer
 
 logging.basicConfig(level=logging.INFO)
 
@@ -29,8 +36,8 @@ def timer(func):
 
     .. todo:: Begin using the :mod:`timeit` module.
 
-        There are more specialized ways of profiling things in other modules;
-        however, this works for a rough estimate.
+        There are more specialized ways of profiling things in
+        other modules; however, this works for a rough estimate.
 
     Parameters
     ----------
@@ -72,3 +79,15 @@ def debug(func):
         return value
 
     return wrapper_debug
+
+
+def exc_timer(statement):
+    """A non-decorator implementation that uses `timeit.`"""
+    t = Timer(statement)  # outside the try/except
+    try:
+        t.timeit()
+    # or t.repeat(...)
+    except:  # noqa E722
+        t.print_exc()
+    # else:
+    # TODO:

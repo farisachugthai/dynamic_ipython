@@ -8,11 +8,11 @@ import sys
 if hasattr(locals(), '__path__'):
     __path__ = pkgutil.extend_path(__path__, __name__)
 else:
-    sys.path.insert(0, Path(__file__).resolve())
+    sys.path.insert(0, str(Path(__file__).resolve()))
 
 import default_profile
+from default_profile.sphinxext import configtraits
 from default_profile.sphinxext.magics import LineMagicRole, CellMagicRole
-from . import configtraits
 
 def ask_for_import(mod, package=None):
     return importlib.import_module(mod, package=package) or None
