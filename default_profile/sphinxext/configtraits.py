@@ -1,5 +1,9 @@
 """Directives and roles for documenting traitlets config options.
 
+============
+Configtraits
+============
+
 .. :rst:directive::
 
     .. configtrait:: Application.log_datefmt

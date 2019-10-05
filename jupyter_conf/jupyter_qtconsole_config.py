@@ -11,19 +11,16 @@ from traitlets.config import get_config
 try:
     import qtconsole  # kinda a prerequisite wouldn't you say?
 except ImportError:
-    sys.exit()
+    sys.exit("QTConsole not installed.")
+
+try:
+    from jupyter_core.paths import get_home_dir
+except ImportError:
+    sys.exit("Jupyter not installed. Exiting.")
 
 c = get_config()
 
-QTCONSOLE_LOGGER = logging.basicConfig(level=logging.WARNING)
-
-
-def get_home():
-    """Returns the user's home directory."""
-    try:
-        return Path.home()
-    except Exception as e:
-        QTCONSOLE_LOGGER.error("There was an error determining home directory: %s" % e)
+logging.basicConfig(level=logging.WARNING)
 
 
 # ------------------------------------------------------------------------------
@@ -136,39 +133,42 @@ c.JupyterQtConsoleApp.display_banner = False
 
 def consoleWidgetconf():
     """
+    -----------------------------------------------------------------------
+    consoleWidget(NewBase) configuration
 
-    # ------------------------------------------------------------------------------
-    # consoleWidget(NewBase) configuration
-    # ------------------------------------------------------------------------------
+    -----------------------------------------------------------------------
 
-    # An abstract base class for console-type widgets. This class has functionality
-    #  for:
-    #
-    #      * Maintaining a prompt and editing region
-    #      * Providing the traditional Unix-style console keyboard shortcuts
-    #      * Performing tab completion
-    #      * Paging text
-    #      * Handling ANSI escape codes
-    #
-    #  ConsoleWidget also provides a number of utility methods that will be
-    #  convenient to implementors of a console-style widget.
+    An abstract base class for console-type widgets. This class has functionality
+     for:
 
-    # Surprisingly windows handles this correctly
-    # Whether to process ANSI escape codes.
-    # c.ConsoleWidget.ansi_codes = True
+         * Maintaining a prompt and editing region
+         * Providing the traditional Unix-style console keyboard shortcuts
+         * Performing tab completion
+         * Paging text
+         * Handling ANSI escape codes
+
+    ConsoleWidget also provides a number of utility methods that will be
+    convenient to implementors of a console-style widget.
+
+    Surprisingly windows handles this correctly
+    Whether to process ANSI escape codes.::
+
+        c.ConsoleWidget.ansi_codes = True
 
     The following is for ConsoleWidget.buffer_size:
 
-    # The maximum number of lines of text before truncation. Specifying a non-
-    #  positive number disables text truncation (not recommended).
+    The maximum number of lines of text before truncation. Specifying a non-
+    positive number disables text truncation (not recommended).
 
+    Here's some inspiration for decorating the console.:
 
-    # Here's some inspiration for decorating the console
     >>> from qtconsole import styles
     >>> styles.default_template
 
-    I think it's JSON but it doesn't load from json.loads(). Here's what it
-    looks like.
+    I think it's :mod:`JSON` but it doesn't load from :func:`json.loads`.
+    Here's what it looks like.
+
+    .. todo:: don't do this
 
     .. ipython::
         :okexcept:
