@@ -228,37 +228,47 @@ KernelManager options
 
 --KernelManager.autorestart=<Bool>
     Default: True
+
     Should we autorestart the kernel if it dies.
 
 --KernelManager.connection_file=<Unicode>
     Default: ''
+
     :mod:`JSON` file in which to store connection info
+
     [default: kernel-<pid>.json]
+
     This file will contain the IP, ports, and authentication key needed to
     connect clients to this kernel. By default, this file will be created in the
     security dir of the current profile, but can be specified by absolute path.
 
 --KernelManager.control_port=<Int>
     Default: 0
-    set the control (ROUTER) port [default: random]
+
+    Set the control (ROUTER) port [default: random]
 
 --KernelManager.hb_port=<Int>
     Default: 0
-    set the heartbeat port [default: random]
+
+    Set the heartbeat port [default: random]
 
 --KernelManager.iopub_port=<Int>
     Default: 0
-    set the iopub (PUB) port [default: random]
+
+    Set the iopub (PUB) port [default: random]
 
 --KernelManager.ip=<Unicode>
     Default: ''
+
     Set the kernel's IP address [default localhost]. If the IP address is
     something other than localhost, then Consoles on other machines will be able
     to connect to the Kernel, so be careful!
 
 --KernelManager.kernel_cmd=<List>
     Default: []
+
     DEPRECATED: Use kernel_name instead.
+
     The :class:`subprocess.Popen` Command to launch the kernel.
     Override this if you have a custom kernel.
     If kernel_cmd is specified in a configuration file, Jupyter does not
@@ -269,18 +279,22 @@ KernelManager options
 
 --KernelManager.shell_port=<Int>
     Default: 0
-    set the shell (ROUTER) port [default: random]
+
+    Set the shell (ROUTER) port [default: random]
 
 --KernelManager.shutdown_wait_time=<Float>
     Default: 5.0
+
     Time to wait for a kernel to terminate before killing it, in seconds.
 
 --KernelManager.stdin_port=<Int>
     Default: 0
-    set the :data:`sys.stdin` (ROUTER) port [default: random]
+
+    Set the :data:`sys.stdin` (ROUTER) port [default: random]
 
 --KernelManager.transport=<CaselessStrEnum>
     Default: 'tcp'
+
     Choices: ['tcp', 'ipc']
 
 KernelSpecManager options
@@ -288,16 +302,19 @@ KernelSpecManager options
 
 --KernelSpecManager.ensure_native_kernel=<Bool>
     Default: `True`
+
     If there is no Python kernelspec registered and the IPython kernel is
     available, ensure it is added to the spec list.
 
 --KernelSpecManager.kernel_spec_class=<Type>
     Default: 'jupyter_client.kernelspec.KernelSpec'
+
     The kernel spec class.  This is configurable to allow subclassing of the
     KernelSpecManager for customized behavior.
 
 --KernelSpecManager.whitelist=<Set>
     Default: :func:`set`
+
     Whitelist of allowed kernel names.
     By default, all installed kernels are allowed.
 

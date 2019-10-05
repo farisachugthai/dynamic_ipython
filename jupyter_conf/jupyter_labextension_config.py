@@ -2,11 +2,8 @@
 # -*- coding: utf-8 -*-
 """Jupyter Lab Extension Config.
 
-.. currentmodule:: jupyterlab
-
-.. highlight:: ipython
-
-FYI
+JupyterLab
+===========
 
 Subcommands
 -----------
@@ -84,8 +81,8 @@ c.Application.log_level = 20
 #
 # JupyterLab Check
 #
-class Foo(Bar):
-    """
+class CheckJupyterLabExtension:
+    """Documentation for the check subcommand.
 
     $ jupyter labextension check --help-all
 
@@ -93,64 +90,84 @@ class Foo(Bar):
 
     Options
     -------
+
     --no-build
         Defer building the app after the action.
+
     --clean
         Cleanup intermediate files after the action.
+
     --installed
         Check only if the extension is installed.
+
     --app-dir=<Unicode> (BaseExtensionApp.app_dir)
         Default: ''
         The app directory to target
+
     --dev-build=<Bool> (BaseExtensionApp.dev_build)
         Default: True
         Whether to build in dev mode (defaults to dev mode)
+
     --debug-log-path=<Unicode> (DebugLogFileMixin.debug_log_path)
         Default: ''
         Path to use for the debug log file
 
     CheckLabExtensionsApp options
     -----------------------------
+
     --CheckLabExtensionsApp.answer_yes=<Bool>
         Default: False
         Answer yes to any prompts.
+
     --CheckLabExtensionsApp.app_dir=<Unicode>
         Default: ''
         The app directory to target
+
     --CheckLabExtensionsApp.config_file=<Unicode>
         Default: ''
         Full path of a config file.
+
     --CheckLabExtensionsApp.config_file_name=<Unicode>
         Default: ''
         Specify a config file to load.
+
     --CheckLabExtensionsApp.debug_log_path=<Unicode>
         Default: ''
         Path to use for the debug log file
+
     --CheckLabExtensionsApp.dev_build=<Bool>
         Default: True
         Whether to build in dev mode (defaults to dev mode)
+
     --CheckLabExtensionsApp.generate_config=<Bool>
         Default: False
         Generate default config file.
+
     --CheckLabExtensionsApp.log_datefmt=<Unicode>
         Default: '%Y-%m-%d %H:%M:%S'
         The date format used by logging formatters for %(asctime)s
+
     --CheckLabExtensionsApp.log_format=<Unicode>
         Default: '[%(name)s]%(highlevel)s %(message)s'
         The Logging format template
+
     --CheckLabExtensionsApp.log_level=<Enum>
         Default: 30
         Choices: (0, 10, 20, 30, 40, 50, 'DEBUG', 'INFO', 'WARN', 'ERROR', 'CRITICAL')
         Set the log level by value or name.
+
     --CheckLabExtensionsApp.should_build=<Bool>
         Default: True
         Whether to build the app after the action
+
     --CheckLabExtensionsApp.should_check_installed_only=<Bool>
         Default: False
         Whether it should check only if the extensions is installed
+
     --CheckLabExtensionsApp.should_clean=<Bool>
         Default: False
         Whether temporary files should be cleaned up after building jupyterlab
+
     """
 
     pass

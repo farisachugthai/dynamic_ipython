@@ -145,8 +145,8 @@ lengthier examples rather than a handful of shorter snippets.
 
 In addition, IPython's output and :data:`sys.stderr` will be
 inserted at doc build time, and the prompts will be renumbered starting
-from ``1``. For example, the prompt below is renumbered so as to follow the code
-block from above.
+from ``1``. For example, the prompt below is renumbered so as to follow
+the code block from above.
 
 .. OH SHIT THIS DIRECTIVE WORKS!
 

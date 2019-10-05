@@ -18,3 +18,8 @@ suite. These have been commented and marked up as appropriate.
 
    qtconsole
    notebook
+
+.. autosummary::
+
+    jupyter_console_config
+    jupyter_labextension_config
