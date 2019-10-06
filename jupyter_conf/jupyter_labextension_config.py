@@ -38,7 +38,6 @@ c = get_config()
 
 import jupyter
 
-
 # ------------------------------------------------------------------------------
 # Application(SingletonConfigurable) configuration
 # ------------------------------------------------------------------------------
@@ -53,6 +52,7 @@ c.Application.log_format = "[ %(created)f : %(name)s : %(highlevel)s : %(message
 
 # Set the log level by value or name.
 c.Application.log_level = 20
+
 
 # ------------------------------------------------------------------------------
 # JupyterApp(Application) configuration

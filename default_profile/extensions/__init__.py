@@ -13,6 +13,11 @@ Many are still works in progress.
 
 
 """
+from .job_control import install
+from .termux_clipboard import termux_clipboard_get
+from .pd_csv import pd_csv
+from .event_watcher_example import VarWatcher
+from . import cwd_prompt, example, load_ext
 import logging
 import os
 import sys
@@ -28,9 +33,3 @@ extensions_logger.addHandler(extensions_handler)
 
 # currently has a syntax error so fix that before we continue importing
 # from . import extension_inspect
-
-from . import cwd_prompt, example, load_ext
-from .event_watcher_example import VarWatcher
-from .pd_csv import pd_csv
-from .termux_clipboard import termux_clipboard_get
-from .job_control import install

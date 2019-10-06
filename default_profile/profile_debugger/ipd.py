@@ -1,34 +1,40 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Vim: set ft=python:
 """Run ipdb and capture args.
 
-Currently crashing on IPD.pt_init line with IPCompleter.
+Oct 06, 2019:
 
-Can we implement differently?
+    Works as expected!!!
+
+    Start IPython and run this as a post-mortem debugger!
+
+
 """
-import signal
+# import signal
+from pdb import Pdb
 import sys
+import traceback
 
-from IPython import get_ipython
+from IPython import get_ipython, start_ipython
 # from IPython.core.magics import MagicsClass, cell_magics, line_magics
 from IPython.core.completer import IPCompleter
-from IPython.core.debugger import Pdb
+
+# As a heads up I think the super() call goes to Pdb not TerminalPdb.
+# from IPython.core.debugger import Pdb
 # from IPython.core.interactiveshell import InteractiveShell
 from IPython.terminal.embed import InteractiveShellEmbed
 from IPython.terminal.debugger import TerminalPdb
-from IPython.terminal.ipapp import TerminalIPythonApp
+from IPython.terminal.interactiveshell import TerminalInteractiveShell
+# from IPython.terminal.ipapp import TerminalIPythonApp
 from IPython.terminal.ptutils import IPythonPTCompleter
-from IPython.terminal.shortcuts import suspend_to_bg, cursor_in_leading_ws, create_ipython_shortcuts
+from IPython.terminal.shortcuts import create_ipython_shortcuts
 
 from prompt_toolkit import patch_stdout
 from prompt_toolkit.key_binding import KeyBindings
-from prompt_toolkit.contrib.completers.system import SystemCompleter
-from prompt_toolkit.enums import DEFAULT_BUFFER
+# from prompt_toolkit.contrib.completers.system import SystemCompleter
 from prompt_toolkit.filters import (
     Condition, has_focus, has_selection, vi_insert_mode, emacs_insert_mode
 )
-from prompt_toolkit.key_binding.bindings.completion import display_completions_like_readline
 from prompt_toolkit.shortcuts.prompt import PromptSession
 from prompt_toolkit.enums import EditingMode
 from prompt_toolkit.formatted_text import PygmentsTokens
@@ -36,59 +42,68 @@ from prompt_toolkit.formatted_text import PygmentsTokens
 from pygments.token import Token
 
 
-class IPD(TerminalPdb):
-    """Set up the IPython Debugger."""
+class IPD(Pdb):
+    """Set up the IPython Debugger.
 
-    def __init__(
-            self, shell=None, change_keys=False, _ptcomp=None, *args, **kwargs
-    ):
-        """Add everything to call signature."""
-        self._ptcomp = _ptcomp
+    Rewrote this largely to break up the :meth:`pt_init` from
+    `IPython.terminal.debugger.TerminalPdb`.
+
+    """
+
+    def __init__(self, shell, completer=None):
+        """Add everything to call signature.
+
+        The original only displays star args and star kwargs.
+
+        Parameters
+        ----------
+        shell : |ip|
+            Global IPython
+        completer : optional
+            What do we use for completions?
+
+        """
         self.shell = shell
-        self.change_keys = change_keys
-        self.pt_init(change_keys)
-        super().__init__(self, color_scheme=shell.style, *args, **kwargs)
 
-    def pt_init(self, change_keys=False):
+        self.completer = completer
+        if self.completer is None:
+            completer = self.initialize_completer()
+            self.completer = IPythonPTCompleter(completer)
+
+        self.pt_init()
+        super().__init__(self)
+
+    def __repr__(self):
+        return '{}\t{}'.format(self.shell, self.completer)
+
+    # TODO:
+    # def __call__(self):
+    #     initialize()
+
+    def get_prompt_tokens(self):
+        """Create the prompt."""
+        return [(Token.Prompt, self.prompt)]
+
+    def initialize_completer(self):
+        """Create a completion instance for the debugger."""
+        compl = IPCompleter(
+            shell=self.shell,
+            namespace=self.shell.user_ns,
+            global_namespace=globals(),
+            parent=self.shell,
+        )
+        return compl
+
+    def pt_init(self):
         """Override the default initialization for prompt_toolkit."""
-        pass
-
-        def get_prompt_tokens():
-            return [(Token.Prompt, self.prompt)]
-
-        if self._ptcomp is None:
-            compl = IPCompleter(
-                shell=self.shell,
-                namespace={},
-                global_namespace={},
-                parent=self.shell,
-            )
-            self._ptcomp = IPythonPTCompleter(compl)
-
-        kb = KeyBindings()
-        if change_keys:
-            supports_suspend = Condition(lambda: hasattr(signal, 'SIGTSTP'))
-            kb.add('c-z', filter=supports_suspend)(suspend_to_bg)
-
-            if self.shell.display_completions == 'readlinelike':
-                kb.add(
-                    'tab',
-                    filter=(
-                        has_focus(DEFAULT_BUFFER)
-                        & ~has_selection
-                        & vi_insert_mode | emacs_insert_mode
-                        & ~cursor_in_leading_ws
-                    )
-                )(display_completions_like_readline)
-        else:
-            kb = create_ipython_shortcuts()
+        keys = create_ipython_shortcuts(self.shell)
 
         self.pt_app = PromptSession(
-            message=(lambda: PygmentsTokens(get_prompt_tokens())),
+            message=(lambda: PygmentsTokens(self.get_prompt_tokens())),
             editing_mode=getattr(EditingMode, self.shell.editing_mode.upper()),
-            key_bindings=kb,
+            key_bindings=keys,
             history=self.shell.debugger_history,
-            completer=self._ptcomp,
+            completer=self.completer,
             enable_history_search=True,
             mouse_support=self.shell.mouse_support,
             complete_style=self.shell.pt_complete_style,
@@ -98,57 +113,78 @@ class IPD(TerminalPdb):
         )
 
 
-def idbg(_ptcomp=None, args=None, kwargs=None):
-    """Create our debugger."""
-    IPD(_ptcomp, args, kwargs)
+def initialize_ipython():
+    """If IPython hasn't been started, then do so.
+
+    #) Build a terminal app in order to force IPython to load the configuration.
+    #) Set the trait 'interact' to `False`.
+    #) TerminalIPythonApp().initialize([])
+
+    .. todo:: allow for args and kwargs
+
+    """
+    # ipapp = TerminalIPythonApp()
+    # # Avoid output (banner, prints)
+    # ipapp.interact = False
+    # # ipapp.initialize([args], kwargs)
+    # # I don't know if we can do it that way
+    # ip.initialize([])
+    # shell = ipapp.shell
+
+    # Unfortunately this doesn't work
+    # shell = start_ipython()
+
+    # This creates an IPython instance inside of our debugger
+    shell = TerminalInteractiveShell()
+    return shell
 
 
-def idebug():
-    """Set up the IPython debugger."""
-    try:
-        import ipdb
-    except (ImportError, ModuleNotFoundError):
-        # Execute the beginning of ipdb's __main__ mod.
-        try:
-            from IPython import get_ipython
-        except (ImportError, ModuleNotFoundError):
-            sys.exit('Neither ipython nor ipdb installed. Use pdb.')
-        else:
-            shell = get_ipython()
+def is_embedded_shell(shell):
+    """Determine if 'shell' is an instance of InteractiveShellEmbed."""
+    if isinstance(shell, InteractiveShellEmbed):
+        sys.stderr.write(
+            "\nYou are currently into an embedded ipython shell,\n"
+            "the configuration will not be loaded.\n\n"
+        )
+        return True
+    return False
 
-        if shell is None:
-            # Not inside IPython
-            # Build a terminal app in order to force ipython to load the
-            # configuration
-            ipapp = TerminalIPythonApp()
-            # Avoid output (banner, prints)
-            ipapp.interact = False
-            ipapp.initialize([])
-            shell = ipapp.shell
-        else:
-            # Running inside IPython
 
-            # Detect if embed shell or not and display a message
-            if isinstance(shell, InteractiveShellEmbed):
-                sys.stderr.write(
-                    "\nYou are currently into an embedded ipython shell,\n"
-                    "the configuration will not be loaded.\n\n"
-                )
+def formatted_traceback():
+    # TODO:
+    print('Traceback: Extracted stack\n' + repr(traceback.extract_stack()) + '\n')
+    print('Traceback: Formatted stack\n' + repr(traceback.format_stack()) + '\n')
+
+
+def setup_breakpointhook():
+    idebug.shell.run_line_magic('debug', '')
+
+
+def main():
+    """Create an instance of our debugger."""
+    # Recall that the first var in a tuple unpacking expression represents
+    # sys.argv[0], aka the program name
+    if len(sys.argv) == 1:
+        user_args = sys.argv[1:]
+        ptcomp = None
     else:
-        ipdb.run(str(sys.argv[1:]))
+        user_args = None
+        ptcomp = None
+
+    ip = get_ipython()  # noqa C0103
+    if ip is None:  # noqa C0103
+        ip = initialize_ipython()
+
+    # with patch_stdout.patch_stdout():
+    dynamic_debugger = IPD(shell=ip, completer=ptcomp)
+    return dynamic_debugger
 
 
 if __name__ == "__main__":
-    args = sys.argv[:]
+    idebug = main()
 
-    ip = get_ipython()
-    if ip is not None:
-        if len(args) > 0:
-            _ptcomp = args[0]
-        else:
-            _ptcomp = None
+    if hasattr(sys, 'last_traceback'):
+        formatted_traceback()
 
-        with patch_stdout.patch_stdout():
-            idbg(_ptcomp, args)
-    else:
-        idebug()
+    sys.breakpointhook = setup_breakpointhook()
+    # Vim: set ft=python:
