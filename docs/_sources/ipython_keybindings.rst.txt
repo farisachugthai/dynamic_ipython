@@ -2,97 +2,68 @@
 Keybindings in IPython
 =======================
 
-.. module:: Keybindings
+.. module:: keybindings
    :synopsis: Document the way keybindings are set up.
 
-.. highlight:: ipython
-   :linenothreshold: 5
+
+Key Bindings
+============
+
+This script allow for hybrid use of Vim and Emacs keybindings.
+
+Approximately 50 Emacs keybindings are added to Vim's insert mode through
+the use of :mod:`prompt_toolkit`.
+
+The source code can be found `here`_ with documentation at `this site`_.
+
+.. _here: profile_default/startup/32_vi_modes.py
+.. _this site: https://farisachugthai.github.io/dynamic_ipython/profile_default.html#module-profile_default.startup.32_vi_mode
 
 
 This document will summarize how to rebind keys in IPython since IPython 5.0.
 
 Interactively Binding Keys
 ==========================
+
 If we would like to add extra keybindings to the IPython shell, we can utilize
 a few functions built into the :mod:`IPython.terminal.interactiveshell` module,
-in addition, to utilizing the expansive :mod:`prompt_toolkit` library.
+in addition, to utilizing the expansive prompt_toolkit library.
 
-First we'll initialize a global instance of the shell.
+First we'll initialize a global instance of the shell by running::
 
-Then import the function
-:func:`IPython.terminal.interactiveshell.create_ipython_shortcuts()`
+   from IPython import get_ipython
+   _ip = get_ipython()
+
+That will bind our shell instance to `_ip`, and if we're not running in IPython,
+`get_ipython()` will return `None`.
+
+
+Then, we'll import the function
+:func:`IPython.terminal.interactiveshell.create_ipython_shortcuts`
 and initialize a
-:class:`prompt_toolkit.key_binding.key_bindings.KeyBindings()`
-instance.
-
-The attributes associated with
-:func:`IPython.terminal.interactiveshell.create_ipython_shortcuts()`
-are as follows:
-
-.. ipython::
-   :verbatim:
-
-   ['_KeyBindings__version',
-   ...
-   '_abc_impl',
-   '_clear_cache',
-   '_get_bindings_for_keys_cache',
-   '_get_bindings_starting_with_keys_cache'
-   '_version',
-   'add',
-   'add_binding',
-   'bindings',
-   'get_bindings_for_keys',
-   'get_bindings_starting_with_keys',
-   'remove',
-   'remove_binding']
+``prompt_toolkit.key_binding.key_bindings.KeyBindings`` instance.
 
 
-Original File Implementation
-----------------------------
-Let's first check out how keybindings were originally implemented to give
-ourselves a frame of reference.:
+Official Prompt Toolkit Documentation
+=====================================
 
-.. ipython::
-
-   In [1]: from IPython.paths import get_ipython_package_dir
-   In [2]: get_ipython_package_dir()
-
-Go to the directory where IPython is installed. You can use the code above
-to check its location.
-
-This could be named something to the effect of
-``~/miniconda3/lib/python3.7/site-packages/IPython/`` for example.
-
-Then navigate to the root of that directory and go to the terminal package.
-
-.. ipython::
-   :verbatim:
-
-    %cd /usr/lib/python3.7/site-packages/IPython
-    %cd terminal
-    %pycat shortcuts
-
-Up at the top you have the keybindings :mod:`IPython` ships with!
-
-
-Official IPython Documentation
-==============================
-Before we dive straight into the source code, let's check out how IPython
-describes the process of re-binding keys.
+Before we dive straight into the source code, let's check out how
+``prompt_toolkit`` describes the process of re-binding keys.
 
 The source code provides this example:
 
 
 Pure Prompt Toolkit Way of Rebinding Keys
 --------------------------------------------
+
 There are 3 different sections in the Prompt Toolkit Official Documentation
 on how to rebind keys using the package.
 
 
 Adding custom key bindings
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
-The first time it's mentioned is in the asking_for_input document.:
+
+The first time it's mentioned is in the ``asking_for_input`` document.:
 
     By default, every prompt already has a set of key bindings which implements
     the usual Vi or Emacs behaviour.
@@ -123,14 +94,16 @@ The first time it's mentioned is in the asking_for_input document.:
         text = prompt('> ', key_bindings=bindings)
         print('You said: %s' % text)
 
-    Note that we use run_in_terminal() for the first key binding. This ensures
-    that the output of the print-statement and the prompt don’t mix up. If the
+    Note that we use ``run_in_terminal`` for the first key binding. This ensures
+    that the output of the print statement and the prompt don’t mix up. If the
     key bindings doesn't print anything, then it can be handled directly
     without nesting functions.
 
+
 Enable key bindings according to a condition
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Then key_bindings are discussed in the context of being filtered through
+
+Then key bindings are discussed in the context of being filtered through
 certain conditions.:
 
     Often, some key bindings can be enabled or disabled according to a certain
@@ -162,15 +135,15 @@ certain conditions.:
 
 Dynamically switch between Emacs and Vi mode
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 This is the part I'm most interested in, as we're going to try coming up with
 a new set of keybindings that blends together Emacs insert mode and
 Vim command mode.
 
 Ideally this would be tied together as 1 set of keybindings so that we don't
-run into key binding collisions. A
-:class:`prompt_toolkit.key_bindings.DynamicKeyBindings()`
+run into key binding collisions. A ``prompt_toolkit.key_bindings.DynamicKeyBindings``
 might be useful. Bring it together with
-:func:`prompt_toolkit.key_bindings.merge_key_bindings()`:
+``prompt_toolkit.key_bindings.merge_key_bindings``:
 
     The Application has an editing_mode attribute. We can change the key
     bindings by changing this attribute from EditingMode.VI to
@@ -206,12 +179,13 @@ might be useful. Bring it together with
 
             prompt('> ', key_bindings=bindings, bottom_toolbar=bottom_toolbar)
 
-        run()
-
+        if __name__ == "__main__":
+           run()
 
 
 Using control-space for completion
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Here's a general overview with more examples on how to rebind keys.:
 
     A popular short cut that people sometimes use is :kbd:`Ctrl` :kbd:`Space`
@@ -232,6 +206,7 @@ Here's a general overview with more examples on how to rebind keys.:
 
 Progress Bar Section
 ~~~~~~~~~~~~~~~~~~~~
+
 This continues in the section on progress bars.::
 
     from prompt_toolkit import HTML
@@ -282,6 +257,7 @@ This continues in the section on progress bars.::
 
 Conditional Key Bindings
 ~~~~~~~~~~~~~~~~~~~~~~~~
+
 Then again as a more advanced section.:
 
     It is also possible to combine multiple registries. We do this in the default
@@ -322,40 +298,42 @@ Then again as a more advanced section.:
 
 Reviewing Source Code
 ---------------------
+
 Whew! Well that was a lot take in. But now we'll move from their official documents
 to simply the source code where this is implemented.
 
 
 Load all default keybindings
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-From :mod:`prompt_toolkit.key_bindings.bindings.defaults`::
 
-     def load_key_bindings():
-         # Create a KeyBindings object that contains the default key bindings.
-         all_bindings = merge_key_bindings([
-             # Load basic bindings.
-             load_basic_bindings(),
+From ``prompt_toolkit.key_bindings.bindings.defaults``::
 
-             # Load emacs bindings.
-             load_emacs_bindings(),
-             load_emacs_search_bindings(),
+   def load_key_bindings():
+       # Create a KeyBindings object that contains the default key bindings.
+       all_bindings = merge_key_bindings([
+           # Load basic bindings.
+           load_basic_bindings(),
 
-             # Load Vi bindings.
-             load_vi_bindings(),
-             load_vi_search_bindings(),
-         ])
+           # Load emacs bindings.
+           load_emacs_bindings(),
+           load_emacs_search_bindings(),
 
-         return merge_key_bindings([
-             # Make sure that the above key bindings are only active if the
-             # currently focused control is a `BufferControl`. For other controls, we
-             # don't want these key bindings to intervene. (This would break "ptterm"
-             # for instance, which handles 'Keys.Any' in the user control itself.)
-             ConditionalKeyBindings(all_bindings, buffer_has_focus),
+           # Load Vi bindings.
+           load_vi_bindings(),
+           load_vi_search_bindings(),
+       ])
 
-             # Active, even when no buffer has been focused.
-             load_mouse_bindings(),
-             load_cpr_bindings(),
-         ])
+       return merge_key_bindings([
+           # Make sure that the above key bindings are only active if the
+           # currently focused control is a `BufferControl`. For other controls, we
+           # don't want these key bindings to intervene. (This would break "ptterm"
+           # for instance, which handles 'Keys.Any' in the user control itself.)
+           ConditionalKeyBindings(all_bindings, buffer_has_focus),
+
+           # Active, even when no buffer has been focused.
+           load_mouse_bindings(),
+           load_cpr_bindings(),
+       ])
 
 That's literally everything. IPython chooses to add their own stuff
 during :func:`IPython.terminal.ptutil.create_ipython_shortcuts` but if you
@@ -378,7 +356,7 @@ Literally::
             self.registry = KeyBindings
 
 Once the user initializes that class, then your
-:class:`prompt_toolkit.key_bindings.keybinding.KeyBindings()`
+``prompt_toolkit.key_bindings.keybinding.KeyBindings``
 statement in the ``__init__`` func was execute and you'll have access
 to everything. Cool!::
 
@@ -413,6 +391,7 @@ seen before and found pretty creative.::
 
 Side Effects
 ====================
+
 I wanted to try experimenting with the code to dynamically set up a toggle
 between Emacs and Vim.
 
@@ -433,7 +412,7 @@ toggle on and off.
 
    :param get_key_bindings: Callable that returns a :class:`.KeyBindings` instance.
 
-The help for :func:`prompt_toolkit.key_binding.key_bindings.DynamicKeyBindings.get_key_bindings()`:
+The help for ``prompt_toolkit.key_binding.key_bindings.DynamicKeyBindings.get_key_bindings``:
 
 .. ipython::
    :verbatim:
@@ -461,6 +440,41 @@ The help for :func:`prompt_toolkit.key_binding.key_bindings.DynamicKeyBindings.g
 
 Source code for creating IPython shortcuts
 ==========================================
+
+Let's first check out how keybindings were originally implemented to give
+ourselves a frame of reference.:
+
+.. ipython::
+
+   In [1]: from IPython.paths import get_ipython_package_dir
+   In [2]: get_ipython_package_dir()
+
+Go to the directory where IPython is installed. You can use the code above
+to check its location.
+
+This could be named something to the effect of
+``/usr/lib/python3.7/site-packages/IPython/`` for example.
+
+Windows users should locate the root of their python installations similarly.
+For users of the ``conda`` environment manager, it may be in a location like:
+
+``C:\tools\miniconda3\Lib\site-packages\IPython``.
+
+.. warning:: Users of conda on Windows.
+
+   Note that there's no directory in between lib and site-packages.
+   A seemingly minor change can make programmatic use of installation layouts
+   much more difficult!
+
+Then navigate to the root of that directory and go to the terminal package.
+
+.. code-block:: console
+
+    cd terminal
+    cat shortcuts.py
+
+Up at the top you have all the keybindings that :mod:`IPython` ships with!
+
 
 Module to define and register Terminal IPython shortcuts with
 :mod:`prompt_toolkit`

@@ -113,10 +113,7 @@ Table of Contents
    jobcontrol
    exceptions
    subcommands
-   sphinxext
-   lexer
-   sphinx_api_docs
-   custom_doctests
+   sphinxext <sphinxext/index.rst>
    Developers Notes <dev>
 
 In addition the API has extensive documentation.

@@ -4,7 +4,7 @@
 :mod:`~default_profile.startup.04_easy_import`
 ==============================================
 
-.. currentmodule:: import
+.. currentmodule:: 04_easy_import
 
 This module simply populates the IPython namespace with frequently
 used modules.
@@ -14,7 +14,7 @@ utilize the python package Pynvim instead of Neovim.
 
 
 Easy Imports
-------------
+---------------------
 
 .. automodule:: default_profile.startup.04_easy_import
    :members:
