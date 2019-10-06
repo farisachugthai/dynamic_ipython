@@ -18,19 +18,48 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
 
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" type="text/css"
-  media="screen" charset="utf-8" />
+<link
+  href="https://fonts.googleapis.com/css?family=Source+Code+Pro"
+  type="text/css"
+  charset="utf-8"
+  rel="stylesheet"
+/>
 
-<link rel="stylesheet"
-  href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" type="text/css" media="screen" charset="utf-8" />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Hack&amp;subset=latin"
+  charset="utf-8"
+  type="text/css"
+/>
+
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Hack:regular,italic,bold,bolditalic&amp;subset=latin"
+  type="text/css"
+  media="screen"
+  charset="utf-8"
+/>
+
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic"
+  type="text/css"
+  media="screen"
+  charset="utf-8"
+/>
 
 <!--[if lte IE 6]>
-<link rel="stylesheet" href="../../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+  <link
+    rel="stylesheet"
+    href="../../../_static/ie6.css"
+    type="text/css"
+    media="screen"
+    charset="utf-8"
+  />
 <![endif]-->
 
 
-  </head><body>
-
+  </head><body> 
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -49,8 +78,7 @@
       <div class="documentwrapper">
         <div class="bodywrapper">
           <div class="body" role="main">
-            
-  <h1>Source code for default_profile.util.module_log</h1><div class="highlight"><pre>
+             <h1>Source code for default_profile.util.module_log</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -146,7 +174,7 @@
         <span class="n">filename</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span>
         <span class="n">msg_format</span><span class="o">=</span><span class="bp">None</span>
 <span class="p">):</span>
-    <span class="sa">u</span><span class="sd">&quot;&quot;&quot;Logging that emits a :class:`logging.LogRecord` to ``filename``.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Logging that emits a :class:`logging.LogRecord` to ``filename``.</span>
 
 <span class="sd">    Logger uses the following formatting by default:</span>
 
@@ -162,9 +190,9 @@
 <span class="sd">    shell : |ip|, optional</span>
 <span class="sd">        Global instance of IPython. Can be **None** if not run in</span>
 <span class="sd">        :mod:`IPython` though this hasn&#39;t been tested.</span>
-<span class="sd">    ``log_level`` : int, optional</span>
+<span class="sd">    log_level : int, optional</span>
 <span class="sd">        Level of log records.</span>
-<span class="sd">    ``msg_format`` : str, optional</span>
+<span class="sd">    msg_format : str, optional</span>
 <span class="sd">        Representation of logging messages using parameters accepted by</span>
 <span class="sd">        :class:`logging.Formatter`. Uses standard :kbd:`%` style</span>
 <span class="sd">        string formatting.</span>
@@ -211,14 +239,14 @@
     <span class="k">return</span> <span class="n">logger</span></div>
 
 
-<div class="viewcode-block" id="json_logger"><a class="viewcode-back" href="../../../util/module_log.html#default_profile.util.module_log.json_logger">[docs]</a><span class="k">def</span> <span class="nf">json_logger</span><span class="p">(</span><span class="n">logger</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">JSONFormatter</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="json_logger"><a class="viewcode-back" href="../../../util/module_log.html#default_profile.util.module_log.json_logger">[docs]</a><span class="k">def</span> <span class="nf">json_logger</span><span class="p">(</span><span class="n">logger</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">json_formatter</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Set up a logger that returns properly formatted JSON.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    logger : str or :class:`logging.Logger`, optional</span>
 <span class="sd">        Either a named Logger instance or the string representing the desired instance</span>
-<span class="sd">    JsonFormatter : :class:`logging.Formatter`, optional</span>
+<span class="sd">    json_formatter : :class:`logging.Formatter`, optional</span>
 <span class="sd">        module_log.JsonFormatter instance.</span>
 <span class="sd">        Included in the listed parameters to be explicit; however, it&#39;s</span>
 <span class="sd">        probably easier to not include the parameter as one is configured</span>
@@ -240,7 +268,10 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">handler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">()</span>
 
-    <span class="n">fmt</span> <span class="o">=</span> <span class="n">JsonFormatter</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">json_formatter</span><span class="p">:</span>
+        <span class="n">fmt</span> <span class="o">=</span> <span class="n">JsonFormatter</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">fmt</span> <span class="o">=</span> <span class="n">json_formatter</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">logger</span><span class="p">:</span>
         <span class="n">root_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span>
@@ -253,6 +284,7 @@
 
     <span class="n">root_logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
     <span class="n">handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">fmt</span><span class="p">)</span>
+    <span class="n">handler</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
     <span class="n">root_logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">root_logger</span></div>
@@ -268,13 +300,16 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">exc</span> <span class="o">=</span> <span class="bp">None</span>
 
-        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
-            <span class="s1">&#39;msg&#39;</span><span class="p">:</span> <span class="n">record</span><span class="o">.</span><span class="n">msg</span> <span class="o">%</span> <span class="n">record</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="s1">&#39;timestamp&#39;</span><span class="p">:</span>
-                <span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">created</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;Z&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;func&#39;</span><span class="p">:</span> <span class="n">record</span><span class="o">.</span><span class="n">funcName</span><span class="p">,</span> <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="n">record</span><span class="o">.</span><span class="n">levelname</span><span class="p">,</span> <span class="s1">&#39;module&#39;</span><span class="p">:</span>
-                <span class="n">record</span><span class="o">.</span><span class="n">module</span><span class="p">,</span> <span class="s1">&#39;process_id&#39;</span><span class="p">:</span> <span class="n">record</span><span class="o">.</span><span class="n">process</span><span class="p">,</span> <span class="s1">&#39;thread_id&#39;</span><span class="p">:</span>
-                    <span class="n">record</span><span class="o">.</span><span class="n">thread</span><span class="p">,</span> <span class="s1">&#39;exception&#39;</span><span class="p">:</span> <span class="n">exc</span>
-        <span class="p">})</span></div></div>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s1">&#39;msg&#39;</span><span class="p">:</span> <span class="n">record</span><span class="o">.</span><span class="n">msg</span> <span class="o">%</span> <span class="n">record</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="s1">&#39;timestamp&#39;</span><span class="p">:</span>
+                    <span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">created</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="o">+</span>
+                    <span class="s1">&#39;Z&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;func&#39;</span><span class="p">:</span> <span class="n">record</span><span class="o">.</span><span class="n">funcName</span><span class="p">,</span> <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="n">record</span><span class="o">.</span><span class="n">levelname</span><span class="p">,</span> <span class="s1">&#39;module&#39;</span><span class="p">:</span>
+                    <span class="n">record</span><span class="o">.</span><span class="n">module</span><span class="p">,</span> <span class="s1">&#39;process_id&#39;</span><span class="p">:</span> <span class="n">record</span><span class="o">.</span><span class="n">process</span><span class="p">,</span> <span class="s1">&#39;thread_id&#39;</span><span class="p">:</span>
+                        <span class="n">record</span><span class="o">.</span><span class="n">thread</span><span class="p">,</span> <span class="s1">&#39;exception&#39;</span><span class="p">:</span> <span class="n">exc</span>
+            <span class="p">}</span>
+        <span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="betterConfig"><a class="viewcode-back" href="../../../util/module_log.html#default_profile.util.module_log.betterConfig">[docs]</a><span class="k">def</span> <span class="nf">betterConfig</span><span class="p">():</span>
@@ -308,8 +343,7 @@
     <span class="n">better_logger</span><span class="o">.</span><span class="n">setFilterer</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Filter</span><span class="p">())</span>
 
     <span class="k">return</span> <span class="n">better_logger</span></div>
-</pre></div>
-
+</pre></div> 
           </div>
         </div>
       </div>
@@ -317,28 +351,36 @@
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
-    <div class="searchformwrapper">
+  <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
     </form>
-    </div>
+  </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script><h3>Related Topics</h3>
+<script type="text/javascript">
+  $("#searchbox").show(0);
+</script><h3>Related Topics</h3>
 <ul>
-  <li><a href="../../../index.html">Documentation overview</a><ul>
-  <li><a href="../../index.html">Module code</a><ul>
-  </ul></li>
-  </ul></li>
+  <li>
+    <a href="../../../index.html">Documentation overview</a>
+    <ul>
+      <li>
+        <a href="../../index.html">Module code</a>
+        <ul>
+        </ul>
+      </li>
+    </ul>
+  </li>
 </ul>
 
 <h3><a href="../../../index.html">Table of Contents</a></h3>
 
 <div>&nbsp;</div>
 <div id="sidebartoc">
-<p class="caption"><span class="caption-text">Tutorial</span></p>
+  <p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../jobcontrol.html">Job Control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../jobcontrol.html">Job Control — Preliminary “job control” extensions for IPython.</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../exceptions.html">Customized Exceptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../subcommands.html">Subcommands in IPython and Jupyter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../sphinxext.html">IPython Sphinx Directive</a></li>
@@ -355,13 +397,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../jupyter/index.html">jupyter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Extensions</a></li>
 </ul>
-
-
-
+ 
 </div>
 
-
-
+ 
         </div>
       </div>
       <div class="clearer"></div>
@@ -380,7 +419,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Oct 04, 2019.
+      Last updated on Oct 06, 2019.
     </div>
   </body>
 </html>

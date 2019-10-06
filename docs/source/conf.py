@@ -483,7 +483,8 @@ autodoc_mock_imports = [
     'default_profile',
     'default_profile.util',
     'default_profile.sphinxext',
-    'extensions',
+    'default_profile.extensions',
+    'jupyter_conf',
 ]
 autosummary_generate = True
 

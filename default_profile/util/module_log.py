@@ -93,7 +93,7 @@ def file_logger(
         filename, logger=None, shell=None, log_level=logging.INFO,
         msg_format=None
 ):
-    u"""Logging that emits a :class:`logging.LogRecord` to ``filename``.
+    r"""Logging that emits a :class:`logging.LogRecord` to ``filename``.
 
     Logger uses the following formatting by default:
 
@@ -109,9 +109,9 @@ def file_logger(
     shell : |ip|, optional
         Global instance of IPython. Can be **None** if not run in
         :mod:`IPython` though this hasn't been tested.
-    ``log_level`` : int, optional
+    log_level : int, optional
         Level of log records.
-    ``msg_format`` : str, optional
+    msg_format : str, optional
         Representation of logging messages using parameters accepted by
         :class:`logging.Formatter`. Uses standard :kbd:`%` style
         string formatting.
@@ -158,14 +158,14 @@ def file_logger(
     return logger
 
 
-def json_logger(logger=None, JSONFormatter=None):
+def json_logger(logger=None, json_formatter=None):
     """Set up a logger that returns properly formatted JSON.
 
     Parameters
     ----------
     logger : str or :class:`logging.Logger`, optional
         Either a named Logger instance or the string representing the desired instance
-    JsonFormatter : :class:`logging.Formatter`, optional
+    json_formatter : :class:`logging.Formatter`, optional
         module_log.JsonFormatter instance.
         Included in the listed parameters to be explicit; however, it's
         probably easier to not include the parameter as one is configured
@@ -187,7 +187,10 @@ def json_logger(logger=None, JSONFormatter=None):
     """
     handler = logging.StreamHandler()
 
-    fmt = JsonFormatter()
+    if not json_formatter:
+        fmt = JsonFormatter()
+    else:
+        fmt = json_formatter
 
     if not logger:
         root_logger = logging.getLogger()
@@ -200,6 +203,7 @@ def json_logger(logger=None, JSONFormatter=None):
 
     root_logger.setLevel(logging.DEBUG)
     handler.setFormatter(fmt)
+    handler.setLevel(logging.DEBUG)
     root_logger.addHandler(handler)
 
     return root_logger
@@ -215,13 +219,16 @@ class JsonFormatter(logging.Formatter):
         else:
             exc = None
 
-        return json.dumps({
-            'msg': record.msg % record.args, 'timestamp':
-                datetime.utcfromtimestamp(record.created).isoformat() + 'Z',
-            'func': record.funcName, 'level': record.levelname, 'module':
-                record.module, 'process_id': record.process, 'thread_id':
-                    record.thread, 'exception': exc
-        })
+        return json.dumps(
+            {
+                'msg': record.msg % record.args, 'timestamp':
+                    datetime.utcfromtimestamp(record.created).isoformat() +
+                    'Z',
+                'func': record.funcName, 'level': record.levelname, 'module':
+                    record.module, 'process_id': record.process, 'thread_id':
+                        record.thread, 'exception': exc
+            }
+        )
 
 
 def betterConfig():

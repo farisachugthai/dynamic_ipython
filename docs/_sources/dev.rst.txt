@@ -72,7 +72,7 @@ From PowerShell, run.:
 
 
 Setting ``&makeprg``
-------------------------
+--------------------
 
 While working in Vim, the following commands can be useful for building
 documentation.:
@@ -83,22 +83,34 @@ documentation.:
    cd docs                " assuming set shellslash has been run if $OS=='Windows_NT'
    make -b html . ../build
 
-Generally it's more difficult to specify parameters in the ``makeprg`` option
+Generally it's more difficult to specify parameters in the ``&makeprg`` option
 than it is to write them out manually on the cmdline and allows for less
 configurability.
 
 Therefore it's best to leave ``&makeprg`` as minimal as possible, and if
 necessary, build arguments into a mapping.
 
-In addition, ``makeprg`` is not an option one is allowed to set in a modeline
+In addition, ``&makeprg`` is not an option one is allowed to set in a modeline
 so it's important to take that into consideration.
 
 .. wait can we specify everything and then override it?
 
+
+:mod:`default_profile.sphinxext.magics`
+---------------------------------------
+.. automodule:: default_profile.sphinxext.magics
+
+.. currentmodule:: developers_notes
+
+:mod:`~default_profile.sphinxext.configtraits`
+----------------------------------------------
+.. automodule:: default_profile.sphinxext.configtraits
+
+
 Utilizing Tagbar
 ----------------
 
-Out of the box, Exuberant ctags and even Universal ctags 
+Out of the box, Exuberant ctags and even Universal ctags
 doesn't support rst documentation.
 
 An external dependency in rst2ctags is required which can be
@@ -130,4 +142,4 @@ Pygments can generate CSS with the following command in the shell:
 
 .. code-block:: shell
 
-   pygmentize -S GruvboxDarkHard -f html > _static/pygments.css 
+   pygmentize -S GruvboxDarkHard -f html > _static/pygments.css

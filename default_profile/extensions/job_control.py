@@ -1,54 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-=================================================================
-job_control --- Preliminary "job control" extensions for IPython.
-=================================================================
-
-Synopsis
---------
-**job-control** [*options*]
-
-Requires python 2.4 (or separate 'subprocess' module).
-This provides 2 features, launching background jobs and killing
-foreground jobs from another IPython instance.
-
-Usage:
-
-[ipython]|2> import jobctrl
-[ipython]|3> &ls
-            <3> <jobctrl.IpyPopen object at 0x00D87FD0>
-[ipython]|4> _3.go
------------> _3.go()
-ChangeLog
-IPython
-MANIFEST.in
-README
-README_Windows.txt
-
-...
-
-Killing foreground tasks:
-
-Launch IPython instance, run a blocking command:
-
-[Q:/ipython]|1> import jobctrl
-[Q:/ipython]|2> cat
-
-Now launch a new IPython prompt and kill the process:
-
-IPython 0.8.3.svn.r2919   [on Py 2.5]
-[Q:/ipython]|1> import jobctrl
-[Q:/ipython]|2> %tasks
-6020: 'cat ' (Q:\ipython)
-[Q:/ipython]|3> %kill
-SUCCESS: The process with PID 6020 has been terminated.
-[Q:/ipython]|4>
-
-.. note::
-    You don't need to specify PID for ``%kill`` if only one task is running.
-
-"""
 import os
 import shlex
 import sys
@@ -57,7 +8,6 @@ import threading
 import queue
 from queue import Queue
 
-from subprocess import *
 from subprocess import PIPE, Popen
 import subprocess
 
@@ -65,15 +15,8 @@ import ipython_genutils
 
 # import IPython.ipapi
 from IPython import get_ipython
-
-if os.name == 'nt':
-
-    def kill_process(pid):
-        os.system('taskkill /F /PID %d' % pid)
-else:
-
-    def kill_process(pid):
-        os.system('kill -9 %d' % pid)
+# TODO: Find TryNext
+# from IPython.lib.editor
 
 
 class IpyPopen(subprocess.Popen):
@@ -90,6 +33,7 @@ class IpyPopen(subprocess.Popen):
 
 
 def startjob(job):
+    """Initialize an *IpyPopen instance."""
     p = IpyPopen(shlex.split(job), stdout=PIPE, shell=False)
     p.line = job
     return p
@@ -136,11 +80,8 @@ class AsyncJobQ(threading.Thread):
             print(item)
 
 
-_jobq = None
-
-
 def jobqueue_f(self, line):
-
+    """Create a jobqueue."""
     global _jobq
     if not _jobq:
         print("Starting jobqueue - do '&some_long_lasting_system_command' to enqueue")
@@ -159,6 +100,7 @@ def jobqueue_f(self, line):
 
 
 def jobctrl_prefilter_f(self, line):
+    """Yeah we definitely gotta rewrite this one."""
     if line.startswith('&'):
         pre, fn, rest = self.split_user_input(line[1:])
 
@@ -167,7 +109,8 @@ def jobctrl_prefilter_f(self, line):
             return '_ip.startjob(%s)' % genutils.make_quoted_expr(line)
         return '_ip.jobq(%s)' % genutils.make_quoted_expr(line)
 
-    raise IPython.ipapi.TryNext
+    # raise IPython.ipapi.TryNext
+    # possibly is
 
 
 def jobq_output_hook(self):
@@ -241,7 +184,10 @@ else:
 
 
 def jobctrl_shellcmd(ip, cmd):
-    """ os.system replacement that stores process info to db['tasks/t1234'] """
+    """:func:`os.system` replacement.
+
+    Stores process info to db['tasks/t1234'].
+    """
     cmd = cmd.strip()
     cmdname = cmd.split(None, 1)[0]
     if cmdname in shell_internal_commands or '|' in cmd or '>' in cmd or '<' in cmd:
@@ -287,4 +233,15 @@ def install():
 
 
 if __name__ == "__main__":
+    if os.name == 'nt':
+
+        def kill_process(pid):
+            os.system('taskkill /F /PID %d' % pid)
+    else:
+
+        def kill_process(pid):
+            os.system('kill -9 %d' % pid)
+
+    _jobq = None
+
     install()
