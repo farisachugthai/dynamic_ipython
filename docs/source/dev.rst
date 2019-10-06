@@ -100,7 +100,7 @@ so it's important to take that into consideration.
 ---------------------------------------
 .. automodule:: default_profile.sphinxext.magics
 
-.. current_module:: developers_notes
+.. currentmodule:: developers_notes
 
 :mod:`~default_profile.sphinxext.configtraits`
 ----------------------------------------------
@@ -110,7 +110,7 @@ so it's important to take that into consideration.
 Utilizing Tagbar
 ----------------
 
-Out of the box, Exuberant ctags and even Universal ctags 
+Out of the box, Exuberant ctags and even Universal ctags
 doesn't support rst documentation.
 
 An external dependency in rst2ctags is required which can be
@@ -142,4 +142,4 @@ Pygments can generate CSS with the following command in the shell:
 
 .. code-block:: shell
 
-   pygmentize -S GruvboxDarkHard -f html > _static/pygments.css 
+   pygmentize -S GruvboxDarkHard -f html > _static/pygments.css

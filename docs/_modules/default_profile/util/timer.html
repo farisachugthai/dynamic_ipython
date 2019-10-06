@@ -60,17 +60,24 @@
 
 <span class="sd">Largely this module was simply practice on writing decorators.</span>
 
+<span class="sd">Might need to review logging best practices. I don&#39;t want the logger from</span>
+<span class="sd">this module to emit anything, but it seems tedious to place that burden</span>
+<span class="sd">on any module that imports from here.</span>
+
 <span class="sd">See Also</span>
 <span class="sd">--------</span>
-<span class="sd">:mod:`cProfile`</span>
-<span class="sd">:mod:`pstats`</span>
-<span class="sd">:mod:`timeit`</span>
-<span class="sd">:magic:`timeit`</span>
+<span class="sd">.. seealso::</span>
+
+<span class="sd">    :mod:`cProfile`</span>
+<span class="sd">    :mod:`pstats`</span>
+<span class="sd">    :mod:`timeit`</span>
+<span class="sd">    :magic:`timeit`</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">functools</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">timeit</span> <span class="kn">import</span> <span class="n">Timer</span>
 
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
 
@@ -82,8 +89,8 @@
 
 <span class="sd">    .. todo:: Begin using the :mod:`timeit` module.</span>
 
-<span class="sd">        There are more specialized ways of profiling things in other modules;</span>
-<span class="sd">        however, this works for a rough estimate.</span>
+<span class="sd">        There are more specialized ways of profiling things in</span>
+<span class="sd">        other modules; however, this works for a rough estimate.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -125,6 +132,18 @@
         <span class="k">return</span> <span class="n">value</span>
 
     <span class="k">return</span> <span class="n">wrapper_debug</span></div>
+
+
+<div class="viewcode-block" id="exc_timer"><a class="viewcode-back" href="../../../util/timer.html#default_profile.util.timer.exc_timer">[docs]</a><span class="k">def</span> <span class="nf">exc_timer</span><span class="p">(</span><span class="n">statement</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A non-decorator implementation that uses `timeit.`&quot;&quot;&quot;</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">Timer</span><span class="p">(</span><span class="n">statement</span><span class="p">)</span>  <span class="c1"># outside the try/except</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">t</span><span class="o">.</span><span class="n">timeit</span><span class="p">()</span>
+    <span class="c1"># or t.repeat(...)</span>
+    <span class="k">except</span><span class="p">:</span>  <span class="c1"># noqa E722</span>
+        <span class="n">t</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span></div>
+    <span class="c1"># else:</span>
+    <span class="c1"># TODO:</span>
 </pre></div>
 
           </div>
@@ -158,10 +177,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../jobcontrol.html">Job Control</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../exceptions.html">Customized Exceptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../subcommands.html">Subcommands in IPython and Jupyter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../sphinxext.html">IPython Sphinx Directive</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../lexer.html">New IPython Console Lexer</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../sphinx_api_docs.html">Sphinx API docs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../custom_doctests.html">Custom Doctests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sphinxext/index.html">sphinxext</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../dev.html">Developers Notes</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
@@ -197,7 +213,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Oct 04, 2019.
+      Last updated on Oct 06, 2019.
     </div>
   </body>
 </html>
