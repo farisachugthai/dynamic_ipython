@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -7,365 +8,186 @@
     <link rel="stylesheet" href="../_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
-    <script
-      type="text/javascript"
-      id="documentation_options"
-      data-url_root="../"
-      src="../_static/documentation_options.js"
-    ></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/language_data.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
-    <link
-      rel="canonical"
-      href="https://farisachugthai.github.io/dynamic-ipython/startup/ipython-logger.html"
-    />
+    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/startup/ipython-logger.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="06_Help_Helpers" href="help_helpers.html" />
     <link rel="prev" title="04_easy_import" href="easy_import.html" />
 
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css?family=Source+Code+Pro"
-      type="text/css"
-      media="screen"
-      charset="utf-8"
-    />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" type="text/css"
+  media="screen" charset="utf-8" />
 
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic"
-      type="text/css"
-      media="screen"
-      charset="utf-8"
-    />
+<link rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" type="text/css" media="screen" charset="utf-8" />
 
-    <!--[if lte IE 6]>
-      <link
-        rel="stylesheet"
-        href="../_static/ie6.css"
-        type="text/css"
-        media="screen"
-        charset="utf-8"
-      />
-    <![endif]-->
-  </head>
-  <body>
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+
+  </head><body>
+
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index" accesskey="I"
-            >index</a
-          >
-        </li>
-        <li class="right">
-          <a href="../py-modindex.html" title="Python Module Index">modules</a>
-          |
-        </li>
-        <li class="right">
-          <a href="help_helpers.html" title="06_Help_Helpers" accesskey="N"
-            >next</a
-          >
-          |
-        </li>
-        <li class="right">
-          <a href="easy_import.html" title="04_easy_import" accesskey="P"
-            >previous</a
-          >
-          |
-        </li>
-        <li class="nav-item nav-item-0">
-          <a href="../index.html">Dynamic IPython</a> &#187;
-        </li>
-        <li class="nav-item nav-item-1">
-          <a href="index.html" accesskey="U">IPython API</a> &#187;
-        </li>
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="help_helpers.html" title="06_Help_Helpers"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="easy_import.html" title="04_easy_import"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Dynamic IPython</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">IPython API</a> &#187;</li> 
       </ul>
-    </div>
+    </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
           <div class="body" role="main">
-            <div class="section" id="log-ipython-logger">
-              <span id="ipython-logger"></span>
-              <h1>
-                05_log — IPython logger<a
-                  class="headerlink"
-                  href="#log-ipython-logger"
-                  title="Permalink to this headline"
-                  >¶</a
-                >
-              </h1>
-              <p>
-                This uses the IPython core
-                <code class="xref py py-class docutils literal notranslate"
-                  ><span class="pre"
-                    >IPython.core.logger.LoggingConfigurable</span
-                  ></code
-                >
-                to create a
-                <code class="xref py py-class docutils literal notranslate"
-                  ><span class="pre">logging.handler.FileHandler()</span></code
-                >
-                that creates one new log file for every calendar day of the
-                year.
-              </p>
-              <p>
-                Running IPython instances will continue to write to the log file
-                if the session continues after the point when the logfile rolls
-                over.
-              </p>
-              <p>
-                If multiple sessions are started, the new instances will append
-                onto the same file as the older ones.
-              </p>
-              <div class="admonition-linux-only admonition">
-                <p class="admonition-title">Linux Only</p>
-                <p>
-                  This only works on Linux. The Win API seemingly isn’t able to
-                  maintain multiple connections to the same file.
-                </p>
-              </div>
-              <div class="section" id="module-default_profile.startup.05_log">
-                <span id="log-module"></span>
-                <h2>
-                  <a
-                    class="reference internal"
-                    href="#module-default_profile.startup.05_log"
-                    title="default_profile.startup.05_log"
-                    ><code class="xref py py-mod docutils literal notranslate"
-                      ><span class="pre">05_log</span></code
-                    ></a
-                  >
-                  module<a
-                    class="headerlink"
-                    href="#module-default_profile.startup.05_log"
-                    title="Permalink to this headline"
-                    >¶</a
-                  >
-                </h2>
-                <p>output to a file.</p>
-                <dl class="function">
-                  <dt id="default_profile.startup.05_log.ipython_logger">
-                    <code class="sig-name descname">ipython_logger</code
-                    ><span class="sig-paren">(</span
-                    ><em class="sig-param">shell=None</em
-                    ><span class="sig-paren">)</span
-                    ><a
-                      class="reference external"
-                      href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"
-                      ><span class="viewcode-link">[source]</span></a
-                    ><a
-                      class="reference internal"
-                      href="../_modules/default_profile/startup/05_log.html#ipython_logger"
-                      ><span class="viewcode-link">[source]</span></a
-                    ><a
-                      class="headerlink"
-                      href="#default_profile.startup.05_log.ipython_logger"
-                      title="Permalink to this definition"
-                      >¶</a
-                    >
-                  </dt>
-                  <dd>
-                    <p>
-                      Saves all commands run in the interactive namespace as
-                      valid IPython code.
-                    </p>
-                    <div class="admonition warning">
-                      <p class="admonition-title">Warning</p>
-                      <p>This is not necessarily valid python code.</p>
-                    </div>
-                    <p>
-                      The commands are appended to a file in the directory of
-                      the profile in <span class="target" id="index-0"></span
-                      ><code
-                        class="xref std std-envvar docutils literal notranslate"
-                        ><span class="pre">$IPYTHONDIR</span></code
-                      >
-                      or fallback ~/.ipython. This file is named based on the
-                      date.
-                    </p>
-                    <dl class="field-list simple">
-                      <dt class="field-odd">Parameters</dt>
-                      <dd class="field-odd">
-                        <p>
-                          <strong>shell</strong> (<a
-                            class="reference external"
-                            href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell"
-                            title="(in IPython v7.8.0)"
-                            ><code
-                              class="xref py py-class docutils literal notranslate"
-                              ><span class="pre">InteractiveShell</span></code
-                            ></a
-                          >) – Global IPython instance.
-                        </p>
-                      </dd>
-                      <dt class="field-even">Raises</dt>
-                      <dd class="field-even">
-                        <p>
-                          <a
-                            class="reference external"
-                            href="https://docs.python.org/3/library/exceptions.html#RuntimeError"
-                            title="(in Python v3.7)"
-                            ><strong>RuntimeError</strong></a
-                          >
-                          – If the configured logger is already logging to
-                          todays date.
-                        </p>
-                      </dd>
-                    </dl>
-                  </dd>
-                </dl>
-              </div>
-            </div>
+            
+  <div class="section" id="log-ipython-logger">
+<span id="ipython-logger"></span><h1>05_log — IPython logger<a class="headerlink" href="#log-ipython-logger" title="Permalink to this headline">¶</a></h1>
+<p>This uses the IPython core <code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.logger.LoggingConfigurable</span></code>
+to create a <code class="xref py py-class docutils literal notranslate"><span class="pre">logging.handler.FileHandler()</span></code> that creates one new log
+file for every calendar day of the year.</p>
+<p>Running IPython instances will continue to write to the log file if the
+session continues after the point when the logfile rolls over.</p>
+<p>If multiple sessions are started, the new instances will append onto the same
+file as the older ones.</p>
+<div class="admonition-linux-only admonition">
+<p class="admonition-title">Linux Only</p>
+<p>This only works on Linux. The Win API seemingly isn’t able to
+maintain multiple connections to the same file.</p>
+</div>
+<div class="section" id="module-default_profile.startup.05_log">
+<span id="log-module"></span><h2><a class="reference internal" href="#module-default_profile.startup.05_log" title="default_profile.startup.05_log"><code class="xref py py-mod docutils literal notranslate"><span class="pre">05_log</span></code></a> module<a class="headerlink" href="#module-default_profile.startup.05_log" title="Permalink to this headline">¶</a></h2>
+<p>output to a file.</p>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<p>Logging TODOs</p>
+<ul>
+<li><dl class="simple">
+<dt>Truncate output if it exceeds a certain threshold.</dt><dd><ul>
+<li><p>Run <strong>dir(np)</strong> or <strong>dir(pd)</strong> a couple of times and the logs
+become swamped.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p>Possibly change that section under the shebang to also include 3
+double quotes and in the comment add system info like py version, venv,
+conda, any of the 1000000 things you could add.</p></li>
+</ul>
+</div>
+<dl class="function">
+<dt id="default_profile.startup.05_log.ipython_logger">
+<code class="sig-name descname">ipython_logger</code><span class="sig-paren">(</span><em class="sig-param">shell=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/05_log.html#ipython_logger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.ipython_logger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves all commands run in the interactive namespace as valid IPython code.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is not necessarily valid python code.</p>
+</div>
+<p>The commands are appended to a file in the directory of the
+profile in <span class="target" id="index-0"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">$IPYTHONDIR</span></code> or fallback ~/.ipython. This file is
+named based on the date.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>shell</strong> (<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.8.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveShell</span></code></a>) – Global IPython instance.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.7)"><strong>RuntimeError</strong></a> – If the configured logger is already logging to todays date.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-          <div id="searchbox" style="display: none" role="search">
-            <h3>Quick search</h3>
-            <div class="searchformwrapper">
-              <form class="search" action="../search.html" method="get">
-                <input type="text" name="q" />
-                <input type="submit" value="Go" />
-              </form>
-            </div>
-          </div>
-          <script type="text/javascript">
-            $("#searchbox").show(0);
-          </script>
-          <h3>Related Topics</h3>
-          <ul>
-            <li>
-              <a href="../index.html">Documentation overview</a>
-              <ul>
-                <li>
-                  <a href="index.html">IPython API</a>
-                  <ul>
-                    <li>
-                      Previous:
-                      <a href="easy_import.html" title="previous chapter"
-                        ><code
-                          class="xref py py-mod docutils literal notranslate"
-                          ><span class="pre">04_easy_import</span></code
-                        ></a
-                      >
-                    </li>
-                    <li>
-                      Next:
-                      <a href="help_helpers.html" title="next chapter"
-                        >06_Help_Helpers</a
-                      >
-                    </li>
-                  </ul>
-                </li>
-              </ul>
-            </li>
-          </ul>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">IPython API</a><ul>
+      <li>Previous: <a href="easy_import.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">04_easy_import</span></code></a></li>
+      <li>Next: <a href="help_helpers.html" title="next chapter">06_Help_Helpers</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
 
-          <h3><a href="../index.html">Table of Contents</a></h3>
+<h3><a href="../index.html">Table of Contents</a></h3>
 
-          <div>&nbsp;</div>
-          <div id="sidebartoc">
-            <p class="caption"><span class="caption-text">Tutorial</span></p>
-            <ul>
-              <li class="toctree-l1">
-                <a class="reference internal" href="../jobcontrol.html"
-                  >Job Control</a
-                >
-              </li>
-              <li class="toctree-l1">
-                <a class="reference internal" href="../exceptions.html"
-                  >Customized Exceptions</a
-                >
-              </li>
-              <li class="toctree-l1">
-                <a class="reference internal" href="../subcommands.html"
-                  >Subcommands in IPython and Jupyter</a
-                >
-              </li>
-              <li class="toctree-l1">
-                <a class="reference internal" href="../sphinxext/index.html"
-                  >sphinxext</a
-                >
-              </li>
-              <li class="toctree-l1">
-                <a class="reference internal" href="../dev.html"
-                  >Developers Notes</a
-                >
-              </li>
-            </ul>
-            <p class="caption"><span class="caption-text">API</span></p>
-            <ul class="current">
-              <li class="toctree-l1 current">
-                <a class="reference internal" href="index.html">IPython API</a>
-              </li>
-              <li class="toctree-l1">
-                <a class="reference internal" href="../util/index.html"
-                  >IPython Utilities</a
-                >
-              </li>
-              <li class="toctree-l1">
-                <a class="reference internal" href="../kernel.html"
-                  >IPython Kernel</a
-                >
-              </li>
-              <li class="toctree-l1">
-                <a class="reference internal" href="../jupyter/index.html"
-                  >jupyter</a
-                >
-              </li>
-              <li class="toctree-l1">
-                <a class="reference internal" href="../extensions.html"
-                  >Extensions</a
-                >
-              </li>
-            </ul>
-          </div>
+<div>&nbsp;</div>
+<div id="sidebartoc">
+<p class="caption"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../jobcontrol.html">Job Control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../exceptions.html">Customized Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../subcommands.html">Subcommands in IPython and Jupyter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sphinxext/index.html">sphinxext</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev.html">Developers Notes</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">IPython API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../util/index.html">IPython Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../kernel.html">IPython Kernel</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../jupyter/index.html">jupyter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../extensions.html">Extensions</a></li>
+</ul>
 
-          <div role="note" aria-label="source link">
-            <h3>This Page</h3>
-            <ul class="this-page-menu">
-              <li>
-                <a
-                  href="../_sources/startup/ipython-logger.rst.txt"
-                  rel="nofollow"
-                  >Show Source</a
-                >
-              </li>
-            </ul>
-          </div>
 
-          <h3><a href="../index.html">On This Page:</a></h3>
 
-          <div>&nbsp;</div>
-          <div id="sidebartoc">
-            <ul>
-              <li>
-                <a class="reference internal" href="#"
-                  >05_log — IPython logger</a
-                >
-                <ul>
-                  <li>
-                    <a
-                      class="reference internal"
-                      href="#module-default_profile.startup.05_log"
-                      ><code class="xref py py-mod docutils literal notranslate"
-                        ><span class="pre">05_log</span></code
-                      >
-                      module</a
-                    >
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </div>
+</div>
+
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/startup/ipython-logger.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+
+<h3><a href="../index.html">On This Page:</a></h3>
+
+<div>&nbsp;</div>
+<div id="sidebartoc">
+  <ul>
+<li><a class="reference internal" href="#">05_log — IPython logger</a><ul>
+<li><a class="reference internal" href="#module-default_profile.startup.05_log"><code class="xref py py-mod docutils literal notranslate"><span class="pre">05_log</span></code> module</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+
         </div>
       </div>
       <div class="clearer"></div>
@@ -374,24 +196,19 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index">index</a>
-        </li>
-        <li class="right">
-          <a href="../py-modindex.html" title="Python Module Index">modules</a>
-          |
-        </li>
-        <li class="right">
-          <a href="help_helpers.html" title="06_Help_Helpers">next</a> |
-        </li>
-        <li class="right">
-          <a href="easy_import.html" title="04_easy_import">previous</a> |
-        </li>
-        <li class="nav-item nav-item-0">
-          <a href="../index.html">Dynamic IPython</a> &#187;
-        </li>
-        <li class="nav-item nav-item-1">
-          <a href="index.html">IPython API</a> &#187;
-        </li>
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="help_helpers.html" title="06_Help_Helpers"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="easy_import.html" title="04_easy_import"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Dynamic IPython</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >IPython API</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

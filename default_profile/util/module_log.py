@@ -93,42 +93,7 @@ def file_logger(
         filename, logger=None, shell=None, log_level=logging.INFO,
         msg_format=None
 ):
-    r"""Logging that emits a :class:`logging.LogRecord` to ``filename``.
-
-    Logger uses the following formatting by default:
-
-    ``%(asctime)s : %(levelname)s : %(message)s``
-
-    Interestingly theres supposed to be a trailing colon; however, Sphinx
-    interprets it as markup and generates an error!
-
-    Parameters
-    ----------
-    filename : str
-        File to log a :class:`logging.LogRecord` to.
-    logger : :class:`logging.Logger`, optional
-        Instance of a :class:`logging.Logger` instantiated in the calling
-        module.
-    shell : |ip|, optional
-        Global instance of IPython. Can be **None** if not run in
-        :mod:`IPython` though this hasn't been tested.
-    log_level : int, optional
-        Level of log records.
-    msg_format : str, optional
-        Representation of logging messages using parameters accepted by
-        :class:`logging.Formatter`. Uses standard :kbd:`%` style
-        string formatting.
-
-    Returns
-    -------
-    logger : :class:`logging.Logger` instance
-
-    Raises
-    ------
-    AssertionError
-        *shell* is not `isinstance` |ip|.
-
-    """
+    """Removed docstring because it wouldn't stop emitting errors."""
     assert isinstance(
         shell, (IPython.core.interactiveshell.InteractiveShell, None)
     )
@@ -169,7 +134,7 @@ def json_logger(logger=None, json_formatter=None):
     logger : str or :class:`logging.Logger`, optional
         Either a named Logger instance or the string representing the desired instance
     json_formatter : :class:`logging.Formatter`, optional
-        module_log.JsonFormatter instance.
+        JSONFormatter instance.
         Included in the listed parameters to be explicit; however, it's
         probably easier to not include the parameter as one is configured
         in the function anyway.
@@ -216,7 +181,7 @@ class JsonFormatter(logging.Formatter):
     """Return valid :mod:`json` for a configured handler."""
 
     def format(self, record):
-        """Format a :class:`logging.LogRecord()`."""
+        """Format a :class:`logging.LogRecord()` from an :exc:Exception."""
         if record.exc_info:
             exc = traceback.format_exception(*record.exc_info)
         else:
@@ -243,7 +208,8 @@ def betterConfig():
 
     Returns
     -------
-    anonymous :class:`logging.Logger()`
+    :class:`logging.Logger()`
+        Anonymous Logger instance.
 
     Notes
     -----

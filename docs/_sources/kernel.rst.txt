@@ -10,9 +10,12 @@ IPython Kernel
     from traitlets.config import get_config
     c = get_config()
 
+
 Initially Provided Configuration
 ================================
+
 From ``ipython kernel --generate-config``.
+
 
 ConnectionFileMixin(LoggingConfigurable) configuration
 ------------------------------------------------------

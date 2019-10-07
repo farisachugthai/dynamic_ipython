@@ -1,11 +1,9 @@
 ==============
 System Aliases
 ==============
-**Source Code:** `default_profile/startup/20_aliases.py`
 
-.. module:: system-aliases
-   :synopsis: Gather information, determine platform and set appropriate aliases.
-
+.. module:: default_profile.startup.20_aliases
+   :synopsis: Create system aliases for the shell.
 
 To date there are well over 100 aliases manually added to the shell.
 

@@ -1,4 +1,4 @@
-.. _ jupyter:
+.. _jupyter:
 
 =============
 Jupyter Suite
