@@ -453,7 +453,7 @@ viewcode_follow_imported_members = False
 
 # -- IPython directive -------------------------------------------------------
 
-ipython_savefig_dir = DOCS.joinpath('source', '_static', '_images').__fspath__()
+ipython_savefig_dir = DOCS.joinpath('_images').__fspath__()
 savefig_dir = ipython_savefig_dir
 
 ipython_warning_is_error = False
