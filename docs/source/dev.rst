@@ -134,6 +134,18 @@ found at `this repo <https://github.com/jszakmeister/rst2ctags.git>`_.
        \ }
 
 
+Automatically well formatted config files
+-----------------------------------------
+
+Buffer searches to reformat the default config files.
+
+.. code-block:: vim
+
+   :%s/##/#
+   :%s/#c/# c/
+   :%s/^#$\n//
+
+Should kill most linter errors.
 
 Generating CSS
 ==============

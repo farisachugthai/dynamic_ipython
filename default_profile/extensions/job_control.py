@@ -1,5 +1,30 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""
+Todo:
+
+(dynamic_ipython) 02:32:23 u0_a144@localhost Mon Oct 07 ~/projects/dynamic_ipython/default_profile/profile_debugger
+
+$: ipdb3 ../extensions/job_control.py -c pdbrc
+> /data/data/com.termux/files/home/projects/dynamic_ipython/default_profile/extensions/job_control.py(3)<module>() 2
+# -*- coding: utf- 8 -*-
+----> 3 import os
+4 import shlex
+
+ipdb> c
+
+Warning! Hook 'input_prefilter' is not one of ['editor', 'synchronize_with_editor',
+'shutdown_hook', 'late_startup_hook', 'show_in_pager', 'pre_prompt_hook',
+'pre_run_code_hook', 'clipboard_get']
+
+Warning! Hook 'shell_hook' is not one of ['editor', 'synchronize_with_editor',
+'shutdown_hook', 'late_startup_hook', 'show_in_pager', 'pre_prompt_hook',
+'pre_run_code_hook', 'clipboard_get']
+
+The program finished and will be restarted
+
+
+"""
 import os
 import shlex
 import sys
@@ -8,7 +33,7 @@ import threading
 import queue
 from queue import Queue
 
-from subprocess import PIPE, Popen
+from subprocess import PIPE, Popen, STDOUT
 import subprocess
 
 import ipython_genutils
@@ -84,7 +109,9 @@ def jobqueue_f(self, line):
     """Create a jobqueue."""
     global _jobq
     if not _jobq:
-        print("Starting jobqueue - do '&some_long_lasting_system_command' to enqueue")
+        print(
+            "Starting jobqueue - do '&some_long_lasting_system_command' to enqueue"
+        )
         _jobq = AsyncJobQ()
         _jobq.setDaemon(True)
         _jobq.start()
@@ -106,8 +133,8 @@ def jobctrl_prefilter_f(self, line):
 
         line = ip.IP.expand_aliases(fn, rest)
         if not _jobq:
-            return '_ip.startjob(%s)' % genutils.make_quoted_expr(line)
-        return '_ip.jobq(%s)' % genutils.make_quoted_expr(line)
+            return '_ip.startjob(%s)' % ipython_genutils.make_quoted_expr(line)
+        return '_ip.jobq(%s)' % ipython_genutils.make_quoted_expr(line)
 
     # raise IPython.ipapi.TryNext
     # possibly is
@@ -128,7 +155,9 @@ def job_list(ip):
 def magic_tasks(self, line):
     """ Show a list of tasks.
 
-    A 'task' is a process that has been started in IPython when 'jobctrl' extension is enabled.
+    A 'task' is a process that has been started in IPython when 'jobctrl'
+    extension is enabled.
+
     Tasks can be killed with %kill.
 
     '%tasks clear' clears the task list (from stale tasks)
@@ -149,12 +178,13 @@ def magic_tasks(self, line):
 
 
 def magic_kill(self, line):
-    """ Kill a task
+    """Kill a task
 
     Without args, either kill one task (if only one running) or show list (if many)
     With arg, assume it's the process id.
 
-    %kill is typically (much) more powerful than trying to terminate a process with ctrl+C.
+    %kill is typically (much) more powerful than trying to terminate
+    a process with ctrl+C.
     """
     ip = self.getapi()
     jobs = job_list(ip)
@@ -174,8 +204,10 @@ def magic_kill(self, line):
 
 
 if sys.platform == 'win32':
-    shell_internal_commands = 'break chcp cls copy ctty date del erase dir md mkdir path prompt rd rmdir start time type ver vol'.split(
-    )
+    shell_internal_commands = [
+        'break chcp cls copy ctty date del erase'
+        'dir md mkdir path prompt rd rmdir start time type ver vol '
+    ].splitlines()
     PopenExc = WindowsError
 else:
     # todo linux commands
@@ -226,9 +258,9 @@ def install():
     ip.startjob = startjob
     ip.set_hook('input_prefilter', jobctrl_prefilter_f)
     ip.set_hook('shell_hook', jobctrl_shellcmd)
-    ip.expose_magic('kill', magic_kill)
-    ip.expose_magic('tasks', magic_tasks)
-    ip.expose_magic('jobqueue', jobqueue_f)
+    # ip.expose_magic('kill', magic_kill)
+    # ip.expose_magic('tasks', magic_tasks)
+    # ip.expose_magic('jobqueue', jobqueue_f)
     ip.set_hook('pre_prompt_hook', jobq_output_hook)
 
 

@@ -1,56 +1,110 @@
-
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>IPython.sphinxext.ipython_directive &#8212; Dynamic IPython: version0.0.2</title>
-    <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <title>
+      IPython.sphinxext.ipython_directive &#8212; Dynamic IPython: version0.0.2
+    </title>
+    <link
+      rel="stylesheet"
+      href="../../../_static/pyramid.css"
+      type="text/css"
+    />
+    <link
+      rel="stylesheet"
+      href="../../../_static/pygments.css"
+      type="text/css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="../../../_static/graphviz.css"
+    />
+    <script
+      type="text/javascript"
+      id="documentation_options"
+      data-url_root="../../../"
+      src="../../../_static/documentation_options.js"
+    ></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script
+      type="text/javascript"
+      src="../../../_static/underscore.js"
+    ></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../_static/language_data.js"></script>
-    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
-    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/IPython/sphinxext/ipython_directive.html" />
+    <script
+      type="text/javascript"
+      src="../../../_static/language_data.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="../../../_static/copybutton.js"
+    ></script>
+    <link
+      rel="canonical"
+      href="https://farisachugthai.github.io/dynamic-ipython/_modules/IPython/sphinxext/ipython_directive.html"
+    />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
 
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" type="text/css"
-  media="screen" charset="utf-8" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Source+Code+Pro"
+      type="text/css"
+      media="screen"
+      charset="utf-8"
+    />
 
-<link rel="stylesheet"
-  href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" type="text/css" media="screen" charset="utf-8" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic"
+      type="text/css"
+      media="screen"
+      charset="utf-8"
+    />
 
-<!--[if lte IE 6]>
-<link rel="stylesheet" href="../../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
-<![endif]-->
-
-
-  </head><body>
-
+    <!--[if lte IE 6]>
+      <link
+        rel="stylesheet"
+        href="../../../_static/ie6.css"
+        type="text/css"
+        media="screen"
+        charset="utf-8"
+      />
+    <![endif]-->
+  </head>
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
+          <a href="../../../genindex.html" title="General Index" accesskey="I"
+            >index</a
+          >
+        </li>
+        <li class="right">
           <a href="../../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+            >modules</a
+          >
+          |
+        </li>
+        <li class="nav-item nav-item-0">
+          <a href="../../../index.html">Dynamic IPython</a> &#187;
+        </li>
+        <li class="nav-item nav-item-1">
+          <a href="../../index.html" accesskey="U">Module code</a> &#187;
+        </li>
       </ul>
-    </div>  
+    </div>
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
           <div class="body" role="main">
-            
-  <h1>Source code for IPython.sphinxext.ipython_directive</h1><div class="highlight"><pre>
+            <h1>Source code for IPython.sphinxext.ipython_directive</h1>
+            <div class="highlight">
+              <pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Sphinx directive to support embedded IPython code.</span>
@@ -195,7 +249,7 @@
 <span class="sd">See http://matplotlib.org/sampledoc/ipython_directive.html for additional</span>
 <span class="sd">documentation.</span>
 
-<span class="sd">Decorators</span>
+<span class="sd">Pseudo-Decorators</span>
 <span class="sd">=================</span>
 
 <span class="sd">Note: Only one decorator is supported per input. If more than one decorator</span>
@@ -215,6 +269,13 @@
 
 <span class="sd">        In [1]: 1/0</span>
 <span class="sd">        In [2]: # raise warning.</span>
+
+<span class="sd">To Do</span>
+<span class="sd">=====</span>
+
+<span class="sd">- Turn the ad-hoc test() function into a real test suite.</span>
+<span class="sd">- Break up ipython-specific functionality from matplotlib stuff into better</span>
+<span class="sd">  separated code.</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 
@@ -1295,57 +1356,101 @@
         <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="s1">&#39;_static&#39;</span><span class="p">)</span>
     <span class="n">test</span><span class="p">()</span>
     <span class="k">print</span><span class="p">(</span><span class="s1">&#39;All OK? Check figures in _static/&#39;</span><span class="p">)</span>
-</pre></div>
-
+</pre>
+            </div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script><h3>Related Topics</h3>
-<ul>
-  <li><a href="../../../index.html">Documentation overview</a><ul>
-  <li><a href="../../index.html">Module code</a><ul>
-  </ul></li>
-  </ul></li>
-</ul>
+          <div id="searchbox" style="display: none" role="search">
+            <h3>Quick search</h3>
+            <div class="searchformwrapper">
+              <form class="search" action="../../../search.html" method="get">
+                <input type="text" name="q" />
+                <input type="submit" value="Go" />
+              </form>
+            </div>
+          </div>
+          <script type="text/javascript">
+            $("#searchbox").show(0);
+          </script>
+          <h3>Related Topics</h3>
+          <ul>
+            <li>
+              <a href="../../../index.html">Documentation overview</a>
+              <ul>
+                <li>
+                  <a href="../../index.html">Module code</a>
+                  <ul></ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
 
-<h3><a href="../../../index.html">Table of Contents</a></h3>
+          <h3><a href="../../../index.html">Table of Contents</a></h3>
 
-<div>&nbsp;</div>
-<div id="sidebartoc">
-<p class="caption"><span class="caption-text">Tutorial</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../jobcontrol.html">Job Control</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../exceptions.html">Customized Exceptions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../subcommands.html">Subcommands in IPython and Jupyter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../sphinxext/index.html">sphinxext</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev.html">Developers Notes</a></li>
-</ul>
-<p class="caption"><span class="caption-text">API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../startup/index.html">IPython API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../util/index.html">IPython Utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../kernel.html">IPython Kernel</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../jupyter/index.html">jupyter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Extensions</a></li>
-</ul>
-
-
-
-</div>
-
-
-
+          <div>&nbsp;</div>
+          <div id="sidebartoc">
+            <p class="caption"><span class="caption-text">Tutorial</span></p>
+            <ul>
+              <li class="toctree-l1">
+                <a class="reference internal" href="../../../jobcontrol.html"
+                  >Job Control</a
+                >
+              </li>
+              <li class="toctree-l1">
+                <a class="reference internal" href="../../../exceptions.html"
+                  >Customized Exceptions</a
+                >
+              </li>
+              <li class="toctree-l1">
+                <a class="reference internal" href="../../../subcommands.html"
+                  >Subcommands in IPython and Jupyter</a
+                >
+              </li>
+              <li class="toctree-l1">
+                <a
+                  class="reference internal"
+                  href="../../../sphinxext/index.html"
+                  >sphinxext</a
+                >
+              </li>
+              <li class="toctree-l1">
+                <a class="reference internal" href="../../../dev.html"
+                  >Developers Notes</a
+                >
+              </li>
+            </ul>
+            <p class="caption"><span class="caption-text">API</span></p>
+            <ul>
+              <li class="toctree-l1">
+                <a class="reference internal" href="../../../startup/index.html"
+                  >IPython API</a
+                >
+              </li>
+              <li class="toctree-l1">
+                <a class="reference internal" href="../../../util/index.html"
+                  >IPython Utilities</a
+                >
+              </li>
+              <li class="toctree-l1">
+                <a class="reference internal" href="../../../kernel.html"
+                  >IPython Kernel</a
+                >
+              </li>
+              <li class="toctree-l1">
+                <a class="reference internal" href="../../../jupyter/index.html"
+                  >jupyter</a
+                >
+              </li>
+              <li class="toctree-l1">
+                <a class="reference internal" href="../../../extensions.html"
+                  >Extensions</a
+                >
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
       <div class="clearer"></div>
@@ -1354,17 +1459,24 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
+          <a href="../../../genindex.html" title="General Index">index</a>
+        </li>
+        <li class="right">
           <a href="../../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+            >modules</a
+          >
+          |
+        </li>
+        <li class="nav-item nav-item-0">
+          <a href="../../../index.html">Dynamic IPython</a> &#187;
+        </li>
+        <li class="nav-item nav-item-1">
+          <a href="../../index.html">Module code</a> &#187;
+        </li>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Oct 06, 2019.
+      Last updated on Oct 07, 2019.
     </div>
   </body>
 </html>

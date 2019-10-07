@@ -97,7 +97,10 @@ def file_logger(
 
     Logger uses the following formatting by default:
 
-    ``%(asctime)s : %(levelname)s : %(message)s : ``
+    ``%(asctime)s : %(levelname)s : %(message)s``
+
+    Interestingly theres supposed to be a trailing colon; however, Sphinx
+    interprets it as markup and generates an error!
 
     Parameters
     ----------

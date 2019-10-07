@@ -1,167 +1,417 @@
-
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>default_profile.util.timer module &#8212; Dynamic IPython: version0.0.2</title>
+    <title>
+      default_profile.util.timer module &#8212; Dynamic IPython: version0.0.2
+    </title>
     <link rel="stylesheet" href="../_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script
+      type="text/javascript"
+      id="documentation_options"
+      data-url_root="../"
+      src="../_static/documentation_options.js"
+    ></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/language_data.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
-    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/util/timer.html" />
+    <link
+      rel="canonical"
+      href="https://farisachugthai.github.io/dynamic-ipython/util/timer.html"
+    />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="IPython Kernel" href="../kernel.html" />
-    <link rel="prev" title="profile_override module" href="profile_override.html" />
+    <link
+      rel="prev"
+      title="profile_override module"
+      href="profile_override.html"
+    />
 
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" type="text/css"
-  media="screen" charset="utf-8" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Source+Code+Pro"
+      type="text/css"
+      media="screen"
+      charset="utf-8"
+    />
 
-<link rel="stylesheet"
-  href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" type="text/css" media="screen" charset="utf-8" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic"
+      type="text/css"
+      media="screen"
+      charset="utf-8"
+    />
 
-<!--[if lte IE 6]>
-<link rel="stylesheet" href="../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
-<![endif]-->
-
-
-  </head><body>
-
+    <!--[if lte IE 6]>
+      <link
+        rel="stylesheet"
+        href="../_static/ie6.css"
+        type="text/css"
+        media="screen"
+        charset="utf-8"
+      />
+    <![endif]-->
+  </head>
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="../kernel.html" title="IPython Kernel"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="profile_override.html" title="profile_override module"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Dynamic IPython</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">IPython Utilities</a> &#187;</li> 
+          <a href="../genindex.html" title="General Index" accesskey="I"
+            >index</a
+          >
+        </li>
+        <li class="right">
+          <a href="../py-modindex.html" title="Python Module Index">modules</a>
+          |
+        </li>
+        <li class="right">
+          <a href="../kernel.html" title="IPython Kernel" accesskey="N">next</a>
+          |
+        </li>
+        <li class="right">
+          <a
+            href="profile_override.html"
+            title="profile_override module"
+            accesskey="P"
+            >previous</a
+          >
+          |
+        </li>
+        <li class="nav-item nav-item-0">
+          <a href="../index.html">Dynamic IPython</a> &#187;
+        </li>
+        <li class="nav-item nav-item-1">
+          <a href="index.html" accesskey="U">IPython Utilities</a> &#187;
+        </li>
       </ul>
-    </div>  
+    </div>
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
           <div class="body" role="main">
-            
-  <div class="section" id="module-default_profile.util.timer">
-<span id="default-profile-util-timer-module"></span><h1>default_profile.util.timer module<a class="headerlink" href="#module-default_profile.util.timer" title="Permalink to this headline">¶</a></h1>
-<p>Largely this module was simply practice on writing decorators.</p>
-<p>Might need to review logging best practices. I don’t want the logger from
-this module to emit anything, but it seems tedious to place that burden
-on any module that imports from here.</p>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<dl class="simple">
-<dt><code class="xref py py-mod docutils literal notranslate"></code></dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/profile.html#module-cProfile" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cProfile</span></code></a> <a class="reference external" href="https://docs.python.org/3/library/profile.html#module-pstats" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pstats</span></code></a> <a class="reference external" href="https://docs.python.org/3/library/timeit.html#module-timeit" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">timeit</span></code></a> <a class="reference external" href="https://ipython.readthedocs.io/en/stable/interactive/magics.html#magic-timeit" title="(in IPython v7.8.0)"><code class="xref std std-magic docutils literal notranslate"><span class="pre">timeit</span></code></a></p>
-</dd>
-</dl>
-</div>
-<dl class="function">
-<dt id="default_profile.util.timer.timer">
-<code class="sig-name descname">timer</code><span class="sig-paren">(</span><em class="sig-param">func</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/util/timer.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/util/timer.html#timer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.timer.timer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Print the runtime of the decorated function.</p>
-<p>Utilizes <a class="reference external" href="https://docs.python.org/3/library/time.html#time.perf_counter" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">time.perf_counter</span></code></a>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>func</strong> (<em>function</em>) – Function to profile</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>value</strong> – Output of function <a class="reference external" href="https://docs.python.org/3/library/time.html#time.perf_counter" title="(in Python v3.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">time.perf_counter()</span></code></a>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)">float</a></p>
-</dd>
-</dl>
-</dd></dl>
+            <div class="section" id="module-default_profile.util.timer">
+              <span id="default-profile-util-timer-module"></span>
+              <h1>
+                default_profile.util.timer module<a
+                  class="headerlink"
+                  href="#module-default_profile.util.timer"
+                  title="Permalink to this headline"
+                  >¶</a
+                >
+              </h1>
+              <p>
+                Largely this module was simply practice on writing decorators.
+              </p>
+              <p>
+                Might need to review logging best practices. I don’t want the
+                logger from this module to emit anything, but it seems tedious
+                to place that burden on any module that imports from here.
+              </p>
+              <div class="admonition seealso">
+                <p class="admonition-title">See also</p>
+                <dl class="simple">
+                  <dt>
+                    <code
+                      class="xref py py-mod docutils literal notranslate"
+                    ></code>
+                  </dt>
+                  <dd>
+                    <p>
+                      <a
+                        class="reference external"
+                        href="https://docs.python.org/3/library/profile.html#module-cProfile"
+                        title="(in Python v3.7)"
+                        ><code
+                          class="xref py py-mod docutils literal notranslate"
+                          ><span class="pre">cProfile</span></code
+                        ></a
+                      >
+                      <a
+                        class="reference external"
+                        href="https://docs.python.org/3/library/profile.html#module-pstats"
+                        title="(in Python v3.7)"
+                        ><code
+                          class="xref py py-mod docutils literal notranslate"
+                          ><span class="pre">pstats</span></code
+                        ></a
+                      >
+                      <a
+                        class="reference external"
+                        href="https://docs.python.org/3/library/timeit.html#module-timeit"
+                        title="(in Python v3.7)"
+                        ><code
+                          class="xref py py-mod docutils literal notranslate"
+                          ><span class="pre">timeit</span></code
+                        ></a
+                      >
+                      <a
+                        class="reference external"
+                        href="https://ipython.readthedocs.io/en/stable/interactive/magics.html#magic-timeit"
+                        title="(in IPython v7.8.0)"
+                        ><code
+                          class="xref std std-magic docutils literal notranslate"
+                          ><span class="pre">timeit</span></code
+                        ></a
+                      >
+                    </p>
+                  </dd>
+                </dl>
+              </div>
+              <dl class="function">
+                <dt id="default_profile.util.timer.timer">
+                  <code class="sig-name descname">timer</code
+                  ><span class="sig-paren">(</span
+                  ><em class="sig-param">func</em
+                  ><span class="sig-paren">)</span
+                  ><a
+                    class="reference external"
+                    href="https://github.com/farisachugthai/dynamic_ipython/default_profile/util/timer.py"
+                    ><span class="viewcode-link">[source]</span></a
+                  ><a
+                    class="reference internal"
+                    href="../_modules/default_profile/util/timer.html#timer"
+                    ><span class="viewcode-link">[source]</span></a
+                  ><a
+                    class="headerlink"
+                    href="#default_profile.util.timer.timer"
+                    title="Permalink to this definition"
+                    >¶</a
+                  >
+                </dt>
+                <dd>
+                  <p>Print the runtime of the decorated function.</p>
+                  <p>
+                    Utilizes
+                    <a
+                      class="reference external"
+                      href="https://docs.python.org/3/library/time.html#time.perf_counter"
+                      title="(in Python v3.7)"
+                      ><code class="xref py py-obj docutils literal notranslate"
+                        ><span class="pre">time.perf_counter</span></code
+                      ></a
+                    >.
+                  </p>
+                  <dl class="field-list simple">
+                    <dt class="field-odd">Parameters</dt>
+                    <dd class="field-odd">
+                      <p>
+                        <strong>func</strong> (<em>function</em>) – Function to
+                        profile
+                      </p>
+                    </dd>
+                    <dt class="field-even">Returns</dt>
+                    <dd class="field-even">
+                      <p>
+                        <strong>value</strong> – Output of function
+                        <a
+                          class="reference external"
+                          href="https://docs.python.org/3/library/time.html#time.perf_counter"
+                          title="(in Python v3.7)"
+                          ><code
+                            class="xref py py-func docutils literal notranslate"
+                            ><span class="pre">time.perf_counter()</span></code
+                          ></a
+                        >.
+                      </p>
+                    </dd>
+                    <dt class="field-odd">Return type</dt>
+                    <dd class="field-odd">
+                      <p>
+                        <a
+                          class="reference external"
+                          href="https://docs.python.org/3/library/functions.html#float"
+                          title="(in Python v3.7)"
+                          >float</a
+                        >
+                      </p>
+                    </dd>
+                  </dl>
+                </dd>
+              </dl>
 
-<dl class="function">
-<dt id="default_profile.util.timer.debug">
-<code class="sig-name descname">debug</code><span class="sig-paren">(</span><em class="sig-param">func</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/util/timer.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/util/timer.html#debug"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.timer.debug" title="Permalink to this definition">¶</a></dt>
-<dd><p>Print the function signature and return value</p>
-</dd></dl>
+              <dl class="function">
+                <dt id="default_profile.util.timer.debug">
+                  <code class="sig-name descname">debug</code
+                  ><span class="sig-paren">(</span
+                  ><em class="sig-param">func</em
+                  ><span class="sig-paren">)</span
+                  ><a
+                    class="reference external"
+                    href="https://github.com/farisachugthai/dynamic_ipython/default_profile/util/timer.py"
+                    ><span class="viewcode-link">[source]</span></a
+                  ><a
+                    class="reference internal"
+                    href="../_modules/default_profile/util/timer.html#debug"
+                    ><span class="viewcode-link">[source]</span></a
+                  ><a
+                    class="headerlink"
+                    href="#default_profile.util.timer.debug"
+                    title="Permalink to this definition"
+                    >¶</a
+                  >
+                </dt>
+                <dd><p>Print the function signature and return value</p></dd>
+              </dl>
 
-<dl class="function">
-<dt id="default_profile.util.timer.exc_timer">
-<code class="sig-name descname">exc_timer</code><span class="sig-paren">(</span><em class="sig-param">statement</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/util/timer.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/util/timer.html#exc_timer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.timer.exc_timer" title="Permalink to this definition">¶</a></dt>
-<dd><p>A non-decorator implementation that uses <code class="xref py py-obj docutils literal notranslate"><span class="pre">timeit.</span></code></p>
-</dd></dl>
-
-</div>
-
-
+              <dl class="function">
+                <dt id="default_profile.util.timer.exc_timer">
+                  <code class="sig-name descname">exc_timer</code
+                  ><span class="sig-paren">(</span
+                  ><em class="sig-param">statement</em
+                  ><span class="sig-paren">)</span
+                  ><a
+                    class="reference external"
+                    href="https://github.com/farisachugthai/dynamic_ipython/default_profile/util/timer.py"
+                    ><span class="viewcode-link">[source]</span></a
+                  ><a
+                    class="reference internal"
+                    href="../_modules/default_profile/util/timer.html#exc_timer"
+                    ><span class="viewcode-link">[source]</span></a
+                  ><a
+                    class="headerlink"
+                    href="#default_profile.util.timer.exc_timer"
+                    title="Permalink to this definition"
+                    >¶</a
+                  >
+                </dt>
+                <dd>
+                  <p>
+                    A non-decorator implementation that uses
+                    <code class="xref py py-obj docutils literal notranslate"
+                      ><span class="pre">timeit.</span></code
+                    >
+                  </p>
+                </dd>
+              </dl>
+            </div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script><h3>Related Topics</h3>
-<ul>
-  <li><a href="../index.html">Documentation overview</a><ul>
-  <li><a href="index.html">IPython Utilities</a><ul>
-      <li>Previous: <a href="profile_override.html" title="previous chapter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">profile_override</span></code> module</a></li>
-      <li>Next: <a href="../kernel.html" title="next chapter">IPython Kernel</a></li>
-  </ul></li>
-  </ul></li>
-</ul>
+          <div id="searchbox" style="display: none" role="search">
+            <h3>Quick search</h3>
+            <div class="searchformwrapper">
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" />
+                <input type="submit" value="Go" />
+              </form>
+            </div>
+          </div>
+          <script type="text/javascript">
+            $("#searchbox").show(0);
+          </script>
+          <h3>Related Topics</h3>
+          <ul>
+            <li>
+              <a href="../index.html">Documentation overview</a>
+              <ul>
+                <li>
+                  <a href="index.html">IPython Utilities</a>
+                  <ul>
+                    <li>
+                      Previous:
+                      <a href="profile_override.html" title="previous chapter"
+                        ><code
+                          class="xref py py-obj docutils literal notranslate"
+                          ><span class="pre">profile_override</span></code
+                        >
+                        module</a
+                      >
+                    </li>
+                    <li>
+                      Next:
+                      <a href="../kernel.html" title="next chapter"
+                        >IPython Kernel</a
+                      >
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
 
-<h3><a href="../index.html">Table of Contents</a></h3>
+          <h3><a href="../index.html">Table of Contents</a></h3>
 
-<div>&nbsp;</div>
-<div id="sidebartoc">
-<p class="caption"><span class="caption-text">Tutorial</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../jobcontrol.html">Job Control</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../exceptions.html">Customized Exceptions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../subcommands.html">Subcommands in IPython and Jupyter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../sphinxext/index.html">sphinxext</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../dev.html">Developers Notes</a></li>
-</ul>
-<p class="caption"><span class="caption-text">API</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../startup/index.html">IPython API</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="index.html">IPython Utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../kernel.html">IPython Kernel</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../jupyter/index.html">jupyter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../extensions.html">Extensions</a></li>
-</ul>
+          <div>&nbsp;</div>
+          <div id="sidebartoc">
+            <p class="caption"><span class="caption-text">Tutorial</span></p>
+            <ul>
+              <li class="toctree-l1">
+                <a class="reference internal" href="../jobcontrol.html"
+                  >Job Control</a
+                >
+              </li>
+              <li class="toctree-l1">
+                <a class="reference internal" href="../exceptions.html"
+                  >Customized Exceptions</a
+                >
+              </li>
+              <li class="toctree-l1">
+                <a class="reference internal" href="../subcommands.html"
+                  >Subcommands in IPython and Jupyter</a
+                >
+              </li>
+              <li class="toctree-l1">
+                <a class="reference internal" href="../sphinxext/index.html"
+                  >sphinxext</a
+                >
+              </li>
+              <li class="toctree-l1">
+                <a class="reference internal" href="../dev.html"
+                  >Developers Notes</a
+                >
+              </li>
+            </ul>
+            <p class="caption"><span class="caption-text">API</span></p>
+            <ul class="current">
+              <li class="toctree-l1">
+                <a class="reference internal" href="../startup/index.html"
+                  >IPython API</a
+                >
+              </li>
+              <li class="toctree-l1 current">
+                <a class="reference internal" href="index.html"
+                  >IPython Utilities</a
+                >
+              </li>
+              <li class="toctree-l1">
+                <a class="reference internal" href="../kernel.html"
+                  >IPython Kernel</a
+                >
+              </li>
+              <li class="toctree-l1">
+                <a class="reference internal" href="../jupyter/index.html"
+                  >jupyter</a
+                >
+              </li>
+              <li class="toctree-l1">
+                <a class="reference internal" href="../extensions.html"
+                  >Extensions</a
+                >
+              </li>
+            </ul>
+          </div>
 
-
-
-</div>
-
-
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../_sources/util/timer.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-
+          <div role="note" aria-label="source link">
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li>
+                <a href="../_sources/util/timer.rst.txt" rel="nofollow"
+                  >Show Source</a
+                >
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
       <div class="clearer"></div>
@@ -170,23 +420,31 @@ on any module that imports from here.</p>
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="../kernel.html" title="IPython Kernel"
-             >next</a> |</li>
-        <li class="right" >
+          <a href="../genindex.html" title="General Index">index</a>
+        </li>
+        <li class="right">
+          <a href="../py-modindex.html" title="Python Module Index">modules</a>
+          |
+        </li>
+        <li class="right">
+          <a href="../kernel.html" title="IPython Kernel">next</a> |
+        </li>
+        <li class="right">
           <a href="profile_override.html" title="profile_override module"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Dynamic IPython</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" >IPython Utilities</a> &#187;</li> 
+            >previous</a
+          >
+          |
+        </li>
+        <li class="nav-item nav-item-0">
+          <a href="../index.html">Dynamic IPython</a> &#187;
+        </li>
+        <li class="nav-item nav-item-1">
+          <a href="index.html">IPython Utilities</a> &#187;
+        </li>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Oct 06, 2019.
+      Last updated on Oct 07, 2019.
     </div>
   </body>
 </html>
