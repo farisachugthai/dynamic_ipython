@@ -397,10 +397,10 @@ def gather_sphinx_options(argv: List[str]) -> Any:
 
     # Necessary enough to justify not making a logrecord.
     pprint('Your sphinx-build command was: ' + str(
-                ['-b', builder,
-                SOURCE_PATH, BUILD_PATH,
-                '-j', jobs, '-' + verbosity * 'v'
-            ]))
+        ['-b', builder,
+         SOURCE_PATH, BUILD_PATH,
+         '-j', jobs, '-' + verbosity * 'v'
+         ]))
     ret = build_main(['-b', builder, SOURCE_PATH, BUILD_PATH])
     return ret
 

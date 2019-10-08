@@ -8,8 +8,9 @@ repr_requests
 .. magic:: _repr_request
 
 
-Utilize the :ref:`_repr_pretty` method to generate a display for a
-requests.models.Response objects.
+Utilize the :meth:`IPython.core.interactiveshell.InteractiveShell._repr_pretty`
+method to generate a :func:`IPython.display.display`
+for a requests.models.Response objects.
 
 """
 import sys

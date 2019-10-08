@@ -207,12 +207,19 @@ if sys.platform == 'win32':
     shell_internal_commands = [
         'break chcp cls copy ctty date del erase'
         'dir md mkdir path prompt rd rmdir start time type ver vol '
-    ].splitlines()
+    ]
     PopenExc = WindowsError
 else:
     # todo linux commands
     shell_internal_commands = []
     PopenExc = OSError
+
+
+def determine_use_shell(command, all_shell_commands):
+    """Refactor jobctrl_shellcmd."""
+    cmdname = command.split(None, 1)[0]
+    if cmdname in all_shell_commands or '|' in command or '>' in command or '<' in command:
+        return True
 
 
 def jobctrl_shellcmd(ip, cmd):
@@ -221,39 +228,29 @@ def jobctrl_shellcmd(ip, cmd):
     Stores process info to db['tasks/t1234'].
     """
     cmd = cmd.strip()
-    cmdname = cmd.split(None, 1)[0]
-    if cmdname in shell_internal_commands or '|' in cmd or '>' in cmd or '<' in cmd:
-        use_shell = True
-    else:
-        use_shell = False
+    use_shell = determine_use_shell(cmd, shell_internal_commands)
 
     jobentry = None
+    # There HAS to be a better way of doing this
     try:
-        try:
-            p = Popen(cmd, shell=use_shell)
-        except PopenExc:
-            if use_shell:
-                # try with os.system
-                os.system(cmd)
-                return
-            else:
-                # have to go via shell, sucks
-                p = Popen(cmd, shell=True)
+        p = Popen(cmd, shell=use_shell)
+    except PopenExc:
+        if use_shell:
+            # try with os.system
+            os.system(cmd)
+            return
+        else:
+            # have to go via shell, sucks
+            p = Popen(cmd, shell=True)
 
-        jobentry = 'tasks/t' + str(p.pid)
-        ip.db[jobentry] = (p.pid, cmd, os.getcwd(), time.time())
-        p.communicate()
-
-    finally:
-        if jobentry:
-            del ip.db[jobentry]
+    jobentry = 'tasks/t' + str(p.pid)
+    # ipython doesn't have a db attribute anymore
+    # ip.db[jobentry] = (p.pid, cmd, os.getcwd(), time.time())
+    p.communicate()
 
 
 def install():
     """Set up job control for the IPython instance."""
-    global ip
-    # ip = IPython.ipapi.get()
-    ip = get_ipython()
     # needed to make startjob visible as _ip.startjob('blah')
     ip.startjob = startjob
     ip.set_hook('input_prefilter', jobctrl_prefilter_f)
@@ -275,5 +272,6 @@ if __name__ == "__main__":
             os.system('kill -9 %d' % pid)
 
     _jobq = None
+    ip = get_ipython()
 
     install()

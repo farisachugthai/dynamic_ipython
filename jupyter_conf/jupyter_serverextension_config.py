@@ -1,3 +1,6 @@
+
+"""Subcommand won't stop complaining about jupyterlab-git."""
+
 # Configuration file for jupyter serverextension.
 
 # ------------------------------------------------------------------------------

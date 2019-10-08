@@ -50,7 +50,7 @@ class IPD(Pdb):
 
     """
 
-    def __init__(self, shell, completer=None):
+    def __init__(self, shell, keys=None, completer=None, prompt_toolkit_application=None, *args, **kwargs):
         """Add everything to call signature.
 
         The original only displays star args and star kwargs.
@@ -61,17 +61,29 @@ class IPD(Pdb):
             Global IPython
         completer : optional
             What do we use for completions?
-
+        prompt_toolkit_application : None
+            pt_init parameter
         """
         self.shell = shell
 
-        self.completer = completer
-        if self.completer is None:
-            completer = self.initialize_completer()
-            self.completer = IPythonPTCompleter(completer)
+        if not keys:
+            self.keys = self.initialize_keybindings()
+        else:
+            self.keys = keys
 
-        self.pt_init()
-        super().__init__(self)
+        if completer is None:
+            self.completer = self.initialize_completer()
+        else:
+            self.completer = completer
+
+        self.completer = IPythonPTCompleter(completer, shell=self.shell)
+
+        if prompt_toolkit_application is None:
+            self.prompt_toolkit_application = self.pt_init()
+        else:
+            self.prompt_toolkit_application = prompt_toolkit_application
+
+        super().__init__(self, *args, **kwargs)
 
     def __repr__(self):
         return '{}\t{}'.format(self.shell, self.completer)
@@ -86,22 +98,23 @@ class IPD(Pdb):
 
     def initialize_completer(self):
         """Create a completion instance for the debugger."""
-        compl = IPCompleter(
+        return IPCompleter(
             shell=self.shell,
             namespace=self.shell.user_ns,
             global_namespace=globals(),
             parent=self.shell,
         )
-        return compl
+
+    def initialize_keybindings(self):
+        """Should make this explicit and as a result independent."""
+        return create_ipython_shortcuts(self.shell)
 
     def pt_init(self):
         """Override the default initialization for prompt_toolkit."""
-        keys = create_ipython_shortcuts(self.shell)
-
-        self.pt_app = PromptSession(
+        return PromptSession(
             message=(lambda: PygmentsTokens(self.get_prompt_tokens())),
             editing_mode=getattr(EditingMode, self.shell.editing_mode.upper()),
-            key_bindings=keys,
+            key_bindings=self.keys,
             history=self.shell.debugger_history,
             completer=self.completer,
             enable_history_search=True,
@@ -147,7 +160,6 @@ def is_embedded_shell(shell):
             "the configuration will not be loaded.\n\n"
         )
         return True
-    return False
 
 
 def formatted_traceback():
@@ -162,21 +174,12 @@ def setup_breakpointhook():
 
 def main():
     """Create an instance of our debugger."""
-    # Recall that the first var in a tuple unpacking expression represents
-    # sys.argv[0], aka the program name
-    if len(sys.argv) == 1:
-        user_args = sys.argv[1:]
-        ptcomp = None
-    else:
-        user_args = None
-        ptcomp = None
-
     ip = get_ipython()  # noqa C0103
     if ip is None:  # noqa C0103
         ip = initialize_ipython()
 
     # with patch_stdout.patch_stdout():
-    dynamic_debugger = IPD(shell=ip, completer=ptcomp)
+    dynamic_debugger = IPD(shell=ip)
     return dynamic_debugger
 
 

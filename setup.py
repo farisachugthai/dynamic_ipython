@@ -49,9 +49,6 @@ from setuptools import setup, find_packages, Command, Extension
 
 # how are we allowed to do this you can't force a dependency before installation
 # from default_profile import __about__.__version__
-__about__ = {}
-__about__['__version__'] = '0.0.2'
-
 # Conda Support: {{{1
 
 try:
@@ -61,7 +58,9 @@ except (ImportError, ModuleNotFoundError):
 else:
     distclass = distutils.command.bdist_conda.CondaDistribution
 
+
 # Metadata: {{{1
+from default_profile.__about__ import __version__
 NAME = 'dynamic_ipython'
 AUTHOR = "Faris Chugthai"
 EMAIL = "farischugthai@gmail.com"
@@ -73,7 +72,7 @@ KEYWORDS = [
 URL = "https://github.com/farisachugthai/dynamic_ipython"
 REQUIRES_PYTHON = '>=3.6.0'
 
-VERSION = __about__['__version__']
+VERSION = '__version__'
 
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 CONF_PATH = os.path.dirname(os.path.abspath('docs'))
@@ -81,7 +80,7 @@ BUILD_PATH = os.path.join(CONF_PATH, 'build')
 SOURCE_PATH = os.path.join(CONF_PATH, 'source')
 
 README = os.path.join(ROOT_PATH, '', 'README.rst')
-REQUIRED = ['IPython>=7.7', 'prompt_toolkit', 'numpy', 'pandas', 'jinja2', 'traitlets']
+REQUIRED = ['IPython>=7.7', 'prompt_toolkit', 'numpy', 'pandas', 'jinja2', 'traitlets', 'pygments']
 
 EXTRAS = {
     'develop': ['pipenv', 'flake8>=3.7.1', 'pylint', 'yapf>=0.27.0'],
@@ -140,7 +139,7 @@ class UploadCommand(Command):  # {{{1
         os.system('twine upload dist/*')
 
         self.status('Pushing git tags…')
-        os.system('git tag v{0}'.format(__about__.__version__))
+        os.system('git tag v{0}'.format(__version__))
         os.system('git push --tags')
 
         sys.exit()
@@ -151,7 +150,7 @@ class UploadCommand(Command):  # {{{1
 
 setup(
     name=NAME,
-    version=__about__['__version__'],
+    version=VERSION,
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
     long_description_content_type='text/restructuredtext',

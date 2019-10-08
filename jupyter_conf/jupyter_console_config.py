@@ -3,12 +3,7 @@
 Jupyter Console config
 =======================
 
-.. currentmodule:: jupyter_console_config
-
-.. highlight:: ipython
-
 Sep 05, 2019:
-
 This is quite the odd program.
 
 >>> from jupyter_console.ptshell import ZMQTerminalIPythonApp, ZMQTerminalInteractiveShell
