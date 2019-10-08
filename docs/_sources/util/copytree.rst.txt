@@ -1,10 +1,7 @@
-==========
-`copytree`
-==========
+============================================
+:mod:`~default_profile.util.copytree` module
+============================================
 
-default_profile.util.copytree module
--------------------------------------
-.. currentmodule:: copytree
 
 .. automodule:: default_profile.util.copytree
    :members:

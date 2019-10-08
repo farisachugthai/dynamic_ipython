@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>default_profile.util.pager2 module &#8212; Dynamic IPython: version0.0.2</title>
+    <title>pager2 module &#8212; Dynamic IPython: version0.0.2</title>
     <link rel="stylesheet" href="../_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -58,8 +58,137 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-default_profile.util.pager2">
-<span id="default-profile-util-pager2-module"></span><h1><a class="reference internal" href="#module-default_profile.util.pager2" title="default_profile.util.pager2"><code class="xref py py-mod docutils literal notranslate"><span class="pre">default_profile.util.pager2</span></code></a> module<a class="headerlink" href="#module-default_profile.util.pager2" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="pager2-module">
+<h1><a class="reference internal" href="#module-default_profile.util.pager2" title="default_profile.util.pager2"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pager2</span></code></a> module<a class="headerlink" href="#pager2-module" title="Permalink to this headline">¶</a></h1>
+<p>Still a Work in Progress.</p>
+<p>Still considering different ways of designing a new Windows specific pager
+on IPython. It’s a bit difficult as the default implementation is over 10
+years old, and it seems to mirror a similar setup from <a class="reference external" href="https://docs.python.org/3/library/pydoc.html#module-pydoc" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pydoc</span></code></a> where a
+Windows user who doesn’t have <span class="target" id="index-0"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PAGER</span></code> set will use a home-brewed
+<strong class="command">more</strong> lite type pager.</p>
+<p>However, I haven’t found anywhere in the docs where this is mentioned which
+is frustrating, in addition to the fact that both APIs are written with no
+ability to change or configure things in mind.</p>
+<div class="section" id="original-implementation">
+<h2>Original Implementation<a class="headerlink" href="#original-implementation" title="Permalink to this headline">¶</a></h2>
+<p>Below is the source code for how the original <span class="xref std std-ref">pycat</span> was implemented.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+<span class="kn">from</span> <span class="nn">IPython.core.magics</span> <span class="kn">import</span> <span class="n">line_magic</span>
+<span class="kn">from</span> <span class="nn">IPython.core.errors</span> <span class="kn">import</span> <span class="n">UsageError</span>
+
+<span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+
+<span class="c1"># Real src</span>
+<span class="nd">@line_magic</span>
+<span class="k">def</span> <span class="nf">pycat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameter_s</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+    <span class="c1"># Show a syntax-highlighted file through a pager.</span>
+
+    <span class="c1"># This magic is similar to the cat utility, but it will assume the file</span>
+    <span class="c1"># to be Python source and will show it with syntax highlighting.</span>
+
+    <span class="c1"># This magic command can either take a local filename, an url,</span>
+    <span class="c1"># an history range (see %history) or a macro as argument ::</span>
+
+    <span class="c1"># %pycat myscript.py</span>
+    <span class="c1"># %pycat 7-27</span>
+    <span class="c1"># %pycat myMacro</span>
+    <span class="c1"># %pycat http://www.example.com/myscript.py</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">parameter_s</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">UsageError</span><span class="p">(</span><span class="s1">&#39;Missing filename, URL, input history range, &#39;</span>
+                         <span class="s1">&#39;or macro.&#39;</span><span class="p">)</span>
+
+    <span class="k">try</span> <span class="p">:</span>
+        <span class="n">cont</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">find_user_code</span><span class="p">(</span><span class="n">parameter_s</span><span class="p">,</span> <span class="n">skip_encoding_cookie</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">IOError</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Error: no such file, variable, URL, history range or macro&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="n">page</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">pycolorize</span><span class="p">(</span><span class="n">source_to_unicode</span><span class="p">(</span><span class="n">cont</span><span class="p">)))</span>
+</pre></div>
+</div>
+<p>File:   /usr/lib/python3.7/site-packages/IPython/core/magics/osm.py</p>
+</div>
+<div class="section" id="breaking-it-down">
+<h2>Breaking it down<a class="headerlink" href="#breaking-it-down" title="Permalink to this headline">¶</a></h2>
+<p>Here’s the docstring from <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.utils.openpy.html#module-IPython.utils.openpy" title="(in IPython v7.8.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython.utils.openpy</span></code></a>, specifically
+the function <code class="docutils literal notranslate"><span class="pre">read_py_file</span></code>.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">skip_encoding_cookie</span> <span class="p">:</span> <span class="nb">bool</span>
+  <span class="n">If</span> <span class="bp">True</span> <span class="p">(</span><span class="n">the</span> <span class="n">default</span><span class="p">),</span> <span class="ow">and</span> <span class="n">the</span> <span class="n">encoding</span> <span class="n">declaration</span> <span class="ow">is</span> <span class="n">found</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">first</span>
+  <span class="n">two</span> <span class="n">lines</span><span class="p">,</span> <span class="n">that</span> <span class="n">line</span> <span class="n">will</span> <span class="n">be</span> <span class="n">excluded</span> <span class="kn">from</span> <span class="nn">the</span> <span class="nn">output</span> <span class="o">-</span> <span class="n">compiling</span> <span class="n">a</span>
+  <span class="nb">unicode</span> <span class="n">string</span> <span class="k">with</span> <span class="n">an</span> <span class="n">encoding</span> <span class="n">declaration</span> <span class="ow">is</span> <span class="n">a</span> <span class="ne">SyntaxError</span> <span class="ow">in</span> <span class="n">Python</span> <span class="mf">2.</span>
+</pre></div>
+</div>
+<div class="section" id="ipython-core-page-page">
+<h3><a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.page.html#IPython.core.page.page" title="(in IPython v7.8.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.core.page.page()</span></code></a><a class="headerlink" href="#ipython-core-page-page" title="Permalink to this headline">¶</a></h3>
+<p>What’s that <code class="docutils literal notranslate"><span class="pre">page.page</span></code> line? Well…time to go exploring!</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from IPython.core.magics.basic import BasicMagics
+&gt;&gt;&gt; BasicMagics.page??
+</pre></div>
+</div>
+<blockquote>
+<div><p>&#64;line_magic
+def page(self, parameter_s=’’):</p>
+<blockquote>
+<div><p># Pretty print the object and display it through a pager.</p>
+<blockquote>
+<div><p>%page [options] OBJECT</p>
+</div></blockquote>
+<p># If no object is given, use _ (last output).
+# Options:</p>
+<blockquote>
+<div><p>-r: page str(object), don’t pretty-print it.</p>
+</div></blockquote>
+<p># After a function contributed by Olivier Aubert, slightly modified.
+# Process options/args
+opts, args = self.parse_options(parameter_s, ‘r’)
+raw = ‘r’ in opts</p>
+<p>oname = args and args or ‘_’
+info = self.shell._ofind(oname)
+if info[‘found’]:</p>
+<blockquote>
+<div><p>txt = (raw and str or pformat)( info[‘obj’] )
+page.page(txt)</p>
+</div></blockquote>
+<dl class="simple">
+<dt>else:</dt><dd><p>print(‘Object <code class="xref py py-obj docutils literal notranslate"><span class="pre">%s</span></code> not found’ % oname)</p>
+</dd>
+</dl>
+</div></blockquote>
+</div></blockquote>
+<p>Nope! <em>However that is a good example use of magic_arguments</em>.
+So what’s page.page?</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">IPython.core</span> <span class="k">import</span> <span class="n">page</span>
+</pre></div>
+</div>
+<p>Eh I don’t know if that was it.</p>
+</div>
+</div>
+<div class="section" id="rewriting-the-pager">
+<h2>Rewriting the pager<a class="headerlink" href="#rewriting-the-pager" title="Permalink to this headline">¶</a></h2>
+<p>Found some platform specific code. I think we’re in the right direction.</p>
+<p>Aug 17, 2019:</p>
+<p>Think I got it.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">IPython.core.page</span> <span class="k">import</span> <span class="n">get_pager_cmd</span>
+</pre></div>
+</div>
+<p><strong>Note that that isn’t the page.page method; however, it does
+show how IPython setup the pager.</strong></p>
+<div class="section" id="see-also">
+<h3>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.info.html#numpy.info" title="(in NumPy v1.17)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.info()</span></code></a>
+<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.source.html#numpy.source" title="(in NumPy v1.17)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.source()</span></code></a></p>
+<p>Also worth noting is how Numpy and Scipy entirely
+circumvent it with their <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.info.html#numpy.info" title="(in NumPy v1.17)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.info()</span></code></a> and <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.source.html#numpy.source" title="(in NumPy v1.17)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.source()</span></code></a> functions.</p>
+</div>
+</div>
+<div class="section" id="implementing-the-rewrite">
+<h2>Implementing the rewrite<a class="headerlink" href="#implementing-the-rewrite" title="Permalink to this headline">¶</a></h2>
+<p>It might be best if we design this using traitlets.
+They have the linking functions in the utils directory
+so that we can observe if sphinxify_docstring changes, or
+the value of editor changes, or handful of other things that we’ll
+be expected to respond to.</p>
+<span class="target" id="module-default_profile.util.pager2"></span></div>
 </div>
 
 
@@ -121,6 +250,28 @@
     </ul>
    </div>
 
+<h3><a href="../index.html">On This Page:</a></h3>
+
+<div>&nbsp;</div>
+<div id="sidebartoc">
+  <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pager2</span></code> module</a><ul>
+<li><a class="reference internal" href="#original-implementation">Original Implementation</a></li>
+<li><a class="reference internal" href="#breaking-it-down">Breaking it down</a><ul>
+<li><a class="reference internal" href="#ipython-core-page-page"><code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.core.page.page()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#rewriting-the-pager">Rewriting the pager</a><ul>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#implementing-the-rewrite">Implementing the rewrite</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+
         </div>
       </div>
       <div class="clearer"></div>
@@ -145,7 +296,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Oct 07, 2019.
+      Last updated on Oct 08, 2019.
     </div>
   </body>
 </html>

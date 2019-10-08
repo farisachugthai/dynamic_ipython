@@ -28,12 +28,20 @@ Ran that command with a :kbd:`-h` flag and got these 2 relevant options.
 
 See Also
 --------
+.. seealso::
 
-numpy.distutils.core
-numpy.distutils.misc_utils
+    numpy.distutils.core
+    numpy.distutils.misc_utils
 
 `Conda builds with a recipe
 <https://docs.conda.io/projects/conda-build/en/latest/user-guide/recipes/build-without-recipe.html>`_
+
+Here's a really good one to check out.:
+
+>>> from conda.cli.main_package import make_tarbz2
+>>> import pydoc
+>>> pydoc.ttypager(make_tarbz2.__doc__)
+
 
 """
 import codecs
@@ -72,7 +80,7 @@ KEYWORDS = [
 URL = "https://github.com/farisachugthai/dynamic_ipython"
 REQUIRES_PYTHON = '>=3.6.0'
 
-VERSION = '__version__'
+VERSION = __version__
 
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 CONF_PATH = os.path.dirname(os.path.abspath('docs'))
