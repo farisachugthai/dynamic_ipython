@@ -7,10 +7,11 @@
 This module simply populates the IPython namespace with frequently
 used modules.
 
-A check is run to see if the user is running a new enough version of Python to
-utilize the python package Pynvim instead of Neovim.
+A check is run to see if the user is running a new enough version of
+Python to utilize the python package pynvim instead of :command:`neovim`.
 
 .. automodule:: default_profile.startup.04_easy_import
    :members:
    :undoc-members:
    :show-inheritance:
+

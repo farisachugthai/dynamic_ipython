@@ -45,7 +45,14 @@ class LinuxAliases:
     """
 
     def __init__(self, shell=None, aliases=None):
-        """The WindowsAliases implementation of this is odd so maybe branch off."""
+        """The WindowsAliases implementation of this is odd so maybe branch off.
+
+        Parameters
+        ----------
+        user_aliases : list of ('alias', 'system command') tuples
+            User aliases to add the user's namespace.
+
+        """
         self.user_aliases = aliases or []
         self.shell = shell or get_ipython()
 
@@ -121,7 +128,7 @@ class LinuxAliases:
         return self._generator()
 
     def _generator(self):
-        for itm in self.aliases():
+        for itm in self.user_aliases:
             yield itm
 
     def thirdparty(self):
@@ -248,22 +255,27 @@ class WindowsAliases:
 
     Notes
     -----
-    Would it be useful to subclass :class:`enum.Enum` here?
+    Would it be useful to subclass :class:`reprlib.Repr` here?
 
     """
 
-    def __init__(self, shell=None):
+    def __init__(self, shell=None, user_aliases=None):
         """Initialize the platform specific alias manager with IPython.
 
         Parameters
         ----------
-        shell : external command, optional
-            The command used to invoke the system shell. If none is provided
-            during instantiation, the function will set
-            :attr:`WindowsAliases.shell` to the |ip| instance.
+        shell : str (external command), optional
+            The command used to invoke the system shell. If none
+            is provided during instantiation, the function will
+            set :attr:`WindowsAliases.shell` to the
+            |ip| instance.
+
+        user_aliases : list of ('alias', 'system command') tuples
+            User aliases to add the user's namespace.
 
         """
         self.shell = shell or get_ipython()
+        self.user_aliases = user_aliases
 
     @staticmethod
     def _find_exe(self, exe=None):
@@ -303,7 +315,7 @@ class WindowsAliases:
             build them into the aliases we have here because
             that'll affect :data:`_ip.user_aliases.mv`?
 
-        Also note :command:`DIRCMD` for :command:`dir`.
+        Also note :envvar:`DIRCMD` for :command:`dir`.
 
         """
         cls.user_aliases = [
@@ -413,7 +425,6 @@ class WindowsAliases:
             raise
 
 
-
 def main():
     """Set up aliases for the user namespace for IPython.
 
@@ -430,12 +441,11 @@ def main():
         # user_aliases += LinuxAliases().busybox()
         linux_aliases = LinuxAliases()
         user_aliases.extend(linux_aliases.busybox())
+
     elif machine.is_win:
         # finish the shell class in default_profile.util.machine
         # then we can create a shell class that determines if
         # we're in cmd or pwsh
-        # win_ = WindowsAliases(_ip)
-        # if win
         user_aliases += WindowsAliases().cmd_aliases()
 
     _ip.alias_manager.user_aliases = user_aliases

@@ -1,4 +1,5 @@
 """Todo: Cleanup."""
+import default_profile
 import importlib
 from pathlib import Path
 import pkgutil
@@ -10,13 +11,19 @@ if hasattr(locals(), '__path__'):
 else:
     sys.path.insert(0, str(Path(__file__).resolve()))
 
-import default_profile
-from default_profile.sphinxext import configtraits
-from default_profile.sphinxext.magics import LineMagicRole, CellMagicRole
+
+# Don't emit an error on IPython startup if not installed.
+
 
 def ask_for_import(mod, package=None):
-    return importlib.import_module(mod, package=package) or None
+    try:
+        imported = importlib.import_module(mod, package=package)
+    except (ImportError, ModuleNotFoundError):
+        pass
+
 
 
 ask_for_import('IPython')
-ask_for_import('sphinx')
+if ask_for_import('sphinx'):
+    from default_profile.sphinxext import configtraits
+    from default_profile.sphinxext.magics import LineMagicRole, CellMagicRole

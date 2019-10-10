@@ -98,7 +98,14 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="LinuxAliases.__init__"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.LinuxAliases.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">aliases</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The WindowsAliases implementation of this is odd so maybe branch off.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;The WindowsAliases implementation of this is odd so maybe branch off.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        user_aliases : list of (&#39;alias&#39;, &#39;system command&#39;) tuples</span>
+<span class="sd">            User aliases to add the user&#39;s namespace.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="n">aliases</span> <span class="ow">or</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">shell</span> <span class="ow">or</span> <span class="n">get_ipython</span><span class="p">()</span></div>
 
@@ -174,7 +181,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generator</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">_generator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">itm</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">aliases</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">itm</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span><span class="p">:</span>
             <span class="k">yield</span> <span class="n">itm</span>
 
 <div class="viewcode-block" id="LinuxAliases.thirdparty"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.LinuxAliases.thirdparty">[docs]</a>    <span class="k">def</span> <span class="nf">thirdparty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -301,22 +308,27 @@
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
-<span class="sd">    Would it be useful to subclass :class:`enum.Enum` here?</span>
+<span class="sd">    Would it be useful to subclass :class:`reprlib.Repr` here?</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="WindowsAliases.__init__"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.WindowsAliases.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="WindowsAliases.__init__"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.WindowsAliases.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">user_aliases</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize the platform specific alias manager with IPython.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        shell : external command, optional</span>
-<span class="sd">            The command used to invoke the system shell. If none is provided</span>
-<span class="sd">            during instantiation, the function will set</span>
-<span class="sd">            :attr:`WindowsAliases.shell` to the |ip| instance.</span>
+<span class="sd">        shell : str (external command), optional</span>
+<span class="sd">            The command used to invoke the system shell. If none</span>
+<span class="sd">            is provided during instantiation, the function will</span>
+<span class="sd">            set :attr:`WindowsAliases.shell` to the</span>
+<span class="sd">            |ip| instance.</span>
+
+<span class="sd">        user_aliases : list of (&#39;alias&#39;, &#39;system command&#39;) tuples</span>
+<span class="sd">            User aliases to add the user&#39;s namespace.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">shell</span> <span class="ow">or</span> <span class="n">get_ipython</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">shell</span> <span class="ow">or</span> <span class="n">get_ipython</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="n">user_aliases</span></div>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_find_exe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exe</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
@@ -356,7 +368,7 @@
 <span class="sd">            build them into the aliases we have here because</span>
 <span class="sd">            that&#39;ll affect :data:`_ip.user_aliases.mv`?</span>
 
-<span class="sd">        Also note :command:`DIRCMD` for :command:`dir`.</span>
+<span class="sd">        Also note :envvar:`DIRCMD` for :command:`dir`.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="p">[</span>
@@ -466,7 +478,6 @@
             <span class="k">raise</span></div></div>
 
 
-
 <div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Set up aliases for the user namespace for IPython.</span>
 
@@ -483,12 +494,11 @@
         <span class="c1"># user_aliases += LinuxAliases().busybox()</span>
         <span class="n">linux_aliases</span> <span class="o">=</span> <span class="n">LinuxAliases</span><span class="p">()</span>
         <span class="n">user_aliases</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">linux_aliases</span><span class="o">.</span><span class="n">busybox</span><span class="p">())</span>
+
     <span class="k">elif</span> <span class="n">machine</span><span class="o">.</span><span class="n">is_win</span><span class="p">:</span>
         <span class="c1"># finish the shell class in default_profile.util.machine</span>
         <span class="c1"># then we can create a shell class that determines if</span>
         <span class="c1"># we&#39;re in cmd or pwsh</span>
-        <span class="c1"># win_ = WindowsAliases(_ip)</span>
-        <span class="c1"># if win</span>
         <span class="n">user_aliases</span> <span class="o">+=</span> <span class="n">WindowsAliases</span><span class="p">()</span><span class="o">.</span><span class="n">cmd_aliases</span><span class="p">()</span>
 
     <span class="n">_ip</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="n">user_aliases</span>
@@ -534,7 +544,6 @@
 <p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../jobcontrol.html">Job Control</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../exceptions.html">Customized Exceptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../subcommands.html">Subcommands in IPython and Jupyter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../sphinxext/index.html">sphinxext</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../dev.html">Developers Notes</a></li>
@@ -572,7 +581,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Oct 08, 2019.
+      Last updated on Oct 10, 2019.
     </div>
   </body>
 </html>

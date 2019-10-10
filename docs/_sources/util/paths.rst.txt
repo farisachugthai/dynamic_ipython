@@ -1,6 +1,6 @@
-========================================
-:mod:`default_profile.util.paths` module
-========================================
+=========================================
+:mod:`~default_profile.util.paths` module
+=========================================
 
 .. automodule:: default_profile.util.paths
    :members:

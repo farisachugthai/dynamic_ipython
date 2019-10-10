@@ -2,9 +2,6 @@
 System Aliases
 ==============
 
-.. module:: default_profile.startup.20_aliases
-   :synopsis: Create system aliases for the shell.
-
 To date there are well over 100 aliases manually added to the shell.
 
 These aliases depend on the operating system used as Linux OSes will default

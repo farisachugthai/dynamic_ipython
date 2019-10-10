@@ -18,7 +18,7 @@ ability to change or configure things in mind.
 Original Implementation
 ========================
 
-Below is the source code for how the original :ref:`pycat` was implemented.::
+Below is the source code for how the original :func:`pycat` was implemented.::
 
     from IPython import get_ipython
     from IPython.core.magics import line_magic
@@ -73,35 +73,39 @@ the function ``read_py_file``.::
 
 What's that ``page.page`` line? Well...time to go exploring!
 
-
 >>> from IPython.core.magics.basic import BasicMagics
->>> BasicMagics.page??
+>>> BasicMagics.page
 
-    @line_magic
-    def page(self, parameter_s=''):
-        # Pretty print the object and display it through a pager.
+So let's check out the source on that.::
 
-            %page [options] OBJECT
+   from IPython.core.magic import line_magic
+   @line_magic
+   def page(self, parameter_s=''):
+       # Pretty print the object and display it through a pager.
 
-        # If no object is given, use _ (last output).
-        # Options:
+           %page [options] OBJECT
 
-            -r: page str(object), don't pretty-print it.
+       # If no object is given, use _ (last output).
+       # Options:
 
-        # After a function contributed by Olivier Aubert, slightly modified.
-        # Process options/args
-        opts, args = self.parse_options(parameter_s, 'r')
-        raw = 'r' in opts
+           -r: page str(object), don't pretty-print it.
 
-        oname = args and args or '_'
-        info = self.shell._ofind(oname)
-        if info['found']:
-            txt = (raw and str or pformat)( info['obj'] )
-            page.page(txt)
-        else:
-            print('Object `%s` not found' % oname)
+       # After a function contributed by Olivier Aubert, slightly modified.
+       # Process options/args
+       opts, args = self.parse_options(parameter_s, 'r')
+       raw = 'r' in opts
 
-Nope! *However that is a good example use of magic_arguments*.
+       oname = args and args or '_'
+       info = self.shell._ofind(oname)
+       if info['found']:
+           txt = (raw and str or pformat)( info['obj'] )
+           page.page(txt)
+       else:
+           print('Object `%s` not found' % oname)
+
+Nope! *However that is a good example use of* 
+:func:`IPython.core.magic.magic_arguments`.
+
 So what's page.page?
 
 >>> from IPython.core import page
@@ -139,8 +143,8 @@ Implementing the rewrite
 
 It might be best if we design this using traitlets.
 They have the linking functions in the utils directory
-so that we can observe if sphinxify_docstring changes, or
-the value of editor changes, or handful of other things that we'll
+so that we can observe if :data:`sphinxify_docstring` changes, or
+the value of :envvar:`EDITOR` changes, or handful of other things that we'll
 be expected to respond to.
 
 

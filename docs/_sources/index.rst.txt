@@ -111,7 +111,6 @@ Table of Contents
    :titlesonly:
 
    jobcontrol
-   exceptions
    subcommands
    sphinxext <sphinxext/index.rst>
    Developers Notes <dev>

@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import functools
+import shutil
 
 
 class Executable:
@@ -21,7 +23,7 @@ class Executable:
             Path to an executable if it's found. Otherwise `None`.
 
         """
-        return shutil.which(self.command))
+        return shutil.which(self.command)
 
     def __repr__(self):
         return 'Executable: {!r}'.format(self.command)

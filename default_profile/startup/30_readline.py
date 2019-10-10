@@ -10,16 +10,26 @@ Ooo also I want to reimplement jedi as the completer because IPython's is
 confusingly slow.
 """
 try:
-    from jedi.utils import setup_readline
-    setup_readline()
-except ImportError:
+    import jedi
+except (ImportError, ModuleNotFoundError):
     # Fallback to the stdlib readline completer if it is installed.
     # Taken from http://docs.python.org/2/library/rlcompleter.html
-    print("Jedi is not installed, falling back to readline")
     try:
         # Interestingly this can work on Windows with a simple pip install pyreadline
-        import readline
-        import rlcompleter
+        import pyreadline as readline
+    except (ImportError, ModuleNotFoundError):
+        try:
+            import readline
+        except (ImportError, ModuleNotFoundError):
+            pass
+        else:
+            readline.parse_and_bind("tab: complete")
+    else:
         readline.parse_and_bind("tab: complete")
-    except ImportError:
-        print("Readline is not installed either. No tab completion is enabled.")
+
+        import rlcompleter
+else:
+    from jedi.utils import setup_readline
+    setup_readline()
+    jedi.settings.add_bracket_after_function = True
+    jedi.settings

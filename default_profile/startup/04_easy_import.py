@@ -2,17 +2,8 @@
 # -*- coding: utf-8 -*-
 # flake8: noqa
 """
-==============
-04_easy_import
-==============
-
-.. module:: 04_easy_import
-    :synopsis: Import frequently used modules in the user namespace.
-
 This imports a few utility functions from :mod:`IPython` and imports the python
 package neovim is served in.
-
-
 """
 import sys
 from importlib import import_module
@@ -28,8 +19,8 @@ class DeepReload:
     Attributes
     ----------
     excludes : set of str, optional
-        Modules that won't be reloaded in order to preserve display
-        and excepthooks.
+        Modules that won't be reloaded in order to preserve 
+        :any:`sys.displayhook` and :any:`sys.excepthook`.
 
     """
     excludes = (
@@ -44,6 +35,10 @@ class DeepReload:
 
     def __repr__(self):
         return '{!r}'.format(repr(self.excludes))
+
+    def reload(self, *args, **kwargs):
+        """Return :func:`IPython.lib.deepreload.dreload`. """
+        return _reload(*args, **kwargs)
 
     def dreload(self, mod, extra_excludes=None):
         """Import IPython's `%deepreload` magic.

@@ -55,17 +55,8 @@
 <span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="c1"># flake8: noqa</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">==============</span>
-<span class="sd">04_easy_import</span>
-<span class="sd">==============</span>
-
-<span class="sd">.. module:: 04_easy_import</span>
-<span class="sd">    :synopsis: Import frequently used modules in the user namespace.</span>
-
 <span class="sd">This imports a few utility functions from :mod:`IPython` and imports the python</span>
 <span class="sd">package neovim is served in.</span>
-
-
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">from</span> <span class="nn">importlib</span> <span class="kn">import</span> <span class="n">import_module</span>
@@ -81,8 +72,8 @@
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 <span class="sd">    excludes : set of str, optional</span>
-<span class="sd">        Modules that won&#39;t be reloaded in order to preserve display</span>
-<span class="sd">        and excepthooks.</span>
+<span class="sd">        Modules that won&#39;t be reloaded in order to preserve </span>
+<span class="sd">        :any:`sys.displayhook` and :any:`sys.excepthook`.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">excludes</span> <span class="o">=</span> <span class="p">(</span>
@@ -97,6 +88,10 @@
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;{!r}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">excludes</span><span class="p">))</span>
+
+<div class="viewcode-block" id="DeepReload.reload"><a class="viewcode-back" href="../../../startup/easy_import.html#default_profile.startup.04_easy_import.DeepReload.reload">[docs]</a>    <span class="k">def</span> <span class="nf">reload</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return :func:`IPython.lib.deepreload.dreload`. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">_reload</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="DeepReload.dreload"><a class="viewcode-back" href="../../../startup/easy_import.html#default_profile.startup.04_easy_import.DeepReload.dreload">[docs]</a>    <span class="k">def</span> <span class="nf">dreload</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mod</span><span class="p">,</span> <span class="n">extra_excludes</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Import IPython&#39;s `%deepreload` magic.</span>
@@ -185,7 +180,6 @@
 <p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../jobcontrol.html">Job Control</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../exceptions.html">Customized Exceptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../subcommands.html">Subcommands in IPython and Jupyter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../sphinxext/index.html">sphinxext</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../dev.html">Developers Notes</a></li>
@@ -223,7 +217,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Oct 08, 2019.
+      Last updated on Oct 10, 2019.
     </div>
   </body>
 </html>

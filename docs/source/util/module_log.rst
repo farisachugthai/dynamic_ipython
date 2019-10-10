@@ -2,17 +2,18 @@
 :mod:`~default_profile.util.module_log` module
 ===============================================
 
-.. module:: default_profile.util.module_log
-   :synopsis: Set up package wide logging
-
-
 .. function:: file_logger
 
    Logging function that emits a :class:`logging.LogRecord` to ``filename``.
-
-   Logger uses the following formatting by default.::
+   Logger uses the following formatting by default.:
 
       %(asctime)s : %(levelname)s : %(message)s
+
+
+.. todo:: Convert this to formatting specific to this function.
+
+   Appears to be for the whole module.
+
 
 Parameters
 ----------
@@ -39,6 +40,7 @@ Raises
 ------
 AssertionError
       *shell* is not `isinstance` |ip|.
+
 
 .. automodule:: default_profile.util.module_log
    :members:

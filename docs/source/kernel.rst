@@ -184,7 +184,7 @@ Parameters are set from command-line arguments of the form:
 ``--Class.trait=value``.
 
 This line is evaluated in Python, so simple expressions
-are allowed, e.g.::
+are allowed, e.g.:
 
    C.a=range(3)
 

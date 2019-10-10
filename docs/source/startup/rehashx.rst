@@ -1,6 +1,6 @@
-============
-`01_rehashx`
-============
+==========================================
+:mod:`~default_profile.startup.01_rehashx`
+==========================================
 .. magic:: rehashx
 
 The IPython magic `%rehashx` allows you to reload all of your startup files
@@ -24,11 +24,10 @@ line : str
 
 Notes
 -----
-IPython.core.magic.run_line_magic
+:func:`IPython.core.magic.run_line_magic`
     A method of the |ip| instance to run a specific magic currently in the
     IPython.core.interactiveshell.InteractiveShell.user_ns
     or user namespace.
-
 
 .. ipython::
     :verbatim:
@@ -36,7 +35,6 @@ IPython.core.magic.run_line_magic
     from IPython.core import get_ipython
     shell = get_ipython()
     shell.run_line_magic('ls', '')
-
 
 Usage
 ------
@@ -60,8 +58,6 @@ If :func:`IPython.core.magics.run_line_magic` is called from
 
 This is added to ensure backward compatibility for use
 of :func:`IPython.core.magics.get_ipython().magic`
-
-.. currentmodule:: 01_rehashx
 
 .. automodule:: default_profile.startup.01_rehashx
    :members:
