@@ -1,11 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-============
-Help Helpers
-============
-
-Export functions to redirect :func:`help` output.
+"""Export functions to redirect :func:`help` output.
 
 This module utilizes the examples given in the official documentation
 for :mod:`contextlib`.
@@ -40,7 +35,7 @@ def save_help(arg=None, output_file=sys.stdout):
 
 
 def page_help(arg=None):
-    """Using IPython's `pinfo` magic to page information to the console.
+    """Using IPython's `%pinfo` magic to page information to the console.
 
     Also noting it's the only function in this module that actually needs
     the IPython instance so the imports were moved here.
@@ -51,7 +46,29 @@ def page_help(arg=None):
         _ip.pinfo(arg)
 
 
-def grep(obj, pattern=['^a-z.*$']):
-    compiled = re.compile(pattern)
+def grep(obj, pattern=None):
+    """Use :func:`re.compile` to match a pattern that may be in ``dir(obj)``.
+
+    Parameters
+    ----------
+    obj : object
+        Any object who has a large enough namespace to warrant greping.
+    pattern : list, optional
+        Unfortunately, lists are mutable objects and can't be used as
+        default parameters.
+        Therefore a default value of::
+
+            pattern = ['^a-z.*$']
+
+        Is only presented inside of the function.
+
+    Yields
+    ------
+    matched_attributes : str
+
+    """
+    if pattern is None:
+        pattern = ['^a-z.*$']
+    compiled = re.compile(*pattern)
     attributes = dir(obj)
-    print('\n'.join(i for i in attributes if re.search(compiled, i)))
+    yield '\n'.join(i for i in attributes if re.search(compiled, i))

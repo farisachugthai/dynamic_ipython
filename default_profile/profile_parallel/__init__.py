@@ -9,9 +9,6 @@ Initialize a IPyParallel profile for IPython.
 
 """
 import logging
-import os
-import sys
-from logging import NullHandler
 
 try:
     # these should always be available
@@ -31,7 +28,5 @@ try:
     import ipyparallel
 except (ImportError, ModuleNotFoundError) as e:
     logging.warning(e)
-
-import default_profile
 
 from . import ipcluster_config, ipcontroller_config, ipengine_config

@@ -66,12 +66,12 @@ Or whatever it's called and run that? It'd be way easier...
 import argparse
 import logging
 import os
-from pprint import pprint
 import shutil
 import subprocess
 import sys
-from typing import List, Any
 import webbrowser
+from pprint import pprint
+from typing import List, Any
 
 try:
     import sphinx

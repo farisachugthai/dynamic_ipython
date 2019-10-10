@@ -13,7 +13,6 @@ import errno
 import os
 import shutil
 
-from IPython import get_ipython, start_ipython
 from IPython.utils.path import ensure_dir_exists, get_ipython_package_dir
 from traitlets.config import Bool, LoggingConfigurable, Unicode, observe
 

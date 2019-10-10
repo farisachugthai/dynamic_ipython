@@ -5,8 +5,6 @@
 The heart of all IPython and console related code lives here.
 """
 import logging
-import os
-import sys
 
 try:
     # these should always be available
@@ -16,8 +14,6 @@ except (ImportError, ModuleNotFoundError):
     pass
 
 # from . import profile_debugger, profile_parallel, sphinxext, startup, util
-from . import ipython_config, ipython_kernel_config, extensions
-from .__about__ import *
 
 default_log_format = '%(created)f : %(module)s : %(levelname)s : %(message)s'
 PROFILE_DEFAULT_LOG = logging.getLogger('default_profile')

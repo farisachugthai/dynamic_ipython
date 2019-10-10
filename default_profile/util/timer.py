@@ -87,7 +87,7 @@ def exc_timer(statement):
     try:
         t.timeit()
     # or t.repeat(...)
-    except:  # noqa E722
+    except Exception:  # noqa E722
         t.print_exc()
     # else:
     # TODO:

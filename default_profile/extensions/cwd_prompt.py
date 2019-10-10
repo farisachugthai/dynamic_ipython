@@ -12,8 +12,8 @@ stuff for IPython<=0.11, 0.11<=IPython<=5.5 AND 5.5<=IPython!
 import os
 
 from IPython import get_ipython
-from IPython.terminal.prompts import Prompts, Token
 from IPython.core.magic import magics_class
+from IPython.terminal.prompts import Prompts, Token
 
 
 @magics_class

@@ -15,9 +15,6 @@ The code that's more important than anything should execute regardless
 of whether someone has ``pip install``-ed it.
 
 """
-import logging
-from platform import system
-import sys
 
 from IPython import get_ipython, start_ipython
 

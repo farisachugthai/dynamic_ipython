@@ -30,7 +30,6 @@ See Also
     Shows an example use case
 
 """
-import doctest
 import logging
 import os
 import platform

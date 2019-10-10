@@ -9,18 +9,6 @@ to avoid import problems as Python modules can't begin with numbers.
 """
 import importlib
 import logging
-import os
-import sys
-from logging import NullHandler
-
-import traitlets
-from traitlets.config import Config, get_config
-import IPython
-from IPython import get_ipython
-from IPython.core.error import UsageError
-
-import default_profile
-
 
 logging.BASIC_FORMAT = '%(created)f : %(module)s : %(levelname)s : %(message)s'
 

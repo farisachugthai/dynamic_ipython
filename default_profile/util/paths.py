@@ -3,8 +3,8 @@
 """Module for working with paths regardless of platform."""
 import logging
 import os
-from pathlib import Path
 import platform
+from pathlib import Path
 
 logging.BASIC_FORMAT = '%(created)f : %(module)s : %(levelname)s : %(message)s'
 
@@ -66,7 +66,7 @@ class PathValidator:
         >>> PathValidator()
 
         """
-        return '{}\t{}'.format(self.__class__.__name__, self.OS)
+        return '{}\t{}'.format(self.__class__.__name__, self.path)
 
     @property
     def OS(self):

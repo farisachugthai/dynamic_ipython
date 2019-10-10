@@ -31,9 +31,7 @@ magic_argparse functions to make something more durable and useful.
 """
 import sys
 
-from IPython import get_ipython
 from IPython.core.history import HistoryAccessor
-from IPython.core.magic import Magic
 
 
 def main():

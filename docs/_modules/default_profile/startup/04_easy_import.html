@@ -18,19 +18,34 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
 
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" type="text/css"
-  media="screen" charset="utf-8" />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Source+Code+Pro"
+  type="text/css"
+  media="screen"
+  charset="utf-8"
+/>
 
-<link rel="stylesheet"
-  href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" type="text/css" media="screen" charset="utf-8" />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic"
+  type="text/css"
+  media="screen"
+  charset="utf-8"
+/>
 
 <!--[if lte IE 6]>
-<link rel="stylesheet" href="../../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+  <link
+    rel="stylesheet"
+    href="../../../_static/ie6.css"
+    type="text/css"
+    media="screen"
+    charset="utf-8"
+  />
 <![endif]-->
 
 
-  </head><body>
-
+  </head><body> 
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -61,9 +76,7 @@
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">from</span> <span class="nn">importlib</span> <span class="kn">import</span> <span class="n">import_module</span>
 
-<span class="kn">import</span> <span class="nn">IPython</span>
 <span class="kn">from</span> <span class="nn">IPython.lib.deepreload</span> <span class="kn">import</span> <span class="nb">reload</span> <span class="k">as</span> <span class="n">_reload</span>
-<span class="kn">from</span> <span class="nn">IPython.utils</span> <span class="kn">import</span> <span class="n">importstring</span>
 
 
 <div class="viewcode-block" id="DeepReload"><a class="viewcode-back" href="../../../startup/easy_import.html#default_profile.startup.04_easy_import.DeepReload">[docs]</a><span class="k">class</span> <span class="nc">DeepReload</span><span class="p">:</span>
@@ -72,14 +85,12 @@
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 <span class="sd">    excludes : set of str, optional</span>
-<span class="sd">        Modules that won&#39;t be reloaded in order to preserve </span>
+<span class="sd">        Modules that won&#39;t be reloaded in order to preserve</span>
 <span class="sd">        :any:`sys.displayhook` and :any:`sys.excepthook`.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">excludes</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="s1">&#39;sys&#39;</span><span class="p">,</span> <span class="s1">&#39;os.path&#39;</span><span class="p">,</span> <span class="s1">&#39;builtins&#39;</span><span class="p">,</span> <span class="s1">&#39;__main__&#39;</span><span class="p">,</span> <span class="s1">&#39;io&#39;</span><span class="p">,</span> <span class="s1">&#39;numpy&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;numpy._globals&#39;</span><span class="p">,</span> <span class="s1">&#39;IPython&#39;</span>
-    <span class="p">)</span>
+    <span class="n">excludes</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;sys&#39;</span><span class="p">,</span> <span class="s1">&#39;os.path&#39;</span><span class="p">,</span> <span class="s1">&#39;builtins&#39;</span><span class="p">,</span> <span class="s1">&#39;__main__&#39;</span><span class="p">,</span> <span class="s1">&#39;io&#39;</span><span class="p">,</span> <span class="s1">&#39;numpy&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;numpy._globals&#39;</span><span class="p">,</span> <span class="s1">&#39;IPython&#39;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="DeepReload.__init__"><a class="viewcode-back" href="../../../startup/easy_import.html#default_profile.startup.04_easy_import.DeepReload.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">excludes</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;How do we set an instance attribute with a class attribute?&quot;&quot;&quot;</span>
@@ -135,10 +146,8 @@
         <span class="k">return</span> <span class="n">import_module</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
         <span class="k">print</span><span class="p">(</span><span class="s2">&quot;************************************************************&quot;</span><span class="p">)</span>
-        <span class="k">print</span><span class="p">(</span>
-            <span class="s2">&quot;{} import failed. Only ignore this if you plan on going&quot;</span>
-            <span class="s2">&quot; the entire session without using it&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span>
-        <span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;{} import failed. Only ignore this if you plan on going&quot;</span>
+              <span class="s2">&quot; the entire session without using it&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mod</span><span class="p">))</span>
         <span class="k">print</span><span class="p">(</span><span class="s2">&quot;************************************************************&quot;</span><span class="p">)</span></div>
 
 
@@ -167,11 +176,15 @@
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script><h3>Related Topics</h3>
 <ul>
-  <li><a href="../../../index.html">Documentation overview</a><ul>
-  <li><a href="../../index.html">Module code</a><ul>
-  </ul></li>
-  </ul></li>
+    <li><a href="../../../index.html">Documentation overview</a>
+        <ul>
+            <li><a href="../../index.html">Module code</a>
+                <ul>
+                </ul>
+            </li>
+        </ul>
 </ul>
+</li>
 
 <h3><a href="../../../index.html">Table of Contents</a></h3>
 

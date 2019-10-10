@@ -10,6 +10,8 @@ Developer's Notes
 .. highlight:: console
 
 
+.. _developer-installation:
+
 Installing
 ===========
 

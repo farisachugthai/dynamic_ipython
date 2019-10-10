@@ -1,9 +1,6 @@
 """Initialize a debugger profile for IPython."""
 import logging
-import os
-import sys
 from logging import NullHandler
-from pprint import pprint  # noqa F401 not used but nice to have
 
 try:
     # these should always be available

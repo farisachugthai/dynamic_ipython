@@ -22,13 +22,12 @@ is the easiest and most oft used entry point in this module.
 
 
 """
-from datetime import datetime
 import json
 import logging
 import os
 import sys
 import traceback
-import warnings
+from datetime import datetime
 
 import IPython
 from IPython import get_ipython

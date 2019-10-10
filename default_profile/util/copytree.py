@@ -1,8 +1,10 @@
-from glob import glob
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import os
 import shutil
+from glob import glob
 from shutil import Error, copytree, copystat
-import stat
 
 
 class CopyTree:

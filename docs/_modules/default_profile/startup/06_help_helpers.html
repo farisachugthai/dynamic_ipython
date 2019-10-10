@@ -18,19 +18,34 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
 
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" type="text/css"
-  media="screen" charset="utf-8" />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Source+Code+Pro"
+  type="text/css"
+  media="screen"
+  charset="utf-8"
+/>
 
-<link rel="stylesheet"
-  href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" type="text/css" media="screen" charset="utf-8" />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic"
+  type="text/css"
+  media="screen"
+  charset="utf-8"
+/>
 
 <!--[if lte IE 6]>
-<link rel="stylesheet" href="../../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+  <link
+    rel="stylesheet"
+    href="../../../_static/ie6.css"
+    type="text/css"
+    media="screen"
+    charset="utf-8"
+  />
 <![endif]-->
 
 
-  </head><body>
-
+  </head><body> 
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -53,12 +68,7 @@
   <h1>Source code for default_profile.startup.06_help_helpers</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">============</span>
-<span class="sd">Help Helpers</span>
-<span class="sd">============</span>
-
-<span class="sd">Export functions to redirect :func:`help` output.</span>
+<span class="sd">&quot;&quot;&quot;Export functions to redirect :func:`help` output.</span>
 
 <span class="sd">This module utilizes the examples given in the official documentation</span>
 <span class="sd">for :mod:`contextlib`.</span>
@@ -93,7 +103,7 @@
 
 
 <div class="viewcode-block" id="page_help"><a class="viewcode-back" href="../../../startup/help_helpers.html#default_profile.startup.06_help_helpers.page_help">[docs]</a><span class="k">def</span> <span class="nf">page_help</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Using IPython&#39;s `pinfo` magic to page information to the console.</span>
+    <span class="sd">&quot;&quot;&quot;Using IPython&#39;s `%pinfo` magic to page information to the console.</span>
 
 <span class="sd">    Also noting it&#39;s the only function in this module that actually needs</span>
 <span class="sd">    the IPython instance so the imports were moved here.</span>
@@ -104,10 +114,32 @@
         <span class="n">_ip</span><span class="o">.</span><span class="n">pinfo</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span></div>
 
 
-<span class="k">def</span> <span class="nf">grep</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;^a-z.*$&#39;</span><span class="p">]):</span>
-    <span class="n">compiled</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
+<div class="viewcode-block" id="grep"><a class="viewcode-back" href="../../../startup/help_helpers.html#default_profile.startup.06_help_helpers.grep">[docs]</a><span class="k">def</span> <span class="nf">grep</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Use :func:`re.compile` to match a pattern that may be in ``dir(obj)``.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    obj : object</span>
+<span class="sd">        Any object who has a large enough namespace to warrant greping.</span>
+<span class="sd">    pattern : list, optional</span>
+<span class="sd">        Unfortunately, lists are mutable objects and can&#39;t be used as</span>
+<span class="sd">        default parameters.</span>
+<span class="sd">        Therefore a default value of::</span>
+
+<span class="sd">            pattern = [&#39;^a-z.*$&#39;]</span>
+
+<span class="sd">        Is only presented inside of the function.</span>
+
+<span class="sd">    Yields</span>
+<span class="sd">    ------</span>
+<span class="sd">    matched_attributes : str</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">pattern</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;^a-z.*$&#39;</span><span class="p">]</span>
+    <span class="n">compiled</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="o">*</span><span class="n">pattern</span><span class="p">)</span>
     <span class="n">attributes</span> <span class="o">=</span> <span class="nb">dir</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">attributes</span> <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">compiled</span><span class="p">,</span> <span class="n">i</span><span class="p">)))</span>
+    <span class="k">yield</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">attributes</span> <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">compiled</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span></div>
 </pre></div>
 
           </div>
@@ -126,11 +158,15 @@
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script><h3>Related Topics</h3>
 <ul>
-  <li><a href="../../../index.html">Documentation overview</a><ul>
-  <li><a href="../../index.html">Module code</a><ul>
-  </ul></li>
-  </ul></li>
+    <li><a href="../../../index.html">Documentation overview</a>
+        <ul>
+            <li><a href="../../index.html">Module code</a>
+                <ul>
+                </ul>
+            </li>
+        </ul>
 </ul>
+</li>
 
 <h3><a href="../../../index.html">Table of Contents</a></h3>
 

@@ -14,8 +14,6 @@ Configtraits
 
 There's an example use.
 """
-from sphinx.locale import l_
-from sphinx.util.docfields import Field
 
 
 def setup(app):

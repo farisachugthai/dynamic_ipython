@@ -52,7 +52,6 @@ from pprint import pformat
 
 from IPython import get_ipython
 from IPython.core.magic import Magics, magics_class, line_magic
-
 from pygments import highlight
 from pygments.formatters import Terminal256Formatter  # Or TerminalFormatter
 from pygments.lexers import PythonLexer

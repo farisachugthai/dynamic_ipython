@@ -1,9 +1,8 @@
 """Todo: Cleanup."""
-import default_profile
 import importlib
-from pathlib import Path
 import pkgutil
 import sys
+from pathlib import Path
 
 # How to check the current namespace
 if hasattr(locals(), '__path__'):

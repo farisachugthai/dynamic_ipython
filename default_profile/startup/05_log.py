@@ -22,13 +22,10 @@ output to a file.
 
 """
 
-import logging
-import os
-import sys
 import time
 from os import path
 
-from IPython import get_ipython, start_ipython
+from IPython import get_ipython
 
 
 def ipython_logger(shell=None):

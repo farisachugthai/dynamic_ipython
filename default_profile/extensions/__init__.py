@@ -13,15 +13,13 @@ Many are still works in progress.
 
 
 """
-from .job_control import install
-from .termux_clipboard import termux_clipboard_get
-from .pd_csv import pd_csv
-from .event_watcher_example import VarWatcher
-from . import cwd_prompt, example, load_ext
 import logging
-import os
-import sys
-from logging import NullHandler
+
+from . import cwd_prompt, example, load_ext
+from .event_watcher_example import VarWatcher
+from .job_control import install
+from .pd_csv import pd_csv
+from .termux_clipboard import termux_clipboard_get
 
 extensions_logger = logging.getLogger(name='default_profile'
                                       ).getChild('extensions')

@@ -33,7 +33,7 @@ be modified if so.
 
 .. code-block:: console
 
-    $: ipython locate profile --<Tab>
+    $: ipython locate profile -- :kbd:`Tab`
 
     --LocateIPythonApp.auto_create=
 
@@ -74,14 +74,12 @@ Therefore that function shouldn't be used anywhere in this file.
 import builtins
 import logging
 import os
-from pathlib import Path
 import platform
 import shutil
 import sys
-from tempfile import TemporaryDirectory
+from pathlib import Path
 
 from IPython import version_info
-from IPython.paths import get_ipython_dir
 # THIS IS THE MODULE! Its too exciting to able to execute this script
 # directly from within python and not get an error for a func call with no
 # import
@@ -103,6 +101,14 @@ def get_home():
 
 
 home = get_home()
+
+if ModuleNotFoundError not in dir(builtins):
+    # I think __traceback__ or something is a usable dunder method for exceptions
+    class ModuleNotFoundError(ImportError):
+        """Try to backport this for python3.6<."""
+
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
 
 # def loaded_config(loaded=None):
 #     """Just noticed IPython loads this file twice."""

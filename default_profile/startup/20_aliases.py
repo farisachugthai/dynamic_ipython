@@ -6,8 +6,6 @@ import os
 import shutil
 
 from IPython import get_ipython
-from IPython.core.alias import AliasError, AliasManager
-from IPython.core.error import UsageError
 
 from default_profile.util import module_log
 from default_profile.util.machine import Platform

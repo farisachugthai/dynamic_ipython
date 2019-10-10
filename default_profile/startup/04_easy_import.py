@@ -8,9 +8,7 @@ package neovim is served in.
 import sys
 from importlib import import_module
 
-import IPython
 from IPython.lib.deepreload import reload as _reload
-from IPython.utils import importstring
 
 
 class DeepReload:
@@ -19,14 +17,12 @@ class DeepReload:
     Attributes
     ----------
     excludes : set of str, optional
-        Modules that won't be reloaded in order to preserve 
+        Modules that won't be reloaded in order to preserve
         :any:`sys.displayhook` and :any:`sys.excepthook`.
 
     """
-    excludes = (
-        'sys', 'os.path', 'builtins', '__main__', 'io', 'numpy',
-        'numpy._globals', 'IPython'
-    )
+    excludes = ('sys', 'os.path', 'builtins', '__main__', 'io', 'numpy',
+                'numpy._globals', 'IPython')
 
     def __init__(self, excludes=None):
         """How do we set an instance attribute with a class attribute?"""
@@ -82,10 +78,8 @@ def easy_import(mod):
         return import_module(mod)
     except ImportError:
         print("************************************************************")
-        print(
-            "{} import failed. Only ignore this if you plan on going"
-            " the entire session without using it".format(mod)
-        )
+        print("{} import failed. Only ignore this if you plan on going"
+              " the entire session without using it".format(mod))
         print("************************************************************")
 
 

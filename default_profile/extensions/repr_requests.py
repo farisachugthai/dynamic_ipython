@@ -15,7 +15,6 @@ for a requests.models.Response objects.
 """
 import sys
 
-import IPython
 from IPython import get_ipython
 
 

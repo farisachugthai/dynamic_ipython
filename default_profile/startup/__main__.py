@@ -21,20 +21,17 @@ an :func:`IPython.get_ipython()` call is doing.::
 
 """
 import errno
-import logging
 import os
 import sys  # unresolved import sys??
 from pathlib import Path
 
-import traitlets
-from traitlets.config import Configurable
-from IPython import get_ipython
-# from IPython.core.debugger import BdbQuit_excepthook
-from IPython.core.interactiveshell import InteractiveShell
-
 # from IPython.terminal.debugger import com
 from IPython.terminal.embed import InteractiveShellEmbed
 from IPython.terminal.ipapp import TerminalIPythonApp
+from traitlets.config import Configurable
+
+
+# from IPython.core.debugger import BdbQuit_excepthook
 
 
 class Dynamic(Configurable):

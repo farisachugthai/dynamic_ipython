@@ -4,7 +4,6 @@
 ==========
 Utilities
 ==========
-.. currentmodule:: utilities
 
 The modules contained in this package are, generally speaking, a collection of
 scripts that I've found useful while working with IPython, but that unfortunately
@@ -38,10 +37,6 @@ allow for attribute-style access.
 
 """
 import logging
-import os
-import sys
-
-import default_profile
 
 from .copytree import CopyTree
 from .machine import Platform

@@ -4,8 +4,6 @@
 Customized Exceptions
 =====================
 
-**Source code**: :ref:`default_profile/startup/50_sysexception`
-
 Debugging
 ==========
 

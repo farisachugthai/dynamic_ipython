@@ -26,21 +26,19 @@ The program finished and will be restarted
 
 """
 import os
-import shlex
-import sys
-import time
-import threading
 import queue
-from queue import Queue
-
-from subprocess import PIPE, Popen, STDOUT
+import shlex
 import subprocess
+import sys
+import threading
+import time
+from subprocess import PIPE, Popen, STDOUT
 
 import ipython_genutils
-
 # import IPython.ipapi
 from IPython import get_ipython
-# TODO: Find TryNext
+
+
 # from IPython.lib.editor
 
 
@@ -97,9 +95,11 @@ class AsyncJobQ(threading.Thread):
             self.output.append(out)
 
     def add(self, cmd):
+        """Would this be better implemented as the dunder ``__add__``?"""
         self.q.put_nowait((cmd, os.getcwd()))
 
     def dumpoutput(self):
+        """Would this be better implemented as the ``__iter__`` dunder?"""
         while self.output:
             item = self.output.pop(0)
             print(item)
@@ -133,6 +133,7 @@ def jobctrl_prefilter_f(self, line):
 
         line = ip.IP.expand_aliases(fn, rest)
         if not _jobq:
+            # Idk if that method is in ipython_genutils
             return '_ip.startjob(%s)' % ipython_genutils.make_quoted_expr(line)
         return '_ip.jobq(%s)' % ipython_genutils.make_quoted_expr(line)
 
@@ -147,6 +148,7 @@ def jobq_output_hook(self):
 
 
 def job_list(ip):
+    """IPython doesn't have a db attribute anymore."""
     keys = ip.db.keys('tasks/*')
     ents = [ip.db[k] for k in keys]
     return ents
@@ -158,9 +160,14 @@ def magic_tasks(self, line):
     A 'task' is a process that has been started in IPython when 'jobctrl'
     extension is enabled.
 
-    Tasks can be killed with %kill.
+    Tasks can be killed with `%kill`.
 
     '%tasks clear' clears the task list (from stale tasks)
+
+    Notes
+    -----
+    IPython doesn't have a getapi() method nor does it have a db attribute.
+
     """
     ip = self.getapi()
     if line.strip() == 'clear':

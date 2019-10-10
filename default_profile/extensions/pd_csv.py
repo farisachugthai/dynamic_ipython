@@ -28,7 +28,6 @@ It also shows the following simpler example:
 
 """
 import logging
-import sys
 from io import StringIO
 
 from IPython import get_ipython

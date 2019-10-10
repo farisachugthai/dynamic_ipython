@@ -98,7 +98,6 @@ Here's an interesting blurb from pandas/docs/conf.py::
 
 """
 import logging
-import sys
 
 from default_profile.util import module_log
 

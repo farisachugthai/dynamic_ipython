@@ -10,35 +10,26 @@ Oct 06, 2019:
 
 
 """
-# import signal
-from pdb import Pdb
 import sys
 import traceback
+# import signal
+from pdb import Pdb
 
-from IPython import get_ipython, start_ipython
+from IPython import get_ipython
 # from IPython.core.magics import MagicsClass, cell_magics, line_magics
 from IPython.core.completer import IPCompleter
-
 # As a heads up I think the super() call goes to Pdb not TerminalPdb.
 # from IPython.core.debugger import Pdb
 # from IPython.core.interactiveshell import InteractiveShell
 from IPython.terminal.embed import InteractiveShellEmbed
-from IPython.terminal.debugger import TerminalPdb
 from IPython.terminal.interactiveshell import TerminalInteractiveShell
 # from IPython.terminal.ipapp import TerminalIPythonApp
 from IPython.terminal.ptutils import IPythonPTCompleter
 from IPython.terminal.shortcuts import create_ipython_shortcuts
-
-from prompt_toolkit import patch_stdout
-from prompt_toolkit.key_binding import KeyBindings
-# from prompt_toolkit.contrib.completers.system import SystemCompleter
-from prompt_toolkit.filters import (
-    Condition, has_focus, has_selection, vi_insert_mode, emacs_insert_mode
-)
-from prompt_toolkit.shortcuts.prompt import PromptSession
 from prompt_toolkit.enums import EditingMode
 from prompt_toolkit.formatted_text import PygmentsTokens
-
+# from prompt_toolkit.contrib.completers.system import SystemCompleter
+from prompt_toolkit.shortcuts.prompt import PromptSession
 from pygments.token import Token
 
 
