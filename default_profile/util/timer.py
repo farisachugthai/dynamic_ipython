@@ -91,3 +91,20 @@ def exc_timer(statement):
         t.print_exc()
     # else:
     # TODO:
+
+
+class ArgReparser:
+    """Class decorator that echoes out the arguments a function was called with."""
+
+    def __init__(self, func):
+        """Initialize the reparser with the function it wraps."""
+        self.func = func
+
+    def __call__(self, *args, **kwargs):
+        print("entering function " + self.func.__name__)
+        i = 0
+        for arg in args:
+            print("arg {0}: {1}".format(i, arg))
+            i = i + 1
+
+        return self.func(*args, **kwargs)

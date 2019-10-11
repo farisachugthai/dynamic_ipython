@@ -19,19 +19,19 @@
     <link rel="search" title="Search" href="../../../search.html" />
 
 <link
-  rel="stylesheet"
-  href="https://fonts.googleapis.com/css?family=Source+Code+Pro"
-  type="text/css"
-  media="screen"
-  charset="utf-8"
+charset="utf-8"
+href="https://fonts.googleapis.com/css?family=Source+Code+Pro"
+media="screen"
+rel="stylesheet"
+type="text/css"
 />
 
 <link
-  rel="stylesheet"
-  href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic"
-  type="text/css"
-  media="screen"
-  charset="utf-8"
+        charset="utf-8"
+        href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic"
+        media="screen"
+        rel="stylesheet"
+        type="text/css"
 />
 
 <!--[if lte IE 6]>
@@ -65,7 +65,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <h1>Source code for default_profile.util.timer</h1><div class="highlight"><pre>
+<h1>Source code for default_profile.util.timer</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -159,6 +159,23 @@
         <span class="n">t</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span></div>
     <span class="c1"># else:</span>
     <span class="c1"># TODO:</span>
+
+
+<div class="viewcode-block" id="ArgReparser"><a class="viewcode-back" href="../../../util/timer.html#default_profile.util.timer.ArgReparser">[docs]</a><span class="k">class</span> <span class="nc">ArgReparser</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Class decorator that echoes out the arguments a function was called with.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ArgReparser.__init__"><a class="viewcode-back" href="../../../util/timer.html#default_profile.util.timer.ArgReparser.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize the reparser with the function it wraps.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">func</span> <span class="o">=</span> <span class="n">func</span></div>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;entering function &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;arg {0}: {1}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">arg</span><span class="p">))</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 </pre></div>
 
           </div>
@@ -191,7 +208,7 @@
 
 <div>&nbsp;</div>
 <div id="sidebartoc">
-<p class="caption"><span class="caption-text">Tutorial</span></p>
+    <p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../jobcontrol.html">Job Control</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../subcommands.html">Subcommands in IPython and Jupyter</a></li>
@@ -207,7 +224,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Extensions</a></li>
 </ul>
 
-
+    
 
 </div>
 
@@ -231,7 +248,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Oct 10, 2019.
+      Last updated on Oct 11, 2019.
     </div>
   </body>
 </html>

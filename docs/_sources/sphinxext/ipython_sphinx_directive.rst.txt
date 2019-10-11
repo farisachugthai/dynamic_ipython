@@ -9,14 +9,9 @@ IPython Sphinx Directive
 .. highlight:: ipython
    :linenothreshold: 3
 
-.. this one is probably overkill right?
-
-.. |IPython| replace:: :mod:`IPython`
-
 .. |rst| replace:: reStructured text
 
-The |IPython| directive is a stateful shell that can be used in reStructured
-text files.
+The IPython directive is a stateful shell that can be used in |rst| files.
 
 The Sphinx project, for those who are unfamiliar, is used
 to create documentation from valid Python source in order to generate HTML.

@@ -1,11 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-==============
-IPython Logger
-==============
-
-Establish a file-logger for IPython.
+"""Establish a file-logger for IPython.
 
 Collects both the input and output of every command run through the IPython
 interpreter, prepends a timestamp to the commands, and save the untransformed
@@ -21,7 +16,6 @@ output to a file.
       conda, any of the 1000000 things you could add.
 
 """
-
 import time
 from os import path
 
@@ -34,7 +28,7 @@ def ipython_logger(shell=None):
     .. warning:: This is not necessarily valid python code.
 
     The commands are appended to a file in the directory of the
-    profile in :envvar:`$IPYTHONDIR` or fallback ~/.ipython. This file is
+    profile in :envvar:`IPYTHONDIR` or fallback to ``~/.ipython``. This file is
     named based on the date.
 
     Parameters
@@ -45,7 +39,7 @@ def ipython_logger(shell=None):
     Raises
     ------
     RuntimeError
-        If the configured logger is already logging to todays date.
+        If the configured logger is already logging to today's date.
 
     """
     log_dir = shell.profile_dir.log_dir

@@ -217,7 +217,7 @@ c.InteractiveShellApp.reraise_ipython_extension_failures = False
 c.Application.log_datefmt = '%Y-%m-%d %H:%M:%S'
 
 # The Logging format template
-#Default: '[%(name)s]%(highlevel)s %(message)s'
+# Default: '[%(name)s]%(highlevel)s %(message)s'
 c.Application.log_format = '%(module) : %(created)f : [%(name)s] : %(highlevel)s : %(message)s : '
 
 # Set the log level by value or name.
@@ -512,23 +512,13 @@ c.TerminalInteractiveShell.extra_open_editor_shortcuts = True
 
 # Try to import my Gruvbox class. Can be found at
 # https://github.com/farisachugthai/Gruvbox_IPython
-if sys.version_info[0:2] <= (3, 6):
-    if ModuleNotFoundError not in dir(builtins):
-
-        class ModuleNotFoundError(ImportError):
-            """Subclass ImportErrors."""
-
-            def __init__(self, *args, **kwargs):
-                " I wouldn't limit this section of code to only py3 up but I think that py2 doesn't accept that super() use below so I will for now." ""
-                super().__init__(self, *args, **kwargs)
-
 
 try:
     from gruvbox.style import GruvboxDarkHard
 except (ImportError, ModuleNotFoundError):
     c.TerminalInteractiveShell.highlighting_style = 'monokai'
 else:
-    c.TerminalInteractiveShell.highlighting_style = GruvboxDarkHard
+    c.TerminalInteractiveShell.highlighting_style = 'GruvboxDarkHard'
 
 # Override highlighting format for specific tokens
 # Comments were genuinely impossible to read. Might need to override
@@ -540,6 +530,29 @@ else:
 # c.TerminalInteractiveShell.mouse_support = False
 
 # Class used to generate Prompt token for prompt_toolkit
+# So this wouldn't be a block of code to build off of but here's something
+# so you can get an idea of what's going on
+
+from IPython.terminal.prompts import ClassicPrompts
+
+class StandardPythonPrompt(ClassicPrompts):
+    """Create a no-op class to demonstrate usage of the ClassicPrompts class.
+
+    Examples
+    --------
+    >>> from IPython.terminal.prompts import ClassicPrompts
+    >>> from IPython.core.getipython import get_ipython
+    >>> ClassicPrompts(get_ipython()).continuation_prompt_tokens()
+    [(Token.Prompt, '... ')]
+    >>> ClassicPrompts(get_ipython()).continuation_prompt_tokens()
+    [(Token.Prompt, '>>> ')]
+
+    """
+
+    def __repr__(self):
+        """The most boiler-platey repr I can come up with."""
+        return self.__class__.__name__
+
 # c.TerminalInteractiveShell.prompts_class = 'IPython.terminal.prompts.Prompts'
 
 # Use `raw_input` for the REPL, without completion and prompt colors.
@@ -698,7 +711,7 @@ class BaseFormatterDoc(Configurable):
             c.BaseFormatter.type_printers = {}
 
         """
-        super().__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def _example_subclass(self):
         """

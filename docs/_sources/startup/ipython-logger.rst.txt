@@ -7,7 +7,7 @@
 .. currentmodule:: default_profile.startup.05_log
 
 This uses the IPython core :class:`IPython.core.logger.LoggingConfigurable`
-to create a :class:`logging.handler.FileHandler()` that creates one new log
+to create a :class:`logging.handler.FileHandler` that creates one new log
 file for every calendar day of the year.
 
 Running IPython instances will continue to write to the log file if the
@@ -26,6 +26,7 @@ file as the older ones.
 ---------------------------------------------
 
 .. automodule:: default_profile.startup.05_log
+   :synopsis: Are we allowed to do this.
    :members:
    :undoc-members:
    :show-inheritance:
