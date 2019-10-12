@@ -1,20 +1,14 @@
-{%- extends "!layout.html" %} {%- block extrahead %}
+{%- extends "!layout.html" %}
 
-<link
-charset="utf-8"
+{%- block extrahead %}
+
+<link charset="utf-8"
 href="https://fonts.googleapis.com/css?family=Source+Code+Pro"
-media="screen"
-rel="stylesheet"
-type="text/css"
-/>
+media="screen" rel="stylesheet" type="text/css" />
 
-<link
-        charset="utf-8"
-        href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic"
-        media="screen"
-        rel="stylesheet"
-        type="text/css"
-/>
+<link charset="utf-8"
+href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic"
+media="screen" rel="stylesheet" type="text/css" />
 
 <!--[if lte IE 6]>
   <link
@@ -26,16 +20,30 @@ type="text/css"
   />
 <![endif]-->
 
-{% endblock %} {% block header %} {%- if logo %}
-<div class="header" role="banner">
+{% endblock %}
+
+{% block header %}
+
+  {%- if logo %}
+  <div class="header" role="banner">
     <div class="logo">
-        <a href="{{ pathto(master_doc) }}">
-            <img class="logo" src="{{ pathto('_static/' + logo, 1) }}" alt="Logo"/>
-        </a>
+      <a href="{{ pathto(master_doc) }}">
+        <img class="logo" src="{{ pathto('_static/' + logo, 1) }}" alt="Logo"/>
+      </a>
     </div>
 </div>
-{%- endif %} {% endblock %} {%- block sidebarlogo %}{%- endblock %} {%- block
-sidebarsourcelink %}{%- endblock %} {# Need to figure out the syntax....also
-where everything else went #} {% if next %}
+{%- endif %}
+
+{% endblock %}
+
+{%- block sidebarlogo %}{%- endblock %}
+
+{%- block sidebarsourcelink %}{%- endblock %}
+
+{# Need to figure out the syntax....also where everything else went #}
+
+{% if next %}
 <a href="{{ next.link|e }}">{{ next.title }}</a>
-{% endif %} {# Vim: set ft=htmljinja: #}
+{% endif %}
+
+{# Vim: set ft=htmljinja: #}

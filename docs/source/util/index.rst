@@ -1,4 +1,4 @@
-.. _utilities-index:
+.. _utilities:
 
 =================
 IPython Utilities
@@ -9,7 +9,7 @@ IPython Utilities
 .. _util-contents:
 
 Module contents
----------------
+===============
 
 .. automodule:: default_profile.util
    :members:
@@ -18,6 +18,9 @@ Module contents
 
 
 The submodules contained in this package are as follows:
+
+Utilities Submodules
+====================
 
 .. toctree::
    :maxdepth: 1

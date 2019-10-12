@@ -16,13 +16,19 @@ Classes
 .. autosummary::
    :template: autosummary.rst
    :toctree:
-{% for item in classes %}{% if item not in ['zip', 'map', 'reduce'] %}
-   {{ item }}{% endif %}{% endfor %}
+
+  {% for item in classes %}
+
+   <!-- {% if item not in ['zip', 'map', 'reduce'] %} -->
+     {{ item }}
+    <!-- {% endif %} -->
+  {% endfor %}
 {% endif %}
+
 {% endblock %}
 
 {% block functions %}
-{% if functions %}
+  {% if functions %}
 
 Functions
 ---------
@@ -31,10 +37,24 @@ Functions
    :template: autosummary.rst
    :toctree:
 
-{% for item in functions %}{% if item not in ['zip', 'map', 'reduce'] %}
-   {{ item }}{% endif %}{% endfor %}
-{% endif %}
+    {% for item in functions %}
+      {% if item not in ['zip', 'map', 'reduce'] %}
+        {{ item }}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
 {% endblock %}
-{% endif %}
 
+
+{% block exceptions %}
+  {% if exceptions %}
+.. rubric:: Exceptions
+
+.. autosummary::
+
+    {% for item in exceptions %}
+      {{ item }}
+    {%- endfor %}
+  {% endif %}
+{% endblock %}
 {# Vim: set ft=htmljinja: #}

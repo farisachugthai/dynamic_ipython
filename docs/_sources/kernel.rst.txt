@@ -1,8 +1,10 @@
-.. _kernel:
-
 ==============
 IPython Kernel
 ==============
+
+.. module:: kernel
+   :synopsis: Summarize the IPykernel.
+
 .. highlight:: ipython
 
 .. ipython::

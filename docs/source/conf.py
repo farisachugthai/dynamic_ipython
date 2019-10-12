@@ -146,7 +146,7 @@ templates_path = ['_templates']
 # You can specify multiple suffix as a list of string:
 
 # source_suffix = ['.rst', '.md']
-source_suffix = '.rst'
+source_suffix = ['.rst']
 
 # The encoding of source files.
 source_encoding = 'utf-8'
@@ -175,8 +175,7 @@ release = version
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-# TODO:
-# I don't know what the default is though.
+# language = None
 
 
 # There are two options for replacing |today|: either, you set today to some
@@ -193,7 +192,7 @@ today_fmt = '%B %d, %Y'
 # domain is C, Python functions will be named “Python function”, not just
 # “function”).
 # New in version 1.0.
-primary_domain = 'py'
+default_domain = 'py'
 
 # The name of a reST role (builtin or Sphinx extension) to use as the
 # default role, that is, for text marked up `like this`. This can be set to
@@ -202,7 +201,10 @@ primary_domain = 'py'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-exclude_patterns = ['build', 'dist', '.tox', '.ipynb_checkpoints', 'tags', '*.ipynb']
+exclude_patterns = [
+    'build', 'Thumbs.db', '.DS_Store', 'dist', '.tox',
+    '.ipynb_checkpoints', 'tags', '*.ipynb'
+]
 
 # The reST default role (used for this markup: `text`) to use for all
 # documents.
@@ -261,12 +263,6 @@ html_theme = 'pyramid'
 # further.  For a list of options available for each theme, see the
 # documentation.
 
-# This right here is why pyramid wasn't working.
-# html_theme_options = {
-#     "github_user": "Faris A. Chugthai",
-#     "github_repo": "dynamic_ipython",
-#     "github_banner": True,
-# }
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -317,7 +313,7 @@ html_js_files = ['copybutton.js']
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-# htmlhelp_basename = 'site-packages-doc'
+htmlhelp_basename = 'dynamic_ipython'
 
 # -- Options for LaTeX output ------------------------------------------------
 
@@ -342,19 +338,11 @@ html_js_files = ['copybutton.js']
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
-# latex_documents = [
-#     (master_doc, 'site-packages.tex', 'site-packages Documentation', 'fac',
-#      'manual'),
-# ]
 
 # -- Options for manual page output ------------------------------------------
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [
-    (master_doc, 'site-packages', 'site-packages Documentation', [author], 1)
-]
-
 manpages_url = 'https://linux.die.net/man/'
 
 man_show_urls = True
@@ -364,15 +352,9 @@ man_show_urls = True
 # Grouping the document tree into Texinfo files. List of tuples
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
-# texinfo_documents = [
-#     (master_doc, 'site-packages', 'site-packages Documentation', author,
-#      'site-packages', 'One line description of project.', 'Miscellaneous'),
-# ]
-
-# -- Options for Epub output -------------------------------------------------
+# -- Options for Epub output ----------------------------------------
 
 # Bibliographic Dublin Core info.
-# epub_title = project
 
 # The unique identifier of the text. This can be a ISBN number
 # or the project homepage.
@@ -477,7 +459,9 @@ else:
     ipython_mplbackend = 'None'
     HAS_MPL = False
 
-# -- autosummary -------------------------------------------------------------
+# -------------------------------------------------------------------
+# Autosummary
+# -------------------------------------------------------------------
 
 autodoc_mock_imports = [
     'default_profile',
@@ -485,6 +469,7 @@ autodoc_mock_imports = [
     'default_profile.sphinxext',
     'extensions',
 ]
+
 autosummary_generate = True
 
 autosummary_imported_members = False
@@ -527,7 +512,8 @@ except Exception:
 
 # -- numpydoc extension ------------------------------------------------------
 
-numpydoc_show_class_members = False  # Otherwise Sphinx emits thousands of warnings
+# Otherwise Sphinx emits thousands of warnings
+numpydoc_show_class_members = False
 numpydoc_class_members_toctree = False
 
 # Whether to create cross-references for the parameter types in the

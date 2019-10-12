@@ -134,7 +134,7 @@ Table of Contents
 
    jobcontrol
    subcommands
-   sphinxext <sphinxext/index.rst>
+   Sphinx Extensions <sphinxext/index.rst>
    Developers Notes <dev>
 
 In addition the API has extensive documentation.
@@ -144,10 +144,10 @@ In addition the API has extensive documentation.
    :titlesonly:
    :caption: API
 
-   IPython API </startup/index>
+   IPython Startup <startup/index>
    IPython Utilities </util/index>
    kernel
-   jupyter <jupyter/index>
+   Jupyter <jupyter/index>
    extensions
 
 

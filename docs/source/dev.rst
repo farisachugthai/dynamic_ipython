@@ -157,3 +157,4 @@ Pygments can generate CSS with the following command in the shell:
 .. code-block:: shell
 
    pygmentize -S GruvboxDarkHard -f html > _static/pygments.css
+flake8-rst --config=setup.cfg --show-source --statistics --doctest docs/source/**/*.rst --rst-directives=ipython --tee --output-file=flake8_output.log

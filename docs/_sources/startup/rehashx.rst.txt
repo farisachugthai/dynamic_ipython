@@ -1,6 +1,8 @@
 ==========================================
 :mod:`~default_profile.startup.01_rehashx`
 ==========================================
+.. currentmodule:: default_profile.startup.01_rehashx
+
 .. magic:: rehashx
 
 The IPython magic `%rehashx` allows you to reload all of your startup files
@@ -14,6 +16,7 @@ In addition 50+ aliases have been added for :command:`git`.
 
 Parameters
 ----------
+
 magic_name : str
     Name of the desired magic function, without :kbd:`%` prefix.
 line : str
@@ -24,6 +27,7 @@ line : str
 
 Notes
 -----
+
 :func:`IPython.core.magic.run_line_magic`
     A method of the |ip| instance to run a specific magic currently in the
     IPython.core.interactiveshell.InteractiveShell.user_ns
@@ -60,6 +64,7 @@ This is added to ensure backward compatibility for use
 of :func:`IPython.core.magics.get_ipython().magic`
 
 .. automodule:: default_profile.startup.01_rehashx
+   :synopsis: Add all executables found on the system PATH to the namespace.
    :members:
    :undoc-members:
    :show-inheritance:
