@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Subcommands in IPython and Jupyter &#8212; Dynamic IPython: version0.0.2</title>
+    <title>Subcommands &#8212; Dynamic IPython: version0.0.2</title>
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
@@ -20,13 +20,11 @@
     <link rel="next" title="Sphinx extension" href="sphinxext/index.html" />
     <link rel="prev" title="Job Control" href="jobcontrol.html" />
 
-<link charset="utf-8"
-href="https://fonts.googleapis.com/css?family=Source+Code+Pro"
-media="screen" rel="stylesheet" type="text/css" />
+<link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" />
 
-<link charset="utf-8"
-href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic"
-media="screen" rel="stylesheet" type="text/css" />
+<link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" media="screen" rel="stylesheet" type="text/css" />
+
+<link rel='stylesheet' href='//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.css'>
 
 <!--[if lte IE 6]>
   <link
@@ -40,7 +38,6 @@ media="screen" rel="stylesheet" type="text/css" />
 
 
   </head><body>
-
 
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -67,46 +64,56 @@ media="screen" rel="stylesheet" type="text/css" />
           <div class="body" role="main">
             
 <div class="section" id="module-subcommands">
-<span id="subcommands-in-ipython-and-jupyter"></span><h1>Subcommands in IPython and Jupyter<a class="headerlink" href="#module-subcommands" title="Permalink to this headline">¶</a></h1>
+<span id="subcommands"></span><h1>Subcommands<a class="headerlink" href="#module-subcommands" title="Permalink to this headline">¶</a></h1>
+<p>Subcommands in IPython and Jupyter.</p>
 <p>Theres a ton that could be done here. A todo for now.</p>
 <div class="section" id="ipython-history">
 <h2>IPython history<a class="headerlink" href="#ipython-history" title="Permalink to this headline">¶</a></h2>
-<p>Here’s some seemingly inconsistent behavior.:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span>: ipython <span class="nb">history</span>
-<span class="go">No subcommand specified. Must specify one of: dict_keys([&#39;trim&#39;, &#39;clear&#39;])</span>
-<span class="go">Manage the IPython history database.</span>
-
-<span class="go">Subcommands</span>
-<span class="go">-----------</span>
-<span class="go">Subcommands are launched as `ipython-history cmd [args]`. For information</span>
-<span class="go">on using subcommand &#39;cmd&#39;, do: `ipython-history cmd -h`.</span>
+<p>Here’s some seemingly inconsistent behavior.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="hll">$: ipython <span class="nb">history</span>
+</span>No subcommand specified. Must specify one of: dict_keys<span class="o">([</span><span class="s1">&#39;trim&#39;</span>, <span class="s1">&#39;clear&#39;</span><span class="o">])</span>
+Manage the IPython <span class="nb">history</span> database.
 </pre></div>
 </div>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="gh">Subcommands</span>
+<span class="gh">-----------</span>
+Subcommands are launched as <span class="nv">`ipython-history cmd [args]`</span>. For information
+on using subcommand &#39;cmd&#39;, do: <span class="nv">`ipython-history cmd -h`</span>.
+</pre></div>
+</div>
+<p>So there we have instructions to use the invocation <code class="docutils literal notranslate"><span class="pre">ipython-history</span></code>.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="err">$</span><span class="p">:</span> <span class="n">ipython</span><span class="o">-</span><span class="n">history</span> <span class="o">-</span><span class="n">h</span>
+<span class="n">ipython</span><span class="o">-</span><span class="n">history</span><span class="p">:</span> <span class="n">command</span> <span class="ow">not</span> <span class="n">found</span>
+</pre></div>
+</div>
+<p>Erhm. That’s confusing.</p>
+<p>So how does the <code class="xref py py-obj docutils literal notranslate"><span class="pre">history</span></code> command work?</p>
+<div class="section" id="ipython-history-api">
+<h3>IPython History API<a class="headerlink" href="#ipython-history-api" title="Permalink to this headline">¶</a></h3>
+<p>Interact with the IPython <a class="reference external" href="https://docs.python.org/3/library/sqlite3.html#module-sqlite3" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sqlite3</span></code></a> database.</p>
 <dl class="option">
-<dt id="cmdoption-arg-trim">
-<code class="sig-name descname">trim</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-arg-trim" title="Permalink to this definition">¶</a></dt>
+<dt id="cmdoption-history-arg-trim">
+<code class="sig-name descname">trim</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-history-arg-trim" title="Permalink to this definition">¶</a></dt>
 <dd><p>Trim the IPython history database to the last 1000 entries.</p>
 </dd></dl>
 
 <dl class="option">
-<dt id="cmdoption-arg-clear">
-<code class="sig-name descname">clear</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-arg-clear" title="Permalink to this definition">¶</a></dt>
+<dt id="cmdoption-history-arg-clear">
+<code class="sig-name descname">clear</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-history-arg-clear" title="Permalink to this definition">¶</a></dt>
 <dd><p>Clear the IPython history database, deleting all entries.</p>
 </dd></dl>
 
-<p>So there we have instructions to use the invocation <code class="docutils literal notranslate"><span class="pre">ipython-history</span></code>.:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span>: ipython-history -h
-<span class="go">ipython-history: command not found</span>
-</pre></div>
-</div>
-<p>Erhm. That’s confusing.</p>
+<p>So where is this initially implemented?</p>
 <div class="admonition-todo admonition" id="id1">
 <p class="admonition-title">Todo</p>
 <p>ipython-history command line definition</p>
 <p>Where in the source code is this set up?</p>
 </div>
 <p>Also the original implementation only defines 2 options for the subcommand.</p>
-<p>But it would be nice to have options like <code class="docutils literal notranslate"><span class="pre">backup</span></code> and <code class="docutils literal notranslate"><span class="pre">grep</span></code> or something.</p>
+<p>But it would be nice to have options like <code class="docutils literal notranslate"><span class="pre">backup</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">grep</span></code> or something.</p>
+<p>There are a handful of <em>nice to have</em> but ultimately pointless functions in
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython.utils</span></code> so why not take advantage?</p>
+</div>
 </div>
 </div>
 
@@ -117,16 +124,18 @@ media="screen" rel="stylesheet" type="text/css" />
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+    <h3>Quick search</h3>
     <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-    </form>
+        <form class="search" action="search.html" method="get">
+            <input type="text" name="q" />
+            <input type="submit" value="Go" />
+        </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script><h3>Related Topics</h3>
-<br></br> 
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+<h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a>
     <ul>
@@ -145,7 +154,7 @@ media="screen" rel="stylesheet" type="text/css" />
     <p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="jobcontrol.html">Job Control</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Subcommands in IPython and Jupyter</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Subcommands</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sphinxext/index.html">Sphinx Extensions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dev.html">Developers Notes</a></li>
 </ul>
@@ -178,8 +187,11 @@ media="screen" rel="stylesheet" type="text/css" />
 <div id="sidebartoc">
 
     <ul>
-<li><a class="reference internal" href="#">Subcommands in IPython and Jupyter</a><ul>
-<li><a class="reference internal" href="#ipython-history">IPython history</a></li>
+<li><a class="reference internal" href="#">Subcommands</a><ul>
+<li><a class="reference internal" href="#ipython-history">IPython history</a><ul>
+<li><a class="reference internal" href="#ipython-history-api">IPython History API</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -210,7 +222,7 @@ media="screen" rel="stylesheet" type="text/css" />
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Oct 11, 2019.
+      Last updated on Oct 12, 2019.
     </div>
   </body>
 </html>

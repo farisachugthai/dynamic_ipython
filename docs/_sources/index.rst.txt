@@ -18,28 +18,6 @@ Welcome to Dynamic IPython's documentation!
    :synopsis: Main landing page for the documentation.
 
 
-Installation
-============
-
-This repository can be installed in the following manner:
-
-   python setup.py build
-   pip install -U -e .
-
-However, that unfortunately assumes one has admin access to wherever pip
-installs files globally, and that the :command:`python` command points to
-python3.7. In most cases it does not.
-
-If one has :command:`pipenv` installed, an easier installation could be:
-
-   pipenv install -e .
-
-If a non-pipenv installation is desired for some reason, a fully specified
-installation could look like:
-
-   python3.7 setup.py build
-   python3.7 -m pip install -U --user pip -e .
-
 Startup Scripts
 ================
 
@@ -100,6 +78,34 @@ If this is not true, the ``highlighting_color`` parameter will fallback
 to Monokai.
 
 
+Installation
+============
+
+This repository can be installed in the following manner.:
+
+.. code-block:: console
+
+   python setup.py build
+   pip install -U -e .
+
+However, that unfortunately assumes one has admin access to wherever pip
+installs files globally, and that the :command:`python` command points to
+python3.7. In most cases it does not.
+
+If one has :command:`pipenv` installed, an easier installation could be::
+
+   pipenv install -e .
+
+If a non-pipenv installation is desired for some reason, a fully specified
+installation could look like::
+
+   python3.7 setup.py build
+   python3.7 -m pip install -U --user pip -e .
+
+As one can see this gets complicated very quickly, and as a result,
+installation via pipenv is the recommended method.
+
+
 See Also
 ==========
 
@@ -118,10 +124,10 @@ see the following::
    >>> from IPython import get_ipython
    >>> _ip = get_ipython()
    >>> help(_ip)  # doctest: +SKIP
-   >>> dir(_ip): # doctest: +SKIP
+   >>> dir(_ip):  # doctest: +SKIP
 
 In addition, there's an abundance of documentation online in the
-form of rst docs and ipynb notebooks.
+form of rst docs and :abbr:`ipynb` notebooks.
 
 
 Table of Contents
