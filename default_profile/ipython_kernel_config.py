@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Configuration file for ipython-kernel.
-
-
-
-"""
+"""Configuration file for ipython-kernel."""
 import logging
 import os
 from pathlib import Path
@@ -25,6 +21,15 @@ c.Application.log_level = 30
 
 
 def get_home():
+    """As simple as this function is I think it not only exists in:
+
+        #) Obviously this file
+        #) IPython.util.paths
+        #) jupyter_core
+        #) jupyter_client
+
+    That's probably too many.
+    """
     return Path.home()
 
 
@@ -65,7 +70,8 @@ def get_home():
 # c.BaseIPythonApplication.verbose_crash = False
 
 # -----------------------------------------------------------------------------
-# IPKernelApp(BaseIPythonApplication,InteractiveShellApp,ConnectionFileMixin) configuration
+# IPKernelApp(BaseIPythonApplication,InteractiveShellApp,ConnectionFileMixin)
+# configuration
 # -----------------------------------------------------------------------------
 
 # IPython: an enhanced interactive Python shell.
@@ -166,8 +172,7 @@ c.IPythonKernel.use_experimental_completions = True
 c.InteractiveShell.automagic = True
 
 # The part of the banner to be printed before the profile
-# c.InteractiveShell.banner1 = "Python 3.6.5 |Anaconda, Inm| (default, Apr 29 2018, 16:14:56) \nType 'copyright',
-# 'credits' or 'license' for more information\nIPython 6.4.0 -- An enhanced Interactive Python. Type '?' for help.\n"
+# Stop being so noisy like goddamn
 c.InteractiveShell.banner1 = ''
 
 # The part of the banner to be printed after the profile
@@ -176,9 +181,10 @@ c.InteractiveShell.banner1 = ''
 # Set the size of the output cache.  The default is 1000, you can change it
 # permanently in your config file.  Setting it to 0 completely disables the
 # caching system, and the minimum value accepted is 3 (if you provide a value
-# less than 3, it is reset to 0 and a warning is issued).  This limit is defined
-# because otherwise you'll spend more time re-flushing a too small cache than
-# working
+# less than 3, it is reset to 0 and a warning is issued).
+
+# This limit is defined because otherwise you'll spend more time
+# re-flushing a too small cache than working
 c.InteractiveShell.cache_size = 100000
 
 # Use colors for displaying information about objects. Because this information
@@ -210,8 +216,8 @@ c.InteractiveShell.history_load_length = 10000
 
 # c.InteractiveShell.ipython_dir = ''
 
-# Start logging to the given file in append mode. Use `logfile` to specify a log
-# file to **overwrite** logs to.
+# Start logging to the given file in append mode. Use `logfile` to
+# specify a log file to **overwrite** logs to.
 # c.InteractiveShell.logappend = ''
 
 # The name of the logfile to use.
@@ -294,17 +300,17 @@ else:
 
 # Object for handling serialization and sending of messages.
 #
-# The Session object handles building messages and sending them with ZMQ sockets
-# or ZMQStream objects.  Objects can communicate with each other over the
-# network via Session objects, and only need to work with the dict-based IPython
-# message spec. The Session will handle serialization/deserialization, security,
-# and metadata.
-#
+# The Session object handles building messages and sending them with ZMQ
+# sockets or ZMQStream objects.  Objects can communicate with each other
+# over the network via Session objects, and only need to work with the
+# dict - based IPython message spec. The Session will handle
+# serialization/deserialization, security, and metadata.
+
 # Sessions support configurable serialization via packer/unpacker traits, and
 # signing with HMAC digests via the key/keyfile traits.
-#
+
 # Parameters ----------
-#
+
 # debug : bool
 #     whether to trigger extra debugging statements
 # packer/unpacker : str : 'json', 'pickle' or import_string
@@ -370,8 +376,8 @@ else:
 # The UUID identifying this session.
 # c.Session.session = ''
 
-# The digest scheme used to construct the message signatures. Must have the form
-# 'hmac-HASH'.
+# The digest scheme used to construct the message signatures. Must have the
+# form 'hmac-HASH'.
 # c.Session.signature_scheme = 'hmac-sha256'
 
 # The name of the unpacker for unserializing messages. Only used with custom

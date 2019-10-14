@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """Initialize the global IPython instance and begin configuring.
 
@@ -18,6 +18,5 @@ except (ImportError, ModuleNotFoundError):
 default_log_format = '%(created)f : %(module)s : %(levelname)s : %(message)s'
 PROFILE_DEFAULT_LOG = logging.getLogger('default_profile')
 PROFILE_DEFAULT_LOG.setLevel(logging.WARNING)
-PROFILE_DEFAULT_LOG.addHandler(
-    logging.StreamHandler().setLevel(logging.WARNING)
-)
+PROFILE_DEFAULT_LOG.addHandler(logging.StreamHandler().setLevel(
+    logging.WARNING))

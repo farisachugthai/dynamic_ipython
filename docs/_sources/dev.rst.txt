@@ -7,8 +7,6 @@ Developer's Notes
 .. module:: developers-notes
    :synopsis: Notes to aid anyone interested in working with this source code.
 
-.. highlight:: console
-
 
 .. _developer-installation:
 
@@ -98,17 +96,6 @@ so it's important to take that into consideration.
 .. wait can we specify everything and then override it?
 
 
-:mod:`default_profile.sphinxext.magics`
----------------------------------------
-.. automodule:: default_profile.sphinxext.magics
-
-.. currentmodule:: developers_notes
-
-:mod:`~default_profile.sphinxext.configtraits`
-----------------------------------------------
-.. automodule:: default_profile.sphinxext.configtraits
-
-
 Utilizing Tagbar
 ----------------
 
@@ -157,4 +144,11 @@ Pygments can generate CSS with the following command in the shell:
 .. code-block:: shell
 
    pygmentize -S GruvboxDarkHard -f html > _static/pygments.css
-flake8-rst --config=setup.cfg --show-source --statistics --doctest docs/source/**/*.rst --rst-directives=ipython --tee --output-file=flake8_output.log
+
+
+Linting
+========
+
+.. code-block:: shell-session
+
+   flake8-rst --config=setup.cfg --show-source --statistics --doctest docs/source/**/*.rst --rst-directives=ipython --tee --output-file=flake8_output.log

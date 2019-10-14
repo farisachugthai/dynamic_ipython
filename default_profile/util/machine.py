@@ -30,11 +30,12 @@ See Also
     Shows an example use case
 
 """
+from pathlib import Path
 import logging
 import os
 import platform
+import reprlib
 import sys
-from pathlib import Path
 
 from IPython import get_ipython
 
@@ -64,8 +65,7 @@ class Platform:
     LOGGER = module_log.stream_logger(
         logger='util.machine.Platform',
         msg_format='%(asctime)s : %(levelname)s : %(lineNo)d : %(message)s : ',
-        log_level=logging.INFO
-    )
+        log_level=logging.INFO)
 
     def __init__(self, shell=None, env=None, LOGGER=None):
         """Initialize a user specific object.
@@ -106,17 +106,16 @@ class Platform:
         self.Path = Path
 
     def __repr__(self):
-        return '{!r}: {!r}.'.format(
-            self.__class__.__name__, self._sys_platform
-        )
+        return '{!r}: {!r}.'.format(self.__class__.__name__,
+                                    self._sys_platform)
 
     def is_windows(self):
         return self._sys_platform.startswith('win')
 
     def is_conemu_ansi(self):
         # refactor to self.env.keys().index('ConEmuAnsi')?
-        return self.is_windows(
-        ) and os.environ.get('ConEmuANSI', 'OFF') == 'ON'
+        return self.is_windows() and os.environ.get('ConEmuANSI',
+                                                    'OFF') == 'ON'
 
     @property
     def is_win_vt100(self):
@@ -162,7 +161,6 @@ class Platform:
 
 class Shell(Platform):
     """Subclass Platform to gain information about the user's shell."""
-
     @property
     def is_cmd(self):
         """Unsure of how to implement this. TODO:"""
@@ -177,12 +175,45 @@ class Shell(Platform):
         pass
 
 
+class DisplayAliases(reprlib.Repr):
+    """Because I literally lose the output from other commands I wanted to see because of my aliases.
+
+    Examples
+    --------
+    ::
+
+        In[54]: DisplayAliases()
+        Out[54]: {'..': 'cd ..', '...': 'cd ../..', 'copy': 'copy %s %s', 'cp': 'copy %s %s', ...}
+
+    """
+    def __init__(self, shell=None, user_aliases=None):
+        self.shell = shell or get_ipython()
+        self.maxdict = 20
+        self.user_aliases = user_aliases or self.shell.alias_manager.user_aliases
+        super().__init__()
+
+    @property
+    def _dict_user_aliases(self):
+        return self.flatten()
+
+    def flatten(self):
+        dict_aliases = {}
+        if len(self.user_aliases) == 0:
+            return
+        for idx, alias_tuple in enumerate(self.user_aliases):
+            dict_aliases[self.user_aliases[idx][0]] = self.user_aliases[idx][1]
+            return dict_aliases
+
+    def __repr__(self):
+        """TODO"""
+        return self.repr_dict(self._dict_user_aliases, 50)
+
+
 if __name__ == "__main__":
     # Modules kept importing this and ending up with 2 loggers and i was confused
     MACHINE_LOGGER = module_log.stream_logger(
         logger='util.machine',
         msg_format='%(asctime)s : %(levelname)s : %(module)s : %(message)s : ',
-        log_level=logging.INFO
-    )
+        log_level=logging.INFO)
 
     Platform()

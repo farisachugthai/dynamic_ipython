@@ -107,6 +107,7 @@
 <span class="sd">            magic_name=name)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="LinuxAliases.__init__"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.LinuxAliases.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">aliases</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The WindowsAliases implementation of this is odd so maybe branch off.</span>
 
@@ -220,6 +221,7 @@
 <span class="sd">    .. todo:: :command:`git show`</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="CommonAliases.__init__"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">user_aliases</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;OS Agnostic aliases.</span>
 
@@ -243,7 +245,7 @@
         <span class="k">return</span> <span class="s1">&#39;Common Aliases: {!r}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span><span class="p">))</span>
 
 <div class="viewcode-block" id="CommonAliases.unalias"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.unalias">[docs]</a>    <span class="k">def</span> <span class="nf">unalias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alias</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Remove an alias. </span>
+        <span class="sd">&quot;&quot;&quot;Remove an alias.</span>
 
 <span class="sd">        .. magic:: unalias</span>
 
@@ -269,9 +271,9 @@
         <span class="sd">&quot;&quot;&quot;100+ git aliases.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">+=</span> <span class="p">[</span>
             <span class="p">(</span><span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff --staged --stat %l&#39;</span><span class="p">),</span>
-            <span class="n">d</span><span class="p">(</span><span class="s1">&#39;ga&#39;</span><span class="p">,</span> <span class="s1">&#39;git add %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;ga&#39;</span><span class="p">,</span> <span class="s1">&#39;git add %l&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;gaa&#39;</span><span class="p">,</span> <span class="s1">&#39;git add --all %l&#39;</span><span class="p">),</span>
-            <span class="n">a4r</span><span class="p">(</span><span class="s1">&#39;gai&#39;</span><span class="p">,</span> <span class="s1">&#39;git add --interactive %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gai&#39;</span><span class="p">,</span> <span class="s1">&#39;git add --interactive %l&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;gap&#39;</span><span class="p">,</span> <span class="s1">&#39;git add --patch %l&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;gar&#39;</span><span class="p">,</span> <span class="s1">&#39;git add --renormalize -A %l&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;gau&#39;</span><span class="p">,</span> <span class="s1">&#39;git add --update %l&#39;</span><span class="p">),</span>
@@ -353,7 +355,7 @@
             <span class="p">(</span><span class="s1">&#39;..&#39;</span><span class="p">,</span> <span class="s1">&#39;cd ..&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;...&#39;</span><span class="p">,</span> <span class="s1">&#39;cd ../..&#39;</span><span class="p">),</span>
         <span class="p">]</span>
-        <span class="k">return</span> <span class="n">_user_aliases</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span></div></div>
 
 
 <div class="viewcode-block" id="WindowsAliases"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.WindowsAliases">[docs]</a><span class="k">class</span> <span class="nc">WindowsAliases</span><span class="p">:</span>
@@ -368,6 +370,7 @@
 <span class="sd">    Would it be useful to subclass :class:`reprlib.Repr` here?</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="WindowsAliases.__init__"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.WindowsAliases.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">user_aliases</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize the platform specific alias manager with IPython.</span>
 
@@ -542,8 +545,11 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_ip</span><span class="p">,</span> <span class="s1">&#39;magics_manager&#39;</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Are you running in IPython?&#39;</span><span class="p">)</span>
 
-    <span class="n">user_aliases</span> <span class="o">=</span> <span class="n">common_aliases</span><span class="p">()</span>
+    <span class="n">common</span> <span class="o">=</span> <span class="n">CommonAliases</span><span class="p">()</span>
+
     <span class="n">machine</span> <span class="o">=</span> <span class="n">Platform</span><span class="p">()</span>
+    <span class="c1"># TODO: Work in the Executable() class check.</span>
+    <span class="n">user_aliases</span> <span class="o">=</span> <span class="n">common</span><span class="o">.</span><span class="n">git</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">machine</span><span class="o">.</span><span class="n">is_linux</span><span class="p">:</span>
         <span class="c1"># user_aliases += LinuxAliases().busybox()</span>

@@ -315,4 +315,8 @@ this page in the :ref:`Pseudo-Decorators` section.
 
 
 .. automodule:: IPython.sphinxext.custom_doctests
+   :synopsis: Custom doctests in rst docs.
+   :members:
+   :undoc-members:
+   :show-inheritance:
 

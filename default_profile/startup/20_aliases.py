@@ -48,6 +48,7 @@ class LinuxAliases:
             magic_name=name)
 
     """
+
     def __init__(self, shell=None, aliases=None):
         """The WindowsAliases implementation of this is odd so maybe branch off.
 
@@ -161,6 +162,7 @@ class CommonAliases:
     .. todo:: :command:`git show`
 
     """
+
     def __init__(self, shell=None, user_aliases=None):
         """OS Agnostic aliases.
 
@@ -184,7 +186,7 @@ class CommonAliases:
         return 'Common Aliases: {!r}'.format(len(self.user_aliases))
 
     def unalias(self, alias):
-        """Remove an alias. 
+        """Remove an alias.
 
         .. magic:: unalias
 
@@ -210,9 +212,9 @@ class CommonAliases:
         """100+ git aliases."""
         self.user_aliases += [
             ('g', 'git diff --staged --stat %l'),
-            d('ga', 'git add %l'),
+            ('ga', 'git add %l'),
             ('gaa', 'git add --all %l'),
-            a4r('gai', 'git add --interactive %l'),
+            ('gai', 'git add --interactive %l'),
             ('gap', 'git add --patch %l'),
             ('gar', 'git add --renormalize -A %l'),
             ('gau', 'git add --update %l'),
@@ -294,7 +296,7 @@ class CommonAliases:
             ('..', 'cd ..'),
             ('...', 'cd ../..'),
         ]
-        return _user_aliases
+        return self.user_aliases
 
 
 class WindowsAliases:
@@ -309,6 +311,7 @@ class WindowsAliases:
     Would it be useful to subclass :class:`reprlib.Repr` here?
 
     """
+
     def __init__(self, shell=None, user_aliases=None):
         """Initialize the platform specific alias manager with IPython.
 
@@ -483,8 +486,11 @@ def main():
     if not hasattr(_ip, 'magics_manager'):
         raise Exception('Are you running in IPython?')
 
-    user_aliases = common_aliases()
+    common = CommonAliases()
+
     machine = Platform()
+    # TODO: Work in the Executable() class check.
+    user_aliases = common.git()
 
     if machine.is_linux:
         # user_aliases += LinuxAliases().busybox()

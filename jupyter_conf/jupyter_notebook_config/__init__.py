@@ -238,13 +238,26 @@ c.Application.log_level = 30
 # standard library module, which allows setting of the BROWSER environment
 # variable to override it.
 
+class NonGraphicalEnvironmentError(OSError):
+    """Raised when we can't get any kind of a reasonable browser."""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(self, *args, **kwargs)
+
+
+# Probably should refactor into a simple function.
 if platform.system() == 'Linux':
-    if shutil.which('qutebrowser'):
-        c.NotebookApp.browser = 'qutebrowser'
-
-browser = webbrowser.get()
-
-logging.info('Using browser: \t%s ', browser)
+    if os.environ.get('DISPLAY')
+        if shutil.which('qutebrowser'):
+            c.NotebookApp.browser = 'qutebrowser'
+    else:
+        try:
+            browser = webbrowser.get()
+        except Exception as e:  # eh
+            raise NonGraphicalEnvironmentError(e)
+        else:
+            logging.info('Using browser: \t%s ', browser)
+            c.NotebookApp.browser = browser
 
 # The full path to an SSL/TLS certificate file.
 # c.NotebookApp.certfile = ''
