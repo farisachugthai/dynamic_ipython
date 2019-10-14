@@ -1,0 +1,237 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Make — Automated Documentation Builder &#8212; Dynamic IPython: version0.0.2</title>
+    <link rel="stylesheet" href="../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/sphinxext/make.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Developer’s Notes" href="../dev.html" />
+    <link rel="prev" title="magics" href="magics.html" />
+<link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" />
+<link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" media="screen" rel="stylesheet" type="text/css" />
+<link rel='stylesheet' href='//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.css'>
+<!--[if lte IE 6]>
+  <link
+    rel="stylesheet"
+    href="../_static/ie6.css"
+    type="text/css"
+    media="screen"
+    charset="utf-8"
+  />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../dev.html" title="Developer’s Notes"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="magics.html" title="magics"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Dynamic IPython</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Sphinx extensions</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+<div class="section" id="make-automated-documentation-builder">
+<h1>Make — Automated Documentation Builder<a class="headerlink" href="#make-automated-documentation-builder" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>While still being actively worked on, the ideal usage would begin with the user
+in the <a class="reference external" href="../docs">../docs</a> directory of the repository and running.:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python3 sphinx_extensions/make html</span>
+</pre></div>
+</div>
+<p>Where <em>html</em> can be replaced with one of <em>html</em>, <em>singlehtml</em>, <em>doctest</em> or
+<em>linkcheck</em>. Not all <strong class="command">sphinx-build</strong> options are currently supported.</p>
+</div>
+<div class="section" id="moving-output-files">
+<h2>Moving output files<a class="headerlink" href="#moving-output-files" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">shutil</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">os.path</span> <span class="k">import</span> <span class="n">join</span> <span class="k">as</span> <span class="n">pjoin</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">BUILD_DIR</span> <span class="o">=</span> <span class="n">pjoin</span><span class="p">(</span><span class="s1">&#39;build&#39;</span><span class="p">,</span> <span class="s1">&#39;html&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s1">&#39;rsync&#39;</span><span class="p">):</span>
+<span class="go">    &gt;&gt;&gt; subprocess.run([&#39;rsync&#39;, &#39;-hv8r&#39;, BUILD_DIR, &#39;.&#39;])</span>
+</pre></div>
+</div>
+<p>You could even add one of the <em>delete on destination</em> options that rsync has.</p>
+<p>One of them specifies to delete anything at the destination not in source.
+Obviously be careful beforehand but that could be a really simple way to
+automatically keep the documentation fresh.</p>
+</div>
+<div class="section" id="todo">
+<h2>Todo<a class="headerlink" href="#todo" title="Permalink to this headline">¶</a></h2>
+<p>Incorporate this in.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sphinx.application</span> <span class="k">import</span> <span class="n">Sphinx</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">srcdir</span><span class="o">=</span><span class="n">confdir</span><span class="o">=</span><span class="s1">&#39;source&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">doctreedir</span><span class="o">=</span><span class="s1">&#39;build/.doctrees&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">outdir</span><span class="o">=</span><span class="s1">&#39;build/html&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">app</span> <span class="o">=</span> <span class="n">Sphinx</span><span class="p">(</span><span class="n">buildername</span><span class="o">=</span><span class="s1">&#39;html&#39;</span><span class="p">,</span> <span class="n">srcdir</span><span class="o">=</span><span class="n">srcdir</span><span class="p">,</span> <span class="n">outdir</span><span class="o">=</span><span class="n">outdir</span><span class="p">,</span> <span class="n">doctreedir</span><span class="o">=</span><span class="n">doctreedir</span><span class="p">,</span> <span class="n">confdir</span><span class="o">=</span><span class="n">confdir</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt>sphinx.cmd.build</dt><dd><p>The main entrypoint for sphinx and a good module to get comfortable with.</p>
+</dd>
+<dt>sphinx.cmd.make_main</dt><dd><p>The pure python replacement for a <code class="docutils literal notranslate"><span class="pre">Makefile</span></code>.</p>
+</dd>
+</dl>
+<p>sphinx.util.osutil</p>
+</div>
+</div>
+<div class="section" id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
+<p>Wait why don’t we just do something like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sphinx</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sphinx.cmd.build</span> <span class="k">import</span> <span class="n">make</span>
+</pre></div>
+</div>
+<p>Or whatever it’s called and run that? It’d be way easier…</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+    <h3>Quick search</h3>
+    <div class="searchformwrapper">
+        <form class="search" action="../search.html" method="get">
+            <input type="text" name="q" />
+            <input type="submit" value="Go" />
+        </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a>
+    <ul>
+      <li><a href="index.html">Sphinx extensions</a>
+        <ul>
+          <li>Previous: <a href="magics.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">magics</span></code></a></li>
+          <li>Next: <a href="../dev.html" title="next chapter">Developer’s Notes</a></li>
+        </ul>
+      </li>
+    </ul>
+</ul>
+</li>
+
+
+
+<h3><a href="../index.html">Table of Contents</a></h3>
+
+<div>&nbsp;</div>
+<div id="sidebartoc">
+    <p class="caption"><span class="caption-text">Tutorial</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../jobcontrol.html">Job Control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../subcommands.html">Subcommands</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Sphinx Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev.html">Developers Notes</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../startup/index.html">IPython Startup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../util/index.html">IPython Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../kernel.html">IPython Kernel</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../jupyter/index.html">Jupyter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../extensions.html">Extensions</a></li>
+</ul>
+
+    
+
+</div>
+
+
+<div role="note" aria-label="source link">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/sphinxext/make.rst.txt" rel="nofollow">Show Source</a></li>
+  </ul>
+</div>
+
+<h3><a href="../index.html">On This Page:</a></h3>
+
+<div>&nbsp;</div>
+
+<div id="sidebartoc">
+
+    <ul>
+<li><a class="reference internal" href="#">Make — Automated Documentation Builder</a><ul>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#moving-output-files">Moving output files</a></li>
+<li><a class="reference internal" href="#todo">Todo</a></li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+<li><a class="reference internal" href="#notes">Notes</a></li>
+</ul>
+</li>
+</ul>
+
+
+</div>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../dev.html" title="Developer’s Notes"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="magics.html" title="magics"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Dynamic IPython</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Sphinx extensions</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+      Last updated on Oct 14, 2019.
+    </div>
+  </body>
+</html>

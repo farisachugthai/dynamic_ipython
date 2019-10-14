@@ -34,3 +34,4 @@ Table of Contents
    custom_doctests
    configtraits
    magics
+   make

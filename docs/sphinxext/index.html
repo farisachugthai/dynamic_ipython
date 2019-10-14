@@ -19,13 +19,9 @@
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="IPython Sphinx Directive" href="ipython_sphinx_directive.html" />
     <link rel="prev" title="Subcommands" href="../subcommands.html" />
-
 <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" />
-
 <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" media="screen" rel="stylesheet" type="text/css" />
-
 <link rel='stylesheet' href='//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.css'>
-
 <!--[if lte IE 6]>
   <link
     rel="stylesheet"
@@ -35,7 +31,6 @@
     charset="utf-8"
   />
 <![endif]-->
-
 
   </head><body>
 
@@ -68,24 +63,26 @@
 <div class="section" id="package-contents">
 <span id="sphinxext-package"></span><h2>Package Contents<a class="headerlink" href="#package-contents" title="Permalink to this headline">¶</a></h2>
 <p>The <a class="reference internal" href="#module-default_profile.sphinxext" title="default_profile.sphinxext: IPython sphinx extensions."><code class="xref py py-obj docutils literal notranslate"><span class="pre">default_profile.sphinxext</span></code></a> package.</p>
-<span class="target" id="module-default_profile.sphinxext"></span><p>to extend the packages <code class="docutils literal notranslate"><span class="pre">__path__</span></code> parameter.</p>
+<span class="target" id="module-default_profile.sphinxext"></span><p>Imports the modules found in the current directory and utilizes
+<a class="reference external" href="https://docs.python.org/3/library/pkgutil.html#module-pkgutil" title="(in Python v3.8)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pkgutil</span></code></a> and <a class="reference external" href="https://docs.python.org/3/library/pkgutil.html#pkgutil.extend_path" title="(in Python v3.8)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pkgutil.extend_path()</span></code></a>
+to extend the packages <code class="docutils literal notranslate"><span class="pre">__path__</span></code> parameter.</p>
 <p>It only imports the modules below if this repository has been installed.</p>
 <p>If this weren’t true, then starting IPython without this package installed
-would emit <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ImportError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ImportError</span></code></a> on startup, which would be frustrating for
+would emit <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ImportError" title="(in Python v3.8)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ImportError</span></code></a> on startup, which would be frustrating for
 users.</p>
 <dl class="function">
 <dt id="default_profile.sphinxext.ask_for_import">
 <code class="sig-name descname">ask_for_import</code><span class="sig-paren">(</span><em class="sig-param">mod</em>, <em class="sig-param">package=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/sphinxext.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/sphinxext.html#ask_for_import"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.sphinxext.ask_for_import" title="Permalink to this definition">¶</a></dt>
-<dd><p>Import a module and return <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a> if it’s not found.</p>
+<dd><p>Import a module and return <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a> if it’s not found.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul>
-<li><p><strong>module</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – Module to import</p></li>
-<li><p><strong>package</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Package the module is found in.</p></li>
+<li><p><strong>module</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Module to import</p></li>
+<li><p><strong>package</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – Package the module is found in.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>imported</strong> – Module as imported by <a class="reference external" href="https://docs.python.org/3/library/importlib.html#importlib.import_module" title="(in Python v3.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">importlib.import_module()</span></code></a>.</p>
+<dd class="field-even"><p><strong>imported</strong> – Module as imported by <a class="reference external" href="https://docs.python.org/3/library/importlib.html#importlib.import_module" title="(in Python v3.8)"><code class="xref py py-func docutils literal notranslate"><span class="pre">importlib.import_module()</span></code></a>.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>mod</p>
@@ -125,6 +122,14 @@ users.</p>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="configtraits.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">configtraits</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="magics.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">magics</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="make.html">Make — Automated Documentation Builder</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="make.html#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="make.html#moving-output-files">Moving output files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="make.html#todo">Todo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="make.html#see-also">See Also</a></li>
+<li class="toctree-l2"><a class="reference internal" href="make.html#notes">Notes</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -185,13 +190,12 @@ users.</p>
 </div>
 
 
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../_sources/sphinxext/index.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
+<div role="note" aria-label="source link">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/sphinxext/index.rst.txt" rel="nofollow">Show Source</a></li>
+  </ul>
+</div>
 
 <h3><a href="../index.html">On This Page:</a></h3>
 

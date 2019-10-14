@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""IPython-specific Sphinx extensions.
+"""
+===================================
+IPython-specific Sphinx extensions.
+===================================
 
 Imports the modules found in the current directory and utilizes
 :mod:`pkgutil` and :func:`pkgutil.extend_path`
