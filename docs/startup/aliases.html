@@ -232,12 +232,24 @@ unset, until, wait, while.</p>
 <div><ul>
 <li><p>Only been tested on Linux</p></li>
 <li><p>Only natively exist on Linux</p></li>
-<li><p>Clobber an existing Windows command (cmd in particular)</p></li>
+<li><dl class="simple">
+<dt>Clobber an existing Windows command</dt><dd><ul>
+<li><p>cmd has a few overlapping commands like <strong class="command">find</strong></p></li>
+<li><p>powershell intentionally has many aliases that match <a class="reference internal" href="#default_profile.startup.20_aliases.LinuxAliases.busybox" title="default_profile.startup.20_aliases.LinuxAliases.busybox"><code class="xref py py-obj docutils literal notranslate"><span class="pre">busybox</span></code></a>
+aliases, with commands like ‘ls’ and ‘curl’ already mapped to
+pwsh builtins.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
 </ul>
 </div></blockquote>
-<p>Convenience packages exist such as ConEmu or Cmder which allow a large
-number of GNU/Linux built-ins to exist on Windows, and as a result, this
-list may not be comprehensive.</p>
+<p>Packages such as ConEmu or Cmder allow a large number of GNU/Linux
+built-ins to exist on Windows, and as a result, the list may not be
+comprehensive and it may be that a reasonable
+portion of these aliases can be successfully executed from a shell
+such as Cygwin, Msys2, Mingw, Git on Windows or the Windows
+Subsystem of Linux.</p>
 <p>Below is the source code for the function
 <code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.core.magics.define_alias()</span></code> that is invoked here.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">define_alias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">cmd</span><span class="p">):</span>
@@ -294,10 +306,11 @@ the namespace.</p>
 
 </dd></dl>
 
-<dl class="function">
-<dt id="default_profile.startup.20_aliases.common_aliases">
-<code class="sig-name descname">common_aliases</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/20_aliases.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/20_aliases.html#common_aliases"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.20_aliases.common_aliases" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add aliases common to all OSes. Overwhelmingly <strong class="command">Git</strong> aliases.</p>
+<dl class="class">
+<dt id="default_profile.startup.20_aliases.CommonAliases">
+<em class="property">class </em><code class="sig-name descname">CommonAliases</code><span class="sig-paren">(</span><em class="sig-param">shell=None</em>, <em class="sig-param">user_aliases=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/20_aliases.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/20_aliases.html#CommonAliases"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.20_aliases.CommonAliases" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Add aliases common to all OSes. Overwhelmingly <strong class="command">Git</strong> aliases.</p>
 <p>This method adds around 70 to 80 aliases that can be
 implemented on most of the major platforms.</p>
 <p>The only real requirement is Git being installed and working. Docker
@@ -306,6 +319,52 @@ commands possibly going to be added.</p>
 <p class="admonition-title">Todo</p>
 <p><strong class="command">git show</strong></p>
 </div>
+<p>OS Agnostic aliases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>user_aliases</strong> (<em>list of</em><em> (</em><em>'alias'</em><em>, </em><em>'system command'</em><em>) </em><em>tuples</em>) – User aliases to add the user’s namespace.</p>
+</dd>
+</dl>
+<dl class="method">
+<dt id="default_profile.startup.20_aliases.CommonAliases.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">shell=None</em>, <em class="sig-param">user_aliases=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/20_aliases.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/20_aliases.html#CommonAliases.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.20_aliases.CommonAliases.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>OS Agnostic aliases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>user_aliases</strong> (<em>list of</em><em> (</em><em>'alias'</em><em>, </em><em>'system command'</em><em>) </em><em>tuples</em>) – User aliases to add the user’s namespace.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="default_profile.startup.20_aliases.CommonAliases.unalias">
+<code class="sig-name descname">unalias</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">alias</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/20_aliases.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/20_aliases.html#CommonAliases.unalias"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.20_aliases.CommonAliases.unalias" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove an alias.</p>
+<dl class="magic">
+<dt id="magic-unalias">
+<code class="sig-name descname">%unalias</code><a class="headerlink" href="#magic-unalias" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>alias</strong> (<em>Alias to remove</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="default_profile.startup.20_aliases.CommonAliases.python_exes">
+<code class="sig-name descname">python_exes</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/20_aliases.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/20_aliases.html#CommonAliases.python_exes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.20_aliases.CommonAliases.python_exes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Python executables like pydoc get executed in a subprocess currently.</p>
+<p>Let’s fix that behavior because that’s silly.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="default_profile.startup.20_aliases.CommonAliases.git">
+<code class="sig-name descname">git</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/20_aliases.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/20_aliases.html#CommonAliases.git"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.20_aliases.CommonAliases.git" title="Permalink to this definition">¶</a></dt>
+<dd><p>100+ git aliases.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -516,7 +575,7 @@ that this section is still under development and frequently changes.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Oct 13, 2019.
+      Last updated on Oct 14, 2019.
     </div>
   </body>
 </html>

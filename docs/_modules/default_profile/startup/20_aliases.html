@@ -82,11 +82,18 @@
 
 <span class="sd">        * Only been tested on Linux</span>
 <span class="sd">        * Only natively exist on Linux</span>
-<span class="sd">        * Clobber an existing Windows command (cmd in particular)</span>
+<span class="sd">        * Clobber an existing Windows command</span>
+<span class="sd">            * cmd has a few overlapping commands like :command:`find`</span>
+<span class="sd">            * powershell intentionally has many aliases that match `busybox`</span>
+<span class="sd">              aliases, with commands like &#39;ls&#39; and &#39;curl&#39; already mapped to</span>
+<span class="sd">              pwsh builtins.</span>
 
-<span class="sd">    Convenience packages exist such as ConEmu or Cmder which allow a large</span>
-<span class="sd">    number of GNU/Linux built-ins to exist on Windows, and as a result, this</span>
-<span class="sd">    list may not be comprehensive.</span>
+<span class="sd">    Packages such as ConEmu or Cmder allow a large number of GNU/Linux</span>
+<span class="sd">    built-ins to exist on Windows, and as a result, the list may not be</span>
+<span class="sd">    comprehensive and it may be that a reasonable</span>
+<span class="sd">    portion of these aliases can be successfully executed from a shell</span>
+<span class="sd">    such as Cygwin, Msys2, Mingw, Git on Windows or the Windows</span>
+<span class="sd">    Subsystem of Linux.</span>
 
 <span class="sd">    Below is the source code for the function</span>
 <span class="sd">    :func:`IPython.core.magics.define_alias()` that is invoked here.::</span>
@@ -100,7 +107,6 @@
 <span class="sd">            magic_name=name)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-
 <div class="viewcode-block" id="LinuxAliases.__init__"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.LinuxAliases.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">aliases</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The WindowsAliases implementation of this is odd so maybe branch off.</span>
 
@@ -114,8 +120,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">shell</span> <span class="ow">or</span> <span class="n">get_ipython</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;Linux Aliases: {!r}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">aliases</span><span class="p">))</span>
+        <span class="k">return</span> <span class="s1">&#39;Linux Aliases: {!r}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span><span class="p">))</span>
 
 <div class="viewcode-block" id="LinuxAliases.busybox"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.LinuxAliases.busybox">[docs]</a>    <span class="k">def</span> <span class="nf">busybox</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Commands that are available on any Unix-ish system.</span>
@@ -134,9 +139,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">+=</span> <span class="p">[</span>
             <span class="p">(</span><span class="s1">&#39;cs&#39;</span><span class="p">,</span> <span class="s1">&#39;cd </span><span class="si">%s</span><span class="s1"> &amp;&amp; ls -F --color=always </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;dU&#39;</span><span class="p">,</span> <span class="s1">&#39;du -d 1 -h --apparent-size --all | sort -h | tail -n 10&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;df&#39;</span><span class="p">,</span> <span class="s1">&#39;df -ah --total&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;cp&#39;</span><span class="p">,</span> <span class="s1">&#39;cp -v %l&#39;</span><span class="p">),</span>  <span class="c1"># cp mv mkdir and rmdir are all overridden</span>
+            <span class="p">(</span><span class="s1">&#39;df&#39;</span><span class="p">,</span> <span class="s1">&#39;df -ah --total&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;dU&#39;</span><span class="p">,</span> <span class="s1">&#39;du -d 1 -h --apparent-size --all | sort -h | tail -n 10&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;dus&#39;</span><span class="p">,</span> <span class="s1">&#39;du -d 1 -ha %l&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;echo&#39;</span><span class="p">,</span> <span class="s1">&#39;echo -e %l&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;free&#39;</span><span class="p">,</span> <span class="s1">&#39;free -mt&#39;</span><span class="p">),</span>
@@ -194,16 +199,16 @@
 <span class="sd">        As a result it&#39;ll be of value to check that they&#39;re even in</span>
 <span class="sd">        the namespace.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">aliases</span> <span class="o">+=</span> <span class="p">[</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">+=</span> <span class="p">[</span>
             <span class="p">(</span><span class="s1">&#39;ag&#39;</span><span class="p">,</span> <span class="s1">&#39;ag --hidden --color --no-column %l&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;nvim&#39;</span><span class="p">,</span> <span class="s1">&#39;nvim %l&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;nman&#39;</span><span class="p">,</span> <span class="s1">&#39;nvim -c &quot;Man %l&quot; -c&quot;wincmd T&quot;&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;tre&#39;</span><span class="p">,</span> <span class="s1">&#39;tree -DAshFC --prune -I .git %l&#39;</span><span class="p">),</span>
         <span class="p">]</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">aliases</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span></div></div>
 
 
-<div class="viewcode-block" id="common_aliases"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.common_aliases">[docs]</a><span class="k">def</span> <span class="nf">common_aliases</span><span class="p">():</span>
+<div class="viewcode-block" id="CommonAliases"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases">[docs]</a><span class="k">class</span> <span class="nc">CommonAliases</span><span class="p">:</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Add aliases common to all OSes. Overwhelmingly :command:`Git` aliases.</span>
 
 <span class="sd">    This method adds around 70 to 80 aliases that can be</span>
@@ -215,92 +220,140 @@
 <span class="sd">    .. todo:: :command:`git show`</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">_user_aliases</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="p">(</span><span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff --staged --stat %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;ga&#39;</span><span class="p">,</span> <span class="s1">&#39;git add %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gaa&#39;</span><span class="p">,</span> <span class="s1">&#39;git add --all %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gai&#39;</span><span class="p">,</span> <span class="s1">&#39;git add --interactive %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gap&#39;</span><span class="p">,</span> <span class="s1">&#39;git add --patch %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gar&#39;</span><span class="p">,</span> <span class="s1">&#39;git add --renormalize -A %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gau&#39;</span><span class="p">,</span> <span class="s1">&#39;git add --update %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;ga.&#39;</span><span class="p">,</span> <span class="s1">&#39;git add .&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gb&#39;</span><span class="p">,</span> <span class="s1">&#39;git branch --all %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gbl&#39;</span><span class="p">,</span> <span class="s1">&#39;git blame %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gbr&#39;</span><span class="p">,</span> <span class="s1">&#39;git branch %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gbru&#39;</span><span class="p">,</span> <span class="s1">&#39;git branch --set-upstream-to origin %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gbrv&#39;</span><span class="p">,</span> <span class="s1">&#39;git branch --all --verbose %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gci&#39;</span><span class="p">,</span> <span class="s1">&#39;git commit %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gcia&#39;</span><span class="p">,</span> <span class="s1">&#39;git commit --amend %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gciad&#39;</span><span class="p">,</span> <span class="s1">&#39;git commit --amend --date=%l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gcid&#39;</span><span class="p">,</span> <span class="s1">&#39;git commit --date=%l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gcim&#39;</span><span class="p">,</span> <span class="s1">&#39;git commit --verbose --message </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gcl&#39;</span><span class="p">,</span> <span class="s1">&#39;git clone %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gcls&#39;</span><span class="p">,</span> <span class="s1">&#39;git clone --depth 1 %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gco&#39;</span><span class="p">,</span> <span class="s1">&#39;git checkout %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gcob&#39;</span><span class="p">,</span> <span class="s1">&#39;git checkout -b %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gd&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gds&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff --staged %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gds2&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff --staged --stat %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gdt&#39;</span><span class="p">,</span> <span class="s1">&#39;git difftool %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gdw&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff --word-diff %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gf&#39;</span><span class="p">,</span> <span class="s1">&#39;git fetch --all %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gfe&#39;</span><span class="p">,</span> <span class="s1">&#39;git fetch %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;ggc&#39;</span><span class="p">,</span> <span class="s1">&#39;git gc %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;ggcp&#39;</span><span class="p">,</span> <span class="s1">&#39;git gc --prune %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;git&#39;</span><span class="p">,</span> <span class="s1">&#39;git %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;git hist&#39;</span><span class="p">,</span>
-         <span class="s1">&#39;git log --pretty=&quot;format:%h %ad | </span><span class="si">%d</span><span class="s1"> [%an]&quot; --graph --date=short &#39;</span>
-         <span class="s1">&#39;--branches --abbrev-commit --oneline %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;git last&#39;</span><span class="p">,</span> <span class="s1">&#39;git log -1 HEAD %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;git staged&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff --cached %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;git rel&#39;</span><span class="p">,</span> <span class="s1">&#39;git rev-parse --show-prefix %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;git root&#39;</span><span class="p">,</span> <span class="s1">&#39;git rev-parse --show-toplevel %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;git unstage&#39;</span><span class="p">,</span> <span class="s1">&#39;git reset HEAD %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;git unstaged&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gl&#39;</span><span class="p">,</span> <span class="s1">&#39;git log %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;glo&#39;</span><span class="p">,</span>
-         <span class="s1">&#39;git log --pretty=&quot;format:%h %ad | </span><span class="si">%d</span><span class="s1"> [%an]&quot; --graph --decorate --abbrev-commit --oneline --branches --all %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gls&#39;</span><span class="p">,</span> <span class="s1">&#39;git ls-tree master %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;git ls&#39;</span><span class="p">,</span> <span class="s1">&#39;git ls-tree master %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gm&#39;</span><span class="p">,</span> <span class="s1">&#39;git merge --no-ff %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gma&#39;</span><span class="p">,</span> <span class="s1">&#39;git merge --abort %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gmc&#39;</span><span class="p">,</span> <span class="s1">&#39;git merge --continue %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gmm&#39;</span><span class="p">,</span> <span class="s1">&#39;git merge master %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gmt&#39;</span><span class="p">,</span> <span class="s1">&#39;git mergetool %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gp&#39;</span><span class="p">,</span> <span class="s1">&#39;git pull --all %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gpo&#39;</span><span class="p">,</span> <span class="s1">&#39;git pull origin %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gpom&#39;</span><span class="p">,</span> <span class="s1">&#39;git pull origin master %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gpu&#39;</span><span class="p">,</span> <span class="s1">&#39;git push %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gr&#39;</span><span class="p">,</span> <span class="s1">&#39;git remote -v %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gre&#39;</span><span class="p">,</span> <span class="s1">&#39;git remote %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;grb&#39;</span><span class="p">,</span> <span class="s1">&#39;git rebase %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;grba&#39;</span><span class="p">,</span> <span class="s1">&#39;git rebase --abort %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;grbc&#39;</span><span class="p">,</span> <span class="s1">&#39;git rebase --continue %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;grbi&#39;</span><span class="p">,</span> <span class="s1">&#39;git rebase --interactive %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gs&#39;</span><span class="p">,</span> <span class="s1">&#39;git status %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gsh&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gsha&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash apply %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gshc&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash clear %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gshd&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash drop %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gshl&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash list %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gshp&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash pop %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gshs&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash show --stat %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gshsp&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash show --patch %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gss&#39;</span><span class="p">,</span> <span class="s1">&#39;git status -sb %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gst&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff --stat %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;gt&#39;</span><span class="p">,</span> <span class="s1">&#39;git tag --list %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;lswitch&#39;</span><span class="p">,</span> <span class="s1">&#39;legit switch&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;lsync&#39;</span><span class="p">,</span> <span class="s1">&#39;legit sync&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;lpublish&#39;</span><span class="p">,</span> <span class="s1">&#39;legit publish&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;lunpublish&#39;</span><span class="p">,</span> <span class="s1">&#39;legit unpublish&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;lundo&#39;</span><span class="p">,</span> <span class="s1">&#39;legit undo&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;lbranches&#39;</span><span class="p">,</span> <span class="s1">&#39;legit branches&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;ssh-day&#39;</span><span class="p">,</span> <span class="s1">&#39;eval &quot;$(ssh-agent -s)&quot;; ssh-add %l&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;xx&#39;</span><span class="p">,</span> <span class="s1">&#39;quit&#39;</span><span class="p">),</span>  <span class="c1"># this is a sweet one</span>
-        <span class="p">(</span><span class="s1">&#39;..&#39;</span><span class="p">,</span> <span class="s1">&#39;cd ..&#39;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s1">&#39;...&#39;</span><span class="p">,</span> <span class="s1">&#39;cd ../..&#39;</span><span class="p">),</span>
-    <span class="p">]</span>
-    <span class="k">return</span> <span class="n">_user_aliases</span></div>
+<div class="viewcode-block" id="CommonAliases.__init__"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">user_aliases</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;OS Agnostic aliases.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        user_aliases : list of (&#39;alias&#39;, &#39;system command&#39;) tuples</span>
+<span class="sd">            User aliases to add the user&#39;s namespace.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="n">user_aliases</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">shell</span> <span class="ow">or</span> <span class="n">get_ipython</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generator</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_generator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">itm</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">itm</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;Common Aliases: {!r}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span><span class="p">))</span>
+
+<div class="viewcode-block" id="CommonAliases.unalias"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.unalias">[docs]</a>    <span class="k">def</span> <span class="nf">unalias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alias</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Remove an alias. </span>
+
+<span class="sd">        .. magic:: unalias</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        alias : Alias to remove</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s1">&#39;unalias&#39;</span><span class="p">,</span> <span class="n">alias</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CommonAliases.python_exes"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.python_exes">[docs]</a>    <span class="k">def</span> <span class="nf">python_exes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Python executables like pydoc get executed in a subprocess currently.</span>
+
+<span class="sd">        Let&#39;s fix that behavior because that&#39;s silly.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unalias</span><span class="p">(</span><span class="n">pydoc</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unalias</span><span class="p">(</span><span class="n">apropos</span><span class="p">)</span>
+
+        <span class="kn">import</span> <span class="nn">pydoc</span>
+        <span class="kn">from</span> <span class="nn">pydoc</span> <span class="kn">import</span> <span class="n">apropos</span></div>
+
+<div class="viewcode-block" id="CommonAliases.git"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.git">[docs]</a>    <span class="k">def</span> <span class="nf">git</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;100+ git aliases.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">+=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff --staged --stat %l&#39;</span><span class="p">),</span>
+            <span class="n">d</span><span class="p">(</span><span class="s1">&#39;ga&#39;</span><span class="p">,</span> <span class="s1">&#39;git add %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gaa&#39;</span><span class="p">,</span> <span class="s1">&#39;git add --all %l&#39;</span><span class="p">),</span>
+            <span class="n">a4r</span><span class="p">(</span><span class="s1">&#39;gai&#39;</span><span class="p">,</span> <span class="s1">&#39;git add --interactive %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gap&#39;</span><span class="p">,</span> <span class="s1">&#39;git add --patch %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gar&#39;</span><span class="p">,</span> <span class="s1">&#39;git add --renormalize -A %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gau&#39;</span><span class="p">,</span> <span class="s1">&#39;git add --update %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;ga.&#39;</span><span class="p">,</span> <span class="s1">&#39;git add .&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gb&#39;</span><span class="p">,</span> <span class="s1">&#39;git branch --all %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gbl&#39;</span><span class="p">,</span> <span class="s1">&#39;git blame %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gbr&#39;</span><span class="p">,</span> <span class="s1">&#39;git branch %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gbru&#39;</span><span class="p">,</span> <span class="s1">&#39;git branch --set-upstream-to origin %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gbrv&#39;</span><span class="p">,</span> <span class="s1">&#39;git branch --all --verbose %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gci&#39;</span><span class="p">,</span> <span class="s1">&#39;git commit %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gcia&#39;</span><span class="p">,</span> <span class="s1">&#39;git commit --amend %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gciad&#39;</span><span class="p">,</span> <span class="s1">&#39;git commit --amend --date=%l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gcid&#39;</span><span class="p">,</span> <span class="s1">&#39;git commit --date=%l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gcim&#39;</span><span class="p">,</span> <span class="s1">&#39;git commit --verbose --message </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gcl&#39;</span><span class="p">,</span> <span class="s1">&#39;git clone %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gcls&#39;</span><span class="p">,</span> <span class="s1">&#39;git clone --depth 1 %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gco&#39;</span><span class="p">,</span> <span class="s1">&#39;git checkout %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gcob&#39;</span><span class="p">,</span> <span class="s1">&#39;git checkout -b %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gd&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gds&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff --staged %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gds2&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff --staged --stat %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gdt&#39;</span><span class="p">,</span> <span class="s1">&#39;git difftool %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gdw&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff --word-diff %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gf&#39;</span><span class="p">,</span> <span class="s1">&#39;git fetch --all %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gfe&#39;</span><span class="p">,</span> <span class="s1">&#39;git fetch %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;ggc&#39;</span><span class="p">,</span> <span class="s1">&#39;git gc %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;ggcp&#39;</span><span class="p">,</span> <span class="s1">&#39;git gc --prune %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;git&#39;</span><span class="p">,</span> <span class="s1">&#39;git %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;git hist&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;git log --pretty=&quot;format:%h %ad | </span><span class="si">%d</span><span class="s1"> [%an]&quot; --graph --date=short &#39;</span>
+             <span class="s1">&#39;--branches --abbrev-commit --oneline %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;git last&#39;</span><span class="p">,</span> <span class="s1">&#39;git log -1 HEAD %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;git staged&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff --cached %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;git rel&#39;</span><span class="p">,</span> <span class="s1">&#39;git rev-parse --show-prefix %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;git root&#39;</span><span class="p">,</span> <span class="s1">&#39;git rev-parse --show-toplevel %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;git unstage&#39;</span><span class="p">,</span> <span class="s1">&#39;git reset HEAD %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;git unstaged&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gl&#39;</span><span class="p">,</span> <span class="s1">&#39;git log %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;glo&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;git log --pretty=&quot;format:%h %ad | </span><span class="si">%d</span><span class="s1"> [%an]&quot; --graph --decorate --abbrev-commit --oneline --branches --all %l&#39;</span>
+             <span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gls&#39;</span><span class="p">,</span> <span class="s1">&#39;git ls-tree master %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;git ls&#39;</span><span class="p">,</span> <span class="s1">&#39;git ls-tree master %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gm&#39;</span><span class="p">,</span> <span class="s1">&#39;git merge --no-ff %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gma&#39;</span><span class="p">,</span> <span class="s1">&#39;git merge --abort %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gmc&#39;</span><span class="p">,</span> <span class="s1">&#39;git merge --continue %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gmm&#39;</span><span class="p">,</span> <span class="s1">&#39;git merge master %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gmt&#39;</span><span class="p">,</span> <span class="s1">&#39;git mergetool %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gp&#39;</span><span class="p">,</span> <span class="s1">&#39;git pull --all %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gpo&#39;</span><span class="p">,</span> <span class="s1">&#39;git pull origin %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gpom&#39;</span><span class="p">,</span> <span class="s1">&#39;git pull origin master %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gpu&#39;</span><span class="p">,</span> <span class="s1">&#39;git push %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gr&#39;</span><span class="p">,</span> <span class="s1">&#39;git remote -v %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gre&#39;</span><span class="p">,</span> <span class="s1">&#39;git remote %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;grb&#39;</span><span class="p">,</span> <span class="s1">&#39;git rebase %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;grba&#39;</span><span class="p">,</span> <span class="s1">&#39;git rebase --abort %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;grbc&#39;</span><span class="p">,</span> <span class="s1">&#39;git rebase --continue %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;grbi&#39;</span><span class="p">,</span> <span class="s1">&#39;git rebase --interactive %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gs&#39;</span><span class="p">,</span> <span class="s1">&#39;git status %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gsh&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gsha&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash apply %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gshc&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash clear %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gshd&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash drop %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gshl&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash list %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gshp&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash pop %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gshs&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash show --stat %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gshsp&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash show --patch %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gss&#39;</span><span class="p">,</span> <span class="s1">&#39;git status -sb %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gst&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff --stat %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;gt&#39;</span><span class="p">,</span> <span class="s1">&#39;git tag --list %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;lswitch&#39;</span><span class="p">,</span> <span class="s1">&#39;legit switch&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;lsync&#39;</span><span class="p">,</span> <span class="s1">&#39;legit sync&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;lpublish&#39;</span><span class="p">,</span> <span class="s1">&#39;legit publish&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;lunpublish&#39;</span><span class="p">,</span> <span class="s1">&#39;legit unpublish&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;lundo&#39;</span><span class="p">,</span> <span class="s1">&#39;legit undo&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;lbranches&#39;</span><span class="p">,</span> <span class="s1">&#39;legit branches&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;ssh-day&#39;</span><span class="p">,</span> <span class="s1">&#39;eval &quot;$(ssh-agent -s)&quot;; ssh-add %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;xx&#39;</span><span class="p">,</span> <span class="s1">&#39;quit&#39;</span><span class="p">),</span>  <span class="c1"># this is a sweet one</span>
+            <span class="p">(</span><span class="s1">&#39;..&#39;</span><span class="p">,</span> <span class="s1">&#39;cd ..&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;...&#39;</span><span class="p">,</span> <span class="s1">&#39;cd ../..&#39;</span><span class="p">),</span>
+        <span class="p">]</span>
+        <span class="k">return</span> <span class="n">_user_aliases</span></div></div>
 
 
 <div class="viewcode-block" id="WindowsAliases"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.WindowsAliases">[docs]</a><span class="k">class</span> <span class="nc">WindowsAliases</span><span class="p">:</span>
@@ -315,7 +368,6 @@
 <span class="sd">    Would it be useful to subclass :class:`reprlib.Repr` here?</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-
 <div class="viewcode-block" id="WindowsAliases.__init__"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.WindowsAliases.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">user_aliases</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize the platform specific alias manager with IPython.</span>
 
@@ -352,8 +404,7 @@
         <span class="k">return</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="n">exe</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">None</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;Windows Aliases: {!r}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">aliases</span><span class="p">))</span>
+        <span class="k">return</span> <span class="s1">&#39;Windows Aliases: {!r}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span><span class="p">))</span>
 
 <div class="viewcode-block" id="WindowsAliases.cmd_aliases"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.WindowsAliases.cmd_aliases">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">cmd_aliases</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
@@ -594,7 +645,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Oct 13, 2019.
+      Last updated on Oct 14, 2019.
     </div>
   </body>
 </html>
