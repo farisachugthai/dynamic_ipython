@@ -5,35 +5,29 @@
   <head>
     <meta charset="utf-8" />
     <title>Customized Exceptions &#8212; Dynamic IPython: version0.0.2</title>
-    <link rel="stylesheet" href="../_static/pyramid.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script type="text/javascript" src="../_static/copybutton.js"></script>
-    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/startup/sysexcept.html" />
-    <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="IPython Utilities" href="../util/index.html" />
-    <link rel="prev" title="Matplotlib Startup" href="matplotlib_rc.html" />
+    <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="_static/copybutton.js"></script>
+    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/exceptions.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Subcommands in IPython and Jupyter" href="subcommands.html" />
+    <link rel="prev" title="Job Control" href="jobcontrol.html" />
 
-<link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" type="text/css"
+  media="screen" charset="utf-8" />
 
-<link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" media="screen" rel="stylesheet" type="text/css" />
-
-<link rel='stylesheet' href='//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.css'>
+<link rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" type="text/css" media="screen" charset="utf-8" />
 
 <!--[if lte IE 6]>
-  <link
-    rel="stylesheet"
-    href="../_static/ie6.css"
-    type="text/css"
-    media="screen"
-    charset="utf-8"
-  />
+<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
 <![endif]-->
 
 
@@ -43,19 +37,18 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
+          <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
+          <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../util/index.html" title="IPython Utilities"
+          <a href="subcommands.html" title="Subcommands in IPython and Jupyter"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="matplotlib_rc.html" title="Matplotlib Startup"
+          <a href="jobcontrol.html" title="Job Control"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Dynamic IPython</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">IPython Startup</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -64,8 +57,9 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-<div class="section" id="customized-exceptions">
+  <div class="section" id="customized-exceptions">
 <span id="id1"></span><h1>Customized Exceptions<a class="headerlink" href="#customized-exceptions" title="Permalink to this headline">¶</a></h1>
+<p><strong>Source code</strong>: <code class="xref py py-obj docutils literal notranslate"><span class="pre">default_profile/startup/50_sysexception.py</span></code></p>
 <div class="section" id="debugging">
 <h2>Debugging<a class="headerlink" href="#debugging" title="Permalink to this headline">¶</a></h2>
 <p>The help docs from IPython’s core module <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.ultratb.html#module-IPython.core.ultratb" title="(in IPython v7.8.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython.core.ultratb</span></code></a>
@@ -181,11 +175,13 @@ I don’t know if I specified the type right but if you follow the
 <div class="section" id="examples">
 <span id="exception-examples"></span><h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
 <p>The following is the aforementioned FormattedTB class.:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.core.ultratb</span> <span class="kn">import</span> <span class="n">VerboseTB</span><span class="p">,</span> <span class="n">ListTB</span>
-<span class="k">class</span> <span class="nc">FormattedTB</span><span class="p">(</span><span class="n">VerboseTB</span><span class="p">,</span> <span class="n">ListTB</span><span class="p">):</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">FormattedTB</span><span class="p">(</span><span class="n">VerboseTB</span><span class="p">,</span> <span class="n">ListTB</span><span class="p">):</span>
     <span class="c1"># Subclass ListTB but allow calling with a traceback.</span>
+
     <span class="c1"># It can thus be used as a sys.excepthook for Python &gt; 2.1.</span>
+
     <span class="c1"># Also adds &#39;Context&#39; and &#39;Verbose&#39; modes, not available in ListTB.</span>
+
     <span class="c1"># Allows a tb_offset to be specified. This is useful for situations where</span>
     <span class="c1"># one needs to remove a number of topmost frames from the traceback (such as</span>
     <span class="c1"># occurs with python programs that themselves execute other python code,</span>
@@ -217,21 +213,6 @@ I don’t know if I specified the type right but if you follow the
 </div>
 </div>
 </div>
-<div class="section" id="module-default_profile.startup.50_sysexception">
-<span id="sysexception"></span><h2><a class="reference internal" href="#module-default_profile.startup.50_sysexception" title="default_profile.startup.50_sysexception"><code class="xref py py-mod docutils literal notranslate"><span class="pre">50_sysexception</span></code></a><a class="headerlink" href="#module-default_profile.startup.50_sysexception" title="Permalink to this headline">¶</a></h2>
-<dl class="exception">
-<dt id="default_profile.startup.50_sysexception.ExceptionHook">
-<em class="property">exception </em><code class="sig-name descname">ExceptionHook</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/50_sysexception.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/50_sysexception.html#ExceptionHook"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.50_sysexception.ExceptionHook" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#BaseException" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseException</span></code></a></p>
-<p>Custom exception hook for IPython.</p>
-<dl class="attribute">
-<dt id="default_profile.startup.50_sysexception.ExceptionHook.instance">
-<code class="sig-name descname">instance</code><em class="property"> = None</em><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/50_sysexception.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.50_sysexception.ExceptionHook.instance" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</div>
 </div>
 
 
@@ -241,54 +222,44 @@ I don’t know if I specified the type right but if you follow the
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
-    <h3>Quick search</h3>
+  <h3>Quick search</h3>
     <div class="searchformwrapper">
-        <form class="search" action="../search.html" method="get">
-            <input type="text" name="q" />
-            <input type="submit" value="Go" />
-        </form>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-
-
-<h3>Related Topics</h3>
+<script type="text/javascript">$('#searchbox').show(0);</script><h3>Related Topics</h3>
 <ul>
-  <li><a href="../index.html">Documentation overview</a>
-    <ul>
-      <li><a href="index.html">IPython Startup</a>
-        <ul>
-          <li>Previous: <a href="matplotlib_rc.html" title="previous chapter">Matplotlib Startup</a></li>
-          <li>Next: <a href="../util/index.html" title="next chapter">IPython Utilities</a></li>
-        </ul>
-      </li>
-    </ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="jobcontrol.html" title="previous chapter">Job Control</a></li>
+      <li>Next: <a href="subcommands.html" title="next chapter">Subcommands in IPython and Jupyter</a></li>
+  </ul></li>
 </ul>
-</li>
 
-
-
-<h3><a href="../index.html">Table of Contents</a></h3>
+<h3><a href="index.html">Table of Contents</a></h3>
 
 <div>&nbsp;</div>
 <div id="sidebartoc">
-    <p class="caption"><span class="caption-text">Tutorial</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../jobcontrol.html">Job Control</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../subcommands.html">Subcommands</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../sphinxext/index.html">Sphinx Extensions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../dev.html">Developers Notes</a></li>
+<p class="caption"><span class="caption-text">Tutorial</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="jobcontrol.html">Job Control</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Customized Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="subcommands.html">Subcommands in IPython and Jupyter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sphinxext/index.html">sphinxext</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev.html">Developers Notes</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="index.html">IPython Startup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../util/index.html">IPython Utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../kernel.html">IPython Kernel</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../jupyter/index.html">Jupyter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../extensions.html">Extensions</a></li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="startup/index.html">IPython API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util/index.html">IPython Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="kernel.html">IPython Kernel</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jupyter/index.html">jupyter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extensions.html">Extensions</a></li>
 </ul>
 
-    
+
 
 </div>
 
@@ -296,18 +267,16 @@ I don’t know if I specified the type right but if you follow the
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../_sources/startup/sysexcept.rst.txt"
+      <li><a href="_sources/exceptions.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 
-<h3><a href="../index.html">On This Page:</a></h3>
+<h3><a href="index.html">On This Page:</a></h3>
 
 <div>&nbsp;</div>
-
 <div id="sidebartoc">
-
-    <ul>
+  <ul>
 <li><a class="reference internal" href="#">Customized Exceptions</a><ul>
 <li><a class="reference internal" href="#debugging">Debugging</a></li>
 <li><a class="reference internal" href="#help-on-module-ipython-core-ultratb-in-ipython-core">Help on module <code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython.core.ultratb</span></code> in <code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython.core</span></code>:</a><ul>
@@ -324,11 +293,9 @@ I don’t know if I specified the type right but if you follow the
 <li><a class="reference internal" href="#examples">Examples</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-default_profile.startup.50_sysexception"><code class="xref py py-mod docutils literal notranslate"><span class="pre">50_sysexception</span></code></a></li>
 </ul>
 </li>
 </ul>
-
 
 </div>
 
@@ -340,23 +307,22 @@ I don’t know if I specified the type right but if you follow the
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
+          <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
+          <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../util/index.html" title="IPython Utilities"
+          <a href="subcommands.html" title="Subcommands in IPython and Jupyter"
              >next</a> |</li>
         <li class="right" >
-          <a href="matplotlib_rc.html" title="Matplotlib Startup"
+          <a href="jobcontrol.html" title="Job Control"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Dynamic IPython</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" >IPython Startup</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Oct 13, 2019.
+      Last updated on Oct 10, 2019.
     </div>
   </body>
 </html>
