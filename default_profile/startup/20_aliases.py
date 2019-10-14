@@ -23,11 +23,18 @@ class LinuxAliases:
 
         * Only been tested on Linux
         * Only natively exist on Linux
-        * Clobber an existing Windows command (cmd in particular)
+        * Clobber an existing Windows command
+            * cmd has a few overlapping commands like :command:`find`
+            * powershell intentionally has many aliases that match `busybox`
+              aliases, with commands like 'ls' and 'curl' already mapped to
+              pwsh builtins.
 
-    Convenience packages exist such as ConEmu or Cmder which allow a large
-    number of GNU/Linux built-ins to exist on Windows, and as a result, this
-    list may not be comprehensive.
+    Packages such as ConEmu or Cmder allow a large number of GNU/Linux
+    built-ins to exist on Windows, and as a result, the list may not be
+    comprehensive and it may be that a reasonable
+    portion of these aliases can be successfully executed from a shell
+    such as Cygwin, Msys2, Mingw, Git on Windows or the Windows
+    Subsystem of Linux.
 
     Below is the source code for the function
     :func:`IPython.core.magics.define_alias()` that is invoked here.::
@@ -41,7 +48,6 @@ class LinuxAliases:
             magic_name=name)
 
     """
-
     def __init__(self, shell=None, aliases=None):
         """The WindowsAliases implementation of this is odd so maybe branch off.
 
@@ -55,8 +61,7 @@ class LinuxAliases:
         self.shell = shell or get_ipython()
 
     def __repr__(self):
-        return 'Linux Aliases: {!r}'.format(
-            len(self.shell.alias_manager.aliases))
+        return 'Linux Aliases: {!r}'.format(len(self.user_aliases))
 
     def busybox(self):
         """Commands that are available on any Unix-ish system.
@@ -75,9 +80,9 @@ class LinuxAliases:
         """
         self.user_aliases += [
             ('cs', 'cd %s && ls -F --color=always %s'),
-            ('dU', 'du -d 1 -h --apparent-size --all | sort -h | tail -n 10'),
-            ('df', 'df -ah --total'),
             ('cp', 'cp -v %l'),  # cp mv mkdir and rmdir are all overridden
+            ('df', 'df -ah --total'),
+            ('dU', 'du -d 1 -h --apparent-size --all | sort -h | tail -n 10'),
             ('dus', 'du -d 1 -ha %l'),
             ('echo', 'echo -e %l'),
             ('free', 'free -mt'),
@@ -135,16 +140,16 @@ class LinuxAliases:
         As a result it'll be of value to check that they're even in
         the namespace.
         """
-        self.aliases += [
+        self.user_aliases += [
             ('ag', 'ag --hidden --color --no-column %l'),
             ('nvim', 'nvim %l'),
             ('nman', 'nvim -c "Man %l" -c"wincmd T"'),
             ('tre', 'tree -DAshFC --prune -I .git %l'),
         ]
-        return self.aliases
+        return self.user_aliases
 
 
-def common_aliases():
+class CommonAliases:
     r"""Add aliases common to all OSes. Overwhelmingly :command:`Git` aliases.
 
     This method adds around 70 to 80 aliases that can be
@@ -156,92 +161,140 @@ def common_aliases():
     .. todo:: :command:`git show`
 
     """
-    _user_aliases = [
-        ('g', 'git diff --staged --stat %l'),
-        ('ga', 'git add %l'),
-        ('gaa', 'git add --all %l'),
-        ('gai', 'git add --interactive %l'),
-        ('gap', 'git add --patch %l'),
-        ('gar', 'git add --renormalize -A %l'),
-        ('gau', 'git add --update %l'),
-        ('ga.', 'git add .'),
-        ('gb', 'git branch --all %l'),
-        ('gbl', 'git blame %l'),
-        ('gbr', 'git branch %l'),
-        ('gbru', 'git branch --set-upstream-to origin %l'),
-        ('gbrv', 'git branch --all --verbose %l'),
-        ('gci', 'git commit %l'),
-        ('gcia', 'git commit --amend %l'),
-        ('gciad', 'git commit --amend --date=%l'),
-        ('gcid', 'git commit --date=%l'),
-        ('gcim', 'git commit --verbose --message %s'),
-        ('gcl', 'git clone %l'),
-        ('gcls', 'git clone --depth 1 %l'),
-        ('gco', 'git checkout %l'),
-        ('gcob', 'git checkout -b %l'),
-        ('gd', 'git diff %l'),
-        ('gds', 'git diff --staged %l'),
-        ('gds2', 'git diff --staged --stat %l'),
-        ('gdt', 'git difftool %l'),
-        ('gdw', 'git diff --word-diff %l'),
-        ('gf', 'git fetch --all %l'),
-        ('gfe', 'git fetch %l'),
-        ('ggc', 'git gc %l'),
-        ('ggcp', 'git gc --prune %l'),
-        ('git', 'git %l'),
-        ('git hist',
-         'git log --pretty="format:%h %ad | %d [%an]" --graph --date=short '
-         '--branches --abbrev-commit --oneline %l'),
-        ('git last', 'git log -1 HEAD %l'),
-        ('git staged', 'git diff --cached %l'),
-        ('git rel', 'git rev-parse --show-prefix %l'),
-        ('git root', 'git rev-parse --show-toplevel %l'),
-        ('git unstage', 'git reset HEAD %l'),
-        ('git unstaged', 'git diff %l'),
-        ('gl', 'git log %l'),
-        ('glo',
-         'git log --graph --decorate --abbrev-commit --oneline --branches -- all %l'),
-        ('gls', 'git ls-tree master %l'),
-        ('git ls', 'git ls-tree master %l'),
-        ('gm', 'git merge --no-ff %l'),
-        ('gma', 'git merge --abort %l'),
-        ('gmc', 'git merge --continue %l'),
-        ('gmm', 'git merge master %l'),
-        ('gmt', 'git mergetool %l'),
-        ('gp', 'git pull --all %l'),
-        ('gpo', 'git pull origin %l'),
-        ('gpom', 'git pull origin master %l'),
-        ('gpu', 'git push %l'),
-        ('gr', 'git remote -v %l'),
-        ('gre', 'git remote %l'),
-        ('grb', 'git rebase %l'),
-        ('grba', 'git rebase --abort %l'),
-        ('grbc', 'git rebase --continue %l'),
-        ('grbi', 'git rebase --interactive %l'),
-        ('gs', 'git status %l'),
-        ('gsh', 'git stash %l'),
-        ('gsha', 'git stash apply %l'),
-        ('gshc', 'git stash clear %l'),
-        ('gshd', 'git stash drop %l'),
-        ('gshl', 'git stash list %l'),
-        ('gshp', 'git stash pop %l'),
-        ('gshs', 'git stash show --stat %l'),
-        ('gshsp', 'git stash show --patch %l'),
-        ('gss', 'git status -sb %l'),
-        ('gst', 'git diff --stat %l'),
-        ('gt', 'git tag --list %l'),
-        ('lswitch', 'legit switch'),
-        ('lsync', 'legit sync'),
-        ('lpublish', 'legit publish'),
-        ('lunpublish', 'legit unpublish'),
-        ('lundo', 'legit undo'),
-        ('lbranches', 'legit branches'),
-        ('ssh-day', 'eval "$(ssh-agent -s)"; ssh-add %l'),
-        ('xx', 'quit'),  # this is a sweet one
-        ('..', 'cd ..'),
-        ('...', 'cd ../..'),
-    ]
-    return _user_aliases
+    def __init__(self, shell=None, user_aliases=None):
+        """OS Agnostic aliases.
+
+        Parameters
+        ----------
+        user_aliases : list of ('alias', 'system command') tuples
+            User aliases to add the user's namespace.
+
+        """
+        self.user_aliases = user_aliases or []
+        self.shell = shell or get_ipython()
+
+    def __iter__(self):
+        return self._generator()
+
+    def _generator(self):
+        for itm in self.user_aliases:
+            yield itm
+
+    def __repr__(self):
+        return 'Common Aliases: {!r}'.format(len(self.user_aliases))
+
+    def unalias(self, alias):
+        """Remove an alias. 
+
+        .. magic:: unalias
+
+        Parameters
+        ----------
+        alias : Alias to remove
+
+        """
+        self.shell.run_line_magic('unalias', alias)
+
+    def python_exes(self):
+        """Python executables like pydoc get executed in a subprocess currently.
+
+        Let's fix that behavior because that's silly.
+        """
+        self.unalias(pydoc)
+        self.unalias(apropos)
+
+        import pydoc
+        from pydoc import apropos
+
+    def git(self):
+        """100+ git aliases."""
+        self.user_aliases += [
+            ('g', 'git diff --staged --stat %l'),
+            d('ga', 'git add %l'),
+            ('gaa', 'git add --all %l'),
+            a4r('gai', 'git add --interactive %l'),
+            ('gap', 'git add --patch %l'),
+            ('gar', 'git add --renormalize -A %l'),
+            ('gau', 'git add --update %l'),
+            ('ga.', 'git add .'),
+            ('gb', 'git branch --all %l'),
+            ('gbl', 'git blame %l'),
+            ('gbr', 'git branch %l'),
+            ('gbru', 'git branch --set-upstream-to origin %l'),
+            ('gbrv', 'git branch --all --verbose %l'),
+            ('gci', 'git commit %l'),
+            ('gcia', 'git commit --amend %l'),
+            ('gciad', 'git commit --amend --date=%l'),
+            ('gcid', 'git commit --date=%l'),
+            ('gcim', 'git commit --verbose --message %s'),
+            ('gcl', 'git clone %l'),
+            ('gcls', 'git clone --depth 1 %l'),
+            ('gco', 'git checkout %l'),
+            ('gcob', 'git checkout -b %l'),
+            ('gd', 'git diff %l'),
+            ('gds', 'git diff --staged %l'),
+            ('gds2', 'git diff --staged --stat %l'),
+            ('gdt', 'git difftool %l'),
+            ('gdw', 'git diff --word-diff %l'),
+            ('gf', 'git fetch --all %l'),
+            ('gfe', 'git fetch %l'),
+            ('ggc', 'git gc %l'),
+            ('ggcp', 'git gc --prune %l'),
+            ('git', 'git %l'),
+            ('git hist',
+             'git log --pretty="format:%h %ad | %d [%an]" --graph --date=short '
+             '--branches --abbrev-commit --oneline %l'),
+            ('git last', 'git log -1 HEAD %l'),
+            ('git staged', 'git diff --cached %l'),
+            ('git rel', 'git rev-parse --show-prefix %l'),
+            ('git root', 'git rev-parse --show-toplevel %l'),
+            ('git unstage', 'git reset HEAD %l'),
+            ('git unstaged', 'git diff %l'),
+            ('gl', 'git log %l'),
+            ('glo',
+             'git log --pretty="format:%h %ad | %d [%an]" --graph --decorate --abbrev-commit --oneline --branches --all %l'
+             ),
+            ('gls', 'git ls-tree master %l'),
+            ('git ls', 'git ls-tree master %l'),
+            ('gm', 'git merge --no-ff %l'),
+            ('gma', 'git merge --abort %l'),
+            ('gmc', 'git merge --continue %l'),
+            ('gmm', 'git merge master %l'),
+            ('gmt', 'git mergetool %l'),
+            ('gp', 'git pull --all %l'),
+            ('gpo', 'git pull origin %l'),
+            ('gpom', 'git pull origin master %l'),
+            ('gpu', 'git push %l'),
+            ('gr', 'git remote -v %l'),
+            ('gre', 'git remote %l'),
+            ('grb', 'git rebase %l'),
+            ('grba', 'git rebase --abort %l'),
+            ('grbc', 'git rebase --continue %l'),
+            ('grbi', 'git rebase --interactive %l'),
+            ('gs', 'git status %l'),
+            ('gsh', 'git stash %l'),
+            ('gsha', 'git stash apply %l'),
+            ('gshc', 'git stash clear %l'),
+            ('gshd', 'git stash drop %l'),
+            ('gshl', 'git stash list %l'),
+            ('gshp', 'git stash pop %l'),
+            ('gshs', 'git stash show --stat %l'),
+            ('gshsp', 'git stash show --patch %l'),
+            ('gss', 'git status -sb %l'),
+            ('gst', 'git diff --stat %l'),
+            ('gt', 'git tag --list %l'),
+            ('lswitch', 'legit switch'),
+            ('lsync', 'legit sync'),
+            ('lpublish', 'legit publish'),
+            ('lunpublish', 'legit unpublish'),
+            ('lundo', 'legit undo'),
+            ('lbranches', 'legit branches'),
+            ('ssh-day', 'eval "$(ssh-agent -s)"; ssh-add %l'),
+            ('xx', 'quit'),  # this is a sweet one
+            ('..', 'cd ..'),
+            ('...', 'cd ../..'),
+        ]
+        return _user_aliases
 
 
 class WindowsAliases:
@@ -256,7 +309,6 @@ class WindowsAliases:
     Would it be useful to subclass :class:`reprlib.Repr` here?
 
     """
-
     def __init__(self, shell=None, user_aliases=None):
         """Initialize the platform specific alias manager with IPython.
 
@@ -293,8 +345,7 @@ class WindowsAliases:
         return shutil.which(exe) or None
 
     def __repr__(self):
-        return 'Windows Aliases: {!r}'.format(
-            len(self.shell.alias_manager.aliases))
+        return 'Windows Aliases: {!r}'.format(len(self.user_aliases))
 
     @classmethod
     def cmd_aliases(cls):
