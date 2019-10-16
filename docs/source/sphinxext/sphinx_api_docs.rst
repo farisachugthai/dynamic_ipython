@@ -1,17 +1,25 @@
-.. _sphinx-ipython-api:
+.. _sphinx-api-docs:
 
 ===============
 Sphinx API docs
 ===============
 
+Sphinx Package
+==============
 
-Automatically generated documentation
-=====================================
+.. automodule:: IPython.sphinxext
+   :synopsis: The IPython sphinx package.
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+Package submodules
+==================
 
 .. automodule:: IPython.sphinxext.ipython_directive
    :synopsis: The IPython sphinx directive.
    :members:
    :undoc-members:
    :show-inheritance:
-
 

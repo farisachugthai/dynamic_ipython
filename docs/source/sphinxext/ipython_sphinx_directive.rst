@@ -3,6 +3,7 @@
 ========================
 IPython Sphinx Directive
 ========================
+
 .. module:: sphinx_directive
    :synopsis: An enhanced extension for Sphinx and rst use.
 
@@ -65,34 +66,6 @@ directive block or they can decorate individual lines of code.
 
    We emit warnings when we document both directives and pseudo-decorators.
 
-One may find it useful to reference the relevant documentation from the
-`Sphinx`_  project and Docutils.
-
-.. _Sphinx: `<http://www.sphinx-doc.org/en/master/usage/restructuredtext/domains.html#the-restructuredtext-domain>`
-
-
-See Also
----------
-.. seealso::
-
-   `The Sphinx documentation project <http://www.sphinx-doc.org/en/master/>`_
-   has phenomenal documentation and provides a good reference when working
-   with rst files.
-
-   In addition the source for each page of the documentation is easily
-   obtainable from the "Show Source" button.
-
-.. seealso::
-
-   `Image Options for rst directives from docutils
-   <http://docutils.sourceforge.net/docs/ref/rst/directives.html#image>`_
-   for details.
-
-.. seealso:: :ref:`configuration-values`
-
-   Check towards the bottom of this document to view all IPython
-   configuration options.
-
 
 .. _ipython-directive-usage:
 
@@ -126,6 +99,14 @@ will be rendered as:
    `Sphinx source <../_sources/sphinxext.rst.txt>`_ that generated this
    document. With the exception of the example given above, the literal
    ReStructured Text will not be displayed alongside the rendered output.
+
+.. admonition:: Warning is Error
+
+   All warnings are treated as errors in the default configuration which
+   will lead to frequent crashes while building documentation.
+   The option where this behavior can be modified, ``ipython_warning_is_error``
+   is displayed in the IPython Sphinx directive module section at the
+   bottom of the page.
 
 
 Persisting the session across IPython directive blocks
@@ -454,11 +435,41 @@ The configurable options that can be placed in conf.py are:
     the execution count after each suppressed command.
 
 As an example, to use the IPython directive when `matplotlib` is not available,
-one sets the backend to `None`:
+one sets the backend to `None`::
 
-    `ipython_mplbackend` = `None`
+    ipython_mplbackend = None
 
 
-To view the API documentation, continue reading at `sphinx_ipython_api`.
+To view the API documentation, continue reading at :ref:`sphinx_api_docs`.
+
+See Also
+---------
+
+One may find it useful to reference the relevant documentation from the
+`Sphinx`_  project and Docutils.
+
+.. _Sphinx: `<http://www.sphinx-doc.org/en/master/usage/restructuredtext/domains.html#the-restructuredtext-domain>`
+
+.. seealso::
+
+   `The Sphinx documentation project <http://www.sphinx-doc.org/en/master/>`_
+   has phenomenal documentation and provides a good reference when working
+   with rst files.
+
+   In addition the source for each page of the documentation is easily
+   obtainable from the "Show Source" button.
+
+.. seealso::
+
+   `Image Options for rst directives from docutils
+   <http://docutils.sourceforge.net/docs/ref/rst/directives.html#image>`_
+   for details.
+
+.. seealso:: :ref:`configuration-values`
+
+   Check towards the bottom of this document to view all IPython
+   configuration options.
+
+
 
 .. Vim: set et:

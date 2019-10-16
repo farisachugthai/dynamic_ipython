@@ -46,14 +46,6 @@ documentation is built:
 3. If there is a difference, the embedded shell will raise an error and
    halt building the documentation.
 
-.. admonition:: Warning is Error
-
-   All warnings are treated as errors in the default configuration which
-   will lead to frequent crashes while building documentation.
-   The option where this behavior can be modified, ``ipython_warning_is_error``
-   is displayed in the IPython Sphinx directive module section at the
-   bottom of the page.
-
 You can `@doctest` multi-line output as well. Just be careful
 when using non-deterministic inputs like random numbers in the IPython
 directive.
@@ -304,17 +296,11 @@ Then call it from a subsequent section.
    In [4]: square(3)
    Out [4]: 9
 
-   In [5]: square(-2)
-   Out [5]: 4
+   
+API Docs
+=========
 
-
-**Why does the sentence below appear no less than 3 times in this doc?**
-
-For more information on the ``@doctest`` decorator, please refer to the end of
-this page in the :ref:`Pseudo-Decorators` section.
-
-
-.. automodule:: IPython.sphinxext.custom_doctests
+.. automodule:: default_profile.sphinxext.custom_doctests
    :synopsis: Custom doctests in rst docs.
    :members:
    :undoc-members:

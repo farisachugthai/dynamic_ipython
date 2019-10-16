@@ -2,13 +2,16 @@
 Make --- Automated Documentation Builder
 ========================================
 
+.. module:: default_profile.sphinxext.make
+   :synopsis: Automated documentation builder.
+
 Usage
 ------
 
 While still being actively worked on, the ideal usage would begin with the user
 in the `<../docs>`_ directory of the repository and running.:
 
-.. code-block:: console
+.. code-block:: shell-session
 
     python3 sphinx_extensions/make html
 
@@ -61,3 +64,14 @@ Wait why don't we just do something like:
 >>> from sphinx.cmd.build import make
 
 Or whatever it's called and run that? It'd be way easier...
+
+
+API
+===
+
+.. automodule:: default_profile.sphinxext.make
+   :synopsis: Make docs
+   :members:
+   :undoc-members:
+   :show-inheritance:
+

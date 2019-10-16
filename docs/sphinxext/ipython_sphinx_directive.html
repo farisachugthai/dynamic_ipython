@@ -128,30 +128,6 @@ directive block or they can decorate individual lines of code.</p>
 <p>Hmmmm should we document those decorators using the above syntax?</p>
 <p>We emit warnings when we document both directives and pseudo-decorators.</p>
 </div>
-<p>One may find it useful to reference the relevant documentation from the
-<a class="reference external" href="`&lt;http://www.sphinx-doc.org/en/master/usage/restructuredtext/domains.html#the-restructuredtext-domain&gt;`">Sphinx</a>  project and Docutils.</p>
-<div class="section" id="see-also">
-<h3>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h3>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p><a class="reference external" href="http://www.sphinx-doc.org/en/master/">The Sphinx documentation project</a>
-has phenomenal documentation and provides a good reference when working
-with rst files.</p>
-<p>In addition the source for each page of the documentation is easily
-obtainable from the “Show Source” button.</p>
-</div>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p><a class="reference external" href="http://docutils.sourceforge.net/docs/ref/rst/directives.html#image">Image Options for rst directives from docutils</a>
-for details.</p>
-</div>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#configuration-values"><span class="std std-ref">Configuration Values</span></a></p>
-<p>Check towards the bottom of this document to view all IPython
-configuration options.</p>
-</div>
-</div>
 </div>
 <div class="section" id="directive-usage">
 <span id="ipython-directive-usage"></span><h2>Directive Usage<a class="headerlink" href="#directive-usage" title="Permalink to this headline">¶</a></h2>
@@ -187,6 +163,14 @@ number displayed in the source code.</p>
 <a class="reference external" href="../_sources/sphinxext.rst.txt">Sphinx source</a> that generated this
 document. With the exception of the example given above, the literal
 ReStructured Text will not be displayed alongside the rendered output.</p>
+</div>
+<div class="admonition-warning-is-error admonition">
+<p class="admonition-title">Warning is Error</p>
+<p>All warnings are treated as errors in the default configuration which
+will lead to frequent crashes while building documentation.
+The option where this behavior can be modified, <code class="docutils literal notranslate"><span class="pre">ipython_warning_is_error</span></code>
+is displayed in the IPython Sphinx directive module section at the
+bottom of the page.</p>
 </div>
 </div>
 <div class="section" id="persisting-the-session-across-ipython-directive-blocks">
@@ -541,10 +525,34 @@ the execution count after each suppressed command.</p>
 
 <p>As an example, to use the IPython directive when <code class="xref py py-obj docutils literal notranslate"><span class="pre">matplotlib</span></code> is not available,
 one sets the backend to <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>:</p>
-<blockquote>
-<div><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ipython_mplbackend</span></code> = <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></p>
-</div></blockquote>
-<p>To view the API documentation, continue reading at <code class="xref py py-obj docutils literal notranslate"><span class="pre">sphinx_ipython_api</span></code>.</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">ipython_mplbackend</span> <span class="o">=</span> <span class="bp">None</span>
+</pre></div>
+</div>
+<p>To view the API documentation, continue reading at <span class="xref std std-ref">sphinx_api_docs</span>.</p>
+<div class="section" id="see-also">
+<h3>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h3>
+<p>One may find it useful to reference the relevant documentation from the
+<a class="reference external" href="`&lt;http://www.sphinx-doc.org/en/master/usage/restructuredtext/domains.html#the-restructuredtext-domain&gt;`">Sphinx</a>  project and Docutils.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="http://www.sphinx-doc.org/en/master/">The Sphinx documentation project</a>
+has phenomenal documentation and provides a good reference when working
+with rst files.</p>
+<p>In addition the source for each page of the documentation is easily
+obtainable from the “Show Source” button.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="http://docutils.sourceforge.net/docs/ref/rst/directives.html#image">Image Options for rst directives from docutils</a>
+for details.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#configuration-values"><span class="std std-ref">Configuration Values</span></a></p>
+<p>Check towards the bottom of this document to view all IPython
+configuration options.</p>
+</div>
+</div>
 </div>
 </div>
 
@@ -622,10 +630,7 @@ one sets the backend to <a class="reference external" href="https://docs.python.
 
     <ul>
 <li><a class="reference internal" href="#">IPython Sphinx Directive</a><ul>
-<li><a class="reference internal" href="#directive-and-options">Directive and options</a><ul>
-<li><a class="reference internal" href="#see-also">See Also</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#directive-and-options">Directive and options</a></li>
 <li><a class="reference internal" href="#directive-usage">Directive Usage</a></li>
 <li><a class="reference internal" href="#persisting-the-session-across-ipython-directive-blocks">Persisting the session across IPython directive blocks</a></li>
 <li><a class="reference internal" href="#multi-line-input">Multi-line input</a><ul>
@@ -639,7 +644,10 @@ one sets the backend to <a class="reference external" href="https://docs.python.
 <li><a class="reference internal" href="#decorators-glossary">Decorators Glossary</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#configuration-values">Configuration Values</a></li>
+<li><a class="reference internal" href="#configuration-values">Configuration Values</a><ul>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -671,7 +679,7 @@ one sets the backend to <a class="reference external" href="https://docs.python.
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Oct 15, 2019.
+      Last updated on Oct 16, 2019.
     </div>
   </body>
 </html>
