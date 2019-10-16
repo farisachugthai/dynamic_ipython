@@ -4,62 +4,72 @@
 Extensions
 ===========
 
-.. module:: ipython_extensions
+.. module:: default_profile.extensions
     :synopsis: Write additions to the IPython ecosystem and additional magics.
 
 Here are the varying `%magic` extensions that are bundled with this
-repository.
+portion of the repository.
 
 
-Event Watcher
-=============
+:mod:`~default_profile.extensions.event_watcher_example`
+========================================================
 
 .. automodule:: default_profile.extensions.event_watcher_example
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
+ 
 -------------------------------------------------------------------------
 
-load_ext
-========
+
+:mod:`~default_profile.extensions.load_ext`
+===========================================
 
 .. automodule:: default_profile.extensions.load_ext
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 
 -------------------------------------------------------------------------
 
-pd_csv
-======
+
+:mod:`~default_profile.extensions.pd_csv`
+=========================================
+
 
 .. automodule:: default_profile.extensions.pd_csv
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :synopsis: Utiilize pandas to load data in a :mod:`csv` file.
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 
 -------------------------------------------------------------------------
 
-repr_requests
-=============
+
+:mod:`~default_profile.extensions.repr_requests`
+================================================
 
 .. automodule:: default_profile.extensions.repr_requests
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 
 -------------------------------------------------------------------------
 
-termux_clipboard
-================
+
+:mod:`~default_profile.extensions.termux_clipboard`
+===================================================
 
 .. automodule:: default_profile.extensions.termux_clipboard
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :synopsis: Patch the paste magic.
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 
 Continue reading at :doc:`jobcontrol` to see a well documented example
 provided by one of the original IPython authors, Brian Granger!

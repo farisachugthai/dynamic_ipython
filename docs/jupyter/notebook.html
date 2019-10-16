@@ -61,11 +61,127 @@
             
 <div class="section" id="module-jupyter_conf.jupyter_notebook_config">
 <span id="jupyter-notebook"></span><h1>Jupyter Notebook<a class="headerlink" href="#module-jupyter_conf.jupyter_notebook_config" title="Permalink to this headline">¶</a></h1>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">from</span> <span class="nn">traitlets.config</span> <span class="kn">import</span> <span class="n">get_config</span>
-
-<span class="gp">In [2]: </span><span class="n">c</span> <span class="o">=</span> <span class="n">get_config</span><span class="p">()</span>
-</pre></div>
+<div class="section" id="the-jupyter-html-notebook">
+<h2>The Jupyter HTML Notebook.<a class="headerlink" href="#the-jupyter-html-notebook" title="Permalink to this headline">¶</a></h2>
+<p>This launches a Tornado based HTML Notebook Server that serves up an
+HTML5/Javascript Notebook client.</p>
+<div class="section" id="subcommands">
+<h3>Subcommands<a class="headerlink" href="#subcommands" title="Permalink to this headline">¶</a></h3>
+<p>Subcommands are launched as <code class="xref py py-obj docutils literal notranslate"><span class="pre">jupyter-notebook</span> <span class="pre">cmd</span> <span class="pre">[args]</span></code>. For information on
+using subcommand ‘cmd’, do: <code class="xref py py-obj docutils literal notranslate"><span class="pre">jupyter-notebook</span> <span class="pre">cmd</span> <span class="pre">-h</span></code>.</p>
+<dl class="simple">
+<dt>list</dt><dd><p>List currently running notebook servers.</p>
+</dd>
+<dt>stop</dt><dd><p>Stop currently running notebook server for a given port</p>
+</dd>
+<dt>password</dt><dd><p>Set a password for the notebook server.</p>
+</dd>
+</dl>
 </div>
+<div class="section" id="options">
+<h3>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h3>
+<p>Arguments that take values are actually convenience aliases to full
+Configurables, whose aliases are listed on the help line. For more information
+on full configurables, see ‘–help-all’.</p>
+<dl class="option-list">
+<dt><kbd><span class="option">--debug</span></kbd></dt>
+<dd><p>set log level to logging.DEBUG (maximize logging output)</p>
+</dd>
+<dt><kbd><span class="option">--generate-config</span></kbd></dt>
+<dd><p>generate default config file</p>
+</dd>
+<dt><kbd><span class="option">-y</span></kbd></dt>
+<dd><p>Answer yes to any questions instead of prompting.</p>
+</dd>
+<dt><kbd><span class="option">--no-browser</span></kbd></dt>
+<dd><p>Don’t open the notebook in a browser after startup.</p>
+</dd>
+<dt><kbd><span class="option">--pylab</span></kbd></dt>
+<dd><p>DISABLED: use %pylab or %matplotlib in the notebook to enable matplotlib.</p>
+</dd>
+<dt><kbd><span class="option">--no-mathjax</span></kbd></dt>
+<dd><p>Disable MathJax.</p>
+<p>MathJax is the javascript library Jupyter uses to render math/LaTeX. It is
+very large, so you may want to disable it if you have a slow internet
+connection, or for offline use of the notebook.</p>
+<p>When disabled, equations etc. will appear as their untransformed TeX source.</p>
+</dd>
+<dt><kbd><span class="option">--allow-root</span></kbd></dt>
+<dd><p>Allow the notebook to be run from root user.</p>
+</dd>
+<dt><kbd><span class="option">--script</span></kbd></dt>
+<dd><p>DEPRECATED, IGNORED</p>
+</dd>
+<dt><kbd><span class="option">--no-script</span></kbd></dt>
+<dd><p>DEPRECATED, IGNORED</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>–log-level=&lt;Enum&gt; (Application.log_level)</dt><dd><p>Default: 30
+Choices: (0, 10, 20, 30, 40, 50, ‘DEBUG’, ‘INFO’, ‘WARN’, ‘ERROR’, ‘CRITICAL’)
+Set the log level by value or name.</p>
+</dd>
+<dt>–config=&lt;Unicode&gt; (JupyterApp.config_file)</dt><dd><p>Default: ‘’
+Full path of a config file.</p>
+</dd>
+<dt>–ip=&lt;Unicode&gt; (NotebookApp.ip)</dt><dd><p>Default: ‘localhost’
+The IP address the notebook server will listen on.</p>
+</dd>
+<dt>–port=&lt;Int&gt; (NotebookApp.port)</dt><dd><p>Default: 8888
+The port the notebook server will listen on.</p>
+</dd>
+<dt>–port-retries=&lt;Int&gt; (NotebookApp.port_retries)</dt><dd><p>Default: 50
+The number of additional ports to try if the specified port is not
+available.</p>
+</dd>
+<dt>–transport=&lt;CaselessStrEnum&gt; (KernelManager.transport)</dt><dd><p>Default: ‘tcp’
+Choices: [‘tcp’, ‘ipc’]</p>
+</dd>
+<dt>–keyfile=&lt;Unicode&gt; (NotebookApp.keyfile)</dt><dd><p>Default: ‘’
+The full path to a private key file for usage with SSL/TLS.</p>
+</dd>
+<dt>–certfile=&lt;Unicode&gt; (NotebookApp.certfile)</dt><dd><p>Default: ‘’
+The full path to an SSL/TLS certificate file.</p>
+</dd>
+<dt>–client-ca=&lt;Unicode&gt; (NotebookApp.client_ca)</dt><dd><p>Default: ‘’
+The full path to a certificate authority certificate for SSL/TLS client
+authentication.</p>
+</dd>
+<dt>–notebook-dir=&lt;Unicode&gt; (NotebookApp.notebook_dir)</dt><dd><p>Default: ‘’
+The directory to use for notebooks and kernels.</p>
+</dd>
+<dt>–browser=&lt;Unicode&gt; (NotebookApp.browser)</dt><dd><p>Default: ‘’
+Specify what command to use to invoke a web browser when opening the
+notebook. If not specified, the default browser will be determined by the
+<a class="reference external" href="https://docs.python.org/3/library/webbrowser.html#module-webbrowser" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">webbrowser</span></code></a> standard library module, which allows setting of the BROWSER
+environment variable to override it.</p>
+</dd>
+<dt>–pylab=&lt;Unicode&gt; (NotebookApp.pylab)</dt><dd><p>Default: ‘disabled’
+DISABLED: use %pylab or %matplotlib in the notebook to enable matplotlib.</p>
+</dd>
+<dt>–gateway-url=&lt;Unicode&gt; (GatewayClient.url)</dt><dd><p>Default: None
+The url of the Kernel or Enterprise Gateway server where kernel
+specifications are defined and kernel management takes place. If defined,
+this Notebook server acts as a proxy for all kernel management and kernel
+specification retrieval.  (JUPYTER_GATEWAY_URL env var)</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="class-parameters">
+<h3>Class parameters<a class="headerlink" href="#class-parameters" title="Permalink to this headline">¶</a></h3>
+<p>Parameters are set from command-line arguments of the form:
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">--Class.trait=value</span></code>. This line is evaluated in Python, so simple expressions
+are allowed, e.g.:: <code class="xref py py-obj docutils literal notranslate"><span class="pre">--C.a='range(3)'</span></code> For setting C.a=[0,1,2].</p>
+</div>
+<div class="section" id="utilizing-supported-packages">
+<h3>Utilizing Supported Packages<a class="headerlink" href="#utilizing-supported-packages" title="Permalink to this headline">¶</a></h3>
+<p>The jupyter_core package provides a handful of useful utility functions
+in the <code class="docutils literal notranslate"><span class="pre">path</span></code> module.</p>
+<p><code class="docutils literal notranslate"><span class="pre">jupyter_config_dir()</span></code> : function</p>
+<p><code class="docutils literal notranslate"><span class="pre">jupyter_data_dir()</span></code> : function</p>
+<p><code class="docutils literal notranslate"><span class="pre">jupyter_runtime_dir()</span></code> : function</p>
+<p><code class="docutils literal notranslate"><span class="pre">jupyter_path(*subdirs)</span></code> : function</p>
+<p><code class="docutils literal notranslate"><span class="pre">jupyter_config_path()</span></code> : function</p>
 <p>Before we start the API documentation, let’s quick go over a traceback
 I just got.</p>
 <div class="highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">I</span> <span class="mi">20</span><span class="p">:</span><span class="mi">39</span><span class="p">:</span><span class="mf">53.393</span> <span class="n">NotebookApp</span><span class="p">]</span> <span class="n">Writing</span> <span class="n">notebook</span><span class="o">-</span><span class="n">signing</span> <span class="n">key</span> <span class="n">to</span>
@@ -159,8 +275,9 @@ I just got.</p>
 </div>
 <p>Well that was absurd to read but what is that DLL that we need to load, why
 isn’t it there and what can we do?</p>
+</div>
 <div class="section" id="jupyterapp-application-configuration">
-<h2>JupyterApp(Application) configuration<a class="headerlink" href="#jupyterapp-application-configuration" title="Permalink to this headline">¶</a></h2>
+<h3>JupyterApp(Application) configuration<a class="headerlink" href="#jupyterapp-application-configuration" title="Permalink to this headline">¶</a></h3>
 <p>Answer yes to any prompts.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">JupyterApp</span><span class="o">.</span><span class="n">answer_yes</span> <span class="o">=</span> <span class="bp">False</span>
 </pre></div>
@@ -179,7 +296,7 @@ isn’t it there and what can we do?</p>
 </div>
 </div>
 <div class="section" id="notebookapp-jupyterapp-configuration">
-<h2>NotebookApp(JupyterApp) configuration<a class="headerlink" href="#notebookapp-jupyterapp-configuration" title="Permalink to this headline">¶</a></h2>
+<h3>NotebookApp(JupyterApp) configuration<a class="headerlink" href="#notebookapp-jupyterapp-configuration" title="Permalink to this headline">¶</a></h3>
 <p>Set the Access-Control-Allow-Credentials: true header:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">NotebookApp</span><span class="o">.</span><span class="n">allow_credentials</span> <span class="o">=</span> <span class="bp">False</span>
 </pre></div>
@@ -492,7 +609,7 @@ server).:</p>
 </div>
 </div>
 <div class="section" id="fswatcher">
-<h2>fswatcher<a class="headerlink" href="#fswatcher" title="Permalink to this headline">¶</a></h2>
+<h3>fswatcher<a class="headerlink" href="#fswatcher" title="Permalink to this headline">¶</a></h3>
 <p>Whether to serve the app in watch mode.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">LabApp</span><span class="o">.</span><span class="n">watch</span> <span class="o">=</span> <span class="bp">False</span>
 </pre></div>
@@ -560,7 +677,7 @@ server (hint: it almost certainly doesn’t).:</p>
 <p><code class="docutils literal notranslate"><span class="pre">ws[s]://hostname[:port]</span></code></p>
 </div>
 <div class="section" id="nteractapp-notebookapp-configuration">
-<h2>NteractApp(NotebookApp) configuration<a class="headerlink" href="#nteractapp-notebookapp-configuration" title="Permalink to this headline">¶</a></h2>
+<h3>NteractApp(NotebookApp) configuration<a class="headerlink" href="#nteractapp-notebookapp-configuration" title="Permalink to this headline">¶</a></h3>
 <p>Application for running <strong class="command">nteract</strong> on a jupyter notebook server.</p>
 <p>Whether to start the app in dev mode. Expects resources to be loaded from
 Webpack’s hot reloading server at <a class="reference external" href="http://localhost:8357">http://localhost:8357</a>. Run</p>
@@ -578,7 +695,7 @@ in editable mode e.g., using:</p>
 </div>
 </div>
 <div class="section" id="image-handlers">
-<h2>Image Handlers<a class="headerlink" href="#image-handlers" title="Permalink to this headline">¶</a></h2>
+<h3>Image Handlers<a class="headerlink" href="#image-handlers" title="Permalink to this headline">¶</a></h3>
 <p>Need to set something up for the Jupyter Console image handler.
 Same thing for QTConsole.</p>
 <p>Callable object called via ‘callable’ image handler with one argument,
@@ -620,6 +737,7 @@ image data.</p>
 </li>
 </ol>
 <p>That’s the default text for the Jupyter consoles (both non-GUI and QT).</p>
+</div>
 </div>
 </div>
 
@@ -697,11 +815,18 @@ image data.</p>
 
     <ul>
 <li><a class="reference internal" href="#">Jupyter Notebook</a><ul>
+<li><a class="reference internal" href="#the-jupyter-html-notebook">The Jupyter HTML Notebook.</a><ul>
+<li><a class="reference internal" href="#subcommands">Subcommands</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#class-parameters">Class parameters</a></li>
+<li><a class="reference internal" href="#utilizing-supported-packages">Utilizing Supported Packages</a></li>
 <li><a class="reference internal" href="#jupyterapp-application-configuration">JupyterApp(Application) configuration</a></li>
 <li><a class="reference internal" href="#notebookapp-jupyterapp-configuration">NotebookApp(JupyterApp) configuration</a></li>
 <li><a class="reference internal" href="#fswatcher">fswatcher</a></li>
 <li><a class="reference internal" href="#nteractapp-notebookapp-configuration">NteractApp(NotebookApp) configuration</a></li>
 <li><a class="reference internal" href="#image-handlers">Image Handlers</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -733,7 +858,7 @@ image data.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Oct 14, 2019.
+      Last updated on Oct 15, 2019.
     </div>
   </body>
 </html>

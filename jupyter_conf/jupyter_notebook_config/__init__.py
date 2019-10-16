@@ -1,132 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Configuration file for jupyter-notebook.
-==========================
-The Jupyter HTML Notebook.
-==========================
-
-This launches a Tornado based HTML Notebook Server that serves up an
-HTML5/Javascript Notebook client.
-
-Subcommands
------------
-
-Subcommands are launched as `jupyter-notebook cmd [args]`. For information on
-using subcommand 'cmd', do: `jupyter-notebook cmd -h`.
-
-list
-    List currently running notebook servers.
-stop
-    Stop currently running notebook server for a given port
-password
-    Set a password for the notebook server.
-
-Options
--------
-
-Arguments that take values are actually convenience aliases to full
-Configurables, whose aliases are listed on the help line. For more information
-on full configurables, see '--help-all'.
-
---debug
-    set log level to logging.DEBUG (maximize logging output)
---generate-config
-    generate default config file
--y
-    Answer yes to any questions instead of prompting.
---no-browser
-    Don't open the notebook in a browser after startup.
---pylab
-    DISABLED: use %pylab or %matplotlib in the notebook to enable matplotlib.
---no-mathjax
-    Disable MathJax
-
-    MathJax is the javascript library Jupyter uses to render math/LaTeX. It is
-    very large, so you may want to disable it if you have a slow internet
-    connection, or for offline use of the notebook.
-
-    When disabled, equations etc. will appear as their untransformed TeX source.
---allow-root
-    Allow the notebook to be run from root user.
---script
-    DEPRECATED, IGNORED
---no-script
-    DEPRECATED, IGNORED
---log-level=<Enum> (Application.log_level)
-    Default: 30
-    Choices: (0, 10, 20, 30, 40, 50, 'DEBUG', 'INFO', 'WARN', 'ERROR', 'CRITICAL')
-    Set the log level by value or name.
---config=<Unicode> (JupyterApp.config_file)
-    Default: ''
-    Full path of a config file.
---ip=<Unicode> (NotebookApp.ip)
-    Default: 'localhost'
-    The IP address the notebook server will listen on.
---port=<Int> (NotebookApp.port)
-    Default: 8888
-    The port the notebook server will listen on.
---port-retries=<Int> (NotebookApp.port_retries)
-    Default: 50
-    The number of additional ports to try if the specified port is not
-    available.
---transport=<CaselessStrEnum> (KernelManager.transport)
-    Default: 'tcp'
-    Choices: ['tcp', 'ipc']
---keyfile=<Unicode> (NotebookApp.keyfile)
-    Default: ''
-    The full path to a private key file for usage with SSL/TLS.
---certfile=<Unicode> (NotebookApp.certfile)
-    Default: ''
-    The full path to an SSL/TLS certificate file.
---client-ca=<Unicode> (NotebookApp.client_ca)
-    Default: ''
-    The full path to a certificate authority certificate for SSL/TLS client
-    authentication.
---notebook-dir=<Unicode> (NotebookApp.notebook_dir)
-    Default: ''
-    The directory to use for notebooks and kernels.
---browser=<Unicode> (NotebookApp.browser)
-    Default: ''
-    Specify what command to use to invoke a web browser when opening the
-    notebook. If not specified, the default browser will be determined by the
-    `webbrowser` standard library module, which allows setting of the BROWSER
-    environment variable to override it.
---pylab=<Unicode> (NotebookApp.pylab)
-    Default: 'disabled'
-    DISABLED: use %pylab or %matplotlib in the notebook to enable matplotlib.
---gateway-url=<Unicode> (GatewayClient.url)
-    Default: None
-    The url of the Kernel or Enterprise Gateway server where kernel
-    specifications are defined and kernel management takes place. If defined,
-    this Notebook server acts as a proxy for all kernel management and kernel
-    specification retrieval.  (JUPYTER_GATEWAY_URL env var)
-
-Class parameters
-----------------
-
-Parameters are set from command-line arguments of the form:
-`--Class.trait=value`. This line is evaluated in Python, so simple expressions
-are allowed, e.g.:: `--C.a='range(3)'` For setting C.a=[0,1,2].
-
-
-Utilizing Supported Packages
------------------------------
-
-The jupyter_core package provides a handful of useful utility functions
-in the ``path`` module.
-
-``jupyter_config_dir()`` : function
-
-``jupyter_data_dir()`` : function
-
-``jupyter_runtime_dir()`` : function
-
-``jupyter_path(*subdirs)`` : function
-
-``jupyter_config_path()`` : function
-
-
-"""
+"""Configuration file for jupyter-notebook."""
 import logging
 import platform
 import shutil
@@ -238,16 +112,18 @@ c.Application.log_level = 30
 # standard library module, which allows setting of the BROWSER environment
 # variable to override it.
 
+
 class NonGraphicalEnvironmentError(OSError):
     """Raised when we can't get any kind of a reasonable browser."""
 
     def __init__(self, *args, **kwargs):
+        """Todo. Need to create a more user error message."""
         super().__init__(self, *args, **kwargs)
 
 
 # Probably should refactor into a simple function.
 if platform.system() == 'Linux':
-    if os.environ.get('DISPLAY')
+    if os.environ.get('DISPLAY'):
         if shutil.which('qutebrowser'):
             c.NotebookApp.browser = 'qutebrowser'
     else:
@@ -466,7 +342,7 @@ c.NotebookApp.reraise_server_extension_failures = True
 # Don't run the del because then Sphinx doesn't get the docstring.
 # del jupyter_specific_configs
 
-## DEPRECATED use the nbserver_extensions dict instead
+# DEPRECATED use the nbserver_extensions dict instead
 # c.NotebookApp.server_extensions = []
 
 # The session manager class to use.
@@ -526,7 +402,7 @@ c.NotebookApp.reraise_server_extension_failures = True
 # See the `webbrowser.open` documentation for details.
 c.NotebookApp.webbrowser_open_new = 1
 
-## Set the tornado compression options for websocket connections.
+# Set the tornado compression options for websocket connections.
 #
 #  This value will be returned from
 #  :meth:`WebSocketHandler.get_compression_options`. None (default) will disable
@@ -535,7 +411,7 @@ c.NotebookApp.webbrowser_open_new = 1
 #  See the tornado docs for WebSocketHandler.get_compression_options for details.
 # c.NotebookApp.websocket_compression_options = None
 
-## The base URL for websockets, if it differs from the HTTP server (hint: it
+# The base URL for websockets, if it differs from the HTTP server (hint: it
 #  almost certainly doesn't).
 #
 #  Should be in the form of an HTTP origin: ws[s]://hostname[:port]
@@ -552,17 +428,17 @@ c.NotebookApp.webbrowser_open_new = 1
 # The app directory to launch JupyterLab from.
 # c.LabApp.app_dir = 'C:\\tools\\miniconda3\\envs\\flask\\share\\jupyter\\lab'
 
-## Whether to start the app in core mode. In this mode, JupyterLab will run using
+# Whether to start the app in core mode. In this mode, JupyterLab will run using
 #  the JavaScript assets that are within the installed JupyterLab Python package.
 #  In core mode, third party extensions are disabled. The `--dev-mode` flag is an
 #  alias to this to be used when the Python package itself is installed in
 #  development mode (`pip install -e .`).
 # c.LabApp.core_mode = False
 
-## The default URL to redirect to from `/`
+# The default URL to redirect to from `/`
 # c.LabApp.default_url = '/lab'
 
-## Whether to start the app in dev mode. Uses the unpublished local JavaScript
+# Whether to start the app in dev mode. Uses the unpublished local JavaScript
 #  packages in the `dev_mode` folder.  In this case JupyterLab will show a red
 #  stripe at the top of the page.  It can only be used if JupyterLab is installed
 #  as `pip install -e .`.
@@ -570,19 +446,19 @@ c.NotebookApp.webbrowser_open_new = 1
 # Todo?
 # c.LabApp.dev_mode = False
 
-## The override url for static lab assets, typically a CDN.
+# The override url for static lab assets, typically a CDN.
 # c.LabApp.override_static_url = ''
 
-## The override url for static lab theme assets, typically a CDN.
+# The override url for static lab theme assets, typically a CDN.
 # c.LabApp.override_theme_url = ''
 
-## The directory for user settings.
+# The directory for user settings.
 # c.LabApp.user_settings_dir = 'C:\\Users\\faris\\.jupyter\\lab\\user-settings'
 
-## Whether to serve the app in watch mode
+# Whether to serve the app in watch mode
 # c.LabApp.watch = False
 
-## The directory for workspaces
+# The directory for workspaces
 # c.LabApp.workspaces_dir = 'C:\\Users\\faris\\.jupyter\\lab\\workspaces'
 
 # -----------------------------------------------------------------------------
@@ -802,15 +678,15 @@ c.MappingKernelManager.cull_interval = 3000
 # KernelSpecManager(LoggingConfigurable) configuration
 # ------------------------------------------------------------------------------
 
-## If there is no Python kernelspec registered and the IPython kernel is
+# If there is no Python kernelspec registered and the IPython kernel is
 #  available, ensure it is added to the spec list.
 # c.KernelSpecManager.ensure_native_kernel = True
 
-## The kernel spec class.  This is configurable to allow subclassing of the
+# The kernel spec class.  This is configurable to allow subclassing of the
 #  KernelSpecManager for customized behavior.
 # c.KernelSpecManager.kernel_spec_class = 'jupyter_client.kernelspec.KernelSpec'
 
-## Whitelist of allowed kernel names.
+# Whitelist of allowed kernel names.
 #
 #  By default, all installed kernels are allowed.
 # c.KernelSpecManager.whitelist = set()
@@ -986,7 +862,7 @@ c.ContentsManager.hide_globs = [
 # GatewayKernelManager(MappingKernelManager) configuration
 # ------------------------------------------------------------------------------
 
-## Kernel manager that supports remote kernels hosted by Jupyter Kernel or
+# Kernel manager that supports remote kernels hosted by Jupyter Kernel or
 #  Enterprise Gateway.
 
 # ------------------------------------------------------------------------------
@@ -997,73 +873,73 @@ c.ContentsManager.hide_globs = [
 # GatewayClient(SingletonConfigurable) configuration
 # ------------------------------------------------------------------------------
 
-## This class manages the configuration.  It's its own singleton class so that we
+# This class manages the configuration.  It's its own singleton class so that we
 #  can share these values across all objects.  It also contains some helper methods
 #   to build request arguments out of the various config options.
 
-## The authorization token used in the HTTP headers.  (JUPYTER_GATEWAY_AUTH_TOKEN
+# The authorization token used in the HTTP headers.  (JUPYTER_GATEWAY_AUTH_TOKEN
 #  env var)
 # c.GatewayClient.auth_token = None
 
-## The filename of CA certificates or None to use defaults.
+# The filename of CA certificates or None to use defaults.
 #  (JUPYTER_GATEWAY_CA_CERTS env var)
 # c.GatewayClient.ca_certs = None
 
-## The filename for client SSL certificate, if any.  (JUPYTER_GATEWAY_CLIENT_CERT
+# The filename for client SSL certificate, if any.  (JUPYTER_GATEWAY_CLIENT_CERT
 #  env var)
 # c.GatewayClient.client_cert = None
 
-## The filename for client SSL key, if any.  (JUPYTER_GATEWAY_CLIENT_KEY env var)
+# The filename for client SSL key, if any.  (JUPYTER_GATEWAY_CLIENT_KEY env var)
 # c.GatewayClient.client_key = None
 
-## The time allowed for HTTP connection establishment with the Gateway server.
+# The time allowed for HTTP connection establishment with the Gateway server.
 #  (JUPYTER_GATEWAY_CONNECT_TIMEOUT env var)
 # c.GatewayClient.connect_timeout = 60.0
 
-## A comma-separated list of environment variable names that will be included,
+# A comma-separated list of environment variable names that will be included,
 #  along with their values, in the kernel startup request.  The corresponding
 #  `env_whitelist` configuration value must also be set on the Gateway server -
 #  since that configuration value indicates which environmental values to make
 #  available to the kernel. (JUPYTER_GATEWAY_ENV_WHITELIST env var)
 # c.GatewayClient.env_whitelist = ''
 
-## Additional HTTP headers to pass on the request.  This value will be converted
+# Additional HTTP headers to pass on the request.  This value will be converted
 #  to a dict. (JUPYTER_GATEWAY_HEADERS env var)
 # c.GatewayClient.headers = '{}'
 
-## The password for HTTP authentication.  (JUPYTER_GATEWAY_HTTP_PWD env var)
+# The password for HTTP authentication.  (JUPYTER_GATEWAY_HTTP_PWD env var)
 # c.GatewayClient.http_pwd = None
 
-## The username for HTTP authentication. (JUPYTER_GATEWAY_HTTP_USER env var)
+# The username for HTTP authentication. (JUPYTER_GATEWAY_HTTP_USER env var)
 # c.GatewayClient.http_user = None
 
-## The gateway API endpoint for accessing kernel resources
+# The gateway API endpoint for accessing kernel resources
 #  (JUPYTER_GATEWAY_KERNELS_ENDPOINT env var)
 # c.GatewayClient.kernels_endpoint = '/api/kernels'
 
-## The gateway API endpoint for accessing kernelspecs
+# The gateway API endpoint for accessing kernelspecs
 #  (JUPYTER_GATEWAY_KERNELSPECS_ENDPOINT env var)
 # c.GatewayClient.kernelspecs_endpoint = '/api/kernelspecs'
 
-## The gateway endpoint for accessing kernelspecs resources
+# The gateway endpoint for accessing kernelspecs resources
 #  (JUPYTER_GATEWAY_KERNELSPECS_RESOURCE_ENDPOINT env var)
 # c.GatewayClient.kernelspecs_resource_endpoint = '/kernelspecs'
 
-## The time allowed for HTTP request completion. (JUPYTER_GATEWAY_REQUEST_TIMEOUT
+# The time allowed for HTTP request completion. (JUPYTER_GATEWAY_REQUEST_TIMEOUT
 #  env var)
 # c.GatewayClient.request_timeout = 60.0
 
-## The url of the Kernel or Enterprise Gateway server where kernel specifications
+# The url of the Kernel or Enterprise Gateway server where kernel specifications
 #  are defined and kernel management takes place. If defined, this Notebook
 #  server acts as a proxy for all kernel management and kernel specification
 #  retrieval.  (JUPYTER_GATEWAY_URL env var)
 # c.GatewayClient.url = None
 
-## For HTTPS requests, determines if server's certificate should be validated or
+# For HTTPS requests, determines if server's certificate should be validated or
 #  not. (JUPYTER_GATEWAY_VALIDATE_CERT env var)
 # c.GatewayClient.validate_cert = True
 
-## The websocket url of the Kernel or Enterprise Gateway server.  If not
+# The websocket url of the Kernel or Enterprise Gateway server.  If not
 #  provided, this value will correspond to the value of the Gateway url with 'ws'
 #  in place of 'http'.  (JUPYTER_GATEWAY_WS_URL env var)
 # c.GatewayClient.ws_url = None

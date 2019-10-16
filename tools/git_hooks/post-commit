@@ -1,0 +1,14 @@
+#!/bin/bash
+# Maintainer: Faris Chugthai
+
+# set -euo pipefail
+
+build_tags() {
+    local root
+    root="$(git rev-parse --show-toplevel)"
+    ctags --options="$root/tools/universal_ctags.ctags" .  >/dev/null 2>&1 &
+}
+
+build_tags
+
+exit 0

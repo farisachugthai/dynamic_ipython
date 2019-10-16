@@ -66,7 +66,6 @@ except (ImportError, ModuleNotFoundError):
 else:
     distclass = distutils.command.bdist_conda.CondaDistribution
 
-
 # Metadata: {{{1
 from default_profile.__about__ import __version__
 NAME = 'dynamic_ipython'
@@ -88,7 +87,10 @@ BUILD_PATH = os.path.join(CONF_PATH, 'build')
 SOURCE_PATH = os.path.join(CONF_PATH, 'source')
 
 README = os.path.join(ROOT_PATH, '', 'README.rst')
-REQUIRED = ['IPython>=7.7', 'prompt_toolkit', 'numpy', 'pandas', 'jinja2', 'traitlets', 'pygments']
+REQUIRED = [
+    'IPython>=7.7', 'prompt_toolkit', 'numpy', 'pandas', 'jinja2', 'traitlets',
+    'pygments'
+]
 
 EXTRAS = {
     'develop': ['pipenv', 'flake8>=3.7.1', 'pylint', 'yapf>=0.27.0'],
