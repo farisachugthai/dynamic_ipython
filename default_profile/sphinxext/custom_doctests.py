@@ -49,6 +49,13 @@ should have the following function signature::
 
 Handlers must be registered in the `doctests` dict at the end of this module.
 
+.. :py:data:`doctests`
+
+    Dict that maps handlers to the name that invokes them in rst docs.
+    The key represents the first argument that must be given to `@doctest`
+    in order to activate the handler.
+
+
 """
 
 
@@ -160,8 +167,7 @@ def float_doctest(sphinx_shell, args, input_lines, found, submitted):
         raise RuntimeError(e)
 
 
-# dict of allowable doctest handlers. The key represents the first argument
-# that must be given to @doctest in order to activate the handler.
+# dict of allowable doctest handlers.
 doctest_handlers = {
     'float': float_doctest,
 }

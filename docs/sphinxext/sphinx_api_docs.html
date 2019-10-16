@@ -79,13 +79,13 @@ Out[1]: 2
 In [2]: import datetime
    ...: datetime.datetime.now()
    ...: 
-Out[2]: datetime.datetime(2019, 10, 16, 1, 14, 2, 788196)</pre>
+Out[2]: datetime.datetime(2019, 10, 16, 1, 33, 44, 467225)</pre>
 <p>It supports IPython construct that plain
 Python does not understand (like magics):</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [3]: </span><span class="kn">import</span> <span class="nn">time</span>
 
 <span class="gp">In [4]: </span><span class="o">%</span><span class="k">timeit</span> time.sleep(0.05)
-<span class="go">50.5 ms +- 58.8 us per loop (mean +- std. dev. of 7 runs, 10 loops each)</span>
+<span class="go">59.6 ms +- 390 us per loop (mean +- std. dev. of 7 runs, 10 loops each)</span>
 </pre></div>
 </div>
 <p>This will also support top-level async when using IPython 7.0+</p>
@@ -162,25 +162,25 @@ Matplotlib and set the backend. The value specifies a backend that is
 passed to <code class="xref py py-obj docutils literal notranslate"><span class="pre">matplotlib.use()</span></code> before any lines in <code class="xref py py-obj docutils literal notranslate"><span class="pre">ipython_execlines</span></code> are
 executed. If not specified in conf.py, then the default value of ‘agg’ is
 used. To use the IPython directive without matplotlib as a dependency, set
-the value to <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>. It may end up that matplotlib is still imported
+the value to <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>. It may end up that matplotlib is still imported
 if the user specifies so in <code class="xref py py-obj docutils literal notranslate"><span class="pre">ipython_execlines</span></code> or makes use of the
 &#64;savefig pseudo decorator.</p>
 </dd>
 <dt>ipython_execlines:</dt><dd><p>A list of strings to be exec’d in the embedded Sphinx shell. Typical
 usage is to make certain packages always available. Set this to an empty
 list if you wish to have no imports always available. If specified in
-<code class="docutils literal notranslate"><span class="pre">conf.py</span></code> as <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>, then it has the effect of making no imports available.
+<code class="docutils literal notranslate"><span class="pre">conf.py</span></code> as <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>, then it has the effect of making no imports available.
 If omitted from conf.py altogether, then the default value of
 [‘import numpy as np’, ‘import matplotlib.pyplot as plt’] is used.</p>
 </dd>
 <dt>ipython_holdcount</dt><dd><p>When the &#64;suppress pseudo-decorator is used, the execution count can be
 incremented or not. The default behavior is to hold the execution count,
-corresponding to a value of <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>. Set this to <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a> to increment
+corresponding to a value of <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>. Set this to <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a> to increment
 the execution count after each suppressed command.</p>
 </dd>
 </dl>
 <p>As an example, to use the IPython directive when <code class="xref py py-obj docutils literal notranslate"><span class="pre">matplotlib</span></code> is not available,
-one sets the backend to <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>:</p>
+one sets the backend to <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">ipython_mplbackend</span> <span class="o">=</span> <span class="bp">None</span>
 </pre></div>
 </div>
@@ -248,7 +248,7 @@ data is, depending on the type of token:</p>
 <dl class="class">
 <dt id="IPython.sphinxext.ipython_directive.EmbeddedSphinxShell">
 <em class="property">class </em><code class="sig-name descname">EmbeddedSphinxShell</code><span class="sig-paren">(</span><em class="sig-param">exec_lines=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/IPython/sphinxext/ipython_directive.html#EmbeddedSphinxShell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.EmbeddedSphinxShell" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>An embedded IPython instance to run inside Sphinx</p>
 <dl class="method">
 <dt id="IPython.sphinxext.ipython_directive.EmbeddedSphinxShell.__init__">
@@ -377,7 +377,7 @@ the content as a list as if it were ipython code</p>
 
 <dl class="attribute">
 <dt id="IPython.sphinxext.ipython_directive.IPythonDirective.seen_docs">
-<code class="sig-name descname">seen_docs</code><em class="property"> = {'/data/data/com.termux/files/home/projects/dynamic_ipython/default_profile/extensions/pd_csv.py:docstring of default_profile.extensions.pd_csv', '/data/data/com.termux/files/home/projects/dynamic_ipython/docs/source/kernel.rst', '/data/data/com.termux/files/home/projects/dynamic_ipython/docs/source/sphinxext/custom_doctests.rst', '/data/data/com.termux/files/home/projects/dynamic_ipython/docs/source/sphinxext/ipython_sphinx_directive.rst'}</em><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.IPythonDirective.seen_docs" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">seen_docs</code><em class="property"> = {'C:\\Users\\faris\\projects\\dynamic_ipython\\docs\\source\\kernel.rst', 'C:\\Users\\faris\\projects\\dynamic_ipython\\docs\\source\\sphinxext\\custom_doctests.rst', 'C:\\Users\\faris\\projects\\dynamic_ipython\\docs\\source\\sphinxext\\ipython_sphinx_directive.rst', 'c:\\users\\faris\\projects\\dynamic_ipython\\default_profile\\extensions\\pd_csv.py:docstring of default_profile.extensions.pd_csv'}</em><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/IPython/sphinxext/ipython_directive.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.sphinxext.ipython_directive.IPythonDirective.seen_docs" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
