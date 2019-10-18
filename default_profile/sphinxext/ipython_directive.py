@@ -79,26 +79,33 @@ The configurable options that can be placed in conf.py are:
 ipython_savefig_dir:
     The directory in which to save the figures. This is relative to the
     Sphinx source directory. The default is `html_static_path`.
+
 ipython_rgxin:
     The compiled regular expression to denote the start of IPython input
     lines. The default is ``re.compile('In \\[(\\d+)\\]:\\s?(.*)\\s*')``. You
     shouldn't need to change this.
-ipython_warning_is_error: [default to True]
+
+ipython_warning_is_error:
+    [default to True]
     Fail the build if something unexpected happen, for example if a block raise
     an exception but does not have the `:okexcept:` flag. The exact behavior of
     what is considered strict, may change between the sphinx directive version.
+
 ipython_rgxout:
     The compiled regular expression to denote the start of IPython output
     lines. The default is ``re.compile('Out\\[(\\d+)\\]:\\s?(.*)\\s*')``. You
     shouldn't need to change this.
+
 ipython_promptin:
     The string to represent the IPython input prompt in the generated ReST.
     The default is ``'In [%d]:'``. This expects that the line numbers are used
     in the prompt.
+
 ipython_promptout:
     The string to represent the IPython prompt in the generated ReST. The
     default is ``'Out [%d]:'``. This expects that the line numbers are used
     in the prompt.
+
 ipython_mplbackend:
     The string which specifies if the embedded Sphinx shell should import
     Matplotlib and set the backend. The value specifies a backend that is
@@ -107,7 +114,8 @@ ipython_mplbackend:
     used. To use the IPython directive without matplotlib as a dependency, set
     the value to `None`. It may end up that matplotlib is still imported
     if the user specifies so in `ipython_execlines` or makes use of the
-    @savefig pseudo decorator.
+    `@savefig` pseudo decorator.
+
 ipython_execlines:
     A list of strings to be exec'd in the embedded Sphinx shell. Typical
     usage is to make certain packages always available. Set this to an empty
@@ -163,6 +171,17 @@ or :okwarning: options:
         In [1]: 1/0
         In [2]: # raise warning.
 
+Now also contains a method for documenting traits.
+
+.. :rst:directive::
+
+    .. configtrait:: Application.log_datefmt
+
+        Description goes here.
+
+    Cross reference like this: :configtrait:`Application.log_datefmt`.
+
+
 """
 
 # Authors
@@ -173,15 +192,16 @@ or :okwarning: options:
 # - VáclavŠmilauer <eudoxos-AT-arcig.cz>: Prompt generalizations.
 # - Skipper Seabold, refactoring, cleanups, pure python addition
 
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Imports
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 # Stdlib
 from io import StringIO
 from typing import Any, Dict, List, Tuple
 import ast
 import atexit
+import enum
 import errno
 import os
 import pathlib
@@ -193,19 +213,22 @@ import warnings
 
 # Third-party
 from docutils.parsers.rst import directives
-from docutils.parsers.rst import Directive
+# from docutils.parsers.rst import Directive
+from sphinx.util import logging
+from sphinx.util.docutils import SphinxDirective
 
 # Our own
 from traitlets.config import Config
 from IPython import InteractiveShell
 from IPython.core.profiledir import ProfileDir
 
-use_matplotlib = False
 try:
     import matplotlib
-    use_matplotlib = True
 except Exception:
     pass
+
+logger = logging.getLogger(__name__)
+
 
 class TokenizedBlocks(enum.Enum):
     """TokenizedBlocks(enum.Enum).
@@ -268,7 +291,7 @@ def block_parser(part, rgxin, rgxout, fmtin, fmtout):
         i += 1
         line_stripped = line.strip()
         if line_stripped.startswith('#'):
-            block.append((COMMENT, line))
+            block.append((TokenizedBlocks.COMMENT, line))
             continue
 
         if line_stripped.startswith('@'):
@@ -300,7 +323,8 @@ def block_parser(part, rgxin, rgxout, fmtin, fmtout):
 
                 nextline = lines[i]
                 matchout = rgxout.match(nextline)
-                # print "nextline=%s, continuation=%s, starts=%s"%(nextline, continuation, nextline.startswith(continuation))
+                # print "nextline=%s, continuation=%s, starts=%s"%(nextline,
+                # continuation, nextline.startswith(continuation))
                 if matchout or nextline.startswith('#'):
                     break
                 elif nextline.startswith(continuation):
@@ -314,12 +338,13 @@ def block_parser(part, rgxin, rgxout, fmtin, fmtout):
                     if nextline and nextline[0] == ' ':
                         nextline = nextline[1:]
 
-                    inputline += '\n' +  nextline
+                    inputline += '\n' + nextline
                 else:
                     rest.append(nextline)
                 i += 1
 
-            block.append((INPUT, (decorator, inputline, '\n'.join(rest))))
+            block.append((TokenizedBlocks.INPUT, (decorator, inputline,
+                                                  '\n'.join(rest))))
             continue
 
         # if it looks like an output line grab all the text to the end
@@ -330,13 +355,13 @@ def block_parser(part, rgxin, rgxout, fmtin, fmtout):
             if i < N - 1:
                 output = '\n'.join([output] + lines[i:])
 
-            block.append((OUTPUT, output))
+            block.append((TokenizedBlocks.OUTPUT, output))
             break
 
     return block
 
 
-class EmbeddedSphinxShell(object):
+class EmbeddedSphinxShell:
     """An embedded IPython instance to run inside Sphinx.
 
     Attributes
@@ -393,7 +418,7 @@ class EmbeddedSphinxShell(object):
         # create a profile so instance history isn't saved
         tmp_profile_dir = tempfile.mkdtemp(prefix='profile_')
         profname = 'auto_profile_sphinx_build'
-        pdir = os.path.join(tmp_profile_dir,profname)
+        pdir = os.path.join(tmp_profile_dir, profname)
         profile = ProfileDir.create_profile_dir(pdir)
 
         # Create and initialize global ipython, but don't start its mainloop.
@@ -429,18 +454,24 @@ class EmbeddedSphinxShell(object):
         for line in exec_lines:
             self.process_input_line(line, store_history=False)
 
+        # Saw this way further down and figured give it to the class.
+        TAB = ' ' * 4
+
     def cleanup(self):
+        """Run :func:`shutil.rmtree` on the *tmp_profile_dir*."""
         shutil.rmtree(self.tmp_profile_dir, ignore_errors=True)
 
     def clear_cout(self):
+        """Method of StringIO that calls seek and truncate? Idk."""
         self.cout.seek(0)
         self.cout.truncate(0)
 
     def process_input_line(self, line, store_history):
+        """An unnecessary method that calls process_input_lines."""
         return self.process_input_lines([line], store_history=store_history)
 
     def process_input_lines(self, lines, store_history=True):
-        """process the input, capturing stdout"""
+        """Process the input, capturing :data:`sys.stdout`."""
         stdout = sys.stdout
         source_raw = '\n'.join(lines)
         try:
@@ -491,33 +522,49 @@ class EmbeddedSphinxShell(object):
             arg, val = kwarg.split('=')
             arg = arg.strip()
             val = val.strip()
-            imagerows.append('   :%s: %s'%(arg, val))
+            imagerows.append('   :%s: %s' % (arg, val))
 
-        image_file = os.path.basename(outfile) # only return file name
+        image_file = os.path.basename(outfile)  # only return file name
         image_directive = '\n'.join(imagerows)
         return image_file, image_directive
 
-    # Callbacks for each type of token
+    def output(self):
+        """Redirect info to sys.stdout. Maybe the logger?"""
+
     def process_input(self, data, input_prompt, lineno):
-        """Process data block for INPUT token."""
+        """Process data block for INPUT token.
+
+        Callbacks for each type of token.
+
+        Parameters
+        ----------
+        data : list?
+            Unpacked to decorator, input, rest. Note no star?
+
+            # The "rest" is the standard output of the input. This needs to be
+            # added when in verbatim mode. If there is no "rest", then we don't
+            # add it, as the new line will be added by the processed output.
+
+
+
+        """
         decorator, input, rest = data
         image_file = None
         image_directive = None
 
         is_verbatim = decorator == '@verbatim' or self.is_verbatim
-        is_doctest = (decorator is not None and
-                     decorator.startswith('@doctest')) or self.is_doctest
+        is_doctest = (decorator is not None
+                      and decorator.startswith('@doctest')) or self.is_doctest
         is_suppress = decorator == '@suppress' or self.is_suppress
         is_okexcept = decorator == '@okexcept' or self.is_okexcept
         is_okwarning = decorator == '@okwarning' or self.is_okwarning
-        is_savefig = decorator is not None and \
-                     decorator.startswith('@savefig')
+        is_savefig = decorator is not None and decorator.startswith('@savefig')
 
         input_lines = input.split('\n')
         if len(input_lines) > 1:
             if input_lines[-1] != "":
-                input_lines.append('') # make sure there's a blank line
-                                       # so splitter buffer gets reset
+                input_lines.append('')  # make sure there's a blank line
+                # so splitter buffer gets reset
 
         continuation = '   %s:' % ''.join(['.'] * (len(str(lineno)) + 2))
 
@@ -537,12 +584,11 @@ class EmbeddedSphinxShell(object):
         with warnings.catch_warnings(record=True) as ws:
             if input_lines[0].endswith(';'):
                 is_semicolon = True
-            #for i, line in enumerate(input_lines):
-
+            # for i, line in enumerate(input_lines):
             # process the first input line
             if is_verbatim:
                 self.process_input_lines([''])
-                self.IP.execution_count += 1 # increment it anyway
+                self.IP.execution_count += 1  # increment it anyway
             else:
                 # only submit the line in non-verbatim mode
                 self.process_input_lines(input_lines,
@@ -557,9 +603,6 @@ class EmbeddedSphinxShell(object):
                 ret.append(formatted_line)
 
         if not is_suppress and len(rest.strip()) and is_verbatim:
-            # The "rest" is the standard output of the input. This needs to be
-            # added when in verbatim mode. If there is no "rest", then we don't
-            # add it, as the new line will be added by the processed output.
             ret.append(rest)
 
         # Fetch the processed output. (This is not the submitted output.)
@@ -571,12 +614,12 @@ class EmbeddedSphinxShell(object):
             # Make sure there is a newline after the semicolon.
             ret.append('')
 
-        # context information
-        filename = "Unknown"
-        lineno = 0
         if self.directive.state:
             filename = self.directive.state.document.current_source
             lineno = self.directive.state.document.current_line
+        else:
+            filename = "Unknown"
+            lineno = 0
 
         # output any exceptions raised during execution to stdout
         # unless :okexcept: has been specified.
@@ -619,15 +662,19 @@ class EmbeddedSphinxShell(object):
 
     def process_output(self, data, output_prompt, input_lines, output,
                        is_doctest, decorator, image_file):
-        """Process data block for OUTPUT token."""
-        # Recall: `data` is the submitted output, and `output` is the processed
-        # output from `input_lines`.
+        """Process data block for OUTPUT token.
 
-        TAB = ' ' * 4
+        Recall: `data` is the submitted output, and `output` is the processed
+        output from `input_lines`.
 
+        Raises
+        ------
+        :exc:`RuntimeError`
+
+        """
         if is_doctest and output is not None:
 
-            found = output # This is the processed output
+            found = output  # This is the processed output
             found = found.strip()
             submitted = data.strip()
 
@@ -708,7 +755,7 @@ class EmbeddedSphinxShell(object):
             return [data]
 
     def save_image(self, image_file):
-        """Saves the image file to disk."""
+        """Save the image file to disk."""
         self.ensure_pyplot()
         command = 'plt.gcf().savefig("%s")' % image_file
         # print 'SAVEFIG', command  # dbg
@@ -733,17 +780,16 @@ class EmbeddedSphinxShell(object):
 
         found_input = False
         for token, data in block:
-            if token == COMMENT:
+            if token == TokenizedBlocks.COMMENT:
                 out_data = self.process_comment(data)
-            elif token == INPUT:
+            elif token == TokenizedBlocks.INPUT:
                 found_input = True
-                (out_data, input_lines, output, is_doctest,
-                 decorator, image_file, image_directive) = \
-                          self.process_input(data, input_prompt, lineno)
-            elif token == OUTPUT:
+                (out_data, input_lines, output, is_doctest, decorator,
+                 image_file,
+                 image_directive) = self.process_input(data, input_prompt,
+                                                       lineno)
+            elif token == TokenizedBlocks.OUTPUT:
                 if not found_input:
-
-                    TAB = ' ' * 4
                     linenumber = 0
                     source = 'Unavailable'
                     content = 'Unavailable'
@@ -774,7 +820,7 @@ class EmbeddedSphinxShell(object):
                     # We need to remove the last element of `ret` that was
                     # added in `process_input`, as it is '' and would introduce
                     # an undesirable newline.
-                    assert(ret[-1] == '')
+                    assert (ret[-1] == '')
                     del ret[-1]
 
             if out_data:
@@ -787,7 +833,7 @@ class EmbeddedSphinxShell(object):
         return ret, image_directive
 
     def ensure_pyplot(self):
-        """Ensures that pyplot has been imported into the embedded IPython shell.
+        """Ensure that pyplot has been imported into the embedded IPython shell.
 
         Also, makes sure to set the backend appropriately if not set already.
 
@@ -804,7 +850,7 @@ class EmbeddedSphinxShell(object):
                 # Then ipython_matplotlib was set to None but there was a
                 # call to the @figure decorator (and ipython_execlines did
                 # not set a backend).
-                #raise Exception("No backend was set, but @figure was used!")
+                # raise Exception("No backend was set, but @figure was used!")
                 import matplotlib
                 matplotlib.use('agg')
 
@@ -814,16 +860,18 @@ class EmbeddedSphinxShell(object):
             self._pyplot_imported = True
 
     def process_pure_python(self, content):
-        """
-        content is a list of strings. it is unedited directive content
+        """Content is a list of strings. It is unedited directive content.
 
         This runs it line by line in the InteractiveShell, prepends
         prompts as needed capturing stderr and stdout, then returns
-        the content as a list as if it were ipython code
+        the content as a list as if it were IPython code.
+
+        .. todo:: cyclomatic complexity is 17.
+
         """
         output = []
-        savefig = False # keep up with this to clear figure
-        multiline = False # to handle line continuation
+        savefig = False  # keep up with this to clear figure
+        multiline = False  # to handle line continuation
         multiline_start = None
         fmtin = self.promptin
 
@@ -840,7 +888,7 @@ class EmbeddedSphinxShell(object):
             if line_stripped.startswith('@'):
                 output.extend([line])
                 if 'savefig' in line:
-                    savefig = True # and need to clear figure
+                    savefig = True  # and need to clear figure
                 continue
 
             # handle comments
@@ -849,7 +897,7 @@ class EmbeddedSphinxShell(object):
                 continue
 
             # deal with lines checking for multiline
-            continuation  = u'   %s:'% ''.join(['.']*(len(str(ct))+2))
+            continuation = u'   %s:' % ''.join(['.'] * (len(str(ct)) + 2))
             if not multiline:
                 modified = u"%s %s" % (fmtin % ct, line_stripped)
                 output.append(modified)
@@ -857,10 +905,12 @@ class EmbeddedSphinxShell(object):
                 try:
                     ast.parse(line_stripped)
                     output.append(u'')
-                except Exception: # on a multiline
+                except Exception as e:  # on a multiline
+                    # let's at least note it somehow right?
+                    logger.error(e)
                     multiline = True
                     multiline_start = lineno
-            else: # still on a multiline
+            else:  # still on a multiline
                 modified = u'%s %s' % (continuation, line)
                 output.append(modified)
 
@@ -883,7 +933,7 @@ class EmbeddedSphinxShell(object):
                 except Exception:
                     pass
 
-            if savefig: # clear figure if plotted
+            if savefig:  # clear figure if plotted
                 self.ensure_pyplot()
                 self.process_input_line('plt.clf()', store_history=False)
                 self.clear_cout()
@@ -904,24 +954,28 @@ class EmbeddedSphinxShell(object):
             raise Exception(e)
 
 
-class IPythonDirective(Directive):
+class IPythonDirective(SphinxDirective):
 
     has_content = True
     required_arguments = 0
-    optional_arguments = 4 # python, suppress, verbatim, doctest
+    optional_arguments = 4  # python, suppress, verbatim, doctest
     final_argumuent_whitespace = True
     option_spec = {
         'python': directives.unchanged,
         'suppress': directives.flag,
         'verbatim': directives.flag,
         'doctest': directives.flag,
-                    'okexcept': directives.flag,
-                    'okwarning': directives.flag
-                  }
+        'okexcept': directives.flag,
+        'okwarning': directives.flag
+    }
 
     shell = None
 
     seen_docs = set()
+
+    def __init__(self):
+        """Add an init method to this class."""
+        super().__init__()
 
     def get_config_options(self):
         # contains sphinx configuration variables
@@ -933,11 +987,11 @@ class IPythonDirective(Directive):
         savefig_dir = os.path.join(source_dir, savefig_dir)
 
         # get regex and prompt stuff
-        rgxin      = config.ipython_rgxin
-        rgxout     = config.ipython_rgxout
-        warning_is_error= config.ipython_warning_is_error
-        promptin   = config.ipython_promptin
-        promptout  = config.ipython_promptout
+        rgxin = config.ipython_rgxin
+        rgxout = config.ipython_rgxout
+        warning_is_error = config.ipython_warning_is_error
+        promptin = config.ipython_promptin
+        promptout = config.ipython_promptout
         mplbackend = config.ipython_mplbackend
         exec_lines = config.ipython_execlines
         hold_count = config.ipython_holdcount
@@ -962,7 +1016,7 @@ class IPythonDirective(Directive):
             # EmbeddedSphinxShell is created, its interactive shell member
             # is the same for each instance.
 
-            if mplbackend and 'matplotlib.backends' not in sys.modules and use_matplotlib:
+            if mplbackend and 'matplotlib.backends' not in sys.modules:
                 import matplotlib
                 matplotlib.use(mplbackend)
 
@@ -974,8 +1028,8 @@ class IPythonDirective(Directive):
             self.shell.directive = self
 
         # reset the execution count if we haven't processed this doc
-        #NOTE: this may be borked if there are multiple seen_doc tmp files
-        #check time stamp?
+        # NOTE: this may be borked if there are multiple seen_doc tmp files
+        # check time stamp?
         if not self.state.document.current_source in self.seen_docs:
             self.shell.IP.history_manager.reset()
             self.shell.IP.execution_count = 1
@@ -1007,7 +1061,7 @@ class IPythonDirective(Directive):
     def run(self):
         debug = False
 
-        #TODO, any reason block_parser can't be a method of embeddable shell
+        # TODO, any reason block_parser can't be a method of embeddable shell
         # then we wouldn't have to carry these around
         rgxin, rgxout, promptin, promptout = self.setup()
 
@@ -1042,9 +1096,9 @@ class IPythonDirective(Directive):
                     figures.append(figure)
             else:
                 message = 'Code input with no code at {}, line {}'\
-                            .format(
-                                self.state.document.current_source,
-                                self.state.document.current_line)
+                    .format(
+                        self.state.document.current_source,
+                        self.state.document.current_line)
                 if self.shell.warning_is_error:
                     raise RuntimeError(message)
                 else:
@@ -1098,11 +1152,11 @@ def setup(app: "Sphinx") -> Dict[str, Any]:
     # If the user sets this config value to `None`, then EmbeddedSphinxShell's
     # __init__ method will treat it as [].
     execlines = ['import numpy as np']
-    if use_matplotlib:
+    if matplotlib:
         execlines.append('import matplotlib.pyplot as plt')
     app.add_config_value('ipython_execlines', execlines, 'env')
 
     app.add_config_value('ipython_holdcount', True, 'env')
 
+    app.add_object_type('configtrait', 'configtrait', objname='Config option')
     metadata = {'parallel_read_safe': True, 'parallel_write_safe': True}
- 

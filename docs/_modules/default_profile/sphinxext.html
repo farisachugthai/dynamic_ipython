@@ -81,8 +81,8 @@
 <span class="k">else</span><span class="p">:</span>
     <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()))</span>
 
-
 <span class="c1"># Don&#39;t emit an error on IPython startup if not installed.</span>
+
 
 <div class="viewcode-block" id="ask_for_import"><a class="viewcode-back" href="../../sphinxext/index.html#default_profile.sphinxext.ask_for_import">[docs]</a><span class="k">def</span> <span class="nf">ask_for_import</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">package</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Import a module and return `None` if it&#39;s not found.</span>
@@ -103,13 +103,16 @@
     <span class="k">try</span><span class="p">:</span>
         <span class="n">imported</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">package</span><span class="o">=</span><span class="n">package</span><span class="p">)</span>
     <span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="ne">ModuleNotFoundError</span><span class="p">):</span>
-        <span class="k">pass</span></div>
+        <span class="k">pass</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">imported</span></div>
 
 
 <span class="n">ask_for_import</span><span class="p">(</span><span class="s1">&#39;IPython&#39;</span><span class="p">)</span>
-<span class="k">if</span> <span class="n">ask_for_import</span><span class="p">(</span><span class="s1">&#39;sphinx&#39;</span><span class="p">):</span>
-    <span class="kn">from</span> <span class="nn">default_profile.sphinxext</span> <span class="kn">import</span> <span class="n">configtraits</span>
-    <span class="kn">from</span> <span class="nn">default_profile.sphinxext.magics</span> <span class="kn">import</span> <span class="n">LineMagicRole</span><span class="p">,</span> <span class="n">CellMagicRole</span>
+<span class="k">if</span> <span class="n">ask_for_import</span><span class="p">(</span><span class="s1">&#39;sphinx&#39;</span><span class="p">):</span>  <span class="c1"># noqa F401</span>
+    <span class="kn">from</span> <span class="nn">default_profile.sphinxext</span> <span class="kn">import</span> <span class="n">make</span><span class="p">,</span> <span class="n">custom_doctests</span>  <span class="c1"># noqa F401</span>
+    <span class="kn">from</span> <span class="nn">default_profile.sphinxext.ipython_directive</span> <span class="kn">import</span> <span class="n">EmbeddedSphinxShell</span><span class="p">,</span> <span class="n">IPythonDirective</span>  <span class="c1"># noqa F401</span>
+    <span class="kn">from</span> <span class="nn">default_profile.sphinxext.magics</span> <span class="kn">import</span> <span class="n">LineMagicRole</span><span class="p">,</span> <span class="n">CellMagicRole</span>  <span class="c1"># noqa F401</span>
 </pre></div>
 
           </div>
@@ -142,9 +145,7 @@
 </li>
 
 
-
 <h3><a href="../../index.html">Table of Contents</a></h3>
-
 <div>&nbsp;</div>
 <div id="sidebartoc">
     <p class="caption"><span class="caption-text">Tutorial</span></p>
@@ -164,9 +165,7 @@
 </ul>
 
     
-
 </div>
-
 
 
         </div>
@@ -187,7 +186,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Oct 16, 2019.
+      Last updated on Oct 18, 2019.
     </div>
   </body>
 </html>

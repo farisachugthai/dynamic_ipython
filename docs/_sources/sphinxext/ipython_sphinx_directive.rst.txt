@@ -12,7 +12,10 @@ IPython Sphinx Directive
 
 .. |rst| replace:: reStructured text
 
-The IPython directive is a stateful shell that can be used in |rst| files.
+.. let's see whether references are case sensitive.
+
+The :rst:dir:`IPython` directive is a stateful shell that can be used
+in |rst| files.
 
 The Sphinx project, for those who are unfamiliar, is used
 to create documentation from valid Python source in order to generate HTML.
@@ -60,7 +63,8 @@ The IPython directive takes a number of options detailed here.
 
 
 It's important to note that all of these options can be used for the entire
-directive block or they can decorate individual lines of code.
+directive block or they can decorate individual lines of code as explained
+in :ref:`pseudo-decorators`.
 
 .. todo:: Hmmmm should we document those decorators using the above syntax?
 
@@ -69,8 +73,8 @@ directive block or they can decorate individual lines of code.
 
 .. _ipython-directive-usage:
 
-Directive Usage
-===============
+Usage
+=====
 
 These prompts will be renumbered starting at ``1`` regardless of the actual
 number displayed in the source code.
@@ -109,10 +113,10 @@ will be rendered as:
    bottom of the page.
 
 
-Persisting the session across IPython directive blocks
-======================================================
+Persisting the session across blocks
+====================================
 
-The state from previous code-blocks is stored, and carries over from section
+The state from previous code-blocks is stored and carries over from section
 to section. The IPython shell will maintain and continue to execute in the same
 namespace so long as it remains in the same document.
 

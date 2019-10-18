@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>IPython.sphinxext.custom_doctests &#8212; Dynamic IPython: version0.0.2</title>
+    <title>default_profile.sphinxext.custom_doctests &#8212; Dynamic IPython: version0.0.2</title>
     <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../../_static/copybutton.js"></script>
-    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/IPython/sphinxext/custom_doctests.html" />
+    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/sphinxext/custom_doctests.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
 <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" />
@@ -42,7 +42,8 @@
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../sphinxext.html" accesskey="U">default_profile.sphinxext</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -51,14 +52,13 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-<h1>Source code for IPython.sphinxext.custom_doctests</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Handlers for IPythonDirective&#39;s @doctest pseudo-decorator.</span>
+<h1>Source code for default_profile.sphinxext.custom_doctests</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Handlers for `IPython` Directive&#39;s `@doctest` pseudo-decorator.</span>
 
 <span class="sd">The Sphinx extension that provides support for embedded IPython code provides</span>
-<span class="sd">a pseudo-decorator @doctest, which treats the input/output block as a</span>
-<span class="sd">doctest, raising a RuntimeError during doc generation if the actual output</span>
-<span class="sd">(after running the input) does not match the expected output.</span>
+<span class="sd">a pseudo-decorator `@doctest`, which treats the input/output block as a</span>
+<span class="sd">:mod:`doctest`, raising a :exc:`RuntimeError` during doc generation if the</span>
+<span class="sd">output generated after running the input does not match the provided output.</span>
 
 <span class="sd">An example usage is:</span>
 
@@ -87,26 +87,37 @@
 <span class="sd">allows the actual output ``0.30000000000000004`` to match the expected output</span>
 <span class="sd">due to a comparison with `np.allclose`.</span>
 
-<span class="sd">This module contains handlers for the @doctest pseudo-decorator. Handlers</span>
+<span class="sd">This module contains handlers for the `@doctest` pseudo-decorator. Handlers</span>
 <span class="sd">should have the following function signature::</span>
 
 <span class="sd">    handler(sphinx_shell, args, input_lines, found, submitted)</span>
 
-<span class="sd">where `sphinx_shell` is the embedded Sphinx shell, `args` contains the list</span>
-<span class="sd">of arguments that follow: &#39;@doctest handler_name&#39;, `input_lines` contains</span>
-<span class="sd">a list of the lines relevant to the current doctest, `found` is a string</span>
-<span class="sd">containing the output from the IPython shell, and `submitted` is a string</span>
-<span class="sd">containing the expected output from the IPython shell.</span>
+<span class="sd">- `sphinx_shell` is the embedded Sphinx shell</span>
+
+<span class="sd">- `args` contains the list of arguments that follow: &#39;@doctest handler_name&#39;</span>
+
+<span class="sd">- `input_lines` contains a list of the lines relevant to the current doctest</span>
+
+<span class="sd">- `found` is a string containing the output from the IPython shell</span>
+
+<span class="sd">- `submitted` is a string containing the expected output from the IPython shell.</span>
 
 <span class="sd">Handlers must be registered in the `doctests` dict at the end of this module.</span>
 
+<span class="sd">.. :py:data:`doctests`</span>
+
+<span class="sd">    Dict that maps handlers to the name that invokes them in rst docs.</span>
+<span class="sd">    The key represents the first argument that must be given to `@doctest`</span>
+<span class="sd">    in order to activate the handler.</span>
+
+
 <span class="sd">&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="str_to_array"><a class="viewcode-back" href="../../../sphinxext/custom_doctests.html#IPython.sphinxext.custom_doctests.str_to_array">[docs]</a><span class="k">def</span> <span class="nf">str_to_array</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Simplistic converter of strings from repr to float NumPy arrays.</span>
 
-<span class="sd">    If the repr representation has ellipsis in it, then this will fail.</span>
+<div class="viewcode-block" id="str_to_array"><a class="viewcode-back" href="../../../sphinxext/custom_doctests.html#default_profile.sphinxext.custom_doctests.str_to_array">[docs]</a><span class="k">def</span> <span class="nf">str_to_array</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Simplistic converter of strings from `repr`to `float` `NumPy` arrays.</span>
+
+<span class="sd">    If the `repr` representation has an ellipsis in it, then this will fail.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -123,6 +134,7 @@
 
     <span class="c1"># Need to make sure eval() knows about inf and nan.</span>
     <span class="c1"># This also assumes default printoptions for NumPy.</span>
+    <span class="c1"># Todo: Use their context manager to reset printoptions</span>
     <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">inf</span><span class="p">,</span> <span class="n">nan</span>
 
     <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;array&#39;</span><span class="p">):</span>
@@ -136,10 +148,13 @@
         <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">a</span></div>
 
-<div class="viewcode-block" id="float_doctest"><a class="viewcode-back" href="../../../sphinxext/custom_doctests.html#IPython.sphinxext.custom_doctests.float_doctest">[docs]</a><span class="k">def</span> <span class="nf">float_doctest</span><span class="p">(</span><span class="n">sphinx_shell</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">input_lines</span><span class="p">,</span> <span class="n">found</span><span class="p">,</span> <span class="n">submitted</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Doctest which allow the submitted output to vary slightly from the input.</span>
 
+<div class="viewcode-block" id="float_doctest"><a class="viewcode-back" href="../../../sphinxext/custom_doctests.html#default_profile.sphinxext.custom_doctests.float_doctest">[docs]</a><span class="k">def</span> <span class="nf">float_doctest</span><span class="p">(</span><span class="n">sphinx_shell</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">input_lines</span><span class="p">,</span> <span class="n">found</span><span class="p">,</span> <span class="n">submitted</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Doctest which allow the submitted output to vary slightly from the input.</span>
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
 <span class="sd">    Here is how it might appear in an rst file:</span>
 
 <span class="sd">    .. code-block:: rst</span>
@@ -149,6 +164,10 @@
 <span class="sd">          @doctest float</span>
 <span class="sd">          In [1]: 0.1 + 0.2</span>
 <span class="sd">          Out[1]: 0.3</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    :exc:`RuntimeError`</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
@@ -202,9 +221,9 @@
                      <span class="nb">repr</span><span class="p">(</span><span class="n">submitted</span><span class="p">),</span> <span class="n">TAB</span><span class="o">=</span><span class="n">TAB</span><span class="p">)</span>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">e</span><span class="p">)</span></div>
 
-<span class="c1"># dict of allowable doctest handlers. The key represents the first argument</span>
-<span class="c1"># that must be given to @doctest in order to activate the handler.</span>
-<span class="n">doctests</span> <span class="o">=</span> <span class="p">{</span>
+
+<span class="c1"># dict of allowable doctest handlers.</span>
+<span class="n">doctest_handlers</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;float&#39;</span><span class="p">:</span> <span class="n">float_doctest</span><span class="p">,</span>
 <span class="p">}</span>
 </pre></div>
@@ -232,6 +251,10 @@
     <ul>
       <li><a href="../../index.html">Module code</a>
         <ul>
+      <li><a href="../sphinxext.html">default_profile.sphinxext</a>
+        <ul>
+        </ul>
+      </li>
         </ul>
       </li>
     </ul>
@@ -239,9 +262,7 @@
 </li>
 
 
-
 <h3><a href="../../../index.html">Table of Contents</a></h3>
-
 <div>&nbsp;</div>
 <div id="sidebartoc">
     <p class="caption"><span class="caption-text">Tutorial</span></p>
@@ -261,9 +282,7 @@
 </ul>
 
     
-
 </div>
-
 
 
         </div>
@@ -280,11 +299,12 @@
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../sphinxext.html" >default_profile.sphinxext</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Oct 15, 2019.
+      Last updated on Oct 18, 2019.
     </div>
   </body>
 </html>

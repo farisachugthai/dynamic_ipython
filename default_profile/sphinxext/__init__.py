@@ -27,8 +27,8 @@ if hasattr(locals(), '__path__'):
 else:
     sys.path.insert(0, str(Path(__file__).resolve()))
 
-
 # Don't emit an error on IPython startup if not installed.
+
 
 def ask_for_import(mod, package=None):
     """Import a module and return `None` if it's not found.
@@ -50,9 +50,12 @@ def ask_for_import(mod, package=None):
         imported = importlib.import_module(mod, package=package)
     except (ImportError, ModuleNotFoundError):
         pass
+    else:
+        return imported
 
 
 ask_for_import('IPython')
-if ask_for_import('sphinx'):
-    from default_profile.sphinxext import configtraits
-    from default_profile.sphinxext.magics import LineMagicRole, CellMagicRole
+if ask_for_import('sphinx'):  # noqa F401
+    from default_profile.sphinxext import make, custom_doctests  # noqa F401
+    from default_profile.sphinxext.ipython_directive import EmbeddedSphinxShell, IPythonDirective  # noqa F401
+    from default_profile.sphinxext.magics import LineMagicRole, CellMagicRole  # noqa F401
