@@ -13,6 +13,9 @@ They're still all useful in their current state and when the user is
 running IPython interactively, but none of the scripts havet been fleshed out
 to the extent that they could be easily changed to IPython extensions.
 
+Goals
+=====
+
 Currently the module aims to:
 
 #) Create consistent `logging.Logger` objects
@@ -39,6 +42,7 @@ allow for attribute-style access.
 import logging
 
 from .copytree import CopyTree
+from .ipython_get_history import get_history
 from .machine import Platform
 from .module_log import stream_logger
 from .paths import _path_build, PathValidator

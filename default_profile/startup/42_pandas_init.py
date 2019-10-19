@@ -1,11 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-
+=====================
 Pandas Initialization
 =====================
-
-:URL: https://realpython.com/python-pandas-tricks/#1-configure-options-settings-at-interpreter-startup
 
 As of version 0.25, there's currently a large number of options that can
 be set to modify Pandas' behavior.
@@ -95,6 +93,13 @@ Here's an interesting blurb from pandas/docs/conf.py::
     # wherever the docs are built. The docs' target is the browser, not
     # the console, so this is fine.
     pd.options.display.encoding="utf8"
+
+
+See Also
+--------
+.. seealso::
+
+    https://realpython.com/python-pandas-tricks/#1-configure-options-settings-at-interpreter-startup
 
 """
 import logging

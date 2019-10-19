@@ -64,14 +64,18 @@ import time
 
 # Third party
 import sphinx
+from sphinx.ext.autodoc import cut_lines
+from sphinx.util.docfields import GroupedField
+from sphinx.domains.rst import ReSTDomain
+
 from IPython.lib.lexers import IPyLexer, IPythonTracebackLexer
 from traitlets.config import Config
 
 # On to my imports
 import default_profile
 from default_profile.__about__ import __version__
-from default_profile.startup import *
 from default_profile import extensions, util
+from default_profile.sphinxext import ipython_directive
 
 DOCS = Path(__file__).resolve().parent.parent
 
@@ -121,20 +125,20 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinx.ext.todo',
     'sphinx.ext.viewcode',
-    'IPython.sphinxext.ipython_console_highlighting',
-    'IPython.sphinxext.ipython_directive',
+    # 'IPython.sphinxext.ipython_directive',
+    # 'IPython.sphinxext.ipython_console_highlighting',
+    # i fucked up
+    'default_profile.sphinxext.ipython_directive',
 ]
 
 if ask_for_import('numpydoc'):
     extensions.append('numpydoc.numpydoc')
+    DOCS_LOGGER.info('numpydoc in extensions')
 
 if ask_for_import('default_profile.sphinxext.magics'):
     magics = ask_for_import('default_profile.sphinxext.magics')
     extensions.append('default_profile.sphinxext.magics')
-
-if ask_for_import('default_profile.sphinxext.configtraits'):
-    configtraits = ask_for_import('default_profile.sphinxext.configtraits')
-    extensions.append('default_profile.sphinxext.configtraits')
+    DOCS_LOGGER.info('magics in extensions')
 
 
 # -- General Configuration ----------------------------------------
@@ -149,10 +153,10 @@ templates_path = ['_templates']
 source_suffix = ['.rst']
 
 # The encoding of source files.
-source_encoding = 'utf-8'
+source_encoding = u'utf-8'
 
 # The master toctree document.
-master_doc = 'index'
+master_doc = u'index'
 
 # -- Project information -----------------------------------------------------
 
@@ -182,7 +186,7 @@ release = version
 # non-false value, then it is used:
 # today = ''
 # Else, today_fmt is used as the format for a strftime call.
-today_fmt = '%B %d, %Y'
+today_fmt = u'%B %d, %Y'
 
 
 # The name of the default domain. Can also be None to disable a default domain.
@@ -192,7 +196,7 @@ today_fmt = '%B %d, %Y'
 # domain is C, Python functions will be named “Python function”, not just
 # “function”).
 # New in version 1.0.
-default_domain = 'py'
+default_domain = u'py'
 
 # The name of a reST role (builtin or Sphinx extension) to use as the
 # default role, that is, for text marked up `like this`. This can be set to
@@ -577,10 +581,9 @@ plot_rcparams = {
 
 from sphinx import addnodes  # noqa
 
-event_sig_re = re.compile(r'([a-zA-Z-]+)\s*\((.*)\)')
-
 
 def parse_event(env, sig, signode):
+    event_sig_re = re.compile(r'([a-zA-Z-]+)\s*\((.*)\)')
     m = event_sig_re.match(sig)
     if not m:
         signode += addnodes.desc_name(sig, sig)
@@ -620,28 +623,25 @@ def del_later():
 
 
 def setup(app):
-    """Add pyramid CSS to the docs.
+    """ Add in jinja templates to the site.
 
-    Add in jinja templates to the site.
+    Add IPython lexers from IPython and Sphinx's use of `confval` to the docs.
+    Listen for the autodoc-process-docstring event and trim docstring lines.
 
-    Add IPython lexers from IPython.
-
-    Add Sphinx's use of `confval` to the docs.
-
-    Add css files.
+    Add the :any:`directive` directive for the sphinx extensions themselves.
+    This requires adding the ReSTDomain.
 
     """
+    DOCS_LOGGER.info('Initializing the Sphinx instance.')
     app.connect("source-read", rstjinja)
     app.add_lexer('ipythontb', IPythonTracebackLexer)
     app.add_lexer('ipy', IPyLexer)
-
-    from sphinx.ext.autodoc import cut_lines
-    from sphinx.util.docfields import GroupedField
     app.connect('autodoc-process-docstring', cut_lines(4, what=['module']))
     app.add_object_type('confval', 'confval',
                         objname='configuration value',
                         indextemplate='pair: %s; configuration value')
 
+    app.add_domain(ReSTDomain)
     fdesc = GroupedField('parameter', label='Parameters',
                          names=['param'], can_collapse=True)
     app.add_object_type('event', 'event', 'pair: %s; event', parse_event,
@@ -651,3 +651,4 @@ def setup(app):
     # app.add_css_file('pygments.css')
     # There's a html.addjsfile call earlier in the file
     # app.add_js_file('copybutton.js')
+    app.add_object_type('directive', 'dir', 'pair: %s; directive'))

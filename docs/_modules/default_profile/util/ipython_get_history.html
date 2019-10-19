@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta charset="utf-8" />
+  <title>default_profile.util.ipython_get_history &#8212; Dynamic IPython: version0.0.2</title>
+  <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
+  <script type="text/javascript" id="documentation_options" data-url_root="../../../"
+    src="../../../_static/documentation_options.js"></script>
+  <script type="text/javascript" src="../../../_static/jquery.js"></script>
+  <script type="text/javascript" src="../../../_static/underscore.js"></script>
+  <script type="text/javascript" src="../../../_static/doctools.js"></script>
+  <script type="text/javascript" src="../../../_static/language_data.js"></script>
+  <script type="text/javascript" src="../../../_static/copybutton.js"></script>
+  <link rel="canonical"
+    href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/util/ipython_get_history.html" />
+  <link rel="index" title="Index" href="../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../search.html" />
+  <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet"
+    type="text/css" />
+  <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic"
+    media="screen" rel="stylesheet" type="text/css" />
+  <link rel='stylesheet' href='//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.css'>
+  <!--[if lte IE 6]>
+  <link
+    rel="stylesheet"
+    href="../../../_static/ie6.css"
+    type="text/css"
+    media="screen"
+    charset="utf-8"
+  />
+<![endif]-->
+
+</head>
+
+<body>
+
+  <div class="related" role="navigation" aria-label="related navigation">
+    <h3>Navigation</h3>
+    <ul>
+      <li class="right" style="margin-right: 10px">
+        <a href="../../../genindex.html" title="General Index" accesskey="I">index</a></li>
+      <li class="right">
+        <a href="../../../py-modindex.html" title="Python Module Index">modules</a> |</li>
+      <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython</a> &#187;</li>
+      <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+    </ul>
+  </div>
+
+  <div class="document">
+    <div class="documentwrapper">
+      <div class="bodywrapper">
+        <div class="body" role="main">
+
+          <h1>Source code for default_profile.util.ipython_get_history</h1>
+          <div class="highlight">
+            <pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="sa">r</span><span class="sd">&quot;&quot;&quot;Extract a session from the IPython input history.</span>
+
+<span class="sd">Usage</span>
+<span class="sd">-----</span>
+<span class="sd">.. program:: ipython_get_history.py sessionnumber [outputfile]</span>
+
+<span class="sd">If &#39;outputfile&#39; is not given, the relevant history is written to</span>
+<span class="sd">:data:`sys.stdout.` If &#39;outputfile&#39; has a *.py* extension,</span>
+<span class="sd">the translated history (without IPython&#39;s special syntax) will be extracted.</span>
+
+
+<span class="sd">Examples</span>
+<span class="sd">--------</span>
+
+<span class="sd">.. code-block:: bash</span>
+
+<span class="sd">  python3 ipython-get-history.py 57 record.ipy</span>
+
+<span class="sd">This script is a simple demonstration of</span>
+<span class="sd">:class:`IPython.core.history.HistoryAccessor`. It should be possible</span>
+<span class="sd">to build much more flexible and powerful tools to browse and pull from the</span>
+<span class="sd">history database.</span>
+
+<span class="sd">So this is a rewrite of that history accessor since IPython&#39;s handling of</span>
+<span class="sd">history sessions out of the box is oddly limited.</span>
+
+<span class="sd">Let&#39;s ignore the direct calls to sys.argv and combine argparse and the</span>
+<span class="sd">magic_argparse functions to make something more durable and useful.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">from</span> <span class="nn">IPython.core.history</span> <span class="kn">import</span> <span class="n">HistoryAccessor</span>
+
+
+<div class="viewcode-block" id="get_history"><a class="viewcode-back" href="../../../util/ipython_get_history.html#default_profile.util.ipython_get_history.get_history">[docs]</a><span class="k">def</span> <span class="nf">get_history</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;TODO: Docstring for main.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    arg1 : TODO</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    TODO</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">session_number</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">dest</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+        <span class="n">raw</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.py&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">dest</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
+        <span class="n">raw</span> <span class="o">=</span> <span class="bp">True</span>
+
+    <span class="k">with</span> <span class="n">dest</span><span class="p">:</span>
+        <span class="n">dest</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;# coding: utf-8</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Profiles other than &#39;default&#39; can be specified here with a profile= argument:</span>
+        <span class="n">hist</span> <span class="o">=</span> <span class="n">HistoryAccessor</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">session</span><span class="p">,</span> <span class="n">lineno</span><span class="p">,</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">hist</span><span class="o">.</span><span class="n">get_range</span><span class="p">(</span><span class="n">session</span><span class="o">=</span><span class="n">session_number</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="n">raw</span><span class="p">):</span>
+            <span class="n">cell</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>  <span class="c1"># This line is only needed on Python 2.</span>
+        <span class="n">dest</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">cell</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</pre>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebarwrapper">
+        <div id="searchbox" style="display: none" role="search">
+          <h3>Quick search</h3>
+          <div class="searchformwrapper">
+            <form class="search" action="../../../search.html" method="get">
+              <input type="text" name="q" />
+              <input type="submit" value="Go" />
+            </form>
+          </div>
+        </div>
+        <script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+        <h3>Related Topics</h3>
+        <ul>
+          <li><a href="../../../index.html">Documentation overview</a>
+            <ul>
+              <li><a href="../../index.html">Module code</a>
+                <ul>
+                </ul>
+              </li>
+            </ul>
+        </ul>
+        </li>
+
+
+        <h3><a href="../../../index.html">Table of Contents</a></h3>
+        <div>&nbsp;</div>
+        <div id="sidebartoc">
+          <p class="caption"><span class="caption-text">Tutorial</span></p>
+          <ul>
+            <li class="toctree-l1"><a class="reference internal" href="../../../jobcontrol.html">Job Control</a></li>
+            <li class="toctree-l1"><a class="reference internal" href="../../../subcommands.html">Subcommands</a></li>
+            <li class="toctree-l1"><a class="reference internal" href="../../../sphinxext/index.html">Sphinx
+                Extensions</a></li>
+            <li class="toctree-l1"><a class="reference internal" href="../../../dev.html">Developers Notes</a></li>
+          </ul>
+          <p class="caption"><span class="caption-text">API</span></p>
+          <ul>
+            <li class="toctree-l1"><a class="reference internal" href="../../../startup/index.html">IPython Startup</a>
+            </li>
+            <li class="toctree-l1"><a class="reference internal" href="../../../util/index.html">IPython Utilities</a>
+            </li>
+            <li class="toctree-l1"><a class="reference internal" href="../../../kernel.html">IPython Kernel</a></li>
+            <li class="toctree-l1"><a class="reference internal" href="../../../jupyter/index.html">Jupyter</a></li>
+            <li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Extensions</a></li>
+          </ul>
+
+
+        </div>
+
+
+      </div>
+    </div>
+    <div class="clearer"></div>
+  </div>
+  <div class="related" role="navigation" aria-label="related navigation">
+    <h3>Navigation</h3>
+    <ul>
+      <li class="right" style="margin-right: 10px">
+        <a href="../../../genindex.html" title="General Index">index</a></li>
+      <li class="right">
+        <a href="../../../py-modindex.html" title="Python Module Index">modules</a> |</li>
+      <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython</a> &#187;</li>
+      <li class="nav-item nav-item-1"><a href="../../index.html">Module code</a> &#187;</li>
+    </ul>
+  </div>
+  <div class="footer" role="contentinfo">
+    Last updated on Oct 18, 2019.
+  </div>
+</body>
+
+</html>

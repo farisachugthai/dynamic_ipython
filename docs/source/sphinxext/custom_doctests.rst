@@ -4,6 +4,9 @@
 Custom Doctests
 ====================
 
+.. module:: default_profile.sphinxext.custom_doctests
+   :synopsis: Add options to the doctest directive.
+
 The extension supports a few limited parameters to configure the running
 shell. These parameters are exposed as reStructured text options to the
 ``.. ipython`` directive, decorators for the source code directly, and
@@ -126,31 +129,27 @@ due to a comparison with `numpy.allclose`.
 
 This is detailed in the module :mod:`IPython.sphinxext.custom_doctests`.
 
-Handlers should have the following function signature::
+This module contains handlers for the `@doctest` pseudo-decorator. Handlers
+should have the following function signature:
 
-    handler(sphinx_shell, args, input_lines, found, submitted)
+.. function:: handler(sphinx_shell, args, input_lines, found, submitted)
 
+    Modify the :rst:directiv:`doctest` and the document state.
 
-.. glossary::
-
-   sphinx_shell
-      Embedded Sphinx shell
-
-   args
-      The list of arguments that follow '@doctest handler_name',
-
-   input_lines
-      A list of the lines relevant to the current doctest,
-
-   found
-      A string containing the output from the IPython shell
-
-   submitted
-      A string containing the expected output from the IPython shell.
-
+    :param sphinx_shell: the embedded Sphinx shell
+    :param list args: contains the list of arguments that follow: '@doctest handler_name'
+    :param list input_lines: contains a list of the lines relevant to the current doctest
+    :param str found: is a string containing the output from the IPython shell
+    :param str submitted: is a string containing the expected output from the IPython shell.
 
 Handlers must be registered in the `doctests` dict at the end of the
 :mod:`~IPython.sphinxext.custom_doctests` module.
+
+.. py:data:: doctests
+
+    Dict that maps handlers to the name that invokes them in rst docs.
+    The key represents the first argument that must be given to `@doctest`
+    in order to activate the handler.
 
 .. todo:: doctest handlers
 
@@ -165,6 +164,10 @@ But here's the sauce::
        'float': float_doctest,
    }
 
+
+
+Multi-Line Input and Output
+---------------------------
 
 Another demonstration of multi-line input and output.:
 
@@ -213,7 +216,7 @@ the inputs::
    In [144]: from matplotlib.pylab import *
    In [145]: ion()
 
-Likewise, you can set ``:doctest:`` or ``:verbatim:`` to apply these
+Likewise, you can set `:doctest:` or `:verbatim:` to apply these
 settings to the entire block.  For example,
 
 .. ipython::
@@ -296,7 +299,6 @@ Then call it from a subsequent section.
    In [4]: square(3)
    Out [4]: 9
 
-   
 API Docs
 =========
 

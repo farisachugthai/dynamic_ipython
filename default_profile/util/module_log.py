@@ -13,10 +13,21 @@ imported and utilized across the package.
 Currently :func:`~default_profile.util.module_log.stream_logger`
 is the easiest and most oft used entry point in this module.
 
-.. doctest::
+Raises
+------
+:exc:`NoUnNamedLoggers`
+    Exception raised when a function in this module is called without a
+    name argument for the logger.
+
+Doctest
+-------
+.. testsetup::
 
     >>> import logging
     >>> import default_profile
+
+.. doctest::
+
     >>> from default_profile.util import module_log
     >>> module_log.stream_logger(logging.getLogger(__name__))
 
@@ -31,6 +42,16 @@ from datetime import datetime
 
 import IPython
 from IPython import get_ipython
+
+
+class NoUnNamedLoggers(NotImplementedError):
+    """Raise this error if the logger a function was called with was anonymous."""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(self, *args, **kwargs)
+
+    def __call__(self):
+        return ''.format('You did not provide a name for the logger.')
 
 
 def stream_logger(logger, log_level=logging.INFO, msg_format=None):
@@ -61,11 +82,12 @@ def stream_logger(logger, log_level=logging.INFO, msg_format=None):
     >>> LOGGER = stream_logger(logging.getLogger(name=__name__))
 
     """
-
     if isinstance(logger, str):
         logger = logging.getLogger(logger)
     elif isinstance(logger, logging.Logger):
         pass
+    else:
+        raise NoUnNamedLoggers()
 
     # TODO: Come up with else. What if they pass a string?
     if isinstance(log_level, int):

@@ -1,6 +1,5 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# flake8: noqa
 """
 This imports a few utility functions from :mod:`IPython` and imports the python
 package neovim is served in.
@@ -48,6 +47,11 @@ class DeepReload:
         extra_excludes : set of str, optional
             Extra modules to exclude from `IPython.lib.deepreload.dreload`.
 
+        Returns
+        -------
+        set of modules
+            Modules that were *excluded* from being erased from the namespace.
+
         """
         if extra_excludes is not None:
             return _reload(mod, self.excludes + set(extra_excludes))
@@ -62,6 +66,11 @@ def easy_import(mod):
     any valid alphanumeric string can be passed without crashing the
     interpreter.
 
+    .. caution::
+
+        Raising :exc:`ImportError` not :exc:`ModuleNotFoundError`
+        may render the try/catch useless on python3.7>=.
+
     Parameters
     ----------
     mod : str
@@ -73,13 +82,18 @@ def easy_import(mod):
         Imported module. Specifically used for neovim in this instance but can
         be interactively used for any module the user needs to import.
 
+    Raises
+    ------
+    :exc:`ImportError`
+        If the module isn't imported.
+
     """
     try:
         return import_module(mod)
     except ImportError:
         print("************************************************************")
-        print("{} import failed. Only ignore this if you plan on going"
-              " the entire session without using it".format(mod))
+        print("{} import failed. Only ignore this if you plan on going".format(mod))
+        print(" the entire session without using it")
         print("************************************************************")
 
 

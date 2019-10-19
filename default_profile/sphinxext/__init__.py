@@ -55,7 +55,10 @@ def ask_for_import(mod, package=None):
 
 
 ask_for_import('IPython')
-if ask_for_import('sphinx'):  # noqa F401
-    from default_profile.sphinxext import make, custom_doctests  # noqa F401
-    from default_profile.sphinxext.ipython_directive import EmbeddedSphinxShell, IPythonDirective  # noqa F401
-    from default_profile.sphinxext.magics import LineMagicRole, CellMagicRole  # noqa F401
+
+if ask_for_import('default_profile'):
+
+    if ask_for_import('sphinx'):
+        from default_profile.sphinxext import make, custom_doctests  # noqa F401
+        from default_profile.sphinxext.ipython_directive import EmbeddedSphinxShell, IPythonDirective  # noqa F401
+        from default_profile.sphinxext.magics import LineMagicRole, CellMagicRole  # noqa F401

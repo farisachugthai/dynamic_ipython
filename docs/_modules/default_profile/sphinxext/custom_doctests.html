@@ -60,56 +60,15 @@
 <span class="sd">:mod:`doctest`, raising a :exc:`RuntimeError` during doc generation if the</span>
 <span class="sd">output generated after running the input does not match the provided output.</span>
 
-<span class="sd">An example usage is:</span>
+<span class="sd">Requires</span>
+<span class="sd">--------</span>
+<span class="sd">numpy</span>
+<span class="sd">    Although not mentioned, both exported functions import numpy immediately.</span>
 
-<span class="sd">.. code-block:: rst</span>
-
-<span class="sd">   .. ipython::</span>
-
-<span class="sd">        In [1]: x = 1</span>
-
-<span class="sd">        @doctest</span>
-<span class="sd">        In [2]: x + 2</span>
-<span class="sd">        Out[3]: 3</span>
-
-<span class="sd">One can also provide arguments to the decorator. The first argument should be</span>
-<span class="sd">the name of a custom handler. The specification of any other arguments is</span>
-<span class="sd">determined by the handler. For example,</span>
-
-<span class="sd">.. code-block:: rst</span>
-
-<span class="sd">      .. ipython::</span>
-
-<span class="sd">         @doctest float</span>
-<span class="sd">         In [154]: 0.1 + 0.2</span>
-<span class="sd">         Out[154]: 0.3</span>
-
-<span class="sd">allows the actual output ``0.30000000000000004`` to match the expected output</span>
-<span class="sd">due to a comparison with `np.allclose`.</span>
-
-<span class="sd">This module contains handlers for the `@doctest` pseudo-decorator. Handlers</span>
-<span class="sd">should have the following function signature::</span>
-
-<span class="sd">    handler(sphinx_shell, args, input_lines, found, submitted)</span>
-
-<span class="sd">- `sphinx_shell` is the embedded Sphinx shell</span>
-
-<span class="sd">- `args` contains the list of arguments that follow: &#39;@doctest handler_name&#39;</span>
-
-<span class="sd">- `input_lines` contains a list of the lines relevant to the current doctest</span>
-
-<span class="sd">- `found` is a string containing the output from the IPython shell</span>
-
-<span class="sd">- `submitted` is a string containing the expected output from the IPython shell.</span>
-
-<span class="sd">Handlers must be registered in the `doctests` dict at the end of this module.</span>
-
-<span class="sd">.. :py:data:`doctests`</span>
-
-<span class="sd">    Dict that maps handlers to the name that invokes them in rst docs.</span>
-<span class="sd">    The key represents the first argument that must be given to `@doctest`</span>
-<span class="sd">    in order to activate the handler.</span>
-
+<span class="sd">Raises</span>
+<span class="sd">------</span>
+<span class="sd">:exc:`RuntimeError`</span>
+<span class="sd">    If an error is observed in the doctest.</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 
@@ -221,11 +180,11 @@
                      <span class="nb">repr</span><span class="p">(</span><span class="n">submitted</span><span class="p">),</span> <span class="n">TAB</span><span class="o">=</span><span class="n">TAB</span><span class="p">)</span>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">e</span><span class="p">)</span></div>
 
-
 <span class="c1"># dict of allowable doctest handlers.</span>
 <span class="n">doctest_handlers</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;float&#39;</span><span class="p">:</span> <span class="n">float_doctest</span><span class="p">,</span>
 <span class="p">}</span>
+
 </pre></div>
 
           </div>

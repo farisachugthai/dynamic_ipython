@@ -3,17 +3,17 @@ r"""Extract a session from the IPython input history.
 
 Usage
 -----
-.. program:: ipython_get_history
-
-    ipython-get-history.py sessionnumber [outputfile]
+.. program:: ipython_get_history.py sessionnumber [outputfile]
 
 If 'outputfile' is not given, the relevant history is written to
 :data:`sys.stdout.` If 'outputfile' has a *.py* extension,
 the translated history (without IPython's special syntax) will be extracted.
 
-Example:
 
-.. code-block:: console
+Examples
+--------
+
+.. code-block:: bash
 
   python3 ipython-get-history.py 57 record.ipy
 
@@ -34,7 +34,7 @@ import sys
 from IPython.core.history import HistoryAccessor
 
 
-def main():
+def get_history():
     """TODO: Docstring for main.
 
     Parameters

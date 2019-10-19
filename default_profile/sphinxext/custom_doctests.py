@@ -5,56 +5,15 @@ a pseudo-decorator `@doctest`, which treats the input/output block as a
 :mod:`doctest`, raising a :exc:`RuntimeError` during doc generation if the
 output generated after running the input does not match the provided output.
 
-An example usage is:
+Requires
+--------
+numpy
+    Although not mentioned, both exported functions import numpy immediately.
 
-.. code-block:: rst
-
-   .. ipython::
-
-        In [1]: x = 1
-
-        @doctest
-        In [2]: x + 2
-        Out[3]: 3
-
-One can also provide arguments to the decorator. The first argument should be
-the name of a custom handler. The specification of any other arguments is
-determined by the handler. For example,
-
-.. code-block:: rst
-
-      .. ipython::
-
-         @doctest float
-         In [154]: 0.1 + 0.2
-         Out[154]: 0.3
-
-allows the actual output ``0.30000000000000004`` to match the expected output
-due to a comparison with `np.allclose`.
-
-This module contains handlers for the `@doctest` pseudo-decorator. Handlers
-should have the following function signature::
-
-    handler(sphinx_shell, args, input_lines, found, submitted)
-
-- `sphinx_shell` is the embedded Sphinx shell
-
-- `args` contains the list of arguments that follow: '@doctest handler_name'
-
-- `input_lines` contains a list of the lines relevant to the current doctest
-
-- `found` is a string containing the output from the IPython shell
-
-- `submitted` is a string containing the expected output from the IPython shell.
-
-Handlers must be registered in the `doctests` dict at the end of this module.
-
-.. :py:data:`doctests`
-
-    Dict that maps handlers to the name that invokes them in rst docs.
-    The key represents the first argument that must be given to `@doctest`
-    in order to activate the handler.
-
+Raises
+------
+:exc:`RuntimeError`
+    If an error is observed in the doctest.
 
 """
 
@@ -166,8 +125,8 @@ def float_doctest(sphinx_shell, args, input_lines, found, submitted):
                      repr(submitted), TAB=TAB)
         raise RuntimeError(e)
 
-
 # dict of allowable doctest handlers.
 doctest_handlers = {
     'float': float_doctest,
 }
+

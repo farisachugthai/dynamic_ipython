@@ -140,24 +140,29 @@
 <span class="sd">    lines. The default is ``re.compile(&#39;In \\[(\\d+)\\]:\\s?(.*)\\s*&#39;)``. You</span>
 <span class="sd">    shouldn&#39;t need to change this.</span>
 
-<span class="sd">ipython_warning_is_error:</span>
-<span class="sd">    [default to True]</span>
-<span class="sd">    Fail the build if something unexpected happen, for example if a block raise</span>
-<span class="sd">    an exception but does not have the `:okexcept:` flag. The exact behavior of</span>
-<span class="sd">    what is considered strict, may change between the sphinx directive version.</span>
-
 <span class="sd">ipython_rgxout:</span>
 <span class="sd">    The compiled regular expression to denote the start of IPython output</span>
 <span class="sd">    lines. The default is ``re.compile(&#39;Out\\[(\\d+)\\]:\\s?(.*)\\s*&#39;)``. You</span>
 <span class="sd">    shouldn&#39;t need to change this.</span>
 
+<span class="sd">ipython_warning_is_error:</span>
+<span class="sd">    [default to True]</span>
+<span class="sd">    Oh. This must be :data:`block_parser.rgxin`. Wow.</span>
+<span class="sd">    Fail the build if something unexpected happen, for example if a block raise</span>
+<span class="sd">    an exception but does not have the `:okexcept:` flag. The exact behavior of</span>
+<span class="sd">    what is considered strict, may change between the sphinx directive version.</span>
+
+<span class="sd">.. caution:: ipython_warning_is_error</span>
+
+<span class="sd">    [Defaults to True]</span>
+
 <span class="sd">ipython_promptin:</span>
-<span class="sd">    The string to represent the IPython input prompt in the generated ReST.</span>
+<span class="sd">    The string to represent the IPython input prompt in the generated rst.</span>
 <span class="sd">    The default is ``&#39;In [%d]:&#39;``. This expects that the line numbers are used</span>
 <span class="sd">    in the prompt.</span>
 
 <span class="sd">ipython_promptout:</span>
-<span class="sd">    The string to represent the IPython prompt in the generated ReST. The</span>
+<span class="sd">    The string to represent the IPython prompt in the generated rst. The</span>
 <span class="sd">    default is ``&#39;Out [%d]:&#39;``. This expects that the line numbers are used</span>
 <span class="sd">    in the prompt.</span>
 
@@ -167,7 +172,11 @@
 <span class="sd">    passed to `matplotlib.use()` before any lines in `ipython_execlines` are</span>
 <span class="sd">    executed. If not specified in conf.py, then the default value of &#39;agg&#39; is</span>
 <span class="sd">    used. To use the IPython directive without matplotlib as a dependency, set</span>
-<span class="sd">    the value to `None`. It may end up that matplotlib is still imported</span>
+<span class="sd">    the value to `None`.</span>
+
+<span class="sd">.. warning::</span>
+
+<span class="sd">    It may end up that matplotlib is still imported</span>
 <span class="sd">    if the user specifies so in `ipython_execlines` or makes use of the</span>
 <span class="sd">    `@savefig` pseudo decorator.</span>
 
@@ -176,11 +185,15 @@
 <span class="sd">    usage is to make certain packages always available. Set this to an empty</span>
 <span class="sd">    list if you wish to have no imports always available. If specified in</span>
 <span class="sd">    ``conf.py`` as `None`, then it has the effect of making no imports available.</span>
-<span class="sd">    If omitted from conf.py altogether, then the default value of</span>
-<span class="sd">    [&#39;import numpy as np&#39;, &#39;import matplotlib.pyplot as plt&#39;] is used.</span>
+
+<span class="sd">    If omitted from conf.py altogether, then the default value of:</span>
+
+<span class="sd">        [&#39;import numpy as np&#39;, &#39;import matplotlib.pyplot as plt&#39;]</span>
+
+<span class="sd">    is used.</span>
 
 <span class="sd">ipython_holdcount</span>
-<span class="sd">    When the @suppress pseudo-decorator is used, the execution count can be</span>
+<span class="sd">    When the `@suppress` pseudo-decorator is used, the execution count can be</span>
 <span class="sd">    incremented or not. The default behavior is to hold the execution count,</span>
 <span class="sd">    corresponding to a value of `True`. Set this to `False` to increment</span>
 <span class="sd">    the execution count after each suppressed command.</span>
@@ -271,16 +284,19 @@
 <span class="c1"># from docutils.parsers.rst import Directive</span>
 <span class="kn">from</span> <span class="nn">sphinx.util</span> <span class="kn">import</span> <span class="n">logging</span>
 <span class="kn">from</span> <span class="nn">sphinx.util.docutils</span> <span class="kn">import</span> <span class="n">SphinxDirective</span>
+<span class="kn">from</span> <span class="nn">sphinx</span> <span class="kn">import</span> <span class="n">highlighting</span>
 
 <span class="c1"># Our own</span>
 <span class="kn">from</span> <span class="nn">traitlets.config</span> <span class="kn">import</span> <span class="n">Config</span>
 <span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">InteractiveShell</span>
 <span class="kn">from</span> <span class="nn">IPython.core.profiledir</span> <span class="kn">import</span> <span class="n">ProfileDir</span>
+<span class="kn">from</span> <span class="nn">IPython.lib.lexers</span> <span class="kn">import</span> <span class="n">IPyLexer</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">matplotlib</span>
 <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-    <span class="k">pass</span>
+    <span class="n">matplotlib</span> <span class="o">=</span> <span class="bp">None</span>
+
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
@@ -289,6 +305,20 @@
     <span class="sd">&quot;&quot;&quot;TokenizedBlocks(enum.Enum).</span>
 
 <span class="sd">    Subclasses the Enumeration class to create distinct global values.</span>
+
+<span class="sd">    COMMENT : str</span>
+<span class="sd">        The comment string.</span>
+
+<span class="sd">    INPUT : ?</span>
+<span class="sd">        the (DECORATOR, INPUT_LINE, REST) where</span>
+<span class="sd">         DECORATOR: the input decorator (or None)</span>
+<span class="sd">         INPUT_LINE: the input as string (possibly multi-line)</span>
+<span class="sd">         REST : any stdout generated by the input line (not OUTPUT)</span>
+
+<span class="sd">    OUTPUT : str</span>
+<span class="sd">        The output string, possibly multi-line.</span>
+
+<span class="sd">    Why was this in the `block_parser` docstring?</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">COMMENT</span> <span class="o">=</span> <span class="mi">0</span>
@@ -308,27 +338,24 @@
 <span class="sd">    ----------</span>
 <span class="sd">    part : str</span>
 <span class="sd">        A string of IPython text, comprised of at most one input,</span>
-<span class="sd">        one output, comments, and blank lines.  The block parser</span>
-<span class="sd">        parses the text into a list of 2-element tuples. I.E.::</span>
+<span class="sd">        one output, comments, and blank lines.</span>
+
+<span class="sd">    rgxin : probably an :class:`re.Pattern` of some kind from :mod:`re`.</span>
+<span class="sd">    rgxout : wasn&#39;t documented. Actally I think it&#39;s those ipython_rgx* params</span>
+<span class="sd">    fmtin :</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    blocks : list of 2 element tuples</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The block parser parses the text into a list of 2-element tuples. I.E.:</span>
 
 <span class="sd">      blocks = [ (TOKEN0, data0), (TOKEN1, data1), ...]</span>
 
-<span class="sd">        where *TOKEN* is one of [ COMMENT | INPUT | OUTPUT ].</span>
-<span class="sd">        Those terms are defined as:</span>
-
-<span class="sd">    COMMENT : str</span>
-<span class="sd">        The comment string.</span>
-
-<span class="sd">    INPUT : ?</span>
-<span class="sd">        the (DECORATOR, INPUT_LINE, REST) where</span>
-<span class="sd">         DECORATOR: the input decorator (or None)</span>
-<span class="sd">         INPUT_LINE: the input as string (possibly multi-line)</span>
-<span class="sd">         REST : any stdout generated by the input line (not OUTPUT)</span>
-
-<span class="sd">    OUTPUT : str</span>
-<span class="sd">        The output string, possibly multi-line</span>
-
-<span class="sd">        *data* is, depending on the type of token::</span>
+<span class="sd">    where *TOKEN* is one of the attributes of `TokenizedBlocks`, namely</span>
+<span class="sd">    :attr:`COMMENT`, :attr:`INPUT`, :attr:`OUTPUT`.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">block</span> <span class="o">=</span> <span class="p">[]</span>
@@ -513,8 +540,12 @@
         <span class="n">TAB</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span> <span class="o">*</span> <span class="mi">4</span></div>
 
 <div class="viewcode-block" id="EmbeddedSphinxShell.cleanup"><a class="viewcode-back" href="../../../sphinxext/sphinx_api_docs.html#default_profile.sphinxext.ipython_directive.EmbeddedSphinxShell.cleanup">[docs]</a>    <span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Run :func:`shutil.rmtree` on the *tmp_profile_dir*.&quot;&quot;&quot;</span>
-        <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tmp_profile_dir</span><span class="p">,</span> <span class="n">ignore_errors</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span></div>
+        <span class="sd">&quot;&quot;&quot;Teardown function that removes :attr:`tmp_profile_dir`.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tmp_profile_dir</span><span class="p">,</span> <span class="n">ignore_errors</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span></div>
+
 
 <div class="viewcode-block" id="EmbeddedSphinxShell.clear_cout"><a class="viewcode-back" href="../../../sphinxext/sphinx_api_docs.html#default_profile.sphinxext.ipython_directive.EmbeddedSphinxShell.clear_cout">[docs]</a>    <span class="k">def</span> <span class="nf">clear_cout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Method of StringIO that calls seek and truncate? Idk.&quot;&quot;&quot;</span>
@@ -522,7 +553,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">cout</span><span class="o">.</span><span class="n">truncate</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="EmbeddedSphinxShell.process_input_line"><a class="viewcode-back" href="../../../sphinxext/sphinx_api_docs.html#default_profile.sphinxext.ipython_directive.EmbeddedSphinxShell.process_input_line">[docs]</a>    <span class="k">def</span> <span class="nf">process_input_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">store_history</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;An unnecessary method that calls process_input_lines.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;An unnecessary method that calls process_input_lines.</span>
+
+<span class="sd">        Refer to &#39;process_input_lines&#39; for signature.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process_input_lines</span><span class="p">([</span><span class="n">line</span><span class="p">],</span> <span class="n">store_history</span><span class="o">=</span><span class="n">store_history</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="EmbeddedSphinxShell.process_input_lines"><a class="viewcode-back" href="../../../sphinxext/sphinx_api_docs.html#default_profile.sphinxext.ipython_directive.EmbeddedSphinxShell.process_input_lines">[docs]</a>    <span class="k">def</span> <span class="nf">process_input_lines</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lines</span><span class="p">,</span> <span class="n">store_history</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
@@ -550,6 +584,9 @@
 <span class="sd">        .. :rst:directive:option:: savefig</span>
 
 <span class="sd">            :savefig: somefile.png width=4in</span>
+
+
+<span class="sd">        But literally why does this exist? Doesn&#39;t sphinx natively handle this?</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -583,8 +620,10 @@
         <span class="n">image_directive</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">imagerows</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">image_file</span><span class="p">,</span> <span class="n">image_directive</span></div>
 
-<div class="viewcode-block" id="EmbeddedSphinxShell.output"><a class="viewcode-back" href="../../../sphinxext/sphinx_api_docs.html#default_profile.sphinxext.ipython_directive.EmbeddedSphinxShell.output">[docs]</a>    <span class="k">def</span> <span class="nf">output</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Redirect info to sys.stdout. Maybe the logger?&quot;&quot;&quot;</span></div>
+<div class="viewcode-block" id="EmbeddedSphinxShell.status"><a class="viewcode-back" href="../../../sphinxext/sphinx_api_docs.html#default_profile.sphinxext.ipython_directive.EmbeddedSphinxShell.status">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">status</span><span class="p">(</span><span class="n">output</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Print output in bold.&quot;&quot;&quot;</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[1m{0}</span><span class="se">\033</span><span class="s1">[0m&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">output</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="EmbeddedSphinxShell.process_input"><a class="viewcode-back" href="../../../sphinxext/sphinx_api_docs.html#default_profile.sphinxext.ipython_directive.EmbeddedSphinxShell.process_input">[docs]</a>    <span class="k">def</span> <span class="nf">process_input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">input_prompt</span><span class="p">,</span> <span class="n">lineno</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Process data block for INPUT token.</span>
@@ -1184,10 +1223,11 @@
     <span class="sd">&quot;&quot;&quot;Enable as a proper Sphinx directive.</span>
 
 <span class="sd">    Add config values using the Sphinx api. Alternatively,</span>
-<span class="sd">    I think we can add these into the namespace using docutils.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">setup</span><span class="o">.</span><span class="n">app</span> <span class="o">=</span> <span class="n">app</span>
+<span class="sd">    I think we can add these into the namespace using docutils and their</span>
+<span class="sd">    `directives`.</span>
 
+<span class="sd">    Also add typing support.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">app</span><span class="o">.</span><span class="n">add_directive</span><span class="p">(</span><span class="s1">&#39;ipython&#39;</span><span class="p">,</span> <span class="n">IPythonDirective</span><span class="p">)</span>
     <span class="n">app</span><span class="o">.</span><span class="n">add_config_value</span><span class="p">(</span><span class="s1">&#39;ipython_savefig_dir&#39;</span><span class="p">,</span> <span class="s1">&#39;savefig&#39;</span><span class="p">,</span> <span class="s1">&#39;env&#39;</span><span class="p">)</span>
     <span class="n">app</span><span class="o">.</span><span class="n">add_config_value</span><span class="p">(</span><span class="s1">&#39;ipython_warning_is_error&#39;</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="s1">&#39;env&#39;</span><span class="p">)</span>
@@ -1214,7 +1254,19 @@
     <span class="n">app</span><span class="o">.</span><span class="n">add_config_value</span><span class="p">(</span><span class="s1">&#39;ipython_holdcount&#39;</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="s1">&#39;env&#39;</span><span class="p">)</span>
 
     <span class="n">app</span><span class="o">.</span><span class="n">add_object_type</span><span class="p">(</span><span class="s1">&#39;configtrait&#39;</span><span class="p">,</span> <span class="s1">&#39;configtrait&#39;</span><span class="p">,</span> <span class="n">objname</span><span class="o">=</span><span class="s1">&#39;Config option&#39;</span><span class="p">)</span>
-    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;parallel_read_safe&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="s1">&#39;parallel_write_safe&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span></div>
+
+
+    <span class="c1"># Let&#39;s see if i can get rid of ipython_console_highlighting as an extension by adding this in</span>
+    <span class="n">ipy2</span> <span class="o">=</span> <span class="n">IPyLexer</span><span class="p">(</span><span class="n">python3</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">ipy3</span> <span class="o">=</span> <span class="n">IPyLexer</span><span class="p">(</span><span class="n">python3</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="n">highlighting</span><span class="o">.</span><span class="n">lexers</span><span class="p">[</span><span class="s1">&#39;ipython&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ipy2</span>
+    <span class="n">highlighting</span><span class="o">.</span><span class="n">lexers</span><span class="p">[</span><span class="s1">&#39;ipython2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ipy2</span>
+    <span class="n">highlighting</span><span class="o">.</span><span class="n">lexers</span><span class="p">[</span><span class="s1">&#39;ipython3&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ipy3</span>
+
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;parallel_read_safe&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="s1">&#39;parallel_write_safe&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">metadata</span></div>
 </pre></div>
 
           </div>
