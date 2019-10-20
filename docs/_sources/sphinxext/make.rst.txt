@@ -2,9 +2,6 @@
 Make --- Automated Documentation Builder
 ========================================
 
-.. module:: default_profile.sphinxext.make
-   :synopsis: Automated documentation builder.
-
 Usage
 ------
 
@@ -70,7 +67,7 @@ API
 ===
 
 .. automodule:: default_profile.sphinxext.make
-   :synopsis: Make docs
+   :synopsis: Automated documentation builder.
    :members:
    :undoc-members:
    :show-inheritance:

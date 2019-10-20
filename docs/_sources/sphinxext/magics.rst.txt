@@ -4,7 +4,7 @@
 :mod:`~default_profile.sphinxext.magics`
 =========================================
 
-Document magics using the :rst:directive:`magic` directive.
+Document magics using the :rst:dir:`magic` directive.
 
 .. automodule:: default_profile.sphinxext.magics
    :synopsis: adding the magic directive to sphinx.

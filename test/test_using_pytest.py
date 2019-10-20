@@ -41,5 +41,6 @@ def main():
 
     pytest.importorskip()
 
+
 if __name__ == "__main__":
-    sys.exit(main())
+    main()

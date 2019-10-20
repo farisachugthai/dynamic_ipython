@@ -59,8 +59,8 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-<div class="section" id="module-default_profile.sphinxext.custom_doctests">
-<span id="id1"></span><span id="custom-doctests"></span><h1>Custom Doctests<a class="headerlink" href="#module-default_profile.sphinxext.custom_doctests" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="custom-doctests">
+<span id="id1"></span><h1>Custom Doctests<a class="headerlink" href="#custom-doctests" title="Permalink to this headline">¶</a></h1>
 <p>The extension supports a few limited parameters to configure the running
 shell. These parameters are exposed as reStructured text options to the
 <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">ipython</span></code> directive, decorators for the source code directly, and
@@ -131,9 +131,9 @@ due to a comparison with <a class="reference external" href="https://docs.scipy.
 <p>This module contains handlers for the <code class="xref py py-obj docutils literal notranslate"><span class="pre">&#64;doctest</span></code> pseudo-decorator. Handlers
 should have the following function signature:</p>
 <dl class="function">
-<dt id="default_profile.sphinxext.custom_doctests.handler">
-<code class="sig-name descname">handler</code><span class="sig-paren">(</span><em class="sig-param">sphinx_shell</em>, <em class="sig-param">args</em>, <em class="sig-param">input_lines</em>, <em class="sig-param">found</em>, <em class="sig-param">submitted</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/sphinxext/custom_doctests.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.sphinxext.custom_doctests.handler" title="Permalink to this definition">¶</a></dt>
-<dd><p>Modify the <a href="#id2"><span class="problematic" id="id3">:rst:directiv:`doctest`</span></a> and the document state.</p>
+<dt id="handler">
+<code class="sig-name descname">handler</code><span class="sig-paren">(</span><em class="sig-param">sphinx_shell</em>, <em class="sig-param">args</em>, <em class="sig-param">input_lines</em>, <em class="sig-param">found</em>, <em class="sig-param">submitted</em><span class="sig-paren">)</span><a class="headerlink" href="#handler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modify the <code class="xref rst rst-dir docutils literal notranslate"><span class="pre">doctest</span></code> and the document state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul>
@@ -147,17 +147,17 @@ should have the following function signature:</p>
 </dl>
 </dd></dl>
 
-<p>Handlers must be registered in the <a class="reference internal" href="#default_profile.sphinxext.custom_doctests.doctests" title="default_profile.sphinxext.custom_doctests.doctests"><code class="xref py py-obj docutils literal notranslate"><span class="pre">doctests</span></code></a> dict at the end of the
+<p>Handlers must be registered in the <a class="reference internal" href="#doctests" title="doctests"><code class="xref py py-obj docutils literal notranslate"><span class="pre">doctests</span></code></a> dict at the end of the
 <code class="xref py py-mod docutils literal notranslate"><span class="pre">custom_doctests</span></code> module.</p>
 <dl class="data">
-<dt id="default_profile.sphinxext.custom_doctests.doctests">
-<code class="sig-name descname">doctests</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/sphinxext/custom_doctests.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.sphinxext.custom_doctests.doctests" title="Permalink to this definition">¶</a></dt>
+<dt id="doctests">
+<code class="sig-name descname">doctests</code><a class="headerlink" href="#doctests" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dict that maps handlers to the name that invokes them in rst docs.
 The key represents the first argument that must be given to <code class="xref py py-obj docutils literal notranslate"><span class="pre">&#64;doctest</span></code>
 in order to activate the handler.</p>
 </dd></dl>
 
-<div class="admonition-todo admonition" id="id4">
+<div class="admonition-todo admonition" id="id2">
 <p class="admonition-title">Todo</p>
 <p>doctest handlers</p>
 <p>I quite honestly don’t know how you’re supposed to add handlers
@@ -250,18 +250,18 @@ page in <a class="reference internal" href="ipython_sphinx_directive.html#pseudo
 <span class="gp">In [10]: </span><span class="n">hist</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">10000</span><span class="p">),</span> <span class="mi">100</span><span class="p">);</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href=".._imagesplot_simple.png"><img alt=".._imagesplot_simple.png" src=".._imagesplot_simple.png" style="width: 4in;" /></a>
-<a class="reference internal image-reference" href=".._imageshist_simple.png"><img alt=".._imageshist_simple.png" src=".._imageshist_simple.png" style="width: 4in;" /></a>
+<a class="reference internal image-reference" href="../_images/plot_simple.png"><img alt="../_images/plot_simple.png" src="../_images/plot_simple.png" style="width: 4in;" /></a>
+<a class="reference internal image-reference" href="../_images/hist_simple.png"><img alt="../_images/hist_simple.png" src="../_images/hist_simple.png" style="width: 4in;" /></a>
 <p>In a subsequent session, we can update the current figure with some
 text, and then resave.:</p>
 <pre class="literal-block">In [11]: ylabel('number')
-Out[11]: Text(39.597222222222214, 0.5, 'number')
+Out[11]: Text(38.097222222222214, 0.5, 'number')
 
 In [12]: title('normal distribution')
 Out[12]: Text(0.5, 1, 'normal distribution')
 
 In [13]: grid(True)</pre>
-<a class="reference internal image-reference" href=".._imageshist_with_text.png"><img alt=".._imageshist_with_text.png" src=".._imageshist_with_text.png" style="width: 4in;" /></a>
+<a class="reference internal image-reference" href="../_images/hist_with_text.png"><img alt="../_images/hist_with_text.png" src="../_images/hist_with_text.png" style="width: 4in;" /></a>
 <p>You can also have function definitions included in the source.</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [14]: </span><span class="k">def</span> <span class="nf">square</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 <span class="gp">   ....: </span>    <span class="sd">&quot;&quot;&quot;</span>
@@ -447,7 +447,7 @@ output generated after running the input does not match the provided output.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Oct 18, 2019.
+      Last updated on Oct 20, 2019.
     </div>
   </body>
 </html>

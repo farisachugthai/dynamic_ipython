@@ -81,11 +81,6 @@ DOCS = Path(__file__).resolve().parent.parent
 
 # Logging
 DOCS_LOGGER = logging.getLogger('docs.source').getChild('conf')
-DOCS_LOGGER.setLevel(level=logging.DEBUG)
-CONF_HANDLER = logging.StreamHandler(stream=sys.stdout)
-CONF_HANDLER.setFormatter(logging.Formatter())
-CONF_HANDLER.setLevel(logging.DEBUG)
-DOCS_LOGGER.addHandler(CONF_HANDLER)
 
 
 def ask_for_import(mod):
@@ -125,10 +120,10 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinx.ext.todo',
     'sphinx.ext.viewcode',
-    # 'IPython.sphinxext.ipython_directive',
-    # 'IPython.sphinxext.ipython_console_highlighting',
+    'IPython.sphinxext.ipython_directive',
+    'IPython.sphinxext.ipython_console_highlighting',
     # i fucked up
-    'default_profile.sphinxext.ipython_directive',
+    # 'default_profile.sphinxext.ipython_directive',
 ]
 
 if ask_for_import('numpydoc'):
@@ -641,7 +636,8 @@ def setup(app):
                         objname='configuration value',
                         indextemplate='pair: %s; configuration value')
 
-    app.add_domain(ReSTDomain)
+    # already added and raises an error
+    # app.add_domain(ReSTDomain)
     fdesc = GroupedField('parameter', label='Parameters',
                          names=['param'], can_collapse=True)
     app.add_object_type('event', 'event', 'pair: %s; event', parse_event,
@@ -651,4 +647,4 @@ def setup(app):
     # app.add_css_file('pygments.css')
     # There's a html.addjsfile call earlier in the file
     # app.add_js_file('copybutton.js')
-    app.add_object_type('directive', 'dir', 'pair: %s; directive'))
+    app.add_object_type('directive', 'dir', 'pair: %s; directive')

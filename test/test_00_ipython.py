@@ -26,8 +26,10 @@ class TestIPython(unittest.TestCase):
             self.shell = start_ipython()
 
     def test_ipython(self):
-        """Produces unexpected results. TODO."""
-        #print(type(self.shell))
+
+
+g       """Produces unexpected results. TODO."""
+        # print(type(self.shell))
         # self.assertIsInstance(self.shell, IPython.core.interactiveshell.InteractiveShell)
         self.assertIsInstance(self.shell, str)
 

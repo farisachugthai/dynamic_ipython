@@ -4,9 +4,6 @@
 Custom Doctests
 ====================
 
-.. module:: default_profile.sphinxext.custom_doctests
-   :synopsis: Add options to the doctest directive.
-
 The extension supports a few limited parameters to configure the running
 shell. These parameters are exposed as reStructured text options to the
 ``.. ipython`` directive, decorators for the source code directly, and
@@ -134,7 +131,7 @@ should have the following function signature:
 
 .. function:: handler(sphinx_shell, args, input_lines, found, submitted)
 
-    Modify the :rst:directiv:`doctest` and the document state.
+    Modify the :rst:dir:`doctest` and the document state.
 
     :param sphinx_shell: the embedded Sphinx shell
     :param list args: contains the list of arguments that follow: '@doctest handler_name'
@@ -303,7 +300,7 @@ API Docs
 =========
 
 .. automodule:: default_profile.sphinxext.custom_doctests
-   :synopsis: Custom doctests in rst docs.
+   :synopsis: Custom doctests in rst docs. Add options to the doctest directive.
    :members:
    :undoc-members:
    :show-inheritance:

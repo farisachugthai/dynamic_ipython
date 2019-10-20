@@ -4,10 +4,6 @@
 Sphinx extensions
 =================
 
-.. module:: default_profile.sphinxext
-   :synopsis: Sphinx extensions
-
-
 .. _sphinxext-package:
 
 Package Contents

@@ -41,6 +41,8 @@ except ImportError as e:
     warnings.warn(e)
 
 import default_profile
+from dynamic_ipython.test.test_00_ipython import TestIPython
+# from default_profile.test.test_20_aliases import
 
 
 def setup_test_logging():

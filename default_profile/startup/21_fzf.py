@@ -44,7 +44,7 @@ class Executable:
                 func(*args, **kwargs)
 
 
-def __setup_fzf(user_aliases):
+def setup_fzf(user_aliases):
     """Needs a good deal of work.
 
     On second thought this function has some potential. Or at least it

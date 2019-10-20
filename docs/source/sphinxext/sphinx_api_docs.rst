@@ -33,7 +33,7 @@ a side-note.
 
 In :func:`EmbeddedSphinxShell.run`, the elements of `ret` are eventually
 combined such that '' entries correspond to newlines. So if
-`processed_output` is equal to '', then the adding it to `ret`
+`processed_output` is equal to :kbd:`''`, then the adding it to `ret`
 ensures that there is a blank line between consecutive inputs
 that have no outputs, as in::
 
@@ -52,7 +52,7 @@ between consecutive input/output blocks, as in::
    Out[2]: 5
 
 When there is :data:`sys.stdout` from the input, it also has a '\n' at the
-tail end, and so this ensures proper spacing as well. E.g.:
+tail end, and so this ensures proper spacing as well. E.g.::
 
    In [1]: print x
    5

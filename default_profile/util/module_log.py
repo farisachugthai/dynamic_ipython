@@ -220,7 +220,7 @@ class JsonFormatter(logging.Formatter):
         )
 
 
-def betterConfig():
+def betterConfig(name=None, parent=None):
     """Similar to logging.basicConfig().
 
     Parameters
@@ -239,7 +239,10 @@ def betterConfig():
 
     """
     logging.BASIC_FORMAT = '%(created)f : %(levelname)s : %(module)s : %(message)s : '
-    better_logger = logging.getLogger()
+    if parent:
+        better_logger = logging.getLogger(name=name).getChild(parent)
+    else:
+        better_logger = logging.getLogger(name=name)
     better_logger.setLevel(logging.WARNING)
 
     better_stream = logging.StreamHandler()
