@@ -30,7 +30,6 @@ indicating to me none of these lines run. Why is that?
 """
 import logging
 import os
-from os.path import abspath, dirname, join
 import pkgutil
 # from pkg_resources import declare_namespace
 from setuptools import find_packages, find_namespace_packages
@@ -41,7 +40,7 @@ from default_profile.__about__ import *
 
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
-REPO_ROOT = dirname(abspath(__file__))
+REPO_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 # This kills everything on termux and makes run pytest or tox in the root
 # of this repo impossible. hmmmmm.

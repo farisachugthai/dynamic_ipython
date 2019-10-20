@@ -35,14 +35,16 @@ sphinx_fs = SphinxFileSystemLoader(searchpath=TEMPLATES_PATH)
 
 
 def _setup_make_logging():
-    logging.BASIC_FORMAT = '%(created)f : %(module)s : %(levelname)s : %(message)s'
+    """Setup the logging. Add a filter with no args to allow everything."""
+    BASIC_FORMAT = '%(created)f : %(module)s : %(levelname)s : %(message)s'
 
-    logger = logging.getLogger(name='docs').getChild('make')
+    logger = logging.getLogger(name='docs.sphinxext').getChild('make')
     logger.setLevel(logging.DEBUG)
     make_handler = logging.StreamHandler(stream=sys.stdout)
     make_handler.setLevel(logging.DEBUG)
-    make_handler.setFormatter(logging.Formatter(fmt=logging.BASIC_FORMAT))
+    make_handler.setFormatter(logging.Formatter(fmt=BASIC_FORMAT))
     logger.addHandler(make_handler)
+    logger.addFilter(logging.Filter())
     return logger
 
 

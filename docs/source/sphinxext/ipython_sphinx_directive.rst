@@ -444,8 +444,6 @@ one sets the backend to `None`::
     ipython_mplbackend = None
 
 
-To view the API documentation, continue reading at :ref:`sphinx_api_docs`.
-
 See Also
 ---------
 
