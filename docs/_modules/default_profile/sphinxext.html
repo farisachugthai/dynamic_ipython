@@ -71,9 +71,12 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">importlib</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">pkgutil</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">sphinxext_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;docs&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">getChild</span><span class="p">(</span><span class="s1">&#39;sphinxext&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">())</span>
 
 <span class="c1"># How to check the current namespace</span>
 <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="nb">locals</span><span class="p">(),</span> <span class="s1">&#39;__path__&#39;</span><span class="p">):</span>
@@ -114,7 +117,7 @@
 
     <span class="k">if</span> <span class="n">ask_for_import</span><span class="p">(</span><span class="s1">&#39;sphinx&#39;</span><span class="p">):</span>
         <span class="kn">from</span> <span class="nn">default_profile.sphinxext</span> <span class="kn">import</span> <span class="n">make</span><span class="p">,</span> <span class="n">custom_doctests</span>  <span class="c1"># noqa F401</span>
-        <span class="kn">from</span> <span class="nn">default_profile.sphinxext.ipython_directive</span> <span class="kn">import</span> <span class="n">EmbeddedSphinxShell</span><span class="p">,</span> <span class="n">IPythonDirective</span>  <span class="c1"># noqa F401</span>
+        <span class="c1"># from default_profile.sphinxext.ipython_directive import EmbeddedSphinxShell, IPythonDirective  # noqa F401</span>
         <span class="kn">from</span> <span class="nn">default_profile.sphinxext.magics</span> <span class="kn">import</span> <span class="n">LineMagicRole</span><span class="p">,</span> <span class="n">CellMagicRole</span>  <span class="c1"># noqa F401</span>
 </pre></div>
 
@@ -153,17 +156,52 @@
 <div id="sidebartoc">
     <p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../sphinxext/index.html">Sphinx Extensions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../sphinxext/ipython_sphinx_directive.html">1 IPython Sphinx Directive</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../sphinxext/lexer.html">2 New IPython Console Lexer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../sphinxext/custom_doctests.html">3 Custom Doctests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../sphinxext/configtraits.html">4 <code class="xref py py-mod docutils literal notranslate"><span class="pre">configtraits</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../sphinxext/magics.html">5 <code class="xref py py-mod docutils literal notranslate"><span class="pre">magics</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../sphinxext/make.html">6 Make — Automated Documentation Builder</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev.html">Developers Notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../jobcontrol.html">Job Control</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../subcommands.html">Subcommands</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../sphinxext/index.html">Sphinx Extensions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../dev.html">Developers Notes</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../startup/index.html">IPython Startup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../util/index.html">IPython Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../startup/index.html">IPython Startup</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../startup/rehashx.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">01_rehashx</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../startup/easy_import.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">04_easy_import</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../startup/ipython-logger.html">05_log — IPython logger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../startup/help_helpers.html">06_Help_Helpers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../startup/aliases.html">System Aliases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../startup/fzf.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">21_fzf</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../startup/setup_readline.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">30_setup_readline</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../startup/41_numpy.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">numpy</span></code> Initialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../startup/42_pandas.html">Pandas Initialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../startup/matplotlib_rc.html">Matplotlib Startup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../startup/sysexcept.html">Customized Exceptions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../util/index.html">IPython Utilities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../util/copytree.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">copytree</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../util/ipython_get_history.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ipython_get_history</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../util/machine.html">machine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../util/module_log.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">module_log</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../util/pager2.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pager2</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../util/paths.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paths</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../util/profile_override.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">profile_override</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../util/timer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">timer</span></code> module</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../../kernel.html">IPython Kernel</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../jupyter/index.html">Jupyter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../jupyter/index.html">Jupyter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../jupyter/qtconsole.html">Jupyter QTConsole</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../jupyter/notebook.html">Jupyter Notebook</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../../extensions.html">Extensions</a></li>
 </ul>
 
@@ -189,7 +227,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Oct 20, 2019.
+      Last updated on Oct 22, 2019.
     </div>
   </body>
 </html>

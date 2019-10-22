@@ -1,143 +1,98 @@
+
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>
-      default_profile.extensions.job_control &#8212; Dynamic IPython:
-      version0.0.2
-    </title>
-    <link
-      rel="stylesheet"
-      href="../../../_static/pyramid.css"
-      type="text/css"
-    />
-    <link
-      rel="stylesheet"
-      href="../../../_static/pygments.css"
-      type="text/css"
-    />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="../../../_static/graphviz.css"
-    />
-    <script
-      type="text/javascript"
-      id="documentation_options"
-      data-url_root="../../../"
-      src="../../../_static/documentation_options.js"
-    ></script>
+    <title>default_profile.extensions.job_control &#8212; Dynamic IPython: version0.0.2</title>
+    <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script
-      type="text/javascript"
-      src="../../../_static/underscore.js"
-    ></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script
-      type="text/javascript"
-      src="../../../_static/language_data.js"
-    ></script>
-    <script
-      type="text/javascript"
-      src="../../../_static/copybutton.js"
-    ></script>
-    <link
-      rel="canonical"
-      href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/extensions/job_control.html"
-    />
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
+    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/extensions/job_control.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
+<link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" />
+<link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" media="screen" rel="stylesheet" type="text/css" />
+<link rel='stylesheet' href='//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.css'>
+<!--[if lte IE 6]>
+  <link
+    rel="stylesheet"
+    href="../../../_static/ie6.css"
+    type="text/css"
+    media="screen"
+    charset="utf-8"
+  />
+<![endif]-->
 
-    <link
-      href="https://fonts.googleapis.com/css?family=Source+Code+Pro"
-      type="text/css"
-      charset="utf-8"
-      rel="stylesheet"
-    />
+  </head><body>
 
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css?family=Hack&amp;subset=latin"
-      charset="utf-8"
-      type="text/css"
-    />
-
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css?family=Hack:regular,italic,bold,bolditalic&amp;subset=latin"
-      type="text/css"
-      media="screen"
-      charset="utf-8"
-    />
-
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic"
-      type="text/css"
-      media="screen"
-      charset="utf-8"
-    />
-
-    <!--[if lte IE 6]>
-      <link
-        rel="stylesheet"
-        href="../../../_static/ie6.css"
-        type="text/css"
-        media="screen"
-        charset="utf-8"
-      />
-    <![endif]-->
-  </head>
-  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../../../genindex.html" title="General Index" accesskey="I"
-            >index</a
-          >
-        </li>
-        <li class="right">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
-            >modules</a
-          >
-          |
-        </li>
-        <li class="nav-item nav-item-0">
-          <a href="../../../index.html">Dynamic IPython</a> &#187;
-        </li>
-        <li class="nav-item nav-item-1">
-          <a href="../../index.html" accesskey="U">Module code</a> &#187;
-        </li>
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
-    </div>
+    </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
           <div class="body" role="main">
-            <h1>Source code for default_profile.extensions.job_control</h1>
-            <div class="highlight">
-              <pre>
+            
+<h1>Source code for default_profile.extensions.job_control</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">shlex</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">import</span> <span class="nn">threading</span>
-<span class="kn">import</span> <span class="nn">queue</span>
-<span class="kn">from</span> <span class="nn">queue</span> <span class="kn">import</span> <span class="n">Queue</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Todo:</span>
 
-<span class="kn">from</span> <span class="nn">subprocess</span> <span class="kn">import</span> <span class="n">PIPE</span><span class="p">,</span> <span class="n">Popen</span>
+<span class="sd">(dynamic_ipython) 02:32:23 u0_a144@localhost Mon Oct 07 ~/projects/dynamic_ipython/default_profile/profile_debugger</span>
+
+<span class="sd">$: ipdb3 ../extensions/job_control.py -c pdbrc</span>
+<span class="sd">&gt; /data/data/com.termux/files/home/projects/dynamic_ipython/default_profile/extensions/job_control.py(3)&lt;module&gt;() 2</span>
+<span class="sd"># -*- coding: utf- 8 -*-</span>
+<span class="sd">----&gt; 3 import os</span>
+<span class="sd">4 import shlex</span>
+
+<span class="sd">ipdb&gt; c</span>
+
+<span class="sd">Warning! Hook &#39;input_prefilter&#39; is not one of [&#39;editor&#39;, &#39;synchronize_with_editor&#39;,</span>
+<span class="sd">&#39;shutdown_hook&#39;, &#39;late_startup_hook&#39;, &#39;show_in_pager&#39;, &#39;pre_prompt_hook&#39;,</span>
+<span class="sd">&#39;pre_run_code_hook&#39;, &#39;clipboard_get&#39;]</span>
+
+<span class="sd">Warning! Hook &#39;shell_hook&#39; is not one of [&#39;editor&#39;, &#39;synchronize_with_editor&#39;,</span>
+<span class="sd">&#39;shutdown_hook&#39;, &#39;late_startup_hook&#39;, &#39;show_in_pager&#39;, &#39;pre_prompt_hook&#39;,</span>
+<span class="sd">&#39;pre_run_code_hook&#39;, &#39;clipboard_get&#39;]</span>
+
+<span class="sd">The program finished and will be restarted</span>
+
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">queue</span>
+<span class="kn">import</span> <span class="nn">shlex</span>
 <span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">subprocess</span> <span class="kn">import</span> <span class="n">PIPE</span><span class="p">,</span> <span class="n">Popen</span><span class="p">,</span> <span class="n">STDOUT</span>
 
 <span class="kn">import</span> <span class="nn">ipython_genutils</span>
-
 <span class="c1"># import IPython.ipapi</span>
 <span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
-<span class="c1"># TODO: Find TryNext</span>
+
+
 <span class="c1"># from IPython.lib.editor</span>
 
 
@@ -194,9 +149,11 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">out</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="AsyncJobQ.add"><a class="viewcode-back" href="../../../jobcontrol.html#default_profile.extensions.job_control.AsyncJobQ.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Would this be better implemented as the dunder ``__add__``?&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="o">.</span><span class="n">put_nowait</span><span class="p">((</span><span class="n">cmd</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()))</span></div>
 
 <div class="viewcode-block" id="AsyncJobQ.dumpoutput"><a class="viewcode-back" href="../../../jobcontrol.html#default_profile.extensions.job_control.AsyncJobQ.dumpoutput">[docs]</a>    <span class="k">def</span> <span class="nf">dumpoutput</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Would this be better implemented as the ``__iter__`` dunder?&quot;&quot;&quot;</span>
         <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">:</span>
             <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
             <span class="k">print</span><span class="p">(</span><span class="n">item</span><span class="p">)</span></div></div>
@@ -206,7 +163,9 @@
     <span class="sd">&quot;&quot;&quot;Create a jobqueue.&quot;&quot;&quot;</span>
     <span class="k">global</span> <span class="n">_jobq</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">_jobq</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Starting jobqueue - do &#39;&amp;some_long_lasting_system_command&#39; to enqueue&quot;</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span>
+            <span class="s2">&quot;Starting jobqueue - do &#39;&amp;some_long_lasting_system_command&#39; to enqueue&quot;</span>
+        <span class="p">)</span>
         <span class="n">_jobq</span> <span class="o">=</span> <span class="n">AsyncJobQ</span><span class="p">()</span>
         <span class="n">_jobq</span><span class="o">.</span><span class="n">setDaemon</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
         <span class="n">_jobq</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
@@ -228,8 +187,9 @@
 
         <span class="n">line</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">IP</span><span class="o">.</span><span class="n">expand_aliases</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">rest</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">_jobq</span><span class="p">:</span>
-            <span class="k">return</span> <span class="s1">&#39;_ip.startjob(</span><span class="si">%s</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="n">genutils</span><span class="o">.</span><span class="n">make_quoted_expr</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-        <span class="k">return</span> <span class="s1">&#39;_ip.jobq(</span><span class="si">%s</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="n">genutils</span><span class="o">.</span><span class="n">make_quoted_expr</span><span class="p">(</span><span class="n">line</span><span class="p">)</span></div>
+            <span class="c1"># Idk if that method is in ipython_genutils</span>
+            <span class="k">return</span> <span class="s1">&#39;_ip.startjob(</span><span class="si">%s</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="n">ipython_genutils</span><span class="o">.</span><span class="n">make_quoted_expr</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s1">&#39;_ip.jobq(</span><span class="si">%s</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="n">ipython_genutils</span><span class="o">.</span><span class="n">make_quoted_expr</span><span class="p">(</span><span class="n">line</span><span class="p">)</span></div>
 
     <span class="c1"># raise IPython.ipapi.TryNext</span>
     <span class="c1"># possibly is</span>
@@ -242,6 +202,7 @@
 
 
 <div class="viewcode-block" id="job_list"><a class="viewcode-back" href="../../../jobcontrol.html#default_profile.extensions.job_control.job_list">[docs]</a><span class="k">def</span> <span class="nf">job_list</span><span class="p">(</span><span class="n">ip</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;IPython doesn&#39;t have a db attribute anymore.&quot;&quot;&quot;</span>
     <span class="n">keys</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">keys</span><span class="p">(</span><span class="s1">&#39;tasks/*&#39;</span><span class="p">)</span>
     <span class="n">ents</span> <span class="o">=</span> <span class="p">[</span><span class="n">ip</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">ents</span></div>
@@ -250,10 +211,17 @@
 <div class="viewcode-block" id="magic_tasks"><a class="viewcode-back" href="../../../jobcontrol.html#default_profile.extensions.job_control.magic_tasks">[docs]</a><span class="k">def</span> <span class="nf">magic_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Show a list of tasks.</span>
 
-<span class="sd">    A &#39;task&#39; is a process that has been started in IPython when &#39;jobctrl&#39; extension is enabled.</span>
-<span class="sd">    Tasks can be killed with %kill.</span>
+<span class="sd">    A &#39;task&#39; is a process that has been started in IPython when &#39;jobctrl&#39;</span>
+<span class="sd">    extension is enabled.</span>
+
+<span class="sd">    Tasks can be killed with `%kill`.</span>
 
 <span class="sd">    &#39;%tasks clear&#39; clears the task list (from stale tasks)</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    IPython doesn&#39;t have a getapi() method nor does it have a db attribute.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ip</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getapi</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;clear&#39;</span><span class="p">:</span>
@@ -271,12 +239,13 @@
 
 
 <div class="viewcode-block" id="magic_kill"><a class="viewcode-back" href="../../../jobcontrol.html#default_profile.extensions.job_control.magic_kill">[docs]</a><span class="k">def</span> <span class="nf">magic_kill</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Kill a task</span>
+    <span class="sd">&quot;&quot;&quot;Kill a task</span>
 
 <span class="sd">    Without args, either kill one task (if only one running) or show list (if many)</span>
 <span class="sd">    With arg, assume it&#39;s the process id.</span>
 
-<span class="sd">    %kill is typically (much) more powerful than trying to terminate a process with ctrl+C.</span>
+<span class="sd">    %kill is typically (much) more powerful than trying to terminate</span>
+<span class="sd">    a process with ctrl+C.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ip</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getapi</span><span class="p">()</span>
     <span class="n">jobs</span> <span class="o">=</span> <span class="n">job_list</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span>
@@ -296,13 +265,22 @@
 
 
 <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s1">&#39;win32&#39;</span><span class="p">:</span>
-    <span class="n">shell_internal_commands</span> <span class="o">=</span> <span class="s1">&#39;break chcp cls copy ctty date del erase dir md mkdir path prompt rd rmdir start time type ver vol&#39;</span><span class="o">.</span><span class="n">split</span><span class="p">(</span>
-    <span class="p">)</span>
+    <span class="n">shell_internal_commands</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s1">&#39;break chcp cls copy ctty date del erase&#39;</span>
+        <span class="s1">&#39;dir md mkdir path prompt rd rmdir start time type ver vol &#39;</span>
+    <span class="p">]</span>
     <span class="n">PopenExc</span> <span class="o">=</span> <span class="ne">WindowsError</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="c1"># todo linux commands</span>
     <span class="n">shell_internal_commands</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">PopenExc</span> <span class="o">=</span> <span class="ne">OSError</span>
+
+
+<div class="viewcode-block" id="determine_use_shell"><a class="viewcode-back" href="../../../jobcontrol.html#default_profile.extensions.job_control.determine_use_shell">[docs]</a><span class="k">def</span> <span class="nf">determine_use_shell</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">all_shell_commands</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Refactor jobctrl_shellcmd.&quot;&quot;&quot;</span>
+    <span class="n">cmdname</span> <span class="o">=</span> <span class="n">command</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">cmdname</span> <span class="ow">in</span> <span class="n">all_shell_commands</span> <span class="ow">or</span> <span class="s1">&#39;|&#39;</span> <span class="ow">in</span> <span class="n">command</span> <span class="ow">or</span> <span class="s1">&#39;&gt;&#39;</span> <span class="ow">in</span> <span class="n">command</span> <span class="ow">or</span> <span class="s1">&#39;&lt;&#39;</span> <span class="ow">in</span> <span class="n">command</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">True</span></div>
 
 
 <div class="viewcode-block" id="jobctrl_shellcmd"><a class="viewcode-back" href="../../../jobcontrol.html#default_profile.extensions.job_control.jobctrl_shellcmd">[docs]</a><span class="k">def</span> <span class="nf">jobctrl_shellcmd</span><span class="p">(</span><span class="n">ip</span><span class="p">,</span> <span class="n">cmd</span><span class="p">):</span>
@@ -311,46 +289,36 @@
 <span class="sd">    Stores process info to db[&#39;tasks/t1234&#39;].</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">cmd</span> <span class="o">=</span> <span class="n">cmd</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-    <span class="n">cmdname</span> <span class="o">=</span> <span class="n">cmd</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">cmdname</span> <span class="ow">in</span> <span class="n">shell_internal_commands</span> <span class="ow">or</span> <span class="s1">&#39;|&#39;</span> <span class="ow">in</span> <span class="n">cmd</span> <span class="ow">or</span> <span class="s1">&#39;&gt;&#39;</span> <span class="ow">in</span> <span class="n">cmd</span> <span class="ow">or</span> <span class="s1">&#39;&lt;&#39;</span> <span class="ow">in</span> <span class="n">cmd</span><span class="p">:</span>
-        <span class="n">use_shell</span> <span class="o">=</span> <span class="bp">True</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">use_shell</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="n">use_shell</span> <span class="o">=</span> <span class="n">determine_use_shell</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">shell_internal_commands</span><span class="p">)</span>
 
     <span class="n">jobentry</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="c1"># There HAS to be a better way of doing this</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">p</span> <span class="o">=</span> <span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="n">use_shell</span><span class="p">)</span>
-        <span class="k">except</span> <span class="n">PopenExc</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">use_shell</span><span class="p">:</span>
-                <span class="c1"># try with os.system</span>
-                <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
-                <span class="k">return</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="c1"># have to go via shell, sucks</span>
-                <span class="n">p</span> <span class="o">=</span> <span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="n">use_shell</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">PopenExc</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">use_shell</span><span class="p">:</span>
+            <span class="c1"># try with os.system</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># have to go via shell, sucks</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
-        <span class="n">jobentry</span> <span class="o">=</span> <span class="s1">&#39;tasks/t&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">pid</span><span class="p">)</span>
-        <span class="n">ip</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="n">jobentry</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">pid</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span>
-        <span class="n">p</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
-
-    <span class="k">finally</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">jobentry</span><span class="p">:</span>
-            <span class="k">del</span> <span class="n">ip</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="n">jobentry</span><span class="p">]</span></div>
+    <span class="n">jobentry</span> <span class="o">=</span> <span class="s1">&#39;tasks/t&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">pid</span><span class="p">)</span>
+    <span class="c1"># ipython doesn&#39;t have a db attribute anymore</span>
+    <span class="c1"># ip.db[jobentry] = (p.pid, cmd, os.getcwd(), time.time())</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="install"><a class="viewcode-back" href="../../../jobcontrol.html#default_profile.extensions.job_control.install">[docs]</a><span class="k">def</span> <span class="nf">install</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Set up job control for the IPython instance.&quot;&quot;&quot;</span>
-    <span class="k">global</span> <span class="n">ip</span>
-    <span class="c1"># ip = IPython.ipapi.get()</span>
-    <span class="n">ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
     <span class="c1"># needed to make startjob visible as _ip.startjob(&#39;blah&#39;)</span>
     <span class="n">ip</span><span class="o">.</span><span class="n">startjob</span> <span class="o">=</span> <span class="n">startjob</span>
     <span class="n">ip</span><span class="o">.</span><span class="n">set_hook</span><span class="p">(</span><span class="s1">&#39;input_prefilter&#39;</span><span class="p">,</span> <span class="n">jobctrl_prefilter_f</span><span class="p">)</span>
     <span class="n">ip</span><span class="o">.</span><span class="n">set_hook</span><span class="p">(</span><span class="s1">&#39;shell_hook&#39;</span><span class="p">,</span> <span class="n">jobctrl_shellcmd</span><span class="p">)</span>
-    <span class="n">ip</span><span class="o">.</span><span class="n">expose_magic</span><span class="p">(</span><span class="s1">&#39;kill&#39;</span><span class="p">,</span> <span class="n">magic_kill</span><span class="p">)</span>
-    <span class="n">ip</span><span class="o">.</span><span class="n">expose_magic</span><span class="p">(</span><span class="s1">&#39;tasks&#39;</span><span class="p">,</span> <span class="n">magic_tasks</span><span class="p">)</span>
-    <span class="n">ip</span><span class="o">.</span><span class="n">expose_magic</span><span class="p">(</span><span class="s1">&#39;jobqueue&#39;</span><span class="p">,</span> <span class="n">jobqueue_f</span><span class="p">)</span>
+    <span class="c1"># ip.expose_magic(&#39;kill&#39;, magic_kill)</span>
+    <span class="c1"># ip.expose_magic(&#39;tasks&#39;, magic_tasks)</span>
+    <span class="c1"># ip.expose_magic(&#39;jobqueue&#39;, jobqueue_f)</span>
     <span class="n">ip</span><span class="o">.</span><span class="n">set_hook</span><span class="p">(</span><span class="s1">&#39;pre_prompt_hook&#39;</span><span class="p">,</span> <span class="n">jobq_output_hook</span><span class="p">)</span></div>
 
 
@@ -365,121 +333,99 @@
             <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;kill -9 </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">pid</span><span class="p">)</span>
 
     <span class="n">_jobq</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
 
     <span class="n">install</span><span class="p">()</span>
-</pre>
-            </div>
+</pre></div>
+
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-          <div id="searchbox" style="display: none" role="search">
-            <h3>Quick search</h3>
-            <div class="searchformwrapper">
-              <form class="search" action="../../../search.html" method="get">
-                <input type="text" name="q" />
-                <input type="submit" value="Go" />
-              </form>
-            </div>
-          </div>
-          <script type="text/javascript">
-            $("#searchbox").show(0);
-          </script>
-          <h3>Related Topics</h3>
-          <ul>
-            <li>
-              <a href="../../../index.html">Documentation overview</a>
-              <ul>
-                <li>
-                  <a href="../../index.html">Module code</a>
-                  <ul></ul>
-                </li>
-              </ul>
-            </li>
-          </ul>
+<div id="searchbox" style="display: none" role="search">
+    <h3>Quick search</h3>
+    <div class="searchformwrapper">
+        <form class="search" action="../../../search.html" method="get">
+            <input type="text" name="q" />
+            <input type="submit" value="Go" />
+        </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
 
-          <h3><a href="../../../index.html">Table of Contents</a></h3>
 
-          <div>&nbsp;</div>
-          <div id="sidebartoc">
-            <p class="caption"><span class="caption-text">Tutorial</span></p>
-            <ul>
-              <li class="toctree-l1">
-                <a class="reference internal" href="../../../jobcontrol.html"
-                  >Job Control — Preliminary “job control” extensions for
-                  IPython.</a
-                >
-              </li>
-              <li class="toctree-l1">
-                <a class="reference internal" href="../../../exceptions.html"
-                  >Customized Exceptions</a
-                >
-              </li>
-              <li class="toctree-l1">
-                <a class="reference internal" href="../../../subcommands.html"
-                  >Subcommands in IPython and Jupyter</a
-                >
-              </li>
-              <li class="toctree-l1">
-                <a class="reference internal" href="../../../sphinxext.html"
-                  >IPython Sphinx Directive</a
-                >
-              </li>
-              <li class="toctree-l1">
-                <a class="reference internal" href="../../../lexer.html"
-                  >New IPython Console Lexer</a
-                >
-              </li>
-              <li class="toctree-l1">
-                <a
-                  class="reference internal"
-                  href="../../../sphinx_api_docs.html"
-                  >Sphinx API docs</a
-                >
-              </li>
-              <li class="toctree-l1">
-                <a
-                  class="reference internal"
-                  href="../../../custom_doctests.html"
-                  >Custom Doctests</a
-                >
-              </li>
-              <li class="toctree-l1">
-                <a class="reference internal" href="../../../dev.html"
-                  >Developers Notes</a
-                >
-              </li>
-            </ul>
-            <p class="caption"><span class="caption-text">API</span></p>
-            <ul>
-              <li class="toctree-l1">
-                <a class="reference internal" href="../../../startup/index.html"
-                  >IPython API</a
-                >
-              </li>
-              <li class="toctree-l1">
-                <a class="reference internal" href="../../../util/index.html"
-                  >IPython Utilities</a
-                >
-              </li>
-              <li class="toctree-l1">
-                <a class="reference internal" href="../../../kernel.html"
-                  >IPython Kernel</a
-                >
-              </li>
-              <li class="toctree-l1">
-                <a class="reference internal" href="../../../jupyter/index.html"
-                  >jupyter</a
-                >
-              </li>
-              <li class="toctree-l1">
-                <a class="reference internal" href="../../../extensions.html"
-                  >Extensions</a
-                >
-              </li>
-            </ul>
-          </div>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a>
+    <ul>
+      <li><a href="../../index.html">Module code</a>
+        <ul>
+        </ul>
+      </li>
+    </ul>
+</ul>
+</li>
+
+
+<h3><a href="../../../index.html">Table of Contents</a></h3>
+<div>&nbsp;</div>
+<div id="sidebartoc">
+    <p class="caption"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../sphinxext/index.html">Sphinx Extensions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/ipython_sphinx_directive.html">1 IPython Sphinx Directive</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/lexer.html">2 New IPython Console Lexer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/custom_doctests.html">3 Custom Doctests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/configtraits.html">4 <code class="xref py py-mod docutils literal notranslate"><span class="pre">configtraits</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/magics.html">5 <code class="xref py py-mod docutils literal notranslate"><span class="pre">magics</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/make.html">6 Make — Automated Documentation Builder</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev.html">Developers Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../jobcontrol.html">Job Control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../subcommands.html">Subcommands</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../startup/index.html">IPython Startup</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/rehashx.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">01_rehashx</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/easy_import.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">04_easy_import</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/ipython-logger.html">05_log — IPython logger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/help_helpers.html">06_Help_Helpers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/aliases.html">System Aliases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/fzf.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">21_fzf</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/setup_readline.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">30_setup_readline</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/41_numpy.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">numpy</span></code> Initialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/42_pandas.html">Pandas Initialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/matplotlib_rc.html">Matplotlib Startup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/sysexcept.html">Customized Exceptions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../util/index.html">IPython Utilities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../util/copytree.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">copytree</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util/ipython_get_history.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ipython_get_history</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util/machine.html">machine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util/module_log.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">module_log</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util/pager2.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pager2</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util/paths.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paths</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util/profile_override.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">profile_override</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util/timer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">timer</span></code> module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../kernel.html">IPython Kernel</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../jupyter/index.html">Jupyter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../jupyter/qtconsole.html">Jupyter QTConsole</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../jupyter/notebook.html">Jupyter Notebook</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Extensions</a></li>
+</ul>
+
+    
+</div>
+
+
         </div>
       </div>
       <div class="clearer"></div>
@@ -488,24 +434,17 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../../../genindex.html" title="General Index">index</a>
-        </li>
-        <li class="right">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
-            >modules</a
-          >
-          |
-        </li>
-        <li class="nav-item nav-item-0">
-          <a href="../../../index.html">Dynamic IPython</a> &#187;
-        </li>
-        <li class="nav-item nav-item-1">
-          <a href="../../index.html">Module code</a> &#187;
-        </li>
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Oct 06, 2019.
+      Last updated on Oct 22, 2019.
     </div>
   </body>
 </html>
