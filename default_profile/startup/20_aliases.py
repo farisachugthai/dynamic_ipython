@@ -329,6 +329,8 @@ class WindowsAliases:
         """
         self.shell = shell or get_ipython()
         self.user_aliases = user_aliases
+        if self.user_aliases is None:
+            self.cmd_aliases()
 
     @staticmethod
     def _find_exe(self, exe=None):

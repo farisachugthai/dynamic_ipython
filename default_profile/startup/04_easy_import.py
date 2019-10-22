@@ -7,6 +7,7 @@ package neovim is served in.
 import sys
 from importlib import import_module
 
+from IPython import get_ipython
 from IPython.lib.deepreload import reload as _reload
 
 
@@ -23,13 +24,17 @@ class DeepReload:
     excludes = ('sys', 'os.path', 'builtins', '__main__', 'io', 'numpy',
                 'numpy._globals', 'IPython')
 
-    def __init__(self, excludes=None):
+    def __init__(self, shell, excludes=None):
         """How do we set an instance attribute with a class attribute?"""
         if excludes == None:
             self.excludes = excludes
+        self.shell = shell
 
     def __repr__(self):
         return '{!r}'.format(repr(self.excludes))
+
+    def __call__(self):
+        self.shell.run_cell(self.dreload(self.excludes))
 
     def reload(self, *args, **kwargs):
         """Return :func:`IPython.lib.deepreload.dreload`. """

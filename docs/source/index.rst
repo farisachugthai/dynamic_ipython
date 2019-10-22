@@ -1,7 +1,7 @@
 .. IPython packages documentation master file, created by
-   sphinx-quickstart on Mon Feb 25 02:48:12 2019.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+    sphinx-quickstart on Mon Feb 25 02:48:12 2019.
+    You can adapt this file completely to your liking, but it should at least
+    contain the root `toctree` directive.
 
 ============================================
 Welcome to Dynamic IPython's documentation!
@@ -10,12 +10,12 @@ Welcome to Dynamic IPython's documentation!
 :date: |today|
 
 .. highlight:: ipython
-   :linenothreshold: 3
+    :linenothreshold: 3
 
 .. moduleauthor:: Faris Chugthai
 
 .. module:: root_index
-   :synopsis: Main landing page for the documentation.
+    :synopsis: Main landing page for the documentation.
 
 
 Startup Scripts
@@ -85,8 +85,8 @@ This repository can be installed in the following manner.:
 
 .. code-block:: console
 
-   python setup.py build
-   pip install -U -e .
+    python setup.py build
+    pip install -U -e .
 
 However, that unfortunately assumes one has admin access to wherever pip
 installs files globally, and that the :command:`python` command points to
@@ -94,13 +94,13 @@ python3.7. In most cases it does not.
 
 If one has :command:`pipenv` installed, an easier installation could be::
 
-   pipenv install -e .
+    pipenv install -e .
 
 If a non-pipenv installation is desired for some reason, a fully specified
 installation could look like::
 
-   python3.7 setup.py build
-   python3.7 -m pip install -U --user pip -e .
+    python3.7 setup.py build
+    python3.7 -m pip install -U --user pip -e .
 
 As one can see this gets complicated very quickly, and as a result,
 installation via pipenv is the recommended method.
@@ -111,8 +111,8 @@ See Also
 
 For further reading, feel free to see the output of any of the following::
 
-   >>> from IPython.core.interactiveshell import InteractiveShell
-   >>> help(InteractiveShell)
+    >>> from IPython.core.interactiveshell import InteractiveShell
+    >>> help(InteractiveShell)
 
 Which features descriptions of functions relevant to startup such as
 :func:`IPython.core.interactiveshell.register_magic_function()` and literally
@@ -121,10 +121,10 @@ every option available through the `%config` magic.
 For commands that are more related to the interactive aspect of the shell,
 see the following::
 
-   >>> from IPython import get_ipython
-   >>> _ip = get_ipython()
-   >>> help(_ip)  # doctest: +SKIP
-   >>> dir(_ip):  # doctest: +SKIP
+    >>> from IPython import get_ipython
+    >>> _ip = get_ipython()
+    >>> help(_ip)  # doctest: +SKIP
+    >>> dir(_ip):  # doctest: +SKIP
 
 In addition, there's an abundance of documentation online in the
 form of rst docs and :abbr:`ipynb` notebooks.
@@ -134,27 +134,27 @@ Table of Contents
 ==================
 
 .. toctree::
-   :caption: Tutorial
-   :maxdepth: 1
-   :titlesonly:
+    :caption: Tutorial
+    :maxdepth: 2
+    :titlesonly:
 
-   jobcontrol
-   subcommands
-   Sphinx Extensions <sphinxext/index.rst>
-   Developers Notes <dev>
+    Sphinx Extensions <sphinxext/index.rst>
+    Developers Notes <dev>
+    jobcontrol
+    subcommands
 
 In addition the API has extensive documentation.
 
 .. toctree::
-   :maxdepth: 1
-   :titlesonly:
-   :caption: API
+    :maxdepth: 2
+    :titlesonly:
+    :caption: API
 
-   IPython Startup <startup/index>
-   IPython Utilities </util/index>
-   kernel
-   Jupyter <jupyter/index>
-   extensions
+    IPython Startup <startup/index>
+    IPython Utilities </util/index>
+    kernel
+    Jupyter <jupyter/index>
+    extensions
 
 
 Indices and tables
