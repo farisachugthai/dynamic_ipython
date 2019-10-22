@@ -48,7 +48,6 @@ class LinuxAliases:
             magic_name=name)
 
     """
-
     def __init__(self, shell=None, aliases=None):
         """The WindowsAliases implementation of this is odd so maybe branch off.
 
@@ -162,7 +161,6 @@ class CommonAliases:
     .. todo:: :command:`git show`
 
     """
-
     def __init__(self, shell=None, user_aliases=None):
         """OS Agnostic aliases.
 
@@ -311,7 +309,6 @@ class WindowsAliases:
     Would it be useful to subclass :class:`reprlib.Repr` here?
 
     """
-
     def __init__(self, shell=None, user_aliases=None):
         """Initialize the platform specific alias manager with IPython.
 

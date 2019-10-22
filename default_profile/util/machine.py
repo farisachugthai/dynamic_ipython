@@ -7,12 +7,7 @@
 Platform Utilities
 ==================
 
-.. highlight:: ipython
-
-This class leverages :mod:`prompt_toolkit` and a few of it's methods to abstract
-away differences in operating systems and filesystems.
-
-The class can be easily initialized with:
+The Platform class in this module can be easily initialized with:
 
 >>> from default_profile.util.machine import Platform
 >>> users_machine = Platform()
@@ -24,6 +19,7 @@ The class can be easily initialized with:
     Don't name the instance `platform` as that's a module in the standard
     library.
 
+
 See Also
 --------
 :mod:`default_profile.startup.20_aliases`
@@ -33,6 +29,7 @@ See Also
 from pathlib import Path
 import logging
 import os
+from os import _Environ
 import platform
 import reprlib
 import sys
@@ -51,7 +48,7 @@ class Platform:
 
     This allows for a user to check the `sys.platform` instance, and then
     act in an appropriate manner without knowing what the
-    :class:`pathlib.Path()` actually initialized to.
+    :class:`pathlib.Path` actually initialized to.
 
     Parameters
     ----------
@@ -216,4 +213,6 @@ if __name__ == "__main__":
         msg_format='%(asctime)s : %(levelname)s : %(module)s : %(message)s : ',
         log_level=logging.INFO)
 
+    # Not useful as i have it here but it's a good reference for the user env
+    Environ = _Environ()
     Platform()
