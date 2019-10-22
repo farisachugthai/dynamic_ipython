@@ -89,7 +89,7 @@ SOURCE_PATH = os.path.join(CONF_PATH, 'source')
 README = os.path.join(ROOT_PATH, '', 'README.rst')
 REQUIRED = [
     'IPython>=7.7', 'prompt_toolkit', 'numpy', 'pandas', 'jinja2', 'traitlets',
-    'pygments'
+    'pygments', 'matplotlib'
 ]
 
 EXTRAS = {

@@ -61,6 +61,7 @@ from pprint import pprint
 import re
 import sys
 import time
+from typing import Dict
 
 # Third party
 import sphinx
@@ -75,7 +76,7 @@ from traitlets.config import Config
 import default_profile
 from default_profile.__about__ import __version__
 from default_profile import extensions, util
-from default_profile.sphinxext import ipython_directive
+# from default_profile.sphinxext import ipython_directive
 
 DOCS = Path(__file__).resolve().parent.parent
 
