@@ -21,16 +21,18 @@ easy_import_mod = importlib.import_module(
     'default_profile.startup.04_easy_import'
 )
 
-ipython_file_logger = importlib.import_module('default_profile.startup.05_log')
+log_mod = importlib.import_module('default_profile.startup.05_log')
 
-help_helpers = importlib.import_module(
+help_helpers_mod = importlib.import_module(
     'default_profile.startup.06_help_helpers'
 )
 
 aliases_mod = importlib.import_module('default_profile.startup.20_aliases')
-numpy_init = importlib.import_module('default_profile.startup.41_numpy_init')
-pandas_init = importlib.import_module('default_profile.startup.42_pandas_init')
 
-except_hook = importlib.import_module(
+readline_mod = importlib.import_module('default_profile.startup.30_readline')
+numpy_init_mod = importlib.import_module('default_profile.startup.41_numpy_init')
+pandas_init_mod = importlib.import_module('default_profile.startup.42_pandas_init')
+
+sysexception_mod = importlib.import_module(
     'default_profile.startup.50_sysexception'
 )

@@ -10,10 +10,10 @@ from IPython import get_ipython
 from default_profile.util import module_log
 from default_profile.util.machine import Platform
 
-LOGGER = module_log.stream_logger(
+ALIAS_LOGGER = module_log.stream_logger(
     logger='default_profile.startup.20_aliases',
     msg_format='%(asctime)s : %(levelname)s : %(module)s %(message)s',
-    log_level=logging.INFO)
+    log_level=logging.WARNING)
 
 
 class LinuxAliases:
@@ -373,10 +373,11 @@ class WindowsAliases:
             ('cp', 'copy %s %s'),
             ('copy', 'copy %s %s'),
             ('ddir', 'dir /ad /on %l'),
+            ('echo', 'echo %l'),
             ('ldir', 'dir /ad /on %l'),
             ('ll', 'dir /Q %l'),
-            ('ln', 'mklink %s %s'
-             ),  # I know this really isn't the same but I need it
+            # I know this really isn't the same but I need it
+            ('ln', 'mklink %s %s'),
             ('make', 'make.bat %l'),  # Useful when we're building docs
             ('mklink', 'mklink %s %s'),
             ('move', 'move %s %s'),
@@ -506,7 +507,7 @@ def main():
     # Apparently the big part i was missing was rerunning the init_aliases method
     _ip.alias_manager.init_aliases()
 
-    LOGGER.debug('Number of aliases is: %s' % user_aliases)
+    ALIAS_LOGGER.info('Number of aliases is: %s' % user_aliases)
 
 
 if __name__ == "__main__":
