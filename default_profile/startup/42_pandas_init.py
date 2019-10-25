@@ -146,12 +146,36 @@ def pandas_init():
             pd.set_option(f'{category}.{op}', value)  # Python 3.6+
 
 
+class DisplayHTML:
+    """Display HTML representation of multiple objects"""
+
+    template = """
+    <div style="float: left; padding: 10px;">
+    <p style='font-family:"Courier New", Courier, monospace'>{0}</p>{1}
+    </div>
+    """
+
+    def __init__(self, *args):
+        self.args = args
+
+    def _repr_html_(self):
+        return '\n'.join(
+            self.template.format(a,
+                                 eval(a)._repr_html_()) for a in self.args)
+
+    def __repr__(self):
+        return '\n\n'.join(a + '\n' + repr(eval(a)) for a in self.args)
+
+
 if __name__ == '__main__':
     name = 'default_profile.startup.pandas_init'
-    PANDAS_LOGGER = module_log.stream_logger(
-        logger=name, log_level=logging.INFO
-    )
-    PANDAS_LOGGER = logging.getLogger(name=name)
+    PANDAS_LOGGER = module_log.stream_logger(logger=name,
+                                             log_level=logging.INFO)
+
+    try:  # Import numexpr before pandas if possible
+        import numexpr
+    except (ImportError, ModuleNotFoundError):
+        pass
 
     try:
         import pandas as pd

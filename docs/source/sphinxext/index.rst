@@ -23,7 +23,6 @@ Table of Contents
 
 .. toctree::
    :maxdepth: 2
-   :numbered:
 
    ipython_sphinx_directive
    lexer

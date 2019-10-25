@@ -75,3 +75,21 @@ def setup_fzf(user_aliases):
             ('fzf', 'ag -C 0 --color-win-ansi --noheading | fzf --ansi'))
 
     return user_aliases
+
+
+def fzf_tmux():
+    """Check if we're using tmux or not."""
+    if os.environ.get('TMUX'):
+        return 'fzf-tmux'
+    else:
+        return 'fzf'
+
+
+def add_rg():
+    """Returns the path to rg."""
+    return shutil.which('rg')
+
+
+# @Executable(fzf_tmux())
+# def add_fzf_alias():
+

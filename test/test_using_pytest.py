@@ -32,14 +32,22 @@ with the sphinx build so it's cool to see it in this context.
 import sys
 
 
+
 def main():
-    """Try a new unit testing framework."""
+    """Try a new unit testing framework.
+
+    Erhm this is definitely not how you implement fixtures.
+
+    """
     try:
         import pytest
     except (ImportError, ModuleNotFoundError):
         return
 
-    pytest.importorskip()
+    # pytest.importorskip()
+    @pytest.fixture
+    def ip():
+        return get_ipython()
 
 
 if __name__ == "__main__":
