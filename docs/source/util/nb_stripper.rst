@@ -1,9 +1,9 @@
 ====================================================
-:mod:`~default_profile.util.profile_override` module
+:mod:`~default_profile.util.nb_stripper` module
 ====================================================
 
-.. automodule:: default_profile.util.profile_override
-   :synopsis: Rewrite IPython profiles.
+.. automodule:: default_profile.util.nb_stripper
+   :synopsis: Remove output from IPython notebooks.
    :members:
    :undoc-members:
    :show-inheritance:

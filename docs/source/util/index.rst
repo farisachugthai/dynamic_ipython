@@ -3,8 +3,6 @@
 =================
 IPython Utilities
 =================
-.. currentmodule:: default_profile.util
-
 
 .. _util-contents:
 

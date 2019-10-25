@@ -18,7 +18,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="paths module" href="paths.html" />
-    <link rel="prev" title="module_log module" href="module_log.html" />
+    <link rel="prev" title="nb_stripper module" href="nb_stripper.html" />
 <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" />
 <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" media="screen" rel="stylesheet" type="text/css" />
 <link rel='stylesheet' href='//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.css'>
@@ -47,7 +47,7 @@
           <a href="paths.html" title="paths module"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="module_log.html" title="module_log module"
+          <a href="nb_stripper.html" title="nb_stripper module"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Dynamic IPython</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">IPython Utilities</a> &#187;</li> 
@@ -60,7 +60,7 @@
           <div class="body" role="main">
             
 <div class="section" id="pager2-module">
-<h1><a class="reference internal" href="#module-default_profile.util.pager2" title="default_profile.util.pager2"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pager2</span></code></a> module<a class="headerlink" href="#pager2-module" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="#module-default_profile.util.pager2" title="default_profile.util.pager2: Rewrite how IPython utilizes the pager on Windows."><code class="xref py py-mod docutils literal notranslate"><span class="pre">pager2</span></code></a> module<a class="headerlink" href="#pager2-module" title="Permalink to this headline">¶</a></h1>
 <p>Still a Work in Progress.</p>
 <p>Still considering different ways of designing a new Windows specific pager
 on IPython. It’s a bit difficult as the default implementation is over 10
@@ -73,73 +73,46 @@ ability to change or configure things in mind.</p>
 <div class="section" id="original-implementation">
 <h2>Original Implementation<a class="headerlink" href="#original-implementation" title="Permalink to this headline">¶</a></h2>
 <p>Below is the source code for how the original <code class="xref py py-func docutils literal notranslate"><span class="pre">pycat()</span></code> was implemented.:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
-<span class="kn">from</span> <span class="nn">IPython.core.magics</span> <span class="kn">import</span> <span class="n">line_magic</span>
-<span class="kn">from</span> <span class="nn">IPython.core.errors</span> <span class="kn">import</span> <span class="n">UsageError</span>
-
-<span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-
-<span class="c1"># Real src</span>
-<span class="nd">@line_magic</span>
-<span class="k">def</span> <span class="nf">pycat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameter_s</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
-    <span class="c1"># Show a syntax-highlighted file through a pager.</span>
-
-    <span class="c1"># This magic is similar to the cat utility, but it will assume the file</span>
-    <span class="c1"># to be Python source and will show it with syntax highlighting.</span>
-
-    <span class="c1"># This magic command can either take a local filename, an url,</span>
-    <span class="c1"># an history range (see %history) or a macro as argument ::</span>
-
-    <span class="c1"># %pycat myscript.py</span>
-    <span class="c1"># %pycat 7-27</span>
-    <span class="c1"># %pycat myMacro</span>
-    <span class="c1"># %pycat http://www.example.com/myscript.py</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">parameter_s</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">UsageError</span><span class="p">(</span><span class="s1">&#39;Missing filename, URL, input history range, &#39;</span>
-                         <span class="s1">&#39;or macro.&#39;</span><span class="p">)</span>
-
-    <span class="k">try</span> <span class="p">:</span>
-        <span class="n">cont</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">find_user_code</span><span class="p">(</span><span class="n">parameter_s</span><span class="p">,</span> <span class="n">skip_encoding_cookie</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-    <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">IOError</span><span class="p">):</span>
-        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Error: no such file, variable, URL, history range or macro&quot;</span><span class="p">)</span>
-        <span class="k">return</span>
-
-    <span class="n">page</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">pycolorize</span><span class="p">(</span><span class="n">source_to_unicode</span><span class="p">(</span><span class="n">cont</span><span class="p">)))</span>
-</pre></div>
-</div>
-<p>File:   /usr/lib/python3.7/site-packages/IPython/core/magics/osm.py</p>
 </div>
 <div class="section" id="breaking-it-down">
 <h2>Breaking it down<a class="headerlink" href="#breaking-it-down" title="Permalink to this headline">¶</a></h2>
 <p>Here’s the docstring from <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.utils.openpy.html#module-IPython.utils.openpy" title="(in IPython v7.8.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython.utils.openpy</span></code></a>, specifically
 the function <code class="docutils literal notranslate"><span class="pre">read_py_file</span></code>.:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">skip_encoding_cookie</span> <span class="p">:</span> <span class="nb">bool</span>
-  <span class="n">If</span> <span class="bp">True</span> <span class="p">(</span><span class="n">the</span> <span class="n">default</span><span class="p">),</span> <span class="ow">and</span> <span class="n">the</span> <span class="n">encoding</span> <span class="n">declaration</span> <span class="ow">is</span> <span class="n">found</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">first</span>
-  <span class="n">two</span> <span class="n">lines</span><span class="p">,</span> <span class="n">that</span> <span class="n">line</span> <span class="n">will</span> <span class="n">be</span> <span class="n">excluded</span> <span class="kn">from</span> <span class="nn">the</span> <span class="nn">output</span> <span class="o">-</span> <span class="n">compiling</span> <span class="n">a</span>
-  <span class="nb">unicode</span> <span class="n">string</span> <span class="k">with</span> <span class="n">an</span> <span class="n">encoding</span> <span class="n">declaration</span> <span class="ow">is</span> <span class="n">a</span> <span class="ne">SyntaxError</span> <span class="ow">in</span> <span class="n">Python</span> <span class="mf">2.</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="o">..</span> <span class="n">data</span><span class="p">::</span> <span class="n">skip_encoding_cookie</span> <span class="p">:</span> <span class="nb">bool</span>
 </pre></div>
 </div>
+<blockquote>
+<div><p>If True (the default), and the encoding declaration is found in the first
+two lines, that line will be excluded from the output - compiling a
+unicode string with an encoding declaration is a SyntaxError in Python 2.</p>
+</div></blockquote>
 <div class="section" id="ipython-core-page-page">
 <h3><a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.page.html#IPython.core.page.page" title="(in IPython v7.8.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.core.page.page()</span></code></a><a class="headerlink" href="#ipython-core-page-page" title="Permalink to this headline">¶</a></h3>
-<p>What’s that <code class="docutils literal notranslate"><span class="pre">page.page</span></code> line? Well…time to go exploring!</p>
+<dl class="function">
+<dt id="page.page">
+<code class="sig-prename descclassname">page.</code><code class="sig-name descname">page</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#page.page" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pretty print an object and display it through the pager.</p>
+</dd></dl>
+
+<p>What’s that <a class="reference internal" href="#page.page" title="page.page"><code class="xref py py-obj docutils literal notranslate"><span class="pre">page.page</span></code></a> line? Well…time to go exploring!</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">IPython.core.magics.basic</span> <span class="k">import</span> <span class="n">BasicMagics</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">BasicMagics</span><span class="o">.</span><span class="n">page</span>
 </pre></div>
 </div>
 <p>So let’s check out the source on that.:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.core.magic</span> <span class="kn">import</span> <span class="n">line_magic</span>
-<span class="nd">@line_magic</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="nd">@line_magic</span>
 <span class="k">def</span> <span class="nf">page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameter_s</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
-    <span class="c1"># Pretty print the object and display it through a pager.</span>
+    <span class="sd">&quot;&quot;&quot;Pretty print the object and display it through a pager.</span>
 
-        <span class="o">%</span><span class="k">page</span> [options] OBJECT
+<span class="sd">      %page [options] OBJECT</span>
 
-    <span class="c1"># If no object is given, use _ (last output).</span>
-    <span class="c1"># Options:</span>
+<span class="sd">    If no object is given, use _ (last output).</span>
+<span class="sd">    Options:</span>
 
-        <span class="o">-</span><span class="n">r</span><span class="p">:</span> <span class="n">page</span> <span class="nb">str</span><span class="p">(</span><span class="nb">object</span><span class="p">),</span> <span class="n">don</span><span class="s1">&#39;t pretty-print it.</span>
+<span class="sd">      -r: page str(object), don&#39;t pretty-print it.</span>
 
-    <span class="c1"># After a function contributed by Olivier Aubert, slightly modified.</span>
+<span class="sd">    After a function contributed by Olivier Aubert, slightly modified.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Process options/args</span>
     <span class="n">opts</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_options</span><span class="p">(</span><span class="n">parameter_s</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
     <span class="n">raw</span> <span class="o">=</span> <span class="s1">&#39;r&#39;</span> <span class="ow">in</span> <span class="n">opts</span>
@@ -154,7 +127,7 @@ the function <code class="docutils literal notranslate"><span class="pre">read_p
 </pre></div>
 </div>
 <p>Nope! <em>However that is a good example use of</em>
-<code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.core.magic.magic_arguments()</span></code>.</p>
+<code class="xref py py-func docutils literal notranslate"><span class="pre">magic_arguments()</span></code>.</p>
 <p>So what’s page.page?</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">IPython.core</span> <span class="k">import</span> <span class="n">page</span>
 </pre></div>
@@ -174,8 +147,11 @@ the function <code class="docutils literal notranslate"><span class="pre">read_p
 show how IPython setup the pager.</strong></p>
 <div class="section" id="see-also">
 <h3>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h3>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
 <p><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.info.html#numpy.info" title="(in NumPy v1.17)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.info()</span></code></a>
 <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.source.html#numpy.source" title="(in NumPy v1.17)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.source()</span></code></a></p>
+</div>
 <p>Also worth noting is how Numpy and Scipy entirely
 circumvent it with their <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.info.html#numpy.info" title="(in NumPy v1.17)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.info()</span></code></a> and <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.source.html#numpy.source" title="(in NumPy v1.17)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.source()</span></code></a> functions.</p>
 </div>
@@ -214,7 +190,7 @@ be expected to respond to.</p>
     <ul>
       <li><a href="index.html">IPython Utilities</a>
         <ul>
-          <li>Previous: <a href="module_log.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">module_log</span></code> module</a></li>
+          <li>Previous: <a href="nb_stripper.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">nb_stripper</span></code> module</a></li>
           <li>Next: <a href="paths.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paths</span></code> module</a></li>
         </ul>
       </li>
@@ -229,12 +205,12 @@ be expected to respond to.</p>
     <p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../sphinxext/index.html">Sphinx Extensions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../sphinxext/ipython_sphinx_directive.html">1 IPython Sphinx Directive</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../sphinxext/lexer.html">2 New IPython Console Lexer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../sphinxext/custom_doctests.html">3 Custom Doctests</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../sphinxext/configtraits.html">4 <code class="xref py py-mod docutils literal notranslate"><span class="pre">configtraits</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../sphinxext/magics.html">5 <code class="xref py py-mod docutils literal notranslate"><span class="pre">magics</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../sphinxext/make.html">6 Make — Automated Documentation Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sphinxext/ipython_sphinx_directive.html">IPython Sphinx Directive</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sphinxext/lexer.html">New IPython Console Lexer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sphinxext/custom_doctests.html">Custom Doctests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sphinxext/configtraits.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">configtraits</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sphinxext/magics.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">magics</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sphinxext/make.html">Make — Automated Documentation Builder</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../dev.html">Developers Notes</a></li>
@@ -262,9 +238,10 @@ be expected to respond to.</p>
 <li class="toctree-l2"><a class="reference internal" href="ipython_get_history.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ipython_get_history</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="machine.html">machine</a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_log.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">module_log</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nb_stripper.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">nb_stripper</span></code> module</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pager2</span></code> module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="paths.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paths</span></code> module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="profile_override.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">profile_override</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="profile_override.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">profile_override</span></code> module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="timer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">timer</span></code> module</a></li>
 </ul>
 </li>
@@ -329,14 +306,14 @@ be expected to respond to.</p>
           <a href="paths.html" title="paths module"
              >next</a> |</li>
         <li class="right" >
-          <a href="module_log.html" title="module_log module"
+          <a href="nb_stripper.html" title="nb_stripper module"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Dynamic IPython</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >IPython Utilities</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Oct 22, 2019.
+      Last updated on Oct 25, 2019.
     </div>
   </body>
 </html>

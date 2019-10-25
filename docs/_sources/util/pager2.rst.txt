@@ -18,42 +18,43 @@ ability to change or configure things in mind.
 Original Implementation
 ========================
 
-Below is the source code for how the original :func:`pycat` was implemented.::
+Below is the source code for how the original :func:`pycat` was implemented.:
+
+.. testsetup::
 
     from IPython import get_ipython
+    from IPython.core import page
     from IPython.core.magics import line_magic
     from IPython.core.errors import UsageError
-
     self.shell = get_ipython()
 
-    # Real src
-    @line_magic
-    def pycat(self, parameter_s=''):
-        # Show a syntax-highlighted file through a pager.
+.. ipython::
+   :doctest:
 
-        # This magic is similar to the cat utility, but it will assume the file
-        # to be Python source and will show it with syntax highlighting.
+   @line_magic
+   def pycat(self, parameter_s=''):
+       """Show a syntax-highlighted file through a pager.
 
-        # This magic command can either take a local filename, an url,
-        # an history range (see %history) or a macro as argument ::
+       This magic is similar to the cat utility, but it will assume the file
+       to be Python source and will show it with syntax highlighting.
+       This magic command can either take a local filename, an url,
+       an history range (see %history) or a macro as argument ::
+       %pycat myscript.py
+       %pycat 7-27
+       %pycat myMacro
+       %pycat http://www.example.com/myscript.py
+       """
+       if not parameter_s:
+           raise UsageError('Missing filename, URL, input history range, '
+                            'or macro.')
 
-        # %pycat myscript.py
-        # %pycat 7-27
-        # %pycat myMacro
-        # %pycat http://www.example.com/myscript.py
-        if not parameter_s:
-            raise UsageError('Missing filename, URL, input history range, '
-                             'or macro.')
+       try :
+           cont = self.shell.find_user_code(parameter_s, skip_encoding_cookie=False)
+       except (ValueError, IOError):
+           print("Error: no such file, variable, URL, history range or macro")
+           return
 
-        try :
-            cont = self.shell.find_user_code(parameter_s, skip_encoding_cookie=False)
-        except (ValueError, IOError):
-            print("Error: no such file, variable, URL, history range or macro")
-            return
-
-        page.page(self.shell.pycolorize(source_to_unicode(cont)))
-
-File:   /usr/lib/python3.7/site-packages/IPython/core/magics/osm.py
+       page.page(self.shell.pycolorize(source_to_unicode(cont)))
 
 
 Breaking it down
@@ -62,35 +63,40 @@ Breaking it down
 Here's the docstring from :mod:`IPython.utils.openpy`, specifically
 the function ``read_py_file``.::
 
-    skip_encoding_cookie : bool
-      If True (the default), and the encoding declaration is found in the first
-      two lines, that line will be excluded from the output - compiling a
-      unicode string with an encoding declaration is a SyntaxError in Python 2.
+.. data:: skip_encoding_cookie : bool
+      
+   If True (the default), and the encoding declaration is found in the first
+   two lines, that line will be excluded from the output - compiling a
+   unicode string with an encoding declaration is a SyntaxError in Python 2.
 
 
 :func:`IPython.core.page.page`
 ------------------------------
 
-What's that ``page.page`` line? Well...time to go exploring!
+.. function:: page.page
+
+   Pretty print an object and display it through the pager.
+
+What's that `page.page` line? Well...time to go exploring!
 
 >>> from IPython.core.magics.basic import BasicMagics
 >>> BasicMagics.page
 
 So let's check out the source on that.::
 
-   from IPython.core.magic import line_magic
    @line_magic
    def page(self, parameter_s=''):
-       # Pretty print the object and display it through a pager.
+       """Pretty print the object and display it through a pager.
 
-           %page [options] OBJECT
+         %page [options] OBJECT
 
-       # If no object is given, use _ (last output).
-       # Options:
+       If no object is given, use _ (last output).
+       Options:
 
-           -r: page str(object), don't pretty-print it.
+         -r: page str(object), don't pretty-print it.
 
-       # After a function contributed by Olivier Aubert, slightly modified.
+       After a function contributed by Olivier Aubert, slightly modified.
+       """
        # Process options/args
        opts, args = self.parse_options(parameter_s, 'r')
        raw = 'r' in opts
@@ -104,7 +110,7 @@ So let's check out the source on that.::
            print('Object `%s` not found' % oname)
 
 Nope! *However that is a good example use of* 
-:func:`IPython.core.magic.magic_arguments`.
+:func:`~IPython.core.magic.magic_arguments`.
 
 So what's page.page?
 
@@ -130,9 +136,10 @@ show how IPython setup the pager.**
 
 See Also
 --------
+.. seealso::
 
-:func:`numpy.info`
-:func:`numpy.source`
+   :func:`numpy.info`
+   :func:`numpy.source`
 
 Also worth noting is how Numpy and Scipy entirely
 circumvent it with their :func:`numpy.info` and :func:`numpy.source` functions.
@@ -149,6 +156,7 @@ be expected to respond to.
 
 
 .. automodule:: default_profile.util.pager2
+   :synopsis: Rewrite how IPython utilizes the pager on Windows.
    :members:
    :undoc-members:
    :show-inheritance:

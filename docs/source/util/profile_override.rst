@@ -1,12 +1,9 @@
-=========================
-`profile_override` module
-=========================
-
-.. module:: profile_override
-   :synopsis: Rewrite IPython profiles.
-
+====================================================
+:mod:`~default_profile.util.profile_override` module
+====================================================
 
 .. automodule:: default_profile.util.profile_override
+   :synopsis: Rewrite IPython profiles.
    :members:
    :undoc-members:
    :show-inheritance:
