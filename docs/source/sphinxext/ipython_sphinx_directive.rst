@@ -12,9 +12,9 @@ IPython Sphinx Directive
 
 .. |rst| replace:: reStructured text
 
-.. let's see whether references are case sensitive.
+.. let's see whether references are case sensitive. Yup!
 
-The :rst:dir:`IPython` directive is a stateful shell that can be used
+The :rst:dir:`ipython` directive is a stateful shell that can be used
 in |rst| files.
 
 The Sphinx project, for those who are unfamiliar, is used

@@ -5,9 +5,7 @@ IPython Kernel
 .. module:: kernel
    :synopsis: Summarize the IPykernel.
 
-.. highlight:: ipython
-
-.. ipython::
+.. testsetup::
 
     from traitlets.config import get_config
     c = get_config()
@@ -27,7 +25,7 @@ Mixin for configurable classes that work with connection files.
 :mod:`json` file in which to store connection info [default: kernel-<pid>.json]
 
 This file will contain the IP, ports, and authentication key needed to connect
-clients to this kernel.
+'clients to this kernel.'
 
 By default, this file will be created in the security
 dir of the current profile, but can be specified by absolute path.::

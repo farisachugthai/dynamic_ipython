@@ -383,8 +383,6 @@
             <span class="k">continue</span>
 
         <span class="c1"># does this look like an input line?</span>
-        <span class="c1"># if rgxin</span>
-        <span class="n">regexin</span> <span class="o">=</span> <span class="n">rgxin</span>
         <span class="n">matchin</span> <span class="o">=</span> <span class="n">rgxin</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">matchin</span><span class="p">:</span>
             <span class="n">lineno</span><span class="p">,</span> <span class="n">inputline</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">matchin</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)),</span> <span class="n">matchin</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
@@ -1038,33 +1036,13 @@
         <span class="k">return</span> <span class="n">output</span></div>
 
 <div class="viewcode-block" id="EmbeddedSphinxShell.custom_doctest"><a class="viewcode-back" href="../../../sphinxext/sphinx_api_docs.html#default_profile.sphinxext.ipython_directive.EmbeddedSphinxShell.custom_doctest">[docs]</a>    <span class="k">def</span> <span class="nf">custom_doctest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">decorator</span><span class="p">,</span> <span class="n">input_lines</span><span class="p">,</span> <span class="n">found</span><span class="p">,</span> <span class="n">submitted</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Perform a specialized doctest using a :ref:`custom_doctest`.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        decorator : str</span>
-<span class="sd">            arguments provided to `@doctest`</span>
-<span class="sd">        input_lines : list</span>
-<span class="sd">        found : I don&#39;t know</span>
-<span class="sd">        submitted</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        Nothing? How? This is what I would&#39;ve assumed we need to return.:</span>
-
-<span class="sd">            doctest_handlers[doctest_type](self, args, input_lines, found, submitted)</span>
-
-<span class="sd">        Raises</span>
-<span class="sd">        ------</span>
-<span class="sd">        :exc:`RuntimeError`</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="kn">from</span> <span class="nn">.custom_doctests</span> <span class="kn">import</span> <span class="n">doctest_handlers</span>
+        <span class="sd">&quot;&quot;&quot;Perform a specialized doctest.&quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">.custom_doctests</span> <span class="kn">import</span> <span class="n">doctests</span>
 
         <span class="n">args</span> <span class="o">=</span> <span class="n">decorator</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
         <span class="n">doctest_type</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">doctest_type</span> <span class="ow">in</span> <span class="n">doctest_handlers</span><span class="p">:</span>
-            <span class="n">doctest_handlers</span><span class="p">[</span><span class="n">doctest_type</span><span class="p">](</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">input_lines</span><span class="p">,</span> <span class="n">found</span><span class="p">,</span> <span class="n">submitted</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">doctest_type</span> <span class="ow">in</span> <span class="n">doctests</span><span class="p">:</span>
+            <span class="n">doctests</span><span class="p">[</span><span class="n">doctest_type</span><span class="p">](</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">input_lines</span><span class="p">,</span> <span class="n">found</span><span class="p">,</span> <span class="n">submitted</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">e</span> <span class="o">=</span> <span class="s2">&quot;Invalid option to @doctest: {0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">doctest_type</span><span class="p">)</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="n">e</span><span class="p">)</span></div></div>
@@ -1089,35 +1067,31 @@
 
     <span class="n">seen_docs</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
 
-    <span class="c1"># def __init__(self):</span>
-    <span class="c1">#     &quot;&quot;&quot;Add an init method to this class.&quot;&quot;&quot;</span>
-    <span class="c1">#     super().__init__()</span>
+<div class="viewcode-block" id="IPythonDirective.__init__"><a class="viewcode-back" href="../../../sphinxext/sphinx_api_docs.html#default_profile.sphinxext.ipython_directive.IPythonDirective.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add an init method to this class.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="IPythonDirective.get_config_options"><a class="viewcode-back" href="../../../sphinxext/sphinx_api_docs.html#default_profile.sphinxext.ipython_directive.IPythonDirective.get_config_options">[docs]</a>    <span class="k">def</span> <span class="nf">get_config_options</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># contains sphinx configuration variables</span>
         <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">config</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Config is :&#39;</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
 
-        <span class="n">config_options</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="c1"># get config variables to set figure output directory</span>
-            <span class="s1">&#39;savefig_dir&#39;</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">ipython_savefig_dir</span><span class="p">,</span>
-            <span class="s1">&#39;source_dir&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">srcdir</span><span class="p">,</span>
-            <span class="c1"># wait wtf do we ovverride the savefig dir?</span>
-            <span class="c1"># savefig_dir = os.path.join(source_dir, savefig_dir)</span>
+        <span class="c1"># get config variables to set figure output directory</span>
+        <span class="n">savefig_dir</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">ipython_savefig_dir</span>
+        <span class="n">source_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">srcdir</span>
+        <span class="n">savefig_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">source_dir</span><span class="p">,</span> <span class="n">savefig_dir</span><span class="p">)</span>
 
-            <span class="c1"># get regex and prompt stuff</span>
-            <span class="s1">&#39;rgxin&#39;</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">ipython_rgxin</span><span class="p">),</span>
-            <span class="s1">&#39;rgxout&#39;</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">ipython_rgxout</span><span class="p">),</span>
-            <span class="s1">&#39;promptin&#39;</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">ipython_promptin</span><span class="p">,</span>
-            <span class="s1">&#39;promptout&#39;</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">ipython_promptout</span><span class="p">,</span>
-            <span class="s1">&#39;mplbackend&#39;</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">ipython_mplbackend</span><span class="p">,</span>
-            <span class="s1">&#39;exec_lines&#39;</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">ipython_execlines</span><span class="p">,</span>
-            <span class="s1">&#39;hold_count&#39;</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">ipython_holdcount</span><span class="p">,</span>
-            <span class="s1">&#39;warning_is_error&#39;</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">ipython_warning_is_error</span><span class="p">,</span>
-        <span class="p">}</span>
-        <span class="c1"># are you allowed to do this? no.</span>
-        <span class="c1"># return **config_options</span>
-        <span class="k">return</span> <span class="n">config_options</span></div>
+        <span class="c1"># get regex and prompt stuff</span>
+        <span class="n">rgxin</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">ipython_rgxin</span>
+        <span class="n">rgxout</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">ipython_rgxout</span>
+        <span class="n">warning_is_error</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">ipython_warning_is_error</span>
+        <span class="n">promptin</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">ipython_promptin</span>
+        <span class="n">promptout</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">ipython_promptout</span>
+        <span class="n">mplbackend</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">ipython_mplbackend</span>
+        <span class="n">exec_lines</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">ipython_execlines</span>
+        <span class="n">hold_count</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">ipython_holdcount</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">savefig_dir</span><span class="p">,</span> <span class="n">source_dir</span><span class="p">,</span> <span class="n">rgxin</span><span class="p">,</span> <span class="n">rgxout</span><span class="p">,</span> <span class="n">promptin</span><span class="p">,</span> <span class="n">promptout</span><span class="p">,</span>
+                <span class="n">mplbackend</span><span class="p">,</span> <span class="n">exec_lines</span><span class="p">,</span> <span class="n">hold_count</span><span class="p">,</span> <span class="n">warning_is_error</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="IPythonDirective.setup"><a class="viewcode-back" href="../../../sphinxext/sphinx_api_docs.html#default_profile.sphinxext.ipython_directive.IPythonDirective.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get configuration values.&quot;&quot;&quot;</span>
@@ -1150,8 +1124,6 @@
         <span class="c1"># reset the execution count if we haven&#39;t processed this doc</span>
         <span class="c1"># NOTE: this may be borked if there are multiple seen_doc tmp files</span>
         <span class="c1"># check time stamp?</span>
-        <span class="c1"># Well this does bork things if you use autodoc. Changes the prompt #</span>
-        <span class="c1"># halfway through a doc</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">current_source</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">seen_docs</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">IP</span><span class="o">.</span><span class="n">history_manager</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">IP</span><span class="o">.</span><span class="n">execution_count</span> <span class="o">=</span> <span class="mi">1</span>
@@ -1181,6 +1153,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">clear_cout</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="IPythonDirective.run"><a class="viewcode-back" href="../../../sphinxext/sphinx_api_docs.html#default_profile.sphinxext.ipython_directive.IPythonDirective.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">debug</span> <span class="o">=</span> <span class="bp">False</span>
 
         <span class="c1"># TODO, any reason block_parser can&#39;t be a method of embeddable shell</span>
         <span class="c1"># then we wouldn&#39;t have to carry these around</span>
@@ -1223,7 +1196,7 @@
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">warning_is_error</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">figure</span> <span class="ow">in</span> <span class="n">figures</span><span class="p">:</span>
             <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
@@ -1231,13 +1204,14 @@
             <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">))</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># This has to do with input, not output. But if we comment</span>
-            <span class="c1"># these lines out, then no IPython code will appear in the</span>
-            <span class="c1"># final output.</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">state_machine</span><span class="o">.</span><span class="n">insert_input</span><span class="p">(</span>
-                <span class="n">lines</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">state_machine</span><span class="o">.</span><span class="n">input_lines</span><span class="o">.</span><span class="n">source</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+                <span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># This has to do with input, not output. But if we comment</span>
+                <span class="c1"># these lines out, then no IPython code will appear in the</span>
+                <span class="c1"># final output.</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">state_machine</span><span class="o">.</span><span class="n">insert_input</span><span class="p">(</span>
+                    <span class="n">lines</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">state_machine</span><span class="o">.</span><span class="n">input_lines</span><span class="o">.</span><span class="n">source</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
 
         <span class="c1"># cleanup</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">teardown</span><span class="p">()</span>
@@ -1256,8 +1230,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">app</span><span class="o">.</span><span class="n">add_directive</span><span class="p">(</span><span class="s1">&#39;ipython&#39;</span><span class="p">,</span> <span class="n">IPythonDirective</span><span class="p">)</span>
     <span class="n">app</span><span class="o">.</span><span class="n">add_config_value</span><span class="p">(</span><span class="s1">&#39;ipython_savefig_dir&#39;</span><span class="p">,</span> <span class="s1">&#39;savefig&#39;</span><span class="p">,</span> <span class="s1">&#39;env&#39;</span><span class="p">)</span>
-    <span class="c1"># This needs to be changed to false so badly</span>
-    <span class="n">app</span><span class="o">.</span><span class="n">add_config_value</span><span class="p">(</span><span class="s1">&#39;ipython_warning_is_error&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="s1">&#39;env&#39;</span><span class="p">)</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">add_config_value</span><span class="p">(</span><span class="s1">&#39;ipython_warning_is_error&#39;</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="s1">&#39;env&#39;</span><span class="p">)</span>
     <span class="n">app</span><span class="o">.</span><span class="n">add_config_value</span><span class="p">(</span><span class="s1">&#39;ipython_rgxin&#39;</span><span class="p">,</span>
                          <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;In \[(\d+)\]:\s?(.*)\s*&#39;</span><span class="p">),</span> <span class="s1">&#39;env&#39;</span><span class="p">)</span>
     <span class="n">app</span><span class="o">.</span><span class="n">add_config_value</span><span class="p">(</span><span class="s1">&#39;ipython_rgxout&#39;</span><span class="p">,</span>
@@ -1372,7 +1345,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Oct 20, 2019.
+      Last updated on Oct 18, 2019.
     </div>
   </body>
 </html>

@@ -51,6 +51,7 @@ See Also
    sphinx.cmd.make_main
       The pure python replacement for a ``Makefile``.
    sphinx.util.osutil
+      OS utilities.
 
 
 Notes

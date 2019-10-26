@@ -43,7 +43,7 @@ from IPython import get_ipython
 
 
 class IpyPopen(subprocess.Popen):
-    """I didn't know you could subclass Popen but okay."""
+    """Subclass subprocess.Popen and give it a new __repr__."""
 
     def go(self):
         return self.communicate()[0]
@@ -56,7 +56,7 @@ class IpyPopen(subprocess.Popen):
 
 
 def startjob(job):
-    """Initialize an *IpyPopen instance."""
+    """Initialize an 'IpyPopen' instance."""
     p = IpyPopen(shlex.split(job), stdout=PIPE, shell=False)
     p.line = job
     return p

@@ -578,7 +578,7 @@ plot_rcparams = {
 from sphinx import addnodes  # noqa
 
 
-def parse_event(env, sig, signode):
+def parse_event(sig, signode):
     event_sig_re = re.compile(r'([a-zA-Z-]+)\s*\((.*)\)')
     m = event_sig_re.match(sig)
     if not m:
@@ -595,9 +595,7 @@ def parse_event(env, sig, signode):
 
 
 def rstjinja(app, docname, source):
-    """
-    Render our pages as a jinja template for fancy templating goodness.
-    """
+    """Render our pages as a jinja template for fancy templating goodness."""
     # Make sure we're outputting HTML
     if app.builder.format != 'html':
         return
@@ -608,8 +606,9 @@ def rstjinja(app, docname, source):
     source[0] = rendered
 
 
-def del_later():
-    """Don't know where to move this but it's an interesting way of running lambdas over an app to get logging statements."""
+def del_later(app):
+    """Don't know where to move this but it's an interesting way of running
+    lambdas over an app to get logging statements."""
     # workaround for RTD
     from sphinx.util import logging
     logger = logging.getLogger(__name__)

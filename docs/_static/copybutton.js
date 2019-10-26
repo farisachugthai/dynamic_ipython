@@ -2,7 +2,7 @@
 // Stolen from the official python documentation no less!
 // All rights reserved
 
-$(document).ready(function() {
+$(document).ready(function () {
   /* Add a [>>>] button on the top-right corner of code samples to hide
    * the >>> and ... prompts and the output and thus make the code
    * copyable. */
@@ -38,7 +38,7 @@ $(document).ready(function() {
   };
 
   // create and add the button to all the code blocks that contain >>>
-  div.each(function(index) {
+  div.each(function (index) {
     var jthis = $(this);
     if (jthis.find(".gp").length > 0) {
       var button = $('<span class="copybutton">&gt;&gt;&gt;</span>');
@@ -52,14 +52,14 @@ $(document).ready(function() {
     jthis
       .find("pre:has(.gt)")
       .contents()
-      .filter(function() {
+      .filter(function () {
         return this.nodeType == 3 && this.data.trim().length > 0;
       })
       .wrap("<span>");
   });
 
   // define the behavior of the button when it's clicked
-  $(".copybutton").click(function(e) {
+  $(".copybutton").click(function (e) {
     e.preventDefault();
     var button = $(this);
     if (button.data("hidden") === "false") {
