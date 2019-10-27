@@ -630,7 +630,7 @@ def setup(app):
     DOCS_LOGGER.info('Initializing the Sphinx instance.')
     app.connect("source-read", rstjinja)
     app.add_lexer('ipythontb', IPythonTracebackLexer)
-    app.add_lexer('ipy', IPyLexer)
+    app.add_lexer('ipython', IPyLexer)
     app.connect('autodoc-process-docstring', cut_lines(4, what=['module']))
     app.add_object_type('confval', 'confval',
                         objname='configuration value',
