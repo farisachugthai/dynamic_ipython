@@ -15,9 +15,16 @@ import traceback
 # import signal
 from pdb import Pdb
 
+from prompt_toolkit.enums import EditingMode
+from prompt_toolkit.formatted_text import PygmentsTokens
+# from prompt_toolkit.contrib.completers.system import SystemCompleter
+from prompt_toolkit.shortcuts.prompt import PromptSession
+from pygments.token import Token
+
 from IPython import get_ipython
 # from IPython.core.magics import MagicsClass, cell_magics, line_magics
 from IPython.core.completer import IPCompleter
+from IPython.core.error import UsageError
 # As a heads up I think the super() call goes to Pdb not TerminalPdb.
 # from IPython.core.debugger import Pdb
 # from IPython.core.interactiveshell import InteractiveShell
@@ -26,11 +33,6 @@ from IPython.terminal.interactiveshell import TerminalInteractiveShell
 # from IPython.terminal.ipapp import TerminalIPythonApp
 from IPython.terminal.ptutils import IPythonPTCompleter
 from IPython.terminal.shortcuts import create_ipython_shortcuts
-from prompt_toolkit.enums import EditingMode
-from prompt_toolkit.formatted_text import PygmentsTokens
-# from prompt_toolkit.contrib.completers.system import SystemCompleter
-from prompt_toolkit.shortcuts.prompt import PromptSession
-from pygments.token import Token
 
 
 class IPD(Pdb):
@@ -41,7 +43,7 @@ class IPD(Pdb):
 
     """
 
-    def __init__(self, shell, keys=None, completer=None, prompt_toolkit_application=None, *args, **kwargs):
+    def __init__(self, shell=None, keys=None, completer=None, prompt_toolkit_application=None, *args, **kwargs):
         """Add everything to call signature.
 
         The original only displays star args and star kwargs.
@@ -52,10 +54,17 @@ class IPD(Pdb):
             Global IPython
         completer : optional
             What do we use for completions?
-        prompt_toolkit_application : None
+        prompt_toolkit_application : prompt_toolkit.PromptSession, optional
             pt_init parameter
+
         """
-        self.shell = shell
+        if shell is not None:
+            self.shell = shell
+        else:
+            self.shell = get_ipython()
+
+        if self.shell is None:
+            raise UsageError
 
         if not keys:
             self.keys = self.initialize_keybindings()

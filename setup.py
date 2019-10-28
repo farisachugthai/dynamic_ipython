@@ -87,13 +87,18 @@ BUILD_PATH = os.path.join(CONF_PATH, 'build')
 SOURCE_PATH = os.path.join(CONF_PATH, 'source')
 
 README = os.path.join(ROOT_PATH, '', 'README.rst')
+
+# TODO: How to do conditionals? Only windows needs pyreadline
 REQUIRED = [
-    'IPython>=7.7', 'prompt_toolkit', 'numpy', 'pandas', 'jinja2', 'traitlets',
-    'pygments', 'matplotlib'
+    'IPython>=7.7', 'prompt_toolkit', 'traitlets',
+    'pygments', 'jedi'
 ]
 
 EXTRAS = {
-    'develop': ['pipenv', 'flake8>=3.7.1', 'pylint', 'yapf>=0.27.0'],
+    'develop': [
+        'pipenv', 'flake8>=3.7.1', 'yapf>=0.27.0', 'numpy', 'pandas',
+        'matplotlib',
+    ],
     'docs': [
         'sphinx>=2.2',
         # Project uses reStructuredText, so ensure that the docutils get
@@ -101,8 +106,11 @@ EXTRAS = {
         'docutils>=0.3',
         'numpydoc>=0.9',
         'flake8-rst',
+        'flake8-docstrings',
     ],
-    'test': ['pytest', 'tox', 'nose']
+    'test': [
+        'pytest', 'tox', 'nose'
+    ]
 }
 
 with codecs.open(README, encoding="utf-8") as f:

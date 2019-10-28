@@ -23,7 +23,6 @@ Classes
      {{ item }}
     <!-- {% endif %} -->
   {% endfor %}
-{% endif %}
 
 {% endblock %}
 
@@ -43,11 +42,13 @@ Functions
       {% endif %}
     {% endfor %}
   {% endif %}
+
 {% endblock %}
 
 
 {% block exceptions %}
   {% if exceptions %}
+
 .. rubric:: Exceptions
 
 .. autosummary::
@@ -56,5 +57,7 @@ Functions
       {{ item }}
     {%- endfor %}
   {% endif %}
+
 {% endblock %}
+
 {# Vim: set ft=htmljinja: #}

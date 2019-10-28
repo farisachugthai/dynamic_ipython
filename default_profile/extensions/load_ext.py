@@ -46,9 +46,9 @@ def load_ipython_extension(shell=None):
         standalone function.  The functions should have the following
         signatures:
 
-    * For line magics: `def f(line)`
-    * For cell magics: `def f(line, cell)`
-    * For a function that does both: `def f(line, cell=None)`
+    * For line magics: ``def f(line)``
+    * For cell magics: ``def f(line, cell)``
+    * For a function that does both: ``def f(line, cell=None)``
 
     In the latter case, the function will be called with ``cell==None`` when
     invoked as ``%f``, and with cell as a string when invoked as ``%%f``.
@@ -61,6 +61,8 @@ if __name__ == "__main__":
     _ip = get_ipython()
     if _ip is None:
         sys.exit()
+
+    args = sys.argv[1:]
 
     if len(args) == 0:
         load_ipython_extension(_ip)

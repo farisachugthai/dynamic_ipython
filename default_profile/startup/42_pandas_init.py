@@ -104,7 +104,8 @@ See Also
 """
 import logging
 
-from default_profile.util import module_log
+# from default_profile.util import module_log
+PANDAS_LOGGER = logging.getLogger('default_profile.startup').getChild('42_pandas_init')
 
 
 def pandas_init():
@@ -169,8 +170,8 @@ class DisplayHTML:
 
 if __name__ == '__main__':
     name = 'default_profile.startup.pandas_init'
-    PANDAS_LOGGER = module_log.stream_logger(logger=name,
-                                             log_level=logging.INFO)
+    # PANDAS_LOGGER = module_log.stream_logger(logger=name,
+    #                                          log_level=logging.INFO)
 
     try:  # Import numexpr before pandas if possible
         import numexpr
