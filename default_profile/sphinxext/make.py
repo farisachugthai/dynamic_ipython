@@ -15,6 +15,7 @@ try:
 except (ImportError, ModuleNotFoundError):
     sys.exit("Sphinx documentation module not found. Exiting.")
 
+from sphinx.application import Sphinx
 from sphinx.jinja2glue import SphinxFileSystemLoader
 from jinja2.environment import Environment
 
@@ -22,6 +23,7 @@ from sphinx.cmd.make_mode import build_main
 
 from default_profile.__about__ import __version__
 
+# TODO:
 DOC_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BUILD_PATH = os.path.join(DOC_PATH, 'build')
 SOURCE_PATH = os.path.join(DOC_PATH, 'source')

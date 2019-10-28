@@ -5,9 +5,6 @@
 ==========
 __main__
 ==========
-
-.. highlight:: ipython
-
 07/08/2019
 
 This module executes a check that's similar in nature to what
@@ -22,14 +19,14 @@ an :func:`IPython.get_ipython()` call is doing.::
 """
 import errno
 import os
-import sys  # unresolved import sys??
+import sys
 from pathlib import Path
 
 # from IPython.terminal.debugger import com
+from IPython import get_ipython
 from IPython.terminal.embed import InteractiveShellEmbed
 from IPython.terminal.ipapp import TerminalIPythonApp
 from traitlets.config import Configurable
-
 
 # from IPython.core.debugger import BdbQuit_excepthook
 
@@ -41,12 +38,17 @@ class Dynamic(Configurable):
     necessary.
     """
 
-    def __init__(self, canary, *args, **kwargs):
+    def __init__(self, canary=None, *args, **kwargs):
         """Initialize our own version of ipython."""
-        self.canary = canary
+        if canary is not None:
+            self.canary = canary
+        else:
+            self.canary = get_ipython()
         super().__init__(*args, **kwargs)
+        # self.config = self.canary.config
 
     def initialize(self):
+        """TODO: Add getattr checks for this func so we don't call on an uninitialized object."""
         if self.canary.initialized():
             # Running inside IPython
 
@@ -54,8 +56,7 @@ class Dynamic(Configurable):
             if isinstance(self.canary, InteractiveShellEmbed):
                 sys.stderr.write(
                     "\nYou are currently in an embedded IPython shell,\n"
-                    "the configuration will not be loaded.\n\n"
-                )
+                    "the configuration will not be loaded.\n\n")
         else:
             # Not inside IPython
             # Build a terminal app in order to force ipython to load the configuration
@@ -80,6 +81,11 @@ class Dynamic(Configurable):
         Returns
         -------
         None
+
+        Raises
+        ------
+        OSError, IOError
+
         """
         if not os.path.exists(path):
             try:
@@ -104,5 +110,4 @@ class Dynamic(Configurable):
             print(e)
         else:
             self.canary.profile_dir = os.path.expanduser(
-                '~/.ipython/default_profile'
-            )
+                '~/.ipython/default_profile')

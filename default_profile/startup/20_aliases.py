@@ -7,10 +7,12 @@ import shutil
 
 from IPython import get_ipython
 
-from default_profile.util import module_log
+from default_profile.startup import ask_for_import
+# TODO: allow these imports to run and allow fall backs otherwise
+from default_profile.util.module_log import stream_logger
 from default_profile.util.machine import Platform
 
-ALIAS_LOGGER = module_log.stream_logger(
+ALIAS_LOGGER = stream_logger(
     logger='default_profile.startup.20_aliases',
     msg_format='%(asctime)s : %(levelname)s : %(module)s %(message)s',
     log_level=logging.WARNING)
@@ -48,6 +50,7 @@ class LinuxAliases:
             magic_name=name)
 
     """
+
     def __init__(self, shell=None, aliases=None):
         """The WindowsAliases implementation of this is odd so maybe branch off.
 
@@ -161,6 +164,7 @@ class CommonAliases:
     .. todo:: :command:`git show`
 
     """
+
     def __init__(self, shell=None, user_aliases=None):
         """OS Agnostic aliases.
 
@@ -309,6 +313,7 @@ class WindowsAliases:
     Would it be useful to subclass :class:`reprlib.Repr` here?
 
     """
+
     def __init__(self, shell=None, user_aliases=None):
         """Initialize the platform specific alias manager with IPython.
 

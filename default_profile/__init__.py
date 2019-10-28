@@ -8,8 +8,8 @@ import logging
 
 try:
     # these should always be available
-    import IPython
-    from IPython import get_ipython
+    import IPython  # noqa F0401
+    from IPython import get_ipython  # noqa F0401
 except (ImportError, ModuleNotFoundError):
     pass
 
