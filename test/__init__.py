@@ -29,14 +29,10 @@ import unittest
 import warnings
 
 import IPython
+from IPython import get_ipython
 
 try:
     import nose  # noqa F401
-except ImportError as e:
-    warnings.warn(e)
-
-try:
-    import pytest  # noqa F401
 except ImportError as e:
     warnings.warn(e)
 
