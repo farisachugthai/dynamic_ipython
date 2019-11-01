@@ -23,3 +23,9 @@ class DynamicAliasManager(AliasManager):
 
     # def __call__(self):
     #     return self.init_aliases()
+
+
+if __name__ == "__main__":
+    # Forgive me for all these terrible hacks
+    shell = get_ipython()
+    shell.run_line_magic('alias_magic', 'p pycat')

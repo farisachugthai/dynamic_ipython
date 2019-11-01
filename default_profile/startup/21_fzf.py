@@ -1,7 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import functools
+import os
 import shutil
+import sys
+
+from IPython import get_ipython
 
 
 class Executable:
@@ -44,21 +48,9 @@ class Executable:
                 func(*args, **kwargs)
 
 
-def setup_fzf(user_aliases):
-    """Needs a good deal of work.
-
-    On second thought this function has some potential. Or at least it
-    jogged a thought in my brain.
-
-    A good idea would be to make a function that's implemented as a decorator,
-    so we'll need to import functools.wrapped, and have that decorator run
-    shutil.which on an external command. If it exists continue with the
-    function and alias it. If it doesn't, then return None.
-
-    This function was useful for pointing out that the decorator should allow
-    for multiple arguments.
-
-    """
+def setup_fzf(user_aliases=None):
+    if user_aliases is None:
+        user_aliases = []
     if shutil.which('fzf') and shutil.which('rg'):
         # user_aliases.extend(
         #     ('fzf', '$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS'))
@@ -77,12 +69,10 @@ def setup_fzf(user_aliases):
     return user_aliases
 
 
-def fzf_tmux():
+def is_fzf_tmux():
     """Check if we're using tmux or not."""
     if os.environ.get('TMUX'):
-        return 'fzf-tmux'
-    else:
-        return 'fzf'
+        return True
 
 
 def add_rg():
@@ -90,6 +80,21 @@ def add_rg():
     return shutil.which('rg')
 
 
+def busybox_hack():
+    # HACK: dear god it feels horrible doing this but shit it works
+    shell.alias_manager.user_aliases += aliases_mod.LinuxAliases().busybox()
+    shell.alias_manager.init_aliases()
+
 # @Executable(fzf_tmux())
 # def add_fzf_alias():
 
+
+if __name__ == "__main__":
+    if sys.platform == 'win32':
+        shell = get_ipython()
+        try:
+            from default_profile.startup import aliases_mod
+        except ImportError:
+            pass
+        else:
+            busybox_hack()

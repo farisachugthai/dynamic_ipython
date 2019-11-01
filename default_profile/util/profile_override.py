@@ -1,4 +1,8 @@
-"""Override the IPython ProfileDir().
+"""
+Profile Override
+================
+
+Override the IPython ProfileDir().
 
 It feels rude to do it this way but all I wanna do is add a repr! Oh I guess I
 could just inherit everything from this class.
@@ -7,6 +11,37 @@ Eh. I also wanna modify the behavior that automatically adds a PID dir, security
 
 I get why it's difficult to run it selectively but it automatically creates them in the wrong dir
 often enough that it should be toggleable behavior.
+
+See Also
+--------
+.. seealso::
+
+    :mod:`IPython.core.profileapp`.
+
+.. code-block:: console
+
+    $: ipython locate profile -- :kbd:`Tab`
+
+    --LocateIPythonApp.auto_create=
+
+    --LocateIPythonApp.copy_config_files=
+
+    --LocateIPythonApp.extra_config_file=
+
+    --LocateIPythonApp.ipython_dir=
+
+    --LocateIPythonApp.log_datefmt=
+
+    --LocateIPythonApp.log_format=
+
+    --LocateIPythonApp.log_level=
+
+    --LocateIPythonApp.overwrite=
+
+    --LocateIPythonApp.profile=
+
+    --LocateIPythonApp.verbose_crash=
+
 
 """
 import errno
@@ -180,6 +215,7 @@ class ReprProfileDir(LoggingConfigurable):
         name : unicode
             The name of the profile.  The name of the profile directory will
             be "profile_<profile>".
+
         """
         if not os.path.isdir(path):
             raise ProfileDirError('Directory not found: %s' % path)
@@ -196,16 +232,20 @@ class ReprProfileDir(LoggingConfigurable):
         is not found, a :class:`ProfileDirError` exception will be raised.
 
         The search path algorithm is:
-        1. ``os.getcwd()``
-        2. ``ipython_dir``
+
+        1. :func:`os.getcwd`
+
+        2. :envvar:IPYTHONDIR`
+
 
         Parameters
         ----------
-        ipython_dir : unicode or str
+        ipython_dir : str
             The IPython directory to use.
         name : unicode or str
             The name of the profile.  The name of the profile directory
             will be "profile_<profile>".
+
         """
         dirname = u'profile_' + name
         paths = [os.getcwd(), ipython_dir]

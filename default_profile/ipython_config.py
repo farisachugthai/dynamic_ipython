@@ -4,57 +4,6 @@
 ==================================================
 IPython --- Configuration file for :mod:`IPython`.
 ==================================================
-.. highlight:: ipython
-
-
-Python3.6
-=========
-
-.. ipython::
-    :verbatim:
-
-    File "/home/farbuntu/.ipython/profile_default/ipython_config.py", line 454, in <module>
-        if ModuleNotFoundError not in builtins:
-    TypeError: argument of type 'module' is not iterable
-
-So we have a python3.6 error. The problem is more that the only reason I noticed
-it is because the default python ran, and by default in 3.7 it never does.
-
-So fix that so we can maintain *some* minimal 3.6 compatability.
-
-See Also
---------
-.. seealso::
-
-    :mod:`IPython.core.profileapp`.
-
-I don't know if that properly belongs here, so figure out what needs to
-be modified if so.
-
-.. code-block:: console
-
-    $: ipython locate profile -- :kbd:`Tab`
-
-    --LocateIPythonApp.auto_create=
-
-    --LocateIPythonApp.copy_config_files=
-
-    --LocateIPythonApp.extra_config_file=
-
-    --LocateIPythonApp.ipython_dir=
-
-    --LocateIPythonApp.log_datefmt=
-
-    --LocateIPythonApp.log_format=
-
-    --LocateIPythonApp.log_level=
-
-    --LocateIPythonApp.overwrite=
-
-    --LocateIPythonApp.profile=
-
-    --LocateIPythonApp.verbose_crash=
-
 
 Notes
 -----
