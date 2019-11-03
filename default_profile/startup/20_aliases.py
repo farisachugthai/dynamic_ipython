@@ -204,8 +204,8 @@ class CommonAliases:
 
         Let's fix that behavior because that's silly.
         """
-        self.unalias(pydoc)
-        self.unalias(apropos)
+        self.unalias("pydoc")
+        self.unalias("apropos")
 
         import pydoc
         from pydoc import apropos
@@ -375,21 +375,23 @@ class WindowsAliases:
 
         """
         cls.user_aliases = [
-            ('cp', 'copy %s %s'),
-            ('copy', 'copy %s %s'),
-            ('ddir', 'dir /ad /on %l'),
-            ('echo', 'echo %l'),
-            ('ldir', 'dir /ad /on %l'),
-            ('ll', 'dir /Q %l'),
-            # I know this really isn't the same but I need it
-            ('ln', 'mklink %s %s'),
-            ('make', 'make.bat %l'),  # Useful when we're building docs
-            ('mklink', 'mklink %s %s'),
-            ('move', 'move %s %s'),
-            ('mv', 'move %s %s'),
-            ('ren', 'ren'),
-            ('rmdir', 'rmdir %l'),
-        ]
+                ('assoc', 'assoc %l')
+                ('cp', 'copy %s %s'),
+                ('copy', 'copy %s %s'),
+                ('ddir', 'dir /ad /on %l'),
+                ('echo', 'echo %l'),
+                ('ldir', 'dir /ad /on %l'),
+                ('ll', 'dir /Q %l'),
+                # I know this really isn't the same but I need it
+                ('ln', 'mklink %s %s'),
+                ('make', 'make.bat %l'),  # Useful when we're building docs
+                ('mklink', 'mklink %s %s'),
+                ('move', 'move %s %s'),
+                ('mv', 'move %s %s'),
+                ('ren', 'ren %l'),
+                ('rmdir', 'rmdir %l'),
+                ('tree', 'tree /A /F %l')
+            ]
         return cls.user_aliases
 
     @classmethod
@@ -496,6 +498,8 @@ def main():
     machine = Platform()
     # TODO: Work in the Executable() class check.
     user_aliases = common.git()
+
+    common.python_exes()
 
     if machine.is_linux:
         # user_aliases += LinuxAliases().busybox()

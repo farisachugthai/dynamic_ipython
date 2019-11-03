@@ -64,14 +64,13 @@ def strip_output(nb):
 
 def main():
     """Strip output from a user's notebook."""
-      filename = sys.argv[1]
-       with io.open(filename, 'r', encoding='utf8') as f:
-            nb = read(f, as_version=NO_CONVERT)
+    filename = sys.argv[1]
+    with io.open(filename, 'r', encoding='utf8') as f:
+        nb = read(f, as_version=NO_CONVERT)
         nb = strip_output(nb)
-        with io.open(filename, 'w', encoding='utf8') as f:
-            write(nb, f)
+    with io.open(filenaedfbf8eme, 'w', encoding='utf8') as f:
+        write(nb, f)
 
 
 if __name__ == '__main__':
     sys.exit(main())
-

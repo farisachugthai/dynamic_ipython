@@ -73,6 +73,6 @@ def load_ipython_extension(ip):
     TODO
 
     """
-    ip.register_magic(PackagingMagics)
+    ip.register_magics(PackagingMagics)
     ip.register_magic_function(PackagingMagics().conda)
 

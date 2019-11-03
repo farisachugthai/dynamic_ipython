@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""FZF works in IPython!!!!"""
 import functools
 import os
 import shutil
@@ -34,48 +35,40 @@ class Executable:
 
     @functools.wraps
     def __call__(self, func, *args, **kwargs):
-        """Make the class a callable.
-
-        I think shutil.which() returns either a `str` or `None`.
-
-        So we could just check that if self.command_path is not None: return func
-
-        Probably would be faster. *shrugs*.
-
-        """
-        if os.path.exists(self.command_path):
+        if self.command_path is not None:
             def wrapped(*args, **kwargs):
                 func(*args, **kwargs)
 
 
-def setup_fzf(user_aliases=None):
-    if user_aliases is None:
-        user_aliases = []
+def setup_fzf(fzf_alias=None):
+    if fzf_alias is None:
+        fzf_alias = ()
     if shutil.which('fzf') and shutil.which('rg'):
         # user_aliases.extend(
         #     ('fzf', '$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS'))
-        user_aliases.extend((
-            'fzf',
-            'rg --pretty --hidden --max-columns=300 --max-columns-preview '
-            '.*[a-zA-Z]* --no-heading -m=30 --no-messages --color=ansi --no-column '
-            ' --no-line-number -C 0 | fzf --ansi'))
+        fzf_alias = ('fzf',
+             'rg --pretty --hidden --max-columns=300 --max-columns-preview '
+             '.*[a-zA-Z]* --no-heading -m=30 --no-messages --color=ansi --no-column '
+             ' --no-line-number -C 0 | fzf --ansi')
 
     elif shutil.which('fzf') and shutil.which('ag'):
         # user_aliases.extend(
         #     ('fzf', '$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS'))
-        user_aliases.extend(
-            ('fzf', 'ag -C 0 --color-win-ansi --noheading | fzf --ansi'))
+        fzf_alias = (
+                'fzf', 'ag -C 0 --color-win-ansi --noheading | fzf --ansi')
 
-    return user_aliases
+    return fzf_alias
 
 
-def is_fzf_tmux():
+# def is_fzf_tmux():
+# def fzf_tmux():
+def is_tmux():
     """Check if we're using tmux or not."""
     if os.environ.get('TMUX'):
         return True
 
 
-def add_rg():
+def is_rg():
     """Returns the path to rg."""
     return shutil.which('rg')
 
@@ -89,12 +82,19 @@ def busybox_hack():
 # def add_fzf_alias():
 
 
-if __name__ == "__main__":
+def main():
+    shell = get_ipython()
     if sys.platform == 'win32':
-        shell = get_ipython()
         try:
             from default_profile.startup import aliases_mod
         except ImportError:
             pass
         else:
             busybox_hack()
+
+    shell.alias_manager.user_aliases.append(setup_fzf())
+    shell.alias_manager.init_aliases()
+
+
+if __name__ == "__main__":
+    main()
