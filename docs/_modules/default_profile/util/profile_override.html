@@ -52,7 +52,11 @@
           <div class="body" role="main">
             
 <h1>Source code for default_profile.util.profile_override</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Override the IPython ProfileDir().</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Profile Override</span>
+<span class="sd">================</span>
+
+<span class="sd">Override the IPython ProfileDir().</span>
 
 <span class="sd">It feels rude to do it this way but all I wanna do is add a repr! Oh I guess I</span>
 <span class="sd">could just inherit everything from this class.</span>
@@ -61,6 +65,37 @@
 
 <span class="sd">I get why it&#39;s difficult to run it selectively but it automatically creates them in the wrong dir</span>
 <span class="sd">often enough that it should be toggleable behavior.</span>
+
+<span class="sd">See Also</span>
+<span class="sd">--------</span>
+<span class="sd">.. seealso::</span>
+
+<span class="sd">    :mod:`IPython.core.profileapp`.</span>
+
+<span class="sd">.. code-block:: console</span>
+
+<span class="sd">    $: ipython locate profile -- :kbd:`Tab`</span>
+
+<span class="sd">    --LocateIPythonApp.auto_create=</span>
+
+<span class="sd">    --LocateIPythonApp.copy_config_files=</span>
+
+<span class="sd">    --LocateIPythonApp.extra_config_file=</span>
+
+<span class="sd">    --LocateIPythonApp.ipython_dir=</span>
+
+<span class="sd">    --LocateIPythonApp.log_datefmt=</span>
+
+<span class="sd">    --LocateIPythonApp.log_format=</span>
+
+<span class="sd">    --LocateIPythonApp.log_level=</span>
+
+<span class="sd">    --LocateIPythonApp.overwrite=</span>
+
+<span class="sd">    --LocateIPythonApp.profile=</span>
+
+<span class="sd">    --LocateIPythonApp.verbose_crash=</span>
+
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">errno</span>
@@ -234,6 +269,7 @@
 <span class="sd">        name : unicode</span>
 <span class="sd">            The name of the profile.  The name of the profile directory will</span>
 <span class="sd">            be &quot;profile_&lt;profile&gt;&quot;.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
             <span class="k">raise</span> <span class="n">ProfileDirError</span><span class="p">(</span><span class="s1">&#39;Directory not found: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">path</span><span class="p">)</span>
@@ -250,16 +286,20 @@
 <span class="sd">        is not found, a :class:`ProfileDirError` exception will be raised.</span>
 
 <span class="sd">        The search path algorithm is:</span>
-<span class="sd">        1. ``os.getcwd()``</span>
-<span class="sd">        2. ``ipython_dir``</span>
+
+<span class="sd">        1. :func:`os.getcwd`</span>
+
+<span class="sd">        2. :envvar:IPYTHONDIR`</span>
+
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        ipython_dir : unicode or str</span>
+<span class="sd">        ipython_dir : str</span>
 <span class="sd">            The IPython directory to use.</span>
 <span class="sd">        name : unicode or str</span>
 <span class="sd">            The name of the profile.  The name of the profile directory</span>
 <span class="sd">            will be &quot;profile_&lt;profile&gt;&quot;.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">dirname</span> <span class="o">=</span> <span class="sa">u</span><span class="s1">&#39;profile_&#39;</span> <span class="o">+</span> <span class="n">name</span>
         <span class="n">paths</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="n">ipython_dir</span><span class="p">]</span>
@@ -398,7 +438,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Oct 31, 2019.
+      Last updated on Nov 03, 2019.
     </div>
   </body>
 </html>

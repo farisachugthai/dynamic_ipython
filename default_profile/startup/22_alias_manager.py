@@ -11,7 +11,7 @@ class DynamicAliasManager(AliasManager):
     shell = InteractiveShellABC()
 
     def __init__(self, ip=None, **kwargs):
-        self.ip = get_ipython()
+        self.ip = ip if ip else get_ipython()
         super().__init__(shell=self.ip, **kwargs)
         self.init_aliases()
 

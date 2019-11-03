@@ -1,11 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Give a detailed, colored traceback and drop into pdb on exceptions.
-
-.. module:: 50_sysexception
-   :synopsis: Specify a handler for IPython's traceback formatting.
-
-"""
+"""Give a detailed, colored traceback and drop into pdb on exceptions."""
 import sys
 
 from IPython import get_ipython
@@ -13,9 +8,7 @@ from IPython.core import ultratb
 
 
 class ExceptionHook(BaseException):
-    """Custom exception hook for IPython.
-
-    """
+    """Custom exception hook for IPython."""
 
     instance = None
 
@@ -34,9 +27,8 @@ class ExceptionHook(BaseException):
         return "<{} '{}'>".format(self.__class__.__name__, self.instance)
 
 
-sys.excepthook = ExceptionHook()
-
 if __name__ == '__main__':
-    _ip = get_ipython()
+    # _ip = get_ipython()
     # So the InteractiveShell class tmk has an attribute called excepthook but
     # it's probably a bad idea to overwrite it
+    sys.excepthook = ExceptionHook()

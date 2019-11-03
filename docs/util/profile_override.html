@@ -61,9 +61,20 @@
             
 <div class="section" id="module-default_profile.util.profile_override">
 <span id="profile-override-module"></span><h1><a class="reference internal" href="#module-default_profile.util.profile_override" title="default_profile.util.profile_override: Rewrite IPython profiles."><code class="xref py py-mod docutils literal notranslate"><span class="pre">profile_override</span></code></a> module<a class="headerlink" href="#module-default_profile.util.profile_override" title="Permalink to this headline">¶</a></h1>
+<p>It feels rude to do it this way but all I wanna do is add a repr! Oh I guess I
+could just inherit everything from this class.</p>
 <p>Eh. I also wanna modify the behavior that automatically adds a PID dir, security dir, etc.</p>
 <p>I get why it’s difficult to run it selectively but it automatically creates them in the wrong dir
 often enough that it should be toggleable behavior.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><code class="xref py py-mod docutils literal notranslate"></code></dt><dd><p><a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.profileapp.html#module-IPython.core.profileapp" title="(in IPython v7.9.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython.core.profileapp</span></code></a>.</p>
+</dd>
+<dt><code class="xref py py-mod docutils literal notranslate"></code></dt><dd><p>$: ipython locate profile – <kbd class="kbd docutils literal notranslate">Tab</kbd> –LocateIPythonApp.auto_create= –LocateIPythonApp.copy_config_files= –LocateIPythonApp.extra_config_file= –LocateIPythonApp.ipython_dir= –LocateIPythonApp.log_datefmt= –LocateIPythonApp.log_format= –LocateIPythonApp.log_level= –LocateIPythonApp.overwrite= –LocateIPythonApp.profile= –LocateIPythonApp.verbose_crash=</p>
+</dd>
+</dl>
+</div>
 <dl class="exception">
 <dt id="default_profile.util.profile_override.ProfileDirError">
 <em class="property">exception </em><code class="sig-name descname">ProfileDirError</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/util/profile_override.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/util/profile_override.html#ProfileDirError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.profile_override.ProfileDirError" title="Permalink to this definition">¶</a></dt>
@@ -235,13 +246,15 @@ be “profile_&lt;profile&gt;”.</p></li>
 <dd><p>Find an existing profile dir by profile name, return its ProfileDir.</p>
 <p>This searches through a sequence of paths for a profile dir.  If it
 is not found, a <a class="reference internal" href="#default_profile.util.profile_override.ProfileDirError" title="default_profile.util.profile_override.ProfileDirError"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProfileDirError</span></code></a> exception will be raised.</p>
-<p>The search path algorithm is:
-1. <code class="docutils literal notranslate"><span class="pre">os.getcwd()</span></code>
-2. <code class="docutils literal notranslate"><span class="pre">ipython_dir</span></code></p>
+<p>The search path algorithm is:</p>
+<ol class="arabic">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/os.html#os.getcwd" title="(in Python v3.8)"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.getcwd()</span></code></a></p></li>
+<li><p>:envvar:IPYTHONDIR`</p></li>
+</ol>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul>
-<li><p><strong>ipython_dir</strong> (<em>unicode</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The IPython directory to use.</p></li>
+<li><p><strong>ipython_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The IPython directory to use.</p></li>
 <li><p><strong>name</strong> (<em>unicode</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the profile.  The name of the profile directory
 will be “profile_&lt;profile&gt;”.</p></li>
 </ul>
@@ -387,7 +400,7 @@ will be “profile_&lt;profile&gt;”.</p></li>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Oct 31, 2019.
+      Last updated on Nov 03, 2019.
     </div>
   </body>
 </html>

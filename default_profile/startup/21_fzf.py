@@ -83,6 +83,14 @@ def busybox_hack():
 
 
 def main():
+    """Adding fzf.
+
+    >>> user_aliases.append(('rg', 'rg --hidden --no-messages %l'))
+
+    ^----- Potentially useful syntax. Also did that after initializing it as
+    a :class:`collections.deque`.
+
+    """
     shell = get_ipython()
     if sys.platform == 'win32':
         try:

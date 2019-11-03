@@ -4,6 +4,11 @@
 Customized Exceptions
 =====================
 
+.. currentmodule:: default_profile.startup.50_sysexception
+
+In this module we'll define our own exception hook for IPython.
+
+
 Debugging
 ==========
 
@@ -80,8 +85,8 @@ This guy was even so kind as to give us a full explanation for the color
 schemes! I never saw anything this thorough in the official docs so that's
 really cool.:
 
-    The colors are defined in the class TBTools through the use of the
-    ColorSchemeTable class. Currently the following exist:
+    The colors are defined in the class :class:`TBTools` through the use of the
+    :class:`ColorSchemeTable` class. Currently the following exist:
 
       - NoColor: allows all of this module to be used in any terminal
         (the color escapes are just dummy blank strings).

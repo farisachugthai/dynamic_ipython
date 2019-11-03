@@ -31,12 +31,17 @@ check
     Check labextension(s)
 
 """
+import logging
+import os
+import platform
+
+logging.basicConfig()
+
 # Configuration file for jupyter labextension.
 from traitlets.config import get_config
 
 c = get_config()
 
-import jupyter
 
 # ------------------------------------------------------------------------------
 # Application(SingletonConfigurable) configuration
@@ -78,7 +83,6 @@ c.Application.log_level = 20
 
 # Base jupyter labextension command entry point
 
-#
 # JupyterLab Check
 #
 class CheckJupyterLabExtension:
@@ -172,6 +176,14 @@ class CheckJupyterLabExtension:
 
     pass
 
+
+# Determine if we have a GUI since thatll be hugely necessary
+if platform.platform().startswith('Linux'):
+    user_env = os.environ.copy()
+    try:
+        user_env.get('DISPLAY')
+    except AttributeError:
+        pass
 
 # Wait some of those were solid
 c.CheckLabExtensionsApp.should_clean = True

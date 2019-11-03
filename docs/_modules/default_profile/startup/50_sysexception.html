@@ -54,22 +54,15 @@
 <h1>Source code for default_profile.startup.50_sysexception</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;Give a detailed, colored traceback and drop into pdb on exceptions.</span>
-
-<span class="sd">.. module:: 50_sysexception</span>
-<span class="sd">   :synopsis: Specify a handler for IPython&#39;s traceback formatting.</span>
-
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">&quot;&quot;&quot;Give a detailed, colored traceback and drop into pdb on exceptions.&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 
 <span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 <span class="kn">from</span> <span class="nn">IPython.core</span> <span class="kn">import</span> <span class="n">ultratb</span>
 
 
-<div class="viewcode-block" id="ExceptionHook"><a class="viewcode-back" href="../../../startup/sysexcept.html#default_profile.startup.50_sysexception.ExceptionHook">[docs]</a><span class="k">class</span> <span class="nc">ExceptionHook</span><span class="p">(</span><span class="ne">BaseException</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Custom exception hook for IPython.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="k">class</span> <span class="nc">ExceptionHook</span><span class="p">(</span><span class="ne">BaseException</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Custom exception hook for IPython.&quot;&quot;&quot;</span>
 
     <span class="n">instance</span> <span class="o">=</span> <span class="bp">None</span>
 
@@ -85,15 +78,14 @@
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Don&#39;t actually know if it works this way.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="s2">&quot;&lt;{} &#39;{}&#39;&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="s2">&quot;&lt;{} &#39;{}&#39;&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">)</span>
 
-
-<span class="n">sys</span><span class="o">.</span><span class="n">excepthook</span> <span class="o">=</span> <span class="n">ExceptionHook</span><span class="p">()</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+    <span class="c1"># _ip = get_ipython()</span>
     <span class="c1"># So the InteractiveShell class tmk has an attribute called excepthook but</span>
     <span class="c1"># it&#39;s probably a bad idea to overwrite it</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">excepthook</span> <span class="o">=</span> <span class="n">ExceptionHook</span><span class="p">()</span>
 </pre></div>
 
           </div>
@@ -131,17 +123,53 @@
 <div id="sidebartoc">
     <p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../sphinxext/index.html">Sphinx Extensions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/ipython_sphinx_directive.html">IPython Sphinx Directive</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/lexer.html">New IPython Console Lexer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/custom_doctests.html">Custom Doctests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/configtraits.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">configtraits</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/magics.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">magics</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/make.html">Make — Automated Documentation Builder</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev.html">Developers Notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../jobcontrol.html">Job Control</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../subcommands.html">Subcommands</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../sphinxext/index.html">Sphinx Extensions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev.html">Developers Notes</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../startup/index.html">IPython Startup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../util/index.html">IPython Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../startup/index.html">IPython Startup</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/rehashx.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">01_rehashx</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/easy_import.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">04_easy_import</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/ipython-logger.html">05_log — IPython logger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/help_helpers.html">06_Help_Helpers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/aliases.html">System Aliases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/fzf.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">21_fzf</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/setup_readline.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">30_setup_readline</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/41_numpy.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">numpy</span></code> Initialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/42_pandas.html">Pandas Initialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/matplotlib_rc.html">Matplotlib Startup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/sysexcept.html">Customized Exceptions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../util/index.html">IPython Utilities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../util/copytree.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">copytree</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util/ipython_get_history.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ipython_get_history</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util/machine.html">machine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util/module_log.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">module_log</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util/nb_stripper.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">nb_stripper</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util/pager2.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pager2</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util/paths.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paths</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util/profile_override.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">profile_override</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util/timer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">timer</span></code> module</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../../../kernel.html">IPython Kernel</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../jupyter/index.html">Jupyter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../jupyter/index.html">Jupyter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../jupyter/qtconsole.html">Jupyter QTConsole</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../jupyter/notebook.html">Jupyter Notebook</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Extensions</a></li>
 </ul>
 
@@ -167,7 +195,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Oct 16, 2019.
+      Last updated on Nov 03, 2019.
     </div>
   </body>
 </html>

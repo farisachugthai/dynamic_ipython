@@ -105,7 +105,12 @@ See Also
 import logging
 
 # from default_profile.util import module_log
-PANDAS_LOGGER = logging.getLogger('default_profile.startup').getChild('42_pandas_init')
+# PANDAS_LOGGER = logging.getLogger('default_profile.startup').getChild('42_pandas_init')
+# PANDAS_LOGGER.addHandler(logging.StreamHandler().setLevel(logging.INFO))
+# PANDAS_LOGGER.setLevel(logging.INFO)
+ROOT_HANDLER_PD = logging.StreamHandler().setLevel(logging.INFO)
+logging.basicConfig(level=logging.INFO, style='%', format='%(created)f : %(module)s : %(levelname)s : %(message)s',
+        handlers=[ROOT_HANDLER_PD])
 
 
 def pandas_init():
@@ -181,6 +186,6 @@ if __name__ == '__main__':
     try:
         import pandas as pd
     except (ImportError, ModuleNotFoundError):
-        PANDAS_LOGGER.error('Pandas not installed.')
+        logging.error('Pandas not installed.')
     else:
         pandas_init()
