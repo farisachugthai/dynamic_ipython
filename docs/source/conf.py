@@ -443,8 +443,6 @@ ipython_warning_is_error = False
 ipython_execlines = [
     'import numpy',
     'import IPython',
-    'import matplotlib as mpl',
-    'import matplotlib.pyplot',
     'import pandas as pd',
     'import default_profile',
 ]

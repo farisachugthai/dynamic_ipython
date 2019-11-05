@@ -73,8 +73,9 @@ def is_rg():
     return shutil.which('rg')
 
 
-def busybox_hack():
+def busybox_hack(shell):
     # HACK: dear god it feels horrible doing this but shit it works
+    from default_profile.startup import aliases_mod
     shell.alias_manager.user_aliases += aliases_mod.LinuxAliases().busybox()
     shell.alias_manager.init_aliases()
 
@@ -92,16 +93,17 @@ def main():
 
     """
     shell = get_ipython()
-    if sys.platform == 'win32':
-        try:
-            from default_profile.startup import aliases_mod
-        except ImportError:
-            pass
-        else:
-            busybox_hack()
+    if shell is not None:
+        if sys.platform == 'win32':
+                try:
+                    from default_profile.startup import aliases_mod
+                except ImportError:
+                    pass
+                else:
+                    busybox_hack(shell)
 
-    shell.alias_manager.user_aliases.append(setup_fzf())
-    shell.alias_manager.init_aliases()
+        shell.alias_manager.user_aliases.append(setup_fzf())
+        shell.alias_manager.init_aliases()
 
 
 if __name__ == "__main__":

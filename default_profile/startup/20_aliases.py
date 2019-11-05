@@ -375,7 +375,7 @@ class WindowsAliases:
 
         """
         cls.user_aliases = [
-                ('assoc', 'assoc %l')
+                ('assoc', 'assoc %l'),
                 ('cp', 'copy %s %s'),
                 ('copy', 'copy %s %s'),
                 ('ddir', 'dir /ad /on %l'),

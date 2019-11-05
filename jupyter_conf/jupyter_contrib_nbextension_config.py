@@ -43,6 +43,15 @@ c.Application.log_level = 30
 # Base class for jupyter_contrib_nbextensions apps.
 
 # ------------------------------------------------------------------------------
+# JupyterContribApp(JupyterApp) configuration
+# ------------------------------------------------------------------------------
+
+# Root level jupyter_contrib app.
+
+# Do these classes take any parameters?
+
+
+# ------------------------------------------------------------------------------
 # ContribNbextensionsApp(BaseContribNbextensionsApp) configuration
 # ------------------------------------------------------------------------------
 

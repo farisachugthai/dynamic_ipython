@@ -30,12 +30,16 @@ with the sphinx build so it's cool to see it in this context.
 
 """
 import sys
+import warnings
+
+from IPython import get_ipython
 
 try:
     import pytest  # noqa F401
 except ImportError as e:
     warnings.warn(e)
     pytest = None
+
 
 if __name__ == "__main__":
     if pytest is not None:
