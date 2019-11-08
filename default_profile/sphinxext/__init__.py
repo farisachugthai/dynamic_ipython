@@ -38,7 +38,7 @@ def ask_for_import(mod, package=None):
 
     Parameters
     ----------
-    module : str
+    mod : str
         Module to import
     package : str, optional
         Package the module is found in.

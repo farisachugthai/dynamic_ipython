@@ -69,109 +69,18 @@ HTML5/Javascript Notebook client.</p>
 <h3>Subcommands<a class="headerlink" href="#subcommands" title="Permalink to this headline">¶</a></h3>
 <p>Subcommands are launched as <code class="xref py py-obj docutils literal notranslate"><span class="pre">jupyter-notebook</span> <span class="pre">cmd</span> <span class="pre">[args]</span></code>. For information on
 using subcommand ‘cmd’, do: <code class="xref py py-obj docutils literal notranslate"><span class="pre">jupyter-notebook</span> <span class="pre">cmd</span> <span class="pre">-h</span></code>.</p>
-<dl class="simple">
-<dt>list</dt><dd><p>List currently running notebook servers.</p>
-</dd>
-<dt>stop</dt><dd><p>Stop currently running notebook server for a given port</p>
-</dd>
-<dt>password</dt><dd><p>Set a password for the notebook server.</p>
-</dd>
-</dl>
 </div>
 <div class="section" id="options">
 <h3>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h3>
 <p>Arguments that take values are actually convenience aliases to full
 Configurables, whose aliases are listed on the help line. For more information
 on full configurables, see ‘–help-all’.</p>
-<dl class="option-list">
-<dt><kbd><span class="option">--debug</span></kbd></dt>
-<dd><p>set log level to logging.DEBUG (maximize logging output)</p>
-</dd>
-<dt><kbd><span class="option">--generate-config</span></kbd></dt>
-<dd><p>generate default config file</p>
-</dd>
-<dt><kbd><span class="option">-y</span></kbd></dt>
-<dd><p>Answer yes to any questions instead of prompting.</p>
-</dd>
-<dt><kbd><span class="option">--no-browser</span></kbd></dt>
-<dd><p>Don’t open the notebook in a browser after startup.</p>
-</dd>
-<dt><kbd><span class="option">--pylab</span></kbd></dt>
-<dd><p>DISABLED: use %pylab or %matplotlib in the notebook to enable matplotlib.</p>
-</dd>
-<dt><kbd><span class="option">--no-mathjax</span></kbd></dt>
-<dd><p>Disable MathJax.</p>
-<p>MathJax is the javascript library Jupyter uses to render math/LaTeX. It is
-very large, so you may want to disable it if you have a slow internet
-connection, or for offline use of the notebook.</p>
-<p>When disabled, equations etc. will appear as their untransformed TeX source.</p>
-</dd>
-<dt><kbd><span class="option">--allow-root</span></kbd></dt>
-<dd><p>Allow the notebook to be run from root user.</p>
-</dd>
-<dt><kbd><span class="option">--script</span></kbd></dt>
-<dd><p>DEPRECATED, IGNORED</p>
-</dd>
-<dt><kbd><span class="option">--no-script</span></kbd></dt>
-<dd><p>DEPRECATED, IGNORED</p>
-</dd>
-</dl>
-<dl class="simple">
-<dt>–log-level=&lt;Enum&gt; (Application.log_level)</dt><dd><p>Default: 30
-Choices: (0, 10, 20, 30, 40, 50, ‘DEBUG’, ‘INFO’, ‘WARN’, ‘ERROR’, ‘CRITICAL’)
-Set the log level by value or name.</p>
-</dd>
-<dt>–config=&lt;Unicode&gt; (JupyterApp.config_file)</dt><dd><p>Default: ‘’
-Full path of a config file.</p>
-</dd>
-<dt>–ip=&lt;Unicode&gt; (NotebookApp.ip)</dt><dd><p>Default: ‘localhost’
-The IP address the notebook server will listen on.</p>
-</dd>
-<dt>–port=&lt;Int&gt; (NotebookApp.port)</dt><dd><p>Default: 8888
-The port the notebook server will listen on.</p>
-</dd>
-<dt>–port-retries=&lt;Int&gt; (NotebookApp.port_retries)</dt><dd><p>Default: 50
-The number of additional ports to try if the specified port is not
-available.</p>
-</dd>
-<dt>–transport=&lt;CaselessStrEnum&gt; (KernelManager.transport)</dt><dd><p>Default: ‘tcp’
-Choices: [‘tcp’, ‘ipc’]</p>
-</dd>
-<dt>–keyfile=&lt;Unicode&gt; (NotebookApp.keyfile)</dt><dd><p>Default: ‘’
-The full path to a private key file for usage with SSL/TLS.</p>
-</dd>
-<dt>–certfile=&lt;Unicode&gt; (NotebookApp.certfile)</dt><dd><p>Default: ‘’
-The full path to an SSL/TLS certificate file.</p>
-</dd>
-<dt>–client-ca=&lt;Unicode&gt; (NotebookApp.client_ca)</dt><dd><p>Default: ‘’
-The full path to a certificate authority certificate for SSL/TLS client
-authentication.</p>
-</dd>
-<dt>–notebook-dir=&lt;Unicode&gt; (NotebookApp.notebook_dir)</dt><dd><p>Default: ‘’
-The directory to use for notebooks and kernels.</p>
-</dd>
-<dt>–browser=&lt;Unicode&gt; (NotebookApp.browser)</dt><dd><p>Default: ‘’
-Specify what command to use to invoke a web browser when opening the
-notebook. If not specified, the default browser will be determined by the
-<a class="reference external" href="https://docs.python.org/3/library/webbrowser.html#module-webbrowser" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">webbrowser</span></code></a> standard library module, which allows setting of the BROWSER
-environment variable to override it.</p>
-</dd>
-<dt>–pylab=&lt;Unicode&gt; (NotebookApp.pylab)</dt><dd><p>Default: ‘disabled’
-DISABLED: use %pylab or %matplotlib in the notebook to enable matplotlib.</p>
-</dd>
-<dt>–gateway-url=&lt;Unicode&gt; (GatewayClient.url)</dt><dd><p>Default: None
-The url of the Kernel or Enterprise Gateway server where kernel
-specifications are defined and kernel management takes place. If defined,
-this Notebook server acts as a proxy for all kernel management and kernel
-specification retrieval.  (JUPYTER_GATEWAY_URL env var)</p>
-</dd>
-</dl>
 </div>
 <div class="section" id="class-parameters">
 <h3>Class parameters<a class="headerlink" href="#class-parameters" title="Permalink to this headline">¶</a></h3>
 <p>Parameters are set from command-line arguments of the form:
-<code class="xref py py-obj docutils literal notranslate"><span class="pre">--Class.trait=value</span></code>. This line is evaluated in Python, so simple expressions
-are allowed, e.g.:: <code class="xref py py-obj docutils literal notranslate"><span class="pre">--C.a='range(3)'</span></code> For setting C.a=[0,1,2].</p>
+<code class="docutils literal notranslate"><span class="pre">--Class.trait=value</span></code>. This line is evaluated in Python, so simple expressions
+are allowed, e.g.:: <code class="docutils literal notranslate"><span class="pre">--C.a='range(3)'</span></code> For setting C.a=[0,1,2].</p>
 </div>
 <div class="section" id="utilizing-supported-packages">
 <h3>Utilizing Supported Packages<a class="headerlink" href="#utilizing-supported-packages" title="Permalink to this headline">¶</a></h3>
@@ -182,8 +91,25 @@ in the <code class="docutils literal notranslate"><span class="pre">path</span><
 <p><code class="docutils literal notranslate"><span class="pre">jupyter_runtime_dir()</span></code> : function</p>
 <p><code class="docutils literal notranslate"><span class="pre">jupyter_path(*subdirs)</span></code> : function</p>
 <p><code class="docutils literal notranslate"><span class="pre">jupyter_config_path()</span></code> : function</p>
+</div>
+<div class="section" id="windows-users">
+<h3>Windows Users<a class="headerlink" href="#windows-users" title="Permalink to this headline">¶</a></h3>
 <p>Before we start the API documentation, let’s quick go over a traceback
 I just got.</p>
+<p>I just tried running <code class="xref py py-obj docutils literal notranslate"><span class="pre">jupyter-notebook</span></code>; however, this specific traceback
+occurred for me as well when trying any of the jupyter subcommands (I.E. qtconsole
+etc. etc.)</p>
+<p>It indicates that the <code class="docutils literal notranslate"><span class="pre">pywin32</span></code> package hasn’t been completely installed, and
+in fact, one can go to the Scripts dir of their virtual environment, <em>more later
+on the completely different directory structures in a Windows virtualenv vs.
+Linux</em>, and see the file <code class="docutils literal notranslate"><span class="pre">pywin32_postinstall.py</span></code>.</p>
+<p>Run this as an administrator {I believe admin permissions are necessary to be
+able to interact with COM objects} with:</p>
+<div class="highlight-dosbatch notranslate"><div class="highlight"><pre><span></span>python3.exe pywin32_postinstall.py -install
+</pre></div>
+</div>
+<div class="section" id="very-long-traceback">
+<h4>Very Long Traceback<a class="headerlink" href="#very-long-traceback" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">I</span> <span class="mi">20</span><span class="p">:</span><span class="mi">39</span><span class="p">:</span><span class="mf">53.393</span> <span class="n">NotebookApp</span><span class="p">]</span> <span class="n">Writing</span> <span class="n">notebook</span><span class="o">-</span><span class="n">signing</span> <span class="n">key</span> <span class="n">to</span>
 <span class="ne">C</span>:\Users\faris\AppData\Roaming\jupyter\notebook_secret
 
@@ -275,6 +201,7 @@ I just got.</p>
 </div>
 <p>Well that was absurd to read but what is that DLL that we need to load, why
 isn’t it there and what can we do?</p>
+</div>
 </div>
 <div class="section" id="jupyterapp-application-configuration">
 <h3>JupyterApp(Application) configuration<a class="headerlink" href="#jupyterapp-application-configuration" title="Permalink to this headline">¶</a></h3>
@@ -852,6 +779,10 @@ image data.</p>
 <li><a class="reference internal" href="#options">Options</a></li>
 <li><a class="reference internal" href="#class-parameters">Class parameters</a></li>
 <li><a class="reference internal" href="#utilizing-supported-packages">Utilizing Supported Packages</a></li>
+<li><a class="reference internal" href="#windows-users">Windows Users</a><ul>
+<li><a class="reference internal" href="#very-long-traceback">Very Long Traceback</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#jupyterapp-application-configuration">JupyterApp(Application) configuration</a></li>
 <li><a class="reference internal" href="#notebookapp-jupyterapp-configuration">NotebookApp(JupyterApp) configuration</a></li>
 <li><a class="reference internal" href="#fswatcher">fswatcher</a></li>
@@ -890,7 +821,7 @@ image data.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Nov 03, 2019.
+      Last updated on Nov 07, 2019.
     </div>
   </body>
 </html>

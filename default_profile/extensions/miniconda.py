@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """TODO: Check out conda API both the conda package and conda_api repo"""
-import shlex
+import shutil
 import sys
+import subprocess
 from subprocess import Popen, PIPE
 
 from IPython.core.magic import Magics, magics_class, line_magic
@@ -10,6 +11,8 @@ from IPython.core.magics.packaging import (CONDA_ENV_FLAGS, CONDA_YES_FLAGS,
                                            CONDA_COMMANDS_REQUIRING_YES,
                                            CONDA_COMMANDS_REQUIRING_PREFIX,
                                            PackagingMagics)
+from IPython.lib import kernel
+from IPython.terminal.interactiveshell import TerminalInteractiveShell
 
 
 @magics_class
@@ -66,13 +69,9 @@ def load_ipython_extension(ip):
 
     Parameters
     ----------
-    arg1 : TODO
-
-    Returns
-    -------
-    TODO
+    ip : shell
+        Global IPython Instance
 
     """
     ip.register_magics(PackagingMagics)
     ip.register_magic_function(PackagingMagics().conda)
-

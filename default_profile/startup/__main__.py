@@ -76,7 +76,10 @@ class Dynamic(Configurable):
 
         Parameters
         ----------
-        todo
+        path : str (path-like)
+            Path to the directory
+        mode : int
+            If the directory doesn't exist, what mode should it be created as?
 
         Returns
         -------

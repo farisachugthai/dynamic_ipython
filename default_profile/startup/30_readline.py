@@ -26,7 +26,6 @@ def readline_logging():
         level=logging.DEBUG,
     )
 
-# I want this executing before anything.
 
 try:
     import jedi
@@ -44,7 +43,8 @@ def get_readline():
     # Taken from http://docs.python.org/2/library/rlcompleter.html
     try:
         # Interestingly this can work on Windows with a simple pip install pyreadline
-        import pyreadline as readline
+        from pyreadline import rlmain
+        readline = rlmain.Readline()
     except (ImportError, ModuleNotFoundError):
         try:
             import readline
@@ -57,7 +57,9 @@ def get_readline():
         readline.parse_and_bind("tab: complete")
         return readline
 
+
 readline_mod = get_readline()
+
 
 def read_inputrc():
     """Check for an inputrc file."""
@@ -124,9 +126,14 @@ def input_loop():
 
 
 if __name__ == "__main__":
-# Oddly enough this is available on every platform
+    # Do this part first
+    readline_logging()
+
+    # Oddly enough this is available on every platform
     import rlcompleter
 
+    readline = get_readline()
     if hasattr(readline, 'read_init_file'):
         read_inputrc()
 
+    # TODO: Check what the API is to add a completer to ipython. _ip.add_completer?

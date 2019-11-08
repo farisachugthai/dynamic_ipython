@@ -134,27 +134,27 @@ Table of Contents
 ==================
 
 .. toctree::
-    :caption: Tutorial
-    :maxdepth: 2
-    :titlesonly:
+   :caption: Tutorial
+   :maxdepth: 2
+   :titlesonly:
 
-    Sphinx Extensions <sphinxext/index.rst>
-    Developers Notes <dev>
-    jobcontrol
-    subcommands
+   Sphinx Extensions <sphinxext/index.rst>
+   Developers Notes <dev>
+   jobcontrol
+   subcommands
 
 In addition the API has extensive documentation.
 
 .. toctree::
-    :maxdepth: 2
-    :titlesonly:
-    :caption: API
+   :maxdepth: 2
+   :titlesonly:
+   :caption: API
 
-    IPython Startup <startup/index>
-    IPython Utilities </util/index>
-    kernel
-    Jupyter <jupyter/index>
-    extensions
+   IPython Startup <startup/index>
+   IPython Utilities </util/index>
+   kernel
+   Jupyter <jupyter/index>
+   extensions
 
 
 Indices and tables

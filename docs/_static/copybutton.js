@@ -2,7 +2,7 @@
 // Stolen from the official python documentation no less!
 // All rights reserved
 
-$(document).ready(function() {
+let ready = (document |> $).ready(function() {
   /* Add a [>>>] button on the top-right corner of code samples to hide
    * the >>> and ... prompts and the output and thus make the code
    * copyable. */

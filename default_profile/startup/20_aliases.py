@@ -71,10 +71,6 @@ class LinuxAliases:
 
         Apparently, I don't know how to use classmethods.
 
-        Parameters
-        ----------
-        None
-
         Returns
         -------
         user_aliases : list of ('alias', 'system command') tuples

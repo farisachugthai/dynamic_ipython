@@ -1,3 +1,4 @@
+================
 Jupyter Notebook
 ================
 
@@ -10,9 +11,10 @@ Jupyter Notebook
     c = get_config()
 
 
-==========================
 The Jupyter HTML Notebook.
 ==========================
+
+.. program:: jupyter-notebook
 
 This launches a Tornado based HTML Notebook Server that serves up an
 HTML5/Javascript Notebook client.
@@ -23,12 +25,14 @@ Subcommands
 Subcommands are launched as `jupyter-notebook cmd [args]`. For information on
 using subcommand 'cmd', do: `jupyter-notebook cmd -h`.
 
-list
-    List currently running notebook servers.
-stop
-    Stop currently running notebook server for a given port
-password
-    Set a password for the notebook server.
+.. command::
+
+   list
+      List currently running notebook servers.
+   stop
+      Stop currently running notebook server for a given port
+   password
+      Set a password for the notebook server.
 
 Options
 -------
@@ -37,106 +41,108 @@ Arguments that take values are actually convenience aliases to full
 Configurables, whose aliases are listed on the help line. For more information
 on full configurables, see '--help-all'.
 
---debug
-    set log level to logging.DEBUG (maximize logging output)
+.. option::
 
---generate-config
-    generate default config file
--y
-    Answer yes to any questions instead of prompting.
+   --debug
+      set log level to logging.DEBUG (maximize logging output)
 
---no-browser
-    Don't open the notebook in a browser after startup.
+   --generate-config
+      generate default config file
+   -y
+      Answer yes to any questions instead of prompting.
 
---pylab
-    DISABLED: use %pylab or %matplotlib in the notebook to enable matplotlib.
+   --no-browser
+      Don't open the notebook in a browser after startup.
 
---no-mathjax
-    Disable MathJax.
+   --pylab
+      DISABLED: use %pylab or %matplotlib in the notebook to enable matplotlib.
 
-    MathJax is the javascript library Jupyter uses to render math/LaTeX. It is
-    very large, so you may want to disable it if you have a slow internet
-    connection, or for offline use of the notebook.
+   --no-mathjax
+      Disable MathJax.
 
-    When disabled, equations etc. will appear as their untransformed TeX source.
+      MathJax is the javascript library Jupyter uses to render math/LaTeX. It is
+      very large, so you may want to disable it if you have a slow internet
+      connection, or for offline use of the notebook.
 
---allow-root
-    Allow the notebook to be run from root user.
+      When disabled, equations etc. will appear as their untransformed TeX source.
 
---script
-    DEPRECATED, IGNORED
+   --allow-root
+      Allow the notebook to be run from root user.
 
---no-script
-    DEPRECATED, IGNORED
+   --script
+      DEPRECATED, IGNORED
 
---log-level=<Enum> (Application.log_level)
-    Default: 30
-    Choices: (0, 10, 20, 30, 40, 50, 'DEBUG', 'INFO', 'WARN', 'ERROR', 'CRITICAL')
-    Set the log level by value or name.
+   --no-script
+      DEPRECATED, IGNORED
 
---config=<Unicode> (JupyterApp.config_file)
-    Default: ''
-    Full path of a config file.
+   --log-level=<Enum> (Application.log_level)
+      Default: 30
+      Choices: (0, 10, 20, 30, 40, 50, 'DEBUG', 'INFO', 'WARN', 'ERROR', 'CRITICAL')
+      Set the log level by value or name.
 
---ip=<Unicode> (NotebookApp.ip)
-    Default: 'localhost'
-    The IP address the notebook server will listen on.
+   --config=<Unicode> (JupyterApp.config_file)
+      Default: ''
+      Full path of a config file.
 
---port=<Int> (NotebookApp.port)
-    Default: 8888
-    The port the notebook server will listen on.
+   --ip=<Unicode> (NotebookApp.ip)
+      Default: 'localhost'
+      The IP address the notebook server will listen on.
 
---port-retries=<Int> (NotebookApp.port_retries)
-    Default: 50
-    The number of additional ports to try if the specified port is not
-    available.
+   --port=<Int> (NotebookApp.port)
+      Default: 8888
+      The port the notebook server will listen on.
 
---transport=<CaselessStrEnum> (KernelManager.transport)
-    Default: 'tcp'
-    Choices: ['tcp', 'ipc']
+   --port-retries=<Int> (NotebookApp.port_retries)
+      Default: 50
+      The number of additional ports to try if the specified port is not
+      available.
 
---keyfile=<Unicode> (NotebookApp.keyfile)
-    Default: ''
-    The full path to a private key file for usage with SSL/TLS.
+   --transport=<CaselessStrEnum> (KernelManager.transport)
+      Default: 'tcp'
+      Choices: ['tcp', 'ipc']
 
---certfile=<Unicode> (NotebookApp.certfile)
-    Default: ''
-    The full path to an SSL/TLS certificate file.
+   --keyfile=<Unicode> (NotebookApp.keyfile)
+      Default: ''
+      The full path to a private key file for usage with SSL/TLS.
 
---client-ca=<Unicode> (NotebookApp.client_ca)
-    Default: ''
-    The full path to a certificate authority certificate for SSL/TLS client
-    authentication.
+   --certfile=<Unicode> (NotebookApp.certfile)
+      Default: ''
+      The full path to an SSL/TLS certificate file.
 
---notebook-dir=<Unicode> (NotebookApp.notebook_dir)
-    Default: ''
-    The directory to use for notebooks and kernels.
+   --client-ca=<Unicode> (NotebookApp.client_ca)
+      Default: ''
+      The full path to a certificate authority certificate for SSL/TLS client
+      authentication.
 
---browser=<Unicode> (NotebookApp.browser)
-    Default: ''
-    Specify what command to use to invoke a web browser when opening the
-    notebook. If not specified, the default browser will be determined by the
-    `webbrowser` standard library module, which allows setting of the BROWSER
-    environment variable to override it.
+   --notebook-dir=<Unicode> (NotebookApp.notebook_dir)
+      Default: ''
+      The directory to use for notebooks and kernels.
 
---pylab=<Unicode> (NotebookApp.pylab)
-    Default: 'disabled'
-    DISABLED: use %pylab or %matplotlib in the notebook to enable matplotlib.
+   --browser=<Unicode> (NotebookApp.browser)
+      Default: ''
+      Specify what command to use to invoke a web browser when opening the
+      notebook. If not specified, the default browser will be determined by the
+      `webbrowser` standard library module, which allows setting of the BROWSER
+      environment variable to override it.
 
---gateway-url=<Unicode> (GatewayClient.url)
-    Default: None
-    The url of the Kernel or Enterprise Gateway server where kernel
-    specifications are defined and kernel management takes place. If defined,
-    this Notebook server acts as a proxy for all kernel management and kernel
-    specification retrieval.  (JUPYTER_GATEWAY_URL env var)
+   --pylab=<Unicode> (NotebookApp.pylab)
+      Default: 'disabled'
+      DISABLED: use %pylab or %matplotlib in the notebook to enable matplotlib.
+
+   --gateway-url=<Unicode> (GatewayClient.url)
+      Default: None
+      The url of the Kernel or Enterprise Gateway server where kernel
+      specifications are defined and kernel management takes place. If defined,
+      this Notebook server acts as a proxy for all kernel management and kernel
+      specification retrieval.  (JUPYTER_GATEWAY_URL env var)
 
 
 Class parameters
 ----------------
 
 Parameters are set from command-line arguments of the form:
-`--Class.trait=value`. This line is evaluated in Python, so simple expressions
-are allowed, e.g.:: `--C.a='range(3)'` For setting C.a=[0,1,2].
+``--Class.trait=value``. This line is evaluated in Python, so simple expressions
+are allowed, e.g.:: ``--C.a='range(3)'`` For setting C.a=[0,1,2].
 
 
 Utilizing Supported Packages
@@ -155,8 +161,32 @@ in the ``path`` module.
 
 ``jupyter_config_path()`` : function
 
+
+Windows Users
+--------------
+
 Before we start the API documentation, let's quick go over a traceback
 I just got.
+
+I just tried running `jupyter-notebook`; however, this specific traceback
+occurred for me as well when trying any of the jupyter subcommands (I.E. qtconsole
+etc. etc.)
+
+It indicates that the ``pywin32`` package hasn't been completely installed, and
+in fact, one can go to the Scripts dir of their virtual environment, *more later
+on the completely different directory structures in a Windows virtualenv vs.
+Linux*, and see the file ``pywin32_postinstall.py``.
+
+Run this as an administrator {I believe admin permissions are necessary to be
+able to interact with COM objects} with:
+
+.. code-block:: dosbatch
+
+   python3.exe pywin32_postinstall.py -install
+
+
+Very Long Traceback
+~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: ipythontb
 

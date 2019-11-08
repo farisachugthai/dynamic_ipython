@@ -186,7 +186,7 @@ else:
 
         Parameters
         ----------
-        overrides : dict
+        kwargs : dict
             Any options that should be overridden.
 
         """
