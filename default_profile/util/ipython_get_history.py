@@ -29,23 +29,29 @@ Let's ignore the direct calls to sys.argv and combine argparse and the
 magic_argparse functions to make something more durable and useful.
 
 """
+import sqlite3
 import sys
+import pprint
+import os
 
+from IPython.core.getipython import get_ipython
 from IPython.core.history import HistoryAccessor
+from IPython.utils.path import get_ipython_dir
+
+
+def print_history(hist_file):
+    with sqlite3.connect(hist_file) as con:
+        c = con.cursor()
+        c.execute("SELECT count(source_raw) as csr,\
+                  source_raw FROM history\
+                  GROUP BY source_raw\
+                  ORDER BY csr")
+        result = c.fetchall()
+        pprint.pprint(result)
+        c.close()
 
 
 def get_history():
-    """TODO: Docstring for main.
-
-    Parameters
-    ----------
-    arg1 : TODO
-
-    Returns
-    -------
-    TODO
-
-    """
     session_number = int(sys.argv[1])
     if len(sys.argv) > 2:
         dest = open(sys.argv[2], "w")
@@ -64,6 +70,21 @@ def get_history():
             cell = cell.encode('utf-8')  # This line is only needed on Python 2.
         dest.write(cell + '\n')
 
+
+def history_printer():
+    """Another way of doing it."""
+    hist_file = '%s/profile_default/history.sqlite' % get_ipython_dir()
+
+    if os.path.exists(hist_file):
+        print_history(hist_file)
+    else:
+        query_shell()
+
+
+def query_shell():
+    shell = get_ipython()
+    raise NotImplementedError
+    # todo. shell locate ipython profile dir in case they arent using profile_default!
 
 if __name__ == "__main__":
     sys.exit(get_history())

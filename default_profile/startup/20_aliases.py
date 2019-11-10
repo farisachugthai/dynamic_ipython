@@ -241,6 +241,8 @@ class CommonAliases:
             ('ggc', 'git gc %l'),
             ('ggcp', 'git gc --prune %l'),
             ('git', 'git %l'),
+            ('git config-list', 'git config --get --global %l'),
+            ('git config-glob', 'git config --get-regex --global %l.*'),
             ('git hist',
              'git log --pretty="format:%h %ad | %d [%an]" --graph --date=short '
              '--branches --abbrev-commit --oneline %l'),

@@ -30,30 +30,38 @@ precision : int or None, optional
     Number of digits of precision for floating point output (default 8).
     May be `None` if `floatmode` is not `fixed`, to print as many digits as
     necessary to uniquely specify the value.
+
 threshold : int, optional
     Total number of array elements which trigger summarization
     rather than full repr (default 1000).
+
 edgeitems : int, optional
     Number of array items in summary at beginning and end of
     each dimension (default 3).
+
 linewidth : int, optional
     The number of characters per line for the purpose of inserting
     line breaks (default 75).
+
 suppress : bool, optional
     If True, always print floating point numbers using fixed point
     notation, in which case numbers equal to zero in the current precision
     will print as zero.  If False, then scientific notation is used when
     absolute value of the smallest number is < 1e-4 or the ratio of the
     maximum absolute value to the minimum is > 1e3. The default is False.
+
 nanstr : str, optional
     String representation of floating point not-a-number (default nan).
+
 infstr : str, optional
     String representation of floating point infinity (default inf).
+
 sign : string, either '-', '+', or ' ', optional
     Controls printing of the sign of floating-point types. If '+', always
     print the sign of positive values. If ' ', always prints a space
     (whitespace character) in the sign position of positive values.  If
     '-', omit the sign character of positive values. (default '-')
+
 formatter : dict of callables, optional
     If not None, the keys should indicate the type(s) that the respective
     formatting function applies to.  Callables should return a string.
@@ -62,23 +70,37 @@ formatter : dict of callables, optional
     can be set are:
 
 - 'bool'
+
 - 'int'
+
 - 'timedelta' : a `numpy.timedelta64`
+
 - 'datetime' : a `numpy.datetime64`
+
 - 'float'
+
 - 'longfloat' : 128-bit floats
+
 - 'complexfloat'
+
 - 'longcomplexfloat' : composed of two 128-bit floats
+
 - 'numpystr' : types `numpy.string_` and `numpy.unicode_`
+
 - 'object' : `np.object_` arrays
+
 - 'str' : all other strings
 
 Other keys that can be used to set a group of types at once are:
 
 - 'all' : sets all types
+
 - 'int_kind' : sets 'int'
+
 - 'float_kind' : sets 'float' and 'longfloat'
+
 - 'complex_kind' : sets 'complexfloat' and 'longcomplexfloat'
+
 - 'str_kind' : sets 'str' and 'numpystr'
 
 
@@ -89,13 +111,16 @@ floatmode : str, optional
 * 'fixed': Always print exactly `precision` fractional digits,
    even if this would print more or fewer digits than
    necessary to specify the value uniquely.
+
 * 'unique': Print the minimum number of fractional digits necessary
    to represent each value uniquely. Different elements may
    have a different number of digits. The value of the
    `precision` option is ignored.
+
 * 'maxprec': Print at most `precision` fractional digits, but if
    an element can be uniquely represented with fewer digits
    only print it with that many.
+
 * 'maxprec_equal': Print at most `precision` fractional digits,
    but if every element in the array can be uniquely
    represented with an equal number of fewer digits, use that

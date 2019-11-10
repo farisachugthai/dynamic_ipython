@@ -86,6 +86,7 @@ def busybox_hack(shell):
 def main():
     """Adding fzf.
 
+    >>> user_aliases = []
     >>> user_aliases.append(('rg', 'rg --hidden --no-messages %l'))
 
     ^----- Potentially useful syntax. Also did that after initializing it as

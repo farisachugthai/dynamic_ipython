@@ -12,6 +12,7 @@ confusingly slow.
 import logging
 import os
 from pathlib import Path
+import platform
 
 
 def readline_logging():
@@ -58,9 +59,6 @@ def get_readline():
         return readline
 
 
-readline_mod = get_readline()
-
-
 def read_inputrc():
     """Check for an inputrc file."""
     if os.environ.get('INPUTRC'):
@@ -70,10 +68,13 @@ def read_inputrc():
 class SimpleCompleter:
     """
     :URL: https://pymotw.com/3/readline/
-    The SimpleCompleter class keeps a list of “options” that are candidates for auto-
-    completion. The complete() method for an instance is designed to be registered with
-    readline as the source of completions. The arguments are a text string to complete
-    and a state value, indicating how many times the function has been called with the
+
+    The SimpleCompleter class keeps a list of “options” that are candidates
+    for auto- completion. The complete() method for an instance is designed
+    to be registered with readline as the source of completions.
+
+    The arguments are a text string to complete  and a state value,
+    xindicating how many times the function has been called with the
     same text. The function is called repeatedly with the state incremented each time. It
     should return a string if there is a candidate for that state value or None if there
     are no more candidates. The implementation of complete() here looks for a set of
@@ -133,6 +134,7 @@ if __name__ == "__main__":
     import rlcompleter
 
     readline = get_readline()
+
     if hasattr(readline, 'read_init_file'):
         read_inputrc()
 

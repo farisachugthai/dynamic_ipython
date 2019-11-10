@@ -15,15 +15,13 @@ The code that's more important than anything should execute regardless
 of whether someone has ``pip install``-ed it.
 
 """
+from IPython import get_ipython
 
-from IPython import get_ipython, start_ipython
 
-
-def main(shell=None):
+def main():
     """Add all executables on the user's :envvar:`PATH` into the IPython ns.
 
-    As this is the first script in startup, it's assumed IPython has already
-    started. As a result, :func:`IPython.start_ipython` is called if not.
+    Now Im wondering if it would be easier to do this after setting up the aliases.
 
     Parameters
     ----------
@@ -31,11 +29,10 @@ def main(shell=None):
         IPython shell instance.
 
     """
-    if shell is None:
-        shell = start_ipython()
-    shell.run_line_magic('rehashx', '')
+    _ip = get_ipython()
+    if _ip is not None:
+        _ip.run_line_magic('rehashx', '')
 
 
 if __name__ == "__main__":
-    _ip = get_ipython()
-    main(_ip)
+    main()
