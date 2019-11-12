@@ -21,8 +21,17 @@ class DeepReload:
         :any:`sys.displayhook` and :any:`sys.excepthook`.
 
     """
-    excludes = ('sys', 'os.path', 'builtins', '__main__', 'io', 'numpy',
-                'numpy._globals', 'IPython')
+
+    excludes = (
+        "sys",
+        "os.path",
+        "builtins",
+        "__main__",
+        "io",
+        "numpy",
+        "numpy._globals",
+        "IPython",
+    )
 
     def __init__(self, shell, excludes=None):
         """How do we set an instance attribute with a class attribute?"""
@@ -31,7 +40,7 @@ class DeepReload:
         self.shell = shell
 
     def __repr__(self):
-        return '{!r}'.format(repr(self.excludes))
+        return "{!r}".format(repr(self.excludes))
 
     def __call__(self):
         self.shell.run_cell(self.dreload(self.excludes))
@@ -104,8 +113,8 @@ def easy_import(mod):
 
 if __name__ == "__main__":
     if sys.version_info > (3, 5):
-        mod = 'pynvim'
+        mod = "pynvim"
     else:
-        mod = 'neovim'
+        mod = "neovim"
 
     easy_import(mod)

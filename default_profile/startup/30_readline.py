@@ -2,12 +2,29 @@
 # -*- coding: utf-8 -*-
 """Let's try setting up readline.
 
+Reimplementing Readline
+========================
+
 Unsure of how pronounced the effect is going to be since IPython has
 prompt_toolkit for most readline features and basic movement bindings
 seem to work just fine.
 
 Ooo also I want to reimplement jedi as the completer because IPython's is
 confusingly slow.
+
+IPython Custom Completers
+-------------------------
+
+
+In [69]: _ip.set_custom_completer?
+Signature: _ip.set_custom_completer(completer, pos=0)
+Docstring:
+Adds a new custom completer function.
+
+The position argument (defaults to 0) is the index in the completers
+list where you want the completer to be inserted.
+
+
 """
 import logging
 import os
@@ -16,27 +33,36 @@ import platform
 
 
 def readline_logging():
-    if os.environ.get('IPYTHONDIR'):
-        LOG_FILENAME = os.path.join(os.environ.get('IPYTHONDIR'), 'completer.log')
+    if os.environ.get("IPYTHONDIR"):
+        LOG_FILENAME = os.path.join(os.environ.get("IPYTHONDIR"), "completer.log")
     # else:
-        # todo
+    # todo
 
     logging.basicConfig(
-        format='%(message)s',
-        filename=LOG_FILENAME,
-        level=logging.DEBUG,
+        format="%(message)s", filename=LOG_FILENAME, level=logging.DEBUG,
     )
 
 
 try:
     import jedi
 except (ImportError, ModuleNotFoundError):
-    pass
+    jedi = None
 else:
     from jedi.utils import setup_readline
+
     setup_readline()
-    jedi.settings.add_bracket_after_function = True
+    jedi.settings.add_bracket_after_function = False
     # jedi.settings
+
+# Only works inside of xonsh
+
+# try:
+#     import xonsh
+# except (ImportError, ModuleNotFoundError):
+#     xonsh = None
+# else:
+#     from xonsh.completer import setup_readline
+#     setup_readline()
 
 
 def get_readline():
@@ -45,6 +71,7 @@ def get_readline():
     try:
         # Interestingly this can work on Windows with a simple pip install pyreadline
         from pyreadline import rlmain
+
         readline = rlmain.Readline()
     except (ImportError, ModuleNotFoundError):
         try:
@@ -52,17 +79,21 @@ def get_readline():
         except (ImportError, ModuleNotFoundError):
             readline = None
         else:
-            readline.parse_and_bind("tab: complete")
             return readline
     else:
-        readline.parse_and_bind("tab: complete")
         return readline
+
+
+def bind_readline_keys():
+    readline.parse_and_bind("tab: complete")
+    readline.parse_and_bind('"\\e[B": history-search-forward')
+    readline.parse_and_bind('"\\e[A": history-search-backward')
 
 
 def read_inputrc():
     """Check for an inputrc file."""
-    if os.environ.get('INPUTRC'):
-        readline.read_init_file(os.environ.get('INPUTRC'))
+    if os.environ.get("INPUTRC"):
+        readline.read_init_file(os.environ.get("INPUTRC"))
 
 
 class SimpleCompleter:
@@ -91,17 +122,11 @@ class SimpleCompleter:
             # This is the first time for this text,
             # so build a match list.
             if text:
-                self.matches = [
-                    s
-                    for s in self.options
-                    if s and s.startswith(text)
-                ]
-                logging.debug('%s matches: %s',
-                              repr(text), self.matches)
+                self.matches = [s for s in self.options if s and s.startswith(text)]
+                logging.debug("%s matches: %s", repr(text), self.matches)
             else:
                 self.matches = self.options[:]
-                logging.debug('(empty input) matches: %s',
-                              self.matches)
+                logging.debug("(empty input) matches: %s", self.matches)
 
         # Return the state'th item from the match list,
         # if we have that many.
@@ -109,16 +134,15 @@ class SimpleCompleter:
             response = self.matches[state]
         except IndexError:
             response = None
-        logging.debug('complete(%s, %s) => %s',
-                      repr(text), state, repr(response))
+        logging.debug("complete(%s, %s) => %s", repr(text), state, repr(response))
         return response
 
 
 def input_loop():
-    line = ''
-    while line != 'stop':
+    line = ""
+    while line != "stop":
         line = input('Prompt ("stop" to quit): ')
-        print('Dispatch {}'.format(line))
+        print("Dispatch {}".format(line))
 
 
 # Register the completer function
@@ -135,7 +159,8 @@ if __name__ == "__main__":
 
     readline = get_readline()
 
-    if hasattr(readline, 'read_init_file'):
+    if hasattr(readline, "read_init_file"):
+        bind_readline_keys()
         read_inputrc()
 
     # TODO: Check what the API is to add a completer to ipython. _ip.add_completer?

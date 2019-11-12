@@ -56,7 +56,8 @@ class Dynamic(Configurable):
             if isinstance(self.canary, InteractiveShellEmbed):
                 sys.stderr.write(
                     "\nYou are currently in an embedded IPython shell,\n"
-                    "the configuration will not be loaded.\n\n")
+                    "the configuration will not be loaded.\n\n"
+                )
         else:
             # Not inside IPython
             # Build a terminal app in order to force ipython to load the configuration
@@ -105,12 +106,11 @@ class Dynamic(Configurable):
         The class searches for directories named default_profile and if found
         uses that as a profile which I dislike.
         """
-        profile_to_load = Path('~/.ipython/default_profile')
+        profile_to_load = Path("~/.ipython/default_profile")
 
         try:
             self.ensure_dir_exists(profile_to_load)
         except OSError as e:
             print(e)
         else:
-            self.canary.profile_dir = os.path.expanduser(
-                '~/.ipython/default_profile')
+            self.canary.profile_dir = os.path.expanduser("~/.ipython/default_profile")

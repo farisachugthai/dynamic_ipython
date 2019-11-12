@@ -43,8 +43,8 @@ def ipython_logger(shell=None):
 
     """
     log_dir = shell.profile_dir.log_dir
-    fname = 'log-' + shell.profile + '-' + time.strftime('%Y-%m-%d') + ".py"
-    logmode = 'append'
+    fname = "log-" + shell.profile + "-" + time.strftime("%Y-%m-%d") + ".py"
+    logmode = "append"
     log_output = True
     filename = path.join(log_dir, fname)
     notnew = path.exists(filename)
@@ -56,13 +56,13 @@ def ipython_logger(shell=None):
         # added -t to get timestamps
         logger.logstart(filename)
         if notnew:
-            logger.log_write(u"# =================================\n")
+            logger.log_write("# =================================\n")
         else:
-            logger.log_write(u"#!/usr/bin/env python\n")
-            logger.log_write(u"# " + fname + "\n")
-            logger.log_write(u"# IPython automatic logging file\n")
-            logger.log_write(u"# " + time.strftime('%H:%M:%S') + "\n")
-            logger.log_write(u"# =================================\n")
+            logger.log_write("#!/usr/bin/env python\n")
+            logger.log_write("# " + fname + "\n")
+            logger.log_write("# IPython automatic logging file\n")
+            logger.log_write("# " + time.strftime("%H:%M:%S") + "\n")
+            logger.log_write("# =================================\n")
             print(" Logging to " + filename)
     except RuntimeError:
         print(" Already logging to " + logger.logfname)

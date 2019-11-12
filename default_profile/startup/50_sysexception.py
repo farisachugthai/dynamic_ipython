@@ -15,10 +15,7 @@ class ExceptionHook(BaseException):
     def __call__(self, *args, **kwargs):
         if self.instance is None:
             self.instance = ultratb.AutoFormattedTB(
-                mode='Context',
-                color_scheme='Linux',
-                call_pdb=True,
-                ostream=sys.stdout
+                mode="Context", color_scheme="Linux", call_pdb=True, ostream=sys.stdout
             )
         return self.instance(*args, **kwargs)
 
@@ -27,7 +24,7 @@ class ExceptionHook(BaseException):
         return "<{} '{}'>".format(self.__class__.__name__, self.instance)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # _ip = get_ipython()
     # So the InteractiveShell class tmk has an attribute called excepthook but
     # it's probably a bad idea to overwrite it

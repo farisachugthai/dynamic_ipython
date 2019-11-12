@@ -10,6 +10,7 @@ Let's re-implement it as an `abstract factory
 import subprocess
 
 from IPython.core.error import TryNext
+
 try:
     import pyperclip
 except ImportError:
@@ -36,8 +37,10 @@ def win32_clipboard_get():
     try:
         import win32clipboard
     except ImportError:
-        raise TryNext("Getting text from the clipboard requires the pywin32 "
-                      "extensions: http://sourceforge.net/projects/pywin32/")
+        raise TryNext(
+            "Getting text from the clipboard requires the pywin32 "
+            "extensions: http://sourceforge.net/projects/pywin32/"
+        )
     win32clipboard.OpenClipboard()
     try:
         text = win32clipboard.GetClipboardData(win32clipboard.CF_UNICODETEXT)

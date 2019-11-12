@@ -10,6 +10,7 @@ Oct 06, 2019:
 
 
 """
+from bdb import BdbQuit
 import sys
 import traceback
 # import signal
@@ -25,9 +26,14 @@ from IPython import get_ipython
 # from IPython.core.magics import MagicsClass, cell_magics, line_magics
 from IPython.core.completer import IPCompleter
 from IPython.core.error import UsageError
+
 # As a heads up I think the super() call goes to Pdb not TerminalPdb.
+
 # from IPython.core.debugger import Pdb
+
 # from IPython.core.interactiveshell import InteractiveShell
+# would this help?
+# from IPython.core.interactiveshell import InteractiveShellABC
 from IPython.terminal.embed import InteractiveShellEmbed
 from IPython.terminal.interactiveshell import TerminalInteractiveShell
 # from IPython.terminal.ipapp import TerminalIPythonApp
@@ -76,13 +82,15 @@ class IPD(Pdb):
         else:
             self.completer = completer
 
-        self.completer = IPythonPTCompleter(completer, shell=self.shell)
+        # why do i have completer defined twice?
+        # self.completer = IPythonPTCompleter(completer, shell=self.shell)
 
         if prompt_toolkit_application is None:
             self.prompt_toolkit_application = self.pt_init()
         else:
             self.prompt_toolkit_application = prompt_toolkit_application
 
+        self.prompt = 'Your Debugger: '
         super().__init__(self, *args, **kwargs)
 
     def __repr__(self):
@@ -168,8 +176,9 @@ def formatted_traceback():
     print('Traceback: Formatted stack\n' + repr(traceback.format_stack()) + '\n')
 
 
-def setup_breakpointhook():
-    idebug.shell.run_line_magic('debug', '')
+def bphook(shell):
+    """User defined breakpoint hook."""
+    shell.run_line_magic('debug', '')
 
 
 def main():
@@ -188,6 +197,9 @@ if __name__ == "__main__":
 
     if hasattr(sys, 'last_traceback'):
         formatted_traceback()
+    # else:
+        # set_trace from somewhere. try except with except (KeyboardInterrupt, EOFError): BdbQuit('Bye!')
+        # or something
 
-    sys.breakpointhook = setup_breakpointhook()
+    sys.breakpointhook = bphook(idebug)
     # Vim: set ft=python:

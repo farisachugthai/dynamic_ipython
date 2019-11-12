@@ -29,7 +29,7 @@ def print_help(arg=None):
 
 def save_help(output_file, arg=None):
     """Write :func:`help` to a file."""
-    with open(output_file, 'xt') as f:
+    with open(output_file, "xt") as f:
         with contextlib.redirect_stdout(f):
             help(arg)
 
@@ -41,8 +41,9 @@ def page_help(arg=None):
     the IPython instance so the imports were moved here.
     """
     from IPython import get_ipython
+
     _ip = get_ipython()
-    if hasattr(_ip, 'pinfo'):
+    if hasattr(_ip, "pinfo"):
         _ip.pinfo(arg)
 
 
@@ -68,7 +69,7 @@ def grep(obj, pattern=None):
 
     """
     if pattern is None:
-        pattern = ['^a-z.*$']
+        pattern = ["^a-z.*$"]
     compiled = re.compile(*pattern)
     attributes = dir(obj)
-    yield '\n'.join(i for i in attributes if re.search(compiled, i))
+    yield "\n".join(i for i in attributes if re.search(compiled, i))
