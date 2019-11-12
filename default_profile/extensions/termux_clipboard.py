@@ -27,9 +27,7 @@ def termux_clipboard_get(self):
     """Set the clipboard on termux using *termux_clipboard_get*."""
     p = subprocess.run(['termux-clipboard-get'], stdout=subprocess.PIPE)
     text = p.stdout
-    from IPython.utils.py3compat import cast_unicode, DEFAULT_ENCODING
-    unicode_text = cast_unicode(text, DEFAULT_ENCODING)
-    return unicode_text
+    return text
 
 
 def load_ipython_extension(ip):

@@ -27,8 +27,8 @@ def print_help(arg=None):
         help(arg)
 
 
-def save_help(arg=None, output_file=sys.stdout):
-    """Write :func:`help` to a file. Defaults to ``sys.stdout``."""
+def save_help(output_file, arg=None):
+    """Write :func:`help` to a file."""
     with open(output_file, 'xt') as f:
         with contextlib.redirect_stdout(f):
             help(arg)

@@ -59,7 +59,7 @@ class PackagingMagics(Magics):
         # tbf i still question if that's a good way of checking interactivity
         try:
             if isinstance(self.shell, TerminalInteractiveShell):
-                return subprocess.run([conda, *args])
+                return subprocess.run([conda, *cmd])
         except AttributeError:
             raise NotImplementedError
 
