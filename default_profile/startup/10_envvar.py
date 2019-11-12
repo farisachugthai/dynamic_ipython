@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 
 from IPython.core.magic import line_magic, Magics, magics_class
+
 # from IPython.core.magic_arguments import magics_class
 
 
@@ -29,11 +30,10 @@ class EnvironMagics(Magics):
 
     @line_magic
     def touch(self, f):
-        if f.endswith('py'):
+        if f.endswith("py"):
             return Path(f).touch(mode=0o755)
         else:
             return Path(f).touch()
-
 
     @line_magic
     def unset(self, arg):

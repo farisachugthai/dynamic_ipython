@@ -59,19 +59,19 @@ def yank_last_arg(event):
 if __name__ == "__main__":
     # TODO: Come up with an else because prompt_toolkit might not bind through
     # the pt_cli attr anymore
-    if getattr(ip, 'pt_app'):
+    if getattr(ip, "pt_app"):
         registry = ip.pt_app.key_bindings
-    elif getattr(ip, 'pt_cli'):
+    elif getattr(ip, "pt_cli"):
         registry = ip.pt_cli.application.key_bindings_registry
 
-    registry.add_binding(Keys.Escape,
-                            u'.',
-                            filter=(HasFocus(DEFAULT_BUFFER)
-                                    & ~HasSelection()
-                                    & insert_mode))(yank_last_arg)
-    registry.add_binding(Keys.Escape,
-                            u'_',
-                            filter=(HasFocus(DEFAULT_BUFFER)
-                                    & ~HasSelection()
-                                    & insert_mode))(yank_last_arg)
-    ip.events.register('post_execute', reset_last_arg_depth)
+    registry.add_binding(
+        Keys.Escape,
+        ".",
+        filter=(HasFocus(DEFAULT_BUFFER) & ~HasSelection() & insert_mode),
+    )(yank_last_arg)
+    registry.add_binding(
+        Keys.Escape,
+        "_",
+        filter=(HasFocus(DEFAULT_BUFFER) & ~HasSelection() & insert_mode),
+    )(yank_last_arg)
+    ip.events.register("post_execute", reset_last_arg_depth)

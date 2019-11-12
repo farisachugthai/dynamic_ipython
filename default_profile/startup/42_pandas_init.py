@@ -109,8 +109,12 @@ import logging
 # PANDAS_LOGGER.addHandler(logging.StreamHandler().setLevel(logging.INFO))
 # PANDAS_LOGGER.setLevel(logging.INFO)
 ROOT_HANDLER_PD = logging.StreamHandler().setLevel(logging.INFO)
-logging.basicConfig(level=logging.INFO, style='%', format='%(created)f : %(module)s : %(levelname)s : %(message)s',
-        handlers=[ROOT_HANDLER_PD])
+logging.basicConfig(
+    level=logging.INFO,
+    style="%",
+    format="%(created)f : %(module)s : %(levelname)s : %(message)s",
+    handlers=[ROOT_HANDLER_PD],
+)
 
 
 def pandas_init():
@@ -128,28 +132,28 @@ def pandas_init():
 
     """
     options = {
-        'display': {
-            'colheader_justify': 'right',
-            'encoding': 'utf-8',
-            'expand_frame_repr': False,  # Don't wrap to multiple pages
-            'html.table_schema': True,
-            'max_columns': None,
-            'max_colwidth': 25,
-            'max_rows': 30,
-            'max_seq_items': 50,
+        "display": {
+            "colheader_justify": "right",
+            "encoding": "utf-8",
+            "expand_frame_repr": False,  # Don't wrap to multiple pages
+            "html.table_schema": True,
+            "max_columns": None,
+            "max_colwidth": 25,
+            "max_rows": 30,
+            "max_seq_items": 50,
             # Max length of printed sequence 'precision': 4,
-            'show_dimensions': 'truncate',
+            "show_dimensions": "truncate",
         },
-        'mode': {
-            'chained_assignment': None
+        "mode": {
+            "chained_assignment": None
             # Controls SettingWithCopyWarning
-        }
+        },
     }
 
     # XXX: Did i mean to do this twice?
     for category, option in options.items():
         for op, value in option.items():
-            pd.set_option(f'{category}.{op}', value)  # Python 3.6+
+            pd.set_option(f"{category}.{op}", value)  # Python 3.6+
 
 
 class DisplayHTML:
@@ -165,16 +169,16 @@ class DisplayHTML:
         self.args = args
 
     def _repr_html_(self):
-        return '\n'.join(
-            self.template.format(a,
-                                 eval(a)._repr_html_()) for a in self.args)
+        return "\n".join(
+            self.template.format(a, eval(a)._repr_html_()) for a in self.args
+        )
 
     def __repr__(self):
-        return '\n\n'.join(a + '\n' + repr(eval(a)) for a in self.args)
+        return "\n\n".join(a + "\n" + repr(eval(a)) for a in self.args)
 
 
-if __name__ == '__main__':
-    name = 'default_profile.startup.pandas_init'
+if __name__ == "__main__":
+    name = "default_profile.startup.pandas_init"
     # PANDAS_LOGGER = module_log.stream_logger(logger=name,
     #                                          log_level=logging.INFO)
 
@@ -186,6 +190,6 @@ if __name__ == '__main__':
     try:
         import pandas as pd
     except (ImportError, ModuleNotFoundError):
-        logging.error('Pandas not installed.')
+        logging.error("Pandas not installed.")
     else:
         pandas_init()
