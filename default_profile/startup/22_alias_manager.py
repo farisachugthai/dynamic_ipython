@@ -16,7 +16,7 @@ class DynamicAliasManager(AliasManager):
         self.init_aliases()
 
     def __repr__(self):
-        return ''.format(reprlib.repr(self.aliases))
+        return "".format(reprlib.repr(self.aliases))
 
     def __iter__(self):
         return iter(self.aliases)
@@ -28,4 +28,4 @@ class DynamicAliasManager(AliasManager):
 if __name__ == "__main__":
     # Forgive me for all these terrible hacks
     shell = get_ipython()
-    shell.run_line_magic('alias_magic', 'p pycat')
+    shell.run_line_magic("alias_magic", "p pycat")

@@ -11,10 +11,9 @@ import importlib
 import logging
 import sys
 
-logging.BASIC_FORMAT = '%(created)f : %(module)s : %(levelname)s : %(message)s'
+logging.BASIC_FORMAT = "%(created)f : %(module)s : %(levelname)s : %(message)s"
 
-STARTUP_LOGGER = logging.getLogger(name='default_profile'
-                                   ).getChild('startup')
+STARTUP_LOGGER = logging.getLogger(name="default_profile").getChild("startup")
 
 STARTUP_LOGGER.setLevel(logging.WARNING)
 STARTUP_HANDLER = logging.StreamHandler(stream=sys.stdout)
@@ -50,27 +49,21 @@ def ask_for_import(mod, package=None):
         return imported
 
 
-rehashx_mod = importlib.import_module('default_profile.startup.01_rehashx')
-easy_import_mod = importlib.import_module(
-    'default_profile.startup.04_easy_import'
-)
-log_mod = importlib.import_module('default_profile.startup.05_log')
-help_helpers_mod = importlib.import_module(
-    'default_profile.startup.06_help_helpers'
-)
+rehashx_mod = importlib.import_module("default_profile.startup.01_rehashx")
+easy_import_mod = importlib.import_module("default_profile.startup.04_easy_import")
+log_mod = importlib.import_module("default_profile.startup.05_log")
+help_helpers_mod = importlib.import_module("default_profile.startup.06_help_helpers")
 
-envvar_mod = importlib.import_module('default_profile.startup.10_envvar')
+envvar_mod = importlib.import_module("default_profile.startup.10_envvar")
 
-aliases_mod = importlib.import_module('default_profile.startup.20_aliases')
-fzf_mod = importlib.import_module('default_profile.startup.21_fzf')
-alias_manager_mod = importlib.import_module('default_profile.startup.22_alias_manager')
+aliases_mod = importlib.import_module("default_profile.startup.20_aliases")
+fzf_mod = importlib.import_module("default_profile.startup.21_fzf")
+alias_manager_mod = importlib.import_module("default_profile.startup.22_alias_manager")
 
-readline_mod = importlib.import_module('default_profile.startup.30_readline')
-yank_last_arg_mod = importlib.import_module('default_profile.startup.31_yank_last_arg')
+readline_mod = importlib.import_module("default_profile.startup.30_readline")
+yank_last_arg_mod = importlib.import_module("default_profile.startup.31_yank_last_arg")
 
-numpy_init_mod = importlib.import_module('default_profile.startup.41_numpy_init')
-pandas_init_mod = importlib.import_module('default_profile.startup.42_pandas_init')
+numpy_init_mod = importlib.import_module("default_profile.startup.41_numpy_init")
+pandas_init_mod = importlib.import_module("default_profile.startup.42_pandas_init")
 
-sysexception_mod = importlib.import_module(
-    'default_profile.startup.50_sysexception'
-)
+sysexception_mod = importlib.import_module("default_profile.startup.50_sysexception")

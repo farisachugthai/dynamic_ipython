@@ -31,7 +31,7 @@ def main():
     """
     _ip = get_ipython()
     if _ip is not None:
-        _ip.run_line_magic('rehashx', '')
+        _ip.run_line_magic("rehashx", "")
 
 
 if __name__ == "__main__":

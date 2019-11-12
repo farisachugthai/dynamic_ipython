@@ -8,14 +8,16 @@ import shutil
 from IPython import get_ipython
 
 from default_profile.startup import ask_for_import
+
 # TODO: allow these imports to run and allow fall backs otherwise
 from default_profile.util.module_log import stream_logger
 from default_profile.util.machine import Platform
 
 ALIAS_LOGGER = stream_logger(
-    logger='default_profile.startup.20_aliases',
-    msg_format='%(asctime)s : %(levelname)s : %(module)s %(message)s',
-    log_level=logging.WARNING)
+    logger="default_profile.startup.20_aliases",
+    msg_format="%(asctime)s : %(levelname)s : %(module)s %(message)s",
+    log_level=logging.WARNING,
+)
 
 
 class LinuxAliases:
@@ -64,7 +66,7 @@ class LinuxAliases:
         self.shell = shell or get_ipython()
 
     def __repr__(self):
-        return 'Linux Aliases: {!r}'.format(len(self.user_aliases))
+        return "Linux Aliases: {!r}".format(len(self.user_aliases))
 
     def busybox(self):
         """Commands that are available on any Unix-ish system.
@@ -78,51 +80,52 @@ class LinuxAliases:
 
         """
         self.user_aliases += [
-            ('cs', 'cd %s && ls -F --color=always %s'),
-            ('cp', 'cp -v %l'),  # cp mv mkdir and rmdir are all overridden
-            ('df', 'df -ah --total'),
-            ('dU', 'du -d 1 -h --apparent-size --all | sort -h | tail -n 10'),
-            ('dus', 'du -d 1 -ha %l'),
-            ('echo', 'echo -e %l'),
-            ('free', 'free -mt'),
-            ('gpip',
-             'export PIP_REQUIRE_VIRTUALENV=0; python -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null'
-             ),
-            ('gpip2',
-             'export PIP_REQUIRE_VIRTUALENV=0; python2 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null'
-             ),
-            ('gpip3',
-             'export PIP_REQUIRE_VIRTUALENV=0; python3 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null'
-             ),
-            ('head', 'head -n 30 %l'),
-            ('l', 'ls -CF --color=always %l'),
-            ('la', 'ls -AF --color=always %l'),
-            ('ldir', 'ls -Apo --color=always %l | grep /$'),
+            ("cs", "cd %s && ls -F --color=always %s"),
+            ("cp", "cp -v %l"),  # cp mv mkdir and rmdir are all overridden
+            ("df", "df -ah --total"),
+            ("dU", "du -d 1 -h --apparent-size --all | sort -h | tail -n 10"),
+            ("dus", "du -d 1 -ha %l"),
+            ("echo", "echo -e %l"),
+            ("free", "free -mt"),
+            (
+                "gpip",
+                "export PIP_REQUIRE_VIRTUALENV=0; python -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null",
+            ),
+            (
+                "gpip2",
+                "export PIP_REQUIRE_VIRTUALENV=0; python2 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null",
+            ),
+            (
+                "gpip3",
+                "export PIP_REQUIRE_VIRTUALENV=0; python3 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null",
+            ),
+            ("head", "head -n 30 %l"),
+            ("l", "ls -CF --color=always %l"),
+            ("la", "ls -AF --color=always %l"),
+            ("ldir", "ls -Apo --color=always %l | grep /$"),
             # ('lf', 'ls -Fo --color=always | grep ^-'),
             # ('ll', 'ls -AFho --color=always %l'),
-            ('ls', 'ls -F --color=always %l'),
-            ('lr', 'ls -AgFhtr --color=always %l'),
-            ('lt', 'ls -AgFht --color=always %l'),
-            ('lx', 'ls -Fo --color=always | grep ^-..x'),
+            ("ls", "ls -F --color=always %l"),
+            ("lr", "ls -AgFhtr --color=always %l"),
+            ("lt", "ls -AgFht --color=always %l"),
+            ("lx", "ls -Fo --color=always | grep ^-..x"),
             # ('ldir', 'ls -Fhpo | grep /$ %l'),
-            ('lf', 'ls -Foh --color=always | grep ^- %l'),
-            ('ll', 'ls -AgFh --color=always %l'),
+            ("lf", "ls -Foh --color=always | grep ^- %l"),
+            ("ll", "ls -AgFh --color=always %l"),
             # ('lt', 'ls -Altc --color=always %l'),
             # ('lr', 'ls -Altcr --color=always %l'),
-            ('mk', 'mkdir -pv %l && cd %l'),  # check if this works. only mkdir
-            ('mkdir', 'mkdir -pv %l'),
-            ('mv', 'mv -v %l'),
-            ('r', 'fc -s'),
-            ('redo', 'fc -s'),
+            ("mk", "mkdir -pv %l && cd %l"),  # check if this works. only mkdir
+            ("mkdir", "mkdir -pv %l"),
+            ("mv", "mv -v %l"),
+            ("r", "fc -s"),
+            ("redo", "fc -s"),
             # Less annoying than -i but more safe
             # only prompts with more than 3 files or recursed dirs.
-            ('rm', 'rm -Iv %l'),
-            ('rmdir', 'rmdir -v %l'),
-            ('default_profile',
-             'cd ~/projects/dotfiles/unix/.ipython/default_profile'),
-            ('startup',
-             'cd ~/projects/dotfiles/unix/.ipython/default_profile/startup'),
-            ('tail', 'tail -n 30 %l'),
+            ("rm", "rm -Iv %l"),
+            ("rmdir", "rmdir -v %l"),
+            ("default_profile", "cd ~/projects/dotfiles/unix/.ipython/default_profile"),
+            ("startup", "cd ~/projects/dotfiles/unix/.ipython/default_profile/startup"),
+            ("tail", "tail -n 30 %l"),
         ]
         return self.user_aliases
 
@@ -140,10 +143,10 @@ class LinuxAliases:
         the namespace.
         """
         self.user_aliases += [
-            ('ag', 'ag --hidden --color --no-column %l'),
-            ('nvim', 'nvim %l'),
-            ('nman', 'nvim -c "Man %l" -c"wincmd T"'),
-            ('tre', 'tree -DAshFC --prune -I .git %l'),
+            ("ag", "ag --hidden --color --no-column %l"),
+            ("nvim", "nvim %l"),
+            ("nman", 'nvim -c "Man %l" -c"wincmd T"'),
+            ("tre", "tree -DAshFC --prune -I .git %l"),
         ]
         return self.user_aliases
 
@@ -173,6 +176,9 @@ class CommonAliases:
         self.user_aliases = user_aliases or []
         self.shell = shell or get_ipython()
 
+        if self.user_aliases is None:
+            self.set_user_aliases()
+
     def __iter__(self):
         return self._generator()
 
@@ -181,7 +187,11 @@ class CommonAliases:
             yield itm
 
     def __repr__(self):
-        return 'Common Aliases: {!r}'.format(len(self.user_aliases))
+        return "Common Aliases: {!r}".format(len(self.user_aliases))
+
+    def set_user_aliases(self):
+        if len(self.shell.alias_manager.aliases) > 0:
+            self.user_aliases = self.shell.alias_manager.aliases
 
     def unalias(self, alias):
         """Remove an alias.
@@ -193,12 +203,29 @@ class CommonAliases:
         alias : Alias to remove
 
         """
-        self.shell.run_line_magic('unalias', alias)
+        self.shell.run_line_magic("unalias", alias)
 
     def python_exes(self):
         """Python executables like pydoc get executed in a subprocess currently.
 
         Let's fix that behavior because that's silly.
+
+        So this method may have exposed a big problem in the way these data
+        structures are set up. It'd be way smarter to have this set up like
+        dictionaries.
+
+        I want to do a check for if pydoc and apropos are in teh aliases.
+        But if we iterate over the list then we still get a tuple.
+        We could do something like::
+
+            for i in self.user_aliases:
+                if i[0] == 'pydoc':
+                    self.unalias('pydoc')
+
+        But that's clunky because we're forced to iterate over all aliases.
+        Then we could try and do something like a merge sort to find pydoc
+        and apropos quickly but jeez that's gonna get complicated kinda quick
+        don't you think?
         """
         self.unalias("pydoc")
         self.unalias("apropos")
@@ -209,92 +236,95 @@ class CommonAliases:
     def git(self):
         """100+ git aliases."""
         self.user_aliases += [
-            ('g', 'git diff --staged --stat %l'),
-            ('ga', 'git add %l'),
-            ('gaa', 'git add --all %l'),
-            ('gai', 'git add --interactive %l'),
-            ('gap', 'git add --patch %l'),
-            ('gar', 'git add --renormalize -A %l'),
-            ('gau', 'git add --update %l'),
-            ('ga.', 'git add .'),
-            ('gb', 'git branch --all %l'),
-            ('gbl', 'git blame %l'),
-            ('gbr', 'git branch %l'),
-            ('gbru', 'git branch --set-upstream-to origin %l'),
-            ('gbrv', 'git branch --all --verbose %l'),
-            ('gci', 'git commit %l'),
-            ('gcia', 'git commit --amend %l'),
-            ('gciad', 'git commit --amend --date=%l'),
-            ('gcid', 'git commit --date=%l'),
-            ('gcim', 'git commit --verbose --message %s'),
-            ('gcl', 'git clone %l'),
-            ('gcls', 'git clone --depth 1 %l'),
-            ('gco', 'git checkout %l'),
-            ('gcob', 'git checkout -b %l'),
-            ('gd', 'git diff %l'),
-            ('gds', 'git diff --staged %l'),
-            ('gds2', 'git diff --staged --stat %l'),
-            ('gdt', 'git difftool %l'),
-            ('gdw', 'git diff --word-diff %l'),
-            ('gf', 'git fetch --all %l'),
-            ('gfe', 'git fetch %l'),
-            ('ggc', 'git gc %l'),
-            ('ggcp', 'git gc --prune %l'),
-            ('git', 'git %l'),
-            ('git config-list', 'git config --get --global %l'),
-            ('git config-glob', 'git config --get-regex --global %l.*'),
-            ('git hist',
-             'git log --pretty="format:%h %ad | %d [%an]" --graph --date=short '
-             '--branches --abbrev-commit --oneline %l'),
-            ('git last', 'git log -1 HEAD %l'),
-            ('git staged', 'git diff --cached %l'),
-            ('git rel', 'git rev-parse --show-prefix %l'),
-            ('git root', 'git rev-parse --show-toplevel %l'),
-            ('git unstage', 'git reset HEAD %l'),
-            ('git unstaged', 'git diff %l'),
-            ('gl', 'git log %l'),
-            ('glo',
-             'git log --pretty="format:%h %ad | %d [%an]" --graph --decorate --abbrev-commit --oneline --branches --all %l'
-             ),
-            ('gls', 'git ls-tree master %l'),
-            ('git ls', 'git ls-tree master %l'),
-            ('gm', 'git merge --no-ff %l'),
-            ('gma', 'git merge --abort %l'),
-            ('gmc', 'git merge --continue %l'),
-            ('gmm', 'git merge master %l'),
-            ('gmt', 'git mergetool %l'),
-            ('gp', 'git pull --all %l'),
-            ('gpo', 'git pull origin %l'),
-            ('gpom', 'git pull origin master %l'),
-            ('gpu', 'git push %l'),
-            ('gr', 'git remote -v %l'),
-            ('gre', 'git remote %l'),
-            ('grb', 'git rebase %l'),
-            ('grba', 'git rebase --abort %l'),
-            ('grbc', 'git rebase --continue %l'),
-            ('grbi', 'git rebase --interactive %l'),
-            ('gs', 'git status %l'),
-            ('gsh', 'git stash %l'),
-            ('gsha', 'git stash apply %l'),
-            ('gshc', 'git stash clear %l'),
-            ('gshd', 'git stash drop %l'),
-            ('gshl', 'git stash list %l'),
-            ('gshp', 'git stash pop %l'),
-            ('gshs', 'git stash show --stat %l'),
-            ('gshsp', 'git stash show --patch %l'),
-            ('gss', 'git status -sb %l'),
-            ('gst', 'git diff --stat %l'),
-            ('gt', 'git tag --list %l'),
-            ('lswitch', 'legit switch'),
-            ('lsync', 'legit sync'),
-            ('lpublish', 'legit publish'),
-            ('lunpublish', 'legit unpublish'),
-            ('lundo', 'legit undo'),
-            ('lbranches', 'legit branches'),
-            ('ssh-day', 'eval "$(ssh-agent -s)"; ssh-add %l'),
-            ('xx', 'quit'),  # this is a sweet one
-            ('..', 'cd ..'),
-            ('...', 'cd ../..'),
+            ("g", "git diff --staged --stat %l"),
+            ("ga", "git add %l"),
+            ("gaa", "git add --all %l"),
+            ("gai", "git add --interactive %l"),
+            ("gap", "git add --patch %l"),
+            ("gar", "git add --renormalize -A %l"),
+            ("gau", "git add --update %l"),
+            ("ga.", "git add ."),
+            ("gb", "git branch --all %l"),
+            ("gbl", "git blame %l"),
+            ("gbr", "git branch %l"),
+            ("gbru", "git branch --set-upstream-to origin %l"),
+            ("gbrv", "git branch --all --verbose %l"),
+            ("gci", "git commit %l"),
+            ("gcia", "git commit --amend %l"),
+            ("gciad", "git commit --amend --date=%l"),
+            ("gcid", "git commit --date=%l"),
+            ("gcim", "git commit --verbose --message %s"),
+            ("gcl", "git clone %l"),
+            ("gcls", "git clone --depth 1 %l"),
+            ("gco", "git checkout %l"),
+            ("gcob", "git checkout -b %l"),
+            ("gd", "git diff %l"),
+            ("gds", "git diff --staged %l"),
+            ("gds2", "git diff --staged --stat %l"),
+            ("gdt", "git difftool %l"),
+            ("gdw", "git diff --word-diff %l"),
+            ("gf", "git fetch --all %l"),
+            ("gfe", "git fetch %l"),
+            ("ggc", "git gc %l"),
+            ("ggcp", "git gc --prune %l"),
+            ("git", "git %l"),
+            ("git config-list", "git config --get --global %l"),
+            ("git config-glob", "git config --get-regex --global %l.*"),
+            (
+                "git hist",
+                'git log --pretty="format:%h %ad | %d [%an]" --graph --date=short '
+                "--branches --abbrev-commit --oneline %l",
+            ),
+            ("git last", "git log -1 HEAD %l"),
+            ("git staged", "git diff --cached %l"),
+            ("git rel", "git rev-parse --show-prefix %l"),
+            ("git root", "git rev-parse --show-toplevel %l"),
+            ("git unstage", "git reset HEAD %l"),
+            ("git unstaged", "git diff %l"),
+            ("gl", "git log %l"),
+            (
+                "glo",
+                'git log --pretty="format:%h %ad | %d [%an]" --graph --decorate --abbrev-commit --oneline --branches --all %l',
+            ),
+            ("gls", "git ls-tree master %l"),
+            ("git ls", "git ls-tree master %l"),
+            ("gm", "git merge --no-ff %l"),
+            ("gma", "git merge --abort %l"),
+            ("gmc", "git merge --continue %l"),
+            ("gmm", "git merge master %l"),
+            ("gmt", "git mergetool %l"),
+            ("gp", "git pull --all %l"),
+            ("gpo", "git pull origin %l"),
+            ("gpom", "git pull origin master %l"),
+            ("gpu", "git push %l"),
+            ("gr", "git remote -v %l"),
+            ("gre", "git remote %l"),
+            ("grb", "git rebase %l"),
+            ("grba", "git rebase --abort %l"),
+            ("grbc", "git rebase --continue %l"),
+            ("grbi", "git rebase --interactive %l"),
+            ("gs", "git status %l"),
+            ("gsh", "git stash %l"),
+            ("gsha", "git stash apply %l"),
+            ("gshc", "git stash clear %l"),
+            ("gshd", "git stash drop %l"),
+            ("gshl", "git stash list %l"),
+            ("gshp", "git stash pop %l"),
+            ("gshs", "git stash show --stat %l"),
+            ("gshsp", "git stash show --patch %l"),
+            ("gss", "git status -sb %l"),
+            ("gst", "git diff --stat %l"),
+            ("gt", "git tag --list %l"),
+            ("lswitch", "legit switch"),
+            ("lsync", "legit sync"),
+            ("lpublish", "legit publish"),
+            ("lunpublish", "legit unpublish"),
+            ("lundo", "legit undo"),
+            ("lbranches", "legit branches"),
+            ("ssh-day", 'eval "$(ssh-agent -s)"; ssh-add %l'),
+            ("xx", "quit"),  # this is a sweet one
+            ("..", "cd .."),
+            ("...", "cd ../.."),
         ]
         return self.user_aliases
 
@@ -350,7 +380,7 @@ class WindowsAliases:
         return shutil.which(exe) or None
 
     def __repr__(self):
-        return 'Windows Aliases: {!r}'.format(len(self.user_aliases))
+        return "Windows Aliases: {!r}".format(len(self.user_aliases))
 
     @classmethod
     def cmd_aliases(cls):
@@ -373,23 +403,23 @@ class WindowsAliases:
 
         """
         cls.user_aliases = [
-                ('assoc', 'assoc %l'),
-                ('cp', 'copy %s %s'),
-                ('copy', 'copy %s %s'),
-                ('ddir', 'dir /ad /on %l'),
-                ('echo', 'echo %l'),
-                ('ldir', 'dir /ad /on %l'),
-                ('ll', 'dir /Q %l'),
-                # I know this really isn't the same but I need it
-                ('ln', 'mklink %s %s'),
-                ('make', 'make.bat %l'),  # Useful when we're building docs
-                ('mklink', 'mklink %s %s'),
-                ('move', 'move %s %s'),
-                ('mv', 'move %s %s'),
-                ('ren', 'ren %l'),
-                ('rmdir', 'rmdir %l'),
-                ('tree', 'tree /A /F %l')
-            ]
+            ("assoc", "assoc %l"),
+            ("cp", "copy %s %s"),
+            ("copy", "copy %s %s"),
+            ("ddir", "dir /ad /on %l"),
+            ("echo", "echo %l"),
+            ("ldir", "dir /ad /on %l"),
+            ("ll", "dir /Q %l"),
+            # I know this really isn't the same but I need it
+            ("ln", "mklink %s %s"),
+            ("make", "make.bat %l"),  # Useful when we're building docs
+            ("mklink", "mklink %s %s"),
+            ("move", "move %s %s"),
+            ("mv", "move %s %s"),
+            ("ren", "ren %l"),
+            ("rmdir", "rmdir %l"),
+            ("tree", "tree /A /F %l"),
+        ]
         return cls.user_aliases
 
     @classmethod
@@ -406,67 +436,64 @@ class WindowsAliases:
 
         """
         cls.user_aliases = [
-            ('ac', 'Add-Content %l'),
-            ('asnp', 'Add-PSSnapin %l'),
-            ('cat', 'Get-Content %l'),
+            ("ac", "Add-Content %l"),
+            ("asnp", "Add-PSSnapin %l"),
+            ("cat", "Get-Content %l"),
             # ('cd', 'Set-Location %l'),
-            ('clc', 'Clear-Content %l'),
+            ("clc", "Clear-Content %l"),
             # ('clear', 'Clear-History %l'),
-            ('conda env', 'Get-Conda-Environment %l'),
-            ('copy', 'Copy-Item %l'),
-            ('cp', 'Copy-Item %l'),
-            ('del', 'Remove-Item %l'),
-            ('dir', 'Get-ChildItem %l'),
-            ('echo', 'Write-Output %l'),
+            ("conda env", "Get-Conda-Environment %l"),
+            ("copy", "Copy-Item %l"),
+            ("cp", "Copy-Item %l"),
+            ("del", "Remove-Item %l"),
+            ("dir", "Get-ChildItem %l"),
+            ("echo", "Write-Output %l"),
             # ('history', 'Get-History %l'),
-            ('kill', 'Stop-Process'),
-            ('l', 'Get-ChildItem %l'),
-            ('ll', 'GetChildItem -Verbose %l'),
-            ('ls', 'Get-ChildItem %l'),
-            ('man', 'Get-Help %l'),
-            ('md', 'mkdir %l'),
-            ('move', 'Move-Item %l'),
-            ('mv', 'Move-Item %l'),
+            ("kill", "Stop-Process"),
+            ("l", "Get-ChildItem %l"),
+            ("ll", "GetChildItem -Verbose %l"),
+            ("ls", "Get-ChildItem %l"),
+            ("man", "Get-Help %l"),
+            ("md", "mkdir %l"),
+            ("move", "Move-Item %l"),
+            ("mv", "Move-Item %l"),
             # ('popd', 'Pop-Location %l'),
-            ('pro', 'nvim $Profile.CurrentUserAllHosts'),
-            ('ps', 'Get-Process %l'),
+            ("pro", "nvim $Profile.CurrentUserAllHosts"),
+            ("ps", "Get-Process %l"),
             # ('pushd', 'Push-Location %l'),
             # ('pwd', 'Get-Location %l'),
-            ('ren', 'Rename-Item %l'),
-            ('rm', 'Remove-Item %l'),
-            ('rmdir', 'Remove-Item %l'),
-            ('rp', 'Remove-ItemProperty %l'),
-            ('rsn', 'Remove-PSSession %l'),
-            ('rv', 'Remove-Variable %l'),
-            ('rvpa', 'Resolve-Path %l'),
-            ('sajb', 'Start-Job %l'),
-            ('sal', 'Set-Alias %l'),
-            ('saps', 'Start-Process %l'),
-            ('sasv', 'Start-Service %l'),
-            ('sbp', 'Set-PSBreakpoint %l'),
-            ('select', 'Select-Object %l'),
-            ('set', 'Set-Variable %l'),
-            ('si', 'Set-Item %l'),
-            ('sl', 'Set-Location %l'),
-            ('sleep', 'Start-Sleep %l'),
-            ('sls', 'Select-String %l'),
-            ('sort', 'Sort-Object %l'),
-            ('sp', 'Set-ItemProperty %l'),
-            ('spjb', 'Stop-Job %l'),
-            ('spps', 'Stop-Process %l'),
-            ('spsv', 'Stop-Service %l'),
-            ('start', 'Start-Process %l'),
-            ('stz', 'Set-TimeZone %l'),
-            ('sv', 'Set-Variable %l'),
-            ('tee', 'Tee-Object %l'),
-            (
-                'tree',
-                'tree /F /A %l',
-            ),
-            ('type', 'Get-Content %l'),
-            ('where', 'Where-Object %l'),
-            ('wjb', 'Wait-Job %l'),
-            ('write', 'Write-Output %l'),
+            ("ren", "Rename-Item %l"),
+            ("rm", "Remove-Item %l"),
+            ("rmdir", "Remove-Item %l"),
+            ("rp", "Remove-ItemProperty %l"),
+            ("rsn", "Remove-PSSession %l"),
+            ("rv", "Remove-Variable %l"),
+            ("rvpa", "Resolve-Path %l"),
+            ("sajb", "Start-Job %l"),
+            ("sal", "Set-Alias %l"),
+            ("saps", "Start-Process %l"),
+            ("sasv", "Start-Service %l"),
+            ("sbp", "Set-PSBreakpoint %l"),
+            ("select", "Select-Object %l"),
+            ("set", "Set-Variable %l"),
+            ("si", "Set-Item %l"),
+            ("sl", "Set-Location %l"),
+            ("sleep", "Start-Sleep %l"),
+            ("sls", "Select-String %l"),
+            ("sort", "Sort-Object %l"),
+            ("sp", "Set-ItemProperty %l"),
+            ("spjb", "Stop-Job %l"),
+            ("spps", "Stop-Process %l"),
+            ("spsv", "Stop-Service %l"),
+            ("start", "Start-Process %l"),
+            ("stz", "Set-TimeZone %l"),
+            ("sv", "Set-Variable %l"),
+            ("tee", "Tee-Object %l"),
+            ("tree", "tree /F /A %l",),
+            ("type", "Get-Content %l"),
+            ("where", "Where-Object %l"),
+            ("wjb", "Wait-Job %l"),
+            ("write", "Write-Output %l"),
         ]
         return cls.user_aliases
 
@@ -474,10 +501,10 @@ class WindowsAliases:
         """Determine the user's shell. Checks :envvar:`SHELL` and :envvar:`COMSPEC`."""
         if self.shell:
             return self.shell
-        elif os.environ.get('SHELL'):
-            return os.environ.get('SHELL')
-        elif os.environ.get('COMSPEC'):
-            return os.environ.get('COMSPEC')
+        elif os.environ.get("SHELL"):
+            return os.environ.get("SHELL")
+        elif os.environ.get("COMSPEC"):
+            return os.environ.get("COMSPEC")
         else:
             raise
 
@@ -488,8 +515,8 @@ def main():
     Planning on coming up with a new way of introducing the aliases into the user namespace.
 
     """
-    if not hasattr(_ip, 'magics_manager'):
-        raise Exception('Are you running in IPython?')
+    if not hasattr(_ip, "magics_manager"):
+        raise Exception("Are you running in IPython?")
 
     common = CommonAliases()
 
@@ -497,12 +524,12 @@ def main():
     # TODO: Work in the Executable() class check.
     user_aliases = common.git()
 
-    common.python_exes()
-
     if machine.is_linux:
         # user_aliases += LinuxAliases().busybox()
         linux_aliases = LinuxAliases()
         user_aliases.extend(linux_aliases.busybox())
+        # yeah i know that it's dumb that the common class has a platform specific method
+        common.python_exes()
 
     elif machine.is_win:
         # finish the shell class in default_profile.util.machine
@@ -514,7 +541,7 @@ def main():
     # Apparently the big part i was missing was rerunning the init_aliases method
     _ip.alias_manager.init_aliases()
 
-    ALIAS_LOGGER.info('Number of aliases is: %s' % user_aliases)
+    ALIAS_LOGGER.info("Number of aliases is: %s" % user_aliases)
 
 
 if __name__ == "__main__":
