@@ -98,6 +98,7 @@ class Platform:
 
         self._sys_platform = sys.platform.lower()
         self._sys_check = platform.uname().system
+        self._platform_system = platform.system()
         self.is_win = self.is_windows()
         self.is_conemu = self.is_conemu_ansi()
         self.Path = Path

@@ -26,7 +26,6 @@ Also a good check to see whats being counted as a package is:
 Unfortunately I'm not getting any log messages when I start up here so thats
 indicating to me none of these lines run. Why is that?
 
-
 """
 import logging
 import os
@@ -34,6 +33,12 @@ import pkgutil
 # from pkg_resources import declare_namespace
 from setuptools import find_packages, find_namespace_packages
 import sys
+
+try:  # new replacement for the pkg_resources API
+    import importlib_metadata
+except ImportError:
+    importlib_metadata = None
+
 
 import default_profile
 from default_profile.__about__ import *

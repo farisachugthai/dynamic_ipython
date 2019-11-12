@@ -68,8 +68,10 @@ import sphinx
 from sphinx.ext.autodoc import cut_lines
 from sphinx.util.docfields import GroupedField
 from sphinx.domains.rst import ReSTDomain
+from sphinx.util import logging
 
 from IPython.lib.lexers import IPyLexer, IPythonTracebackLexer
+from IPython.sphinxext import ipython_directive
 from traitlets.config import Config
 
 # On to my imports
@@ -83,7 +85,8 @@ from default_profile.startup import *
 DOCS = Path(__file__).resolve().parent.parent
 
 # Logging
-DOCS_LOGGER = logging.getLogger('docs.source').getChild('conf')
+# DOCS_LOGGER = logging.getLogger('docs.source').getChild('conf')
+DOCS_LOGGER = logging.getLogger(name=__name__)
 
 
 def ask_for_import(mod):
@@ -118,8 +121,7 @@ extensions = [
     'sphinx.ext.inheritance_diagram',
     'sphinx.ext.intersphinx',
     'sphinx.ext.linkcode',
-    # aren't using it currently
-    # 'sphinx.ext.mathjax',
+    'sphinx.ext.mathjax',
     'sphinx.ext.napoleon',
     'sphinx.ext.todo',
     'sphinx.ext.viewcode',
@@ -138,6 +140,10 @@ if ask_for_import('default_profile.sphinxext.magics'):
     extensions.append('default_profile.sphinxext.magics')
     DOCS_LOGGER.info('magics in extensions')
 
+if ask_for_import('flake8_rst'):
+    extensions.extend([
+        'flake8_rst.sphinxext.custom_roles',
+    ])
 
 # -- General Configuration ----------------------------------------
 
@@ -238,6 +244,8 @@ modindex_common_prefix = [
     'default_profile.startup.',
     'default_profile.util.',
 ]
+
+# -- General Output Options --------------------------------------------------
 
 # If true, keep warnings as "system message" paragraphs in the built documents.
 keep_warnings = False
