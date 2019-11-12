@@ -329,6 +329,11 @@ commands possibly going to be added.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="default_profile.startup.20_aliases.CommonAliases.set_user_aliases">
+<code class="sig-name descname">set_user_aliases</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/20_aliases.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/20_aliases.html#CommonAliases.set_user_aliases"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.20_aliases.CommonAliases.set_user_aliases" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="default_profile.startup.20_aliases.CommonAliases.unalias">
 <code class="sig-name descname">unalias</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">alias</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/20_aliases.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/20_aliases.html#CommonAliases.unalias"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.20_aliases.CommonAliases.unalias" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove an alias.</p>
@@ -349,6 +354,21 @@ commands possibly going to be added.</p>
 <code class="sig-name descname">python_exes</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/20_aliases.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/20_aliases.html#CommonAliases.python_exes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.20_aliases.CommonAliases.python_exes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Python executables like pydoc get executed in a subprocess currently.</p>
 <p>Let’s fix that behavior because that’s silly.</p>
+<p>So this method may have exposed a big problem in the way these data
+structures are set up. It’d be way smarter to have this set up like
+dictionaries.</p>
+<p>I want to do a check for if pydoc and apropos are in teh aliases.
+But if we iterate over the list then we still get a tuple.
+We could do something like:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;pydoc&#39;</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unalias</span><span class="p">(</span><span class="s1">&#39;pydoc&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>But that’s clunky because we’re forced to iterate over all aliases.
+Then we could try and do something like a merge sort to find pydoc
+and apropos quickly but jeez that’s gonna get complicated kinda quick
+don’t you think?</p>
 </dd></dl>
 
 <dl class="method">
@@ -598,7 +618,7 @@ that this section is still under development and frequently changes.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Nov 11, 2019.
+      Last updated on Nov 12, 2019.
     </div>
   </body>
 </html>

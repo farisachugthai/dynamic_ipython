@@ -62,14 +62,16 @@
 <span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 
 <span class="kn">from</span> <span class="nn">default_profile.startup</span> <span class="kn">import</span> <span class="n">ask_for_import</span>
+
 <span class="c1"># TODO: allow these imports to run and allow fall backs otherwise</span>
 <span class="kn">from</span> <span class="nn">default_profile.util.module_log</span> <span class="kn">import</span> <span class="n">stream_logger</span>
 <span class="kn">from</span> <span class="nn">default_profile.util.machine</span> <span class="kn">import</span> <span class="n">Platform</span>
 
 <span class="n">ALIAS_LOGGER</span> <span class="o">=</span> <span class="n">stream_logger</span><span class="p">(</span>
-    <span class="n">logger</span><span class="o">=</span><span class="s1">&#39;default_profile.startup.20_aliases&#39;</span><span class="p">,</span>
-    <span class="n">msg_format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> : </span><span class="si">%(levelname)s</span><span class="s1"> : </span><span class="si">%(module)s</span><span class="s1"> </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span>
-    <span class="n">log_level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">=</span><span class="s2">&quot;default_profile.startup.20_aliases&quot;</span><span class="p">,</span>
+    <span class="n">msg_format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> : </span><span class="si">%(levelname)s</span><span class="s2"> : </span><span class="si">%(module)s</span><span class="s2"> </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="n">log_level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">,</span>
+<span class="p">)</span>
 
 
 <div class="viewcode-block" id="LinuxAliases"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.LinuxAliases">[docs]</a><span class="k">class</span> <span class="nc">LinuxAliases</span><span class="p">:</span>
@@ -118,7 +120,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">shell</span> <span class="ow">or</span> <span class="n">get_ipython</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;Linux Aliases: {!r}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span><span class="p">))</span>
+        <span class="k">return</span> <span class="s2">&quot;Linux Aliases: {!r}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span><span class="p">))</span>
 
 <div class="viewcode-block" id="LinuxAliases.busybox"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.LinuxAliases.busybox">[docs]</a>    <span class="k">def</span> <span class="nf">busybox</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Commands that are available on any Unix-ish system.</span>
@@ -132,51 +134,52 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">+=</span> <span class="p">[</span>
-            <span class="p">(</span><span class="s1">&#39;cs&#39;</span><span class="p">,</span> <span class="s1">&#39;cd </span><span class="si">%s</span><span class="s1"> &amp;&amp; ls -F --color=always </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;cp&#39;</span><span class="p">,</span> <span class="s1">&#39;cp -v %l&#39;</span><span class="p">),</span>  <span class="c1"># cp mv mkdir and rmdir are all overridden</span>
-            <span class="p">(</span><span class="s1">&#39;df&#39;</span><span class="p">,</span> <span class="s1">&#39;df -ah --total&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;dU&#39;</span><span class="p">,</span> <span class="s1">&#39;du -d 1 -h --apparent-size --all | sort -h | tail -n 10&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;dus&#39;</span><span class="p">,</span> <span class="s1">&#39;du -d 1 -ha %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;echo&#39;</span><span class="p">,</span> <span class="s1">&#39;echo -e %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;free&#39;</span><span class="p">,</span> <span class="s1">&#39;free -mt&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gpip&#39;</span><span class="p">,</span>
-             <span class="s1">&#39;export PIP_REQUIRE_VIRTUALENV=0; python -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 &gt; /dev/null&#39;</span>
-             <span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gpip2&#39;</span><span class="p">,</span>
-             <span class="s1">&#39;export PIP_REQUIRE_VIRTUALENV=0; python2 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 &gt; /dev/null&#39;</span>
-             <span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gpip3&#39;</span><span class="p">,</span>
-             <span class="s1">&#39;export PIP_REQUIRE_VIRTUALENV=0; python3 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 &gt; /dev/null&#39;</span>
-             <span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;head&#39;</span><span class="p">,</span> <span class="s1">&#39;head -n 30 %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;l&#39;</span><span class="p">,</span> <span class="s1">&#39;ls -CF --color=always %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;la&#39;</span><span class="p">,</span> <span class="s1">&#39;ls -AF --color=always %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;ldir&#39;</span><span class="p">,</span> <span class="s1">&#39;ls -Apo --color=always %l | grep /$&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;cs&quot;</span><span class="p">,</span> <span class="s2">&quot;cd </span><span class="si">%s</span><span class="s2"> &amp;&amp; ls -F --color=always </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;cp&quot;</span><span class="p">,</span> <span class="s2">&quot;cp -v %l&quot;</span><span class="p">),</span>  <span class="c1"># cp mv mkdir and rmdir are all overridden</span>
+            <span class="p">(</span><span class="s2">&quot;df&quot;</span><span class="p">,</span> <span class="s2">&quot;df -ah --total&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;dU&quot;</span><span class="p">,</span> <span class="s2">&quot;du -d 1 -h --apparent-size --all | sort -h | tail -n 10&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;dus&quot;</span><span class="p">,</span> <span class="s2">&quot;du -d 1 -ha %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;echo&quot;</span><span class="p">,</span> <span class="s2">&quot;echo -e %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;free&quot;</span><span class="p">,</span> <span class="s2">&quot;free -mt&quot;</span><span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;gpip&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;export PIP_REQUIRE_VIRTUALENV=0; python -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 &gt; /dev/null&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;gpip2&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;export PIP_REQUIRE_VIRTUALENV=0; python2 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 &gt; /dev/null&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;gpip3&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;export PIP_REQUIRE_VIRTUALENV=0; python3 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 &gt; /dev/null&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;head&quot;</span><span class="p">,</span> <span class="s2">&quot;head -n 30 %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;l&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -CF --color=always %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;la&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -AF --color=always %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;ldir&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -Apo --color=always %l | grep /$&quot;</span><span class="p">),</span>
             <span class="c1"># (&#39;lf&#39;, &#39;ls -Fo --color=always | grep ^-&#39;),</span>
             <span class="c1"># (&#39;ll&#39;, &#39;ls -AFho --color=always %l&#39;),</span>
-            <span class="p">(</span><span class="s1">&#39;ls&#39;</span><span class="p">,</span> <span class="s1">&#39;ls -F --color=always %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;lr&#39;</span><span class="p">,</span> <span class="s1">&#39;ls -AgFhtr --color=always %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;lt&#39;</span><span class="p">,</span> <span class="s1">&#39;ls -AgFht --color=always %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;lx&#39;</span><span class="p">,</span> <span class="s1">&#39;ls -Fo --color=always | grep ^-..x&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;ls&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -F --color=always %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;lr&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -AgFhtr --color=always %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;lt&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -AgFht --color=always %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;lx&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -Fo --color=always | grep ^-..x&quot;</span><span class="p">),</span>
             <span class="c1"># (&#39;ldir&#39;, &#39;ls -Fhpo | grep /$ %l&#39;),</span>
-            <span class="p">(</span><span class="s1">&#39;lf&#39;</span><span class="p">,</span> <span class="s1">&#39;ls -Foh --color=always | grep ^- %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;ll&#39;</span><span class="p">,</span> <span class="s1">&#39;ls -AgFh --color=always %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;lf&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -Foh --color=always | grep ^- %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;ll&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -AgFh --color=always %l&quot;</span><span class="p">),</span>
             <span class="c1"># (&#39;lt&#39;, &#39;ls -Altc --color=always %l&#39;),</span>
             <span class="c1"># (&#39;lr&#39;, &#39;ls -Altcr --color=always %l&#39;),</span>
-            <span class="p">(</span><span class="s1">&#39;mk&#39;</span><span class="p">,</span> <span class="s1">&#39;mkdir -pv %l &amp;&amp; cd %l&#39;</span><span class="p">),</span>  <span class="c1"># check if this works. only mkdir</span>
-            <span class="p">(</span><span class="s1">&#39;mkdir&#39;</span><span class="p">,</span> <span class="s1">&#39;mkdir -pv %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;mv&#39;</span><span class="p">,</span> <span class="s1">&#39;mv -v %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="s1">&#39;fc -s&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;redo&#39;</span><span class="p">,</span> <span class="s1">&#39;fc -s&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;mk&quot;</span><span class="p">,</span> <span class="s2">&quot;mkdir -pv %l &amp;&amp; cd %l&quot;</span><span class="p">),</span>  <span class="c1"># check if this works. only mkdir</span>
+            <span class="p">(</span><span class="s2">&quot;mkdir&quot;</span><span class="p">,</span> <span class="s2">&quot;mkdir -pv %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;mv&quot;</span><span class="p">,</span> <span class="s2">&quot;mv -v %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="s2">&quot;fc -s&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;redo&quot;</span><span class="p">,</span> <span class="s2">&quot;fc -s&quot;</span><span class="p">),</span>
             <span class="c1"># Less annoying than -i but more safe</span>
             <span class="c1"># only prompts with more than 3 files or recursed dirs.</span>
-            <span class="p">(</span><span class="s1">&#39;rm&#39;</span><span class="p">,</span> <span class="s1">&#39;rm -Iv %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;rmdir&#39;</span><span class="p">,</span> <span class="s1">&#39;rmdir -v %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;default_profile&#39;</span><span class="p">,</span>
-             <span class="s1">&#39;cd ~/projects/dotfiles/unix/.ipython/default_profile&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;startup&#39;</span><span class="p">,</span>
-             <span class="s1">&#39;cd ~/projects/dotfiles/unix/.ipython/default_profile/startup&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;tail&#39;</span><span class="p">,</span> <span class="s1">&#39;tail -n 30 %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;rm&quot;</span><span class="p">,</span> <span class="s2">&quot;rm -Iv %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;rmdir&quot;</span><span class="p">,</span> <span class="s2">&quot;rmdir -v %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;default_profile&quot;</span><span class="p">,</span> <span class="s2">&quot;cd ~/projects/dotfiles/unix/.ipython/default_profile&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;startup&quot;</span><span class="p">,</span> <span class="s2">&quot;cd ~/projects/dotfiles/unix/.ipython/default_profile/startup&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;tail&quot;</span><span class="p">,</span> <span class="s2">&quot;tail -n 30 %l&quot;</span><span class="p">),</span>
         <span class="p">]</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span></div>
 
@@ -194,10 +197,10 @@
 <span class="sd">        the namespace.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">+=</span> <span class="p">[</span>
-            <span class="p">(</span><span class="s1">&#39;ag&#39;</span><span class="p">,</span> <span class="s1">&#39;ag --hidden --color --no-column %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;nvim&#39;</span><span class="p">,</span> <span class="s1">&#39;nvim %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;nman&#39;</span><span class="p">,</span> <span class="s1">&#39;nvim -c &quot;Man %l&quot; -c&quot;wincmd T&quot;&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;tre&#39;</span><span class="p">,</span> <span class="s1">&#39;tree -DAshFC --prune -I .git %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;ag&quot;</span><span class="p">,</span> <span class="s2">&quot;ag --hidden --color --no-column %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;nvim&quot;</span><span class="p">,</span> <span class="s2">&quot;nvim %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;nman&quot;</span><span class="p">,</span> <span class="s1">&#39;nvim -c &quot;Man %l&quot; -c&quot;wincmd T&quot;&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;tre&quot;</span><span class="p">,</span> <span class="s2">&quot;tree -DAshFC --prune -I .git %l&quot;</span><span class="p">),</span>
         <span class="p">]</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span></div></div>
 
@@ -225,7 +228,10 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="n">user_aliases</span> <span class="ow">or</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">shell</span> <span class="ow">or</span> <span class="n">get_ipython</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">shell</span> <span class="ow">or</span> <span class="n">get_ipython</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_user_aliases</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generator</span><span class="p">()</span>
@@ -235,7 +241,11 @@
             <span class="k">yield</span> <span class="n">itm</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;Common Aliases: {!r}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span><span class="p">))</span>
+        <span class="k">return</span> <span class="s2">&quot;Common Aliases: {!r}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span><span class="p">))</span>
+
+<div class="viewcode-block" id="CommonAliases.set_user_aliases"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.set_user_aliases">[docs]</a>    <span class="k">def</span> <span class="nf">set_user_aliases</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">aliases</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">aliases</span></div>
 
 <div class="viewcode-block" id="CommonAliases.unalias"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.unalias">[docs]</a>    <span class="k">def</span> <span class="nf">unalias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alias</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Remove an alias.</span>
@@ -247,12 +257,29 @@
 <span class="sd">        alias : Alias to remove</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s1">&#39;unalias&#39;</span><span class="p">,</span> <span class="n">alias</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s2">&quot;unalias&quot;</span><span class="p">,</span> <span class="n">alias</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="CommonAliases.python_exes"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.python_exes">[docs]</a>    <span class="k">def</span> <span class="nf">python_exes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Python executables like pydoc get executed in a subprocess currently.</span>
 
 <span class="sd">        Let&#39;s fix that behavior because that&#39;s silly.</span>
+
+<span class="sd">        So this method may have exposed a big problem in the way these data</span>
+<span class="sd">        structures are set up. It&#39;d be way smarter to have this set up like</span>
+<span class="sd">        dictionaries.</span>
+
+<span class="sd">        I want to do a check for if pydoc and apropos are in teh aliases.</span>
+<span class="sd">        But if we iterate over the list then we still get a tuple.</span>
+<span class="sd">        We could do something like::</span>
+
+<span class="sd">            for i in self.user_aliases:</span>
+<span class="sd">                if i[0] == &#39;pydoc&#39;:</span>
+<span class="sd">                    self.unalias(&#39;pydoc&#39;)</span>
+
+<span class="sd">        But that&#39;s clunky because we&#39;re forced to iterate over all aliases.</span>
+<span class="sd">        Then we could try and do something like a merge sort to find pydoc</span>
+<span class="sd">        and apropos quickly but jeez that&#39;s gonna get complicated kinda quick</span>
+<span class="sd">        don&#39;t you think?</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">unalias</span><span class="p">(</span><span class="s2">&quot;pydoc&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">unalias</span><span class="p">(</span><span class="s2">&quot;apropos&quot;</span><span class="p">)</span>
@@ -263,92 +290,95 @@
 <div class="viewcode-block" id="CommonAliases.git"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.git">[docs]</a>    <span class="k">def</span> <span class="nf">git</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;100+ git aliases.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">+=</span> <span class="p">[</span>
-            <span class="p">(</span><span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff --staged --stat %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;ga&#39;</span><span class="p">,</span> <span class="s1">&#39;git add %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gaa&#39;</span><span class="p">,</span> <span class="s1">&#39;git add --all %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gai&#39;</span><span class="p">,</span> <span class="s1">&#39;git add --interactive %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gap&#39;</span><span class="p">,</span> <span class="s1">&#39;git add --patch %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gar&#39;</span><span class="p">,</span> <span class="s1">&#39;git add --renormalize -A %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gau&#39;</span><span class="p">,</span> <span class="s1">&#39;git add --update %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;ga.&#39;</span><span class="p">,</span> <span class="s1">&#39;git add .&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gb&#39;</span><span class="p">,</span> <span class="s1">&#39;git branch --all %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gbl&#39;</span><span class="p">,</span> <span class="s1">&#39;git blame %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gbr&#39;</span><span class="p">,</span> <span class="s1">&#39;git branch %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gbru&#39;</span><span class="p">,</span> <span class="s1">&#39;git branch --set-upstream-to origin %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gbrv&#39;</span><span class="p">,</span> <span class="s1">&#39;git branch --all --verbose %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gci&#39;</span><span class="p">,</span> <span class="s1">&#39;git commit %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gcia&#39;</span><span class="p">,</span> <span class="s1">&#39;git commit --amend %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gciad&#39;</span><span class="p">,</span> <span class="s1">&#39;git commit --amend --date=%l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gcid&#39;</span><span class="p">,</span> <span class="s1">&#39;git commit --date=%l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gcim&#39;</span><span class="p">,</span> <span class="s1">&#39;git commit --verbose --message </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gcl&#39;</span><span class="p">,</span> <span class="s1">&#39;git clone %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gcls&#39;</span><span class="p">,</span> <span class="s1">&#39;git clone --depth 1 %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gco&#39;</span><span class="p">,</span> <span class="s1">&#39;git checkout %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gcob&#39;</span><span class="p">,</span> <span class="s1">&#39;git checkout -b %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gd&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gds&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff --staged %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gds2&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff --staged --stat %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gdt&#39;</span><span class="p">,</span> <span class="s1">&#39;git difftool %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gdw&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff --word-diff %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gf&#39;</span><span class="p">,</span> <span class="s1">&#39;git fetch --all %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gfe&#39;</span><span class="p">,</span> <span class="s1">&#39;git fetch %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;ggc&#39;</span><span class="p">,</span> <span class="s1">&#39;git gc %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;ggcp&#39;</span><span class="p">,</span> <span class="s1">&#39;git gc --prune %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;git&#39;</span><span class="p">,</span> <span class="s1">&#39;git %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;git config-list&#39;</span><span class="p">,</span> <span class="s1">&#39;git config --get --global %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;git config-glob&#39;</span><span class="p">,</span> <span class="s1">&#39;git config --get-regex --global %l.*&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;git hist&#39;</span><span class="p">,</span>
-             <span class="s1">&#39;git log --pretty=&quot;format:%h %ad | </span><span class="si">%d</span><span class="s1"> [%an]&quot; --graph --date=short &#39;</span>
-             <span class="s1">&#39;--branches --abbrev-commit --oneline %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;git last&#39;</span><span class="p">,</span> <span class="s1">&#39;git log -1 HEAD %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;git staged&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff --cached %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;git rel&#39;</span><span class="p">,</span> <span class="s1">&#39;git rev-parse --show-prefix %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;git root&#39;</span><span class="p">,</span> <span class="s1">&#39;git rev-parse --show-toplevel %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;git unstage&#39;</span><span class="p">,</span> <span class="s1">&#39;git reset HEAD %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;git unstaged&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gl&#39;</span><span class="p">,</span> <span class="s1">&#39;git log %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;glo&#39;</span><span class="p">,</span>
-             <span class="s1">&#39;git log --pretty=&quot;format:%h %ad | </span><span class="si">%d</span><span class="s1"> [%an]&quot; --graph --decorate --abbrev-commit --oneline --branches --all %l&#39;</span>
-             <span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gls&#39;</span><span class="p">,</span> <span class="s1">&#39;git ls-tree master %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;git ls&#39;</span><span class="p">,</span> <span class="s1">&#39;git ls-tree master %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gm&#39;</span><span class="p">,</span> <span class="s1">&#39;git merge --no-ff %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gma&#39;</span><span class="p">,</span> <span class="s1">&#39;git merge --abort %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gmc&#39;</span><span class="p">,</span> <span class="s1">&#39;git merge --continue %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gmm&#39;</span><span class="p">,</span> <span class="s1">&#39;git merge master %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gmt&#39;</span><span class="p">,</span> <span class="s1">&#39;git mergetool %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gp&#39;</span><span class="p">,</span> <span class="s1">&#39;git pull --all %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gpo&#39;</span><span class="p">,</span> <span class="s1">&#39;git pull origin %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gpom&#39;</span><span class="p">,</span> <span class="s1">&#39;git pull origin master %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gpu&#39;</span><span class="p">,</span> <span class="s1">&#39;git push %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gr&#39;</span><span class="p">,</span> <span class="s1">&#39;git remote -v %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gre&#39;</span><span class="p">,</span> <span class="s1">&#39;git remote %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;grb&#39;</span><span class="p">,</span> <span class="s1">&#39;git rebase %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;grba&#39;</span><span class="p">,</span> <span class="s1">&#39;git rebase --abort %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;grbc&#39;</span><span class="p">,</span> <span class="s1">&#39;git rebase --continue %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;grbi&#39;</span><span class="p">,</span> <span class="s1">&#39;git rebase --interactive %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gs&#39;</span><span class="p">,</span> <span class="s1">&#39;git status %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gsh&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gsha&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash apply %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gshc&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash clear %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gshd&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash drop %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gshl&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash list %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gshp&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash pop %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gshs&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash show --stat %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gshsp&#39;</span><span class="p">,</span> <span class="s1">&#39;git stash show --patch %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gss&#39;</span><span class="p">,</span> <span class="s1">&#39;git status -sb %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gst&#39;</span><span class="p">,</span> <span class="s1">&#39;git diff --stat %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;gt&#39;</span><span class="p">,</span> <span class="s1">&#39;git tag --list %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;lswitch&#39;</span><span class="p">,</span> <span class="s1">&#39;legit switch&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;lsync&#39;</span><span class="p">,</span> <span class="s1">&#39;legit sync&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;lpublish&#39;</span><span class="p">,</span> <span class="s1">&#39;legit publish&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;lunpublish&#39;</span><span class="p">,</span> <span class="s1">&#39;legit unpublish&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;lundo&#39;</span><span class="p">,</span> <span class="s1">&#39;legit undo&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;lbranches&#39;</span><span class="p">,</span> <span class="s1">&#39;legit branches&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;ssh-day&#39;</span><span class="p">,</span> <span class="s1">&#39;eval &quot;$(ssh-agent -s)&quot;; ssh-add %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;xx&#39;</span><span class="p">,</span> <span class="s1">&#39;quit&#39;</span><span class="p">),</span>  <span class="c1"># this is a sweet one</span>
-            <span class="p">(</span><span class="s1">&#39;..&#39;</span><span class="p">,</span> <span class="s1">&#39;cd ..&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;...&#39;</span><span class="p">,</span> <span class="s1">&#39;cd ../..&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="s2">&quot;git diff --staged --stat %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;ga&quot;</span><span class="p">,</span> <span class="s2">&quot;git add %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gaa&quot;</span><span class="p">,</span> <span class="s2">&quot;git add --all %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gai&quot;</span><span class="p">,</span> <span class="s2">&quot;git add --interactive %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gap&quot;</span><span class="p">,</span> <span class="s2">&quot;git add --patch %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gar&quot;</span><span class="p">,</span> <span class="s2">&quot;git add --renormalize -A %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gau&quot;</span><span class="p">,</span> <span class="s2">&quot;git add --update %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;ga.&quot;</span><span class="p">,</span> <span class="s2">&quot;git add .&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gb&quot;</span><span class="p">,</span> <span class="s2">&quot;git branch --all %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gbl&quot;</span><span class="p">,</span> <span class="s2">&quot;git blame %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gbr&quot;</span><span class="p">,</span> <span class="s2">&quot;git branch %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gbru&quot;</span><span class="p">,</span> <span class="s2">&quot;git branch --set-upstream-to origin %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gbrv&quot;</span><span class="p">,</span> <span class="s2">&quot;git branch --all --verbose %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gci&quot;</span><span class="p">,</span> <span class="s2">&quot;git commit %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gcia&quot;</span><span class="p">,</span> <span class="s2">&quot;git commit --amend %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gciad&quot;</span><span class="p">,</span> <span class="s2">&quot;git commit --amend --date=%l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gcid&quot;</span><span class="p">,</span> <span class="s2">&quot;git commit --date=%l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gcim&quot;</span><span class="p">,</span> <span class="s2">&quot;git commit --verbose --message </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gcl&quot;</span><span class="p">,</span> <span class="s2">&quot;git clone %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gcls&quot;</span><span class="p">,</span> <span class="s2">&quot;git clone --depth 1 %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gco&quot;</span><span class="p">,</span> <span class="s2">&quot;git checkout %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gcob&quot;</span><span class="p">,</span> <span class="s2">&quot;git checkout -b %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gd&quot;</span><span class="p">,</span> <span class="s2">&quot;git diff %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gds&quot;</span><span class="p">,</span> <span class="s2">&quot;git diff --staged %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gds2&quot;</span><span class="p">,</span> <span class="s2">&quot;git diff --staged --stat %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gdt&quot;</span><span class="p">,</span> <span class="s2">&quot;git difftool %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gdw&quot;</span><span class="p">,</span> <span class="s2">&quot;git diff --word-diff %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gf&quot;</span><span class="p">,</span> <span class="s2">&quot;git fetch --all %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gfe&quot;</span><span class="p">,</span> <span class="s2">&quot;git fetch %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;ggc&quot;</span><span class="p">,</span> <span class="s2">&quot;git gc %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;ggcp&quot;</span><span class="p">,</span> <span class="s2">&quot;git gc --prune %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;git&quot;</span><span class="p">,</span> <span class="s2">&quot;git %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;git config-list&quot;</span><span class="p">,</span> <span class="s2">&quot;git config --get --global %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;git config-glob&quot;</span><span class="p">,</span> <span class="s2">&quot;git config --get-regex --global %l.*&quot;</span><span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;git hist&quot;</span><span class="p">,</span>
+                <span class="s1">&#39;git log --pretty=&quot;format:%h %ad | </span><span class="si">%d</span><span class="s1"> [%an]&quot; --graph --date=short &#39;</span>
+                <span class="s2">&quot;--branches --abbrev-commit --oneline %l&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;git last&quot;</span><span class="p">,</span> <span class="s2">&quot;git log -1 HEAD %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;git staged&quot;</span><span class="p">,</span> <span class="s2">&quot;git diff --cached %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;git rel&quot;</span><span class="p">,</span> <span class="s2">&quot;git rev-parse --show-prefix %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;git root&quot;</span><span class="p">,</span> <span class="s2">&quot;git rev-parse --show-toplevel %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;git unstage&quot;</span><span class="p">,</span> <span class="s2">&quot;git reset HEAD %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;git unstaged&quot;</span><span class="p">,</span> <span class="s2">&quot;git diff %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gl&quot;</span><span class="p">,</span> <span class="s2">&quot;git log %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;glo&quot;</span><span class="p">,</span>
+                <span class="s1">&#39;git log --pretty=&quot;format:%h %ad | </span><span class="si">%d</span><span class="s1"> [%an]&quot; --graph --decorate --abbrev-commit --oneline --branches --all %l&#39;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gls&quot;</span><span class="p">,</span> <span class="s2">&quot;git ls-tree master %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;git ls&quot;</span><span class="p">,</span> <span class="s2">&quot;git ls-tree master %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gm&quot;</span><span class="p">,</span> <span class="s2">&quot;git merge --no-ff %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gma&quot;</span><span class="p">,</span> <span class="s2">&quot;git merge --abort %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gmc&quot;</span><span class="p">,</span> <span class="s2">&quot;git merge --continue %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gmm&quot;</span><span class="p">,</span> <span class="s2">&quot;git merge master %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gmt&quot;</span><span class="p">,</span> <span class="s2">&quot;git mergetool %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gp&quot;</span><span class="p">,</span> <span class="s2">&quot;git pull --all %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gpo&quot;</span><span class="p">,</span> <span class="s2">&quot;git pull origin %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gpom&quot;</span><span class="p">,</span> <span class="s2">&quot;git pull origin master %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gpu&quot;</span><span class="p">,</span> <span class="s2">&quot;git push %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gr&quot;</span><span class="p">,</span> <span class="s2">&quot;git remote -v %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gre&quot;</span><span class="p">,</span> <span class="s2">&quot;git remote %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;grb&quot;</span><span class="p">,</span> <span class="s2">&quot;git rebase %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;grba&quot;</span><span class="p">,</span> <span class="s2">&quot;git rebase --abort %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;grbc&quot;</span><span class="p">,</span> <span class="s2">&quot;git rebase --continue %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;grbi&quot;</span><span class="p">,</span> <span class="s2">&quot;git rebase --interactive %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gs&quot;</span><span class="p">,</span> <span class="s2">&quot;git status %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gsh&quot;</span><span class="p">,</span> <span class="s2">&quot;git stash %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gsha&quot;</span><span class="p">,</span> <span class="s2">&quot;git stash apply %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gshc&quot;</span><span class="p">,</span> <span class="s2">&quot;git stash clear %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gshd&quot;</span><span class="p">,</span> <span class="s2">&quot;git stash drop %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gshl&quot;</span><span class="p">,</span> <span class="s2">&quot;git stash list %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gshp&quot;</span><span class="p">,</span> <span class="s2">&quot;git stash pop %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gshs&quot;</span><span class="p">,</span> <span class="s2">&quot;git stash show --stat %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gshsp&quot;</span><span class="p">,</span> <span class="s2">&quot;git stash show --patch %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gss&quot;</span><span class="p">,</span> <span class="s2">&quot;git status -sb %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gst&quot;</span><span class="p">,</span> <span class="s2">&quot;git diff --stat %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gt&quot;</span><span class="p">,</span> <span class="s2">&quot;git tag --list %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;lswitch&quot;</span><span class="p">,</span> <span class="s2">&quot;legit switch&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;lsync&quot;</span><span class="p">,</span> <span class="s2">&quot;legit sync&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;lpublish&quot;</span><span class="p">,</span> <span class="s2">&quot;legit publish&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;lunpublish&quot;</span><span class="p">,</span> <span class="s2">&quot;legit unpublish&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;lundo&quot;</span><span class="p">,</span> <span class="s2">&quot;legit undo&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;lbranches&quot;</span><span class="p">,</span> <span class="s2">&quot;legit branches&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;ssh-day&quot;</span><span class="p">,</span> <span class="s1">&#39;eval &quot;$(ssh-agent -s)&quot;; ssh-add %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;xx&quot;</span><span class="p">,</span> <span class="s2">&quot;quit&quot;</span><span class="p">),</span>  <span class="c1"># this is a sweet one</span>
+            <span class="p">(</span><span class="s2">&quot;..&quot;</span><span class="p">,</span> <span class="s2">&quot;cd ..&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;...&quot;</span><span class="p">,</span> <span class="s2">&quot;cd ../..&quot;</span><span class="p">),</span>
         <span class="p">]</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span></div></div>
 
@@ -404,7 +434,7 @@
         <span class="k">return</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="n">exe</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">None</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;Windows Aliases: {!r}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span><span class="p">))</span>
+        <span class="k">return</span> <span class="s2">&quot;Windows Aliases: {!r}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span><span class="p">))</span>
 
 <div class="viewcode-block" id="WindowsAliases.cmd_aliases"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.WindowsAliases.cmd_aliases">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">cmd_aliases</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
@@ -427,23 +457,23 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="p">(</span><span class="s1">&#39;assoc&#39;</span><span class="p">,</span> <span class="s1">&#39;assoc %l&#39;</span><span class="p">),</span>
-                <span class="p">(</span><span class="s1">&#39;cp&#39;</span><span class="p">,</span> <span class="s1">&#39;copy </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">),</span>
-                <span class="p">(</span><span class="s1">&#39;copy&#39;</span><span class="p">,</span> <span class="s1">&#39;copy </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">),</span>
-                <span class="p">(</span><span class="s1">&#39;ddir&#39;</span><span class="p">,</span> <span class="s1">&#39;dir /ad /on %l&#39;</span><span class="p">),</span>
-                <span class="p">(</span><span class="s1">&#39;echo&#39;</span><span class="p">,</span> <span class="s1">&#39;echo %l&#39;</span><span class="p">),</span>
-                <span class="p">(</span><span class="s1">&#39;ldir&#39;</span><span class="p">,</span> <span class="s1">&#39;dir /ad /on %l&#39;</span><span class="p">),</span>
-                <span class="p">(</span><span class="s1">&#39;ll&#39;</span><span class="p">,</span> <span class="s1">&#39;dir /Q %l&#39;</span><span class="p">),</span>
-                <span class="c1"># I know this really isn&#39;t the same but I need it</span>
-                <span class="p">(</span><span class="s1">&#39;ln&#39;</span><span class="p">,</span> <span class="s1">&#39;mklink </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">),</span>
-                <span class="p">(</span><span class="s1">&#39;make&#39;</span><span class="p">,</span> <span class="s1">&#39;make.bat %l&#39;</span><span class="p">),</span>  <span class="c1"># Useful when we&#39;re building docs</span>
-                <span class="p">(</span><span class="s1">&#39;mklink&#39;</span><span class="p">,</span> <span class="s1">&#39;mklink </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">),</span>
-                <span class="p">(</span><span class="s1">&#39;move&#39;</span><span class="p">,</span> <span class="s1">&#39;move </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">),</span>
-                <span class="p">(</span><span class="s1">&#39;mv&#39;</span><span class="p">,</span> <span class="s1">&#39;move </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">),</span>
-                <span class="p">(</span><span class="s1">&#39;ren&#39;</span><span class="p">,</span> <span class="s1">&#39;ren %l&#39;</span><span class="p">),</span>
-                <span class="p">(</span><span class="s1">&#39;rmdir&#39;</span><span class="p">,</span> <span class="s1">&#39;rmdir %l&#39;</span><span class="p">),</span>
-                <span class="p">(</span><span class="s1">&#39;tree&#39;</span><span class="p">,</span> <span class="s1">&#39;tree /A /F %l&#39;</span><span class="p">)</span>
-            <span class="p">]</span>
+            <span class="p">(</span><span class="s2">&quot;assoc&quot;</span><span class="p">,</span> <span class="s2">&quot;assoc %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;cp&quot;</span><span class="p">,</span> <span class="s2">&quot;copy </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;copy&quot;</span><span class="p">,</span> <span class="s2">&quot;copy </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;ddir&quot;</span><span class="p">,</span> <span class="s2">&quot;dir /ad /on %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;echo&quot;</span><span class="p">,</span> <span class="s2">&quot;echo %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;ldir&quot;</span><span class="p">,</span> <span class="s2">&quot;dir /ad /on %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;ll&quot;</span><span class="p">,</span> <span class="s2">&quot;dir /Q %l&quot;</span><span class="p">),</span>
+            <span class="c1"># I know this really isn&#39;t the same but I need it</span>
+            <span class="p">(</span><span class="s2">&quot;ln&quot;</span><span class="p">,</span> <span class="s2">&quot;mklink </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;make&quot;</span><span class="p">,</span> <span class="s2">&quot;make.bat %l&quot;</span><span class="p">),</span>  <span class="c1"># Useful when we&#39;re building docs</span>
+            <span class="p">(</span><span class="s2">&quot;mklink&quot;</span><span class="p">,</span> <span class="s2">&quot;mklink </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;move&quot;</span><span class="p">,</span> <span class="s2">&quot;move </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;mv&quot;</span><span class="p">,</span> <span class="s2">&quot;move </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;ren&quot;</span><span class="p">,</span> <span class="s2">&quot;ren %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;rmdir&quot;</span><span class="p">,</span> <span class="s2">&quot;rmdir %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;tree&quot;</span><span class="p">,</span> <span class="s2">&quot;tree /A /F %l&quot;</span><span class="p">),</span>
+        <span class="p">]</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">user_aliases</span></div>
 
 <div class="viewcode-block" id="WindowsAliases.powershell_aliases"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.WindowsAliases.powershell_aliases">[docs]</a>    <span class="nd">@classmethod</span>
@@ -460,67 +490,64 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="p">(</span><span class="s1">&#39;ac&#39;</span><span class="p">,</span> <span class="s1">&#39;Add-Content %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;asnp&#39;</span><span class="p">,</span> <span class="s1">&#39;Add-PSSnapin %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;cat&#39;</span><span class="p">,</span> <span class="s1">&#39;Get-Content %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;ac&quot;</span><span class="p">,</span> <span class="s2">&quot;Add-Content %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;asnp&quot;</span><span class="p">,</span> <span class="s2">&quot;Add-PSSnapin %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;cat&quot;</span><span class="p">,</span> <span class="s2">&quot;Get-Content %l&quot;</span><span class="p">),</span>
             <span class="c1"># (&#39;cd&#39;, &#39;Set-Location %l&#39;),</span>
-            <span class="p">(</span><span class="s1">&#39;clc&#39;</span><span class="p">,</span> <span class="s1">&#39;Clear-Content %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;clc&quot;</span><span class="p">,</span> <span class="s2">&quot;Clear-Content %l&quot;</span><span class="p">),</span>
             <span class="c1"># (&#39;clear&#39;, &#39;Clear-History %l&#39;),</span>
-            <span class="p">(</span><span class="s1">&#39;conda env&#39;</span><span class="p">,</span> <span class="s1">&#39;Get-Conda-Environment %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;copy&#39;</span><span class="p">,</span> <span class="s1">&#39;Copy-Item %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;cp&#39;</span><span class="p">,</span> <span class="s1">&#39;Copy-Item %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;del&#39;</span><span class="p">,</span> <span class="s1">&#39;Remove-Item %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;dir&#39;</span><span class="p">,</span> <span class="s1">&#39;Get-ChildItem %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;echo&#39;</span><span class="p">,</span> <span class="s1">&#39;Write-Output %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;conda env&quot;</span><span class="p">,</span> <span class="s2">&quot;Get-Conda-Environment %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;copy&quot;</span><span class="p">,</span> <span class="s2">&quot;Copy-Item %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;cp&quot;</span><span class="p">,</span> <span class="s2">&quot;Copy-Item %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;del&quot;</span><span class="p">,</span> <span class="s2">&quot;Remove-Item %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;dir&quot;</span><span class="p">,</span> <span class="s2">&quot;Get-ChildItem %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;echo&quot;</span><span class="p">,</span> <span class="s2">&quot;Write-Output %l&quot;</span><span class="p">),</span>
             <span class="c1"># (&#39;history&#39;, &#39;Get-History %l&#39;),</span>
-            <span class="p">(</span><span class="s1">&#39;kill&#39;</span><span class="p">,</span> <span class="s1">&#39;Stop-Process&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;l&#39;</span><span class="p">,</span> <span class="s1">&#39;Get-ChildItem %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;ll&#39;</span><span class="p">,</span> <span class="s1">&#39;GetChildItem -Verbose %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;ls&#39;</span><span class="p">,</span> <span class="s1">&#39;Get-ChildItem %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;man&#39;</span><span class="p">,</span> <span class="s1">&#39;Get-Help %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;md&#39;</span><span class="p">,</span> <span class="s1">&#39;mkdir %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;move&#39;</span><span class="p">,</span> <span class="s1">&#39;Move-Item %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;mv&#39;</span><span class="p">,</span> <span class="s1">&#39;Move-Item %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;kill&quot;</span><span class="p">,</span> <span class="s2">&quot;Stop-Process&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;l&quot;</span><span class="p">,</span> <span class="s2">&quot;Get-ChildItem %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;ll&quot;</span><span class="p">,</span> <span class="s2">&quot;GetChildItem -Verbose %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;ls&quot;</span><span class="p">,</span> <span class="s2">&quot;Get-ChildItem %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;man&quot;</span><span class="p">,</span> <span class="s2">&quot;Get-Help %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;md&quot;</span><span class="p">,</span> <span class="s2">&quot;mkdir %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;move&quot;</span><span class="p">,</span> <span class="s2">&quot;Move-Item %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;mv&quot;</span><span class="p">,</span> <span class="s2">&quot;Move-Item %l&quot;</span><span class="p">),</span>
             <span class="c1"># (&#39;popd&#39;, &#39;Pop-Location %l&#39;),</span>
-            <span class="p">(</span><span class="s1">&#39;pro&#39;</span><span class="p">,</span> <span class="s1">&#39;nvim $Profile.CurrentUserAllHosts&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;ps&#39;</span><span class="p">,</span> <span class="s1">&#39;Get-Process %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;pro&quot;</span><span class="p">,</span> <span class="s2">&quot;nvim $Profile.CurrentUserAllHosts&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;ps&quot;</span><span class="p">,</span> <span class="s2">&quot;Get-Process %l&quot;</span><span class="p">),</span>
             <span class="c1"># (&#39;pushd&#39;, &#39;Push-Location %l&#39;),</span>
             <span class="c1"># (&#39;pwd&#39;, &#39;Get-Location %l&#39;),</span>
-            <span class="p">(</span><span class="s1">&#39;ren&#39;</span><span class="p">,</span> <span class="s1">&#39;Rename-Item %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;rm&#39;</span><span class="p">,</span> <span class="s1">&#39;Remove-Item %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;rmdir&#39;</span><span class="p">,</span> <span class="s1">&#39;Remove-Item %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;rp&#39;</span><span class="p">,</span> <span class="s1">&#39;Remove-ItemProperty %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;rsn&#39;</span><span class="p">,</span> <span class="s1">&#39;Remove-PSSession %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;rv&#39;</span><span class="p">,</span> <span class="s1">&#39;Remove-Variable %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;rvpa&#39;</span><span class="p">,</span> <span class="s1">&#39;Resolve-Path %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;sajb&#39;</span><span class="p">,</span> <span class="s1">&#39;Start-Job %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;sal&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-Alias %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;saps&#39;</span><span class="p">,</span> <span class="s1">&#39;Start-Process %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;sasv&#39;</span><span class="p">,</span> <span class="s1">&#39;Start-Service %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;sbp&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-PSBreakpoint %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;select&#39;</span><span class="p">,</span> <span class="s1">&#39;Select-Object %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;set&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-Variable %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;si&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-Item %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;sl&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-Location %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;sleep&#39;</span><span class="p">,</span> <span class="s1">&#39;Start-Sleep %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;sls&#39;</span><span class="p">,</span> <span class="s1">&#39;Select-String %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;sort&#39;</span><span class="p">,</span> <span class="s1">&#39;Sort-Object %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;sp&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-ItemProperty %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;spjb&#39;</span><span class="p">,</span> <span class="s1">&#39;Stop-Job %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;spps&#39;</span><span class="p">,</span> <span class="s1">&#39;Stop-Process %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;spsv&#39;</span><span class="p">,</span> <span class="s1">&#39;Stop-Service %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;start&#39;</span><span class="p">,</span> <span class="s1">&#39;Start-Process %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;stz&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-TimeZone %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;sv&#39;</span><span class="p">,</span> <span class="s1">&#39;Set-Variable %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;tee&#39;</span><span class="p">,</span> <span class="s1">&#39;Tee-Object %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span>
-                <span class="s1">&#39;tree&#39;</span><span class="p">,</span>
-                <span class="s1">&#39;tree /F /A %l&#39;</span><span class="p">,</span>
-            <span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">,</span> <span class="s1">&#39;Get-Content %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;where&#39;</span><span class="p">,</span> <span class="s1">&#39;Where-Object %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;wjb&#39;</span><span class="p">,</span> <span class="s1">&#39;Wait-Job %l&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;write&#39;</span><span class="p">,</span> <span class="s1">&#39;Write-Output %l&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;ren&quot;</span><span class="p">,</span> <span class="s2">&quot;Rename-Item %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;rm&quot;</span><span class="p">,</span> <span class="s2">&quot;Remove-Item %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;rmdir&quot;</span><span class="p">,</span> <span class="s2">&quot;Remove-Item %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;rp&quot;</span><span class="p">,</span> <span class="s2">&quot;Remove-ItemProperty %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;rsn&quot;</span><span class="p">,</span> <span class="s2">&quot;Remove-PSSession %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;rv&quot;</span><span class="p">,</span> <span class="s2">&quot;Remove-Variable %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;rvpa&quot;</span><span class="p">,</span> <span class="s2">&quot;Resolve-Path %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;sajb&quot;</span><span class="p">,</span> <span class="s2">&quot;Start-Job %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;sal&quot;</span><span class="p">,</span> <span class="s2">&quot;Set-Alias %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;saps&quot;</span><span class="p">,</span> <span class="s2">&quot;Start-Process %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;sasv&quot;</span><span class="p">,</span> <span class="s2">&quot;Start-Service %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;sbp&quot;</span><span class="p">,</span> <span class="s2">&quot;Set-PSBreakpoint %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;select&quot;</span><span class="p">,</span> <span class="s2">&quot;Select-Object %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;set&quot;</span><span class="p">,</span> <span class="s2">&quot;Set-Variable %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;si&quot;</span><span class="p">,</span> <span class="s2">&quot;Set-Item %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;sl&quot;</span><span class="p">,</span> <span class="s2">&quot;Set-Location %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;sleep&quot;</span><span class="p">,</span> <span class="s2">&quot;Start-Sleep %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;sls&quot;</span><span class="p">,</span> <span class="s2">&quot;Select-String %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;sort&quot;</span><span class="p">,</span> <span class="s2">&quot;Sort-Object %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;sp&quot;</span><span class="p">,</span> <span class="s2">&quot;Set-ItemProperty %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;spjb&quot;</span><span class="p">,</span> <span class="s2">&quot;Stop-Job %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;spps&quot;</span><span class="p">,</span> <span class="s2">&quot;Stop-Process %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;spsv&quot;</span><span class="p">,</span> <span class="s2">&quot;Stop-Service %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;start&quot;</span><span class="p">,</span> <span class="s2">&quot;Start-Process %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;stz&quot;</span><span class="p">,</span> <span class="s2">&quot;Set-TimeZone %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;sv&quot;</span><span class="p">,</span> <span class="s2">&quot;Set-Variable %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;tee&quot;</span><span class="p">,</span> <span class="s2">&quot;Tee-Object %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;tree&quot;</span><span class="p">,</span> <span class="s2">&quot;tree /F /A %l&quot;</span><span class="p">,),</span>
+            <span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;Get-Content %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;where&quot;</span><span class="p">,</span> <span class="s2">&quot;Where-Object %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;wjb&quot;</span><span class="p">,</span> <span class="s2">&quot;Wait-Job %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;write&quot;</span><span class="p">,</span> <span class="s2">&quot;Write-Output %l&quot;</span><span class="p">),</span>
         <span class="p">]</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">user_aliases</span></div>
 
@@ -528,10 +555,10 @@
         <span class="sd">&quot;&quot;&quot;Determine the user&#39;s shell. Checks :envvar:`SHELL` and :envvar:`COMSPEC`.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span>
-        <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;SHELL&#39;</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;SHELL&#39;</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;COMSPEC&#39;</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;COMSPEC&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SHELL&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SHELL&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;COMSPEC&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;COMSPEC&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span></div></div>
 
@@ -542,8 +569,8 @@
 <span class="sd">    Planning on coming up with a new way of introducing the aliases into the user namespace.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_ip</span><span class="p">,</span> <span class="s1">&#39;magics_manager&#39;</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Are you running in IPython?&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_ip</span><span class="p">,</span> <span class="s2">&quot;magics_manager&quot;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Are you running in IPython?&quot;</span><span class="p">)</span>
 
     <span class="n">common</span> <span class="o">=</span> <span class="n">CommonAliases</span><span class="p">()</span>
 
@@ -551,12 +578,12 @@
     <span class="c1"># TODO: Work in the Executable() class check.</span>
     <span class="n">user_aliases</span> <span class="o">=</span> <span class="n">common</span><span class="o">.</span><span class="n">git</span><span class="p">()</span>
 
-    <span class="n">common</span><span class="o">.</span><span class="n">python_exes</span><span class="p">()</span>
-
     <span class="k">if</span> <span class="n">machine</span><span class="o">.</span><span class="n">is_linux</span><span class="p">:</span>
         <span class="c1"># user_aliases += LinuxAliases().busybox()</span>
         <span class="n">linux_aliases</span> <span class="o">=</span> <span class="n">LinuxAliases</span><span class="p">()</span>
         <span class="n">user_aliases</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">linux_aliases</span><span class="o">.</span><span class="n">busybox</span><span class="p">())</span>
+        <span class="c1"># yeah i know that it&#39;s dumb that the common class has a platform specific method</span>
+        <span class="n">common</span><span class="o">.</span><span class="n">python_exes</span><span class="p">()</span>
 
     <span class="k">elif</span> <span class="n">machine</span><span class="o">.</span><span class="n">is_win</span><span class="p">:</span>
         <span class="c1"># finish the shell class in default_profile.util.machine</span>
@@ -568,7 +595,7 @@
     <span class="c1"># Apparently the big part i was missing was rerunning the init_aliases method</span>
     <span class="n">_ip</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">init_aliases</span><span class="p">()</span>
 
-    <span class="n">ALIAS_LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Number of aliases is: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">user_aliases</span><span class="p">)</span></div>
+    <span class="n">ALIAS_LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Number of aliases is: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">user_aliases</span><span class="p">)</span></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
@@ -685,7 +712,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Nov 11, 2019.
+      Last updated on Nov 12, 2019.
     </div>
   </body>
 </html>
