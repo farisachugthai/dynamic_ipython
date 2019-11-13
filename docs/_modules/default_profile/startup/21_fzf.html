@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 
 <!DOCTYPE html>
 
@@ -280,3 +281,283 @@
     </div>
   </body>
 </html>
+||||||| merged common ancestors
+=======
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>default_profile.startup.21_fzf &#8212; Dynamic IPython: version0.0.2</title>
+    <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
+    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/startup/21_fzf.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" />
+<link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" media="screen" rel="stylesheet" type="text/css" />
+<link rel='stylesheet' href='//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.css'>
+<!--[if lte IE 6]>
+  <link
+    rel="stylesheet"
+    href="../../../_static/ie6.css"
+    type="text/css"
+    media="screen"
+    charset="utf-8"
+  />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+<h1>Source code for default_profile.startup.21_fzf</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;FZF works in IPython!!!!&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+
+
+<div class="viewcode-block" id="Executable"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.Executable">[docs]</a><span class="k">class</span> <span class="nc">Executable</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;An object representing some executable on a user computer.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Executable.__init__"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.Executable.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize with *command*.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">command</span> <span class="o">=</span> <span class="n">command</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">command_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_command_path</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_command_path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the path to an executable if *command* is on `PATH`.</span>
+
+<span class="sd">        Same signature as :func:`shutil.which`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str (path-like)</span>
+<span class="sd">            Path to an executable if it&#39;s found. Otherwise `None`.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;Executable: {!r}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="p">)</span>
+
+    <span class="nd">@functools.wraps</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">command_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">def</span> <span class="nf">wrapped</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="setup_fzf"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.setup_fzf">[docs]</a><span class="k">def</span> <span class="nf">setup_fzf</span><span class="p">(</span><span class="n">fzf_alias</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">fzf_alias</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">fzf_alias</span> <span class="o">=</span> <span class="p">()</span>
+    <span class="k">if</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s1">&#39;fzf&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s1">&#39;rg&#39;</span><span class="p">):</span>
+        <span class="c1"># user_aliases.extend(</span>
+        <span class="c1">#     (&#39;fzf&#39;, &#39;$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS&#39;))</span>
+        <span class="n">fzf_alias</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;fzf&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;rg --pretty --hidden --max-columns=300 --max-columns-preview &#39;</span>
+             <span class="s1">&#39;.*[a-zA-Z]* --no-heading -m=30 --no-messages --color=ansi --no-column &#39;</span>
+             <span class="s1">&#39; --no-line-number -C 0 | fzf --ansi&#39;</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s1">&#39;fzf&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s1">&#39;ag&#39;</span><span class="p">):</span>
+        <span class="c1"># user_aliases.extend(</span>
+        <span class="c1">#     (&#39;fzf&#39;, &#39;$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS&#39;))</span>
+        <span class="n">fzf_alias</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s1">&#39;fzf&#39;</span><span class="p">,</span> <span class="s1">&#39;ag -C 0 --color-win-ansi --noheading | fzf --ansi&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">fzf_alias</span></div>
+
+
+<span class="c1"># def is_fzf_tmux():</span>
+<span class="c1"># def fzf_tmux():</span>
+<div class="viewcode-block" id="is_tmux"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.is_tmux">[docs]</a><span class="k">def</span> <span class="nf">is_tmux</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Check if we&#39;re using tmux or not.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;TMUX&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">True</span></div>
+
+
+<div class="viewcode-block" id="is_rg"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.is_rg">[docs]</a><span class="k">def</span> <span class="nf">is_rg</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Returns the path to rg.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s1">&#39;rg&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="busybox_hack"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.busybox_hack">[docs]</a><span class="k">def</span> <span class="nf">busybox_hack</span><span class="p">(</span><span class="n">shell</span><span class="p">):</span>
+    <span class="c1"># HACK: dear god it feels horrible doing this but shit it works</span>
+    <span class="kn">from</span> <span class="nn">default_profile.startup</span> <span class="kn">import</span> <span class="n">aliases_mod</span>
+    <span class="n">shell</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">+=</span> <span class="n">aliases_mod</span><span class="o">.</span><span class="n">LinuxAliases</span><span class="p">()</span><span class="o">.</span><span class="n">busybox</span><span class="p">()</span>
+    <span class="n">shell</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">init_aliases</span><span class="p">()</span></div>
+
+<span class="c1"># @Executable(fzf_tmux())</span>
+<span class="c1"># def add_fzf_alias():</span>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Adding fzf.</span>
+
+<span class="sd">    &gt;&gt;&gt; user_aliases.append((&#39;rg&#39;, &#39;rg --hidden --no-messages %l&#39;))</span>
+
+<span class="sd">    ^----- Potentially useful syntax. Also did that after initializing it as</span>
+<span class="sd">    a :class:`collections.deque`.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">shell</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s1">&#39;win32&#39;</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="kn">from</span> <span class="nn">default_profile.startup</span> <span class="kn">import</span> <span class="n">aliases_mod</span>
+                <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+                    <span class="k">pass</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">busybox_hack</span><span class="p">(</span><span class="n">shell</span><span class="p">)</span>
+
+        <span class="n">shell</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">user_aliases</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">setup_fzf</span><span class="p">())</span>
+        <span class="n">shell</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">init_aliases</span><span class="p">()</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+    <h3>Quick search</h3>
+    <div class="searchformwrapper">
+        <form class="search" action="../../../search.html" method="get">
+            <input type="text" name="q" />
+            <input type="submit" value="Go" />
+        </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a>
+    <ul>
+      <li><a href="../../index.html">Module code</a>
+        <ul>
+        </ul>
+      </li>
+    </ul>
+</ul>
+</li>
+
+
+<h3><a href="../../../index.html">Table of Contents</a></h3>
+<div>&nbsp;</div>
+<div id="sidebartoc">
+    <p class="caption"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../sphinxext/index.html">Sphinx Extensions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/ipython_sphinx_directive.html">IPython Sphinx Directive</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/lexer.html">New IPython Console Lexer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/custom_doctests.html">Custom Doctests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/configtraits.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">configtraits</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/magics.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">magics</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/make.html">Make — Automated Documentation Builder</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev.html">Developers Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../jobcontrol.html">Job Control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../subcommands.html">Subcommands</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../startup/index.html">IPython Startup</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/rehashx.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">01_rehashx</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/easy_import.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">04_easy_import</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/ipython-logger.html">05_log — IPython logger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/help_helpers.html">06_Help_Helpers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/aliases.html">System Aliases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/fzf.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">21_fzf</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/setup_readline.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">30_setup_readline</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/41_numpy.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">numpy</span></code> Initialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/42_pandas.html">Pandas Initialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/matplotlib_rc.html">Matplotlib Startup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/sysexcept.html">Customized Exceptions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../util/index.html">IPython Utilities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../util/copytree.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">copytree</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util/ipython_get_history.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ipython_get_history</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util/machine.html">machine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util/module_log.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">module_log</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util/nb_stripper.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">nb_stripper</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util/pager2.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pager2</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util/paths.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paths</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util/profile_override.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">profile_override</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util/timer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">timer</span></code> module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../kernel.html">IPython Kernel</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../jupyter/index.html">Jupyter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../jupyter/qtconsole.html">Jupyter QTConsole</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../jupyter/notebook.html">Jupyter Notebook</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Extensions</a></li>
+</ul>
+
+    
+</div>
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+      Last updated on Nov 07, 2019.
+    </div>
+  </body>
+</html>
+>>>>>>> Stashed changes

@@ -10,7 +10,6 @@ Welcome to Dynamic IPython's documentation!
 :date: |today|
 
 .. highlight:: ipython
-    :linenothreshold: 3
 
 .. moduleauthor:: Faris Chugthai
 
@@ -83,7 +82,7 @@ Installation
 
 This repository can be installed in the following manner.:
 
-.. code-block:: console
+.. ipython::
 
     python setup.py build
     pip install -U -e .

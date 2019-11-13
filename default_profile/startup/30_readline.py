@@ -83,11 +83,13 @@ def get_readline():
     else:
         return readline
 
-
 def bind_readline_keys():
     readline.parse_and_bind("tab: complete")
     readline.parse_and_bind('"\\e[B": history-search-forward')
     readline.parse_and_bind('"\\e[A": history-search-backward')
+
+
+readline_mod = get_readline()
 
 
 def read_inputrc():
