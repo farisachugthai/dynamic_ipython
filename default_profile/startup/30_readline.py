@@ -14,8 +14,6 @@ confusingly slow.
 
 IPython Custom Completers
 -------------------------
-
-
 In [69]: _ip.set_custom_completer?
 Signature: _ip.set_custom_completer(completer, pos=0)
 Docstring:
@@ -69,27 +67,25 @@ def get_readline():
     # Fallback to the stdlib readline completer if it is installed.
     # Taken from http://docs.python.org/2/library/rlcompleter.html
     try:
-        # Interestingly this can work on Windows with a simple pip install pyreadline
-        from pyreadline import rlmain
-
-        readline = rlmain.Readline()
+        import readline
     except (ImportError, ModuleNotFoundError):
+        # Interestingly this can work on Windows with a simple pip install pyreadline
         try:
-            import readline
+            from pyreadline import rlmain
         except (ImportError, ModuleNotFoundError):
             readline = None
+            return readline  # might be unnecessary
         else:
+            readline = rlmain.Readline()
             return readline
     else:
         return readline
+
 
 def bind_readline_keys():
     readline.parse_and_bind("tab: complete")
     readline.parse_and_bind('"\\e[B": history-search-forward')
     readline.parse_and_bind('"\\e[A": history-search-backward')
-
-
-readline_mod = get_readline()
 
 
 def read_inputrc():
