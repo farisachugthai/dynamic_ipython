@@ -1,6 +1,6 @@
-"""Need to do redo IPython.lib.clipboard because it doesn't work.
+"""Need to do redo :mod:`IPython.lib.clipboard` because it doesn't work.
 
-%paste or %cpaste doesn't work on Termux and there's no built-in
+`%paste` or `%cpaste` doesn't work on Termux and there's no built-in
 customizability.
 
 Let's re-implement it as an `abstract factory

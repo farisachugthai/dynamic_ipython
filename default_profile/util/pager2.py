@@ -59,6 +59,47 @@ Like solid shit man. And I came up with this in 10 minutes too!
     PAGER_LOGGER.addHandler(PAGER_HANDLER)
 
 
+Original Pydoc Implementation and Errors
+----------------------------------------
+
+$ pydoc FRAMEOBJECTS
+Traceback (most recent call last):
+  File "C:/tools/miniconda3/lib/runpy.py", line 193, in _run_module_as_main
+    "__main__", mod_spec)
+  File "C:/tools/miniconda3/lib/runpy.py", line 85, in _run_code
+    exec(code, run_globals)
+    elif request in self.topics: self.showtopic(request)
+  File "C:/tools/miniconda3/lib/pydoc.py", line 2021, in showtopic
+    return self.showtopic(target, more_xrefs)
+  File "C:/tools/miniconda3/lib/pydoc.py", line 2037, in showtopic
+    pager(doc)
+  File "C:/tools/miniconda3/lib/pydoc.py", line 1449, in pager
+    pager(text)
+  File "C:/tools/miniconda3/lib/pydoc.py", line 1462, in <lambda>
+    return lambda text: tempfilepager(plain(text), use_pager)
+  File "C:/tools/miniconda3/lib/pydoc.py", line 1519, in tempfilepager
+    os.system(cmd + ' "' + filename + '"')
+KeyboardInterrupt
+
+
+Outside of the stupid traceback, that command worked perfectly for me.
+
+I have $PAGER set on Windows {which I realize isn't typical}, however we should
+re-use this implementation entirely and cut IPython.core.page.page out.
+
+
+In [63]: pydoc.pipepager(inspect.getdoc(arg), os.environ.get('PAGER'))
+
+Despite the source code of the std lib stating that pipes are completely broken on windows,
+this worked just fine for me.
+
+Define arg as an object like if you pass a string it'll give you the help message
+for a str.
+
+inspect has a million more methods and pydoc does too so possibly change the inspect.getdoc part,
+but honestly that one line is 80% of the way to what I've been trying to do.
+
+
 """
 from importlib import import_module
 import inspect
@@ -77,9 +118,29 @@ from IPython.core.page import pager_page
 
 
 class NotInIPythonError(RuntimeError):
+    """Error raised when a magic is invoked outside of IPython."""
 
     def __init__(self, *args, **kwargs):
         super().__init__(self, *args, **kwargs)
+
+
+class PyPager:
+    """A pager if you're outside of IPython."""
+
+    def __init__(self, *args):
+        self.call(*args)
+
+    def __repr__(self):
+        return ''.join(self.__class__.__name__)
+
+    def __str__(self):
+        return "A pager for files you'd like to inspect. Or interactive variables."
+
+    def __call__(self, text, use_pager=True):
+        return pydoc.tempfilepager(text, use_pager)
+
+    def call(self, text, use_pager=True):
+        return self.__call__(text, use_pager=use_pager)
 
 
 def were_in_ipython():
@@ -108,6 +169,10 @@ def c(s=None):
     try/except that catches KeyboardInterrupts and EOFErrors because pycat
     doesn't.
 
+    .. note:: The internal variable namespace, or an instance of the magic
+              :class:`~IPython.core.magics.namespace.NameSpaceMagics`
+              can display the magics through the attribute ...magics.
+
     Parameters
     ----------
     s : str
@@ -115,7 +180,7 @@ def c(s=None):
 
     """
     if not were_in_ipython():
-        return
+        PyPager(*sys.argv[1:])
     code = provided_or_last(s)
     namespace = NamespaceMagics()
     if hasattr(namespace, 'pycat'):
