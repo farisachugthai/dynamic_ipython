@@ -14,6 +14,8 @@ except (ImportError, ModuleNotFoundError):
     pass
 
 # from . import profile_debugger, profile_parallel, sphinxext, startup, util
+from . import startup, util, sphinxext
+from .startup import ask_for_import
 
 default_log_format = '%(created)f : %(module)s : %(levelname)s : %(message)s'
 PROFILE_DEFAULT_LOG = logging.getLogger('default_profile')

@@ -30,14 +30,6 @@ with a pre-determined template string like so::
     >>> UTIL_LOGGER = logging.getLogger('default_profile.util')
     >>> UTIL_LOGGER.setLevel(logging.WARNING)
 
-
-Pandas
-------
-
-In addition, 2 classes have been taken verbatim from the Pandas dev team.
-The classes are used to create :keyword:`dict` style objects that also
-allow for attribute-style access.
-
 """
 import logging
 
@@ -46,6 +38,7 @@ from .ipython_get_history import get_history
 from .machine import Platform
 from .module_log import stream_logger
 from .paths import _path_build, PathValidator
+from .pager2 import c
 from .profile_override import ReprProfileDir
 from .timer import timer as _itimer
 
@@ -54,5 +47,6 @@ logging.BASIC_FORMAT = '%(created)f : %(module)s : %(levelname)s : %(message)s'
 UTIL_LOGGER = logging.getLogger('default_profile').getChild('util')
 UTIL_LOGGER.setLevel(logging.WARNING)
 util_handler = logging.StreamHandler()
-util_handler.setLevel(30)
+util_formmatter = logging.Formatter(fmt=logging.BASIC_FORMAT)
+util_handler.setLevel(logging.WARNING)
 UTIL_LOGGER.addHandler(util_handler)
