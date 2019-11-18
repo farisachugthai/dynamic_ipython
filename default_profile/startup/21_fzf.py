@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""FZF works in IPython!!!!"""
+"""FZF works in IPython!!!!
+
+Note
+-----
+
+Trying to rework this over in ../extensions/namespaces.py
+"""
 import functools
 import os
 import shutil

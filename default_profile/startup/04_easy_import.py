@@ -4,11 +4,39 @@
 This imports a few utility functions from :mod:`IPython` and imports the python
 package neovim is served in.
 """
-import sys
 from importlib import import_module
+import logging
+import subprocess
+import sys
+import tempfile
+
+logging.basicConfig(level=logging.WARN)
 
 from IPython import get_ipython
+from IPython.core.error import TryNext
 from IPython.lib.deepreload import reload as _reload
+
+
+class NvimHook:
+
+    def __init__(self, fname=None):
+        self.fname = fname
+        self.shell = get_ipython()
+
+    def nvim_quickfix_file(self):
+        """The hook."""
+        if self.fname is None:
+            self.fname = tempfile.NamedTemporaryFile()
+        if self.run_nvim():
+            raise TryNext
+
+    def run_nvim(self):
+        """I thought of a clever way to return a nonzero exit code and have it return and raise a TryNext :D"""
+        try:
+            retval = subprocess.check_call(['nvim', '-c', 'set errorformat=%f:%l:%c:%m', '-q', self.fname])
+        except subprocess.CalledProcessError:
+            pass
+        return retval
 
 
 class DeepReload:
@@ -34,7 +62,6 @@ class DeepReload:
     )
 
     def __init__(self, shell, excludes=None):
-        """How do we set an instance attribute with a class attribute?"""
         if excludes == None:
             self.excludes = excludes
         self.shell = shell
@@ -111,6 +138,29 @@ def easy_import(mod):
         print("************************************************************")
 
 
+def run_nvim(filename):
+    """Execute the hook."""
+    try:
+        # clever way to make sure that the exit code was 0
+        retval = subprocess.check_call(['nvim', '--cmd', 'set errorformat=%f:%l:%c:%m', '-q ' + filename])
+            # runraise TryNext()
+    except subprocess.CalledProcessError:
+        pass
+    # finally:
+        # t.close()
+    return retval
+
+
+def nvim_quickfix_file():
+    """Nabbed this from IPython.core.hooks and added a `n`."""
+    t = tempfile.NamedTemporaryFile()
+    # t.write('%s:%d:%d:%s\n' % (filename, linenum, column, msg))
+    # t.flush()
+    if run_nvim(t):
+        raise TryNext
+    # return t
+
+
 if __name__ == "__main__":
     if sys.version_info > (3, 5):
         mod = "pynvim"
@@ -118,3 +168,13 @@ if __name__ == "__main__":
         mod = "neovim"
 
     easy_import(mod)
+
+    _ip = get_ipython()
+    if _ip.editor == 'nvim':
+        _ip.set_hook('editor', NvimHook().nvim_quickfix_file, priority=99)
+    else:
+        logging.warn('editor not set to nvim. hook not set.')
+
+    if logging.getLevelName(logging.INFO):
+        logging.info('The editor hooks are as follows %', _ip.hooks['editor'].__str__())
+

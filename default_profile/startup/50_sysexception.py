@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Give a detailed, colored traceback and drop into pdb on exceptions."""
+"""Give a detailed, colored traceback and drop into pdb on exceptions.
+
+This may have proved obvious to some but don't call
+get_ipython().atexit_operations() during a terminal session you intend
+on continuing....
+
+"""
 import sys
 from collections.abc import Sequence
 

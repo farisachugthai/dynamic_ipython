@@ -10,33 +10,22 @@ Oct 06, 2019:
 
 
 """
-from bdb import BdbQuit
+import inspect
+import pdb
+from pdb import Pdb
 import sys
 import traceback
-# import signal
-from pdb import Pdb
 
 from prompt_toolkit.enums import EditingMode
 from prompt_toolkit.formatted_text import PygmentsTokens
-# from prompt_toolkit.contrib.completers.system import SystemCompleter
 from prompt_toolkit.shortcuts.prompt import PromptSession
 from pygments.token import Token
 
 from IPython import get_ipython
-# from IPython.core.magics import MagicsClass, cell_magics, line_magics
 from IPython.core.completer import IPCompleter
 from IPython.core.error import UsageError
-
-# As a heads up I think the super() call goes to Pdb not TerminalPdb.
-
-# from IPython.core.debugger import Pdb
-
-# from IPython.core.interactiveshell import InteractiveShell
-# would this help?
-# from IPython.core.interactiveshell import InteractiveShellABC
 from IPython.terminal.embed import InteractiveShellEmbed
 from IPython.terminal.interactiveshell import TerminalInteractiveShell
-# from IPython.terminal.ipapp import TerminalIPythonApp
 from IPython.terminal.ptutils import IPythonPTCompleter
 from IPython.terminal.shortcuts import create_ipython_shortcuts
 
@@ -45,8 +34,8 @@ class IPD(Pdb):
     """Set up the IPython Debugger.
 
     Rewrote this largely to break up the :meth:`pt_init` from
-    `IPython.terminal.debugger.TerminalPdb`.
-
+    `IPython.terminal.debugger.TerminalPdb` and decouple it from the rest
+    of the application.
     """
 
     def __init__(self, shell=None, keys=None, completer=None, prompt_toolkit_application=None, *args, **kwargs):
@@ -64,37 +53,25 @@ class IPD(Pdb):
             pt_init parameter
 
         """
-        if shell is not None:
-            self.shell = shell
-        else:
-            self.shell = get_ipython()
+        self.shell = shell or get_ipython()
 
         if self.shell is None:
             raise UsageError
 
-        if not keys:
-            self.keys = self.initialize_keybindings()
+        self.keys = keys or self.initialize_keybindings()
+        self.completer = completer or self.initialize_completer()
+        self.prompt_toolkit_application = prompt_toolkit_application or self.pt_init()
+
+        if kwargs:
+            if kwargs['prompt']:
+                self.prompt = kwargs.pop('prompt')
         else:
-            self.keys = keys
+            self.prompt = 'Your Debugger: '
 
-        if completer is None:
-            self.completer = self.initialize_completer()
-        else:
-            self.completer = completer
-
-        # why do i have completer defined twice?
-        # self.completer = IPythonPTCompleter(completer, shell=self.shell)
-
-        if prompt_toolkit_application is None:
-            self.prompt_toolkit_application = self.pt_init()
-        else:
-            self.prompt_toolkit_application = prompt_toolkit_application
-
-        self.prompt = 'Your Debugger: '
         super().__init__(self, *args, **kwargs)
 
     def __repr__(self):
-        return '{}\t{}'.format(self.shell, self.completer)
+        return '{!r}\t{!r}'.format(self.__class__.__name__, self.shell.__repr__())
 
     # TODO:
     # def __call__(self):
@@ -128,7 +105,7 @@ class IPD(Pdb):
             enable_history_search=True,
             mouse_support=self.shell.mouse_support,
             complete_style=self.shell.pt_complete_style,
-            style=self.shell.style,
+            # style=self.shell.style,
             inputhook=self.shell.inputhook,
             color_depth=self.shell.color_depth,
         )
@@ -171,14 +148,9 @@ def is_embedded_shell(shell):
 
 
 def formatted_traceback():
-    # TODO:
+    """Allow a little post mortem introspection."""
     print('Traceback: Extracted stack\n' + repr(traceback.extract_stack()) + '\n')
     print('Traceback: Formatted stack\n' + repr(traceback.format_stack()) + '\n')
-
-
-def bphook(shell):
-    """User defined breakpoint hook."""
-    shell.run_line_magic('debug', '')
 
 
 def main():
@@ -197,9 +169,11 @@ if __name__ == "__main__":
 
     if hasattr(sys, 'last_traceback'):
         formatted_traceback()
-    # else:
-        # set_trace from somewhere. try except with except (KeyboardInterrupt, EOFError): BdbQuit('Bye!')
-        # or something
+    else:
+        pdb.set_trace()
 
-    sys.breakpointhook = bphook(idebug)
-    # Vim: set ft=python:
+    debugger = main()
+    try:
+        debugger.prompt()
+    except (KeyboardInterrupt, EOFError):
+        sys.exit('Bye!')
