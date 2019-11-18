@@ -61,9 +61,30 @@
 <div class="section" id="module-subcommands">
 <span id="subcommands"></span><h1>Subcommands<a class="headerlink" href="#module-subcommands" title="Permalink to this headline">¶</a></h1>
 <p>Subcommands in IPython and Jupyter.</p>
-<p>Theres a ton that could be done here. A todo for now.</p>
+<p>There’s a ton that could be done here. A todo for now.</p>
+<p>Well I guess sub-apps would be a better name for it but whatever.</p>
+<p>Mostly here to note that I think the ‘editor’ hook doesn’t work the way
+it’s supposed to if you want to configure it.</p>
+<p>If you run <code class="xref py py-obj docutils literal notranslate"><span class="pre">%edit</span></code> in the shell it doesn’t provide any arguments, but
+it’ll complain that it needs a function that accepts 4 positional parameters.</p>
+<p>I’m pretty confident it isn’t just me calling the function wrong too.
+Try this.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+<span class="n">ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+<span class="n">ip</span><span class="o">.</span><span class="n">hooks</span><span class="p">[</span><span class="s1">&#39;editor&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">chain</span>
+<span class="c1"># inspect your hooks look normal</span>
+<span class="kn">from</span> <span class="nn">IPython.core.hooks</span> <span class="kn">import</span> <span class="n">fix_error_editor</span>
+<span class="n">ip</span><span class="o">.</span><span class="n">hooks</span><span class="p">[</span><span class="s1">&#39;editor&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">fix_error_editor</span><span class="p">)</span>
+<span class="o">%</span><span class="k">edit</span> # --&gt; complains that it needs 3 more positional parameters
+</pre></div>
+</div>
+<p>Before I noticed this, I wrote a function that only accepts 1 positional arg,
+<em>which btw…it was the filename duh. I don’t know or care what column
+number I start at???</em> and takes optional keyword arguments.</p>
+<p>Said the function was getting called wrong as it only accepted 1 positional
+and was being called with 4. <em>sigh</em>.</p>
 <div class="section" id="ipython-history">
-<h2>IPython history<a class="headerlink" href="#ipython-history" title="Permalink to this headline">¶</a></h2>
+<span id="history-app"></span><h2>IPython history<a class="headerlink" href="#ipython-history" title="Permalink to this headline">¶</a></h2>
 <p>Here’s some seemingly inconsistent behavior.</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="hll">$: ipython <span class="nb">history</span>
 </span>No subcommand specified. Must specify one of: dict_keys<span class="o">([</span><span class="s1">&#39;trim&#39;</span>, <span class="s1">&#39;clear&#39;</span><span class="o">])</span>
@@ -155,7 +176,6 @@ on using subcommand &#39;cmd&#39;, do: <span class="nv">`ipython-history cmd -h`
 <li class="toctree-l2"><a class="reference internal" href="sphinxext/make.html">Make — Automated Documentation Builder</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="dev.html">Developers Notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="jobcontrol.html">Job Control</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Subcommands</a></li>
 </ul>
@@ -194,6 +214,7 @@ on using subcommand &#39;cmd&#39;, do: <span class="nv">`ipython-history cmd -h`
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="extensions.html">Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev.html">Developers Notes</a></li>
 </ul>
 
     
@@ -248,7 +269,7 @@ on using subcommand &#39;cmd&#39;, do: <span class="nv">`ipython-history cmd -h`
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Nov 12, 2019.
+      Last updated on Nov 18, 2019.
     </div>
   </body>
 </html>

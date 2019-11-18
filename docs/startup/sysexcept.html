@@ -70,7 +70,7 @@ are phenomenally helpful.</p>
 <div class="section" id="help-on-module-ipython-core-ultratb-in-ipython-core">
 <h2>Help on module <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.ultratb.html#module-IPython.core.ultratb" title="(in IPython v7.9.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython.core.ultratb</span></code></a> in <code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython.core</span></code>:<a class="headerlink" href="#help-on-module-ipython-core-ultratb-in-ipython-core" title="Permalink to this headline">¶</a></h2>
 <p>NAME:</p>
-<p>IPython.core.ultratb - Verbose and colourful traceback formatting.</p>
+<p><a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.ultratb.html#module-IPython.core.ultratb" title="(in IPython v7.9.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython.core.ultratb</span></code></a> - Verbose and colourful traceback formatting.</p>
 <div class="section" id="description">
 <h3>DESCRIPTION:<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
@@ -82,15 +82,14 @@ ColorTB class is a solution to that problem.</p>
 you would expect from a syntax-highlighting text editor.</p>
 </dd></dl>
 
-<p>Installation instructions for ColorTB:</p>
+<p>Installation instructions for <a class="reference internal" href="#default_profile.startup.50_sysexception.IPython.core.ultratb.ColorTB" title="default_profile.startup.50_sysexception.IPython.core.ultratb.ColorTB"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ColorTB</span></code></a>:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span><span class="nn">ultratb</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">excepthook</span> <span class="o">=</span> <span class="n">ultratb</span><span class="o">.</span><span class="n">ColorTB</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
-</div>
-<div class="section" id="verbosetb">
-<h2><strong>VerboseTB</strong><a class="headerlink" href="#verbosetb" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="ipython-core-ultratb-verbosetb">
+<h3><a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.ultratb.html#IPython.core.ultratb.VerboseTB" title="(in IPython v7.9.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.ultratb.VerboseTB</span></code></a><a class="headerlink" href="#ipython-core-ultratb-verbosetb" title="Permalink to this headline">¶</a></h3>
 <p>I’ve also included a port of Ka-Ping Yee’s “cgitb.py” that produces all kinds
 of useful info when a traceback occurs.  Ping originally had it spit out HTML
 and intended it for CGI programmers, but why should they have all the fun?  I
@@ -119,6 +118,7 @@ potentially leak sensitive information like access keys, or unencrypted
 password.</p>
 <p>Note:  Much of the code in this module was lifted verbatim from the standard
 library module ‘traceback.py’ and Ka-Ping Yee’s ‘cgitb.py’.</p>
+</div>
 </div>
 <div class="section" id="color-schemes">
 <h3>Color schemes<a class="headerlink" href="#color-schemes" title="Permalink to this headline">¶</a></h3>
@@ -174,57 +174,114 @@ I don’t know if I specified the type right but if you follow the
 </dd>
 </dl>
 </div>
-<div class="section" id="examples">
-<span id="exception-examples"></span><h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
-<p>The following is the aforementioned FormattedTB class.:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.core.ultratb</span> <span class="kn">import</span> <span class="n">VerboseTB</span><span class="p">,</span> <span class="n">ListTB</span>
-<span class="k">class</span> <span class="nc">FormattedTB</span><span class="p">(</span><span class="n">VerboseTB</span><span class="p">,</span> <span class="n">ListTB</span><span class="p">):</span>
-    <span class="c1"># Subclass ListTB but allow calling with a traceback.</span>
-    <span class="c1"># It can thus be used as a sys.excepthook for Python &gt; 2.1.</span>
-    <span class="c1"># Also adds &#39;Context&#39; and &#39;Verbose&#39; modes, not available in ListTB.</span>
-    <span class="c1"># Allows a tb_offset to be specified. This is useful for situations where</span>
-    <span class="c1"># one needs to remove a number of topmost frames from the traceback (such as</span>
-    <span class="c1"># occurs with python programs that themselves execute other python code,</span>
-    <span class="c1"># like Python shells).</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;Plain&#39;</span><span class="p">,</span> <span class="n">color_scheme</span><span class="o">=</span><span class="s1">&#39;Linux&#39;</span><span class="p">,</span> <span class="n">call_pdb</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
-                 <span class="n">ostream</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-                 <span class="n">tb_offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">long_header</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">include_vars</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
-                 <span class="n">check_cache</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">debugger_cls</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-                 <span class="n">parent</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-
-        <span class="c1"># NEVER change the order of this list. Put new modes at the end:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">valid_modes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Plain&#39;</span><span class="p">,</span> <span class="s1">&#39;Context&#39;</span><span class="p">,</span> <span class="s1">&#39;Verbose&#39;</span><span class="p">,</span> <span class="s1">&#39;Minimal&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">verbose_modes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_modes</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
-
-        <span class="n">VerboseTB</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">color_scheme</span><span class="o">=</span><span class="n">color_scheme</span><span class="p">,</span> <span class="n">call_pdb</span><span class="o">=</span><span class="n">call_pdb</span><span class="p">,</span>
-                           <span class="n">ostream</span><span class="o">=</span><span class="n">ostream</span><span class="p">,</span> <span class="n">tb_offset</span><span class="o">=</span><span class="n">tb_offset</span><span class="p">,</span>
-                           <span class="n">long_header</span><span class="o">=</span><span class="n">long_header</span><span class="p">,</span> <span class="n">include_vars</span><span class="o">=</span><span class="n">include_vars</span><span class="p">,</span>
-                           <span class="n">check_cache</span><span class="o">=</span><span class="n">check_cache</span><span class="p">,</span> <span class="n">debugger_cls</span><span class="o">=</span><span class="n">debugger_cls</span><span class="p">,</span>
-                           <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
-
-        <span class="c1"># Different types of tracebacks are joined with different separators to</span>
-        <span class="c1"># form a single string.  They are taken from this dict</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_join_chars</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">Plain</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">Context</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">Verbose</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span>
-                                <span class="n">Minimal</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-        <span class="c1"># set_mode also sets the tb_join_char attribute</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_mode</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span>
-</pre></div>
+<div class="section" id="interface-with-the-user">
+<h3>Interface with the user<a class="headerlink" href="#interface-with-the-user" title="Permalink to this headline">¶</a></h3>
+<p>With all of that background on how to traceback handlers work, now
+let’s use some of that knowledge.</p>
+<p>One can set the following variables on the running <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.9.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveShell</span></code></a>.:</p>
+<ul>
+<li><p>custom_exceptions — set by the <code class="xref py py-meth docutils literal notranslate"><span class="pre">set_custom_exc()</span></code></p></li>
+<li><p>xmode — show tracebacks in different formats</p></li>
+</ul>
+<p>For try/excepts there are.:</p>
+<ul>
+<li><p>last_execution_result and last_execution_succeeded</p></li>
+</ul>
+<p><a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.9.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveShell</span></code></a> has the methods.:</p>
+<ul>
+<li><p>call_pdb</p></li>
+<li><p>debugger</p></li>
+</ul>
+<div class="section" id="instances-from-ultratb">
+<h4>Instances from ultratb<a class="headerlink" href="#instances-from-ultratb" title="Permalink to this headline">¶</a></h4>
+<p>In addition there’s the instance <code class="docutils literal notranslate"><span class="pre">InteractiveTB</span></code> that’s bound to the shell.</p>
+<p>This is an instance of a VerboseTB.</p>
+<p>However note the InteractiveTB being mentioned in these docstrings.</p>
+<p>In [141]: _ip.excepthook?
+Signature: _ip.excepthook(etype, value, tb)</p>
+<p>Docstring:</p>
+<p>One more defense for GUI apps that call sys.excepthook.
+GUI frameworks like wxPython trap exceptions and call
+sys.excepthook themselves.  I guess this is a feature that
+enables them to keep running after exceptions that would
+otherwise kill their mainloop. This is a bother for IPython
+which excepts to catch all of the program exceptions with a try:
+except: statement.</p>
+<p>Normally, IPython sets sys.excepthook to a CrashHandler instance, so if
+any app directly invokes sys.excepthook, it will look to the user like
+IPython crashed.  In order to work around this, we can disable the
+CrashHandler and replace it with this excepthook instead, which prints a
+regular traceback using our InteractiveTB.  In this fashion, apps which
+call sys.excepthook will generate a regular-looking exception from
+IPython, and the CrashHandler will only be triggered by real IPython
+crashes.</p>
+<p>This hook should be used sparingly, only in places which are not likely
+to be true IPython errors.
+Type:      method</p>
+<p>self.showtraceback((etype, value, tb), tb_offset=0)
+_ip.showtraceback(exc_tuple=None,filename=None,tb_offset=None,exception_only=False,running_compiled_code=False,
+Display the exception that just occurred.</p>
+<p>Docstring:</p>
+<p>If nothing is known about the exception, this is the method which
+should be used throughout the code for presenting user tracebacks,
+rather than directly invoking the InteractiveTB object.</p>
+<p>A specific showsyntaxerror() also exists, but this method can take
+care of calling it if needed, so unless you are explicitly catching a
+SyntaxError exception, don’t try to analyze the stack manually and
+simply call this method.</p>
 </div>
 </div>
 </div>
 <div class="section" id="module-default_profile.startup.50_sysexception">
 <span id="sysexception"></span><h2><a class="reference internal" href="#module-default_profile.startup.50_sysexception" title="default_profile.startup.50_sysexception"><code class="xref py py-mod docutils literal notranslate"><span class="pre">50_sysexception</span></code></a><a class="headerlink" href="#module-default_profile.startup.50_sysexception" title="Permalink to this headline">¶</a></h2>
-<dl class="exception">
+<p>on continuing….</p>
+<dl class="class">
 <dt id="default_profile.startup.50_sysexception.ExceptionHook">
-<em class="property">exception </em><code class="sig-name descname">ExceptionHook</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/50_sysexception.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/50_sysexception.html#ExceptionHook"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.50_sysexception.ExceptionHook" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#BaseException" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseException</span></code></a></p>
+<em class="property">class </em><code class="sig-name descname">ExceptionHook</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/50_sysexception.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/50_sysexception.html#ExceptionHook"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.50_sysexception.ExceptionHook" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">traitlets.config.configurable.Configurable</span></code></p>
 <p>Custom exception hook for IPython.</p>
+<p>Create a configurable given a config config.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul>
+<li><p><strong>config</strong> (<em>Config</em>) – If this is empty, default values are used. If config is a
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Config</span></code> instance, it will be used to configure the
+instance.</p></li>
+<li><p><strong>parent</strong> (<em>Configurable instance</em><em>, </em><em>optional</em>) – The parent Configurable instance of this object.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Subclasses of Configurable must call the <code class="xref py py-meth docutils literal notranslate"><span class="pre">__init__()</span></code> method of
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Configurable</span></code> <em>before</em> doing anything else and using
+<a class="reference external" href="https://docs.python.org/3/library/functions.html#super" title="(in Python v3.8)"><code class="xref py py-func docutils literal notranslate"><span class="pre">super()</span></code></a>:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyConfigurable</span><span class="p">(</span><span class="n">Configurable</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">MyConfigurable</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+        <span class="c1"># Then any other code you need to finish initialization.</span>
+</pre></div>
+</div>
+<p>This ensures that instances will be configured properly.</p>
 <dl class="attribute">
 <dt id="default_profile.startup.50_sysexception.ExceptionHook.instance">
 <code class="sig-name descname">instance</code><em class="property"> = None</em><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/50_sysexception.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.50_sysexception.ExceptionHook.instance" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="method">
+<dt id="default_profile.startup.50_sysexception.ExceptionHook.call">
+<code class="sig-name descname">call</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/50_sysexception.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/50_sysexception.html#ExceptionHook.call"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.50_sysexception.ExceptionHook.call" title="Permalink to this definition">¶</a></dt>
+<dd><p>Proxy for the call dunder.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="default_profile.startup.50_sysexception.ExceptionTuple">
+<em class="property">class </em><code class="sig-name descname">ExceptionTuple</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/50_sysexception.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/50_sysexception.html#ExceptionTuple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.50_sysexception.ExceptionTuple" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Sequence</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a></p>
+<p>Simply a test for now but we need to provide the exception hook with this.</p>
+<p>It needs a tuple of exceptions to catch.</p>
+<p>Seemed like a good place to keep working with ABCs.</p>
 </dd></dl>
 
 </div>
@@ -277,7 +334,6 @@ I don’t know if I specified the type right but if you follow the
 <li class="toctree-l2"><a class="reference internal" href="../sphinxext/make.html">Make — Automated Documentation Builder</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../dev.html">Developers Notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../jobcontrol.html">Job Control</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../subcommands.html">Subcommands</a></li>
 </ul>
@@ -316,6 +372,7 @@ I don’t know if I specified the type right but if you follow the
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../extensions.html">Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev.html">Developers Notes</a></li>
 </ul>
 
     
@@ -339,16 +396,17 @@ I don’t know if I specified the type right but if you follow the
 <li><a class="reference internal" href="#debugging">Debugging</a></li>
 <li><a class="reference internal" href="#help-on-module-ipython-core-ultratb-in-ipython-core">Help on module <code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython.core.ultratb</span></code> in <code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython.core</span></code>:</a><ul>
 <li><a class="reference internal" href="#description">DESCRIPTION:</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#verbosetb"><strong>VerboseTB</strong></a><ul>
+<li><a class="reference internal" href="#ipython-core-ultratb-verbosetb"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.ultratb.VerboseTB</span></code></a></li>
 <li><a class="reference internal" href="#color-schemes">Color schemes</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#sys-excepthook-exceptionhook"><code class="xref py py-func docutils literal notranslate"><span class="pre">sys.excepthook()</span></code> — ExceptionHook</a><ul>
 <li><a class="reference internal" href="#parameters">Parameters</a></li>
 <li><a class="reference internal" href="#see-also">See Also</a></li>
-<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#interface-with-the-user">Interface with the user</a><ul>
+<li><a class="reference internal" href="#instances-from-ultratb">Instances from ultratb</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-default_profile.startup.50_sysexception"><code class="xref py py-mod docutils literal notranslate"><span class="pre">50_sysexception</span></code></a></li>
@@ -383,7 +441,7 @@ I don’t know if I specified the type right but if you follow the
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Nov 12, 2019.
+      Last updated on Nov 18, 2019.
     </div>
   </body>
 </html>
