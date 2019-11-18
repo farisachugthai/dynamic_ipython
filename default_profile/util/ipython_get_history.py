@@ -86,5 +86,6 @@ def query_shell():
     raise NotImplementedError
     # todo. shell locate ipython profile dir in case they arent using profile_default!
 
+
 if __name__ == "__main__":
     sys.exit(get_history())

@@ -4,11 +4,45 @@
 This imports a few utility functions from :mod:`IPython` and imports the python
 package neovim is served in.
 """
-import sys
-from importlib import import_module
-
-from IPython import get_ipython
 from IPython.lib.deepreload import reload as _reload
+from IPython.core.error import TryNext
+from IPython import get_ipython
+from importlib import import_module
+import logging
+import subprocess
+import sys
+import tempfile
+
+logging.basicConfig(level=logging.WARN)
+
+
+class NvimHook:
+
+    def __init__(self, fname=None):
+        """Specify the editor arguments. None are required."""
+        self.fname = fname
+        self.shell = get_ipython()
+
+    def __repr__(self):
+        return ''.join(self.__class__.__name__)
+
+    def __str__(self):
+        return 'Nvim Hook: {}'.format(self.fname)
+
+    def nvim_quickfix_file(self, *, fname=None, lineno=None, columnno=None, m=None):
+        """The hook. Accepts positional parameters to specify filename, linenumber, column number and something else?"""
+        if self.fname is None:
+            self.fname = tempfile.NamedTemporaryFile()
+        if self.run_nvim():
+            raise TryNext
+
+    def run_nvim(self):
+        """I thought of a clever way to return a nonzero exit code and have it return and raise a TryNext :D"""
+        try:
+            retval = subprocess.check_call(['nvim', '-c', 'set errorformat=%f:%l:%c:%m', '-q', self.fname])
+        except subprocess.CalledProcessError:
+            pass
+        return retval
 
 
 class DeepReload:
@@ -34,7 +68,6 @@ class DeepReload:
     )
 
     def __init__(self, shell, excludes=None):
-        """How do we set an instance attribute with a class attribute?"""
         if excludes == None:
             self.excludes = excludes
         self.shell = shell
@@ -118,3 +151,12 @@ if __name__ == "__main__":
         mod = "neovim"
 
     easy_import(mod)
+
+    _ip = get_ipython()
+    if _ip.editor == 'nvim':
+        _ip.set_hook('editor', NvimHook().nvim_quickfix_file, priority=99)
+    else:
+        logging.warning('$EDITOR not set. IPython hook not set.')
+
+    if logging.getLevelName(logging.INFO):
+        logging.info('The editor hooks are as follows %s: ', _ip.hooks['editor'].__str__())

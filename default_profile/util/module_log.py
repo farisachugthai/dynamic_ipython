@@ -62,7 +62,7 @@ def stream_logger(logger, log_level=logging.INFO, msg_format=None):
 
     Parameters
     ----------
-    logger : :class:`logging.Logger`
+    logger : str
         Configure a passed logger. See example below.
     log_level : int, optional
         Level of log records. Defaults to 20.

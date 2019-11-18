@@ -96,8 +96,13 @@ this worked just fine for me.
 Define arg as an object like if you pass a string it'll give you the help message
 for a str.
 
-inspect has a million more methods and pydoc does too so possibly change the inspect.getdoc part,
-but honestly that one line is 80% of the way to what I've been trying to do.
+:mod:`inspect` has a million more methods and pydoc does too so possibly change the
+:func:`inspect.getdoc` part, but honestly that one line is 80% of the way
+to what I've been trying to do.
+
+Nov 17, 2019:
+
+Yo this is outrageous how inconsistently ANYTHING is working for me.
 
 
 """
@@ -141,6 +146,18 @@ class PyPager:
 
     def call(self, text, use_pager=True):
         return self.__call__(text, use_pager=use_pager)
+
+
+def blocking_pager(text):
+    """A pipe pager that works on Windows. Doesn't colorize anything.
+
+    It's better that way though as we can send the contents elsewhere to
+    be highlighted.
+
+    Better to keep things separated.
+    """
+    with open(text, 'rt') as f:
+        pydoc.pipepager(f.read(), 'less -JRKMLige ')
 
 
 def were_in_ipython():

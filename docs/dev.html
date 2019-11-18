@@ -17,8 +17,7 @@
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/dev.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Job Control" href="jobcontrol.html" />
-    <link rel="prev" title="Make — Automated Documentation Builder" href="sphinxext/make.html" />
+    <link rel="prev" title="Extensions" href="extensions.html" />
 <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" />
 <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" media="screen" rel="stylesheet" type="text/css" />
 <link rel='stylesheet' href='//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.css'>
@@ -44,10 +43,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="jobcontrol.html" title="Job Control"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="sphinxext/make.html" title="Make — Automated Documentation Builder"
+          <a href="extensions.html" title="Extensions"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython</a> &#187;</li> 
       </ul>
@@ -85,6 +81,24 @@ changed like so:</p>
 <span class="n">c</span><span class="o">.</span><span class="n">TerminalInteractiveShell</span><span class="o">.</span><span class="n">editor</span> <span class="o">=</span> <span class="s1">&#39;nvim&#39;</span>
 </pre></div>
 </div>
+</div>
+<div class="section" id="commands">
+<h3>Commands<a class="headerlink" href="#commands" title="Permalink to this headline">¶</a></h3>
+<p>In your console of choice, create a virtual environment.
+This can be done with:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">virtualenv</span> <span class="o">~/.</span><span class="n">local</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">virtualenvs</span><span class="o">/</span><span class="n">dynamic_ipython</span> <span class="o">--</span><span class="n">python</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">python3</span><span class="o">.</span><span class="mi">7</span>
+</pre></div>
+</div>
+<p>Then run:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">build</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">U</span> <span class="o">-</span><span class="n">e</span> <span class="o">.</span>
+</pre></div>
+</div>
+<p>If you’d like to build the docs, change the pip command to:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">U</span> <span class="o">-</span><span class="n">e</span> <span class="o">.</span><span class="p">[</span><span class="n">docs</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>And likewise for the tests.</p>
 </div>
 </div>
 <div class="section" id="building-documentation">
@@ -196,8 +210,7 @@ found at <a class="reference external" href="https://github.com/jszakmeister/rst
 <ul>
   <li><a href="index.html">Documentation overview</a>
     <ul>
-          <li>Previous: <a href="sphinxext/make.html" title="previous chapter">Make — Automated Documentation Builder</a></li>
-          <li>Next: <a href="jobcontrol.html" title="next chapter">Job Control</a></li>
+          <li>Previous: <a href="extensions.html" title="previous chapter">Extensions</a></li>
     </ul>
 </ul>
 </li>
@@ -207,7 +220,7 @@ found at <a class="reference external" href="https://github.com/jszakmeister/rst
 <div>&nbsp;</div>
 <div id="sidebartoc">
     <p class="caption"><span class="caption-text">Tutorial</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="sphinxext/index.html">Sphinx Extensions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="sphinxext/ipython_sphinx_directive.html">IPython Sphinx Directive</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sphinxext/lexer.html">New IPython Console Lexer</a></li>
@@ -217,12 +230,11 @@ found at <a class="reference external" href="https://github.com/jszakmeister/rst
 <li class="toctree-l2"><a class="reference internal" href="sphinxext/make.html">Make — Automated Documentation Builder</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Developers Notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="jobcontrol.html">Job Control</a></li>
 <li class="toctree-l1"><a class="reference internal" href="subcommands.html">Subcommands</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="startup/index.html">IPython Startup</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="startup/rehashx.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">01_rehashx</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="startup/easy_import.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">04_easy_import</span></code></a></li>
@@ -256,6 +268,7 @@ found at <a class="reference external" href="https://github.com/jszakmeister/rst
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="extensions.html">Extensions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Developers Notes</a></li>
 </ul>
 
     
@@ -278,6 +291,7 @@ found at <a class="reference external" href="https://github.com/jszakmeister/rst
 <li><a class="reference internal" href="#">Developer’s Notes</a><ul>
 <li><a class="reference internal" href="#installing">Installing</a><ul>
 <li><a class="reference internal" href="#installation-assumptions">Installation Assumptions</a></li>
+<li><a class="reference internal" href="#commands">Commands</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#building-documentation">Building Documentation</a><ul>
@@ -309,16 +323,13 @@ found at <a class="reference external" href="https://github.com/jszakmeister/rst
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="jobcontrol.html" title="Job Control"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="sphinxext/make.html" title="Make — Automated Documentation Builder"
+          <a href="extensions.html" title="Extensions"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Dynamic IPython</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Nov 12, 2019.
+      Last updated on Nov 18, 2019.
     </div>
   </body>
 </html>

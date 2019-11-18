@@ -1,7 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Give a detailed, colored traceback and drop into pdb on exceptions."""
+"""Give a detailed, colored traceback and drop into pdb on exceptions.
+
+This may have proved obvious to some but don't call
+get_ipython().atexit_operations() during a terminal session you intend
+on continuing....
+
+"""
 import sys
+from abc import ABC
 from collections.abc import Sequence
 
 from IPython import get_ipython
@@ -31,7 +38,7 @@ class ExceptionHook(Configurable):
         return "<{} '{}'>".format(self.__class__.__name__, self.instance)
 
 
-class ExceptionTuple(Sequence):
+class ExceptionTuple(Sequence, ABC):
     """Simply a test for now but we need to provide the exception hook with this.
 
     It needs a tuple of exceptions to catch.

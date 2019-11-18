@@ -19,7 +19,7 @@ portion of the repository.
    :undoc-members:
    :show-inheritance:
 
- 
+
 -------------------------------------------------------------------------
 
 
@@ -73,6 +73,5 @@ portion of the repository.
 
 Continue reading at :doc:`jobcontrol` to see a well documented example
 provided by one of the original IPython authors, Brian Granger!
-
 
 `Next --- Job Control <jobcontrol.html>`_
