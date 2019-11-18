@@ -104,11 +104,9 @@ See Also
 """
 import logging
 
-# from default_profile.util import module_log
-# PANDAS_LOGGER = logging.getLogger('default_profile.startup').getChild('42_pandas_init')
-# PANDAS_LOGGER.addHandler(logging.StreamHandler().setLevel(logging.INFO))
-# PANDAS_LOGGER.setLevel(logging.INFO)
-ROOT_HANDLER_PD = logging.StreamHandler().setLevel(logging.INFO)
+# Dude holy shit pycharm is good
+ROOT_HANDLER_PD = logging.StreamHandler()
+ROOT_HANDLER_PD.setLevel(logging.INFO)
 logging.basicConfig(
     level=logging.INFO,
     style="%",

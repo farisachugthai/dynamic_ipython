@@ -3,37 +3,52 @@
 import argparse
 import logging
 import os
+from pathlib import Path
+from pprint import pprint
 import shutil
 import subprocess
 import sys
-import webbrowser
-from pprint import pprint
 from typing import List, Any
+import webbrowser
 
 try:
     import sphinx
 except (ImportError, ModuleNotFoundError):
     sys.exit("Sphinx documentation module not found. Exiting.")
 
+from jinja2.environment import Environment
 from sphinx.application import Sphinx
 from sphinx.jinja2glue import SphinxFileSystemLoader
-from jinja2.environment import Environment
-
+from sphinx.project import Project
 from sphinx.cmd.make_mode import build_main
 
 from default_profile.__about__ import __version__
 
-# TODO:
-DOC_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-BUILD_PATH = os.path.join(DOC_PATH, 'build')
-SOURCE_PATH = os.path.join(DOC_PATH, 'source')
-TEMPLATES_PATH = os.path.join(SOURCE_PATH, '_templates')
+
+class GitProject:
+    """Determine the root of the repo and work from there."""
+
+    def __init__(self, **kwargs):
+        """Override anything you like as a keyword argument. My personal choices for defaults are provided here."""
+        self.root = subprocess.check_output(['git', 'rev-parse', '--show-toplevel'])
+        self.doc_root = kwargs.pop('doc_root') or Path(self.root).joinpath('docs')
+        self.build_path = kwargs.pop('build_path') or self.doc_root.joinpath('build')
+        self.source_dir = kwargs.pop('source_dir') or self.doc_root.joinpath('source')
+        self.project = kwargs.pop('Project') or Project(srcdir=self.source_dir, source_suffix='rst')
+        self.templates_path = kwargs.pop('templates_path') or self.source_dir.joinpath('_templates')
+
+    def __repr__(self):
+        return ''.join(self.__class__.__name__)
+
+    def __str__(self):
+        return ''.format('Git Repository:\nself.root')
 
 
 # Probably should initialize in a different/ better way but eh
 env = Environment()
+repo = GitProject(**{})
 
-sphinx_fs = SphinxFileSystemLoader(searchpath=TEMPLATES_PATH)
+sphinx_fs = SphinxFileSystemLoader(searchpath=repo.templates_path)
 
 
 def _setup_make_logging():

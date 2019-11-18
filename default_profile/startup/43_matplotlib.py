@@ -5,6 +5,7 @@ INFO:matplotlib.font_manager:generated new fontManager
 """
 import sys
 
+
 def set_mpl():
     try:
         import matplotlib as mpl

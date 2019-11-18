@@ -46,6 +46,26 @@ changed like so::
    c.TerminalInteractiveShell.editor = 'nvim'
 
 
+Commands
+--------
+
+In your console of choice, create a virtual environment.
+This can be done with::
+
+   virtualenv ~/.local/share/virtualenvs/dynamic_ipython --python=/usr/bin/python3.7
+
+Then run::
+
+   python setup.py build
+   pip install -U -e .
+
+If you'd like to build the docs, change the pip command to::
+
+   pip install -U -e .[docs]
+
+And likewise for the tests.
+
+
 Building Documentation
 ======================
 

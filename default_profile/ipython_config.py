@@ -434,6 +434,7 @@ else:
 # TODO:
 # c_logger.info("Editing Mode:\t {!s}", c.TerminalInteractiveShell.editing_mode)
 
+
 # Set the editor used by IPython (default to $EDITOR/vi/notepad).
 c.TerminalInteractiveShell.editor = 'nvim'
 

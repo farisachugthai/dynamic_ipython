@@ -1,7 +1,7 @@
 .. IPython packages documentation master file, created by
-    sphinx-quickstart on Mon Feb 25 02:48:12 2019.
-    You can adapt this file completely to your liking, but it should at least
-    contain the root `toctree` directive.
+   sphinx-quickstart on Mon Feb 25 02:48:12 2019.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
 
 ============================================
 Welcome to Dynamic IPython's documentation!
@@ -84,8 +84,8 @@ This repository can be installed in the following manner.:
 
 .. ipython::
 
-    python setup.py build
-    pip install -U -e .
+   python setup.py build
+   pip install -U -e .
 
 However, that unfortunately assumes one has admin access to wherever pip
 installs files globally, and that the :command:`python` command points to
@@ -114,7 +114,7 @@ For further reading, feel free to see the output of any of the following::
     >>> help(InteractiveShell)
 
 Which features descriptions of functions relevant to startup such as
-:func:`IPython.core.interactiveshell.register_magic_function()` and literally
+:func:`IPython.core.interactiveshell.register_magic_function` and literally
 every option available through the `%config` magic.
 
 For commands that are more related to the interactive aspect of the shell,
@@ -134,11 +134,9 @@ Table of Contents
 
 .. toctree::
    :caption: Tutorial
-   :maxdepth: 2
    :titlesonly:
 
    Sphinx Extensions <sphinxext/index.rst>
-   Developers Notes <dev>
    jobcontrol
    subcommands
 
@@ -154,6 +152,7 @@ In addition the API has extensive documentation.
    kernel
    Jupyter <jupyter/index>
    extensions
+   Developers Notes <dev>
 
 
 Indices and tables

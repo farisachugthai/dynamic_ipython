@@ -104,12 +104,13 @@ EXTRAS = {
         # Project uses reStructuredText, so ensure that the docutils get
         # installed or upgraded on the target machine
         'docutils>=0.3',
+        'matplotlib>=3.0.0',
         'numpydoc>=0.9',
         'flake8-rst',
         'flake8-docstrings',
     ],
     'test': [
-        'pytest', 'tox', 'nose'
+        'pytest', 'tox', 'nose',
     ]
 }
 

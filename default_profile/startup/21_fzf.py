@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""FZF works in IPython!!!!"""
+"""FZF works in IPython!!!!
+
+Note
+-----
+
+Trying to rework this over in ../extensions/namespaces.py
+"""
 import functools
 import os
 import shutil
@@ -90,8 +96,8 @@ def busybox_hack(shell):
 def main():
     """Adding fzf.
 
-    >>> user_aliases = []
-    >>> user_aliases.append(('rg', 'rg --hidden --no-messages %l'))
+    >>> user_aliases = [('rg', 'rg --hidden --no-messages %l')]
+    >>> 
 
     ^----- Potentially useful syntax. Also did that after initializing it as
     a :class:`collections.deque`.
