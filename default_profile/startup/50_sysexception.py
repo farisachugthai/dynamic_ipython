@@ -8,6 +8,7 @@ on continuing....
 
 """
 import sys
+from abc import ABC
 from collections.abc import Sequence
 
 from IPython import get_ipython
@@ -37,7 +38,7 @@ class ExceptionHook(Configurable):
         return "<{} '{}'>".format(self.__class__.__name__, self.instance)
 
 
-class ExceptionTuple(Sequence):
+class ExceptionTuple(Sequence, ABC):
     """Simply a test for now but we need to provide the exception hook with this.
 
     It needs a tuple of exceptions to catch.

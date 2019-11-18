@@ -46,7 +46,7 @@ class GitProject:
 
 # Probably should initialize in a different/ better way but eh
 env = Environment()
-repo = GitProject()
+repo = GitProject(**{})
 
 sphinx_fs = SphinxFileSystemLoader(searchpath=repo.templates_path)
 

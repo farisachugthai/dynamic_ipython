@@ -22,7 +22,7 @@ import pkgutil
 import sys
 from pathlib import Path
 
-sphinxext_logger = logging.getLogger(name='docs').getChild('sphinxext').addHandler(logging.StreamHandler())
+logging.getLogger(name='docs').getChild('sphinxext').addHandler(logging.StreamHandler())
 
 # How to check the current namespace
 if hasattr(locals(), '__path__'):
@@ -62,6 +62,6 @@ ask_for_import('IPython')
 if ask_for_import('default_profile'):
 
     if ask_for_import('sphinx'):
-        from default_profile.sphinxext import make, custom_doctests  # noqa F401
+        from default_profile.sphinxext import custom_doctests  # noqa F401
         # from default_profile.sphinxext.ipython_directive import EmbeddedSphinxShell, IPythonDirective  # noqa F401
         from default_profile.sphinxext.magics import LineMagicRole, CellMagicRole  # noqa F401

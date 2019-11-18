@@ -11,7 +11,7 @@ The Platform class in this module can be easily initialized with:
 
 >>> from default_profile.util.machine import Platform
 >>> users_machine = Platform()
->>> env = users_machine.update_env()
+>>> users_machine.update_env()
 >>> assert env is not None
 
 .. note::
