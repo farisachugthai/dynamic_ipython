@@ -14,7 +14,7 @@ Jupyter Notebook
 The Jupyter HTML Notebook.
 ==========================
 
-.. program:: jupyter-notebook
+.. program:: jupyter_notebook
 
 This launches a Tornado based HTML Notebook Server that serves up an
 HTML5/Javascript Notebook client.
@@ -25,7 +25,7 @@ Subcommands
 Subcommands are launched as `jupyter-notebook cmd [args]`. For information on
 using subcommand 'cmd', do: `jupyter-notebook cmd -h`.
 
-.. command::
+.. hlist::
 
    list
       List currently running notebook servers.
@@ -41,7 +41,7 @@ Arguments that take values are actually convenience aliases to full
 Configurables, whose aliases are listed on the help line. For more information
 on full configurables, see '--help-all'.
 
-.. option::
+.. hlist::
 
    --debug
       set log level to logging.DEBUG (maximize logging output)

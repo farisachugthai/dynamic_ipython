@@ -4,19 +4,26 @@
 This imports a few utility functions from :mod:`IPython` and imports the python
 package neovim is served in.
 """
-from IPython.lib.deepreload import reload as _reload
-from IPython.core.error import TryNext
-from IPython import get_ipython
 from importlib import import_module
+import io
 import logging
 import subprocess
 import sys
 import tempfile
 
+from IPython.lib.deepreload import reload as _reload
+from IPython.core.error import TryNext
+from IPython import get_ipython
+
 logging.basicConfig(level=logging.WARN)
 
 
 class NvimHook:
+    """todo: Doesnt work.
+
+    Might need to subclass and override
+    :class:`IPython.core.hooks.CommandChainDispatcher`.
+    """
 
     def __init__(self, fname=None):
         """Specify the editor arguments. None are required."""
@@ -30,7 +37,11 @@ class NvimHook:
         return 'Nvim Hook: {}'.format(self.fname)
 
     def nvim_quickfix_file(self, *, fname=None, lineno=None, columnno=None, m=None):
-        """The hook. Accepts positional parameters to specify filename, linenumber, column number and something else?"""
+        """The hook.
+
+        Accepts positional parameters to specify filename,
+        linenumber, column number and something else?
+        """
         if self.fname is None:
             self.fname = tempfile.NamedTemporaryFile()
         if self.run_nvim():
@@ -43,6 +54,38 @@ class NvimHook:
         except subprocess.CalledProcessError:
             pass
         return retval
+
+
+class IOStream(io.TextIOBase):
+    """Try to rewrite IPythons IPython.utils.io.IOStream."""
+
+    def __init__(self, stream, fallback=None):
+        if fallback is not None:
+            self.stream = fallback
+        else:
+            self.stream = stream
+
+    def __repr__(self):
+        return ''.format(self.__class__.__name__)
+
+    def __str__(self):
+        return ''.join(self.__class__.__name__, str(self.stream))
+
+    def write(self, message):
+        self.stream.write(message)
+
+    def read(self):
+        """Did a smoke test and this is the only method not working.
+
+        >>> s = IOStream(sys.stdout)
+        >>> s.write('foo')
+
+        Worked but s.read() raises as it expect a str,
+        bytes or pathlike.
+        sys.sydout is an _io.TextWrapper. Hm.
+        """
+        with open(self.stream, 'rt') as f:
+            return f.read()
 
 
 class DeepReload:
@@ -152,11 +195,11 @@ if __name__ == "__main__":
 
     easy_import(mod)
 
-    _ip = get_ipython()
-    if _ip.editor == 'nvim':
-        _ip.set_hook('editor', NvimHook().nvim_quickfix_file, priority=99)
-    else:
-        logging.warning('$EDITOR not set. IPython hook not set.')
+    # _ip = get_ipython()
+    # if _ip.editor == 'nvim':
+    #     _ip.set_hook('editor', NvimHook().nvim_quickfix_file, priority=99)
+    # else:
+    #     logging.warning('$EDITOR not set. IPython hook not set.')
 
-    if logging.getLevelName(logging.INFO):
-        logging.info('The editor hooks are as follows %s: ', _ip.hooks['editor'].__str__())
+    # if logging.getLevelName(logging.INFO):
+    #     logging.info('The editor hooks are as follows %s: ', _ip.hooks['editor'].__str__())
