@@ -45,7 +45,7 @@ IPython Console Highlighting
 ============================
 
 Previously, the :class:`IPythonConsoleLexer` class was available at
-:mod:`IPython.sphinxext.ipython_console_hightlight`.  It was inserted
+:mod:`IPython.sphinxext.ipython_console_highlight`, and was inserted
 into Pygments' list of available lexers under the name ``ipython``.
 
 
@@ -57,7 +57,6 @@ into Pygments' list of available lexers under the name ``ipython``.
 Now, the Sphinx extension inserts two console lexers into Pygments' list of
 available lexers. Both are `IPyLexer` instances under the names:
 *ipython* and *ipython3*.
-
 
 As a result, code blocks such as:
 

@@ -16,7 +16,7 @@ except (ImportError, ModuleNotFoundError):
 # from . import profile_debugger, profile_parallel, sphinxext, startup, util
 from .sphinxext import custom_doctests, magics
 from .startup import ask_for_import
-from .util import module_log, machine, pager2, ipython_get_history
+# from .util import module_log, machine, pager2, ipython_get_history
 
 default_log_format = '%(created)f : %(module)s : %(levelname)s : %(message)s'
 PROFILE_DEFAULT_LOG = logging.getLogger('default_profile')

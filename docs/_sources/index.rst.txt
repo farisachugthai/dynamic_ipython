@@ -83,6 +83,7 @@ Installation
 This repository can be installed in the following manner.:
 
 .. ipython::
+   :verbatim:
 
    python setup.py build
    pip install -U -e .
@@ -91,12 +92,12 @@ However, that unfortunately assumes one has admin access to wherever pip
 installs files globally, and that the :command:`python` command points to
 python3.7. In most cases it does not.
 
-If one has :command:`pipenv` installed, an easier installation could be::
+If one has :command:`pipenv` installed, an easier installation could be:
 
     pipenv install -e .
 
 If a non-pipenv installation is desired for some reason, a fully specified
-installation could look like::
+installation could look like:
 
     python3.7 setup.py build
     python3.7 -m pip install -U --user pip -e .
@@ -133,25 +134,18 @@ Table of Contents
 ==================
 
 .. toctree::
-   :caption: Tutorial
-   :titlesonly:
-
-   Sphinx Extensions <sphinxext/index.rst>
-   jobcontrol
-   subcommands
-
-In addition the API has extensive documentation.
-
-.. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :titlesonly:
    :caption: API
 
+   Sphinx Extensions <sphinxext/index.rst>
    IPython Startup <startup/index>
    IPython Utilities </util/index>
    kernel
    Jupyter <jupyter/index>
    extensions
+   jobcontrol
+   subcommands
    Developers Notes <dev>
 
 

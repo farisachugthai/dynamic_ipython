@@ -34,7 +34,8 @@ with a pre-determined template string like so::
 import logging
 
 from .copytree import CopyTree
-from .ipython_get_history import get_history
+# sqlite is being annoying on windows :/ go figure
+# from .ipython_get_history import get_history
 from .machine import Platform
 from .module_log import stream_logger
 from .paths import _path_build, PathValidator
