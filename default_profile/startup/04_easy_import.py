@@ -79,6 +79,7 @@ class IOStream(io.TextIOBase):
 
         >>> s = IOStream(sys.stdout)
         >>> s.write('foo')
+        foo
 
         Worked but s.read() raises as it expect a str,
         bytes or pathlike.
@@ -111,7 +112,7 @@ class DeepReload:
     )
 
     def __init__(self, shell, excludes=None):
-        if excludes == None:
+        if excludes is None:
             self.excludes = excludes
         self.shell = shell
 

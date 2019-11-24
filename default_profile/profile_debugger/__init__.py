@@ -1,19 +1,7 @@
 """Initialize a debugger profile for IPython."""
 import logging
-from logging import NullHandler
+from logging import StreamHandler
 
-try:
-    # these should always be available
-    import IPython
-    from IPython import get_ipython
-except (ImportError, ModuleNotFoundError):
-    pass
+from . import ipd, ipdb3
 
-try:
-    import ipdb as pdb
-except (ImportError, ModuleNotFoundError):
-    import pdb
-
-from . import ipd
-
-logging.getLogger(__name__).addHandler(NullHandler())
+debugger_logger = logging.getLogger(__name__).addHandler(StreamHandler())

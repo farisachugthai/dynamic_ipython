@@ -10,6 +10,7 @@ from pyfzf.pyfzf import FzfPrompt
 from prompt_toolkit.application.current import get_app
 from prompt_toolkit.application.run_in_terminal import run_in_terminal
 from prompt_toolkit.enums import DEFAULT_BUFFER
+from prompt_toolkit.filters import HasFocus
 from prompt_toolkit.keys import Keys
 from prompt_toolkit.shortcuts import print_formatted_text as print
 from prompt_toolkit.utils import Event
@@ -37,7 +38,7 @@ def new_shortcuts():
     app = get_app()
     shell = get_ipython()
     kb = create_ipython_shortcuts(shell)
-    fzf_keys = (Keys.ControlT, HasFocus=DEFAULT_BUFFER)
+    fzf_keys = (Keys.ControlT, HasFocus(DEFAULT_BUFFER))
 
     # not sure how pt wants us to do this part
     # with run_in_terminal(FzfPrompt(), render_cli_done=True, in_executor=True):

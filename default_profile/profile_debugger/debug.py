@@ -3,20 +3,33 @@
 # This file is part of ipdb.
 # Redistributable under the revised BSD license
 # https://opensource.org/licenses/BSD-3-Clause
-"""Copied it because the BdbQuit_excepthook he uses is deprecated."""
-from IPython.terminal.embed import InteractiveShellEmbed
-from IPython.terminal.ipapp import TerminalIPythonApp
-from IPython import get_ipython
+"""Copied it because the BdbQuit_excepthook he uses is deprecated.
+
+Huh! This is neat. He imports pdb.Restart. Check out the call signature.
+
+pdb.Restart = class Restart(builtins.Exception)
+   Causes a debugger to be restarted for the debugged python program.
+
+"""
 from bdb import BdbQuit
 import os
 import sys
+import traceback
+import getopt
+
 
 from contextlib import contextmanager
+
+from IPython.terminal.embed import InteractiveShellEmbed
+from IPython.terminal.ipapp import TerminalIPythonApp
+from IPython import get_ipython
 
 __version__ = "0.10.3"
 
 
-def _init_pdb(context=3, commands=[]):
+def _init_pdb(context=3, commands=None):
+    if commands is None:
+        commands = []
     try:
         p = debugger_cls(context=context)
     except TypeError:
@@ -94,22 +107,15 @@ Initial commands are read from .pdbrc files in your home directory
 and in the current directory, if they exist.  Commands supplied with
 -c are executed after commands from .pdbrc files.
 
-To let the script run until an exception occurs, use "-c continue".
-To let the script run up to a given line X in the debugged file, use
-"-c 'until X'"
+To let the script run until an exception occurs, use '-c continue'.
+
+To let the script run up to a given line 'X' in the debugged file, use '-c until X'.
+
 ipdb version %s.""" % __version__
 
 
 def main():
-    import traceback
-    import sys
-    import getopt
-
-    try:
-        from pdb import Restart
-    except ImportError:
-        class Restart(Exception):
-            pass
+    from pdb import Restart
 
     opts, args = getopt.getopt(sys.argv[1:], 'hc:', ['help', 'command='])
 

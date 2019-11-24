@@ -73,9 +73,10 @@
     },
     {
       "name": "Python: Current File",
+      "type": "python",
+      "showReturnValue": true,
       "request": "launch",
       "program": "python ${file}",
-      "showAsyncStacks": true,
       "internalConsoleOptions": "openOnSessionStart",
       "console": "internalConsole"
     },
@@ -91,10 +92,7 @@
           "remoteRoot": "."
         }
       ]
-    }
-  ]
-}
-
+    },
 		{
   "name": "Python: Remote Attach",
   "type": "python",
@@ -108,36 +106,36 @@
     }
   ]
 },
-{
-  "name": "Launch Extension",
-  "type": "extensionHost",
-  "request": "launch",
-  "runtimeExecutable": "${execPath}",
-  "args": [
-    "--extensionDevelopmentPath=${workspaceFolder}"
-  ],
-  "outFiles": [
-    "${workspaceFolder}/out/**/*.js"
-  ],
-  "preLaunchTask": "npm"
-},
-{
-  "name": "Python: Test Suite",
-  "type": "python",
-  "request": "launch",
-  "module": "test",
-  "cwd": "${workspaceFolder}",
-  "console": "internalConsole", // so what is this?
-  "args": [
-    "-m",
-    "unittest",
-    "-v",
-    "-s",
-    "test",
-    "-p",
-    "test.*.py"
-  ],
-},
+  {
+    "name": "Launch Extension",
+    "type": "extensionHost",
+    "request": "launch",
+    "runtimeExecutable": "${execPath}",
+    "args": [
+      "--extensionDevelopmentPath=${workspaceFolder}"
+    ],
+    "outFiles": [
+      "${workspaceFolder}/out/**/*.js"
+    ],
+    "preLaunchTask": "npm"
+  },
+  {
+    "name": "Python: Test Suite",
+    "type": "python",
+    "request": "launch",
+    "module": "test",
+    "cwd": "${workspaceFolder}",
+    "console": "internalConsole", // so what is this?
+    "args": [
+      "-m",
+      "unittest",
+      "-v",
+      "-s",
+      "test",
+      "-p",
+      "test.*.py"
+    ],
+  },
 {
   "name": "Python: Current File (Integrated Terminal)",
   "type": "python",
@@ -165,4 +163,5 @@
   "console": "integratedTerminal",
   "module": "test.test_00_ipython.py"
 }
+  ]
 }

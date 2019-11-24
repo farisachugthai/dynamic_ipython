@@ -183,9 +183,10 @@ setup(
     # If your package is a single module, use this instead of 'packages':
     # py_modules=['mypackage'],
 
-    # entry_points={
-    #     'console_scripts': ['mycli=mymodule:cli'],
-    # },
+    # using this temporarily
+    entry_points={
+        'console_scripts': ['ip=default_profile.profile_debugger:debug.main'],
+    },
     install_requires=REQUIRED,
     extras_require=EXTRAS,
     test_suite='test',
