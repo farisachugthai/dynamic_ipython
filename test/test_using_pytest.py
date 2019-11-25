@@ -34,17 +34,21 @@ import warnings
 
 from IPython import get_ipython
 
-try:
-    import pytest  # noqa F401
-except ImportError as e:
-    warnings.warn(e)
-    pytest = None
 
-
-if __name__ == "__main__":
+def run_pytest():
+    """Make sure pytest is installed before running."""
+    try:
+        import pytest  # noqa F401
+    except ImportError as e:
+        warnings.warn(e)
+        pytest = None
     if pytest is not None:
         @pytest.fixture
         def _ip():
             return get_ipython()
 
         pytest.main()
+
+
+if __name__ == "__main__":
+    run_pytest()
