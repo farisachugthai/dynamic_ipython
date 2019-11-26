@@ -6,9 +6,14 @@ import os
 import platform
 from pathlib import Path
 
+# A) I wanna see if relative imports are working
+# B) This would probably make more sense here
+
+from .machine import Platform
+
 logging.BASIC_FORMAT = '%(created)f : %(module)s : %(levelname)s : %(message)s'
 
-PATHS_LOGGER = logging.getLogger(name='default_profile.util.paths')
+PATHS_LOGGER = logging.getLogger(name='default_profile.util').getChild('paths')
 PATHS_LOGGER.setLevel(logging.WARNING)
 
 
@@ -52,7 +57,6 @@ class PathValidator:
         C:\\Program Files\\ and their ilk?
 
     """
-
     def __init__(self):
         """Initialize with parameters. Which parameters though?"""
         self.env = dict(os.environ.copy())
@@ -84,5 +88,3 @@ class PathValidator:
         else:
             return self.env["PATH"].split(':')
 
-
-validate_path = PathValidator().path

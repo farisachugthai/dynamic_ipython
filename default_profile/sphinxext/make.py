@@ -30,12 +30,15 @@ class GitProject:
 
     def __init__(self, **kwargs):
         """Override anything you like as a keyword argument. My personal choices for defaults are provided here."""
+
         self.root = subprocess.check_output(['git', 'rev-parse', '--show-toplevel'])
-        self.doc_root = kwargs.pop('doc_root') or Path(self.root).joinpath('docs')
-        self.build_path = kwargs.pop('build_path') or self.doc_root.joinpath('build')
-        self.source_dir = kwargs.pop('source_dir') or self.doc_root.joinpath('source')
-        self.project = kwargs.pop('Project') or Project(srcdir=self.source_dir, source_suffix='rst')
-        self.templates_path = kwargs.pop('templates_path') or self.source_dir.joinpath('_templates')
+
+        # good try but it raises a KeyError
+        # self.doc_root = kwargs.pop('doc_root') or Path(self.root).joinpath('docs')
+        # self.build_path = kwargs.pop('build_path') or self.doc_root.joinpath('build')
+        # self.source_dir = kwargs.pop('source_dir') or self.doc_root.joinpath('source')
+        # self.project = kwargs.pop('Project') or Project(srcdir=self.source_dir, source_suffix='rst')
+        # self.templates_path = kwargs.pop('templates_path') or self.source_dir.joinpath('_templates')
 
     def __repr__(self):
         return ''.join(self.__class__.__name__)
