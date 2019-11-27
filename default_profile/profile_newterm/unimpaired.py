@@ -37,4 +37,4 @@ class TerminallyUnimpaired(TerminalInteractiveShell):
             self.config = Config()
 
 
-StoreMagics(get_ipython()).unobserve_all()
+# StoreMagics(get_ipython()).unobserve_all()

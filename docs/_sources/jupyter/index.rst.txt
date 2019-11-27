@@ -17,9 +17,16 @@ suite. These have been commented and marked up as appropriate.
    :caption: Jupyter configuration
 
    qtconsole
-   notebook
 
 .. autosummary::
 
-    jupyter_console_config
-    jupyter_labextension_config
+   jupyter_console_config
+   jupyter_contrib_nbextension_config
+   jupyter_labextension_config
+   jupyter_nbconvert_config
+   jupyter_notebook_config/__init__
+   jupyter_qtconsole_config
+   jupyter_serverextension_config
+   jupyternbextensions_configurator_config
+
+

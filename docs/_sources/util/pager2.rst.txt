@@ -2,6 +2,8 @@
 :mod:`~default_profile.util.pager2` module
 ==========================================
 
+.. currentmodule:: default_profile.util.pager2
+
 Still a Work in Progress.
 
 Still considering different ways of designing a new Windows specific pager
@@ -18,7 +20,7 @@ ability to change or configure things in mind.
 Original Implementation
 ========================
 
-Below is the source code for how the original :func:`pycat` was implemented.:
+Below is the source code for how the original :magic:`pycat` was implemented.:
 
 .. testsetup::
 
@@ -38,11 +40,13 @@ Below is the source code for how the original :func:`pycat` was implemented.:
        This magic is similar to the cat utility, but it will assume the file
        to be Python source and will show it with syntax highlighting.
        This magic command can either take a local filename, an url,
-       an history range (see %history) or a macro as argument ::
+       an history range (see %history) or a macro as argument:
+
        %pycat myscript.py
        %pycat 7-27
        %pycat myMacro
        %pycat http://www.example.com/myscript.py
+
        """
        if not parameter_s:
            raise UsageError('Missing filename, URL, input history range, '
@@ -220,31 +224,37 @@ Like solid shit man. And I came up with this in 10 minutes too!
 Original Pydoc Implementation and Errors
 ----------------------------------------
 
-$ pydoc FRAMEOBJECTS
-Traceback (most recent call last):
-  File "C:/tools/miniconda3/lib/runpy.py", line 193, in _run_module_as_main
-    "__main__", mod_spec)
-  File "C:/tools/miniconda3/lib/runpy.py", line 85, in _run_code
-    exec(code, run_globals)
-    elif request in self.topics: self.showtopic(request)
-  File "C:/tools/miniconda3/lib/pydoc.py", line 2021, in showtopic
-    return self.showtopic(target, more_xrefs)
-  File "C:/tools/miniconda3/lib/pydoc.py", line 2037, in showtopic
-    pager(doc)
-  File "C:/tools/miniconda3/lib/pydoc.py", line 1449, in pager
-    pager(text)
-  File "C:/tools/miniconda3/lib/pydoc.py", line 1462, in <lambda>
-    return lambda text: tempfilepager(plain(text), use_pager)
-  File "C:/tools/miniconda3/lib/pydoc.py", line 1519, in tempfilepager
-    os.system(cmd + ' "' + filename + '"')
-KeyboardInterrupt
+.. ipython::
+   :verbatim:
+
+   $ pydoc FRAMEOBJECTS
+   Traceback (most recent call last):
+   File "C:/tools/miniconda3/lib/runpy.py", line 193, in _run_module_as_main
+      "__main__", mod_spec)
+   File "C:/tools/miniconda3/lib/runpy.py", line 85, in _run_code
+      exec(code, run_globals)
+      elif request in self.topics: self.showtopic(request)
+   File "C:/tools/miniconda3/lib/pydoc.py", line 2021, in showtopic
+      return self.showtopic(target, more_xrefs)
+   File "C:/tools/miniconda3/lib/pydoc.py", line 2037, in showtopic
+      pager(doc)
+   File "C:/tools/miniconda3/lib/pydoc.py", line 1449, in pager
+      pager(text)
+   File "C:/tools/miniconda3/lib/pydoc.py", line 1462, in <lambda>
+      return lambda text: tempfilepager(plain(text), use_pager)
+   File "C:/tools/miniconda3/lib/pydoc.py", line 1519, in tempfilepager
+      os.system(cmd + ' "' + filename + '"')
+   KeyboardInterrupt
 
 Outside of the stupid traceback, that command worked perfectly for me.
 
-I have $PAGER set on Windows {which I realize isn't typical}, however we should
-re-use this implementation entirely and cut IPython.core.page.page out.
+I have :envvar:`PAGER` set on Windows {which I realize isn't typical},
+however we should re-use this implementation entirely and cut
+`IPython.core.page.page` out.
 
-In [63]: pydoc.pipepager(inspect.getdoc(arg), os.environ.get('PAGER'))
+Also worth noting `IPython.core.payloadpage.page`.:
+
+   In [63]: pydoc.pipepager(inspect.getdoc(arg), os.environ.get('PAGER'))
 
 Despite the source code of the std lib stating that pipes are completely
 broken on windows, this worked just fine for me.
@@ -255,11 +265,6 @@ for a str.
 :mod:`inspect` has a million more methods and pydoc does too so possibly change the
 :func:`inspect.getdoc` part, but honestly that one line is 80% of the way
 to what I've been trying to do.
-
-Nov 17, 2019:
-
-Yo this is outrageous how inconsistently ANYTHING is working for me.
-
 
 .. automodule:: default_profile.util.pager2
    :synopsis: Rewrite how IPython utilizes the pager on Windows.

@@ -28,8 +28,7 @@ modules, configure the data analysis library Pandas, add multiple application
 specific loggers, and more.
 
 This repository contains a collection of different scripts written over the
-course of the last year modifying `IPython <docs/profile_default.html>`_
-and `Jupyter <docs/jupyter.html>`_.
+course of the last year modifying `IPython <docs/profile_default.html>`_.
 
 
 .. _root-extensions:
@@ -92,15 +91,21 @@ However, that unfortunately assumes one has admin access to wherever pip
 installs files globally, and that the :command:`python` command points to
 python3.7. In most cases it does not.
 
-If one has :command:`pipenv` installed, an easier installation could be:
+If one has :command:`pipenv` installed, an easier installation could be
 
-    pipenv install -e .
+.. ipython::
+   :verbatim:
+
+   pipenv install -e .
 
 If a non-pipenv installation is desired for some reason, a fully specified
-installation could look like:
+installation could look like.
 
-    python3.7 setup.py build
-    python3.7 -m pip install -U --user pip -e .
+.. ipython::
+   :verbatim:
+
+   python3.7 setup.py build
+   python3.7 -m pip install -U --user pip -e .
 
 As one can see this gets complicated very quickly, and as a result,
 installation via pipenv is the recommended method.
@@ -142,7 +147,7 @@ Table of Contents
    IPython Startup <startup/index>
    IPython Utilities </util/index>
    kernel
-   Jupyter <jupyter/index>
+   jupyter <jupyter/index>
    extensions
    jobcontrol
    subcommands

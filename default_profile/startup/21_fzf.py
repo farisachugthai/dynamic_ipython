@@ -55,15 +55,13 @@ def setup_fzf(fzf_alias=None):
         #     ('fzf', '$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS'))
         fzf_alias = (
             "fzf",
-            "rg --pretty --hidden --max-columns=300 --max-columns-preview "
-            ".*[a-zA-Z]* --no-heading -m=30 --no-messages --color=ansi --no-column "
-            " --no-line-number -C 0 | fzf --ansi",
+            "rg --pretty --hidden --max-columns-preview --no-heading --no-messages --no-column --no-line-number -C 0 -e ^.* | fzf ",
         )
 
     elif shutil.which("fzf") and shutil.which("ag"):
         # user_aliases.extend(
         #     ('fzf', '$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS'))
-        fzf_alias = ("fzf", "ag -C 0 --color-win-ansi --noheading | fzf --ansi")
+        fzf_alias = ("fzf", "ag -C 0 --color-win-ansi --noheading %l | fzf -")
 
     return fzf_alias
 
@@ -97,7 +95,7 @@ def main():
     """Adding fzf.
 
     >>> user_aliases = [('rg', 'rg --hidden --no-messages %l')]
-    >>> 
+    >>>
 
     ^----- Potentially useful syntax. Also did that after initializing it as
     a :class:`collections.deque`.

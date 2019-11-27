@@ -109,15 +109,13 @@
         <span class="c1">#     (&#39;fzf&#39;, &#39;$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS&#39;))</span>
         <span class="n">fzf_alias</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;fzf&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;rg --pretty --hidden --max-columns=300 --max-columns-preview &quot;</span>
-            <span class="s2">&quot;.*[a-zA-Z]* --no-heading -m=30 --no-messages --color=ansi --no-column &quot;</span>
-            <span class="s2">&quot; --no-line-number -C 0 | fzf --ansi&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;rg --pretty --hidden --max-columns-preview --no-heading --no-messages --no-column --no-line-number -C 0 -e ^.* | fzf &quot;</span><span class="p">,</span>
         <span class="p">)</span>
 
     <span class="k">elif</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;fzf&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;ag&quot;</span><span class="p">):</span>
         <span class="c1"># user_aliases.extend(</span>
         <span class="c1">#     (&#39;fzf&#39;, &#39;$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS&#39;))</span>
-        <span class="n">fzf_alias</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;fzf&quot;</span><span class="p">,</span> <span class="s2">&quot;ag -C 0 --color-win-ansi --noheading | fzf --ansi&quot;</span><span class="p">)</span>
+        <span class="n">fzf_alias</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;fzf&quot;</span><span class="p">,</span> <span class="s2">&quot;ag -C 0 --color-win-ansi --noheading %l | fzf -&quot;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">fzf_alias</span></div>
 
@@ -151,7 +149,7 @@
     <span class="sd">&quot;&quot;&quot;Adding fzf.</span>
 
 <span class="sd">    &gt;&gt;&gt; user_aliases = [(&#39;rg&#39;, &#39;rg --hidden --no-messages %l&#39;)]</span>
-<span class="sd">    &gt;&gt;&gt; </span>
+<span class="sd">    &gt;&gt;&gt;</span>
 
 <span class="sd">    ^----- Potentially useful syntax. Also did that after initializing it as</span>
 <span class="sd">    a :class:`collections.deque`.</span>
@@ -215,7 +213,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../startup/index.html">IPython Startup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../util/index.html">IPython Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../kernel.html">IPython Kernel</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../jupyter/index.html">Jupyter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../jupyter/index.html">jupyter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Extensions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../jobcontrol.html">Job Control</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../subcommands.html">Subcommands</a></li>
@@ -243,7 +241,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Nov 26, 2019.
+      Last updated on Nov 27, 2019.
     </div>
   </body>
 </html>
