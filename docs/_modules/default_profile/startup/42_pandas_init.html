@@ -54,108 +54,6 @@
 <h1>Source code for default_profile.startup.42_pandas_init</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">=====================</span>
-<span class="sd">Pandas Initialization</span>
-<span class="sd">=====================</span>
-
-<span class="sd">As of version 0.25, there&#39;s currently a large number of options that can</span>
-<span class="sd">be set to modify Pandas&#39; behavior.</span>
-
-<span class="sd">An example of this::</span>
-
-<span class="sd">    In [8]: pd.options</span>
-<span class="sd">    Out[8]: &lt;pandas._config.config.DictWrapper at 0x1f2facfdd68</span>
-<span class="sd">            compute=&lt;pandas._config.config.DictWrapper at 0x1f2fbfc1d30</span>
-<span class="sd">            use_bottleneck=True,</span>
-<span class="sd">            use_numexpr=True&gt;,</span>
-<span class="sd">            display=&lt;pandas._config.config.DictWrapper at 0x1f2fbfc1c18</span>
-<span class="sd">                    chop_threshold=None,</span>
-<span class="sd">                    colheader_justify=&#39;right&#39;,</span>
-<span class="sd">                    column_space=12,</span>
-<span class="sd">                    date_dayfirst=False,</span>
-<span class="sd">                    date_yearfirst=False,</span>
-<span class="sd">                    encoding=&#39;utf-8&#39;,</span>
-<span class="sd">                    expand_frame_repr=False,</span>
-<span class="sd">                    float_format=None,</span>
-<span class="sd">            html=&lt;pandas._config.config.DictWrapper at 0x1f2fbfc1c50</span>
-<span class="sd">                border=1,</span>
-<span class="sd">                table_schema=True,</span>
-<span class="sd">                use_mathjax=True&gt;,</span>
-<span class="sd">            large_repr=&#39;truncate&#39;,</span>
-<span class="sd">            latex=&lt;pandas._config.config.DictWrapper at 0x1f2fbfc1c50</span>
-<span class="sd">                 escape=True,</span>
-<span class="sd">                 longtable=False,</span>
-<span class="sd">                 multicolumn=True,</span>
-<span class="sd">                 multicolumn_format=&#39;l&#39;,</span>
-<span class="sd">                 multirow=False,</span>
-<span class="sd">                 repr=False&gt;,</span>
-<span class="sd">            max_categories=8,</span>
-<span class="sd">            max_columns=None,</span>
-<span class="sd">            max_colwidth=25,</span>
-<span class="sd">            max_info_columns=100,</span>
-<span class="sd">            max_info_rows=1690785,</span>
-<span class="sd">            max_rows=30,</span>
-<span class="sd">            max_seq_items=50,</span>
-<span class="sd">            memory_usage=True,</span>
-<span class="sd">            min_rows=10,</span>
-<span class="sd">            multi_sparse=True,</span>
-<span class="sd">            notebook_repr_html=True,</span>
-<span class="sd">            pprint_nest_depth=3,</span>
-<span class="sd">            precision=6,</span>
-<span class="sd">            show_dimensions=&#39;truncate&#39;,</span>
-<span class="sd">            unicode=&lt;pandas._config.config.DictWrapper at 0x1f2fbfc1c50</span>
-<span class="sd">                    ambiguous_as_wide=False,</span>
-<span class="sd">                    east_asian_width=False&gt;,</span>
-<span class="sd">                    width=80&gt;,</span>
-<span class="sd">            io=&lt;pandas._config.config.DictWrapper at 0x1f2fbfc1d30</span>
-<span class="sd">            excel=&lt;pandas._config.config.DictWrapper at 0x1f2fce37f98</span>
-<span class="sd">            ods=&lt;pandas._config.config.DictWrapper at 0x1f2fce37ac8</span>
-<span class="sd">                 reader=&#39;auto&#39;&gt;,</span>
-<span class="sd">            xls=&lt;pandas._config.config.DictWrapper at 0x1f2fce37978</span>
-<span class="sd">                 reader=&#39;auto&#39;,</span>
-<span class="sd">                 writer=&#39;auto&#39;&gt;,</span>
-<span class="sd">            xlsm=&lt;pandas._config.config.DictWrapper at 0x1f2fce37ac8</span>
-<span class="sd">                  reader=&#39;auto&#39;,</span>
-<span class="sd">                  writer=&#39;auto&#39;&gt;,</span>
-<span class="sd">            xlsx=&lt;pandas._config.config.DictWrapper at 0x1f2fce37978</span>
-<span class="sd">                  reader=&#39;auto&#39;,</span>
-<span class="sd">                  writer=&#39;auto&#39;&gt;&gt;,</span>
-<span class="sd">            hdf=&lt;pandas._config.config.DictWrapper at 0x1f2fce379e8</span>
-<span class="sd">                default_format=None,</span>
-<span class="sd">                dropna_table=False&gt;,</span>
-<span class="sd">            parquet=&lt;pandas._config.config.DictWrapper at 0x1f2fce37978</span>
-<span class="sd">                    engine=&#39;auto&#39;&gt;&gt;,</span>
-<span class="sd">            mode=&lt;pandas._config.config.DictWrapper at 0x1f2fbfc1c18</span>
-<span class="sd">                    chained_assignment=None,</span>
-<span class="sd">                    sim_interactive=False,</span>
-<span class="sd">                    use_inf_as_na=False,</span>
-<span class="sd">                    use_inf_as_null=False&gt;,</span>
-<span class="sd">                    plotting=&lt;pandas._config.config.DictWrapper at</span>
-<span class="sd">                    0x1f2fbfc1d30</span>
-<span class="sd">                    backend=&#39;matplotlib&#39;,</span>
-<span class="sd">                    matplotlib=&lt;pandas._config.config.DictWrapper at</span>
-<span class="sd">                    0x1f2fce37978</span>
-<span class="sd">                    register_converters=True&gt;&gt;&gt;</span>
-
-
-<span class="sd">Here&#39;s an interesting blurb from pandas/docs/conf.py::</span>
-
-<span class="sd">    import pandas as pd</span>
-<span class="sd">    # This ensures correct rendering on system with console encoding != utf8</span>
-<span class="sd">    # (windows). It forces pandas to encode its output reprs using utf8</span>
-<span class="sd">    # wherever the docs are built. The docs&#39; target is the browser, not</span>
-<span class="sd">    # the console, so this is fine.</span>
-<span class="sd">    pd.options.display.encoding=&quot;utf8&quot;</span>
-
-
-<span class="sd">See Also</span>
-<span class="sd">--------</span>
-<span class="sd">.. seealso::</span>
-
-<span class="sd">    https://realpython.com/python-pandas-tricks/#1-configure-options-settings-at-interpreter-startup</span>
-
-<span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 
 <span class="c1"># Dude holy shit pycharm is good</span>
@@ -277,6 +175,7 @@
 </li>
 
 
+
 <h3><a href="../../../index.html">Table of Contents</a></h3>
 <div>&nbsp;</div>
 <div id="sidebartoc">
@@ -296,7 +195,6 @@
     
 </div>
 
-
         </div>
       </div>
       <div class="clearer"></div>
@@ -315,7 +213,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Nov 24, 2019.
+      Last updated on Nov 26, 2019.
     </div>
   </body>
 </html>

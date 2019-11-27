@@ -54,114 +54,9 @@
 <h1>Source code for default_profile.util.pager2</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python3</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;Rewrite the module that creates the ``%pycat`` magic.</span>
-
-<span class="sd">In it&#39;s current implementation, the pager gives Windows a dumb terminal and</span>
-<span class="sd">never checks for whether :command:`less` is on the :envvar:`PATH` or</span>
-<span class="sd">if the user has a pager they wanna implement!</span>
-
-<span class="sd">Working Implementation</span>
-<span class="sd">----------------------</span>
-
-<span class="sd">Oct 28, 2019:</span>
-
-<span class="sd">Just ran this in the shell and I&#39;m really pleased with it.</span>
-
-<span class="sd">It utilizes the :attr:`autocall` functionality of IPython, works with the</span>
-<span class="sd">pycolorize utils, uses the page.page core function.</span>
-
-<span class="sd">If the user doesn&#39;t provide an argument, then just show them the last input</span>
-<span class="sd">they gave us especially since that var is **guaranteed** to always</span>
-<span class="sd">be there.</span>
-
-<span class="sd">Like solid shit man. And I came up with this in 10 minutes too!</span>
-
-<span class="sd">.. testsetup::</span>
-
-<span class="sd">    import IPython</span>
-<span class="sd">    from IPython import get_ipython</span>
-<span class="sd">    from IPython.core.magic import line_magic</span>
-
-<span class="sd">.. ipython::</span>
-
-<span class="sd">    In [105]: @line_magic</span>
-<span class="sd">        ...: def p(shell=None, s=None):</span>
-<span class="sd">        ...:     if shell is None:</span>
-<span class="sd">        ...:         shell = get_ipython()</span>
-<span class="sd">        ...:     if s is None:</span>
-<span class="sd">        ...:         IPython.core.page.page(shell.pycolorize(_i))</span>
-<span class="sd">        ...:     else:</span>
-<span class="sd">        ...:         IPython.core.page.page(shell.pycolorize(shell.find_user_code(s, skip_encoding_cookie=True)))</span>
-
-<span class="sd">    In [106]: /p</span>
-<span class="sd">    @line_magic</span>
-<span class="sd">    def p(shell=None, s=None):</span>
-<span class="sd">        if shell is None:</span>
-<span class="sd">            shell = get_ipython()</span>
-<span class="sd">        if s is None:</span>
-<span class="sd">            IPython.core.page.page(shell.pycolorize(_i))</span>
-<span class="sd">        else:</span>
-<span class="sd">            IPython.core.page.page(shell.pycolorize(shell.find_user_code(s, skip_encoding_cookie=True)))</span>
-
-
-<span class="sd">.. todo:: Literally how is this the part that&#39;s giving me errors.</span>
-
-<span class="sd">::</span>
-
-<span class="sd">    PAGER_LOGGER = logging.getLogger(name=&#39;default_profile.util&#39;).getchild(&#39;pager2&#39;)</span>
-<span class="sd">    PAGER_HANDLER = logging.StreamHandler()</span>
-<span class="sd">    PAGER_LOGGER.addHandler(PAGER_HANDLER)</span>
-
-
-<span class="sd">Original Pydoc Implementation and Errors</span>
-<span class="sd">----------------------------------------</span>
-
-<span class="sd">$ pydoc FRAMEOBJECTS</span>
-<span class="sd">Traceback (most recent call last):</span>
-<span class="sd">  File &quot;C:/tools/miniconda3/lib/runpy.py&quot;, line 193, in _run_module_as_main</span>
-<span class="sd">    &quot;__main__&quot;, mod_spec)</span>
-<span class="sd">  File &quot;C:/tools/miniconda3/lib/runpy.py&quot;, line 85, in _run_code</span>
-<span class="sd">    exec(code, run_globals)</span>
-<span class="sd">    elif request in self.topics: self.showtopic(request)</span>
-<span class="sd">  File &quot;C:/tools/miniconda3/lib/pydoc.py&quot;, line 2021, in showtopic</span>
-<span class="sd">    return self.showtopic(target, more_xrefs)</span>
-<span class="sd">  File &quot;C:/tools/miniconda3/lib/pydoc.py&quot;, line 2037, in showtopic</span>
-<span class="sd">    pager(doc)</span>
-<span class="sd">  File &quot;C:/tools/miniconda3/lib/pydoc.py&quot;, line 1449, in pager</span>
-<span class="sd">    pager(text)</span>
-<span class="sd">  File &quot;C:/tools/miniconda3/lib/pydoc.py&quot;, line 1462, in &lt;lambda&gt;</span>
-<span class="sd">    return lambda text: tempfilepager(plain(text), use_pager)</span>
-<span class="sd">  File &quot;C:/tools/miniconda3/lib/pydoc.py&quot;, line 1519, in tempfilepager</span>
-<span class="sd">    os.system(cmd + &#39; &quot;&#39; + filename + &#39;&quot;&#39;)</span>
-<span class="sd">KeyboardInterrupt</span>
-
-
-<span class="sd">Outside of the stupid traceback, that command worked perfectly for me.</span>
-
-<span class="sd">I have $PAGER set on Windows {which I realize isn&#39;t typical}, however we should</span>
-<span class="sd">re-use this implementation entirely and cut IPython.core.page.page out.</span>
-
-
-<span class="sd">In [63]: pydoc.pipepager(inspect.getdoc(arg), os.environ.get(&#39;PAGER&#39;))</span>
-
-<span class="sd">Despite the source code of the std lib stating that pipes are completely broken on windows,</span>
-<span class="sd">this worked just fine for me.</span>
-
-<span class="sd">Define arg as an object like if you pass a string it&#39;ll give you the help message</span>
-<span class="sd">for a str.</span>
-
-<span class="sd">:mod:`inspect` has a million more methods and pydoc does too so possibly change the</span>
-<span class="sd">:func:`inspect.getdoc` part, but honestly that one line is 80% of the way</span>
-<span class="sd">to what I&#39;ve been trying to do.</span>
-
-<span class="sd">Nov 17, 2019:</span>
-
-<span class="sd">Yo this is outrageous how inconsistently ANYTHING is working for me.</span>
-
-
-<span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">importlib</span> <span class="kn">import</span> <span class="n">import_module</span>
 <span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">from</span> <span class="nn">inspect</span> <span class="kn">import</span> <span class="n">getdoc</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">pydoc</span>
 <span class="kn">import</span> <span class="nn">sys</span>
@@ -186,7 +81,21 @@
 <div class="viewcode-block" id="PyPager"><a class="viewcode-back" href="../../../util/pager2.html#default_profile.util.pager2.PyPager">[docs]</a><span class="k">class</span> <span class="nc">PyPager</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;A pager if you&#39;re outside of IPython.&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="PyPager.__init__"><a class="viewcode-back" href="../../../util/pager2.html#default_profile.util.pager2.PyPager.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<div class="viewcode-block" id="PyPager.__init__"><a class="viewcode-back" href="../../../util/pager2.html#default_profile.util.pager2.PyPager.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">use_pager</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initializes the class.</span>
+
+<span class="sd">        This occurs by binding an optional text to the instance and determining</span>
+<span class="sd">        whether to use a pager or output by printing to the shell.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        text : str, optional</span>
+<span class="sd">            Text to page</span>
+<span class="sd">        use_pager : bool, optional</span>
+<span class="sd">            Whether to print to the shell or pipe to a pager.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">text</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_pager</span> <span class="o">=</span> <span class="n">use_pager</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -195,8 +104,8 @@
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;A pager for files you&#39;d like to inspect. Or interactive variables.&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">use_pager</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">pydoc</span><span class="o">.</span><span class="n">tempfilepager</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">use_pager</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">pydoc</span><span class="o">.</span><span class="n">tempfilepager</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_pager</span><span class="p">)</span>
 
 <div class="viewcode-block" id="PyPager.call"><a class="viewcode-back" href="../../../util/pager2.html#default_profile.util.pager2.PyPager.call">[docs]</a>    <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">use_pager</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">use_pager</span><span class="o">=</span><span class="n">use_pager</span><span class="p">)</span></div></div>
@@ -214,6 +123,15 @@
         <span class="n">pydoc</span><span class="o">.</span><span class="n">pipepager</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span> <span class="s1">&#39;less -JRKMLige &#39;</span><span class="p">)</span></div>
 
 
+<div class="viewcode-block" id="get_docs_and_page"><a class="viewcode-back" href="../../../util/pager2.html#default_profile.util.pager2.get_docs_and_page">[docs]</a><span class="k">def</span> <span class="nf">get_docs_and_page</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Resourceful way to parse sys.argv and then expand a ``*args``.&quot;&quot;&quot;</span>
+    <span class="n">_</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[:]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">getdoc</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s1">&#39;Need to provide an argument.&#39;</span><span class="p">)</span></div>
+
+
 <div class="viewcode-block" id="were_in_ipython"><a class="viewcode-back" href="../../../util/pager2.html#default_profile.util.pager2.were_in_ipython">[docs]</a><span class="k">def</span> <span class="nf">were_in_ipython</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Call ipython to make sure we&#39;re really in it.&quot;&quot;&quot;</span>
     <span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
@@ -222,12 +140,33 @@
     <span class="c1"># (&#39;Not in IPython.&#39;)</span>
 
 
-<div class="viewcode-block" id="provided_or_last"><a class="viewcode-back" href="../../../util/pager2.html#default_profile.util.pager2.provided_or_last">[docs]</a><span class="k">def</span> <span class="nf">provided_or_last</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Either run a provided code_cell from a user or rerun their last input.&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="provided_or_last"><a class="viewcode-back" href="../../../util/pager2.html#default_profile.util.pager2.provided_or_last">[docs]</a><span class="k">def</span> <span class="nf">provided_or_last</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Either run a provided code_cell from a user or rerun their last input.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    s : str, optional</span>
+<span class="sd">        str to page</span>
+<span class="sd">    shell : IPython instance, optional</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    --------</span>
+<span class="sd">    code_to_page :</span>
+<span class="sd">        Found user code.</span>
+
+<span class="sd">    Note</span>
+<span class="sd">    -----</span>
+<span class="sd">    What is the actual implementation name for the var ``_i``? I think IPython</span>
+<span class="sd">    stores a :attr:`last_execution_result` or maybe a</span>
+<span class="sd">    :attr:`last_execution_succeeded`.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">shell</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">s</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="n">code_to_page</span> <span class="o">=</span> <span class="n">find_user_code</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">skip_encoding_cookie</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">code_to_page</span> <span class="o">=</span> <span class="n">shell</span><span class="o">.</span><span class="n">find_user_code</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">skip_encoding_cookie</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">code_to_page</span> <span class="o">=</span> <span class="n">_i</span>
+        <span class="n">code_to_page</span> <span class="o">=</span> <span class="n">shell</span><span class="o">.</span><span class="n">_i</span>
 
     <span class="k">return</span> <span class="n">code_to_page</span></div>
 
@@ -299,6 +238,7 @@
 </li>
 
 
+
 <h3><a href="../../../index.html">Table of Contents</a></h3>
 <div>&nbsp;</div>
 <div id="sidebartoc">
@@ -318,7 +258,6 @@
     
 </div>
 
-
         </div>
       </div>
       <div class="clearer"></div>
@@ -337,7 +276,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Nov 24, 2019.
+      Last updated on Nov 26, 2019.
     </div>
   </body>
 </html>

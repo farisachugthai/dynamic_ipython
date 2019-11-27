@@ -13,6 +13,9 @@ try:
 except (ImportError, ModuleNotFoundError):
     pass
 
+from . import profile_newterm
+from .profile_newterm import unimpaired
+
 # from . import profile_debugger, profile_parallel, sphinxext, startup, util
 from .sphinxext import custom_doctests, magics
 from .startup import ask_for_import

@@ -8,7 +8,6 @@ from prompt_toolkit.keys import Keys
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.filters import HasFocus, HasSelection, ViInsertMode, EmacsInsertMode
 
-ip = get_ipython()
 insert_mode = ViInsertMode() | EmacsInsertMode()
 
 
@@ -58,13 +57,23 @@ def yank_last_arg(event):
 
 
 if __name__ == "__main__":
-    # TODO: Come up with an else because prompt_toolkit might not bind through
-    # the pt_cli attr anymore
+
     registry = KeyBindings()
+
+    ip = get_ipython()
+
     if getattr(ip, "pt_app", None):
+        # don't do it this way. if you change it from
         registry = ip.pt_app.key_bindings
+        # to
+        # registry = ip.pt_app.app.key_bindings
+        # then you'll end up with a prompt_toolkit.key_binding.key_bindings._MergedKeyBindings
+        # class which has no `add_binding` method.
+
     elif getattr(ip, "pt_cli", None):
         registry = ip.pt_cli.application.key_bindings_registry
+    else:
+        raise NotImplementedError("IPython doesn't have prompt toolkit bindings. Exiting.")
 
     registry.add_binding(Keys.Escape,
                             u'.',

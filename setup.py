@@ -67,7 +67,12 @@ else:
     distclass = distutils.command.bdist_conda.CondaDistribution
 
 # Metadata: {{{1
-from default_profile.__about__ import __version__
+
+try:
+    from default_profile.__about__ import __version__
+except:  # noqa
+    __version__ = '0.0.2'
+
 NAME = 'dynamic_ipython'
 AUTHOR = "Faris Chugthai"
 EMAIL = "farischugthai@gmail.com"
@@ -89,14 +94,15 @@ SOURCE_PATH = os.path.join(CONF_PATH, 'source')
 README = os.path.join(ROOT_PATH, '', 'README.rst')
 
 # TODO: How to do conditionals? Only windows needs pyreadline
-REQUIRED = [
-    'IPython>=7.7', 'prompt_toolkit', 'traitlets',
-    'pygments', 'jedi'
-]
+REQUIRED = ['IPython>=7.7', 'prompt_toolkit', 'traitlets', 'pygments', 'jedi', 'sphinx']
 
 EXTRAS = {
     'develop': [
-        'pipenv', 'flake8>=3.7.1', 'yapf>=0.27.0', 'numpy', 'pandas',
+        'pipenv',
+        'flake8>=3.7.1',
+        'yapf>=0.27.0',
+        'numpy',
+        'pandas',
         'matplotlib',
     ],
     'docs': [
@@ -110,7 +116,9 @@ EXTRAS = {
         'flake8-docstrings',
     ],
     'test': [
-        'pytest', 'tox', 'nose',
+        'pytest',
+        'tox',
+        'nose',
     ]
 }
 

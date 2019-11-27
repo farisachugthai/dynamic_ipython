@@ -166,53 +166,55 @@ Instances from ultratb
 
 In addition there's the instance ``InteractiveTB`` that's bound to the shell.
 
-This is an instance of a VerboseTB.
+This is an instance of a `VerboseTB`.
 
-However note the InteractiveTB being mentioned in these docstrings.
+However note the InteractiveTB being mentioned in these docstrings.:
 
-In [141]: _ip.excepthook?
-Signature: _ip.excepthook(etype, value, tb)
+   In [141]: _ip.excepthook?
+   Signature: _ip.excepthook(etype, value, tb)
 
-Docstring:
+   Docstring:
 
-One more defense for GUI apps that call sys.excepthook.
-GUI frameworks like wxPython trap exceptions and call
-sys.excepthook themselves.  I guess this is a feature that
-enables them to keep running after exceptions that would
-otherwise kill their mainloop. This is a bother for IPython
-which excepts to catch all of the program exceptions with a try:
-except: statement.
+.. code-block:: rst
 
-Normally, IPython sets sys.excepthook to a CrashHandler instance, so if
-any app directly invokes sys.excepthook, it will look to the user like
-IPython crashed.  In order to work around this, we can disable the
-CrashHandler and replace it with this excepthook instead, which prints a
-regular traceback using our InteractiveTB.  In this fashion, apps which
-call sys.excepthook will generate a regular-looking exception from
-IPython, and the CrashHandler will only be triggered by real IPython
-crashes.
+   One more defense for GUI apps that call sys.excepthook.
+   GUI frameworks like wxPython trap exceptions and call
+   sys.excepthook themselves.  I guess this is a feature that
+   enables them to keep running after exceptions that would
+   otherwise kill their mainloop. This is a bother for IPython
+   which excepts to catch all of the program exceptions with a try:
+   except: statement.
 
-This hook should be used sparingly, only in places which are not likely
-to be true IPython errors.
-Type:      method
+   Normally, IPython sets sys.excepthook to a CrashHandler instance, so if
+   any app directly invokes sys.excepthook, it will look to the user like
+   IPython crashed.  In order to work around this, we can disable the
+   CrashHandler and replace it with this excepthook instead, which prints a
+   regular traceback using our InteractiveTB.  In this fashion, apps which
+   call sys.excepthook will generate a regular-looking exception from
+   IPython, and the CrashHandler will only be triggered by real IPython
+   crashes.
 
-self.showtraceback((etype, value, tb), tb_offset=0)
-_ip.showtraceback(exc_tuple=None,filename=None,tb_offset=None,exception_only=False,running_compiled_code=False,
-Display the exception that just occurred.
+   This hook should be used sparingly, only in places which are not likely
+   to be true IPython errors.
+   Type:      method
 
-Docstring:
+   self.showtraceback((etype, value, tb), tb_offset=0)
+   _ip.showtraceback(exc_tuple=None,filename=None,tb_offset=None,exception_only=False,running_compiled_code=False,
+   Display the exception that just occurred.
 
-If nothing is known about the exception, this is the method which
-should be used throughout the code for presenting user tracebacks,
-rather than directly invoking the InteractiveTB object.
+   Docstring:
 
-A specific showsyntaxerror() also exists, but this method can take
-care of calling it if needed, so unless you are explicitly catching a
-SyntaxError exception, don't try to analyze the stack manually and
-simply call this method.
+   If nothing is known about the exception, this is the method which
+   should be used throughout the code for presenting user tracebacks,
+   rather than directly invoking the InteractiveTB object.
+
+   A specific showsyntaxerror() also exists, but this method can take
+   care of calling it if needed, so unless you are explicitly catching a
+   SyntaxError exception, don't try to analyze the stack manually and
+   simply call this method.
 
 
-.. see:: init_traceback_handlers
+.. seealso:: init_traceback_handlers
 
 
 :mod:`~default_profile.startup.50_sysexception`

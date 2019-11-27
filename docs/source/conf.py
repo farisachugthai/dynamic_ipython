@@ -292,9 +292,9 @@ html_sidebars = {
         [
             'searchbox.html',
             'relations.html',
+            'localtoc.html',
             'globaltoc.html',
             'sourcelink.html',
-            'localtoc.html',
         ]
 }
 
