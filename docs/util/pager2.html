@@ -72,7 +72,7 @@ is frustrating, in addition to the fact that both APIs are written with no
 ability to change or configure things in mind.</p>
 <div class="section" id="original-implementation">
 <h2>Original Implementation<a class="headerlink" href="#original-implementation" title="Permalink to this headline">¶</a></h2>
-<p>Below is the source code for how the original <code class="xref py py-func docutils literal notranslate"><span class="pre">pycat()</span></code> was implemented.:</p>
+<p>Below is the source code for how the original <a class="reference external" href="https://ipython.readthedocs.io/en/stable/interactive/magics.html#magic-pycat" title="(in IPython v7.9.0)"><code class="xref std std-magic docutils literal notranslate"><span class="pre">pycat</span></code></a> was implemented.:</p>
 </div>
 <div class="section" id="breaking-it-down">
 <h2>Breaking it down<a class="headerlink" href="#breaking-it-down" title="Permalink to this headline">¶</a></h2>
@@ -89,12 +89,12 @@ unicode string with an encoding declaration is a SyntaxError in Python 2.</p>
 <div class="section" id="ipython-core-page-page">
 <h3><a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.page.html#IPython.core.page.page" title="(in IPython v7.9.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.core.page.page()</span></code></a><a class="headerlink" href="#ipython-core-page-page" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
-<dt id="page.page">
-<code class="sig-prename descclassname">page.</code><code class="sig-name descname">page</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#page.page" title="Permalink to this definition">¶</a></dt>
+<dt id="default_profile.util.pager2.page.page">
+<code class="sig-prename descclassname">page.</code><code class="sig-name descname">page</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/util/pager2.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.pager2.page.page" title="Permalink to this definition">¶</a></dt>
 <dd><p>Pretty print an object and display it through the pager.</p>
 </dd></dl>
 
-<p>What’s that <a class="reference internal" href="#page.page" title="page.page"><code class="xref py py-obj docutils literal notranslate"><span class="pre">page.page</span></code></a> line? Well…time to go exploring!</p>
+<p>What’s that <a class="reference internal" href="#default_profile.util.pager2.page.page" title="default_profile.util.pager2.page.page"><code class="xref py py-obj docutils literal notranslate"><span class="pre">page.page</span></code></a> line? Well…time to go exploring!</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">IPython.core.magics.basic</span> <span class="k">import</span> <span class="n">BasicMagics</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">BasicMagics</span><span class="o">.</span><span class="n">page</span>
 </pre></div>
@@ -206,32 +206,14 @@ NameError: name 'p' is not defined</pre>
 </div>
 <div class="section" id="original-pydoc-implementation-and-errors">
 <h3>Original Pydoc Implementation and Errors<a class="headerlink" href="#original-pydoc-implementation-and-errors" title="Permalink to this headline">¶</a></h3>
-<p>$ pydoc FRAMEOBJECTS
-Traceback (most recent call last):</p>
-<blockquote>
-<div><dl class="simple">
-<dt>File “C:/tools/miniconda3/lib/runpy.py”, line 193, in _run_module_as_main</dt><dd><p>“__main__”, mod_spec)</p>
-</dd>
-<dt>File “C:/tools/miniconda3/lib/runpy.py”, line 85, in _run_code</dt><dd><p>exec(code, run_globals)
-elif request in self.topics: self.showtopic(request)</p>
-</dd>
-<dt>File “C:/tools/miniconda3/lib/pydoc.py”, line 2021, in showtopic</dt><dd><p>return self.showtopic(target, more_xrefs)</p>
-</dd>
-<dt>File “C:/tools/miniconda3/lib/pydoc.py”, line 2037, in showtopic</dt><dd><p>pager(doc)</p>
-</dd>
-<dt>File “C:/tools/miniconda3/lib/pydoc.py”, line 1449, in pager</dt><dd><p>pager(text)</p>
-</dd>
-<dt>File “C:/tools/miniconda3/lib/pydoc.py”, line 1462, in &lt;lambda&gt;</dt><dd><p>return lambda text: tempfilepager(plain(text), use_pager)</p>
-</dd>
-<dt>File “C:/tools/miniconda3/lib/pydoc.py”, line 1519, in tempfilepager</dt><dd><p>os.system(cmd + ‘ “’ + filename + ‘”’)</p>
-</dd>
-</dl>
-</div></blockquote>
-<p>KeyboardInterrupt</p>
 <p>Outside of the stupid traceback, that command worked perfectly for me.</p>
-<p>I have $PAGER set on Windows {which I realize isn’t typical}, however we should
-re-use this implementation entirely and cut IPython.core.page.page out.</p>
-<p>In [63]: pydoc.pipepager(inspect.getdoc(arg), os.environ.get(‘PAGER’))</p>
+<p>I have <span class="target" id="index-3"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PAGER</span></code> set on Windows {which I realize isn’t typical},
+however we should re-use this implementation entirely and cut
+<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.page.html#IPython.core.page.page" title="(in IPython v7.9.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IPython.core.page.page</span></code></a> out.</p>
+<p>Also worth noting <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.payloadpage.html#IPython.core.payloadpage.page" title="(in IPython v7.9.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IPython.core.payloadpage.page</span></code></a>.:</p>
+<blockquote>
+<div><p>In [63]: pydoc.pipepager(inspect.getdoc(arg), os.environ.get(‘PAGER’))</p>
+</div></blockquote>
 <p>Despite the source code of the std lib stating that pipes are completely
 broken on windows, this worked just fine for me.</p>
 <p>Define arg as an object like if you pass a string it’ll give you the help message
@@ -239,8 +221,6 @@ for a str.</p>
 <p><a class="reference external" href="https://docs.python.org/3/library/inspect.html#module-inspect" title="(in Python v3.8)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">inspect</span></code></a> has a million more methods and pydoc does too so possibly change the
 <a class="reference external" href="https://docs.python.org/3/library/inspect.html#inspect.getdoc" title="(in Python v3.8)"><code class="xref py py-func docutils literal notranslate"><span class="pre">inspect.getdoc()</span></code></a> part, but honestly that one line is 80% of the way
 to what I’ve been trying to do.</p>
-<p>Nov 17, 2019:</p>
-<p>Yo this is outrageous how inconsistently ANYTHING is working for me.</p>
 <span class="target" id="module-default_profile.util.pager2"></span><dl class="exception">
 <dt id="default_profile.util.pager2.NotInIPythonError">
 <em class="property">exception </em><code class="sig-name descname">NotInIPythonError</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/util/pager2.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/util/pager2.html#NotInIPythonError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.pager2.NotInIPythonError" title="Permalink to this definition">¶</a></dt>
@@ -436,7 +416,7 @@ can display the magics through the attribute …magics.</p>
 <li class="toctree-l1"><a class="reference internal" href="../startup/index.html">IPython Startup</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">IPython Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../kernel.html">IPython Kernel</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../jupyter/index.html">Jupyter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../jupyter/index.html">jupyter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../extensions.html">Extensions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../jobcontrol.html">Job Control</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../subcommands.html">Subcommands</a></li>
@@ -476,7 +456,7 @@ can display the magics through the attribute …magics.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Nov 26, 2019.
+      Last updated on Nov 27, 2019.
     </div>
   </body>
 </html>
