@@ -27,6 +27,5 @@ Table of Contents
    ipython_sphinx_directive
    lexer
    custom_doctests
-   configtraits
    magics
    make

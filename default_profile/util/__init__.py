@@ -51,3 +51,5 @@ util_handler = logging.StreamHandler()
 util_formmatter = logging.Formatter(fmt=logging.BASIC_FORMAT)
 util_handler.setLevel(logging.WARNING)
 UTIL_LOGGER.addHandler(util_handler)
+
+path = PathValidator().path

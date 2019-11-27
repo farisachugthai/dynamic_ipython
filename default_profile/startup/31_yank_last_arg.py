@@ -5,6 +5,7 @@ https://gist.githubusercontent.com/konradkonrad/7143fa8407804e37132e4ea90175f2d8
 from IPython import get_ipython
 from prompt_toolkit.enums import DEFAULT_BUFFER
 from prompt_toolkit.keys import Keys
+from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.filters import HasFocus, HasSelection, ViInsertMode, EmacsInsertMode
 
 ip = get_ipython()
@@ -32,7 +33,7 @@ def yank_last_arg(event):
     Successive calls to yank-last-arg move back through the history list,
     inserting the last word of each line in turn.
 
-    .. see:: https://www.gnu.org/software/bash/manual/bashref.html#Commands-For-History
+    .. see: https://www.gnu.org/software/bash/manual/bashref.html#Commands-For-History
 
     .. note: This doesn't support the numeric argument option of readline's
              yank-last-arg
@@ -59,9 +60,10 @@ def yank_last_arg(event):
 if __name__ == "__main__":
     # TODO: Come up with an else because prompt_toolkit might not bind through
     # the pt_cli attr anymore
-    if getattr(ip, "pt_app"):
+    registry = KeyBindings()
+    if getattr(ip, "pt_app", None):
         registry = ip.pt_app.key_bindings
-    elif getattr(ip, "pt_cli"):
+    elif getattr(ip, "pt_cli", None):
         registry = ip.pt_cli.application.key_bindings_registry
 
     registry.add_binding(Keys.Escape,

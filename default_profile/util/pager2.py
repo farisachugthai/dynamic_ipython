@@ -81,17 +81,15 @@ Traceback (most recent call last):
     os.system(cmd + ' "' + filename + '"')
 KeyboardInterrupt
 
-
 Outside of the stupid traceback, that command worked perfectly for me.
 
 I have $PAGER set on Windows {which I realize isn't typical}, however we should
 re-use this implementation entirely and cut IPython.core.page.page out.
 
-
 In [63]: pydoc.pipepager(inspect.getdoc(arg), os.environ.get('PAGER'))
 
-Despite the source code of the std lib stating that pipes are completely broken on windows,
-this worked just fine for me.
+Despite the source code of the std lib stating that pipes are completely
+broken on windows, this worked just fine for me.
 
 Define arg as an object like if you pass a string it'll give you the help message
 for a str.
@@ -108,6 +106,7 @@ Yo this is outrageous how inconsistently ANYTHING is working for me.
 """
 from importlib import import_module
 import inspect
+from inspect import getdoc
 import logging
 import pydoc
 import sys
@@ -132,8 +131,10 @@ class NotInIPythonError(RuntimeError):
 class PyPager:
     """A pager if you're outside of IPython."""
 
-    def __init__(self, *args):
+    def __init__(self, *args, text=None, use_pager=True):
         self.call(*args)
+        self.text = text
+        self.use_pager = use_pager
 
     def __repr__(self):
         return ''.join(self.__class__.__name__)
@@ -141,8 +142,8 @@ class PyPager:
     def __str__(self):
         return "A pager for files you'd like to inspect. Or interactive variables."
 
-    def __call__(self, text, use_pager=True):
-        return pydoc.tempfilepager(text, use_pager)
+    def __call__(self):
+        return pydoc.tempfilepager(self.text, self.use_pager)
 
     def call(self, text, use_pager=True):
         return self.__call__(text, use_pager=use_pager)
@@ -160,6 +161,15 @@ def blocking_pager(text):
         pydoc.pipepager(f.read(), 'less -JRKMLige ')
 
 
+def get_docs_and_page():
+    """Resourceful way to parse sys.argv and then expand a ``*args``."""
+    _, *args = sys.argv[:]
+    if len(args) > 0:
+        print(getdoc(*args))
+    else:
+        sys.exit('Need to provide an argument.')
+
+
 def were_in_ipython():
     """Call ipython to make sure we're really in it."""
     shell = get_ipython()
@@ -168,12 +178,33 @@ def were_in_ipython():
     # ('Not in IPython.')
 
 
-def provided_or_last(s=None):
-    """Either run a provided code_cell from a user or rerun their last input."""
+def provided_or_last(s=None, shell=None):
+    """Either run a provided code_cell from a user or rerun their last input.
+
+    Parameters
+    ----------
+    s : str, optional
+        str to page
+    shell : IPython instance, optional
+
+    Returns
+    --------
+    code_to_page :
+        Found user code.
+
+    Note
+    -----
+    What is the actual implementation name for the var ``_i``? I think IPython
+    stores a :attr:`last_execution_result` or maybe a
+    :attr:`last_execution_succeeded`.
+
+    """
+    if shell is None:
+        shell = get_ipython()
     if s is not None:
-        code_to_page = find_user_code(s, skip_encoding_cookie=True)
+        code_to_page = shell.find_user_code(s, skip_encoding_cookie=True)
     else:
-        code_to_page = _i
+        code_to_page = shell._i
 
     return code_to_page
 
