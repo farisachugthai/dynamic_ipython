@@ -53,6 +53,8 @@ from shutil import rmtree
 # Why does Coc keep complaining about resolving the import sys???
 import sys
 
+logging.basicConfig()
+
 from setuptools import setup, find_packages, Command, Extension
 
 # how are we allowed to do this you can't force a dependency before installation
@@ -124,9 +126,9 @@ EXTRAS = {
 
 with codecs.open(README, encoding="utf-8") as f:
     LONG_DESCRIPTION = "\n" + f.read()
+
+
 # }}}}
-
-
 class UploadCommand(Command):  # {{{1
     """Support setup.py upload."""
 
@@ -153,7 +155,7 @@ class UploadCommand(Command):  # {{{1
             self.status('Removing previous builds…')
             rmtree(os.path.join(str(self.root), 'dist'))
         except OSError:
-            pass
+            logging.warning("Could not renove previous builds")
 
         self.status('Building Source and Wheel (universal) distribution…')
 

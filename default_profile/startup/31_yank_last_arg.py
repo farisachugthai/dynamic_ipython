@@ -1,15 +1,46 @@
 """
 https://gist.githubusercontent.com/konradkonrad/7143fa8407804e37132e4ea90175f2d8/raw/ef2f570fc67fd5d9d227f9ae0363e10907831c97/01-esc-dot.py
 """
-# ~/.ipython/profile_default/startup/01-esc-dot.py
 from IPython import get_ipython
+
+from prompt_toolkit.application.current import get_app
 from prompt_toolkit.enums import DEFAULT_BUFFER
 from prompt_toolkit.keys import Keys
-from prompt_toolkit.key_binding import KeyBindings
+from prompt_toolkit.key_binding import KeyBindings, merge_key_bindings
+from prompt_toolkit.key_binding.bindings.basic import load_basic_bindings
+from prompt_toolkit.key_binding.bindings.emacs import load_emacs_bindings, load_emacs_search_bindings
+from prompt_toolkit.key_binding.bindings.mouse import load_mouse_bindings
+from prompt_toolkit.key_binding.bindings.cpr import load_cpr_bindings
 from prompt_toolkit.filters import HasFocus, HasSelection, ViInsertMode, EmacsInsertMode
 
 insert_mode = ViInsertMode() | EmacsInsertMode()
 
+app = get_app()
+
+
+def get_key_bindings(custom_key_bindings=None):
+    """
+    The ``__init__`` for `_MergedKeyBindings` features this.:
+
+        def __init__(self, registries):
+            assert all(isinstance(r, KeyBindingsBase) for r in registries)
+            _Proxy.__init__(self)
+            self.registries = registries
+
+    As a result `None` can't be passed to merge_key_bindings.
+
+    Based on prompt_toolkit.key_binding.defaults.load_key_bindings()
+    """
+    if custom_key_bindings is None:
+        custom_key_bindings = KeyBindings()
+    return merge_key_bindings([
+        load_basic_bindings(),
+        load_emacs_bindings(),
+        load_emacs_search_bindings(),
+        load_mouse_bindings(),
+        load_cpr_bindings(),
+        custom_key_bindings,
+    ])
 
 class State:
     def __init__(self):
@@ -86,3 +117,5 @@ if __name__ == "__main__":
                                     & ~HasSelection()
                                     & insert_mode))(yank_last_arg)
     ip.events.register('post_execute', reset_last_arg_depth)
+
+    get_key_bindings(registry)

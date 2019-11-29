@@ -16,13 +16,21 @@ from pdb import Pdb
 import sys
 import traceback
 
+from prompt_toolkit.completion import DynamicCompleter
 from prompt_toolkit.enums import EditingMode
+from prompt_toolkit.keys import Keys
+from prompt_toolkit.key_binding import KeyBindings, merge_key_bindings
+from prompt_toolkit.key_binding.bindings.basic import load_basic_bindings
+from prompt_toolkit.key_binding.bindings.emacs import load_emacs_bindings, load_emacs_search_bindings
+from prompt_toolkit.key_binding.bindings.mouse import load_mouse_bindings
+from prompt_toolkit.key_binding.bindings.cpr import load_cpr_bindings
 from prompt_toolkit.formatted_text import PygmentsTokens
 from prompt_toolkit.shortcuts.prompt import PromptSession
+
 from pygments.token import Token
 
 from IPython import get_ipython
-from IPython.core.completer import IPCompleter
+# from IPython.core.completer import IPCompleter
 from IPython.core.error import UsageError
 from IPython.terminal.embed import InteractiveShellEmbed
 from IPython.terminal.interactiveshell import TerminalInteractiveShell
@@ -59,7 +67,8 @@ class IPD(Pdb):
             raise UsageError
 
         self.keys = keys or self.initialize_keybindings()
-        self.completer = completer or self.initialize_completer()
+        # self.completer = completer or self.initialize_completer()
+        self.completer = completer or DynamicCompleter()
         self.prompt_toolkit_application = prompt_toolkit_application or self.pt_init()
 
         if kwargs:
@@ -92,7 +101,14 @@ class IPD(Pdb):
 
     def initialize_keybindings(self):
         """Should make this explicit and as a result independent."""
-        return create_ipython_shortcuts(self.shell)
+        return merge_key_bindings([
+            load_basic_bindings(),
+            load_emacs_bindings(),
+            load_emacs_search_bindings(),
+            load_mouse_bindings(),
+            load_cpr_bindings(),
+            create_ipython_shortcuts(self.shell)
+        ])
 
     def pt_init(self):
         """Override the default initialization for prompt_toolkit."""
