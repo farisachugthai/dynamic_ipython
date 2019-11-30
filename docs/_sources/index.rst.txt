@@ -143,7 +143,7 @@ Table of Contents
    :titlesonly:
    :caption: API
 
-   Sphinx Extensions <sphinxext/index.rst>
+   Sphinx Extensions <sphinxext/index>
    IPython Startup <startup/index>
    IPython Utilities </util/index>
    kernel

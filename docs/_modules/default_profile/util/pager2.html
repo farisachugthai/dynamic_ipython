@@ -81,7 +81,7 @@
 <div class="viewcode-block" id="PyPager"><a class="viewcode-back" href="../../../util/pager2.html#default_profile.util.pager2.PyPager">[docs]</a><span class="k">class</span> <span class="nc">PyPager</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;A pager if you&#39;re outside of IPython.&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="PyPager.__init__"><a class="viewcode-back" href="../../../util/pager2.html#default_profile.util.pager2.PyPager.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">use_pager</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="PyPager.__init__"><a class="viewcode-back" href="../../../util/pager2.html#default_profile.util.pager2.PyPager.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_pager</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initializes the class.</span>
 
 <span class="sd">        This occurs by binding an optional text to the instance and determining</span>
@@ -107,7 +107,7 @@
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">pydoc</span><span class="o">.</span><span class="n">tempfilepager</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_pager</span><span class="p">)</span>
 
-<div class="viewcode-block" id="PyPager.call"><a class="viewcode-back" href="../../../util/pager2.html#default_profile.util.pager2.PyPager.call">[docs]</a>    <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">use_pager</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="PyPager.call"><a class="viewcode-back" href="../../../util/pager2.html#default_profile.util.pager2.PyPager.call">[docs]</a>    <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">use_pager</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">use_pager</span><span class="o">=</span><span class="n">use_pager</span><span class="p">)</span></div></div>
 
 
@@ -127,7 +127,7 @@
     <span class="sd">&quot;&quot;&quot;Resourceful way to parse sys.argv and then expand a ``*args``.&quot;&quot;&quot;</span>
     <span class="n">_</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[:]</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="n">getdoc</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">getdoc</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">))</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s1">&#39;Need to provide an argument.&#39;</span><span class="p">)</span></div>
 
@@ -135,12 +135,12 @@
 <div class="viewcode-block" id="were_in_ipython"><a class="viewcode-back" href="../../../util/pager2.html#default_profile.util.pager2.were_in_ipython">[docs]</a><span class="k">def</span> <span class="nf">were_in_ipython</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Call ipython to make sure we&#39;re really in it.&quot;&quot;&quot;</span>
     <span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">shell</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">shell</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">NotInIPythonError</span></div>
     <span class="c1"># (&#39;Not in IPython.&#39;)</span>
 
 
-<div class="viewcode-block" id="provided_or_last"><a class="viewcode-back" href="../../../util/pager2.html#default_profile.util.pager2.provided_or_last">[docs]</a><span class="k">def</span> <span class="nf">provided_or_last</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="provided_or_last"><a class="viewcode-back" href="../../../util/pager2.html#default_profile.util.pager2.provided_or_last">[docs]</a><span class="k">def</span> <span class="nf">provided_or_last</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Either run a provided code_cell from a user or rerun their last input.</span>
 
 <span class="sd">    Parameters</span>
@@ -161,10 +161,10 @@
 <span class="sd">    :attr:`last_execution_succeeded`.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">shell</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">shell</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">s</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="n">code_to_page</span> <span class="o">=</span> <span class="n">shell</span><span class="o">.</span><span class="n">find_user_code</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">skip_encoding_cookie</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">s</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">code_to_page</span> <span class="o">=</span> <span class="n">shell</span><span class="o">.</span><span class="n">find_user_code</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">skip_encoding_cookie</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">code_to_page</span> <span class="o">=</span> <span class="n">shell</span><span class="o">.</span><span class="n">_i</span>
 
@@ -172,7 +172,7 @@
 
 
 <div class="viewcode-block" id="c"><a class="viewcode-back" href="../../../util/pager2.html#default_profile.util.pager2.c">[docs]</a><span class="nd">@line_magic</span>
-<span class="k">def</span> <span class="nf">c</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">c</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Intentionally abbreviated function call to `%pycat`.</span>
 
 <span class="sd">    This implementation has the added benefit of wrapping everything in a</span>
@@ -276,7 +276,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Nov 27, 2019.
+      Last updated on Dec 01, 2019.
     </div>
   </body>
 </html>
