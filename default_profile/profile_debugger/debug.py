@@ -11,18 +11,16 @@ pdb.Restart = class Restart(builtins.Exception)
    Causes a debugger to be restarted for the debugged python program.
 
 """
-from bdb import BdbQuit
+import getopt
 import os
 import sys
 import traceback
-import getopt
-
-
+from bdb import BdbQuit
 from contextlib import contextmanager
 
+from IPython import get_ipython
 from IPython.terminal.embed import InteractiveShellEmbed
 from IPython.terminal.ipapp import TerminalIPythonApp
-from IPython import get_ipython
 
 __version__ = "0.10.3"
 
@@ -98,22 +96,6 @@ def launch_ipdb_on_exception():
         pass
 
 
-_usage = """\
-usage: python -m ipdb [-c command] ... pyfile [arg] ...
-
-Debug the Python program given by pyfile.
-
-Initial commands are read from .pdbrc files in your home directory
-and in the current directory, if they exist.  Commands supplied with
--c are executed after commands from .pdbrc files.
-
-To let the script run until an exception occurs, use '-c continue'.
-
-To let the script run up to a given line 'X' in the debugged file, use '-c until X'.
-
-ipdb version %s.""" % __version__
-
-
 def main():
     from pdb import Restart
 
@@ -122,8 +104,7 @@ def main():
     commands = []
     for opt, optarg in opts:
         if opt in ['-h', '--help']:
-            print(_usage)
-            sys.exit()
+            getopt.error(: )
         elif opt in ['-c', '--command']:
             commands.append(optarg)
 
@@ -146,7 +127,7 @@ def main():
     # changed by the user from the command line. There is a "restart" command
     # which allows explicit specification of command line arguments.
     pdb = _init_pdb(commands=commands)
-    while 1:
+    while True:
         try:
             pdb._runscript(mainpyfile)
             if pdb._user_requested_quit:

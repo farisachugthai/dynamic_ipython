@@ -111,7 +111,7 @@
 
 <div class="viewcode-block" id="startjob"><a class="viewcode-back" href="../../../jobcontrol.html#default_profile.extensions.job_control.startjob">[docs]</a><span class="k">def</span> <span class="nf">startjob</span><span class="p">(</span><span class="n">job</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Initialize an &#39;IpyPopen&#39; instance.&quot;&quot;&quot;</span>
-    <span class="n">p</span> <span class="o">=</span> <span class="n">IpyPopen</span><span class="p">(</span><span class="n">shlex</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">job</span><span class="p">),</span> <span class="n">stdout</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">IpyPopen</span><span class="p">(</span><span class="n">shlex</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">job</span><span class="p">),</span> <span class="n">stdout</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">p</span><span class="o">.</span><span class="n">line</span> <span class="o">=</span> <span class="n">job</span>
     <span class="k">return</span> <span class="n">p</span></div>
 
@@ -119,7 +119,7 @@
 <div class="viewcode-block" id="AsyncJobQ"><a class="viewcode-back" href="../../../jobcontrol.html#default_profile.extensions.job_control.AsyncJobQ">[docs]</a><span class="k">class</span> <span class="nc">AsyncJobQ</span><span class="p">(</span><span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;An asynchronous job queue.&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="AsyncJobQ.__init__"><a class="viewcode-back" href="../../../jobcontrol.html#default_profile.extensions.job_control.AsyncJobQ.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="AsyncJobQ.__init__"><a class="viewcode-back" href="../../../jobcontrol.html#default_profile.extensions.job_control.AsyncJobQ.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize the class.</span>
 
 <span class="sd">        Parameters</span>
@@ -132,7 +132,7 @@
         <span class="c1"># threading.Thread.__init__(self)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">Queue</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">output</span> <span class="o">=</span> <span class="n">output</span> <span class="ow">or</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">stop</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="AsyncJobQ.run"><a class="viewcode-back" href="../../../jobcontrol.html#default_profile.extensions.job_control.AsyncJobQ.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -143,7 +143,7 @@
                 <span class="k">continue</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;** Task started: &#39;</span><span class="si">%s</span><span class="s2">&#39; - </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">cwd</span><span class="p">))</span>
 
-            <span class="n">p</span> <span class="o">=</span> <span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">STDOUT</span><span class="p">,</span> <span class="n">cwd</span><span class="o">=</span><span class="n">cwd</span><span class="p">)</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">STDOUT</span><span class="p">,</span> <span class="n">cwd</span><span class="o">=</span><span class="n">cwd</span><span class="p">)</span>
             <span class="n">out</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;** Task complete: &#39;</span><span class="si">%s</span><span class="s2">&#39;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">cmd</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">out</span><span class="p">)</span></div>
@@ -156,27 +156,27 @@
         <span class="sd">&quot;&quot;&quot;Would this be better implemented as the ``__iter__`` dunder?&quot;&quot;&quot;</span>
         <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">:</span>
             <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-            <span class="k">print</span><span class="p">(</span><span class="n">item</span><span class="p">)</span></div></div>
+            <span class="nb">print</span><span class="p">(</span><span class="n">item</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="jobqueue_f"><a class="viewcode-back" href="../../../jobcontrol.html#default_profile.extensions.job_control.jobqueue_f">[docs]</a><span class="k">def</span> <span class="nf">jobqueue_f</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Create a jobqueue.&quot;&quot;&quot;</span>
     <span class="k">global</span> <span class="n">_jobq</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">_jobq</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span>
+        <span class="nb">print</span><span class="p">(</span>
             <span class="s2">&quot;Starting jobqueue - do &#39;&amp;some_long_lasting_system_command&#39; to enqueue&quot;</span>
         <span class="p">)</span>
         <span class="n">_jobq</span> <span class="o">=</span> <span class="n">AsyncJobQ</span><span class="p">()</span>
-        <span class="n">_jobq</span><span class="o">.</span><span class="n">setDaemon</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">_jobq</span><span class="o">.</span><span class="n">setDaemon</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">_jobq</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
         <span class="n">ip</span><span class="o">.</span><span class="n">jobq</span> <span class="o">=</span> <span class="n">_jobq</span><span class="o">.</span><span class="n">add</span>
         <span class="k">return</span>
     <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;stop&#39;</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Stopping and clearing jobqueue, %jobqueue start to start again&quot;</span><span class="p">)</span>
-        <span class="n">_jobq</span><span class="o">.</span><span class="n">stop</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Stopping and clearing jobqueue, %jobqueue start to start again&quot;</span><span class="p">)</span>
+        <span class="n">_jobq</span><span class="o">.</span><span class="n">stop</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">return</span>
     <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;start&#39;</span><span class="p">:</span>
-        <span class="n">_jobq</span><span class="o">.</span><span class="n">stop</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="n">_jobq</span><span class="o">.</span><span class="n">stop</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">return</span></div>
 
 
@@ -226,16 +226,16 @@
     <span class="n">ip</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getapi</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;clear&#39;</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">ip</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">keys</span><span class="p">(</span><span class="s1">&#39;tasks/*&#39;</span><span class="p">):</span>
-            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Clearing&quot;</span><span class="p">,</span> <span class="n">ip</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Clearing&quot;</span><span class="p">,</span> <span class="n">ip</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
             <span class="k">del</span> <span class="n">ip</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
         <span class="k">return</span>
 
     <span class="n">ents</span> <span class="o">=</span> <span class="n">job_list</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">ents</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;No tasks running&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No tasks running&quot;</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">pid</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">cwd</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">ents</span><span class="p">:</span>
         <span class="n">dur</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t</span><span class="p">)</span>
-        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">: &#39;</span><span class="si">%s</span><span class="s2">&#39; (</span><span class="si">%s</span><span class="s2">) </span><span class="si">%d</span><span class="s2">:</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">cwd</span><span class="p">,</span> <span class="n">dur</span> <span class="o">/</span> <span class="mi">60</span><span class="p">,</span> <span class="n">dur</span> <span class="o">%</span> <span class="mi">60</span><span class="p">))</span></div>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">: &#39;</span><span class="si">%s</span><span class="s2">&#39; (</span><span class="si">%s</span><span class="s2">) </span><span class="si">%d</span><span class="s2">:</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">cwd</span><span class="p">,</span> <span class="n">dur</span> <span class="o">/</span> <span class="mi">60</span><span class="p">,</span> <span class="n">dur</span> <span class="o">%</span> <span class="mi">60</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="magic_kill"><a class="viewcode-back" href="../../../jobcontrol.html#default_profile.extensions.job_control.magic_kill">[docs]</a><span class="k">def</span> <span class="nf">magic_kill</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
@@ -278,9 +278,9 @@
 
 <div class="viewcode-block" id="determine_use_shell"><a class="viewcode-back" href="../../../jobcontrol.html#default_profile.extensions.job_control.determine_use_shell">[docs]</a><span class="k">def</span> <span class="nf">determine_use_shell</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">all_shell_commands</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Refactor jobctrl_shellcmd.&quot;&quot;&quot;</span>
-    <span class="n">cmdname</span> <span class="o">=</span> <span class="n">command</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">cmdname</span> <span class="o">=</span> <span class="n">command</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">cmdname</span> <span class="ow">in</span> <span class="n">all_shell_commands</span> <span class="ow">or</span> <span class="s1">&#39;|&#39;</span> <span class="ow">in</span> <span class="n">command</span> <span class="ow">or</span> <span class="s1">&#39;&gt;&#39;</span> <span class="ow">in</span> <span class="n">command</span> <span class="ow">or</span> <span class="s1">&#39;&lt;&#39;</span> <span class="ow">in</span> <span class="n">command</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">True</span></div>
+        <span class="k">return</span> <span class="kc">True</span></div>
 
 
 <div class="viewcode-block" id="jobctrl_shellcmd"><a class="viewcode-back" href="../../../jobcontrol.html#default_profile.extensions.job_control.jobctrl_shellcmd">[docs]</a><span class="k">def</span> <span class="nf">jobctrl_shellcmd</span><span class="p">(</span><span class="n">ip</span><span class="p">,</span> <span class="n">cmd</span><span class="p">):</span>
@@ -291,7 +291,7 @@
     <span class="n">cmd</span> <span class="o">=</span> <span class="n">cmd</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
     <span class="n">use_shell</span> <span class="o">=</span> <span class="n">determine_use_shell</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">shell_internal_commands</span><span class="p">)</span>
 
-    <span class="n">jobentry</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">jobentry</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="c1"># There HAS to be a better way of doing this</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">p</span> <span class="o">=</span> <span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="n">use_shell</span><span class="p">)</span>
@@ -302,7 +302,7 @@
             <span class="k">return</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># have to go via shell, sucks</span>
-            <span class="n">p</span> <span class="o">=</span> <span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="n">jobentry</span> <span class="o">=</span> <span class="s1">&#39;tasks/t&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">pid</span><span class="p">)</span>
     <span class="c1"># ipython doesn&#39;t have a db attribute anymore</span>
@@ -332,7 +332,7 @@
         <span class="k">def</span> <span class="nf">kill_process</span><span class="p">(</span><span class="n">pid</span><span class="p">):</span>
             <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;kill -9 </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">pid</span><span class="p">)</span>
 
-    <span class="n">_jobq</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">_jobq</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
 
     <span class="n">install</span><span class="p">()</span>
@@ -406,7 +406,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Nov 27, 2019.
+      Last updated on Dec 01, 2019.
     </div>
   </body>
 </html>

@@ -42,7 +42,8 @@
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../startup.html" accesskey="U">default_profile.startup</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -62,7 +63,7 @@
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
     <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span>
     <span class="n">style</span><span class="o">=</span><span class="s2">&quot;%&quot;</span><span class="p">,</span>
-    <span class="n">format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%(created)f</span><span class="s2"> : </span><span class="si">%(module)s</span><span class="s2"> : </span><span class="si">%(levelname)s</span><span class="s2"> : </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%(created)f</span><span class="s2"> : </span><span class="si">%(module)s</span><span class="s2"> : </span><span class="si">%(levelname)s</span><span class="s2"> : </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span>
     <span class="n">handlers</span><span class="o">=</span><span class="p">[</span><span class="n">ROOT_HANDLER_PD</span><span class="p">],</span>
 <span class="p">)</span>
 
@@ -85,9 +86,9 @@
         <span class="s2">&quot;display&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;colheader_justify&quot;</span><span class="p">:</span> <span class="s2">&quot;right&quot;</span><span class="p">,</span>
             <span class="s2">&quot;encoding&quot;</span><span class="p">:</span> <span class="s2">&quot;utf-8&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;expand_frame_repr&quot;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>  <span class="c1"># Don&#39;t wrap to multiple pages</span>
-            <span class="s2">&quot;html.table_schema&quot;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-            <span class="s2">&quot;max_columns&quot;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+            <span class="s2">&quot;expand_frame_repr&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>  <span class="c1"># Don&#39;t wrap to multiple pages</span>
+            <span class="s2">&quot;html.table_schema&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;max_columns&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
             <span class="s2">&quot;max_colwidth&quot;</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span>
             <span class="s2">&quot;max_rows&quot;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
             <span class="s2">&quot;max_seq_items&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
@@ -95,7 +96,7 @@
             <span class="s2">&quot;show_dimensions&quot;</span><span class="p">:</span> <span class="s2">&quot;truncate&quot;</span><span class="p">,</span>
         <span class="p">},</span>
         <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;chained_assignment&quot;</span><span class="p">:</span> <span class="bp">None</span>
+            <span class="s2">&quot;chained_assignment&quot;</span><span class="p">:</span> <span class="kc">None</span>
             <span class="c1"># Controls SettingWithCopyWarning</span>
         <span class="p">},</span>
     <span class="p">}</span>
@@ -103,7 +104,7 @@
     <span class="c1"># XXX: Did i mean to do this twice?</span>
     <span class="k">for</span> <span class="n">category</span><span class="p">,</span> <span class="n">option</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="k">for</span> <span class="n">op</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">option</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;{category}.{op}&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>  <span class="c1"># Python 3.6+</span></div>
+            <span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{category}</span><span class="s2">.</span><span class="si">{op}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>  <span class="c1"># Python 3.6+</span></div>
 
 
 <div class="viewcode-block" id="DisplayHTML"><a class="viewcode-back" href="../../../startup/42_pandas.html#default_profile.startup.42_pandas_init.DisplayHTML">[docs]</a><span class="k">class</span> <span class="nc">DisplayHTML</span><span class="p">:</span>
@@ -111,7 +112,7 @@
 
     <span class="n">template</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">    &lt;div style=&quot;float: left; padding: 10px;&quot;&gt;</span>
-<span class="s2">    &lt;p style=&#39;font-family:&quot;Courier New&quot;, Courier, monospace&#39;&gt;{0}&lt;/p&gt;{1}</span>
+<span class="s2">    &lt;p style=&#39;font-family:&quot;Courier New&quot;, Courier, monospace&#39;&gt;</span><span class="si">{0}</span><span class="s2">&lt;/p&gt;</span><span class="si">{1}</span><span class="s2"></span>
 <span class="s2">    &lt;/div&gt;</span>
 <span class="s2">    &quot;&quot;&quot;</span>
 
@@ -134,12 +135,12 @@
 
     <span class="k">try</span><span class="p">:</span>  <span class="c1"># Import numexpr before pandas if possible</span>
         <span class="kn">import</span> <span class="nn">numexpr</span>
-    <span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="ne">ModuleNotFoundError</span><span class="p">):</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="n">ModuleNotFoundError</span><span class="p">):</span>
         <span class="k">pass</span>
 
     <span class="k">try</span><span class="p">:</span>
-        <span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
-    <span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="ne">ModuleNotFoundError</span><span class="p">):</span>
+        <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="n">ModuleNotFoundError</span><span class="p">):</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Pandas not installed.&quot;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">pandas_init</span><span class="p">()</span>
@@ -168,6 +169,10 @@
     <ul>
       <li><a href="../../index.html">Module code</a>
         <ul>
+      <li><a href="../startup.html">default_profile.startup</a>
+        <ul>
+        </ul>
+      </li>
         </ul>
       </li>
     </ul>
@@ -209,11 +214,12 @@
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../startup.html" >default_profile.startup</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Nov 27, 2019.
+      Last updated on Dec 01, 2019.
     </div>
   </body>
 </html>

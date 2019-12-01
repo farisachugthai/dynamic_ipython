@@ -4,8 +4,8 @@
 
 Note
 -----
-
 Trying to rework this over in ../extensions/namespaces.py
+
 """
 import functools
 import os
@@ -55,7 +55,7 @@ def setup_fzf(fzf_alias=None):
         #     ('fzf', '$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS'))
         fzf_alias = (
             "fzf",
-            "rg --pretty --hidden --max-columns-preview --no-heading --no-messages --no-column --no-line-number -C 0 -e ^.* | fzf ",
+            "rg --pretty --hidden --max-columns-preview --no-heading --no-messages --no-column -C 0 -e ^ | fzf --ansi --multi",
         )
 
     elif shutil.which("fzf") and shutil.which("ag"):
@@ -94,11 +94,9 @@ def busybox_hack(shell):
 def main():
     """Adding fzf.
 
+    >>> from collections import deque
+    >>> user_aliases = deque()
     >>> user_aliases = [('rg', 'rg --hidden --no-messages %l')]
-    >>>
-
-    ^----- Potentially useful syntax. Also did that after initializing it as
-    a :class:`collections.deque`.
 
     """
     shell = get_ipython()

@@ -22,7 +22,10 @@ from .startup import ask_for_import
 # from .util import module_log, machine, pager2, ipython_get_history
 
 default_log_format = '%(created)f : %(module)s : %(levelname)s : %(message)s'
-PROFILE_DEFAULT_LOG = logging.getLogger('default_profile')
+PROFILE_DEFAULT_LOG = logging.getLogger(name='default_profile')
 PROFILE_DEFAULT_LOG.setLevel(logging.WARNING)
-PROFILE_DEFAULT_LOG.addHandler(logging.StreamHandler().setLevel(
-    logging.WARNING))
+PROFILE_DEFAULT_HANDLER = logging.StreamHandler()
+PROFILE_DEFAULT_HANDLER.setLevel(logging.WARNING)
+PROFILE_DEFAULT_FORMATTER = logging.Formatter(fmt=default_log_format)
+PROFILE_DEFAULT_HANDLER.addFilter(logging.Filterer())
+# PROFILE_DEFAULT_LOG

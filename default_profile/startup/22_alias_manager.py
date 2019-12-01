@@ -1,5 +1,7 @@
 import reprlib
 
+from traitlets import List, Instance
+
 from IPython import get_ipython
 from IPython.core.alias import AliasManager
 from IPython.core.interactiveshell import InteractiveShellABC
@@ -13,7 +15,19 @@ class DynamicAliasManager(AliasManager):
     def __init__(self, ip=None, **kwargs):
         self.ip = ip if ip else get_ipython()
         super().__init__(shell=self.ip, **kwargs)
+        self.linemagics = self.shell.magics_manager.magics['line']
         self.init_aliases()
+
+    def init_aliases(self):
+        # Load default & user aliases
+        for name, cmd in self.default_aliases + self.user_aliases:
+            if cmd.startswith('ls ') and self.shell.colors == 'NoColor':
+                cmd = cmd.replace(' --color', '')
+            self.soft_define_alias(name, cmd)
+
+    # @property
+    def aliases(self):
+        return {n: func.cmd for n, func in self.linemagics.items() if isinstance(func, Alias)}
 
     def __repr__(self):
         return "".format(reprlib.repr(self.aliases))

@@ -65,13 +65,13 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">re</span>
 
-<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(name)-12s</span><span class="s1">: </span><span class="si">%(levelname)-8s</span><span class="s1"> </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(name)-12s</span><span class="s1">: </span><span class="si">%(levelname)-8s</span><span class="s1"> </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">sphinx</span> <span class="kn">import</span> <span class="n">addnodes</span>
     <span class="c1"># from sphinx.domains.std import StandardDomain</span>
     <span class="kn">from</span> <span class="nn">sphinx.roles</span> <span class="kn">import</span> <span class="n">XRefRole</span>
-<span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="ne">ModuleNotFoundError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="n">ModuleNotFoundError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
     <span class="c1"># This has to be defined or else the module, and as a result,</span>
     <span class="c1"># the package come crashing down</span>
@@ -80,16 +80,16 @@
 <span class="k">try</span><span class="p">:</span>
     <span class="c1"># Let&#39;s get a more useful error than raising exception</span>
     <span class="kn">from</span> <span class="nn">IPython.core.error</span> <span class="kn">import</span> <span class="n">UsageError</span>
-<span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="ne">ModuleNotFoundError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="n">ModuleNotFoundError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
 
     <span class="k">class</span> <span class="nc">UsageError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
-        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">err</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">err</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">err</span> <span class="o">=</span> <span class="n">err</span>
             <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-            <span class="k">return</span> <span class="s1">&#39;{}</span><span class="se">\t</span><span class="s1"> </span><span class="se">\t</span><span class="s1">{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="se">\t</span><span class="s1"> </span><span class="se">\t</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">err</span><span class="p">)</span>
 
@@ -154,14 +154,14 @@
     <span class="n">app</span><span class="o">.</span><span class="n">add_object_type</span><span class="p">(</span>
         <span class="s1">&#39;magic&#39;</span><span class="p">,</span> <span class="s1">&#39;magic&#39;</span><span class="p">,</span> <span class="s1">&#39;pair: </span><span class="si">%s</span><span class="s1">; magic command&#39;</span><span class="p">,</span> <span class="n">parse_magic</span>
     <span class="p">)</span>
-    <span class="n">app</span><span class="o">.</span><span class="n">add_role_to_domain</span><span class="p">(</span><span class="s1">&#39;std&#39;</span><span class="p">,</span> <span class="s1">&#39;linemagic&#39;</span><span class="p">,</span> <span class="n">LineMagicRole</span><span class="p">(),</span> <span class="n">override</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">add_role_to_domain</span><span class="p">(</span><span class="s1">&#39;std&#39;</span><span class="p">,</span> <span class="s1">&#39;linemagic&#39;</span><span class="p">,</span> <span class="n">LineMagicRole</span><span class="p">(),</span> <span class="n">override</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="n">app</span><span class="o">.</span><span class="n">add_object_type</span><span class="p">(</span>
         <span class="s1">&#39;cellmagic&#39;</span><span class="p">,</span> <span class="s1">&#39;cellmagic&#39;</span><span class="p">,</span> <span class="s1">&#39;pair: </span><span class="si">%s</span><span class="s1">; cell magic&#39;</span><span class="p">,</span> <span class="n">parse_cell_magic</span>
     <span class="p">)</span>
-    <span class="n">app</span><span class="o">.</span><span class="n">add_role_to_domain</span><span class="p">(</span><span class="s1">&#39;std&#39;</span><span class="p">,</span> <span class="s1">&#39;cellmagic&#39;</span><span class="p">,</span> <span class="n">CellMagicRole</span><span class="p">(),</span> <span class="n">override</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">add_role_to_domain</span><span class="p">(</span><span class="s1">&#39;std&#39;</span><span class="p">,</span> <span class="s1">&#39;cellmagic&#39;</span><span class="p">,</span> <span class="n">CellMagicRole</span><span class="p">(),</span> <span class="n">override</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;parallel_read_safe&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="s1">&#39;parallel_write_safe&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;parallel_read_safe&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;parallel_write_safe&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
     <span class="k">return</span> <span class="n">metadata</span></div>
 </pre></div>
 
@@ -238,7 +238,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Nov 27, 2019.
+      Last updated on Dec 01, 2019.
     </div>
   </body>
 </html>

@@ -1,5 +1,7 @@
 {{ fullname | escape | underline}}
 
+{# yo if this is supposed to be a jinja template tjen underline doesnt seem to be a filter #}q
+
 .. automodule:: {{ fullname }}
    :members:
    :undoc-members:

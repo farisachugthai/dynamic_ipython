@@ -613,7 +613,7 @@ c.HistoryManager.db_log_output = True
 
 # 05/18/19: I'm enabling this as it overrides the logic used for profile in
 # the `BaseIPythonApplication` section
-c.ProfileDir.location = os.path.join(home, '', 'ipython')
+c.ProfileDir.location = os.path.join(home, '', '.ipython')
 
 # ----------------------------------------------------------------------------
 # BaseFormatter(Configurable) configuration

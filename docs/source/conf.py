@@ -88,6 +88,10 @@ DOCS = Path(__file__).resolve().parent.parent
 # DOCS_LOGGER = logging.getLogger('docs.source').getChild('conf')
 DOCS_LOGGER = logging.getLogger(name=__name__)
 
+# Gotta hack at sys.path a little
+ROOT = DOCS.parent
+JUPYTER = ROOT.joinpath('jupyter_conf')
+sys.path.insert(0, str(JUPYTER))
 
 def ask_for_import(mod):
     """Try/except for importing modules."""
@@ -482,7 +486,7 @@ autosummary_generate = True
 
 autosummary_imported_members = False
 
-autoclass_content = u'both'
+# autoclass_content = u'both'
 autodoc_member_order = u'bysource'
 
 autodoc_docstring_signature = True
@@ -493,8 +497,8 @@ else:
     autodoc_default_options = {
         'members': True,
         'member-order': 'bysource',
+        'undoc-members': True,
         'special-members': '__init__',
-        'exclude-members': '__weakref__',
     }
 
 autodoc_inherit_docstrings = False

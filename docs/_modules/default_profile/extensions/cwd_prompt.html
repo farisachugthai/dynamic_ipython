@@ -70,7 +70,7 @@
 <span class="kn">from</span> <span class="nn">IPython.terminal.prompts</span> <span class="kn">import</span> <span class="n">Prompts</span><span class="p">,</span> <span class="n">Token</span>
 
 
-<div class="viewcode-block" id="MyPrompt"><a class="viewcode-back" href="../../../extensions/default_profile.extensions.cwd_prompt.html#default_profile.extensions.cwd_prompt.MyPrompt">[docs]</a><span class="nd">@magics_class</span>
+<div class="viewcode-block" id="MyPrompt"><a class="viewcode-back" href="../../../api/default_profile.extensions.cwd_prompt.html#default_profile.extensions.cwd_prompt.MyPrompt">[docs]</a><span class="nd">@magics_class</span>
 <span class="k">class</span> <span class="nc">MyPrompt</span><span class="p">(</span><span class="n">Prompts</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Create a customized instance of an IPython prompt.</span>
 
@@ -78,28 +78,28 @@
 
 <span class="sd">    Unsure of whether I need that decorator though.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="MyPrompt.in_prompt_tokens"><a class="viewcode-back" href="../../../extensions/default_profile.extensions.cwd_prompt.html#default_profile.extensions.cwd_prompt.MyPrompt.in_prompt_tokens">[docs]</a>    <span class="k">def</span> <span class="nf">in_prompt_tokens</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cli</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="MyPrompt.in_prompt_tokens"><a class="viewcode-back" href="../../../api/default_profile.extensions.cwd_prompt.html#default_profile.extensions.cwd_prompt.MyPrompt.in_prompt_tokens">[docs]</a>    <span class="k">def</span> <span class="nf">in_prompt_tokens</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cli</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">[(</span><span class="n">Token</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()),</span> <span class="p">(</span><span class="n">Token</span><span class="o">.</span><span class="n">Prompt</span><span class="p">,</span> <span class="s1">&#39;&gt;&gt;&gt;&#39;</span><span class="p">)]</span></div></div>
 
 
-<div class="viewcode-block" id="load_ipython_extension"><a class="viewcode-back" href="../../../extensions/default_profile.extensions.cwd_prompt.html#default_profile.extensions.cwd_prompt.load_ipython_extension">[docs]</a><span class="k">def</span> <span class="nf">load_ipython_extension</span><span class="p">(</span><span class="n">shell</span><span class="p">):</span>
+<div class="viewcode-block" id="load_ipython_extension"><a class="viewcode-back" href="../../../api/default_profile.extensions.cwd_prompt.html#default_profile.extensions.cwd_prompt.load_ipython_extension">[docs]</a><span class="k">def</span> <span class="nf">load_ipython_extension</span><span class="p">(</span><span class="n">shell</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Set the prompt to MyPrompt and save the old prompt in the variable new_prompts.old_prompts.&quot;&quot;&quot;</span>
     <span class="n">new_prompts</span> <span class="o">=</span> <span class="n">MyPrompt</span><span class="p">(</span><span class="n">shell</span><span class="p">)</span>
     <span class="n">new_prompts</span><span class="o">.</span><span class="n">old_prompts</span> <span class="o">=</span> <span class="n">shell</span><span class="o">.</span><span class="n">prompts</span>
     <span class="n">shell</span><span class="o">.</span><span class="n">prompts</span> <span class="o">=</span> <span class="n">new_prompts</span></div>
 
 
-<div class="viewcode-block" id="unload_ipython_extension"><a class="viewcode-back" href="../../../extensions/default_profile.extensions.cwd_prompt.html#default_profile.extensions.cwd_prompt.unload_ipython_extension">[docs]</a><span class="k">def</span> <span class="nf">unload_ipython_extension</span><span class="p">(</span><span class="n">shell</span><span class="p">):</span>
+<div class="viewcode-block" id="unload_ipython_extension"><a class="viewcode-back" href="../../../api/default_profile.extensions.cwd_prompt.html#default_profile.extensions.cwd_prompt.unload_ipython_extension">[docs]</a><span class="k">def</span> <span class="nf">unload_ipython_extension</span><span class="p">(</span><span class="n">shell</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Recover the old prompt.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">shell</span><span class="o">.</span><span class="n">prompts</span><span class="p">,</span> <span class="s1">&#39;old_prompts&#39;</span><span class="p">):</span>
-        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;cannot unload&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;cannot unload&quot;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">shell</span><span class="o">.</span><span class="n">prompts</span> <span class="o">=</span> <span class="n">shell</span><span class="o">.</span><span class="n">prompts</span><span class="o">.</span><span class="n">old_prompts</span></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">_ip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">_ip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">load_ipython_extension</span><span class="p">(</span><span class="n">_ip</span><span class="p">)</span>
 </pre></div>
 
@@ -133,64 +133,25 @@
 </li>
 
 
+
 <h3><a href="../../../index.html">Table of Contents</a></h3>
 <div>&nbsp;</div>
 <div id="sidebartoc">
-    <p class="caption"><span class="caption-text">Tutorial</span></p>
+    <p class="caption"><span class="caption-text">API</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../sphinxext/index.html">Sphinx Extensions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/ipython_sphinx_directive.html">IPython Sphinx Directive</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/lexer.html">New IPython Console Lexer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/custom_doctests.html">Custom Doctests</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/configtraits.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">configtraits</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/magics.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">magics</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/make.html">Make — Automated Documentation Builder</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev.html">Developers Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sphinxext/index.html">Sphinx Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../startup/index.html">IPython Startup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../util/index.html">IPython Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../kernel.html">IPython Kernel</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../jupyter/index.html">jupyter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Extensions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../jobcontrol.html">Job Control</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../subcommands.html">Subcommands</a></li>
-</ul>
-<p class="caption"><span class="caption-text">API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../startup/index.html">IPython Startup</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../startup/rehashx.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">01_rehashx</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../startup/easy_import.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">04_easy_import</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../startup/ipython-logger.html">05_log — IPython logger</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../startup/help_helpers.html">06_Help_Helpers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../startup/aliases.html">System Aliases</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../startup/fzf.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">21_fzf</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../startup/setup_readline.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">30_setup_readline</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../startup/41_numpy.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">numpy</span></code> Initialization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../startup/42_pandas.html">Pandas Initialization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../startup/matplotlib_rc.html">Matplotlib Startup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../startup/sysexcept.html">Customized Exceptions</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../../util/index.html">IPython Utilities</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../util/copytree.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">copytree</span></code> module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../util/ipython_get_history.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ipython_get_history</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../util/machine.html">machine</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../util/module_log.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">module_log</span></code> module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../util/nb_stripper.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">nb_stripper</span></code> module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../util/pager2.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pager2</span></code> module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../util/paths.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paths</span></code> module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../util/profile_override.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">profile_override</span></code> module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../util/timer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">timer</span></code> module</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../../kernel.html">IPython Kernel</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../jupyter/index.html">Jupyter</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../jupyter/qtconsole.html">Jupyter QTConsole</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../jupyter/notebook.html">Jupyter Notebook</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev.html">Developers Notes</a></li>
 </ul>
 
     
 </div>
-
 
         </div>
       </div>
@@ -210,7 +171,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Nov 11, 2019.
+      Last updated on Dec 01, 2019.
     </div>
   </body>
 </html>
