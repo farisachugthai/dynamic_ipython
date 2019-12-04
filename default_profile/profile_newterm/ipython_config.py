@@ -20,6 +20,7 @@ Notes
 Therefore that function shouldn't be used anywhere in this file.
 
 """
+from IPython.terminal.prompts import ClassicPrompts
 import builtins
 import logging
 import os
@@ -52,6 +53,7 @@ try:
 except:  # noqa
     pass
 
+
 def get_home():
     """Define the user's :envvar:`HOME`."""
     try:
@@ -64,12 +66,15 @@ def get_home():
 home = get_home()
 
 if ModuleNotFoundError not in dir(builtins):
-    # I think __traceback__ or something is a usable dunder method for exceptions
+
     class ModuleNotFoundError(ImportError):
         """Try to backport this for python3.6<."""
 
+        __module__ = builtins
+
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
+
 
 # def loaded_config(loaded=None):
 #     """Just noticed IPython loads this file twice."""
@@ -158,14 +163,7 @@ else:
 #  When False, pylab mode should not import any names into the user namespace.
 # c.InteractiveShellApp.pylab_import_all = True
 
-# Reraise exceptions encountered loading IPython extensions?
-# if you realize this is a bad idea please leave a note why
-# i'm actually curious
-
 c.InteractiveShellApp.reraise_ipython_extension_failures = False
-
-# I'm assuming these are related and please don't crash the interpreter
-# from a simple mistake
 
 # ----------------------------------------------------------------------------
 # Application(SingletonConfigurable) configuration
@@ -218,7 +216,7 @@ else:
 # c.BaseIPythonApplication.overwrite = False
 
 # The IPython profile to use.
-# c.BaseIPythonApplication.profile = 'default'
+c.BaseIPythonApplication.profile = 'newterm'
 
 # Create a massive crash report when IPython encounters what may be an internal
 #  error.  The default is to append a short message to the usual traceback
@@ -359,25 +357,6 @@ c.InteractiveShell.history_load_length = 10000
 # Automatically call the pdb debugger after every exception.
 # c.InteractiveShell.pdb = False
 
-# from time import time
-# Is the prompt manager class ignored? Yes!
-# c.PromptManager.in_template = u"{color.LightGreen}{time}{color.Yellow} {color.normal}>>>"
-# Deprecated since IPython 4.0 and ignored since 5.0, set
-# TerminalInteractiveShell.prompts object directly.
-# c.InteractiveShell.prompt_in1 = 'In [\\#]: '
-
-# Deprecated since IPython 4.0 and ignored since 5.0, set
-# TerminalInteractiveShell.prompts object directly.
-# c.InteractiveShell.prompt_in2 = '   .\\D.: '
-
-# Deprecated since IPython 4.0 and ignored since 5.0, set
-# TerminalInteractiveShell.prompts object directly.
-# c.InteractiveShell.prompt_out = 'Out[\\#]: '
-
-# Deprecated since IPython 4.0 and ignored since 5.0, set
-# TerminalInteractiveShell.prompts object directly.
-# c.InteractiveShell.prompts_pad_left = True
-
 c.InteractiveShell.quiet = False
 
 # c.InteractiveShell.separate_in = '\n'
@@ -389,16 +368,6 @@ c.InteractiveShell.quiet = False
 # Show rewritten input, e.g. for autocall.
 # c.InteractiveShell.show_rewritten_input = True
 
-# Jan 20, 2019: Even with docrepr installed this still ends up raising errors.
-# Need to debug later.
-# c.InteractiveShell.sphinxify_docstring = False
-#  module).
-# c.InteractiveShell.separate_out2 = ''
-
-# Jan 20, 2019: Even with docrepr installed this still ends up raising errors.
-# Need to debug later.
-# c.InteractiveShell.sphinxify_docstring = False
-#  module).
 
 c.InteractiveShell.wildcards_case_sensitive = False
 
@@ -421,20 +390,7 @@ c.TerminalInteractiveShell.confirm_exit = False
 #  documentation for more information.
 c.TerminalInteractiveShell.display_completions = 'column'
 
-# Shortcut style to use at the prompt. 'vi' or 'emacs'.
-# Ah I forgot <C-a> on Tmux and Emacs clobber.
-
-# Well windows doesn't get tmux so.
-
-if platform.system() == 'Windows':
-    c.TerminalInteractiveShell.editing_mode = 'emacs'
-else:
-    if os.environ.get("TMUX"):
-        c.TerminalInteractiveShell.editing_mode = 'vi'
-        # I don't know if this is the right way to do this
-        c.TerminalInteractiveShell.prompt_includes_vi_mode = False
-    else:
-        c.TerminalInteractiveShell.editing_mode = 'emacs'
+c.TerminalInteractiveShell.editing_mode = 'emacs'
 
 # TODO:
 # c_logger.info("Editing Mode:\t {!s}", c.TerminalInteractiveShell.editing_mode)
@@ -488,7 +444,6 @@ else:
 # So this wouldn't be a block of code to build off of but here's something
 # so you can get an idea of what's going on
 
-from IPython.terminal.prompts import ClassicPrompts
 
 class StandardPythonPrompt(ClassicPrompts):
     """Create a no-op class to demonstrate usage of the ClassicPrompts class.
@@ -519,6 +474,7 @@ class StandardPythonPrompt(ClassicPrompts):
 # This mode default to `True` if the `IPY_TEST_SIMPLE_PROMPT` environment
 # variable is set, or the current terminal is not a tty.
 # c.TerminalInteractiveShell.simple_prompt = False
+
 
 # Number of line at the bottom of the screen to reserve for the completion menu
 c.TerminalInteractiveShell.space_for_menu = 6

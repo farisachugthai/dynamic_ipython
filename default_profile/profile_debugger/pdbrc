@@ -20,17 +20,17 @@
     ipdb version 0.10.3.
 
 """
-
 try:
-    import ipdb as pdb
-except (ImportError, ModuleNotFoundError):
-    import pdb
-
-try:
-    from IPython.terminal.debugger import TerminalPdb
-except (ImportError, ModuleNotFoundError):
-    TerminalPdb = None
-
+    import pyreadline
+except:
+    try:
+        import jedi
+    except:
+        pass
+    else:
+        from jedi.utils import setup_readline
+        setup_readline()
+        del jedi
 
 # https://github.com/python/cpython/blob/3.7/Lib/pdb.py#L1380
 # in the do_alias() function it mentions some examples and they sounded like

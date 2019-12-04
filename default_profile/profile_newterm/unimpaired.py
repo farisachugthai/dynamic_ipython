@@ -2,45 +2,21 @@
 # -*- coding: utf-8 -*-
 """
 
-Todo:
-
-(dynamic_ipython) 19:00:17 u0_a144@localhost Wed Nov 27 ~/projects/dynamic_ipython/default_profile
-
-$: ipython --profile=newterm
-[TerminalIPythonApp] WARNING | Error in loading extension: storemagic
-Check your config files in /data/data/com.termux/files/home/projects/dynamic_ipython/default_profile/profile_newterm
-Traceback (most recent call last):
-  File "/data/data/com.termux/files/home/.local/share/virtualenvs/dynamic_ipython-mVJ3Ohov/lib/python3.8/site-packages/IPython/core/shellapp.py", line 261, in init_extensions
-    self.shell.extension_manager.load_extension(ext)
-  File "/data/data/com.termux/files/home/.local/share/virtualenvs/dynamic_ipython-mVJ3Ohov/lib/python3.8/site-packages/IPython/core/extensions.py", line 87, in load_extension
-    if self._call_load_ipython_extension(mod):
-  File "/data/data/com.termux/files/home/.local/share/virtualenvs/dynamic_ipython-mVJ3Ohov/lib/python3.8/site-packages/IPython/core/extensions.py", line 134, in _call_load_ipython_extension
-    mod.load_ipython_extension(self.shell)
-  File "/data/data/com.termux/files/home/.local/share/virtualenvs/dynamic_ipython-mVJ3Ohov/lib/python3.8/site-packages/IPython/extensions/storemagic.py", line 225, in load_ipython_extension
-    ip.register_magics(StoreMagics)
-  File "/data/data/com.termux/files/home/.local/share/virtualenvs/dynamic_ipython-mVJ3Ohov/lib/python3.8/site-packages/IPython/core/magic.py", line 405, in register
-    m = m(shell=self.shell)
-  File "/data/data/com.termux/files/home/.local/share/virtualenvs/dynamic_ipython-mVJ3Ohov/lib/python3.8/site-packages/IPython/extensions/storemagic.py", line 69, in __init__
-    super(StoreMagics, self).__init__(shell=shell)
-  File "/data/data/com.termux/files/home/.local/share/virtualenvs/dynamic_ipython-mVJ3Ohov/lib/python3.8/site-packages/IPython/core/magic.py", line 535, in __init__
-    tab[magic_name] = getattr(self, meth_name)
-AttributeError: 'StoreMagics' object has no attribute 'load_ext'
 
 """
+import traceback
+from IPython.terminal.interactiveshell import TerminalInteractiveShell
+from IPython.extensions.storemagic import StoreMagics
+from IPython.core.magics.basic import BasicMagics
+from IPython import get_ipython
+from traitlets.config.loader import Config
+import traitlets
 import logging
 import os
 from reprlib import Repr
 import sys
 
-logging.basicConfig(level = logging.INFO)
-
-import traitlets
-from traitlets.config.loader import Config
-
-from IPython import get_ipython
-from IPython.core.magics.basic import BasicMagics
-from IPython.extensions.storemagic import StoreMagics
-from IPython.terminal.interactiveshell import TerminalInteractiveShell
+logging.basicConfig(level=logging.INFO)
 
 
 class TerminallyUnimpaired(TerminalInteractiveShell):
@@ -52,9 +28,10 @@ class TerminallyUnimpaired(TerminalInteractiveShell):
     Uhh I'm just gonna add a Config to ensure that it's there.
 
     """
+
     def __repr__(self):
         truncated = Repr().repr(self.__class__.__name__)
-        return ''.format(truncated)
+        return "".format(truncated)
 
     def begin(self):
         """The superclass already defined initialize, initlialized, init_* and start.
@@ -64,6 +41,84 @@ class TerminallyUnimpaired(TerminalInteractiveShell):
         super().initialize()
         if self.config is None:
             self.config = Config()
+
+    @staticmethod
+    def execfile(fname, user_global=None, local=None):
+        """Apparently using global raises an error.
+
+        Could've checked it wasn't reserved I  guess.
+        """
+        local = local if local is not None else user_global
+        with open(fname, "rb") as f:
+            code_obj = compile(f.read(), "<string>", "exec")
+            clean_ns = {}
+            # Are you still allowed to do this?
+            # return exec(code_obj in clean_ns)
+            # nope
+            return exec(code_obj, user_global, local)
+
+    def init_profile_dir(self, profile_dir=None):
+        """Modify this so we have a none argument for profile_dir."""
+        if profile_dir is not None:
+            self.profile_dir = profile_dir
+            return
+        try:
+            self.profile_dir = ProfileDir.create_profile_dir_by_name(
+                self.ipython_dir, "default")
+        except ProfileDirError:
+            self.log.error("Profiledirerror")
+        except BaseException as e:
+            self.log.warning(e)
+
+    def showsyntaxerror(self, filename=None, **kwargs):
+        """Display the syntax error that just occurred.
+
+        How refreshing is it to not have tracebacks intertwined with
+        every other aspect of your application :D
+
+        Parameters
+        ----------
+        filename :
+        **kwargs :
+
+        """
+        # Override for avoid using sys.excepthook PY-12600
+        exception_type, value, tb = sys.exc_info()
+        sys.last_type = exception_type
+        sys.last_value = value
+        sys.last_traceback = tb
+        if filename and exception_type is SyntaxError:
+            # Work hard to stuff the correct filename in the exception
+            try:
+                msg, (dummy_filename, lineno, offset, line) = value.args
+            except ValueError:
+                # Not the format we expect; leave it alone
+                pass
+            else:
+                # Stuff in the right filename
+                value = SyntaxError(msg, (filename, lineno, offset, line))
+                sys.last_value = value
+        _ = traceback.format_exception_only(exception_type, value)
+        sys.stderr.write("".join(_))
+
+    def showtraceback(self, *args, **kwargs):
+        """Display the exception that just occurred."""
+        # Override for avoid using sys.excepthook PY-12600
+        try:
+            exception_type, value, tb = sys.exc_info()
+            sys.last_type = exception_type
+            sys.last_value = value
+            sys.last_traceback = tb
+            tblist = traceback.extract_tb(tb)
+            del tblist[:1]
+            lines = traceback.format_list(tblist)
+            if lines:
+                lines.insert(0, "Traceback (most recent call last):\n")
+            lines.extend(traceback.format_exception_only(
+                exception_type, value))
+        finally:
+            tblist = tb = None
+        sys.stderr.write("".join(lines))
 
 
 # StoreMagics(get_ipython()).unobserve_all()

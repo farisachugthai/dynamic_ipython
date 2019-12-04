@@ -12,6 +12,26 @@ def _ip():
    return get_ipython()
 
 
+def pytest_addoption(parser):
+    """The recommended way of marking tests slow."""
+    parser.addoption('--slow', action='store_true', default=False, help='run slow tests')
+
+
+def pytest_configure(config):
+    config.addinivalue_line('markers', 'slow: mark test as slow to run')
+
+
+def pytest_collection_modifyitems(config, items):
+    if config.getoption('--slow'):
+    # If the option is present, don't skip slow tests.
+        return
+    skip_slow = pytest.mark.skip(reason='only runs when --slow is set')
+    for item in items:
+        if 'slow' in item.keywords:
+            item.add_marker(skip_slow)))))))))
+
+
+# idk if you're supposed to do it this way but eh
 if _ip is None:
    from IPython import start_ipython
    start_ipython()

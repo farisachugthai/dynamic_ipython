@@ -17,6 +17,7 @@ to be quickly and easily understood based on the output of :func:`dir`.
 
 """
 import contextlib
+import logging
 import re
 import sys
 
@@ -40,7 +41,7 @@ def page_help(arg=None):
     Also noting it's the only function in this module that actually needs
     the IPython instance so the imports were moved here.
     """
-    from IPython import get_ipython
+    from IPython.core.getipython import get_ipython
 
     _ip = get_ipython()
     if hasattr(_ip, "pinfo"):
@@ -73,3 +74,35 @@ def grep(obj, pattern=None):
     compiled = re.compile(*pattern)
     attributes = dir(obj)
     yield "\n".join(i for i in attributes if re.search(compiled, i))
+
+
+def dirip():
+    """Accomodations for dir(get_ipython()).
+
+    The list of attributes that the IPython InteractiveShell class has is
+    so long that it requires a pager to see all of it.
+
+    Which is pretty inconvenient.
+
+    This function utilizes the IPython `SList` class to make it easier
+    to work with.
+
+    Methods of note are the :meth:`grep` and ``s``, ``l`` and ``p`` attributes.
+
+    Examples
+    ---------
+    >>> from default_profile.startup import help_helpers_mod
+    >>> i = help_helpers_mod.dirip()
+    >>> i.grep('complete')
+    ['Completer', 'check_complete', 'complete', 'completer', 'init_completer', 'pt_complete_style', 'set_completer_frame', 'set_custom_completer']
+
+    """
+    from IPython.core.getipython import get_ipython
+    shell_attributes = dir(get_ipython())
+    if shell_attributes is None:
+        logging.warning(
+            'Are you in in IPython? get_ipython() did not return anything')
+        return
+    from IPython.utils.text import SList
+    shell_list = SList(shell_attributes)
+    return shell_list

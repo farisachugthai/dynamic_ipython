@@ -20,6 +20,7 @@ Notes
 Therefore that function shouldn't be used anywhere in this file.
 
 """
+from IPython.terminal.prompts import ClassicPrompts
 import builtins
 import logging
 import os
@@ -52,12 +53,18 @@ def get_home():
 home = get_home()
 
 if ModuleNotFoundError not in dir(builtins):
-    # I think __traceback__ or something is a usable dunder method for exceptions
+
     class ModuleNotFoundError(ImportError):
         """Try to backport this for python3.6<."""
 
+        __module__ = "builtins"  # for py3
+
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
+
+        def __repr__(self):
+            return "{}\n{}".format(self.__class__.__name__, self.__traceback__)
+
 
 # def loaded_config(loaded=None):
 #     """Just noticed IPython loads this file twice."""
@@ -229,12 +236,6 @@ c.TerminalIPythonApp.force_interact = False
 # c.TerminalIPythonApp.interactive_shell_class =
 # 'IPython.terminal.interactiveshell.TerminalInteractiveShell'
 
-# I think the original code is above.
-# shell_cls = 'IPython.terminal.interactiveshell.TerminalInteractiveShell'
-# c.TerminalIPythonApp.interactive_shell_class = shell_cls
-# ---
-# Damn that seems like some real useful code.
-
 # Start IPython quickly by skipping the loading of config files.
 # c.TerminalIPythonApp.quick = False
 
@@ -327,7 +328,6 @@ c.InteractiveShell.history_length = 50000
 #  startup.
 c.InteractiveShell.history_load_length = 10000
 
-# c.InteractiveShell.ipython_dir = ''
 
 # Start logging to the given file in append mode. Use `logfile` to specify a
 # log file to **overwrite** logs to.
@@ -346,6 +346,8 @@ c.InteractiveShell.history_load_length = 10000
 # c.InteractiveShell.loop_runner = 'IPython.core.interactiveshell._asyncio_runner'
 
 # TODO: What is this?
+# Been digging through the source and i still can't tell you. btw i don't think
+# 2 is an allowed option we only check if it's 0 or 1. if 1 print more info.
 # --TerminalInteractiveShell.object_info_string_level=<Enum>
 #     Default: 0
 #     Choices: (0, 1, 2)
@@ -431,9 +433,8 @@ else:
     else:
         c.TerminalInteractiveShell.editing_mode = 'emacs'
 
-# TODO:
-# c_logger.info("Editing Mode:\t {!s}", c.TerminalInteractiveShell.editing_mode)
 
+c.log("Editing Mode:\t {!s}".format(c.TerminalInteractiveShell.editing_mode))
 
 # Set the editor used by IPython (default to $EDITOR/vi/notepad).
 c.TerminalInteractiveShell.editor = 'nvim'
@@ -448,6 +449,7 @@ c.TerminalInteractiveShell.extra_open_editor_shortcuts = True
 # Provide an alternative handler to be called when the user presses Return.
 # This is an advanced option intended for debugging, which may be changed or
 # removed in later releases.
+# Wth no it's not? It's a feature not something that should be subject to removal.
 # c.TerminalInteractiveShell.handle_return = None
 
 # Highlight matching brackets.
@@ -483,7 +485,6 @@ else:
 # So this wouldn't be a block of code to build off of but here's something
 # so you can get an idea of what's going on
 
-from IPython.terminal.prompts import ClassicPrompts
 
 class StandardPythonPrompt(ClassicPrompts):
     """Create a no-op class to demonstrate usage of the ClassicPrompts class.
@@ -503,6 +504,12 @@ class StandardPythonPrompt(ClassicPrompts):
         """The most boiler-platey repr I can come up with."""
         return self.__class__.__name__
 
+    # def __call__(self):
+        """TODO"""
+        # return
+
+
+# As an aside I believe that this attr is the same as Prompt
 # c.TerminalInteractiveShell.prompts_class = 'IPython.terminal.prompts.Prompts'
 
 # Use `raw_input` for the REPL, without completion and prompt colors.
@@ -514,6 +521,7 @@ class StandardPythonPrompt(ClassicPrompts):
 # This mode default to `True` if the `IPY_TEST_SIMPLE_PROMPT` environment
 # variable is set, or the current terminal is not a tty.
 # c.TerminalInteractiveShell.simple_prompt = False
+
 
 # Number of line at the bottom of the screen to reserve for the completion menu
 c.TerminalInteractiveShell.space_for_menu = 6
@@ -665,16 +673,18 @@ class BaseFormatterDoc(Configurable):
 
     def _example_subclass(self):
         """
-        -----------------------------------------------------------------------------
         PlainTextFormatter(BaseFormatter) configuration
-        ----------------------------------------------------------------------------
+        -----------------------------------------------
 
         The default pretty-printer.
 
-        This uses :mod:`IPython.lib.pretty` to compute the format data of the object.
-        If the object cannot be pretty printed, :func:`repr` is used. See the
-        documentation of :mod:`IPython.lib.pretty` for details on how to write pretty
-        printers.  Here is a simple example::
+        This uses :mod:`IPython.lib.pretty` to compute the format data of
+        the object.
+
+        If the object cannot be pretty printed, :func:`repr` is used.
+
+        See the documentation of :mod:`IPython.lib.pretty` for details on
+        how to write pretty printers.  Here is a simple example::
 
             def dtype_pprinter(obj, p, cycle):
                 if cycle:
@@ -714,6 +724,15 @@ class BaseFormatterDoc(Configurable):
         return self._example_subclass()
 
 
+c.PlainTextFormatter.max_seq_length = 100
+
+c.PlainTextFormatter.max_width = 79
+
+# I'm confident I don't want any \r\n newlines even on windows
+c.PlainTextFormatter.newline = '\n'
+
+c.PlainTextFormatter.verbose = True
+
 # ----------------------------------------------------------------------------
 # Completer(Configurable) configuration
 # ----------------------------------------------------------------------------
@@ -737,16 +756,20 @@ c.Completer.debug = False
 # Experimental: restrict time (in milliseconds) during which Jedi can compute
 #  types. Set to 0 to stop computing types. Non-zero value lower than 100ms may
 #  hurt performance by preventing jedi to build its cache.
-c.Completer.jedi_compute_type_timeout = 1000
+c.Completer.jedi_compute_type_timeout = 0
 
 # Experimental: Use Jedi to generate autocompletions. Default to True if jedi
 # is installed
-try:
-    import jedi
-except ImportError:  # clearly not installed
-    c.Completer.use_jedi = False
-else:
-    c.Completer.use_jedi = True
+# try:
+#     import jedi
+# except ImportError:  # clearly not installed
+#     c.Completer.use_jedi = False
+# else:
+#     c.Completer.use_jedi = True
+
+c.Completer.use_jedi = False
+
+# It's not that I don't want to use jedi, it's that our implementation is awful
 
 # ----------------------------------------------------------------------------
 # IPCompleter(Completer) configuration

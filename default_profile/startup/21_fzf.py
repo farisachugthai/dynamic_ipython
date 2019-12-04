@@ -7,21 +7,30 @@ Note
 Trying to rework this over in ../extensions/namespaces.py
 
 """
+from contextlib import ContextDecorator
 import functools
 import os
 import shutil
 import sys
+import types
+from typing import get_type_hints  # what is this?
 
 from IPython import get_ipython
 
 
-class Executable:
+# so apparently this is
+class Executable(ContextDecorator):  # types.MappingProxy
     """An object representing some executable on a user computer."""
 
     def __init__(self, command):
         """Initialize with *command*."""
         self.command = command
         self.command_path = self._get_command_path()
+        super().__init__()
+
+    @property
+    def _command(self):
+        return self.command
 
     def _get_command_path(self):
         """Return the path to an executable if *command* is on `PATH`.
@@ -58,12 +67,33 @@ def setup_fzf(fzf_alias=None):
             "rg --pretty --hidden --max-columns-preview --no-heading --no-messages --no-column -C 0 -e ^ | fzf --ansi --multi",
         )
 
-    elif shutil.which("fzf") and shutil.which("ag"):
-        # user_aliases.extend(
-        #     ('fzf', '$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS'))
-        fzf_alias = ("fzf", "ag -C 0 --color-win-ansi --noheading %l | fzf -")
 
-    return fzf_alias
+# @Executable('fzf')
+
+class FZF:
+    """Wrap FZF together."""
+
+    def __init__(self, fzf_alias=None, *args, **kwargs):
+        self.fzf_alias = fzf_alias or ''
+
+    def _setup_fzf(self):
+        if self.fzf_alias is None:
+            self.fzf_alias = ()
+        if shutil.which("fzf") and shutil.which("rg"):
+            # user_aliases.extend(
+            #     ('fzf', '$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS'))
+            self.fzf_alias = (
+                "fzf",
+                "rg --pretty --hidden --max-columns-preview --no-heading --no-messages --no-column --no-line-number -C 0 -e ^ | fzf --ansi --multi ",
+            )
+
+        elif shutil.which("fzf") and shutil.which("ag"):
+            # user_aliases.extend(
+            #     ('fzf', '$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS'))
+            self.fzf_alias = ("fzf",
+                              "ag -C 0 --color-win-ansi --noheading %l | fzf")
+
+        return self.fzf_alias
 
 
 # def is_fzf_tmux():

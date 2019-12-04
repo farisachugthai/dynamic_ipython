@@ -17,7 +17,10 @@ except ImportError:
     # from prompt_toolkit.contrib I think?
     pass
 
-from default_profile.extensions import termux_clipboard
+try:
+    from default_profile.extensions import termux_clipboard
+except (ImportError, ModuleNotFoundError):
+    termux_clipboard = None
 
 
 class ClipboardEmpty(ValueError):
