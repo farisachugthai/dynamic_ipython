@@ -1,0 +1,196 @@
+===========
+Todo
+===========
+
+.. module:: todo
+   :synopsis: List of improvements
+
+Subcommands in IPython and Jupyter.
+===================================
+
+There's a ton that could be done here.
+Well I guess sub-apps would be a better name for it but whatever.
+
+Mostly here to note that I think the 'editor' :mod:`~IPython.core.hooks`
+doesn't work the way it's supposed to if you want to configure it.
+
+If you run `%edit` in the shell it doesn't provide any arguments, but
+it'll complain that it needs a function that accepts 4 positional parameters.
+
+I'm pretty confident it isn't just me calling the function wrong too.
+Try this.::
+
+   from IPython import get_ipython
+   ip = get_ipython()
+   ip.hooks['editor'].chain
+   # inspect your hooks look normal
+   from IPython.core.hooks import fix_error_editor
+   ip.hooks['editor'].add(fix_error_editor)
+   %edit # --> complains that it needs 3 more positional parameters
+
+Before I noticed this, I wrote a function that only accepts 1 positional arg,
+*which btw...it was the filename duh. I don't know or care what column
+number I start at???* and takes optional keyword arguments.
+
+Said the function was getting called wrong as it only accepted 1 positional
+and was being called with 4. *sigh*.
+
+
+.. _history-app:
+
+IPython history
+===============
+
+Here's some seemingly inconsistent behavior.
+
+.. code-block:: shell
+   :emphasize-lines: 1
+
+   $: ipython history
+   No subcommand specified. Must specify one of: dict_keys(['trim', 'clear'])
+   Manage the IPython history database.
+
+.. code-block:: rst
+
+   Subcommands
+   -----------
+   Subcommands are launched as `ipython-history cmd [args]`. For information
+   on using subcommand 'cmd', do: `ipython-history cmd -h`.
+
+
+So there we have instructions to use the invocation ``ipython-history``.::
+
+   $: ipython-history -h
+   ipython-history: command not found
+
+
+Erhm. That's confusing.
+
+So how does the `history` command work?
+
+
+IPython History API
+===================
+
+Interact with the IPython :mod:`sqlite3` database.
+
+.. program:: history
+
+.. option:: trim
+
+       Trim the IPython history database to the last 1000 entries.
+
+.. option:: clear
+
+       Clear the IPython history database, deleting all entries.
+
+
+So where is this initially implemented?
+
+.. todo:: ipython-history command line definition
+
+   Where in the source code is this set up?
+
+Also the original implementation only defines 2 options for the subcommand.
+
+But it would be nice to have options like ``backup`` and :command:`grep`
+or something. *Though to be fair the :class:`~IPython.utils.text.SList` class
+has a 'grep' method.
+
+There are a handful of *nice to have* but ultimately pointless functions in
+:mod:`IPython.utils` so why not take advantage?
+
+
+Writing Magics For Our Users
+=============================
+
+In the documentation, it specifies the requirements for a magic.
+
+And I quote the ``custommagics`` document.:
+
+   There are two main ways to define your own magic functions: from standalone
+   functions and by inheriting from a base class provided by IPython:
+   :class:`~IPython.core.magic.Magics`.
+
+It then gives an example.
+
+.. ipython::
+
+    from IPython.core.magic import (Magics, magics_class, line_magic,
+                                    cell_magic, line_cell_magic)
+
+    # The class MUST call this class decorator at creation time
+    @magics_class
+    class MyMagics(Magics):
+
+        @line_magic
+        def lmagic(self, line):
+            "my line magic"
+            print("Full access to the main IPython object:", self.shell)
+            print("Variables in the user namespace:", list(self.shell.user_ns.keys()))
+            return line
+
+        @cell_magic
+        def cmagic(self, line, cell):
+            "my cell magic"
+            return line, cell
+
+        @line_cell_magic
+        def lcmagic(self, line, cell=None):
+            "Magic that works both as %lcmagic and as %%lcmagic"
+            if cell is None:
+                print("Called as line magic")
+                return line
+            else:
+                print("Called as cell magic")
+                return line, cell
+
+
+    # In order to actually use these magics, you must register them with a
+    # running IPython.
+
+    def load_ipython_extension(ipython):
+        """
+        Any module file that define a function named `load_ipython_extension`
+        can be loaded via `%load_ext module.path` or be configured to be
+        autoloaded by IPython at startup time.
+        """
+        # You can register the class itself without instantiating it.  IPython will
+        # call the default constructor on it.
+        ipython.register_magics(MyMagics)
+
+
+How can we rewrite the magic implementation so that the decorator ``@magics_class``
+isn't required anymore?
+
+.. sidebar:: Also how do you cross-ref a decorator?
+
+Like if they pass us a string can we not just feed it to our own home-brewed
+wrapper function? Off the top of my head I'm guessing something like this.::
+
+   arg, _ = sys.argv[1:]
+   if not hasattr(arg, 'load_ext'):   # or whatever interface is expected
+
+      @magics_class
+      @functools.wraps
+      def wrapped(*args, **kwargs):
+          return *args, **kwargs
+
+   shell.register_magic('MyMagic')   # <---- incorrectly passed as a str
+
+   # But in the register_magic method we would do:
+
+   class InteractiveShell:
+
+      ...
+      def register_magic(self, *args, **kwargs):
+          # Run that interface check with
+          if not hasattr(arg, 'load_ext'):   # or whatever interface is expected
+              # and then call the wrapped function with the args that were passed to us
+
+              ...
+              # the usual stuff
+
+
+I'm sure that I poorly executed that here; however, after some delibration,
+would it be that hard to do?

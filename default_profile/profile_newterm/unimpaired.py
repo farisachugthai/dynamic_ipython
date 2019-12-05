@@ -1,20 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-
-
-"""
 import traceback
 from IPython.terminal.interactiveshell import TerminalInteractiveShell
-from IPython.extensions.storemagic import StoreMagics
 from IPython.core.magics.basic import BasicMagics
-from IPython import get_ipython
+from IPython.core.getipython import get_ipython
+from IPython.core.profiledir import ProfileDir, ProfileDirError
 from traitlets.config.loader import Config
 import traitlets
 import logging
 import os
 from reprlib import Repr
 import sys
+
+from . import storeandloadmagics
+from .storeandloadmagics import StoreAndLoadMagics
 
 logging.basicConfig(level=logging.INFO)
 
@@ -34,9 +33,9 @@ class TerminallyUnimpaired(TerminalInteractiveShell):
         return "".format(truncated)
 
     def begin(self):
-        """The superclass already defined initialize, initlialized, init_* and start.
+        """The superclass already defined initialize and a few other methods.
 
-        So let's go with begin.
+        So let's go with begin since we don't have much room in this namespace.
         """
         super().initialize()
         if self.config is None:
@@ -67,7 +66,7 @@ class TerminallyUnimpaired(TerminalInteractiveShell):
                 self.ipython_dir, "default")
         except ProfileDirError:
             self.log.error("Profiledirerror")
-        except BaseException as e:
+        except Exception as e:
             self.log.warning(e)
 
     def showsyntaxerror(self, filename=None, **kwargs):
@@ -121,4 +120,5 @@ class TerminallyUnimpaired(TerminalInteractiveShell):
         sys.stderr.write("".join(lines))
 
 
-# StoreMagics(get_ipython()).unobserve_all()
+shell = TerminallyUnimpaired()
+shell.extension_manager.load_extension('storeandloadmagics')

@@ -49,6 +49,7 @@ def get_key_bindings(custom_key_bindings=None):
         custom_key_bindings,
     ])
 
+
 class State:
     def __init__(self):
         self.depth = 0
@@ -94,11 +95,6 @@ def yank_last_arg(event):
             b.insert_text(lastline.split()[-1])
 
 
-def emacs_basic_bindings():
-    """Load all the basic built-in key bindings from prompt_toolkit."""
-    return merge_key
-
-
 if __name__ == "__main__":
 
     registry = KeyBindings()
@@ -107,11 +103,12 @@ if __name__ == "__main__":
 
     if getattr(ip, "pt_app", None):
         # don't do it this way. if you change it from
-        all_kb = ip.pt_app.app.key_bindings
+        # registry = ip.pt_app.key_bindings
         # to
         # registry = ip.pt_app.app.key_bindings
         # then you'll end up with a prompt_toolkit.key_binding.key_bindings._MergedKeyBindings
         # class which has no `add_binding` method.
+        all_kb = ip.pt_app.key_bindings
 
     elif getattr(ip, "pt_cli", None):
         all_kb = ip.pt_cli.application.key_bindings_registry
@@ -119,15 +116,15 @@ if __name__ == "__main__":
         raise NotImplementedError("IPython doesn't have prompt toolkit bindings. Exiting.")
 
     registry.add_binding(Keys.Escape,
-                            u'.',
-                            filter=(HasFocus(DEFAULT_BUFFER)
-                                    & ~HasSelection()
-                                    & insert_mode))(yank_last_arg)
+                         u'.',
+                         filter=(HasFocus(DEFAULT_BUFFER)
+                                 & ~HasSelection()
+                                 & insert_mode))(yank_last_arg)
     registry.add_binding(Keys.Escape,
-                            u'_',
-                            filter=(HasFocus(DEFAULT_BUFFER)
-                                    & ~HasSelection()
-                                    & insert_mode))(yank_last_arg)
+                         u'_',
+                         filter=(HasFocus(DEFAULT_BUFFER)
+                                 & ~HasSelection()
+                                 & insert_mode))(yank_last_arg)
     ip.events.register('post_execute', reset_last_arg_depth)
 
     # Here's a simple example of using registry. C-i == Tab
@@ -138,4 +135,3 @@ if __name__ == "__main__":
     # should display something like +100 bindings
     # since we linked it to the correct attribute of pt_app this should work
     all_kb = get_key_bindings(registry)
-

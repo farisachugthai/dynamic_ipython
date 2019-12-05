@@ -23,31 +23,6 @@ STARTUP_HANDLER.addFilter(STARTUP_FILTERER)
 STARTUP_HANDLER.setFormatter(STARTUP_FORMATTER)
 STARTUP_LOGGER.addHandler(STARTUP_HANDLER)
 
-
-def ask_for_import(mod, package=None):
-    """Import a module and return `None` if it's not found.
-
-    Parameters
-    ----------
-    mod : str
-        Module to import
-    package : str, optional
-        Package the module is found in.
-
-    Returns
-    -------
-    imported : mod
-        Module as imported by :func:`importlib.import_module`.
-
-    """
-    try:
-        imported = importlib.import_module(mod, package=package)
-    except (ImportError, ModuleNotFoundError):
-        pass
-    else:
-        return imported
-
-
 rehashx_mod = importlib.import_module("default_profile.startup.01_rehashx")
 easy_import_mod = importlib.import_module("default_profile.startup.04_easy_import")
 log_mod = importlib.import_module("default_profile.startup.05_log")

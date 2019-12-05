@@ -7,7 +7,7 @@ import shutil
 
 from IPython import get_ipython
 
-from default_profile.startup import ask_for_import
+from default_profile import ask_for_import
 
 # TODO: allow these imports to run and allow fall backs otherwise
 from default_profile.util.module_log import stream_logger

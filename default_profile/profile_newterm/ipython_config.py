@@ -27,6 +27,7 @@ import os
 import platform
 import shutil
 import sys
+import traceback
 from pathlib import Path
 
 from IPython import version_info
@@ -46,7 +47,13 @@ except:  # noqa
     default_profile = None
     logging.error('import error for default_profile')
 else:
-    from default_profile.profile_newterm.unimpaired import TerminallyUnimpaired
+    # This is the real test
+    # I want this loaded too so that I don't have to rewrite all my startup junk
+    try:
+        from default_profile import startup
+    except Exception as e:
+        traceback.print_exc(e)
+
 
 try:
     from .unimpaired import TerminallyUnimpaired
@@ -368,7 +375,6 @@ c.InteractiveShell.quiet = False
 # Show rewritten input, e.g. for autocall.
 # c.InteractiveShell.show_rewritten_input = True
 
-
 c.InteractiveShell.wildcards_case_sensitive = False
 
 # Switch modes for the IPython exception handlers.
@@ -394,7 +400,6 @@ c.TerminalInteractiveShell.editing_mode = 'emacs'
 
 # TODO:
 # c_logger.info("Editing Mode:\t {!s}", c.TerminalInteractiveShell.editing_mode)
-
 
 # Set the editor used by IPython (default to $EDITOR/vi/notepad).
 c.TerminalInteractiveShell.editor = 'nvim'
@@ -424,12 +429,31 @@ c.TerminalInteractiveShell.extra_open_editor_shortcuts = True
 # Try to import my Gruvbox class. Can be found at
 # https://github.com/farisachugthai/Gruvbox_IPython
 
-try:
-    from gruvbox.style import GruvboxDarkHard
-except (ImportError, ModuleNotFoundError):
-    c.TerminalInteractiveShell.highlighting_style = 'monokai'
-else:
-    c.TerminalInteractiveShell.highlighting_style = 'GruvboxDarkHard'
+
+def get_env():
+    """Would it make sense to combine functools.lru_cache with this?"""
+    return os.environ.copy()
+
+
+if platform.system() == 'Windows':
+    from pygments.styles import friendly
+    # I know it's odd making this platform specific but everything is completely illegible otherwise
+    c.TerminalInteractiveShell.highlighting_style = friendly
+
+
+environment = get_env()
+if 'LESS' not in environment:
+    os.environ.setdefault('LESS', "less -JRKMLigeF")
+    os.environ.setdefault('LESSHISTSIZE', 5000)
+if 'LESS_TERMCAP_mb' not in environment:
+    # Who is curios as to whether this is gonna work or not?
+    os.environ.setdefault('LESS_TERMCAP_mb', '\e[01;31m')
+    os.environ.setdefault('LESS_TERMCAP_md', '\e[01;38;5;180m')
+    os.environ.setdefault('LESS_TERMCAP_me', '\e[0m')
+    os.environ.setdefault('LESS_TERMCAP_se', '\e[0m')
+    os.environ.setdefault('LESS_TERMCAP_so', '\e[03;38;5;202m')
+    os.environ.setdefault('LESS_TERMCAP_ue', '\e[0m')
+    os.environ.setdefault('LESS_TERMCAP_us', '\e[04;38;5;139m')
 
 # Override highlighting format for specific tokens
 # Comments were genuinely impossible to read. Might need to override
@@ -463,6 +487,7 @@ class StandardPythonPrompt(ClassicPrompts):
         """The most boiler-platey repr I can come up with."""
         return self.__class__.__name__
 
+
 # c.TerminalInteractiveShell.prompts_class = 'IPython.terminal.prompts.Prompts'
 
 # Use `raw_input` for the REPL, without completion and prompt colors.
@@ -474,7 +499,6 @@ class StandardPythonPrompt(ClassicPrompts):
 # This mode default to `True` if the `IPY_TEST_SIMPLE_PROMPT` environment
 # variable is set, or the current terminal is not a tty.
 # c.TerminalInteractiveShell.simple_prompt = False
-
 
 # Number of line at the bottom of the screen to reserve for the completion menu
 c.TerminalInteractiveShell.space_for_menu = 6
