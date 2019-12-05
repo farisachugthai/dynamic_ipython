@@ -20,137 +20,6 @@ ALIAS_LOGGER = stream_logger(
 )
 
 
-class LinuxAliases:
-    """Add Linux specific aliases.
-
-    Aliases that have either:
-
-        * Only been tested on Linux
-        * Only natively exist on Linux
-        * Clobber an existing Windows command
-            * cmd has a few overlapping commands like :command:`find`
-            * powershell intentionally has many aliases that match `busybox`
-              aliases, with commands like 'ls' and 'curl' already mapped to
-              pwsh builtins.
-
-    Packages such as ConEmu or Cmder allow a large number of GNU/Linux
-    built-ins to exist on Windows, and as a result, the list may not be
-    comprehensive and it may be that a reasonable
-    portion of these aliases can be successfully executed from a shell
-    such as Cygwin, Msys2, Mingw, Git on Windows or the Windows
-    Subsystem of Linux.
-
-    Below is the source code for the function
-    :func:`IPython.core.magics.define_alias()` that is invoked here.::
-
-        def define_alias(self, name, cmd):
-            # Define a new alias after validating it.
-            # This will raise an :exc:`AliasError` if there are validation
-            # problems.
-            caller = Alias(shell=self.shell, name=name, cmd=cmd)
-            self.shell.magics_manager.register_function(caller, magic_kind='line',
-            magic_name=name)
-
-    """
-
-    def __init__(self, shell=None, aliases=None):
-        """The WindowsAliases implementation of this is odd so maybe branch off.
-
-        Parameters
-        ----------
-        user_aliases : list of ('alias', 'system command') tuples
-            User aliases to add the user's namespace.
-
-        """
-        self.user_aliases = aliases or []
-        self.shell = shell or get_ipython()
-
-    def __repr__(self):
-        return "Linux Aliases: {!r}".format(len(self.user_aliases))
-
-    def busybox(self):
-        """Commands that are available on any Unix-ish system.
-
-        Apparently, I don't know how to use classmethods.
-
-        Returns
-        -------
-        user_aliases : list of ('alias', 'system command') tuples
-            User aliases to add the user's namespace.
-
-        """
-        self.user_aliases += [
-            ("cs", "cd %s && ls -F --color=always %s"),
-            ("cp", "cp -v %l"),  # cp mv mkdir and rmdir are all overridden
-            ("df", "df -ah --total"),
-            ("dU", "du -d 1 -h --apparent-size --all | sort -h | tail -n 10"),
-            ("dus", "du -d 1 -ha %l"),
-            ("echo", "echo -e %l"),
-            ("free", "free -mt"),
-            (
-                "gpip",
-                "export PIP_REQUIRE_VIRTUALENV=0; python -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null",
-            ),
-            (
-                "gpip2",
-                "export PIP_REQUIRE_VIRTUALENV=0; python2 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null",
-            ),
-            (
-                "gpip3",
-                "export PIP_REQUIRE_VIRTUALENV=0; python3 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null",
-            ),
-            ("head", "head -n 30 %l"),
-            ("l", "ls -CF --color=always %l"),
-            ("la", "ls -AF --color=always %l"),
-            ("ldir", "ls -Apo --color=always %l | grep /$"),
-            # ('lf', 'ls -Fo --color=always | grep ^-'),
-            # ('ll', 'ls -AFho --color=always %l'),
-            ("ls", "ls -F --color=always %l"),
-            ("lr", "ls -AgFhtr --color=always %l"),
-            ("lt", "ls -AgFht --color=always %l"),
-            ("lx", "ls -Fo --color=always | grep ^-..x"),
-            # ('ldir', 'ls -Fhpo | grep /$ %l'),
-            ("lf", "ls -Foh --color=always | grep ^- %l"),
-            ("ll", "ls -AgFh --color=always %l"),
-            # ('lt', 'ls -Altc --color=always %l'),
-            # ('lr', 'ls -Altcr --color=always %l'),
-            ("mk", "mkdir -pv %l && cd %l"),  # check if this works. only mkdir
-            ("mkdir", "mkdir -pv %l"),
-            ("mv", "mv -v %l"),
-            ("r", "fc -s"),
-            ("redo", "fc -s"),
-            # Less annoying than -i but more safe
-            # only prompts with more than 3 files or recursed dirs.
-            ("rm", "rm -Iv %l"),
-            ("rmdir", "rmdir -v %l"),
-            ("default_profile", "cd ~/projects/dotfiles/unix/.ipython/default_profile"),
-            ("startup", "cd ~/projects/dotfiles/unix/.ipython/default_profile/startup"),
-            ("tail", "tail -n 30 %l"),
-        ]
-        return self.user_aliases
-
-    def __iter__(self):
-        return self._generator()
-
-    def _generator(self):
-        for itm in self.user_aliases:
-            yield itm
-
-    def thirdparty(self):
-        """Contrasted to busybox, these require external installation.
-
-        As a result it'll be of value to check that they're even in
-        the namespace.
-        """
-        self.user_aliases += [
-            ("ag", "ag --hidden --color --no-column %l"),
-            ("nvim", "nvim %l"),
-            ("nman", 'nvim -c "Man %l" -c"wincmd T"'),
-            ("tre", "tree -DAshFC --prune -I .git %l"),
-        ]
-        return self.user_aliases
-
-
 class CommonAliases:
     r"""Add aliases common to all OSes. Overwhelmingly :command:`Git` aliases.
 
@@ -163,6 +32,8 @@ class CommonAliases:
     .. todo:: :command:`git show`
 
     """
+
+    user_aliases = []
 
     def __init__(self, shell=None, user_aliases=None):
         """OS Agnostic aliases.
@@ -227,15 +98,17 @@ class CommonAliases:
         and apropos quickly but jeez that's gonna get complicated kinda quick
         don't you think?
         """
-        self.unalias("pydoc")
-        self.unalias("apropos")
+        if "pydoc" in self.user_aliases:
+            self.unalias("pydoc")
+            import pydoc
+        if "apropos" in self.user_aliases:
+            self.unalias("apropos")
+            from pydoc import apropos
 
-        import pydoc
-        from pydoc import apropos
-
-    def git(self):
+    @classmethod
+    def git(cls):
         """100+ git aliases."""
-        self.user_aliases += [
+        cls.user_aliases += [
             ("g", "git diff --staged --stat %l"),
             ("ga", "git add %l"),
             ("gaa", "git add --all %l"),
@@ -329,6 +202,138 @@ class CommonAliases:
             ("xx", "quit"),  # this is a sweet one
             ("..", "cd .."),
             ("...", "cd ../.."),
+        ]
+        return cls.user_aliases
+
+class LinuxAliases(CommonAliases):
+    """Add Linux specific aliases.
+
+    Aliases that have either:
+
+        * Only been tested on Linux
+        * Only natively exist on Linux
+        * Clobber an existing Windows command
+            * cmd has a few overlapping commands like :command:`find`
+            * powershell intentionally has many aliases that match `busybox`
+              aliases, with commands like 'ls' and 'curl' already mapped to
+              pwsh builtins.
+
+    Packages such as ConEmu or Cmder allow a large number of GNU/Linux
+    built-ins to exist on Windows, and as a result, the list may not be
+    comprehensive and it may be that a reasonable
+    portion of these aliases can be successfully executed from a shell
+    such as Cygwin, Msys2, Mingw, Git on Windows or the Windows
+    Subsystem of Linux.
+
+    Below is the source code for the function
+    :func:`IPython.core.magics.define_alias()` that is invoked here.::
+
+        def define_alias(self, name, cmd):
+            # Define a new alias after validating it.
+            # This will raise an :exc:`AliasError` if there are validation
+            # problems.
+            caller = Alias(shell=self.shell, name=name, cmd=cmd)
+            self.shell.magics_manager.register_function(caller, magic_kind='line',
+            magic_name=name)
+
+    """
+
+    def __init__(self, shell=None, aliases=None, *args, **kwargs):
+        """The WindowsAliases implementation of this is odd so maybe branch off.
+
+        Parameters
+        ----------
+        user_aliases : list of ('alias', 'system command') tuples
+            User aliases to add the user's namespace.
+
+        """
+        self.user_aliases = aliases or []
+        self.shell = shell or get_ipython()
+        super().__init__(*args, **kwargs)
+
+    def __repr__(self):
+        return "Linux Aliases: {!r}".format(len(self.user_aliases))
+
+    def busybox(self):
+        """Commands that are available on any Unix-ish system.
+
+        Apparently, I don't know how to use classmethods.
+
+        Returns
+        -------
+        user_aliases : list of ('alias', 'system command') tuples
+            User aliases to add the user's namespace.
+
+        """
+        self.user_aliases += [
+            ("cs", "cd %s && ls -F --color=always %s"),
+            ("cp", "cp -v %l"),  # cp mv mkdir and rmdir are all overridden
+            ("df", "df -ah --total"),
+            ("dU", "du -d 1 -h --apparent-size --all | sort -h | tail -n 10"),
+            ("dus", "du -d 1 -ha %l"),
+            ("echo", "echo -e %l"),
+            ("free", "free -mt"),
+            (
+                "gpip",
+                "export PIP_REQUIRE_VIRTUALENV=0; python -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null",
+            ),
+            (
+                "gpip2",
+                "export PIP_REQUIRE_VIRTUALENV=0; python2 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null",
+            ),
+            (
+                "gpip3",
+                "export PIP_REQUIRE_VIRTUALENV=0; python3 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null",
+            ),
+            ("head", "head -n 30 %l"),
+            ("l", "ls -CF --color=always %l"),
+            ("la", "ls -AF --color=always %l"),
+            ("ldir", "ls -Apo --color=always %l | grep /$"),
+            # ('lf', 'ls -Fo --color=always | grep ^-'),
+            # ('ll', 'ls -AFho --color=always %l'),
+            ("ls", "ls -F --color=always %l"),
+            ("lr", "ls -AgFhtr --color=always %l"),
+            ("lt", "ls -AgFht --color=always %l"),
+            ("lx", "ls -Fo --color=always | grep ^-..x"),
+            # ('ldir', 'ls -Fhpo | grep /$ %l'),
+            ("lf", "ls -Foh --color=always | grep ^- %l"),
+            ("ll", "ls -AgFh --color=always %l"),
+            # ('lt', 'ls -Altc --color=always %l'),
+            # ('lr', 'ls -Altcr --color=always %l'),
+            ("mk", "mkdir -pv %l && cd %l"),  # check if this works. only mkdir
+            ("mkdir", "mkdir -pv %l"),
+            ("mv", "mv -v %l"),
+            ("r", "fc -s"),
+            ("redo", "fc -s"),
+            # Less annoying than -i but more safe
+            # only prompts with more than 3 files or recursed dirs.
+            ("rm", "rm -Iv %l"),
+            ("rmdir", "rmdir -v %l"),
+            ("default_profile", "cd ~/projects/dotfiles/unix/.ipython/default_profile"),
+            ("startup", "cd ~/projects/dotfiles/unix/.ipython/default_profile/startup"),
+            ("tail", "tail -n 30 %l"),
+        ]
+        return self.user_aliases
+
+    def __iter__(self):
+        return self._generator()
+
+    def _generator(self):
+        for itm in self.user_aliases:
+            yield itm
+
+    def thirdparty(self):
+        """Contrasted to busybox, these require external installation.
+
+        As a result it'll be of value to check that they're even in
+        the namespace.
+        """
+        self.user_aliases += [
+            ("ag", "ag --hidden --color --no-column %l"),
+            ("cat", "bat %l"),
+            ("nvim", "nvim %l"),
+            ("nman", 'nvim -c "Man %l" -c"wincmd T"'),
+            ("tre", "tree -DAshFC --prune -I .git %l"),
         ]
         return self.user_aliases
 
@@ -522,7 +527,7 @@ def main():
     if not hasattr(_ip, "magics_manager"):
         raise Exception("Are you running in IPython?")
 
-    common = CommonAliases()
+    common = CommonAliases(user_aliases=_ip.alias_manager.user_aliases)
 
     machine = Platform()
     # TODO: Work in the Executable() class check.
