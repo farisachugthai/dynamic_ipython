@@ -1,4 +1,6 @@
 """Set up pytest."""
+import os
+import tempfile
 
 from IPython import get_ipython
 import pytest
@@ -7,9 +9,9 @@ import pytest
 import default_profile
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture()
 def _ip():
-   return get_ipython()
+    return get_ipython()
 
 
 def pytest_addoption(parser):
@@ -23,15 +25,22 @@ def pytest_configure(config):
 
 def pytest_collection_modifyitems(config, items):
     if config.getoption('--slow'):
-    # If the option is present, don't skip slow tests.
+        # If the option is present, don't skip slow tests.
         return
     skip_slow = pytest.mark.skip(reason='only runs when --slow is set')
     for item in items:
         if 'slow' in item.keywords:
-            item.add_marker(skip_slow)))))))))
+            item.add_marker(skip_slow)
+
+
+@pytest.fixture()
+def cleandir():
+    newpath = tempfile.mkdtemp()
+    os.chdir(newpath)
 
 
 # idk if you're supposed to do it this way but eh
-if _ip is None:
-   from IPython import start_ipython
-   start_ipython()
+# if _ip is None:
+#     from IPython import start_ipython
+
+#     start_ipython()

@@ -139,7 +139,7 @@ Table of Contents
 ==================
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :titlesonly:
    :caption: API
 
@@ -150,7 +150,7 @@ Table of Contents
    jupyter <jupyter/index>
    extensions
    jobcontrol
-   subcommands
+   todo
    Developers Notes <dev>
 
 

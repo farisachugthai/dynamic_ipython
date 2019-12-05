@@ -43,10 +43,6 @@ def run_pytest():
         warnings.warn(e)
         pytest = None
     if pytest is not None:
-        @pytest.fixture
-        def _ip():
-            return get_ipython()
-
         pytest.main()
 
 
