@@ -9,7 +9,7 @@ import pytest
 import default_profile
 
 
-@pytest.fixture()
+@pytest.fixture(autouse=True)
 def _ip():
     return get_ipython()
 
@@ -39,8 +39,6 @@ def cleandir():
     os.chdir(newpath)
 
 
-# idk if you're supposed to do it this way but eh
-# if _ip is None:
-#     from IPython import start_ipython
-
-#     start_ipython()
+if _ip is None:
+    from IPython import start_ipython
+    start_ipython()

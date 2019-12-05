@@ -15,7 +15,7 @@ import sys
 import types
 from typing import get_type_hints  # what is this?
 
-from IPython import get_ipython
+from IPython.core.getipython import get_ipython
 
 
 # so apparently this is
@@ -56,18 +56,6 @@ class Executable(ContextDecorator):  # types.MappingProxy
                 func(*args, **kwargs)
 
 
-def setup_fzf(fzf_alias=None):
-    if fzf_alias is None:
-        fzf_alias = ()
-    if shutil.which("fzf") and shutil.which("rg"):
-        # user_aliases.extend(
-        #     ('fzf', '$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS'))
-        fzf_alias = (
-            "fzf",
-            "rg --pretty --hidden --max-columns-preview --no-heading --no-messages --no-column -C 0 -e ^ | fzf --ansi --multi",
-        )
-
-
 # @Executable('fzf')
 
 class FZF:
@@ -75,6 +63,9 @@ class FZF:
 
     def __init__(self, fzf_alias=None, *args, **kwargs):
         self.fzf_alias = fzf_alias or ''
+
+    def __repr__(self):
+        return '{}    {}'.format(self.__class__.__name__, self.fzf_alias)
 
     def _setup_fzf(self):
         if self.fzf_alias is None:
@@ -96,8 +87,6 @@ class FZF:
         return self.fzf_alias
 
 
-# def is_fzf_tmux():
-# def fzf_tmux():
 def is_tmux():
     """Check if we're using tmux or not."""
     if os.environ.get("TMUX"):
@@ -115,10 +104,6 @@ def busybox_hack(shell):
 
     shell.alias_manager.user_aliases += aliases_mod.LinuxAliases().busybox()
     shell.alias_manager.init_aliases()
-
-
-# @Executable(fzf_tmux())
-# def add_fzf_alias():
 
 
 def main():

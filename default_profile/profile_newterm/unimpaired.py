@@ -1,9 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-
-
-"""
 import traceback
 from IPython.terminal.interactiveshell import TerminalInteractiveShell
 from IPython.core.magics.basic import BasicMagics
