@@ -146,7 +146,6 @@ Table of Contents
    Sphinx Extensions <sphinxext/index>
    IPython Startup <startup/index>
    IPython Utilities </util/index>
-   kernel
    jupyter <jupyter/index>
    extensions
    jobcontrol
