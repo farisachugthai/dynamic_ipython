@@ -20,7 +20,6 @@ Notes
 Therefore that function shouldn't be used anywhere in this file.
 
 """
-from IPython.terminal.prompts import ClassicPrompts
 import builtins
 import logging
 import os
@@ -29,15 +28,23 @@ import shutil
 import sys
 from pathlib import Path
 
+from IPython.terminal.prompts import ClassicPrompts
 from IPython import version_info
 # THIS IS THE MODULE! Its too exciting to able to execute this script
 # directly from within python and not get an error for a func call with no
 # import
 from traitlets.config import get_config, Configurable
+from traitlets.config.application import LevelFormatter
 
-logging.basicConfig(level=logging.INFO, format=logging.BASIC_FORMAT)
+default_log_format = '%(highlevel)s %(created)f %(module)s %(levelname)s  %(message)s'
+default_formatter = LevelFormatter(fmt=default_log_format)
+
+logging.basicConfig(
+    level=logging.INFO,
+    format = '%(module)s %(created)f [%(name)s] %(message)s ')
+
 c = get_config()
-# Don't it this way
+# admonition: Don't it this way
 # c = Configurable()
 
 
@@ -137,7 +144,6 @@ except (ImportError, ModuleNotFoundError):
     c.InteractiveShellApp.matplotlib = None
 else:
     c.InteractiveShellApp.matplotlib = 'auto'
-    c.InteractiveShellApp.pylab = 'auto'
 
 # Run the module as a script.
 # c.InteractiveShellApp.module_to_run = ''
@@ -174,6 +180,7 @@ c.Application.log_datefmt = '%Y-%m-%d %H:%M:%S'
 
 # The Logging format template
 # Default: '[%(name)s]%(highlevel)s %(message)s'
+# Todo: Import traitlets.config.application.LevelFormatter
 c.Application.log_format = '%(module) : %(created)f : [%(name)s] : %(highlevel)s : %(message)s : '
 
 # Set the log level by value or name.
@@ -294,7 +301,7 @@ c.InteractiveShell.banner1 = ""
 # less than 3, it is reset to 0 and a warning is issued). This limit is defined
 # because otherwise you'll spend more time re-flushing a too small cache than
 # working
-c.InteractiveShell.cache_size = 100000
+c.InteractiveShell.cache_size = 10000
 
 # Use colors for displaying information about objects. Because this information
 #  is passed through a pager (like 'less'), and some pagers get confused with
@@ -327,7 +334,6 @@ c.InteractiveShell.history_length = 50000
 # The number of saved history entries to be loaded into the history buffer at
 #  startup.
 c.InteractiveShell.history_load_length = 10000
-
 
 # Start logging to the given file in append mode. Use `logfile` to specify a
 # log file to **overwrite** logs to.
@@ -399,11 +405,6 @@ c.InteractiveShell.quiet = False
 
 c.InteractiveShell.wildcards_case_sensitive = False
 
-# Switch modes for the IPython exception handlers.
-# Default: 'Context'
-# Choices: ['Context', 'Plain', 'Verbose', 'Minimal']
-# c.InteractiveShell.xmode = 'Context'
-
 # ----------------------------------------------------------------------------
 # TerminalInteractiveShell(InteractiveShell) configuration
 # ----------------------------------------------------------------------------
@@ -433,8 +434,7 @@ else:
     else:
         c.TerminalInteractiveShell.editing_mode = 'emacs'
 
-
-c.log("Editing Mode:\t {!s}".format(c.TerminalInteractiveShell.editing_mode))
+# c.log("Editing Mode:\t {!s}".format(c.TerminalInteractiveShell.editing_mode))
 
 # Set the editor used by IPython (default to $EDITOR/vi/notepad).
 c.TerminalInteractiveShell.editor = 'nvim'
@@ -468,7 +468,7 @@ c.TerminalInteractiveShell.extra_open_editor_shortcuts = True
 try:
     from gruvbox.style import GruvboxDarkHard
 except (ImportError, ModuleNotFoundError):
-    c.TerminalInteractiveShell.highlighting_style = 'monokai'
+    c.TerminalInteractiveShell.highlighting_style = 'friendly'
 else:
     c.TerminalInteractiveShell.highlighting_style = 'GruvboxDarkHard'
 
@@ -499,12 +499,11 @@ class StandardPythonPrompt(ClassicPrompts):
     [(Token.Prompt, '>>> ')]
 
     """
-
     def __repr__(self):
         """The most boiler-platey repr I can come up with."""
         return self.__class__.__name__
 
-    # def __call__(self):
+        # def __call__(self):
         """TODO"""
         # return
 
@@ -522,7 +521,6 @@ class StandardPythonPrompt(ClassicPrompts):
 # variable is set, or the current terminal is not a tty.
 # c.TerminalInteractiveShell.simple_prompt = False
 
-
 # Number of line at the bottom of the screen to reserve for the completion menu
 c.TerminalInteractiveShell.space_for_menu = 6
 
@@ -537,6 +535,12 @@ c.TerminalInteractiveShell.term_title_format = 'IPython: {cwd}'
 # terminal supports true color, the following command should print 'TRUECOLOR'
 # in orange: printf "\x1b[38;2;255;100;0mTRUECOLOR\x1b[0m\n"
 c.TerminalInteractiveShell.true_color = True
+
+# Switch modes for the IPython exception handlers.
+# Default: 'Context'
+# Choices: ['Context', 'Plain', 'Verbose', 'Minimal']
+
+c.TerminalInteractiveShell.xmode = 'Minimal'
 
 # ----------------------------------------------------------------------------
 # HistoryAccessor(HistoryAccessorBase) configuration
@@ -654,7 +658,6 @@ class BaseFormatterDoc(Configurable):
     .. seealso:: :mod:`IPython.lib.pretty`.
 
     """
-
     def __init__(self, *args, **kwargs):
         """Initialize a BaseFormatter and get some Sphinx help.
 
@@ -763,11 +766,9 @@ c.Completer.jedi_compute_type_timeout = 0
 # try:
 #     import jedi
 # except ImportError:  # clearly not installed
-#     c.Completer.use_jedi = False
+c.Completer.use_jedi = False
 # else:
 #     c.Completer.use_jedi = True
-
-c.Completer.use_jedi = False
 
 # It's not that I don't want to use jedi, it's that our implementation is awful
 

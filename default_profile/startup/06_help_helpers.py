@@ -23,13 +23,29 @@ import sys
 
 
 def print_help(arg=None):
-    """Redirect :func:`help` to ``sys.stderr``."""
+    """Redirect :func:`help` to ``sys.stderr``.
+
+    Parameters
+    ----------
+    arg : obj, optional
+        Object to run :magic:`pinfo` on.
+
+    """
     with contextlib.redirect_stdout(sys.stderr):
         help(arg)
 
 
 def save_help(output_file, arg=None):
-    """Write :func:`help` to a file."""
+    """Write :func:`help` to a file.
+
+    Parameters
+    ----------
+    output_file : str (os.Pathlike)
+        File to write to.
+    arg : obj, optional
+        Object to run :magic:`pinfo` on.
+
+    """
     with open(output_file, "xt") as f:
         with contextlib.redirect_stdout(f):
             help(arg)
@@ -40,6 +56,11 @@ def page_help(arg=None):
 
     Also noting it's the only function in this module that actually needs
     the IPython instance so the imports were moved here.
+
+    Parameters
+    ----------
+    arg : obj, optional
+        Object to run :magic:`pinfo` on.
     """
     from IPython.core.getipython import get_ipython
 
@@ -54,7 +75,7 @@ def grep(obj, pattern=None):
     Parameters
     ----------
     obj : object
-        Any object who has a large enough namespace to warrant greping.
+        Any object who has a large enough namespace to warrant a :command:`grep`.
     pattern : list, optional
         Unfortunately, lists are mutable objects and can't be used as
         default parameters.
@@ -94,7 +115,9 @@ def dirip():
     >>> from default_profile.startup import help_helpers_mod
     >>> i = help_helpers_mod.dirip()
     >>> i.grep('complete')
-    ['Completer', 'check_complete', 'complete', 'completer', 'init_completer', 'pt_complete_style', 'set_completer_frame', 'set_custom_completer']
+    ['Completer', 'check_complete', 'complete', 'init_completer', 'pt_complete_style', 'set_completer_frame', 'set_custom_completer']
+
+    .. where did completer go?
 
     """
     from IPython.core.getipython import get_ipython

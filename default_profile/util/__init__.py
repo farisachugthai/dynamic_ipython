@@ -33,6 +33,7 @@ with a pre-determined template string like so::
 """
 import logging
 
+from .base16 import Base16
 from .copytree import CopyTree
 # sqlite is being annoying on windows :/ go figure
 # from .ipython_get_history import get_history
@@ -43,13 +44,16 @@ from .pager2 import c
 from .profile_override import ReprProfileDir
 from .timer import timer as _itimer
 
-logging.BASIC_FORMAT = '%(created)f : %(module)s : %(levelname)s : %(message)s'
+from traitlets.config.application import LevelFormatter
+
+LOG_BASIC_FORMAT = '%(module) : %(created)f : [%(name)s] : %(highlevel)s : %(message)s : '
 
 UTIL_LOGGER = logging.getLogger('default_profile').getChild('util')
 UTIL_LOGGER.setLevel(logging.WARNING)
 util_handler = logging.StreamHandler()
-util_formmatter = logging.Formatter(fmt=logging.BASIC_FORMAT)
 util_handler.setLevel(logging.WARNING)
+util_handler.setFormatter(LevelFormatter(LOG_BASIC_FORMAT))
+util_handler.addFilter(logging.Filter())
 UTIL_LOGGER.addHandler(util_handler)
 
 path = PathValidator().path
