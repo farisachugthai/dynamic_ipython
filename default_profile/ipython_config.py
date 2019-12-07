@@ -313,10 +313,11 @@ c.InteractiveShell.colors = 'Linux'
 #  regular output instead.
 # Only if we don't have bat.
 
-if shutil.which('bat'):
-    c.InteractiveShell.display_page = False
-else:
+if platform.system() == 'Windows':
     c.InteractiveShell.display_page = True
+else:
+    if shutil.which('bat'):
+        c.InteractiveShell.display_page = False
 
 # (Provisional API) enables html representation in mime bundles sent to pagers.
 # c.InteractiveShell.enable_html_pager = False
@@ -434,7 +435,8 @@ else:
         c.TerminalInteractiveShell.editing_mode = 'emacs'
 
 
-c.log("Editing Mode:\t {!s}".format(c.TerminalInteractiveShell.editing_mode))
+# TODO: What is the API for traitlets.LazyConfigValue? It doesn't have a log method.
+# c.log("Editing Mode:\t {!s}".format(c.TerminalInteractiveShell.editing_mode))
 
 # Set the editor used by IPython (default to $EDITOR/vi/notepad).
 c.TerminalInteractiveShell.editor = 'nvim'

@@ -4,6 +4,8 @@
 This imports a few utility functions from :mod:`IPython` and imports the python
 package neovim is served in.
 """
+# This is really unnecessary. Undo later
+from asyncio import *  # noqa
 from importlib import import_module
 import io
 import logging
@@ -15,7 +17,7 @@ from IPython.lib.deepreload import reload as _reload
 from IPython.core.error import TryNext
 from IPython import get_ipython
 
-logging.basicConfig(level=logging.WARN)
+from default_profile.startup import STARTUP_LOGGER
 
 
 class NvimHook:
@@ -195,12 +197,3 @@ if __name__ == "__main__":
         mod = "neovim"
 
     easy_import(mod)
-
-    # _ip = get_ipython()
-    # if _ip.editor == 'nvim':
-    #     _ip.set_hook('editor', NvimHook().nvim_quickfix_file, priority=99)
-    # else:
-    #     logging.warning('$EDITOR not set. IPython hook not set.')
-
-    # if logging.getLevelName(logging.INFO):
-    #     logging.info('The editor hooks are as follows %s: ', _ip.hooks['editor'].__str__())
