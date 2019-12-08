@@ -63,12 +63,22 @@ import sys
 import time
 from typing import Dict
 
+# Logging
+# DOCS_LOGGER = logging.getLogger('docs.source').getChild('conf')
+DOCS_LOGGER = logging.getLogger(name=__name__,)
+DOCS_HANDLER = logging.StreamHandler()
+DOCS_LOGGER.addHandler(DOCS_HANDLER)
+DOCS_LOGGER.setLevel(logging.INFO)
+
+
 # Third party
 import sphinx
 from sphinx.ext.autodoc import cut_lines
 from sphinx.util.docfields import GroupedField
 from sphinx.domains.rst import ReSTDomain
-from sphinx.util import logging
+from sphinx.util.logging import getLogger
+# Yes i do actually configure my own logger and sphinxs
+sphinx_logger = getLogger(name=__name__).setLevel(logging.DEBUG)
 
 from IPython.lib.lexers import IPyLexer, IPythonTracebackLexer
 from IPython.sphinxext import ipython_directive
@@ -84,9 +94,6 @@ from default_profile.startup import *
 
 DOCS = Path(__file__).resolve().parent.parent
 
-# Logging
-# DOCS_LOGGER = logging.getLogger('docs.source').getChild('conf')
-DOCS_LOGGER = logging.getLogger(name=__name__)
 
 # Gotta hack at sys.path a little
 ROOT = DOCS.parent
@@ -97,8 +104,10 @@ def ask_for_import(mod):
     """Try/except for importing modules."""
     try:
         return import_module(mod)
-    except (ImportError, ModuleNotFoundError):
-        pass
+    except Exception:  # noqa
+        if getattr(sys, 'last_type', None):
+            exception_name = sys.last_type
+            DOCS_LOGGER.exception(exception_name)
 
 
 ask_for_import('jinja2')
@@ -131,16 +140,13 @@ extensions = [
     'sphinx.ext.viewcode',
     'IPython.sphinxext.ipython_directive',
     'IPython.sphinxext.ipython_console_highlighting',
-    # i fucked up
-    # 'default_profile.sphinxext.ipython_directive',
 ]
 
-if ask_for_import('numpydoc'):
-    extensions.append('numpydoc.numpydoc')
-    DOCS_LOGGER.info('numpydoc in extensions')
+# if ask_for_import('numpydoc'):
+#     extensions.append('numpydoc.numpydoc')
+#     DOCS_LOGGER.info('numpydoc in extensions')
 
 if ask_for_import('default_profile.sphinxext.magics'):
-    magics = ask_for_import('default_profile.sphinxext.magics')
     extensions.append('default_profile.sphinxext.magics')
     DOCS_LOGGER.info('magics in extensions')
 
@@ -148,6 +154,7 @@ if ask_for_import('flake8_rst'):
     extensions.extend([
         'flake8_rst.sphinxext.custom_roles',
     ])
+    DOCS_LOGGER.info('flake8_rst in extensions')
 
 # -- General Configuration ----------------------------------------
 

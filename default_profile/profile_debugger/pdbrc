@@ -20,6 +20,15 @@
     ipdb version 0.10.3.
 
 """
+import bdb
+import cmd
+import os
+import reprlib
+import sys
+import trace
+import traceback
+
+
 try:
     import pyreadline
 except:
@@ -29,20 +38,36 @@ except:
         pass
     else:
         from jedi.utils import setup_readline
-        setup_readline()
-        del jedi
+        try:
+            setup_readline()
+        except ImportError as e:
+            if getattr(sys, 'last_type', None):
+                print(sys.last_type)
+
+
+# Alright pdb stuff.
+import pdb
+from pdb import Pdb
+debugger = Pdb(skip='traitlets')
+debugger.prompt = 'YourPdb: '
+# seriously pdb shut the fuck up
+debugger.doc_header = ''
 
 # https://github.com/python/cpython/blob/3.7/Lib/pdb.py#L1380
+
 # in the do_alias() function it mentions some examples and they sounded like
 # useful alias to tack on!
 
-# Print instance variables (usage "pi classInst")
-alias pi for k in % 1.__dict__.keys(): print("%1.", k, "=", % 1.__dict__[k])  # noqa
-# # Print instance variables in self
-alias ps pi self
+def create_pdb_aliases():
 
-# # Apr 07, 2019
-# # How in the world have I gone this long without noticing this isn't set up
-alias ? pinfo
-# # Kinda sucks now only ?func is valid not func?
-alias ?? pinfo2
+    # Print instance variables (usage "pi classInst")
+    alias pi for k in % 1.__dict__.keys(): print("%1.", k, "=", % 1.__dict__[k])  # noqa
+    # # Print instance variables in self
+    alias ps pi self
+
+    # # Apr 07, 2019
+    # # How in the world have I gone this long without noticing this isn't set up
+    alias ? pinfo
+    # # Kinda sucks now only ?func is valid not func?
+    alias ?? pinfo2
+

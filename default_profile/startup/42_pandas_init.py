@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import sys
 import logging
 
-# Dude holy shit pycharm is good
-ROOT_HANDLER_PD = logging.StreamHandler()
+ROOT_HANDLER_PD = logging.StreamHandler(sys.stdout)
 ROOT_HANDLER_PD.setLevel(logging.INFO)
 logging.basicConfig(
     level=logging.INFO,
@@ -51,13 +51,16 @@ def pandas_init():
         for op, value in option.items():
             pd.set_option(f"{category}.{op}", value)  # Python 3.6+
 
+    pd.plotting.register_matplotlib_converters()
+
 
 class DisplayHTML:
     """Display HTML representation of multiple objects"""
 
     template = """
     <div style="float: left; padding: 10px;">
-    <p style='font-family:"Courier New", Courier, monospace'>{0}</p>{1}
+    <p style='font-family:'DejaVu Sans Mono',
+    "Courier New", Courier, monospace'>{0}</p>{1}
     </div>
     """
 
@@ -74,10 +77,6 @@ class DisplayHTML:
 
 
 if __name__ == "__main__":
-    name = "default_profile.startup.pandas_init"
-    # PANDAS_LOGGER = module_log.stream_logger(logger=name,
-    #                                          log_level=logging.INFO)
-
     try:  # Import numexpr before pandas if possible
         import numexpr
     except (ImportError, ModuleNotFoundError):
