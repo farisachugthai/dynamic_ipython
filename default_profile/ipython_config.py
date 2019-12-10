@@ -20,7 +20,6 @@ Notes
 Therefore that function shouldn't be used anywhere in this file.
 
 """
-from IPython.terminal.prompts import ClassicPrompts
 import builtins
 import logging
 import os
@@ -30,15 +29,23 @@ import sys
 import traceback
 from pathlib import Path
 
+from IPython.terminal.prompts import ClassicPrompts
 from IPython import version_info
 # THIS IS THE MODULE! Its too exciting to able to execute this script
 # directly from within python and not get an error for a func call with no
 # import
 from traitlets.config import get_config, Configurable
+from traitlets.config.application import LevelFormatter
 
-logging.basicConfig(level=logging.INFO, format=logging.BASIC_FORMAT)
+default_log_format = '%(highlevel)s %(created)f %(module)s %(levelname)s  %(message)s'
+default_formatter = LevelFormatter(fmt=default_log_format)
+
+logging.basicConfig(
+    level=logging.INFO,
+    format = '%(module)s %(created)f [%(name)s] %(message)s ')
+
 c = get_config()
-# Don't it this way
+# admonition: Don't it this way
 # c = Configurable()
 
 try:
@@ -151,6 +158,12 @@ c.InteractiveShellApp.extensions = []
 #     widget', 'wx']
 #     Configure matplotlib for interactive use with the default matplotlib
 #     backend.
+try:
+    import matplotlib
+except (ImportError, ModuleNotFoundError):
+    c.InteractiveShellApp.matplotlib = None
+else:
+    c.InteractiveShellApp.matplotlib = 'auto'
 
 # Run the module as a script.
 # c.InteractiveShellApp.module_to_run = ''
@@ -180,6 +193,7 @@ c.Application.log_datefmt = '%Y-%m-%d %H:%M:%S'
 
 # The Logging format template
 # Default: '[%(name)s]%(highlevel)s %(message)s'
+# Todo: Import traitlets.config.application.LevelFormatter
 c.Application.log_format = '%(module) : %(created)f : [%(name)s] : %(highlevel)s : %(message)s : '
 
 # Set the log level by value or name.
@@ -446,7 +460,7 @@ c.InteractiveShell.wildcards_case_sensitive = False
 # Switch modes for the IPython exception handlers.
 # Default: 'Context'
 # Choices: ['Context', 'Plain', 'Verbose', 'Minimal']
-c.InteractiveShell.xmode = 'Minimal'
+# c.InteractiveShell.xmode = 'Context'
 
 # ----------------------------------------------------------------------------
 # TerminalInteractiveShell(InteractiveShell) configuration
@@ -521,7 +535,7 @@ c.TerminalInteractiveShell.extra_open_editor_shortcuts = True
 try:
     from gruvbox.style import GruvboxDarkHard
 except (ImportError, ModuleNotFoundError):
-    c.TerminalInteractiveShell.highlighting_style = 'monokai'
+    c.TerminalInteractiveShell.highlighting_style = 'friendly'
 else:
     c.TerminalInteractiveShell.highlighting_style = 'GruvboxDarkHard'
 
@@ -582,10 +596,13 @@ class StandardPythonPrompt(ClassicPrompts):
     [(Token.Prompt, '>>> ')]
 
     """
-
     def __repr__(self):
         """The most boiler-platey repr I can come up with."""
         return self.__class__.__name__
+
+    # def __call__(self):
+        """TODO"""
+        # return
 
 
 # As an aside I believe that this attr is the same as Prompt
@@ -615,7 +632,6 @@ c.TerminalInteractiveShell.term_title_format = 'IPython: {cwd}'
 # terminal supports true color, the following command should print 'TRUECOLOR'
 # in orange: printf "\x1b[38;2;255;100;0mTRUECOLOR\x1b[0m\n"
 c.TerminalInteractiveShell.true_color = True
-
 
 # Switch modes for the IPython exception handlers.
 # Default: 'Context'
@@ -739,7 +755,6 @@ class BaseFormatterDoc(Configurable):
     .. seealso:: :mod:`IPython.lib.pretty`.
 
     """
-
     def __init__(self, *args, **kwargs):
         """Initialize a BaseFormatter and get some Sphinx help.
 
@@ -839,11 +854,9 @@ c.Completer.jedi_compute_type_timeout = 0
 # try:
 #     import jedi
 # except ImportError:  # clearly not installed
-#     c.Completer.use_jedi = False
+c.Completer.use_jedi = False
 # else:
 #     c.Completer.use_jedi = True
-
-c.Completer.use_jedi = False
 
 # It's not that I don't want to use jedi, it's that our implementation is awful
 

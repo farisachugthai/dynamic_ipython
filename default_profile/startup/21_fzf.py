@@ -61,19 +61,22 @@ class Executable(ContextDecorator):  # types.MappingProxy
 class FZF:
     """Wrap FZF together."""
 
-    def __init__(self, fzf_alias=None, *args, **kwargs):
+    fzf_alias = ''
+
+    def __init__(self, fzf_alias=None):
         self.fzf_alias = fzf_alias or ''
 
     def __repr__(self):
         return '{}    {}'.format(self.__class__.__name__, self.fzf_alias)
 
-    def _setup_fzf(self):
-        if self.fzf_alias is None:
-            self.fzf_alias = ()
+    @classmethod
+    def _setup_fzf(cls):
+        if cls.fzf_alias is None:
+            cls.fzf_alias = ()
         if shutil.which("fzf") and shutil.which("rg"):
             # user_aliases.extend(
             #     ('fzf', '$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS'))
-            self.fzf_alias = (
+            cls.fzf_alias = (
                 "fzf",
                 "rg --pretty --hidden --max-columns-preview --no-heading --no-messages --no-column --no-line-number -C 0 -e ^ | fzf --ansi --multi ",
             )
@@ -81,10 +84,10 @@ class FZF:
         elif shutil.which("fzf") and shutil.which("ag"):
             # user_aliases.extend(
             #     ('fzf', '$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS'))
-            self.fzf_alias = ("fzf",
-                              "ag -C 0 --color-win-ansi --noheading %l | fzf")
+            cls.fzf_alias = ("fzf",
+                             "ag -C 0 --color-win-ansi --noheading %l | fzf")
 
-        return self.fzf_alias
+        return cls.fzf_alias
 
 
 def is_tmux():
@@ -125,7 +128,8 @@ def main():
                 busybox_hack(shell)
 
         fzf_aliases = FZF()._setup_fzf()
-        shell.alias_manager.user_aliases.append(fzf_aliases)
+        shell.alias_manager.user_aliases.append(FZF._setup_fzf())
+        # TODO: is this really the method we need to call here?
         shell.alias_manager.init_aliases()
 
 
