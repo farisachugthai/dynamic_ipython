@@ -4,8 +4,7 @@
 Jupyter Suite
 =============
 
-.. module:: jupyter_conf
-   :synopsis: Documentation for the Jupyter project.
+.. currentmodule:: jupyter_conf
 
 .. highlight:: ipython
 
@@ -18,15 +17,16 @@ suite. These have been commented and marked up as appropriate.
 
    qtconsole
 
-.. autosummary::
+Interrupting text.
 
-   jupyter_console_config
-   jupyter_contrib_nbextension_config
-   jupyter_labextension_config
-   jupyter_nbconvert_config
-   jupyter_notebook_config/__init__
-   jupyter_qtconsole_config
-   jupyter_serverextension_config
-   jupyternbextensions_configurator_config
+.. automodule:: jupyter_console_config
 
+.. automodule:: jupyter_contrib_nbextension_config
 
+.. automodule:: jupyter_labextension_config
+
+.. automodule:: jupyter_nbconvert_config
+
+.. todo:: Why isn't this one working in the autosummary?
+
+   jupyter_notebook_config

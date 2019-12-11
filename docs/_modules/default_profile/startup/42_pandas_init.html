@@ -14,6 +14,7 @@
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/startup/42_pandas_init.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -55,10 +56,10 @@
 <h1>Source code for default_profile.startup.42_pandas_init</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 
-<span class="c1"># Dude holy shit pycharm is good</span>
-<span class="n">ROOT_HANDLER_PD</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">()</span>
+<span class="n">ROOT_HANDLER_PD</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
 <span class="n">ROOT_HANDLER_PD</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
     <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span>
@@ -104,7 +105,9 @@
     <span class="c1"># XXX: Did i mean to do this twice?</span>
     <span class="k">for</span> <span class="n">category</span><span class="p">,</span> <span class="n">option</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="k">for</span> <span class="n">op</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">option</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{category}</span><span class="s2">.</span><span class="si">{op}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>  <span class="c1"># Python 3.6+</span></div>
+            <span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{category}</span><span class="s2">.</span><span class="si">{op}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>  <span class="c1"># Python 3.6+</span>
+
+    <span class="n">pd</span><span class="o">.</span><span class="n">plotting</span><span class="o">.</span><span class="n">register_matplotlib_converters</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="DisplayHTML"><a class="viewcode-back" href="../../../startup/42_pandas.html#default_profile.startup.42_pandas_init.DisplayHTML">[docs]</a><span class="k">class</span> <span class="nc">DisplayHTML</span><span class="p">:</span>
@@ -112,7 +115,8 @@
 
     <span class="n">template</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">    &lt;div style=&quot;float: left; padding: 10px;&quot;&gt;</span>
-<span class="s2">    &lt;p style=&#39;font-family:&quot;Courier New&quot;, Courier, monospace&#39;&gt;</span><span class="si">{0}</span><span class="s2">&lt;/p&gt;</span><span class="si">{1}</span><span class="s2"></span>
+<span class="s2">    &lt;p style=&#39;font-family:&#39;DejaVu Sans Mono&#39;,</span>
+<span class="s2">    &quot;Courier New&quot;, Courier, monospace&#39;&gt;</span><span class="si">{0}</span><span class="s2">&lt;/p&gt;</span><span class="si">{1}</span><span class="s2"></span>
 <span class="s2">    &lt;/div&gt;</span>
 <span class="s2">    &quot;&quot;&quot;</span>
 
@@ -129,10 +133,6 @@
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;default_profile.startup.pandas_init&quot;</span>
-    <span class="c1"># PANDAS_LOGGER = module_log.stream_logger(logger=name,</span>
-    <span class="c1">#                                          log_level=logging.INFO)</span>
-
     <span class="k">try</span><span class="p">:</span>  <span class="c1"># Import numexpr before pandas if possible</span>
         <span class="kn">import</span> <span class="nn">numexpr</span>
     <span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="n">ModuleNotFoundError</span><span class="p">):</span>
@@ -220,11 +220,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../util/timer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">timer</span></code> module</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../../kernel.html">IPython Kernel</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../jupyter/index.html">jupyter</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../jupyter/qtconsole.html">Jupyter QTConsole</a></li>
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Extensions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../jobcontrol.html">Job Control</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../todo.html">Todo</a></li>
@@ -253,7 +248,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Dec 05, 2019.
+      Last updated on Dec 10, 2019.
     </div>
   </body>
 </html>
