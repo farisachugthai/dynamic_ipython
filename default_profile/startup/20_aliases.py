@@ -153,6 +153,8 @@ class CommonAliases:
             ("git", "git %l"),
             ("git config-list", "git config --get --global %l"),
             ("git config-glob", "git config --get-regex --global %l.*"),
+            # If you're on a topic branch, shows commit msgs since split
+            ("git fork", "git show-branch --current %l")
             (
                 "git hist",
                 'git log --pretty="format:%h %ad | %d [%an]" --graph --date=short '
@@ -345,7 +347,7 @@ class LinuxAliases(CommonAliases):
         return self.user_aliases
 
 
-class WindowsAliases:
+class WindowsAliases(CommonAliases):
     """Aggregated Window aliases. Provides simplified system calls for NT.
 
     Methods
@@ -392,6 +394,10 @@ class WindowsAliases:
         path : str (path-like)
             Where the executable is located.
 
+        Note
+        ----
+        shutil.which actually checks :envvar:`PATHEXT`! That's real nice.
+
         """
         return shutil.which(exe) or None
 
@@ -433,7 +439,8 @@ class WindowsAliases:
             ("move", "move %s %s"),
             ("mv", "move %s %s"),
             ("ren", "ren %l"),
-            ("rmdir", "rmdir %l"),
+            ("rm", "del %l"),
+            ("rmdir", "erase %l"),
             ("tree", "tree /A /F %l"),
         ]
         return cls.user_aliases
@@ -522,7 +529,8 @@ class WindowsAliases:
         elif os.environ.get("COMSPEC"):
             return os.environ.get("COMSPEC")
         else:
-            logging.warning('%s is None as are %s and %s', self.shell, '$SHELL', '$COMSPEC')
+            logging.warning('%s is None as are %s and %s',
+                            self.shell, '$SHELL', '$COMSPEC')
 
 
 def main():
@@ -551,7 +559,11 @@ def main():
         # finish the shell class in default_profile.util.machine
         # then we can create a shell class that determines if
         # we're in cmd or pwsh
-        user_aliases += WindowsAliases().cmd_aliases()
+        try:
+            user_aliases += WindowsAliases().cmd_aliases()
+        except SyntaxError as e:
+            if hasattr(e, 'lineno', None):
+                print('Error: .20_aliases main method line: {}'.format(e.lineno))
 
     _ip.alias_manager.user_aliases = user_aliases
     # Apparently the big part i was missing was rerunning the init_aliases method

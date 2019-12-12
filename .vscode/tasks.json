@@ -41,16 +41,12 @@
           "docs/build/html"
         ]
       },
-      "options": {
-        "shell": {
-          "executable": "cmd",
-          "args": [
-            "/U",
-            "/K",
-            "C:/tools/Cmder/vendor/init.bat"
-          ]
-        }
-      },
+      "command": "cmd",
+      "args": [
+        "/U",
+        "/K",
+        "C:/tools/Cmder/vendor/init.bat"
+      ]
     },
     {
       "label": "second try sphinx-build",
@@ -71,16 +67,20 @@
       }
     },
     {
+      "type": "shell",
+      "command": "${config:python.pythonPath}",
+      "label": "autopep8 file. shell?",
       "args": [
         "-m",
         "autopep8",
         "-i",
         "${file}"
       ],
+    },
+    {
       "command": "${config:python.pythonPath}",
-      ""
       "group": "none",
-      "label": "autopep8 current file",
+      "label": "autopep8 current file. process?",
       "type": "process"
     },
     {

@@ -5,6 +5,12 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Python: Module",
+      "type": "python",
+      "request": "launch",
+      "module": "{file}"
+    },
+    {
       "name": "IPython Module",
       "type": "python",
       "preLaunchTask": "conda",
@@ -14,37 +20,33 @@
       "console": "internalConsole"
     },
     {
+      "console": "internalConsole",
+      "program": "call C:\\tools\\miniconda3\\envs\\working\\Scripts\\conda.bat",
+      "name": "conda",
+      "request": "launch",
+      "type": "python",
+      // "command": "call C:\\tools\\miniconda3\\envs\\working\\Scripts\\conda.bat"
+      // why the fuck isnt teh command property allowed
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Run specific test",
+      "program": "${workspaceFolder}/${input:pickTest}",
+    },
+    {
       "name": "basic python debugger",
       "type": "python",
       "request": "launch",
       "stopOnEntry": true,
       "console": "internalConsole",
-      "program": "ipdb3 ${file}",
+      // "program": "${config:python.pythonPath} -m pdb -m ${file}",
       "cwd": "${workspaceRoot}"
       // "debugOptions": [
       //     "WaitOnAbnormalExit",
       //     "WaitOnNormalExit",
       //     "RedirectOutput"
       // ],
-    },
-    {
-      "name": "PowerShell Attach to Host Process",
-      "type": "PowerShell",
-      "request": "attach",
-      "runspaceId": 1
-    },
-    {
-      "name": "PowerShell Launch Script",
-      "type": "PowerShell",
-      "request": "launch",
-      "script": "enter path or command to execute e.g.: ${workspaceFolder}/src/foo.ps1 or Invoke-Pester",
-      "cwd": "${workspaceFolder}"
-    },
-    {
-      "name": "PowerShell Interactive Session",
-      "type": "PowerShell",
-      "request": "launch",
-      "cwd": ""
     },
     {
       "type": "node",
@@ -182,17 +184,21 @@
       "console": "externalTerminal"
     },
     {
-      "name": "PowerShell Interactive Session",
-      "type": "PowerShell",
-      "request": "launch",
-      "cwd": "${workspaceFolder}"
-    },
-    {
       "name": "test.test_00_ipython",
       "type": "python",
       "request": "launch",
       "console": "integratedTerminal",
       "module": "test.test_00_ipython.py"
+    }
+  ],
+  "inputs": [
+    {
+      "id": "pickTest",
+      "type": "command",
+      "command": "extension.mochaSupport.testPicker",
+      "args": {
+        "testFolder": "/out/tests"
+      }
     }
   ]
 }

@@ -38,4 +38,4 @@ class EnvironMagics(Magics):
 
     @line_magic
     def unset(self, arg):
-        return os.environ.unsetenv(arg)
+        return os.environ.unset(arg)

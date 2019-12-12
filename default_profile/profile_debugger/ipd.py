@@ -10,7 +10,6 @@ Oct 06, 2019:
 
 
 """
-import inspect
 import pdb
 from pdb import Pdb
 import sys
@@ -92,7 +91,7 @@ class IPD(Pdb):
 
     def initialize_completer(self):
         """Create a completion instance for the debugger."""
-        return IPCompleter(
+        return IPythonPTCompleter(
             shell=self.shell,
             namespace=self.shell.user_ns,
             global_namespace=globals(),

@@ -50,10 +50,10 @@ else:
     # This is the real test
     # I want this loaded too so that I don't have to rewrite all my startup junk
     try:
-        from default_profile import startup
+        from default_profile import profile_newterm
     except Exception as e:
-        traceback.print_exc(e)
-
+        if getattr(sys, 'exc_info', None):
+            traceback.print_exc(*sys.exc_info())
 
 try:
     from .unimpaired import TerminallyUnimpaired
@@ -85,14 +85,6 @@ if ModuleNotFoundError not in dir(builtins):
         def __repr__(self):
             return "{}\n{}".format(self.__class__.__name__, self.__traceback__)
 
-
-# def loaded_config(loaded=None):
-#     """Just noticed IPython loads this file twice."""
-#     if loaded is None:
-#         pass
-#     loaded = True
-
-# loaded_config(loaded)  # noqa F821
 
 # ----------------------------------------------------------------------------
 # InteractiveShellApp(Configurable) configuration
@@ -239,8 +231,31 @@ c.TerminalIPythonApp.force_interact = True
 # ---
 # Class to use to instantiate the TerminalInteractiveShell object. Useful for
 #  custom Frontends
+
+# Yo I just got the saddest error messages about this.
+# The HistoryManager required InteractiveShellABC or None....
+# Can we not configure this parameter then? How do we set it to a
+# fucking abstract class?
+
 # c.TerminalIPythonApp.interactive_shell_class = 'IPython.terminal.interactiveshell.TerminalInteractiveShell'
-c.TerminalIPythonApp.interactive_shell_class = default_profile.profile_newterm.unimpaired.TerminallyUnimpaired
+# if hasattr(default_profile, 'profile_newterm'):
+#     c.TerminalIPythonApp.interactive_shell_class = default_profile.profile_newterm.unimpaired.TerminallyUnimpaired
+# else:
+#     logging.warning("if hasattr(default_profile, 'profile_newterm'): returned False")
+#     try:
+#         from .unimpaired import TerminallyUnimpaired
+#     except Exception as e:
+#         logging.critical(e)
+#     else:
+#         c.TerminalIPythonApp.interactive_shell_class = TerminallyUnimpaired
+
+
+# from IPython.core.interactiveshell import InteractiveShellABC
+# c.TerminalIPythonApp.interactive_shell_class = InteractiveShellABC()
+
+# What the hell? Now it's telling me it needs a subclass of object...?
+# EVERYTHING IS A SUBCLASS OF OBJECT YOU FUCKS
+
 
 # Start IPython quickly by skipping the loading of config files.
 # c.TerminalIPythonApp.quick = False
@@ -248,30 +263,6 @@ c.TerminalIPythonApp.interactive_shell_class = default_profile.profile_newterm.u
 # Dec 08, 2019: Adding this in
 c.TerminalIPythonApp.log_format = '%(module) : %(created)f : [%(name)s] : %(highlevel)s : %(message)s : '
 
-# Configure matplotlib for interactive use with the default matplotlib backend.
-
-# TerminalIPythonApp.matplotlib=<CaselessStrEnum>
-#     Default: None
-#     Choices: ['auto', 'agg', 'gtk', 'gtk3', 'inline', 'ipympl', 'nbagg',
-#     notebook', 'osx', 'pdf', 'ps', 'qt', 'qt4', 'qt5', 'svg', 'tk',
-#     widget', 'wx']
-#     Configure matplotlib for interactive use with the default matplotlib
-#     backend.
-try:
-    import matplotlib
-except (ImportError, ModuleNotFoundError):
-    c.TerminalIPythonApp.matplotlib = None
-except OSError:
-    c.TerminalIPythonApp.matplotlib = None
-except Exception as e:
-    if getattr(sys, 'exc_info', None):
-        print(sys.exc_info()[2])
-else:
-    c.TerminalIPythonApp.matplotlib = 'auto'
-    # TODO: I accidentally set this as a config of InteractiveShellApp.
-    # Was this why i've eeen having so many unexplainable mpl problems?
-    # Why is this a problem and what causes it?
-    # c.InteractiveShellApp.pylab = 'auto'
 
 # ------------------------------------------------------------------------------
 # InteractiveShell(SingletonConfigurable) configuration
@@ -289,11 +280,7 @@ c.InteractiveShell.ast_node_interactivity = 'last_expr_or_assign'
 #  user input before code is run.
 # c.InteractiveShell.ast_transformers = []
 
-# Automatically run await statement in the top level repl.
-if version_info > (7, 2):
-    c.InteractiveShell.autoawait = True
-else:
-    c.InteractiveShell.autoawait = False
+c.InteractiveShell.autoawait = False
 
 # Make IPython automatically call any callable object even if you didn't type
 # explicit parentheses. For example, 'str 43' becomes 'str(43)' automatically.
@@ -508,16 +495,16 @@ if platform.system() == 'Windows':
 environment = get_env()
 if 'LESS' not in environment:
     os.environ.setdefault('LESS', "less -JRKMLigeF")
-    os.environ.setdefault('LESSHISTSIZE', 5000)
+    os.environ.setdefault('LESSHISTSIZE', '5000')
 if 'LESS_TERMCAP_mb' not in environment:
     # Who is curios as to whether this is gonna work or not?
-    os.environ.setdefault('LESS_TERMCAP_mb', '\e[01;31m')
-    os.environ.setdefault('LESS_TERMCAP_md', '\e[01;38;5;180m')
-    os.environ.setdefault('LESS_TERMCAP_me', '\e[0m')
-    os.environ.setdefault('LESS_TERMCAP_se', '\e[0m')
-    os.environ.setdefault('LESS_TERMCAP_so', '\e[03;38;5;202m')
-    os.environ.setdefault('LESS_TERMCAP_ue', '\e[0m')
-    os.environ.setdefault('LESS_TERMCAP_us', '\e[04;38;5;139m')
+    os.environ.setdefault('LESS_TERMCAP_mb', r'\e[01;31m')
+    os.environ.setdefault('LESS_TERMCAP_md', r'\e[01;38;5;180m')
+    os.environ.setdefault('LESS_TERMCAP_me', r'\e[0m')
+    os.environ.setdefault('LESS_TERMCAP_se', r'\e[0m')
+    os.environ.setdefault('LESS_TERMCAP_so', r'\e[03;38;5;202m')
+    os.environ.setdefault('LESS_TERMCAP_ue', r'\e[0m')
+    os.environ.setdefault('LESS_TERMCAP_us', r'\e[04;38;5;139m')
 
 # Override highlighting format for specific tokens
 # Comments were genuinely impossible to read. Might need to override
@@ -674,7 +661,7 @@ c.HistoryManager.db_log_output = True
 
 # 05/18/19: I'm enabling this as it overrides the logic used for profile in
 # the `BaseIPythonApplication` section
-c.ProfileDir.location = os.path.join(home, '', '.ipython')
+# c.ProfileDir.location = os.path.join(home, '', '.ipython')
 
 # ----------------------------------------------------------------------------
 # BaseFormatter(Configurable) configuration

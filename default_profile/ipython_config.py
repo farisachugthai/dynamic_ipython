@@ -40,9 +40,8 @@ from traitlets.config.application import LevelFormatter
 default_log_format = '%(highlevel)s %(created)f %(module)s %(levelname)s  %(message)s'
 default_formatter = LevelFormatter(fmt=default_log_format)
 
-logging.basicConfig(
-    level=logging.INFO,
-    format = '%(module)s %(created)f [%(name)s] %(message)s ')
+logging.basicConfig(level=logging.INFO,
+                    format='%(module)s %(created)f [%(name)s] %(message)s ')
 
 c = get_config()
 # admonition: Don't it this way
@@ -60,12 +59,6 @@ else:
         from default_profile import startup
     except Exception as e:
         traceback.print_exc(e)
-
-
-try:
-    from .unimpaired import TerminallyUnimpaired
-except:  # noqa
-    pass
 
 
 def get_home():
@@ -158,12 +151,12 @@ c.InteractiveShellApp.extensions = []
 #     widget', 'wx']
 #     Configure matplotlib for interactive use with the default matplotlib
 #     backend.
-try:
-    import matplotlib
-except (ImportError, ModuleNotFoundError):
-    c.InteractiveShellApp.matplotlib = None
-else:
-    c.InteractiveShellApp.matplotlib = 'auto'
+# try:
+#     import matplotlib
+# except (ImportError, ModuleNotFoundError):
+#     c.InteractiveShellApp.matplotlib = None
+# else:
+#     c.InteractiveShellApp.matplotlib = 'auto'
 
 # Run the module as a script.
 # c.InteractiveShellApp.module_to_run = ''
@@ -293,11 +286,8 @@ else:
 
 # An enhanced, interactive shell for Python.
 
-# 'all', 'last', 'last_expr' or 'none', 'last_expr_or_assign' specifying which
-#  nodes should be run interactively (displaying output from expressions).
-c.InteractiveShell.ast_node_interactivity = 'last_expr_or_assign'
-
 # AKA:  Make IPython automatically call any callable object even if you didn't type
+# c.InteractiveShell.autocall = True
 
 # A list of ast.NodeTransformer subclass instances, which will be applied to
 #  user input before code is run.
@@ -465,13 +455,16 @@ c.InteractiveShell.wildcards_case_sensitive = False
 # ----------------------------------------------------------------------------
 # TerminalInteractiveShell(InteractiveShell) configuration
 # ----------------------------------------------------------------------------
+
+# 'all', 'last', 'last_expr' or 'none', 'last_expr_or_assign' specifying which
+#  nodes should be run interactively (displaying output from expressions).
+c.TerminalInteractiveShell.ast_node_interactivity = 'last_expr_or_assign'
+
 # Autoformatter to reformat Terminal code. Can be `'black'` or `None`
 if shutil.which('black'):
     c.TerminalInteractiveShell.autoformatter = 'black'
 else:
     c.TerminalInteractiveShell.autoformatter = None
-
-c.TerminalInteractiveShell.ast = 'last_expr_or_assign'
 
 # Set to confirm when you try to exit IPython with an EOF (Control-D in Unix,
 #  Control-Z/Enter in Windows). By typing 'exit' or 'quit', you can force a
@@ -497,7 +490,6 @@ else:
         c.TerminalInteractiveShell.prompt_includes_vi_mode = False
     else:
         c.TerminalInteractiveShell.editing_mode = 'emacs'
-
 
 # TODO: What is the API for traitlets.LazyConfigValue? It doesn't have a log method.
 # c.log("Editing Mode:\t {!s}".format(c.TerminalInteractiveShell.editing_mode))
@@ -550,26 +542,25 @@ if platform.system() == 'Windows':
     # I know it's odd making this platform specific but everything is completely illegible otherwise
     c.TerminalInteractiveShell.highlighting_style = friendly
 
-
 environment = get_env()
 if 'LESS' not in environment:
-    os.environ.setdefault('LESS', "less -JRKMLigeF")
-    os.environ.setdefault('LESSHISTSIZE', 5000)
+    os.environ.setdefault("LESS", "less -JRKMLigeF")
+    os.environ.setdefault("LESSHISTSIZE", "5000")
+
 if 'LESS_TERMCAP_mb' not in environment:
     # Who is curios as to whether this is gonna work or not?
-    os.environ.setdefault('LESS_TERMCAP_mb', '\e[01;31m')
-    os.environ.setdefault('LESS_TERMCAP_md', '\e[01;38;5;180m')
-    os.environ.setdefault('LESS_TERMCAP_me', '\e[0m')
-    os.environ.setdefault('LESS_TERMCAP_se', '\e[0m')
-    os.environ.setdefault('LESS_TERMCAP_so', '\e[03;38;5;202m')
-    os.environ.setdefault('LESS_TERMCAP_ue', '\e[0m')
-    os.environ.setdefault('LESS_TERMCAP_us', '\e[04;38;5;139m')
+    os.environ.setdefault('LESS_TERMCAP_mb', r'\e[01;31m')
+    os.environ.setdefault('LESS_TERMCAP_md', r'\e[01;38;5;180m')
+    os.environ.setdefault('LESS_TERMCAP_me', r'\e[0m')
+    os.environ.setdefault('LESS_TERMCAP_se', r'\e[0m')
+    os.environ.setdefault('LESS_TERMCAP_so', r'\e[03;38;5;202m')
+    os.environ.setdefault('LESS_TERMCAP_ue', r'\e[0m')
+    os.environ.setdefault('LESS_TERMCAP_us', r'\e[04;38;5;139m')
 
 # Override highlighting format for specific tokens
 # Comments were genuinely impossible to read. Might need to override
 # punctuation next.
 # c.TerminalInteractiveShell.highlighting_style_overrides = {Comment: '#ffffff'}
-
 
 # No help docs? Update when you find the sauce
 #c.TerminalInteractiveShell.mime_renderers = {}
@@ -596,11 +587,12 @@ class StandardPythonPrompt(ClassicPrompts):
     [(Token.Prompt, '>>> ')]
 
     """
+
     def __repr__(self):
         """The most boiler-platey repr I can come up with."""
         return self.__class__.__name__
 
-    # def __call__(self):
+        # def __call__(self):
         """TODO"""
         # return
 
@@ -755,6 +747,7 @@ class BaseFormatterDoc(Configurable):
     .. seealso:: :mod:`IPython.lib.pretty`.
 
     """
+
     def __init__(self, *args, **kwargs):
         """Initialize a BaseFormatter and get some Sphinx help.
 
