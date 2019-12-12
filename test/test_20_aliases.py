@@ -27,6 +27,8 @@ except (ImportError, ModuleNotFoundError):
 else:
     NO_NOSE = None
 
+from default_profile.startup import aliases_mod
+
 
 def test_alias_lifecycle(_ip):
     name = 'test_alias1'
@@ -92,7 +94,7 @@ def test_alias_args_commented_nargs(_ip):
 
 if __name__ == "__main__":
     _ip = get_ipython()
-    unittest.skipIf(_ip is None)
+    unittest.skipIf(_ip is None, 'IPython not running')
     unittest.skipIf(NO_NOSE, 'Nose not installed.')
     unittest.main()
     nose.run()

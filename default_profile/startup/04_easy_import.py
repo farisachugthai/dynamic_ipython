@@ -9,28 +9,32 @@ from asyncio import *  # noqa
 from importlib import import_module
 import io
 import logging
+from pprint import pprint
+from reprlib import Repr
 import subprocess
 import sys
 import tempfile
+from textwrap import dedent
 
 from IPython.lib.deepreload import reload as _reload
 from IPython.core.error import TryNext
-from IPython import get_ipython
+from IPython.core.getipython import get_ipython
+from traitlets.config import Configurable
 
 from default_profile.startup import STARTUP_LOGGER
 
 
-class NvimHook:
+class NvimHook(Configurable):
     """todo: Doesnt work.
 
     Might need to subclass and override
     :class:`IPython.core.hooks.CommandChainDispatcher`.
     """
-
     def __init__(self, fname=None):
         """Specify the editor arguments. None are required."""
         self.fname = fname
         self.shell = get_ipython()
+        super().__init__(parent=self.shell)
 
     def __repr__(self):
         return ''.join(self.__class__.__name__)
@@ -38,7 +42,12 @@ class NvimHook:
     def __str__(self):
         return 'Nvim Hook: {}'.format(self.fname)
 
-    def nvim_quickfix_file(self, *, fname=None, lineno=None, columnno=None, m=None):
+    def nvim_quickfix_file(self,
+                           *,
+                           fname=None,
+                           lineno=None,
+                           columnno=None,
+                           m=None):
         """The hook.
 
         Accepts positional parameters to specify filename,
@@ -52,7 +61,9 @@ class NvimHook:
     def run_nvim(self):
         """I thought of a clever way to return a nonzero exit code and have it return and raise a TryNext :D"""
         try:
-            retval = subprocess.check_call(['nvim', '-c', 'set errorformat=%f:%l:%c:%m', '-q', self.fname])
+            retval = subprocess.check_call([
+                'nvim', '-c', 'set errorformat=%f:%l:%c:%m', '-q', self.fname
+            ])
         except subprocess.CalledProcessError:
             pass
         return retval
@@ -60,7 +71,6 @@ class NvimHook:
 
 class IOStream(io.TextIOBase):
     """Try to rewrite IPythons IPython.utils.io.IOStream."""
-
     def __init__(self, stream, fallback=None):
         if fallback is not None:
             self.stream = fallback
@@ -68,13 +78,16 @@ class IOStream(io.TextIOBase):
             self.stream = stream
 
     def __repr__(self):
-        return ''.format(self.__class__.__name__)
+        return ''.format(repr(self.__class__.__name__), repr(self.stream))
 
     def __str__(self):
-        return ''.join(self.__class__.__name__, str(self.stream))
+        return ''.format(self.__class__.__name__, str(self.stream))
 
     def write(self, message):
+        """Flush streams after any writes."""
         self.stream.write(message)
+        sys.stdout.flush()
+        sys.stderr.flush()
 
     def read(self):
         """Did a smoke test and this is the only method not working.
@@ -119,7 +132,7 @@ class DeepReload:
         self.shell = shell
 
     def __repr__(self):
-        return "{!r}".format(repr(self.excludes))
+        return "{!r}".format(Repr.repr(self.excludes))
 
     def __call__(self):
         self.shell.run_cell(self.dreload(self.excludes))
@@ -175,19 +188,17 @@ def easy_import(mod):
         Imported module. Specifically used for neovim in this instance but can
         be interactively used for any module the user needs to import.
 
-    Raises
-    ------
-    :exc:`ImportError`
-        If the module isn't imported.
-
     """
     try:
         return import_module(mod)
     except ImportError:
-        print("************************************************************")
-        print("{} import failed. Only ignore this if you plan on going".format(mod))
-        print(" the entire session without using it")
-        print("************************************************************")
+        msg = dedent(
+                """
+        ************************************************************
+        {} import failed. Only ignore this if you plan on going
+        the entire session without using it!!
+        ************************************************************
+""".format(mod))
 
 
 if __name__ == "__main__":

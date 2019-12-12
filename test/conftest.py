@@ -39,6 +39,10 @@ def cleandir():
     os.chdir(newpath)
 
 
-if _ip is None:
-    from IPython import start_ipython
-    start_ipython()
+def start():
+    if _ip is None:
+        from IPython import start_ipython
+        start_ipython()
+
+
+start()
