@@ -1,8 +1,26 @@
 import copy
+import logging
 from reprlib import Repr
+
+from IPython.core.getipython import get_ipython
+
+from . import STARTUP_LOGGER
+
+
+def get_aliases(shell=None):
+    if shell is None:
+        shell = get_ipython()
+    if shell is None:
+        return
+    return shell.alias_manager.aliases
 
 
 class ReprAlias(Repr):
+    """Take user aliases and transform them to a dictionary.
+
+    Then utilize :class:`reprlib.Repr` to print the structure.
+    """
+
     def __init__(self, aliases=None):
         """Initialize truncated alias list.
 
@@ -12,14 +30,26 @@ class ReprAlias(Repr):
             Aliases in a more sensible data structure
 
         """
-        self.aliases = aliases
+        self.aliases = aliases or get_aliases()
+        if len(self.aliases) == 0:
+            STARTUP_LOGGER.exception('Length of repralias.ReprAlias.aliases was 0')
 
     def transform_aliases_to_dict(self):
-        # TODO:
-        self.aliases
+        """Ensure everythings funcional. Then.
+
+        TODO: Check that this can be rewritten as 1 line.::
+
+            return {flat[i[0]]: i[1] for i in self.aliases}
+
+        """
+        flattened_dict = {}
+        for i in self.aliases:
+            flattened_dict[i[0]] = i[1]
+
+        return flattened_dict
 
     def __repr__(self):
-        return ''.join(self.__class__.__name__)
+        return '{}: {} aliases'.format(self.__class__.__name__, len(self.aliases))
 
     def __str__(self):
         return '{}\n{}'.format(self.__class__.__name__,

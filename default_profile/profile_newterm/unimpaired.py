@@ -1,16 +1,20 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import functools
+import logging
+import os
+import pathlib
+from reprlib import Repr
+import sys
 import traceback
+import traitlets
+
+from prompt_toolkit import HTML
 from IPython.terminal.interactiveshell import TerminalInteractiveShell
 from IPython.core.magics.basic import BasicMagics
 from IPython.core.getipython import get_ipython
 from IPython.core.profiledir import ProfileDir, ProfileDirError
 from traitlets.config.loader import Config
-import traitlets
-import logging
-import os
-from reprlib import Repr
-import sys
 
 from . import storeandloadmagics
 from .storeandloadmagics import StoreAndLoadMagics
@@ -37,24 +41,24 @@ class TerminallyUnimpaired(TerminalInteractiveShell):
 
         So let's go with begin since we don't have much room in this namespace.
         """
-        super().initialize()
         if self.config is None:
             self.config = Config()
+        super().initialize()
 
     @staticmethod
-    def execfile(fname, user_global=None, local=None):
+    def execfile(fname, user_global=None):
         """Apparently using global raises an error.
 
         Could've checked it wasn't reserved I  guess.
         """
-        local = local if local is not None else user_global
+        user_global = user_global or globals()
         with open(fname, "rb") as f:
             code_obj = compile(f.read(), "<string>", "exec")
             clean_ns = {}
             # Are you still allowed to do this?
             # return exec(code_obj in clean_ns)
             # nope
-            return exec(code_obj, user_global, local)
+            return exec(code_obj, user_global, clean_ns)
 
     def init_profile_dir(self, profile_dir=None):
         """Modify this so we have a none argument for profile_dir."""
@@ -117,8 +121,30 @@ class TerminallyUnimpaired(TerminalInteractiveShell):
                 exception_type, value))
         finally:
             tblist = tb = None
-        sys.stderr.write("".join(lines))
+        if lines:
+            sys.stderr.write("".join(lines))
+
+    def custom_toolbar(self) -> HTML:
+        """TODO: I want this to return as the bottom toolbar.
+
+        Does it go in self.extra_prompt_options?
+        """
+        s = "New Terminal REPL"
+
+        @functools.wraps
+        def entry(k: str, v: str) -> str:
+            return f" | <b><style bg=\"ansiblue\">{k.capitalize()}</style></b> {v}"
+
+        s += entry('multiline', self.config.multiline)
+        s += entry('directory', pathlib.Path().cwd())
+        s += entry('style', self.config.highlighting_style)
+
+        return HTML(s)
 
 
-shell = TerminallyUnimpaired()
+try:
+    shell = TerminallyUnimpaired()
+except Exception as e:  # noqa
+    logging.exception(e)
+
 shell.extension_manager.load_extension('storeandloadmagics')
