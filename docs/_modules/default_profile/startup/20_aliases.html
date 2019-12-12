@@ -14,6 +14,7 @@
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/startup/20_aliases.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -85,6 +86,12 @@
 <span class="sd">    commands possibly going to be added.</span>
 
 <span class="sd">    .. todo:: :command:`git show`</span>
+
+<span class="sd">    .. todo:: The classs method doesn&#39;t work if we don&#39;t have a class attribute.</span>
+
+<span class="sd">        But if we create a class attribute, does updating the aliases for an instance</span>
+<span class="sd">        change it for the class? Write a test to ensure that this isn&#39;t what</span>
+<span class="sd">        happens.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -259,6 +266,7 @@
             <span class="p">(</span><span class="s2">&quot;...&quot;</span><span class="p">,</span> <span class="s2">&quot;cd ../..&quot;</span><span class="p">),</span>
         <span class="p">]</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">user_aliases</span></div></div>
+
 
 <div class="viewcode-block" id="LinuxAliases"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.LinuxAliases">[docs]</a><span class="k">class</span> <span class="nc">LinuxAliases</span><span class="p">(</span><span class="n">CommonAliases</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Add Linux specific aliases.</span>
@@ -570,7 +578,7 @@
         <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;COMSPEC&quot;</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;COMSPEC&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span></div></div>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> is None as are </span><span class="si">%s</span><span class="s1"> and </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="p">,</span> <span class="s1">&#39;$SHELL&#39;</span><span class="p">,</span> <span class="s1">&#39;$COMSPEC&#39;</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
@@ -689,11 +697,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../util/timer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">timer</span></code> module</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../../kernel.html">IPython Kernel</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../jupyter/index.html">jupyter</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../jupyter/qtconsole.html">Jupyter QTConsole</a></li>
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Extensions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../jobcontrol.html">Job Control</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../todo.html">Todo</a></li>
@@ -722,7 +725,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Dec 05, 2019.
+      Last updated on Dec 10, 2019.
     </div>
   </body>
 </html>

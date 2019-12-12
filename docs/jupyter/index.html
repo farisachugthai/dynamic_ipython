@@ -14,11 +14,10 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/language_data.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/jupyter/index.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Jupyter QTConsole" href="qtconsole.html" />
-    <link rel="prev" title="IPython Kernel" href="../kernel.html" />
 <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" />
 <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" media="screen" rel="stylesheet" type="text/css" />
 <link rel='stylesheet' href='//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.css'>
@@ -43,12 +42,6 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="qtconsole.html" title="Jupyter QTConsole"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="../kernel.html" title="IPython Kernel"
-             accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Dynamic IPython</a> &#187;</li> 
       </ul>
     </div>  
@@ -58,8 +51,8 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-<div class="section" id="module-jupyter_conf">
-<span id="jupyter-suite"></span><span id="jupyter"></span><h1>Jupyter Suite<a class="headerlink" href="#module-jupyter_conf" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="jupyter-suite">
+<span id="jupyter"></span><h1>Jupyter Suite<a class="headerlink" href="#jupyter-suite" title="Permalink to this headline">¶</a></h1>
 <p>Here are the default configuration files for the Jupyter application
 suite. These have been commented and marked up as appropriate.</p>
 <div class="toctree-wrapper compound">
@@ -68,38 +61,49 @@ suite. These have been commented and marked up as appropriate.</p>
 <li class="toctree-l1"><a class="reference internal" href="qtconsole.html">Jupyter QTConsole</a></li>
 </ul>
 </div>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">jupyter_console_config</span></code></p></td>
-<td><p>If you read the help for the ZMQTerminalInteractiveShell it indicates that you can retrieve the global instance with ZMQTerminalInteractiveShell(self).instance.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">jupyter_contrib_nbextension_config</span></code></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">jupyter_labextension_config</span></code></p></td>
-<td><p>Subcommands</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">jupyter_nbconvert_config</span></code></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">jupyter_notebook_config/__init__</span></code></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="qtconsole.html#module-jupyter_conf.jupyter_qtconsole_config" title="jupyter_conf.jupyter_qtconsole_config: Set up QTConsole."><code class="xref py py-obj docutils literal notranslate"><span class="pre">jupyter_qtconsole_config</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">jupyter_serverextension_config</span></code></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">jupyternbextensions_configurator_config</span></code></p></td>
-<td><p>Generated from the following shell command.</p></td>
-</tr>
-</tbody>
-</table>
+<p>Interrupting text.</p>
+<span class="target" id="module-jupyter_console_config"></span><p>Sep 05, 2019:
+This is quite the odd program.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">jupyter_console.ptshell</span> <span class="kn">import</span> <span class="n">ZMQTerminalIPythonApp</span><span class="p">,</span> <span class="n">ZMQTerminalInteractiveShell</span>
+</pre></div>
+</div>
+<p>If you read the help for the ZMQTerminalInteractiveShell it indicates that you
+can retrieve the global instance with ZMQTerminalInteractiveShell(self).instance.</p>
+<p>As a guess I’d imagine this is true because that class specifically subclasses
+the traitlets object, SingletonConfigurable.</p>
+<p>Running that raised an error for me however.</p>
+<p>And oddly, running:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">traitlets.config</span> <span class="kn">import</span> <span class="n">get_config</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">get_config</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Only returned information about IPython…</p>
+<p>So I ran some information about the ZMQTerminalIPythonApp to see if that
+fared any better and:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [47]: </span><span class="n">jup</span> <span class="o">=</span> <span class="n">ZMQTerminalIPythonApp</span><span class="p">()</span>
+<span class="gp">In [48]: </span><span class="n">jup</span><span class="o">.</span><span class="n">aliases</span>
+<span class="gh">Out[48]:</span>
+<span class="go">{&#39;log-level&#39;: &#39;Application.log_level&#39;,</span>
+<span class="go">&#39;config&#39;: &#39;JupyterApp.config_file&#39;,</span>
+<span class="go">&#39;ip&#39;: &#39;JupyterConsoleApp.ip&#39;,</span>
+<span class="go">&#39;transport&#39;: &#39;JupyterConsoleApp.transport&#39;,</span>
+<span class="go">&#39;hb&#39;: &#39;JupyterConsoleApp.hb_port&#39;,</span>
+<span class="go">&#39;shell&#39;: &#39;JupyterConsoleApp.shell_port&#39;,</span>
+<span class="go">&#39;iopub&#39;: &#39;JupyterConsoleApp.iopub_port&#39;,</span>
+<span class="go">&#39;stdin&#39;: &#39;JupyterConsoleApp.stdin_port&#39;,</span>
+<span class="go">&#39;existing&#39;: &#39;JupyterConsoleApp.existing&#39;,</span>
+<span class="go">&#39;f&#39;: &#39;JupyterConsoleApp.connection_file&#39;,</span>
+<span class="go">&#39;kernel&#39;: &#39;JupyterConsoleApp.kernel_name&#39;,</span>
+<span class="go">&#39;ssh&#39;: &#39;JupyterConsoleApp.sshserver&#39;}</span>
+</pre></div>
+</div>
+<p>Needless to say none of those aliases worked in the shell for me.
+..what the hell is this?</p>
+<span class="target" id="module-jupyter_contrib_nbextension_config"></span><span class="target" id="module-jupyter_labextension_config"></span><span class="target" id="module-jupyter_nbconvert_config"></span><div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<p>Why isn’t this one working in the autosummary?</p>
+<p>jupyter_notebook_config</p>
+</div>
 </div>
 
 
@@ -124,8 +128,6 @@ suite. These have been commented and marked up as appropriate.</p>
 <ul>
   <li><a href="../index.html">Documentation overview</a>
     <ul>
-          <li>Previous: <a href="../kernel.html" title="previous chapter">IPython Kernel</a></li>
-          <li>Next: <a href="qtconsole.html" title="next chapter">Jupyter QTConsole</a></li>
     </ul>
 </ul>
 </li>
@@ -136,7 +138,7 @@ suite. These have been commented and marked up as appropriate.</p>
 <div>&nbsp;</div>
 <div id="sidebartoc">
     <p class="caption"><span class="caption-text">API</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../sphinxext/index.html">Sphinx Extensions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../sphinxext/ipython_sphinx_directive.html">IPython Sphinx Directive</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../sphinxext/lexer.html">New IPython Console Lexer</a></li>
@@ -171,11 +173,6 @@ suite. These have been commented and marked up as appropriate.</p>
 <li class="toctree-l2"><a class="reference internal" href="../util/timer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">timer</span></code> module</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../kernel.html">IPython Kernel</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">jupyter</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="qtconsole.html">Jupyter QTConsole</a></li>
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference internal" href="../extensions.html">Extensions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../jobcontrol.html">Job Control</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../todo.html">Todo</a></li>
@@ -204,17 +201,11 @@ suite. These have been commented and marked up as appropriate.</p>
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="qtconsole.html" title="Jupyter QTConsole"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="../kernel.html" title="IPython Kernel"
-             >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Dynamic IPython</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Dec 05, 2019.
+      Last updated on Dec 10, 2019.
     </div>
   </body>
 </html>

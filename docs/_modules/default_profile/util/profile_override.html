@@ -14,6 +14,7 @@
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/util/profile_override.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -72,37 +73,17 @@
 
 <span class="sd">    :mod:`IPython.core.profileapp`.</span>
 
-<span class="sd">.. code-block:: console</span>
-
-<span class="sd">    $: ipython locate profile -- :kbd:`Tab`</span>
-
-<span class="sd">    --LocateIPythonApp.auto_create=</span>
-
-<span class="sd">    --LocateIPythonApp.copy_config_files=</span>
-
-<span class="sd">    --LocateIPythonApp.extra_config_file=</span>
-
-<span class="sd">    --LocateIPythonApp.ipython_dir=</span>
-
-<span class="sd">    --LocateIPythonApp.log_datefmt=</span>
-
-<span class="sd">    --LocateIPythonApp.log_format=</span>
-
-<span class="sd">    --LocateIPythonApp.log_level=</span>
-
-<span class="sd">    --LocateIPythonApp.overwrite=</span>
-
-<span class="sd">    --LocateIPythonApp.profile=</span>
-
-<span class="sd">    --LocateIPythonApp.verbose_crash=</span>
-
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">errno</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
-<span class="kn">from</span> <span class="nn">IPython.paths</span> <span class="kn">import</span> <span class="n">ensure_dir_exists</span><span class="p">,</span> <span class="n">get_ipython_package_dir</span>
+<span class="kn">from</span> <span class="nn">IPython.terminal.embed</span> <span class="kn">import</span> <span class="n">InteractiveShellEmbed</span>
+<span class="kn">from</span> <span class="nn">IPython.terminal.ipapp</span> <span class="kn">import</span> <span class="n">TerminalIPythonApp</span>
+
+<span class="c1"># from IPython.paths import ensure_dir_exists, get_ipython_package_dir</span>
 <span class="kn">from</span> <span class="nn">traitlets.config</span> <span class="kn">import</span> <span class="n">Bool</span><span class="p">,</span> <span class="n">LoggingConfigurable</span><span class="p">,</span> <span class="n">Unicode</span><span class="p">,</span> <span class="n">observe</span>
 
 
@@ -121,112 +102,41 @@
 <span class="sd">    should be used by any code that wants to handle profiles.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">security_dir_name</span> <span class="o">=</span> <span class="n">Unicode</span><span class="p">(</span><span class="s1">&#39;security&#39;</span><span class="p">)</span>
-    <span class="n">log_dir_name</span> <span class="o">=</span> <span class="n">Unicode</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
-    <span class="n">startup_dir_name</span> <span class="o">=</span> <span class="n">Unicode</span><span class="p">(</span><span class="s1">&#39;startup&#39;</span><span class="p">)</span>
-    <span class="n">pid_dir_name</span> <span class="o">=</span> <span class="n">Unicode</span><span class="p">(</span><span class="s1">&#39;pid&#39;</span><span class="p">)</span>
-    <span class="n">static_dir_name</span> <span class="o">=</span> <span class="n">Unicode</span><span class="p">(</span><span class="s1">&#39;static&#39;</span><span class="p">)</span>
-    <span class="n">security_dir</span> <span class="o">=</span> <span class="n">Unicode</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-    <span class="n">log_dir</span> <span class="o">=</span> <span class="n">Unicode</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-    <span class="n">startup_dir</span> <span class="o">=</span> <span class="n">Unicode</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-    <span class="n">pid_dir</span> <span class="o">=</span> <span class="n">Unicode</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-    <span class="n">static_dir</span> <span class="o">=</span> <span class="n">Unicode</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="ReprProfileDir.__init__"><a class="viewcode-back" href="../../../util/profile_override.html#default_profile.util.profile_override.ReprProfileDir.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create an init and then make it way shorter.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ensure_dir_exists</span> <span class="o">=</span> <span class="n">DirectoryChecker</span>
+        <span class="n">startup_dir</span> <span class="o">=</span> <span class="n">Unicode</span><span class="p">(</span><span class="s1">&#39;startup&#39;</span><span class="p">)</span>
+        <span class="n">log_dir</span> <span class="o">=</span> <span class="n">Unicode</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
+        <span class="n">location</span> <span class="o">=</span> <span class="n">Unicode</span><span class="p">(</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;Set the profile location directly. This overrides the logic used by the</span>
+<span class="s2">            `profile` option.&quot;&quot;&quot;</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">tag</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 
-    <span class="n">location</span> <span class="o">=</span> <span class="n">Unicode</span><span class="p">(</span>
-        <span class="sa">u</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;Set the profile location directly. This overrides the logic used by the</span>
-<span class="s2">        `profile` option.&quot;&quot;&quot;</span><span class="p">,</span>
-    <span class="p">)</span><span class="o">.</span><span class="n">tag</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># don&#39;t set the location more than once no matter how many profiles</span>
+    <span class="c1"># are instantiated so yes a class attr</span>
+    <span class="n">_location_isset</span> <span class="o">=</span> <span class="kc">False</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;I&#39;ll admit this is unnecessary. Oh well.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">location</span><span class="p">)</span>
-
-    <span class="n">_location_isset</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># flag for detecting multiply set location</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">location</span><span class="p">)</span>
 
     <span class="nd">@observe</span><span class="p">(</span><span class="s1">&#39;location&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_location_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">change</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;This is so odd to me. What is change when does it get called?&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_location_isset</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Cannot set profile location more than once.&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_location_isset</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="n">new</span> <span class="o">=</span> <span class="n">change</span><span class="p">[</span><span class="s1">&#39;new&#39;</span><span class="p">]</span>
-        <span class="n">ensure_dir_exists</span><span class="p">(</span><span class="n">new</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ensure_dir_exists</span><span class="p">(</span><span class="n">new</span><span class="p">)</span>
 
-        <span class="c1"># ensure config files exist:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">security_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">new</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">security_dir_name</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">new</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_dir_name</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">startup_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">new</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">startup_dir_name</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pid_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">new</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pid_dir_name</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">static_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">new</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">static_dir_name</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">check_dirs</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">_mkdir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Ensure a directory exists at a given path.</span>
-
-<span class="sd">        This is a version of os.mkdir, with the following differences:</span>
-
-<span class="sd">        - Returns `True` if it created the directory, `False` otherwise.</span>
-<span class="sd">        - ignores :data:`signal.EEXIST`, protecting against race conditions where</span>
-<span class="sd">          the dir may have been created in between the check and</span>
-<span class="sd">          the creation.</span>
-<span class="sd">        - Sets permissions via :func:`os.chmod()` if requested and the dir already exists.</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">mode</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">stat</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">st_mode</span> <span class="o">!=</span> <span class="n">mode</span><span class="p">:</span>
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="n">os</span><span class="o">.</span><span class="n">chmod</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
-                <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Could not set permissions on </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
-            <span class="k">return</span> <span class="kc">False</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">mode</span><span class="p">:</span>
-                <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="n">errno</span><span class="o">.</span><span class="n">EEXIST</span><span class="p">:</span>
-                <span class="k">return</span> <span class="kc">False</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span>
-
-        <span class="k">return</span> <span class="kc">True</span>
-
-<div class="viewcode-block" id="ReprProfileDir.check_log_dir"><a class="viewcode-back" href="../../../util/profile_override.html#default_profile.util.profile_override.ReprProfileDir.check_log_dir">[docs]</a>    <span class="nd">@observe</span><span class="p">(</span><span class="s1">&#39;log_dir&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">check_log_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">change</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_mkdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="ReprProfileDir.check_startup_dir"><a class="viewcode-back" href="../../../util/profile_override.html#default_profile.util.profile_override.ReprProfileDir.check_startup_dir">[docs]</a>    <span class="nd">@observe</span><span class="p">(</span><span class="s1">&#39;startup_dir&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">check_startup_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">change</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_mkdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">startup_dir</span><span class="p">)</span>
-
-        <span class="n">readme</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">startup_dir</span><span class="p">,</span> <span class="s1">&#39;README&#39;</span><span class="p">)</span>
-        <span class="n">src</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-            <span class="n">get_ipython_package_dir</span><span class="p">(),</span> <span class="sa">u</span><span class="s1">&#39;core&#39;</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;profile&#39;</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;README_STARTUP&#39;</span>
-        <span class="p">)</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">src</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                <span class="s2">&quot;Could not copy README_STARTUP to startup dir. Source file </span><span class="si">%s</span><span class="s2"> does not exist.&quot;</span><span class="p">,</span>
-                <span class="n">src</span>
-            <span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">src</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">readme</span><span class="p">):</span>
-            <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">readme</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="ReprProfileDir.check_security_dir"><a class="viewcode-back" href="../../../util/profile_override.html#default_profile.util.profile_override.ReprProfileDir.check_security_dir">[docs]</a>    <span class="nd">@observe</span><span class="p">(</span><span class="s1">&#39;security_dir&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">check_security_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">change</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_mkdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">security_dir</span><span class="p">,</span> <span class="mo">0o40700</span><span class="p">)</span></div>
+        <span class="c1"># what is static?</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;security&#39;</span><span class="p">,</span> <span class="s1">&#39;log&#39;</span><span class="p">,</span> <span class="s1">&#39;startup&#39;</span><span class="p">,</span> <span class="s1">&#39;pid&#39;</span><span class="p">,</span> <span class="s1">&#39;static&#39;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ensure_dir_exists</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">new</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>
 
 <div class="viewcode-block" id="ReprProfileDir.check_pid_dir"><a class="viewcode-back" href="../../../util/profile_override.html#default_profile.util.profile_override.ReprProfileDir.check_pid_dir">[docs]</a>    <span class="nd">@observe</span><span class="p">(</span><span class="s1">&#39;pid_dir&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">check_pid_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">change</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mkdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pid_dir</span><span class="p">,</span> <span class="mo">0o40700</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="ReprProfileDir.check_dirs"><a class="viewcode-back" href="../../../util/profile_override.html#default_profile.util.profile_override.ReprProfileDir.check_dirs">[docs]</a>    <span class="k">def</span> <span class="nf">check_dirs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">check_security_dir</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">check_log_dir</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">check_pid_dir</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">check_startup_dir</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="ReprProfileDir.copy_config_file"><a class="viewcode-back" href="../../../util/profile_override.html#default_profile.util.profile_override.ReprProfileDir.copy_config_file">[docs]</a>    <span class="k">def</span> <span class="nf">copy_config_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_file</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Copy a default config file into the active profile directory.</span>
@@ -329,6 +239,90 @@
                 <span class="s1">&#39;Profile directory not found: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">profile_dir</span>
             <span class="p">)</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="n">profile_dir</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="DirectoryChecker"><a class="viewcode-back" href="../../../util/profile_override.html#default_profile.util.profile_override.DirectoryChecker">[docs]</a><span class="k">class</span> <span class="nc">DirectoryChecker</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Let&#39;s redo profiledir with pathlib.</span>
+
+<span class="sd">    Dude we&#39;re allowed to subclass os.Pathlike. I wonder if that&#39;d make this</span>
+<span class="sd">    easier.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="DirectoryChecker.__init__"><a class="viewcode-back" href="../../../util/profile_override.html#default_profile.util.profile_override.DirectoryChecker.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">canary</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize our own version of ipython.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">canary</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">canary</span> <span class="o">=</span> <span class="n">canary</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">canary</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fs</span> <span class="o">=</span> <span class="n">Path</span></div>
+
+<div class="viewcode-block" id="DirectoryChecker.initialize"><a class="viewcode-back" href="../../../util/profile_override.html#default_profile.util.profile_override.DirectoryChecker.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;TODO: Add getattr checks for this func so we don&#39;t call on an uninitialized object.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">canary</span><span class="o">.</span><span class="n">initialized</span><span class="p">():</span>
+            <span class="c1"># Running inside IPython</span>
+
+            <span class="c1"># Detect if embed shell or not and display a message</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">canary</span><span class="p">,</span> <span class="n">InteractiveShellEmbed</span><span class="p">):</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">You are currently in an embedded IPython shell,</span><span class="se">\n</span><span class="s2">&quot;</span>
+                    <span class="s2">&quot;the configuration will not be loaded.</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Not inside IPython</span>
+            <span class="c1"># Build a terminal app in order to force ipython to load the configuration</span>
+            <span class="n">ipapp</span> <span class="o">=</span> <span class="n">TerminalIPythonApp</span><span class="p">()</span>
+            <span class="c1"># Avoid output (banner, prints)</span>
+            <span class="n">ipapp</span><span class="o">.</span><span class="n">interact</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="DirectoryChecker.ensure_dir_exists"><a class="viewcode-back" href="../../../util/profile_override.html#default_profile.util.profile_override.DirectoryChecker.ensure_dir_exists">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">ensure_dir_exists</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="mo">0o755</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Ensure that a directory exists.</span>
+
+<span class="sd">        If it doesn&#39;t exist, try to create it and protect against a race</span>
+<span class="sd">        condition if another process is doing the same.</span>
+
+<span class="sd">        The default permissions are :data:`0o755`, which differ from</span>
+<span class="sd">        :func:`os.makedirs()` default of :data:`0o777`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        path : str (path-like)</span>
+<span class="sd">            Path to the directory</span>
+<span class="sd">        mode : int</span>
+<span class="sd">            If the directory doesn&#39;t exist, what mode should it be created as?</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        OSError, IOError</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">!=</span> <span class="n">errno</span><span class="o">.</span><span class="n">EEXIST</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%r</span><span class="s2"> exists but is not a directory&quot;</span> <span class="o">%</span> <span class="n">path</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DirectoryChecker.initialize_profile"><a class="viewcode-back" href="../../../util/profile_override.html#default_profile.util.profile_override.DirectoryChecker.initialize_profile">[docs]</a>    <span class="k">def</span> <span class="nf">initialize_profile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize the profile but sidestep the IPython.core.ProfileDir().</span>
+
+<span class="sd">        The class searches for directories named default_profile and if found</span>
+<span class="sd">        uses that as a profile which I dislike.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">profile_to_load</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;~/.ipython/default_profile&quot;</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ensure_dir_exists</span><span class="p">(</span><span class="n">profile_to_load</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">canary</span><span class="o">.</span><span class="n">profile_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~/.ipython/default_profile&quot;</span><span class="p">)</span></div></div>
 </pre></div>
 
           </div>
@@ -401,11 +395,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../util/timer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">timer</span></code> module</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../../kernel.html">IPython Kernel</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../jupyter/index.html">jupyter</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../jupyter/qtconsole.html">Jupyter QTConsole</a></li>
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Extensions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../jobcontrol.html">Job Control</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../todo.html">Todo</a></li>
@@ -433,7 +422,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Dec 05, 2019.
+      Last updated on Dec 10, 2019.
     </div>
   </body>
 </html>

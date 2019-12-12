@@ -14,6 +14,7 @@
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/startup/04_easy_import.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -59,6 +60,8 @@
 <span class="sd">This imports a few utility functions from :mod:`IPython` and imports the python</span>
 <span class="sd">package neovim is served in.</span>
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># This is really unnecessary. Undo later</span>
+<span class="kn">from</span> <span class="nn">asyncio</span> <span class="kn">import</span> <span class="o">*</span>  <span class="c1"># noqa</span>
 <span class="kn">from</span> <span class="nn">importlib</span> <span class="kn">import</span> <span class="n">import_module</span>
 <span class="kn">import</span> <span class="nn">io</span>
 <span class="kn">import</span> <span class="nn">logging</span>
@@ -68,9 +71,9 @@
 
 <span class="kn">from</span> <span class="nn">IPython.lib.deepreload</span> <span class="kn">import</span> <span class="n">reload</span> <span class="k">as</span> <span class="n">_reload</span>
 <span class="kn">from</span> <span class="nn">IPython.core.error</span> <span class="kn">import</span> <span class="n">TryNext</span>
-<span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+<span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 
-<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">WARN</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">default_profile.startup</span> <span class="kn">import</span> <span class="n">STARTUP_LOGGER</span>
 
 
 <div class="viewcode-block" id="NvimHook"><a class="viewcode-back" href="../../../startup/easy_import.html#default_profile.startup.04_easy_import.NvimHook">[docs]</a><span class="k">class</span> <span class="nc">NvimHook</span><span class="p">:</span>
@@ -79,7 +82,6 @@
 <span class="sd">    Might need to subclass and override</span>
 <span class="sd">    :class:`IPython.core.hooks.CommandChainDispatcher`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
 <div class="viewcode-block" id="NvimHook.__init__"><a class="viewcode-back" href="../../../startup/easy_import.html#default_profile.startup.04_easy_import.NvimHook.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Specify the editor arguments. None are required.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fname</span> <span class="o">=</span> <span class="n">fname</span>
@@ -91,7 +93,12 @@
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;Nvim Hook: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fname</span><span class="p">)</span>
 
-<div class="viewcode-block" id="NvimHook.nvim_quickfix_file"><a class="viewcode-back" href="../../../startup/easy_import.html#default_profile.startup.04_easy_import.NvimHook.nvim_quickfix_file">[docs]</a>    <span class="k">def</span> <span class="nf">nvim_quickfix_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">fname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lineno</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">columnno</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="NvimHook.nvim_quickfix_file"><a class="viewcode-back" href="../../../startup/easy_import.html#default_profile.startup.04_easy_import.NvimHook.nvim_quickfix_file">[docs]</a>    <span class="k">def</span> <span class="nf">nvim_quickfix_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                           <span class="o">*</span><span class="p">,</span>
+                           <span class="n">fname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                           <span class="n">lineno</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                           <span class="n">columnno</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                           <span class="n">m</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The hook.</span>
 
 <span class="sd">        Accepts positional parameters to specify filename,</span>
@@ -105,7 +112,9 @@
 <div class="viewcode-block" id="NvimHook.run_nvim"><a class="viewcode-back" href="../../../startup/easy_import.html#default_profile.startup.04_easy_import.NvimHook.run_nvim">[docs]</a>    <span class="k">def</span> <span class="nf">run_nvim</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;I thought of a clever way to return a nonzero exit code and have it return and raise a TryNext :D&quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">retval</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">check_call</span><span class="p">([</span><span class="s1">&#39;nvim&#39;</span><span class="p">,</span> <span class="s1">&#39;-c&#39;</span><span class="p">,</span> <span class="s1">&#39;set errorformat=</span><span class="si">%f</span><span class="s1">:%l:</span><span class="si">%c</span><span class="s1">:%m&#39;</span><span class="p">,</span> <span class="s1">&#39;-q&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fname</span><span class="p">])</span>
+            <span class="n">retval</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">check_call</span><span class="p">([</span>
+                <span class="s1">&#39;nvim&#39;</span><span class="p">,</span> <span class="s1">&#39;-c&#39;</span><span class="p">,</span> <span class="s1">&#39;set errorformat=</span><span class="si">%f</span><span class="s1">:%l:</span><span class="si">%c</span><span class="s1">:%m&#39;</span><span class="p">,</span> <span class="s1">&#39;-q&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fname</span>
+            <span class="p">])</span>
         <span class="k">except</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">CalledProcessError</span><span class="p">:</span>
             <span class="k">pass</span>
         <span class="k">return</span> <span class="n">retval</span></div></div>
@@ -113,7 +122,6 @@
 
 <div class="viewcode-block" id="IOStream"><a class="viewcode-back" href="../../../startup/easy_import.html#default_profile.startup.04_easy_import.IOStream">[docs]</a><span class="k">class</span> <span class="nc">IOStream</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">TextIOBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Try to rewrite IPythons IPython.utils.io.IOStream.&quot;&quot;&quot;</span>
-
 <div class="viewcode-block" id="IOStream.__init__"><a class="viewcode-back" href="../../../startup/easy_import.html#default_profile.startup.04_easy_import.IOStream.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">fallback</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">stream</span> <span class="o">=</span> <span class="n">fallback</span>
@@ -238,7 +246,8 @@
         <span class="k">return</span> <span class="n">import_module</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;************************************************************&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> import failed. Only ignore this if you plan on going&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mod</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> import failed. Only ignore this if you plan on going&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">mod</span><span class="p">))</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; the entire session without using it&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;************************************************************&quot;</span><span class="p">)</span></div>
 
@@ -250,15 +259,6 @@
         <span class="n">mod</span> <span class="o">=</span> <span class="s2">&quot;neovim&quot;</span>
 
     <span class="n">easy_import</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span>
-
-    <span class="c1"># _ip = get_ipython()</span>
-    <span class="c1"># if _ip.editor == &#39;nvim&#39;:</span>
-    <span class="c1">#     _ip.set_hook(&#39;editor&#39;, NvimHook().nvim_quickfix_file, priority=99)</span>
-    <span class="c1"># else:</span>
-    <span class="c1">#     logging.warning(&#39;$EDITOR not set. IPython hook not set.&#39;)</span>
-
-    <span class="c1"># if logging.getLevelName(logging.INFO):</span>
-    <span class="c1">#     logging.info(&#39;The editor hooks are as follows %s: &#39;, _ip.hooks[&#39;editor&#39;].__str__())</span>
 </pre></div>
 
           </div>
@@ -335,11 +335,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../util/timer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">timer</span></code> module</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../../kernel.html">IPython Kernel</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../jupyter/index.html">jupyter</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../jupyter/qtconsole.html">Jupyter QTConsole</a></li>
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Extensions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../jobcontrol.html">Job Control</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../todo.html">Todo</a></li>
@@ -368,7 +363,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Dec 05, 2019.
+      Last updated on Dec 10, 2019.
     </div>
   </body>
 </html>

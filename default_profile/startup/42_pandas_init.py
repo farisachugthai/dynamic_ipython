@@ -8,7 +8,7 @@ ROOT_HANDLER_PD.setLevel(logging.INFO)
 logging.basicConfig(
     level=logging.INFO,
     style="%",
-    format="%(created)f : %(module)s : %(levelname)s : %(message)s",
+    format="%(created)f %(module)s %(levelname)s %(message)s",
     handlers=[ROOT_HANDLER_PD],
 )
 
@@ -69,8 +69,8 @@ class DisplayHTML:
 
     def _repr_html_(self):
         return "\n".join(
-            self.template.format(a, eval(a)._repr_html_()) for a in self.args
-        )
+            self.template.format(a,
+                                 eval(a)._repr_html_()) for a in self.args)
 
     def __repr__(self):
         return "\n\n".join(a + "\n" + repr(eval(a)) for a in self.args)
