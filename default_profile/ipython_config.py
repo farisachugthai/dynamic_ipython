@@ -26,6 +26,7 @@ import os
 import platform
 import shutil
 import sys
+import traceback
 from pathlib import Path
 
 from IPython.terminal.prompts import ClassicPrompts
@@ -46,6 +47,25 @@ logging.basicConfig(
 c = get_config()
 # admonition: Don't it this way
 # c = Configurable()
+
+try:
+    import default_profile
+except:  # noqa
+    default_profile = None
+    logging.error('import error for default_profile')
+else:
+    # This is the real test
+    # I want this loaded too so that I don't have to rewrite all my startup junk
+    try:
+        from default_profile import startup
+    except Exception as e:
+        traceback.print_exc(e)
+
+
+try:
+    from .unimpaired import TerminallyUnimpaired
+except:  # noqa
+    pass
 
 
 def get_home():
@@ -113,7 +133,7 @@ if ModuleNotFoundError not in dir(builtins):
 # c.InteractiveShellApp.exec_lines = []
 
 # A list of dotted module names of IPython extensions to load.
-# c.InteractiveShellApp.extensions = []
+c.InteractiveShellApp.extensions = []
 
 # dotted module name of an IPython extension to load.
 # c.InteractiveShellApp.extra_extension = ''
@@ -121,9 +141,10 @@ if ModuleNotFoundError not in dir(builtins):
 # A file to be run
 # c.InteractiveShellApp.file_to_run = ''
 
-# Enable GUI event loop integration with any of ('glut', 'gtk', 'gtk2', 'gtk3',
-# 'osx', 'pyglet', 'qt', 'qt4', 'qt5', 'tk', 'wx', 'gtk2', 'qt4').
-# c.InteractiveShellApp.gui ='qt5'
+# Enable GUI event loop integration with any of ('asyncio', 'glut', 'gtk',
+#  'gtk2', 'gtk3', 'osx', 'pyglet', 'qt', 'qt4', 'qt5', 'tk', 'wx', 'gtk2',
+#  'qt4').
+# c.InteractiveShellApp.gui = None
 
 # Should variables loaded at startup (by startup files, exec_lines, etc.) be
 # hidden from tools like %who?
@@ -131,7 +152,6 @@ if ModuleNotFoundError not in dir(builtins):
 
 # Configure matplotlib for interactive use with the default matplotlib backend.
 
-# TerminalIPythonApp.matplotlib=<CaselessStrEnum>
 #     Default: None
 #     Choices: ['auto', 'agg', 'gtk', 'gtk3', 'inline', 'ipympl', 'nbagg',
 #     notebook', 'osx', 'pdf', 'ps', 'qt', 'qt4', 'qt5', 'svg', 'tk',
@@ -158,15 +178,8 @@ else:
 # Dude I never noticed that this defaults to True like whatttt
 #  When False, pylab mode should not import any names into the user namespace.
 # c.InteractiveShellApp.pylab_import_all = True
-
 # Reraise exceptions encountered loading IPython extensions?
-# if you realize this is a bad idea please leave a note why
-# i'm actually curious
-
 c.InteractiveShellApp.reraise_ipython_extension_failures = False
-
-# I'm assuming these are related and please don't crash the interpreter
-# from a simple mistake
 
 # ----------------------------------------------------------------------------
 # Application(SingletonConfigurable) configuration
@@ -208,7 +221,7 @@ c.Application.log_level = 30
 
 # The name of the IPython directory. This directory is used for logging
 # configuration (through profiles), history storage, etc. The default is
-# $HOME/.ipython. This option can also be specified through the environment
+# usually $HOME/.ipython. This option can also be specified through the environment
 # variable IPYTHONDIR.
 if os.environ.get("IPYTHONDIR"):
     c.BaseIPythonApplication.ipython_dir = os.environ.get("IPYTHONDIR")
@@ -246,6 +259,34 @@ c.TerminalIPythonApp.force_interact = False
 # Start IPython quickly by skipping the loading of config files.
 # c.TerminalIPythonApp.quick = False
 
+# Dec 08, 2019: Adding this in
+c.TerminalIPythonApp.log_format = '%(module) : %(created)f : [%(name)s] : %(highlevel)s : %(message)s : '
+
+# Configure matplotlib for interactive use with the default matplotlib backend.
+
+# TerminalIPythonApp.matplotlib=<CaselessStrEnum>
+#     Default: None
+#     Choices: ['auto', 'agg', 'gtk', 'gtk3', 'inline', 'ipympl', 'nbagg',
+#     notebook', 'osx', 'pdf', 'ps', 'qt', 'qt4', 'qt5', 'svg', 'tk',
+#     widget', 'wx']
+#     Configure matplotlib for interactive use with the default matplotlib
+#     backend.
+try:
+    import matplotlib
+except (ImportError, ModuleNotFoundError):
+    c.TerminalIPythonApp.matplotlib = None
+except OSError:
+    c.TerminalIPythonApp.matplotlib = None
+except Exception as e:
+    if getattr(sys, 'exc_info', None):
+        print(sys.exc_info()[2])
+else:
+    c.TerminalIPythonApp.matplotlib = 'auto'
+    # TODO: I accidentally set this as a config of InteractiveShellApp.
+    # Was this why i've eeen having so many unexplainable mpl problems?
+    # Why is this a problem and what causes it?
+    # c.InteractiveShellApp.pylab = 'auto'
+
 # ------------------------------------------------------------------------------
 # InteractiveShell(SingletonConfigurable) configuration
 # ------------------------------------------------------------------------------
@@ -253,6 +294,16 @@ c.TerminalIPythonApp.force_interact = False
 # An enhanced, interactive shell for Python.
 
 # 'all', 'last', 'last_expr' or 'none', 'last_expr_or_assign' specifying which
+#  nodes should be run interactively (displaying output from expressions).
+c.InteractiveShell.ast_node_interactivity = 'last_expr_or_assign'
+
+# AKA:  Make IPython automatically call any callable object even if you didn't type
+
+# A list of ast.NodeTransformer subclass instances, which will be applied to
+#  user input before code is run.
+# c.InteractiveShell.ast_transformers = []
+
+# Automatically run await statement in the top level repl.
 if version_info > (7, 2):
     c.InteractiveShell.autoawait = True
 else:
@@ -274,7 +325,7 @@ c.InteractiveShell.autocall = 0
 #     pass
 
 # Enable magic commands to be called without the leading %.
-c.InteractiveShell.automagic = True
+# c.InteractiveShell.automagic = True
 
 # The part of the banner to be printed before the profile
 c.InteractiveShell.banner1 = ""
@@ -293,7 +344,7 @@ c.InteractiveShell.banner1 = ""
 #  c.InteractiveShell.banner1 = rewritten_banner
 
 # The part of the banner to be printed after the profile
-# c.InteractiveShell.banner2 = ''
+c.InteractiveShell.banner2 = ''
 
 # Set the size of the output cache. The default is 1000, you can change it
 # permanently in your config file. Setting it to 0 completely disables the
@@ -311,7 +362,7 @@ c.InteractiveShell.color_info = True
 # Set the color scheme (NoColor, Neutral, Linux, or LightBG).
 c.InteractiveShell.colors = 'Linux'
 
-# c.InteractiveShell.debug = False
+c.InteractiveShell.debug = True
 
 # Don't call post-execute functions that have failed in the past.
 # c.InteractiveShell.disable_failing_post_execute = False
@@ -320,10 +371,11 @@ c.InteractiveShell.colors = 'Linux'
 #  regular output instead.
 # Only if we don't have bat.
 
-if shutil.which('bat'):
-    c.InteractiveShell.display_page = False
-else:
+if platform.system() == 'Windows':
     c.InteractiveShell.display_page = True
+else:
+    if shutil.which('bat'):
+        c.InteractiveShell.display_page = False
 
 # (Provisional API) enables html representation in mime bundles sent to pagers.
 # c.InteractiveShell.enable_html_pager = False
@@ -334,6 +386,8 @@ c.InteractiveShell.history_length = 50000
 # The number of saved history entries to be loaded into the history buffer at
 #  startup.
 c.InteractiveShell.history_load_length = 10000
+
+# c.InteractiveShell.ipython_dir = ''
 
 # Start logging to the given file in append mode. Use `logfile` to specify a
 # log file to **overwrite** logs to.
@@ -352,8 +406,6 @@ c.InteractiveShell.history_load_length = 10000
 # c.InteractiveShell.loop_runner = 'IPython.core.interactiveshell._asyncio_runner'
 
 # TODO: What is this?
-# Been digging through the source and i still can't tell you. btw i don't think
-# 2 is an allowed option we only check if it's 0 or 1. if 1 print more info.
 # --TerminalInteractiveShell.object_info_string_level=<Enum>
 #     Default: 0
 #     Choices: (0, 1, 2)
@@ -405,9 +457,21 @@ c.InteractiveShell.quiet = False
 
 c.InteractiveShell.wildcards_case_sensitive = False
 
+# Switch modes for the IPython exception handlers.
+# Default: 'Context'
+# Choices: ['Context', 'Plain', 'Verbose', 'Minimal']
+# c.InteractiveShell.xmode = 'Context'
+
 # ----------------------------------------------------------------------------
 # TerminalInteractiveShell(InteractiveShell) configuration
 # ----------------------------------------------------------------------------
+# Autoformatter to reformat Terminal code. Can be `'black'` or `None`
+if shutil.which('black'):
+    c.TerminalInteractiveShell.autoformatter = 'black'
+else:
+    c.TerminalInteractiveShell.autoformatter = None
+
+c.TerminalInteractiveShell.ast = 'last_expr_or_assign'
 
 # Set to confirm when you try to exit IPython with an EOF (Control-D in Unix,
 #  Control-Z/Enter in Windows). By typing 'exit' or 'quit', you can force a
@@ -434,6 +498,8 @@ else:
     else:
         c.TerminalInteractiveShell.editing_mode = 'emacs'
 
+
+# TODO: What is the API for traitlets.LazyConfigValue? It doesn't have a log method.
 # c.log("Editing Mode:\t {!s}".format(c.TerminalInteractiveShell.editing_mode))
 
 # Set the editor used by IPython (default to $EDITOR/vi/notepad).
@@ -457,6 +523,7 @@ c.TerminalInteractiveShell.extra_open_editor_shortcuts = True
 
 # The name or class of a Pygments style to use for syntax highlighting.
 # To see available styles, run `pygmentize -L styles`.
+# c.TerminalInteractiveShell.highlighting_style = traitlets.Undefined
 
 # default, emacs, friendly, colorful, autumn, murphy, manni, monokai, perldoc,
 # pastie, borland, trac, native, fruity, bw, vim, vs, tango, rrt, xcode, igor,
@@ -472,10 +539,40 @@ except (ImportError, ModuleNotFoundError):
 else:
     c.TerminalInteractiveShell.highlighting_style = 'GruvboxDarkHard'
 
+
+def get_env():
+    """Would it make sense to combine functools.lru_cache with this?"""
+    return os.environ.copy()
+
+
+if platform.system() == 'Windows':
+    from pygments.styles import friendly
+    # I know it's odd making this platform specific but everything is completely illegible otherwise
+    c.TerminalInteractiveShell.highlighting_style = friendly
+
+
+environment = get_env()
+if 'LESS' not in environment:
+    os.environ.setdefault('LESS', "less -JRKMLigeF")
+    os.environ.setdefault('LESSHISTSIZE', 5000)
+if 'LESS_TERMCAP_mb' not in environment:
+    # Who is curios as to whether this is gonna work or not?
+    os.environ.setdefault('LESS_TERMCAP_mb', '\e[01;31m')
+    os.environ.setdefault('LESS_TERMCAP_md', '\e[01;38;5;180m')
+    os.environ.setdefault('LESS_TERMCAP_me', '\e[0m')
+    os.environ.setdefault('LESS_TERMCAP_se', '\e[0m')
+    os.environ.setdefault('LESS_TERMCAP_so', '\e[03;38;5;202m')
+    os.environ.setdefault('LESS_TERMCAP_ue', '\e[0m')
+    os.environ.setdefault('LESS_TERMCAP_us', '\e[04;38;5;139m')
+
 # Override highlighting format for specific tokens
 # Comments were genuinely impossible to read. Might need to override
 # punctuation next.
 # c.TerminalInteractiveShell.highlighting_style_overrides = {Comment: '#ffffff'}
+
+
+# No help docs? Update when you find the sauce
+#c.TerminalInteractiveShell.mime_renderers = {}
 
 # Enable mouse support in the prompt (Note: prevents selecting text with the
 # mouse)
@@ -503,7 +600,7 @@ class StandardPythonPrompt(ClassicPrompts):
         """The most boiler-platey repr I can come up with."""
         return self.__class__.__name__
 
-        # def __call__(self):
+    # def __call__(self):
         """TODO"""
         # return
 
@@ -522,7 +619,7 @@ class StandardPythonPrompt(ClassicPrompts):
 # c.TerminalInteractiveShell.simple_prompt = False
 
 # Number of line at the bottom of the screen to reserve for the completion menu
-c.TerminalInteractiveShell.space_for_menu = 6
+c.TerminalInteractiveShell.space_for_menu = 0
 
 # Automatically set the terminal title
 c.TerminalInteractiveShell.term_title = True
@@ -539,7 +636,6 @@ c.TerminalInteractiveShell.true_color = True
 # Switch modes for the IPython exception handlers.
 # Default: 'Context'
 # Choices: ['Context', 'Plain', 'Verbose', 'Minimal']
-
 c.TerminalInteractiveShell.xmode = 'Minimal'
 
 # ----------------------------------------------------------------------------
@@ -559,14 +655,14 @@ c.TerminalInteractiveShell.xmode = 'Minimal'
 # Options for configuring the SQLite connection
 
 # These options are passed as keyword args to sqlite3.connect when establishing
-# database conenctions.
+#  database connections.
 # c.HistoryAccessor.connection_options = {}
 
 # enable the SQLite history
 
 # set enabled=False to disable the SQLite history, in which case there will be
 # no stored history, no SQLite connection, and no background saving thread.
-# This may be necessary in some threaded environments where IPython is embedded
+# This may be necessary in some threaded environments where IPython is embedded.
 # c.HistoryAccessor.enabled = True
 
 # Path to file to use for SQLite history database.
@@ -619,6 +715,7 @@ c.HistoryManager.db_log_output = True
 
 #  This object knows how to find, create and manage these directories. This
 #  should be used by any code that wants to handle profiles.
+# c.ProfileDir.location = ''
 
 # Set the profile location directly. This overrides the logic used by the
 #  `profile` option.
@@ -727,15 +824,6 @@ class BaseFormatterDoc(Configurable):
         return self._example_subclass()
 
 
-c.PlainTextFormatter.max_seq_length = 100
-
-c.PlainTextFormatter.max_width = 79
-
-# I'm confident I don't want any \r\n newlines even on windows
-c.PlainTextFormatter.newline = '\n'
-
-c.PlainTextFormatter.verbose = True
-
 # ----------------------------------------------------------------------------
 # Completer(Configurable) configuration
 # ----------------------------------------------------------------------------
@@ -839,4 +927,4 @@ c.LoggingMagics.quiet = True
 # Provides the %store magic.
 # If True, any %store-d variables will be automatically restored when IPython
 # starts.
-# c.StoreMagics.autorestore = False
+c.StoreMagics.autorestore = False

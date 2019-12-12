@@ -189,41 +189,69 @@ To put back the default options, you can use:
 
 
 """
+import ctypes
 import doctest
 import logging
+import platform
 import sys
 
-# Not allowed to do this
-# from default_profile.startup import logging.BASIC_FORMAT
+logging.basicConfig(
+    level=logging.WARNING, stream=sys.stdout, format=logging.BASIC_FORMAT
+)
 
-try:
-    import numpy as np
-except (ImportError, ModuleNotFoundError):
-    set_numpy_printoptions = None
-else:
 
-    def set_numpy_printoptions(**kwargs):
-        """Define this function only if numpy can be imported.
+if platform.system() == 'Windows':
+    from ctypes import WinDLL
 
-        But don't end the script with sys.exit() because anything that imports
-        this module will exit too. As the ``__init__.py`` imports this module
-        the whole package breaks due to a simple installation issue.
 
-        Parameters
-        ----------
-        kwargs : dict
-            Any options that should be overridden.
+def numpy_setup():
+    """Jeez this got platform specific."""
+    try:
+        import numpy as np
+    except (ImportError, ModuleNotFoundError):
+        set_numpy_printoptions = None
+    except OSError as e:
 
-        """
-        np.set_printoptions(threshold=20)
-        np.set_printoptions(**kwargs)
+        ###########
+        # WAIT WHAT
+        ###########
+
+        # If you catch an exception like this, does it not appear in sys.exc_info()
+        # anymore or am i being an idiot?
+        # Check again in the morning
+
+        if getattr(sys, 'last_type', None):
+            if sys.last_type == 'WindowsError':
+                sys.exit('Goddamnit Numpy. ctypes is fucking up again.')
+            else:
+                logging.exception(e)
+                return
+        else:
+            return
+    else:
+        return numpy
+
+
+def set_numpy_printoptions(**kwargs):
+    """Define this function only if numpy can be imported.
+
+    But don't end the script with sys.exit() because anything that imports
+    this module will exit too. As the ``__init__.py`` imports this module
+    the whole package breaks due to a simple installation issue.
+
+    Parameters
+    ----------
+    kwargs : dict
+        Any options that should be overridden.
+
+    """
+    np.set_printoptions(threshold=20)
+    np.set_printoptions(**kwargs)
 
 
 if __name__ == "__main__":
-    logging.basicConfig(
-        level=logging.WARNING, stream=sys.stdout, format=logging.BASIC_FORMAT
-    )
 
-    if set_numpy_printoptions:
+    numpy_mod = numpy_setup()
+    if numpy_mod is not None:
         set_numpy_printoptions()
         doctest.testmod()  # why not?

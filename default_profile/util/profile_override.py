@@ -18,37 +18,17 @@ See Also
 
     :mod:`IPython.core.profileapp`.
 
-.. code-block:: console
-
-    $: ipython locate profile -- :kbd:`Tab`
-
-    --LocateIPythonApp.auto_create=
-
-    --LocateIPythonApp.copy_config_files=
-
-    --LocateIPythonApp.extra_config_file=
-
-    --LocateIPythonApp.ipython_dir=
-
-    --LocateIPythonApp.log_datefmt=
-
-    --LocateIPythonApp.log_format=
-
-    --LocateIPythonApp.log_level=
-
-    --LocateIPythonApp.overwrite=
-
-    --LocateIPythonApp.profile=
-
-    --LocateIPythonApp.verbose_crash=
-
 
 """
 import errno
 import os
 import shutil
+from pathlib import Path
 
-from IPython.paths import ensure_dir_exists, get_ipython_package_dir
+from IPython.terminal.embed import InteractiveShellEmbed
+from IPython.terminal.ipapp import TerminalIPythonApp
+
+# from IPython.paths import ensure_dir_exists, get_ipython_package_dir
 from traitlets.config import Bool, LoggingConfigurable, Unicode, observe
 
 
@@ -67,112 +47,41 @@ class ReprProfileDir(LoggingConfigurable):
     should be used by any code that wants to handle profiles.
     """
 
-    security_dir_name = Unicode('security')
-    log_dir_name = Unicode('log')
-    startup_dir_name = Unicode('startup')
-    pid_dir_name = Unicode('pid')
-    static_dir_name = Unicode('static')
-    security_dir = Unicode(u'')
-    log_dir = Unicode(u'')
-    startup_dir = Unicode(u'')
-    pid_dir = Unicode(u'')
-    static_dir = Unicode(u'')
+    def __init__(self, *args, **kwargs):
+        """Create an init and then make it way shorter."""
+        super().__init__(*args, **kwargs)
+        self.ensure_dir_exists = DirectoryChecker
+        startup_dir = Unicode('startup')
+        log_dir = Unicode('log')
+        location = Unicode(
+            help="""Set the profile location directly. This overrides the logic used by the
+            `profile` option.""", allow_none=True
+        ).tag(config=True)
 
-    location = Unicode(
-        u'',
-        help="""Set the profile location directly. This overrides the logic used by the
-        `profile` option.""",
-    ).tag(config=True)
+    # don't set the location more than once no matter how many profiles
+    # are instantiated so yes a class attr
+    _location_isset = False
 
     def __repr__(self):
         """I'll admit this is unnecessary. Oh well."""
-        return '{}'.format(self.location)
-
-    _location_isset = Bool(False)  # flag for detecting multiply set location
+        return '{}: {}'.format(self.__class__.__name__, self.location)
 
     @observe('location')
     def _location_changed(self, change):
+        """This is so odd to me. What is change when does it get called?"""
         if self._location_isset:
             raise RuntimeError("Cannot set profile location more than once.")
         self._location_isset = True
         new = change['new']
-        ensure_dir_exists(new)
+        self.ensure_dir_exists(new)
 
-        # ensure config files exist:
-        self.security_dir = os.path.join(new, self.security_dir_name)
-        self.log_dir = os.path.join(new, self.log_dir_name)
-        self.startup_dir = os.path.join(new, self.startup_dir_name)
-        self.pid_dir = os.path.join(new, self.pid_dir_name)
-        self.static_dir = os.path.join(new, self.static_dir_name)
-        self.check_dirs()
-
-    def _mkdir(self, path, mode=None):
-        """Ensure a directory exists at a given path.
-
-        This is a version of os.mkdir, with the following differences:
-
-        - Returns `True` if it created the directory, `False` otherwise.
-        - ignores :data:`signal.EEXIST`, protecting against race conditions where
-          the dir may have been created in between the check and
-          the creation.
-        - Sets permissions via :func:`os.chmod()` if requested and the dir already exists.
-
-        """
-        if os.path.exists(path):
-            if mode and os.stat(path).st_mode != mode:
-                try:
-                    os.chmod(path, mode)
-                except OSError:
-                    self.log.warning("Could not set permissions on %s", path)
-            return False
-        try:
-            if mode:
-                os.mkdir(path, mode)
-            else:
-                os.mkdir(path)
-        except OSError as e:
-            if e.errno == errno.EEXIST:
-                return False
-            else:
-                raise
-
-        return True
-
-    @observe('log_dir')
-    def check_log_dir(self, change=None):
-        self._mkdir(self.log_dir)
-
-    @observe('startup_dir')
-    def check_startup_dir(self, change=None):
-        self._mkdir(self.startup_dir)
-
-        readme = os.path.join(self.startup_dir, 'README')
-        src = os.path.join(
-            get_ipython_package_dir(), u'core', u'profile', u'README_STARTUP'
-        )
-
-        if not os.path.exists(src):
-            self.log.warning(
-                "Could not copy README_STARTUP to startup dir. Source file %s does not exist.",
-                src
-            )
-
-        if os.path.exists(src) and not os.path.exists(readme):
-            shutil.copy(src, readme)
-
-    @observe('security_dir')
-    def check_security_dir(self, change=None):
-        self._mkdir(self.security_dir, 0o40700)
+        # what is static?
+        for i in ['security', 'log', 'startup', 'pid', 'static']:
+            self.ensure_dir_exists(Path(new, i))
 
     @observe('pid_dir')
     def check_pid_dir(self, change=None):
         self._mkdir(self.pid_dir, 0o40700)
-
-    def check_dirs(self):
-        self.check_security_dir()
-        self.check_log_dir()
-        self.check_pid_dir()
-        self.check_startup_dir()
 
     def copy_config_file(self, config_file, path=None, overwrite=False):
         """Copy a default config file into the active profile directory.
@@ -275,3 +184,87 @@ class ReprProfileDir(LoggingConfigurable):
                 'Profile directory not found: %s' % profile_dir
             )
         return cls(location=profile_dir, config=config)
+
+
+class DirectoryChecker:
+    """Let's redo profiledir with pathlib.
+
+    Dude we're allowed to subclass os.Pathlike. I wonder if that'd make this
+    easier.
+    """
+
+    def __init__(self, canary=None, *args, **kwargs):
+        """Initialize our own version of ipython."""
+        if canary is not None:
+            self.canary = canary
+        else:
+            self.canary = get_ipython()
+        self.fs = Path
+
+    def initialize(self):
+        """TODO: Add getattr checks for this func so we don't call on an uninitialized object."""
+        if self.canary.initialized():
+            # Running inside IPython
+
+            # Detect if embed shell or not and display a message
+            if isinstance(self.canary, InteractiveShellEmbed):
+                sys.stderr.write(
+                    "\nYou are currently in an embedded IPython shell,\n"
+                    "the configuration will not be loaded.\n\n"
+                )
+        else:
+            # Not inside IPython
+            # Build a terminal app in order to force ipython to load the configuration
+            ipapp = TerminalIPythonApp()
+            # Avoid output (banner, prints)
+            ipapp.interact = False
+
+    @staticmethod
+    def ensure_dir_exists(path, mode=0o755):
+        """Ensure that a directory exists.
+
+        If it doesn't exist, try to create it and protect against a race
+        condition if another process is doing the same.
+
+        The default permissions are :data:`0o755`, which differ from
+        :func:`os.makedirs()` default of :data:`0o777`.
+
+        Parameters
+        ----------
+        path : str (path-like)
+            Path to the directory
+        mode : int
+            If the directory doesn't exist, what mode should it be created as?
+
+        Returns
+        -------
+        None
+
+        Raises
+        ------
+        OSError, IOError
+
+        """
+        if not os.path.exists(path):
+            try:
+                os.makedirs(path, mode=mode)
+            except OSError as e:
+                if e.errno != errno.EEXIST:
+                    raise IOError(e)
+        elif not os.path.isdir(path):
+            raise IOError("%r exists but is not a directory" % path)
+
+    def initialize_profile(self):
+        """Initialize the profile but sidestep the IPython.core.ProfileDir().
+
+        The class searches for directories named default_profile and if found
+        uses that as a profile which I dislike.
+        """
+        profile_to_load = Path("~/.ipython/default_profile")
+
+        try:
+            self.ensure_dir_exists(profile_to_load)
+        except OSError as e:
+            print(e)
+        else:
+            self.canary.profile_dir = os.path.expanduser("~/.ipython/default_profile")

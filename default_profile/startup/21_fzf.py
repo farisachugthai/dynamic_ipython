@@ -85,7 +85,7 @@ class FZF:
             # user_aliases.extend(
             #     ('fzf', '$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS'))
             cls.fzf_alias = ("fzf",
-                              "ag -C 0 --color-win-ansi --noheading %l | fzf")
+                             "ag -C 0 --color-win-ansi --noheading %l | fzf")
 
         return cls.fzf_alias
 
@@ -127,7 +127,9 @@ def main():
             else:
                 busybox_hack(shell)
 
+        fzf_aliases = FZF()._setup_fzf()
         shell.alias_manager.user_aliases.append(FZF._setup_fzf())
+        # TODO: is this really the method we need to call here?
         shell.alias_manager.init_aliases()
 
 

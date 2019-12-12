@@ -31,6 +31,12 @@ class CommonAliases:
 
     .. todo:: :command:`git show`
 
+    .. todo:: The classs method doesn't work if we don't have a class attribute.
+
+        But if we create a class attribute, does updating the aliases for an instance
+        change it for the class? Write a test to ensure that this isn't what
+        happens.
+
     """
 
     user_aliases = []
@@ -204,6 +210,7 @@ class CommonAliases:
             ("...", "cd ../.."),
         ]
         return cls.user_aliases
+
 
 class LinuxAliases(CommonAliases):
     """Add Linux specific aliases.
@@ -515,7 +522,7 @@ class WindowsAliases:
         elif os.environ.get("COMSPEC"):
             return os.environ.get("COMSPEC")
         else:
-            raise
+            logging.warning('%s is None as are %s and %s', self.shell, '$SHELL', '$COMSPEC')
 
 
 def main():

@@ -30,12 +30,10 @@
       }
     },
     {
-      "command": "${config:python.pythonPath}",
       "group": "build",
       "label": "doesn't work sphinx",
       "linux": {
         "args": [
-          "-m",
           "sphinx-build",
           "-b",
           "html",
@@ -45,10 +43,21 @@
       },
       "options": {
         "shell": {
-          "executable": "pwsh"
+          "executable": "cmd",
+          "args": [
+            "/U",
+            "/K",
+            "C:/tools/Cmder/vendor/init.bat"
+          ]
         }
       },
+    },
+    {
+      "label": "second try sphinx-build",
+      "group": "build",
+      "dependsOrder": "sequence",
       "type": "process",
+      "command": "${config:python.pythonPath}",
       "windows": {
         "args": [
           "-m",
@@ -69,6 +78,8 @@
         "${file}"
       ],
       "command": "${config:python.pythonPath}",
+      ""
+      "group": "none",
       "label": "autopep8 current file",
       "type": "process"
     },
@@ -80,6 +91,7 @@
         "${file}"
       ],
       "command": "${config:python.pythonPath}",
+      "group": "none",
       "label": "YAPF current file",
       "type": "process"
     },
@@ -89,7 +101,7 @@
         "isDefault": true,
         "kind": "build"
       },
-      "label": "sphinx-build",
+      "label": "sphinx-build with pwsh",
       "options": {
         "shell": {
           "args": [
