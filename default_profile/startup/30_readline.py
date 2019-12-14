@@ -33,15 +33,15 @@ import logging
 import os
 from pathlib import Path
 import platform
+# Oddly enough this is available on every platform
+import rlcompleter
 
 
 def readline_logging():
+    """TODO: Fallback in case IPYTHONDIR isn't set"""
     if os.environ.get("IPYTHONDIR"):
         LOG_FILENAME = os.path.join(os.environ.get("IPYTHONDIR"),
                                     "completer.log")
-    # else:
-    # todo
-
     logging.basicConfig(
         format="%(message)s",
         filename=LOG_FILENAME,
@@ -55,7 +55,6 @@ except (ImportError, ModuleNotFoundError):
     jedi = None
 else:
     from jedi.utils import setup_readline
-
     setup_readline()
     jedi.settings.add_bracket_after_function = False
     # jedi.settings
@@ -69,12 +68,14 @@ def get_readline():
     except (ImportError, ModuleNotFoundError):
         # Interestingly this can work on Windows with a simple pip install pyreadline
         try:
-            from pyreadline import rlmain
+            import pyreadline as readline
         except (ImportError, ModuleNotFoundError):
             readline = None
-            return readline  # might be unnecessary
+            return
         else:
-            readline = rlmain.Readline()
+            from pyreadline.rlmain import Readline
+            global rl
+            rl = Readline()
             return readline
     else:
         return readline
@@ -89,11 +90,11 @@ def bind_readline_keys():
 def read_inputrc():
     """Check for an inputrc file."""
     if os.environ.get("INPUTRC"):
-        readline.read_init_file(os.environ.get("INPUTRC"))
-    else:
-        if Path('~/pyreadlineconfig.ini').is_file():
-            readline.read_init_file(str(Path('~/pyreadlineconfig.ini')))
-
+        readline.read_inputrc_file(os.environ.get("INPUTRC"))
+    elif Path('~/pyreadlineconfig.ini').is_file():
+        readline.read_inputrc_file(str(Path('~/pyreadlineconfig.ini')))
+    elif Path('~/.inputrc').is_file():
+        readline.read_inputrc_file(os.expanduser('~/.inputrc'))
 
 class SimpleCompleter:
     """
@@ -155,17 +156,23 @@ def input_loop():
 # OPTIONS = ['start', 'stop', 'list', 'print']
 # readline.set_completer(SimpleCompleter(OPTIONS).complete)
 
-if __name__ == "__main__":
-    # Do this part first
-    readline_logging()
 
-    # Oddly enough this is available on every platform
-    import rlcompleter
+# Originally this part was in an `if __name__ == '__main__' block but I actually
+# want it executed in the global namespace. It should have been written carefully
+# enough that both Linux and Windows can handle it. TUI only but isn't that implied
+# with readline?
+# Do this part first
+readline_logging()
 
-    readline = get_readline()
+readline = get_readline()
 
-    if hasattr(readline, "read_init_file"):
+if readline:
+    if getattr(readline, 'parse_and_bind', None):
         bind_readline_keys()
+    if getattr(readline, "read_inputrc_file", None):
         read_inputrc()
 
-    # TODO: Check what the API is to add a completer to ipython. _ip.add_completer?
+else:
+    print('you fucked up')
+
+# TODO: Check what the API is to add a completer to ipython. _ip.add_completer?

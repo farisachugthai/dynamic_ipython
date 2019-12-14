@@ -4,11 +4,6 @@
 ==========
 Numpy Init
 ==========
-.. module:: 41_numpy
-    :synopsis: Initialize numpy.
-
-This could be a starting point for practicing module
-configuration with traits.
 
 .. ipython::
    :verbatim:
@@ -229,7 +224,7 @@ def numpy_setup():
         else:
             return
     else:
-        return numpy
+        return True
 
 
 def set_numpy_printoptions(**kwargs):
@@ -246,12 +241,14 @@ def set_numpy_printoptions(**kwargs):
 
     """
     np.set_printoptions(threshold=20)
-    np.set_printoptions(**kwargs)
+    if kwargs is not None:
+        np.set_printoptions(**kwargs)
 
 
 if __name__ == "__main__":
 
     numpy_mod = numpy_setup()
-    if numpy_mod is not None:
+    if numpy_mod is True:
+        import numpy as np
         set_numpy_printoptions()
         doctest.testmod()  # why not?

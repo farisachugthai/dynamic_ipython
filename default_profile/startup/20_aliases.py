@@ -116,29 +116,29 @@ class CommonAliases:
         """100+ git aliases."""
         cls.user_aliases += [
             ("g", "git diff --staged --stat %l"),
-            ("ga", "git add %l"),
+            ("ga", "git add -v %l"),
             ("gaa", "git add --all %l"),
             ("gai", "git add --interactive %l"),
             ("gap", "git add --patch %l"),
             ("gar", "git add --renormalize -A %l"),
             ("gau", "git add --update %l"),
             ("ga.", "git add ."),
-            ("gb", "git branch --all %l"),
+            ("gb", "git branch --all --remote --verbose %l"),
             ("gbd", "git branch -d %l"),
             ("gbD", "git branch -D %l"),
             ("gbl", "git blame %l"),
             ("gbr", "git branch %l"),
             ("gbrd", "git branch -rd %l"),
             ("gbrD", "git branch -rD %l"),
-            ("gbru", "git branch --set-upstream-to origin %l"),
+            ("gbru", "git branch --set-upstream-to --verbose origin %l"),
             ("gbrv", "git branch --all --verbose %l"),
             ("gci", "git commit %l"),
             ("gcia", "git commit --amend %l"),
             ("gciad", "git commit --amend --date=%l"),
             ("gcid", "git commit --date=%l"),
             ("gcim", "git commit --verbose --message %s"),
-            ("gcl", "git clone %l"),
-            ("gcls", "git clone --depth 1 %l"),
+            ("gcl", "git clone --progress %l"),
+            ("gcls", "git clone --progress --depth 1 %l"),
             ("gco", "git checkout %l"),
             ("gcob", "git checkout -b %l"),
             ("gd", "git diff %l"),
@@ -154,7 +154,7 @@ class CommonAliases:
             ("git config-list", "git config --get --global %l"),
             ("git config-glob", "git config --get-regex --global %l.*"),
             # If you're on a topic branch, shows commit msgs since split
-            ("git fork", "git show-branch --current %l")
+            ("git fork", "git show-branch --current %l"),
             (
                 "git hist",
                 'git log --pretty="format:%h %ad | %d [%an]" --graph --date=short '
@@ -246,7 +246,6 @@ class LinuxAliases(CommonAliases):
             magic_name=name)
 
     """
-
     def __init__(self, shell=None, aliases=None, *args, **kwargs):
         """The WindowsAliases implementation of this is odd so maybe branch off.
 
@@ -318,8 +317,10 @@ class LinuxAliases(CommonAliases):
             # only prompts with more than 3 files or recursed dirs.
             ("rm", "rm -Iv %l"),
             ("rmdir", "rmdir -v %l"),
-            ("default_profile", "cd ~/projects/dotfiles/unix/.ipython/default_profile"),
-            ("startup", "cd ~/projects/dotfiles/unix/.ipython/default_profile/startup"),
+            ("default_profile",
+             "cd ~/projects/dotfiles/unix/.ipython/default_profile"),
+            ("startup",
+             "cd ~/projects/dotfiles/unix/.ipython/default_profile/startup"),
             ("tail", "tail -n 30 %l"),
         ]
         return self.user_aliases
@@ -359,7 +360,6 @@ class WindowsAliases(CommonAliases):
     Would it be useful to subclass :class:`reprlib.Repr` here?
 
     """
-
     def __init__(self, shell=None, user_aliases=None):
         """Initialize the platform specific alias manager with IPython.
 
@@ -426,8 +426,11 @@ class WindowsAliases(CommonAliases):
         """
         cls.user_aliases = [
             ("assoc", "assoc %l"),
-            ("cp", "copy %s %s"),
+            ("control", "control %l"),
+            ("controlpanel", "control %l"),
             ("copy", "copy %s %s"),
+            ("cp", "copy %s %s"),
+            ("cpanel", "control %l"),
             ("ddir", "dir /ad /on %l"),
             ("echo", "echo %l"),
             ("ldir", "dir /ad /on %l"),
@@ -438,10 +441,17 @@ class WindowsAliases(CommonAliases):
             ("mklink", "mklink %s %s"),
             ("move", "move %s %s"),
             ("mv", "move %s %s"),
+            ("path", "path %l"),
             ("ren", "ren %l"),
             ("rm", "del %l"),
-            ("rmdir", "erase %l"),
+            ("rmdir", "rmdir %l"),
+            # i'll admit this is specific but I'm NEVER gonna remember it
+            ("rmdir -r", "rmdir /S %l"),
+            ("sfc", "sfc %l"),
+            ("tasklist", "tasklist %l"),
+            ("taskkill", "taskkill %l"),
             ("tree", "tree /A /F %l"),
+            ("where", "where %l"),
         ]
         return cls.user_aliases
 
@@ -512,7 +522,10 @@ class WindowsAliases(CommonAliases):
             ("stz", "Set-TimeZone %l"),
             ("sv", "Set-Variable %l"),
             ("tee", "Tee-Object %l"),
-            ("tree", "tree /F /A %l",),
+            (
+                "tree",
+                "tree /F /A %l",
+            ),
             ("type", "Get-Content %l"),
             ("where", "Where-Object %l"),
             ("wjb", "Wait-Job %l"),
@@ -529,8 +542,8 @@ class WindowsAliases(CommonAliases):
         elif os.environ.get("COMSPEC"):
             return os.environ.get("COMSPEC")
         else:
-            logging.warning('%s is None as are %s and %s',
-                            self.shell, '$SHELL', '$COMSPEC')
+            logging.warning('%s is None as are %s and %s', self.shell,
+                            '$SHELL', '$COMSPEC')
 
 
 def main():
@@ -560,10 +573,12 @@ def main():
         # then we can create a shell class that determines if
         # we're in cmd or pwsh
         try:
-            user_aliases += WindowsAliases().cmd_aliases()
+            user_aliases += WindowsAliases.cmd_aliases()
         except SyntaxError as e:
             if hasattr(e, 'lineno', None):
-                print('Error: .20_aliases main method line: {}'.format(e.lineno))
+                print(
+                    'Error | default_profile.startup.20_aliases:main | line: {}'
+                    .format(e.lineno))
 
     _ip.alias_manager.user_aliases = user_aliases
     # Apparently the big part i was missing was rerunning the init_aliases method

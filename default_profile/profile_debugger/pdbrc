@@ -1,81 +1,29 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-"""Set up pdb or ipdb.
-
-.. code-block:: console
-
-    $: ipdb3 -h
-
-.. code-block:: none
-
-    usage: python -m ipdb [-c command] ... pyfile [arg] ...
-    Debug the Python program given by pyfile.
-    Initial commands are read from .pdbrc files in your home directory
-    and in the current directory, if they exist.  Commands supplied with
-    -c are executed after commands from .pdbrc files.
-    To let the script run until an exception occurs, use "-c continue".
-    To let the script run up to a given line X in the debugged file, use
-    "-c 'until X'"
-    ipdb version 0.10.3.
-
-Make `pp` use IPython's pretty printer, instead of the standard `pprint` module.
-
-:URL: https://nedbatchelder.com/blog/200704/my_pdbrc.html
-
-"""
-import bdb
-import cmd
-from contextlib import suppress
-import inspect
-import os
-import pdb
-from pprint import pprint
-import reprlib
-import sys
-import trace
-import traceback
-try:
-    import pyreadline
-except:
-    try:
-        import jedi
-    except:
-        pass
-    else:
-        from jedi.utils import setup_readline
-        try:
-            setup_readline()
-        except Exception:
-            pass
-
-# # Alright pdb stuff.
-# from pdb import Pdb
-# debugger = Pdb(skip='traitlets')
-# debugger.prompt = 'YourPdb: '
-# # seriously pdb shut the fuck up
-# debugger.doc_header = ''
-
-# Use IPython's pretty printing within PDB
-with suppress(ImportError):
-    from IPython.lib.pretty import pprint
-
-alias pp pprint(%*)
-
 # https://github.com/python/cpython/blob/3.7/Lib/pdb.py#L1380
+import os
+from pprint import pprint
+
+try:
+    exec(os.path.expanduser("~/.pdbrc.py"))
+except OSError as e:
+    print(e)
+
+# alias pp pprint(%*)
 
 # in the do_alias() function it mentions some examples and they sounded like
 # useful alias to tack on!
 
 # Print instance variables (usage "pi classInst")
-alias pi for k in % 1.__dict__.keys(): print("%1.", k, "=", % 1.__dict__[k])  # noqa
-# # Print instance variables in self
+alias pi {i:j for i,j in %1.__dict__.items()}
+alias pr pp pi %1
+# alias pi for k in %1.__dict__.keys(): print("%1.", k, "=", %1.__dict__[k])  # noqa
+# Print instance variables in self
 alias ps pi self
 
-# # Apr 07, 2019
-# # How in the world have I gone this long without noticing this isn't set up
-alias ? pinfo
-# # Kinda sucks now only ?func is valid not func?
-alias ?? pinfo2
+# Apr 07, 2019
+# How in the world have I gone this long without noticing this isn't set up
+# alias ? pinfo
+# Kinda sucks now only ?func is valid not func?
+# alias ?? pinfo2
 
 # Been reading through the inspect docs a little
 
@@ -83,7 +31,7 @@ alias ?? pinfo2
 alias pd pp {k: v for k, v in sorted(dict(%*).items(), key=lambda i: i[0])}
 
 # Print the member variables of a thing.
-alias pi pd %*.__dict__
+# alias pi pd %*.__dict__
 
 alias pii pd dict(inspect.getmembers(%1))
 
@@ -98,6 +46,12 @@ alias pg pd globals()
 alias nll n;;ll
 alias nl n;;l
 alias sl s;;l
+
+# Oh i want up and down too
+alias ul u;;l
+alias dl u;;l
+alias ull u;;ll
+alias dll d;;ll
 
 # Let's keep it going
 alias who pp dir(%1)
