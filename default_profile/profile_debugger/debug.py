@@ -104,7 +104,7 @@ def main():
     commands = []
     for opt, optarg in opts:
         if opt in ['-h', '--help']:
-            getopt.error(: )
+            getopt.error(:)
         elif opt in ['-c', '--command']:
             commands.append(optarg)
 
