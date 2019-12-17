@@ -187,10 +187,10 @@ c.Application.log_datefmt = '%Y-%m-%d %H:%M:%S'
 # The Logging format template
 # Default: '[%(name)s]%(highlevel)s %(message)s'
 # Todo: Import traitlets.config.application.LevelFormatter
-c.Application.log_format = '%(module) %(created)f [%(name)s] %(highlevel)s  %(message)s '
+c.Application.log_format = '%(module) %(created)f [%(name)s] %(message)s'
 
 # Set the log level by value or name.
-c.Application.log_level = 30
+c.Application.log_level = 20
 
 # ----------------------------------------------------------------------------
 # BaseIPythonApplication(Application) configuration
@@ -474,7 +474,7 @@ c.TerminalInteractiveShell.confirm_exit = False
 # Options for displaying tab completions, 'column', 'multicolumn', and
 #  'readlinelike'. These options are for `prompt_toolkit`, see `prompt_toolkit`
 #  documentation for more information.
-c.TerminalInteractiveShell.display_completions = 'column'
+c.TerminalInteractiveShell.display_completions = 'readlinelike'
 
 # Shortcut style to use at the prompt. 'vi' or 'emacs'.
 # Ah I forgot <C-a> on Tmux and Emacs clobber.
@@ -542,10 +542,9 @@ def get_env():
     return os.environ.copy()
 
 
-
 environment = get_env()
 if 'LESS' not in environment:
-    os.environ.setdefault("LESS", "less -JRKMLigeF")
+    os.environ.setdefault("LESS", "JRKMLigeF")
     os.environ.setdefault("LESSHISTSIZE", "5000")
 
 if 'LESS_TERMCAP_mb' not in environment:
@@ -588,7 +587,6 @@ class StandardPythonPrompt(ClassicPrompts):
     [(Token.Prompt, '>>> ')]
 
     """
-
     def __repr__(self):
         """The most boiler-platey repr I can come up with."""
         return self.__class__.__name__
@@ -748,7 +746,6 @@ class BaseFormatterDoc(Configurable):
     .. seealso:: :mod:`IPython.lib.pretty`.
 
     """
-
     def __init__(self, *args, **kwargs):
         """Initialize a BaseFormatter and get some Sphinx help.
 
