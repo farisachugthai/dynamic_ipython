@@ -238,7 +238,7 @@ def betterConfig(name=None, parent=None):
     it's default behavior is to allow all :class:`logging.LogRecords` to pass.
 
     """
-    logging.BASIC_FORMAT = '%(created)f : %(levelname)s : %(module)s : %(message)s : '
+    logging.BASIC_FORMAT = '%(created)f  %(levelname)s  %(module)s  %(message)s  '
     if parent:
         better_logger = logging.getLogger(name=name).getChild(parent)
     else:

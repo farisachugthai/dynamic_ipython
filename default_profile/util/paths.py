@@ -11,7 +11,7 @@ from pathlib import Path
 
 from .machine import Platform
 
-logging.BASIC_FORMAT = '%(created)f : %(module)s : %(levelname)s : %(message)s'
+logging.BASIC_FORMAT = '%(created)f  %(module)s  %(levelname)s  %(message)s'
 
 PATHS_LOGGER = logging.getLogger(name='default_profile.util').getChild('paths')
 PATHS_LOGGER.setLevel(logging.WARNING)

@@ -1,44 +1,9 @@
 =================
 IPython Startup
 =================
-.. module:: startup
-   :synopsis: Index the startup files.
 
-These are the auto-generated API docs for IPython's startup.
-
-
-.. toctree::
-   :maxdepth: 1
-   :titlesonly:
-   :caption: List of IPython startup files
-
-   rehashx
-   easy_import
-   ipython-logger
-   help_helpers
-   aliases
-   fzf
-   setup_readline
-   41_numpy
-   42_pandas
-   matplotlib_rc
-   sysexcept
-
-
-IPython Config
-==============
-
-Before delving into the startup files, the API for the main IPython config file
-will be discussed.
-
-This is simply the file that's generated when ``ipython --generate-config``
-is run on the command line.
-
-.. automodule:: default_profile.ipython_config
-   :synopsis: First module executed from userspace in IPython startup.
-   :members:
-   :undoc-members:
-   :show-inheritance:
+.. module:: default_profile.startup
+   :synopsis: Define the files that are run at every startup.
 
 
 Startup
@@ -56,3 +21,46 @@ files are executable without requiring the typical Unix file permissions
 system.
 
 Continue reading on at :doc:`rehashx`.
+
+
+IPython Config
+==============
+
+Before delving into the startup files, the API for the main IPython config file
+will be discussed.
+
+This is simply a heavily configured version of the file that's generated when
+``ipython --generate-config`` is run on the command line.
+
+As a result, it heavily utilizes the ``traitlets`` module.
+
+
+.. automodule:: default_profile.ipython_config
+   :synopsis: First module executed from userspace in IPython startup.
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+API
+====
+
+These are the auto-generated API docs for IPython's startup.
+
+
+
+.. toctree::
+   :titlesonly:
+   :caption: List of IPython startup files
+
+   rehashx
+   easy_import
+   ipython-logger
+   help_helpers
+   aliases
+   fzf
+   setup_readline
+   41_numpy
+   42_pandas
+   matplotlib_rc
+   sysexcept

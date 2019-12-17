@@ -48,4 +48,4 @@ current_configurable = get_config()
 if getattr(current_configurable, 'Prompts', None):
     current_configurable.Prompts = SessionPrompt
 else:
-    logging.error('New PromptSession did not work'.)
+    logging.error('New PromptSession did not work. Prompt attr: %s', getattr(current_configurable, 'Prompts', None))

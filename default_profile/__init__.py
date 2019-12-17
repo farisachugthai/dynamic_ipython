@@ -11,7 +11,7 @@ below without intermingling.
 import logging
 import sys
 
-default_log_format = '%(created)f : %(module)s : %(levelname)s : %(message)s'
+default_log_format = '%(module) %(created)f [%(name)s] %(highlevel)s  %(message)s '
 PROFILE_DEFAULT_LOG = logging.getLogger(name='default_profile')
 PROFILE_DEFAULT_LOG.setLevel(logging.WARNING)
 PROFILE_DEFAULT_HANDLER = logging.StreamHandler()
