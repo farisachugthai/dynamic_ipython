@@ -172,7 +172,7 @@ c.Application.log_datefmt = '%Y-%m-%d %H:%M:%S'
 
 # The Logging format template
 # Default: '[%(name)s]%(highlevel)s %(message)s'
-c.Application.log_format = '%(module) : %(created)f : [%(name)s] : %(highlevel)s : %(message)s : '
+# c.Application.log_format = '%(module) : %(created)f : [%(name)s] : %(highlevel)s : %(message)s : '
 
 # Set the log level by value or name.
 c.Application.log_level = 30
@@ -261,7 +261,7 @@ c.TerminalIPythonApp.force_interact = True
 # c.TerminalIPythonApp.quick = False
 
 # Dec 08, 2019: Adding this in
-c.TerminalIPythonApp.log_format = '%(module) : %(created)f : [%(name)s] : %(highlevel)s : %(message)s : '
+# c.TerminalIPythonApp.log_format = '%(module) : %(created)f : [%(name)s] : %(highlevel)s : %(message)s : '
 
 
 # ------------------------------------------------------------------------------
@@ -428,7 +428,7 @@ c.TerminalInteractiveShell.confirm_exit = False
 # Options for displaying tab completions, 'column', 'multicolumn', and
 #  'readlinelike'. These options are for `prompt_toolkit`, see `prompt_toolkit`
 #  documentation for more information.
-c.TerminalInteractiveShell.display_completions = 'column'
+c.TerminalInteractiveShell.display_completions = 'readlinelike'
 
 # Shortcut style to use at the prompt. 'vi' or 'emacs'.
 # Ah I forgot <C-a> on Tmux and Emacs clobber.
@@ -494,7 +494,7 @@ if platform.system() == 'Windows':
 
 environment = get_env()
 if 'LESS' not in environment:
-    os.environ.setdefault('LESS', "less -JRKMLigeF")
+    os.environ.setdefault('LESS', "JRKMLigeF")
     os.environ.setdefault('LESSHISTSIZE', '5000')
 if 'LESS_TERMCAP_mb' not in environment:
     # Who is curios as to whether this is gonna work or not?

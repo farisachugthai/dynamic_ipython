@@ -2,18 +2,22 @@
 Profile Override
 ================
 
-Override the IPython ProfileDir().
+Override the IPython ProfileDir.
 
 It feels rude to do it this way but all I wanna do is add a repr! Oh I guess I
 could just inherit everything from this class.
 
-Eh. I also wanna modify the behavior that automatically adds a PID dir, security dir, etc.
+Eh. I also wanna modify the behavior that automatically adds a PID dir,
+security dir, etc.
 
-I get why it's difficult to run it selectively but it automatically creates them in the wrong dir
-often enough that it should be toggleable behavior.
+I get why it's difficult to run it selectively but it automatically creates
+them in the wrong dir often enough that it should be toggleable behavior.
+
+.. todo:: How much can we delete?
 
 See Also
 --------
+
 .. seealso::
 
     :mod:`IPython.core.profileapp`.
@@ -27,9 +31,10 @@ from pathlib import Path
 
 from IPython.terminal.embed import InteractiveShellEmbed
 from IPython.terminal.ipapp import TerminalIPythonApp
+from IPython.core.profiledir import ProfileDir
 
 # from IPython.paths import ensure_dir_exists, get_ipython_package_dir
-from traitlets.config import Bool, LoggingConfigurable, Unicode, observe
+from traitlets.config import Bool, Unicode, observe
 
 
 class ProfileDirError(Exception):
@@ -37,7 +42,7 @@ class ProfileDirError(Exception):
     pass
 
 
-class ReprProfileDir(LoggingConfigurable):
+class ReprProfileDir(ProfileDir):
     """An object to manage the profile directory and its resources.
 
     The profile directory is used by all IPython applications, to manage
@@ -46,7 +51,6 @@ class ReprProfileDir(LoggingConfigurable):
     This object knows how to find, create and manage these directories. This
     should be used by any code that wants to handle profiles.
     """
-
     def __init__(self, *args, **kwargs):
         """Create an init and then make it way shorter."""
         super().__init__(*args, **kwargs)
@@ -54,9 +58,10 @@ class ReprProfileDir(LoggingConfigurable):
         startup_dir = Unicode('startup')
         log_dir = Unicode('log')
         location = Unicode(
-            help="""Set the profile location directly. This overrides the logic used by the
-            `profile` option.""", allow_none=True
-        ).tag(config=True)
+            help=
+            """Set the profile location directly. This overrides the logic used by the
+            `profile` option.""",
+            allow_none=True).tag(config=True)
 
     # don't set the location more than once no matter how many profiles
     # are instantiated so yes a class attr
@@ -81,7 +86,7 @@ class ReprProfileDir(LoggingConfigurable):
 
     @observe('pid_dir')
     def check_pid_dir(self, change=None):
-        self._mkdir(self.pid_dir, 0o40700)
+        super()._mkdir(self.pid_dir, 0o40700)
 
     def copy_config_file(self, config_file, path=None, overwrite=False):
         """Copy a default config file into the active profile directory.
@@ -94,9 +99,8 @@ class ReprProfileDir(LoggingConfigurable):
         if os.path.isfile(dst) and not overwrite:
             return False
         if path is None:
-            path = os.path.join(
-                get_ipython_package_dir(), u'core', u'profile', u'default'
-            )
+            path = os.path.join(get_ipython_package_dir(), u'core', u'profile',
+                                u'default')
         src = os.path.join(path, config_file)
         shutil.copy(src, dst)
         return True
@@ -132,9 +136,10 @@ class ReprProfileDir(LoggingConfigurable):
         return cls(location=profile_dir, config=config)
 
     @classmethod
-    def find_profile_dir_by_name(
-            cls, ipython_dir, name=u'default', config=None
-    ):
+    def find_profile_dir_by_name(cls,
+                                 ipython_dir,
+                                 name=u'default',
+                                 config=None):
         """Find an existing profile dir by profile name, return its ProfileDir.
 
         This searches through a sequence of paths for a profile dir.  If it
@@ -163,9 +168,8 @@ class ReprProfileDir(LoggingConfigurable):
             if os.path.isdir(profile_dir):
                 return cls(location=profile_dir, config=config)
         else:
-            raise ProfileDirError(
-                'Profile directory not found in paths: %s' % dirname
-            )
+            raise ProfileDirError('Profile directory not found in paths: %s' %
+                                  dirname)
 
     @classmethod
     def find_profile_dir(cls, profile_dir, config=None):
@@ -180,9 +184,8 @@ class ReprProfileDir(LoggingConfigurable):
         """
         profile_dir = expand_path(profile_dir)
         if not os.path.isdir(profile_dir):
-            raise ProfileDirError(
-                'Profile directory not found: %s' % profile_dir
-            )
+            raise ProfileDirError('Profile directory not found: %s' %
+                                  profile_dir)
         return cls(location=profile_dir, config=config)
 
 
@@ -192,7 +195,6 @@ class DirectoryChecker:
     Dude we're allowed to subclass os.Pathlike. I wonder if that'd make this
     easier.
     """
-
     def __init__(self, canary=None, *args, **kwargs):
         """Initialize our own version of ipython."""
         if canary is not None:
@@ -210,8 +212,7 @@ class DirectoryChecker:
             if isinstance(self.canary, InteractiveShellEmbed):
                 sys.stderr.write(
                     "\nYou are currently in an embedded IPython shell,\n"
-                    "the configuration will not be loaded.\n\n"
-                )
+                    "the configuration will not be loaded.\n\n")
         else:
             # Not inside IPython
             # Build a terminal app in order to force ipython to load the configuration
@@ -267,4 +268,5 @@ class DirectoryChecker:
         except OSError as e:
             print(e)
         else:
-            self.canary.profile_dir = os.path.expanduser("~/.ipython/default_profile")
+            self.canary.profile_dir = os.path.expanduser(
+                "~/.ipython/default_profile")

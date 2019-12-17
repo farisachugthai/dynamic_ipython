@@ -96,6 +96,7 @@ def read_inputrc():
     elif Path('~/.inputrc').is_file():
         readline.read_inputrc_file(os.expanduser('~/.inputrc'))
 
+
 class SimpleCompleter:
     """
     :URL: https://pymotw.com/3/readline/
@@ -156,7 +157,6 @@ def input_loop():
 # OPTIONS = ['start', 'stop', 'list', 'print']
 # readline.set_completer(SimpleCompleter(OPTIONS).complete)
 
-
 # Originally this part was in an `if __name__ == '__main__' block but I actually
 # want it executed in the global namespace. It should have been written carefully
 # enough that both Linux and Windows can handle it. TUI only but isn't that implied
@@ -172,14 +172,12 @@ if readline:
     if getattr(readline, "read_inputrc_file", None):
         read_inputrc()
 
-else:
-    print('you fucked up')
-
 # TODO: Check what the API is to add a completer to ipython. _ip.add_completer?
 
 # History
 
-def set_historyfile(filename=None):
+
+def setup_historyfile(filename=None):
 
     if filename is None:
         filename = '~/.pdb_history'
@@ -192,7 +190,21 @@ def set_historyfile(filename=None):
         readline.set_history_length(200)
 
 
+def teardown_historyfile(histfile=None):
+    """Can we cascade atexit calls like this?"""
+    if not histfile:
+        return
+    if not Path(histfile).exists():
+        Path(histfile).expanduser().touch()
+    try:
+        atexit.register(readline.write_history_file, histfile)
+    except OSError:
+        logging.error(
+            'History not saved. There were problems saving to ~/.python_history'
+        )
+
+
 if __name__ == "__main__":
     histfile = '~/.python_history'
-    set_historyfile(histfile)
-    atexit.register(readline.write_history_file, histfile)
+    setup_historyfile(histfile)
+    atexit.register(teardown_historyfile, histfile)

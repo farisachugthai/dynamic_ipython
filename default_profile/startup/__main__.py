@@ -9,7 +9,6 @@ import sys
 
 from IPython.core.getipython import get_ipython
 
-
 global shell
 shell = get_ipython()
 
@@ -26,5 +25,6 @@ def wrap_safe_execfile(executed):
         return 'ModuleNotFoundError for {}'.format(e.__cause__)
 
 
-for i in os.scandir():
-    wrap_safe_execfile(i.name)
+# Why the hell would I ever do this
+# for i in os.scandir():
+#     wrap_safe_execfile(i.name)
