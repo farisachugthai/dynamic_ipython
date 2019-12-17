@@ -187,7 +187,7 @@ c.Application.log_datefmt = '%Y-%m-%d %H:%M:%S'
 # The Logging format template
 # Default: '[%(name)s]%(highlevel)s %(message)s'
 # Todo: Import traitlets.config.application.LevelFormatter
-c.Application.log_format = '%(module) : %(created)f : [%(name)s] : %(highlevel)s : %(message)s : '
+c.Application.log_format = '%(module) %(created)f [%(name)s] %(highlevel)s  %(message)s '
 
 # Set the log level by value or name.
 c.Application.log_level = 30
@@ -524,12 +524,17 @@ c.TerminalInteractiveShell.extra_open_editor_shortcuts = True
 # Try to import my Gruvbox class. Can be found at
 # https://github.com/farisachugthai/Gruvbox_IPython
 
-try:
-    from gruvbox.style import GruvboxDarkHard
-except (ImportError, ModuleNotFoundError):
-    c.TerminalInteractiveShell.highlighting_style = 'friendly'
+if platform.system() == 'Windows':
+    from pygments.styles.friendly import FriendlyStyle
+    # I know it's odd making this platform specific but everything is completely illegible otherwise
+    c.TerminalInteractiveShell.highlighting_style = FriendlyStyle
 else:
-    c.TerminalInteractiveShell.highlighting_style = 'GruvboxDarkHard'
+    try:
+        from gruvbox.style import GruvboxDarkHard
+    except (ImportError, ModuleNotFoundError):
+        c.TerminalInteractiveShell.highlighting_style = 'Friendly'
+    else:
+        c.TerminalInteractiveShell.highlighting_style = 'GruvboxDarkHard'
 
 
 def get_env():
@@ -537,10 +542,6 @@ def get_env():
     return os.environ.copy()
 
 
-if platform.system() == 'Windows':
-    from pygments.styles import friendly
-    # I know it's odd making this platform specific but everything is completely illegible otherwise
-    c.TerminalInteractiveShell.highlighting_style = friendly
 
 environment = get_env()
 if 'LESS' not in environment:

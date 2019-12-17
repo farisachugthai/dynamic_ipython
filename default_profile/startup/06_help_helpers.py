@@ -17,6 +17,7 @@ to be quickly and easily understood based on the output of :func:`dir`.
 
 """
 import contextlib
+import io
 import logging
 import re
 import sys
@@ -35,7 +36,14 @@ def print_help(arg=None):
         help(arg)
 
 
-def save_help(output_file, arg=None):
+def save_help(redirected):
+    """Redirect output from sys.stdout to a string."""
+    saved = io.StringIO()
+    with contextlib.redirect_stdout(saved):
+        help(redirected)
+        return saved
+
+def write_help(output_file, arg=None):
     """Write :func:`help` to a file.
 
     Parameters

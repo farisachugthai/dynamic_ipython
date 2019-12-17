@@ -46,7 +46,7 @@ from .timer import timer as _itimer
 
 from traitlets.config.application import LevelFormatter
 
-LOG_BASIC_FORMAT = '%(module) : %(created)f : [%(name)s] : %(highlevel)s : %(message)s : '
+LOG_BASIC_FORMAT = '%(module)  %(created)f  [%(name)s]  %(highlevel)s  %(message)s  '
 
 UTIL_LOGGER = logging.getLogger('default_profile').getChild('util')
 UTIL_LOGGER.setLevel(logging.WARNING)

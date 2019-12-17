@@ -56,7 +56,7 @@ sphinx_fs = SphinxFileSystemLoader(searchpath=repo.templates_path)
 
 def _setup_make_logging():
     """Setup the logging. Add a filter with no args to allow everything."""
-    BASIC_FORMAT = '%(created)f : %(module)s : %(levelname)s : %(message)s'
+    BASIC_FORMAT = '%(created)f  %(module)s  %(levelname)s  %(message)s'
 
     logger = logging.getLogger(name='docs.sphinxext').getChild('make')
     logger.setLevel(logging.DEBUG)
