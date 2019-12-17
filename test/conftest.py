@@ -1,7 +1,10 @@
 """Set up pytest."""
+import multiprocessing
 import os
+import sys
 import tempfile
 
+from traitlets.config import Config
 from IPython import get_ipython
 import pytest
 # from pytest.nose import *
@@ -9,9 +12,25 @@ import pytest
 import default_profile
 
 
-@pytest.fixture(autouse=True)
+def pytest_load_initial_conftests(args):
+    """If you have the xdist plugin installed you will now always perform test runs using a number of subprocesses close to your CPU."""
+    if "xdist" in sys.modules:  # pytest-xdist plugin
+
+        num = max(multiprocessing.cpu_count() / 2, 1)
+        args[:] = ["-n", str(num)] + args
+
+
+@pytest.fixture(scope='session', autouse=True)
 def _ip():
-    return get_ipython()
+    config = Config()
+    config.TerminalInteractiveShell.colors = 'NoColor'
+    config.TerminalInteractiveShell.term_title = False,
+    config.TerminalInteractiveShell.autocall = 0
+    f = tempfile.NamedTemporaryFile(suffix=u'test_hist.sqlite', delete=False)
+    config.HistoryManager.hist_file = f.name
+    f.close()
+    config.HistoryManager.db_cache_size = 10000
+    return config
 
 
 def pytest_addoption(parser):
@@ -31,6 +50,11 @@ def pytest_collection_modifyitems(config, items):
     for item in items:
         if 'slow' in item.keywords:
             item.add_marker(skip_slow)
+
+
+def pytest_report_header(config):
+    """Present a custom header. Did this wrong because mpl is installed."""
+    return "\nMatplotlib: {}\nSQLite3: {}\n".format(('matplotlib' in sys.modules), ('sqlite3' in sys.modules))
 
 
 @pytest.fixture()
