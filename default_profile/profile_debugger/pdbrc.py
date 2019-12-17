@@ -1,22 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Set up pdb or ipdb.
-
-.. code-block:: console
-
-    $: ipdb3 -h
-
-.. code-block:: none
-
-    usage: python -m ipdb [-c command] ... pyfile [arg] ...
-    Debug the Python program given by pyfile.
-    Initial commands are read from .pdbrc files in your home directory
-    and in the current directory, if they exist.  Commands supplied with
-    -c are executed after commands from .pdbrc files.
-    To let the script run until an exception occurs, use "-c continue".
-    To let the script run up to a given line X in the debugged file, use
-    "-c 'until X'"
-    ipdb version 0.10.3.
+"""Set up pdb with readline, history management, and fault handling.
 
 Make `pp` use IPython's pretty printer, instead of the standard `pprint` module.
 
@@ -25,26 +9,25 @@ Make `pp` use IPython's pretty printer, instead of the standard `pprint` module.
 Jesus Christ this got out of control.
 
 """
-print(".pdbrc.py started")
-
-import atexit
-import bdb
-import cmd
 from contextlib import suppress
 import faulthandler
-import importlib
-import inspect
 import os
 from pathlib import Path
 import pdb
 from pprint import pprint
 import runpy
-import reprlib
 import sys
 import trace
-import traceback
+
+pprint(".pdbrc.py started")
 
 faulthandler.enable()
+
+
+# Use IPython's pretty printing within PDB
+with suppress(ImportError):
+    from IPython.lib.pretty import pprint
+
 
 # I have a really useful module for importing readline on windows, linux,
 # WSL, and anything else you can imagine. let's use it.
@@ -62,22 +45,17 @@ else:
         setup_readline = readline_mod['setup_readline']
         setup_readline()
 
-# Use IPython's pretty printing within PDB
-with suppress(ImportError):
-    from IPython.lib.pretty import pprint
 
-
-# History
-
-histfile = os.path.expanduser('~/.pdb_history')
+# History: Set up separately
 try:
-    readline.read_history_file(histfile)
-except OSError:
+    from default_profile.startup.readline_mod import set_historyfile
+except ImportError:
+    raise
+except:  # noqa
     pass
 else:
-    readline.set_history_length(200)
+    set_historyfile('~/.pdb_history')
 
-atexit.register(readline.write_history_file, histfile)
 
 # Customized Pdb
 
@@ -86,9 +64,10 @@ class MyPdb(pdb.Pdb):
     """Subclass pdb.Pdb."""
 
     def __init__(self, skip='traitlets', prompt=None, doc_header=None, *args, **kwargs):
-        super().__init__(skip='traitlets', *args, **kwargs)
+        self.skip = skip
         self.prompt = prompt or 'YourPdb: '
         self.doc_header = doc_header or ''
+        super().__init__(skip=self.skip, prompt=self.prompt, doc_header=self.doc_header, *args, **kwargs)
 
 
 # Customize the sys.excepthook
@@ -106,5 +85,3 @@ def exception_hook(type=None, value=None, tb=None):
 sys.excepthook = exception_hook
 
 print(".pdbrc.py finished")
-
-# Vim: set ft=python:

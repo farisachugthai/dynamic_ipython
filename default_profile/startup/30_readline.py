@@ -29,6 +29,7 @@ IPython Custom Completers
 
 
 """
+import atexit
 import logging
 import os
 from pathlib import Path
@@ -74,7 +75,6 @@ def get_readline():
             return
         else:
             from pyreadline.rlmain import Readline
-            global rl
             rl = Readline()
             return readline
     else:
@@ -100,7 +100,7 @@ class SimpleCompleter:
     """
     :URL: https://pymotw.com/3/readline/
 
-    The SimpleCompleter class keeps a list of “options” that are candidates
+    The SimpleCompleter class keeps a list of âoptionsâ that are candidates
     for auto- completion. The complete() method for an instance is designed
     to be registered with readline as the source of completions.
 
@@ -176,3 +176,23 @@ else:
     print('you fucked up')
 
 # TODO: Check what the API is to add a completer to ipython. _ip.add_completer?
+
+# History
+
+def set_historyfile(filename=None):
+
+    if filename is None:
+        filename = '~/.pdb_history'
+    histfile = os.path.expanduser(filename)
+    try:
+        readline.read_history_file(filename)
+    except OSError:
+        pass
+    else:
+        readline.set_history_length(200)
+
+
+if __name__ == "__main__":
+    histfile = '~/.python_history'
+    set_historyfile(histfile)
+    atexit.register(readline.write_history_file, histfile)
