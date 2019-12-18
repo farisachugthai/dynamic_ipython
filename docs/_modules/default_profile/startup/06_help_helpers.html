@@ -43,8 +43,7 @@
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="../startup.html" accesskey="U">default_profile.startup</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -73,6 +72,7 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">contextlib</span>
+<span class="kn">import</span> <span class="nn">io</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">sys</span>
@@ -91,7 +91,14 @@
         <span class="n">help</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="save_help"><a class="viewcode-back" href="../../../startup/help_helpers.html#default_profile.startup.06_help_helpers.save_help">[docs]</a><span class="k">def</span> <span class="nf">save_help</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="n">arg</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="save_help"><a class="viewcode-back" href="../../../startup/help_helpers.html#default_profile.startup.06_help_helpers.save_help">[docs]</a><span class="k">def</span> <span class="nf">save_help</span><span class="p">(</span><span class="n">redirected</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Redirect output from sys.stdout to a string.&quot;&quot;&quot;</span>
+    <span class="n">saved</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">()</span>
+    <span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">redirect_stdout</span><span class="p">(</span><span class="n">saved</span><span class="p">):</span>
+        <span class="n">help</span><span class="p">(</span><span class="n">redirected</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">saved</span></div>
+
+<div class="viewcode-block" id="write_help"><a class="viewcode-back" href="../../../startup/help_helpers.html#default_profile.startup.06_help_helpers.write_help">[docs]</a><span class="k">def</span> <span class="nf">write_help</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="n">arg</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Write :func:`help` to a file.</span>
 
 <span class="sd">    Parameters</span>
@@ -210,10 +217,6 @@
     <ul>
       <li><a href="../../index.html">Module code</a>
         <ul>
-      <li><a href="../startup.html">default_profile.startup</a>
-        <ul>
-        </ul>
-      </li>
         </ul>
       </li>
     </ul>
@@ -284,12 +287,11 @@
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="../startup.html" >default_profile.startup</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Dec 10, 2019.
+      Last updated on Dec 17, 2019.
     </div>
   </body>
 </html>

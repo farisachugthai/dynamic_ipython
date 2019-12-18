@@ -143,6 +143,7 @@ Table of Contents
    :titlesonly:
    :caption: API
 
+   Tailor-made profiles <default_profile>
    Sphinx Extensions <sphinxext/index>
    IPython Startup <startup/index>
    IPython Utilities </util/index>
