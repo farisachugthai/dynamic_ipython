@@ -59,8 +59,30 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-<div class="section" id="module-startup">
-<span id="ipython-startup"></span><h1>IPython Startup<a class="headerlink" href="#module-startup" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-default_profile.startup">
+<span id="ipython-startup"></span><h1>IPython Startup<a class="headerlink" href="#module-default_profile.startup" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="startup">
+<h2>Startup<a class="headerlink" href="#startup" title="Permalink to this headline">¶</a></h2>
+<p>The first script to run invokes <code class="xref py py-obj docutils literal notranslate"><span class="pre">%rehashx</span></code> which initializes
+<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.10.2)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> with all of the commands that the system shell knows.</p>
+<p>By invoking <code class="xref py py-obj docutils literal notranslate"><span class="pre">%rehashx</span></code> at the beginning of startup, all system commands
+are added as well, which regularly adds well over 1000 commands to the shell.</p>
+<p>The IPython team cleverly remembers to also check the environment variable
+<span class="target" id="index-0"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PATHEXT</span></code> on Windows devices as it indicates to the system which
+files are executable without requiring the typical Unix file permissions
+system.</p>
+<p>Continue reading on at <a class="reference internal" href="rehashx.html"><span class="doc">01_rehashx</span></a>.</p>
+</div>
+<div class="section" id="ipython-config">
+<h2>IPython Config<a class="headerlink" href="#ipython-config" title="Permalink to this headline">¶</a></h2>
+<p>Before delving into the startup files, the API for the main IPython config file
+will be discussed.</p>
+<p>This is simply a heavily configured version of the file that’s generated when
+<code class="docutils literal notranslate"><span class="pre">ipython</span> <span class="pre">--generate-config</span></code> is run on the command line.</p>
+<p>As a result, it heavily utilizes the <code class="docutils literal notranslate"><span class="pre">traitlets</span></code> module.</p>
+<span class="target" id="module-default_profile.ipython_config"></span></div>
+<div class="section" id="api">
+<h2>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
 <p>These are the auto-generated API docs for IPython’s startup.</p>
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">List of IPython startup files</span></p>
@@ -78,24 +100,6 @@
 <li class="toctree-l1"><a class="reference internal" href="sysexcept.html">Customized Exceptions</a></li>
 </ul>
 </div>
-<div class="section" id="ipython-config">
-<h2>IPython Config<a class="headerlink" href="#ipython-config" title="Permalink to this headline">¶</a></h2>
-<p>Before delving into the startup files, the API for the main IPython config file
-will be discussed.</p>
-<p>This is simply the file that’s generated when <code class="docutils literal notranslate"><span class="pre">ipython</span> <span class="pre">--generate-config</span></code>
-is run on the command line.</p>
-<span class="target" id="module-default_profile.ipython_config"></span></div>
-<div class="section" id="startup">
-<h2>Startup<a class="headerlink" href="#startup" title="Permalink to this headline">¶</a></h2>
-<p>The first script to run invokes <code class="xref py py-obj docutils literal notranslate"><span class="pre">%rehashx</span></code> which initializes
-<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.10.1)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> with all of the commands that the system shell knows.</p>
-<p>By invoking <code class="xref py py-obj docutils literal notranslate"><span class="pre">%rehashx</span></code> at the beginning of startup, all system commands
-are added as well, which regularly adds well over 1000 commands to the shell.</p>
-<p>The IPython team cleverly remembers to also check the environment variable
-<span class="target" id="index-0"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PATHEXT</span></code> on Windows devices as it indicates to the system which
-files are executable without requiring the typical Unix file permissions
-system.</p>
-<p>Continue reading on at <a class="reference internal" href="rehashx.html"><span class="doc">01_rehashx</span></a>.</p>
 </div>
 </div>
 
@@ -137,8 +141,9 @@ system.</p>
 
     <ul>
 <li><a class="reference internal" href="#">IPython Startup</a><ul>
-<li><a class="reference internal" href="#ipython-config">IPython Config</a></li>
 <li><a class="reference internal" href="#startup">Startup</a></li>
+<li><a class="reference internal" href="#ipython-config">IPython Config</a></li>
+<li><a class="reference internal" href="#api">API</a></li>
 </ul>
 </li>
 </ul>
@@ -223,7 +228,7 @@ system.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Dec 10, 2019.
+      Last updated on Dec 17, 2019.
     </div>
   </body>
 </html>
