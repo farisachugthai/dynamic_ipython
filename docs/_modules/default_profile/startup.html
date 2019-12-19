@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>default_profile.sphinxext &#8212; Dynamic IPython: version0.0.2</title>
+    <title>default_profile.startup &#8212; Dynamic IPython: version0.0.2</title>
     <link rel="stylesheet" href="../../_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript" src="../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../_static/copybutton.js"></script>
     <script type="text/javascript" src="../../_static/copybutton.js"></script>
-    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/sphinxext.html" />
+    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/startup.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
 <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" />
@@ -52,43 +52,34 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-<h1>Source code for default_profile.sphinxext</h1><div class="highlight"><pre>
+<h1>Source code for default_profile.startup</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python3</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">===================================</span>
-<span class="sd">IPython-specific Sphinx extensions.</span>
-<span class="sd">===================================</span>
+<span class="sd">&quot;&quot;&quot;Initialize the global IPython instance and begin configuring.</span>
 
-<span class="sd">Imports the modules found in the current directory and utilizes</span>
-<span class="sd">:mod:`pkgutil` and :func:`pkgutil.extend_path`</span>
-<span class="sd">to extend the packages ``__path__`` parameter.</span>
-
-<span class="sd">It only imports the modules below if this repository has been installed.</span>
-
-<span class="sd">If this weren&#39;t true, then starting IPython without this package installed</span>
-<span class="sd">would emit :exc:`ImportError` on startup, which would be frustrating for</span>
-<span class="sd">users.</span>
+<span class="sd">Imports all files in this directory by utilizing the</span>
+<span class="sd">:mod:`importlib` API</span>
+<span class="sd">to avoid import problems as Python modules can&#39;t begin with numbers.</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">importlib</span>
 <span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">pkgutil</span>
 <span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
-<span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;docs&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">getChild</span><span class="p">(</span><span class="s1">&#39;sphinxext&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">())</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">BASIC_FORMAT</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%(created)f</span><span class="s2"> : </span><span class="si">%(module)s</span><span class="s2"> : </span><span class="si">%(levelname)s</span><span class="s2"> : </span><span class="si">%(message)s</span><span class="s2">&quot;</span>
 
-<span class="c1"># How to check the current namespace</span>
-<span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="nb">locals</span><span class="p">(),</span> <span class="s1">&#39;__path__&#39;</span><span class="p">):</span>
-    <span class="n">__path__</span> <span class="o">=</span> <span class="n">pkgutil</span><span class="o">.</span><span class="n">extend_path</span><span class="p">(</span><span class="n">__path__</span><span class="p">,</span> <span class="vm">__name__</span><span class="p">)</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()))</span>
+<span class="n">STARTUP_LOGGER</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;default_profile&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">getChild</span><span class="p">(</span><span class="s2">&quot;startup&quot;</span><span class="p">)</span>
+<span class="n">STARTUP_LOGGER</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
+<span class="n">STARTUP_HANDLER</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">(</span><span class="n">stream</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+<span class="n">STARTUP_HANDLER</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
+<span class="n">STARTUP_FORMATTER</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="n">fmt</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">BASIC_FORMAT</span><span class="p">)</span>
+<span class="n">STARTUP_FILTERER</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Filterer</span><span class="p">()</span>
+<span class="n">STARTUP_HANDLER</span><span class="o">.</span><span class="n">addFilter</span><span class="p">(</span><span class="n">STARTUP_FILTERER</span><span class="p">)</span>
+<span class="n">STARTUP_HANDLER</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">STARTUP_FORMATTER</span><span class="p">)</span>
+<span class="n">STARTUP_LOGGER</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">STARTUP_HANDLER</span><span class="p">)</span>
 
-<span class="c1"># Don&#39;t emit an error on IPython startup if not installed.</span>
 
-
-<div class="viewcode-block" id="ask_for_import"><a class="viewcode-back" href="../../sphinxext/index.html#default_profile.sphinxext.ask_for_import">[docs]</a><span class="k">def</span> <span class="nf">ask_for_import</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">package</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ask_for_import"><a class="viewcode-back" href="../../api/default_profile.startup.html#default_profile.startup.ask_for_import">[docs]</a><span class="k">def</span> <span class="nf">ask_for_import</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">package</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Import a module and return `None` if it&#39;s not found.</span>
 
 <span class="sd">    Parameters</span>
@@ -112,14 +103,21 @@
         <span class="k">return</span> <span class="n">imported</span></div>
 
 
-<span class="n">ask_for_import</span><span class="p">(</span><span class="s1">&#39;IPython&#39;</span><span class="p">)</span>
-
-<span class="k">if</span> <span class="n">ask_for_import</span><span class="p">(</span><span class="s1">&#39;default_profile&#39;</span><span class="p">):</span>
-
-    <span class="k">if</span> <span class="n">ask_for_import</span><span class="p">(</span><span class="s1">&#39;sphinx&#39;</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">default_profile.sphinxext</span> <span class="kn">import</span> <span class="n">custom_doctests</span>  <span class="c1"># noqa F401</span>
-        <span class="c1"># from default_profile.sphinxext.ipython_directive import EmbeddedSphinxShell, IPythonDirective  # noqa F401</span>
-        <span class="kn">from</span> <span class="nn">default_profile.sphinxext.magics</span> <span class="kn">import</span> <span class="n">LineMagicRole</span><span class="p">,</span> <span class="n">CellMagicRole</span>  <span class="c1"># noqa F401</span>
+<span class="n">rehashx_mod</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;default_profile.startup.01_rehashx&quot;</span><span class="p">)</span>
+<span class="n">easy_import_mod</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;default_profile.startup.04_easy_import&quot;</span><span class="p">)</span>
+<span class="n">log_mod</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;default_profile.startup.05_log&quot;</span><span class="p">)</span>
+<span class="n">help_helpers_mod</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;default_profile.startup.06_help_helpers&quot;</span><span class="p">)</span>
+<span class="n">envvar_mod</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;default_profile.startup.10_envvar&quot;</span><span class="p">)</span>
+<span class="n">clipboard_mod</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;default_profile.startup.11_clipboard&quot;</span><span class="p">)</span>
+<span class="n">aliases_mod</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;default_profile.startup.20_aliases&quot;</span><span class="p">)</span>
+<span class="n">fzf_mod</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;default_profile.startup.21_fzf&quot;</span><span class="p">)</span>
+<span class="n">alias_manager_mod</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;default_profile.startup.22_alias_manager&quot;</span><span class="p">)</span>
+<span class="n">readline_mod</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;default_profile.startup.30_readline&quot;</span><span class="p">)</span>
+<span class="n">yank_last_arg_mod</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;default_profile.startup.31_yank_last_arg&quot;</span><span class="p">)</span>
+<span class="n">numpy_init_mod</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;default_profile.startup.41_numpy_init&quot;</span><span class="p">)</span>
+<span class="n">pandas_init_mod</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;default_profile.startup.42_pandas_init&quot;</span><span class="p">)</span>
+<span class="n">matplotlib_mod</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;default_profile.startup.43_matplotlib&quot;</span><span class="p">)</span>
+<span class="n">sysexception_mod</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;default_profile.startup.50_sysexception&quot;</span><span class="p">)</span>
 </pre></div>
 
           </div>
@@ -158,7 +156,6 @@
 <div id="sidebartoc">
     <p class="caption"><span class="caption-text">API</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../default_profile.html">Tailor-made profiles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../sphinxext/index.html">Sphinx Extensions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../sphinxext/ipython_sphinx_directive.html">IPython Sphinx Directive</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../sphinxext/lexer.html">New IPython Console Lexer</a></li>
@@ -220,7 +217,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Dec 18, 2019.
+      Last updated on Dec 10, 2019.
     </div>
   </body>
 </html>

@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>default_profile.extensions.termux_clipboard &#8212; Dynamic IPython: version0.0.2</title>
+    <title>default_profile.startup.10_envvar &#8212; Dynamic IPython: version0.0.2</title>
     <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript" src="../../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../../_static/copybutton.js"></script>
     <script type="text/javascript" src="../../../_static/copybutton.js"></script>
-    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/extensions/termux_clipboard.html" />
+    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/startup/10_envvar.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
 <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" />
@@ -43,7 +43,8 @@
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../startup.html" accesskey="U">default_profile.startup</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -52,62 +53,48 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-<h1>Source code for default_profile.extensions.termux_clipboard</h1><div class="highlight"><pre>
+<h1>Source code for default_profile.startup.10_envvar</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;Implement the `%paste` magic on Termux.</span>
+<span class="sd">&quot;&quot;&quot;Implement a few magics so as to modify the user&#39;s environment.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
-<span class="sd">.. magic:: termux_clipboard_get</span>
+<span class="kn">from</span> <span class="nn">IPython.core.magic</span> <span class="kn">import</span> <span class="n">line_magic</span><span class="p">,</span> <span class="n">Magics</span><span class="p">,</span> <span class="n">magics_class</span>
+<span class="c1"># from IPython.core.magic_arguments import magics_class</span>
 
-<span class="sd">IPython will simply fail as tkinter can&#39;t be installed.</span>
-
-<span class="sd">See Also</span>
-<span class="sd">--------</span>
-<span class="sd">:mod:`IPython.lib.clipboard`</span>
-<span class="sd">:mod:`IPython.core.hooks`</span>
-
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">shutil</span>
-<span class="kn">import</span> <span class="nn">subprocess</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-
-<span class="kn">from</span> <span class="nn">IPython.core.magic</span> <span class="kn">import</span> <span class="n">line_magic</span>
+<span class="c1"># from IPython.core.magic_arguments import magics_class</span>
 
 
-<div class="viewcode-block" id="termux_clipboard_get"><a class="viewcode-back" href="../../../extensions.html#default_profile.extensions.termux_clipboard.termux_clipboard_get">[docs]</a><span class="nd">@line_magic</span>
-<span class="k">def</span> <span class="nf">termux_clipboard_get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Set the clipboard on termux using *termux_clipboard_get*.&quot;&quot;&quot;</span>
-    <span class="n">p</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="s1">&#39;termux-clipboard-get&#39;</span><span class="p">],</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">)</span>
-    <span class="n">text</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">stdout</span>
-    <span class="k">return</span> <span class="n">text</span></div>
+<div class="viewcode-block" id="EnvironMagics"><a class="viewcode-back" href="../../../api/default_profile.startup.10_envvar.html#default_profile.startup.10_envvar.EnvironMagics">[docs]</a><span class="nd">@magics_class</span>
+<span class="k">class</span> <span class="nc">EnvironMagics</span><span class="p">(</span><span class="n">Magics</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Any class that subclasses Magics *must* also apply this decorator, to</span>
+<span class="sd">    ensure that all the methods that have been decorated as line/cell magics</span>
+<span class="sd">    get correctly registered in the class instance.  This is necessary because</span>
+<span class="sd">    when method decorators run, the class does not exist yet, so they</span>
+<span class="sd">    temporarily store their information into a module global.  Application of</span>
+<span class="sd">    this class decorator copies that global data to the class instance and</span>
+<span class="sd">    clears the global.</span>
 
-
-<div class="viewcode-block" id="load_ipython_extension"><a class="viewcode-back" href="../../../extensions.html#default_profile.extensions.termux_clipboard.load_ipython_extension">[docs]</a><span class="k">def</span> <span class="nf">load_ipython_extension</span><span class="p">(</span><span class="n">ip</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Sep 20, 2019: Works!&quot;&quot;&quot;</span>
-    <span class="n">ip</span><span class="o">.</span><span class="n">set_hook</span><span class="p">(</span><span class="s1">&#39;clipboard_get&#39;</span><span class="p">,</span> <span class="n">termux_clipboard_get</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../extensions.html#default_profile.extensions.termux_clipboard.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Main function.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    TODO</span>
-
+<span class="sd">    Obviously, this mechanism is not thread-safe, which means that the</span>
+<span class="sd">    *creation* of subclasses of Magic should only be done in a single-thread</span>
+<span class="sd">    context.  Instantiation of the classes has no restrictions.  Given that</span>
+<span class="sd">    these classes are typically created at IPython startup time and before user</span>
+<span class="sd">    application code becomes active, in practice this should not pose any</span>
+<span class="sd">    problems.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
-    <span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
 
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">shell</span><span class="p">:</span>
-        <span class="k">return</span>
+<div class="viewcode-block" id="EnvironMagics.touch"><a class="viewcode-back" href="../../../api/default_profile.startup.10_envvar.html#default_profile.startup.10_envvar.EnvironMagics.touch">[docs]</a>    <span class="nd">@line_magic</span>
+    <span class="k">def</span> <span class="nf">touch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;py&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="n">touch</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="mo">0o755</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="n">touch</span><span class="p">()</span></div>
 
-    <span class="k">if</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s1">&#39;termux-clipboard-get&#39;</span><span class="p">):</span>
-        <span class="c1"># shell.set_hook(termux_clipboard_get)</span>
-        <span class="n">load_ipython_extension</span><span class="p">(</span><span class="n">shell</span><span class="p">)</span></div>
-
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+<div class="viewcode-block" id="EnvironMagics.unset"><a class="viewcode-back" href="../../../api/default_profile.startup.10_envvar.html#default_profile.startup.10_envvar.EnvironMagics.unset">[docs]</a>    <span class="nd">@line_magic</span>
+    <span class="k">def</span> <span class="nf">unset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">unsetenv</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span></div></div>
 </pre></div>
 
           </div>
@@ -133,6 +120,10 @@
     <ul>
       <li><a href="../../index.html">Module code</a>
         <ul>
+      <li><a href="../startup.html">default_profile.startup</a>
+        <ul>
+        </ul>
+      </li>
         </ul>
       </li>
     </ul>
@@ -146,7 +137,6 @@
 <div id="sidebartoc">
     <p class="caption"><span class="caption-text">API</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../default_profile.html">Tailor-made profiles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../sphinxext/index.html">Sphinx Extensions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/ipython_sphinx_directive.html">IPython Sphinx Directive</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/lexer.html">New IPython Console Lexer</a></li>
@@ -204,11 +194,12 @@
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../startup.html" >default_profile.startup</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Dec 18, 2019.
+      Last updated on Dec 10, 2019.
     </div>
   </body>
 </html>

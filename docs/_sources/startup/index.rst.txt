@@ -7,7 +7,7 @@ IPython Startup
 
 
 Startup
-=======
+========
 
 The first script to run invokes `%rehashx` which initializes
 :mod:`IPython` with all of the commands that the system shell knows.
@@ -46,7 +46,6 @@ API
 ====
 
 These are the auto-generated API docs for IPython's startup.
-
 
 
 .. toctree::

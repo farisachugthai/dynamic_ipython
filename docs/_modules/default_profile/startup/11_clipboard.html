@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>default_profile.extensions.termux_clipboard &#8212; Dynamic IPython: version0.0.2</title>
+    <title>default_profile.startup.11_clipboard &#8212; Dynamic IPython: version0.0.2</title>
     <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript" src="../../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../../_static/copybutton.js"></script>
     <script type="text/javascript" src="../../../_static/copybutton.js"></script>
-    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/extensions/termux_clipboard.html" />
+    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/startup/11_clipboard.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
 <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" />
@@ -43,7 +43,8 @@
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../startup.html" accesskey="U">default_profile.startup</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -52,62 +53,86 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-<h1>Source code for default_profile.extensions.termux_clipboard</h1><div class="highlight"><pre>
-<span></span><span class="ch">#!/usr/bin/env python</span>
-<span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;Implement the `%paste` magic on Termux.</span>
+<h1>Source code for default_profile.startup.11_clipboard</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Need to do redo :mod:`IPython.lib.clipboard` because it doesn&#39;t work.</span>
 
-<span class="sd">.. magic:: termux_clipboard_get</span>
+<span class="sd">`%paste` or `%cpaste` doesn&#39;t work on Termux and there&#39;s no built-in</span>
+<span class="sd">customizability.</span>
 
-<span class="sd">IPython will simply fail as tkinter can&#39;t be installed.</span>
-
-<span class="sd">See Also</span>
-<span class="sd">--------</span>
-<span class="sd">:mod:`IPython.lib.clipboard`</span>
-<span class="sd">:mod:`IPython.core.hooks`</span>
+<span class="sd">Let&#39;s re-implement it as an `abstract factory</span>
+<span class="sd">&lt;https://en.wikipedia.org/wiki/Abstract_factory_pattern&gt;`_.</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">import</span> <span class="nn">subprocess</span>
-<span class="kn">import</span> <span class="nn">sys</span>
 
-<span class="kn">from</span> <span class="nn">IPython.core.magic</span> <span class="kn">import</span> <span class="n">line_magic</span>
+<span class="kn">from</span> <span class="nn">IPython.core.error</span> <span class="kn">import</span> <span class="n">TryNext</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">pyperclip</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="c1"># from prompt_toolkit.contrib I think?</span>
+    <span class="k">pass</span>
+
+<span class="kn">from</span> <span class="nn">default_profile.extensions</span> <span class="kn">import</span> <span class="n">termux_clipboard</span>
 
 
-<div class="viewcode-block" id="termux_clipboard_get"><a class="viewcode-back" href="../../../extensions.html#default_profile.extensions.termux_clipboard.termux_clipboard_get">[docs]</a><span class="nd">@line_magic</span>
-<span class="k">def</span> <span class="nf">termux_clipboard_get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Set the clipboard on termux using *termux_clipboard_get*.&quot;&quot;&quot;</span>
-    <span class="n">p</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="s1">&#39;termux-clipboard-get&#39;</span><span class="p">],</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">)</span>
-    <span class="n">text</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">stdout</span>
+<div class="viewcode-block" id="ClipboardEmpty"><a class="viewcode-back" href="../../../api/default_profile.startup.11_clipboard.html#default_profile.startup.11_clipboard.ClipboardEmpty">[docs]</a><span class="k">class</span> <span class="nc">ClipboardEmpty</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="win32_clipboard_get"><a class="viewcode-back" href="../../../api/default_profile.startup.11_clipboard.html#default_profile.startup.11_clipboard.win32_clipboard_get">[docs]</a><span class="k">def</span> <span class="nf">win32_clipboard_get</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Get the current clipboard&#39;s text on Windows.</span>
+
+<span class="sd">    Admittedly difficult to explain why it&#39;s not listed in the dependencies</span>
+<span class="sd">    though.</span>
+
+<span class="sd">    Note</span>
+<span class="sd">    ----</span>
+<span class="sd">    Requires Mark Hammond&#39;s pywin32 extensions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">win32clipboard</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">TryNext</span><span class="p">(</span>
+            <span class="s2">&quot;Getting text from the clipboard requires the pywin32 &quot;</span>
+            <span class="s2">&quot;extensions: http://sourceforge.net/projects/pywin32/&quot;</span>
+        <span class="p">)</span>
+    <span class="n">win32clipboard</span><span class="o">.</span><span class="n">OpenClipboard</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">win32clipboard</span><span class="o">.</span><span class="n">GetClipboardData</span><span class="p">(</span><span class="n">win32clipboard</span><span class="o">.</span><span class="n">CF_UNICODETEXT</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="n">win32clipboard</span><span class="o">.</span><span class="n">error</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="n">win32clipboard</span><span class="o">.</span><span class="n">GetClipboardData</span><span class="p">(</span><span class="n">win32clipboard</span><span class="o">.</span><span class="n">CF_TEXT</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="n">win32clipboard</span><span class="o">.</span><span class="n">error</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">ClipboardEmpty</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">win32clipboard</span><span class="o">.</span><span class="n">CloseClipboard</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">text</span></div>
 
 
-<div class="viewcode-block" id="load_ipython_extension"><a class="viewcode-back" href="../../../extensions.html#default_profile.extensions.termux_clipboard.load_ipython_extension">[docs]</a><span class="k">def</span> <span class="nf">load_ipython_extension</span><span class="p">(</span><span class="n">ip</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Sep 20, 2019: Works!&quot;&quot;&quot;</span>
-    <span class="n">ip</span><span class="o">.</span><span class="n">set_hook</span><span class="p">(</span><span class="s1">&#39;clipboard_get&#39;</span><span class="p">,</span> <span class="n">termux_clipboard_get</span><span class="p">)</span></div>
+<div class="viewcode-block" id="tkinter_clipboard_get"><a class="viewcode-back" href="../../../api/default_profile.startup.11_clipboard.html#default_profile.startup.11_clipboard.tkinter_clipboard_get">[docs]</a><span class="k">def</span> <span class="nf">tkinter_clipboard_get</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Get the clipboard&#39;s text using Tkinter.</span>
 
-
-<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../extensions.html#default_profile.extensions.termux_clipboard.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Main function.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    TODO</span>
-
+<span class="sd">    This is the default on systems that are not Windows or OS X. It may</span>
+<span class="sd">    interfere with other UI toolkits and should be replaced with an</span>
+<span class="sd">    implementation that uses that toolkit.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
-    <span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">tkinter</span> <span class="kn">import</span> <span class="n">Tk</span><span class="p">,</span> <span class="n">TclError</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">TryNext</span><span class="p">(</span>
+            <span class="s2">&quot;Getting text from the clipboard on this platform requires tkinter.&quot;</span>
+        <span class="p">)</span>
 
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">shell</span><span class="p">:</span>
-        <span class="k">return</span>
-
-    <span class="k">if</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s1">&#39;termux-clipboard-get&#39;</span><span class="p">):</span>
-        <span class="c1"># shell.set_hook(termux_clipboard_get)</span>
-        <span class="n">load_ipython_extension</span><span class="p">(</span><span class="n">shell</span><span class="p">)</span></div>
-
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+    <span class="n">root</span> <span class="o">=</span> <span class="n">Tk</span><span class="p">()</span>
+    <span class="n">root</span><span class="o">.</span><span class="n">withdraw</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">clipboard_get</span><span class="p">()</span>
+    <span class="k">except</span> <span class="n">TclError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ClipboardEmpty</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">root</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">text</span></div>
 </pre></div>
 
           </div>
@@ -133,6 +158,10 @@
     <ul>
       <li><a href="../../index.html">Module code</a>
         <ul>
+      <li><a href="../startup.html">default_profile.startup</a>
+        <ul>
+        </ul>
+      </li>
         </ul>
       </li>
     </ul>
@@ -146,7 +175,6 @@
 <div id="sidebartoc">
     <p class="caption"><span class="caption-text">API</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../default_profile.html">Tailor-made profiles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../sphinxext/index.html">Sphinx Extensions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/ipython_sphinx_directive.html">IPython Sphinx Directive</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/lexer.html">New IPython Console Lexer</a></li>
@@ -204,11 +232,12 @@
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../startup.html" >default_profile.startup</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Dec 18, 2019.
+      Last updated on Dec 10, 2019.
     </div>
   </body>
 </html>

@@ -14,7 +14,7 @@ Welcome to Dynamic IPython's documentation!
 .. moduleauthor:: Faris Chugthai
 
 .. module:: root_index
-    :synopsis: Main landing page for the documentation.
+   :synopsis: Main landing page for the documentation.
 
 
 Startup Scripts

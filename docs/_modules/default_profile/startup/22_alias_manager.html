@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>default_profile.extensions.termux_clipboard &#8212; Dynamic IPython: version0.0.2</title>
+    <title>default_profile.startup.22_alias_manager &#8212; Dynamic IPython: version0.0.2</title>
     <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript" src="../../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../../_static/copybutton.js"></script>
     <script type="text/javascript" src="../../../_static/copybutton.js"></script>
-    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/extensions/termux_clipboard.html" />
+    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/startup/22_alias_manager.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
 <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" />
@@ -43,7 +43,8 @@
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../startup.html" accesskey="U">default_profile.startup</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -52,62 +53,52 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-<h1>Source code for default_profile.extensions.termux_clipboard</h1><div class="highlight"><pre>
-<span></span><span class="ch">#!/usr/bin/env python</span>
-<span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;Implement the `%paste` magic on Termux.</span>
+<h1>Source code for default_profile.startup.22_alias_manager</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">reprlib</span>
 
-<span class="sd">.. magic:: termux_clipboard_get</span>
+<span class="kn">from</span> <span class="nn">traitlets</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Instance</span>
 
-<span class="sd">IPython will simply fail as tkinter can&#39;t be installed.</span>
-
-<span class="sd">See Also</span>
-<span class="sd">--------</span>
-<span class="sd">:mod:`IPython.lib.clipboard`</span>
-<span class="sd">:mod:`IPython.core.hooks`</span>
-
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">shutil</span>
-<span class="kn">import</span> <span class="nn">subprocess</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-
-<span class="kn">from</span> <span class="nn">IPython.core.magic</span> <span class="kn">import</span> <span class="n">line_magic</span>
+<span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+<span class="kn">from</span> <span class="nn">IPython.core.alias</span> <span class="kn">import</span> <span class="n">AliasManager</span>
+<span class="kn">from</span> <span class="nn">IPython.core.interactiveshell</span> <span class="kn">import</span> <span class="n">InteractiveShellABC</span>
 
 
-<div class="viewcode-block" id="termux_clipboard_get"><a class="viewcode-back" href="../../../extensions.html#default_profile.extensions.termux_clipboard.termux_clipboard_get">[docs]</a><span class="nd">@line_magic</span>
-<span class="k">def</span> <span class="nf">termux_clipboard_get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Set the clipboard on termux using *termux_clipboard_get*.&quot;&quot;&quot;</span>
-    <span class="n">p</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="s1">&#39;termux-clipboard-get&#39;</span><span class="p">],</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">)</span>
-    <span class="n">text</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">stdout</span>
-    <span class="k">return</span> <span class="n">text</span></div>
+<div class="viewcode-block" id="DynamicAliasManager"><a class="viewcode-back" href="../../../api/default_profile.startup.22_alias_manager.html#default_profile.startup.22_alias_manager.DynamicAliasManager">[docs]</a><span class="k">class</span> <span class="nc">DynamicAliasManager</span><span class="p">(</span><span class="n">AliasManager</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Doesn&#39;t currently display info the way I want but it&#39;s a start.&quot;&quot;&quot;</span>
+
+    <span class="n">shell</span> <span class="o">=</span> <span class="n">InteractiveShellABC</span><span class="p">()</span>
+
+<div class="viewcode-block" id="DynamicAliasManager.__init__"><a class="viewcode-back" href="../../../api/default_profile.startup.22_alias_manager.html#default_profile.startup.22_alias_manager.DynamicAliasManager.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ip</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ip</span> <span class="o">=</span> <span class="n">ip</span> <span class="k">if</span> <span class="n">ip</span> <span class="k">else</span> <span class="n">get_ipython</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">shell</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ip</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">linemagics</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">magics_manager</span><span class="o">.</span><span class="n">magics</span><span class="p">[</span><span class="s1">&#39;line&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_aliases</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="DynamicAliasManager.init_aliases"><a class="viewcode-back" href="../../../api/default_profile.startup.22_alias_manager.html#default_profile.startup.22_alias_manager.DynamicAliasManager.init_aliases">[docs]</a>    <span class="k">def</span> <span class="nf">init_aliases</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Load default &amp; user aliases</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">cmd</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_aliases</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">cmd</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;ls &#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">colors</span> <span class="o">==</span> <span class="s1">&#39;NoColor&#39;</span><span class="p">:</span>
+                <span class="n">cmd</span> <span class="o">=</span> <span class="n">cmd</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; --color&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">soft_define_alias</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">cmd</span><span class="p">)</span></div>
+
+    <span class="c1"># @property</span>
+<div class="viewcode-block" id="DynamicAliasManager.aliases"><a class="viewcode-back" href="../../../api/default_profile.startup.22_alias_manager.html#default_profile.startup.22_alias_manager.DynamicAliasManager.aliases">[docs]</a>    <span class="k">def</span> <span class="nf">aliases</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">n</span><span class="p">:</span> <span class="n">func</span><span class="o">.</span><span class="n">cmd</span> <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">func</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">linemagics</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">Alias</span><span class="p">)}</span></div>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">reprlib</span><span class="o">.</span><span class="n">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">aliases</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">aliases</span><span class="p">)</span></div>
+
+    <span class="c1"># def __call__(self):</span>
+    <span class="c1">#     return self.init_aliases()</span>
 
 
-<div class="viewcode-block" id="load_ipython_extension"><a class="viewcode-back" href="../../../extensions.html#default_profile.extensions.termux_clipboard.load_ipython_extension">[docs]</a><span class="k">def</span> <span class="nf">load_ipython_extension</span><span class="p">(</span><span class="n">ip</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Sep 20, 2019: Works!&quot;&quot;&quot;</span>
-    <span class="n">ip</span><span class="o">.</span><span class="n">set_hook</span><span class="p">(</span><span class="s1">&#39;clipboard_get&#39;</span><span class="p">,</span> <span class="n">termux_clipboard_get</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../extensions.html#default_profile.extensions.termux_clipboard.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Main function.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    TODO</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># Forgive me for all these terrible hacks</span>
     <span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">shell</span><span class="p">:</span>
-        <span class="k">return</span>
-
-    <span class="k">if</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s1">&#39;termux-clipboard-get&#39;</span><span class="p">):</span>
-        <span class="c1"># shell.set_hook(termux_clipboard_get)</span>
-        <span class="n">load_ipython_extension</span><span class="p">(</span><span class="n">shell</span><span class="p">)</span></div>
-
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+    <span class="n">shell</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s2">&quot;alias_magic&quot;</span><span class="p">,</span> <span class="s2">&quot;p pycat&quot;</span><span class="p">)</span>
 </pre></div>
 
           </div>
@@ -133,6 +124,10 @@
     <ul>
       <li><a href="../../index.html">Module code</a>
         <ul>
+      <li><a href="../startup.html">default_profile.startup</a>
+        <ul>
+        </ul>
+      </li>
         </ul>
       </li>
     </ul>
@@ -146,7 +141,6 @@
 <div id="sidebartoc">
     <p class="caption"><span class="caption-text">API</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../default_profile.html">Tailor-made profiles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../sphinxext/index.html">Sphinx Extensions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/ipython_sphinx_directive.html">IPython Sphinx Directive</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/lexer.html">New IPython Console Lexer</a></li>
@@ -204,11 +198,12 @@
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../startup.html" >default_profile.startup</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Dec 18, 2019.
+      Last updated on Dec 10, 2019.
     </div>
   </body>
 </html>

@@ -1,0 +1,285 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>default_profile.startup.31_yank_last_arg &#8212; Dynamic IPython: version0.0.2</title>
+    <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
+    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/startup/31_yank_last_arg.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" />
+<link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" media="screen" rel="stylesheet" type="text/css" />
+<link rel='stylesheet' href='//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.css'>
+<!--[if lte IE 6]>
+  <link
+    rel="stylesheet"
+    href="../../../_static/ie6.css"
+    type="text/css"
+    media="screen"
+    charset="utf-8"
+  />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../startup.html" accesskey="U">default_profile.startup</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+<h1>Source code for default_profile.startup.31_yank_last_arg</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">https://gist.githubusercontent.com/konradkonrad/7143fa8407804e37132e4ea90175f2d8/raw/ef2f570fc67fd5d9d227f9ae0363e10907831c97/01-esc-dot.py</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+
+<span class="kn">from</span> <span class="nn">prompt_toolkit.application.current</span> <span class="kn">import</span> <span class="n">get_app</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.enums</span> <span class="kn">import</span> <span class="n">DEFAULT_BUFFER</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.keys</span> <span class="kn">import</span> <span class="n">Keys</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding</span> <span class="kn">import</span> <span class="n">KeyBindings</span><span class="p">,</span> <span class="n">merge_key_bindings</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.basic</span> <span class="kn">import</span> <span class="n">load_basic_bindings</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.emacs</span> <span class="kn">import</span> <span class="n">load_emacs_bindings</span><span class="p">,</span> <span class="n">load_emacs_search_bindings</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.mouse</span> <span class="kn">import</span> <span class="n">load_mouse_bindings</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.cpr</span> <span class="kn">import</span> <span class="n">load_cpr_bindings</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.filters</span> <span class="kn">import</span> <span class="n">HasFocus</span><span class="p">,</span> <span class="n">HasSelection</span><span class="p">,</span> <span class="n">ViInsertMode</span><span class="p">,</span> <span class="n">EmacsInsertMode</span>
+
+<span class="n">insert_mode</span> <span class="o">=</span> <span class="n">ViInsertMode</span><span class="p">()</span> <span class="o">|</span> <span class="n">EmacsInsertMode</span><span class="p">()</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">get_app</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="get_key_bindings"><a class="viewcode-back" href="../../../api/default_profile.startup.31_yank_last_arg.html#default_profile.startup.31_yank_last_arg.get_key_bindings">[docs]</a><span class="k">def</span> <span class="nf">get_key_bindings</span><span class="p">(</span><span class="n">custom_key_bindings</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The ``__init__`` for `_MergedKeyBindings` features this.:</span>
+
+<span class="sd">        def __init__(self, registries):</span>
+<span class="sd">            assert all(isinstance(r, KeyBindingsBase) for r in registries)</span>
+<span class="sd">            _Proxy.__init__(self)</span>
+<span class="sd">            self.registries = registries</span>
+
+<span class="sd">    As a result `None` can&#39;t be passed to merge_key_bindings.</span>
+
+<span class="sd">    Based on prompt_toolkit.key_binding.defaults.load_key_bindings()</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">custom_key_bindings</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">custom_key_bindings</span> <span class="o">=</span> <span class="n">KeyBindings</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">merge_key_bindings</span><span class="p">([</span>
+        <span class="n">load_basic_bindings</span><span class="p">(),</span>
+        <span class="n">load_emacs_bindings</span><span class="p">(),</span>
+        <span class="n">load_emacs_search_bindings</span><span class="p">(),</span>
+        <span class="n">load_mouse_bindings</span><span class="p">(),</span>
+        <span class="n">load_cpr_bindings</span><span class="p">(),</span>
+        <span class="n">custom_key_bindings</span><span class="p">,</span>
+    <span class="p">])</span></div>
+
+<div class="viewcode-block" id="State"><a class="viewcode-back" href="../../../api/default_profile.startup.31_yank_last_arg.html#default_profile.startup.31_yank_last_arg.State">[docs]</a><span class="k">class</span> <span class="nc">State</span><span class="p">:</span>
+<div class="viewcode-block" id="State.__init__"><a class="viewcode-back" href="../../../api/default_profile.startup.31_yank_last_arg.html#default_profile.startup.31_yank_last_arg.State.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">depth</span> <span class="o">=</span> <span class="mi">0</span></div></div>
+
+
+<span class="n">state</span> <span class="o">=</span> <span class="n">State</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="reset_last_arg_depth"><a class="viewcode-back" href="../../../api/default_profile.startup.31_yank_last_arg.html#default_profile.startup.31_yank_last_arg.reset_last_arg_depth">[docs]</a><span class="k">def</span> <span class="nf">reset_last_arg_depth</span><span class="p">():</span>
+    <span class="n">state</span><span class="o">.</span><span class="n">depth</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="yank_last_arg"><a class="viewcode-back" href="../../../api/default_profile.startup.31_yank_last_arg.html#default_profile.startup.31_yank_last_arg.yank_last_arg">[docs]</a><span class="k">def</span> <span class="nf">yank_last_arg</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;:program:`readline` style &#39;yank-last-arg&#39;</span>
+
+<span class="sd">    Insert last argument to the previous command (the last word of the</span>
+<span class="sd">    previous history entry).</span>
+
+<span class="sd">    Successive calls to yank-last-arg move back through the history list,</span>
+<span class="sd">    inserting the last word of each line in turn.</span>
+
+<span class="sd">    .. see: https://www.gnu.org/software/bash/manual/bashref.html#Commands-For-History</span>
+
+<span class="sd">    .. note: This doesn&#39;t support the numeric argument option of readline&#39;s</span>
+<span class="sd">             yank-last-arg</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span>
+    <span class="n">hist</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">history_manager</span><span class="o">.</span><span class="n">input_hist_raw</span>
+    <span class="k">if</span> <span class="n">state</span><span class="o">.</span><span class="n">depth</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">depth</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">depth</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">hist</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">hist</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">state</span><span class="o">.</span><span class="n">depth</span><span class="p">:</span>
+        <span class="n">lastline</span> <span class="o">=</span> <span class="n">hist</span><span class="p">[</span><span class="o">-</span><span class="n">state</span><span class="o">.</span><span class="n">depth</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">state</span><span class="o">.</span><span class="n">depth</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">b</span><span class="o">.</span><span class="n">undo</span><span class="p">()</span>
+
+        <span class="n">b</span><span class="o">.</span><span class="n">save_to_undo_stack</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">lastline</span><span class="o">.</span><span class="n">split</span><span class="p">()):</span>
+            <span class="n">b</span><span class="o">.</span><span class="n">insert_text</span><span class="p">(</span><span class="n">lastline</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+
+    <span class="n">registry</span> <span class="o">=</span> <span class="n">KeyBindings</span><span class="p">()</span>
+
+    <span class="n">ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ip</span><span class="p">,</span> <span class="s2">&quot;pt_app&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># don&#39;t do it this way. if you change it from</span>
+        <span class="n">registry</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">key_bindings</span>
+        <span class="c1"># to</span>
+        <span class="c1"># registry = ip.pt_app.app.key_bindings</span>
+        <span class="c1"># then you&#39;ll end up with a prompt_toolkit.key_binding.key_bindings._MergedKeyBindings</span>
+        <span class="c1"># class which has no `add_binding` method.</span>
+
+    <span class="k">elif</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ip</span><span class="p">,</span> <span class="s2">&quot;pt_cli&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">registry</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">pt_cli</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">key_bindings_registry</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;IPython doesn&#39;t have prompt toolkit bindings. Exiting.&quot;</span><span class="p">)</span>
+
+    <span class="n">registry</span><span class="o">.</span><span class="n">add_binding</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">Escape</span><span class="p">,</span>
+                            <span class="sa">u</span><span class="s1">&#39;.&#39;</span><span class="p">,</span>
+                            <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span>
+                                    <span class="o">&amp;</span> <span class="o">~</span><span class="n">HasSelection</span><span class="p">()</span>
+                                    <span class="o">&amp;</span> <span class="n">insert_mode</span><span class="p">))(</span><span class="n">yank_last_arg</span><span class="p">)</span>
+    <span class="n">registry</span><span class="o">.</span><span class="n">add_binding</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">Escape</span><span class="p">,</span>
+                            <span class="sa">u</span><span class="s1">&#39;_&#39;</span><span class="p">,</span>
+                            <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span>
+                                    <span class="o">&amp;</span> <span class="o">~</span><span class="n">HasSelection</span><span class="p">()</span>
+                                    <span class="o">&amp;</span> <span class="n">insert_mode</span><span class="p">))(</span><span class="n">yank_last_arg</span><span class="p">)</span>
+    <span class="n">ip</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s1">&#39;post_execute&#39;</span><span class="p">,</span> <span class="n">reset_last_arg_depth</span><span class="p">)</span>
+
+    <span class="n">get_key_bindings</span><span class="p">(</span><span class="n">registry</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+    <h3>Quick search</h3>
+    <div class="searchformwrapper">
+        <form class="search" action="../../../search.html" method="get">
+            <input type="text" name="q" />
+            <input type="submit" value="Go" />
+        </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a>
+    <ul>
+      <li><a href="../../index.html">Module code</a>
+        <ul>
+      <li><a href="../startup.html">default_profile.startup</a>
+        <ul>
+        </ul>
+      </li>
+        </ul>
+      </li>
+    </ul>
+</ul>
+</li>
+
+
+
+<h3><a href="../../../index.html">Table of Contents</a></h3>
+<div>&nbsp;</div>
+<div id="sidebartoc">
+    <p class="caption"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../sphinxext/index.html">Sphinx Extensions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/ipython_sphinx_directive.html">IPython Sphinx Directive</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/lexer.html">New IPython Console Lexer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/custom_doctests.html">Custom Doctests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/magics.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">magics</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/make.html">Make — Automated Documentation Builder</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../startup/index.html">IPython Startup</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/rehashx.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">01_rehashx</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/easy_import.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">04_easy_import</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/ipython-logger.html">05_log — IPython logger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/help_helpers.html">06_Help_Helpers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/aliases.html">System Aliases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/fzf.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">21_fzf</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/setup_readline.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">30_setup_readline</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/41_numpy.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">numpy</span></code> Initialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/42_pandas.html">Pandas Initialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/matplotlib_rc.html">Matplotlib Startup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/sysexcept.html">Customized Exceptions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../util/index.html">IPython Utilities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../util/copytree.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">copytree</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util/ipython_get_history.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ipython_get_history</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util/machine.html">machine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util/module_log.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">module_log</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util/nb_stripper.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">nb_stripper</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util/pager2.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pager2</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util/paths.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paths</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util/profile_override.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">profile_override</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util/timer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">timer</span></code> module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../jobcontrol.html">Job Control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../todo.html">Todo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev.html">Developers Notes</a></li>
+</ul>
+
+    
+</div>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../startup.html" >default_profile.startup</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+      Last updated on Dec 10, 2019.
+    </div>
+  </body>
+</html>
