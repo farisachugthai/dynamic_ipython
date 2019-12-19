@@ -18,20 +18,23 @@ import traceback
 from bdb import BdbQuit
 from contextlib import contextmanager
 
-from IPython import get_ipython
+from IPython.core.getipython import get_ipython
 from IPython.terminal.embed import InteractiveShellEmbed
 from IPython.terminal.ipapp import TerminalIPythonApp
 
 __version__ = "0.10.3"
 
 
-def _init_pdb(context=3, commands=None):
+def _init_pdb(context=3, commands=None, debugger_kls=None):
+    """Needed to add a debugger_cls param to this."""
+    if debugger_kls is None:
+        debugger_kls = debugger_kls
     if commands is None:
         commands = []
     try:
-        p = debugger_cls(context=context)
+        p = debugger_kls(context=context)
     except TypeError:
-        p = debugger_cls()
+        p = debugger_kls()
     p.rcLines.extend(commands)
     return p
 
@@ -96,7 +99,8 @@ def launch_ipdb_on_exception():
         pass
 
 
-def main():
+def parse_args():
+    """Factored out of main. Well sweet this now rasies an error."""
     from pdb import Restart
 
     opts, args = getopt.getopt(sys.argv[1:], 'hc:', ['help', 'command='])
@@ -104,20 +108,27 @@ def main():
     commands = []
     for opt, optarg in opts:
         if opt in ['-h', '--help']:
-            getopt.error(:)
+            # getopt.error('TODO: Print help.')
+            print(_usage)
         elif opt in ['-c', '--command']:
             commands.append(optarg)
 
     if not args:
-        print(_usage)
+        getopt.GetOptError()
+        # print(_usage)
         sys.exit(2)
 
-    mainpyfile = args[0]     # Get script filename
+    mainpyfile = args[0]  # Get script filename
     if not os.path.exists(mainpyfile):
         print('Error:', mainpyfile, 'does not exist')
         sys.exit(1)
 
-    sys.argv = args     # Hide "pdb.py" from argument list
+    return args
+
+
+def main():
+    args = parse_args()
+    sys.argv = args  # Hide "pdb.py" from argument list
 
     # Replace pdb's dir with script's dir in front of module search path.
     sys.path[0] = os.path.dirname(mainpyfile)
@@ -169,11 +180,11 @@ if __name__ == '__main__':
         if isinstance(shell, InteractiveShellEmbed):
             sys.stderr.write(
                 "\nYou are currently into an embedded ipython shell,\n"
-                "the configuration will not be loaded.\n\n"
-            )
+                "the configuration will not be loaded.\n\n")
 
     # Let IPython decide about which debugger class to use
     # This is especially important for tools that fiddle with stdout
+    global debugger_cls
     debugger_cls = shell.debugger_cls
 
     main()
