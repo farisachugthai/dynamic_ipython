@@ -40,8 +40,9 @@ from traitlets.config.application import LevelFormatter
 default_log_format = '%(highlevel)s %(created)f %(module)s %(levelname)s  %(message)s'
 default_formatter = LevelFormatter(fmt=default_log_format)
 
-logging.basicConfig(level=logging.INFO,
-                    format='%(module)s %(created)f [%(name)s] %(message)s ')
+IPYTHON_CONFIG_HANDLER = logging.StreamHandler()
+
+logging.basicConfig(level=logging.INFO, format=default_log_format)
 
 c = get_config()
 # admonition: Don't it this way
@@ -253,7 +254,7 @@ c.TerminalIPythonApp.force_interact = False
 # c.TerminalIPythonApp.quick = False
 
 # Dec 08, 2019: Adding this in
-c.TerminalIPythonApp.log_format = '%(module) : %(created)f : [%(name)s] : %(highlevel)s : %(message)s : '
+c.TerminalIPythonApp.log_format = '%(module) %(created)f [%(name)s]  %(message)s '
 
 # Configure matplotlib for interactive use with the default matplotlib backend.
 

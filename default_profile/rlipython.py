@@ -1,8 +1,5 @@
 """Subclass of InteractiveShell for terminal based frontends.
 
-Named .local simply for the git ignore. Set the ft to python though.
-
-Here's how to drop prompt_toolkit.
 """
 import bdb
 import os
@@ -14,7 +11,6 @@ from IPython.core.interactiveshell import InteractiveShell, InteractiveShellABC
 from IPython.core.usage import interactive_usage
 from IPython.terminal.interactiveshell import TerminalInteractiveShell
 from IPython.terminal.magics import TerminalMagics
-from IPython.utils import py3compat
 from IPython.utils.contexts import NoOpContext
 from IPython.utils.encoding import get_stream_enc
 from IPython.utils.process import abbrev_cwd
@@ -32,23 +28,18 @@ def get_default_editor():
 
     """
     try:
-        ed = os.environ['EDITOR']
-        if not py3compat.PY3:
-            ed = ed.decode()
-        return ed
-    except KeyError:
-        pass
+        return os.environ['EDITOR']
     except UnicodeError:
         warn("$EDITOR environment variable is not pure ASCII. Using platform "
              "default editor.")
+    except KeyError:
+        if os.name == 'posix':
+            return 'vi'  # the only one guaranteed to be there!
+        else:
+            return 'notepad'  # same in Windows!
 
-    if os.name == 'posix':
-        return 'vi'  # the only one guaranteed to be there!
-    else:
-        return 'notepad'  # same in Windows!
 
-
-def get_pasted_lines(sentinel, l_input=py3compat.input, quiet=False):
+def get_pasted_lines(sentinel, l_input=input, quiet=False):
     """ Yield pasted lines until the user enters the given sentinel value.
 
     Parameters
@@ -65,7 +56,7 @@ def get_pasted_lines(sentinel, l_input=py3compat.input, quiet=False):
         prompt = ""
     while True:
         try:
-            l = py3compat.str_to_unicode(l_input(prompt))
+            l = (l_input(prompt))
             if l == sentinel:
                 return
             else:
@@ -224,6 +215,8 @@ class ReadlineInteractiveShell(InteractiveShell):
 
     system = InteractiveShell.system_raw
 
+    stdin_encoding = sys.stdin.encoding or "utf-8"
+
     # -------------------------------------------------------------------------
     # Overrides of init stages
     # -------------------------------------------------------------------------
@@ -321,8 +314,6 @@ class ReadlineInteractiveShell(InteractiveShell):
             # Remove some chars from the delimiters list.  If we encounter
             # unicode chars, discard them.
             delims = readline.get_completer_delims()
-            if not py3compat.PY3:
-                delims = delims.encode("ascii", "ignore")
             for d in self.readline_remove_delims:
                 delims = delims.replace(d, "")
             delims = delims.replace(ESC_MAGIC, '')
@@ -351,17 +342,17 @@ class ReadlineInteractiveShell(InteractiveShell):
         from IPython.core.completerlib import (module_completer,
                                                magic_run_completer, cd_completer, reset_completer)
 
-        # self.Completer = RLCompleter(shell=self,
-        #                              namespace=self.user_ns,
-        #                              global_namespace=self.user_global_ns,
-        #                              parent=self,
-        #                              )
-        # self.configurables.append(self.Completer)
+        self.Completer = RLCompleter(shell=self,
+                                     namespace=self.user_ns,
+                                     global_namespace=self.user_global_ns,
+                                     parent=self,
+                                     )
+        self.configurables.append(self.Completer)
 
         # Add custom completers to the basic ones built into IPCompleter
         sdisp = self.strdispatchers.get('complete_command', StrDispatch())
         self.strdispatchers['complete_command'] = sdisp
-        # self.Completer.custom_completers = sdisp
+        self.Completer.custom_completers = sdisp
 
         self.set_hook('complete_command', module_completer, str_key='import')
         self.set_hook('complete_command', module_completer, str_key='from')
@@ -370,14 +361,14 @@ class ReadlineInteractiveShell(InteractiveShell):
         self.set_hook('complete_command', cd_completer, str_key='%cd')
         self.set_hook('complete_command', reset_completer, str_key='%reset')
 
-        # self.init_readline()
-        # if self.has_readline:
-        #     self.set_readline_completer()
+        self.init_readline()
+        if self.has_readline:
+            self.set_readline_completer()
 
     def set_readline_completer(self):
         """Reset readline's completer to be our own."""
-        # self.Completer.readline = self.readline
-        # self.readline.set_completer(self.Completer.rlcomplete)
+        self.Completer.readline = self.readline
+        self.readline.set_completer(self.Completer.rlcomplete)
 
     def pre_readline(self):
         """readline hook to be used at the start of each line.
@@ -393,7 +384,6 @@ class ReadlineInteractiveShell(InteractiveShell):
     def refill_readline_hist(self):
         # Load the last 1000 lines from history
         self.readline.clear_history()
-        stdin_encoding = sys.stdin.encoding or "utf-8"
         last_cell = u""
         for _, _, cell in self.history_manager.get_tail(self.history_load_length,
                                                         include_latest=True):
@@ -402,12 +392,10 @@ class ReadlineInteractiveShell(InteractiveShell):
             if cell and (cell != last_cell):
                 try:
                     if self.multiline_history:
-                        self.readline.add_history(py3compat.unicode_to_str(cell,
-                                                                           stdin_encoding))
+                        self.readline.add_history(cell)
                     else:
                         for line in cell.splitlines():
-                            self.readline.add_history(py3compat.unicode_to_str(line,
-                                                                               stdin_encoding))
+                            self.readline.add_history(line)
                     last_cell = cell
 
                 except (TypeError, ValueError) as e:
@@ -518,9 +506,9 @@ class ReadlineInteractiveShell(InteractiveShell):
 
         for i in range(hlen - hlen_before_cell):
             self.readline.remove_history_item(hlen - i - 1)
-        stdin_encoding = get_stream_enc(sys.stdin, 'utf-8')
-        self.readline.add_history(py3compat.unicode_to_str(source_raw.rstrip(),
-                                                           stdin_encoding))
+        stdin_encoding = sys.stdin.encoding or 'utf-8'
+        self.readline.add_history(source_raw.rstrip())
+
         return self.readline.get_current_history_length()
 
     def interact(self, display_banner=None):
@@ -533,10 +521,7 @@ class ReadlineInteractiveShell(InteractiveShell):
         if display_banner is None:
             display_banner = self.display_banner
 
-        if isinstance(display_banner, py3compat.string_types):
-            self.show_banner(display_banner)
-        elif display_banner:
-            self.show_banner()
+        self.show_banner()
 
         more = False
 
@@ -629,12 +614,12 @@ class ReadlineInteractiveShell(InteractiveShell):
 
         Parameters
         ----------
-
         prompt : str, optional
           A string to be printed to prompt the user.
+
         """
         try:
-            line = py3compat.cast_unicode_py2(self.raw_input_original(prompt))
+            line = self.raw_input_original(prompt)
         except ValueError:
             warn("\n********\nYou or a %run:ed script called sys.stdin.close()"
                  " or sys.stdout.close()!\nExiting IPython!\n")

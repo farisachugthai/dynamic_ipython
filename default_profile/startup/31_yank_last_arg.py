@@ -1,5 +1,9 @@
 """
+Started with:
+
 https://gist.githubusercontent.com/konradkonrad/7143fa8407804e37132e4ea90175f2d8/raw/ef2f570fc67fd5d9d227f9ae0363e10907831c97/01-esc-dot.py
+
+Has since grown to ~200 key bindings.
 """
 from IPython import get_ipython
 
@@ -102,16 +106,10 @@ if __name__ == "__main__":
     ip = get_ipython()
 
     if getattr(ip, "pt_app", None):
-        # don't do it this way. if you change it from
-        # registry = ip.pt_app.key_bindings
-        # to
-        # registry = ip.pt_app.app.key_bindings
-        # then you'll end up with a prompt_toolkit.key_binding.key_bindings._MergedKeyBindings
-        # class which has no `add_binding` method.
-        all_kb = ip.pt_app.key_bindings
+        orig_kb = ip.pt_app.key_bindings
 
     elif getattr(ip, "pt_cli", None):
-        all_kb = ip.pt_cli.application.key_bindings_registry
+        orig_kb = ip.pt_cli.application.key_bindings_registry
     else:
         raise NotImplementedError("IPython doesn't have prompt toolkit bindings. Exiting.")
 
@@ -134,4 +132,7 @@ if __name__ == "__main__":
     # If we did this correctly, running _ip.pt_app.app.key_bindings.bindings
     # should display something like +100 bindings
     # since we linked it to the correct attribute of pt_app this should work
+
     all_kb = get_key_bindings(registry)
+    # Overwrite our original keybindings
+    orig_kb = all_kb

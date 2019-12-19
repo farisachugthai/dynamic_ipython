@@ -73,35 +73,45 @@ class IOStream(io.TextIOBase):
     """Try to rewrite IPythons IPython.utils.io.IOStream."""
     def __init__(self, stream, fallback=None):
         if fallback is not None:
-            self.stream = fallback
+            self.fallback_stream = fallback
         else:
             self.stream = stream
 
     def __repr__(self):
-        return ''.format(repr(self.__class__.__name__), repr(self.stream))
+        return '{}\t{}'.format(repr(self.__class__.__name__),
+                               repr(self.stream))
 
     def __str__(self):
-        return ''.format(self.__class__.__name__, str(self.stream))
+        return '{}\n{}'.format(self.__class__.__name__, str(self.stream))
 
     def write(self, message):
         """Flush streams after any writes."""
-        self.stream.write(message)
-        sys.stdout.flush()
-        sys.stderr.flush()
+        try:
+            self.stream.write(message)
+        except (AttributeError, TypeError) as e:
+            if self.fallback_stream:
+                try:
+                    self.stream.write(message)
+                except (AttributeError, TypeError) as e:
+                    STARTUP_LOGGER.exception(e)
+        finally:
+            sys.stdout.flush()
+            sys.stderr.flush()
 
     def read(self):
-        """Did a smoke test and this is the only method not working.
+        try:
+            message = self.stream.read()
+        except (AttributeError, TypeError) as e:
+            if self.fallback_stream:
+                try:
+                    message = self.stream.read()
+                except (AttributeError, TypeError) as e:
+                    STARTUP_LOGGER.exception(e)
+        finally:
+            sys.stdout.flush()
+            sys.stderr.flush()
 
-        >>> s = IOStream(sys.stdout)
-        >>> s.write('foo')
-        foo
-
-        Worked but s.read() raises as it expect a str,
-        bytes or pathlike.
-        sys.sydout is an _io.TextWrapper. Hm.
-        """
-        with open(self.stream, 'rt') as f:
-            return f.read()
+        return message
 
 
 class DeepReload:
@@ -185,20 +195,19 @@ def easy_import(mod):
     Returns
     -------
     ret_mod : mod
-        Imported module. Specifically used for neovim in this instance but can
-        be interactively used for any module the user needs to import.
+        Imported module. Specifically used for neovim in this instance
+        but can be interactively used for any module the user needs to import.
 
     """
     try:
         return import_module(mod)
     except ImportError:
-        msg = dedent(
-                """
+        msg = dedent("""
         ************************************************************
         {} import failed. Only ignore this if you plan on going
         the entire session without using it!!
         ************************************************************
-""".format(mod))
+        """.format(mod))
 
 
 if __name__ == "__main__":
