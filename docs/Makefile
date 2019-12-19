@@ -40,7 +40,7 @@ clean:
 	-rm -rf $(BUILDDIR)/*
 
 html:
-	$(SPHINXBUILD) -b html $(SOURCEDIR) $(BUILDDIR)/html $(ALLSPHINXOPTS) $(0)
+	$(SPHINXBUILD) $(ALLSPHINXOPTS) $(0) -b html $(SOURCEDIR) $(BUILDDIR)/html
 
 dirhtml:
 	$(SPHINXBUILD) -b dirhtml $(ALLSPHINXOPTS) $(BUILDDIR)/dirhtml
