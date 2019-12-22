@@ -144,16 +144,6 @@ else:
 # c.InteractiveShellApp.exec_lines = []
 
 # A list of dotted module names of IPython extensions to load.
-# try:
-#     from default_profile.extensions.storemagic import StoreAndLoadMagics
-# except (ImportError, ModuleNotFoundError):
-#     c.InteractiveShellApp.extensions = []
-# else:
-#     c.InteractiveShellApp.extensions = [
-#         'default_profile.extensions.storemagic'
-#     ]
-# You moron. This is what's been raising errors. We need to define a load_ext
-# method on this class
 
 # dotted module name of an IPython extension to load.
 # c.InteractiveShellApp.extra_extension = ''

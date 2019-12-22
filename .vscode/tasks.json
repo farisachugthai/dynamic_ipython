@@ -6,6 +6,62 @@
       "type": "shell"
     },
     {
+      "args": [
+        "${file}"
+      ],
+      "command": "${config:python.pythonPath}",
+      "group": "build",
+      "label": "Run Python",
+      "presentation": {
+        "panel": "new",
+        "reveal": "always"
+      },
+      "problemMatcher": {
+        "fileLocation": "absolute",
+        "pattern": [
+          {
+            "file": 1,
+            "line": 2,
+            "message": 0,
+            "regexp": "^\\s+File \"(.*?)\", line ([0-9]+)[,]?.+?$"
+          },
+          {
+            "code": 1,
+            "regexp": "^\\s+(.+?)$"
+          }
+        ]
+      },
+      "type": "shell"
+    },
+    {
+      "command": "${config:python.pythonPath} ${file}",
+      "group": {
+        "isDefault": true,
+        "kind": "build"
+      },
+      "label": "Run File",
+      "presentation": {
+        "focus": true,
+        "panel": "new",
+        "reveal": "always"
+      },
+      "type": "shell"
+    },
+    {
+      "command": "${config:python.pythonPath} -m unittest",
+      "group": {
+        "isDefault": true,
+        "kind": "build"
+      },
+      "label": "unittest",
+      "presentation": {
+        "focus": true,
+        "panel": "new",
+        "reveal": "always"
+      },
+      "type": "shell"
+    },
+    {
       "isBackground": true,
       "label": "conda",
       "linux": {
@@ -21,15 +77,21 @@
       "dependsOn": [
         "pipenv"
       ],
+      "group": {
+        "isDefault": true,
+        "kind": "build"
+      },
       "isBackground": true,
       "label": "pipenv",
-      "type": "shell",
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      }
+      "type": "shell"
     },
     {
+      "args": [
+        "/U",
+        "/K",
+        "C:/tools/Cmder/vendor/init.bat"
+      ],
+      "command": "cmd",
       "group": "build",
       "label": "doesn't work sphinx",
       "linux": {
@@ -40,20 +102,14 @@
           "docs/source",
           "docs/build/html"
         ]
-      },
-      "command": "cmd",
-      "args": [
-        "/U",
-        "/K",
-        "C:/tools/Cmder/vendor/init.bat"
-      ]
+      }
     },
     {
-      "label": "second try sphinx-build",
-      "group": "build",
-      "dependsOrder": "sequence",
-      "type": "process",
       "command": "${config:python.pythonPath}",
+      "dependsOrder": "sequence",
+      "group": "build",
+      "label": "second try sphinx-build",
+      "type": "process",
       "windows": {
         "args": [
           "-m",
@@ -67,15 +123,15 @@
       }
     },
     {
-      "type": "shell",
-      "command": "${config:python.pythonPath}",
-      "label": "autopep8 file. shell?",
       "args": [
         "-m",
         "autopep8",
         "-i",
         "${file}"
       ],
+      "command": "${config:python.pythonPath}",
+      "label": "autopep8 file. shell?",
+      "type": "shell"
     },
     {
       "command": "${config:python.pythonPath}",
@@ -134,10 +190,10 @@
       "type": "npm"
     },
     {
-      "type": "npm",
-      "script": "install",
       "path": "docs/",
-      "problemMatcher": []
+      "problemMatcher": [],
+      "script": "install",
+      "type": "npm"
     }
   ],
   "version": "2.0.0"

@@ -17,6 +17,7 @@ Huh! This is neat. He imports pdb.Restart. Check out the call signature.
 """
 import getopt
 import os
+from pdb import Restart
 import sys
 import traceback
 from bdb import BdbQuit
@@ -109,7 +110,6 @@ def launch_ipdb_on_exception():
 
 def parse_args():
     """Factored out of main. Well sweet this now rasies an error."""
-    from pdb import Restart
 
     opts, args = getopt.getopt(sys.argv[1:], "hc:", ["help", "command="])
 
@@ -117,9 +117,7 @@ def parse_args():
     for opt, optarg in opts:
         if opt in ["-h", "--help"]:
             getopt.GetOptError()
-            # getopt.error('TODO: Print help.')
         elif opt in ["-c", "--command"]:
-            # print(_usage)
             commands.append(optarg)
 
     if not args:

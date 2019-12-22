@@ -64,12 +64,10 @@ import time
 from typing import Dict
 
 # Logging
-# DOCS_LOGGER = logging.getLogger('docs.source').getChild('conf')
-DOCS_LOGGER = logging.getLogger(name=__name__,)
+DOCS_LOGGER = logging.getLogger(name=__name__)
 DOCS_HANDLER = logging.StreamHandler()
-DOCS_LOGGER.addHandler(DOCS_HANDLER)
+DOCS_LOGGER.addHandler(DOCS_HANDLER.setLevel(logging.INFO))
 DOCS_LOGGER.setLevel(logging.INFO)
-
 
 # Third party
 import sphinx

@@ -48,11 +48,12 @@ from traitlets.config.application import LevelFormatter
 
 class NoUnNamedLoggers(NotImplementedError):
     """Raise this error if the logger a function was called with was anonymous."""
+
     def __init__(self, *args, **kwargs):
         super().__init__(self, *args, **kwargs)
 
     def __call__(self):
-        return ''.format('You did not provide a name for the logger.')
+        return "".format("You did not provide a name for the logger.")
 
 
 def stream_logger(logger, log_level=logging.INFO, msg_format=None):
@@ -99,7 +100,7 @@ def stream_logger(logger, log_level=logging.INFO, msg_format=None):
     handler.setLevel(level)
 
     if msg_format is None:
-        msg_format = '%(asctime)s %(levelname)s  %(message)s\n'
+        msg_format = "%(asctime)s %(levelname)s  %(message)s\n"
 
     formatter = logging.Formatter(msg_format)
 
@@ -109,14 +110,11 @@ def stream_logger(logger, log_level=logging.INFO, msg_format=None):
     return logger
 
 
-def file_logger(filename,
-                logger=None,
-                shell=None,
-                log_level=logging.INFO,
-                msg_format=None):
+def file_logger(
+    filename, logger=None, shell=None, log_level=logging.INFO, msg_format=None
+):
     """Removed docstring because it wouldn't stop emitting errors."""
-    assert isinstance(shell,
-                      (IPython.core.interactiveshell.InteractiveShell, None))
+    assert isinstance(shell, (IPython.core.interactiveshell.InteractiveShell, None))
 
     if shell is None:
         shell = get_ipython()
@@ -135,8 +133,7 @@ def file_logger(filename,
     if msg_format is not None:
         formatter = logging.Formatter(msg_format)
     else:
-        formatter = logging.Formatter(
-            '%(asctime)s : %(levelname)s : %(message)s : ')
+        formatter = logging.Formatter("%(asctime)s : %(levelname)s : %(message)s : ")
 
     handler.setFormatter(formatter)
 
@@ -198,6 +195,7 @@ def json_logger(logger=None, json_formatter=None):
 
 class JsonFormatter(logging.Formatter):
     """Return valid :mod:`json` for a configured handler."""
+
     def format(self, record):
         """Format a :class:`logging.LogRecord()` from an :exc:Exception."""
         if record.exc_info:
@@ -205,28 +203,23 @@ class JsonFormatter(logging.Formatter):
         else:
             exc = None
 
-        return json.dumps({
-            'msg':
-            record.msg % record.args,
-            'timestamp':
-            datetime.utcfromtimestamp(record.created).isoformat() + 'Z',
-            'func':
-            record.funcName,
-            'level':
-            record.levelname,
-            'module':
-            record.module,
-            'process_id':
-            record.process,
-            'thread_id':
-            record.thread,
-            'exception':
-            exc
-        })
+        return json.dumps(
+            {
+                "msg": record.msg % record.args,
+                "timestamp": datetime.utcfromtimestamp(record.created).isoformat()
+                + "Z",
+                "func": record.funcName,
+                "level": record.levelname,
+                "module": record.module,
+                "process_id": record.process,
+                "thread_id": record.thread,
+                "exception": exc,
+            }
+        )
 
 
 def betterConfig(name=None, parent=None):
-    """Similar to logging.basicConfig().
+    """Similar to :func:`logging.basicConfig`.
 
     Parameters
     ----------
@@ -243,10 +236,9 @@ def betterConfig(name=None, parent=None):
     it's default behavior is to allow all :class:`logging.LogRecords` to pass.
 
     """
-    BASIC_FORMAT = '%(created)f  %(levelname)s  %(module)s  %(message)s  '
+    BASIC_FORMAT = "%(created)f  %(levelname)s  %(module)s  %(message)s  "
     if name is None:
-        name = 'mod_log'
-
+        name = "mod_log"
     if parent:
         better_logger = logging.getLogger(name=name).getChild(parent)
     else:
@@ -258,7 +250,7 @@ def betterConfig(name=None, parent=None):
     better_stream.setLevel(logging.WARNING)
     better_logger.addHandler(better_stream)
 
-    better_formatter = LevelFormatter(BASIC_FORMAT + '%(highlevel)s')
+    better_formatter = LevelFormatter(BASIC_FORMAT + "%(highlevel)s")
     better_stream.setFormatter(better_formatter)
 
     better_logger.addFilter(logging.Filter())
