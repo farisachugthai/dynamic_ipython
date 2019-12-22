@@ -238,11 +238,15 @@ def betterConfig(name=None, parent=None):
     it's default behavior is to allow all :class:`logging.LogRecords` to pass.
 
     """
-    logging.BASIC_FORMAT = '%(created)f  %(levelname)s  %(module)s  %(message)s  '
+    BASIC_FORMAT = '%(created)f  %(levelname)s  %(module)s  %(message)s  '
+    if name is None:
+        name = 'mod_log'
+
     if parent:
         better_logger = logging.getLogger(name=name).getChild(parent)
     else:
         better_logger = logging.getLogger(name=name)
+
     better_logger.setLevel(logging.WARNING)
 
     better_stream = logging.StreamHandler()
@@ -252,6 +256,6 @@ def betterConfig(name=None, parent=None):
     better_formatter = logging.Formatter(logging.BASIC_FORMAT)
     better_stream.setFormatter(better_formatter)
 
-    better_logger.setFilterer(logging.Filter())
+    better_logger.addFilter(logging.Filter())
 
     return better_logger

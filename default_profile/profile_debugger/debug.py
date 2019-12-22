@@ -7,8 +7,12 @@
 
 Huh! This is neat. He imports pdb.Restart. Check out the call signature.
 
-pdb.Restart = class Restart(builtins.Exception)
+.. class:: pdb.Restart
+
+   class Restart(builtins.Exception)
    Causes a debugger to be restarted for the debugged python program.
+
+.. todo:: ipdb doesnt take a -m option. pdb started taking it in 3.7.
 
 """
 import getopt
@@ -18,11 +22,16 @@ import traceback
 from bdb import BdbQuit
 from contextlib import contextmanager
 
+try:
+    import readline
+except (ImportError, ModuleNotFoundError):
+    readline = None
+
 from IPython import get_ipython
 from IPython.terminal.embed import InteractiveShellEmbed
 from IPython.terminal.ipapp import TerminalIPythonApp
 
-__version__ = "0.10.3"
+# __version__ = "0.10.3"
 
 
 def _init_pdb(context=3, commands=None):
@@ -52,7 +61,7 @@ def set_trace(frame=None, context=3):
     if frame is None:
         frame = sys._getframe().f_back
     p = _init_pdb(context).set_trace(frame)
-    if p and hasattr(p, 'shell'):
+    if p and hasattr(p, "shell"):
         p.shell.restore_sys_module_state()
 
 
@@ -89,8 +98,8 @@ def launch_ipdb_on_exception():
     try:
         yield
     except Exception:
-        e, m, tb = sys.exc_info()
-        print(m.__repr__(), file=sys.stderr)
+        if hasattr(sys, "exc_info"):
+            print(sys.exc_info()[2])
         post_mortem(tb)
     finally:
         pass
@@ -99,25 +108,25 @@ def launch_ipdb_on_exception():
 def main():
     from pdb import Restart
 
-    opts, args = getopt.getopt(sys.argv[1:], 'hc:', ['help', 'command='])
+    opts, args = getopt.getopt(sys.argv[1:], "hc:", ["help", "command="])
 
     commands = []
     for opt, optarg in opts:
-        if opt in ['-h', '--help']:
-            getopt.error(:)
-        elif opt in ['-c', '--command']:
+        if opt in ["-h", "--help"]:
+            getopt.error()
+        elif opt in ["-c", "--command"]:
             commands.append(optarg)
 
     if not args:
-        print(_usage)
+        # print(_usage) todo!
         sys.exit(2)
 
-    mainpyfile = args[0]     # Get script filename
+    mainpyfile = args[0]  # Get script filename
     if not os.path.exists(mainpyfile):
-        print('Error:', mainpyfile, 'does not exist')
+        print("Error:", mainpyfile, "does not exist")
         sys.exit(1)
 
-    sys.argv = args     # Hide "pdb.py" from argument list
+    sys.argv = args  # Hide "pdb.py" from argument list
 
     # Replace pdb's dir with script's dir in front of module search path.
     sys.path[0] = os.path.dirname(mainpyfile)
@@ -138,7 +147,7 @@ def main():
             print("\t" + " ".join(sys.argv[1:]))
         except SystemExit:
             # In most cases SystemExit does not warrant a post-mortem session.
-            print("The program exited via sys.exit(). Exit status: ", end='')
+            print("The program exited via sys.exit(). Exit status: ", end="")
             print(sys.exc_info()[1])
         except:
             traceback.print_exc()
@@ -146,11 +155,14 @@ def main():
             print("Running 'cont' or 'step' will restart the program")
             t = sys.exc_info()[2]
             pdb.interaction(None, t)
-            print("Post mortem debugger finished. The " + mainpyfile +
-                  " will be restarted")
+            print(
+                "Post mortem debugger finished. The "
+                + mainpyfile
+                + " will be restarted"
+            )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Moving all the globals because that shit drives me nuts
     shell = get_ipython()
     if shell is None:
@@ -160,7 +172,7 @@ if __name__ == '__main__':
         ipapp = TerminalIPythonApp()
         # Avoid output (banner, prints)
         ipapp.interact = False
-        ipapp.initialize(['--no-term-title'])
+        ipapp.initialize(["--no-term-title"])
         shell = ipapp.shell
     else:
         # Running inside IPython

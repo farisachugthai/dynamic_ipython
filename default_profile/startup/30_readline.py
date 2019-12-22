@@ -34,8 +34,11 @@ import logging
 import os
 from pathlib import Path
 import platform
-# Oddly enough this is available on every platform
 import rlcompleter
+
+from IPython.core.getipython import get_ipython
+
+from default_profile.util.module_log import betterConfig
 
 
 def readline_logging():
@@ -48,7 +51,15 @@ def readline_logging():
         filename=LOG_FILENAME,
         level=logging.DEBUG,
     )
+    return betterConfig(parent="default_profile.startup", name=__name__)
 
+
+# Originally this part was in an `if __name__ == '__main__' block but I actually
+# want it executed in the global namespace. It should have been written carefully
+# enough that both Linux and Windows can handle it. TUI only but isn't that implied
+# with readline?
+# Do this part first
+rl_logger = readline_logging()
 
 try:
     import jedi
@@ -56,29 +67,25 @@ except (ImportError, ModuleNotFoundError):
     jedi = None
 else:
     from jedi.utils import setup_readline
+
     setup_readline()
     jedi.settings.add_bracket_after_function = False
     # jedi.settings
 
-
-def get_readline():
-    # Fallback to the stdlib readline completer if it is installed.
-    # Taken from http://docs.python.org/2/library/rlcompleter.html
+# Fallback to the stdlib readline completer if it is installed.
+# Taken from http://docs.python.org/2/library/rlcompleter.html
+try:
+    import readline
+except (ImportError, ModuleNotFoundError):
+    # Interestingly this can work on Windows with a simple pip install pyreadline
     try:
-        import readline
+        import pyreadline as readline
     except (ImportError, ModuleNotFoundError):
-        # Interestingly this can work on Windows with a simple pip install pyreadline
-        try:
-            import pyreadline as readline
-        except (ImportError, ModuleNotFoundError):
-            readline = None
-            return
-        else:
-            from pyreadline.rlmain import Readline
-            rl = Readline()
-            return readline
+        readline = None
     else:
-        return readline
+        from pyreadline.rlmain import Readline
+
+        rl = Readline()
 
 
 def bind_readline_keys():
@@ -91,18 +98,18 @@ def read_inputrc():
     """Check for an inputrc file."""
     if os.environ.get("INPUTRC"):
         readline.read_inputrc_file(os.environ.get("INPUTRC"))
-    elif Path('~/pyreadlineconfig.ini').is_file():
-        readline.read_inputrc_file(str(Path('~/pyreadlineconfig.ini')))
-    elif Path('~/.inputrc').is_file():
-        readline.read_inputrc_file(os.expanduser('~/.inputrc'))
+    elif Path("~/pyreadlineconfig.ini").is_file():
+        readline.read_inputrc_file(str(Path("~/pyreadlineconfig.ini")))
+    elif Path("~/.inputrc").is_file():
+        readline.read_inputrc_file(os.expanduser("~/.inputrc"))
 
 
 class SimpleCompleter:
     """
     :URL: https://pymotw.com/3/readline/
 
-    The SimpleCompleter class keeps a list of âoptionsâ that are candidates
-    for auto- completion. The complete() method for an instance is designed
+    The SimpleCompleter class keeps a list of options that are candidates
+    for auto-completion. The complete() method for an instance is designed
     to be registered with readline as the source of completions.
 
     The arguments are a text string to complete and a state value,
@@ -156,22 +163,6 @@ def input_loop():
 # Register the completer function
 # OPTIONS = ['start', 'stop', 'list', 'print']
 # readline.set_completer(SimpleCompleter(OPTIONS).complete)
-
-# Originally this part was in an `if __name__ == '__main__' block but I actually
-# want it executed in the global namespace. It should have been written carefully
-# enough that both Linux and Windows can handle it. TUI only but isn't that implied
-# with readline?
-# Do this part first
-readline_logging()
-
-readline = get_readline()
-
-if readline:
-    if getattr(readline, 'parse_and_bind', None):
-        bind_readline_keys()
-    if getattr(readline, "read_inputrc_file", None):
-        read_inputrc()
-
 # TODO: Check what the API is to add a completer to ipython. _ip.add_completer?
 
 # History
@@ -180,7 +171,7 @@ if readline:
 def setup_historyfile(filename=None):
 
     if filename is None:
-        filename = '~/.pdb_history'
+        filename = "~/.pdb_history"
     histfile = os.path.expanduser(filename)
     try:
         readline.read_history_file(filename)
@@ -200,11 +191,27 @@ def teardown_historyfile(histfile=None):
         atexit.register(readline.write_history_file, histfile)
     except OSError:
         logging.error(
-            'History not saved. There were problems saving to ~/.python_history'
+            "History not saved. There were problems saving to ~/.python_history"
         )
 
 
 if __name__ == "__main__":
-    histfile = '~/.python_history'
+    histfile = "~/.python_history"
     setup_historyfile(histfile)
     atexit.register(teardown_historyfile, histfile)
+
+    # Globally available regardless of platform
+    RlCompleter = rlcompleter.Completer()
+
+    if readline:
+        if getattr(readline, "parse_and_bind", None):
+            bind_readline_keys()
+        if getattr(readline, "read_inputrc_file", None):
+            read_inputrc()
+
+        readline.set_completer_delims(" \t\n`@#$%^&*()=+[{]}\\|;:'\",<>?")
+
+        _ip = get_ipython()
+        _ip.set_custom_completer(RlCompleter.complete)
+    else:
+        rl_logger.warning("Readline not imported.")

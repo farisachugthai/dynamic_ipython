@@ -1,4 +1,5 @@
 PYTEST_EXE ?= $(shell which py.test)
+PYTHON_EXE ?= $(shell which python3)
 
 help:
 	@echo "Please use one of the following targets.:"
@@ -6,6 +7,7 @@ help:
 	@echo "pytest"
 	@echo "clean"
 	@echo "clean-all"
+	@echo "install"
 
 html:
 	@cd docs && make html
@@ -27,4 +29,8 @@ clean-all: clean
 	@rm -rf *.egg-info*
 	@rm -rf dist build
 
-.PHONY: help html pytest clean clean-all
+install:
+	$(PYTHON_EXE) setup.py build
+	$(PYTHON_EXE) -m pip install -U -e .
+
+.PHONY: help html pytest clean clean-all install

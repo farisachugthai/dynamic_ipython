@@ -20,7 +20,10 @@ from prompt_toolkit.enums import EditingMode
 from prompt_toolkit.keys import Keys
 from prompt_toolkit.key_binding import KeyBindings, merge_key_bindings
 from prompt_toolkit.key_binding.bindings.basic import load_basic_bindings
-from prompt_toolkit.key_binding.bindings.emacs import load_emacs_bindings, load_emacs_search_bindings
+from prompt_toolkit.key_binding.bindings.emacs import (
+    load_emacs_bindings,
+    load_emacs_search_bindings,
+)
 from prompt_toolkit.key_binding.bindings.mouse import load_mouse_bindings
 from prompt_toolkit.key_binding.bindings.cpr import load_cpr_bindings
 from prompt_toolkit.formatted_text import PygmentsTokens
@@ -29,6 +32,7 @@ from prompt_toolkit.shortcuts.prompt import PromptSession
 from pygments.token import Token
 
 from IPython import get_ipython
+
 # from IPython.core.completer import IPCompleter
 from IPython.core.error import UsageError
 from IPython.terminal.embed import InteractiveShellEmbed
@@ -45,7 +49,15 @@ class IPD(Pdb):
     of the application.
     """
 
-    def __init__(self, shell=None, keys=None, completer=None, prompt_toolkit_application=None, *args, **kwargs):
+    def __init__(
+        self,
+        shell=None,
+        keys=None,
+        completer=None,
+        prompt_toolkit_application=None,
+        *args,
+        **kwargs
+    ):
         """Add everything to call signature.
 
         The original only displays star args and star kwargs.
@@ -71,15 +83,15 @@ class IPD(Pdb):
         self.prompt_toolkit_application = prompt_toolkit_application or self.pt_init()
 
         if kwargs:
-            if kwargs['prompt']:
-                self.prompt = kwargs.pop('prompt')
+            if kwargs["prompt"]:
+                self.prompt = kwargs.pop("prompt")
         else:
-            self.prompt = 'Your Debugger: '
+            self.prompt = "Your Debugger: "
 
         super().__init__(self, *args, **kwargs)
 
     def __repr__(self):
-        return '{!r}\t{!r}'.format(self.__class__.__name__, self.shell.__repr__())
+        return "{!r}\t{!r}".format(self.__class__.__name__, self.shell.__repr__())
 
     # TODO:
     # def __call__(self):
@@ -100,14 +112,16 @@ class IPD(Pdb):
 
     def initialize_keybindings(self):
         """Should make this explicit and as a result independent."""
-        return merge_key_bindings([
-            load_basic_bindings(),
-            load_emacs_bindings(),
-            load_emacs_search_bindings(),
-            load_mouse_bindings(),
-            load_cpr_bindings(),
-            create_ipython_shortcuts(self.shell)
-        ])
+        return merge_key_bindings(
+            [
+                load_basic_bindings(),
+                load_emacs_bindings(),
+                load_emacs_search_bindings(),
+                load_mouse_bindings(),
+                load_cpr_bindings(),
+                create_ipython_shortcuts(self.shell),
+            ]
+        )
 
     def pt_init(self):
         """Override the default initialization for prompt_toolkit."""
@@ -164,8 +178,8 @@ def is_embedded_shell(shell):
 
 def formatted_traceback():
     """Allow a little post mortem introspection."""
-    print('Traceback: Extracted stack\n' + repr(traceback.extract_stack()) + '\n')
-    print('Traceback: Formatted stack\n' + repr(traceback.format_stack()) + '\n')
+    print("Traceback: Extracted stack\n" + repr(traceback.extract_stack()) + "\n")
+    print("Traceback: Formatted stack\n" + repr(traceback.format_stack()) + "\n")
 
 
 def main():
@@ -182,7 +196,7 @@ def main():
 if __name__ == "__main__":
     idebug = main()
 
-    if hasattr(sys, 'last_traceback'):
+    if hasattr(sys, "last_traceback"):
         formatted_traceback()
     else:
         pdb.set_trace()
@@ -191,4 +205,4 @@ if __name__ == "__main__":
     try:
         debugger.prompt()
     except (KeyboardInterrupt, EOFError):
-        sys.exit('Bye!')
+        sys.exit("Bye!")

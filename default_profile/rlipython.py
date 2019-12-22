@@ -28,15 +28,17 @@ def get_default_editor():
 
     """
     try:
-        return os.environ['EDITOR']
+        return os.environ["EDITOR"]
     except UnicodeError:
-        warn("$EDITOR environment variable is not pure ASCII. Using platform "
-             "default editor.")
+        warn(
+            "$EDITOR environment variable is not pure ASCII. Using platform "
+            "default editor."
+        )
     except KeyError:
-        if os.name == 'posix':
-            return 'vi'  # the only one guaranteed to be there!
+        if os.name == "posix":
+            return "vi"  # the only one guaranteed to be there!
         else:
-            return 'notepad'  # same in Windows!
+            return "notepad"  # same in Windows!
 
 
 def get_pasted_lines(sentinel, l_input=input, quiet=False):
@@ -49,20 +51,22 @@ def get_pasted_lines(sentinel, l_input=input, quiet=False):
     quiet :
     """
     if not quiet:
-        print("Pasting code; enter '%s' alone on the line to stop or use Ctrl-D."
-              % sentinel)
+        print(
+            "Pasting code; enter '%s' alone on the line to stop or use Ctrl-D."
+            % sentinel
+        )
         prompt = ":"
     else:
         prompt = ""
     while True:
         try:
-            l = (l_input(prompt))
+            l = l_input(prompt)
             if l == sentinel:
                 return
             else:
                 yield l
         except EOFError:
-            print('<EOF>')
+            print("<EOF>")
             return
 
 
@@ -93,7 +97,7 @@ class ReadlineNoRecord:
             try:
                 self.orig_length = self.current_length()
                 self.readline_tail = self.get_readline_tail()
-            except (AttributeError, IndexError):   # Can fail with pyreadline
+            except (AttributeError, IndexError):  # Can fail with pyreadline
                 self.orig_length, self.readline_tail = 999999, []
         self._nested_level += 1
 
@@ -108,8 +112,10 @@ class ReadlineNoRecord:
                         self.shell.readline.remove_history_item(self.orig_length)
 
                 # If it still doesn't match, just reload readline history.
-                if self.current_length() != self.orig_length \
-                        or self.get_readline_tail() != self.readline_tail:
+                if (
+                    self.current_length() != self.orig_length
+                    or self.get_readline_tail() != self.readline_tail
+                ):
                     self.shell.refill_readline_hist()
             except (AttributeError, IndexError):
                 pass
@@ -139,14 +145,14 @@ class ReadlineInteractiveShell(InteractiveShell):
 
     """
 
-    autoedit_syntax = CBool(False,
-                            help="auto editing of files with syntax errors.")
-    confirm_exit = CBool(True,
-                         help="""
+    autoedit_syntax = CBool(False, help="auto editing of files with syntax errors.")
+    confirm_exit = CBool(
+        True,
+        help="""
         Set to confirm when you try to exit IPython with an EOF (Control-D
         in Unix, Control-Z/Enter in Windows). By typing 'exit' or 'quit',
         you can force a direct exit without any confirmation.""",
-                         )
+    )
     # This display_banner only controls whether or not self.show_banner()
     # is called when mainloop/interact are called.  The default is False
     # because for the terminal based application, the banner behavior
@@ -154,14 +160,17 @@ class ReadlineInteractiveShell(InteractiveShell):
     display_banner = CBool(False)  # This isn't configurable!
     embedded = CBool(False)
     embedded_active = CBool(False)
-    editor = Unicode(get_default_editor(),
-                     help="Set the editor used by IPython (default to $EDITOR/vi/notepad)."
-                     ).tag(config=True)
-    pager = Unicode('less',
-                    help="The shell program to be used for paging.").tag(config=True)
+    editor = Unicode(
+        get_default_editor(),
+        help="Set the editor used by IPython (default to $EDITOR/vi/notepad).",
+    ).tag(config=True)
+    pager = Unicode("less", help="The shell program to be used for paging.").tag(
+        config=True
+    )
 
-    screen_length = Integer(0,
-                            help="""Number of lines of your screen, used to control printing of very
+    screen_length = Integer(
+        0,
+        help="""Number of lines of your screen, used to control printing of very
         long strings.  Strings longer than this number of lines will be sent
         through a pager instead of directly printed.  The default value for
         this is 0, which means IPython will auto-detect your screen size every
@@ -169,17 +178,22 @@ class ReadlineInteractiveShell(InteractiveShell):
         change the behavior of the 'print' keyword, it's only triggered
         internally). If for some reason this isn't working well (it needs
         curses support), specify it yourself. Otherwise don't change the
-        default.""").tag(config=Tre)
+        default.""",
+    ).tag(config=True)
 
     _term_reset = "\033[0m"
     # This is ugly because not only do we have a bunch of ansi escape
     # sequences, but we also have to wrap each escape code in \001 and \002
     # for readline to be able to insert history matches properly.
     # prompt_in1 = "\033[32mIn [\033[32;1m{}\033[0;32m]: " + _term_reset
-    prompt_in1 = "\001\033[32m\002In [\001\033[32;1m\002{}\001\033[0;32m\002]: \001" + _term_reset + "\002"
+    prompt_in1 = (
+        "\001\033[32m\002In [\001\033[32;1m\002{}\001\033[0;32m\002]: \001"
+        + _term_reset
+        + "\002"
+    )
     prompt_in2 = "\001\033[32m\002   ...: \001" + _term_reset + "\002"
 
-    @default('displayhook_class')
+    @default("displayhook_class")
     def _displayhook_class_default(self):
         from IPython.core.displayhook import DisplayHook
 
@@ -194,12 +208,13 @@ class ReadlineInteractiveShell(InteractiveShell):
 
         return OldSchoolPrompt
 
-    term_title = CBool(False,
-                       help="Enable auto setting the terminal title."
-                       ).tag(config=True)
-    usage = Unicode(interactive_usage, help(
-        "now made configurable so you can tell it to shut the fuck up.")).tag(
-        config=True)
+    term_title = CBool(False, help="Enable auto setting the terminal title.").tag(
+        config=True
+    )
+    usage = Unicode(
+        interactive_usage,
+        help=("now made configurable so you can tell it to shut the fuck up."),
+    ).tag(config=True)
 
     # This `using_paste_magics` is used to detect whether the code is being
     # executed via paste magics functions
@@ -227,7 +242,7 @@ class ReadlineInteractiveShell(InteractiveShell):
         Call superclasses's method.
         """
         super().init_display_formatter()
-        self.display_formatter.active_types = ['text/plain']
+        self.display_formatter.active_types = ["text/plain"]
 
     # -------------------------------------------------------------------------
     # Things related to readline
@@ -238,9 +253,9 @@ class ReadlineInteractiveShell(InteractiveShell):
         self.readline_use = True
         self._custom_readline_config = False
         self.readline_parse_and_bind = [
-            'tab: complete',
+            "tab: complete",
             '"\C-l": clear-screen',
-            'set show-all-if-ambiguous on',
+            "set show-all-if-ambiguous on",
             '"\C-o": tab-insert',
             '"\C-r": reverse-search-history',
             '"\C-s": forward-search-history',
@@ -249,8 +264,9 @@ class ReadlineInteractiveShell(InteractiveShell):
             '"\e[A": history-search-backward',
             '"\e[B": history-search-forward',
             '"\C-k": kill-line',
-            '"\C-u": unix-line-discard']
-        self.readline_remove_delims = '-/~'
+            '"\C-u": unix-line-discard',
+        ]
+        self.readline_remove_delims = "-/~"
         self.multiline_history = False
         if self.readline_use:
             from . import rlineimpl as readline
@@ -265,14 +281,14 @@ class ReadlineInteractiveShell(InteractiveShell):
             self.set_readline_completer = no_op
             self.set_custom_completer = no_op
             if self.readline_use:
-                warn('Readline services not available or not loaded.')
+                warn("Readline services not available or not loaded.")
         else:
             self.has_readline = True
             self.readline = readline
-            sys.modules['readline'] = readline
+            sys.modules["readline"] = readline
 
             # Platform-specific configuration
-            if os.name == 'nt':
+            if os.name == "nt":
                 # FIXME - check with Frederick to see if we can harmonize
                 # naming conventions with pyreadline to avoid this
                 # platform-dependent check
@@ -293,18 +309,20 @@ class ReadlineInteractiveShell(InteractiveShell):
 
             # Load user's initrc file (readline config)
             # Or if libedit is used, load editrc.
-            inputrc_name = os.environ.get('INPUTRC')
+            inputrc_name = os.environ.get("INPUTRC")
             if inputrc_name is None:
-                inputrc_name = '.inputrc'
+                inputrc_name = ".inputrc"
                 if readline.uses_libedit:
-                    inputrc_name = '.editrc'
+                    inputrc_name = ".editrc"
                 inputrc_name = os.path.join(self.home_dir, inputrc_name)
             if os.path.isfile(inputrc_name):
                 try:
                     readline.read_init_file(inputrc_name)
                 except:
-                    warn('Problems reading readline initialization file <%s>'
-                         % inputrc_name)
+                    warn(
+                        "Problems reading readline initialization file <%s>"
+                        % inputrc_name
+                    )
 
             # load IPython config after inputrc if user has customized
             if self._custom_readline_config:
@@ -316,7 +334,7 @@ class ReadlineInteractiveShell(InteractiveShell):
             delims = readline.get_completer_delims()
             for d in self.readline_remove_delims:
                 delims = delims.replace(d, "")
-            delims = delims.replace(ESC_MAGIC, '')
+            delims = delims.replace(ESC_MAGIC, "")
             readline.set_completer_delims(delims)
             # Store these so we can restore them if something like rpy2 modifies
             # them.
@@ -339,27 +357,32 @@ class ReadlineInteractiveShell(InteractiveShell):
         (typically over the network by remote frontends).
         """
         # from .completer import RLCompleter
-        from IPython.core.completerlib import (module_completer,
-                                               magic_run_completer, cd_completer, reset_completer)
+        from IPython.core.completerlib import (
+            module_completer,
+            magic_run_completer,
+            cd_completer,
+            reset_completer,
+        )
 
-        self.Completer = RLCompleter(shell=self,
-                                     namespace=self.user_ns,
-                                     global_namespace=self.user_global_ns,
-                                     parent=self,
-                                     )
+        self.Completer = RLCompleter(
+            shell=self,
+            namespace=self.user_ns,
+            global_namespace=self.user_global_ns,
+            parent=self,
+        )
         self.configurables.append(self.Completer)
 
         # Add custom completers to the basic ones built into IPCompleter
-        sdisp = self.strdispatchers.get('complete_command', StrDispatch())
-        self.strdispatchers['complete_command'] = sdisp
+        sdisp = self.strdispatchers.get("complete_command", StrDispatch())
+        self.strdispatchers["complete_command"] = sdisp
         self.Completer.custom_completers = sdisp
 
-        self.set_hook('complete_command', module_completer, str_key='import')
-        self.set_hook('complete_command', module_completer, str_key='from')
-        self.set_hook('complete_command', module_completer, str_key='%aimport')
-        self.set_hook('complete_command', magic_run_completer, str_key='%run')
-        self.set_hook('complete_command', cd_completer, str_key='%cd')
-        self.set_hook('complete_command', reset_completer, str_key='%reset')
+        self.set_hook("complete_command", module_completer, str_key="import")
+        self.set_hook("complete_command", module_completer, str_key="from")
+        self.set_hook("complete_command", module_completer, str_key="%aimport")
+        self.set_hook("complete_command", magic_run_completer, str_key="%run")
+        self.set_hook("complete_command", cd_completer, str_key="%cd")
+        self.set_hook("complete_command", reset_completer, str_key="%reset")
 
         self.init_readline()
         if self.has_readline:
@@ -385,8 +408,9 @@ class ReadlineInteractiveShell(InteractiveShell):
         # Load the last 1000 lines from history
         self.readline.clear_history()
         last_cell = u""
-        for _, _, cell in self.history_manager.get_tail(self.history_load_length,
-                                                        include_latest=True):
+        for _, _, cell in self.history_manager.get_tail(
+            self.history_load_length, include_latest=True
+        ):
             # Ignore blank lines and consecutive duplicates
             cell = cell.rstrip()
             if cell and (cell != last_cell):
@@ -401,9 +425,13 @@ class ReadlineInteractiveShell(InteractiveShell):
                 except (TypeError, ValueError) as e:
                     # The history DB can get corrupted so it returns strings
                     # containing null bytes, which readline objects to.
-                    warn(("Failed to add string to readline history.\n"
-                          "Error: {}\n"
-                          "Cell: {!r}").format(e, cell))
+                    warn(
+                        (
+                            "Failed to add string to readline history.\n"
+                            "Error: {}\n"
+                            "Cell: {!r}"
+                        ).format(e, cell)
+                    )
 
     # -------------------------------------------------------------------------
     # Things related to the terminal
@@ -420,7 +448,7 @@ class ReadlineInteractiveShell(InteractiveShell):
         if not self.screen_length:
             return 0
         else:
-            num_lines_bot = self.separate_in.count('\n') + 1
+            num_lines_bot = self.separate_in.count("\n") + 1
             return self.screen_length - num_lines_bot
 
     def _term_title_changed(self, name, new_value):
@@ -434,7 +462,7 @@ class ReadlineInteractiveShell(InteractiveShell):
         # Enable or disable the terminal title.
         if self.term_title:
             toggle_set_term_title(True)
-            set_term_title('IPython: ' + abbrev_cwd())
+            set_term_title("IPython: " + abbrev_cwd())
         else:
             toggle_set_term_title(False)
 
@@ -450,9 +478,13 @@ class ReadlineInteractiveShell(InteractiveShell):
         # Now define aliases that only make sense on the terminal, because they
         # need direct access to the console in a way that we can't emulate in
         # GUI or web frontend
-        if os.name == 'posix':
-            aliases = [('clear', 'clear'), ('more', 'more'), ('less', 'less'),
-                       ('man', 'man')]
+        if os.name == "posix":
+            aliases = [
+                ("clear", "clear"),
+                ("more", "more"),
+                ("less", "less"),
+                ("man", "man"),
+            ]
         else:
             aliases = []
 
@@ -506,7 +538,7 @@ class ReadlineInteractiveShell(InteractiveShell):
 
         for i in range(hlen - hlen_before_cell):
             self.readline.remove_history_item(hlen - i - 1)
-        stdin_encoding = sys.stdin.encoding or 'utf-8'
+        stdin_encoding = sys.stdin.encoding or "utf-8"
         self.readline.add_history(source_raw.rstrip())
 
         return self.readline.get_current_history_length()
@@ -549,7 +581,9 @@ class ReadlineInteractiveShell(InteractiveShell):
 
             else:
                 try:
-                    prompt = self.separate_in + self.prompt_in1.format(self.execution_count)
+                    prompt = self.separate_in + self.prompt_in1.format(
+                        self.execution_count
+                    )
                 except:
                     self.showtraceback()
             try:
@@ -563,10 +597,11 @@ class ReadlineInteractiveShell(InteractiveShell):
             except KeyboardInterrupt:
                 # double-guard against keyboardinterrupts during kbdint handling
                 try:
-                    self.write('\n' + self.get_exception_only())
+                    self.write("\n" + self.get_exception_only())
                     source_raw = self.input_splitter.raw_reset()
-                    hlen_b4_cell = \
-                        self._replace_rlhist_multiline(source_raw, hlen_b4_cell)
+                    hlen_b4_cell = self._replace_rlhist_multiline(
+                        source_raw, hlen_b4_cell
+                    )
                     more = False
                 except KeyboardInterrupt:
                     pass
@@ -575,13 +610,15 @@ class ReadlineInteractiveShell(InteractiveShell):
                     self.rl_do_indent = False
                     if self.has_readline:
                         self.readline_startup_hook(None)
-                self.write('\n')
+                self.write("\n")
                 self.exit()
             except bdb.BdbQuit:
-                warn('The Python debugger has exited with a BdbQuit exception.\n'
-                     'Because of how pdb handles the stack, it is impossible\n'
-                     'for IPython to properly format this particular exception.\n'
-                     'IPython will resume normal operation.')
+                warn(
+                    "The Python debugger has exited with a BdbQuit exception.\n"
+                    "Because of how pdb handles the stack, it is impossible\n"
+                    "for IPython to properly format this particular exception.\n"
+                    "IPython will resume normal operation."
+                )
             except:
                 # exceptions here are VERY RARE, but they can be triggered
                 # asynchronously by signal handlers, for example.
@@ -594,19 +631,19 @@ class ReadlineInteractiveShell(InteractiveShell):
                     # Run the code directly - run_cell takes care of displaying
                     # the exception.
                     more = False
-                if (self.SyntaxTB.last_syntax_error and
-                        self.autoedit_syntax):
+                if self.SyntaxTB.last_syntax_error and self.autoedit_syntax:
                     self.edit_syntax_error()
                 if not more:
                     source_raw = self.input_splitter.raw_reset()
                     self.run_cell(source_raw, store_history=True)
-                    hlen_b4_cell = \
-                        self._replace_rlhist_multiline(source_raw, hlen_b4_cell)
+                    hlen_b4_cell = self._replace_rlhist_multiline(
+                        source_raw, hlen_b4_cell
+                    )
 
         # Turn off the exit flag, so the mainloop can be restarted if desired
         self.exit_now = False
 
-    def raw_input(self, prompt: object = '') -> object:
+    def raw_input(self, prompt: object = "") -> object:
         """Write a prompt and read a line.
 
         The returned line does not include the trailing newline.
@@ -621,8 +658,10 @@ class ReadlineInteractiveShell(InteractiveShell):
         try:
             line = self.raw_input_original(prompt)
         except ValueError:
-            warn("\n********\nYou or a %run:ed script called sys.stdin.close()"
-                 " or sys.stdout.close()!\nExiting IPython!\n")
+            warn(
+                "\n********\nYou or a %run:ed script called sys.stdin.close()"
+                " or sys.stdout.close()!\nExiting IPython!\n"
+            )
             self.ask_exit()
             return ""
 
@@ -631,7 +670,7 @@ class ReadlineInteractiveShell(InteractiveShell):
         # spaces, if the user's actual input started itself with whitespace.
         if self.autoindent:
             if num_ini_spaces(line) > self.indent_current_nsp:
-                line = line[self.indent_current_nsp:]
+                line = line[self.indent_current_nsp :]
                 self.indent_current_nsp = 0
 
         return line
@@ -671,15 +710,20 @@ class ReadlineInteractiveShell(InteractiveShell):
     def _should_recompile(self, e):
         """Utility routine for edit_syntax_error"""
 
-        if e.filename in ('<ipython console>', '<input>', '<string>',
-                          '<console>', '<BackgroundJob compilation>',
-                          None):
+        if e.filename in (
+            "<ipython console>",
+            "<input>",
+            "<string>",
+            "<console>",
+            "<BackgroundJob compilation>",
+            None,
+        ):
 
             return False
         try:
-            if (self.autoedit_syntax and
-                not self.ask_yes_no('Return to editor to correct syntax error? '
-                                    '[Y/n] ', 'y')):
+            if self.autoedit_syntax and not self.ask_yes_no(
+                "Return to editor to correct syntax error? " "[Y/n] ", "y"
+            ):
                 return False
         except EOFError:
             return False
@@ -689,12 +733,14 @@ class ReadlineInteractiveShell(InteractiveShell):
                 return int(x)
             except TypeError:
                 return 0
+
         # always pass integer line and offset values to editor hook
         try:
-            self.hooks.fix_error_editor(e.filename,
-                                        int0(e.lineno), int0(e.offset), e.msg)
+            self.hooks.fix_error_editor(
+                e.filename, int0(e.lineno), int0(e.offset), e.msg
+            )
         except TryNext:
-            warn('Could not open editor')
+            warn("Could not open editor")
             return False
         return True
 
@@ -711,7 +757,7 @@ class ReadlineInteractiveShell(InteractiveShell):
 
         This method calls the ask_exit callback."""
         if self.confirm_exit:
-            if self.ask_yes_no('Do you really want to exit ([y]/n)?', 'y', 'n'):
+            if self.ask_yes_no("Do you really want to exit ([y]/n)?", "y", "n"):
                 self.ask_exit()
         else:
             self.ask_exit()
@@ -733,8 +779,10 @@ class ReadlineInteractiveShell(InteractiveShell):
         """
         super().showindentationerror()
         if not self.using_paste_magics:
-            print("If you want to paste code into IPython, try the "
-                  "%paste and %cpaste magic functions.")
+            print(
+                "If you want to paste code into IPython, try the "
+                "%paste and %cpaste magic functions."
+            )
 
 
 InteractiveShellABC.register(TerminalInteractiveShell)

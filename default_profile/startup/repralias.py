@@ -4,7 +4,7 @@ from reprlib import Repr
 
 from IPython.core.getipython import get_ipython
 
-from . import STARTUP_LOGGER
+from default_profile.startup import STARTUP_LOGGER
 
 
 def get_aliases(shell=None):
@@ -32,7 +32,7 @@ class ReprAlias(Repr):
         """
         self.aliases = aliases or get_aliases()
         if len(self.aliases) == 0:
-            STARTUP_LOGGER.exception('Length of repralias.ReprAlias.aliases was 0')
+            STARTUP_LOGGER.exception("Length of repralias.ReprAlias.aliases was 0")
 
     def transform_aliases_to_dict(self):
         """Ensure everythings funcional. Then.
@@ -49,11 +49,12 @@ class ReprAlias(Repr):
         return flattened_dict
 
     def __repr__(self):
-        return '{}: {} aliases'.format(self.__class__.__name__, len(self.aliases))
+        return "{}: {} aliases".format(self.__class__.__name__, len(self.aliases))
 
     def __str__(self):
-        return '{}\n{}'.format(self.__class__.__name__,
-                               self.repr_dict(self.aliases, 15))
+        return "{}\n{}".format(
+            self.__class__.__name__, self.repr_dict(self.aliases, 15)
+        )
 
     def __add__(self):
         # todo

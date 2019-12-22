@@ -31,17 +31,21 @@ from pathlib import Path
 
 from IPython.terminal.prompts import ClassicPrompts
 from IPython import version_info
+
 # THIS IS THE MODULE! Its too exciting to able to execute this script
 # directly from within python and not get an error for a func call with no
 # import
 from traitlets.config import get_config, Configurable
 from traitlets.config.application import LevelFormatter
 
-default_log_format = '%(highlevel)s %(created)f %(module)s %(levelname)s  %(message)s'
-default_formatter = LevelFormatter(fmt=default_log_format)
+default_traitlets_log_format = (
+    "%(highlevel)s %(created)f %(module)s %(levelname)s  %(message)s"
+)
+default_formatter = LevelFormatter(fmt=default_traitlets_log_format)
 
 IPYTHON_CONFIG_HANDLER = logging.StreamHandler()
 
+default_log_format = "%(created)f %(module)s %(levelname)s  %(message)s"
 logging.basicConfig(level=logging.INFO, format=default_log_format)
 
 c = get_config()
@@ -52,7 +56,7 @@ try:
     import default_profile
 except:  # noqa
     default_profile = None
-    logging.error('import error for default_profile')
+    logging.error("import error for default_profile")
 else:
     # This is the real test
     # I want this loaded too so that I don't have to rewrite all my startup junk
@@ -183,12 +187,12 @@ c.InteractiveShellApp.reraise_ipython_extension_failures = False
 
 # The date format used by logging formatters for %(asctime)s
 # Default: '%Y-%m-%d %H:%M:%S'
-c.Application.log_datefmt = '%Y-%m-%d %H:%M:%S'
+c.Application.log_datefmt = "%Y-%m-%d %H:%M:%S"
 
 # The Logging format template
 # Default: '[%(name)s]%(highlevel)s %(message)s'
 # Todo: Import traitlets.config.application.LevelFormatter
-c.Application.log_format = '%(module) %(created)f [%(name)s] %(message)s'
+c.Application.log_format = "%(module)s %(created)f [ %(name)s ] %(message)s"
 
 # Set the log level by value or name.
 c.Application.log_level = 20
@@ -227,7 +231,7 @@ else:
 # c.BaseIPythonApplication.overwrite = False
 
 # The IPython profile to use.
-c.BaseIPythonApplication.profile = 'default'
+c.BaseIPythonApplication.profile = "default"
 
 # Create a massive crash report when IPython encounters what may be an internal
 #  error.  The default is to append a short message to the usual traceback
@@ -254,7 +258,7 @@ c.TerminalIPythonApp.force_interact = False
 # c.TerminalIPythonApp.quick = False
 
 # Dec 08, 2019: Adding this in
-c.TerminalIPythonApp.log_format = '%(module) %(created)f [%(name)s]  %(message)s '
+c.TerminalIPythonApp.log_format = "%(module) %(created)f [%(name)s]  %(message)s "
 
 # Configure matplotlib for interactive use with the default matplotlib backend.
 
@@ -272,10 +276,10 @@ except (ImportError, ModuleNotFoundError):
 except OSError:
     c.TerminalIPythonApp.matplotlib = None
 except Exception as e:
-    if getattr(sys, 'exc_info', None):
+    if getattr(sys, "exc_info", None):
         print(sys.exc_info()[2])
 else:
-    c.TerminalIPythonApp.matplotlib = 'auto'
+    c.TerminalIPythonApp.matplotlib = "auto"
     # TODO: I accidentally set this as a config of InteractiveShellApp.
     # Was this why i've eeen having so many unexplainable mpl problems?
     # Why is this a problem and what causes it?
@@ -335,7 +339,7 @@ c.InteractiveShell.banner1 = ""
 #  c.InteractiveShell.banner1 = rewritten_banner
 
 # The part of the banner to be printed after the profile
-c.InteractiveShell.banner2 = ''
+c.InteractiveShell.banner2 = ""
 
 # Set the size of the output cache. The default is 1000, you can change it
 # permanently in your config file. Setting it to 0 completely disables the
@@ -351,7 +355,7 @@ c.InteractiveShell.cache_size = 10000
 c.InteractiveShell.color_info = True
 
 # Set the color scheme (NoColor, Neutral, Linux, or LightBG).
-c.InteractiveShell.colors = 'Linux'
+c.InteractiveShell.colors = "Linux"
 
 c.InteractiveShell.debug = True
 
@@ -362,10 +366,10 @@ c.InteractiveShell.debug = True
 #  regular output instead.
 # Only if we don't have bat.
 
-if platform.system() == 'Windows':
+if platform.system() == "Windows":
     c.InteractiveShell.display_page = True
 else:
-    if shutil.which('bat'):
+    if shutil.which("bat"):
         c.InteractiveShell.display_page = False
 
 # (Provisional API) enables html representation in mime bundles sent to pagers.
@@ -395,6 +399,11 @@ c.InteractiveShell.history_load_length = 10000
 # Select the loop runner that will be used to execute top-level asynchronous
 # code
 # c.InteractiveShell.loop_runner = 'IPython.core.interactiveshell._asyncio_runner'
+# c.InteractiveShell.loop_runner = None
+# TODO: allow_none should be added
+# File "/data/data/com.termux/files/home/.local/share/virtualenvs/dynamic_ipython-mVJ3Ohov/lib/python3.8/site-packages/IPython/core/interactiveshell.py", line 402, in _import_runner
+#     raise ValueError('loop_runner must be callable')
+# ValueError: loop_runner must be callable
 
 # TODO: What is this?
 # --TerminalInteractiveShell.object_info_string_level=<Enum>
@@ -459,11 +468,11 @@ c.InteractiveShell.wildcards_case_sensitive = False
 
 # 'all', 'last', 'last_expr' or 'none', 'last_expr_or_assign' specifying which
 #  nodes should be run interactively (displaying output from expressions).
-c.TerminalInteractiveShell.ast_node_interactivity = 'last_expr_or_assign'
+c.TerminalInteractiveShell.ast_node_interactivity = "last_expr_or_assign"
 
 # Autoformatter to reformat Terminal code. Can be `'black'` or `None`
-if shutil.which('black'):
-    c.TerminalInteractiveShell.autoformatter = 'black'
+if shutil.which("black"):
+    c.TerminalInteractiveShell.autoformatter = "black"
 else:
     c.TerminalInteractiveShell.autoformatter = None
 
@@ -475,28 +484,28 @@ c.TerminalInteractiveShell.confirm_exit = False
 # Options for displaying tab completions, 'column', 'multicolumn', and
 #  'readlinelike'. These options are for `prompt_toolkit`, see `prompt_toolkit`
 #  documentation for more information.
-c.TerminalInteractiveShell.display_completions = 'readlinelike'
+c.TerminalInteractiveShell.display_completions = "readlinelike"
 
 # Shortcut style to use at the prompt. 'vi' or 'emacs'.
 # Ah I forgot <C-a> on Tmux and Emacs clobber.
 
 # Well windows doesn't get tmux so.
 
-if platform.system() == 'Windows':
-    c.TerminalInteractiveShell.editing_mode = 'emacs'
+if platform.system() == "Windows":
+    c.TerminalInteractiveShell.editing_mode = "emacs"
 else:
     if os.environ.get("TMUX"):
-        c.TerminalInteractiveShell.editing_mode = 'vi'
+        c.TerminalInteractiveShell.editing_mode = "vi"
         # I don't know if this is the right way to do this
         c.TerminalInteractiveShell.prompt_includes_vi_mode = False
     else:
-        c.TerminalInteractiveShell.editing_mode = 'emacs'
+        c.TerminalInteractiveShell.editing_mode = "emacs"
 
 # TODO: What is the API for traitlets.LazyConfigValue? It doesn't have a log method.
 # c.log("Editing Mode:\t {!s}".format(c.TerminalInteractiveShell.editing_mode))
 
 # Set the editor used by IPython (default to $EDITOR/vi/notepad).
-c.TerminalInteractiveShell.editor = 'nvim'
+c.TerminalInteractiveShell.editor = "nvim"
 
 # Allows to enable/disable the prompt toolkit history search
 # c.TerminalInteractiveShell.enable_history_search = True
@@ -525,17 +534,18 @@ c.TerminalInteractiveShell.extra_open_editor_shortcuts = True
 # Try to import my Gruvbox class. Can be found at
 # https://github.com/farisachugthai/Gruvbox_IPython
 
-if platform.system() == 'Windows':
+if platform.system() == "Windows":
     from pygments.styles.friendly import FriendlyStyle
+
     # I know it's odd making this platform specific but everything is completely illegible otherwise
-    c.TerminalInteractiveShell.highlighting_style = FriendlyStyle
+    c.TerminalInteractiveShell.highlighting_style = "friendly"
 else:
     try:
         from gruvbox.style import GruvboxDarkHard
     except (ImportError, ModuleNotFoundError):
-        c.TerminalInteractiveShell.highlighting_style = 'Friendly'
+        c.TerminalInteractiveShell.highlighting_style = "friendly"
     else:
-        c.TerminalInteractiveShell.highlighting_style = 'GruvboxDarkHard'
+        c.TerminalInteractiveShell.highlighting_style = "GruvboxDarkHard"
 
 
 def get_env():
@@ -544,19 +554,19 @@ def get_env():
 
 
 environment = get_env()
-if 'LESS' not in environment:
+if "LESS" not in environment:
     os.environ.setdefault("LESS", "JRKMLigeF")
     os.environ.setdefault("LESSHISTSIZE", "5000")
 
-if 'LESS_TERMCAP_mb' not in environment:
+if "LESS_TERMCAP_mb" not in environment:
     # Who is curios as to whether this is gonna work or not?
-    os.environ.setdefault('LESS_TERMCAP_mb', r'\e[01;31m')
-    os.environ.setdefault('LESS_TERMCAP_md', r'\e[01;38;5;180m')
-    os.environ.setdefault('LESS_TERMCAP_me', r'\e[0m')
-    os.environ.setdefault('LESS_TERMCAP_se', r'\e[0m')
-    os.environ.setdefault('LESS_TERMCAP_so', r'\e[03;38;5;202m')
-    os.environ.setdefault('LESS_TERMCAP_ue', r'\e[0m')
-    os.environ.setdefault('LESS_TERMCAP_us', r'\e[04;38;5;139m')
+    os.environ.setdefault("LESS_TERMCAP_mb", r"\e[01;31m")
+    os.environ.setdefault("LESS_TERMCAP_md", r"\e[01;38;5;180m")
+    os.environ.setdefault("LESS_TERMCAP_me", r"\e[0m")
+    os.environ.setdefault("LESS_TERMCAP_se", r"\e[0m")
+    os.environ.setdefault("LESS_TERMCAP_so", r"\e[03;38;5;202m")
+    os.environ.setdefault("LESS_TERMCAP_ue", r"\e[0m")
+    os.environ.setdefault("LESS_TERMCAP_us", r"\e[04;38;5;139m")
 
 # Override highlighting format for specific tokens
 # Comments were genuinely impossible to read. Might need to override
@@ -564,7 +574,7 @@ if 'LESS_TERMCAP_mb' not in environment:
 # c.TerminalInteractiveShell.highlighting_style_overrides = {Comment: '#ffffff'}
 
 # No help docs? Update when you find the sauce
-#c.TerminalInteractiveShell.mime_renderers = {}
+# c.TerminalInteractiveShell.mime_renderers = {}
 
 # Enable mouse support in the prompt (Note: prevents selecting text with the
 # mouse)
@@ -588,6 +598,7 @@ class StandardPythonPrompt(ClassicPrompts):
     [(Token.Prompt, '>>> ')]
 
     """
+
     def __repr__(self):
         """The most boiler-platey repr I can come up with."""
         return self.__class__.__name__
@@ -618,7 +629,7 @@ c.TerminalInteractiveShell.term_title = True
 
 # Customize the terminal title format.  This is a python format string.
 # Available substitutions are: {cwd}.
-c.TerminalInteractiveShell.term_title_format = 'IPython: {cwd}'
+c.TerminalInteractiveShell.term_title_format = "IPython: {cwd}"
 
 # Use 24bit colors instead of 256 colors in prompt highlighting. If your
 # terminal supports true color, the following command should print 'TRUECOLOR'
@@ -628,7 +639,7 @@ c.TerminalInteractiveShell.true_color = True
 # Switch modes for the IPython exception handlers.
 # Default: 'Context'
 # Choices: ['Context', 'Plain', 'Verbose', 'Minimal']
-c.TerminalInteractiveShell.xmode = 'Minimal'
+c.TerminalInteractiveShell.xmode = "Minimal"
 
 # ----------------------------------------------------------------------------
 # HistoryAccessor(HistoryAccessorBase) configuration
@@ -714,7 +725,7 @@ c.HistoryManager.db_log_output = True
 
 # 05/18/19: I'm enabling this as it overrides the logic used for profile in
 # the `BaseIPythonApplication` section
-c.ProfileDir.location = os.path.join(home, '', '.ipython')
+c.ProfileDir.location = os.path.join(home, "", ".ipython")
 
 # ----------------------------------------------------------------------------
 # BaseFormatter(Configurable) configuration
@@ -747,6 +758,7 @@ class BaseFormatterDoc(Configurable):
     .. seealso:: :mod:`IPython.lib.pretty`.
 
     """
+
     def __init__(self, *args, **kwargs):
         """Initialize a BaseFormatter and get some Sphinx help.
 
