@@ -30,7 +30,7 @@ import traceback
 from pathlib import Path
 
 from IPython.terminal.prompts import ClassicPrompts
-from IPython import version_info
+from IPython.core.release import version_info
 
 # THIS IS THE MODULE! Its too exciting to able to execute this script
 # directly from within python and not get an error for a func call with no
@@ -91,6 +91,19 @@ if ModuleNotFoundError not in dir(builtins):
             return "{}\n{}".format(self.__class__.__name__, self.__traceback__)
 
 
+try:
+    import default_profile
+except (ImportError, ModuleNotFoundError):
+    default_profile = None
+    logging.error("import error for default_profile")
+else:
+    # This is the real test
+    # I want this loaded too so that I don't have to rewrite all my startup junk
+    try:
+        from default_profile import startup
+    except Exception as e:
+        traceback.print_exc(e)
+
 # def loaded_config(loaded=None):
 #     """Just noticed IPython loads this file twice."""
 #     if loaded is None:
@@ -131,7 +144,14 @@ if ModuleNotFoundError not in dir(builtins):
 # c.InteractiveShellApp.exec_lines = []
 
 # A list of dotted module names of IPython extensions to load.
-c.InteractiveShellApp.extensions = []
+# try:
+#     from default_profile.extensions.storemagic import StoreAndLoadMagics
+# except (ImportError, ModuleNotFoundError):
+#     c.InteractiveShellApp.extensions = []
+# else:
+#     c.InteractiveShellApp.extensions = [
+#         'default_profile.extensions.storemagic'
+#     ]
 
 # dotted module name of an IPython extension to load.
 # c.InteractiveShellApp.extra_extension = ''
@@ -299,6 +319,7 @@ else:
 # c.InteractiveShell.ast_transformers = []
 
 # Automatically run await statement in the top level repl.
+# Must be boolean. Where do we specify the runner?
 if version_info > (7, 2):
     c.InteractiveShell.autoawait = True
 else:
