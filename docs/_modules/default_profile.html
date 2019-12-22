@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Jupyter Suite &#8212; Dynamic IPython: version0.0.2</title>
+    <title>default_profile &#8212; Dynamic IPython: version0.0.2</title>
     <link rel="stylesheet" href="../_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript" src="../_static/language_data.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
-    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/jupyter/index.html" />
+    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
 <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" />
@@ -42,7 +42,8 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Dynamic IPython</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Dynamic IPython</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -51,61 +52,67 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-<div class="section" id="jupyter-suite">
-<span id="jupyter"></span><h1>Jupyter Suite<a class="headerlink" href="#jupyter-suite" title="Permalink to this headline">¶</a></h1>
-<p>Here are the default configuration files for the Jupyter application
-suite. These have been commented and marked up as appropriate.</p>
-<div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">Jupyter configuration</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="qtconsole.html">Jupyter QTConsole</a></li>
-</ul>
-</div>
-<p>Interrupting text.</p>
-<span class="target" id="module-jupyter_console_config"></span><p>Sep 05, 2019:
-This is quite the odd program.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">jupyter_console.ptshell</span> <span class="kn">import</span> <span class="n">ZMQTerminalIPythonApp</span><span class="p">,</span> <span class="n">ZMQTerminalInteractiveShell</span>
-</pre></div>
-</div>
-<p>If you read the help for the ZMQTerminalInteractiveShell it indicates that you
-can retrieve the global instance with ZMQTerminalInteractiveShell(self).instance.</p>
-<p>As a guess I’d imagine this is true because that class specifically subclasses
-the traitlets object, SingletonConfigurable.</p>
-<p>Running that raised an error for me however.</p>
-<p>And oddly, running:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">traitlets.config</span> <span class="kn">import</span> <span class="n">get_config</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">get_config</span><span class="p">()</span>
-</pre></div>
-</div>
-<p>Only returned information about IPython…</p>
-<p>So I ran some information about the ZMQTerminalIPythonApp to see if that
-fared any better and:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [47]: </span><span class="n">jup</span> <span class="o">=</span> <span class="n">ZMQTerminalIPythonApp</span><span class="p">()</span>
-<span class="gp">In [48]: </span><span class="n">jup</span><span class="o">.</span><span class="n">aliases</span>
-<span class="gh">Out[48]:</span>
-<span class="go">{&#39;log-level&#39;: &#39;Application.log_level&#39;,</span>
-<span class="go">&#39;config&#39;: &#39;JupyterApp.config_file&#39;,</span>
-<span class="go">&#39;ip&#39;: &#39;JupyterConsoleApp.ip&#39;,</span>
-<span class="go">&#39;transport&#39;: &#39;JupyterConsoleApp.transport&#39;,</span>
-<span class="go">&#39;hb&#39;: &#39;JupyterConsoleApp.hb_port&#39;,</span>
-<span class="go">&#39;shell&#39;: &#39;JupyterConsoleApp.shell_port&#39;,</span>
-<span class="go">&#39;iopub&#39;: &#39;JupyterConsoleApp.iopub_port&#39;,</span>
-<span class="go">&#39;stdin&#39;: &#39;JupyterConsoleApp.stdin_port&#39;,</span>
-<span class="go">&#39;existing&#39;: &#39;JupyterConsoleApp.existing&#39;,</span>
-<span class="go">&#39;f&#39;: &#39;JupyterConsoleApp.connection_file&#39;,</span>
-<span class="go">&#39;kernel&#39;: &#39;JupyterConsoleApp.kernel_name&#39;,</span>
-<span class="go">&#39;ssh&#39;: &#39;JupyterConsoleApp.sshserver&#39;}</span>
-</pre></div>
-</div>
-<p>Needless to say none of those aliases worked in the shell for me.
-..what the hell is this?</p>
-<span class="target" id="module-jupyter_contrib_nbextension_config"></span><span class="target" id="module-jupyter_labextension_config"></span><span class="target" id="module-jupyter_nbconvert_config"></span><div class="admonition-todo admonition" id="id1">
-<p class="admonition-title">Todo</p>
-<p>Why isn’t this one working in the autosummary?</p>
-<p>jupyter_notebook_config</p>
-</div>
-</div>
+<h1>Source code for default_profile</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;Initialize the global IPython instance and begin configuring.</span>
 
+<span class="sd">The heart of all IPython and console related code lives here.</span>
+
+<span class="sd">Moved ask_for_import up here so we can import it from all of the profiles</span>
+<span class="sd">below without intermingling.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="n">default_log_format</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%(module) %</span><span class="s1">(created)f [</span><span class="si">%(name)s</span><span class="s1">] </span><span class="si">%(highlevel)s</span><span class="s1">  </span><span class="si">%(message)s</span><span class="s1"> &#39;</span>
+<span class="n">PROFILE_DEFAULT_LOG</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;default_profile&#39;</span><span class="p">)</span>
+<span class="n">PROFILE_DEFAULT_LOG</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
+<span class="n">PROFILE_DEFAULT_HANDLER</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">()</span>
+<span class="n">PROFILE_DEFAULT_HANDLER</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
+<span class="n">PROFILE_DEFAULT_FORMATTER</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="n">fmt</span><span class="o">=</span><span class="n">default_log_format</span><span class="p">)</span>
+<span class="n">PROFILE_DEFAULT_HANDLER</span><span class="o">.</span><span class="n">addFilter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Filterer</span><span class="p">())</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="c1"># these should always be available</span>
+    <span class="kn">import</span> <span class="nn">IPython</span>  <span class="c1"># noqa F0401</span>
+    <span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>  <span class="c1"># noqa F0401</span>
+<span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="n">ModuleNotFoundError</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.sphinxext</span> <span class="kn">import</span> <span class="n">custom_doctests</span><span class="p">,</span> <span class="n">magics</span>
+<span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="n">ModuleNotFoundError</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">sys</span><span class="p">,</span> <span class="s1">&#39;last_value&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">PROFILE_DEFAULT_LOG</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">last_value</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="ask_for_import"><a class="viewcode-back" href="../api/default_profile.html#default_profile.ask_for_import">[docs]</a><span class="k">def</span> <span class="nf">ask_for_import</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">package</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Import a module and return `None` if it&#39;s not found.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mod : str</span>
+<span class="sd">        Module to import</span>
+<span class="sd">    package : str, optional</span>
+<span class="sd">        Package the module is found in.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    imported : mod</span>
+<span class="sd">        Module as imported by :func:`importlib.import_module`.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">imported</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">package</span><span class="o">=</span><span class="n">package</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="n">ModuleNotFoundError</span><span class="p">):</span>
+        <span class="k">pass</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">imported</span></div>
+
+</pre></div>
 
           </div>
         </div>
@@ -128,6 +135,10 @@ fared any better and:</p>
 <ul>
   <li><a href="../index.html">Documentation overview</a>
     <ul>
+      <li><a href="index.html">Module code</a>
+        <ul>
+        </ul>
+      </li>
     </ul>
 </ul>
 </li>
@@ -178,17 +189,15 @@ fared any better and:</p>
 <li class="toctree-l1"><a class="reference internal" href="../jobcontrol.html">Job Control</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../todo.html">Todo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../dev.html">Developers Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../jupyter/index.html">jupyter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../jupyter/qtconsole.html">Jupyter QTConsole</a></li>
+</ul>
+</li>
 </ul>
 
     
 </div>
 
-<div role="note" aria-label="source link">
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/jupyter/index.rst.txt" rel="nofollow">Show Source</a></li>
-  </ul>
-</div>
         </div>
       </div>
       <div class="clearer"></div>
@@ -202,7 +211,8 @@ fared any better and:</p>
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Dynamic IPython</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Dynamic IPython</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

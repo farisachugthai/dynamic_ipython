@@ -44,7 +44,7 @@
              >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="../startup.html" accesskey="U">default_profile.startup</a> &#187;</li> 
+          <li class="nav-item nav-item-2"><a href="../../default_profile.html" accesskey="U">default_profile</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -55,7 +55,11 @@
             
 <h1>Source code for default_profile.startup.31_yank_last_arg</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Started with:</span>
+
 <span class="sd">https://gist.githubusercontent.com/konradkonrad/7143fa8407804e37132e4ea90175f2d8/raw/ef2f570fc67fd5d9d227f9ae0363e10907831c97/01-esc-dot.py</span>
+
+<span class="sd">Has since grown to ~200 key bindings.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 
@@ -63,10 +67,14 @@
 <span class="kn">from</span> <span class="nn">prompt_toolkit.enums</span> <span class="kn">import</span> <span class="n">DEFAULT_BUFFER</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.keys</span> <span class="kn">import</span> <span class="n">Keys</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding</span> <span class="kn">import</span> <span class="n">KeyBindings</span><span class="p">,</span> <span class="n">merge_key_bindings</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.auto_suggest</span> <span class="kn">import</span> <span class="n">load_auto_suggest_bindings</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.basic</span> <span class="kn">import</span> <span class="n">load_basic_bindings</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.cpr</span> <span class="kn">import</span> <span class="n">load_cpr_bindings</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.completion</span> <span class="kn">import</span> <span class="n">display_completions_like_readline</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.emacs</span> <span class="kn">import</span> <span class="n">load_emacs_bindings</span><span class="p">,</span> <span class="n">load_emacs_search_bindings</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.mouse</span> <span class="kn">import</span> <span class="n">load_mouse_bindings</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.cpr</span> <span class="kn">import</span> <span class="n">load_cpr_bindings</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.open_in_editor</span> <span class="kn">import</span> <span class="n">load_open_in_editor_bindings</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.page_navigation</span> <span class="kn">import</span> <span class="n">load_page_navigation_bindings</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.filters</span> <span class="kn">import</span> <span class="n">HasFocus</span><span class="p">,</span> <span class="n">HasSelection</span><span class="p">,</span> <span class="n">ViInsertMode</span><span class="p">,</span> <span class="n">EmacsInsertMode</span>
 
 <span class="n">insert_mode</span> <span class="o">=</span> <span class="n">ViInsertMode</span><span class="p">()</span> <span class="o">|</span> <span class="n">EmacsInsertMode</span><span class="p">()</span>
@@ -90,13 +98,17 @@
     <span class="k">if</span> <span class="n">custom_key_bindings</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">custom_key_bindings</span> <span class="o">=</span> <span class="n">KeyBindings</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">merge_key_bindings</span><span class="p">([</span>
+        <span class="n">load_auto_suggest_bindings</span><span class="p">(),</span>
         <span class="n">load_basic_bindings</span><span class="p">(),</span>
+        <span class="n">load_cpr_bindings</span><span class="p">(),</span>
         <span class="n">load_emacs_bindings</span><span class="p">(),</span>
         <span class="n">load_emacs_search_bindings</span><span class="p">(),</span>
         <span class="n">load_mouse_bindings</span><span class="p">(),</span>
-        <span class="n">load_cpr_bindings</span><span class="p">(),</span>
+        <span class="n">load_open_in_editor_bindings</span><span class="p">(),</span>
+        <span class="n">load_page_navigation_bindings</span><span class="p">(),</span>
         <span class="n">custom_key_bindings</span><span class="p">,</span>
     <span class="p">])</span></div>
+
 
 <div class="viewcode-block" id="State"><a class="viewcode-back" href="../../../api/default_profile.startup.31_yank_last_arg.html#default_profile.startup.31_yank_last_arg.State">[docs]</a><span class="k">class</span> <span class="nc">State</span><span class="p">:</span>
 <div class="viewcode-block" id="State.__init__"><a class="viewcode-back" href="../../../api/default_profile.startup.31_yank_last_arg.html#default_profile.startup.31_yank_last_arg.State.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -150,31 +162,36 @@
     <span class="n">ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ip</span><span class="p">,</span> <span class="s2">&quot;pt_app&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
-        <span class="c1"># don&#39;t do it this way. if you change it from</span>
-        <span class="n">registry</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">key_bindings</span>
-        <span class="c1"># to</span>
-        <span class="c1"># registry = ip.pt_app.app.key_bindings</span>
-        <span class="c1"># then you&#39;ll end up with a prompt_toolkit.key_binding.key_bindings._MergedKeyBindings</span>
-        <span class="c1"># class which has no `add_binding` method.</span>
+        <span class="n">orig_kb</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">key_bindings</span>
 
     <span class="k">elif</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ip</span><span class="p">,</span> <span class="s2">&quot;pt_cli&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
-        <span class="n">registry</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">pt_cli</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">key_bindings_registry</span>
+        <span class="n">orig_kb</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">pt_cli</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">key_bindings_registry</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;IPython doesn&#39;t have prompt toolkit bindings. Exiting.&quot;</span><span class="p">)</span>
 
     <span class="n">registry</span><span class="o">.</span><span class="n">add_binding</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">Escape</span><span class="p">,</span>
-                            <span class="sa">u</span><span class="s1">&#39;.&#39;</span><span class="p">,</span>
-                            <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span>
-                                    <span class="o">&amp;</span> <span class="o">~</span><span class="n">HasSelection</span><span class="p">()</span>
-                                    <span class="o">&amp;</span> <span class="n">insert_mode</span><span class="p">))(</span><span class="n">yank_last_arg</span><span class="p">)</span>
+                         <span class="sa">u</span><span class="s1">&#39;.&#39;</span><span class="p">,</span>
+                         <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span>
+                                 <span class="o">&amp;</span> <span class="o">~</span><span class="n">HasSelection</span><span class="p">()</span>
+                                 <span class="o">&amp;</span> <span class="n">insert_mode</span><span class="p">))(</span><span class="n">yank_last_arg</span><span class="p">)</span>
     <span class="n">registry</span><span class="o">.</span><span class="n">add_binding</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">Escape</span><span class="p">,</span>
-                            <span class="sa">u</span><span class="s1">&#39;_&#39;</span><span class="p">,</span>
-                            <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span>
-                                    <span class="o">&amp;</span> <span class="o">~</span><span class="n">HasSelection</span><span class="p">()</span>
-                                    <span class="o">&amp;</span> <span class="n">insert_mode</span><span class="p">))(</span><span class="n">yank_last_arg</span><span class="p">)</span>
+                         <span class="sa">u</span><span class="s1">&#39;_&#39;</span><span class="p">,</span>
+                         <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span>
+                                 <span class="o">&amp;</span> <span class="o">~</span><span class="n">HasSelection</span><span class="p">()</span>
+                                 <span class="o">&amp;</span> <span class="n">insert_mode</span><span class="p">))(</span><span class="n">yank_last_arg</span><span class="p">)</span>
     <span class="n">ip</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s1">&#39;post_execute&#39;</span><span class="p">,</span> <span class="n">reset_last_arg_depth</span><span class="p">)</span>
 
-    <span class="n">get_key_bindings</span><span class="p">(</span><span class="n">registry</span><span class="p">)</span>
+    <span class="c1"># Here&#39;s a simple example of using registry. C-i == Tab</span>
+    <span class="n">registry</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlI</span><span class="p">)(</span><span class="n">display_completions_like_readline</span><span class="p">)</span>
+
+    <span class="c1"># add allll the defaults in and bind it back to the shell.</span>
+    <span class="c1"># If we did this correctly, running _ip.pt_app.app.key_bindings.bindings</span>
+    <span class="c1"># should display something like +100 bindings</span>
+    <span class="c1"># since we linked it to the correct attribute of pt_app this should work</span>
+
+    <span class="n">all_kb</span> <span class="o">=</span> <span class="n">get_key_bindings</span><span class="p">(</span><span class="n">registry</span><span class="p">)</span>
+    <span class="c1"># Overwrite our original keybindings</span>
+    <span class="n">orig_kb</span> <span class="o">=</span> <span class="n">all_kb</span>
 </pre></div>
 
           </div>
@@ -200,7 +217,7 @@
     <ul>
       <li><a href="../../index.html">Module code</a>
         <ul>
-      <li><a href="../startup.html">default_profile.startup</a>
+      <li><a href="../../default_profile.html">default_profile</a>
         <ul>
         </ul>
       </li>
@@ -217,6 +234,7 @@
 <div id="sidebartoc">
     <p class="caption"><span class="caption-text">API</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../default_profile.html">Tailor-made profiles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../sphinxext/index.html">Sphinx Extensions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/ipython_sphinx_directive.html">IPython Sphinx Directive</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/lexer.html">New IPython Console Lexer</a></li>
@@ -255,6 +273,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../jobcontrol.html">Job Control</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../todo.html">Todo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../dev.html">Developers Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../jupyter/index.html">jupyter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../jupyter/qtconsole.html">Jupyter QTConsole</a></li>
+</ul>
+</li>
 </ul>
 
     
@@ -275,11 +297,11 @@
              >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="../startup.html" >default_profile.startup</a> &#187;</li> 
+          <li class="nav-item nav-item-2"><a href="../../default_profile.html" >default_profile</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Dec 10, 2019.
+      Last updated on Dec 22, 2019.
     </div>
   </body>
 </html>

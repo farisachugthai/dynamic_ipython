@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>default_profile.extensions.example &#8212; Dynamic IPython: version0.0.2</title>
+    <title>default_profile.extensions.storemagic &#8212; Dynamic IPython: version0.0.2</title>
     <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript" src="../../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../../_static/copybutton.js"></script>
     <script type="text/javascript" src="../../../_static/copybutton.js"></script>
-    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/extensions/example.html" />
+    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/extensions/storemagic.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
 <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" />
@@ -53,69 +53,26 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-<h1>Source code for default_profile.extensions.example</h1><div class="highlight"><pre>
-<span></span><span class="ch">#!/usr/bin/env python</span>
-<span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">=============================================</span>
-<span class="sd">Example of Writing A Custom IPython Extension</span>
-<span class="sd">=============================================</span>
-
-<span class="sd">Usage</span>
-<span class="sd">-----</span>
-
-<span class="sd">.. ipython::</span>
-
-<span class="sd">    In [40]: %load_ext example</span>
+<h1>Source code for default_profile.extensions.storemagic</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Basically a no-op because IPython keeps raising errors.&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+<span class="kn">from</span> <span class="nn">IPython.extensions.storemagic</span> <span class="kn">import</span> <span class="n">StoreMagics</span>
 
 
-<span class="sd">Writing Cell Magics</span>
-<span class="sd">--------------------</span>
+<div class="viewcode-block" id="StoreAndLoadMagics"><a class="viewcode-back" href="../../../api/default_profile.extensions.storemagic.html#default_profile.extensions.storemagic.StoreAndLoadMagics">[docs]</a><span class="k">class</span> <span class="nc">StoreAndLoadMagics</span><span class="p">(</span><span class="n">StoreMagics</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;I keep getting an error about this.&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="StoreAndLoadMagics.__init__"><a class="viewcode-back" href="../../../api/default_profile.extensions.storemagic.html#default_profile.extensions.storemagic.StoreAndLoadMagics.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;TODO: Docstring for function.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">shell</span> <span class="ow">or</span> <span class="n">get_ipython</span><span class="p">()</span></div>
 
-<span class="sd">While not utilized here, a similar execution path can be utilized for</span>
-<span class="sd">:func:`IPython.core.magic.cell_magic()`</span>
+<div class="viewcode-block" id="StoreAndLoadMagics.load_ext"><a class="viewcode-back" href="../../../api/default_profile.extensions.storemagic.html#default_profile.extensions.storemagic.StoreAndLoadMagics.load_ext">[docs]</a>    <span class="k">def</span> <span class="nf">load_ext</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">register_magics</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
 
-
-<span class="sd">Those lines specifically.</span>
-
-<span class="sd">See Also</span>
-<span class="sd">--------</span>
-<span class="sd">IPython.core.magic</span>
-<span class="sd">IPython.terminal.magic</span>
-
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">time</span>
-
-<span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
-<span class="kn">from</span> <span class="nn">IPython.core.magic</span> <span class="kn">import</span> <span class="n">Magics</span><span class="p">,</span> <span class="n">line_magic</span><span class="p">,</span> <span class="n">magics_class</span>
-
-
-<div class="viewcode-block" id="ExampleMagic"><a class="viewcode-back" href="../../../api/default_profile.extensions.example.html#default_profile.extensions.example.ExampleMagic">[docs]</a><span class="nd">@magics_class</span>
-<span class="k">class</span> <span class="nc">ExampleMagic</span><span class="p">(</span><span class="n">Magics</span><span class="p">):</span>
-
-<div class="viewcode-block" id="ExampleMagic.__init__"><a class="viewcode-back" href="../../../api/default_profile.extensions.example.html#default_profile.extensions.example.ExampleMagic.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">ExampleMagic</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">shell</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="ExampleMagic.time_printer"><a class="viewcode-back" href="../../../api/default_profile.extensions.example.html#default_profile.extensions.example.ExampleMagic.time_printer">[docs]</a>    <span class="nd">@line_magic</span>
-    <span class="k">def</span> <span class="nf">time_printer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;An example of a line magic.&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;win&#39;</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span></div></div>
-
-
-<div class="viewcode-block" id="load_ipython_extension"><a class="viewcode-back" href="../../../api/default_profile.extensions.example.html#default_profile.extensions.example.load_ipython_extension">[docs]</a><span class="k">def</span> <span class="nf">load_ipython_extension</span><span class="p">(</span><span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Load the extension in IPython.&quot;&quot;&quot;</span>
-    <span class="n">shell</span><span class="o">.</span><span class="n">register_magics</span><span class="p">(</span><span class="n">ExampleMagic</span><span class="p">)</span>
-    <span class="c1"># _ip.register_magics(ExampleMagic.time_printer)</span>
-    <span class="n">shell</span><span class="o">.</span><span class="n">register_magic_function</span><span class="p">(</span><span class="n">ExampleMagic</span><span class="o">.</span><span class="n">time_printer</span><span class="p">)</span></div>
-
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-    <span class="n">load_ipython_extension</span><span class="p">(</span><span class="n">_ip</span><span class="p">)</span>
+    <span class="c1"># Load the extension in IPython.</span>
+<div class="viewcode-block" id="StoreAndLoadMagics.register_magic"><a class="viewcode-back" href="../../../api/default_profile.extensions.storemagic.html#default_profile.extensions.storemagic.StoreAndLoadMagics.register_magic">[docs]</a>    <span class="k">def</span> <span class="nf">register_magic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ip</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Are you allowed to do this?&quot;&quot;&quot;</span>
+        <span class="n">ip</span><span class="o">.</span><span class="n">register_magics</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div></div>
 </pre></div>
 
           </div>
