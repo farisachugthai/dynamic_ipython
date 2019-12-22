@@ -118,7 +118,7 @@ c.JupyterConsoleApp.confirm_exit = False
 c.Application.log_datefmt = "%Y-%m-%d %H:%M:%S"
 
 # The Logging format template
-c.Application.log_format = "[%(name)s] : %(highlevel)s : %(message)s : "
+c.Application.log_format = "[%(name)s] %(highlevel)s %(message)s"
 
 # Set the log level by value or name.
 c.Application.log_level = 20
@@ -167,8 +167,7 @@ c.ZMQTerminalInteractiveShell.banner = ""
 try:
     from gruvbox.style import GruvboxDarkHard
 except (ImportError, ModuleNotFoundError):
-    # c.ZMQTerminalInteractiveShell.highlighting_style = 'Solarized Dark'
-    pass
+    c.ZMQTerminalInteractiveShell.highlighting_style = "friendly"
 else:
     c.ZMQTerminalInteractiveShell.highlighting_style = "Gruvbox"
 

@@ -152,6 +152,8 @@ else:
 #     c.InteractiveShellApp.extensions = [
 #         'default_profile.extensions.storemagic'
 #     ]
+# You moron. This is what's been raising errors. We need to define a load_ext
+# method on this class
 
 # dotted module name of an IPython extension to load.
 # c.InteractiveShellApp.extra_extension = ''
@@ -564,6 +566,7 @@ else:
     try:
         from gruvbox.style import GruvboxDarkHard
     except (ImportError, ModuleNotFoundError):
+        from pygments.styles.friendly import FriendlyStyle
         c.TerminalInteractiveShell.highlighting_style = "friendly"
     else:
         c.TerminalInteractiveShell.highlighting_style = "GruvboxDarkHard"

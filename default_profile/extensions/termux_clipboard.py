@@ -16,8 +16,17 @@ import shutil
 import subprocess
 import sys
 
-from IPython.core.magic import line_magic
+# from prompt_toolkit.contrib
+from IPython.core.getipython import get_ipython
+from IPython.core.magic import line_magic, Magics, magics_class
 
+
+class ClipboardMagics(Magics):
+    """Haven't seen it implemented in a different way than this."""
+
+    def __init__(self, shell=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.shell = shell or get_ipython()
 
 @line_magic
 def termux_clipboard_get(self):
@@ -33,16 +42,7 @@ def load_ipython_extension(ip):
 
 
 def main():
-    """Main function.
-
-    Returns
-    -------
-    TODO
-
-    """
-    from IPython import get_ipython
     shell = get_ipython()
-
     if not shell:
         return
 

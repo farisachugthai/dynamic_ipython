@@ -4,6 +4,7 @@
 import logging
 import platform
 import shutil
+
 # import sys
 import webbrowser
 
@@ -122,17 +123,17 @@ class NonGraphicalEnvironmentError(OSError):
 
 
 # Probably should refactor into a simple function.
-if platform.system() == 'Linux':
-    if os.environ.get('DISPLAY'):
-        if shutil.which('qutebrowser'):
-            c.NotebookApp.browser = 'qutebrowser'
+if platform.system() == "Linux":
+    if os.environ.get("DISPLAY"):
+        if shutil.which("qutebrowser"):
+            c.NotebookApp.browser = "qutebrowser"
     else:
         try:
             browser = webbrowser.get()
         except Exception as e:  # eh
             raise NonGraphicalEnvironmentError(e)
         else:
-            logging.info('Using browser: \t%s ', browser)
+            logging.info("Using browser: \t%s ", browser)
             c.NotebookApp.browser = browser
 
 # The full path to an SSL/TLS certificate file.

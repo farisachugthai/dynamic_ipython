@@ -41,7 +41,9 @@ import traceback
 from datetime import datetime
 
 import IPython
-from IPython import get_ipython
+from IPython.core.getipython import get_ipython
+
+from traitlets.config.application import LevelFormatter
 
 
 class NoUnNamedLoggers(NotImplementedError):
@@ -256,7 +258,7 @@ def betterConfig(name=None, parent=None):
     better_stream.setLevel(logging.WARNING)
     better_logger.addHandler(better_stream)
 
-    better_formatter = logging.Formatter(logging.BASIC_FORMAT)
+    better_formatter = LevelFormatter(BASIC_FORMAT + '%(highlevel)s')
     better_stream.setFormatter(better_formatter)
 
     better_logger.addFilter(logging.Filter())

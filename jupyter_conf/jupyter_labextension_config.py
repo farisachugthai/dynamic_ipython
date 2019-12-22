@@ -54,10 +54,10 @@ c.Application.log_level = 20
 
 # JupyterLab Check
 # Determine if we have a GUI since thatll be hugely necessary
-if platform.platform().startswith('Linux'):
+if platform.platform().startswith("Linux"):
     user_env = os.environ.copy()
     try:
-        user_env.get('DISPLAY')
+        user_env.get("DISPLAY")
     except AttributeError:
         pass
 

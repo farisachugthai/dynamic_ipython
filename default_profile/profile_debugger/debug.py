@@ -116,8 +116,10 @@ def parse_args():
     commands = []
     for opt, optarg in opts:
         if opt in ["-h", "--help"]:
-            getopt.error()
+            getopt.GetOptError()
+            # getopt.error('TODO: Print help.')
         elif opt in ["-c", "--command"]:
+            # print(_usage)
             commands.append(optarg)
 
     if not args:

@@ -24,13 +24,13 @@ Annoyingly the alias for simply --generate-config didn't seem to work.
 # This is an application.
 
 # The date format used by logging formatters for %(asctime)s
-#c.Application.log_datefmt = '%Y-%m-%d %H:%M:%S'
+# c.Application.log_datefmt = '%Y-%m-%d %H:%M:%S'
 
 # The Logging format template
-#c.Application.log_format = '[%(name)s]%(highlevel)s %(message)s'
+# c.Application.log_format = '[%(name)s]%(highlevel)s %(message)s'
 
 # Set the log level by value or name.
-#c.Application.log_level = 30
+# c.Application.log_level = 30
 
 # ------------------------------------------------------------------------------
 # JupyterApp(Application) configuration
@@ -39,16 +39,16 @@ Annoyingly the alias for simply --generate-config didn't seem to work.
 # Base class for Jupyter applications
 
 # Answer yes to any prompts.
-#c.JupyterApp.answer_yes = False
+# c.JupyterApp.answer_yes = False
 
 # Full path of a config file.
-#c.JupyterApp.config_file = ''
+# c.JupyterApp.config_file = ''
 
 # Specify a config file to load.
-#c.JupyterApp.config_file_name = ''
+# c.JupyterApp.config_file_name = ''
 
 # Generate default config file.
-#c.JupyterApp.generate_config = False
+# c.JupyterApp.generate_config = False
 
 # ------------------------------------------------------------------------------
 # BaseExtensionApp(JupyterApp) configuration
@@ -57,16 +57,16 @@ Annoyingly the alias for simply --generate-config didn't seem to work.
 # Base nbextension installer app
 
 # Install from a Python package
-#c.BaseExtensionApp.python = False
+# c.BaseExtensionApp.python = False
 
 # Use the sys.prefix as the prefix
-#c.BaseExtensionApp.sys_prefix = False
+# c.BaseExtensionApp.sys_prefix = False
 
 # Whether to do a user install
-#c.BaseExtensionApp.user = False
+# c.BaseExtensionApp.user = False
 
 # DEPRECATED: Verbosity level
-#c.BaseExtensionApp.verbose = None
+# c.BaseExtensionApp.verbose = None
 
 # ------------------------------------------------------------------------------
 # JupyterNbextensionsConfiguratorApp(BaseExtensionApp) configuration

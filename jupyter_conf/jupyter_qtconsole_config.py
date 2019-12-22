@@ -88,7 +88,7 @@ c.JupyterConsoleApp.kernel_name = "python3"
 c.Application.log_datefmt = "%Y-%m-%d %H:%M:%S"
 
 # The Logging format template
-c.Application.log_format = "%(pid)s - [%(name)s] : %(highlevel)s %(message)s"
+c.Application.log_format = "%(pid)s [%(name)s] %(highlevel)s %(message)s"
 
 # Set the log level by value or name.
 c.Application.log_level = 20
@@ -131,7 +131,7 @@ c.JupyterQtConsoleApp.display_banner = False
 # c.JupyterQtConsoleApp.stylesheet = ''
 
 
-def consoleWidgetconf():
+def ConsoleWidgetDoc():
     """
     -----------------------------------------------------------------------
     consoleWidget(NewBase) configuration
@@ -207,7 +207,7 @@ c.ConsoleWidget.console_width = 120
 # I wonder if we can give multiple values
 # We cant. Also don't use this it's genuinely impossible to read
 # c.ConsoleWidget.font_family = "Source Code Pro Light"
-c.ConsoleWidget.font_family = 'Hack'
+c.ConsoleWidget.font_family = "Hack"
 
 # The font size. If unconfigured, Qt will be entrusted with the size of the
 #  font.
