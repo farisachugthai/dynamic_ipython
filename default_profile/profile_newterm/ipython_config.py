@@ -31,6 +31,7 @@ import traceback
 from pathlib import Path
 
 from IPython import version_info
+
 # THIS IS THE MODULE! Its too exciting to able to execute this script
 # directly from within python and not get an error for a func call with no
 # import
@@ -45,14 +46,14 @@ try:
     import default_profile
 except:  # noqa
     default_profile = None
-    logging.error('import error for default_profile')
+    logging.error("import error for default_profile")
 else:
     # This is the real test
     # I want this loaded too so that I don't have to rewrite all my startup junk
     try:
         from default_profile import profile_newterm
     except Exception as e:
-        if getattr(sys, 'exc_info', None):
+        if getattr(sys, "exc_info", None):
             traceback.print_exc(*sys.exc_info())
 
 try:
@@ -168,7 +169,7 @@ c.InteractiveShellApp.reraise_ipython_extension_failures = False
 
 # The date format used by logging formatters for %(asctime)s
 # Default: '%Y-%m-%d %H:%M:%S'
-c.Application.log_datefmt = '%Y-%m-%d %H:%M:%S'
+c.Application.log_datefmt = "%Y-%m-%d %H:%M:%S"
 
 # The Logging format template
 # Default: '[%(name)s]%(highlevel)s %(message)s'
@@ -211,7 +212,7 @@ else:
 # c.BaseIPythonApplication.overwrite = False
 
 # The IPython profile to use.
-c.BaseIPythonApplication.profile = 'newterm'
+c.BaseIPythonApplication.profile = "newterm"
 
 # Create a massive crash report when IPython encounters what may be an internal
 #  error.  The default is to append a short message to the usual traceback
@@ -272,7 +273,7 @@ c.TerminalIPythonApp.force_interact = True
 
 # 'all', 'last', 'last_expr' or 'none', 'last_expr_or_assign' specifying which
 #  nodes should be run interactively (displaying output from expressions).
-c.InteractiveShell.ast_node_interactivity = 'last_expr_or_assign'
+c.InteractiveShell.ast_node_interactivity = "last_expr_or_assign"
 
 # AKA:  Make IPython automatically call any callable object even if you didn't type
 
@@ -317,7 +318,7 @@ c.InteractiveShell.banner1 = ""
 #  c.InteractiveShell.banner1 = rewritten_banner
 
 # The part of the banner to be printed after the profile
-c.InteractiveShell.banner2 = ''
+c.InteractiveShell.banner2 = ""
 
 # Set the size of the output cache. The default is 1000, you can change it
 # permanently in your config file. Setting it to 0 completely disables the
@@ -333,7 +334,7 @@ c.InteractiveShell.cache_size = 10000
 c.InteractiveShell.color_info = True
 
 # Set the color scheme (NoColor, Neutral, Linux, or LightBG).
-c.InteractiveShell.colors = 'Linux'
+c.InteractiveShell.colors = "Linux"
 
 c.InteractiveShell.debug = True
 
@@ -344,10 +345,10 @@ c.InteractiveShell.debug = True
 #  regular output instead.
 # Only if we don't have bat.
 
-if platform.system() == 'Windows':
+if platform.system() == "Windows":
     c.InteractiveShell.display_page = True
 else:
-    if shutil.which('bat'):
+    if shutil.which("bat"):
         c.InteractiveShell.display_page = False
 
 # (Provisional API) enables html representation in mime bundles sent to pagers.
@@ -400,7 +401,7 @@ c.InteractiveShell.quiet = False
 
 # Enables rich html representation of docstrings. (This requires the docrepr
 #  module).
-#c.InteractiveShell.sphinxify_docstring = False
+# c.InteractiveShell.sphinxify_docstring = False
 
 
 c.InteractiveShell.wildcards_case_sensitive = False
@@ -408,14 +409,14 @@ c.InteractiveShell.wildcards_case_sensitive = False
 # Switch modes for the IPython exception handlers.
 # Default: 'Context'
 # Choices: ['Context', 'Plain', 'Verbose', 'Minimal']
-c.InteractiveShell.xmode = 'Minimal'
+c.InteractiveShell.xmode = "Minimal"
 
 # ----------------------------------------------------------------------------
 # TerminalInteractiveShell(InteractiveShell) configuration
 # ----------------------------------------------------------------------------
 # Autoformatter to reformat Terminal code. Can be `'black'` or `None`
-if shutil.which('black'):
-    c.TerminalInteractiveShell.autoformatter = 'black'
+if shutil.which("black"):
+    c.TerminalInteractiveShell.autoformatter = "black"
 else:
     c.TerminalInteractiveShell.autoformatter = None
 
@@ -428,30 +429,30 @@ c.TerminalInteractiveShell.confirm_exit = False
 # Options for displaying tab completions, 'column', 'multicolumn', and
 #  'readlinelike'. These options are for `prompt_toolkit`, see `prompt_toolkit`
 #  documentation for more information.
-c.TerminalInteractiveShell.display_completions = 'readlinelike'
+c.TerminalInteractiveShell.display_completions = "readlinelike"
 
 # Shortcut style to use at the prompt. 'vi' or 'emacs'.
 # Ah I forgot <C-a> on Tmux and Emacs clobber.
 
 # Well windows doesn't get tmux so.
 
-if platform.system() == 'Windows':
-    c.TerminalInteractiveShell.editing_mode = 'emacs'
+if platform.system() == "Windows":
+    c.TerminalInteractiveShell.editing_mode = "emacs"
 else:
     if os.environ.get("TMUX"):
-        c.TerminalInteractiveShell.editing_mode = 'vi'
+        c.TerminalInteractiveShell.editing_mode = "vi"
         # I don't know if this is the right way to do this
         c.TerminalInteractiveShell.prompt_includes_vi_mode = False
 # c.TerminalInteractiveShell.display_completions = 'column'
-c.TerminalInteractiveShell.display_completions = 'readlinelike'
+c.TerminalInteractiveShell.display_completions = "readlinelike"
 
-c.TerminalInteractiveShell.editing_mode = 'emacs'
+c.TerminalInteractiveShell.editing_mode = "emacs"
 
 # TODO:
 # c_logger.info("Editing Mode:\t {!s}", c.TerminalInteractiveShell.editing_mode)
 
 # Set the editor used by IPython (default to $EDITOR/vi/notepad).
-c.TerminalInteractiveShell.editor = 'nvim'
+c.TerminalInteractiveShell.editor = "nvim"
 
 # Allows to enable/disable the prompt toolkit history search
 # c.TerminalInteractiveShell.enable_history_search = True
@@ -486,25 +487,26 @@ def get_env():
     return os.environ.copy()
 
 
-if platform.system() == 'Windows':
+if platform.system() == "Windows":
     from pygments.styles import friendly
+
     # I know it's odd making this platform specific but everything is completely illegible otherwise
     c.TerminalInteractiveShell.highlighting_style = friendly
 
 
 environment = get_env()
-if 'LESS' not in environment:
-    os.environ.setdefault('LESS', "JRKMLigeF")
-    os.environ.setdefault('LESSHISTSIZE', '5000')
-if 'LESS_TERMCAP_mb' not in environment:
+if "LESS" not in environment:
+    os.environ.setdefault("LESS", "JRKMLigeF")
+    os.environ.setdefault("LESSHISTSIZE", "5000")
+if "LESS_TERMCAP_mb" not in environment:
     # Who is curios as to whether this is gonna work or not?
-    os.environ.setdefault('LESS_TERMCAP_mb', r'\e[01;31m')
-    os.environ.setdefault('LESS_TERMCAP_md', r'\e[01;38;5;180m')
-    os.environ.setdefault('LESS_TERMCAP_me', r'\e[0m')
-    os.environ.setdefault('LESS_TERMCAP_se', r'\e[0m')
-    os.environ.setdefault('LESS_TERMCAP_so', r'\e[03;38;5;202m')
-    os.environ.setdefault('LESS_TERMCAP_ue', r'\e[0m')
-    os.environ.setdefault('LESS_TERMCAP_us', r'\e[04;38;5;139m')
+    os.environ.setdefault("LESS_TERMCAP_mb", r"\e[01;31m")
+    os.environ.setdefault("LESS_TERMCAP_md", r"\e[01;38;5;180m")
+    os.environ.setdefault("LESS_TERMCAP_me", r"\e[0m")
+    os.environ.setdefault("LESS_TERMCAP_se", r"\e[0m")
+    os.environ.setdefault("LESS_TERMCAP_so", r"\e[03;38;5;202m")
+    os.environ.setdefault("LESS_TERMCAP_ue", r"\e[0m")
+    os.environ.setdefault("LESS_TERMCAP_us", r"\e[04;38;5;139m")
 
 # Override highlighting format for specific tokens
 # Comments were genuinely impossible to read. Might need to override
@@ -513,7 +515,7 @@ if 'LESS_TERMCAP_mb' not in environment:
 
 
 # No help docs? Update when you find the sauce
-#c.TerminalInteractiveShell.mime_renderers = {}
+# c.TerminalInteractiveShell.mime_renderers = {}
 
 # Enable mouse support in the prompt (Note: prevents selecting text with the
 # mouse)
@@ -564,7 +566,7 @@ c.TerminalInteractiveShell.term_title = True
 
 # Customize the terminal title format.  This is a python format string.
 # Available substitutions are: {cwd}.
-c.TerminalInteractiveShell.term_title_format = 'IPython: {cwd}'
+c.TerminalInteractiveShell.term_title_format = "IPython: {cwd}"
 
 # Use 24bit colors instead of 256 colors in prompt highlighting. If your
 # terminal supports true color, the following command should print 'TRUECOLOR'
@@ -575,7 +577,7 @@ c.TerminalInteractiveShell.true_color = True
 # Switch modes for the IPython exception handlers.
 # Default: 'Context'
 # Choices: ['Context', 'Plain', 'Verbose', 'Minimal']
-c.TerminalInteractiveShell.xmode = 'Minimal'
+c.TerminalInteractiveShell.xmode = "Minimal"
 
 # ----------------------------------------------------------------------------
 # HistoryAccessor(HistoryAccessorBase) configuration

@@ -13,7 +13,7 @@ global shell
 shell = get_ipython()
 
 if not shell:
-    sys.exit('startup.__main__: get_ipython returned None')
+    sys.exit("startup.__main__: get_ipython returned None")
 
 
 def wrap_safe_execfile(executed):
@@ -22,9 +22,8 @@ def wrap_safe_execfile(executed):
         shell.safe_execfile(executed)
     except ModuleNotFoundError as e:
         # TODO:
-        return 'ModuleNotFoundError for {}'.format(e.__cause__)
+        return "ModuleNotFoundError for {}".format(e.__cause__)
 
 
-# Why the hell would I ever do this
-# for i in os.scandir():
-#     wrap_safe_execfile(i.name)
+# for i in os.scandir('.'):
+# exec(compile(open(i.name).read(), '<string>', 'exec'), globals(), locals())

@@ -11,7 +11,7 @@ below without intermingling.
 import logging
 import sys
 
-default_log_format = '%(module) %(created)f [%(name)s] %(highlevel)s  %(message)s '
+default_log_format = '%(module)s %(created)f [%(name)s] %(highlevel)s  %(message)s '
 PROFILE_DEFAULT_LOG = logging.getLogger(name='default_profile')
 PROFILE_DEFAULT_LOG.setLevel(logging.WARNING)
 PROFILE_DEFAULT_HANDLER = logging.StreamHandler()
@@ -22,16 +22,9 @@ PROFILE_DEFAULT_HANDLER.addFilter(logging.Filterer())
 try:
     # these should always be available
     import IPython  # noqa F0401
-    from IPython import get_ipython  # noqa F0401
+    from IPython.core.getipython import get_ipython  # noqa F0401
 except (ImportError, ModuleNotFoundError):
     pass
-
-
-try:
-    from .sphinxext import custom_doctests, magics
-except (ImportError, ModuleNotFoundError):
-    if getattr(sys, 'last_value', None):
-        PROFILE_DEFAULT_LOG.exception(sys.last_value)
 
 
 def ask_for_import(mod, package=None):

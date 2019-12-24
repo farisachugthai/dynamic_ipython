@@ -42,9 +42,10 @@ import glob
 def main():
     """Alright well let's start by putting this in a contained scope like yeesh."""
 
-    if os.name == 'nt':
+    if os.name == "nt":
         # Moving this import here becase it'll probably crash Linux
         from ctypes import WinDLL
+
         # convention for storing / loading the DLL from
         # numpy/.libs/, if present
         try:
@@ -52,20 +53,21 @@ def main():
         except:
             pass
         else:
-            libs_dir = os.path.abspath(os.path.join(basedir, '.libs'))
+            libs_dir = os.path.abspath(os.path.join(basedir, ".libs"))
             DLL_filenames = []
             if os.path.isdir(libs_dir):
-                for filename in glob.glob(os.path.join(libs_dir,
-                                                       '*openblas*dll')):
+                for filename in glob.glob(os.path.join(libs_dir, "*openblas*dll")):
                     # NOTE: would it change behavior to load ALL
                     # DLLs at this path vs. the name restriction?
                     WinDLL(os.path.abspath(filename))
                     DLL_filenames.append(filename)
         if len(DLL_filenames) > 1:
             import warnings
-            warnings.warn("loaded more than 1 DLL from .libs:\n%s" %
-                          "\n".join(DLL_filenames),
-                          stacklevel=1)
+
+            warnings.warn(
+                "loaded more than 1 DLL from .libs:\n%s" % "\n".join(DLL_filenames),
+                stacklevel=1,
+            )
 
 
 if __name__ == "__main__":

@@ -83,9 +83,10 @@ except (ImportError, ModuleNotFoundError):
     except (ImportError, ModuleNotFoundError):
         readline = None
     else:
-        from pyreadline.rlmain import Readline
-
-        rl = Readline()
+        # So apparently readline.rl in the pyreadline module is an instantiated
+        # rlcompleter?
+        readline.set_completer(readline.rl.complete)
+        readline.set_completer(rlcomplter.Completer.complete)
 
 
 def bind_readline_keys():

@@ -121,6 +121,7 @@ EXTRAS = {
         'pytest',
         'tox',
         'nose',
+        'testpath',
     ]
 }
 

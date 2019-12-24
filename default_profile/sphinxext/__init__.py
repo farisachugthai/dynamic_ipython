@@ -16,6 +16,7 @@ would emit :exc:`ImportError` on startup, which would be frustrating for
 users.
 
 """
+from default_profile import ask_for_import
 import importlib
 import logging
 import pkgutil
@@ -30,38 +31,12 @@ if hasattr(locals(), '__path__'):
 else:
     sys.path.insert(0, str(Path(__file__).resolve()))
 
+
 # Don't emit an error on IPython startup if not installed.
-
-
-def ask_for_import(mod, package=None):
-    """Import a module and return `None` if it's not found.
-
-    Parameters
-    ----------
-    mod : str
-        Module to import
-    package : str, optional
-        Package the module is found in.
-
-    Returns
-    -------
-    imported : mod
-        Module as imported by :func:`importlib.import_module`.
-
-    """
-    try:
-        imported = importlib.import_module(mod, package=package)
-    except (ImportError, ModuleNotFoundError):
-        pass
-    else:
-        return imported
-
-
 ask_for_import('IPython')
 
-if ask_for_import('default_profile'):
-
-    if ask_for_import('sphinx'):
-        from default_profile.sphinxext import custom_doctests  # noqa F401
-        # from default_profile.sphinxext.ipython_directive import EmbeddedSphinxShell, IPythonDirective  # noqa F401
-        from default_profile.sphinxext.magics import LineMagicRole, CellMagicRole  # noqa F401
+# We kinda have to assume we're installed if we're building our docs
+if ask_for_import('sphinx'):
+    from default_profile.sphinxext import custom_doctests  # noqa F401
+    # from default_profile.sphinxext.ipython_directive import EmbeddedSphinxShell, IPythonDirective  # noqa F401
+    from default_profile.sphinxext.magics import LineMagicRole, CellMagicRole  # noqa F401

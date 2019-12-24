@@ -7,14 +7,14 @@ import traceback
 
 from IPython.core.getipython import get_ipython
 
-pkg_resources.declare_namespace('.')
+pkg_resources.declare_namespace(".")
 
 newterm_logger = logging.getLogger(name=__name__)
 
 
 def initialize():
     shell = get_ipython()
-    if shell.profile_dir != 'profile_newterm':
+    if shell.profile_dir != "profile_newterm":
         return
 
     try:

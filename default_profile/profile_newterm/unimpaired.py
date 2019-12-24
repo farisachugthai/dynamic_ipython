@@ -11,6 +11,7 @@ import traceback
 import traitlets
 
 from prompt_toolkit import HTML
+from prompt_toolkit.key_binding import KeyBindings
 from IPython.terminal.interactiveshell import TerminalInteractiveShell
 from IPython.core.magics.basic import BasicMagics
 from IPython.core.getipython import get_ipython
@@ -66,7 +67,8 @@ class TerminallyUnimpaired(TerminalInteractiveShell):
             return
         try:
             self.profile_dir = ProfileDir.create_profile_dir_by_name(
-                self.ipython_dir, "default")
+                self.ipython_dir, "default"
+            )
         except ProfileDirError:
             self.log.error("Profiledirerror")
         except Exception as e:
@@ -116,8 +118,7 @@ class TerminallyUnimpaired(TerminalInteractiveShell):
             lines = traceback.format_list(tblist)
             if lines:
                 lines.insert(0, "Traceback (most recent call last):\n")
-            lines.extend(traceback.format_exception_only(
-                exception_type, value))
+            lines.extend(traceback.format_exception_only(exception_type, value))
         finally:
             tblist = tb = None
         if lines:
@@ -132,19 +133,66 @@ class TerminallyUnimpaired(TerminalInteractiveShell):
 
         @functools.wraps
         def entry(k: str, v: str) -> str:
-            return f" | <b><style bg=\"ansiblue\">{k.capitalize()}</style></b> {v}"
+            return f' | <b><style bg="ansiblue">{k.capitalize()}</style></b> {v}'
 
-        s += entry('multiline', self.config.multiline)
-        s += entry('directory', pathlib.Path().cwd())
-        s += entry('style', self.config.highlighting_style)
+        s += entry("multiline", self.config.multiline)
+        s += entry("directory", pathlib.Path().cwd())
+        s += entry("style", self.config.highlighting_style)
 
         return HTML(s)
 
 
-# StoreMagics(get_ipython()).unobserve_all()
+class Terminally(TerminalInteractiveShell):
+    """Since a lot of these things are class attributes, can I assign to a subclass and have things automagically appear in teh super?"""
+
+    kb = KeyBindings()
+
+    def __init__(self, config=None, *args, **kwargs):
+        """Note that initialization requires a config object.
+
+        traitlets raises an error so let's setup a little dance around that.
+        """
+        super().__init__(*args, **kwargs)
+        self.config = config or self._create_config()
+        self.Completer = self.create_completer()
+
+    def __call__(self):
+        super().prompt_for_code()
+
+    @staticmethod
+    def _create_config():
+        running_shell = get_ipython()
+        if running_shell is not None:
+            # Well this'll probably cause some issues because 2 of these can't
+            # running at the same time
+            return running_shell.config
+
+    def create_kb(self):
+        # TODO
+        raise NotImplementedError
+
+    def create_lexer(self):
+        # TODO
+        raise NotImplementedError
+
+    @staticmethod
+    def create_completer():
+        import rlcompleter
+
+        return rlcompleter.Completer
+
+    def _extra_prompt_options(self, **kwargs):
+        """Override the superclasses method because this feels like a solid spot to inject some configurability."""
+        if kwargs is None:
+            return super()._extra_prompt_options
+        else:
+            return {**kwargs}
+
+
 class StoreAndLoadMagics(StoreMagics):
     """I keep getting an error about this."""
 
+    # StoreMagics(get_ipython()).unobserve_all()
     def __init__(self, shell=None, *args, **kwargs):
         """TODO: Docstring for function."""
         super().__init__(self, *args, **kwargs)
@@ -176,5 +224,5 @@ if __name__ == "__main__":
     except Exception as e:  # noqa
         logging.exception(e)
         shell = None
-    else:
-        shell.extension_manager.load_extension('storeandloadmagics')
+    # else:
+    #     shell.extension_manager.load_extension("storeandloadmagics")
