@@ -52,7 +52,6 @@ def ask_for_import(mod, package=None):
     else:
         return imported
 
-
 class ModuleNotFoundError(ImportError):
     """Try to backport this for python3.6<."""
 
@@ -72,12 +71,3 @@ try:
     from IPython.core.getipython import get_ipython  # noqa F0401
 except (ImportError, ModuleNotFoundError):
     pass
-
-
-try:
-    from .sphinxext import custom_doctests, magics
-except (ImportError, ModuleNotFoundError):
-    if getattr(sys, "last_value", None):
-        PROFILE_DEFAULT_LOG.exception(sys.last_value)
-
-
