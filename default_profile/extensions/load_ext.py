@@ -37,26 +37,6 @@ def load_ext(module_str, shell=None):
             )
 
 
-def load_ipython_extension(shell=None):
-    """Register load_ext as an extension.
-
-    From :func:`IPython.core.magic.MagicsManager.register_function()`:
-
-        This will create an IPython magic (line, cell or both) from a
-        standalone function.  The functions should have the following
-        signatures:
-
-    * For line magics: ``def f(line)``
-    * For cell magics: ``def f(line, cell)``
-    * For a function that does both: ``def f(line, cell=None)``
-
-    In the latter case, the function will be called with ``cell==None`` when
-    invoked as ``%f``, and with cell as a string when invoked as ``%%f``.
-
-    """
-    shell.magics_manager.register_function(load_ext, magic_name='load_ext')
-
-
 if __name__ == "__main__":
     _ip = get_ipython()
     if _ip is None:
