@@ -5,7 +5,7 @@ import logging
 import os
 import shutil
 
-from IPython import get_ipython
+from IPython.core.getipython import get_ipython
 
 from default_profile import ask_for_import
 
@@ -15,7 +15,7 @@ from default_profile.util.machine import Platform
 
 ALIAS_LOGGER = stream_logger(
     logger="default_profile.startup.20_aliases",
-    msg_format="%(asctime)s : %(levelname)s : %(module)s %(message)s",
+    msg_format="%(asctime)s %(levelname)s %(module)s %(message)s",
     log_level=logging.WARNING,
 )
 
@@ -23,7 +23,7 @@ ALIAS_LOGGER = stream_logger(
 class CommonAliases:
     r"""Add aliases common to all OSes. Overwhelmingly :command:`Git` aliases.
 
-    This method adds around 70 to 80 aliases that can be
+    This method adds around 100 aliases that can be
     implemented on most of the major platforms.
 
     The only real requirement is Git being installed and working. Docker
@@ -31,7 +31,7 @@ class CommonAliases:
 
     .. todo:: :command:`git show`
 
-    .. todo:: The classs method doesn't work if we don't have a class attribute.
+    .. todo:: The class method doesn't work if we don't have a class attribute.
 
         But if we create a class attribute, does updating the aliases for an instance
         change it for the class? Write a test to ensure that this isn't what
@@ -64,7 +64,7 @@ class CommonAliases:
             yield itm
 
     def __repr__(self):
-        return "Common Aliases: {!r}".format(len(self.user_aliases))
+        return "<Common Aliases>: # of aliases: {!r} ".format(len(self.user_aliases))
 
     def set_user_aliases(self):
         if len(self.shell.alias_manager.aliases) > 0:
@@ -124,12 +124,12 @@ class CommonAliases:
             ("gau", "git add --update %l"),
             ("ga.", "git add ."),
             ("gb", "git branch --all --remote --verbose %l"),
-            ("gbd", "git branch -d %l"),
-            ("gbD", "git branch -D %l"),
             ("gbl", "git blame %l"),
             ("gbr", "git branch -arv %l"),
-            ("gbrd", "git branch -rd %l"),
-            ("gbrD", "git branch -rD %l"),
+            ("gbrd", "git branch -d %l"),
+            ("gbrD", "git branch -D %l"),
+            ("gbrrd", "git branch -rd %l"),
+            ("gbrrD", "git branch -rD %l"),
             ("gbru", "git branch --set-upstream-to --verbose origin %l"),
             ("gbrv", "git branch --all --verbose --remote %l"),
             ("gci", "git commit %l"),
@@ -183,11 +183,11 @@ class CommonAliases:
             ("gpom", "git pull origin master %l"),
             ("gpu", "git push %l"),
             ("gr", "git remote -v %l"),
-            ("gre", "git remote %l"),
             ("grb", "git rebase %l"),
             ("grba", "git rebase --abort %l"),
             ("grbc", "git rebase --continue %l"),
             ("grbi", "git rebase --interactive %l"),
+            ("gre", "git remote %l"),
             ("gs", "git status %l"),
             ("gsh", "git stash %l"),
             ("gsha", "git stash apply %l"),
@@ -199,7 +199,10 @@ class CommonAliases:
             ("gshsp", "git stash show --patch %l"),
             ("gss", "git status -sb %l"),
             ("gst", "git diff --stat %l"),
+            ("gsw", "git switch --progress %l"),
+            ("gswm", "git switch --progress master %l"),
             ("gt", "git tag --list %l"),
+            ("gtd", "git tag --delete %l"),
             ("lswitch", "legit switch"),
             ("lsync", "legit sync"),
             ("lpublish", "legit publish"),
@@ -246,6 +249,7 @@ class LinuxAliases(CommonAliases):
             magic_name=name)
 
     """
+
     def __init__(self, shell=None, aliases=None, *args, **kwargs):
         """The WindowsAliases implementation of this is odd so maybe branch off.
 
@@ -317,10 +321,8 @@ class LinuxAliases(CommonAliases):
             # only prompts with more than 3 files or recursed dirs.
             ("rm", "rm -Iv %l"),
             ("rmdir", "rmdir -v %l"),
-            ("default_profile",
-             "cd ~/projects/dotfiles/unix/.ipython/default_profile"),
-            ("startup",
-             "cd ~/projects/dotfiles/unix/.ipython/default_profile/startup"),
+            ("default_profile", "cd ~/projects/dotfiles/unix/.ipython/default_profile"),
+            ("startup", "cd ~/projects/dotfiles/unix/.ipython/default_profile/startup"),
             ("tail", "tail -n 30 %l"),
         ]
         return self.user_aliases
@@ -360,6 +362,7 @@ class WindowsAliases(CommonAliases):
     Would it be useful to subclass :class:`reprlib.Repr` here?
 
     """
+
     def __init__(self, shell=None, user_aliases=None):
         """Initialize the platform specific alias manager with IPython.
 
@@ -522,10 +525,7 @@ class WindowsAliases(CommonAliases):
             ("stz", "Set-TimeZone %l"),
             ("sv", "Set-Variable %l"),
             ("tee", "Tee-Object %l"),
-            (
-                "tree",
-                "tree /F /A %l",
-            ),
+            ("tree", "tree /F /A %l",),
             ("type", "Get-Content %l"),
             ("where", "Where-Object %l"),
             ("wjb", "Wait-Job %l"),
@@ -542,11 +542,12 @@ class WindowsAliases(CommonAliases):
         elif os.environ.get("COMSPEC"):
             return os.environ.get("COMSPEC")
         else:
-            logging.warning('%s is None as are %s and %s', self.shell,
-                            '$SHELL', '$COMSPEC')
+            logging.warning(
+                "%s is None as are %s and %s", self.shell, "$SHELL", "$COMSPEC"
+            )
 
 
-def main():
+def generate_aliases():
     """Set up aliases for the user namespace for IPython.
 
     Planning on coming up with a new way of introducing the aliases into the user namespace.
@@ -575,20 +576,32 @@ def main():
         try:
             user_aliases += WindowsAliases.cmd_aliases()
         except SyntaxError as e:
-            if hasattr(e, 'lineno', None):
+            if hasattr(e, "lineno", None):
                 print(
-                    'Error | default_profile.startup.20_aliases:main | line: {}'
-                    .format(e.lineno))
+                    "Error | default_profile.startup.20_aliases:main | line: {}".format(
+                        e.lineno
+                    )
+                )
+            else:
+                print(e)
 
-    _ip.alias_manager.user_aliases = user_aliases
+    # _ip.alias_manager.user_aliases = user_aliases
     # Apparently the big part i was missing was rerunning the init_aliases method
-    _ip.alias_manager.init_aliases()
+    # _ip.alias_manager.init_aliases()
+    return user_aliases
 
-    ALIAS_LOGGER.info("Number of aliases is: %s" % user_aliases)
 
+def redefine_aliases(aliases, shell=None):
+    """Now a function to allow the user to rerun as necesaary."""
+    if shell is None:
+        shell = get_ipython()
+    for i in aliases:
+        shell.alias_manager.define_alias(*i)
 
 if __name__ == "__main__":
     _ip = get_ipython()
 
     if _ip is not None:
-        main()
+        all_aliases = generate_aliases()
+        redefine_aliases(all_aliases)
+        ALIAS_LOGGER.info("Number of aliases is: %s" % all_aliases)
