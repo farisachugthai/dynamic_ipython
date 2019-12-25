@@ -36,16 +36,8 @@ from IPython.core.release import version_info
 # directly from within python and not get an error for a func call with no
 # import
 from traitlets.config import get_config, Configurable
-from traitlets.config.application import LevelFormatter
 
-default_traitlets_log_format = (
-    "%(highlevel)s %(created)f %(module)s %(levelname)s  %(message)s"
-)
-default_formatter = LevelFormatter(fmt=default_traitlets_log_format)
-
-IPYTHON_CONFIG_HANDLER = logging.StreamHandler()
-
-default_log_format = "%(created)f %(module)s %(levelname)s  %(message)s"
+default_log_format = "%(levelname)s %(module)s %(msecs)f [ %(name)s ] %(message)s "
 logging.basicConfig(level=logging.INFO, format=default_log_format)
 
 c = get_config()
@@ -54,16 +46,16 @@ c = get_config()
 
 try:
     import default_profile
-except:  # noqa
+except (ImportError, ModuleNotFoundError):
     default_profile = None
     logging.error("import error for default_profile")
+    # todo: realistically we should also set exec_files to None since everything ./startup is gonna crash
 else:
-    # This is the real test
-    # I want this loaded too so that I don't have to rewrite all my startup junk
-    try:
-        from default_profile import startup
-    except Exception as e:
-        traceback.print_exc(e)
+    from default_profile import PROFILE_DEFAULT_LOG
+
+    # 3.6 compat
+    if ModuleNotFoundError not in dir(builtins):
+        from default_profile import ModuleNotFoundError
 
 
 def get_home():
@@ -77,40 +69,6 @@ def get_home():
 
 home = get_home()
 
-if ModuleNotFoundError not in dir(builtins):
-
-    class ModuleNotFoundError(ImportError):
-        """Try to backport this for python3.6<."""
-
-        __module__ = "builtins"  # for py3
-
-        def __init__(self, *args, **kwargs):
-            super().__init__(*args, **kwargs)
-
-        def __repr__(self):
-            return "{}\n{}".format(self.__class__.__name__, self.__traceback__)
-
-
-try:
-    import default_profile
-except (ImportError, ModuleNotFoundError):
-    default_profile = None
-    logging.error("import error for default_profile")
-else:
-    # This is the real test
-    # I want this loaded too so that I don't have to rewrite all my startup junk
-    try:
-        from default_profile import startup
-    except Exception as e:
-        traceback.print_exc(e)
-
-# def loaded_config(loaded=None):
-#     """Just noticed IPython loads this file twice."""
-#     if loaded is None:
-#         pass
-#     loaded = True
-
-# loaded_config(loaded)  # noqa F821
 
 # ----------------------------------------------------------------------------
 # InteractiveShellApp(Configurable) configuration
@@ -270,7 +228,7 @@ c.TerminalIPythonApp.force_interact = False
 # c.TerminalIPythonApp.quick = False
 
 # Dec 08, 2019: Adding this in
-c.TerminalIPythonApp.log_format = "%(module) %(created)f [%(name)s]  %(message)s "
+c.TerminalIPythonApp.log_format = "%(module)s %(created)f [ %(name)s ]  %(message)s "
 
 # Configure matplotlib for interactive use with the default matplotlib backend.
 
@@ -413,12 +371,16 @@ c.InteractiveShell.history_load_length = 10000
 # code
 # c.InteractiveShell.loop_runner = 'IPython.core.interactiveshell._asyncio_runner'
 # c.InteractiveShell.loop_runner = None
-# TODO: allow_none should be added
+
+# TODO: allow_none should be added to the loop runner. Check below tb
+
 # File "/data/data/com.termux/files/home/.local/share/virtualenvs/dynamic_ipython-mVJ3Ohov/lib/python3.8/site-packages/IPython/core/interactiveshell.py", line 402, in _import_runner
 #     raise ValueError('loop_runner must be callable')
+
 # ValueError: loop_runner must be callable
 
 # TODO: What is this?
+
 # --TerminalInteractiveShell.object_info_string_level=<Enum>
 #     Default: 0
 #     Choices: (0, 1, 2)
@@ -497,7 +459,7 @@ c.TerminalInteractiveShell.confirm_exit = False
 # Options for displaying tab completions, 'column', 'multicolumn', and
 #  'readlinelike'. These options are for `prompt_toolkit`, see `prompt_toolkit`
 #  documentation for more information.
-c.TerminalInteractiveShell.display_completions = "readlinelike"
+# c.TerminalInteractiveShell.display_completions = "readlinelike"
 
 # Shortcut style to use at the prompt. 'vi' or 'emacs'.
 # Ah I forgot <C-a> on Tmux and Emacs clobber.
@@ -557,7 +519,9 @@ else:
         from gruvbox.style import GruvboxDarkHard
     except (ImportError, ModuleNotFoundError):
         from pygments.styles.friendly import FriendlyStyle
+
         c.TerminalInteractiveShell.highlighting_style = "friendly"
+
     else:
         c.TerminalInteractiveShell.highlighting_style = "GruvboxDarkHard"
 

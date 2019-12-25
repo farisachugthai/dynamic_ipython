@@ -11,27 +11,22 @@ below without intermingling.
 import logging
 import sys
 
-default_log_format = '%(module) %(created)f [%(name)s] %(highlevel)s  %(message)s '
-PROFILE_DEFAULT_LOG = logging.getLogger(name='default_profile')
+from traitlets.config.application import LevelFormatter
+
+default_log_format = "%(module)s %(created)f [ %(name)s ] %(message)s "
+PROFILE_DEFAULT_LOG = logging.getLogger(name="default_profile")
 PROFILE_DEFAULT_LOG.setLevel(logging.WARNING)
 PROFILE_DEFAULT_HANDLER = logging.StreamHandler()
 PROFILE_DEFAULT_HANDLER.setLevel(logging.WARNING)
 PROFILE_DEFAULT_FORMATTER = logging.Formatter(fmt=default_log_format)
 PROFILE_DEFAULT_HANDLER.addFilter(logging.Filterer())
+PROFILE_DEFAULT_HANDLER.setFormatter(PROFILE_DEFAULT_FORMATTER)
+PROFILE_DEFAULT_LOG.addHandler(PROFILE_DEFAULT_HANDLER)
 
-try:
-    # these should always be available
-    import IPython  # noqa F0401
-    from IPython import get_ipython  # noqa F0401
-except (ImportError, ModuleNotFoundError):
-    pass
-
-
-try:
-    from .sphinxext import custom_doctests, magics
-except (ImportError, ModuleNotFoundError):
-    if getattr(sys, 'last_value', None):
-        PROFILE_DEFAULT_LOG.exception(sys.last_value)
+default_traitlets_log_format = (
+    "%(highlevel)s %(created)f %(module)s %(levelname)s  %(message)s"
+)
+default_formatter = LevelFormatter(fmt=default_traitlets_log_format)
 
 
 def ask_for_import(mod, package=None):
@@ -57,3 +52,22 @@ def ask_for_import(mod, package=None):
     else:
         return imported
 
+class ModuleNotFoundError(ImportError):
+    """Try to backport this for python3.6<."""
+
+    __module__ = "builtins"  # for py3
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def __repr__(self):
+        return "{}\n{}".format(self.__class__.__name__, self.__traceback__)
+
+
+# Keep these imports below the ModuleNotFoundError backport
+try:
+    # these should always be available
+    import IPython  # noqa F0401
+    from IPython.core.getipython import get_ipython  # noqa F0401
+except (ImportError, ModuleNotFoundError):
+    pass

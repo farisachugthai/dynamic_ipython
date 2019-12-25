@@ -42,6 +42,7 @@ Here's a really good one to check out.:
 >>> import pydoc
 >>> pydoc.ttypager(make_tarbz2.__doc__)
 
+.. todo:: Why does the .egg_info/ dir get dropped in the cwd?
 
 """
 import codecs
