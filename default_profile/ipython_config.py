@@ -446,10 +446,7 @@ c.InteractiveShell.wildcards_case_sensitive = False
 c.TerminalInteractiveShell.ast_node_interactivity = "last_expr_or_assign"
 
 # Autoformatter to reformat Terminal code. Can be `'black'` or `None`
-if shutil.which("black"):
-    c.TerminalInteractiveShell.autoformatter = "black"
-else:
-    c.TerminalInteractiveShell.autoformatter = None
+c.TerminalInteractiveShell.autoformatter = None
 
 # Set to confirm when you try to exit IPython with an EOF (Control-D in Unix,
 #  Control-Z/Enter in Windows). By typing 'exit' or 'quit', you can force a
@@ -459,7 +456,7 @@ c.TerminalInteractiveShell.confirm_exit = False
 # Options for displaying tab completions, 'column', 'multicolumn', and
 #  'readlinelike'. These options are for `prompt_toolkit`, see `prompt_toolkit`
 #  documentation for more information.
-# c.TerminalInteractiveShell.display_completions = "readlinelike"
+c.TerminalInteractiveShell.display_completions = "multicolumn"
 
 # Shortcut style to use at the prompt. 'vi' or 'emacs'.
 # Ah I forgot <C-a> on Tmux and Emacs clobber.
@@ -600,7 +597,7 @@ class StandardPythonPrompt(ClassicPrompts):
 # c.TerminalInteractiveShell.simple_prompt = False
 
 # Number of line at the bottom of the screen to reserve for the completion menu
-c.TerminalInteractiveShell.space_for_menu = 0
+c.TerminalInteractiveShell.space_for_menu = 6
 
 # Automatically set the terminal title
 c.TerminalInteractiveShell.term_title = True

@@ -5,6 +5,23 @@ from typing import Callable, Optional
 from prompt_toolkit.application.dummy import DummyApplication
 from prompt_toolkit.enums import DEFAULT_BUFFER, SEARCH_BUFFER
 from prompt_toolkit.application.current import get_app
+from prompt_toolkit.key_binding import merge_key_bindings
+from prompt_toolkit.key_binding.defaults import load_vi_bindings
+
+# Dude these are all the vi modes prompt_toolkit has...lol
+from prompt_toolkit.key_binding.bindings.vi import(
+    vi_selection_mode,
+    vi_recording_macro,
+    vi_register_names,
+    vi_mode,
+    vi_replace_mode,
+    vi_waiting_for_text_object_mode,
+    vi_insert_mode,
+    vi_search_direction_reversed,
+    vi_navigation_mode,
+    vi_digraph_mode,
+    vi_insert_multiple_mode,
+)
 
 from IPython.core.getipython import get_ipython
 from IPython.terminal.shortcuts import create_ipython_shortcuts
@@ -39,8 +56,7 @@ class ContainerKeyBindings:
     """Originally this was gonna subclass SList but I wrote like 6 dunders
     in one shot so I realized it wouldn't be a good idea."""
 
-    def __init__(self, kb=None, shell=None, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, kb=None, shell=None):
         self.shell = shell or get_ipython()
         if self.shell is not None:
             self.kb = kb or self.shell.pt_app.app.key_binding
@@ -67,3 +83,20 @@ class ContainerKeyBindings:
         return self.__str__()
 
     # def __index__(self):
+
+
+if __name__ == "__main__":
+
+    _ip = get_ipython()
+    if _ip is not None:
+        # Does this do anything? Need to revisit how these work and what the
+        # difference between _ip.pt_app and _ip.pt_app.app are
+        # _ip.pt_app.key_bindings.bindings.extend(load_basic_bindings().bindings)
+        # Sweet i might have just broken how pt handles keypresses
+
+        # Also let's make an instance of this class
+        container_kb = ContainerKeyBindings(shell=_ip, kb=_ip.pt_app.key_bindings.bindings)
+        # Dude holy shit does this give you a lot
+        if _ip.editing_mode == 'vi':
+            more_keybindings = merge_key_bindings([_ip.pt_app.app.key_bindings, load_vi_bindings()])
+            _ip.pt_app.app.key_bindings = more_keybindings

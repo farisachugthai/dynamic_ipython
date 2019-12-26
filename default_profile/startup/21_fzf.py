@@ -128,9 +128,7 @@ def main():
                 busybox_hack(shell)
 
         fzf_aliases = FZF()._setup_fzf()
-        shell.alias_manager.user_aliases.append(FZF._setup_fzf())
-        # TODO: is this really the method we need to call here?
-        shell.alias_manager.init_aliases()
+        shell.alias_manager.define_alias(FZF._setup_fzf(), 'fzf')
 
 
 if __name__ == "__main__":

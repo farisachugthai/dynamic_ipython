@@ -67,4 +67,4 @@ class ReprAlias(Repr):
 
 
 if __name__ == "__main__":
-    aliases = ReprAlias(get_ipython().alias_manager.user_aliases)
+    aliases = ReprAlias(get_aliases())
