@@ -44,49 +44,14 @@ from default_profile.util.module_log import betterConfig
 def readline_logging():
     """TODO: Fallback in case IPYTHONDIR isn't set"""
     if os.environ.get("IPYTHONDIR"):
-        LOG_FILENAME = os.path.join(os.environ.get("IPYTHONDIR"),
-                                    "completer.log")
+        LOG_FILENAME = os.path.join(os.environ.get("IPYTHONDIR"), "completer.log")
     logging.basicConfig(
-        format="%(message)s",
-        filename=LOG_FILENAME,
-        level=logging.DEBUG,
+        format="%(message)s", filename=LOG_FILENAME, level=logging.DEBUG,
     )
     return betterConfig(parent="default_profile.startup", name=__name__)
 
 
-# Originally this part was in an `if __name__ == '__main__' block but I actually
-# want it executed in the global namespace. It should have been written carefully
-# enough that both Linux and Windows can handle it. TUI only but isn't that implied
-# with readline?
-# Do this part first
 rl_logger = readline_logging()
-
-try:
-    import jedi
-except (ImportError, ModuleNotFoundError):
-    jedi = None
-else:
-    from jedi.utils import setup_readline
-
-    setup_readline()
-    jedi.settings.add_bracket_after_function = False
-    # jedi.settings
-
-# Fallback to the stdlib readline completer if it is installed.
-# Taken from http://docs.python.org/2/library/rlcompleter.html
-try:
-    import readline
-except (ImportError, ModuleNotFoundError):
-    # Interestingly this can work on Windows with a simple pip install pyreadline
-    try:
-        import pyreadline as readline
-    except (ImportError, ModuleNotFoundError):
-        readline = None
-    else:
-        # So apparently readline.rl in the pyreadline module is an instantiated
-        # rlcompleter?
-        readline.set_completer(readline.rl.complete)
-        readline.set_completer(rlcomplter.Completer.complete)
 
 
 def bind_readline_keys():
@@ -126,6 +91,7 @@ class SimpleCompleter:
     one at a time on subsequent calls.
 
     """
+
     def __init__(self, options):
         self.options = sorted(options)
 
@@ -135,9 +101,7 @@ class SimpleCompleter:
             # This is the first time for this text,
             # so build a match list.
             if text:
-                self.matches = [
-                    s for s in self.options if s and s.startswith(text)
-                ]
+                self.matches = [s for s in self.options if s and s.startswith(text)]
                 logging.debug("%s matches: %s", repr(text), self.matches)
             else:
                 self.matches = self.options[:]
@@ -149,28 +113,31 @@ class SimpleCompleter:
             response = self.matches[state]
         except IndexError:
             response = None
-        logging.debug("complete(%s, %s) => %s", repr(text), state,
-                      repr(response))
+        logging.debug("complete(%s, %s) => %s", repr(text), state, repr(response))
         return response
 
 
 def input_loop():
+    """
+    todo:
+
+        # Register the completer function
+        # OPTIONS = ['start', 'stop', 'list', 'print']
+        # readline.set_completer(SimpleCompleter(OPTIONS).complete)
+        # TODO: Check what the API is to add a completer to ipython. _ip.add_completer?
+    """
+
     line = ""
     while line != "stop":
         line = input('Prompt ("stop" to quit): ')
         print("Dispatch {}".format(line))
 
 
-# Register the completer function
-# OPTIONS = ['start', 'stop', 'list', 'print']
-# readline.set_completer(SimpleCompleter(OPTIONS).complete)
-# TODO: Check what the API is to add a completer to ipython. _ip.add_completer?
-
 # History
 
 
 def setup_historyfile(filename=None):
-
+    """Add a history file to readline."""
     if filename is None:
         filename = "~/.pdb_history"
     histfile = os.path.expanduser(filename)
@@ -198,21 +165,43 @@ def teardown_historyfile(histfile=None):
 
 if __name__ == "__main__":
     histfile = "~/.python_history"
-    setup_historyfile(histfile)
-    atexit.register(teardown_historyfile, histfile)
+    try:
+        import jedi
+    except (ImportError, ModuleNotFoundError):
+        jedi = None
+    else:
+        from jedi.utils import setup_readline
 
-    # Globally available regardless of platform
-    RlCompleter = rlcompleter.Completer()
+        setup_readline()
+        jedi.settings.add_bracket_after_function = False
+        # jedi.settings
 
-    if readline:
+    # Fallback to the stdlib readline completer if it is installed.
+    # Taken from http://docs.python.org/2/library/rlcompleter.html
+    try:
+        import readline
+    except (ImportError, ModuleNotFoundError):
+        # Interestingly this can work on Windows with a simple pip install pyreadline
+        try:
+            import pyreadline as readline
+        except (ImportError, ModuleNotFoundError):
+            readline = None
+            rl_logger.warning("Readline not imported.")
+        else:
+            from pyreadline.rlmain import Readline
+
+            rl = Readline()
+            # So apparently readline.rl in the pyreadline module is an instantiated
+            # rlcompleter?
+            readline.set_completer(readline.rl.complete)
+    else:
         if getattr(readline, "parse_and_bind", None):
             bind_readline_keys()
         if getattr(readline, "read_inputrc_file", None):
             read_inputrc()
 
         readline.set_completer_delims(" \t\n`@#$%^&*()=+[{]}\\|;:'\",<>?")
+        readline.set_completer(rlcompleter.Completer().complete)
 
-        _ip = get_ipython()
-        _ip.set_custom_completer(RlCompleter.complete)
-    else:
-        rl_logger.warning("Readline not imported.")
+        setup_historyfile(histfile)
+        atexit.register(teardown_historyfile, histfile)
