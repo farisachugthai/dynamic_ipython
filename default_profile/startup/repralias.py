@@ -67,5 +67,4 @@ class ReprAlias(Repr):
 
 
 if __name__ == "__main__":
-    repr_alias = ReprAlias(get_ipython().alias_manager.user_aliases)
-    print("This file is getting loaded right?")
+    aliases = ReprAlias(get_ipython().alias_manager.user_aliases)

@@ -1,22 +1,41 @@
 """Basically a no-op because IPython keeps raising errors."""
 import logging
 
+from traitlets import Bool
+
 from IPython.core.getipython import get_ipython
 from IPython.core.magic import Magics, magics_class, line_magic
-from IPython.extensions.storemagic import StoreMagics
+from IPython.extensions.storemagic import (
+    StoreMagics,
+    restore_data,
+    restore_dhist,
+    restore_aliases,
+    refresh_variables,
+)
 
 
 @magics_class
 class StoreAndLoadMagics(StoreMagics):
     """I keep getting an error about this."""
+
     # because you never registered this class
+
+    autorestore = Bool(
+        False,
+        help="""If True, any %store-d variables will be automatically restored
+        when IPython starts.
+        """,
+    ).tag(config=True)
 
     def __init__(self, shell=None, *args, **kwargs):
         """TODO: Docstring for function."""
         super().__init__(self, *args, **kwargs)
         self.shell = shell or get_ipython()
         if self.shell is None:
-            logging.error('StoreAndLoadMagics: shell is None')
+            logging.error("StoreAndLoadMagics: shell is None")
+        self.shell.configurables.append(self)
+        if self.autorestore:
+            restore_data(self.shell)
 
     def load_ext(self):
         self.shell.register_magics(self)
@@ -67,8 +86,6 @@ class StoreAndLoadMagics(StoreMagics):
         super().store(*args)
 
 
-
 def load_ipython_extension(ip):
     """Load the extension in IPython."""
     ip.register_magics(StoreMagics)
-
