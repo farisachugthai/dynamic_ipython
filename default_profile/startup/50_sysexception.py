@@ -8,18 +8,6 @@ on continuing....
 
 So the IPython.core.ultratb mod was stated to be a port of cgitb.
 
-Let's check out the source for that then right?
-
-class Hook:
-    # A hook to replace sys.excepthook that shows tracebacks in HTML.
-    def __init__(self, display=1, logdir=None, context=5, file=None,
-                 format="html"):
-        self.display = display          # send tracebacks to browser if true
-        self.logdir = logdir            # log tracebacks to files if not None
-        self.context = context          # number of source code lines per frame
-        self.file = file or sys.stdout  # place to send the output
-        self.format = format
-
 Looks like we're in business!
 
 """
@@ -37,16 +25,19 @@ class ExceptionHook(Configurable):
 
     instance = None
 
-    def call(self, *args, **kwargs):
-        """Proxy for the call dunder."""
-        self.__call__(self, *args, **kwargs)
+    def __init__(self, shell=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.shell = shell
 
-    # def __call__(self, *args, **kwargs):
-    #     if self.instance is None:
-    #         self.instance = ultratb.AutoFormattedTB(
-    #             mode="Context", color_scheme="Linux", call_pdb=True, ostream=sys.stdout
-    #         )
-    #     return self.instance(*args, **kwargs)
+    def call(self, etype=None, evalue=None, etb=None):
+        """Proxy for the call dunder."""
+        if etype is None and evalue is None and etb is None:
+            etype, evalue, etb = sys.exc_info()
+        self.__call__(self, etype, evalue, etb)
+
+    def __call__(self, etype, evalue, etb):
+        """TODO."""
+        pass
 
     def __repr__(self):
         """Don't actually know if it works this way."""

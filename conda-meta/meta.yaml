@@ -10,30 +10,15 @@ build:
     script: "{{ PYTHON }} -m pip install {{ PWD }} --no-deps --ignore-installed -vv "
 
 requirements:
-    host:
-        - _libgcc_mutex 0.1 main
-        - ca-certificates 2019.8.28 0
-        - certifi 2019.9.11 py37_0
-        - libedit 3.1.20181209 hc058e9b_0
-        - libffi 3.2.1 hd88cf55_4
-        - libgcc-ng 9.1.0 hdf63c60_0
-        - libstdcxx-ng 9.1.0 hdf63c60_0
-        - IPython 7.10.2
-        - ncurses 6.1 he6710b0_1
-        - numpy 1.14
-        - openssl 1.1.1d h7b6447c_2
-        - pip 19.2.3 py37_0
-        - python 3.7.4 h265db76_1
-        - readline 7.0 h7b6447c_5
-        - setuptools 41.4.0 py37_0
-        - sqlite 3.30.0 h7b6447c_0
-        - sphinx 2.2.2
-        - tk 8.6.8 hbc83047_0
-        - wheel 0.33.6 py37_0
-        - xz 5.2.4 h14c3975_4
-        - zlib 1.2.11 h7b6447c_3
     run:
+        - IPython 7.10.2.*
+        - numpy {{ numpy }}
+        - python >=3.7.4
+        - wheel  <=0.33.6
+    host:
         - python >=3.7
+        - pip  >=19.2.3
+
 test:
   imports:
     - default_profile
@@ -45,20 +30,4 @@ about:
   home: "https://farischugthai/dynamic-ipython.io"
   license: "MIT"
   license_family: "MIT"
-  license_file: ""
-
-# source:
-#     - url "https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz"
-#     - sha256 ":todo:"
-#
-#
-#
-  # summary: "IPython: Productive Interactive Computing"
-  # doc_url: ""
-  # dev_url: ""
-
-# extra:
-# 	recipe-maintainers:
-# 		- your-github-id-here
-#     copy_test_source_files: true
-#     final: true
+  license_file: "../LICENSE"

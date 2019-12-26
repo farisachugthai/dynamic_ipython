@@ -1,21 +1,22 @@
 import logging
 import reprlib
+from typing import Callable, Optional
 
-kb_logger = logging.getLogger(name=__name__)
+from prompt_toolkit.application.dummy import DummyApplication
+from prompt_toolkit.enums import DEFAULT_BUFFER, SEARCH_BUFFER
+from prompt_toolkit.application.current import get_app
 
 from IPython.core.getipython import get_ipython
 from IPython.terminal.shortcuts import create_ipython_shortcuts
 from IPython.utils.text import SList
 
-# from prompt_toolkit.application
-from prompt_toolkit.application.current import get_app
-from prompt_toolkit.enums import DEFAULT_BUFFER, SEARCH_BUFFER
+kb_logger = logging.getLogger(name=__name__)
 
 
 class VerbosePrompt:
     """Because I can't ever remember how these classes resolve."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.shell = get_ipython()
         if getattr(self.shell, "pt_app", None):
             self.app = self.shell.pt_app
@@ -25,9 +26,10 @@ class VerbosePrompt:
             self.app = get_app()
             if self.app is not None:
                 # ah shit what if it's a dummy app
-                if isinstance(self.app, )
-                kb_logger.error('Ipython was none but prompt toolkit returned an app.)
-
+                if isinstance(self.app, DummyApplication):
+                    self.app = None
+            else:
+                kb_logger.error("IPython was none but prompt toolkit returned an app.")
 
     def __repr__(self):
         return "{}".format(i for i in dir(self) if not i.startswith("_"))
@@ -46,7 +48,7 @@ class ContainerKeyBindings:
                 self.kb = create_ipython_shortcuts()
 
     def __repr__(self):
-        return '<{}>: {}'.format(self.__class__.__name__, len(self.kb.bindings))
+        return "<{}>: {}".format(self.__class__.__name__, len(self.kb.bindings))
 
     def __add__(self, another_one):
         self.kb.add_binding(another_one)
@@ -64,4 +66,4 @@ class ContainerKeyBindings:
         """Doesn't do anything important."""
         return self.__str__()
 
-    def __index__(self):
+    # def __index__(self):
