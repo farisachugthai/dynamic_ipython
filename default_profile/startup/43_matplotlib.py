@@ -6,6 +6,11 @@ INFO:matplotlib.font_manager:generated new fontManager
 import sys
 
 
+def set_mpl():
+    # TODO
+    pass
+
+
 if __name__ == "__main__":
     try:
         import matplotlib as mpl
@@ -13,7 +18,6 @@ if __name__ == "__main__":
         pass
     else:
         import matplotlib.pyplot as mpl
-
-    if mpl:
         from matplotlib.font_manager import FontManager
         fm = FontManager()
+        set_mpl()
