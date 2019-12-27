@@ -6,6 +6,8 @@ Note
 -----
 Trying to rework this over in ../extensions/namespaces.py
 
+Also worth noting the aliasmanager rewrite in ./22_alias_manager.py
+
 """
 from contextlib import ContextDecorator
 import functools
@@ -128,7 +130,7 @@ def main():
                 busybox_hack(shell)
 
         fzf_aliases = FZF()._setup_fzf()
-        shell.alias_manager.define_alias(FZF._setup_fzf(), 'fzf')
+        # shell.alias_manager.define_alias(FZF._setup_fzf(), 'fzf')
 
 
 if __name__ == "__main__":

@@ -1,3 +1,14 @@
+"""Make prompt_toolkit's keybindings more extensible.
+
+I'm just gonna note how much this bugs me though.::
+
+    In [30]: p = PromptSessionKB()
+    Out[30]: <PromptSessionKB>: 13
+
+    In [31]: a = ApplicationKB()
+    Out[31]: <ApplicationKB>: 24
+
+"""
 import logging
 import reprlib
 from typing import Callable, Optional
@@ -46,20 +57,25 @@ class VerbosePrompt:
                 if isinstance(self.app, DummyApplication):
                     self.app = None
             else:
-                kb_logger.error("IPython was none but prompt toolkit returned an app.")
+                kb_logger.error(
+                    "IPython was none but prompt toolkit returned an app.")
 
     def __repr__(self):
         return "{}".format(i for i in dir(self) if not i.startswith("_"))
 
 
-class ContainerKeyBindings:
-    """Originally this was gonna subclass SList but I wrote like 6 dunders
-    in one shot so I realized it wouldn't be a good idea."""
+class PromptSessionKB:
+    """Bind an interface with IPython's keybindings and define dunders so this behaves properly.
+
+    I think that I'm going to continue this by making a subclass that validates the bindings it's being given
+    because you can add the same keybinding over and over and that's probably
+    never what the user wants to have happen.
+    """
 
     def __init__(self, kb=None, shell=None):
         self.shell = shell or get_ipython()
         if self.shell is not None:
-            self.kb = kb or self.shell.pt_app.app.key_binding
+            self.kb = kb or self.shell.pt_app.key_bindings
             if self.kb is None:
                 self.kb = create_ipython_shortcuts()
 
@@ -67,13 +83,21 @@ class ContainerKeyBindings:
         return "<{}>: {}".format(self.__class__.__name__, len(self.kb.bindings))
 
     def __add__(self, another_one):
-        self.kb.add_binding(another_one)
+        """Honestly not sure if this returns anything."""
+        return self.kb.add_binding(another_one)
 
     def __iadd__(self, another_one):
         return self.__add__(another_one)
 
+    def add(self, another_one):
+        return self.__add__(another_one)
+
     def __len__(self):
         return len(self.kb.bindings)
+
+    @property
+    def len(self):
+        return self.__len__()
 
     def __str__(self):
         return reprlib.Repr().repr_list(self.kb.bindings)
@@ -83,6 +107,25 @@ class ContainerKeyBindings:
         return self.__str__()
 
     # def __index__(self):
+
+    def __iter__(self):
+        """This file in general is gonna suck to test isn't it?"""
+        try:
+            iter(self.kb.bindings)
+        except TypeError:
+            raise  # uhm idk
+
+
+class ApplicationKB(PromptSessionKB):
+    """Functionally the exact same thing except now we're bound to _ip.pt_app.app."""
+
+    def __init__(self, kb=None, shell=None, *args, **kwargs):
+        self.shell = shell or get_ipython()
+        if self.shell is not None:
+            self.kb = kb or self.shell.pt_app.app.key_bindings
+            if self.kb is None:
+                self.kb = create_ipython_shortcuts()
+        super().__init__(kb=self.kb, shell=self.shell, *args, **kwargs)
 
 
 if __name__ == "__main__":
@@ -95,8 +138,10 @@ if __name__ == "__main__":
         # Sweet i might have just broken how pt handles keypresses
 
         # Also let's make an instance of this class
-        container_kb = ContainerKeyBindings(shell=_ip, kb=_ip.pt_app.key_bindings.bindings)
+        container_kb = PromptSessionKB(
+            shell=_ip, kb=_ip.pt_app.key_bindings.bindings)
         # Dude holy shit does this give you a lot
         if _ip.editing_mode == 'vi':
-            more_keybindings = merge_key_bindings([_ip.pt_app.app.key_bindings, load_vi_bindings()])
+            more_keybindings = merge_key_bindings(
+                [_ip.pt_app.app.key_bindings, load_vi_bindings()])
             _ip.pt_app.app.key_bindings = more_keybindings

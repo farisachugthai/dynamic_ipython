@@ -530,7 +530,8 @@ def get_env():
 
 environment = get_env()
 if "LESS" not in environment:
-    os.environ.setdefault("LESS", "JRKMLigeF")
+    # nah you set this var wrong
+    # os.environ.setdefault("LESS", "JRKMLigeF")
     os.environ.setdefault("LESSHISTSIZE", "5000")
 
 if "LESS_TERMCAP_mb" not in environment:
