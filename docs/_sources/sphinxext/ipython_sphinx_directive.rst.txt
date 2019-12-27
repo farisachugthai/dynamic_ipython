@@ -7,9 +7,6 @@ IPython Sphinx Directive
 .. module:: sphinx_directive
    :synopsis: An enhanced extension for Sphinx and rst use.
 
-.. highlight:: ipython
-   :linenothreshold: 3
-
 .. |rst| replace:: reStructured text
 
 .. let's see whether references are case sensitive. Yup!
@@ -225,8 +222,8 @@ Comments are handled and state is preserved.:
    print(foo)
 
 The following section attempts to execute faulty code, namely calling
-the :mod:`matplotlib.pyplot` functions :func:`~matplotlib.pyplot.ioff`
-and :func:`~matplotlib.pyplot.ion` which haven't been defined in this session.
+the :mod:`matplotlib.pyplot` functions ``matplotlib.pyplot.ioff``
+and ``matplotlib.pyplot.ion`` which haven't been defined in this session.
 
 .. todo:: Remove this sentence below like wth?
 
@@ -305,51 +302,54 @@ line just below them (eg `@savefig`).:
 
 .. _pseudo-decorators:
 
-Decorators Glossary
+Pseudo Decorators
 -------------------------
 
-.. glossary::
+.. decorator:: suppress
 
-   @suppress
-       Execute the IPython input block, but :dfn:`@suppress` the input and output
-       block from the rendered output.  Also, can be applied to the entire
-       ``.. ipython`` block as a directive option with ``:suppress:``.
+    Execute the IPython input block, but :dfn:`@suppress` the input and output
+    block from the rendered output.  Also, can be applied to the entire
+    ``.. ipython`` block as a directive option with ``:suppress:``.
 
-   @verbatim
-       Insert the input and output block in :dfn:`@verbatim`, but auto-increment
-       the line numbers. Internally, the interpreter will be fed an empty
-       string, so it is a no-op that keeps line numbering consistent.
-       Also, can be applied to the entire ``.. ipython`` block as a
-       directive option with ``:verbatim:``.
+.. decorator:: verbatim
 
-   @savefig
-      Save the target of the directive to :dfn:`outfile`.
-      *I think I'm just gonna rewrite this entire paragraph.*
-      Save the figure to the static directory and insert it into the
-      document, possibly binding it into a mini-page and/or putting
-      code/figure label/references to associate the code and the figure.
-      Takes args to pass to the image directive (*scale*,
-      *width*, etc can be ``**kwargs``)
+    Insert the input and output block in :dfn:`@verbatim`, but auto-increment
+    the line numbers. Internally, the interpreter will be fed an empty
+    string, so it is a no-op that keeps line numbering consistent.
+    Also, can be applied to the entire ``.. ipython`` block as a
+    directive option with ``:verbatim:``.
 
-   @doctest
-      Compare the pasted in output in the IPython block with the output
-      generated at doc build time, and raise errors if they don't
-      match. Also, can be applied to the entire ``.. ipython`` block as a
-      directive option with ``:doctest:``.
+.. decorator:: savefig
 
-   @suppress
-      execute the ipython input block, but suppress the input and output
-      block from the rendered output.  Also, can be applied to the entire
-      ``..ipython`` block as a directive option with ``:suppress:``.
+   Save the target of the directive to :dfn:`outfile`.
+   *I think I'm just gonna rewrite this entire paragraph.*
+   Save the figure to the static directory and insert it into the
+   document, possibly binding it into a mini-page and/or putting
+   code/figure label/references to associate the code and the figure.
+   Takes args to pass to the image directive (*scale*,
+   *width*, etc can be ``**kwargs``)
 
-   @okexcept
-      Actually is this a decorator?
+.. decorator:: doctest
 
-   @okwarning
-      What about this one?
+   Compare the pasted in output in the IPython block with the output
+   generated at doc build time, and raise errors if they don't
+   match. Also, can be applied to the entire ``.. ipython`` block as a
+   directive option with ``:doctest:``.
 
-   @python
-      This can't be.
+.. decorator:: suppress
+
+   Execute the ipython input block, but suppress the input and output
+   block from the rendered output.  Also, can be applied to the entire
+   ``..ipython`` block as a directive option with ``:suppress:``.
+
+.. decorator:: okexcept
+
+
+.. decorator:: okwarning
+
+
+.. decorator:: python
+
 
 
 .. todo:: Document the magics.py sphinx extension!!

@@ -43,8 +43,7 @@
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="../../default_profile.html" accesskey="U">default_profile</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -62,13 +61,16 @@
 <span class="sd">get_ipython().atexit_operations() during a terminal session you intend</span>
 <span class="sd">on continuing....</span>
 
+<span class="sd">So the IPython.core.ultratb mod was stated to be a port of cgitb.</span>
+
+<span class="sd">Looks like we&#39;re in business!</span>
+
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span>
 <span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Sequence</span>
+<span class="kn">import</span> <span class="nn">cgitb</span>
 
-<span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
-<span class="kn">from</span> <span class="nn">IPython.core</span> <span class="kn">import</span> <span class="n">ultratb</span>
+<span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 
 <span class="kn">from</span> <span class="nn">traitlets.config</span> <span class="kn">import</span> <span class="n">Configurable</span>
 
@@ -78,23 +80,26 @@
 
     <span class="n">instance</span> <span class="o">=</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="ExceptionHook.call"><a class="viewcode-back" href="../../../startup/sysexcept.html#default_profile.startup.50_sysexception.ExceptionHook.call">[docs]</a>    <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Proxy for the call dunder.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+<div class="viewcode-block" id="ExceptionHook.__init__"><a class="viewcode-back" href="../../../startup/sysexcept.html#default_profile.startup.50_sysexception.ExceptionHook.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">shell</span></div>
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">instance</span> <span class="o">=</span> <span class="n">ultratb</span><span class="o">.</span><span class="n">AutoFormattedTB</span><span class="p">(</span>
-                <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;Context&quot;</span><span class="p">,</span> <span class="n">color_scheme</span><span class="o">=</span><span class="s2">&quot;Linux&quot;</span><span class="p">,</span> <span class="n">call_pdb</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ostream</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
-            <span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<div class="viewcode-block" id="ExceptionHook.call"><a class="viewcode-back" href="../../../startup/sysexcept.html#default_profile.startup.50_sysexception.ExceptionHook.call">[docs]</a>    <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">etype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">evalue</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">etb</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Proxy for the call dunder.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">etype</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">evalue</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">etb</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">etype</span><span class="p">,</span> <span class="n">evalue</span><span class="p">,</span> <span class="n">etb</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">etype</span><span class="p">,</span> <span class="n">evalue</span><span class="p">,</span> <span class="n">etb</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">etype</span><span class="p">,</span> <span class="n">evalue</span><span class="p">,</span> <span class="n">etb</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;TODO.&quot;&quot;&quot;</span>
+        <span class="k">pass</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Don&#39;t actually know if it works this way.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s2">&quot;&lt;</span><span class="si">{}</span><span class="s2"> &#39;</span><span class="si">{}</span><span class="s2">&#39;&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="ExceptionTuple"><a class="viewcode-back" href="../../../startup/sysexcept.html#default_profile.startup.50_sysexception.ExceptionTuple">[docs]</a><span class="k">class</span> <span class="nc">ExceptionTuple</span><span class="p">(</span><span class="n">Sequence</span><span class="p">,</span> <span class="n">ABC</span><span class="p">):</span>
+<div class="viewcode-block" id="ExceptionTuple"><a class="viewcode-back" href="../../../startup/sysexcept.html#default_profile.startup.50_sysexception.ExceptionTuple">[docs]</a><span class="k">class</span> <span class="nc">ExceptionTuple</span><span class="p">(</span><span class="n">Sequence</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Simply a test for now but we need to provide the exception hook with this.</span>
 
 <span class="sd">    It needs a tuple of exceptions to catch.</span>
@@ -107,13 +112,9 @@
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="c1"># _ip = get_ipython()</span>
-    <span class="c1"># So the InteractiveShell class tmk has an attribute called excepthook but</span>
-    <span class="c1"># it&#39;s probably a bad idea to overwrite it</span>
-    <span class="c1"># sys.excepthook = ExceptionHook()</span>
-
-    <span class="c1"># _ip.set_custom_exc(ExceptionHook())</span>
-    <span class="k">pass</span>
+    <span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+    <span class="n">handled</span> <span class="o">=</span> <span class="n">cgitb</span><span class="o">.</span><span class="n">Hook</span><span class="p">(</span><span class="n">logdir</span><span class="o">=</span><span class="n">shell</span><span class="o">.</span><span class="n">profile_dir</span><span class="o">.</span><span class="n">log_dir</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;text&#39;</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">excepthook</span> <span class="o">=</span> <span class="n">handled</span>
 </pre></div>
 
           </div>
@@ -139,10 +140,6 @@
     <ul>
       <li><a href="../../index.html">Module code</a>
         <ul>
-      <li><a href="../../default_profile.html">default_profile</a>
-        <ul>
-        </ul>
-      </li>
         </ul>
       </li>
     </ul>
@@ -218,12 +215,11 @@
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="../../default_profile.html" >default_profile</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Dec 22, 2019.
+      Last updated on Dec 27, 2019.
     </div>
   </body>
 </html>

@@ -43,8 +43,7 @@
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="../../default_profile.html" accesskey="U">default_profile</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -95,6 +94,7 @@
 
 <div class="viewcode-block" id="ProfileDirError"><a class="viewcode-back" href="../../../util/profile_override.html#default_profile.util.profile_override.ProfileDirError">[docs]</a><span class="k">class</span> <span class="nc">ProfileDirError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Foo.&quot;&quot;&quot;</span>
+
     <span class="k">pass</span></div>
 
 
@@ -107,17 +107,18 @@
 <span class="sd">    This object knows how to find, create and manage these directories. This</span>
 <span class="sd">    should be used by any code that wants to handle profiles.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="ReprProfileDir.__init__"><a class="viewcode-back" href="../../../util/profile_override.html#default_profile.util.profile_override.ReprProfileDir.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create an init and then make it way shorter.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ensure_dir_exists</span> <span class="o">=</span> <span class="n">DirectoryChecker</span>
-        <span class="n">startup_dir</span> <span class="o">=</span> <span class="n">Unicode</span><span class="p">(</span><span class="s1">&#39;startup&#39;</span><span class="p">)</span>
-        <span class="n">log_dir</span> <span class="o">=</span> <span class="n">Unicode</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
+        <span class="n">startup_dir</span> <span class="o">=</span> <span class="n">Unicode</span><span class="p">(</span><span class="s2">&quot;startup&quot;</span><span class="p">)</span>
+        <span class="n">log_dir</span> <span class="o">=</span> <span class="n">Unicode</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
         <span class="n">location</span> <span class="o">=</span> <span class="n">Unicode</span><span class="p">(</span>
-            <span class="n">help</span><span class="o">=</span>
-            <span class="sd">&quot;&quot;&quot;Set the profile location directly. This overrides the logic used by the</span>
-<span class="sd">            `profile` option.&quot;&quot;&quot;</span><span class="p">,</span>
-            <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">tag</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;Set the profile location directly. This overrides the logic used by the</span>
+<span class="s2">            `profile` option.&quot;&quot;&quot;</span><span class="p">,</span>
+            <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">tag</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 
     <span class="c1"># don&#39;t set the location more than once no matter how many profiles</span>
     <span class="c1"># are instantiated so yes a class attr</span>
@@ -125,124 +126,33 @@
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;I&#39;ll admit this is unnecessary. Oh well.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">location</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">location</span><span class="p">)</span>
 
-    <span class="nd">@observe</span><span class="p">(</span><span class="s1">&#39;location&#39;</span><span class="p">)</span>
+    <span class="nd">@observe</span><span class="p">(</span><span class="s2">&quot;location&quot;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_location_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">change</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;This is so odd to me. What is change when does it get called?&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_location_isset</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Cannot set profile location more than once.&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_location_isset</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="n">new</span> <span class="o">=</span> <span class="n">change</span><span class="p">[</span><span class="s1">&#39;new&#39;</span><span class="p">]</span>
+        <span class="n">new</span> <span class="o">=</span> <span class="n">change</span><span class="p">[</span><span class="s2">&quot;new&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ensure_dir_exists</span><span class="p">(</span><span class="n">new</span><span class="p">)</span>
 
         <span class="c1"># what is static?</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;security&#39;</span><span class="p">,</span> <span class="s1">&#39;log&#39;</span><span class="p">,</span> <span class="s1">&#39;startup&#39;</span><span class="p">,</span> <span class="s1">&#39;pid&#39;</span><span class="p">,</span> <span class="s1">&#39;static&#39;</span><span class="p">]:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;security&quot;</span><span class="p">,</span> <span class="s2">&quot;log&quot;</span><span class="p">,</span> <span class="s2">&quot;startup&quot;</span><span class="p">,</span> <span class="s2">&quot;pid&quot;</span><span class="p">,</span> <span class="s2">&quot;static&quot;</span><span class="p">]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">ensure_dir_exists</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">new</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>
 
-<div class="viewcode-block" id="ReprProfileDir.check_pid_dir"><a class="viewcode-back" href="../../../util/profile_override.html#default_profile.util.profile_override.ReprProfileDir.check_pid_dir">[docs]</a>    <span class="nd">@observe</span><span class="p">(</span><span class="s1">&#39;pid_dir&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">check_pid_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">change</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_mkdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pid_dir</span><span class="p">,</span> <span class="mo">0o40700</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="ReprProfileDir.copy_config_file"><a class="viewcode-back" href="../../../util/profile_override.html#default_profile.util.profile_override.ReprProfileDir.copy_config_file">[docs]</a>    <span class="k">def</span> <span class="nf">copy_config_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_file</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Copy a default config file into the active profile directory.</span>
-
-<span class="sd">        Default configuration files are kept in :mod:`IPython.core.profile`.</span>
-<span class="sd">        This function moves these from that location to the working profile</span>
-<span class="sd">        directory.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">dst</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">location</span><span class="p">,</span> <span class="n">config_file</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">dst</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">overwrite</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">False</span>
-        <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">get_ipython_package_dir</span><span class="p">(),</span> <span class="sa">u</span><span class="s1">&#39;core&#39;</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;profile&#39;</span><span class="p">,</span>
-                                <span class="sa">u</span><span class="s1">&#39;default&#39;</span><span class="p">)</span>
-        <span class="n">src</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">config_file</span><span class="p">)</span>
-        <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">)</span>
-        <span class="k">return</span> <span class="kc">True</span></div>
-
-<div class="viewcode-block" id="ReprProfileDir.create_profile_dir"><a class="viewcode-back" href="../../../util/profile_override.html#default_profile.util.profile_override.ReprProfileDir.create_profile_dir">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">create_profile_dir</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">profile_dir</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Create a new profile directory given a full path.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        profile_dir : str</span>
-<span class="sd">            The full path to the profile directory.  If it does exist, it will</span>
-<span class="sd">            be used.  If not, it will be created.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="n">profile_dir</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="ReprProfileDir.create_profile_dir_by_name"><a class="viewcode-back" href="../../../util/profile_override.html#default_profile.util.profile_override.ReprProfileDir.create_profile_dir_by_name">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">create_profile_dir_by_name</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="sa">u</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Create a profile dir by profile name and path.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        path : unicode</span>
-<span class="sd">            The path (directory) to put the profile directory in.</span>
-<span class="sd">        name : unicode</span>
-<span class="sd">            The name of the profile.  The name of the profile directory will</span>
-<span class="sd">            be &quot;profile_&lt;profile&gt;&quot;.</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="n">ProfileDirError</span><span class="p">(</span><span class="s1">&#39;Directory not found: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">path</span><span class="p">)</span>
-        <span class="n">profile_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;profile_&#39;</span> <span class="o">+</span> <span class="n">name</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="n">profile_dir</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="ReprProfileDir.find_profile_dir_by_name"><a class="viewcode-back" href="../../../util/profile_override.html#default_profile.util.profile_override.ReprProfileDir.find_profile_dir_by_name">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">find_profile_dir_by_name</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span>
-                                 <span class="n">ipython_dir</span><span class="p">,</span>
-                                 <span class="n">name</span><span class="o">=</span><span class="sa">u</span><span class="s1">&#39;default&#39;</span><span class="p">,</span>
-                                 <span class="n">config</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Find an existing profile dir by profile name, return its ProfileDir.</span>
-
-<span class="sd">        This searches through a sequence of paths for a profile dir.  If it</span>
-<span class="sd">        is not found, a :class:`ProfileDirError` exception will be raised.</span>
-
-<span class="sd">        The search path algorithm is:</span>
-
-<span class="sd">        1. :func:`os.getcwd`</span>
-
-<span class="sd">        2. :envvar:IPYTHONDIR`</span>
-
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        ipython_dir : str</span>
-<span class="sd">            The IPython directory to use.</span>
-<span class="sd">        name : unicode or str</span>
-<span class="sd">            The name of the profile.  The name of the profile directory</span>
-<span class="sd">            will be &quot;profile_&lt;profile&gt;&quot;.</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">dirname</span> <span class="o">=</span> <span class="sa">u</span><span class="s1">&#39;profile_&#39;</span> <span class="o">+</span> <span class="n">name</span>
-        <span class="n">paths</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="n">ipython_dir</span><span class="p">]</span>
-        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">:</span>
-            <span class="n">profile_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">dirname</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">profile_dir</span><span class="p">):</span>
-                <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="n">profile_dir</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">ProfileDirError</span><span class="p">(</span><span class="s1">&#39;Profile directory not found in paths: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span>
-                                  <span class="n">dirname</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="ReprProfileDir.find_profile_dir"><a class="viewcode-back" href="../../../util/profile_override.html#default_profile.util.profile_override.ReprProfileDir.find_profile_dir">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">find_profile_dir</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">profile_dir</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Find/create a profile dir and return its ProfileDir.</span>
-
-<span class="sd">        This will create the profile directory if it doesn&#39;t exist.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        profile_dir : unicode or str</span>
-<span class="sd">            The path of the profile directory.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">profile_dir</span> <span class="o">=</span> <span class="n">expand_path</span><span class="p">(</span><span class="n">profile_dir</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">profile_dir</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="n">ProfileDirError</span><span class="p">(</span><span class="s1">&#39;Profile directory not found: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span>
-                                  <span class="n">profile_dir</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="n">profile_dir</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span></div></div>
+<div class="viewcode-block" id="ReprProfileDir.ensure_dir_exists"><a class="viewcode-back" href="../../../util/profile_override.html#default_profile.util.profile_override.ReprProfileDir.ensure_dir_exists">[docs]</a>    <span class="k">def</span> <span class="nf">ensure_dir_exists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="s1">&#39;exists&#39;</span><span class="p">):</span>
+            <span class="n">folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">folder</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">folder</span><span class="o">.</span><span class="n">mkdir</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">PermissionError</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">errno</span><span class="o">.</span><span class="n">EPERM</span>
+            <span class="k">except</span> <span class="ne">FileExistsError</span><span class="p">:</span>
+                <span class="k">raise</span></div></div>
+            <span class="c1"># except IsADirectoryError:</span>
+                <span class="c1"># Do we need to catch this?</span>
 
 
 <div class="viewcode-block" id="DirectoryChecker"><a class="viewcode-back" href="../../../util/profile_override.html#default_profile.util.profile_override.DirectoryChecker">[docs]</a><span class="k">class</span> <span class="nc">DirectoryChecker</span><span class="p">:</span>
@@ -251,6 +161,7 @@
 <span class="sd">    Dude we&#39;re allowed to subclass os.Pathlike. I wonder if that&#39;d make this</span>
 <span class="sd">    easier.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="DirectoryChecker.__init__"><a class="viewcode-back" href="../../../util/profile_override.html#default_profile.util.profile_override.DirectoryChecker.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">canary</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize our own version of ipython.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">canary</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -268,7 +179,8 @@
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">canary</span><span class="p">,</span> <span class="n">InteractiveShellEmbed</span><span class="p">):</span>
                 <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
                     <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">You are currently in an embedded IPython shell,</span><span class="se">\n</span><span class="s2">&quot;</span>
-                    <span class="s2">&quot;the configuration will not be loaded.</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="s2">&quot;the configuration will not be loaded.</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># Not inside IPython</span>
             <span class="c1"># Build a terminal app in order to force ipython to load the configuration</span>
@@ -324,8 +236,7 @@
         <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">canary</span><span class="o">.</span><span class="n">profile_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span>
-                <span class="s2">&quot;~/.ipython/default_profile&quot;</span><span class="p">)</span></div></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">canary</span><span class="o">.</span><span class="n">profile_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~/.ipython/default_profile&quot;</span><span class="p">)</span></div></div>
 </pre></div>
 
           </div>
@@ -351,10 +262,6 @@
     <ul>
       <li><a href="../../index.html">Module code</a>
         <ul>
-      <li><a href="../../default_profile.html">default_profile</a>
-        <ul>
-        </ul>
-      </li>
         </ul>
       </li>
     </ul>
@@ -430,12 +337,11 @@
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="../../default_profile.html" >default_profile</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Dec 22, 2019.
+      Last updated on Dec 27, 2019.
     </div>
   </body>
 </html>

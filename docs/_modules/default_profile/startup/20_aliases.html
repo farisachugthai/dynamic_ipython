@@ -43,8 +43,7 @@
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="../../default_profile.html" accesskey="U">default_profile</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -61,7 +60,7 @@
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
 
-<span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+<span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 
 <span class="kn">from</span> <span class="nn">default_profile</span> <span class="kn">import</span> <span class="n">ask_for_import</span>
 
@@ -71,7 +70,7 @@
 
 <span class="n">ALIAS_LOGGER</span> <span class="o">=</span> <span class="n">stream_logger</span><span class="p">(</span>
     <span class="n">logger</span><span class="o">=</span><span class="s2">&quot;default_profile.startup.20_aliases&quot;</span><span class="p">,</span>
-    <span class="n">msg_format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> : </span><span class="si">%(levelname)s</span><span class="s2"> : </span><span class="si">%(module)s</span><span class="s2"> </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="n">msg_format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> </span><span class="si">%(levelname)s</span><span class="s2"> </span><span class="si">%(module)s</span><span class="s2"> </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span>
     <span class="n">log_level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">,</span>
 <span class="p">)</span>
 
@@ -79,7 +78,7 @@
 <div class="viewcode-block" id="CommonAliases"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases">[docs]</a><span class="k">class</span> <span class="nc">CommonAliases</span><span class="p">:</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Add aliases common to all OSes. Overwhelmingly :command:`Git` aliases.</span>
 
-<span class="sd">    This method adds around 70 to 80 aliases that can be</span>
+<span class="sd">    This method adds around 100 aliases that can be</span>
 <span class="sd">    implemented on most of the major platforms.</span>
 
 <span class="sd">    The only real requirement is Git being installed and working. Docker</span>
@@ -87,7 +86,7 @@
 
 <span class="sd">    .. todo:: :command:`git show`</span>
 
-<span class="sd">    .. todo:: The classs method doesn&#39;t work if we don&#39;t have a class attribute.</span>
+<span class="sd">    .. todo:: The class method doesn&#39;t work if we don&#39;t have a class attribute.</span>
 
 <span class="sd">        But if we create a class attribute, does updating the aliases for an instance</span>
 <span class="sd">        change it for the class? Write a test to ensure that this isn&#39;t what</span>
@@ -120,7 +119,7 @@
             <span class="k">yield</span> <span class="n">itm</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">&quot;Common Aliases: </span><span class="si">{!r}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span><span class="p">))</span>
+        <span class="k">return</span> <span class="s2">&quot;&lt;Common Aliases&gt;: # of aliases: </span><span class="si">{!r}</span><span class="s2"> &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span><span class="p">))</span>
 
 <div class="viewcode-block" id="CommonAliases.set_user_aliases"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.set_user_aliases">[docs]</a>    <span class="k">def</span> <span class="nf">set_user_aliases</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">aliases</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -180,12 +179,12 @@
             <span class="p">(</span><span class="s2">&quot;gau&quot;</span><span class="p">,</span> <span class="s2">&quot;git add --update %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;ga.&quot;</span><span class="p">,</span> <span class="s2">&quot;git add .&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;gb&quot;</span><span class="p">,</span> <span class="s2">&quot;git branch --all --remote --verbose %l&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;gbd&quot;</span><span class="p">,</span> <span class="s2">&quot;git branch -d %l&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;gbD&quot;</span><span class="p">,</span> <span class="s2">&quot;git branch -D %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;gbl&quot;</span><span class="p">,</span> <span class="s2">&quot;git blame %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;gbr&quot;</span><span class="p">,</span> <span class="s2">&quot;git branch -arv %l&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;gbrd&quot;</span><span class="p">,</span> <span class="s2">&quot;git branch -rd %l&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;gbrD&quot;</span><span class="p">,</span> <span class="s2">&quot;git branch -rD %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gbrd&quot;</span><span class="p">,</span> <span class="s2">&quot;git branch -d %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gbrD&quot;</span><span class="p">,</span> <span class="s2">&quot;git branch -D %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gbrrd&quot;</span><span class="p">,</span> <span class="s2">&quot;git branch -rd %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gbrrD&quot;</span><span class="p">,</span> <span class="s2">&quot;git branch -rD %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;gbru&quot;</span><span class="p">,</span> <span class="s2">&quot;git branch --set-upstream-to --verbose origin %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;gbrv&quot;</span><span class="p">,</span> <span class="s2">&quot;git branch --all --verbose --remote %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;gci&quot;</span><span class="p">,</span> <span class="s2">&quot;git commit %l&quot;</span><span class="p">),</span>
@@ -239,11 +238,11 @@
             <span class="p">(</span><span class="s2">&quot;gpom&quot;</span><span class="p">,</span> <span class="s2">&quot;git pull origin master %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;gpu&quot;</span><span class="p">,</span> <span class="s2">&quot;git push %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;gr&quot;</span><span class="p">,</span> <span class="s2">&quot;git remote -v %l&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;gre&quot;</span><span class="p">,</span> <span class="s2">&quot;git remote %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;grb&quot;</span><span class="p">,</span> <span class="s2">&quot;git rebase %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;grba&quot;</span><span class="p">,</span> <span class="s2">&quot;git rebase --abort %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;grbc&quot;</span><span class="p">,</span> <span class="s2">&quot;git rebase --continue %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;grbi&quot;</span><span class="p">,</span> <span class="s2">&quot;git rebase --interactive %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gre&quot;</span><span class="p">,</span> <span class="s2">&quot;git remote %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;gs&quot;</span><span class="p">,</span> <span class="s2">&quot;git status %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;gsh&quot;</span><span class="p">,</span> <span class="s2">&quot;git stash %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;gsha&quot;</span><span class="p">,</span> <span class="s2">&quot;git stash apply %l&quot;</span><span class="p">),</span>
@@ -255,7 +254,10 @@
             <span class="p">(</span><span class="s2">&quot;gshsp&quot;</span><span class="p">,</span> <span class="s2">&quot;git stash show --patch %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;gss&quot;</span><span class="p">,</span> <span class="s2">&quot;git status -sb %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;gst&quot;</span><span class="p">,</span> <span class="s2">&quot;git diff --stat %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gsw&quot;</span><span class="p">,</span> <span class="s2">&quot;git switch --progress %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gswm&quot;</span><span class="p">,</span> <span class="s2">&quot;git switch --progress master %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;gt&quot;</span><span class="p">,</span> <span class="s2">&quot;git tag --list %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gtd&quot;</span><span class="p">,</span> <span class="s2">&quot;git tag --delete %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;lswitch&quot;</span><span class="p">,</span> <span class="s2">&quot;legit switch&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;lsync&quot;</span><span class="p">,</span> <span class="s2">&quot;legit sync&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;lpublish&quot;</span><span class="p">,</span> <span class="s2">&quot;legit publish&quot;</span><span class="p">),</span>
@@ -302,6 +304,7 @@
 <span class="sd">            magic_name=name)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="LinuxAliases.__init__"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.LinuxAliases.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">aliases</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The WindowsAliases implementation of this is odd so maybe branch off.</span>
 
@@ -373,10 +376,8 @@
             <span class="c1"># only prompts with more than 3 files or recursed dirs.</span>
             <span class="p">(</span><span class="s2">&quot;rm&quot;</span><span class="p">,</span> <span class="s2">&quot;rm -Iv %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;rmdir&quot;</span><span class="p">,</span> <span class="s2">&quot;rmdir -v %l&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;default_profile&quot;</span><span class="p">,</span>
-             <span class="s2">&quot;cd ~/projects/dotfiles/unix/.ipython/default_profile&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;startup&quot;</span><span class="p">,</span>
-             <span class="s2">&quot;cd ~/projects/dotfiles/unix/.ipython/default_profile/startup&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;default_profile&quot;</span><span class="p">,</span> <span class="s2">&quot;cd ~/projects/dotfiles/unix/.ipython/default_profile&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;startup&quot;</span><span class="p">,</span> <span class="s2">&quot;cd ~/projects/dotfiles/unix/.ipython/default_profile/startup&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;tail&quot;</span><span class="p">,</span> <span class="s2">&quot;tail -n 30 %l&quot;</span><span class="p">),</span>
         <span class="p">]</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span></div>
@@ -416,6 +417,7 @@
 <span class="sd">    Would it be useful to subclass :class:`reprlib.Repr` here?</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="WindowsAliases.__init__"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.WindowsAliases.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">user_aliases</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize the platform specific alias manager with IPython.</span>
 
@@ -578,10 +580,7 @@
             <span class="p">(</span><span class="s2">&quot;stz&quot;</span><span class="p">,</span> <span class="s2">&quot;Set-TimeZone %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;sv&quot;</span><span class="p">,</span> <span class="s2">&quot;Set-Variable %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;tee&quot;</span><span class="p">,</span> <span class="s2">&quot;Tee-Object %l&quot;</span><span class="p">),</span>
-            <span class="p">(</span>
-                <span class="s2">&quot;tree&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;tree /F /A %l&quot;</span><span class="p">,</span>
-            <span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;tree&quot;</span><span class="p">,</span> <span class="s2">&quot;tree /F /A %l&quot;</span><span class="p">,),</span>
             <span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;Get-Content %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;where&quot;</span><span class="p">,</span> <span class="s2">&quot;Where-Object %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;wjb&quot;</span><span class="p">,</span> <span class="s2">&quot;Wait-Job %l&quot;</span><span class="p">),</span>
@@ -598,11 +597,12 @@
         <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;COMSPEC&quot;</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;COMSPEC&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> is None as are </span><span class="si">%s</span><span class="s1"> and </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="p">,</span>
-                            <span class="s1">&#39;$SHELL&#39;</span><span class="p">,</span> <span class="s1">&#39;$COMSPEC&#39;</span><span class="p">)</span></div></div>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> is None as are </span><span class="si">%s</span><span class="s2"> and </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="p">,</span> <span class="s2">&quot;$SHELL&quot;</span><span class="p">,</span> <span class="s2">&quot;$COMSPEC&quot;</span>
+            <span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<div class="viewcode-block" id="generate_aliases"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.generate_aliases">[docs]</a><span class="k">def</span> <span class="nf">generate_aliases</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Set up aliases for the user namespace for IPython.</span>
 
 <span class="sd">    Planning on coming up with a new way of introducing the aliases into the user namespace.</span>
@@ -631,23 +631,35 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="n">user_aliases</span> <span class="o">+=</span> <span class="n">WindowsAliases</span><span class="o">.</span><span class="n">cmd_aliases</span><span class="p">()</span>
         <span class="k">except</span> <span class="ne">SyntaxError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="s1">&#39;lineno&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="s2">&quot;lineno&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
                 <span class="nb">print</span><span class="p">(</span>
-                    <span class="s1">&#39;Error | default_profile.startup.20_aliases:main | line: </span><span class="si">{}</span><span class="s1">&#39;</span>
-                    <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">lineno</span><span class="p">))</span>
+                    <span class="s2">&quot;Error | default_profile.startup.20_aliases:main | line: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">e</span><span class="o">.</span><span class="n">lineno</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
 
-    <span class="n">_ip</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="n">user_aliases</span>
+    <span class="c1"># _ip.alias_manager.user_aliases = user_aliases</span>
     <span class="c1"># Apparently the big part i was missing was rerunning the init_aliases method</span>
-    <span class="n">_ip</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">init_aliases</span><span class="p">()</span>
+    <span class="c1"># _ip.alias_manager.init_aliases()</span>
+    <span class="k">return</span> <span class="n">user_aliases</span></div>
 
-    <span class="n">ALIAS_LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Number of aliases is: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">user_aliases</span><span class="p">)</span></div>
 
+<div class="viewcode-block" id="redefine_aliases"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.redefine_aliases">[docs]</a><span class="k">def</span> <span class="nf">redefine_aliases</span><span class="p">(</span><span class="n">aliases</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Now a function to allow the user to rerun as necesaary.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">shell</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">aliases</span><span class="p">:</span>
+        <span class="n">shell</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">define_alias</span><span class="p">(</span><span class="o">*</span><span class="n">i</span><span class="p">)</span></div>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">_ip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">main</span><span class="p">()</span>
+        <span class="n">all_aliases</span> <span class="o">=</span> <span class="n">generate_aliases</span><span class="p">()</span>
+        <span class="n">redefine_aliases</span><span class="p">(</span><span class="n">all_aliases</span><span class="p">)</span>
+        <span class="n">ALIAS_LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Number of aliases is: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">all_aliases</span><span class="p">)</span>
 </pre></div>
 
           </div>
@@ -673,10 +685,6 @@
     <ul>
       <li><a href="../../index.html">Module code</a>
         <ul>
-      <li><a href="../../default_profile.html">default_profile</a>
-        <ul>
-        </ul>
-      </li>
         </ul>
       </li>
     </ul>
@@ -752,12 +760,11 @@
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../../index.html">Dynamic IPython</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="../../default_profile.html" >default_profile</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Dec 22, 2019.
+      Last updated on Dec 27, 2019.
     </div>
   </body>
 </html>

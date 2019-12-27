@@ -65,7 +65,7 @@
 <h2>Subcommands in IPython and Jupyter.<a class="headerlink" href="#subcommands-in-ipython-and-jupyter" title="Permalink to this headline">¶</a></h2>
 <p>There’s a ton that could be done here.
 Well I guess sub-apps would be a better name for it but whatever.</p>
-<p>Mostly here to note that I think the ‘editor’ <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.hooks.html#module-IPython.core.hooks" title="(in IPython v7.10.2)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">hooks</span></code></a>
+<p>Mostly here to note that I think the ‘editor’ <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.hooks.html#module-IPython.core.hooks" title="(in IPython v7.11.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">hooks</span></code></a>
 doesn’t work the way it’s supposed to if you want to configure it.</p>
 <p>If you run <code class="xref py py-obj docutils literal notranslate"><span class="pre">%edit</span></code> in the shell it doesn’t provide any arguments, but
 it’ll complain that it needs a function that accepts 4 positional parameters.</p>
@@ -131,7 +131,7 @@ on using subcommand &#39;cmd&#39;, do: <span class="nv">`ipython-history cmd -h`
 </div>
 <p>Also the original implementation only defines 2 options for the subcommand.</p>
 <p>But it would be nice to have options like <code class="docutils literal notranslate"><span class="pre">backup</span></code> and <strong class="command">grep</strong>
-or something. <a href="#id2"><span class="problematic" id="id3">*</span></a>Though to be fair the <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.utils.text.html#IPython.utils.text.SList" title="(in IPython v7.10.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SList</span></code></a> class
+or something. <a href="#id2"><span class="problematic" id="id3">*</span></a>Though to be fair the <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.utils.text.html#IPython.utils.text.SList" title="(in IPython v7.11.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SList</span></code></a> class
 has a ‘grep’ method.</p>
 <p>There are a handful of <em>nice to have</em> but ultimately pointless functions in
 <code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython.utils</span></code> so why not take advantage?</p>
@@ -143,7 +143,7 @@ has a ‘grep’ method.</p>
 <blockquote>
 <div><p>There are two main ways to define your own magic functions: from standalone
 functions and by inheriting from a base class provided by IPython:
-<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.magic.html#IPython.core.magic.Magics" title="(in IPython v7.10.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Magics</span></code></a>.</p>
+<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.magic.html#IPython.core.magic.Magics" title="(in IPython v7.11.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Magics</span></code></a>.</p>
 </div></blockquote>
 <p>It then gives an example.</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="c1"># The class MUST call this class decorator at creation time</span>
@@ -183,6 +183,52 @@ wrapper function? Off the top of my head I’m guessing something like this.:</p
 </div>
 <p>I’m sure that I poorly executed that here; however, after some delibration,
 would it be that hard to do?</p>
+</div>
+<div class="section" id="prompt-toolkit">
+<h2>Prompt Toolkit<a class="headerlink" href="#prompt-toolkit" title="Permalink to this headline">¶</a></h2>
+<p>Modify the KeyBindings classes so that the following works.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">shell</span><span class="o">.</span><span class="n">editing_mode</span> <span class="o">==</span> <span class="s1">&#39;vi&#39;</span><span class="p">:</span>
+    <span class="c1"># kb.add(load_vi_bindings(), filter=(has_focus(DEFAULT_BUFFER)))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">load_vi_bindings</span><span class="p">()</span><span class="o">.</span><span class="n">bindings</span><span class="p">:</span>
+        <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">has_focus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)))</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">load_basic_bindings</span><span class="p">():</span>
+        <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">has_focus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)))</span>
+
+<span class="c1"># don&#39;t do this one of these keys steals &lt;C-d&gt;</span>
+<span class="n">kb</span> <span class="o">=</span> <span class="n">merge_key_bindings</span><span class="p">([</span>
+    <span class="n">load_cpr_bindings</span><span class="p">(),</span>
+    <span class="n">load_basic_bindings</span><span class="p">(),</span>
+    <span class="n">load_mouse_bindings</span><span class="p">(),</span>
+    <span class="n">kb</span><span class="p">,</span>
+<span class="p">])</span>
+</pre></div>
+</div>
+<p>Currently every part fails.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">load_vi_bindings</span><span class="p">())</span>
+
+<span class="ne">TypeError</span><span class="p">:</span> <span class="nb">object</span> <span class="n">of</span> <span class="nb">type</span> <span class="s1">&#39;ConditionalKeyBindings&#39;</span> <span class="n">has</span> <span class="n">no</span> <span class="nb">len</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Uh that’s really confusing but when you go to
+prompt_toolkit.key_binding.key_bindings you’ll see a …wow I can’t find the
+method that this came from. Whatever. Next!:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [39]: </span><span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.defaults</span> <span class="kn">import</span> <span class="n">load_basic_bindings</span>
+<span class="gp">In [40]: </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">load_basic_bindings</span><span class="p">():</span>
+<span class="go">    ...:     print(i)</span>
+<span class="go">    ...:</span>
+<span class="go">         TypeError: &#39;KeyBindings&#39; object is not iterable</span>
+</pre></div>
+</div>
+<p>This doesn’t even feel internally consistent. Alright let’s play by his rules.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [42]: </span><span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span><span class="o">.</span><span class="n">add</span><span class="p">()</span>
+<span class="go">AttributeError: &#39;_MergedKeyBindings&#39; object has no attribute &#39;add&#39;</span>
+</pre></div>
+</div>
+<p>…??????</p>
+<p>So if I merge my key bindings at any point I shoot myself in the foot from
+adding more later?</p>
+<p>Holy hell.</p>
 </div>
 </div>
 
@@ -228,6 +274,7 @@ would it be that hard to do?</p>
 <li><a class="reference internal" href="#ipython-history">IPython history</a></li>
 <li><a class="reference internal" href="#ipython-history-api">IPython History API</a></li>
 <li><a class="reference internal" href="#writing-magics-for-our-users">Writing Magics For Our Users</a></li>
+<li><a class="reference internal" href="#prompt-toolkit">Prompt Toolkit</a></li>
 </ul>
 </li>
 </ul>
@@ -279,6 +326,10 @@ would it be that hard to do?</p>
 <li class="toctree-l1"><a class="reference internal" href="jobcontrol.html">Job Control</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Todo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dev.html">Developers Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jupyter/index.html">jupyter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="jupyter/qtconsole.html">Jupyter QTConsole</a></li>
+</ul>
+</li>
 </ul>
 
     
@@ -313,7 +364,7 @@ would it be that hard to do?</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Dec 22, 2019.
+      Last updated on Dec 27, 2019.
     </div>
   </body>
 </html>
