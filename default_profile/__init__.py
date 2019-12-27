@@ -8,6 +8,7 @@ Moved ask_for_import up here so we can import it from all of the profiles
 below without intermingling.
 
 """
+import importlib
 import logging
 import sys
 from traitlets.config.application import LevelFormatter

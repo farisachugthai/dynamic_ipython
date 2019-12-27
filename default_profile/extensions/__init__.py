@@ -17,7 +17,7 @@ from . import cwd_prompt, example
 from .event_watcher_example import VarWatcher
 from .job_control import install
 from .pd_csv import pd_csv
-from .termux_clipboard import termux_clipboard_get
+from .termux_clipboard import ClipboardMagics
 
 extensions_logger = logging.getLogger(name="default_profile").getChild("extensions")
 extensions_handler = logging.StreamHandler()

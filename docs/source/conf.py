@@ -49,46 +49,52 @@ Here's a little info from the Sphinx website.
       only highlighting, you can set it back to ``'python'``.
 
 """
-# Stdlib imports
-from datetime import datetime
 import functools
-from importlib import import_module
 import logging
 import math
 import os
-from pathlib import Path
-from pprint import pprint
 import re
 import sys
 import time
+from datetime import datetime
+from importlib import import_module
+from pathlib import Path
+from pprint import pprint
 from typing import Dict
+
+import sphinx
+from IPython.lib.lexers import IPyLexer, IPythonTracebackLexer
+from IPython.sphinxext import ipython_directive
+from sphinx import addnodes  # noqa
+from sphinx.domains.rst import ReSTDomain
+from sphinx.ext.autodoc import cut_lines
+from sphinx.util.docfields import GroupedField
+from sphinx.util.logging import getLogger
+from traitlets.config import Config
+
+import default_profile
+from default_profile import extensions, util
+from default_profile.__about__ import __version__
+# Stdlib imports
+from default_profile.sphinxext import CellMagicRole, LineMagicRole
+from default_profile.sphinxext.magics import CellMagicRole, LineMagicRole
+from default_profile.startup import *
 
 # Logging
 DOCS_LOGGER = logging.getLogger(name=__name__)
 DOCS_HANDLER = logging.StreamHandler()
-DOCS_LOGGER.addHandler(DOCS_HANDLER.setLevel(logging.INFO))
+DOCS_HANDLER.setLevel(logging.INFO)
+DOCS_LOGGER.addHandler(DOCS_HANDLER)
 DOCS_LOGGER.setLevel(logging.INFO)
 
 # Third party
-import sphinx
-from sphinx.ext.autodoc import cut_lines
-from sphinx.util.docfields import GroupedField
-from sphinx.domains.rst import ReSTDomain
-from sphinx.util.logging import getLogger
 # Yes i do actually configure my own logger and sphinxs
 sphinx_logger = getLogger(name=__name__).setLevel(logging.DEBUG)
 
-from IPython.lib.lexers import IPyLexer, IPythonTracebackLexer
-from IPython.sphinxext import ipython_directive
-from traitlets.config import Config
 
 # On to my imports
-import default_profile
-from default_profile.__about__ import __version__
-from default_profile import extensions, util
 # from default_profile.sphinxext import ipython_directive
 
-from default_profile.startup import *
 
 DOCS = Path(__file__).resolve().parent.parent
 
@@ -97,6 +103,7 @@ DOCS = Path(__file__).resolve().parent.parent
 ROOT = DOCS.parent
 JUPYTER = ROOT.joinpath('jupyter_conf')
 sys.path.insert(0, str(JUPYTER))
+
 
 def ask_for_import(mod):
     """Try/except for importing modules."""
@@ -138,6 +145,7 @@ extensions = [
     'sphinx.ext.viewcode',
     'IPython.sphinxext.ipython_directive',
     'IPython.sphinxext.ipython_console_highlighting',
+    'default_profile.sphinxext.magics',
 ]
 
 # if ask_for_import('numpydoc'):
@@ -592,7 +600,6 @@ plot_rcparams = {
 
 # -- Setup -------------------------------------------------------------------
 
-from sphinx import addnodes  # noqa
 
 
 def parse_event(sig, signode):
