@@ -65,10 +65,11 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">re</span>
 
-<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(name)-12s</span><span class="s1">: </span><span class="si">%(levelname)-8s</span><span class="s1"> </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%(name)-12s</span><span class="s2">: </span><span class="si">%(levelname)-8s</span><span class="s2"> </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">)</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">sphinx</span> <span class="kn">import</span> <span class="n">addnodes</span>
+
     <span class="c1"># from sphinx.domains.std import StandardDomain</span>
     <span class="kn">from</span> <span class="nn">sphinx.roles</span> <span class="kn">import</span> <span class="n">XRefRole</span>
 <span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="n">ModuleNotFoundError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
@@ -89,10 +90,7 @@
             <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-            <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="se">\t</span><span class="s1"> </span><span class="se">\t</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">err</span><span class="p">)</span>
-
+            <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="se">\t</span><span class="s2"> </span><span class="se">\t</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">err</span><span class="p">)</span>
 
         <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">err</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;KEEP IT MOVIN&#39; OVA THERE&quot;&quot;&quot;</span>
@@ -126,6 +124,7 @@
 
 <div class="viewcode-block" id="LineMagicRole"><a class="viewcode-back" href="../../../sphinxext/magics.html#default_profile.sphinxext.magics.LineMagicRole">[docs]</a><span class="k">class</span> <span class="nc">LineMagicRole</span><span class="p">(</span><span class="n">XRefRole</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Cross reference role displayed with a % prefix.&quot;&quot;&quot;</span>
+
     <span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;%&quot;</span>
 
 <div class="viewcode-block" id="LineMagicRole.process_link"><a class="viewcode-back" href="../../../sphinxext/magics.html#default_profile.sphinxext.magics.LineMagicRole.process_link">[docs]</a>    <span class="k">def</span> <span class="nf">process_link</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">refnode</span><span class="p">,</span> <span class="n">has_explicit_title</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
@@ -151,17 +150,15 @@
 
 
 <div class="viewcode-block" id="setup"><a class="viewcode-back" href="../../../sphinxext/magics.html#default_profile.sphinxext.magics.setup">[docs]</a><span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="n">app</span><span class="p">):</span>
-    <span class="n">app</span><span class="o">.</span><span class="n">add_object_type</span><span class="p">(</span>
-        <span class="s1">&#39;magic&#39;</span><span class="p">,</span> <span class="s1">&#39;magic&#39;</span><span class="p">,</span> <span class="s1">&#39;pair: </span><span class="si">%s</span><span class="s1">; magic command&#39;</span><span class="p">,</span> <span class="n">parse_magic</span>
-    <span class="p">)</span>
-    <span class="n">app</span><span class="o">.</span><span class="n">add_role_to_domain</span><span class="p">(</span><span class="s1">&#39;std&#39;</span><span class="p">,</span> <span class="s1">&#39;linemagic&#39;</span><span class="p">,</span> <span class="n">LineMagicRole</span><span class="p">(),</span> <span class="n">override</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">add_object_type</span><span class="p">(</span><span class="s2">&quot;magic&quot;</span><span class="p">,</span> <span class="s2">&quot;magic&quot;</span><span class="p">,</span> <span class="s2">&quot;pair: </span><span class="si">%s</span><span class="s2">; magic command&quot;</span><span class="p">,</span> <span class="n">parse_magic</span><span class="p">)</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">add_role_to_domain</span><span class="p">(</span><span class="s2">&quot;std&quot;</span><span class="p">,</span> <span class="s2">&quot;linemagic&quot;</span><span class="p">,</span> <span class="n">LineMagicRole</span><span class="p">(),</span> <span class="n">override</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="n">app</span><span class="o">.</span><span class="n">add_object_type</span><span class="p">(</span>
-        <span class="s1">&#39;cellmagic&#39;</span><span class="p">,</span> <span class="s1">&#39;cellmagic&#39;</span><span class="p">,</span> <span class="s1">&#39;pair: </span><span class="si">%s</span><span class="s1">; cell magic&#39;</span><span class="p">,</span> <span class="n">parse_cell_magic</span>
+        <span class="s2">&quot;cellmagic&quot;</span><span class="p">,</span> <span class="s2">&quot;cellmagic&quot;</span><span class="p">,</span> <span class="s2">&quot;pair: </span><span class="si">%s</span><span class="s2">; cell magic&quot;</span><span class="p">,</span> <span class="n">parse_cell_magic</span>
     <span class="p">)</span>
-    <span class="n">app</span><span class="o">.</span><span class="n">add_role_to_domain</span><span class="p">(</span><span class="s1">&#39;std&#39;</span><span class="p">,</span> <span class="s1">&#39;cellmagic&#39;</span><span class="p">,</span> <span class="n">CellMagicRole</span><span class="p">(),</span> <span class="n">override</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">add_role_to_domain</span><span class="p">(</span><span class="s2">&quot;std&quot;</span><span class="p">,</span> <span class="s2">&quot;cellmagic&quot;</span><span class="p">,</span> <span class="n">CellMagicRole</span><span class="p">(),</span> <span class="n">override</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;parallel_read_safe&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;parallel_write_safe&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;parallel_read_safe&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;parallel_write_safe&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
     <span class="k">return</span> <span class="n">metadata</span></div>
 </pre></div>
 
@@ -267,7 +264,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Dec 27, 2019.
+      Last updated on Dec 28, 2019.
     </div>
   </body>
 </html>

@@ -96,11 +96,11 @@
     <span class="c1"># Todo: Use their context manager to reset printoptions</span>
     <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">inf</span><span class="p">,</span> <span class="n">nan</span>
 
-    <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;array&#39;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;array&quot;</span><span class="p">):</span>
         <span class="c1"># Remove array( and )</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
-    <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;[&#39;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;[&quot;</span><span class="p">):</span>
         <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># Assume its a regular float. Force 1D so we can index into it.</span>
@@ -140,8 +140,10 @@
             <span class="n">rtol</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
             <span class="n">atol</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
         <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
-            <span class="n">e</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Both `rtol` and `atol` must be specified &quot;</span>
-                 <span class="s2">&quot;if either are specified: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="p">))</span>
+            <span class="n">e</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;Both `rtol` and `atol` must be specified &quot;</span>
+                <span class="s2">&quot;if either are specified: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+            <span class="p">)</span>
             <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
 
     <span class="k">try</span><span class="p">:</span>
@@ -154,37 +156,45 @@
         <span class="n">found_isnan</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">found</span><span class="p">)</span>
         <span class="n">submitted_isnan</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">submitted</span><span class="p">)</span>
         <span class="n">error</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">found_isnan</span><span class="p">,</span> <span class="n">submitted_isnan</span><span class="p">)</span>
-        <span class="n">error</span> <span class="o">|=</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">found</span><span class="p">[</span><span class="o">~</span><span class="n">found_isnan</span><span class="p">],</span>
-                                 <span class="n">submitted</span><span class="p">[</span><span class="o">~</span><span class="n">submitted_isnan</span><span class="p">],</span>
-                                 <span class="n">rtol</span><span class="o">=</span><span class="n">rtol</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">atol</span><span class="p">)</span>
+        <span class="n">error</span> <span class="o">|=</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span>
+            <span class="n">found</span><span class="p">[</span><span class="o">~</span><span class="n">found_isnan</span><span class="p">],</span> <span class="n">submitted</span><span class="p">[</span><span class="o">~</span><span class="n">submitted_isnan</span><span class="p">],</span> <span class="n">rtol</span><span class="o">=</span><span class="n">rtol</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">atol</span>
+        <span class="p">)</span>
 
-    <span class="n">TAB</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span> <span class="o">*</span> <span class="mi">4</span>
+    <span class="n">TAB</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="mi">4</span>
     <span class="n">directive</span> <span class="o">=</span> <span class="n">sphinx_shell</span><span class="o">.</span><span class="n">directive</span>
     <span class="k">if</span> <span class="n">directive</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">source</span> <span class="o">=</span> <span class="s1">&#39;Unavailable&#39;</span>
-        <span class="n">content</span> <span class="o">=</span> <span class="s1">&#39;Unavailable&#39;</span>
+        <span class="n">source</span> <span class="o">=</span> <span class="s2">&quot;Unavailable&quot;</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="s2">&quot;Unavailable&quot;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">source</span> <span class="o">=</span> <span class="n">directive</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">current_source</span>
         <span class="c1"># Add tabs and make into a single string.</span>
-        <span class="n">content</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">TAB</span> <span class="o">+</span> <span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">directive</span><span class="o">.</span><span class="n">content</span><span class="p">])</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">TAB</span> <span class="o">+</span> <span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">directive</span><span class="o">.</span><span class="n">content</span><span class="p">])</span>
 
     <span class="k">if</span> <span class="n">error</span><span class="p">:</span>
 
-        <span class="n">e</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;doctest float comparison failure</span><span class="se">\n\n</span><span class="s1">&#39;</span>
-             <span class="s1">&#39;Document source: </span><span class="si">{0}</span><span class="se">\n\n</span><span class="s1">&#39;</span>
-             <span class="s1">&#39;Raw content: </span><span class="se">\n</span><span class="si">{1}</span><span class="se">\n\n</span><span class="s1">&#39;</span>
-             <span class="s1">&#39;On input line(s):</span><span class="se">\n</span><span class="si">{TAB}{2}</span><span class="se">\n\n</span><span class="s1">&#39;</span>
-             <span class="s1">&#39;we found output:</span><span class="se">\n</span><span class="si">{TAB}{3}</span><span class="se">\n\n</span><span class="s1">&#39;</span>
-             <span class="s1">&#39;instead of the expected:</span><span class="se">\n</span><span class="si">{TAB}{4}</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="p">)</span>
-        <span class="n">e</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">content</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_lines</span><span class="p">),</span> <span class="nb">repr</span><span class="p">(</span><span class="n">found</span><span class="p">),</span>
-                     <span class="nb">repr</span><span class="p">(</span><span class="n">submitted</span><span class="p">),</span> <span class="n">TAB</span><span class="o">=</span><span class="n">TAB</span><span class="p">)</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;doctest float comparison failure</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;Document source: </span><span class="si">{0}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;Raw content: </span><span class="se">\n</span><span class="si">{1}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;On input line(s):</span><span class="se">\n</span><span class="si">{TAB}{2}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;we found output:</span><span class="se">\n</span><span class="si">{TAB}{3}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;instead of the expected:</span><span class="se">\n</span><span class="si">{TAB}{4}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">source</span><span class="p">,</span>
+            <span class="n">content</span><span class="p">,</span>
+            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_lines</span><span class="p">),</span>
+            <span class="nb">repr</span><span class="p">(</span><span class="n">found</span><span class="p">),</span>
+            <span class="nb">repr</span><span class="p">(</span><span class="n">submitted</span><span class="p">),</span>
+            <span class="n">TAB</span><span class="o">=</span><span class="n">TAB</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">e</span><span class="p">)</span></div>
+
 
 <span class="c1"># dict of allowable doctest handlers.</span>
 <span class="n">doctest_handlers</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;float&#39;</span><span class="p">:</span> <span class="n">float_doctest</span><span class="p">,</span>
+    <span class="s2">&quot;float&quot;</span><span class="p">:</span> <span class="n">float_doctest</span><span class="p">,</span>
 <span class="p">}</span>
-
 </pre></div>
 
           </div>
@@ -289,7 +299,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Dec 27, 2019.
+      Last updated on Dec 28, 2019.
     </div>
   </body>
 </html>

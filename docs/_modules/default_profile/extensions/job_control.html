@@ -90,6 +90,7 @@
 <span class="kn">from</span> <span class="nn">subprocess</span> <span class="kn">import</span> <span class="n">PIPE</span><span class="p">,</span> <span class="n">Popen</span><span class="p">,</span> <span class="n">STDOUT</span>
 
 <span class="kn">import</span> <span class="nn">ipython_genutils</span>
+
 <span class="c1"># import IPython.ipapi</span>
 <span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 
@@ -164,33 +165,31 @@
     <span class="sd">&quot;&quot;&quot;Create a jobqueue.&quot;&quot;&quot;</span>
     <span class="k">global</span> <span class="n">_jobq</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">_jobq</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span>
-            <span class="s2">&quot;Starting jobqueue - do &#39;&amp;some_long_lasting_system_command&#39; to enqueue&quot;</span>
-        <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Starting jobqueue - do &#39;&amp;some_long_lasting_system_command&#39; to enqueue&quot;</span><span class="p">)</span>
         <span class="n">_jobq</span> <span class="o">=</span> <span class="n">AsyncJobQ</span><span class="p">()</span>
         <span class="n">_jobq</span><span class="o">.</span><span class="n">setDaemon</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">_jobq</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
         <span class="n">ip</span><span class="o">.</span><span class="n">jobq</span> <span class="o">=</span> <span class="n">_jobq</span><span class="o">.</span><span class="n">add</span>
         <span class="k">return</span>
-    <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;stop&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;stop&quot;</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Stopping and clearing jobqueue, %jobqueue start to start again&quot;</span><span class="p">)</span>
         <span class="n">_jobq</span><span class="o">.</span><span class="n">stop</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">return</span>
-    <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;start&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;start&quot;</span><span class="p">:</span>
         <span class="n">_jobq</span><span class="o">.</span><span class="n">stop</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">return</span></div>
 
 
 <div class="viewcode-block" id="jobctrl_prefilter_f"><a class="viewcode-back" href="../../../jobcontrol.html#default_profile.extensions.job_control.jobctrl_prefilter_f">[docs]</a><span class="k">def</span> <span class="nf">jobctrl_prefilter_f</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Yeah we definitely gotta rewrite this one.&quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;&amp;&#39;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;&amp;&quot;</span><span class="p">):</span>
         <span class="n">pre</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">rest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">split_user_input</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
 
         <span class="n">line</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">IP</span><span class="o">.</span><span class="n">expand_aliases</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">rest</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">_jobq</span><span class="p">:</span>
             <span class="c1"># Idk if that method is in ipython_genutils</span>
-            <span class="k">return</span> <span class="s1">&#39;_ip.startjob(</span><span class="si">%s</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="n">ipython_genutils</span><span class="o">.</span><span class="n">make_quoted_expr</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-        <span class="k">return</span> <span class="s1">&#39;_ip.jobq(</span><span class="si">%s</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="n">ipython_genutils</span><span class="o">.</span><span class="n">make_quoted_expr</span><span class="p">(</span><span class="n">line</span><span class="p">)</span></div>
+            <span class="k">return</span> <span class="s2">&quot;_ip.startjob(</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="n">ipython_genutils</span><span class="o">.</span><span class="n">make_quoted_expr</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;_ip.jobq(</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="n">ipython_genutils</span><span class="o">.</span><span class="n">make_quoted_expr</span><span class="p">(</span><span class="n">line</span><span class="p">)</span></div>
 
     <span class="c1"># raise IPython.ipapi.TryNext</span>
     <span class="c1"># possibly is</span>
@@ -204,7 +203,7 @@
 
 <div class="viewcode-block" id="job_list"><a class="viewcode-back" href="../../../jobcontrol.html#default_profile.extensions.job_control.job_list">[docs]</a><span class="k">def</span> <span class="nf">job_list</span><span class="p">(</span><span class="n">ip</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;IPython doesn&#39;t have a db attribute anymore.&quot;&quot;&quot;</span>
-    <span class="n">keys</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">keys</span><span class="p">(</span><span class="s1">&#39;tasks/*&#39;</span><span class="p">)</span>
+    <span class="n">keys</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">keys</span><span class="p">(</span><span class="s2">&quot;tasks/*&quot;</span><span class="p">)</span>
     <span class="n">ents</span> <span class="o">=</span> <span class="p">[</span><span class="n">ip</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">ents</span></div>
 
@@ -225,8 +224,8 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ip</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getapi</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;clear&#39;</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">ip</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">keys</span><span class="p">(</span><span class="s1">&#39;tasks/*&#39;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;clear&quot;</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">ip</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">keys</span><span class="p">(</span><span class="s2">&quot;tasks/*&quot;</span><span class="p">):</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Clearing&quot;</span><span class="p">,</span> <span class="n">ip</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
             <span class="k">del</span> <span class="n">ip</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
         <span class="k">return</span>
@@ -265,10 +264,10 @@
         <span class="n">magic_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span></div>
 
 
-<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s1">&#39;win32&#39;</span><span class="p">:</span>
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;win32&quot;</span><span class="p">:</span>
     <span class="n">shell_internal_commands</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="s1">&#39;break chcp cls copy ctty date del erase&#39;</span>
-        <span class="s1">&#39;dir md mkdir path prompt rd rmdir start time type ver vol &#39;</span>
+        <span class="s2">&quot;break chcp cls copy ctty date del erase&quot;</span>
+        <span class="s2">&quot;dir md mkdir path prompt rd rmdir start time type ver vol &quot;</span>
     <span class="p">]</span>
     <span class="n">PopenExc</span> <span class="o">=</span> <span class="ne">WindowsError</span>
 <span class="k">else</span><span class="p">:</span>
@@ -280,7 +279,12 @@
 <div class="viewcode-block" id="determine_use_shell"><a class="viewcode-back" href="../../../jobcontrol.html#default_profile.extensions.job_control.determine_use_shell">[docs]</a><span class="k">def</span> <span class="nf">determine_use_shell</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">all_shell_commands</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Refactor jobctrl_shellcmd.&quot;&quot;&quot;</span>
     <span class="n">cmdname</span> <span class="o">=</span> <span class="n">command</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">cmdname</span> <span class="ow">in</span> <span class="n">all_shell_commands</span> <span class="ow">or</span> <span class="s1">&#39;|&#39;</span> <span class="ow">in</span> <span class="n">command</span> <span class="ow">or</span> <span class="s1">&#39;&gt;&#39;</span> <span class="ow">in</span> <span class="n">command</span> <span class="ow">or</span> <span class="s1">&#39;&lt;&#39;</span> <span class="ow">in</span> <span class="n">command</span><span class="p">:</span>
+    <span class="k">if</span> <span class="p">(</span>
+        <span class="n">cmdname</span> <span class="ow">in</span> <span class="n">all_shell_commands</span>
+        <span class="ow">or</span> <span class="s2">&quot;|&quot;</span> <span class="ow">in</span> <span class="n">command</span>
+        <span class="ow">or</span> <span class="s2">&quot;&gt;&quot;</span> <span class="ow">in</span> <span class="n">command</span>
+        <span class="ow">or</span> <span class="s2">&quot;&lt;&quot;</span> <span class="ow">in</span> <span class="n">command</span>
+    <span class="p">):</span>
         <span class="k">return</span> <span class="kc">True</span></div>
 
 
@@ -305,7 +309,7 @@
             <span class="c1"># have to go via shell, sucks</span>
             <span class="n">p</span> <span class="o">=</span> <span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-    <span class="n">jobentry</span> <span class="o">=</span> <span class="s1">&#39;tasks/t&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">pid</span><span class="p">)</span>
+    <span class="n">jobentry</span> <span class="o">=</span> <span class="s2">&quot;tasks/t&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">pid</span><span class="p">)</span>
     <span class="c1"># ipython doesn&#39;t have a db attribute anymore</span>
     <span class="c1"># ip.db[jobentry] = (p.pid, cmd, os.getcwd(), time.time())</span>
     <span class="n">p</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span></div>
@@ -315,23 +319,24 @@
     <span class="sd">&quot;&quot;&quot;Set up job control for the IPython instance.&quot;&quot;&quot;</span>
     <span class="c1"># needed to make startjob visible as _ip.startjob(&#39;blah&#39;)</span>
     <span class="n">ip</span><span class="o">.</span><span class="n">startjob</span> <span class="o">=</span> <span class="n">startjob</span>
-    <span class="n">ip</span><span class="o">.</span><span class="n">set_hook</span><span class="p">(</span><span class="s1">&#39;input_prefilter&#39;</span><span class="p">,</span> <span class="n">jobctrl_prefilter_f</span><span class="p">)</span>
-    <span class="n">ip</span><span class="o">.</span><span class="n">set_hook</span><span class="p">(</span><span class="s1">&#39;shell_hook&#39;</span><span class="p">,</span> <span class="n">jobctrl_shellcmd</span><span class="p">)</span>
+    <span class="n">ip</span><span class="o">.</span><span class="n">set_hook</span><span class="p">(</span><span class="s2">&quot;input_prefilter&quot;</span><span class="p">,</span> <span class="n">jobctrl_prefilter_f</span><span class="p">)</span>
+    <span class="n">ip</span><span class="o">.</span><span class="n">set_hook</span><span class="p">(</span><span class="s2">&quot;shell_hook&quot;</span><span class="p">,</span> <span class="n">jobctrl_shellcmd</span><span class="p">)</span>
     <span class="c1"># ip.expose_magic(&#39;kill&#39;, magic_kill)</span>
     <span class="c1"># ip.expose_magic(&#39;tasks&#39;, magic_tasks)</span>
     <span class="c1"># ip.expose_magic(&#39;jobqueue&#39;, jobqueue_f)</span>
-    <span class="n">ip</span><span class="o">.</span><span class="n">set_hook</span><span class="p">(</span><span class="s1">&#39;pre_prompt_hook&#39;</span><span class="p">,</span> <span class="n">jobq_output_hook</span><span class="p">)</span></div>
+    <span class="n">ip</span><span class="o">.</span><span class="n">set_hook</span><span class="p">(</span><span class="s2">&quot;pre_prompt_hook&quot;</span><span class="p">,</span> <span class="n">jobq_output_hook</span><span class="p">)</span></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;nt&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;nt&quot;</span><span class="p">:</span>
 
         <span class="k">def</span> <span class="nf">kill_process</span><span class="p">(</span><span class="n">pid</span><span class="p">):</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;taskkill /F /PID </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">pid</span><span class="p">)</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;taskkill /F /PID </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">pid</span><span class="p">)</span>
+
     <span class="k">else</span><span class="p">:</span>
 
         <span class="k">def</span> <span class="nf">kill_process</span><span class="p">(</span><span class="n">pid</span><span class="p">):</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;kill -9 </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">pid</span><span class="p">)</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;kill -9 </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">pid</span><span class="p">)</span>
 
     <span class="n">_jobq</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
@@ -441,7 +446,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Dec 27, 2019.
+      Last updated on Dec 28, 2019.
     </div>
   </body>
 </html>

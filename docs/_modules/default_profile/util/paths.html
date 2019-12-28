@@ -66,9 +66,9 @@
 
 <span class="kn">from</span> <span class="nn">.machine</span> <span class="kn">import</span> <span class="n">Platform</span>
 
-<span class="n">logging</span><span class="o">.</span><span class="n">BASIC_FORMAT</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%(created)f</span><span class="s1">  </span><span class="si">%(module)s</span><span class="s1">  </span><span class="si">%(levelname)s</span><span class="s1">  </span><span class="si">%(message)s</span><span class="s1">&#39;</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">BASIC_FORMAT</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%(created)f</span><span class="s2">  </span><span class="si">%(module)s</span><span class="s2">  </span><span class="si">%(levelname)s</span><span class="s2">  </span><span class="si">%(message)s</span><span class="s2">&quot;</span>
 
-<span class="n">PATHS_LOGGER</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;default_profile.util&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">getChild</span><span class="p">(</span><span class="s1">&#39;paths&#39;</span><span class="p">)</span>
+<span class="n">PATHS_LOGGER</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;default_profile.util&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">getChild</span><span class="p">(</span><span class="s2">&quot;paths&quot;</span><span class="p">)</span>
 <span class="n">PATHS_LOGGER</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
 
 
@@ -98,7 +98,7 @@
         <span class="n">new</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">suffix</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">new</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">PATHS_LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">: does not exist. Returning None.&#39;</span> <span class="o">%</span> <span class="n">root</span><span class="p">)</span>
+        <span class="n">PATHS_LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: does not exist. Returning None.&quot;</span> <span class="o">%</span> <span class="n">root</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="PathValidator"><a class="viewcode-back" href="../../../util/paths.html#default_profile.util.paths.PathValidator">[docs]</a><span class="k">class</span> <span class="nc">PathValidator</span><span class="p">:</span>
@@ -112,6 +112,7 @@
 <span class="sd">        C:\\Program Files\\ and their ilk?</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="PathValidator.__init__"><a class="viewcode-back" href="../../../util/paths.html#default_profile.util.paths.PathValidator.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize with parameters. Which parameters though?&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span></div>
@@ -125,7 +126,7 @@
 <span class="sd">        &gt;&gt;&gt; PathValidator()</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="se">\t</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="se">\t</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
 
 <div class="viewcode-block" id="PathValidator.OS"><a class="viewcode-back" href="../../../util/paths.html#default_profile.util.paths.PathValidator.OS">[docs]</a>    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">OS</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -133,16 +134,15 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">_is_win</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">OS</span> <span class="o">==</span> <span class="s1">&#39;windows&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">OS</span> <span class="o">==</span> <span class="s2">&quot;windows&quot;</span>
 
 <div class="viewcode-block" id="PathValidator.path"><a class="viewcode-back" href="../../../util/paths.html#default_profile.util.paths.PathValidator.path">[docs]</a>    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Break the path up into a list and replace the double back slashes.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_win</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s2">&quot;PATH&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;/&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s2">&quot;PATH&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;/&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s2">&quot;PATH&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)</span></div></div>
-
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s2">&quot;PATH&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span></div></div>
 </pre></div>
 
           </div>
@@ -247,7 +247,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Dec 27, 2019.
+      Last updated on Dec 28, 2019.
     </div>
   </body>
 </html>

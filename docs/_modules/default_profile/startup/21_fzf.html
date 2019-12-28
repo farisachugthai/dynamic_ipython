@@ -57,8 +57,6 @@
 <span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;FZF works in IPython!!!!</span>
 
-<span class="sd">Note</span>
-<span class="sd">-----</span>
 <span class="sd">Trying to rework this over in ../extensions/namespaces.py</span>
 
 <span class="sd">Also worth noting the aliasmanager rewrite in ./22_alias_manager.py</span>
@@ -75,8 +73,7 @@
 <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 
 
-<span class="c1"># so apparently this is</span>
-<div class="viewcode-block" id="Executable"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.Executable">[docs]</a><span class="k">class</span> <span class="nc">Executable</span><span class="p">(</span><span class="n">ContextDecorator</span><span class="p">):</span>  <span class="c1"># types.MappingProxy</span>
+<div class="viewcode-block" id="Executable"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.Executable">[docs]</a><span class="k">class</span> <span class="nc">Executable</span><span class="p">(</span><span class="n">ContextDecorator</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;An object representing some executable on a user computer.&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Executable.__init__"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.Executable.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">):</span>
@@ -115,16 +112,18 @@
 
 <span class="c1"># @Executable(&#39;fzf&#39;)</span>
 
+
 <div class="viewcode-block" id="FZF"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.FZF">[docs]</a><span class="k">class</span> <span class="nc">FZF</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Wrap FZF together.&quot;&quot;&quot;</span>
 
-    <span class="n">fzf_alias</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">fzf_alias</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
-<div class="viewcode-block" id="FZF.__init__"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.FZF.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fzf_alias</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fzf_alias</span> <span class="o">=</span> <span class="n">fzf_alias</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span></div>
+<div class="viewcode-block" id="FZF.__init__"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.FZF.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fzf_alias</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fzf_configs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fzf_alias</span> <span class="o">=</span> <span class="n">fzf_alias</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fzf_config</span> <span class="o">=</span> <span class="n">fzf_configs</span> <span class="ow">or</span> <span class="p">{}</span></div>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">    </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fzf_alias</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">    </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fzf_alias</span><span class="p">)</span>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">_setup_fzf</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
@@ -141,8 +140,7 @@
         <span class="k">elif</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;fzf&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;ag&quot;</span><span class="p">):</span>
             <span class="c1"># user_aliases.extend(</span>
             <span class="c1">#     (&#39;fzf&#39;, &#39;$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS&#39;))</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">fzf_alias</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;fzf&quot;</span><span class="p">,</span>
-                             <span class="s2">&quot;ag -C 0 --color-win-ansi --noheading %l | fzf&quot;</span><span class="p">)</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">fzf_alias</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;fzf&quot;</span><span class="p">,</span> <span class="s2">&quot;ag -C 0 --color-win-ansi --noheading %l | fzf&quot;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">fzf_alias</span></div>
 
@@ -294,7 +292,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Dec 27, 2019.
+      Last updated on Dec 28, 2019.
     </div>
   </body>
 </html>
