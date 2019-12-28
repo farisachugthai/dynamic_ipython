@@ -125,7 +125,7 @@ IPython prompts, and extracts the input and output lines to generate HTML.</p>
 
 <p>It’s important to note that all of these options can be used for the entire
 directive block or they can decorate individual lines of code as explained
-in <a class="reference internal" href="#pseudo-decorators"><span class="std std-ref">Pseudo Decorators</span></a>.</p>
+in <a class="reference internal" href="#pseudo-decorators"><span class="std std-ref">Pseudo-Decorators</span></a>.</p>
 <div class="admonition-todo admonition" id="id2">
 <p class="admonition-title">Todo</p>
 <p>Hmmmm should we document those decorators using the above syntax?</p>
@@ -234,14 +234,21 @@ python interpreter. The following markup:</p>
 <span class="gh">Out[8]: </span><span class="go">4</span>
 </pre></div>
 </div>
-<p>We can even plot from python, using the <code class="xref py py-obj docutils literal notranslate"><span class="pre">:savefig:</span></code> option to the directive,
-as well as <code class="xref py py-obj docutils literal notranslate"><span class="pre">:suppress:</span></code> output with a semicolon.</p>
+<p>We can even plot from python, using the <code class="xref rst rst-dir docutils literal notranslate"><span class="pre">savefig</span></code> option to the directive,
+as well as <code class="xref rst rst-dir docutils literal notranslate"><span class="pre">suppress</span></code> output with a semicolon.</p>
 <p>These options can both be expressed with their decorator counterparts like so:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [9]: </span><span class="n">plot</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]);</span>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">ipython</span><span class="p">::</span> python
+
+   @savefig plot_simple_python.png width=4in
+   plot([1, 2, 3])
+</pre></div>
+</div>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [9]: </span><span class="n">plot</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="gh">Out[9]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7ffae75c8580&gt;]</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/plot_simple_python.png"><img alt="../_images/plot_simple_python.png" src="../_images/plot_simple_python.png" style="width: 4in;" /></a>
-<p>For more information on <code class="xref py py-obj docutils literal notranslate"><span class="pre">&#64;savefig</span></code> decorator, please refer to the end of
+<p>For more information on <a class="reference internal" href="#sphinx_directive.savefig" title="sphinx_directive.savefig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">savefig</span></code></a> decorator, please refer to the end of
 this page in Pseudo-Decorators section.</p>
 <p>Similarly, <a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stderr" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stderr</span></code></a> is inserted.:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [10]: </span><span class="n">foo</span> <span class="o">=</span> <span class="s1">&#39;bar&#39;</span>
@@ -328,23 +335,25 @@ take.  Some of the decorators can be used as options to the entire
 block (e.g. <code class="xref py py-obj docutils literal notranslate"><span class="pre">&#64;verbatim</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">&#64;suppress</span></code>), and some only apply to the
 line just below them (eg <code class="xref py py-obj docutils literal notranslate"><span class="pre">&#64;savefig</span></code>).:</p>
 <div class="section" id="pseudo-decorators">
-<span id="id4"></span><h3>Pseudo Decorators<a class="headerlink" href="#pseudo-decorators" title="Permalink to this headline">¶</a></h3>
+<span id="id4"></span><h3>Pseudo-Decorators<a class="headerlink" href="#pseudo-decorators" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
 <dt id="sphinx_directive.suppress">
 <code class="sig-prename descclassname">&#64;</code><code class="sig-name descname">suppress</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/sphinx_directive.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sphinx_directive.suppress" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute the IPython input block, but <em class="dfn">&#64;suppress</em> the input and output
 block from the rendered output.  Also, can be applied to the entire
-<code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">ipython</span></code> block as a directive option with <code class="docutils literal notranslate"><span class="pre">:suppress:</span></code>.</p>
+<code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">ipython</span></code> block as a directive option with <code class="xref rst rst-dir docutils literal notranslate"><span class="pre">suppress</span></code>.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="sphinx_directive.verbatim">
 <code class="sig-prename descclassname">&#64;</code><code class="sig-name descname">verbatim</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/sphinx_directive.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sphinx_directive.verbatim" title="Permalink to this definition">¶</a></dt>
-<dd><p>Insert the input and output block in <em class="dfn">&#64;verbatim</em>, but auto-increment
-the line numbers. Internally, the interpreter will be fed an empty
+<dd><p>Insert the input and output block in exactly as they were inputted, but
+prepend an IPython prompt if necessary.
+Auto-increment the prompt as appropriate for the state of the document.
+Internally, the interpreter will be fed an empty
 string, so it is a no-op that keeps line numbering consistent.
 Also, can be applied to the entire <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">ipython</span></code> block as a
-directive option with <code class="docutils literal notranslate"><span class="pre">:verbatim:</span></code>.</p>
+directive option with <code class="xref rst rst-dir docutils literal notranslate"><span class="pre">verbatim</span></code>.</p>
 </dd></dl>
 
 <dl class="function">
@@ -577,7 +586,7 @@ configuration options.</p>
 <li><a class="reference internal" href="#splitting-python-statements-across-lines">Splitting Python statements across lines</a></li>
 <li><a class="reference internal" href="#configuring-the-build-environment">Configuring the Build Environment</a></li>
 <li><a class="reference internal" href="#supported-pseudo-decorators">Supported Pseudo-Decorators</a><ul>
-<li><a class="reference internal" href="#pseudo-decorators">Pseudo Decorators</a></li>
+<li><a class="reference internal" href="#pseudo-decorators">Pseudo-Decorators</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#configuration-values">Configuration Values</a><ul>

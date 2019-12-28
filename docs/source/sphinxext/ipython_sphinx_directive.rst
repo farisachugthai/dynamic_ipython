@@ -189,17 +189,24 @@ Renders as
    foo = 2
    foo**2
 
-We can even plot from python, using the `:savefig:` option to the directive,
-as well as `:suppress:` output with a semicolon.
+We can even plot from python, using the :rst:dir:`savefig` option to the directive,
+as well as :rst:dir:`suppress` output with a semicolon.
 
 These options can both be expressed with their decorator counterparts like so:
+
+.. code-block:: rst
+
+   .. ipython:: python
+
+      @savefig plot_simple_python.png width=4in
+      plot([1, 2, 3])
 
 .. ipython:: python
 
    @savefig plot_simple_python.png width=4in
-   plot([1,2,3]);
+   plot([1, 2, 3])
 
-For more information on `@savefig` decorator, please refer to the end of
+For more information on `savefig` decorator, please refer to the end of
 this page in Pseudo-Decorators section.
 
 Similarly, :data:`sys.stderr` is inserted.:
@@ -302,22 +309,24 @@ line just below them (eg `@savefig`).:
 
 .. _pseudo-decorators:
 
-Pseudo Decorators
--------------------------
+Pseudo-Decorators
+-----------------
 
 .. decorator:: suppress
 
     Execute the IPython input block, but :dfn:`@suppress` the input and output
     block from the rendered output.  Also, can be applied to the entire
-    ``.. ipython`` block as a directive option with ``:suppress:``.
+    ``.. ipython`` block as a directive option with :rst:dir:`suppress`.
 
 .. decorator:: verbatim
 
-    Insert the input and output block in :dfn:`@verbatim`, but auto-increment
-    the line numbers. Internally, the interpreter will be fed an empty
+    Insert the input and output block in exactly as they were inputted, but
+    prepend an IPython prompt if necessary.
+    Auto-increment the prompt as appropriate for the state of the document.
+    Internally, the interpreter will be fed an empty
     string, so it is a no-op that keeps line numbering consistent.
     Also, can be applied to the entire ``.. ipython`` block as a
-    directive option with ``:verbatim:``.
+    directive option with :rst:dir:`verbatim`.
 
 .. decorator:: savefig
 

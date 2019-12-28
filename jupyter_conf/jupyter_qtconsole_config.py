@@ -8,16 +8,6 @@ import sys
 import traitlets
 from traitlets.config import get_config
 
-try:
-    import qtconsole  # kinda a prerequisite wouldn't you say?
-except ImportError:
-    sys.exit("QTConsole not installed.")
-
-try:
-    from jupyter_core.paths import get_home_dir
-except ImportError:
-    sys.exit("Jupyter not installed. Exiting.")
-
 c = get_config()
 
 logging.basicConfig(level=logging.WARNING)
@@ -482,3 +472,19 @@ else:
 
 # Username for the Session. Default is your system username.
 c.Session.username = "faris"
+
+
+if __name__ == '__main__':
+
+    # In an ifmain because we still want documentation to be read, settings
+    # to be set even if we don't have qtconsole installed IE a console user
+    try:
+        import qtconsole  # kinda a prerequisite wouldn't you say?
+    except ImportError:
+        sys.exit("QTConsole not installed.")
+
+    try:
+        from jupyter_core.paths import get_home_dir
+    except ImportError:
+        sys.exit("Jupyter not installed. Exiting.")
+

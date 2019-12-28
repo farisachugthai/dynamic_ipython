@@ -37,7 +37,8 @@ from IPython.core.release import version_info
 # import
 from traitlets.config import get_config, Configurable
 
-default_log_format = "%(levelname)s %(module)s %(msecs)f [ %(name)s ] %(message)s "
+default_log_format = "[ %(name)s  %(relativeCreated)d ] %(levelname)s %(module)s %(message)s "
+
 logging.basicConfig(level=logging.INFO, format=default_log_format)
 
 c = get_config()

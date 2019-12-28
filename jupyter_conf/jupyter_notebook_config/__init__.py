@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 """Configuration file for jupyter-notebook."""
 import logging
+import os
 import platform
 import shutil
 
@@ -26,7 +27,7 @@ c = get_config()
 c.Application.log_datefmt = "%Y-%m-%d %H:%M:%S"
 
 # The Logging format template
-c.Application.log_format = "[%(name)s]%(highlevel)s %(message)s"
+c.Application.log_format = " %(relativeCreated)d [ %(name)s ] %(highlevel)s %(message)s"
 
 # Set the log level by value or name.
 c.Application.log_level = 30

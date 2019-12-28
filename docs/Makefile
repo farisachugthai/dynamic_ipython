@@ -4,7 +4,7 @@ SPHINXBUILD   = sphinx-build
 SOURCEDIR     = source
 BUILDDIR      = build
 
-ALLSPHINXOPTS   = -d $(BUILDDIR)/.doctrees -c $(SOURCEDIR) $(SPHINXOPTS)
+ALLSPHINXOPTS   = -d $(BUILDDIR)/.doctrees -c $(SOURCEDIR) $(SPHINXOPTS) $(O)
 
 .PHONY: help clean html dirhtml singlehtml pickle json htmlhelp qthelp devhelp epub latex latexpdf text man changes linkcheck doctest gettext
 
