@@ -14,7 +14,10 @@ because wth is this saying?
     to it. Interesting.
 
 """
-import unittest
+try:
+    from _pytest import unittest
+except:  # noqa
+    import unittest
 
 from IPython import get_ipython, start_ipython
 from IPython.utils.capture import capture_output
@@ -31,7 +34,7 @@ from default_profile.startup import aliases_mod
 
 
 def test_alias_lifecycle(_ip):
-    name = 'test_alias1'
+    name = "test_alias1"
     cmd = 'echo "Hello"'
     am = _ip.alias_manager
     am.clear_aliases()
@@ -45,7 +48,7 @@ def test_alias_lifecycle(_ip):
     result = []
     _ip.system = result.append
     try:
-        _ip.run_cell('%{}'.format(name))
+        _ip.run_cell("%{}".format(name))
         result = [c.strip() for c in result]
         nt.assert_equal(result, [cmd])
     finally:
@@ -61,29 +64,29 @@ def test_alias_lifecycle(_ip):
 
 def test_alias_args_error(_ip):
     """Error expanding with wrong number of arguments."""
-    _ip.alias_manager.define_alias('parts', 'echo first %s second %s')
+    _ip.alias_manager.define_alias("parts", "echo first %s second %s")
     # capture stderr:
     with capture_output() as cap:
-        _ip.run_cell('parts 1')
+        _ip.run_cell("parts 1")
 
-    nt.assert_equal(cap.stderr.split(':')[0], 'UsageError')
+    nt.assert_equal(cap.stderr.split(":")[0], "UsageError")
 
 
 def test_alias_args_commented(_ip):
     """Check that alias correctly ignores 'commented out' args"""
-    _ip.magic('alias commetarg echo this is %%s a commented out arg')
+    _ip.magic("alias commetarg echo this is %%s a commented out arg")
 
     with capture_output() as cap:
-        _ip.run_cell('commetarg')
+        _ip.run_cell("commetarg")
 
-    nt.assert_equal(cap.stdout, 'this is %s a commented out arg')
+    nt.assert_equal(cap.stdout, "this is %s a commented out arg")
 
 
 def test_alias_args_commented_nargs(_ip):
     """Check that alias correctly counts args, excluding those commented out"""
     am = _ip.alias_manager
-    alias_name = 'comargcount'
-    cmd = 'echo this is %%s a commented out arg and this is not %s'
+    alias_name = "comargcount"
+    cmd = "echo this is %%s a commented out arg and this is not %s"
 
     am.define_alias(alias_name, cmd)
     assert am.is_alias(alias_name)
@@ -94,7 +97,7 @@ def test_alias_args_commented_nargs(_ip):
 
 if __name__ == "__main__":
     _ip = get_ipython()
-    unittest.skipIf(_ip is None, 'IPython not running')
-    unittest.skipIf(NO_NOSE, 'Nose not installed.')
+    unittest.skipIf(_ip is None, "IPython not running")
+    unittest.skipIf(NO_NOSE, "Nose not installed.")
     unittest.main()
     nose.run()

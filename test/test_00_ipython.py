@@ -23,6 +23,7 @@ class TestIPython(unittest.TestCase):
             self.shell = shell
         else:
             from IPython import start_ipython
+
             self.shell = start_ipython()
 
     def test_ipython(self):

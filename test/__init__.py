@@ -44,7 +44,8 @@ def setup_test_logging():
     logger = logging.getLogger(name=__name__)
     test_handler = logging.StreamHandler(stream=sys.stdout)
     test_formatter = logging.Formatter(
-        fmt='%(created)f : %(module)s : %(levelname)s : %(message)s')
+        fmt="%(created)f : %(module)s : %(levelname)s : %(message)s"
+    )
     test_handler.setFormatter(test_formatter)
     test_handler.setLevel(logging.WARNING)
     logger.setLevel(logging.WARNING)
@@ -58,4 +59,4 @@ if __name__ == "__main__":
 
     doctest_finder = doctest.DocTestFinder()
     unittest.main()
-    doctest.DocTestSuite('__main__', globs='*')
+    doctest.DocTestSuite("__main__", globs="*")
