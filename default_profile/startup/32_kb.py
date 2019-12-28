@@ -20,7 +20,7 @@ from prompt_toolkit.key_binding import merge_key_bindings
 from prompt_toolkit.key_binding.defaults import load_vi_bindings
 
 # Dude these are all the vi modes prompt_toolkit has...lol
-from prompt_toolkit.key_binding.bindings.vi import(
+from prompt_toolkit.key_binding.bindings.vi import (
     vi_selection_mode,
     vi_recording_macro,
     vi_register_names,
@@ -57,8 +57,7 @@ class VerbosePrompt:
                 if isinstance(self.app, DummyApplication):
                     self.app = None
             else:
-                kb_logger.error(
-                    "IPython was none but prompt toolkit returned an app.")
+                kb_logger.error("IPython was none but prompt toolkit returned an app.")
 
     def __repr__(self):
         return "{}".format(i for i in dir(self) if not i.startswith("_"))
@@ -138,10 +137,10 @@ if __name__ == "__main__":
         # Sweet i might have just broken how pt handles keypresses
 
         # Also let's make an instance of this class
-        container_kb = PromptSessionKB(
-            shell=_ip, kb=_ip.pt_app.key_bindings.bindings)
+        container_kb = PromptSessionKB(shell=_ip, kb=_ip.pt_app.key_bindings.bindings)
         # Dude holy shit does this give you a lot
-        if _ip.editing_mode == 'vi':
+        if _ip.editing_mode == "vi":
             more_keybindings = merge_key_bindings(
-                [_ip.pt_app.app.key_bindings, load_vi_bindings()])
+                [_ip.pt_app.app.key_bindings, load_vi_bindings()]
+            )
             _ip.pt_app.app.key_bindings = more_keybindings

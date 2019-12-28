@@ -87,7 +87,7 @@ class ReprProfileDir(ProfileDir):
             self.ensure_dir_exists(Path(new, i))
 
     def ensure_dir_exists(self, folder):
-        if not hasattr(folder, 'exists'):
+        if not hasattr(folder, "exists"):
             folder = Path(folder)
         if not folder.exists():
             try:
@@ -97,7 +97,7 @@ class ReprProfileDir(ProfileDir):
             except FileExistsError:
                 raise
             # except IsADirectoryError:
-                # Do we need to catch this?
+            # Do we need to catch this?
 
 
 class DirectoryChecker:

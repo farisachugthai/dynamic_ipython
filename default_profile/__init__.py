@@ -145,4 +145,3 @@ def setup_logging(debug=True, logfile=None):
         root_logger.addHandler(handler)
 
     root_logger.setLevel(10)
-

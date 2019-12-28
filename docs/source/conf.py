@@ -75,6 +75,7 @@ from traitlets.config import Config
 import default_profile
 from default_profile import extensions, util
 from default_profile.__about__ import __version__
+
 # Stdlib imports
 from default_profile.sphinxext import CellMagicRole, LineMagicRole
 from default_profile.sphinxext.magics import CellMagicRole, LineMagicRole
@@ -101,7 +102,7 @@ DOCS = Path(__file__).resolve().parent.parent
 
 # Gotta hack at sys.path a little
 ROOT = DOCS.parent
-JUPYTER = ROOT.joinpath('jupyter_conf')
+JUPYTER = ROOT.joinpath("jupyter_conf")
 sys.path.insert(0, str(JUPYTER))
 
 
@@ -110,80 +111,80 @@ def ask_for_import(mod):
     try:
         return import_module(mod)
     except Exception:  # noqa
-        if getattr(sys, 'last_type', None):
+        if getattr(sys, "last_type", None):
             exception_name = sys.last_type
             DOCS_LOGGER.exception(exception_name)
 
 
-ask_for_import('jinja2')
+ask_for_import("jinja2")
 
 
 # -- Imports ---------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
 
-needs_sphinx = '2.1.0'
+needs_sphinx = "2.1.0"
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.autosectionlabel',
-    'sphinx.ext.autosummary',
-    'sphinx.ext.coverage',
-    'sphinx.ext.doctest',
-    'sphinx.ext.extlinks',
-    'sphinx.ext.githubpages',
-    'sphinx.ext.ifconfig',
-    'sphinx.ext.inheritance_diagram',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.linkcode',
-    'sphinx.ext.mathjax',
-    'sphinx.ext.napoleon',
-    'sphinx.ext.todo',
-    'sphinx.ext.viewcode',
-    'IPython.sphinxext.ipython_directive',
-    'IPython.sphinxext.ipython_console_highlighting',
-    'default_profile.sphinxext.magics',
+    "sphinx.ext.autodoc",
+    "sphinx.ext.autosectionlabel",
+    "sphinx.ext.autosummary",
+    "sphinx.ext.coverage",
+    "sphinx.ext.doctest",
+    "sphinx.ext.extlinks",
+    "sphinx.ext.githubpages",
+    "sphinx.ext.ifconfig",
+    "sphinx.ext.inheritance_diagram",
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.linkcode",
+    "sphinx.ext.mathjax",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.todo",
+    "sphinx.ext.viewcode",
+    "IPython.sphinxext.ipython_directive",
+    "IPython.sphinxext.ipython_console_highlighting",
+    "default_profile.sphinxext.magics",
 ]
 
 # if ask_for_import('numpydoc'):
 #     extensions.append('numpydoc.numpydoc')
 #     DOCS_LOGGER.info('numpydoc in extensions')
 
-if ask_for_import('default_profile.sphinxext.magics'):
-    extensions.append('default_profile.sphinxext.magics')
-    DOCS_LOGGER.info('magics in extensions')
+if ask_for_import("default_profile.sphinxext.magics"):
+    extensions.append("default_profile.sphinxext.magics")
+    DOCS_LOGGER.info("magics in extensions")
 
-if ask_for_import('flake8_rst'):
-    extensions.extend([
-        'flake8_rst.sphinxext.custom_roles',
-    ])
-    DOCS_LOGGER.info('flake8_rst in extensions')
+if ask_for_import("flake8_rst"):
+    extensions.extend(
+        ["flake8_rst.sphinxext.custom_roles",]
+    )
+    DOCS_LOGGER.info("flake8_rst in extensions")
 
 # -- General Configuration ----------------------------------------
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = ["_templates"]
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 
 # source_suffix = ['.rst', '.md']
-source_suffix = ['.rst']
+source_suffix = [".rst"]
 
 # The encoding of source files.
-source_encoding = u'utf-8'
+source_encoding = u"utf-8"
 
 # The master toctree document.
-master_doc = u'index'
+master_doc = u"index"
 
 # -- Project information -----------------------------------------------------
 
-project = u'Dynamic IPython'
-copyright = u'(C) 2018-{} Faris Chugthai'.format(datetime.now().year)
-author = u'fac'
+project = u"Dynamic IPython"
+copyright = u"(C) 2018-{} Faris Chugthai".format(datetime.now().year)
+author = u"fac"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -207,7 +208,7 @@ release = version
 # non-false value, then it is used:
 # today = ''
 # Else, today_fmt is used as the format for a strftime call.
-today_fmt = u'%B %d, %Y'
+today_fmt = u"%B %d, %Y"
 
 
 # The name of the default domain. Can also be None to disable a default domain.
@@ -217,7 +218,7 @@ today_fmt = u'%B %d, %Y'
 # domain is C, Python functions will be named “Python function”, not just
 # “function”).
 # New in version 1.0.
-default_domain = u'py'
+default_domain = u"py"
 
 # The name of a reST role (builtin or Sphinx extension) to use as the
 # default role, that is, for text marked up `like this`. This can be set to
@@ -227,15 +228,21 @@ default_domain = u'py'
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 exclude_patterns = [
-    'build', 'Thumbs.db', '.DS_Store', 'dist', '.tox',
-    '.ipynb_checkpoints', 'tags', '*.ipynb'
+    "build",
+    "Thumbs.db",
+    ".DS_Store",
+    "dist",
+    ".tox",
+    ".ipynb_checkpoints",
+    "tags",
+    "*.ipynb",
 ]
 
 # The reST default role (used for this markup: `text`) to use for all
 # documents.
 # The default role can always be set within individual documents using the
 # standard reST default-role directive.
-default_role = 'py:obj'
+default_role = "py:obj"
 
 # If true, '()' will be appended to :func: etc. cross-reference text.
 # add_function_parentheses = True
@@ -250,16 +257,16 @@ add_module_names = False
 
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'sphinx'
+pygments_style = "sphinx"
 
 # A list of ignored prefixes for module index sorting.
 # NOTE: lol you have to put a dot at the end otherwise all your modules will start
 # with a period
 modindex_common_prefix = [
-    'default_profile.',
-    'default_profile.extensions.',
-    'default_profile.startup.',
-    'default_profile.util.',
+    "default_profile.",
+    "default_profile.extensions.",
+    "default_profile.startup.",
+    "default_profile.util.",
 ]
 
 # -- General Output Options --------------------------------------------------
@@ -275,7 +282,7 @@ rst_prolog = """
 
 trim_doctest_flags = True
 
-highlight_language = 'ipython'
+highlight_language = "ipython"
 
 warning_is_error = False
 
@@ -284,7 +291,7 @@ warning_is_error = False
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 
-html_theme = 'pyramid'
+html_theme = "pyramid"
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -294,7 +301,7 @@ html_theme = 'pyramid'
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = ["_static"]
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
@@ -305,19 +312,18 @@ html_static_path = ['_static']
 # 'searchbox.html']``.
 #
 html_sidebars = {
-    '**':
-        [
-            'searchbox.html',
-            'relations.html',
-            'localtoc.html',
-            'globaltoc.html',
-            'sourcelink.html',
-        ]
+    "**": [
+        "searchbox.html",
+        "relations.html",
+        "localtoc.html",
+        "globaltoc.html",
+        "sourcelink.html",
+    ]
 }
 
-html_title = u'Dynamic IPython: version' + __version__
+html_title = u"Dynamic IPython: version" + __version__
 
-html_short_title = u'Dynamic IPython'
+html_short_title = u"Dynamic IPython"
 
 # If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
 html_show_sphinx = False
@@ -326,21 +332,21 @@ html_show_copyright = False
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
-html_last_updated_fmt = '%b %d, %Y'
+html_last_updated_fmt = "%b %d, %Y"
 
-html_baseurl = u'https://farisachugthai.github.io/dynamic-ipython'
+html_baseurl = u"https://farisachugthai.github.io/dynamic-ipython"
 
 html_compact_lists = False
 
-html_secnumber_suffix = ' '
+html_secnumber_suffix = " "
 
-html_js_files = ['copybutton.js']
+html_js_files = ["copybutton.js"]
 
 
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'dynamic_ipython'
+htmlhelp_basename = "dynamic_ipython"
 
 # -- Options for LaTeX output ------------------------------------------------
 
@@ -370,7 +376,7 @@ htmlhelp_basename = 'dynamic_ipython'
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-manpages_url = 'https://linux.die.net/man/'
+manpages_url = "https://linux.die.net/man/"
 
 man_show_urls = True
 
@@ -397,11 +403,11 @@ man_show_urls = True
 
 # -- Options for text output -------------------------------------------------
 
-text_newlines = 'native'
+text_newlines = "native"
 
 text_add_secnumbers = False
 
-text_secnumber_suffix = ''
+text_secnumber_suffix = ""
 
 # -- Extension configuration -------------------------------------------------
 
@@ -409,14 +415,13 @@ text_secnumber_suffix = ''
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
-    'python': ('https://docs.python.org/3/', None),
-    'ipython': ('https://ipython.readthedocs.io/en/stable/', None),
-    'prompt_toolkit':
-        ('https://python-prompt-toolkit.readthedocs.io/en/stable/', None),
-    'scipy': ('https://docs.scipy.org/doc/scipy/reference', None),
-    'matplotlib': ('https://matplotlib.org', None),
-    'jupyter': ('https://jupyter.readthedocs.io/en/latest/', None),
-    'numpy': ('https://docs.scipy.org/doc/numpy/', None),
+    "python": ("https://docs.python.org/3/", None),
+    "ipython": ("https://ipython.readthedocs.io/en/stable/", None),
+    "prompt_toolkit": ("https://python-prompt-toolkit.readthedocs.io/en/stable/", None),
+    "scipy": ("https://docs.scipy.org/doc/scipy/reference", None),
+    "matplotlib": ("https://matplotlib.org", None),
+    "jupyter": ("https://jupyter.readthedocs.io/en/latest/", None),
+    "numpy": ("https://docs.scipy.org/doc/numpy/", None),
 }
 
 # -- Options for todo extension ----------------------------------------------
@@ -462,26 +467,26 @@ viewcode_follow_imported_members = False
 
 # -- IPython directive -------------------------------------------------------
 
-ipython_savefig_dir = DOCS.joinpath('_images').__fspath__()
+ipython_savefig_dir = DOCS.joinpath("_images").__fspath__()
 savefig_dir = ipython_savefig_dir
 
 ipython_warning_is_error = False
 
 ipython_execlines = [
-    'import numpy',
-    'import IPython',
-    'import pandas as pd',
-    'import default_profile',
+    "import numpy",
+    "import IPython",
+    "import pandas as pd",
+    "import default_profile",
 ]
 
-if ask_for_import('matplotlib'):
+if ask_for_import("matplotlib"):
     HAS_MPL = True
-    extensions.extend(['matplotlib.sphinxext.plot_directive'])
+    extensions.extend(["matplotlib.sphinxext.plot_directive"])
     ipython_execlines.append(
-        'import matplotlib as mpl; import matplotlib.pyplot as plt'
+        "import matplotlib as mpl; import matplotlib.pyplot as plt"
     )
 else:
-    ipython_mplbackend = 'None'
+    ipython_mplbackend = "None"
     HAS_MPL = False
 
 # -------------------------------------------------------------------
@@ -489,10 +494,10 @@ else:
 # -------------------------------------------------------------------
 
 autodoc_mock_imports = [
-    'default_profile',
-    'default_profile.util',
-    'default_profile.sphinxext',
-    'extensions',
+    "default_profile",
+    "default_profile.util",
+    "default_profile.sphinxext",
+    "extensions",
 ]
 
 autosummary_generate = True
@@ -500,18 +505,18 @@ autosummary_generate = True
 autosummary_imported_members = False
 
 # autoclass_content = u'both'
-autodoc_member_order = u'bysource'
+autodoc_member_order = u"bysource"
 
 autodoc_docstring_signature = True
 
 if sphinx.version_info < (1, 8):
-    autodoc_default_flags = ['members', 'undoc-members']
+    autodoc_default_flags = ["members", "undoc-members"]
 else:
     autodoc_default_options = {
-        'members': True,
-        'member-order': 'bysource',
-        'undoc-members': True,
-        'special-members': '__init__',
+        "members": True,
+        "member-order": "bysource",
+        "undoc-members": True,
+        "special-members": "__init__",
     }
 
 autodoc_inherit_docstrings = False
@@ -522,7 +527,7 @@ autosectionlabel_prefix_document = True
 
 # -- doctest ----------------------
 
-doctest_global_setup = '''
+doctest_global_setup = """
 import default_profile
 import IPython
 from IPython import get_ipython
@@ -533,7 +538,7 @@ try:
     import matplotlib.pyplot as plt
 except Exception:
     pass
-'''
+"""
 
 # -- numpydoc extension ------------------------------------------------------
 
@@ -551,12 +556,12 @@ numpydoc_xref_param_type = True
 
 def linkcode_resolve(domain, info):
     """Oddly this function is required for the linkcode extension."""
-    if domain != 'py':
+    if domain != "py":
         return None
-    if not info['module']:
+    if not info["module"]:
         return None
 
-    filename = info['module'].replace('.', '/')
+    filename = info["module"].replace(".", "/")
     return "https://github.com/farisachugthai/dynamic_ipython/%s.py" % filename
 
 
@@ -575,7 +580,7 @@ import default_profile
 np.random.seed(123)
 """
 plot_include_source = True
-plot_formats = [('png', 96), 'pdf']
+plot_formats = [("png", 96), "pdf"]
 plot_html_show_formats = False
 
 phi = (math.sqrt(5) + 1) / 2
@@ -583,27 +588,26 @@ phi = (math.sqrt(5) + 1) / 2
 font_size = 13 * 72 / 96.0  # 13 px
 
 plot_rcparams = {
-    'font.size': font_size,
-    'axes.titlesize': font_size,
-    'axes.labelsize': font_size,
-    'xtick.labelsize': font_size,
-    'ytick.labelsize': font_size,
-    'legend.fontsize': font_size,
-    'figure.figsize': (3 * phi, 3),
-    'figure.subplot.bottom': 0.2,
-    'figure.subplot.left': 0.2,
-    'figure.subplot.right': 0.9,
-    'figure.subplot.top': 0.85,
-    'figure.subplot.wspace': 0.4,
-    'text.usetex': False,
+    "font.size": font_size,
+    "axes.titlesize": font_size,
+    "axes.labelsize": font_size,
+    "xtick.labelsize": font_size,
+    "ytick.labelsize": font_size,
+    "legend.fontsize": font_size,
+    "figure.figsize": (3 * phi, 3),
+    "figure.subplot.bottom": 0.2,
+    "figure.subplot.left": 0.2,
+    "figure.subplot.right": 0.9,
+    "figure.subplot.top": 0.85,
+    "figure.subplot.wspace": 0.4,
+    "text.usetex": False,
 }
 
 # -- Setup -------------------------------------------------------------------
 
 
-
 def parse_event(sig, signode):
-    event_sig_re = re.compile(r'([a-zA-Z-]+)\s*\((.*)\)')
+    event_sig_re = re.compile(r"([a-zA-Z-]+)\s*\((.*)\)")
     m = event_sig_re.match(sig)
     if not m:
         signode += addnodes.desc_name(sig, sig)
@@ -611,7 +615,7 @@ def parse_event(sig, signode):
     name, args = m.groups()
     signode += addnodes.desc_name(name, name)
     plist = addnodes.desc_parameterlist()
-    for arg in args.split(','):
+    for arg in args.split(","):
         arg = arg.strip()
         plist += addnodes.desc_parameter(arg, arg)
     signode += plist
@@ -621,12 +625,10 @@ def parse_event(sig, signode):
 def rstjinja(app, docname, source):
     """Render our pages as a jinja template for fancy templating goodness."""
     # Make sure we're outputting HTML
-    if app.builder.format != 'html':
+    if app.builder.format != "html":
         return
     src = source[0]
-    rendered = app.builder.templates.render_string(
-        src, app.config.html_context
-    )
+    rendered = app.builder.templates.render_string(src, app.config.html_context)
     source[0] = rendered
 
 
@@ -635,6 +637,7 @@ def del_later(app):
     lambdas over an app to get logging statements."""
     # workaround for RTD
     from sphinx.util import logging
+
     logger = logging.getLogger(__name__)
     app.info = lambda *args, **kwargs: logger.info(*args, **kwargs)
     app.warn = lambda *args, **kwargs: logger.warning(*args, **kwargs)
@@ -651,24 +654,29 @@ def setup(app):
     This requires adding the ReSTDomain.
 
     """
-    DOCS_LOGGER.info('Initializing the Sphinx instance.')
+    DOCS_LOGGER.info("Initializing the Sphinx instance.")
     app.connect("source-read", rstjinja)
-    app.add_lexer('ipythontb', IPythonTracebackLexer)
-    app.add_lexer('ipython', IPyLexer)
-    app.connect('autodoc-process-docstring', cut_lines(4, what=['module']))
-    app.add_object_type('confval', 'confval',
-                        objname='configuration value',
-                        indextemplate='pair: %s; configuration value')
+    app.add_lexer("ipythontb", IPythonTracebackLexer)
+    app.add_lexer("ipython", IPyLexer)
+    app.connect("autodoc-process-docstring", cut_lines(4, what=["module"]))
+    app.add_object_type(
+        "confval",
+        "confval",
+        objname="configuration value",
+        indextemplate="pair: %s; configuration value",
+    )
 
     # already added and raises an error
     # app.add_domain(ReSTDomain)
-    fdesc = GroupedField('parameter', label='Parameters',
-                         names=['param'], can_collapse=True)
-    app.add_object_type('event', 'event', 'pair: %s; event', parse_event,
-                        doc_field_types=[fdesc])
+    fdesc = GroupedField(
+        "parameter", label="Parameters", names=["param"], can_collapse=True
+    )
+    app.add_object_type(
+        "event", "event", "pair: %s; event", parse_event, doc_field_types=[fdesc]
+    )
 
     # app.add_css_file('custom.css')
     # app.add_css_file('pygments.css')
     # There's a html.addjsfile call earlier in the file
-    app.add_js_file('copybutton.js')
-    app.add_object_type('directive', 'dir', 'pair: %s; directive')
+    app.add_js_file("copybutton.js")
+    app.add_object_type("directive", "dir", "pair: %s; directive")

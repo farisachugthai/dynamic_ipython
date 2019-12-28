@@ -195,7 +195,7 @@ logging.basicConfig(
 )
 
 
-if platform.system() == 'Windows':
+if platform.system() == "Windows":
     from ctypes import WinDLL
 
 
@@ -215,9 +215,9 @@ def numpy_setup():
         # anymore or am i being an idiot?
         # Check again in the morning
 
-        if getattr(sys, 'last_type', None):
-            if sys.last_type == 'WindowsError':
-                sys.exit('Goddamnit Numpy. ctypes is fucking up again.')
+        if getattr(sys, "last_type", None):
+            if sys.last_type == "WindowsError":
+                sys.exit("Goddamnit Numpy. ctypes is fucking up again.")
             else:
                 logging.exception(e)
                 return
@@ -250,6 +250,7 @@ if __name__ == "__main__":
     numpy_mod = numpy_setup()
     if numpy_mod is True:
         import numpy as np
+
         # setup worked so import it as normal
         set_numpy_printoptions()
         doctest.testmod()  # why not?

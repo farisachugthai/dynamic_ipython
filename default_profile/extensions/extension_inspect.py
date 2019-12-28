@@ -13,6 +13,7 @@ from pprint import pformat
 
 from pygments import highlight
 from pygments.formatters import Terminal256Formatter  # Or TerminalFormatter
+
 # from pygments.lexers import PythonLexer
 from IPython import get_ipython
 from IPython.core.magic import Magics, magics_class, line_magic
@@ -67,7 +68,6 @@ class PrettyColorfulInspector(Magics):
             print(highlight(formatted_dict, lexer, formatter).strip())
 
 
-
 def load_ipython_extension(shell=None):
     """Add to the list of extensions used by IPython."""
     if shell is None:
@@ -75,7 +75,6 @@ def load_ipython_extension(shell=None):
     shell.register_magics(PrettyColorfulInspector)
     shell.register_line_magic(PrettyColorfulInspector.inspect)
     shell.register_line_magic(PrettyColorfulInspector.i)
-
 
 
 if __name__ == "__main__":

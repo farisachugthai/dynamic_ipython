@@ -19,5 +19,6 @@ if __name__ == "__main__":
     else:
         import matplotlib.pyplot as mpl
         from matplotlib.font_manager import FontManager
+
         fm = FontManager()
         set_mpl()

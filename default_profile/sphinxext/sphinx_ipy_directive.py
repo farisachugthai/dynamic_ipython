@@ -7,7 +7,7 @@ import IPython
 
 
 class IPythonDirectiveError(SphinxError):
-    category = 'Uh?'
+    category = "Uh?"
 
 
 class IPDirective(Directive):
@@ -17,9 +17,9 @@ class IPDirective(Directive):
     optional_arguments = 0
     final_argument_whitespace = False
     option_spec = {  # todo
-        'python': python_validator,
-        'doctest': doctest_validator,
-        'verbatim': verbatim_validator
+        "python": python_validator,
+        "doctest": doctest_validator,
+        "verbatim": verbatim_validator,
     }
 
     def run(self):
@@ -34,6 +34,7 @@ class IPDirective(Directive):
 
     def verbatim_validator(self):
         pass
+
 
 # Sphinx.add_directive(IPDirective)
 # aka

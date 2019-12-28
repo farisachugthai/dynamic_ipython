@@ -10,10 +10,11 @@
 import logging
 import re
 
-logging.basicConfig(format='%(name)-12s: %(levelname)-8s %(message)s')
+logging.basicConfig(format="%(name)-12s: %(levelname)-8s %(message)s")
 
 try:
     from sphinx import addnodes
+
     # from sphinx.domains.std import StandardDomain
     from sphinx.roles import XRefRole
 except (ImportError, ModuleNotFoundError) as e:
@@ -34,10 +35,7 @@ except (ImportError, ModuleNotFoundError) as e:
             super().__init__(self, *args, **kwargs)
 
         def __repr__(self):
-            return '{}\t \t{}'.format(
-                    self.__class__.__name__,
-                    self.err)
-
+            return "{}\t \t{}".format(self.__class__.__name__, self.err)
 
         def __call__(self, err):
             """KEEP IT MOVIN' OVA THERE"""
@@ -71,6 +69,7 @@ def parse_magic(env, sig, signode):
 
 class LineMagicRole(XRefRole):
     """Cross reference role displayed with a % prefix."""
+
     prefix = "%"
 
     def process_link(self, env, refnode, has_explicit_title, title, target):
@@ -96,15 +95,13 @@ class CellMagicRole(LineMagicRole):
 
 
 def setup(app):
-    app.add_object_type(
-        'magic', 'magic', 'pair: %s; magic command', parse_magic
-    )
-    app.add_role_to_domain('std', 'linemagic', LineMagicRole(), override=True)
+    app.add_object_type("magic", "magic", "pair: %s; magic command", parse_magic)
+    app.add_role_to_domain("std", "linemagic", LineMagicRole(), override=True)
 
     app.add_object_type(
-        'cellmagic', 'cellmagic', 'pair: %s; cell magic', parse_cell_magic
+        "cellmagic", "cellmagic", "pair: %s; cell magic", parse_cell_magic
     )
-    app.add_role_to_domain('std', 'cellmagic', CellMagicRole(), override=True)
+    app.add_role_to_domain("std", "cellmagic", CellMagicRole(), override=True)
 
-    metadata = {'parallel_read_safe': True, 'parallel_write_safe': True}
+    metadata = {"parallel_read_safe": True, "parallel_write_safe": True}
     return metadata

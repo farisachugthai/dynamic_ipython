@@ -474,7 +474,7 @@ else:
 c.Session.username = "faris"
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
     # In an ifmain because we still want documentation to be read, settings
     # to be set even if we don't have qtconsole installed IE a console user
@@ -487,4 +487,3 @@ if __name__ == '__main__':
         from jupyter_core.paths import get_home_dir
     except ImportError:
         sys.exit("Jupyter not installed. Exiting.")
-

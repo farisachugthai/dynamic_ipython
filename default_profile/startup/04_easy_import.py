@@ -30,6 +30,7 @@ class NvimHook(Configurable):
     Might need to subclass and override
     :class:`IPython.core.hooks.CommandChainDispatcher`.
     """
+
     def __init__(self, fname=None):
         """Specify the editor arguments. None are required."""
         self.fname = fname
@@ -37,17 +38,12 @@ class NvimHook(Configurable):
         super().__init__(parent=self.shell)
 
     def __repr__(self):
-        return ''.join(self.__class__.__name__)
+        return "".join(self.__class__.__name__)
 
     def __str__(self):
-        return 'Nvim Hook: {}'.format(self.fname)
+        return "Nvim Hook: {}".format(self.fname)
 
-    def nvim_quickfix_file(self,
-                           *,
-                           fname=None,
-                           lineno=None,
-                           columnno=None,
-                           m=None):
+    def nvim_quickfix_file(self, *, fname=None, lineno=None, columnno=None, m=None):
         """The hook.
 
         Accepts positional parameters to specify filename,
@@ -61,9 +57,9 @@ class NvimHook(Configurable):
     def run_nvim(self):
         """I thought of a clever way to return a nonzero exit code and have it return and raise a TryNext :D"""
         try:
-            retval = subprocess.check_call([
-                'nvim', '-c', 'set errorformat=%f:%l:%c:%m', '-q', self.fname
-            ])
+            retval = subprocess.check_call(
+                ["nvim", "-c", "set errorformat=%f:%l:%c:%m", "-q", self.fname]
+            )
         except subprocess.CalledProcessError:
             pass
         return retval
@@ -71,6 +67,7 @@ class NvimHook(Configurable):
 
 class IOStream(io.TextIOBase):
     """Try to rewrite IPythons IPython.utils.io.IOStream."""
+
     def __init__(self, stream, fallback=None):
         if fallback is not None:
             self.fallback_stream = fallback
@@ -78,11 +75,10 @@ class IOStream(io.TextIOBase):
             self.stream = stream
 
     def __repr__(self):
-        return '{}\t{}'.format(repr(self.__class__.__name__),
-                               repr(self.stream))
+        return "{}\t{}".format(repr(self.__class__.__name__), repr(self.stream))
 
     def __str__(self):
-        return '{}\n{}'.format(self.__class__.__name__, str(self.stream))
+        return "{}\n{}".format(self.__class__.__name__, str(self.stream))
 
     def write(self, message):
         """Flush streams after any writes."""
@@ -202,12 +198,16 @@ def easy_import(mod):
     try:
         return import_module(mod)
     except ImportError:
-        msg = dedent("""
+        msg = dedent(
+            """
         ************************************************************
         {} import failed. Only ignore this if you plan on going
         the entire session without using it!!
         ************************************************************
-        """.format(mod))
+        """.format(
+                mod
+            )
+        )
 
 
 if __name__ == "__main__":

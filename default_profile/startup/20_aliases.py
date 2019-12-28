@@ -598,6 +598,7 @@ def redefine_aliases(aliases, shell=None):
     for i in aliases:
         shell.alias_manager.define_alias(*i)
 
+
 if __name__ == "__main__":
     _ip = get_ipython()
 

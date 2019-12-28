@@ -23,20 +23,24 @@ import pkgutil
 import sys
 from pathlib import Path
 
-logging.getLogger(name='docs').getChild('sphinxext').addHandler(logging.StreamHandler())
+logging.getLogger(name="docs").getChild("sphinxext").addHandler(logging.StreamHandler())
 
 # How to check the current namespace
-if hasattr(locals(), '__path__'):
+if hasattr(locals(), "__path__"):
     __path__ = pkgutil.extend_path(__path__, __name__)
 else:
     sys.path.insert(0, str(Path(__file__).resolve()))
 
 
 # Don't emit an error on IPython startup if not installed.
-ask_for_import('IPython')
+ask_for_import("IPython")
 
 # We kinda have to assume we're installed if we're building our docs
-if ask_for_import('sphinx'):
+if ask_for_import("sphinx"):
     from default_profile.sphinxext import custom_doctests  # noqa F401
+
     # from default_profile.sphinxext.ipython_directive import EmbeddedSphinxShell, IPythonDirective  # noqa F401
-    from default_profile.sphinxext.magics import LineMagicRole, CellMagicRole  # noqa F401
+    from default_profile.sphinxext.magics import (
+        LineMagicRole,
+        CellMagicRole,
+    )  # noqa F401

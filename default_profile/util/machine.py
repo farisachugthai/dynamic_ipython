@@ -60,9 +60,10 @@ class Platform:
     """
 
     LOGGER = module_log.stream_logger(
-        logger='util.machine.Platform',
-        msg_format='%(asctime)s : %(levelname)s : %(lineNo)d : %(message)s : ',
-        log_level=logging.INFO)
+        logger="util.machine.Platform",
+        msg_format="%(asctime)s : %(levelname)s : %(lineNo)d : %(message)s : ",
+        log_level=logging.INFO,
+    )
 
     def __init__(self, shell=None, env=None, LOGGER=None):
         """Initialize a user specific object.
@@ -104,16 +105,14 @@ class Platform:
         self.Path = Path
 
     def __repr__(self):
-        return '{!r}: {!r}.'.format(self.__class__.__name__,
-                                    self._sys_platform)
+        return "{!r}: {!r}.".format(self.__class__.__name__, self._sys_platform)
 
     def is_windows(self):
-        return self._sys_platform.startswith('win')
+        return self._sys_platform.startswith("win")
 
     def is_conemu_ansi(self):
         # refactor to self.env.keys().index('ConEmuAnsi')?
-        return self.is_windows() and os.environ.get('ConEmuANSI',
-                                                    'OFF') == 'ON'
+        return self.is_windows() and os.environ.get("ConEmuANSI", "OFF") == "ON"
 
     @property
     def is_win_vt100(self):
@@ -122,12 +121,13 @@ class Platform:
         Import needs to be inline. Windows libraries are not always available.
         """
         from prompt_toolkit.output.windows10 import is_win_vt100_enabled
+
         return self.is_win and is_win_vt100_enabled()
 
     @property
     def is_linux(self):
         """True when :func:`sys.platform` returns linux."""
-        return self._sys_platform == 'linux'
+        return self._sys_platform == "linux"
 
     @staticmethod
     def get_env():
@@ -159,6 +159,7 @@ class Platform:
 
 class Shell(Platform):
     """Subclass Platform to gain information about the user's shell."""
+
     @property
     def is_cmd(self):
         """Unsure of how to implement this. TODO:"""
@@ -184,6 +185,7 @@ class DisplayAliases(reprlib.Repr):
         Out[54]: {'..': 'cd ..', '...': 'cd ../..', 'copy': 'copy %s %s', 'cp': 'copy %s %s', ...}
 
     """
+
     def __init__(self, shell=None, user_aliases=None):
         self.shell = shell or get_ipython()
         self.maxdict = 20
@@ -210,9 +212,10 @@ class DisplayAliases(reprlib.Repr):
 if __name__ == "__main__":
     # Modules kept importing this and ending up with 2 loggers and i was confused
     MACHINE_LOGGER = module_log.stream_logger(
-        logger='util.machine',
-        msg_format='%(asctime)s : %(levelname)s : %(module)s : %(message)s : ',
-        log_level=logging.INFO)
+        logger="util.machine",
+        msg_format="%(asctime)s : %(levelname)s : %(module)s : %(message)s : ",
+        log_level=logging.INFO,
+    )
 
     # Not useful as i have it here but it's a good reference for the user env
     Environ = _Environ()

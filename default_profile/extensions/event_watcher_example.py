@@ -41,23 +41,23 @@ class VarWatcher:
         self.last_x = last_x or None
 
     def pre_execute(self):
-        self.last_x = self.shell.user_ns.get('x', None)
+        self.last_x = self.shell.user_ns.get("x", None)
 
     def pre_run_cell(self, info):
         print('Cell code: "%s"' % info.raw_cell)
 
     def post_execute(self):
-        if self.shell.user_ns.get('x', None) != self.last_x:
+        if self.shell.user_ns.get("x", None) != self.last_x:
             print("x changed!")
 
     def post_run_cell(self, result):
         print('Cell code: "%s"' % result.info.raw_cell)
         if result.error_before_exec:
-            print('Error before execution: %s' % result.error_before_exec)
+            print("Error before execution: %s" % result.error_before_exec)
 
     def load_ipython_extension(ip):
         vw = VarWatcher(ip)
-        ip.events.register('pre_execute', vw.pre_execute)
-        ip.events.register('pre_run_cell', vw.pre_run_cell)
-        ip.events.register('post_execute', vw.post_execute)
-        ip.events.register('post_run_cell', vw.post_run_cell)
+        ip.events.register("pre_execute", vw.pre_execute)
+        ip.events.register("pre_run_cell", vw.pre_run_cell)
+        ip.events.register("post_execute", vw.post_execute)
+        ip.events.register("post_run_cell", vw.post_run_cell)

@@ -41,11 +41,11 @@ def str_to_array(s):
     # Todo: Use their context manager to reset printoptions
     from numpy import inf, nan
 
-    if s.startswith(u'array'):
+    if s.startswith(u"array"):
         # Remove array( and )
         s = s[6:-1]
 
-    if s.startswith(u'['):
+    if s.startswith(u"["):
         a = np.array(eval(s), dtype=float)
     else:
         # Assume its a regular float. Force 1D so we can index into it.
@@ -85,8 +85,10 @@ def float_doctest(sphinx_shell, args, input_lines, found, submitted):
             rtol = float(args[2])
             atol = float(args[3])
         except IndexError:
-            e = ("Both `rtol` and `atol` must be specified "
-                 "if either are specified: {0}".format(args))
+            e = (
+                "Both `rtol` and `atol` must be specified "
+                "if either are specified: {0}".format(args)
+            )
             raise IndexError(e)
 
     try:
@@ -99,34 +101,42 @@ def float_doctest(sphinx_shell, args, input_lines, found, submitted):
         found_isnan = np.isnan(found)
         submitted_isnan = np.isnan(submitted)
         error = not np.allclose(found_isnan, submitted_isnan)
-        error |= not np.allclose(found[~found_isnan],
-                                 submitted[~submitted_isnan],
-                                 rtol=rtol, atol=atol)
+        error |= not np.allclose(
+            found[~found_isnan], submitted[~submitted_isnan], rtol=rtol, atol=atol
+        )
 
-    TAB = ' ' * 4
+    TAB = " " * 4
     directive = sphinx_shell.directive
     if directive is None:
-        source = 'Unavailable'
-        content = 'Unavailable'
+        source = "Unavailable"
+        content = "Unavailable"
     else:
         source = directive.state.document.current_source
         # Add tabs and make into a single string.
-        content = '\n'.join([TAB + line for line in directive.content])
+        content = "\n".join([TAB + line for line in directive.content])
 
     if error:
 
-        e = ('doctest float comparison failure\n\n'
-             'Document source: {0}\n\n'
-             'Raw content: \n{1}\n\n'
-             'On input line(s):\n{TAB}{2}\n\n'
-             'we found output:\n{TAB}{3}\n\n'
-             'instead of the expected:\n{TAB}{4}\n\n')
-        e = e.format(source, content, '\n'.join(input_lines), repr(found),
-                     repr(submitted), TAB=TAB)
+        e = (
+            "doctest float comparison failure\n\n"
+            "Document source: {0}\n\n"
+            "Raw content: \n{1}\n\n"
+            "On input line(s):\n{TAB}{2}\n\n"
+            "we found output:\n{TAB}{3}\n\n"
+            "instead of the expected:\n{TAB}{4}\n\n"
+        )
+        e = e.format(
+            source,
+            content,
+            "\n".join(input_lines),
+            repr(found),
+            repr(submitted),
+            TAB=TAB,
+        )
         raise RuntimeError(e)
+
 
 # dict of allowable doctest handlers.
 doctest_handlers = {
-    'float': float_doctest,
+    "float": float_doctest,
 }
-

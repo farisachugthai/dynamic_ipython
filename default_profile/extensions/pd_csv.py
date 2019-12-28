@@ -62,14 +62,14 @@ def load_ipython_extension(ip):
     ip : |ip|
 
     """
-    ip.register_magic_function('pd_csv')
+    ip.register_magic_function("pd_csv")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     try:
         import pandas as pd
     except (ImportError, ModuleNotFoundError):
-        logging.error("{lib} not installed.".format(lib='Pandas'))
+        logging.error("{lib} not installed.".format(lib="Pandas"))
     else:
         shell = get_ipython()
         if shell is not None:

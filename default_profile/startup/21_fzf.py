@@ -60,16 +60,17 @@ class Executable(ContextDecorator):  # types.MappingProxy
 
 # @Executable('fzf')
 
+
 class FZF:
     """Wrap FZF together."""
 
-    fzf_alias = ''
+    fzf_alias = ""
 
     def __init__(self, fzf_alias=None):
-        self.fzf_alias = fzf_alias or ''
+        self.fzf_alias = fzf_alias or ""
 
     def __repr__(self):
-        return '{}    {}'.format(self.__class__.__name__, self.fzf_alias)
+        return "{}    {}".format(self.__class__.__name__, self.fzf_alias)
 
     @classmethod
     def _setup_fzf(cls):
@@ -86,8 +87,7 @@ class FZF:
         elif shutil.which("fzf") and shutil.which("ag"):
             # user_aliases.extend(
             #     ('fzf', '$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS'))
-            cls.fzf_alias = ("fzf",
-                             "ag -C 0 --color-win-ansi --noheading %l | fzf")
+            cls.fzf_alias = ("fzf", "ag -C 0 --color-win-ansi --noheading %l | fzf")
 
         return cls.fzf_alias
 

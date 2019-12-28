@@ -48,4 +48,3 @@ def load_ipython_extension(shell=None):
 
     """
     shell.magics_manager.register_function(load_ext, magic_name="load_ext")
-

@@ -13,6 +13,7 @@ from IPython.core.error import UsageError
 from IPython.core.magic import line_magic
 from IPython.core.magics.namespace import NamespaceMagics
 from IPython.core.page import pager_page
+
 # from IPython.core.magics import
 # Might need some of the funcs from IPython.utils.{PyColorize,coloransi,colorable}
 
@@ -45,7 +46,7 @@ class PyPager:
         self.call(*args)
 
     def __repr__(self):
-        return ''.join(self.__class__.__name__)
+        return "".join(self.__class__.__name__)
 
     def __str__(self):
         return "A pager for files you'd like to inspect. Or interactive variables."
@@ -65,8 +66,8 @@ def blocking_pager(text):
 
     Better to keep things separated.
     """
-    with open(text, 'rt') as f:
-        pydoc.pipepager(f.read(), 'less -JRKMLige ')
+    with open(text, "rt") as f:
+        pydoc.pipepager(f.read(), "less -JRKMLige ")
 
 
 def get_docs_and_page():
@@ -75,7 +76,7 @@ def get_docs_and_page():
     if len(args) > 0:
         print(getdoc(*args))
     else:
-        sys.exit('Need to provide an argument.')
+        sys.exit("Need to provide an argument.")
 
 
 def were_in_ipython():
@@ -139,13 +140,13 @@ def c(s=None):
         PyPager(*sys.argv[1:])
     code = provided_or_last(s)
     namespace = NamespaceMagics()
-    if hasattr(namespace, 'pycat'):
+    if hasattr(namespace, "pycat"):
         try:
-            get_ipython().run_line_magic('pycat', 'code')
+            get_ipython().run_line_magic("pycat", "code")
         except (KeyboardInterrupt, EOFError):
             return
     else:
-        raise UsageError('ya dun goofed')
+        raise UsageError("ya dun goofed")
 
 
 if __name__ == "__main__":

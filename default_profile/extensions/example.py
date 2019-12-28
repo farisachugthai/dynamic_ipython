@@ -37,14 +37,13 @@ from IPython.core.magic import Magics, line_magic, magics_class
 
 @magics_class
 class ExampleMagic(Magics):
-
     def __init__(self, shell=None, **kwargs):
         super(ExampleMagic, self).__init__(shell)
 
     @line_magic
     def time_printer(self):
         """An example of a line magic."""
-        if sys.platform.startswith('win'):
+        if sys.platform.startswith("win"):
             return time.clock()
         else:
             return time.time()

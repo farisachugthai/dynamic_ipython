@@ -7,10 +7,13 @@ import subprocess
 from subprocess import Popen, PIPE
 
 from IPython.core.magic import Magics, magics_class, line_magic
-from IPython.core.magics.packaging import (CONDA_ENV_FLAGS, CONDA_YES_FLAGS,
-                                           CONDA_COMMANDS_REQUIRING_YES,
-                                           CONDA_COMMANDS_REQUIRING_PREFIX,
-                                           PackagingMagics)
+from IPython.core.magics.packaging import (
+    CONDA_ENV_FLAGS,
+    CONDA_YES_FLAGS,
+    CONDA_COMMANDS_REQUIRING_YES,
+    CONDA_COMMANDS_REQUIRING_PREFIX,
+    PackagingMagics,
+)
 from IPython.lib import kernel
 from IPython.terminal.interactiveshell import TerminalInteractiveShell
 
@@ -25,7 +28,7 @@ class PackagingMagics(Magics):
 
         Also. Property or classmethod?
         """
-        return shutil.which('conda')
+        return shutil.which("conda")
 
     @property
     def stdin_disabled(self):
@@ -46,7 +49,7 @@ class PackagingMagics(Magics):
 
         """
         if self.conda_path is None:
-            raise NotImplementedError('conda not installed or on $PATH envvar')
+            raise NotImplementedError("conda not installed or on $PATH envvar")
 
         conda, *cmd = sys.argv
 

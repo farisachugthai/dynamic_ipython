@@ -20,6 +20,7 @@ class ReprAlias(Repr):
 
     Then utilize :class:`reprlib.Repr` to print the structure.
     """
+
     maxdict = 6
     maxlevel = 5
 

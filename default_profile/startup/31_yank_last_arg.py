@@ -14,11 +14,20 @@ from prompt_toolkit.key_binding import KeyBindings, merge_key_bindings
 from prompt_toolkit.key_binding.bindings.auto_suggest import load_auto_suggest_bindings
 from prompt_toolkit.key_binding.bindings.basic import load_basic_bindings
 from prompt_toolkit.key_binding.bindings.cpr import load_cpr_bindings
-from prompt_toolkit.key_binding.bindings.completion import display_completions_like_readline
-from prompt_toolkit.key_binding.bindings.emacs import load_emacs_bindings, load_emacs_search_bindings
+from prompt_toolkit.key_binding.bindings.completion import (
+    display_completions_like_readline,
+)
+from prompt_toolkit.key_binding.bindings.emacs import (
+    load_emacs_bindings,
+    load_emacs_search_bindings,
+)
 from prompt_toolkit.key_binding.bindings.mouse import load_mouse_bindings
-from prompt_toolkit.key_binding.bindings.open_in_editor import load_open_in_editor_bindings
-from prompt_toolkit.key_binding.bindings.page_navigation import load_page_navigation_bindings
+from prompt_toolkit.key_binding.bindings.open_in_editor import (
+    load_open_in_editor_bindings,
+)
+from prompt_toolkit.key_binding.bindings.page_navigation import (
+    load_page_navigation_bindings,
+)
 from prompt_toolkit.filters import HasFocus, HasSelection, ViInsertMode, EmacsInsertMode
 
 insert_mode = ViInsertMode() | EmacsInsertMode()
@@ -41,17 +50,19 @@ def get_key_bindings(custom_key_bindings=None):
     """
     if custom_key_bindings is None:
         custom_key_bindings = KeyBindings()
-    return merge_key_bindings([
-        load_auto_suggest_bindings(),
-        load_basic_bindings(),
-        load_cpr_bindings(),
-        load_emacs_bindings(),
-        load_emacs_search_bindings(),
-        load_mouse_bindings(),
-        load_open_in_editor_bindings(),
-        load_page_navigation_bindings(),
-        custom_key_bindings,
-    ])
+    return merge_key_bindings(
+        [
+            load_auto_suggest_bindings(),
+            load_basic_bindings(),
+            load_cpr_bindings(),
+            load_emacs_bindings(),
+            load_emacs_search_bindings(),
+            load_mouse_bindings(),
+            load_open_in_editor_bindings(),
+            load_page_navigation_bindings(),
+            custom_key_bindings,
+        ]
+    )
 
 
 class State:
@@ -111,19 +122,21 @@ if __name__ == "__main__":
     elif getattr(ip, "pt_cli", None):
         orig_kb = ip.pt_cli.application.key_bindings_registry
     else:
-        raise NotImplementedError("IPython doesn't have prompt toolkit bindings. Exiting.")
+        raise NotImplementedError(
+            "IPython doesn't have prompt toolkit bindings. Exiting."
+        )
 
-    registry.add_binding(Keys.Escape,
-                         u'.',
-                         filter=(HasFocus(DEFAULT_BUFFER)
-                                 & ~HasSelection()
-                                 & insert_mode))(yank_last_arg)
-    registry.add_binding(Keys.Escape,
-                         u'_',
-                         filter=(HasFocus(DEFAULT_BUFFER)
-                                 & ~HasSelection()
-                                 & insert_mode))(yank_last_arg)
-    ip.events.register('post_execute', reset_last_arg_depth)
+    registry.add_binding(
+        Keys.Escape,
+        u".",
+        filter=(HasFocus(DEFAULT_BUFFER) & ~HasSelection() & insert_mode),
+    )(yank_last_arg)
+    registry.add_binding(
+        Keys.Escape,
+        u"_",
+        filter=(HasFocus(DEFAULT_BUFFER) & ~HasSelection() & insert_mode),
+    )(yank_last_arg)
+    ip.events.register("post_execute", reset_last_arg_depth)
 
     # Here's a simple example of using registry. C-i == Tab
     registry.add(Keys.ControlI)(display_completions_like_readline)

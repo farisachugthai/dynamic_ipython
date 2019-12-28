@@ -58,5 +58,7 @@ class ExceptionTuple(Sequence):
 
 if __name__ == "__main__":
     shell = get_ipython()
-    handled = cgitb.Hook(logdir=shell.profile_dir.log_dir, file=sys.stdout, format='text')
+    handled = cgitb.Hook(
+        logdir=shell.profile_dir.log_dir, file=sys.stdout, format="text"
+    )
     sys.excepthook = handled

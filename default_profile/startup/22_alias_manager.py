@@ -15,7 +15,7 @@ class DynamicAliasManager(AliasManager):
     def __init__(self, ip=None, user_aliases=None, **kwargs):
         self.ip = ip if ip else get_ipython()
         super().__init__(shell=self.ip, **kwargs)
-        self.linemagics = self.shell.magics_manager.magics['line']
+        self.linemagics = self.shell.magics_manager.magics["line"]
         self.user_aliases = user_aliases
         # yes thank god they defined teh defaults in 1 function.
         self.default_aliases = default_aliases()
@@ -51,7 +51,7 @@ class DynamicAliasManager(AliasManager):
         if self.is_alias(name):
             del self.linemagics[name]
         else:
-            raise AliasError('%s is not an alias' % name)
+            raise AliasError("%s is not an alias" % name)
 
 
 if __name__ == "__main__":

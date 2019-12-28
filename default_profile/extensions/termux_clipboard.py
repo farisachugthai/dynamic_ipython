@@ -28,12 +28,12 @@ class ClipboardMagics(Magics):
         """Bind the IPython instance and it's config and parent attributes."""
         self.shell = shell or get_ipython()
         if self.shell is not None:
-            if getattr(self.shell, 'config', None):
+            if getattr(self.shell, "config", None):
                 self.config = self.shell.config
             else:
                 self.config = None
 
-            if getattr(self.shell, 'parent', None):
+            if getattr(self.shell, "parent", None):
                 self.parent = self.shell.parent
             else:
                 self.parent = None
@@ -41,7 +41,7 @@ class ClipboardMagics(Magics):
         super().__init__(*args, **kwargs)
 
     def __repr__(self):
-        return '<{}>:'.format(self.__class__.__name__)
+        return "<{}>:".format(self.__class__.__name__)
 
     def load_ipython_extension(self):
         """Sep 20, 2019: Works!"""
@@ -62,6 +62,6 @@ class ClipboardMagics(Magics):
             from prompt_toolkit.clipboard.pyperclip import PyperclipClipboard
         except ModuleNotFoundError:
             # womp
-            print('pyperclip not imported.')
+            print("pyperclip not imported.")
         else:
             self.shell.pt_app.clipboard = PyperclipClipboard()

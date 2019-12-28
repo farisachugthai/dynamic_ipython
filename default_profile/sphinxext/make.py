@@ -31,7 +31,7 @@ class GitProject:
     def __init__(self, **kwargs):
         """Override anything you like as a keyword argument. My personal choices for defaults are provided here."""
 
-        self.root = subprocess.check_output(['git', 'rev-parse', '--show-toplevel'])
+        self.root = subprocess.check_output(["git", "rev-parse", "--show-toplevel"])
 
         # good try but it raises a KeyError
         # self.doc_root = kwargs.pop('doc_root') or Path(self.root).joinpath('docs')
@@ -41,10 +41,10 @@ class GitProject:
         # self.templates_path = kwargs.pop('templates_path') or self.source_dir.joinpath('_templates')
 
     def __repr__(self):
-        return ''.join(self.__class__.__name__)
+        return "".join(self.__class__.__name__)
 
     def __str__(self):
-        return ''.format('Git Repository:\nself.root')
+        return "".format("Git Repository:\nself.root")
 
 
 # Probably should initialize in a different/ better way but eh
@@ -56,9 +56,9 @@ sphinx_fs = SphinxFileSystemLoader(searchpath=repo.templates_path)
 
 def _setup_make_logging():
     """Setup the logging. Add a filter with no args to allow everything."""
-    BASIC_FORMAT = '%(created)f  %(module)s  %(levelname)s  %(message)s'
+    BASIC_FORMAT = "%(created)f  %(module)s  %(levelname)s  %(message)s"
 
-    logger = logging.getLogger(name='docs.sphinxext').getChild('make')
+    logger = logging.getLogger(name="docs.sphinxext").getChild("make")
     logger.setLevel(logging.DEBUG)
     make_handler = logging.StreamHandler(stream=sys.stdout)
     make_handler.setLevel(logging.DEBUG)
@@ -87,80 +87,79 @@ def _parse_arguments(cmds=None) -> argparse.ArgumentParser:
         Shows a few good methods on how to programatically publish docs.
 
     """
-    cmds = [method for method in dir(DocBuilder) if not method.startswith('_')]
+    cmds = [method for method in dir(DocBuilder) if not method.startswith("_")]
 
     parser = argparse.ArgumentParser(
         prog="Pure Python Makefile",
         description="Dynamic IPython doc builder.",
-        epilog="Commands: {}".format(', '.join(cmds))
+        epilog="Commands: {}".format(", ".join(cmds)),
     )
 
     parser.add_argument(
-        'builder',
-        nargs='?',
-        default='html',
+        "builder",
+        nargs="?",
+        default="html",
         # ugh this shouldn't be independent of DocBuilder.kinds
-        choices=['html', 'singlehtml', 'text', 'linkcheck', 'doctest'],
-        metavar='builder: ',
-        help='command to run: {}'.format(',\t '.join(cmds))
+        choices=["html", "singlehtml", "text", "linkcheck", "doctest"],
+        metavar="builder: ",
+        help="command to run: {}".format(",\t ".join(cmds)),
     )
 
     parser.add_argument(
-        '-j',
-        '--num-jobs',
-        metavar='num-jobs',
-        dest='jobs',
+        "-j",
+        "--num-jobs",
+        metavar="num-jobs",
+        dest="jobs",
         type=int,
         default=os.cpu_count(),
-        help='Number of parallel jobs used by `sphinx-build`.'
+        help="Number of parallel jobs used by `sphinx-build`.",
     )
 
     parser.add_argument(
-        '-b',
-        '--open_browser',
-        metavar='BROWSER',
+        "-b",
+        "--open_browser",
+        metavar="BROWSER",
         type=bool,
         default=False,
-        dest='open_browser',
-        help='Toggle opening the docs in the default'
-        ' browser after a successful build.'
+        dest="open_browser",
+        help="Toggle opening the docs in the default"
+        " browser after a successful build.",
     )
 
     parser.add_argument(
-        '-l',
-        '--log',
+        "-l",
+        "--log",
         default=sys.stdout,
-        type=argparse.FileType('w'),
-        help='Where to write log records to. Defaults to'
-        ' stdout.'
+        type=argparse.FileType("w"),
+        help="Where to write log records to. Defaults to" " stdout.",
     )
 
     parser.add_argument(
-        '-ll',
-        '--log-level',
-        dest='log_level',
-        default='INFO',
-        choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'],
-        help='Log level. Defaults to INFO. Implies logging.'
+        "-ll",
+        "--log-level",
+        dest="log_level",
+        default="INFO",
+        choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
+        help="Log level. Defaults to INFO. Implies logging.",
     )
     # reasonably should mention what the purpose of some of these are.
     # they primarily seem like toggles since they don't provide much else
     parser.add_argument(
-        '-V',
-        '--verbose',
-        nargs='?',
+        "-V",
+        "--verbose",
+        nargs="?",
         const=True,
         default=False,
-        help='Enable verbose logging and increase level to `debug`.'
+        help="Enable verbose logging and increase level to `debug`.",
     )
 
-    parser.add_argument('--version', action='version', version=__version__)
+    parser.add_argument("--version", action="version", version=__version__)
 
     user_args = parser.parse_args()
 
     if len(sys.argv[1:]) == 0:
         parser.print_help()
-        sys.exit('Args not provided.')
+        sys.exit("Args not provided.")
 
     return user_args
 
@@ -177,6 +176,7 @@ class DocBuilder:
         The filetype :command:`make` invokes :command:`sphinx-build` to create.
 
     """
+
     MAKE_LOGGER = _setup_make_logging()
 
     def __init__(self, kind=None, num_jobs=1, verbosity=0):
@@ -200,29 +200,29 @@ class DocBuilder:
 
         """
         if kind is None:
-            kind = 'html'
+            kind = "html"
         self.kind = kind
         self.num_jobs = num_jobs
         self.verbosity = verbosity
 
     def __repr__(self):
-        return '{}\t{}'.format(self.__class__.__name__, self.kind)
+        return "{}\t{}".format(self.__class__.__name__, self.kind)
 
     @property
     def kinds(self):
         """Allowable sphinx-build outputs."""
-        return ['html', 'singlehtml', 'text', 'linkcheck', 'doctest']
+        return ["html", "singlehtml", "text", "linkcheck", "doctest"]
 
     @staticmethod
     def status(output):
         """Print output in bold. Emits ANSI escape sequences to sys.stdout"""
-        print('\033[1m{0}\033[0m'.format(output))
+        print("\033[1m{0}\033[0m".format(output))
 
     def cleanup(self):
         """Clean the working tree."""
         try:
-            self.status('Removing previous builds…')
-            shutil.rmtree('build')
+            self.status("Removing previous builds…")
+            shutil.rmtree("build")
         except OSError as e:
             MAKE_LOGGER.error(e)
 
@@ -236,20 +236,20 @@ class DocBuilder:
         """
         if self.kind not in self.kinds:
             raise ValueError(
-                'kind must be one of: {}'.format(str(self.kinds)) +
-                'not {}'.format(self.kind)
+                "kind must be one of: {}".format(str(self.kinds))
+                + "not {}".format(self.kind)
             )
-        cmd = ['sphinx-build', '-b', self.kind, '.', '-c', SOURCE_PATH]
+        cmd = ["sphinx-build", "-b", self.kind, ".", "-c", SOURCE_PATH]
         if self.num_jobs:
-            cmd += ['-j', str(self.num_jobs)]
+            cmd += ["-j", str(self.num_jobs)]
         if self.verbosity:
-            cmd.append('-{}'.format('v' * self.verbosity))
+            cmd.append("-{}".format("v" * self.verbosity))
         cmd += [
-            '-d',
-            os.path.join(BUILD_PATH, 'doctrees'),
-            os.path.join(BUILD_PATH, self.kind)
+            "-d",
+            os.path.join(BUILD_PATH, "doctrees"),
+            os.path.join(BUILD_PATH, self.kind),
         ]
-        MAKE_LOGGER.debug('Cmd is ', cmd)
+        MAKE_LOGGER.debug("Cmd is ", cmd)
         return cmd
 
     def run(self):
@@ -273,9 +273,9 @@ class DocBuilder:
     def open_browser(self, doc=None):
         """Open a browser tab to the provided document."""
         if doc is None:
-            doc = 'index.html'
-        url = os.path.join('file://', DOC_PATH, 'build', 'html', doc)
-        self.status('Opening path to: {!s}'.format(url))
+            doc = "index.html"
+        url = os.path.join("file://", DOC_PATH, "build", "html", doc)
+        self.status("Opening path to: {!s}".format(url))
         webbrowser.open(url, new=2)
 
     @classmethod
@@ -295,7 +295,7 @@ class DocBuilder:
 
         """
         # so do we not set self.kind to html? Just pass it in like that?
-        ret_code = cls.sphinx_build('html')
+        ret_code = cls.sphinx_build("html")
 
         return ret_code
 
@@ -304,17 +304,13 @@ def termux_hack():
     """Android permissions don't allow viewing files in app specific files."""
     try:
         shutil.copytree(
-            BUILD_PATH,
-            '/data/data/com.termux/files/home/storage/downloads/html'
+            BUILD_PATH, "/data/data/com.termux/files/home/storage/downloads/html"
         )
     except FileExistsError:
         try:
-            shutil.rmtree(
-                '/data/data/com.termux/files/home/storage/downloads/html'
-            )
+            shutil.rmtree("/data/data/com.termux/files/home/storage/downloads/html")
             shutil.copytree(
-                BUILD_PATH,
-                '/data/data/com.termux/files/home/storage/downloads/html'
+                BUILD_PATH, "/data/data/com.termux/files/home/storage/downloads/html"
             )
         except Exception as e:
             raise e
@@ -330,8 +326,8 @@ def rsync():
     None
 
     """
-    if shutil.which('rsync'):
-        output = subprocess.run(['rsync', '-hv8r', BUILD_PATH, DOC_PATH])
+    if shutil.which("rsync"):
+        output = subprocess.run(["rsync", "-hv8r", BUILD_PATH, DOC_PATH])
         return output
 
 
@@ -355,12 +351,13 @@ def gather_sphinx_options(argv: List[str]) -> Any:
     builder = args.builder
 
     # Necessary enough to justify not making a logrecord.
-    pprint('Your sphinx-build command was: ' + str(
-        ['-b', builder,
-         SOURCE_PATH, BUILD_PATH,
-         '-j', jobs, '-' + verbosity * 'v'
-         ]))
-    ret = build_main(['-b', builder, SOURCE_PATH, BUILD_PATH])
+    pprint(
+        "Your sphinx-build command was: "
+        + str(
+            ["-b", builder, SOURCE_PATH, BUILD_PATH, "-j", jobs, "-" + verbosity * "v"]
+        )
+    )
+    ret = build_main(["-b", builder, SOURCE_PATH, BUILD_PATH])
     return ret
 
 
@@ -379,14 +376,12 @@ def main():
     output = sphinx_shell.run()
 
     if output.returncode != 0:
-        print(
-            'Command failed with return code: {} '.format(output.returncode)
-        )
+        print("Command failed with return code: {} ".format(output.returncode))
         sys.exit(output.stderr)
 
     if args.open_browser:
         sphinx_shell.open_browser()
-        sphinx_shell.status('Opening browser!')
+        sphinx_shell.status("Opening browser!")
 
     return output
 

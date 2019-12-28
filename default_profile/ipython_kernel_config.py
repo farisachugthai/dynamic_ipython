@@ -9,12 +9,12 @@ from traitlets.config import get_config
 
 c = get_config()  # noqa
 # The date format used by logging formatters for %(asctime)s
-c.Application.log_datefmt = '%Y-%m-%d %H:%M:%S'
+c.Application.log_datefmt = "%Y-%m-%d %H:%M:%S"
 
 # The Logging format template
 
-logging.BASIC_FORMAT = '%(created)f %(levelname)s  %(module)s  %(message)s : '
-c.Application.log_format = '%(created)f  %(levelname)s  %(module)s  %(message)s  '
+logging.BASIC_FORMAT = "%(created)f %(levelname)s  %(module)s  %(message)s : "
+c.Application.log_format = "%(created)f  %(levelname)s  %(module)s  %(message)s  "
 
 # Set the log level by value or name.
 c.Application.log_level = 30
@@ -173,7 +173,7 @@ c.InteractiveShell.automagic = True
 
 # The part of the banner to be printed before the profile
 # Stop being so noisy like goddamn
-c.InteractiveShell.banner1 = ''
+c.InteractiveShell.banner1 = ""
 
 # The part of the banner to be printed after the profile
 # c.InteractiveShell.banner2 = ''
@@ -193,7 +193,7 @@ c.InteractiveShell.cache_size = 100000
 # c.InteractiveShell.color_info = True
 
 # Set the color scheme (NoColor, Neutral, Linux, or LightBG).
-c.InteractiveShell.colors = 'Linux'
+c.InteractiveShell.colors = "Linux"
 
 # c.InteractiveShell.debug = False
 
@@ -288,11 +288,11 @@ c.InteractiveShell.wildcards_case_sensitive = False
 
 # Set the profile location directly. This overrides the logic used by the
 # `profile` option.
-if os.environ.get('IPYTHONDIR'):
-    c.ProfileDir.location = os.environ.get('IPYTHONDIR')
+if os.environ.get("IPYTHONDIR"):
+    c.ProfileDir.location = os.environ.get("IPYTHONDIR")
 else:
     if get_home():
-        c.ProfileDir.location = Path.joinpath(get_home(), '', '.ipython')
+        c.ProfileDir.location = Path.joinpath(get_home(), "", ".ipython")
 
 # -----------------------------------------------------------------------------
 # Session(Configurable) configuration
@@ -385,4 +385,4 @@ else:
 # c.Session.unpacker = 'json'
 
 # Username for the Session. Default is your system username.
-c.Session.username = 'faris'
+c.Session.username = "faris"

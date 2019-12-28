@@ -35,6 +35,7 @@ import logging
 
 from .base16 import Base16
 from .copytree import CopyTree
+
 # sqlite is being annoying on windows :/ go figure
 # from .ipython_get_history import get_history
 from .machine import Platform
@@ -46,9 +47,9 @@ from .timer import timer as _itimer
 
 from traitlets.config.application import LevelFormatter
 
-LOG_BASIC_FORMAT = '%(module)  %(created)f  [%(name)s]  %(highlevel)s  %(message)s  '
+LOG_BASIC_FORMAT = "%(module)  %(created)f  [%(name)s]  %(highlevel)s  %(message)s  "
 
-UTIL_LOGGER = logging.getLogger('default_profile').getChild('util')
+UTIL_LOGGER = logging.getLogger("default_profile").getChild("util")
 UTIL_LOGGER.setLevel(logging.WARNING)
 util_handler = logging.StreamHandler()
 util_handler.setLevel(logging.WARNING)

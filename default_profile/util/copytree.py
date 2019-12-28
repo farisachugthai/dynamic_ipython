@@ -37,12 +37,7 @@ class CopyTree:
     errors = []
 
     def __init__(
-            self,
-            src,
-            dst,
-            symlinks=False,
-            ignore=None,
-            copy_function=shutil.copy2
+        self, src, dst, symlinks=False, ignore=None, copy_function=shutil.copy2
     ):
         self.src = src
         self.dst = dst
@@ -93,15 +88,10 @@ class CopyTree:
                         # code with a custom `copy_function` may rely on copytree
                         # doing the right thing.
                         os.symlink(linkto, dstname)
-                        copystat(
-                            srcname,
-                            dstname,
-                            follow_symlinks=not self.symlinks
-                        )
+                        copystat(srcname, dstname, follow_symlinks=not self.symlinks)
                     else:
                         # ignore dangling symlink if the flag is on
-                        if not os.path.exists(linkto
-                                              ) and ignore_dangling_symlinks:
+                        if not os.path.exists(linkto) and ignore_dangling_symlinks:
                             continue
                         # otherwise let the copy occurs. copy2 will raise an error
                         if os.path.isdir(srcname):
@@ -116,8 +106,7 @@ class CopyTree:
                             self.copy_function(srcname, dstname)
                 elif os.path.isdir(srcname):
                     copytree(
-                        srcname, dstname, self.symlinks, self.ignore,
-                        self.copy_function
+                        srcname, dstname, self.symlinks, self.ignore, self.copy_function
                     )
                 else:
                     # Will raise a SpecialFileError for unsupported file types

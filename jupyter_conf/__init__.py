@@ -16,4 +16,3 @@ from . import (
     jupyter_qtconsole_config,
     jupyter_serverextension_config,
 )
-

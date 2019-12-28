@@ -11,9 +11,9 @@ from pathlib import Path
 
 from .machine import Platform
 
-logging.BASIC_FORMAT = '%(created)f  %(module)s  %(levelname)s  %(message)s'
+logging.BASIC_FORMAT = "%(created)f  %(module)s  %(levelname)s  %(message)s"
 
-PATHS_LOGGER = logging.getLogger(name='default_profile.util').getChild('paths')
+PATHS_LOGGER = logging.getLogger(name="default_profile.util").getChild("paths")
 PATHS_LOGGER.setLevel(logging.WARNING)
 
 
@@ -43,7 +43,7 @@ def _path_build(root, suffix):
         new = root.joinpath(suffix)
         return new
     else:
-        PATHS_LOGGER.error('%s: does not exist. Returning None.' % root)
+        PATHS_LOGGER.error("%s: does not exist. Returning None." % root)
 
 
 class PathValidator:
@@ -57,6 +57,7 @@ class PathValidator:
         C:\\Program Files\\ and their ilk?
 
     """
+
     def __init__(self):
         """Initialize with parameters. Which parameters though?"""
         self.env = dict(os.environ.copy())
@@ -70,7 +71,7 @@ class PathValidator:
         >>> PathValidator()
 
         """
-        return '{}\t{}'.format(self.__class__.__name__, self.path)
+        return "{}\t{}".format(self.__class__.__name__, self.path)
 
     @property
     def OS(self):
@@ -78,13 +79,12 @@ class PathValidator:
 
     @property
     def _is_win(self):
-        return self.OS == 'windows'
+        return self.OS == "windows"
 
     @property
     def path(self):
         """Break the path up into a list and replace the double back slashes."""
         if self._is_win:
-            return self.env["PATH"].replace('\\', '/').split(';')
+            return self.env["PATH"].replace("\\", "/").split(";")
         else:
-            return self.env["PATH"].split(':')
-
+            return self.env["PATH"].split(":")

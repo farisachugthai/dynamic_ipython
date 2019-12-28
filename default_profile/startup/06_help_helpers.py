@@ -43,6 +43,7 @@ def save_help(redirected):
         help(redirected)
         return saved
 
+
 def write_help(output_file, arg=None):
     """Write :func:`help` to a file.
 
@@ -129,11 +130,12 @@ def dirip():
 
     """
     from IPython.core.getipython import get_ipython
+
     shell_attributes = dir(get_ipython())
     if shell_attributes is None:
-        logging.warning(
-            'Are you in in IPython? get_ipython() did not return anything')
+        logging.warning("Are you in in IPython? get_ipython() did not return anything")
         return
     from IPython.utils.text import SList
+
     shell_list = SList(shell_attributes)
     return shell_list

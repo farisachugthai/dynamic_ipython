@@ -23,10 +23,10 @@ except ImportError:
         from IPython.nbformat import current
 
         def read(f, as_version):
-            return current.read(f, 'json')
+            return current.read(f, "json")
 
         def write(nb, f):
-            return current.write(nb, f, 'json')
+            return current.write(nb, f, "json")
 
 
 def _cells(notebook):
@@ -53,24 +53,24 @@ def _cells(notebook):
 
 def strip_output(nb):
     """strip the outputs from a notebook object."""
-    nb.metadata.pop('signature', None)
+    nb.metadata.pop("signature", None)
     for cell in _cells(nb):
-        if 'outputs' in cell:
-            cell['outputs'] = []
-        if 'prompt_number' in cell:
-            cell['prompt_number'] = None
+        if "outputs" in cell:
+            cell["outputs"] = []
+        if "prompt_number" in cell:
+            cell["prompt_number"] = None
     return nb
 
 
 def main():
     """Strip output from a user's notebook."""
     filename = sys.argv[1]
-    with io.open(filename, 'r', encoding='utf8') as f:
+    with io.open(filename, "r", encoding="utf8") as f:
         nb = read(f, as_version=NO_CONVERT)
         nb = strip_output(nb)
-    with io.open(filenaedfbf8eme, 'w', encoding='utf8') as f:
+    with io.open(filenaedfbf8eme, "w", encoding="utf8") as f:
         write(nb, f)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())
