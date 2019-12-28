@@ -2,8 +2,6 @@
 # -*- coding: utf-8 -*-
 """FZF works in IPython!!!!
 
-Note
------
 Trying to rework this over in ../extensions/namespaces.py
 
 Also worth noting the aliasmanager rewrite in ./22_alias_manager.py
@@ -20,8 +18,7 @@ from typing import get_type_hints  # what is this?
 from IPython.core.getipython import get_ipython
 
 
-# so apparently this is
-class Executable(ContextDecorator):  # types.MappingProxy
+class Executable(ContextDecorator):
     """An object representing some executable on a user computer."""
 
     def __init__(self, command):
@@ -66,8 +63,9 @@ class FZF:
 
     fzf_alias = ""
 
-    def __init__(self, fzf_alias=None):
+    def __init__(self, fzf_alias=None, fzf_configs=None, **kwargs):
         self.fzf_alias = fzf_alias or ""
+        self.fzf_config = fzf_configs or {}
 
     def __repr__(self):
         return "{}    {}".format(self.__class__.__name__, self.fzf_alias)

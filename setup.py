@@ -95,11 +95,15 @@ SOURCE_PATH = os.path.join(CONF_PATH, "source")
 
 README = os.path.join(ROOT_PATH, "", "README.rst")
 
+with codecs.open(README, encoding="utf-8") as f:
+    LONG_DESCRIPTION = "\n" + f.read()
+
+
 # TODO: How to do conditionals? Only windows needs pyreadline
 REQUIRED = [
     "IPython>=7.10",
     "prompt_toolkit",
-    "traitlets>=4.4",
+    "traitlets>=4.3",
     "pygments",
     "jedi>=0.15",
     "sphinx",
@@ -125,6 +129,7 @@ EXTRAS = {
         "flake8-docstrings",
     ],
     "test": ["pytest", "tox", "nose", "testpath",],
+}
 
 # }}}}
 class UploadCommand(Command):  # {{{1
