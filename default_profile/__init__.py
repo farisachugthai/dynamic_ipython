@@ -71,7 +71,6 @@ PROFILE_DEFAULT_LOG.debug(
 )
 
 PROFILE_DEFAULT_LOG.debug("Sys.path before:" + str(sys.path))
-sys.path = sys.path + [REPO_ROOT]
 PROFILE_DEFAULT_LOG.debug("Sys path after:" + str(sys.path))
 
 if hasattr(locals(), "__path__"):
@@ -193,6 +192,3 @@ def setup_logging(debug=True, logfile=None):
         root_logger.addHandler(handler)
 
     root_logger.setLevel(10)
-
-
-setup_logging()
