@@ -11,6 +11,7 @@ from prompt_toolkit.application.current import get_app
 from prompt_toolkit.enums import DEFAULT_BUFFER
 from prompt_toolkit.keys import Keys
 from prompt_toolkit.key_binding import KeyBindings, merge_key_bindings
+from prompt_toolkit.key_binding.defaults import load_key_bindings
 from prompt_toolkit.key_binding.bindings.auto_suggest import load_auto_suggest_bindings
 from prompt_toolkit.key_binding.bindings.basic import load_basic_bindings
 from prompt_toolkit.key_binding.bindings.cpr import load_cpr_bindings
@@ -111,13 +112,12 @@ def yank_last_arg(event):
 
 
 if __name__ == "__main__":
-
     registry = KeyBindings()
 
     ip = get_ipython()
 
     if getattr(ip, "pt_app", None):
-        orig_kb = ip.pt_app.key_bindings
+        orig_kb = ip.pt_app.app.key_bindings
 
     elif getattr(ip, "pt_cli", None):
         orig_kb = ip.pt_cli.application.key_bindings_registry
@@ -146,6 +146,7 @@ if __name__ == "__main__":
     # should display something like +100 bindings
     # since we linked it to the correct attribute of pt_app this should work
 
-    all_kb = get_key_bindings(registry)
+    # all_kb = get_key_bindings(registry)
     # Overwrite our original keybindings
-    orig_kb = all_kb
+    # orig_kb = all_kb
+    # _ip.pt_app.app.key_bindings = load_key_bindings()
