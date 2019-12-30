@@ -95,29 +95,39 @@ import logging
 import reprlib
 from typing import Callable, Optional
 
+from prompt_toolkit.application.current import get_app
 from prompt_toolkit.cache import SimpleCache
 from prompt_toolkit.enums import DEFAULT_BUFFER, SEARCH_BUFFER
 from prompt_toolkit.filters import Condition
+
+from prompt_toolkit.keys import Keys
 from prompt_toolkit.key_binding import merge_key_bindings, KeyBindings, ConditionalKeyBindings
 from prompt_toolkit.key_binding.defaults import load_vi_bindings, load_key_bindings
 from prompt_toolkit.key_binding.key_bindings import _MergedKeyBindings
 
-# Dude these are all the vi modes prompt_toolkit has...lol
 from prompt_toolkit.key_binding.bindings.vi import (
-    vi_selection_mode,
-    vi_recording_macro,
-    vi_register_names,
-    vi_mode,
-    vi_replace_mode,
-    vi_waiting_for_text_object_mode,
-    vi_insert_mode,
-    vi_search_direction_reversed,
-    vi_navigation_mode,
-    vi_digraph_mode,
-    vi_insert_multiple_mode,
+    load_vi_bindings,
+    load_vi_search_bindings
 )
 
+# Dude these are all the vi modes prompt_toolkit has...lol
+# So I just checked. Wanna know what it does? They're basically enums that get compared to editing_mode.input_mode. lol kinda dumb right.
+# from prompt_toolkit.filters.app import (
+#     vi_selection_mode,
+#     vi_recording_macro,
+#     vi_register_names,
+#     vi_mode,
+#     vi_replace_mode,
+#     vi_waiting_for_text_object_mode,
+#     vi_insert_mode,
+#     vi_search_direction_reversed,
+#     vi_navigation_mode,
+#     vi_digraph_mode,
+#     vi_insert_multiple_mode,
+# )
+
 from IPython.core.getipython import get_ipython
+from prompt_toolkit.application.dummy import DummyApplication
 
 kb_logger = logging.getLogger(name=__name__)
 
@@ -157,6 +167,9 @@ class KeyBindingsManager:
     KeyBindingsBase.
 
     Copy pasted it below.
+
+    .. todo:: ``__getitem__`` so we have a properly constructed sequence.
+
     """
 
     def __init__(self, kb=None, shell=None):
@@ -203,8 +216,8 @@ class KeyBindingsManager:
     def len(self):
         return self.__len__()
 
-    def __str__(self):
-        return reprlib.Repr().repr_list(self.kb.bindings)
+    def __str__(self, level=6):
+        return reprlib.Repr().repr_list(self.kb.bindings, level)
 
     def __call__(self):
         """Doesn't do anything important."""
@@ -309,11 +322,12 @@ class HandlesMergedKB(KeyBindingsManager):
         kb = shell.pt_app.app.key_bindings
         if kb is None:
             kb = load_key_bindings()
-        elif isinstance(kb, _MergedKeyBindings):
-            for i in kb.registries:
-                unpack(i)
+        else:
+            if isinstance(kb, _MergedKeyBindings):
+                for i in kb.registries:
+                    unpack(i)
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, kb=None, shell=None, *args, **kwargs):
         """Honestly can't say I have a great grasp on proper initialization
         of subclasses with both class attributes and __init__'s.
         """

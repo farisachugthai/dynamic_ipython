@@ -16,6 +16,7 @@ Huh! This is neat. He imports pdb.Restart. Check out the call signature.
 
 """
 import getopt
+import logging
 import os
 from pdb import Restart
 import sys
@@ -53,6 +54,8 @@ def wrap_sys_excepthook():
 
     As it's written don't we lose the old sys excepthook as soon as we leave
     this functions ns though?
+
+    Also how do you compare Exceptions and whatever excepthook is?
     """
     if sys.excepthook != BdbQuit:
         original_excepthook = sys.excepthook
@@ -60,7 +63,7 @@ def wrap_sys_excepthook():
 
 
 def set_trace(frame=None, context=3):
-    wrap_sys_excepthook()
+    # wrap_sys_excepthook()
     if frame is None:
         frame = sys._getframe().f_back
     p = _init_pdb(context).set_trace(frame)
@@ -69,7 +72,7 @@ def set_trace(frame=None, context=3):
 
 
 def post_mortem(tb=None):
-    wrap_sys_excepthook()
+    # wrap_sys_excepthook()
     p = _init_pdb()
     p.reset()
     if tb is None:
@@ -116,13 +119,13 @@ def parse_args():
     commands = []
     for opt, optarg in opts:
         if opt in ["-h", "--help"]:
-            getopt.GetOptError()
+            getopt.GetoptError()
         elif opt in ["-c", "--command"]:
             commands.append(optarg)
 
     if not args:
         # print(_usage) todo!
-        getopt.GetOptError()
+        getopt.GetoptError()
         sys.exit(2)
 
     mainpyfile = args[0]  # Get script filename
