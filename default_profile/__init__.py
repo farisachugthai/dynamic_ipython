@@ -7,12 +7,40 @@ The heart of all IPython and console related code lives here.
 Moved ask_for_import up here so we can import it from all of the profiles
 below without intermingling.
 
+>>> import pkg_resources
+>>> for i in pkg_resources.find_distributions('.'):
+...     print(i)
+...
+dynamic-ipython 0.0.1
+
+Also a good check to see whats being counted as a package is:
+
+>>> from setuptools import find_packages, find_namespace_packages
+>>> found_packages = find_packages(where='.')
+>>> found_namespace_packages = find_namespace_packages(where='.')
+>>> logging.debug('Found packages were: {}'.format(found_packages))
+>>> logging.debug('Found namespace packages were: {}'.format(found_namespace_packages))
+
 """
 import importlib
 import logging
 import sys
 from collections import deque
 from traitlets.config.application import LevelFormatter
+
+import logging
+import os
+import pkgutil
+
+# from pkg_resources import declare_namespace
+from setuptools import find_packages, find_namespace_packages
+import sys
+
+try:  # new replacement for the pkg_resources API
+    import importlib_metadata
+except ImportError:
+    importlib_metadata = None
+
 
 default_log_format = (
     "[ %(name)s  %(relativeCreated)d ] %(levelname)s %(module)s %(message)s "
@@ -25,9 +53,28 @@ PROFILE_DEFAULT_FORMATTER = logging.Formatter(fmt=default_log_format)
 PROFILE_DEFAULT_HANDLER.addFilter(logging.Filterer())
 PROFILE_DEFAULT_HANDLER.setFormatter(PROFILE_DEFAULT_FORMATTER)
 PROFILE_DEFAULT_LOG.addHandler(PROFILE_DEFAULT_HANDLER)
-
 default_traitlets_log_format = "[ %(name)s  %(relativeCreated)d ] %(highlevel)s %(levelname)s %(module)s %(message)s "
 default_formatter = LevelFormatter(fmt=default_traitlets_log_format)
+
+
+# Pkg-resources:
+# This kills everything on termux and makes run pytest or tox in the root
+# of this repo impossible. hmmmmm. Is there a fix for that?
+# declare_namespace(REPO_ROOT)
+
+found_packages = find_packages(where="..")
+found_namespace_packages = find_namespace_packages(where="..")
+
+PROFILE_DEFAULT_LOG.debug("Found packages were: {}".format(found_packages))
+PROFILE_DEFAULT_LOG.debug(
+    "Found namespace packages were: {}".format(found_namespace_packages)
+)
+
+PROFILE_DEFAULT_LOG.debug("Sys.path before:" + str(sys.path))
+PROFILE_DEFAULT_LOG.debug("Sys path after:" + str(sys.path))
+
+if hasattr(locals(), "__path__"):
+    ___path__ = pkgutil.extend_path(__path__, __name__)
 
 
 def ask_for_import(mod, package=None):
