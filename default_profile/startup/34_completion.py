@@ -1,3 +1,4 @@
+import abc
 import keyword
 import re
 
@@ -10,33 +11,57 @@ from prompt_toolkit.completion import (
     WordCompleter,
 )
 
+class SimpleCompleter(metaclass=abc.ABC):
 
-class SimpleWordCompletions:
+    @abc.abstractproperty
+    def document(self):
+        # does it make sense to create these 2 as abstract properties?
+        raise
+
+    @abc.abstractproperty
+    def current_text(self):
+        raise
+
+    @abc.abstractmethod
+    def get_completions(self, doc=None, complete_event=None, **kwargs):
+        raise
+
+    @abc.abstractmethod
+    def _initialize_completer(self, *args, **kwargs):
+        raise
+
+
+class SimpleCompletions(SimpleCompleter):
+    # Do you make super calls after subclassing ABC?
+
     def __init__(self, shell=None):
         self.shell = shell or get_ipython()
-        self._initialize_word_completer()
+        self._initialize_completer()
 
     @property
     def user_ns(self):
         return self.shell.user_ns
 
-    def _initialize_word_completer(self, *args, **kwargs):
+    def _initialize_completer(self, *args, **kwargs):
         if not args and not kwargs:
-            self.word_completer = WordCompleter(
+            self.completer = WordCompleter(
                 self.user_ns, pattern=re.compile(r"^([a-zA-Z0-9_.]+|[^a-zA-Z0-9_.\s]+)")
             )
         # TODO: else:
 
-    def get_document(self):
-        """Is this how you do this?"""
+    @property
+    def document(self):
         return self.shell.pt_app.app.current_buffer.document
 
     def get_completions(self, doc=None, complete_event=None, **kwargs):
-
+        """For now lets not worry about CompleteEvent too much. But we will need to add a
+        get_async_completions method."""
         if doc is None:
-            doc = self.get_document()
+            doc = self.document
+        if complete_event is None:
+            complete_event = CompleteEvent()
         yield WordCompleter.get_completions(
-            document=doc, complete_event=CompleteEvent(), **kwargs
+            document=doc, complete_event=complete_event, **kwargs
         )
 
 
@@ -54,6 +79,6 @@ def get_keyword_completer():
 
 if __name__ == "__main__":
     if get_ipython() is not None:
-        get_ipython().set_custom_completer(SimpleWordCompletions)
-        get_ipython().set_custom_completer(get_path_completer)
-        get_ipython().set_custom_completer(get_keyword_completer)
+        get_ipython().set_custom_completer(SimpleCompletions())
+        get_ipython().set_custom_completer(get_path_completer())
+        get_ipython().set_custom_completer(get_keyword_completer())

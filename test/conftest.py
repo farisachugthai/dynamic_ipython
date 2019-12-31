@@ -5,10 +5,17 @@ import sys
 import tempfile
 
 from traitlets.config import Config
-from IPython import get_ipython
+from IPython.core.getipython import get_ipython
+from IPython import start_ipython
+
+# from IPython.terminal.ipapp import TerminalIPythonApp
+
 import pytest
+from pytest import set_trace
 
 # from pytest.nose import *
+from _pytest import nose
+from _pytest import unittest
 
 import default_profile
 
@@ -23,15 +30,19 @@ def pytest_load_initial_conftests(args):
 
 @pytest.fixture(scope="session", autouse=True)
 def _ip():
-    config = Config()
-    config.TerminalInteractiveShell.colors = "NoColor"
-    config.TerminalInteractiveShell.term_title = (False,)
-    config.TerminalInteractiveShell.autocall = 0
+    # config = Config()
+    c = get_ipython()
+    # if c is None:
+    #     c = startconfigython()
+    set_trace()
+    c.colors = "NoColor"
+    c.term_title = (False,)
+    c.autocall = 0
     f = tempfile.NamedTemporaryFile(suffix=u"test_hist.sqlite", delete=False)
-    config.HistoryManager.hist_file = f.name
+    c.HistoryManager.hist_file = f.name
     f.close()
-    config.HistoryManager.db_cache_size = 10000
-    return config
+    c.HistoryManager.db_cache_size = 10000
+    return c
 
 
 def pytest_addoption(parser):
@@ -66,13 +77,3 @@ def pytest_report_header(config):
 def cleandir():
     newpath = tempfile.mkdtemp()
     os.chdir(newpath)
-
-
-def start():
-    if _ip is None:
-        from IPython import start_ipython
-
-        start_ipython()
-
-
-start()
