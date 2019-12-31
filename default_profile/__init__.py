@@ -62,13 +62,13 @@ default_formatter = LevelFormatter(fmt=default_traitlets_log_format)
 # of this repo impossible. hmmmmm. Is there a fix for that?
 # declare_namespace(REPO_ROOT)
 
-found_packages = find_packages(where="..")
-found_namespace_packages = find_namespace_packages(where="..")
+# found_packages = find_packages(where="..")
+# found_namespace_packages = find_namespace_packages(where="..")
 
-PROFILE_DEFAULT_LOG.debug("Found packages were: {}".format(found_packages))
-PROFILE_DEFAULT_LOG.debug(
-    "Found namespace packages were: {}".format(found_namespace_packages)
-)
+# PROFILE_DEFAULT_LOG.debug("Found packages were: {}".format(found_packages))
+# PROFILE_DEFAULT_LOG.debug(
+#     "Found namespace packages were: {}".format(found_namespace_packages)
+# )
 
 PROFILE_DEFAULT_LOG.debug("Sys.path before:" + str(sys.path))
 PROFILE_DEFAULT_LOG.debug("Sys path after:" + str(sys.path))
