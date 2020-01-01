@@ -131,29 +131,66 @@ on using subcommand &#39;cmd&#39;, do: <span class="nv">`ipython-history cmd -h`
 </div>
 <p>Also the original implementation only defines 2 options for the subcommand.</p>
 <p>But it would be nice to have options like <code class="docutils literal notranslate"><span class="pre">backup</span></code> and <strong class="command">grep</strong>
-or something. <a href="#id2"><span class="problematic" id="id3">*</span></a>Though to be fair the <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.utils.text.html#IPython.utils.text.SList" title="(in IPython v7.11.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SList</span></code></a> class
-has a ‘grep’ method.</p>
+or something. <em>Though to be fair the :class:`~IPython.utils.text.SList` class
+has a ‘grep’ method.</em></p>
 <p>There are a handful of <em>nice to have</em> but ultimately pointless functions in
 <code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython.utils</span></code> so why not take advantage?</p>
 </div>
 <div class="section" id="writing-magics-for-our-users">
 <h2>Writing Magics For Our Users<a class="headerlink" href="#writing-magics-for-our-users" title="Permalink to this headline">¶</a></h2>
 <p>In the documentation, it specifies the requirements for a magic.</p>
-<p>And I quote the <code class="docutils literal notranslate"><span class="pre">custommagics</span></code> document.:</p>
+<p>And qI quote the <code class="docutils literal notranslate"><span class="pre">custommagics</span></code> document.:</p>
 <blockquote>
 <div><p>There are two main ways to define your own magic functions: from standalone
 functions and by inheriting from a base class provided by IPython:
 <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.magic.html#IPython.core.magic.Magics" title="(in IPython v7.11.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Magics</span></code></a>.</p>
 </div></blockquote>
 <p>It then gives an example.</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="c1"># The class MUST call this class decorator at creation time</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.core.magic</span> <span class="kn">import</span> <span class="p">(</span><span class="n">Magics</span><span class="p">,</span> <span class="n">magics_class</span><span class="p">,</span>
+                                <span class="n">line_magic</span><span class="p">,</span><span class="n">cell_magic</span><span class="p">,</span> <span class="n">line_cell_magic</span><span class="p">)</span>
+
+<span class="c1"># The class MUST call this class decorator at creation time</span>
+<span class="nd">@magics_class</span>
+<span class="k">class</span> <span class="nc">MyMagics</span><span class="p">(</span><span class="n">Magics</span><span class="p">):</span>
+
+    <span class="nd">@line_magic</span>
+    <span class="k">def</span> <span class="nf">lmagic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+        <span class="s2">&quot;my line magic&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Full access to the main IPython object:&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Variables in the user namespace:&quot;</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">user_ns</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+        <span class="k">return</span> <span class="n">line</span>
+
+    <span class="nd">@cell_magic</span>
+    <span class="k">def</span> <span class="nf">cmagic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">cell</span><span class="p">):</span>
+        <span class="s2">&quot;my cell magic&quot;</span>
+        <span class="k">return</span> <span class="n">line</span><span class="p">,</span> <span class="n">cell</span>
+
+    <span class="nd">@line_cell_magic</span>
+    <span class="k">def</span> <span class="nf">lcmagic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="s2">&quot;Magic that works both as %lmagic and as </span><span class="si">%%</span><span class="s2">cmagic&quot;</span>
+        <span class="k">if</span> <span class="n">cell</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Called as line magic&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">line</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Called as cell magic&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">line</span><span class="p">,</span> <span class="n">cell</span>
+
+
 <span class="c1"># In order to actually use these magics, you must register them with a</span>
 <span class="c1"># running IPython.</span>
+
+<span class="k">def</span> <span class="nf">load_ipython_extension</span><span class="p">(</span><span class="n">ipython</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Any module file that define a function named `load_ipython_extension`</span>
+<span class="sd">    can be loaded via `%load_ext module.path` or be configured to be</span>
+<span class="sd">    autoloaded by IPython at startup time.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># You can register the class itself without instantiating it.  IPython will</span>
     <span class="c1"># call the default constructor on it.</span>
+    <span class="n">ipython</span><span class="o">.</span><span class="n">register_magics</span><span class="p">(</span><span class="n">MyMagics</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>How can we rewrite the magic implementation so that the decorator <code class="docutils literal notranslate"><span class="pre">&#64;magics_class</span></code>
+<p>How can we rewrite the magic implementation so that the decorator <code class="docutils literal notranslate"><span class="pre">magics_class</span></code>
 isn’t required anymore?</p>
 <p>Like if they pass us a string can we not just feed it to our own home-brewed
 wrapper function? Off the top of my head I’m guessing something like this.:</p>
@@ -364,7 +401,7 @@ adding more later?</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Dec 28, 2019.
+      Last updated on Dec 31, 2019.
     </div>
   </body>
 </html>

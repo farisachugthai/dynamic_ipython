@@ -8,7 +8,7 @@ import pydoc
 import sys
 
 import IPython
-from IPython import get_ipython
+from IPython.core.getipython import get_ipython
 from IPython.core.error import UsageError
 from IPython.core.magic import line_magic
 from IPython.core.magics.namespace import NamespaceMagics
@@ -149,7 +149,13 @@ def c(s=None):
         raise UsageError("ya dun goofed")
 
 
+# def superhelper(x):
+#     """Stolen from xonsh. And wow this is a weird module."""
+#     inspector.pinfo(x, =)
+
+
 if __name__ == "__main__":
     get_ipython().register_magic_function(c)
+    inspector = IPython.core.oinspect.Inspector()
     if len(sys.argv[:]) > 1:
         c(sys.argv[1:])

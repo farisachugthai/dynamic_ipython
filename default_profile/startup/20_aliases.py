@@ -123,7 +123,7 @@ class CommonAliases:
             ("gar", "git add --renormalize %l"),
             ("gau", "git add --update %l"),
             ("ga.", "git add ."),
-            ("gb", "git branch --all --remote --verbose %l"),
+            ("gb", "git branch --all --verbose %l"),
             ("gbl", "git blame %l"),
             ("gbr", "git branch -arv %l"),
             ("gbrd", "git branch -d %l"),

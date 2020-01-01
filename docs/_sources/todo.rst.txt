@@ -95,7 +95,7 @@ Also the original implementation only defines 2 options for the subcommand.
 
 But it would be nice to have options like ``backup`` and :command:`grep`
 or something. *Though to be fair the :class:`~IPython.utils.text.SList` class
-has a 'grep' method.
+has a 'grep' method.*
 
 There are a handful of *nice to have* but ultimately pointless functions in
 :mod:`IPython.utils` so why not take advantage?
@@ -106,7 +106,7 @@ Writing Magics For Our Users
 
 In the documentation, it specifies the requirements for a magic.
 
-And I quote the ``custommagics`` document.:
+And qI quote the ``custommagics`` document.:
 
    There are two main ways to define your own magic functions: from standalone
    functions and by inheriting from a base class provided by IPython:
@@ -114,10 +114,10 @@ And I quote the ``custommagics`` document.:
 
 It then gives an example.
 
-.. ipython::
+.. code-block:: ipython
 
-    from IPython.core.magic import (Magics, magics_class, line_magic,
-                                    cell_magic, line_cell_magic)
+    from IPython.core.magic import (Magics, magics_class,
+                                    line_magic,cell_magic, line_cell_magic)
 
     # The class MUST call this class decorator at creation time
     @magics_class
@@ -137,7 +137,7 @@ It then gives an example.
 
         @line_cell_magic
         def lcmagic(self, line, cell=None):
-            "Magic that works both as %lcmagic and as %%lcmagic"
+            "Magic that works both as %lmagic and as %%cmagic"
             if cell is None:
                 print("Called as line magic")
                 return line
@@ -160,10 +160,8 @@ It then gives an example.
         ipython.register_magics(MyMagics)
 
 
-How can we rewrite the magic implementation so that the decorator ``@magics_class``
+How can we rewrite the magic implementation so that the decorator ``magics_class``
 isn't required anymore?
-
-.. sidebar:: Also how do you cross-ref a decorator?
 
 Like if they pass us a string can we not just feed it to our own home-brewed
 wrapper function? Off the top of my head I'm guessing something like this.::
