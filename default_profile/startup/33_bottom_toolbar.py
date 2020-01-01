@@ -1,7 +1,12 @@
 """Holy fuck this works."""
+from datetime import date
 from prompt_toolkit.enums import EditingMode
 from prompt_toolkit.keys import Keys
 from prompt_toolkit.key_binding import KeyBindings
+
+# from prompt_toolkit.shortcuts import HTML
+from prompt_toolkit.shortcuts import print_formatted_text
+from prompt_toolkit.styles import default_pygments_style
 
 from IPython.core.getipython import get_ipython
 
@@ -15,10 +20,16 @@ def bottom_toolbar():
 
     Got a TypeError because function doesn't have len?
     Wtf dude.
+
+    Ooo this might be a fun time to really see how far I can stretch
+    pythons new string formatting.
     """
     if get_ipython().pt_app.app.editing_mode == EditingMode.VI:
         current_vi_mode = get_ipython().pt_app.app.vi_state.input_mode
-        return " [F4] Vi: {}".format(current_vi_mode)
+        return print_formatted_text(
+            " [F4] Vi: {}  {:>30}".format(current_vi_mode, date.today()),
+            style=default_pygments_style(),
+        )
     else:
         return " [F4] Emacs "
 
