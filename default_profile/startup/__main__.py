@@ -12,7 +12,8 @@
 """
 import errno
 import logging
-import os
+from os import scandir
+import runpy
 import sys
 
 from IPython.core.getipython import get_ipython
@@ -28,7 +29,7 @@ if not shell:
     sys.exit("startup.__main__: get_ipython returned None")
 
 
-def startup_exec_files():
+def rerun_startup():
     ret = {}
     for i in scandir('.'):
         if i.name.endswith('.py'):

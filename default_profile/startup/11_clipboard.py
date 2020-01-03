@@ -14,8 +14,11 @@ from IPython.core.error import TryNext
 try:
     import pyperclip
 except ImportError:
-    # from prompt_toolkit.contrib I think?
-    pass
+    pyperclip = None
+else:
+    from prompt_toolkit.clipboard import pyperclip as pt_pyperclip
+
+from prompt_toolkit.clipboard import ClipboardData, InMemoryClipboard
 
 try:
     from default_profile.extensions import termux_clipboard
@@ -80,3 +83,9 @@ def tkinter_clipboard_get():
     finally:
         root.destroy()
     return text
+
+
+if __name__ == "__main__":
+    ipy = get_ipython()
+    if ipy is not None:
+        ipy.pt_app.clipboard = InMemoryClipboard()
