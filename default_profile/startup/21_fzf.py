@@ -11,6 +11,7 @@ from contextlib import ContextDecorator
 import functools
 import os
 import shutil
+import shlex
 import sys
 import types
 from typing import get_type_hints  # what is this?
@@ -66,12 +67,28 @@ class FZF:
     def __init__(self, fzf_alias=None, fzf_configs=None, **kwargs):
         self.fzf_alias = fzf_alias or ""
         self.fzf_config = fzf_configs or {}
+        self._setup_fzf()
 
     def __repr__(self):
         return "{}    {}".format(self.__class__.__name__, self.fzf_alias)
 
+    def __call__(self, *args, **kwargs):
+        """Run :attr:`safe_default_cmd` with ``*args`` as a command.
+
+        Accepts any optional ``**kwargs`` passed along to :func:`subprocess.run`.
+        """
+        subprocess.run([self.safe_default_cmd, *args], **kwargs)
+
+    @property
+    def default_cmd_str(self):
+        return "rg --pretty --hidden --max-columns-preview --no-heading --no-messages --no-column --no-line-number -C 0 -e ^ | fzf --ansi --multi ",
+
+    @property
+    def safe_default_cmd(self):
+        return shlex.split(shlex.quote(self.default_cmd_str))
+
     @classmethod
-    def _setup_fzf(cls):
+    def _setup_fzf(cls, *args):
         if cls.fzf_alias is None:
             cls.fzf_alias = ()
         if shutil.which("fzf") and shutil.which("rg"):
@@ -86,6 +103,9 @@ class FZF:
             # user_aliases.extend(
             #     ('fzf', '$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS'))
             cls.fzf_alias = ("fzf", "ag -C 0 --color-win-ansi --noheading %l | fzf")
+
+        if args:
+            cls.fzf_alias.extend(args)
 
         return cls.fzf_alias
 

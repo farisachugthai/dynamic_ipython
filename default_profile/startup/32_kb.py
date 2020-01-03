@@ -132,29 +132,6 @@ from prompt_toolkit.application.dummy import DummyApplication
 kb_logger = logging.getLogger(name=__name__)
 
 
-class VerbosePrompt:
-    """Because I can't ever remember how these classes resolve."""
-
-    def __init__(self) -> None:
-        self.shell = get_ipython()
-        if getattr(self.shell, "pt_app", None):
-            self.app = self.shell.pt_app
-            self.buffer = self.shell.pt_app.buffer
-            self.document = self.shell.pt_app.buffer.document
-        else:  # well let's check at least
-            self.app = get_app()
-            if self.app is not None:
-                # ah shit what if it's a dummy app
-                if isinstance(self.app, DummyApplication):
-                    self.app = None
-            else:
-                kb_logger.error(
-                    "IPython was none but prompt toolkit returned an app.")
-
-    def __repr__(self):
-        return "{}".format(i for i in dir(self) if not i.startswith("_"))
-
-
 class KeyBindingsManager:
     """Bind an interface with IPython's keybindings and define dunders so this behaves properly.
 
@@ -166,9 +143,13 @@ class KeyBindingsManager:
     I'm assuming wed need to implement the methods provided by the class
     KeyBindingsBase.
 
+    *Fun fact:* This used to be a class in prompt_toolkit!
+
     Copy pasted it below.
 
-    .. todo:: ``__getitem__`` so we have a properly constructed sequence.
+    .. todo::
+        ``__getitem__`` so we have a properly constructed sequence.
+        Jan 03, 2020: Done! Just ensure everything works upon usage.
 
     """
 
@@ -228,9 +209,16 @@ class KeyBindingsManager:
     def __iter__(self):
         """This file in general is gonna suck to test isn't it?"""
         try:
-            iter(self.kb.bindings)
+            for i in iter(self.kb.bindings):
+                yield i
         except TypeError:
             raise  # uhm idk
+        except StopIteration:
+            pass
+
+    def __getitem__(self, index):
+        return self.kb.bindings[index]
+
 
     def _clear_cache(self):
         self.__version += 1
