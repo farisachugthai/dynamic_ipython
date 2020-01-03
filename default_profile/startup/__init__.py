@@ -11,9 +11,11 @@ import importlib
 import logging
 import sys
 
-BASIC_FORMAT = "%(created)f %(module)s %(levelname)s %(message)s"
+import default_profile
 
-STARTUP_LOGGER = logging.getLogger(name="default_profile").getChild("startup")
+BASIC_FORMAT = default_profile.default_log_format
+
+STARTUP_LOGGER = logging.getLogger(name=__name__).getChild("startup")
 STARTUP_LOGGER.setLevel(logging.WARNING)
 STARTUP_HANDLER = logging.StreamHandler(stream=sys.stdout)
 STARTUP_HANDLER.setLevel(logging.WARNING)
@@ -27,14 +29,22 @@ rehashx_mod = importlib.import_module("default_profile.startup.01_rehashx")
 easy_import_mod = importlib.import_module("default_profile.startup.04_easy_import")
 log_mod = importlib.import_module("default_profile.startup.05_log")
 help_helpers_mod = importlib.import_module("default_profile.startup.06_help_helpers")
+
 envvar_mod = importlib.import_module("default_profile.startup.10_envvar")
 clipboard_mod = importlib.import_module("default_profile.startup.11_clipboard")
+
 aliases_mod = importlib.import_module("default_profile.startup.20_aliases")
 fzf_mod = importlib.import_module("default_profile.startup.21_fzf")
 alias_manager_mod = importlib.import_module("default_profile.startup.22_alias_manager")
+
 readline_mod = importlib.import_module("default_profile.startup.30_readline")
 yank_last_arg_mod = importlib.import_module("default_profile.startup.31_yank_last_arg")
+kb_mod = importlib.import_module("default_profile.startup.32_kb")
+bottom_toolbar_mod = importlib.import_module("default_profile.startup.33_bottom_toolbar")
+completion_mod = importlib.import_module("default_profile.startup.34_completion")
+
 numpy_init_mod = importlib.import_module("default_profile.startup.41_numpy_init")
 pandas_init_mod = importlib.import_module("default_profile.startup.42_pandas_init")
 matplotlib_mod = importlib.import_module("default_profile.startup.43_matplotlib")
+
 sysexception_mod = importlib.import_module("default_profile.startup.50_sysexception")

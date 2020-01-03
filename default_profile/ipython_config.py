@@ -56,6 +56,7 @@ except (ImportError, ModuleNotFoundError):
 else:
     from default_profile import PROFILE_DEFAULT_LOG
 
+    import __main__
     # 3.6 compat
     if ModuleNotFoundError not in dir(builtins):
         from default_profile import ModuleNotFoundError

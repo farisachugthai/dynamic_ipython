@@ -4,6 +4,7 @@
 import logging
 import os
 import shutil
+import traceback
 
 from IPython.core.getipython import get_ipython
 
@@ -15,7 +16,9 @@ from default_profile.util.machine import Platform
 
 ALIAS_LOGGER = stream_logger(
     logger="default_profile.startup.20_aliases",
-    msg_format="%(asctime)s %(levelname)s %(module)s %(message)s",
+    msg_format=(
+        "[ %(name)s  %(relativeCreated)d ] %(levelname)s %(module)s %(message)s "
+    ),
     log_level=logging.WARNING,
 )
 
@@ -34,14 +37,14 @@ class CommonAliases:
     .. todo:: The class method doesn't work if we don't have a class attribute.
 
         But if we create a class attribute, does updating the aliases for an instance
-        change it for the class? Write a test to ensure that this isn't what
+        change it for subclasses? Write a test to ensure that this isn't what
         happens.
 
     """
 
     user_aliases = []
 
-    def __init__(self, shell=None, user_aliases=None):
+    def __init__(self, shell=None, **kwargs):
         """OS Agnostic aliases.
 
         Parameters
@@ -50,9 +53,11 @@ class CommonAliases:
             User aliases to add the user's namespace.
 
         """
-        self.user_aliases = user_aliases or []
         self.shell = shell or get_ipython()
 
+        # todo: shit this was needs dict to tuple
+        # if kwargs:
+        #     self.tuple_to_dict(kwargs)
         if self.user_aliases is None:
             self.set_user_aliases()
 
@@ -63,12 +68,70 @@ class CommonAliases:
         for itm in self.user_aliases:
             yield itm
 
-    def __repr__(self):
+    def __repr__(self):  # reprlib?
         return "<Common Aliases>: # of aliases: {!r} ".format(len(self.user_aliases))
+
+    def __getitem__(self, arg1):
+        # Todo: Make sure this works
+        return self[arg1]
 
     def set_user_aliases(self):
         if len(self.shell.alias_manager.aliases) > 0:
             self.user_aliases = self.shell.alias_manager.aliases
+
+    def tuple_to_dict(tuple_):
+        """Showcasing how to convert a tuple into a dict.
+
+        Nothing particularly hard, just a good exercise.
+        Also some good docstring practice!
+
+        Parameters
+        ----------
+        color_templates : tuple of tuples
+        Each element maps ANSI escape codes to the colors they represent.
+
+        Returns
+        -------
+        Flattened dict : dict with {str: str} for each element
+            Maps exactly as intended and reduces a little of the nesting.
+
+        Examples
+        --------
+        ::
+
+            In [3]: tuple_to_dict(color_templates)
+            Out[14]:
+            {'Black': '0;30',
+            'Red': '0;31',
+            'Green': '0;32',
+            'Brown': '0;33',
+            'Blue': '0;34',
+            'Purple': '0;35',
+            'Cyan': '0;36',
+            'LightGray': '0;37',
+            'DarkGray': '1;30',
+            'LightRed': '1;31',
+            'LightGreen': '1;32',
+            'Yellow': '1;33',
+            'LightBlue': '1;34',
+            'LightPurple': '1;35',
+            'LightCyan': '1;36',
+            'White': '1;37',
+            'BlinkBlack': '5;30',
+            'BlinkRed': '5;31',
+            'BlinkGreen': '5;32',
+            'BlinkYellow': '5;33',
+            'BlinkBlue': '5;34',
+            'BlinkPurple': '5;35',
+            'BlinkCyan': '5;36',
+            'BlinkLightGray': '5;37'}
+
+        """
+        ret = {}
+        for i, j in enumerate(tuple_):
+            ret[tuple_[i][0]] = tuple_[i][1]
+
+        return ret
 
     def unalias(self, alias):
         """Remove an alias.
@@ -103,6 +166,12 @@ class CommonAliases:
         Then we could try and do something like a merge sort to find pydoc
         and apropos quickly but jeez that's gonna get complicated kinda quick
         don't you think?
+
+        .. todo::
+            shutil.chown
+            shutil.which
+            os.environ => env
+
         """
         if "pydoc" in self.user_aliases:
             self.unalias("pydoc")
@@ -250,7 +319,7 @@ class LinuxAliases(CommonAliases):
 
     """
 
-    def __init__(self, shell=None, aliases=None, *args, **kwargs):
+    def __init__(self, shell=None, aliases=None, **kwargs):
         """The WindowsAliases implementation of this is odd so maybe branch off.
 
         Parameters
@@ -259,9 +328,8 @@ class LinuxAliases(CommonAliases):
             User aliases to add the user's namespace.
 
         """
-        self.user_aliases = aliases or []
-        self.shell = shell or get_ipython()
-        super().__init__(*args, **kwargs)
+        super().__init__(**kwargs)
+        self.busybox()
 
     def __repr__(self):
         return "Linux Aliases: {!r}".format(len(self.user_aliases))
@@ -327,13 +395,6 @@ class LinuxAliases(CommonAliases):
         ]
         return self.user_aliases
 
-    def __iter__(self):
-        return self._generator()
-
-    def _generator(self):
-        for itm in self.user_aliases:
-            yield itm
-
     def thirdparty(self):
         """Contrasted to busybox, these require external installation.
 
@@ -363,7 +424,7 @@ class WindowsAliases(CommonAliases):
 
     """
 
-    def __init__(self, shell=None, user_aliases=None):
+    def __init__(self, shell=None, aliases=None, **kwargs):
         """Initialize the platform specific alias manager with IPython.
 
         Parameters
@@ -378,8 +439,9 @@ class WindowsAliases(CommonAliases):
             User aliases to add the user's namespace.
 
         """
+        super().__init__(**kwargs)
+        self.user_aliases = super().user_aliases.extend(aliases)
         self.shell = shell or get_ipython()
-        self.user_aliases = user_aliases
         if self.user_aliases is None:
             self.cmd_aliases()
 
@@ -542,7 +604,7 @@ class WindowsAliases(CommonAliases):
         elif os.environ.get("COMSPEC"):
             return os.environ.get("COMSPEC")
         else:
-            logging.warning(
+            ALIAS_LOGGER.warning(
                 "%s is None as are %s and %s", self.shell, "$SHELL", "$COMSPEC"
             )
 

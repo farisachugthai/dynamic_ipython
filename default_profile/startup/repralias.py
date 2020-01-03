@@ -19,6 +19,8 @@ class ReprAlias(Repr):
     """Take user aliases and transform them to a dictionary.
 
     Then utilize :class:`reprlib.Repr` to print the structure.
+
+    TODO: Add `__add__`, `__iadd__`, `__iter__`, `__getitem__`.
     """
 
     maxdict = 6

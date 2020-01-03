@@ -7,7 +7,6 @@ Has since grown to ~200 key bindings.
 """
 from IPython import get_ipython
 
-from prompt_toolkit.application.current import get_app
 from prompt_toolkit.enums import DEFAULT_BUFFER
 from prompt_toolkit.keys import Keys
 from prompt_toolkit.key_binding import KeyBindings, merge_key_bindings
@@ -32,8 +31,6 @@ from prompt_toolkit.key_binding.bindings.page_navigation import (
 from prompt_toolkit.filters import HasFocus, HasSelection, ViInsertMode, EmacsInsertMode
 
 insert_mode = ViInsertMode() | EmacsInsertMode()
-
-app = get_app()
 
 
 def get_key_bindings(custom_key_bindings=None):

@@ -7,8 +7,17 @@ import sys
 
 
 def set_mpl():
-    # TODO
-    pass
+    global get_font, get_fontconfig_fonts
+    from matplotlib.font_manager import get_font, get_fontconfig_fonts
+    fonts = get_fontconfig_fonts()
+    try:
+        font = fonts.index('Roboto-Black.ttf')
+    except (ValueError, IndexError):
+        return
+    if not font:
+        pass  # todo
+    else:
+        return font
 
 
 if __name__ == "__main__":
@@ -21,4 +30,4 @@ if __name__ == "__main__":
         from matplotlib.font_manager import FontManager
 
         fm = FontManager()
-        set_mpl()
+        roboto = set_mpl()
