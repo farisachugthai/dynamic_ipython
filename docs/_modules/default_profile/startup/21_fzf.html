@@ -66,6 +66,7 @@
 <span class="kn">import</span> <span class="nn">functools</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">shlex</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">types</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">get_type_hints</span>  <span class="c1"># what is this?</span>
@@ -120,13 +121,29 @@
 
 <div class="viewcode-block" id="FZF.__init__"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.FZF.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fzf_alias</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fzf_configs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fzf_alias</span> <span class="o">=</span> <span class="n">fzf_alias</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fzf_config</span> <span class="o">=</span> <span class="n">fzf_configs</span> <span class="ow">or</span> <span class="p">{}</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fzf_config</span> <span class="o">=</span> <span class="n">fzf_configs</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setup_fzf</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">    </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fzf_alias</span><span class="p">)</span>
 
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Run :attr:`safe_default_cmd` with ``*args`` as a command.</span>
+
+<span class="sd">        Accepts any optional ``**kwargs`` passed along to :func:`subprocess.run`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">safe_default_cmd</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="FZF.default_cmd_str"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.FZF.default_cmd_str">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">default_cmd_str</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;rg --pretty --hidden --max-columns-preview --no-heading --no-messages --no-column --no-line-number -C 0 -e ^ | fzf --ansi --multi &quot;</span><span class="p">,</span></div>
+
+<div class="viewcode-block" id="FZF.safe_default_cmd"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.FZF.safe_default_cmd">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">safe_default_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">shlex</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">shlex</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default_cmd_str</span><span class="p">))</span></div>
+
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">_setup_fzf</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_setup_fzf</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">fzf_alias</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">cls</span><span class="o">.</span><span class="n">fzf_alias</span> <span class="o">=</span> <span class="p">()</span>
         <span class="k">if</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;fzf&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;rg&quot;</span><span class="p">):</span>
@@ -141,6 +158,9 @@
             <span class="c1"># user_aliases.extend(</span>
             <span class="c1">#     (&#39;fzf&#39;, &#39;$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS&#39;))</span>
             <span class="bp">cls</span><span class="o">.</span><span class="n">fzf_alias</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;fzf&quot;</span><span class="p">,</span> <span class="s2">&quot;ag -C 0 --color-win-ansi --noheading %l | fzf&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">args</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">fzf_alias</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">fzf_alias</span></div>
 
@@ -250,6 +270,8 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../util/index.html">IPython Utilities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../util/base16.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">base_16</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util/command_chain.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">command_chain</span></code> module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../util/copytree.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">copytree</span></code> module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../util/ipython_get_history.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ipython_get_history</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../util/machine.html">machine</a></li>
@@ -259,6 +281,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../util/paths.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paths</span></code> module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../util/profile_override.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">profile_override</span></code> module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../util/timer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">timer</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util/trio_testing.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trio_testing</span></code> module</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Extensions</a></li>
@@ -292,7 +315,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Dec 31, 2019.
+      Last updated on Jan 03, 2020.
     </div>
   </body>
 </html>

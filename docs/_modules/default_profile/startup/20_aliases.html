@@ -59,6 +59,7 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">traceback</span>
 
 <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 
@@ -70,7 +71,9 @@
 
 <span class="n">ALIAS_LOGGER</span> <span class="o">=</span> <span class="n">stream_logger</span><span class="p">(</span>
     <span class="n">logger</span><span class="o">=</span><span class="s2">&quot;default_profile.startup.20_aliases&quot;</span><span class="p">,</span>
-    <span class="n">msg_format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> </span><span class="si">%(levelname)s</span><span class="s2"> </span><span class="si">%(module)s</span><span class="s2"> </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="n">msg_format</span><span class="o">=</span><span class="p">(</span>
+        <span class="s2">&quot;[ </span><span class="si">%(name)s</span><span class="s2">  </span><span class="si">%(relativeCreated)d</span><span class="s2"> ] </span><span class="si">%(levelname)s</span><span class="s2"> </span><span class="si">%(module)s</span><span class="s2"> </span><span class="si">%(message)s</span><span class="s2"> &quot;</span>
+    <span class="p">),</span>
     <span class="n">log_level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">,</span>
 <span class="p">)</span>
 
@@ -89,14 +92,14 @@
 <span class="sd">    .. todo:: The class method doesn&#39;t work if we don&#39;t have a class attribute.</span>
 
 <span class="sd">        But if we create a class attribute, does updating the aliases for an instance</span>
-<span class="sd">        change it for the class? Write a test to ensure that this isn&#39;t what</span>
+<span class="sd">        change it for subclasses? Write a test to ensure that this isn&#39;t what</span>
 <span class="sd">        happens.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">user_aliases</span> <span class="o">=</span> <span class="p">[]</span>
 
-<div class="viewcode-block" id="CommonAliases.__init__"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">user_aliases</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="CommonAliases.__init__"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;OS Agnostic aliases.</span>
 
 <span class="sd">        Parameters</span>
@@ -105,9 +108,11 @@
 <span class="sd">            User aliases to add the user&#39;s namespace.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="n">user_aliases</span> <span class="ow">or</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">shell</span> <span class="ow">or</span> <span class="n">get_ipython</span><span class="p">()</span>
 
+        <span class="c1"># todo: shit this was needs dict to tuple</span>
+        <span class="c1"># if kwargs:</span>
+        <span class="c1">#     self.tuple_to_dict(kwargs)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">set_user_aliases</span><span class="p">()</span></div>
 
@@ -118,12 +123,70 @@
         <span class="k">for</span> <span class="n">itm</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span><span class="p">:</span>
             <span class="k">yield</span> <span class="n">itm</span>
 
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># reprlib?</span>
         <span class="k">return</span> <span class="s2">&quot;&lt;Common Aliases&gt;: # of aliases: </span><span class="si">{!r}</span><span class="s2"> &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg1</span><span class="p">):</span>
+        <span class="c1"># Todo: Make sure this works</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="n">arg1</span><span class="p">]</span>
 
 <div class="viewcode-block" id="CommonAliases.set_user_aliases"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.set_user_aliases">[docs]</a>    <span class="k">def</span> <span class="nf">set_user_aliases</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">aliases</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">aliases</span></div>
+
+<div class="viewcode-block" id="CommonAliases.tuple_to_dict"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.tuple_to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">tuple_to_dict</span><span class="p">(</span><span class="n">tuple_</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Showcasing how to convert a tuple into a dict.</span>
+
+<span class="sd">        Nothing particularly hard, just a good exercise.</span>
+<span class="sd">        Also some good docstring practice!</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        color_templates : tuple of tuples</span>
+<span class="sd">        Each element maps ANSI escape codes to the colors they represent.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Flattened dict : dict with {str: str} for each element</span>
+<span class="sd">            Maps exactly as intended and reduces a little of the nesting.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        ::</span>
+
+<span class="sd">            In [3]: tuple_to_dict(color_templates)</span>
+<span class="sd">            Out[14]:</span>
+<span class="sd">            {&#39;Black&#39;: &#39;0;30&#39;,</span>
+<span class="sd">            &#39;Red&#39;: &#39;0;31&#39;,</span>
+<span class="sd">            &#39;Green&#39;: &#39;0;32&#39;,</span>
+<span class="sd">            &#39;Brown&#39;: &#39;0;33&#39;,</span>
+<span class="sd">            &#39;Blue&#39;: &#39;0;34&#39;,</span>
+<span class="sd">            &#39;Purple&#39;: &#39;0;35&#39;,</span>
+<span class="sd">            &#39;Cyan&#39;: &#39;0;36&#39;,</span>
+<span class="sd">            &#39;LightGray&#39;: &#39;0;37&#39;,</span>
+<span class="sd">            &#39;DarkGray&#39;: &#39;1;30&#39;,</span>
+<span class="sd">            &#39;LightRed&#39;: &#39;1;31&#39;,</span>
+<span class="sd">            &#39;LightGreen&#39;: &#39;1;32&#39;,</span>
+<span class="sd">            &#39;Yellow&#39;: &#39;1;33&#39;,</span>
+<span class="sd">            &#39;LightBlue&#39;: &#39;1;34&#39;,</span>
+<span class="sd">            &#39;LightPurple&#39;: &#39;1;35&#39;,</span>
+<span class="sd">            &#39;LightCyan&#39;: &#39;1;36&#39;,</span>
+<span class="sd">            &#39;White&#39;: &#39;1;37&#39;,</span>
+<span class="sd">            &#39;BlinkBlack&#39;: &#39;5;30&#39;,</span>
+<span class="sd">            &#39;BlinkRed&#39;: &#39;5;31&#39;,</span>
+<span class="sd">            &#39;BlinkGreen&#39;: &#39;5;32&#39;,</span>
+<span class="sd">            &#39;BlinkYellow&#39;: &#39;5;33&#39;,</span>
+<span class="sd">            &#39;BlinkBlue&#39;: &#39;5;34&#39;,</span>
+<span class="sd">            &#39;BlinkPurple&#39;: &#39;5;35&#39;,</span>
+<span class="sd">            &#39;BlinkCyan&#39;: &#39;5;36&#39;,</span>
+<span class="sd">            &#39;BlinkLightGray&#39;: &#39;5;37&#39;}</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tuple_</span><span class="p">):</span>
+            <span class="n">ret</span><span class="p">[</span><span class="n">tuple_</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">tuple_</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">ret</span></div>
 
 <div class="viewcode-block" id="CommonAliases.unalias"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.unalias">[docs]</a>    <span class="k">def</span> <span class="nf">unalias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alias</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Remove an alias.</span>
@@ -158,6 +221,12 @@
 <span class="sd">        Then we could try and do something like a merge sort to find pydoc</span>
 <span class="sd">        and apropos quickly but jeez that&#39;s gonna get complicated kinda quick</span>
 <span class="sd">        don&#39;t you think?</span>
+
+<span class="sd">        .. todo::</span>
+<span class="sd">            shutil.chown</span>
+<span class="sd">            shutil.which</span>
+<span class="sd">            os.environ =&gt; env</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="s2">&quot;pydoc&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">unalias</span><span class="p">(</span><span class="s2">&quot;pydoc&quot;</span><span class="p">)</span>
@@ -305,7 +374,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="LinuxAliases.__init__"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.LinuxAliases.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">aliases</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="LinuxAliases.__init__"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.LinuxAliases.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">aliases</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The WindowsAliases implementation of this is odd so maybe branch off.</span>
 
 <span class="sd">        Parameters</span>
@@ -314,9 +383,8 @@
 <span class="sd">            User aliases to add the user&#39;s namespace.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="n">aliases</span> <span class="ow">or</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">shell</span> <span class="ow">or</span> <span class="n">get_ipython</span><span class="p">()</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">busybox</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;Linux Aliases: </span><span class="si">{!r}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span><span class="p">))</span>
@@ -382,13 +450,6 @@
         <span class="p">]</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span></div>
 
-    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generator</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">_generator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">itm</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span><span class="p">:</span>
-            <span class="k">yield</span> <span class="n">itm</span>
-
 <div class="viewcode-block" id="LinuxAliases.thirdparty"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.LinuxAliases.thirdparty">[docs]</a>    <span class="k">def</span> <span class="nf">thirdparty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Contrasted to busybox, these require external installation.</span>
 
@@ -418,7 +479,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="WindowsAliases.__init__"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.WindowsAliases.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">user_aliases</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="WindowsAliases.__init__"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.WindowsAliases.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">aliases</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize the platform specific alias manager with IPython.</span>
 
 <span class="sd">        Parameters</span>
@@ -433,8 +494,9 @@
 <span class="sd">            User aliases to add the user&#39;s namespace.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">user_aliases</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">aliases</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">shell</span> <span class="ow">or</span> <span class="n">get_ipython</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="n">user_aliases</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">cmd_aliases</span><span class="p">()</span></div>
 
@@ -597,7 +659,7 @@
         <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;COMSPEC&quot;</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;COMSPEC&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+            <span class="n">ALIAS_LOGGER</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
                 <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> is None as are </span><span class="si">%s</span><span class="s2"> and </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="p">,</span> <span class="s2">&quot;$SHELL&quot;</span><span class="p">,</span> <span class="s2">&quot;$COMSPEC&quot;</span>
             <span class="p">)</span></div></div>
 
@@ -723,6 +785,8 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../util/index.html">IPython Utilities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../util/base16.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">base_16</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util/command_chain.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">command_chain</span></code> module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../util/copytree.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">copytree</span></code> module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../util/ipython_get_history.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ipython_get_history</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../util/machine.html">machine</a></li>
@@ -732,6 +796,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../util/paths.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paths</span></code> module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../util/profile_override.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">profile_override</span></code> module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../util/timer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">timer</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../util/trio_testing.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trio_testing</span></code> module</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Extensions</a></li>
@@ -765,7 +830,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Dec 31, 2019.
+      Last updated on Jan 03, 2020.
     </div>
   </body>
 </html>
