@@ -531,22 +531,6 @@ def get_env():
     return os.environ.copy()
 
 
-environment = get_env()
-if "LESS" not in environment:
-    # nah you set this var wrong
-    # os.environ.setdefault("LESS", "JRKMLigeF")
-    os.environ.setdefault("LESSHISTSIZE", "5000")
-
-if "LESS_TERMCAP_mb" not in environment:
-    # Who is curios as to whether this is gonna work or not?
-    os.environ.setdefault("LESS_TERMCAP_mb", r"\e[01;31m")
-    os.environ.setdefault("LESS_TERMCAP_md", r"\e[01;38;5;180m")
-    os.environ.setdefault("LESS_TERMCAP_me", r"\e[0m")
-    os.environ.setdefault("LESS_TERMCAP_se", r"\e[0m")
-    os.environ.setdefault("LESS_TERMCAP_so", r"\e[03;38;5;202m")
-    os.environ.setdefault("LESS_TERMCAP_ue", r"\e[0m")
-    os.environ.setdefault("LESS_TERMCAP_us", r"\e[04;38;5;139m")
-
 # Override highlighting format for specific tokens
 # Comments were genuinely impossible to read. Might need to override
 # punctuation next.

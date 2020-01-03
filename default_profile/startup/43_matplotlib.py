@@ -6,9 +6,9 @@ INFO:matplotlib.font_manager:generated new fontManager
 import sys
 
 
-def set_mpl():
-    # TODO
-    pass
+def get_mpl_font(font='Roboto-Black.ttf'):
+    if font in get_fontconfig_fonts():
+        return True
 
 
 if __name__ == "__main__":
@@ -19,6 +19,9 @@ if __name__ == "__main__":
     else:
         import matplotlib.pyplot as mpl
         from matplotlib.font_manager import FontManager
+        from matplotlib.font_manager import get_fontconfig_fonts
 
         fm = FontManager()
-        set_mpl()
+        if get_mpl_font():
+            font = 'Roboto-Black'  # todo this is not well done
+        get_mpl_font()

@@ -582,6 +582,11 @@ np.random.seed(123)
 plot_include_source = True
 plot_formats = [("png", 96), "pdf"]
 plot_html_show_formats = False
+# Not sure if this is a good idea because it usually works in source or one of
+# the dirs in source
+# plot_basedir = docs_root
+# plot_working_directory = docs_root
+plot_apply_rcparams = True
 
 phi = (math.sqrt(5) + 1) / 2
 
@@ -602,6 +607,10 @@ plot_rcparams = {
     "figure.subplot.wspace": 0.4,
     "text.usetex": False,
 }
+
+# Not from scpy but mpl related anyway
+plot_html_show_source_link = True
+
 
 # -- Setup -------------------------------------------------------------------
 
