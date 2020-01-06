@@ -5,7 +5,7 @@ https://gist.githubusercontent.com/konradkonrad/7143fa8407804e37132e4ea90175f2d8
 
 Has since grown to ~200 key bindings.
 """
-from IPython import get_ipython
+from IPython.core.getipython import get_ipython
 
 from prompt_toolkit.enums import DEFAULT_BUFFER
 from prompt_toolkit.keys import Keys
