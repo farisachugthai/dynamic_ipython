@@ -520,14 +520,14 @@ if platform.system() == "Windows":
     c.TerminalInteractiveShell.highlighting_style = "friendly"
 else:
     try:
-        from gruvbox.style import GruvboxDarkHard
+        from gruvbox import Gruvbox
     except (ImportError, ModuleNotFoundError):
         from pygments.styles.friendly import FriendlyStyle
 
         c.TerminalInteractiveShell.highlighting_style = "friendly"
 
     else:
-        c.TerminalInteractiveShell.highlighting_style = "GruvboxDarkHard"
+        c.TerminalInteractiveShell.highlighting_style = "Gruvbox"
 
 
 def get_env():
@@ -684,7 +684,6 @@ c.HistoryManager.db_log_output = True
 
 #  This object knows how to find, create and manage these directories. This
 #  should be used by any code that wants to handle profiles.
-# c.ProfileDir.location = ''
 
 # Set the profile location directly. This overrides the logic used by the
 #  `profile` option.
