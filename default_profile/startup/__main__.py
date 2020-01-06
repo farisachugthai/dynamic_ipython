@@ -10,10 +10,6 @@
     So make it easy to re-exec.
 
 """
-import errno
-import logging
-from os import scandir
-import runpy
 import sys
 
 from IPython.core.getipython import get_ipython
@@ -21,7 +17,6 @@ from IPython.core.getipython import get_ipython
 # Are you allowed to do this? This shit confuses me so much
 # Nope
 # from . import STARTUP_LOGGER
-from default_profile.startup import STARTUP_LOGGER
 
 shell = get_ipython()
 
@@ -29,9 +24,15 @@ if not shell:
     sys.exit("startup.__main__: get_ipython returned None")
 
 
-def rerun_startup():
-    ret = {}
-    for i in scandir('.'):
-        if i.name.endswith('.py'):
-            ret.update(runpy.run_path(i.name))
-    return ret
+def exec_startup():
+    """Be careful!!
+
+    .. danger::
+        All of the usual exec admonitions apply here.
+
+    """
+    exec (compile(
+        open(__file__).read(),
+        '<string>',
+        'exec',
+    ), globals(), locals())

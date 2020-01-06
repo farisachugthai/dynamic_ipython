@@ -29,17 +29,15 @@ import sys
 import traceback
 from pathlib import Path
 
-from IPython.terminal.prompts import ClassicPrompts
 from IPython.core.release import version_info
-
+from IPython.terminal.prompts import ClassicPrompts
 # THIS IS THE MODULE! Its too exciting to able to execute this script
 # directly from within python and not get an error for a func call with no
 # import
-from traitlets.config import get_config, Configurable
+from traitlets.config import Configurable, get_config
 
 default_log_format = (
-    "[ %(name)s  %(relativeCreated)d ] %(levelname)s %(module)s %(message)s "
-)
+    "[ %(name)s  %(relativeCreated)d ] %(levelname)s %(module)s %(message)s ")
 
 logging.basicConfig(level=logging.INFO, format=default_log_format)
 
@@ -72,7 +70,6 @@ def get_home():
 
 
 home = get_home()
-
 
 # ----------------------------------------------------------------------------
 # InteractiveShellApp(Configurable) configuration
@@ -467,16 +464,22 @@ c.TerminalInteractiveShell.display_completions = "multicolumn"
 
 # Well windows doesn't get tmux so.
 
-if platform.system() == "Windows":
-    c.TerminalInteractiveShell.editing_mode = "emacs"
-else:
-    if os.environ.get("TMUX"):
-        c.TerminalInteractiveShell.editing_mode = "vi"
-        # I don't know if this is the right way to do this
-        c.TerminalInteractiveShell.prompt_includes_vi_mode = False
-    else:
-        c.TerminalInteractiveShell.editing_mode = "emacs"
 
+def conditional_editing_mode():
+    """Execute this function to enable the emacs editing mode on Windows and vi only in tmux."""
+    # Honestly making this conditional makes it hard to remember what's what.
+    if platform.system() == "Windows":
+        c.TerminalInteractiveShell.editing_mode = "emacs"
+    else:
+        if os.environ.get("TMUX"):
+            c.TerminalInteractiveShell.editing_mode = "vi"
+            # I don't know if this is the right way to do this
+            c.TerminalInteractiveShell.prompt_includes_vi_mode = False
+        else:
+            c.TerminalInteractiveShell.editing_mode = "emacs"
+
+
+c.TerminalInteractiveShell.editing_mode = "emacs"
 # TODO: What is the API for traitlets.LazyConfigValue? It doesn't have a log method.
 # c.log("Editing Mode:\t {!s}".format(c.TerminalInteractiveShell.editing_mode))
 
@@ -562,7 +565,6 @@ class StandardPythonPrompt(ClassicPrompts):
     [(Token.Prompt, '>>> ')]
 
     """
-
     def __repr__(self):
         """The most boiler-platey repr I can come up with."""
         return self.__class__.__name__
@@ -722,7 +724,6 @@ class BaseFormatterDoc(Configurable):
     .. seealso:: :mod:`IPython.lib.pretty`.
 
     """
-
     def __init__(self, *args, **kwargs):
         """Initialize a BaseFormatter and get some Sphinx help.
 
@@ -895,4 +896,4 @@ c.LoggingMagics.quiet = True
 # Provides the %store magic.
 # If True, any %store-d variables will be automatically restored when IPython
 # starts.
-c.StoreMagics.autorestore = False
+# c.StoreMagics.autorestore = False

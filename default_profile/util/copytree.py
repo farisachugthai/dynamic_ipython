@@ -1,10 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""This actually got implemented in the stdlib in a much cleaner way.
+
+But this might continue holding some improvements to the std. lib for a little.
+"""
 
 import os
 import shutil
 from glob import glob
 from shutil import Error, copytree, copystat
+import warnings
 
 
 class CopyTree:
@@ -39,6 +44,8 @@ class CopyTree:
     def __init__(
         self, src, dst, symlinks=False, ignore=None, copy_function=shutil.copy2
     ):
+        warnings.warn('This class is going to be removed shortly.'
+                'Discontinue usage.')
         self.src = src
         self.dst = dst
         self.symlinks = symlinks

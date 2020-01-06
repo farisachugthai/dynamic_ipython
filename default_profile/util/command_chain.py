@@ -1,8 +1,9 @@
 """Redo the CommandChainDispatcher in IPython.core.hooks for more flexbility."""
-from reprlib import Repr
 from pprint import pprint
+from reprlib import Repr
 
 import IPython
+from traitlets.traitlets import Instance
 
 
 class CommandChainDispatcherRepr(IPython.utils.ipstruct.Struct):
@@ -15,6 +16,8 @@ class CommandChainDispatcherRepr(IPython.utils.ipstruct.Struct):
     methods to improve visibility.
 
     """
+
+    shell = Instance("IPython.core.interactiveshell.InteractiveshellABC")
 
     def __init__(self, shell=None, chain=None, level=6, *args, **kwargs):
         """Initialize the class.

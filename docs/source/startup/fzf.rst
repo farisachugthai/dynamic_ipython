@@ -1,5 +1,5 @@
 ======================================
-:mod:`~default_profile.startup.21_fzf`
+`~default_profile.startup.21_fzf`
 ======================================
 
 .. todo:: Consider adding in some kind of generalized subprocess command.
@@ -9,4 +9,3 @@
    :members:
    :undoc-members:
    :show-inheritance:
-

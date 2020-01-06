@@ -4,7 +4,8 @@ import re
 from typing import Callable, Dict, Iterable, List, NamedTuple, Optional, Tuple, Union
 
 from IPython.core.getipython import get_ipython
-from prompt_toolkit.document import Document
+
+from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
 from prompt_toolkit.completion import (
     CompleteEvent,
     Completer,
@@ -15,6 +16,7 @@ from prompt_toolkit.completion import (
     merge_completers,
 )
 from prompt_toolkit.completion.fuzzy_completer import FuzzyWordCompleter
+from prompt_toolkit.document import Document
 
 from traitlets.traitlets import Instance
 from traitlets.config import LoggingConfigurable
@@ -121,6 +123,7 @@ def get_word_completer():
 
 if __name__ == "__main__":
     if get_ipython() is not None:
+        # XXX:
         # merged_completers = merge_completers(
         #     [
         #         SimpleCompletions(),
@@ -131,3 +134,6 @@ if __name__ == "__main__":
         # )
         # threaded = ThreadedCompleter(merged_completers)
         get_ipython().set_custom_completer(get_path_completer())
+
+        # Jesus Christ. This was so easy to implement that why not just mix it in with another file.
+        get_ipython().pt_app.auto_suggest = AutoSuggestFromHistory()

@@ -45,10 +45,10 @@ def readline_logging():
     """TODO: Fallback in case IPYTHONDIR isn't set"""
     if os.environ.get("IPYTHONDIR"):
         LOG_FILENAME = os.path.join(os.environ.get("IPYTHONDIR"), "completer.log")
-    logging.basicConfig(
-        format="%(message)s", filename=LOG_FILENAME, level=logging.DEBUG,
-    )
-    return betterConfig(parent="default_profile.startup", name=__name__)
+        logging.basicConfig(
+            format="%(message)s", filename=LOG_FILENAME, level=logging.DEBUG,
+        )
+        return betterConfig(parent="default_profile.startup", name=__name__)
 
 
 rl_logger = readline_logging()

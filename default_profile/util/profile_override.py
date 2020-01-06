@@ -22,7 +22,6 @@ See Also
 
     :mod:`IPython.core.profileapp`.
 
-
 """
 import errno
 import os

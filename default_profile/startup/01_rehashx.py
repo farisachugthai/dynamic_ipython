@@ -1,27 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-==========
-`%rehashx`
-==========
+"""Run rehashx magic.
 
 This is an incredible little gem that's hugely useful for
 making IPython work as a more versatile system shell.
-
-For the future we should consider moving all imports from this package out and
-keeping only "*Mission Critical*" type code in the first file.
 
 The code that's more important than anything should execute regardless
 of whether someone has ``pip install``-ed it.
 
 """
-from IPython import get_ipython
+import runpy
+from os import scandir
+
+from IPython.core.getipython import get_ipython
 
 
-def main():
+def rehashx_run():
     """Add all executables on the user's :envvar:`PATH` into the IPython ns.
-
-    Now Im wondering if it would be easier to do this after setting up the aliases.
 
     Parameters
     ----------
@@ -34,5 +29,21 @@ def main():
         _ip.run_line_magic("rehashx", "")
 
 
+def rerun_startup():
+    """Rerun the files in the startup directory.
+
+    Returns
+    -------
+    ret : dict
+         Namespace of all successful files.
+
+    """
+    ret = {}
+    for i in scandir('.'):
+        if i.name.endswith('.py'):
+            ret.update(runpy.run_path(i.name))
+    return ret
+
+
 if __name__ == "__main__":
-    main()
+    rehashx_run()
