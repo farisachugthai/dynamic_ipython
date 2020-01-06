@@ -55,28 +55,23 @@
 <h1>Source code for default_profile.startup.01_rehashx</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python3</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">==========</span>
-<span class="sd">`%rehashx`</span>
-<span class="sd">==========</span>
+<span class="sd">&quot;&quot;&quot;Run rehashx magic.</span>
 
 <span class="sd">This is an incredible little gem that&#39;s hugely useful for</span>
 <span class="sd">making IPython work as a more versatile system shell.</span>
-
-<span class="sd">For the future we should consider moving all imports from this package out and</span>
-<span class="sd">keeping only &quot;*Mission Critical*&quot; type code in the first file.</span>
 
 <span class="sd">The code that&#39;s more important than anything should execute regardless</span>
 <span class="sd">of whether someone has ``pip install``-ed it.</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+<span class="kn">import</span> <span class="nn">runpy</span>
+<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">scandir</span>
+
+<span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 
 
-<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<div class="viewcode-block" id="rehashx_run"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.rehashx_run">[docs]</a><span class="k">def</span> <span class="nf">rehashx_run</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Add all executables on the user&#39;s :envvar:`PATH` into the IPython ns.</span>
-
-<span class="sd">    Now Im wondering if it would be easier to do this after setting up the aliases.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -89,8 +84,24 @@
         <span class="n">_ip</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s2">&quot;rehashx&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span></div>
 
 
+<div class="viewcode-block" id="rerun_startup"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.rerun_startup">[docs]</a><span class="k">def</span> <span class="nf">rerun_startup</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Rerun the files in the startup directory.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ret : dict</span>
+<span class="sd">         Namespace of all successful files.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ret</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">scandir</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.py&#39;</span><span class="p">):</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">runpy</span><span class="o">.</span><span class="n">run_path</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">ret</span></div>
+
+
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">main</span><span class="p">()</span>
+    <span class="n">rehashx_run</span><span class="p">()</span>
 </pre></div>
 
           </div>
@@ -139,13 +150,14 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../startup/index.html">IPython Startup</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../startup/rehashx.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">01_rehashx</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/rehashx.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">%rehashx</span></code> — Add executables to $PATH</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/easy_import.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">04_easy_import</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/ipython-logger.html">05_log — IPython logger</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/help_helpers.html">06_Help_Helpers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/aliases.html">System Aliases</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../startup/fzf.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">21_fzf</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/fzf.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">21_fzf</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/setup_readline.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">30_setup_readline</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/completions.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">34_completions</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/41_numpy.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">numpy</span></code> Initialization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/42_pandas.html">Pandas Initialization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/matplotlib_rc.html">Matplotlib Startup</a></li>
@@ -198,7 +210,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Jan 03, 2020.
+      Last updated on Jan 06, 2020.
     </div>
   </body>
 </html>

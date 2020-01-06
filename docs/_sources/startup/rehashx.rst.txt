@@ -1,9 +1,15 @@
 ==========================================
-:mod:`~default_profile.startup.01_rehashx`
+`%rehashx` --- Add executables to $PATH
 ==========================================
-.. currentmodule:: default_profile.startup.01_rehashx
+
+:synopsis: Run the rehashx magic and begin initializing IPython startup.
 
 .. magic:: rehashx
+
+
+As the first file in startup this file plays an important role in setting
+everything else up. As a result, the first thing done is running the magic
+`%rehashx`.
 
 The IPython magic `%rehashx` allows you to reload all of your startup files
 and also adds system commands to the namespace!
@@ -11,8 +17,16 @@ and also adds system commands to the namespace!
 Insofar, I haven't noticed any significant slowdown in startup time as a result
 of this, and it hugely eases utilizing IPython as a system shell.
 
-In addition 50+ aliases have been added for :command:`git`.
+In addition 100+ aliases have been added for :command:`git`.
 
+This is a useful place to start as any aliases that need further modification
+can be overridden later.
+
+Aliases are easy to work with as they as composed of simple data structures.
+
+.. function:: rerun_startup
+
+   This function can be run in an interactive session.
 
 Parameters
 ----------

@@ -47,7 +47,6 @@ API
 
 These are the auto-generated API docs for IPython's startup.
 
-
 .. toctree::
    :titlesonly:
    :caption: List of IPython startup files
@@ -59,6 +58,7 @@ These are the auto-generated API docs for IPython's startup.
    aliases
    fzf
    setup_readline
+   completions
    41_numpy
    42_pandas
    matplotlib_rc

@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>01_rehashx &#8212; Dynamic IPython: version0.0.2</title>
+    <title>%rehashx — Add executables to $PATH &#8212; Dynamic IPython: version0.0.2</title>
     <link rel="stylesheet" href="../_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -60,18 +60,35 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-<div class="section" id="rehashx">
-<h1><a class="reference internal" href="#module-default_profile.startup.01_rehashx" title="default_profile.startup.01_rehashx: Add all executables found on the system PATH to the namespace."><code class="xref py py-mod docutils literal notranslate"><span class="pre">01_rehashx</span></code></a><a class="headerlink" href="#rehashx" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="rehashx-add-executables-to-path">
+<h1><code class="xref py py-obj docutils literal notranslate"><span class="pre">%rehashx</span></code> — Add executables to $PATH<a class="headerlink" href="#rehashx-add-executables-to-path" title="Permalink to this headline">¶</a></h1>
+<dl class="field-list simple">
+<dt class="field-odd">synopsis</dt>
+<dd class="field-odd"><p>Run the rehashx magic and begin initializing IPython startup.</p>
+</dd>
+</dl>
 <dl class="magic">
 <dt id="magic-rehashx">
 <code class="sig-name descname">%rehashx</code><a class="headerlink" href="#magic-rehashx" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<p>As the first file in startup this file plays an important role in setting
+everything else up. As a result, the first thing done is running the magic
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">%rehashx</span></code>.</p>
 <p>The IPython magic <code class="xref py py-obj docutils literal notranslate"><span class="pre">%rehashx</span></code> allows you to reload all of your startup files
 and also adds system commands to the namespace!</p>
 <p>Insofar, I haven’t noticed any significant slowdown in startup time as a result
 of this, and it hugely eases utilizing IPython as a system shell.</p>
-<p>In addition 50+ aliases have been added for <strong class="command">git</strong>.</p>
+<p>In addition 100+ aliases have been added for <strong class="command">git</strong>.</p>
+<p>This is a useful place to start as any aliases that need further modification
+can be overridden later.</p>
+<p>Aliases are easy to work with as they as composed of simple data structures.</p>
+<dl class="function">
+<dt id="rerun_startup">
+<code class="sig-name descname">rerun_startup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rerun_startup" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function can be run in an interactive session.</p>
+</dd></dl>
+
 <div class="section" id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
 <dl class="simple">
@@ -107,20 +124,29 @@ an error, so an empty <a class="reference external" href="https://docs.python.or
 <code class="docutils literal notranslate"><span class="pre">_stack_depth</span></code> = 2.</p>
 <p>This is added to ensure backward compatibility for use
 of <code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.core.magics.get_ipython().magic()</span></code></p>
-<span class="target" id="module-default_profile.startup.01_rehashx"></span><p>This is an incredible little gem that’s hugely useful for
-making IPython work as a more versatile system shell.</p>
-<p>For the future we should consider moving all imports from this package out and
-keeping only “<em>Mission Critical</em>” type code in the first file.</p>
-<p>The code that’s more important than anything should execute regardless
+<span class="target" id="module-default_profile.startup.01_rehashx"></span><p>The code that’s more important than anything should execute regardless
 of whether someone has <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span></code>-ed it.</p>
 <dl class="function">
-<dt id="default_profile.startup.01_rehashx.main">
-<code class="sig-name descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/01_rehashx.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/01_rehashx.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.01_rehashx.main" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add all executables on the user’s <span class="target" id="index-0"></span><a class="reference external" href="https://matplotlib.org/faq/environment_variables_faq.html#envvar-PATH" title="(in Matplotlib v3.1.1)"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PATH</span></code></a> into the IPython ns.</p>
-<p>Now Im wondering if it would be easier to do this after setting up the aliases.</p>
+<dt id="default_profile.startup.01_rehashx.rehashx_run">
+<code class="sig-name descname">rehashx_run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/01_rehashx.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.01_rehashx.rehashx_run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add all executables on the user’s <span class="target" id="index-0"></span><a class="reference external" href="https://matplotlib.org/faq/environment_variables_faq.html#envvar-PATH" title="(in Matplotlib v3.1.2)"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PATH</span></code></a> into the IPython ns.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>shell</strong> (<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.11.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveShell</span></code></a> instance) – IPython shell instance.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="default_profile.startup.01_rehashx.rerun_startup">
+<code class="sig-name descname">rerun_startup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/01_rehashx.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.01_rehashx.rerun_startup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rerun the files in the startup directory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>ret</strong> – Namespace of all successful files.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -170,7 +196,7 @@ of whether someone has <code class="docutils literal notranslate"><span class="p
 <div id="sidebartoc">
 
     <ul>
-<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">01_rehashx</span></code></a><ul>
+<li><a class="reference internal" href="#"><code class="xref py py-obj docutils literal notranslate"><span class="pre">%rehashx</span></code> — Add executables to $PATH</a><ul>
 <li><a class="reference internal" href="#parameters">Parameters</a></li>
 <li><a class="reference internal" href="#notes">Notes</a></li>
 <li><a class="reference internal" href="#usage">Usage</a><ul>
@@ -199,13 +225,14 @@ of whether someone has <code class="docutils literal notranslate"><span class="p
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">IPython Startup</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">01_rehashx</span></code></a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="xref py py-obj docutils literal notranslate"><span class="pre">%rehashx</span></code> — Add executables to $PATH</a></li>
 <li class="toctree-l2"><a class="reference internal" href="easy_import.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">04_easy_import</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="ipython-logger.html">05_log — IPython logger</a></li>
 <li class="toctree-l2"><a class="reference internal" href="help_helpers.html">06_Help_Helpers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="aliases.html">System Aliases</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fzf.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">21_fzf</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="fzf.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">21_fzf</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="setup_readline.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">30_setup_readline</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="completions.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">34_completions</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="41_numpy.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">numpy</span></code> Initialization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="42_pandas.html">Pandas Initialization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="matplotlib_rc.html">Matplotlib Startup</a></li>
@@ -270,7 +297,7 @@ of whether someone has <code class="docutils literal notranslate"><span class="p
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Jan 03, 2020.
+      Last updated on Jan 06, 2020.
     </div>
   </body>
 </html>

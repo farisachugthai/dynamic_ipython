@@ -1,9 +1,8 @@
 ==========================================
-`%rehashx`
+`%rehashx` --- Add executables to $PATH
 ==========================================
 
-.. module:: default_profile.startup.01_rehashx
-   :synopsis: Run the rehashx magic and begin initializing IPython startup.
+:synopsis: Run the rehashx magic and begin initializing IPython startup.
 
 .. magic:: rehashx
 

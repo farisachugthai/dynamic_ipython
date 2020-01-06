@@ -143,7 +143,6 @@ extensions = [
     "sphinx.ext.mathjax",
     "sphinx.ext.napoleon",
     "sphinx.ext.todo",
-    "sphinx.ext.viewcode",
     "IPython.sphinxext.ipython_directive",
     "IPython.sphinxext.ipython_console_highlighting",
     "default_profile.sphinxext.magics",
@@ -463,7 +462,7 @@ viewcode-follow-imported(app, modname, attribute)
 
 """
 
-viewcode_follow_imported_members = False
+# viewcode_follow_imported_members = False
 
 # -- IPython directive -------------------------------------------------------
 
