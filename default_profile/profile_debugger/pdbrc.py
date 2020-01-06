@@ -32,12 +32,13 @@ with suppress(ImportError):
 # I have a really useful module for importing readline on windows, linux,
 # WSL, and anything else you can imagine. let's use it.
 try:
-    from default_profile.startup import readline_mod
+    from default_profile.startup import __main__
 except:  # noqa
     print("You did not import your readline mods in pdbrc.py")
 else:
+
     readline_mod = runpy.run_path(
-        Path("../startup/30_readline.py"), init_globals=globals()
+        Path("../startup/30_readline.py").__fspath__(), init_globals=globals()
     )
     # runpy.run_path returns a dict with the modules namespace so let's get
     # the keys and check if we imported readline
@@ -51,8 +52,6 @@ else:
 # History: Set up separately
 try:
     from default_profile.startup.readline_mod import set_historyfile
-except ImportError:
-    raise
 except:  # noqa
     pass
 else:

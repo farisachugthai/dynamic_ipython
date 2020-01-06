@@ -95,15 +95,15 @@ import logging
 import reprlib
 from typing import Callable, Optional
 
-from prompt_toolkit.application.current import get_app
+from prompt_toolkit.application.dummy import DummyApplication
 from prompt_toolkit.cache import SimpleCache
 from prompt_toolkit.enums import DEFAULT_BUFFER, SEARCH_BUFFER
 from prompt_toolkit.filters import Condition
 
 from prompt_toolkit.keys import Keys
-from prompt_toolkit.key_binding import merge_key_bindings, KeyBindings, ConditionalKeyBindings
+from prompt_toolkit.key_binding import merge_key_bindings
 from prompt_toolkit.key_binding.defaults import load_vi_bindings, load_key_bindings
-from prompt_toolkit.key_binding.key_bindings import _MergedKeyBindings
+from prompt_toolkit.key_binding.key_bindings import _MergedKeyBindings, KeyBindings, KeyBindingsBase
 
 from prompt_toolkit.key_binding.bindings.vi import (
     load_vi_bindings,
@@ -127,12 +127,11 @@ from prompt_toolkit.key_binding.bindings.vi import (
 # )
 
 from IPython.core.getipython import get_ipython
-from prompt_toolkit.application.dummy import DummyApplication
 
 kb_logger = logging.getLogger(name=__name__)
 
 
-class KeyBindingsManager:
+class KeyBindingsManager(KeyBindingsBase):
     """Bind an interface with IPython's keybindings and define dunders so this behaves properly.
 
     I think that I'm going to continue this by making a subclass that validates the bindings it's being given
@@ -163,6 +162,7 @@ class KeyBindingsManager:
         self._get_bindings_for_keys_cache = SimpleCache(maxsize=10000)
         self._get_bindings_starting_with_keys_cache = SimpleCache(maxsize=1000)
         self.__version = 0  # For cache invalidation.
+        super().__init__()
 
     def __repr__(self):
         return "<{}>: {}".format(self.__class__.__name__,
@@ -219,9 +219,21 @@ class KeyBindingsManager:
     def __getitem__(self, index):
         return self.kb.bindings[index]
 
+    @property
+    def bindings(self):
+        return self.kb.bindings
 
+    @bindings.setter
+    def call_iadd(self, other):
+        self.__iadd__(other)
+
+    @property
+    def _version(self):
+        self._version = 0
+
+    @_version.setter
     def _clear_cache(self):
-        self.__version += 1
+        self._version += 1
         self._get_bindings_for_keys_cache.clear()
         self._get_bindings_starting_with_keys_cache.clear()
 
@@ -326,12 +338,6 @@ if __name__ == "__main__":
 
     _ip = get_ipython()
     if _ip is not None:
-        # Does this do anything? Need to revisit how these work and what the
-        # difference between _ip.pt_app and _ip.pt_app.app are
-        # _ip.pt_app.key_bindings.bindings.extend(load_basic_bindings().bindings)
-        # Sweet i might have just broken how pt handles keypresses
-
-        # Also let's make an instance of this class
         container_kb = KeyBindingsManager(shell=_ip,
                                           kb=_ip.pt_app.key_bindings.bindings)
         # Dude holy shit does this give you a lot
@@ -339,4 +345,9 @@ if __name__ == "__main__":
             more_keybindings = merge_key_bindings(
                 [_ip.pt_app.app.key_bindings,
                  load_vi_bindings()])
-            _ip.pt_app.app.key_bindings = more_keybindings
+        else:
+            more_keybindings = merge_key_bindings(
+                [_ip.pt_app.app.key_bindings,
+            container_kb ])
+
+        _ip.pt_app.app.key_bindings = container_kb

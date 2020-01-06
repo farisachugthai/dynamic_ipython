@@ -235,10 +235,14 @@ class CommonAliases:
             ("git root", "git rev-parse --show-toplevel %l"),
             ("git unstage", "git reset HEAD %l"),
             ("git unstaged", "git diff %l"),
-            ("gl", "git log %l"),
             (
-                "glo",
-                'git log --pretty="format:%h %ad | %d [%an]" --graph --decorate --abbrev-commit --oneline --branches --all %l',
+                "gl",
+                "git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative %l",
+            ),
+            ("glo", "git log %l"),
+            (
+                "glog",
+                'git log --pretty="format:%h %ad | %d [%an]" --graph --decorate --abbrev-commit --oneline --branches %l',
             ),
             ("gls", "git ls-tree master %l"),
             ("git ls", "git ls-tree master %l"),
