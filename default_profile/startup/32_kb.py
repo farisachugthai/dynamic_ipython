@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Make prompt_toolkit's keybindings more extensible.
 
 Reminder of where you left off:
@@ -95,20 +96,20 @@ import logging
 import reprlib
 from typing import Callable, Optional
 
+from IPython.core.getipython import get_ipython
 from prompt_toolkit.application.dummy import DummyApplication
 from prompt_toolkit.cache import SimpleCache
 from prompt_toolkit.enums import DEFAULT_BUFFER, SEARCH_BUFFER
 from prompt_toolkit.filters import Condition
-
-from prompt_toolkit.keys import Keys
 from prompt_toolkit.key_binding import merge_key_bindings
-from prompt_toolkit.key_binding.defaults import load_vi_bindings, load_key_bindings
-from prompt_toolkit.key_binding.key_bindings import _MergedKeyBindings, KeyBindings, KeyBindingsBase
-
-from prompt_toolkit.key_binding.bindings.vi import (
-    load_vi_bindings,
-    load_vi_search_bindings
-)
+from prompt_toolkit.key_binding.bindings.vi import (load_vi_bindings,
+                                                    load_vi_search_bindings)
+from prompt_toolkit.key_binding.defaults import (load_key_bindings,
+                                                 load_vi_bindings)
+from prompt_toolkit.key_binding.key_bindings import (KeyBindings,
+                                                     KeyBindingsBase,
+                                                     _MergedKeyBindings)
+from prompt_toolkit.keys import Keys
 
 # Dude these are all the vi modes prompt_toolkit has...lol
 # So I just checked. Wanna know what it does? They're basically enums that get compared to editing_mode.input_mode. lol kinda dumb right.
@@ -126,7 +127,6 @@ from prompt_toolkit.key_binding.bindings.vi import (
 #     vi_insert_multiple_mode,
 # )
 
-from IPython.core.getipython import get_ipython
 
 kb_logger = logging.getLogger(name=__name__)
 
@@ -165,8 +165,7 @@ class KeyBindingsManager(KeyBindingsBase):
         super().__init__()
 
     def __repr__(self):
-        return "<{}>: {}".format(self.__class__.__name__,
-                                 len(self.kb.bindings))
+        return "<{}>: {}".format(self.__class__.__name__, len(self.kb.bindings))
 
     def __add__(self, another_one):
         """Honestly not sure if this returns anything."""
@@ -244,6 +243,7 @@ class KeyBindingsManager(KeyBindingsBase):
         called, for checking it.)
         :param keys: tuple of keys.
         """
+
         def get():
             result = []
             for b in self.bindings:
@@ -277,6 +277,7 @@ class KeyBindingsManager(KeyBindingsBase):
         inactive bindings.)
         :param keys: tuple of keys.
         """
+
         def get():
             result = []
             for b in self.bindings:
@@ -338,16 +339,15 @@ if __name__ == "__main__":
 
     _ip = get_ipython()
     if _ip is not None:
-        container_kb = KeyBindingsManager(shell=_ip,
-                                          kb=_ip.pt_app.key_bindings.bindings)
+        container_kb = KeyBindingsManager(
+            shell=_ip, kb=_ip.pt_app.key_bindings.bindings
+        )
         # Dude holy shit does this give you a lot
         if _ip.editing_mode == "vi":
             more_keybindings = merge_key_bindings(
-                [_ip.pt_app.app.key_bindings,
-                 load_vi_bindings()])
+                [_ip.pt_app.app.key_bindings, load_vi_bindings()]
+            )
         else:
             more_keybindings = merge_key_bindings(
-                [_ip.pt_app.app.key_bindings,
-            container_kb ])
-
-        _ip.pt_app.app.key_bindings = container_kb
+                [_ip.pt_app.app.key_bindings, container_kb]
+            )

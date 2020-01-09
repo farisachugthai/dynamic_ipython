@@ -38,8 +38,9 @@ def rerun_startup():
          Namespace of all successful files.
 
     """
+    curdir = Path().curdir().resolve()
     ret = {}
-    for i in scandir('.'):
+    for i in scandir(curdir):
         if i.name.endswith('.py'):
             ret.update(runpy.run_path(i.name))
     return ret

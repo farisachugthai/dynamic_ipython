@@ -111,9 +111,6 @@ def ask_for_import(mod):
     try:
         return import_module(mod)
     except Exception:  # noqa
-        if getattr(sys, "last_type", None):
-            exception_name = sys.last_type
-            DOCS_LOGGER.exception(exception_name)
 
 
 ask_for_import("jinja2")

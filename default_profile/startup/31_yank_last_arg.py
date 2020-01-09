@@ -6,29 +6,25 @@ https://gist.githubusercontent.com/konradkonrad/7143fa8407804e37132e4ea90175f2d8
 Has since grown to ~200 key bindings.
 """
 from IPython.core.getipython import get_ipython
-
 from prompt_toolkit.enums import DEFAULT_BUFFER
-from prompt_toolkit.keys import Keys
+from prompt_toolkit.filters import (EmacsInsertMode, HasFocus, HasSelection,
+                                    ViInsertMode)
 from prompt_toolkit.key_binding import KeyBindings, merge_key_bindings
-from prompt_toolkit.key_binding.defaults import load_key_bindings
-from prompt_toolkit.key_binding.bindings.auto_suggest import load_auto_suggest_bindings
+from prompt_toolkit.key_binding.bindings.auto_suggest import \
+    load_auto_suggest_bindings
 from prompt_toolkit.key_binding.bindings.basic import load_basic_bindings
+from prompt_toolkit.key_binding.bindings.completion import \
+    display_completions_like_readline
 from prompt_toolkit.key_binding.bindings.cpr import load_cpr_bindings
-from prompt_toolkit.key_binding.bindings.completion import (
-    display_completions_like_readline,
-)
 from prompt_toolkit.key_binding.bindings.emacs import (
-    load_emacs_bindings,
-    load_emacs_search_bindings,
-)
+    load_emacs_bindings, load_emacs_search_bindings)
 from prompt_toolkit.key_binding.bindings.mouse import load_mouse_bindings
-from prompt_toolkit.key_binding.bindings.open_in_editor import (
-    load_open_in_editor_bindings,
-)
-from prompt_toolkit.key_binding.bindings.page_navigation import (
-    load_page_navigation_bindings,
-)
-from prompt_toolkit.filters import HasFocus, HasSelection, ViInsertMode, EmacsInsertMode
+from prompt_toolkit.key_binding.bindings.open_in_editor import \
+    load_open_in_editor_bindings
+from prompt_toolkit.key_binding.bindings.page_navigation import \
+    load_page_navigation_bindings
+from prompt_toolkit.key_binding.defaults import load_key_bindings
+from prompt_toolkit.keys import Keys
 
 insert_mode = ViInsertMode() | EmacsInsertMode()
 
@@ -48,19 +44,17 @@ def get_key_bindings(custom_key_bindings=None):
     """
     if custom_key_bindings is None:
         custom_key_bindings = KeyBindings()
-    return merge_key_bindings(
-        [
-            load_auto_suggest_bindings(),
-            load_basic_bindings(),
-            load_cpr_bindings(),
-            load_emacs_bindings(),
-            load_emacs_search_bindings(),
-            load_mouse_bindings(),
-            load_open_in_editor_bindings(),
-            load_page_navigation_bindings(),
-            custom_key_bindings,
-        ]
-    )
+    return merge_key_bindings([
+        load_auto_suggest_bindings(),
+        load_basic_bindings(),
+        load_cpr_bindings(),
+        load_emacs_bindings(),
+        load_emacs_search_bindings(),
+        load_mouse_bindings(),
+        load_open_in_editor_bindings(),
+        load_page_navigation_bindings(),
+        custom_key_bindings,
+    ])
 
 
 class State:
@@ -108,6 +102,17 @@ def yank_last_arg(event):
             b.insert_text(lastline.split()[-1])
 
 
+def switch_to_navigation_mode(event):
+    """Switches :mod:`IPython` from Vim insert mode to Vim normal mode.
+
+    The function we can work with in the future if we want to change the
+    keybinding for insert to navigation mode.
+    """
+    vi_state = event.cli.vi_state
+    # logger.debug('%s', dir(event))
+    vi_state.input_mode = InputMode.NAVIGATION
+
+
 if __name__ == "__main__":
     registry = KeyBindings()
 
@@ -120,8 +125,7 @@ if __name__ == "__main__":
         orig_kb = ip.pt_cli.application.key_bindings_registry
     else:
         raise NotImplementedError(
-            "IPython doesn't have prompt toolkit bindings. Exiting."
-        )
+            "IPython doesn't have prompt toolkit bindings. Exiting.")
 
     registry.add_binding(
         Keys.Escape,
@@ -136,8 +140,11 @@ if __name__ == "__main__":
     ip.events.register("post_execute", reset_last_arg_depth)
 
     # Here's a simple example of using registry. C-i == Tab
-    registry.add(Keys.ControlI)(display_completions_like_readline)
+    registry.add(Keys.ControlI, filter=(HasFocus(DEFAULT_BUFFER) & insert_mode))(display_completions_like_readline)
 
+    registry.add("j", "k", filter=(HasFocus(DEFAULT_BUFFER) & insert_mode))(switch_to_navigation_mode)
+    # Keys.j and Keys.k don't exists
+    # registry.add(Keys.j, Keys.k)(switch_to_navigation_mode)
     # add allll the defaults in and bind it back to the shell.
     # If we did this correctly, running _ip.pt_app.app.key_bindings.bindings
     # should display something like +100 bindings

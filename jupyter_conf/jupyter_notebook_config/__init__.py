@@ -5,7 +5,6 @@ import logging
 import os
 import platform
 import shutil
-
 # import sys
 import webbrowser
 
@@ -117,7 +116,6 @@ c.Application.log_level = 30
 
 class NonGraphicalEnvironmentError(OSError):
     """Raised when we can't get any kind of a reasonable browser."""
-
     def __init__(self, *args, **kwargs):
         """Todo. Need to create a more user error message."""
         super().__init__(self, *args, **kwargs)
@@ -240,7 +238,7 @@ if platform.system() == "Linux":
 # c.NotebookApp.iopub_msg_rate_limit = 1000
 
 # The IP address the notebook server will listen on.
-# c.NotebookApp.ip = 'localhost'
+c.NotebookApp.ip = 'localhost'
 
 # Supply extra arguments that will be passed to Jinja environment.
 # c.NotebookApp.jinja_environment_options = {}
@@ -265,7 +263,7 @@ if platform.system() == "Linux":
 #
 #  Local IP addresses (such as 127.0.0.1 and ::1) are automatically accepted as
 #  local as well.
-# c.NotebookApp.local_hostnames = ['localhost']
+c.NotebookApp.local_hostnames = ['localhost']
 
 # The login handler class to use.
 # c.NotebookApp.login_handler_class = 'notebook.auth.login.LoginHandler'
@@ -320,10 +318,10 @@ if platform.system() == "Linux":
 #
 #  In such a case, server the notebook server on localhost is not secure since
 #  any user can connect to the notebook server via ssh.
-# c.NotebookApp.password_required = False
+c.NotebookApp.password_required = False
 
 # The port the notebook server will listen on.
-# c.NotebookApp.port = 8888
+c.NotebookApp.port = 8888
 
 # The number of additional ports to try if the specified port is not available.
 # c.NotebookApp.port_retries = 50
@@ -339,7 +337,7 @@ if platform.system() == "Linux":
 # c.NotebookApp.rate_limit_window = 3
 
 # Reraise exceptions encountered loading server extensions?
-c.NotebookApp.reraise_server_extension_failures = True
+c.NotebookApp.reraise_server_extension_failures = False
 
 # Don't run the del because then Sphinx doesn't get the docstring.
 # del jupyter_specific_configs
@@ -379,7 +377,7 @@ c.NotebookApp.reraise_server_extension_failures = True
 #
 #  Setting to an empty string disables authentication altogether, which is NOT
 #  RECOMMENDED.
-# c.NotebookApp.token = '<generated>'
+c.NotebookApp.token = ''
 
 # Supply overrides for the tornado.web.Application that the Jupyter notebook
 #  uses.

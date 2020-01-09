@@ -37,7 +37,8 @@ from IPython.terminal.prompts import ClassicPrompts
 from traitlets.config import Configurable, get_config
 
 default_log_format = (
-    "[ %(name)s  %(relativeCreated)d ] %(levelname)s %(module)s %(message)s ")
+    "[ %(name)s  %(relativeCreated)d ] %(levelname)s %(module)s %(message)s "
+)
 
 logging.basicConfig(level=logging.INFO, format=default_log_format)
 
@@ -55,6 +56,7 @@ else:
     from default_profile import PROFILE_DEFAULT_LOG
 
     import __main__
+
     # 3.6 compat
     if ModuleNotFoundError not in dir(builtins):
         from default_profile import ModuleNotFoundError
@@ -163,7 +165,9 @@ c.Application.log_datefmt = "%Y-%m-%d %H:%M:%S"
 # The Logging format template
 # Default: '[%(name)s]%(highlevel)s %(message)s'
 # Todo: Import traitlets.config.application.LevelFormatter
-c.Application.log_format = "%(module)s %(created)f [ %(name)s ] %(message)s"
+c.Application.log_format = (
+    c.TerminalIPythonApplication.log_format
+) = "[ %(name)s  %(relativeCreated)d ] %(levelname)s %(module)s %(message)s "
 
 # Set the log level by value or name.
 c.Application.log_level = 20
@@ -213,7 +217,7 @@ c.BaseIPythonApplication.verbose_crash = False
 # ----------------------------------------------------------------------------
 
 # Whether to display a banner upon starting IPython.
-c.TerminalIPythonApp.display_banner = False
+# c.TerminalIPythonApp.display_banner = False
 
 # If a command or file is given via the command-line, e.g. 'ipython foo.py',
 #  start an interactive shell after executing the file or command.
@@ -227,9 +231,6 @@ c.TerminalIPythonApp.force_interact = False
 
 # Start IPython quickly by skipping the loading of config files.
 # c.TerminalIPythonApp.quick = False
-
-# Dec 08, 2019: Adding this in
-c.TerminalIPythonApp.log_format = "%(module)s %(created)f [ %(name)s ]  %(message)s "
 
 # Configure matplotlib for interactive use with the default matplotlib backend.
 
@@ -294,24 +295,6 @@ c.InteractiveShell.autocall = 0
 # Enable magic commands to be called without the leading %.
 # c.InteractiveShell.automagic = True
 
-# The part of the banner to be printed before the profile
-c.InteractiveShell.banner1 = ""
-
-# Let's try rewriting the banner.
-# check IPython/core/usage.py
-# unfortunately this doesn't work yet. release isn't defined and idk where
-# they define it in the original file.
-# rewritten_banner_parts = [
-#     "Python %s\n" % sys.version.split("\n")[0],
-#     "IPython {version} ".format(version=release.version),
-# ]
-
-#  rewritten_banner = ''.join(rewritten_banner_parts)
-
-#  c.InteractiveShell.banner1 = rewritten_banner
-
-# The part of the banner to be printed after the profile
-c.InteractiveShell.banner2 = ""
 
 # Set the size of the output cache. The default is 1000, you can change it
 # permanently in your config file. Setting it to 0 completely disables the
@@ -480,6 +463,37 @@ def conditional_editing_mode():
 
 
 c.TerminalInteractiveShell.editing_mode = "emacs"
+
+
+##########
+# Banner
+##########
+
+# The part of the banner to be printed before the profile
+
+# c.InteractiveShell.banner1 = ""
+# Let's try rewriting the banner.
+# check IPython/core/usage.py
+# unfortunately this doesn't work yet. release isn't defined and idk where
+# they define it in the original file.
+# rewritten_banner_parts = [
+#     "Python %s\n" % sys.version.split("\n")[0],
+#     "IPython {version} ".format(version=release.version),
+# ]
+
+#  rewritten_banner = ''.join(rewritten_banner_parts)
+
+#  c.InteractiveShell.banner1 = rewritten_banner
+
+# The part of the banner to be printed after the profile
+c.InteractiveShell.banner2 = ""
+
+c.TerminalInteractiveShell.banner1 = (
+    "Press Control-Y to paste from the system clipboard.\n"
+    "Press Control-Space or Control-@ to enter selection mode.\n"
+    "Press Control-W to cut to clipboard.\n"
+)
+
 # TODO: What is the API for traitlets.LazyConfigValue? It doesn't have a log method.
 # c.log("Editing Mode:\t {!s}".format(c.TerminalInteractiveShell.editing_mode))
 
@@ -520,14 +534,15 @@ if platform.system() == "Windows":
     c.TerminalInteractiveShell.highlighting_style = "friendly"
 else:
     try:
-        from gruvbox import Gruvbox
+        from gruvbox.style import Gruvbox
     except (ImportError, ModuleNotFoundError):
-        from pygments.styles.friendly import FriendlyStyle
+        # Shown here we're actually supposed to hand off the module name.
+        from pygments.styles import friendly
 
         c.TerminalInteractiveShell.highlighting_style = "friendly"
 
     else:
-        c.TerminalInteractiveShell.highlighting_style = "Gruvbox"
+        c.TerminalInteractiveShell.highlighting_style = Gruvbox
 
 
 def get_env():
@@ -565,6 +580,7 @@ class StandardPythonPrompt(ClassicPrompts):
     [(Token.Prompt, '>>> ')]
 
     """
+
     def __repr__(self):
         """The most boiler-platey repr I can come up with."""
         return self.__class__.__name__
@@ -723,6 +739,7 @@ class BaseFormatterDoc(Configurable):
     .. seealso:: :mod:`IPython.lib.pretty`.
 
     """
+
     def __init__(self, *args, **kwargs):
         """Initialize a BaseFormatter and get some Sphinx help.
 
