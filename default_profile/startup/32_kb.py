@@ -97,11 +97,12 @@ import reprlib
 from typing import Callable, Optional
 
 from IPython.core.getipython import get_ipython
-from prompt_toolkit.application.dummy import DummyApplication
+from prompt_toolkit.application.current import get_app
 from prompt_toolkit.cache import SimpleCache
 from prompt_toolkit.enums import DEFAULT_BUFFER, SEARCH_BUFFER
 from prompt_toolkit.filters import Condition
 from prompt_toolkit.key_binding import merge_key_bindings
+from prompt_toolkit.key_binding.defaults import load_key_bindings
 from prompt_toolkit.key_binding.bindings.vi import (load_vi_bindings,
                                                     load_vi_search_bindings)
 from prompt_toolkit.key_binding.defaults import (load_key_bindings,
@@ -126,9 +127,6 @@ from prompt_toolkit.keys import Keys
 #     vi_digraph_mode,
 #     vi_insert_multiple_mode,
 # )
-
-
-kb_logger = logging.getLogger(name=__name__)
 
 
 class KeyBindingsManager(KeyBindingsBase):
@@ -162,7 +160,6 @@ class KeyBindingsManager(KeyBindingsBase):
         self._get_bindings_for_keys_cache = SimpleCache(maxsize=10000)
         self._get_bindings_starting_with_keys_cache = SimpleCache(maxsize=1000)
         self.__version = 0  # For cache invalidation.
-        super().__init__()
 
     def __repr__(self):
         return "<{}>: {}".format(self.__class__.__name__, len(self.kb.bindings))
@@ -336,20 +333,71 @@ class HandlesMergedKB(KeyBindingsManager):
         super().__init__(kb=kb, shell=shell, *args, **kwargs)
 
 
-if __name__ == "__main__":
+def unnest_merged_kb(kb, pre_existing_list=None):
+    if pre_existing_list:
+        ret = pre_existing_list
+    else:
+        ret = []
+    if type(registry) == _MergedKeyBindings:
+        for i in kb.registries:
+            ret.append(i)
+        for i in ret:
+            unnest_merged_kb(kb, pre_existing_list=ret)
+    else:
+        if ret:
+            return ret
+        else:
+            return
 
-    _ip = get_ipython()
+def safely_get_registry(_ip):
     if _ip is not None:
         if hasattr(_ip, 'pt_app'):
-            container_kb = KeyBindingsManager(
-                shell=_ip, kb=_ip.pt_app.key_bindings.bindings
+            registry = _ip.pt_app.app.key_bindings
+            if type(registry) == _MergedKeyBindings:
+                unnest_merged_kb(registry)
+
+def kb_main(_ip=None):
+    # This doesn't do much of anything right now.
+    if _ip is not None:
+        ipy_registry = safely_get_registry(_ip)
+        ipython_registry = safely_get_registry(_ip)
+        for i in basic_bindings.bindings:
+            ipython_registry = _rewritten_add(ipython_registry, i)
+
+        assert ipython_registry is not prompt_toolkit.key_binding.key_bindings._MergedKeyBindings
+        _ip.pt_app.app.key_bindings = ipython_registry
+        # Dude holy shit does this give you a lot
+        if _ip.editing_mode == "vi":
+            more_keybindings = merge_key_bindings(
+                [_ip.pt_app.app.key_bindings, load_vi_bindings()]
             )
-            # Dude holy shit does this give you a lot
-            if _ip.editing_mode == "vi":
-                more_keybindings = merge_key_bindings(
-                    [_ip.pt_app.app.key_bindings, load_vi_bindings()]
-                )
-            else:
-                more_keybindings = merge_key_bindings(
-                    [_ip.pt_app.app.key_bindings, container_kb]
-                )
+        else:
+            more_keybindings = merge_key_bindings(
+                [_ip.pt_app.app.key_bindings, container_kb]
+            )
+        container_kb = KeyBindingsManager(
+            shell=_ip, kb=ipy_registry.bindings
+        )
+    else:
+        # TODO
+        running_app = get_app()
+
+
+def _rewritten_add(registry, _binding):
+    key = _binding.keys
+    filter = _binding.filter
+    handler = _binding.handler
+    registry.add(i, filter=filter)(handler)
+    return registry
+
+if __name__ == "__main__":
+    basic_bindings = load_key_bindings()
+    _ip = get_ipython()
+    # Let's side step all those fuckups
+    # This is probably a terrible thing to rely on, and not a guaranteed order but....
+    if _ip is not None:
+        if _ip.editing_mode == "vi":
+            vi_bindings = basic_bindings.registries[0]
+            vi_mouse = basic_bindings.registries[1]
+            vi_cpr = basic_bindings.registries[2]
+

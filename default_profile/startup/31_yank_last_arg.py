@@ -23,7 +23,6 @@ from prompt_toolkit.key_binding.bindings.open_in_editor import \
     load_open_in_editor_bindings
 from prompt_toolkit.key_binding.bindings.page_navigation import \
     load_page_navigation_bindings
-from prompt_toolkit.key_binding.defaults import load_key_bindings
 from prompt_toolkit.keys import Keys
 
 insert_mode = ViInsertMode() | EmacsInsertMode()
@@ -44,7 +43,7 @@ def get_key_bindings(custom_key_bindings=None):
     """
     if custom_key_bindings is None:
         custom_key_bindings = KeyBindings()
-    return merge_key_bindings([
+    return [
         load_auto_suggest_bindings(),
         load_basic_bindings(),
         load_cpr_bindings(),
@@ -54,7 +53,7 @@ def get_key_bindings(custom_key_bindings=None):
         load_open_in_editor_bindings(),
         load_page_navigation_bindings(),
         custom_key_bindings,
-    ])
+    ]
 
 
 class State:
@@ -137,9 +136,9 @@ if __name__ == "__main__":
         u"_",
         filter=(HasFocus(DEFAULT_BUFFER) & ~HasSelection() & insert_mode),
     )(yank_last_arg)
+
     ip.events.register("post_execute", reset_last_arg_depth)
 
-    # Here's a simple example of using registry. C-i == Tab
     registry.add(Keys.ControlI, filter=(HasFocus(DEFAULT_BUFFER) & insert_mode))(display_completions_like_readline)
 
     registry.add("j", "k", filter=(HasFocus(DEFAULT_BUFFER) & insert_mode))(switch_to_navigation_mode)
