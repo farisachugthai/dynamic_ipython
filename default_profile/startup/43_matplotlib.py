@@ -37,7 +37,7 @@ if __name__ == "__main__":
     except (ImportError, ModuleNotFoundError):
         pass
     else:
-        import matplotlib.pyplot as mpl
+        import matplotlib.pyplot as plt
         from matplotlib.font_manager import FontManager
         from matplotlib.font_manager import get_fontconfig_fonts
         from matplotlib import set_loglevel, RcParams, rcdefaults

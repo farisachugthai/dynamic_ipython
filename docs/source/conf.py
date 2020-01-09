@@ -77,9 +77,11 @@ from default_profile import extensions, util
 from default_profile.__about__ import __version__
 
 # Stdlib imports
+from default_profile import ask_for_import
 from default_profile.sphinxext import CellMagicRole, LineMagicRole
 from default_profile.sphinxext.magics import CellMagicRole, LineMagicRole
 from default_profile.startup import *
+from default_profile.util import *
 
 # Logging
 DOCS_LOGGER = logging.getLogger(name=__name__)
@@ -104,13 +106,6 @@ DOCS = Path(__file__).resolve().parent.parent
 ROOT = DOCS.parent
 JUPYTER = ROOT.joinpath("jupyter_conf")
 sys.path.insert(0, str(JUPYTER))
-
-
-def ask_for_import(mod):
-    """Try/except for importing modules."""
-    try:
-        return import_module(mod)
-    except Exception:  # noqa
 
 
 ask_for_import("jinja2")
