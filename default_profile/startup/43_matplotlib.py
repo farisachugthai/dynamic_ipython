@@ -3,8 +3,15 @@
 INFO:matplotlib.font_manager:Could not open font file /system/fonts/NotoColorEmoji.ttf: In FT2Font: Could not set the fontsize (error code 0x17)
 INFO:matplotlib.font_manager:generated new fontManager
 """
+import difflib
 import logging
+import locale
 import sys
+
+
+def diff_rcparams(rcparam=None):
+    differ = difflib.Differ()
+    # TODO: Odd place to get all messed up in
 
 
 def set_mpl():
@@ -23,6 +30,8 @@ def set_mpl():
 
 
 if __name__ == "__main__":
+    locale.setlocale(locale.LC_ALL, '')
+
     try:
         import matplotlib as mpl
     except (ImportError, ModuleNotFoundError):
@@ -31,8 +40,9 @@ if __name__ == "__main__":
         import matplotlib.pyplot as mpl
         from matplotlib.font_manager import FontManager
         from matplotlib.font_manager import get_fontconfig_fonts
-        from matplotlib import set_loglevel
+        from matplotlib import set_loglevel, RcParams, rcdefaults
 
+        from matplotlib.style.core import STYLE_BLACKLIST
         set_loglevel("info")
 
         fm = FontManager()

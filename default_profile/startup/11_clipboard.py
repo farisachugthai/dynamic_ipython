@@ -15,8 +15,11 @@ try:
     import pyperclip
 except ImportError:
     pyperclip = None
+    clipboard = None
 else:
     from prompt_toolkit.clipboard import pyperclip as pt_pyperclip
+    from pyperclip import determine_clipboard
+    copy, paste = determine_clipboard()
 
 from prompt_toolkit.clipboard import ClipboardData, InMemoryClipboard
 

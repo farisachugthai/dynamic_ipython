@@ -36,14 +36,18 @@ Doctest
 import json
 import logging
 import os
+import reprlib
 import sys
 import traceback
 from datetime import datetime
 
 import IPython
 from IPython.core.getipython import get_ipython
+from IPython.core.interactiveshell import InteractiveShellABC
 
+from traitlets.config.configurable import LoggingConfigurable
 from traitlets.config.application import LevelFormatter
+from traitlets.traitlets import Instance
 
 
 class NoUnNamedLoggers(NotImplementedError):
@@ -236,7 +240,9 @@ def betterConfig(name=None, parent=None):
     it's default behavior is to allow all :class:`logging.LogRecords` to pass.
 
     """
-    BASIC_FORMAT = "%(created)f  %(levelname)s  %(module)s  %(message)s  "
+    BASIC_FORMAT = (
+        "[ %(name)s  %(relativeCreated)d ] %(levelname)s %(module)s %(message)s "
+    )
     if name is None:
         name = "mod_log"
     if parent:
@@ -256,3 +262,43 @@ def betterConfig(name=None, parent=None):
     better_logger.addFilter(logging.Filter())
 
     return better_logger
+
+
+class VerboseLoggingConfigurable(LoggingConfigurable):
+    """Tried building on the LoggingConfigurable. Doesn't work currently.
+
+    We need to register the currently running IPython instance so it gets
+    access to the config and parent attributes.
+    """
+
+    shell = Instance('InteractiveShellABC')
+
+    def __init__(self, logger_name=None, logger_parent=None, shell=None, **kwargs):
+        self.log = betterConfig(name=logger_name, parent=logger_parent)
+        self.logger_name = logger_name
+        self.logger_parent = logger_parent
+        self.shell = shell
+        if self.shell is not None:
+            self.config = shell.config
+            self.parent = shell.parent
+        super().__init__(shell = shell, **kwargs)
+
+    def log(self, msg, level=None):
+        """Isn't it weird that the default logging.Logger made the level positional?
+
+        Idk I might just be THAT lazy.
+        """
+        if level is None:
+            level = logging.WARNING
+        self.log.log(msg, level=level)
+
+    def __repr__(self):
+        return reprlib.Repr().repr_dict(self.traits(), level=6)
+
+    @property
+    def handlers(self):
+        return self.log.handlers
+
+    @property
+    def filters(self):
+        return self.log.filters

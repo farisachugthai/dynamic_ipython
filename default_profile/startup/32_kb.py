@@ -320,13 +320,14 @@ class HandlesMergedKB(KeyBindingsManager):
 
     shell = get_ipython()
     if shell is not None:
-        kb = shell.pt_app.app.key_bindings
-        if kb is None:
-            kb = load_key_bindings()
-        else:
-            if isinstance(kb, _MergedKeyBindings):
-                for i in kb.registries:
-                    unpack(i)
+        if hasattr(shell, 'pt_app'):
+            kb = shell.pt_app.app.key_bindings
+            if kb is None:
+                kb = load_key_bindings()
+            else:
+                if isinstance(kb, _MergedKeyBindings):
+                    for i in kb.registries:
+                        unpack(i)
 
     def __init__(self, kb=None, shell=None, *args, **kwargs):
         """Honestly can't say I have a great grasp on proper initialization
@@ -339,15 +340,16 @@ if __name__ == "__main__":
 
     _ip = get_ipython()
     if _ip is not None:
-        container_kb = KeyBindingsManager(
-            shell=_ip, kb=_ip.pt_app.key_bindings.bindings
-        )
-        # Dude holy shit does this give you a lot
-        if _ip.editing_mode == "vi":
-            more_keybindings = merge_key_bindings(
-                [_ip.pt_app.app.key_bindings, load_vi_bindings()]
+        if hasattr(_ip, 'pt_app'):
+            container_kb = KeyBindingsManager(
+                shell=_ip, kb=_ip.pt_app.key_bindings.bindings
             )
-        else:
-            more_keybindings = merge_key_bindings(
-                [_ip.pt_app.app.key_bindings, container_kb]
-            )
+            # Dude holy shit does this give you a lot
+            if _ip.editing_mode == "vi":
+                more_keybindings = merge_key_bindings(
+                    [_ip.pt_app.app.key_bindings, load_vi_bindings()]
+                )
+            else:
+                more_keybindings = merge_key_bindings(
+                    [_ip.pt_app.app.key_bindings, container_kb]
+                )
