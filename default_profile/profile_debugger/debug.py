@@ -15,7 +15,7 @@ Huh! This is neat. He imports pdb.Restart. Check out the call signature.
 .. todo:: ipdb doesnt take a -m option. pdb started taking it in 3.7.
 
 """
-import getopt
+import argparse
 import logging
 import os
 from pdb import Restart
@@ -25,9 +25,15 @@ from bdb import BdbQuit
 from contextlib import contextmanager
 
 try:
+    from .pdbrc import MyPdb
+except:  # noqa
+    MyPdb = None
+
+try:
     import readline
 except (ImportError, ModuleNotFoundError):
     readline = None
+
 from IPython.core.getipython import get_ipython
 from IPython.terminal.embed import InteractiveShellEmbed
 from IPython.terminal.ipapp import TerminalIPythonApp
@@ -111,35 +117,56 @@ def launch_ipdb_on_exception():
         pass
 
 
-def parse_args():
+def get_parser():
     """Factored out of main. Well sweet this now rasies an error."""
+    parser = argparse.ArgumentParser(
+        prog="`Batteries included and the kitchen sink too`-PDB",
+        description=(
+            "You're debugging code you don't want to figure out if you"
+            "imported something or not."
+        ),
+    )
 
-    opts, args = getopt.getopt(sys.argv[1:], "hc:", ["help", "command="])
+    parser.add_argument("-v", "--version", action='version')
 
-    commands = []
-    for opt, optarg in opts:
-        if opt in ["-h", "--help"]:
-            getopt.GetoptError()
-        elif opt in ["-c", "--command"]:
-            commands.append(optarg)
+    parser.add_argument(
+        "-c",
+        "--command",
+        metavar="Commands",
+        nargs="*",
+        type=list,
+        help="List of commands to run before starting.",
+        dest="commands",
+        default=[],
+    )
 
-    if not args:
-        # print(_usage) todo!
-        getopt.GetoptError()
-        sys.exit(2)
+    parser.add_argument(
+        "-m",
+        "--module",
+        nargs="?",
+        help="Module to debug",
+        dest="mod",
+    )
 
-    mainpyfile = args[0]  # Get script filename
-    if not os.path.exists(mainpyfile):
-        print("Error:", mainpyfile, "does not exist")
-        sys.exit(1)
-
-    sys.argv = args  # Hide "pdb.py" from argument list
-    return args
+    return parser
 
 
 def main():
-    args = parse_args()
+    program_name, *args = sys.argv
+    parser = get_parser()
+    if not args:
+        sys.exit(parser.print_help())
+
+    try:
+        mainpyfile = args[0]  # Get script filename
+    except IndexError:
+        sys.exit(parser.print_help())
+
+    if not os.path.exists(mainpyfile):
+        raise FileNotFoundError
+
     sys.argv = args  # Hide "pdb.py" from argument list
+    namespace = parser.parse_args(args)
 
     # Replace pdb's dir with script's dir in front of module search path.
     sys.path[0] = os.path.dirname(mainpyfile)
@@ -154,10 +181,9 @@ def main():
             pdb._runscript(mainpyfile)
             if pdb._user_requested_quit:
                 break
-            print("The program finished and will be restarted")
+            logger.warning("The program finished and will be restarted")
         except Restart:
-            print("Restarting", mainpyfile, "with arguments:")
-            print("\t" + " ".join(sys.argv[1:]))
+            logger.info(f"Restarting {mainpyfile} with arguments:\t{str(sys.argv[1:])}")
         except SystemExit:
             # In most cases SystemExit does not warrant a post-mortem session.
             print("The program exited via sys.exit(). Exit status: ", end="")
@@ -197,9 +223,6 @@ if __name__ == "__main__":
                 "the configuration will not be loaded.\n\n"
             )
 
-    # Let IPython decide about which debugger class to use
-    # This is especially important for tools that fiddle with stdout
     global debugger_cls
-    debugger_cls = shell.debugger_cls
-
+    debugger_cls = MyPdb
     main()
