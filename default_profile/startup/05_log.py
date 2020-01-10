@@ -76,6 +76,11 @@ class LoggerManager(LoggingConfigurable):
 
     """
 
+    # Missed one!
+    # Don't make it a trait. Traitlets predate pathlib so it'll fail if we set
+    # the trait type to Unicode and we get passed a path object.
+    logfile = None
+
     # could do this. make an enum class? hm. idk.
     # logmode =
     log_raw_input = Bool(False, help="Whether to log raw or processed input").tag(
@@ -114,6 +119,29 @@ class LoggerManager(LoggingConfigurable):
         "%H:%M:%S", help="Enable timestamps and you'll see what I mean."
     ).tag(config=True)
 
+    logmode = Unicode("rotate", help=f"""How to properly store log files with
+    options including:
+
+        *) Rotate [the default]
+
+        *) Global
+
+        *) Backup
+
+        *) Over
+    """).tag(config=True)
+
+    @default("logmode")
+    def _mode(self, change):
+        return self.logmode
+
+    @validate("logmode")
+    def _set_mode(self, mode):
+        """'logmode' is a validated property."""
+        if mode not in ["append", "backup", "global", "over", "rotate"]:
+            raise TraitError("invalid log mode %s given" % mode)
+        self.logmode = mode
+
     def __init__(
         self,
         logger_name="IPython_Logger_Manager",
@@ -128,9 +156,13 @@ class LoggerManager(LoggingConfigurable):
         ----------
         logfname : str
             Is set to the attribute 'logfile' in method :meth:`logstart`.
+            But logfile is also a property now which we need to fix as properties
+            aren't callables but that's kinda the point of ahving the reference
+            to it.
 
         """
-        super().__init__(*args, **kwargs)
+        super().__init__(shell=None, *args, **kwargs)
+        self.shell = shell
         self.logfname = Path(logfname)
         self.logger_name = logger_name
         self.logger_log_level = logger_log_level
@@ -163,17 +195,6 @@ class LoggerManager(LoggingConfigurable):
 
     def init_filter(self, **kwargs):
         self.handler.addFilter(logging.Filter(**kwargs))
-
-    @default("logmode")
-    def _mode(self, change):
-        return self.logmode
-
-    @validate("logmode")
-    def _set_mode(self, mode):
-        """'logmode' is a validated property."""
-        if mode not in ["append", "backup", "global", "over", "rotate"]:
-            raise TraitError("invalid log mode %s given" % mode)
-        self.logmode = mode
 
     def logappend(self):
         return self.append()
@@ -242,7 +263,8 @@ class LoggerManager(LoggingConfigurable):
         """Generate a new log-file with a default header."""
         if cls.logfile is not None:
             cls.shell.warn("Logging already started in this session!")
-        cls.logfile = cls.set_outputfile()
+        # Even the setter for a property is not a callable!
+        cls.logfile = cls.set_output_file
 
         if cls.logmode != "append":
             cls.logfile.write(cls.loghead)

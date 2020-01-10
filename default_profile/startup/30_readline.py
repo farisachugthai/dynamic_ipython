@@ -130,18 +130,40 @@ def input_loop():
         # readline.set_completer(SimpleCompleter(OPTIONS).complete)
         # TODO: Check what the API is to add a completer to ipython. _ip.add_completer?
     """
-
     line = ""
     while line != "stop":
         line = input('Prompt ("stop" to quit): ')
         print("Dispatch {}".format(line))
 
 
+def return_readline():
+    try:
+        import readline
+    except (ImportError, ModuleNotFoundError):
+        # Interestingly this can work on Windows with a simple pip install pyreadline
+        try:
+            import pyreadline as readline
+        except (ImportError, ModuleNotFoundError):
+            rl_logger.warning("Readline not imported.")
+            raise
+        else:
+            from pyreadline.rlmain import Readline
+
+            rl = Readline()
+            # So apparently readline.rl in the pyreadline module is an instantiated
+            # rlcompleter?
+            readline.set_completer(readline.rl.complete)
+            return readline
+    else:
+        return readline
+
 # History
 
 
 def setup_historyfile(filename=None):
     """Add a history file to readline."""
+    if not hasattr(locals(), 'readline'):
+        readline = return_readline()
     if filename is None:
         filename = "~/.pdb_history"
     histfile = os.path.expanduser(filename)
@@ -166,9 +188,7 @@ def teardown_historyfile(histfile=None):
             "History not saved. There were problems saving to ~/.python_history"
         )
 
-
-if __name__ == "__main__":
-    histfile = "~/.python_history"
+def jedi_readline():
     try:
         import jedi
     except (ImportError, ModuleNotFoundError):
@@ -180,32 +200,22 @@ if __name__ == "__main__":
         jedi.settings.add_bracket_after_function = False
         # jedi.settings
 
+
+if __name__ == "__main__":
+    jedi_readline()
+    readline = return_readline()
+    if getattr(readline, "parse_and_bind", None):
+        bind_readline_keys()
+    if getattr(readline, "read_inputrc_file", None):
+        read_inputrc()
+
+    readline.set_completer_delims(" \t\n`@#$%^&*()=+[{]}\\|;:'\",<>?")
+    readline.set_completer(rlcompleter.Completer().complete)
+
+    # history
+    histfile = "~/.python_history"
     # Fallback to the stdlib readline completer if it is installed.
     # Taken from http://docs.python.org/2/library/rlcompleter.html
-    try:
-        import readline
-    except (ImportError, ModuleNotFoundError):
-        # Interestingly this can work on Windows with a simple pip install pyreadline
-        try:
-            import pyreadline as readline
-        except (ImportError, ModuleNotFoundError):
-            readline = None
-            rl_logger.warning("Readline not imported.")
-        else:
-            from pyreadline.rlmain import Readline
+    setup_historyfile(histfile)
+    atexit.register(teardown_historyfile, histfile)
 
-            rl = Readline()
-            # So apparently readline.rl in the pyreadline module is an instantiated
-            # rlcompleter?
-            readline.set_completer(readline.rl.complete)
-    else:
-        if getattr(readline, "parse_and_bind", None):
-            bind_readline_keys()
-        if getattr(readline, "read_inputrc_file", None):
-            read_inputrc()
-
-        readline.set_completer_delims(" \t\n`@#$%^&*()=+[{]}\\|;:'\",<>?")
-        readline.set_completer(rlcompleter.Completer().complete)
-
-        setup_historyfile(histfile)
-        atexit.register(teardown_historyfile, histfile)

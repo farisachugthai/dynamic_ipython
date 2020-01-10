@@ -13,8 +13,8 @@ c.Application.log_datefmt = "%Y-%m-%d %H:%M:%S"
 
 # The Logging format template
 
-logging.BASIC_FORMAT = "%(created)f %(levelname)s  %(module)s  %(message)s : "
-c.Application.log_format = "%(created)f  %(levelname)s  %(module)s  %(message)s  "
+logging.BASIC_FORMAT = "[%(created)f %(levelname)s ] %(module)s  %(message)s : "
+c.Application.log_format = "[%(created)f %(levelname)s ] %(module)s  %(message)s  "
 
 # Set the log level by value or name.
 c.Application.log_level = 30
@@ -130,19 +130,19 @@ def get_home():
 # IPythonKernel(Kernel) configuration
 # -----------------------------------------------------------------------------
 
-# c.IPythonKernel.help_links = [{'text': 'Python Reference', 'url': 'https://docs.python.org/3'},
-#           {'text': 'Python3.7 Reference', 'url': 'https://docs.python.org/3.7'}
-#           {'text': 'IPython Reference', 'url': 'https://ipython.org/documentation.html'},
-#           {'text': 'NumPy Reference', 'url': 'https://docs.scipy.org/doc/numpy/reference/'},
-#           {'text': 'SciPy Reference', 'url': 'https://docs.scipy.org/doc/scipy/reference/'},
-#           {'text': 'Matplotlib Reference', 'url': 'https://matplotlib.org/contents.html'},
-#           {'text': 'SymPy Reference', 'url': 'http://docs.sympy.org/latest/index.html'},
-#           {'text': 'pandas Reference', 'url': 'https://pandas.pydata.org/pandas-docs/stable/'}
-#           ]
+c.IPythonKernel.help_links = [{'text': 'Python Reference', 'url': 'https://docs.python.org/3'},
+                              {'text': 'Python3.7 Reference', 'url': 'https://docs.python.org/3.7'}
+                              {'text': 'IPython Reference', 'url': 'https://ipython.org/documentation.html'},
+                              {'text': 'NumPy Reference', 'url': 'https://docs.scipy.org/doc/numpy/reference/'},
+                              {'text': 'SciPy Reference', 'url': 'https://docs.scipy.org/doc/scipy/reference/'},
+                              {'text': 'Matplotlib Reference', 'url': 'https://matplotlib.org/contents.html'},
+                              {'text': 'SymPy Reference', 'url': 'http://docs.sympy.org/latest/index.html'},
+                              {'text': 'pandas Reference', 'url': 'https://pandas.pydata.org/pandas-docs/stable/'}
+                              ]
 
 # Set this flag to False to deactivate the use of experimental IPython
 # completion APIs.
-c.IPythonKernel.use_experimental_completions = True
+# c.IPythonKernel.use_experimental_completions = True
 
 # -----------------------------------------------------------------------------
 # InteractiveShell(SingletonConfigurable) configuration
@@ -158,7 +158,7 @@ c.IPythonKernel.use_experimental_completions = True
 # c.InteractiveShell.ast_transformers = []
 
 # Automatically run await statement in the top level repl.
-# c.InteractiveShell.autoawait = True
+c.InteractiveShell.autoawait = False
 
 # Make IPython automatically call any callable object even if you didn't type
 # explicit parentheses. For example, 'str 43' becomes 'str(43)' automatically.
@@ -195,7 +195,7 @@ c.InteractiveShell.cache_size = 100000
 # Set the color scheme (NoColor, Neutral, Linux, or LightBG).
 c.InteractiveShell.colors = "Linux"
 
-# c.InteractiveShell.debug = False
+c.InteractiveShell.debug = True
 
 # Don't call post-execute functions that have failed in the past.
 # c.InteractiveShell.disable_failing_post_execute = False
@@ -226,6 +226,8 @@ c.InteractiveShell.history_load_length = 10000
 # Start logging to the default log file in overwrite mode. Use `logappend` to
 # specify a log file to **append** logs to.
 # c.InteractiveShell.logstart = False
+
+c.InteractiveShell.loop_runner = None
 
 # c.InteractiveShell.object_info_string_level = 0
 
