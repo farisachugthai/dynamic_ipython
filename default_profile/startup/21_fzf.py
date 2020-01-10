@@ -80,10 +80,19 @@ class FZF:
         subprocess.run([self.safe_default_cmd, *args], **kwargs)
 
     @property
-    def default_cmd_str(self):
+    def default_cmds(self):
         return (
             "rg --pretty --hidden --max-columns-preview --no-heading --no-messages --no-column --no-line-number -C 0 -e ^ | fzf --ansi --multi ",
         )
+
+    @property
+    def default_cmd(self):
+        """Define the cmd for FZF.
+
+        In the sane vein as json.load and json.loads, separate the 2 based on
+        the 's'.
+        """
+        return ['rg', '--pretty', '--hidden', '--max-columns-preview', '--no-heading', '--no-messages', '--no-column', '--no-line-number', '-C', '0', '-e', '^', '|', 'fzf', '--ansi', '--multi']
 
     @property
     def safe_default_cmd(self):
@@ -109,7 +118,7 @@ class FZF:
         if args:
             cls.fzf_alias.extend(args)
 
-        return cls.fzf_alias
+        return cls
 
 
 def is_tmux():
@@ -149,9 +158,9 @@ def main():
             else:
                 busybox_hack(shell)
 
-        fzf_aliases = FZF()._setup_fzf()
-        # shell.alias_manager.define_alias(FZF._setup_fzf(), 'fzf')
-
+        fzf_aliases = FZF._setup_fzf()
+        shell.alias_manager.define_alias("fzf", "fzf-tmux")
+        os.environ.setdefault("FZF_DEFAULT_COMMAND", fzf_aliases.default_cmds)
 
 if __name__ == "__main__":
     main()

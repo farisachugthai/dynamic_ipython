@@ -90,7 +90,32 @@ And you kinda can't do anything about it.::
     In [40]: did_we_make_it_better.bindings
     TypeError: '_MergedKeyBindings' object is not callable
 
+Can't extract anything from them.::
 
+    In [42]: for i in load_key_bindings().registries[0].bindings:
+        ...:     _ip.pt_app.key_bindings.add(i.keys)(i.handler)
+        ...: ValueError: Invalid key: (<Keys.ControlX: 'c-x'>, 'r', 'y')
+
+Gotta be honest I felt very creative workibg ny way up to that one.
+If we can't do that, lets keep working at the individual bindings.::
+
+    In [43]: i.keys
+    Out[43]: (<Keys.ControlX: 'c-x'>, 'r', 'y')
+    In [44]: type(i.keys)
+    Out[44]: tuple
+    In [45]: i.keys[0]
+    Out[45]: <Keys.ControlX: 'c-x'>
+
+So far so good?::
+
+    In [57]: c = ""
+    ...: for j in i.keys:
+    ...:     c += Keys(j)
+    ...: ValueError: 'r' is not a valid Keys
+        During handling of the above exception, another exception occurred:
+        ValueError: 'r' is not a valid Keys
+
+Yup. We have to redefine what a key is.
 """
 import logging
 import reprlib

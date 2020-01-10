@@ -33,6 +33,7 @@ Doctest
 
 
 """
+import functools
 import json
 import logging
 import os
@@ -271,7 +272,7 @@ class VerboseLoggingConfigurable(LoggingConfigurable):
     access to the config and parent attributes.
     """
 
-    shell = Instance('InteractiveShellABC')
+    shell = Instance("InteractiveShellABC")
 
     def __init__(self, logger_name=None, logger_parent=None, shell=None, **kwargs):
         self.log = betterConfig(name=logger_name, parent=logger_parent)
@@ -281,7 +282,7 @@ class VerboseLoggingConfigurable(LoggingConfigurable):
         if self.shell is not None:
             self.config = shell.config
             self.parent = shell.parent
-        super().__init__(shell = shell, **kwargs)
+        super().__init__(shell=shell, **kwargs)
 
     def log(self, msg, level=None):
         """Isn't it weird that the default logging.Logger made the level positional?
@@ -302,3 +303,15 @@ class VerboseLoggingConfigurable(LoggingConfigurable):
     @property
     def filters(self):
         return self.log.filters
+
+
+def logging_decorator(f):
+    @functools.wraps(f)
+    def wrapper(*args, **kwargs):
+        logging.debug("Entering %s", f.__name__)
+        start = time.time()
+        f(*args, **kwargs)
+        end = time.time()
+        logging.debug("Exiting %s in %-5.2f secs", f.__name__, end - start)
+
+    return wrapper

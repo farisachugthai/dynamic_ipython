@@ -533,20 +533,21 @@ if platform.system() == "Windows":
     # I know it's odd making this platform specific but everything is completely illegible otherwise
     c.TerminalInteractiveShell.highlighting_style = "friendly"
 else:
-    try:
-        from gruvbox.gruvbox import Gruvbox
-    except (ImportError, ModuleNotFoundError):
-        # Shown here we're actually supposed to hand off the module name.
-        from pygments.styles import friendly
+    # try:
+    #     from gruvbox import gruvbox
+    # except (ImportError, ModuleNotFoundError):
+    #     # Shown here we're actually supposed to hand off the module name.
+    #     from pygments.styles import friendly
 
-        c.TerminalInteractiveShell.highlighting_style = "friendly"
+    #     c.TerminalInteractiveShell.highlighting_style = "friendly"
 
-    else:
-        c.TerminalInteractiveShell.highlighting_style = "gruvbox"
+    # else:
+    #     c.TerminalInteractiveShell.highlighting_style = "gruvbox"
         # Idk if we're supposed to do this
         # you're not it's not a recognized option. unfortunately it's definitely
         # an attribute that can be set. fuck.
         # c.TerminalInteractiveShell.style = Gruvbox()
+    c.TerminalInteractiveShell.highlighting_style = "friendly"
 
 
 def get_env():

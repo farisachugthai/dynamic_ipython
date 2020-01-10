@@ -44,7 +44,7 @@ class BottomToolbar:
         "none": None,
     }
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         self.shell = get_ipython()
         self.unfinished_toolbar = ""
         self.rerender()
@@ -80,6 +80,7 @@ class BottomToolbar:
         # [('class:toolbar', ' [F4] %s ' % text)]
         current_vi_mode = self.pt_app().vi_state.input_mode
         toolbar = f" [F4] Vi: {current_vi_mode}  {date.today()}"
+        # toolbar.append(style=default_pygments_style())
         return toolbar
 
     def _render_emacs(self):
@@ -103,6 +104,10 @@ def _(event):
         return "EMACS"
     if event.app.editing_mode == "EMACS":
         return "VI"
+
+
+def toggle_editing_mode(_ip):
+    _ip.pt_app.app.key_bindings.registries.append(toggle_vi)
 
 
 def add_toolbar(toolbar=None):
