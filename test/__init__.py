@@ -33,10 +33,10 @@ from IPython import get_ipython
 
 try:
     import nose  # noqa F401
-except ImportError as e:
+    import default_profile
+except Exception as e:
     warnings.warn(e)
 
-import default_profile
 
 
 def setup_test_logging():

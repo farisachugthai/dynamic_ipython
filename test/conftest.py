@@ -4,11 +4,7 @@ import os
 import sys
 import tempfile
 
-from traitlets.config import Config
-from IPython.core.getipython import get_ipython
-from IPython import start_ipython
-
-# from IPython.terminal.ipapp import TerminalIPythonApp
+from IPython.core.interactiveshell import InteractiveShell
 
 import pytest
 from pytest import set_trace
@@ -17,7 +13,10 @@ from pytest import set_trace
 from _pytest import nose
 from _pytest import unittest
 
-import default_profile
+try:
+    import default_profile
+except:
+    pass
 
 
 def pytest_load_initial_conftests(args):
@@ -30,19 +29,7 @@ def pytest_load_initial_conftests(args):
 
 @pytest.fixture(scope="session", autouse=True)
 def _ip():
-    # config = Config()
-    c = get_ipython()
-    # if c is None:
-    #     c = startconfigython()
-    set_trace()
-    c.colors = "NoColor"
-    c.term_title = (False,)
-    c.autocall = 0
-    f = tempfile.NamedTemporaryFile(suffix=u"test_hist.sqlite", delete=False)
-    c.HistoryManager.hist_file = f.name
-    f.close()
-    c.HistoryManager.db_cache_size = 10000
-    return c
+    return InteractiveShell()
 
 
 def pytest_addoption(parser):
