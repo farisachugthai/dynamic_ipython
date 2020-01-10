@@ -7,6 +7,7 @@ Developer's Notes
 .. module:: developers-notes
    :synopsis: Notes to aid anyone interested in working with this source code.
 
+.. highlight:: bash
 
 .. _developer-installation:
 
@@ -161,7 +162,7 @@ Generating CSS
 
 Pygments can generate CSS with the following command in the shell:
 
-.. code-block:: shell
+.. code-block:: bash
 
    pygmentize -S GruvboxDarkHard -f html > _static/pygments.css
 
@@ -169,6 +170,6 @@ Pygments can generate CSS with the following command in the shell:
 Linting
 ========
 
-.. code-block:: shell-session
+.. code-block:: bash
 
    flake8-rst --config=setup.cfg --show-source --statistics --doctest docs/source/**/*.rst --rst-directives=ipython --tee --output-file=flake8_output.log

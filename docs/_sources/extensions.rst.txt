@@ -38,7 +38,6 @@ portion of the repository.
 :mod:`~default_profile.extensions.pd_csv`
 =========================================
 
-
 .. automodule:: default_profile.extensions.pd_csv
    :synopsis: Utiilize pandas to load data in a :mod:`csv` file.
    :members:
@@ -69,9 +68,3 @@ portion of the repository.
    :members:
    :undoc-members:
    :show-inheritance:
-
-
-Continue reading at :doc:`jobcontrol` to see a well documented example
-provided by one of the original IPython authors, Brian Granger!
-
-`Next --- Job Control <jobcontrol.html>`_
