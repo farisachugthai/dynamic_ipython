@@ -37,9 +37,12 @@ class IPythonConfigurableLexer(LoggingConfigurable):
             than 1,000 lines.
         :param syntax_sync: `SyntaxSync` object.
     """
+
     shell = Instance(InteractiveShellABC, allow_none=True)
 
-    lexer = Instance(Lexer, help="Instance that lexs documents.", allow_none=True).tag(config=True)
+    lexer = Instance(Lexer, help="Instance that lexs documents.", allow_none=True).tag(
+        config=True
+    )
 
     # from pygments.lexer.Lexer
     #: Name of the lexer

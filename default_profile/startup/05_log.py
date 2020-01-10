@@ -139,9 +139,8 @@ class LoggerManager(LoggingConfigurable):
     def __repr__(self):
         return "{r!} {:<r!}".format(self.__class__.__name__, self.logger_name)
 
-    def log(self, *args, **kwargs):
-        if self.logger_log_level == 30:
-            super().log.warning(*args, **kwargs)
+    def log(self, msg, level=30):
+        super().log(msg, level=level)
 
     def init_logger(self, override_level=None, **kwargs):
         self.logger_instance = logging.getLogger(name=self.logger_name)
@@ -307,5 +306,5 @@ def ipython_logger(shell=None):
 
 if __name__ == "__main__":
     _ip = get_ipython()
-    logger = ipython_logger(_ip)
-    logger_manager = LoggerManager()
+    # logger = ipython_logger(_ip)
+    logger_manager = LoggerManager.logstart()

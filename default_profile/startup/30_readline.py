@@ -28,6 +28,10 @@ IPython Custom Completers
     list where you want the completer to be inserted.
 
 
+.. todo:: Shoot all of these functions depend on readline existing so nothing
+          can be imported. They should be methods in a class so that we
+          know that we have that state pre-established right?
+
 """
 import atexit
 import logging

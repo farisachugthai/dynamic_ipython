@@ -4,8 +4,6 @@
 This imports a few utility functions from :mod:`IPython` and imports the python
 package neovim is served in.
 """
-# This is really unnecessary. Undo later
-from asyncio import *  # noqa
 from importlib import import_module
 import io
 import logging

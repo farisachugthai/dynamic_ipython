@@ -9,13 +9,12 @@ from IPython.core.getipython import get_ipython
 from prompt_toolkit.enums import DEFAULT_BUFFER
 from prompt_toolkit.filters import (
     Condition,
-    emacs_insert_mode,
     has_selection,
     in_paste_mode,
     is_multiline,
-    vi_insert_mode,
 )
-from prompt_toolkit.key_binding import KeyBindings, merge_key_bindings
+from prompt_toolkit.filters.app import emacs_insert_mode, vi_insert_mode, has_focus
+from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.key_binding.bindings.auto_suggest import load_auto_suggest_bindings
 from prompt_toolkit.key_binding.bindings.basic import load_basic_bindings
 from prompt_toolkit.key_binding.bindings.completion import (
@@ -37,7 +36,8 @@ from prompt_toolkit.key_binding.bindings.page_navigation import (
 from prompt_toolkit.key_binding.key_processor import KeyPress, KeyPressEvent
 from prompt_toolkit.keys import Keys
 
-insert_mode = ViInsertMode() | EmacsInsertMode()
+# fun fact. ViInsertMode is deprecated
+insert_mode = vi_insert_mode() | emacs_insert_mode()
 
 
 def get_key_bindings(custom_key_bindings=None):
@@ -132,6 +132,7 @@ def if_no_repeat(event: E) -> bool:
     another handler. """
     return not event.is_repeat
 
+
 def additional_bindings():
 
     registry = KeyBindings()
@@ -151,21 +152,21 @@ def additional_bindings():
     registry.add_binding(
         Keys.Escape,
         u".",
-        filter=(HasFocus(DEFAULT_BUFFER) & ~HasSelection() & insert_mode),
+        filter=(has_focus(DEFAULT_BUFFER) & ~has_selection() & insert_mode),
     )(yank_last_arg)
     registry.add_binding(
         Keys.Escape,
         u"_",
-        filter=(HasFocus(DEFAULT_BUFFER) & ~HasSelection() & insert_mode),
+        filter=(has_focus(DEFAULT_BUFFER) & ~has_selection() & insert_mode),
     )(yank_last_arg)
 
     ip.events.register("post_execute", reset_last_arg_depth)
 
-    registry.add(Keys.ControlI, filter=(HasFocus(DEFAULT_BUFFER) & insert_mode))(
+    registry.add(Keys.ControlI, filter=(has_focus(DEFAULT_BUFFER) & insert_mode))(
         display_completions_like_readline
     )
 
-    registry.add("j", "k", filter=(HasFocus(DEFAULT_BUFFER) & insert_mode))(
+    registry.add("j", "k", filter=(has_focus(DEFAULT_BUFFER) & insert_mode))(
         switch_to_navigation_mode
     )
     # Keys.j and Keys.k don't exists
@@ -299,6 +300,7 @@ def additional_bindings():
         event.app.quoted_insert = False
 
     return registry
+
 
 if __name__ == "__main__":
     additional_bindings()

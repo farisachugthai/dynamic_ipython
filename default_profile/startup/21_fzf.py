@@ -81,7 +81,9 @@ class FZF:
 
     @property
     def default_cmd_str(self):
-        return "rg --pretty --hidden --max-columns-preview --no-heading --no-messages --no-column --no-line-number -C 0 -e ^ | fzf --ansi --multi ",
+        return (
+            "rg --pretty --hidden --max-columns-preview --no-heading --no-messages --no-column --no-line-number -C 0 -e ^ | fzf --ansi --multi ",
+        )
 
     @property
     def safe_default_cmd(self):

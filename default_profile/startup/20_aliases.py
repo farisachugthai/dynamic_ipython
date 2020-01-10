@@ -443,11 +443,12 @@ class WindowsAliases(CommonAliases):
             User aliases to add the user's namespace.
 
         """
-        super().__init__(**kwargs)
-        self.user_aliases = super().user_aliases.extend(aliases)
+        if aliases is not None:
+            self.user_aliases = aliases
+        else:
+            self.user_aliases = self.set_user_aliases()
         self.shell = shell or get_ipython()
-        if self.user_aliases is None:
-            self.cmd_aliases()
+        super().__init__(**kwargs)
 
     @staticmethod
     def _find_exe(self, exe=None):

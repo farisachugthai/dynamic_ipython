@@ -9,6 +9,7 @@ The code that's more important than anything should execute regardless
 of whether someone has ``pip install``-ed it.
 
 """
+from pathlib import Path
 import runpy
 from os import scandir
 
@@ -38,10 +39,10 @@ def rerun_startup():
          Namespace of all successful files.
 
     """
-    curdir = Path().curdir().resolve()
+    curdir = Path.cwd().resolve()
     ret = {}
     for i in scandir(curdir):
-        if i.name.endswith('.py'):
+        if i.name.endswith(".py"):
             ret.update(runpy.run_path(i.name))
     return ret
 

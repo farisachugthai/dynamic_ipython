@@ -101,15 +101,17 @@ from prompt_toolkit.application.current import get_app
 from prompt_toolkit.cache import SimpleCache
 from prompt_toolkit.enums import DEFAULT_BUFFER, SEARCH_BUFFER
 from prompt_toolkit.filters import Condition
-from prompt_toolkit.key_binding import merge_key_bindings
 from prompt_toolkit.key_binding.defaults import load_key_bindings
-from prompt_toolkit.key_binding.bindings.vi import (load_vi_bindings,
-                                                    load_vi_search_bindings)
-from prompt_toolkit.key_binding.defaults import (load_key_bindings,
-                                                 load_vi_bindings)
-from prompt_toolkit.key_binding.key_bindings import (KeyBindings,
-                                                     KeyBindingsBase,
-                                                     _MergedKeyBindings)
+from prompt_toolkit.key_binding.bindings.vi import (
+    load_vi_bindings,
+    load_vi_search_bindings,
+)
+from prompt_toolkit.key_binding.defaults import load_key_bindings, load_vi_bindings
+from prompt_toolkit.key_binding.key_bindings import (
+    KeyBindings,
+    KeyBindingsBase,
+    _MergedKeyBindings,
+)
 from prompt_toolkit.keys import Keys
 
 # Dude these are all the vi modes prompt_toolkit has...lol
@@ -317,7 +319,7 @@ class HandlesMergedKB(KeyBindingsManager):
 
     shell = get_ipython()
     if shell is not None:
-        if hasattr(shell, 'pt_app'):
+        if hasattr(shell, "pt_app"):
             kb = shell.pt_app.app.key_bindings
             if kb is None:
                 kb = load_key_bindings()
@@ -349,12 +351,14 @@ def unnest_merged_kb(kb, pre_existing_list=None):
         else:
             return
 
+
 def safely_get_registry(_ip):
     if _ip is not None:
-        if hasattr(_ip, 'pt_app'):
+        if hasattr(_ip, "pt_app"):
             registry = _ip.pt_app.app.key_bindings
             if type(registry) == _MergedKeyBindings:
                 unnest_merged_kb(registry)
+
 
 def kb_main(_ip=None):
     # This doesn't do much of anything right now.
@@ -364,7 +368,10 @@ def kb_main(_ip=None):
         for i in basic_bindings.bindings:
             ipython_registry = _rewritten_add(ipython_registry, i)
 
-        assert ipython_registry is not prompt_toolkit.key_binding.key_bindings._MergedKeyBindings
+        assert (
+            ipython_registry
+            is not prompt_toolkit.key_binding.key_bindings._MergedKeyBindings
+        )
         _ip.pt_app.app.key_bindings = ipython_registry
         # Dude holy shit does this give you a lot
         if _ip.editing_mode == "vi":
@@ -375,9 +382,7 @@ def kb_main(_ip=None):
             more_keybindings = merge_key_bindings(
                 [_ip.pt_app.app.key_bindings, container_kb]
             )
-        container_kb = KeyBindingsManager(
-            shell=_ip, kb=ipy_registry.bindings
-        )
+        container_kb = KeyBindingsManager(shell=_ip, kb=ipy_registry.bindings)
     else:
         # TODO
         running_app = get_app()
@@ -390,6 +395,7 @@ def _rewritten_add(registry, _binding):
     registry.add(i, filter=filter)(handler)
     return registry
 
+
 if __name__ == "__main__":
     basic_bindings = load_key_bindings()
     _ip = get_ipython()
@@ -400,4 +406,3 @@ if __name__ == "__main__":
             vi_bindings = basic_bindings.registries[0]
             vi_mouse = basic_bindings.registries[1]
             vi_cpr = basic_bindings.registries[2]
-

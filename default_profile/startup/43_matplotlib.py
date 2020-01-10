@@ -30,7 +30,7 @@ def set_mpl():
 
 
 if __name__ == "__main__":
-    locale.setlocale(locale.LC_ALL, '')
+    locale.setlocale(locale.LC_ALL, "")
 
     try:
         import matplotlib as mpl
@@ -43,6 +43,7 @@ if __name__ == "__main__":
         from matplotlib import set_loglevel, RcParams, rcdefaults
 
         from matplotlib.style.core import STYLE_BLACKLIST
+
         set_loglevel("info")
 
         fm = FontManager()

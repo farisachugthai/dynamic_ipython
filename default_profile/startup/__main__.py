@@ -31,8 +31,4 @@ def exec_startup():
         All of the usual exec admonitions apply here.
 
     """
-    exec (compile(
-        open(__file__).read(),
-        '<string>',
-        'exec',
-    ), globals(), locals())
+    exec(compile(open(__file__).read(), "<string>", "exec",), globals(), locals())
