@@ -152,21 +152,21 @@ to resort to manual copy-paste)</p>
 <p>So far so good, I can hear the music playing in the background!</p>
 <p>Now I’ll make a <code class="xref py py-obj docutils literal notranslate"><span class="pre">%macro</span></code> that both imports jobctrl and launches vlc
 (lines 1 and 4), and <code class="xref py py-obj docutils literal notranslate"><span class="pre">%store</span></code> it:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">ipython</span><span class="p">]</span><span class="o">|</span><span class="mi">5</span><span class="o">&gt;</span> <span class="n">hist</span>
-<span class="mi">1</span><span class="p">:</span> <span class="kn">import</span> <span class="nn">jobctrl</span>
-<span class="mi">2</span><span class="p">:</span> <span class="n">_ip</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;q:/opt/VLC/vlc.exe http://di.fm/mp3/trance.pls&quot;</span><span class="p">)</span>
-<span class="mi">3</span><span class="p">:</span> <span class="n">_ip</span><span class="o">.</span><span class="n">magic</span><span class="p">(</span><span class="s2">&quot;hist &quot;</span><span class="p">)</span>
-<span class="mi">4</span><span class="p">:</span> <span class="n">_ip</span><span class="o">.</span><span class="n">startjob</span><span class="p">(</span><span class="s2">&quot;q:/opt/VLC/vlc.exe http://di.fm/mp3/trance.pls&quot;</span><span class="p">)</span>
-<span class="mi">5</span><span class="p">:</span> <span class="n">_ip</span><span class="o">.</span><span class="n">magic</span><span class="p">(</span><span class="s2">&quot;hist &quot;</span><span class="p">)</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span>[ipython]|5&gt; hist
+1: import jobctrl
+2: _ip.system(&quot;q:/opt/VLC/vlc.exe http://di.fm/mp3/trance.pls&quot;)
+3: _ip.magic(&quot;hist &quot;)
+4: _ip.startjob(&quot;q:/opt/VLC/vlc.exe http://di.fm/mp3/trance.pls&quot;)
+5: _ip.magic(&quot;hist &quot;)
 
-<span class="p">[</span><span class="n">ipython</span><span class="p">]</span><span class="o">|</span><span class="mi">6</span><span class="o">&gt;</span> <span class="n">macro</span> <span class="n">radio_trance</span> <span class="mi">1</span> <span class="mi">4</span>
-<span class="n">Macro</span> <span class="err">`</span><span class="n">radio_trance</span><span class="err">`</span> <span class="n">created</span><span class="o">.</span> <span class="n">To</span> <span class="n">execute</span><span class="p">,</span> <span class="nb">type</span> <span class="n">its</span> <span class="n">name</span> <span class="p">(</span><span class="n">without</span> <span class="n">quotes</span><span class="p">)</span><span class="o">.</span>
-<span class="n">Macro</span> <span class="n">contents</span><span class="p">:</span>
-<span class="kn">import</span> <span class="nn">jobctrl</span>
-<span class="n">_ip</span><span class="o">.</span><span class="n">startjob</span><span class="p">(</span><span class="s2">&quot;q:/opt/VLC/vlc.exe http://di.fm/mp3/trance.pls&quot;</span><span class="p">)</span>
+[ipython]|6&gt; macro radio_trance 1 4
+Macro `radio_trance` created. To execute, type its name (without quotes).
+Macro contents:
+import jobctrl
+_ip.startjob(&quot;q:/opt/VLC/vlc.exe http://di.fm/mp3/trance.pls&quot;)
 
-<span class="p">[</span><span class="n">ipython</span><span class="p">]</span><span class="o">|</span><span class="mi">7</span><span class="o">&gt;</span> <span class="n">store</span> <span class="n">radio_trance</span>
-<span class="n">Stored</span> <span class="s1">&#39;radio_trance&#39;</span> <span class="p">(</span><span class="n">Macro</span><span class="p">)</span>
+[ipython]|7&gt; store radio_trance
+Stored &#39;radio_trance&#39; (Macro)
 </pre></div>
 </div>
 <p>Now I restart ipython and try the <code class="xref py py-obj docutils literal notranslate"><span class="pre">%macro</span></code>:</p>
@@ -405,7 +405,6 @@ a process with ctrl+C.</p>
 <div id="sidebartoc">
     <p class="caption"><span class="caption-text">API</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="default_profile.html">Tailor-made profiles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sphinxext/index.html">Sphinx Extensions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="sphinxext/ipython_sphinx_directive.html">IPython Sphinx Directive</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sphinxext/lexer.html">New IPython Console Lexer</a></li>
@@ -447,11 +446,8 @@ a process with ctrl+C.</p>
 <li class="toctree-l1"><a class="reference internal" href="extensions.html">Extensions</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Job Control</a></li>
 <li class="toctree-l1"><a class="reference internal" href="todo.html">Todo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="default_profile.html">Tailor-made profiles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dev.html">Developers Notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="jupyter/index.html">jupyter</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="jupyter/qtconsole.html">Jupyter QTConsole</a></li>
-</ul>
-</li>
 </ul>
 
     
@@ -486,7 +482,7 @@ a process with ctrl+C.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Jan 09, 2020.
+      Last updated on Jan 11, 2020.
     </div>
   </body>
 </html>

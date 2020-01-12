@@ -142,15 +142,14 @@ Table of Contents
    :titlesonly:
    :caption: API
 
-   Tailor-made profiles <default_profile>
    Sphinx Extensions <sphinxext/index>
    IPython Startup <startup/index>
    IPython Utilities </util/index>
    extensions
    jobcontrol
    todo
+   Tailor-made profiles <default_profile>
    Developers Notes <dev>
-   jupyter <jupyter/index>
 
 
 Indices and tables

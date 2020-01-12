@@ -193,13 +193,13 @@ Like solid shit man. And I came up with this in 10 minutes too!
 .. ipython::
 
     In [105]: @line_magic
-        ...: def p(shell=None, s=None):
-        ...:     if shell is None:
-        ...:         shell = get_ipython()
-        ...:     if s is None:
-        ...:         IPython.core.page.page(shell.pycolorize(_i))
-        ...:     else:
-        ...:         IPython.core.page.page(shell.pycolorize(shell.find_user_code(s, skip_encoding_cookie=True)))
+         ...: def p(shell=None, s=None):
+         ...:     if shell is None:
+         ...:         shell = get_ipython()
+         ...:     if s is None:
+         ...:         IPython.core.page.page(shell.pycolorize(_i))
+         ...:     else:
+         ...:         IPython.core.page.page(shell.pycolorize(shell.find_user_code(s, skip_encoding_cookie=True)))
 
     In [106]: /p
     @line_magic
@@ -271,4 +271,3 @@ to what I've been trying to do.
    :members:
    :undoc-members:
    :show-inheritance:
-

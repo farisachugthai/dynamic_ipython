@@ -177,6 +177,11 @@ your home directory is.</p>
 </div>
 <dl class="attribute">
 <dt>
+<code class="sig-name descname">logfile</code><em class="property"> = None</em><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt>
 <code class="sig-name descname">log_raw_input</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>A boolean (True, False) trait.</p>
 </dd></dl>
@@ -206,14 +211,6 @@ your home directory is.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="default_profile.startup.05_log.LoggerManager.shell">
-<code class="sig-name descname">shell</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.LoggerManager.shell" title="Permalink to this definition">¶</a></dt>
-<dd><p>A trait whose value must be an instance of a specified class.</p>
-<p>The value can also be an instance of a subclass of the specified class.</p>
-<p>Subclasses can declare default classes by overriding the klass attribute</p>
-</dd></dl>
-
-<dl class="attribute">
 <dt id="default_profile.startup.05_log.LoggerManager.formatter_style">
 <code class="sig-name descname">formatter_style</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.LoggerManager.formatter_style" title="Permalink to this definition">¶</a></dt>
 <dd><p>A trait for unicode strings.</p>
@@ -225,15 +222,32 @@ your home directory is.</p>
 <dd><p>A trait for unicode strings.</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="default_profile.startup.05_log.LoggerManager.logmode">
+<code class="sig-name descname">logmode</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.LoggerManager.logmode" title="Permalink to this definition">¶</a></dt>
+<dd><p>A trait for unicode strings.</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="default_profile.startup.05_log.LoggerManager.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">logger_name='IPython_Logger_Manager'</em>, <em class="sig-param">logfname='Logger.log'</em>, <em class="sig-param">logger_log_level=None</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.LoggerManager.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>New LoggerManager.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>logfname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Is set to the attribute ‘logfile’ in method <a class="reference internal" href="#default_profile.startup.05_log.LoggerManager.logstart" title="default_profile.startup.05_log.LoggerManager.logstart"><code class="xref py py-meth docutils literal notranslate"><span class="pre">logstart()</span></code></a>.</p>
+<dd class="field-odd"><p><strong>logfname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Is set to the attribute ‘logfile’ in method <a class="reference internal" href="#default_profile.startup.05_log.LoggerManager.logstart" title="default_profile.startup.05_log.LoggerManager.logstart"><code class="xref py py-meth docutils literal notranslate"><span class="pre">logstart()</span></code></a>.
+But logfile is also a property now which we need to fix as properties
+aren’t callables but that’s kinda the point of ahving the reference
+to it.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="default_profile.startup.05_log.LoggerManager.shell">
+<code class="sig-name descname">shell</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.LoggerManager.shell" title="Permalink to this definition">¶</a></dt>
+<dd><p>A trait whose value must be an instance of a specified class.</p>
+<p>The value can also be an instance of a subclass of the specified class.</p>
+<p>Subclasses can declare default classes by overriding the klass attribute</p>
 </dd></dl>
 
 <dl class="method">
@@ -395,7 +409,6 @@ named based on the date.</p>
 <div id="sidebartoc">
     <p class="caption"><span class="caption-text">API</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../default_profile.html">Tailor-made profiles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../sphinxext/index.html">Sphinx Extensions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../sphinxext/ipython_sphinx_directive.html">IPython Sphinx Directive</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../sphinxext/lexer.html">New IPython Console Lexer</a></li>
@@ -437,6 +450,7 @@ named based on the date.</p>
 <li class="toctree-l1"><a class="reference internal" href="../extensions.html">Extensions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../jobcontrol.html">Job Control</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../todo.html">Todo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../default_profile.html">Tailor-made profiles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../dev.html">Developers Notes</a></li>
 </ul>
 
@@ -473,7 +487,7 @@ named based on the date.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Jan 10, 2020.
+      Last updated on Jan 11, 2020.
     </div>
   </body>
 </html>
