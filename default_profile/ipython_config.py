@@ -21,6 +21,7 @@ Therefore that function shouldn't be used anywhere in this file.
 
 """
 import builtins
+import dataclasses
 import logging
 import os
 import platform
@@ -31,6 +32,7 @@ from pathlib import Path
 
 from IPython.core.release import version_info
 from IPython.terminal.prompts import ClassicPrompts
+
 # THIS IS THE MODULE! Its too exciting to able to execute this script
 # directly from within python and not get an error for a func call with no
 # import
@@ -543,10 +545,10 @@ else:
 
     # else:
     #     c.TerminalInteractiveShell.highlighting_style = "gruvbox"
-        # Idk if we're supposed to do this
-        # you're not it's not a recognized option. unfortunately it's definitely
-        # an attribute that can be set. fuck.
-        # c.TerminalInteractiveShell.style = Gruvbox()
+    # Idk if we're supposed to do this
+    # you're not it's not a recognized option. unfortunately it's definitely
+    # an attribute that can be set. fuck.
+    # c.TerminalInteractiveShell.style = Gruvbox()
     c.TerminalInteractiveShell.highlighting_style = "friendly"
 
 
@@ -812,6 +814,59 @@ class BaseFormatterDoc(Configurable):
 
     def __repr__(self):
         return self._example_subclass()
+
+    def _repr_pretty_(self, p, cycle=None):
+        """ExecutionMagics has an example of how to use this method...
+
+        Well...erhm. I guess so anyway.::
+
+            unic = self.__str__()
+            p.text(u'<TimeitResult : '+unic+u'>')
+
+        What is p? And we don't use cycle so...
+        Oh holy shit. Well if you see the string method...I'm putting this
+        in a new class wtf.
+        """
+        p.text(u"<TimeitResult : " + unic + u">")
+
+
+@dataclasses.dataclass
+class TimedFormatter(BaseFormatterDoc):
+    """I'd imagine this would benefit from a dataclass. Don't instantiate!
+
+    *sigh*. Rewrite the init so that it takes advantage of the dataclass
+    module. If that doesn't seem to be working namedtuples are similar.
+    """
+
+    def __init__(self, precision=None, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+        self.loops = loops
+        self.repeat = repeat
+        self.best = best
+        self.worst = worst
+        self.all_runs = all_runs
+        self.compile_time = compile_time
+        self._precision = precision
+        self.timings = [dt / self.loops for dt in all_runs]
+
+    def __str__(self):
+        pm = "+-"
+        if hasattr(sys.stdout, "encoding") and sys.stdout.encoding:
+            try:
+                u"\xb1".encode(sys.stdout.encoding)
+                pm = u"\xb1"
+            except:
+                pass
+        return u"{mean} {pm} {std} per loop (mean {pm} std. dev. of {runs} run{run_plural}, {loops} loop{loop_plural} each)".format(
+            pm=pm,
+            runs=self.repeat,
+            loops=self.loops,
+            loop_plural="" if self.loops == 1 else "s",
+            run_plural="" if self.repeat == 1 else "s",
+            mean=_format_time(self.average, self._precision),
+            std=_format_time(self.stdev, self._precision),
+        )
 
 
 # ----------------------------------------------------------------------------

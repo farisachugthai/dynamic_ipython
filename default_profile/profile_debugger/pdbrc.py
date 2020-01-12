@@ -28,7 +28,7 @@ print(f".pdbrc.py started {time.ctime()}")
 start = time.time()
 logger = logging.getLogger(name=__name__)
 faulthandler.enable()
-cgitb.enable(format='text')
+cgitb.enable(format="text")
 
 try:
     from prompt_toolkit.shortcuts import print_formatted_text as print
@@ -52,7 +52,7 @@ try:
 except:
     pass
 else:
-    readline.parse_and_bind('Tab:menu-complete')
+    readline.parse_and_bind("Tab:menu-complete")
 # I have a really useful module for importing readline on windows, linux,
 # WSL, and anything else you can imagine. let's use it.
 try:
@@ -113,7 +113,15 @@ class MyPdb(pdb.Pdb):
     prompt = f"<YourPdb> : "
     doc_header = ""
 
-    def __init__(self, skip="traitlets", prompt=None, doc_header=None, shell=None, *args, **kwargs):
+    def __init__(
+        self,
+        skip="traitlets",
+        prompt=None,
+        doc_header=None,
+        shell=None,
+        *args,
+        **kwargs,
+    ):
         self.skip = skip
         self.prompt = prompt
         self.doc_header = doc_header
@@ -135,6 +143,7 @@ debugger = MyPdb()
 # get_ipython().debugger_cls = MyPdb
 
 # Customize the sys.excepthook
+
 
 def exception_hook(type=None, value=None, tb=None):
     """Return to debugger after fatal exception (Python cookbook 14.5)."""

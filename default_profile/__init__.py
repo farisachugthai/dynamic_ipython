@@ -96,7 +96,7 @@ def ask_for_import(mod, package=None):
     try:
         imported = importlib.import_module(mod, package=package)
     except (ImportError, ModuleNotFoundError):
-        PROFILE_DEFAULT_LOG.warning('%s not imported', mod)
+        PROFILE_DEFAULT_LOG.warning("%s not imported", mod)
     except Exception:  # noqa
         if hasattr(sys, "last_type"):
             exception_name = sys.last_type

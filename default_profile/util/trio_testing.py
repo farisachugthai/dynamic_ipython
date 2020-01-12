@@ -7,18 +7,26 @@ Whoa!::
 
 """
 import sys
-import trio
+try:
+    from trio import run
+except:
+    from asyncio.runners import run
+    trio = None
+else:
+    import trio
 
 
 def trio_traiging(filename):
+    if trio is None:
+        return
     async with await trio.open_file(filename) as f:
         async for line in f:
             print(line)
             yield from line
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     try:
-        trio.run(trio_traiging(sys.argv[1]))
+        run(trio_traiging(sys.argv[1]))
     except IndexError:
-        print('Give me a filename.')
+        print("Give me a filename.")

@@ -127,7 +127,7 @@ def get_parser():
         ),
     )
 
-    parser.add_argument("-v", "--version", action='version')
+    parser.add_argument("-v", "--version", action="version")
 
     parser.add_argument(
         "-c",
@@ -141,11 +141,7 @@ def get_parser():
     )
 
     parser.add_argument(
-        "-m",
-        "--module",
-        nargs="?",
-        help="Module to debug",
-        dest="mod",
+        "-m", "--module", nargs="?", help="Module to debug", dest="mod",
     )
 
     return parser

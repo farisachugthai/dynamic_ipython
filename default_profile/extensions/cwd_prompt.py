@@ -44,7 +44,7 @@ class CwdPrompt(Prompts):
     #     return self.in_prompt_tokens(cli=self.shell)
 
     def __repr__(self):
-        return '{!r}'.format(self.in_prompt_tokens(cli=self.shell))
+        return "{!r}".format(self.in_prompt_tokens(cli=self.shell))
 
     def in_prompt_tokens(self, cli=None):
         """Uh what was cli supposed to be?"""

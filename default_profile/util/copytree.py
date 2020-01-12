@@ -44,8 +44,7 @@ class CopyTree:
     def __init__(
         self, src, dst, symlinks=False, ignore=None, copy_function=shutil.copy2
     ):
-        warnings.warn('This class is going to be removed shortly.'
-                'Discontinue usage.')
+        warnings.warn("This class is going to be removed shortly." "Discontinue usage.")
         self.src = src
         self.dst = dst
         self.symlinks = symlinks
