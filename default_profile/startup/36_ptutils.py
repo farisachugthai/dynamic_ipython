@@ -101,8 +101,6 @@ class Helpers:
         return self.session.style
 
 
-
-
 def carriage_return(b, cli, *, autoindent=True):
     """Preliminary parser to determine if 'Enter' key should send command to the
     xonsh parser for execution or should insert a newline for continued input.

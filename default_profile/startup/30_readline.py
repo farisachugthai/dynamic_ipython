@@ -157,12 +157,13 @@ def return_readline():
     else:
         return readline
 
+
 # History
 
 
 def setup_historyfile(filename=None):
     """Add a history file to readline."""
-    if not hasattr(locals(), 'readline'):
+    if not hasattr(locals(), "readline"):
         readline = return_readline()
     if filename is None:
         filename = "~/.pdb_history"
@@ -187,6 +188,7 @@ def teardown_historyfile(histfile=None):
         logging.error(
             "History not saved. There were problems saving to ~/.python_history"
         )
+
 
 def jedi_readline():
     try:
@@ -218,4 +220,3 @@ if __name__ == "__main__":
     # Taken from http://docs.python.org/2/library/rlcompleter.html
     setup_historyfile(histfile)
     atexit.register(teardown_historyfile, histfile)
-

@@ -6,6 +6,7 @@ package neovim is served in.
 """
 from importlib import import_module
 import io
+from io import RawIOBase, BufferedRWPair, BufferedIOBase  # noqa
 import logging
 from pprint import pprint
 from reprlib import Repr
@@ -13,10 +14,14 @@ import subprocess
 import sys
 import tempfile
 from textwrap import dedent
+import traceback
 
 from IPython.lib.deepreload import reload as _reload
 from IPython.core.error import TryNext
+from IPython.core.hooks import CommandChainDispatcher  # noqa
 from IPython.core.getipython import get_ipython
+from IPython.core.magics.execution import ExecutionMagics, _format_time
+from IPython.utils.text import SList  # noqa
 from traitlets.config import Configurable
 
 from default_profile.startup import STARTUP_LOGGER
@@ -63,17 +68,23 @@ class NvimHook(Configurable):
         return retval
 
 
-class IOStream(io.TextIOBase):
-    """Try to rewrite IPythons IPython.utils.io.IOStream."""
+class IOStream(RawIOBase):
+    """Try to rewrite IPythons IPython.utils.io.IOStream.
 
-    def __init__(self, stream, fallback=None):
-        if fallback is not None:
-            self.fallback_stream = fallback
-        else:
-            self.stream = stream
+    Did a little bit but I'd imagine it's gonna need flush methods. Let's
+    try subclassing RawIOBase.
+    """
+
+    def __init__(self, stream=None, *args, **kwargs):
+        self.stream = stream
+        if self.stream is None:
+            self.stream = io.StringIO()
+        super().__init__(*args, **kwargs)
 
     def __repr__(self):
-        return "{}\t{}".format(repr(self.__class__.__name__), repr(self.stream))
+        return "<{}:> --- Stream is currently {}".format(
+            repr(self.__class__.__name__), repr(self.stream)
+        )
 
     def __str__(self):
         return "{}\n{}".format(self.__class__.__name__, str(self.stream))
@@ -83,11 +94,8 @@ class IOStream(io.TextIOBase):
         try:
             self.stream.write(message)
         except (AttributeError, TypeError) as e:
-            if self.fallback_stream:
-                try:
-                    self.stream.write(message)
-                except (AttributeError, TypeError) as e:
-                    STARTUP_LOGGER.exception(e)
+            traceback.format_exception(e)
+            raise
         finally:
             sys.stdout.flush()
             sys.stderr.flush()
@@ -96,11 +104,8 @@ class IOStream(io.TextIOBase):
         try:
             message = self.stream.read()
         except (AttributeError, TypeError) as e:
-            if self.fallback_stream:
-                try:
-                    message = self.stream.read()
-                except (AttributeError, TypeError) as e:
-                    STARTUP_LOGGER.exception(e)
+            traceback.format_exception(e)
+            raise
         finally:
             sys.stdout.flush()
             sys.stderr.flush()

@@ -119,7 +119,9 @@ class LoggerManager(LoggingConfigurable):
         "%H:%M:%S", help="Enable timestamps and you'll see what I mean."
     ).tag(config=True)
 
-    logmode = Unicode("rotate", help=f"""How to properly store log files with
+    logmode = Unicode(
+        "rotate",
+        help=f"""How to properly store log files with
     options including:
 
         *) Rotate [the default]
@@ -129,7 +131,8 @@ class LoggerManager(LoggingConfigurable):
         *) Backup
 
         *) Over
-    """).tag(config=True)
+    """,
+    ).tag(config=True)
 
     @default("logmode")
     def _mode(self, change):
@@ -148,7 +151,7 @@ class LoggerManager(LoggingConfigurable):
         logfname="Logger.log",
         logger_log_level=None,
         *args,
-        **kwargs
+        **kwargs,
     ):
         """New LoggerManager.
 

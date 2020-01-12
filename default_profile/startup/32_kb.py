@@ -120,8 +120,11 @@ Yup. We have to redefine what a key is.
 import logging
 import reprlib
 from typing import Callable, Optional
+import warnings
 
 from IPython.core.getipython import get_ipython
+
+import prompt_toolkit
 from prompt_toolkit.application.current import get_app
 from prompt_toolkit.cache import SimpleCache
 from prompt_toolkit.enums import DEFAULT_BUFFER, SEARCH_BUFFER
@@ -136,6 +139,7 @@ from prompt_toolkit.key_binding.key_bindings import (
     KeyBindings,
     KeyBindingsBase,
     _MergedKeyBindings,
+    merge_key_bindings,
 )
 from prompt_toolkit.keys import Keys
 
@@ -223,8 +227,14 @@ class KeyBindingsManager(KeyBindingsBase):
     def __str__(self, level=6):
         return reprlib.Repr().repr_list(self.kb.bindings, level)
 
+    def __repr_pretty(self, p, cycle):
+        # I don't know why it has that call signature
+        return (
+            f"<{self.__class__.__name__}:> - {reprlib.recursive_repr(self.kb.bindings)}"
+        )
+
     def __call__(self):
-        """Doesn't do anything important."""
+        """Simply calls the str method until we figure something out."""
         return self.__str__()
 
     # def __index__(self):
@@ -361,11 +371,12 @@ class HandlesMergedKB(KeyBindingsManager):
 
 
 def unnest_merged_kb(kb, pre_existing_list=None):
+    # So I tried this again and it more than likely isn't gonna work
     if pre_existing_list:
         ret = pre_existing_list
     else:
         ret = []
-    if type(registry) == _MergedKeyBindings:
+    if type(kb) == _MergedKeyBindings:
         for i in kb.registries:
             ret.append(i)
         for i in ret:
@@ -386,6 +397,8 @@ def safely_get_registry(_ip):
 
 
 def kb_main(_ip=None):
+    """DON'T CALL."""
+    warnings.warn("This calls merge_key_bindings")
     # This doesn't do much of anything right now.
     if _ip is not None:
         ipy_registry = safely_get_registry(_ip)
@@ -404,9 +417,7 @@ def kb_main(_ip=None):
                 [_ip.pt_app.app.key_bindings, load_vi_bindings()]
             )
         else:
-            more_keybindings = merge_key_bindings(
-                [_ip.pt_app.app.key_bindings, container_kb]
-            )
+            more_keybindings = _ip.pt_app.app.key_bindings
         container_kb = KeyBindingsManager(shell=_ip, kb=ipy_registry.bindings)
     else:
         # TODO
@@ -417,7 +428,7 @@ def _rewritten_add(registry, _binding):
     key = _binding.keys
     filter = _binding.filter
     handler = _binding.handler
-    registry.add(i, filter=filter)(handler)
+    registry.add(key, filter=filter)(handler)
     return registry
 
 
