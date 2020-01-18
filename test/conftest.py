@@ -60,7 +60,39 @@ def pytest_report_header(config):
     )
 
 
+def pytest_runtest_makereport(item, call):
+    if "incremental" in item.keywords:
+        if call.excinfo is not None:
+            parent = item.parent
+            parent._previousfailed = item
+
+
+def pytest_runtest_setup(item):
+    if "incremental" in item.keywords:
+        previousfailed = getattr(item.parent, "_previousfailed", None)
+        if previousfailed is not None:
+            pytest.xfail("previous test failed ({})".format(previousfailed.name))
+
+
 @pytest.fixture()
 def cleandir():
     newpath = tempfile.mkdtemp()
     os.chdir(newpath)
+
+
+ALL = set("darwin linux win32".split())
+
+
+def pytest_runtest_setup(item):
+    """Consider you have a test suite which marks tests for particular platforms.
+
+    Namely pytest.mark.darwin, pytest.mark.win32 etc.
+    and you also have tests that run on all platforms and have
+    no specific marker. If you now want to have a way to only
+    run the tests for your particular platform, you could use
+    the following plugin:
+    """
+    supported_platforms = ALL.intersection(mark.name for mark in item.iter_markers())
+    plat = sys.platform
+    if supported_platforms and plat not in supported_platforms:
+        pytest.skip("cannot run on platform {}".format(plat))
