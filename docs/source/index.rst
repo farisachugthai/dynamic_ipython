@@ -146,7 +146,6 @@ Table of Contents
    IPython Startup <startup/index>
    IPython Utilities </util/index>
    extensions
-   jobcontrol
    todo
    Tailor-made profiles <default_profile>
    Developers Notes <dev>
