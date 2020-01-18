@@ -149,26 +149,12 @@ def additional_bindings():
             "IPython doesn't have prompt toolkit bindings. Exiting."
         )
 
-    registry.add_binding(
-        Keys.Escape,
-        u".",
-        filter=(has_focus(DEFAULT_BUFFER) & ~has_selection() & insert_mode),
-    )(yank_last_arg)
-    registry.add_binding(
-        Keys.Escape,
-        u"_",
-        filter=(has_focus(DEFAULT_BUFFER) & ~has_selection() & insert_mode),
-    )(yank_last_arg)
-
+    registry.add_binding(Keys.Escape, u".")(yank_last_arg)
+    registry.add_binding(Keys.Escape, u"_")(yank_last_arg)
     ip.events.register("post_execute", reset_last_arg_depth)
+    registry.add(Keys.ControlI)(display_completions_like_readline)
 
-    registry.add(Keys.ControlI, filter=(has_focus(DEFAULT_BUFFER) & insert_mode))(
-        display_completions_like_readline
-    )
-
-    registry.add("j", "k", filter=(has_focus(DEFAULT_BUFFER) & insert_mode))(
-        switch_to_navigation_mode
-    )
+    registry.add("j", "k")(switch_to_navigation_mode)
     # Keys.j and Keys.k don't exists
     # registry.add(Keys.j, Keys.k)(switch_to_navigation_mode)
     # add allll the defaults in and bind it back to the shell.
@@ -223,11 +209,9 @@ def additional_bindings():
     def has_text_before_cursor() -> bool:
         return bool(get_app().current_buffer.text)
 
-    handle("c-d", filter=has_text_before_cursor & insert_mode)(
-        get_by_name("delete-char")
-    )
+    handle("c-d")(get_by_name("delete-char"))
 
-    @handle("enter", filter=insert_mode & is_multiline)
+    @handle("enter")
     def _(event: E) -> None:
         """
         Newline (in case of multiline input.

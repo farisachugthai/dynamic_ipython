@@ -12,11 +12,23 @@ import functools
 import os
 import shutil
 import shlex
+import subprocess
+from subprocess import Popen, CompletedProcess, CalledProcessError, PIPE, DEVNULL
 import sys
 import types
 from typing import get_type_hints  # what is this?
 
 from IPython.core.getipython import get_ipython
+
+try:
+    import pyfzf
+except:
+    pyfzf = None
+    fufpy = fuf = None
+else:
+    from pyfzf.pyfzf import FzfPrompt
+    fufpy = FzfPrompt()
+    fuf = fufpy.prompt
 
 
 class Executable(ContextDecorator):
@@ -137,7 +149,6 @@ class FZF:
 
         return cls
 
-
 def is_tmux():
     """Check if we're using tmux or not."""
     if os.environ.get("TMUX"):
@@ -182,3 +193,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+    if fuf is not None:
+
+        class Fuf(FZF, FzfPrompt):
+            fzf_default_opts = None

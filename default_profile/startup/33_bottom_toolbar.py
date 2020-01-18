@@ -18,6 +18,8 @@ from prompt_toolkit.styles.pygments import (
     style_from_pygments_dict,
 )
 
+import pygments
+
 from IPython.core.getipython import get_ipython
 
 try:
@@ -25,12 +27,9 @@ try:
 except:
     GruvboxDarkHard = None
 
-# Add an additional key binding for toggling this flag.
-# don't really get the point of making a new container for t though
-toggle_vi = KeyBindings()
-
 
 class BottomToolbar:
+
     """Display the current input mode.
 
     Ooo this might be a fun time to really see how far I can stretch
@@ -47,7 +46,6 @@ class BottomToolbar:
     def __init__(self, *args, **kwargs):
         self.shell = get_ipython()
         self.unfinished_toolbar = ""
-        self.rerender()
 
     @property
     def session(self):
@@ -65,6 +63,9 @@ class BottomToolbar:
         else:
             return False
 
+    def __repr__(self):
+        f"{self.__class__.__name__}:> {self.rerender}"
+
     def __call__(self):
         self.rerender()
 
@@ -78,7 +79,7 @@ class BottomToolbar:
         # TODO:
         # add more styling:
         # [('class:toolbar', ' [F4] %s ' % text)]
-        current_vi_mode = self.pt_app().vi_state.input_mode
+        current_vi_mode = self.pt_app.vi_state.input_mode
         toolbar = f" [F4] Vi: {current_vi_mode}  {date.today()}"
         # toolbar.append(style=default_pygments_style())
         return toolbar
@@ -97,32 +98,11 @@ class BottomToolbar:
                 print_exception()
 
 
-@toggle_vi.add(Keys.F4)
-def _(event):
-    # The syntax of this function alone is the argument for more dunders.
-    if event.app.editing_mode == "VI":
-        return "EMACS"
-    if event.app.editing_mode == "EMACS":
-        return "VI"
-
-
-def toggle_editing_mode(_ip):
-    _ip.pt_app.app.key_bindings.registries.append(toggle_vi)
-
-
 def add_toolbar(toolbar=None):
     """Get the running IPython instance and add 'bottom_toolbar'."""
     _ip = get_ipython()
 
-    @toggle_vi.add(Keys.F4)
-    def _(event):
-        """Toggle between Emacs and Vi mode."""
-        if event.app.editing_mode == EditingMode.VI:
-            event.app.editing_mode = EditingMode.EMACS
-        else:
-            event.app.editing_mode = EditingMode.VI
-
-    _ip.pt_app.bottom_toolbar = toolbar.rerender()
+    _ip.pt_app.bottom_toolbar = toolbar()
 
 
 # Don't uncomment! This fucks up the keybindings so that the only way a line
@@ -131,5 +111,4 @@ def add_toolbar(toolbar=None):
 # Unbelievable. It wasn't this block. it was load_key_bindings()?????
 if __name__ == "__main__":
     if get_ipython() is not None:
-        bottom_toolbar = BottomToolbar()
-        add_toolbar(bottom_toolbar)
+        add_toolbar(BottomToolbar)

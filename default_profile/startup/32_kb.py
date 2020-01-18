@@ -432,12 +432,22 @@ def _rewritten_add(registry, _binding):
     return registry
 
 
+# @_rewritten_add(registries, Keys.F4)
+def _(event):
+    """Toggle between Emacs and Vi mode."""
+    if event.app.editing_mode == EditingMode.VI:
+        event.app.editing_mode = EditingMode.EMACS
+    else:
+        event.app.editing_mode = EditingMode.VI
+
+
 if __name__ == "__main__":
     basic_bindings = load_key_bindings()
     _ip = get_ipython()
     # Let's side step all those fuckups
     # This is probably a terrible thing to rely on, and not a guaranteed order but....
     if _ip is not None:
+        kb_manager = KeyBindingsManager()
         if _ip.editing_mode == "vi":
             vi_bindings = basic_bindings.registries[0]
             vi_mouse = basic_bindings.registries[1]

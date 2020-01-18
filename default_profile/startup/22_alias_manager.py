@@ -1,3 +1,11 @@
+# Import types and functions implemented in C
+from _tracemalloc import *
+from _tracemalloc import _get_object_traceback, _get_traces
+try:
+    from _bisect import *
+except ImportError:
+    from bisect import bisect
+
 import reprlib
 
 from traitlets import List, Instance
@@ -10,7 +18,7 @@ from IPython.core.interactiveshell import InteractiveShellABC
 class DynamicAliasManager(AliasManager):
     """Doesn't currently display info the way I want but it's a start."""
 
-    # shell = InteractiveShellABC()
+    shell = Instance('InteractiveShellABC')
 
     def __init__(self, ip=None, user_aliases=None, **kwargs):
         self.ip = ip if ip else get_ipython()
@@ -30,6 +38,9 @@ class DynamicAliasManager(AliasManager):
     def __repr__(self):
         return "".format(reprlib.repr(self.aliases))
 
+    def __len__(self):
+        return len(self.aliases)
+
     def __iter__(self):
         try:
             return iter(self.aliases)
@@ -46,6 +57,13 @@ class DynamicAliasManager(AliasManager):
                 name, cmd = args
         self.define_alias(name, cmd)
 
+    def __eq__(self, other):
+        return (self.aliases == other.aliases)
+
+    # dicts arwnt hashable
+    # def __hash__(self):
+    #     return hash(self._trace)
+
     def undefine_alias(self, name):
         """Override to raise AliasError not ValueError."""
         if self.is_alias(name):
@@ -58,3 +76,4 @@ if __name__ == "__main__":
     # Forgive me for all these terrible hacks
     shell = get_ipython()
     shell.run_line_magic("alias_magic", "p pycat")
+    shell.configurables.append("DynamicAliasManager")

@@ -38,7 +38,7 @@ import logging
 import os
 from pathlib import Path
 import platform
-import rlcompleter
+from rlcompleter import Completer
 
 from IPython.core.getipython import get_ipython
 
@@ -150,8 +150,7 @@ def return_readline():
             from pyreadline.rlmain import Readline
 
             rl = Readline()
-            # So apparently readline.rl in the pyreadline module is an instantiated
-            # rlcompleter?
+            # So apparently readline.rl in the pyreadline module is an instantiated rlcompleter?
             readline.set_completer(readline.rl.complete)
             return readline
     else:
@@ -212,7 +211,7 @@ if __name__ == "__main__":
         read_inputrc()
 
     readline.set_completer_delims(" \t\n`@#$%^&*()=+[{]}\\|;:'\",<>?")
-    readline.set_completer(rlcompleter.Completer().complete)
+    readline.set_completer(Completer().complete)
 
     # history
     histfile = "~/.python_history"

@@ -1,11 +1,12 @@
 import subprocess
 
 try:
-    import git
-except:
-    git = None
-else:
     from git import Git
+except:
+    Git = None
+else:
+    from git import Repo
+    # repo = Repo()
 
 
 def generate_git_aliases():

@@ -26,7 +26,6 @@ STARTUP_HANDLER.setFormatter(STARTUP_FORMATTER)
 STARTUP_LOGGER.addHandler(STARTUP_HANDLER)
 
 rehashx_mod = importlib.import_module("default_profile.startup.01_rehashx")
-easy_import_mod = importlib.import_module("default_profile.startup.04_easy_import")
 log_mod = importlib.import_module("default_profile.startup.05_log")
 help_helpers_mod = importlib.import_module("default_profile.startup.06_help_helpers")
 
@@ -46,7 +45,4 @@ bottom_toolbar_mod = importlib.import_module(
 completion_mod = importlib.import_module("default_profile.startup.34_completion")
 
 numpy_init_mod = importlib.import_module("default_profile.startup.41_numpy_init")
-pandas_init_mod = importlib.import_module("default_profile.startup.42_pandas_init")
 matplotlib_mod = importlib.import_module("default_profile.startup.43_matplotlib")
-
-sysexception_mod = importlib.import_module("default_profile.startup.50_sysexception")

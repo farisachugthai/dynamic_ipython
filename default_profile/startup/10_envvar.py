@@ -6,9 +6,6 @@ from pathlib import Path
 
 from IPython.core.magic import line_magic, Magics, magics_class
 
-# from IPython.core.magic_arguments import magics_class
-
-# from IPython.core.magic_arguments import magics_class
 
 
 @magics_class
