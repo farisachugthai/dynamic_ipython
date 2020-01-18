@@ -20,30 +20,26 @@ Looks like we're in business!
 
 """
 import asyncio
-from asyncio.events import get_child_watcher, get_event_loop_policy, get_event_loop, get_running_loop
+import cgitb
+import code
 import faulthandler
 import logging
-from pathlib import Path
 import runpy
-from runpy import run_module, run_path
 import sys
 import trace
 import traceback
-from traceback import StackSummary, FrameSummary
-from tracemalloc import Snapshot
-from os import scandir
-
-import sys
+from asyncio.events import (get_child_watcher, get_event_loop,
+                            get_event_loop_policy, get_running_loop)
+from asyncio.tasks import Task
 from collections.abc import Sequence
-import cgitb
-import code
+from os import scandir
+from pathlib import Path
+from runpy import run_module, run_path
+from traceback import FrameSummary, StackSummary
+from tracemalloc import Snapshot
 
 from IPython.core.getipython import get_ipython
-
 from traitlets.config import Configurable
-
-
-from IPython.core.getipython import get_ipython
 
 
 def rehashx_run():
@@ -58,7 +54,16 @@ def rehashx_run():
     get_ipython().run_line_magic("rehashx", "")
 
 
-def rerun_startup():
+def get_exec_dir():
+    _ip = get_ipython()
+    if _ip is not None:
+        profiledir = Path(_ip.profile_dir)
+        exec_dir = profile_dir / "startup"
+    else:
+        exec_dir = "."
+
+
+def rerun_startup(logger=None):
     """Rerun the files in the startup directory.
 
     Returns
@@ -67,13 +72,13 @@ def rerun_startup():
          Namespace of all successful files.
 
     """
+    curdir = Path.cwd().resolve()
+    if logger is None:
+        logger = logging.getLogger(name=__name__)
+        logger.addHandler(logging.StreamHandler())
+    logger.debug("Curdir. %s", curdir)
     ret = {}
-    _ip = get_ipython()
-    if _ip is not None:
-        profiledir = Path(_ip.profile_dir)
-        exec_dir = profile_dir / "startup"
-    else:
-        exec_dir = "."
+    exec_dir = get_exec_dir()
     for i in scandir(exec_dir):
         if i.name.endswith(".py"):
             try:
@@ -84,6 +89,16 @@ def rerun_startup():
                 )
             except ImportError:
                 print("ImportError for mod: ", sys.last_traceback)
+            except ConnectionResetError:  # happens in windows async loop all the time
+                pass
+            except OSError as e:
+                if hasattr(e, "winerror"):  # same reason
+                    pass
+                else:
+                    logger.exception(e)
+            except Exception as e:  # noqa
+                logger.exception(e)
+                raise
             except:
                 traceback.print_exc()
                 raise

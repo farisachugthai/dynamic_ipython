@@ -75,4 +75,3 @@ def ipython_logger(shell=None):
 if __name__ == "__main__":
     _ip = get_ipython()
     logger = ipython_logger(_ip)
-    # logger_manager = LoggerManager.logstart()

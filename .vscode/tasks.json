@@ -34,12 +34,12 @@
       "type": "shell"
     },
     {
-      "command": "${config:python.pythonPath} ${file}",
+      "command": "${config:python.pythonPath} -m pytest",
       "group": {
-        "isDefault": true,
-        "kind": "build"
+        "kind": "test",
+        "isDefault": true
       },
-      "label": "Run File",
+      "label": "pytest",
       "presentation": {
         "focus": true,
         "panel": "new",
@@ -50,8 +50,8 @@
     {
       "command": "${config:python.pythonPath} -m unittest",
       "group": {
-        "isDefault": true,
-        "kind": "build"
+        "kind": "test",
+        "isDefault": true
       },
       "label": "unittest",
       "presentation": {
@@ -60,17 +60,6 @@
         "reveal": "always"
       },
       "type": "shell"
-    },
-    {
-      "isBackground": true,
-      "label": "conda",
-      "linux": {
-        "command": "conda activate jupyterlab"
-      },
-      "type": "shell",
-      "windows": {
-        "command": "conda activate flask"
-      }
     },
     {
       "command": "pipenv shell",
@@ -84,25 +73,6 @@
       "isBackground": true,
       "label": "pipenv",
       "type": "shell"
-    },
-    {
-      "args": [
-        "/U",
-        "/K",
-        "C:/tools/Cmder/vendor/init.bat"
-      ],
-      "command": "cmd",
-      "group": "build",
-      "label": "doesn't work sphinx",
-      "linux": {
-        "args": [
-          "sphinx-build",
-          "-b",
-          "html",
-          "docs/source",
-          "docs/build/html"
-        ]
-      }
     },
     {
       "command": "${config:python.pythonPath}",
