@@ -38,7 +38,6 @@ except Exception as e:
     warnings.warn(e)
 
 
-
 def setup_test_logging():
     """Set up some logging so we can see what's happening."""
     logger = logging.getLogger(name=__name__)

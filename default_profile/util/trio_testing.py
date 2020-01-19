@@ -7,10 +7,12 @@ Whoa!::
 
 """
 import sys
+
 try:
     from trio import run
 except:
     from asyncio.runners import run
+
     trio = None
 else:
     import trio

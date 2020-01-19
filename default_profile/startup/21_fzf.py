@@ -27,6 +27,7 @@ except:
     fufpy = fuf = None
 else:
     from pyfzf.pyfzf import FzfPrompt
+
     fufpy = FzfPrompt()
     fuf = fufpy.prompt
 
@@ -148,6 +149,7 @@ class FZF:
             cls.fzf_alias.extend(args)
 
         return cls
+
 
 def is_tmux():
     """Check if we're using tmux or not."""

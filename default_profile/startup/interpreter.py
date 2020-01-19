@@ -75,4 +75,3 @@ if __name__ == "__main__":
     _ip.interpreter = interpreter
     _ip.showsyntaxerror = _ip.interpreter.showsyntaxerror
     _ip.showtraceback = _ip.interpreter.showtraceback
-

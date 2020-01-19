@@ -12,7 +12,7 @@ import unittest
 
 
 def remove_tmpdir(dirname):
-    print('In remove_tmpdir()')
+    print("In remove_tmpdir()")
     shutil.rmtree(dirname)
 
 
@@ -97,15 +97,16 @@ class _TestClass:
 
         return self.val
 
-__test__ = {"_TestClass": _TestClass,
-            "string": r"""
+
+__test__ = {
+    "_TestClass": _TestClass,
+    "string": r"""
                       Example of a string object, searched as-is.
                       >>> x = 1; y = 2
                       >>> x + y, x * y
                       (3, 2)
                       """,
-
-            "bool-int equivalence": r"""
+    "bool-int equivalence": r"""
                                     In 2.2, boolean expressions displayed
                                     0 or 1.  By default, we still accept
                                     them.  This can be disabled by passing
@@ -120,8 +121,7 @@ __test__ = {"_TestClass": _TestClass,
                                     >>> 4 > 4
                                     False
                                     """,
-
-            "blank lines": r"""
+    "blank lines": r"""
                 Blank lines can be marked with <BLANKLINE>:
                     >>> print('foo\n\nbar\n')
                     foo
@@ -129,15 +129,13 @@ __test__ = {"_TestClass": _TestClass,
                     bar
                     <BLANKLINE>
             """,
-
-            "ellipsis": r"""
+    "ellipsis": r"""
                 If the ellipsis flag is used, then '...' can be used to
                 elide substrings in the desired output:
                     >>> print(list(range(1000))) #doctest: +ELLIPSIS
                     [0, 1, 2, ..., 999]
             """,
-
-            "whitespace normalization": r"""
+    "whitespace normalization": r"""
                 If the whitespace normalization flag is used, then
                 differences in whitespace are ignored.
                     >>> print(list(range(30))) #doctest: +NORMALIZE_WHITESPACE
@@ -145,21 +143,20 @@ __test__ = {"_TestClass": _TestClass,
                      15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26,
                      27, 28, 29]
             """,
-           }
+}
 
 
 class FixturesTest(unittest.TestCase):
-
     def setUp(self):
         super().setUp()
         self.tmpdir = tempfile.mkdtemp()
         self.addCleanup(remove_tmpdir, self.tmpdir)
 
     def test1(self):
-        print('\nIn test1()')
+        print("\nIn test1()")
 
     def test2(self):
-        print('\nIn test2()')
+        print("\nIn test2()")
 
 
 if __name__ == "__main__":

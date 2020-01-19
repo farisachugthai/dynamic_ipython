@@ -130,15 +130,19 @@ def get_home():
 # IPythonKernel(Kernel) configuration
 # -----------------------------------------------------------------------------
 
-c.IPythonKernel.help_links = [{'text': 'Python Reference', 'url': 'https://docs.python.org/3'},
-                              {'text': 'Python3.7 Reference', 'url': 'https://docs.python.org/3.7'}
-                              {'text': 'IPython Reference', 'url': 'https://ipython.org/documentation.html'},
-                              {'text': 'NumPy Reference', 'url': 'https://docs.scipy.org/doc/numpy/reference/'},
-                              {'text': 'SciPy Reference', 'url': 'https://docs.scipy.org/doc/scipy/reference/'},
-                              {'text': 'Matplotlib Reference', 'url': 'https://matplotlib.org/contents.html'},
-                              {'text': 'SymPy Reference', 'url': 'http://docs.sympy.org/latest/index.html'},
-                              {'text': 'pandas Reference', 'url': 'https://pandas.pydata.org/pandas-docs/stable/'}
-                              ]
+c.IPythonKernel.help_links = [
+    {"text": "Python Reference", "url": "https://docs.python.org/3"},
+    {"text": "Python3.7 Reference", "url": "https://docs.python.org/3.7"},
+    {"text": "IPython Reference", "url": "https://ipython.org/documentation.html"},
+    {"text": "NumPy Reference", "url": "https://docs.scipy.org/doc/numpy/reference/"},
+    {"text": "SciPy Reference", "url": "https://docs.scipy.org/doc/scipy/reference/"},
+    {"text": "Matplotlib Reference", "url": "https://matplotlib.org/contents.html"},
+    {"text": "SymPy Reference", "url": "http://docs.sympy.org/latest/index.html"},
+    {
+        "text": "pandas Reference",
+        "url": "https://pandas.pydata.org/pandas-docs/stable/",
+    },
+]
 
 # Set this flag to False to deactivate the use of experimental IPython
 # completion APIs.
@@ -227,7 +231,8 @@ c.InteractiveShell.history_load_length = 10000
 # specify a log file to **append** logs to.
 # c.InteractiveShell.logstart = False
 
-c.InteractiveShell.loop_runner = None
+# Not allowed to do this :/
+# c.InteractiveShell.loop_runner = None
 
 # c.InteractiveShell.object_info_string_level = 0
 

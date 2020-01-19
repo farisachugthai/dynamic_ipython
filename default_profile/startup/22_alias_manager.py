@@ -1,6 +1,7 @@
 # Import types and functions implemented in C
 from _tracemalloc import *
 from _tracemalloc import _get_object_traceback, _get_traces
+
 try:
     from _bisect import *
 except ImportError:
@@ -18,7 +19,7 @@ from IPython.core.interactiveshell import InteractiveShellABC
 class DynamicAliasManager(AliasManager):
     """Doesn't currently display info the way I want but it's a start."""
 
-    shell = Instance('InteractiveShellABC')
+    shell = Instance("InteractiveShellABC")
 
     def __init__(self, ip=None, user_aliases=None, **kwargs):
         self.ip = ip if ip else get_ipython()
@@ -58,7 +59,7 @@ class DynamicAliasManager(AliasManager):
         self.define_alias(name, cmd)
 
     def __eq__(self, other):
-        return (self.aliases == other.aliases)
+        return self.aliases == other.aliases
 
     # dicts arwnt hashable
     # def __hash__(self):

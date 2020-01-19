@@ -7,7 +7,6 @@ from pathlib import Path
 from IPython.core.magic import line_magic, Magics, magics_class
 
 
-
 @magics_class
 class EnvironMagics(Magics):
     """
