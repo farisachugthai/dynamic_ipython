@@ -3,6 +3,8 @@
 
 Lmao also dude check out what doctest has at the bottom.
 """
+from IPython.core.getipython import get_ipython
+import IPython
 import doctest
 import logging
 import unittest
@@ -14,10 +16,6 @@ import unittest
 def remove_tmpdir(dirname):
     print("In remove_tmpdir()")
     shutil.rmtree(dirname)
-
-
-import IPython
-from IPython.core.getipython import get_ipython
 
 
 class TestIPython(unittest.TestCase):
@@ -49,7 +47,7 @@ class TestIPython(unittest.TestCase):
 
 
 ######################################################################
-## 9. Example Usage
+# 9. Example Usage
 ######################################################################
 
 

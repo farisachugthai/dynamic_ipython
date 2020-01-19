@@ -4,31 +4,29 @@
 import logging
 import os
 from pathlib import Path
+from platform import platform
 
 from traitlets.config import get_config
 
 c = get_config()  # noqa
+
+kernel_logger = logging.getLogger(name=__name__)
+
 # The date format used by logging formatters for %(asctime)s
 c.Application.log_datefmt = "%Y-%m-%d %H:%M:%S"
 
 # The Logging format template
 
-logging.BASIC_FORMAT = "[%(created)f %(levelname)s ] %(module)s  %(message)s : "
-c.Application.log_format = "[%(created)f %(levelname)s ] %(module)s  %(message)s  "
+BASIC_FORMAT = "[%(created)f %(levelname)s ] %(module)s  %(message)s : "
+
+c.Application.log_format = BASIC_FORMAT
 
 # Set the log level by value or name.
 c.Application.log_level = 30
 
 
 def get_home():
-    """As simple as this function is I think it not only exists in:
-
-        #) Obviously this file
-        #) IPython.util.paths
-        #) jupyter_core
-        #) jupyter_client
-
-    That's probably too many.
+    """Return :func:`pathlib.Path.home`.
     """
     return Path.home()
 
@@ -57,7 +55,17 @@ def get_home():
 # configuration (through profiles), history storage, etc. The default is usually
 # $HOME/.ipython. This option can also be specified through the environment
 # variable IPYTHONDIR.
-# c.BaseIPythonApplication.ipython_dir = ''
+
+# The name of the IPython directory. This directory is used for logging
+# configuration (through profiles), history storage, etc. The default is
+# usually $HOME/.ipython. This option can also be specified through the environment
+# variable IPYTHONDIR.
+if os.environ.get("IPYTHONDIR"):
+    c.BaseIPythonApplication.ipython_dir = os.environ.get("IPYTHONDIR")
+else:
+    # Assume home was defined correctly up top. Will need to rewrite for windows
+    c.BaseIPythonApplication.ipython_dir = os.path.join(get_home(), ".ipython")
+
 
 # Whether to overwrite existing config files when copying
 # c.BaseIPythonApplication.overwrite = False
@@ -131,17 +139,15 @@ def get_home():
 # -----------------------------------------------------------------------------
 
 c.IPythonKernel.help_links = [
-    {"text": "Python Reference", "url": "https://docs.python.org/3"},
-    {"text": "Python3.7 Reference", "url": "https://docs.python.org/3.7"},
+    {
+        "text": "pandas Reference",
+        "url": "https://pandas.pydata.org/pandas-docs/stable/",
+    },
     {"text": "IPython Reference", "url": "https://ipython.org/documentation.html"},
     {"text": "NumPy Reference", "url": "https://docs.scipy.org/doc/numpy/reference/"},
     {"text": "SciPy Reference", "url": "https://docs.scipy.org/doc/scipy/reference/"},
     {"text": "Matplotlib Reference", "url": "https://matplotlib.org/contents.html"},
     {"text": "SymPy Reference", "url": "http://docs.sympy.org/latest/index.html"},
-    {
-        "text": "pandas Reference",
-        "url": "https://pandas.pydata.org/pandas-docs/stable/",
-    },
 ]
 
 # Set this flag to False to deactivate the use of experimental IPython
@@ -162,7 +168,10 @@ c.IPythonKernel.help_links = [
 # c.InteractiveShell.ast_transformers = []
 
 # Automatically run await statement in the top level repl.
-c.InteractiveShell.autoawait = False
+if platform().startswith('Win'):
+    c.InteractiveShell.autoawait = False
+else:
+    c.InteractiveShell.autoawait = True
 
 # Make IPython automatically call any callable object even if you didn't type
 # explicit parentheses. For example, 'str 43' becomes 'str(43)' automatically.
@@ -209,14 +218,14 @@ c.InteractiveShell.debug = True
 # c.InteractiveShell.display_page = True
 
 # (Provisional API) enables html representation in mime bundles sent to pagers.
-# c.InteractiveShell.enable_html_pager = True
+c.InteractiveShell.enable_html_pager = False
 
 # Total length of command history
-c.InteractiveShell.history_length = 100000
+c.InteractiveShell.history_length = 1000
 
 # The number of saved history entries to be loaded into the history buffer at
 # startup.
-c.InteractiveShell.history_load_length = 10000
+c.InteractiveShell.history_load_length = 100
 
 # c.InteractiveShell.ipython_dir = ''
 
@@ -234,43 +243,17 @@ c.InteractiveShell.history_load_length = 10000
 # Not allowed to do this :/
 # c.InteractiveShell.loop_runner = None
 
-# c.InteractiveShell.object_info_string_level = 0
-
 # Automatically call the pdb debugger after every exception.
 # c.InteractiveShell.pdb = False
-
-# Deprecated since IPython 4.0 and ignored since 5.0, set
-# TerminalInteractiveShell.prompts object directly.
-# c.InteractiveShell.prompt_in1 = 'In [\\#]: '
-
-# Deprecated since IPython 4.0 and ignored since 5.0, set
-# TerminalInteractiveShell.prompts object directly.
-# c.InteractiveShell.prompt_in2 = '   .\\D.: '
-
-# Deprecated since IPython 4.0 and ignored since 5.0, set
-# TerminalInteractiveShell.prompts object directly.
-# c.InteractiveShell.prompt_out = 'Out[\\#]: '
-
-# Deprecated since IPython 4.0 and ignored since 5.0, set
-# TerminalInteractiveShell.prompts object directly.
-# c.InteractiveShell.prompts_pad_left = True
-
-# c.InteractiveShell.quiet = False
-
-# c.InteractiveShell.separate_in = '\n'
-
-# c.InteractiveShell.separate_out = ''
-
-# c.InteractiveShell.separate_out2 = ''
 
 # Show rewritten input, e.g. for autocall.
 # c.InteractiveShell.show_rewritten_input = True
 
 # Enables rich html representation of docstrings. (This requires the docrepr
 # module).
-# c.InteractiveShell.sphinxify_docstring = True
+c.InteractiveShell.sphinxify_docstring = False
 
-c.InteractiveShell.wildcards_case_sensitive = False
+# c.InteractiveShell.wildcards_case_sensitive = False
 
 # Switch modes for the IPython exception handlers.
 # c.InteractiveShell.xmode = 'Context'

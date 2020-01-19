@@ -30,8 +30,12 @@ class GitProject:
 
     def __init__(self, **kwargs):
         """Override anything you like as a keyword argument. My personal choices for defaults are provided here."""
+        self.cwd = Path.cwd()
 
-        self.root = subprocess.check_output(["git", "rev-parse", "--show-toplevel"])
+    def get_git_root(self):
+        root = subprocess.run(["git", "rev-parse", "--show-toplevel"])
+        self.root = root
+        return root
 
         # good try but it raises a KeyError
         # self.doc_root = kwargs.pop('doc_root') or Path(self.root).joinpath('docs')

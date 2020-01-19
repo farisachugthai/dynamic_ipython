@@ -14,7 +14,7 @@ class IPDirective(Directive):
 
     has_content = True
     required_arguments = 1
-    optional_arguments = 0
+    optional_arguments = 3
     final_argument_whitespace = False
     option_spec = {  # todo
         "python": python_validator,
