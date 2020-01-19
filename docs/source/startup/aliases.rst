@@ -1,6 +1,7 @@
 ==============
 System Aliases
 ==============
+
 .. currentmodule:: default_profile.startup.20_aliases
 
 To date there are well over 100 aliases manually added to the shell.
@@ -14,6 +15,7 @@ to a :command:`bash` system shell, and Windows will have :command:`dosbatch` or
 
 Overview
 --------
+
 This module utilizes ``_ip``, the global |ip|
 instance, and fills the ``user_ns`` with aliases that are available
 in a typical system shell.
@@ -93,6 +95,7 @@ can be given.
 
 See Also
 --------
+
 .. seealso::
 
    :mod:`IPython.core.alias`
@@ -120,7 +123,7 @@ Below is the source code for the function
 
 
 Roadmap
--------
+--------
 
 Create a class with instance attributes for `sys.platform`.
 Break linux up like so::
@@ -178,6 +181,29 @@ following man page to reference?:
 I think that :command:`declare -f` could have a nice tie in to
 `inspect.is_function()` or whatever.
 
+Linux Aliases
+=============
+
+Aliases that have either:
+
+- Only been tested on Linux
+
+- Only natively exist on Linux
+
+- Clobber an existing Windows command
+
+   - cmd has a few overlapping commands like :command:`find`.
+
+   - powershell intentionally has many aliases that match `busybox`
+     aliases, with commands like 'ls' and 'curl' already mapped to
+     pwsh builtins.
+
+Packages such as ConEmu or Cmder allow a large number of GNU/Linux
+built-ins to exist on Windows, and as a result, the list may not be
+comprehensive and it may be that a reasonable
+portion of these aliases can be successfully executed from a shell
+such as Cygwin, Msys2, Mingw, Git on Windows or the Windows
+Subsystem for Linux.
 
 .. _aliases-api-docs:
 

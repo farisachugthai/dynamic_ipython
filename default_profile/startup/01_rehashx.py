@@ -1,12 +1,24 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Run rehashx magic.
+"""
+
+rehashx magic
+-------------
+
+Run rehashx magic.
 
 This is an incredible little gem that's hugely useful for
 making IPython work as a more versatile system shell.
 
+Work in Progress
+
+-----------------
 The code that's more important than anything should execute regardless
 of whether someone has ``pip install``-ed it.
+
+
+Exception Handling
+------------------
 
 Give a detailed, colored traceback and drop into pdb on exceptions.
 
@@ -18,12 +30,22 @@ So the IPython.core.ultratb mod was stated to be a port of cgitb.
 
 Looks like we're in business!
 
+Asyncio operations
+------------------
+
+def extract_stack(f=None, limit=None):
+    Replacement for traceback.extract_stack() that only does the
+    necessary work for asyncio debug mode.
+
+Well thats awesome.
+
 """
 import asyncio
 import cgitb
 import code
 import faulthandler
 import logging
+import platform
 import runpy
 import sys
 import trace
@@ -34,7 +56,21 @@ from asyncio.events import (
     get_event_loop_policy,
     get_running_loop,
 )
-from asyncio.tasks import Task
+
+try:
+    from curio import Task
+except:
+    from asyncio.tasks import Task
+
+from asyncio.tasks import current_task, all_tasks, create_task
+
+try:
+    from trio import run
+except:
+    from asyncio.events import run
+
+from asyncio.format_helpers import extract_stack
+from asyncio.windows_events import ProactorEventLoop, IocpProactor
 from collections.abc import Sequence
 from os import scandir
 from pathlib import Path
@@ -62,7 +98,7 @@ def get_exec_dir():
     _ip = get_ipython()
     if _ip is not None:
         profiledir = Path(_ip.profile_dir)
-        exec_dir = profile_dir / "startup"
+        exec_dir = profiledir / "startup"
     else:
         exec_dir = "."
 
@@ -149,9 +185,15 @@ if __name__ == "__main__":
     if hasattr(asyncio.log.logger, "setLevel"):  # TODO: is this necessary?
         asyncio.log.logger.setLevel(logging.ERROR)
 
+    handled = cgitb.Hook(logdir=_ip.profile_dir.log_dir, file=sys.stdout, format="text")
+    sys.excepthook = handled
+
     if _ip is not None:
         rehashx_run()
-        handled = cgitb.Hook(
-            logdir=_ip.profile_dir.log_dir, file=sys.stdout, format="text"
-        )
-        sys.excepthook = handled
+        _ip.excepthook = handled
+
+    # This doesn't do anything yet but hey at least we found the API
+    if platform.platform().startswith("Win"):
+        proactor = IocpProactor()
+        loop = ProactorEventLoop(proactor=proactor)
+

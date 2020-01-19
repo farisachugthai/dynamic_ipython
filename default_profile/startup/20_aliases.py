@@ -182,7 +182,25 @@ class CommonAliases:
 
     @classmethod
     def git(cls):
-        """100+ git aliases."""
+        """100+ git aliases.
+
+        Notes
+        -----
+        Aliases of note.
+
+        - gcls: git clone [url]
+
+            - This uses the ``%s`` argument to indicate it requires 1 and only 1 argument as git clone does
+
+            - Note this is in contrast to gcl, or git clone, as that can have additional options specified
+
+        - gcim: git commit --message [message]
+
+            - Also uses ``%s``
+
+        Unless otherwise noted every alias uses ``%l`` to allow the user to specify
+        any relevant options or flags on the command line as necessary.
+        """
         cls.user_aliases += [
             ("g", "git diff --staged --stat %l"),
             ("ga", "git add -v %l"),
@@ -207,7 +225,10 @@ class CommonAliases:
             ("gcid", "git commit --date=%l"),
             ("gcim", "git commit --verbose --message %s"),
             ("gcl", "git clone --progress %l"),
-            ("gcls", "git clone --progress --depth 1 %l"),
+            (
+                "gcls",
+                "git clone --progress --depth 1 --single-branch --branch master %s",
+            ),
             ("gco", "git checkout %l"),
             ("gcob", "git checkout -b %l"),
             ("gd", "git diff %l"),
@@ -291,37 +312,7 @@ class CommonAliases:
 
 
 class LinuxAliases(CommonAliases):
-    """Add Linux specific aliases.
-
-    Aliases that have either:
-
-        * Only been tested on Linux
-        * Only natively exist on Linux
-        * Clobber an existing Windows command
-            * cmd has a few overlapping commands like :command:`find`
-            * powershell intentionally has many aliases that match `busybox`
-              aliases, with commands like 'ls' and 'curl' already mapped to
-              pwsh builtins.
-
-    Packages such as ConEmu or Cmder allow a large number of GNU/Linux
-    built-ins to exist on Windows, and as a result, the list may not be
-    comprehensive and it may be that a reasonable
-    portion of these aliases can be successfully executed from a shell
-    such as Cygwin, Msys2, Mingw, Git on Windows or the Windows
-    Subsystem of Linux.
-
-    Below is the source code for the function
-    :func:`IPython.core.magics.define_alias()` that is invoked here.::
-
-        def define_alias(self, name, cmd):
-            # Define a new alias after validating it.
-            # This will raise an :exc:`AliasError` if there are validation
-            # problems.
-            caller = Alias(shell=self.shell, name=name, cmd=cmd)
-            self.shell.magics_manager.register_function(caller, magic_kind='line',
-            magic_name=name)
-
-    """
+    """Add Linux specific aliases."""
 
     def __init__(self, shell=None, aliases=None, **kwargs):
         """The WindowsAliases implementation of this is odd so maybe branch off.
