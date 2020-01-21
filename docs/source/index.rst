@@ -106,6 +106,18 @@ As one can see this gets complicated very quickly, and as a result,
 installation via pipenv is the recommended method.
 
 
+Assumptions
+===========
+
+Neovim is the default editor.
+
+If this behavior isn't desired, the following parameter needs to be
+changed like so::
+
+   from traitlets import get_config
+   c = get_config()
+   c.TerminalInteractiveShell.editor = 'nvim'
+
 See Also
 ==========
 

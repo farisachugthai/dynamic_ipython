@@ -7,13 +7,11 @@
     <title>Developer’s Notes &#8212; Dynamic IPython: version0.0.2</title>
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/language_data.js"></script>
-    <script type="text/javascript" src="_static/copybutton.js"></script>
     <script type="text/javascript" src="_static/copybutton.js"></script>
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/dev.html" />
     <link rel="index" title="Index" href="genindex.html" />
@@ -161,32 +159,6 @@
 <span id="developer-s-notes"></span><span id="dev"></span><h1>Developer’s Notes<a class="headerlink" href="#module-developers-notes" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="installing">
 <span id="developer-installation"></span><h2>Installing<a class="headerlink" href="#installing" title="Permalink to this headline">¶</a></h2>
-<p>All of the resources necessary for installing the contents of this repository
-have been moved to the directory <a class="reference external" href="tools">tools</a>.</p>
-<p>There are environment files for Conda on both <a class="reference external" href="tools/environment_linux.txt">Linux</a> and <a class="reference external" href="tools/environment_windows.yml">Windows</a>,
-<a class="reference external" href="tools/Pipfile">a Pipfile</a>, <a class="reference external" href="tools/requirements.txt">a requirements.txt</a>,
-and another for a <a class="reference external" href="tools/requirements_dev.txt">development installation</a>,
-as well as a <a class="reference external" href="tools/tox.ini">tox.ini</a>.</p>
-<p>Therefore the number of files that one can use to install this repository grew
-large enough that they’ve all been moved to their own separate folder.</p>
-<div class="section" id="installation-assumptions">
-<h3>Installation Assumptions<a class="headerlink" href="#installation-assumptions" title="Permalink to this headline">¶</a></h3>
-<p>In addition, the scripts therein make a few assumptions. One is that
-the repository at <a class="reference external" href="https://github.com/farisachugthai/Gruvbox-IPython">https://github.com/farisachugthai/Gruvbox-IPython</a>
-has been installed.</p>
-<p>The other assumption, the subject of many online debates, is that the user
-wants to use the text editor Neovim as their default editor.</p>
-<p>The editor will be invoked whenever the user runs the line magic <code class="xref py py-obj docutils literal notranslate"><span class="pre">%edit</span></code>.</p>
-<p>If this behavior isn’t desired, the following parameter needs to be
-changed like so:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>from traitlets import get_config
-<span class="nv">c</span> <span class="o">=</span> get_config<span class="o">()</span>
-c.TerminalInteractiveShell.editor <span class="o">=</span> <span class="s1">&#39;nvim&#39;</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="commands">
-<h3>Commands<a class="headerlink" href="#commands" title="Permalink to this headline">¶</a></h3>
 <p>In your console of choice, create a virtual environment.
 This can be done with:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>virtualenv ~/.local/share/virtualenvs/dynamic_ipython --python<span class="o">=</span>/usr/bin/python3.7
@@ -202,7 +174,6 @@ pip install -U -e .
 </pre></div>
 </div>
 <p>And likewise for the tests.</p>
-</div>
 </div>
 <div class="section" id="building-documentation">
 <h2>Building Documentation<a class="headerlink" href="#building-documentation" title="Permalink to this headline">¶</a></h2>
@@ -277,8 +248,8 @@ so it’s important to take that into consideration.</p>
 <div class="section" id="utilizing-tagbar">
 <h3>Utilizing Tagbar<a class="headerlink" href="#utilizing-tagbar" title="Permalink to this headline">¶</a></h3>
 <p>Out of the box, Exuberant ctags and even Universal ctags
-doesn’t support rst documentation.</p>
-<p>An external dependency in rst2ctags is required which can be
+do not support rst documentation in tag files.</p>
+<p>An external dependency, <code class="docutils literal notranslate"><span class="pre">rst2ctags</span></code>, is required. It can be
 found at <a class="reference external" href="https://github.com/jszakmeister/rst2ctags.git">this repo</a>.</p>
 <div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="k">g</span>:tagbar_type_rst <span class="p">=</span> {
     \ <span class="s1">&#39;ctagstype&#39;</span>: <span class="s1">&#39;rst&#39;</span><span class="p">,</span>
@@ -345,7 +316,7 @@ found at <a class="reference external" href="https://github.com/jszakmeister/rst
 <ul>
   <li><a href="index.html">Documentation overview</a>
     <ul>
-          <li>Previous: <a href="default_profile.html" title="previous chapter">default_profile</a></li>
+          <li>Previous: <a href="default_profile.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">default_profile</span></code></a></li>
     </ul>
 </ul>
 </li>
@@ -360,11 +331,7 @@ found at <a class="reference external" href="https://github.com/jszakmeister/rst
 
     <ul>
 <li><a class="reference internal" href="#">Developer’s Notes</a><ul>
-<li><a class="reference internal" href="#installing">Installing</a><ul>
-<li><a class="reference internal" href="#installation-assumptions">Installation Assumptions</a></li>
-<li><a class="reference internal" href="#commands">Commands</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#installing">Installing</a></li>
 <li><a class="reference internal" href="#building-documentation">Building Documentation</a><ul>
 <li><a class="reference internal" href="#sphinx-directives">Sphinx Directives</a></li>
 <li><a class="reference internal" href="#setting-makeprg">Setting <code class="docutils literal notranslate"><span class="pre">&amp;makeprg</span></code></a></li>
@@ -396,17 +363,14 @@ found at <a class="reference external" href="https://github.com/jszakmeister/rst
 </li>
 <li class="toctree-l1"><a class="reference internal" href="startup/index.html">IPython Startup</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="startup/rehashx.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">%rehashx</span></code> — Add executables to $PATH</a></li>
-<li class="toctree-l2"><a class="reference internal" href="startup/easy_import.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">04_easy_import</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="startup/ipython-logger.html">05_log — IPython logger</a></li>
 <li class="toctree-l2"><a class="reference internal" href="startup/help_helpers.html">06_Help_Helpers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="startup/aliases.html">System Aliases</a></li>
-<li class="toctree-l2"><a class="reference internal" href="startup/fzf.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">21_fzf</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="startup/fzf.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">21_fzf</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="startup/setup_readline.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">30_setup_readline</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="startup/completions.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">34_completions</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="startup/41_numpy.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">numpy</span></code> Initialization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="startup/42_pandas.html">Pandas Initialization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="startup/matplotlib_rc.html">Matplotlib Startup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="startup/sysexcept.html">Customized Exceptions</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="util/index.html">IPython Utilities</a><ul>
@@ -459,7 +423,7 @@ found at <a class="reference external" href="https://github.com/jszakmeister/rst
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Jan 20, 2020.
+      Last updated on Jan 21, 2020.
     </div>
   </body>
 </html>

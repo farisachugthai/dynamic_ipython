@@ -7,32 +7,132 @@
     <title>default_profile.startup.21_fzf &#8212; Dynamic IPython: version0.0.2</title>
     <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../../_static/copybutton.js"></script>
-    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/startup/21_fzf.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-<link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" />
-<link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" media="screen" rel="stylesheet" type="text/css" />
-<link rel='stylesheet' href='//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.css'>
-<!--[if lte IE 6]>
-  <link
-    rel="stylesheet"
-    href="../../../_static/ie6.css"
-    type="text/css"
-    media="screen"
-    charset="utf-8"
-  />
-<![endif]-->
+<!-- <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" /> -->
+<!-- <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" media="screen" rel="stylesheet" type="text/css" /> -->
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <title>Floating label Demo</title>
+  <meta name="description" content="" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style type="text/css">
+    /* CSS styles */
+    /* Example by Matthias Benkort at http://codepen.io/KtorZ/pen/ZOzdqG */
+    @import url(
+      https://fonts.googleapis.com/css?family=Roboto:400,
+      300,
+      500,
+      700
+    );
+    .wrapper {
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
 
-  </head><body>
+    .material-textfield {
+      display: inline-block;
+      height: 4rem;
+      padding-top: 2rem;
+    }
+    .material-textfield input {
+      background: none;
+      border: none;
+      box-sizing: border-box;
+      display: block;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 1rem;
+      padding: 0.25rem 0.1rem;
+      width: 100%;
+    }
+    .material-textfield input:invalid {
+      box-shadow: none;
+    }
+    .material-textfield input:focus {
+      outline: none;
+    }
+    .material-textfield label {
+      display: inline-block;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 0;
+      pointer-events: none;
+      position: relative;
+      text-transform: uppercase;
+      width: 100%;
+    }
+    .material-textfield label::before {
+      content: attr(data-content);
+      position: relative;
+      transition: all 0.2s ease;
+      will-change: font-size, top;
+    }
+    .material-textfield label::after {
+      bottom: 0.9rem;
+      content: "";
+      height: 0.3rem;
+      left: 50%;
+      position: absolute;
+      transition: all 0.2s ease;
+      width: 0;
+      will-change: width, left;
+    }
+    .material-textfield label::before,
+    .material-textfield input[required]:focus ~ label::before {
+      font-size: 0.75rem;
+      top: -3.25rem;
+    }
+    .material-textfield input:focus ~ label::after {
+      left: 0%;
+      width: 100%;
+    }
+    .material-textfield input:invalid ~ label::before {
+      font-size: 1rem;
+      top: -2rem;
+    }
 
+    .material-textfield.blue input {
+      border-bottom: 0.1rem solid #03a9f4;
+      color: #0275a8;
+    }
+    .material-textfield.blue label::after {
+      background: #03a9f4;
+    }
+    .material-textfield.blue label::before,
+    .material-textfield.blue input[required]:focus ~ label::before {
+      color: #47c4fd;
+    }
+    .material-textfield.blue input:invalid ~ label::before {
+      color: #03a9f4;
+    }
+
+    .material-textfield.red input {
+      border-bottom: 0.1rem solid #f44336;
+      color: #d2190b;
+    }
+    .material-textfield.red label::after {
+      background: #f44336;
+    }
+    .material-textfield.red label::before,
+    .material-textfield.red input[required]:focus ~ label::before {
+      color: #f8877f;
+    }
+    .material-textfield.red input:invalid ~ label::before {
+      color: #f44336;
+    }
+  </style>
+</head>
+
+  </head><body> 
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -67,11 +167,24 @@
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">import</span> <span class="nn">shlex</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">from</span> <span class="nn">subprocess</span> <span class="kn">import</span> <span class="n">Popen</span><span class="p">,</span> <span class="n">CompletedProcess</span><span class="p">,</span> <span class="n">CalledProcessError</span><span class="p">,</span> <span class="n">PIPE</span><span class="p">,</span> <span class="n">DEVNULL</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">types</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">get_type_hints</span>  <span class="c1"># what is this?</span>
 
 <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">pyfzf</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="n">pyfzf</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">fufpy</span> <span class="o">=</span> <span class="n">fuf</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pyfzf.pyfzf</span> <span class="kn">import</span> <span class="n">FzfPrompt</span>
+
+    <span class="n">fufpy</span> <span class="o">=</span> <span class="n">FzfPrompt</span><span class="p">()</span>
+    <span class="n">fuf</span> <span class="o">=</span> <span class="n">fufpy</span><span class="o">.</span><span class="n">prompt</span>
 
 
 <div class="viewcode-block" id="Executable"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.Executable">[docs]</a><span class="k">class</span> <span class="nc">Executable</span><span class="p">(</span><span class="n">ContextDecorator</span><span class="p">):</span>
@@ -134,9 +247,37 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">safe_default_cmd</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-<div class="viewcode-block" id="FZF.default_cmd_str"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.FZF.default_cmd_str">[docs]</a>    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">default_cmd_str</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">&quot;rg --pretty --hidden --max-columns-preview --no-heading --no-messages --no-column --no-line-number -C 0 -e ^ | fzf --ansi --multi &quot;</span><span class="p">,</span></div>
+<div class="viewcode-block" id="FZF.default_cmds"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.FZF.default_cmds">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">default_cmds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="s2">&quot;rg --pretty --hidden --max-columns-preview --no-heading --no-messages --no-column --no-line-number -C 0 -e ^ | fzf --ansi --multi &quot;</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="FZF.default_cmd"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.FZF.default_cmd">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">default_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Define the cmd for FZF.</span>
+
+<span class="sd">        In the sane vein as json.load and json.loads, separate the 2 based on</span>
+<span class="sd">        the &#39;s&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="s2">&quot;rg&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--pretty&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--hidden&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--max-columns-preview&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--no-heading&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--no-messages&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--no-column&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--no-line-number&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;-C&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;0&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;-e&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;^&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;|&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;fzf&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--ansi&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--multi&quot;</span><span class="p">,</span>
+        <span class="p">]</span></div>
 
 <div class="viewcode-block" id="FZF.safe_default_cmd"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.FZF.safe_default_cmd">[docs]</a>    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">safe_default_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -162,7 +303,7 @@
         <span class="k">if</span> <span class="n">args</span><span class="p">:</span>
             <span class="bp">cls</span><span class="o">.</span><span class="n">fzf_alias</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">fzf_alias</span></div>
+        <span class="k">return</span> <span class="bp">cls</span></div>
 
 
 <div class="viewcode-block" id="is_tmux"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.is_tmux">[docs]</a><span class="k">def</span> <span class="nf">is_tmux</span><span class="p">():</span>
@@ -202,12 +343,17 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">busybox_hack</span><span class="p">(</span><span class="n">shell</span><span class="p">)</span>
 
-        <span class="n">fzf_aliases</span> <span class="o">=</span> <span class="n">FZF</span><span class="p">()</span><span class="o">.</span><span class="n">_setup_fzf</span><span class="p">()</span></div>
-        <span class="c1"># shell.alias_manager.define_alias(FZF._setup_fzf(), &#39;fzf&#39;)</span>
+        <span class="n">fzf_aliases</span> <span class="o">=</span> <span class="n">FZF</span><span class="o">.</span><span class="n">_setup_fzf</span><span class="p">()</span>
+        <span class="n">shell</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">define_alias</span><span class="p">(</span><span class="s2">&quot;fzf&quot;</span><span class="p">,</span> <span class="s2">&quot;fzf-tmux&quot;</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;FZF_DEFAULT_COMMAND&quot;</span><span class="p">,</span> <span class="n">fzf_aliases</span><span class="o">.</span><span class="n">default_cmds</span><span class="p">)</span></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">main</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">fuf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+
+        <span class="k">class</span> <span class="nc">Fuf</span><span class="p">(</span><span class="n">FZF</span><span class="p">,</span> <span class="n">FzfPrompt</span><span class="p">):</span>
+            <span class="n">fzf_default_opts</span> <span class="o">=</span> <span class="kc">None</span>
 </pre></div>
 
           </div>
@@ -246,7 +392,6 @@
 <div id="sidebartoc">
     <p class="caption"><span class="caption-text">API</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../default_profile.html">Tailor-made profiles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../sphinxext/index.html">Sphinx Extensions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/ipython_sphinx_directive.html">IPython Sphinx Directive</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/lexer.html">New IPython Console Lexer</a></li>
@@ -257,17 +402,14 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../startup/index.html">IPython Startup</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/rehashx.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">%rehashx</span></code> — Add executables to $PATH</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../startup/easy_import.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">04_easy_import</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/ipython-logger.html">05_log — IPython logger</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/help_helpers.html">06_Help_Helpers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/aliases.html">System Aliases</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../startup/fzf.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">21_fzf</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/fzf.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">21_fzf</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/setup_readline.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">30_setup_readline</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/completions.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">34_completions</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/41_numpy.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">numpy</span></code> Initialization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../startup/42_pandas.html">Pandas Initialization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/matplotlib_rc.html">Matplotlib Startup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../startup/sysexcept.html">Customized Exceptions</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../util/index.html">IPython Utilities</a><ul>
@@ -286,13 +428,9 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Extensions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../jobcontrol.html">Job Control</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../todo.html">Todo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../default_profile.html">Tailor-made profiles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../dev.html">Developers Notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../jupyter/index.html">jupyter</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../jupyter/qtconsole.html">Jupyter QTConsole</a></li>
-</ul>
-</li>
 </ul>
 
     
@@ -316,7 +454,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Jan 06, 2020.
+      Last updated on Jan 21, 2020.
     </div>
   </body>
 </html>

@@ -7,32 +7,132 @@
     <title>default_profile.startup.05_log &#8212; Dynamic IPython: version0.0.2</title>
     <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../../_static/copybutton.js"></script>
-    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/startup/05_log.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-<link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" />
-<link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" media="screen" rel="stylesheet" type="text/css" />
-<link rel='stylesheet' href='//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.css'>
-<!--[if lte IE 6]>
-  <link
-    rel="stylesheet"
-    href="../../../_static/ie6.css"
-    type="text/css"
-    media="screen"
-    charset="utf-8"
-  />
-<![endif]-->
+<!-- <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" /> -->
+<!-- <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" media="screen" rel="stylesheet" type="text/css" /> -->
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <title>Floating label Demo</title>
+  <meta name="description" content="" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style type="text/css">
+    /* CSS styles */
+    /* Example by Matthias Benkort at http://codepen.io/KtorZ/pen/ZOzdqG */
+    @import url(
+      https://fonts.googleapis.com/css?family=Roboto:400,
+      300,
+      500,
+      700
+    );
+    .wrapper {
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
 
-  </head><body>
+    .material-textfield {
+      display: inline-block;
+      height: 4rem;
+      padding-top: 2rem;
+    }
+    .material-textfield input {
+      background: none;
+      border: none;
+      box-sizing: border-box;
+      display: block;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 1rem;
+      padding: 0.25rem 0.1rem;
+      width: 100%;
+    }
+    .material-textfield input:invalid {
+      box-shadow: none;
+    }
+    .material-textfield input:focus {
+      outline: none;
+    }
+    .material-textfield label {
+      display: inline-block;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 0;
+      pointer-events: none;
+      position: relative;
+      text-transform: uppercase;
+      width: 100%;
+    }
+    .material-textfield label::before {
+      content: attr(data-content);
+      position: relative;
+      transition: all 0.2s ease;
+      will-change: font-size, top;
+    }
+    .material-textfield label::after {
+      bottom: 0.9rem;
+      content: "";
+      height: 0.3rem;
+      left: 50%;
+      position: absolute;
+      transition: all 0.2s ease;
+      width: 0;
+      will-change: width, left;
+    }
+    .material-textfield label::before,
+    .material-textfield input[required]:focus ~ label::before {
+      font-size: 0.75rem;
+      top: -3.25rem;
+    }
+    .material-textfield input:focus ~ label::after {
+      left: 0%;
+      width: 100%;
+    }
+    .material-textfield input:invalid ~ label::before {
+      font-size: 1rem;
+      top: -2rem;
+    }
 
+    .material-textfield.blue input {
+      border-bottom: 0.1rem solid #03a9f4;
+      color: #0275a8;
+    }
+    .material-textfield.blue label::after {
+      background: #03a9f4;
+    }
+    .material-textfield.blue label::before,
+    .material-textfield.blue input[required]:focus ~ label::before {
+      color: #47c4fd;
+    }
+    .material-textfield.blue input:invalid ~ label::before {
+      color: #03a9f4;
+    }
+
+    .material-textfield.red input {
+      border-bottom: 0.1rem solid #f44336;
+      color: #d2190b;
+    }
+    .material-textfield.red label::after {
+      background: #f44336;
+    }
+    .material-textfield.red label::before,
+    .material-textfield.red input[required]:focus ~ label::before {
+      color: #f8877f;
+    }
+    .material-textfield.red input:invalid ~ label::before {
+      color: #f44336;
+    }
+  </style>
+</head>
+
+  </head><body> 
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -71,245 +171,10 @@
 <span class="sd">      conda, any of the 1000000 things you could add.</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">codecs</span>
-<span class="kn">import</span> <span class="nn">glob</span>
-<span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">io</span>
-
-<span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">textwrap</span> <span class="kn">import</span> <span class="n">dedent</span>
-
-<span class="kn">from</span> <span class="nn">traitlets.config</span> <span class="kn">import</span> <span class="n">Bool</span><span class="p">,</span> <span class="n">Configurable</span><span class="p">,</span> <span class="n">LoggingConfigurable</span>
-<span class="kn">from</span> <span class="nn">traitlets.config.application</span> <span class="kn">import</span> <span class="n">LevelFormatter</span>
-<span class="kn">from</span> <span class="nn">traitlets.traitlets</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">validate</span><span class="p">,</span>
-    <span class="n">default</span><span class="p">,</span>
-    <span class="n">TraitError</span><span class="p">,</span>
-    <span class="n">Any</span><span class="p">,</span>
-    <span class="n">CInt</span><span class="p">,</span>
-    <span class="n">Int</span><span class="p">,</span>
-    <span class="n">Unicode</span><span class="p">,</span>
-    <span class="n">Instance</span><span class="p">,</span>
-<span class="p">)</span>
-
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">path</span>
 
-<span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
-
-
-<div class="viewcode-block" id="LoggerManager"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager">[docs]</a><span class="k">class</span> <span class="nc">LoggerManager</span><span class="p">(</span><span class="n">LoggingConfigurable</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Let&#39;s give cleanup a shot.</span>
-
-<span class="sd">    Now with all of this effort put in to determine the mode that the user</span>
-<span class="sd">    wants and how to best put the file where they&#39;ll expect it, it&#39;s safe to</span>
-<span class="sd">    say that we know that we don&#39;t need a FileHandler.</span>
-
-<span class="sd">    But let&#39;s add a StreamHandler and set the level. And make them configurable right?</span>
-
-<span class="sd">    Attributes</span>
-<span class="sd">    ----------</span>
-<span class="sd">    logfile : str (os.Pathlike)</span>
-<span class="sd">        Be careful to not set this immediately. We set it with</span>
-<span class="sd">        :meth:`logstart` and it will raise an error if set early.</span>
-<span class="sd">    log_raw_input : bool</span>
-<span class="sd">        Whether to log raw or processed input.</span>
-<span class="sd">    log_output : bool</span>
-<span class="sd">        Whether to also log output.</span>
-<span class="sd">    timestamp : bool</span>
-<span class="sd">        Whether to put timestamps before each log entry.</span>
-<span class="sd">    log_active : bool</span>
-<span class="sd">        activity control flags</span>
-<span class="sd">    home : str</span>
-<span class="sd">        Not in init because it doesn&#39;t make any sense to override where</span>
-<span class="sd">        your home directory is.</span>
-
-<span class="sd">    Note</span>
-<span class="sd">    ----</span>
-<span class="sd">    Uses pathlib internally and externally.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="c1"># could do this. make an enum class? hm. idk.</span>
-    <span class="c1"># logmode =</span>
-    <span class="n">log_raw_input</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Whether to log raw or processed input&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">tag</span><span class="p">(</span>
-        <span class="n">config</span><span class="o">=</span><span class="kc">True</span>
-    <span class="p">)</span>
-    <span class="n">log_output</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Whether to also log output.&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">tag</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-    <span class="n">timestamp</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span>
-        <span class="kc">False</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Whether to put timestamps before each log entry.&quot;</span>
-    <span class="p">)</span><span class="o">.</span><span class="n">tag</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-    <span class="n">log_active</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;activity control flags&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">tag</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-    <span class="n">loghead</span> <span class="o">=</span> <span class="n">Any</span><span class="p">(</span>
-        <span class="n">help</span><span class="o">=</span><span class="n">dedent</span><span class="p">(</span>
-            <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    The header in your log file.</span>
-<span class="sd">    Only used if you&#39;re not logging in append mode to prevent</span>
-<span class="sd">    printing a header to the same log file repetitively.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-        <span class="p">)</span>
-    <span class="p">)</span><span class="o">.</span><span class="n">tag</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-    <span class="n">shell</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span>
-        <span class="s2">&quot;IPython.core.interactiveshell.InteractiveShellABC&quot;</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span>
-    <span class="p">)</span>
-
-    <span class="c1"># handler_level = CInt(30, help=&quot;Log level for the handler&quot;).tag(config=True)</span>
-
-    <span class="n">formatter_style</span> <span class="o">=</span> <span class="n">Unicode</span><span class="p">(</span>
-        <span class="s2">&quot;</span><span class="si">%(filename)s</span><span class="s2">:</span><span class="si">%(highlevel)-20s</span><span class="s2"> </span><span class="si">%(name)s</span><span class="s2">:</span><span class="si">%(lineno)d</span><span class="s2"> </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;How do log messages look?&quot;</span><span class="p">,</span>
-    <span class="p">)</span><span class="o">.</span><span class="n">tag</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-    <span class="n">time_format</span> <span class="o">=</span> <span class="n">Unicode</span><span class="p">(</span>
-        <span class="s2">&quot;%H:%M:%S&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Enable timestamps and you&#39;ll see what I mean.&quot;</span>
-    <span class="p">)</span><span class="o">.</span><span class="n">tag</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<div class="viewcode-block" id="LoggerManager.__init__"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">logger_name</span><span class="o">=</span><span class="s2">&quot;IPython_Logger_Manager&quot;</span><span class="p">,</span>
-        <span class="n">logfname</span><span class="o">=</span><span class="s2">&quot;Logger.log&quot;</span><span class="p">,</span>
-        <span class="n">logger_log_level</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="o">*</span><span class="n">args</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span>
-    <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;New LoggerManager.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        logfname : str</span>
-<span class="sd">            Is set to the attribute &#39;logfile&#39; in method :meth:`logstart`.</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logfname</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">logfname</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger_name</span> <span class="o">=</span> <span class="n">logger_name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger_log_level</span> <span class="o">=</span> <span class="n">logger_log_level</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">()</span></div>
-
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">&quot;{r!} {:&lt;r!}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">logger_name</span><span class="p">)</span>
-
-<div class="viewcode-block" id="LoggerManager.log"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.log">[docs]</a>    <span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">logger_log_level</span> <span class="o">==</span> <span class="mi">30</span><span class="p">:</span>
-            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="LoggerManager.init_logger"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.init_logger">[docs]</a>    <span class="k">def</span> <span class="nf">init_logger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">override_level</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger_instance</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logger_name</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger_log_level</span> <span class="o">=</span> <span class="n">override_level</span> <span class="ow">or</span> <span class="mi">30</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger_instance</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger_log_level</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="LoggerManager.init_handler"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.init_handler">[docs]</a>    <span class="k">def</span> <span class="nf">init_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">override_level</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">handler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="n">handler_level</span> <span class="o">=</span> <span class="n">override_level</span> <span class="ow">or</span> <span class="mi">30</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">handler_level</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="LoggerManager.init_formatter"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.init_formatter">[docs]</a>    <span class="k">def</span> <span class="nf">init_formatter</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">override_style</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">formatter_style</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">time_format</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-    <span class="p">):</span>
-        <span class="k">if</span> <span class="n">override_style</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">formatter_style</span> <span class="o">=</span> <span class="n">override_style</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">formatter</span> <span class="o">=</span> <span class="n">LevelFormatter</span><span class="p">(</span>
-            <span class="n">fmt</span><span class="o">=</span><span class="n">formatter_style</span><span class="p">,</span> <span class="n">datefmt</span><span class="o">=</span><span class="n">time_format</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-        <span class="p">)</span></div>
-
-<div class="viewcode-block" id="LoggerManager.init_filter"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.init_filter">[docs]</a>    <span class="k">def</span> <span class="nf">init_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">addFilter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Filter</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">))</span></div>
-
-    <span class="nd">@default</span><span class="p">(</span><span class="s2">&quot;logmode&quot;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">_mode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">change</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">logmode</span>
-
-    <span class="nd">@validate</span><span class="p">(</span><span class="s2">&quot;logmode&quot;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">_set_mode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;&#39;logmode&#39; is a validated property.&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">mode</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;append&quot;</span><span class="p">,</span> <span class="s2">&quot;backup&quot;</span><span class="p">,</span> <span class="s2">&quot;global&quot;</span><span class="p">,</span> <span class="s2">&quot;over&quot;</span><span class="p">,</span> <span class="s2">&quot;rotate&quot;</span><span class="p">]:</span>
-            <span class="k">raise</span> <span class="n">TraitError</span><span class="p">(</span><span class="s2">&quot;invalid log mode </span><span class="si">%s</span><span class="s2"> given&quot;</span> <span class="o">%</span> <span class="n">mode</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logmode</span> <span class="o">=</span> <span class="n">mode</span>
-
-<div class="viewcode-block" id="LoggerManager.logappend"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.logappend">[docs]</a>    <span class="k">def</span> <span class="nf">logappend</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">append</span><span class="p">()</span></div>
-
-<div class="viewcode-block" id="LoggerManager.append"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.append">[docs]</a>    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Called when logmode is set to append.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">codecs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logfname</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="LoggerManager.backup"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.backup">[docs]</a>    <span class="k">def</span> <span class="nf">backup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">backupext</span><span class="o">=</span><span class="s2">&quot;~&quot;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Create a logging file and backups as necessary at path &#39;target&#39;.</span>
-
-<span class="sd">        Added a backupext parameter so that can be changed.</span>
-
-<span class="sd">        Also changed the logfile to be open in append mode so we don&#39;t have</span>
-<span class="sd">        to worry about whether we have more.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">logfname</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
-            <span class="n">target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">logfname</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span><span class="n">backupext</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">logfname</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">codecs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logfname</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="LoggerManager.global_mode"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.global_mode">[docs]</a>    <span class="k">def</span> <span class="nf">global_mode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;I&#39;m changing this. Global mode shouldn&#39;t dump files in the home dir.</span>
-
-<span class="sd">        Global means put it iin teh IPython dir not the profile dir.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logfname</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">ipython_dir</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">logfname</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">codecs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logfname</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="LoggerManager.over"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.over">[docs]</a>    <span class="k">def</span> <span class="nf">over</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">codecs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logfname</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="LoggerManager.output_file"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.output_file">[docs]</a>    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">output_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">logfile</span></div>
-
-<div class="viewcode-block" id="LoggerManager.set_output_file"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.set_output_file">[docs]</a>    <span class="nd">@output_file</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">set_output_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">logmode</span> <span class="o">==</span> <span class="s2">&quot;append&quot;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">logfile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">append</span><span class="p">()</span>
-
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">logmode</span> <span class="o">==</span> <span class="s2">&quot;backup&quot;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">logfile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">backup</span><span class="p">()</span>
-
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">logmode</span> <span class="o">==</span> <span class="s2">&quot;global&quot;</span><span class="p">:</span>  <span class="c1"># can&#39;t name a method global</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">logfile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_mode</span><span class="p">()</span>
-
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">logmode</span> <span class="o">==</span> <span class="s2">&quot;over&quot;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">logfile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">over</span><span class="p">()</span>
-
-        <span class="c1"># TODO</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">logmode</span> <span class="o">==</span> <span class="s2">&quot;rotate&quot;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">logfname</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
-                <span class="k">if</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logfname</span> <span class="o">/</span> <span class="s2">&quot;.001~&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
-                    <span class="c1"># Don&#39;t make the logic too complicated. I&#39;ve set this to rotate and got</span>
-                    <span class="c1"># pissed when i saw 11 log files from 1 session.</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">logfname</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logfname</span> <span class="o">/</span> <span class="s2">&quot;.002~&quot;</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">logfname</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logfname</span> <span class="o">/</span> <span class="s2">&quot;.001~&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">logfile</span> <span class="o">=</span> <span class="n">codecs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logfname</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">logfile</span></div>
-
-<div class="viewcode-block" id="LoggerManager.logstart"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.logstart">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">logstart</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Generate a new log-file with a default header.&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">logfile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Logging already started in this session!&quot;</span><span class="p">)</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">logfile</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">set_outputfile</span><span class="p">()</span>
-
-        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">logmode</span> <span class="o">!=</span> <span class="s2">&quot;append&quot;</span><span class="p">:</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">logfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">loghead</span><span class="p">)</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">logfile</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">log_active</span> <span class="o">=</span> <span class="kc">True</span></div>
-
-<div class="viewcode-block" id="LoggerManager.run"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">init_logger</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">init_handler</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">init_formatter</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">init_filter</span><span class="p">()</span></div></div>
+<span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 
 
 <div class="viewcode-block" id="ipython_logger"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.ipython_logger">[docs]</a><span class="k">def</span> <span class="nf">ipython_logger</span><span class="p">(</span><span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -332,6 +197,8 @@
 <span class="sd">        If the configured logger is already logging to today&#39;s date.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">shell</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span>
     <span class="n">log_dir</span> <span class="o">=</span> <span class="n">shell</span><span class="o">.</span><span class="n">profile_dir</span><span class="o">.</span><span class="n">log_dir</span>
     <span class="n">fname</span> <span class="o">=</span> <span class="s2">&quot;log-&quot;</span> <span class="o">+</span> <span class="n">shell</span><span class="o">.</span><span class="n">profile</span> <span class="o">+</span> <span class="s2">&quot;-&quot;</span> <span class="o">+</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.py&quot;</span>
     <span class="n">logmode</span> <span class="o">=</span> <span class="s2">&quot;append&quot;</span>
@@ -363,7 +230,6 @@
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
     <span class="n">logger</span> <span class="o">=</span> <span class="n">ipython_logger</span><span class="p">(</span><span class="n">_ip</span><span class="p">)</span>
-    <span class="n">logger_manager</span> <span class="o">=</span> <span class="n">LoggerManager</span><span class="p">()</span>
 </pre></div>
 
           </div>
@@ -402,7 +268,6 @@
 <div id="sidebartoc">
     <p class="caption"><span class="caption-text">API</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../default_profile.html">Tailor-made profiles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../sphinxext/index.html">Sphinx Extensions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/ipython_sphinx_directive.html">IPython Sphinx Directive</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/lexer.html">New IPython Console Lexer</a></li>
@@ -413,17 +278,14 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../startup/index.html">IPython Startup</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/rehashx.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">%rehashx</span></code> — Add executables to $PATH</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../startup/easy_import.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">04_easy_import</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/ipython-logger.html">05_log — IPython logger</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/help_helpers.html">06_Help_Helpers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/aliases.html">System Aliases</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../startup/fzf.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">21_fzf</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/fzf.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">21_fzf</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/setup_readline.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">30_setup_readline</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/completions.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">34_completions</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/41_numpy.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">numpy</span></code> Initialization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../startup/42_pandas.html">Pandas Initialization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/matplotlib_rc.html">Matplotlib Startup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../startup/sysexcept.html">Customized Exceptions</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../util/index.html">IPython Utilities</a><ul>
@@ -442,13 +304,9 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Extensions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../jobcontrol.html">Job Control</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../todo.html">Todo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../default_profile.html">Tailor-made profiles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../dev.html">Developers Notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../jupyter/index.html">jupyter</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../jupyter/qtconsole.html">Jupyter QTConsole</a></li>
-</ul>
-</li>
 </ul>
 
     
@@ -472,7 +330,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Jan 06, 2020.
+      Last updated on Jan 21, 2020.
     </div>
   </body>
 </html>

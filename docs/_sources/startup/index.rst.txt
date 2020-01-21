@@ -52,7 +52,6 @@ These are the auto-generated API docs for IPython's startup.
    :caption: List of IPython startup files
 
    rehashx
-   easy_import
    ipython-logger
    help_helpers
    aliases
@@ -60,6 +59,5 @@ These are the auto-generated API docs for IPython's startup.
    setup_readline
    completions
    41_numpy
-   42_pandas
    matplotlib_rc
-   sysexcept
+

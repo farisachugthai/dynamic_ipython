@@ -7,13 +7,11 @@
     <title>IPython Sphinx Directive &#8212; Dynamic IPython: version0.0.2</title>
     <link rel="stylesheet" href="../_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script type="text/javascript" src="../_static/copybutton.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/sphinxext/ipython_sphinx_directive.html" />
     <link rel="index" title="Index" href="../genindex.html" />
@@ -264,6 +262,7 @@ number displayed in the source code.</p>
 </div>
 <p>will be rendered as:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="n">x</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="gh">Out[1]: </span><span class="go">2</span>
 
 <span class="gp">In [2]: </span><span class="n">x</span><span class="o">**</span><span class="mi">3</span>
 <span class="gh">Out[2]: </span><span class="go">8</span>
@@ -334,11 +333,13 @@ python interpreter. The following markup:</p>
 </div>
 <p>Renders as</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">foo</span> <span class="o">=</span> <span class="s1">&#39;bar&#39;</span>
+<span class="gh">Out[5]: </span><span class="go">&#39;bar&#39;</span>
 
 <span class="gp">In [6]: </span><span class="nb">print</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span>
 <span class="go">bar</span>
 
 <span class="gp">In [7]: </span><span class="n">foo</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="gh">Out[7]: </span><span class="go">2</span>
 
 <span class="gp">In [8]: </span><span class="n">foo</span><span class="o">**</span><span class="mi">2</span>
 <span class="gh">Out[8]: </span><span class="go">4</span>
@@ -354,7 +355,7 @@ as well as <code class="xref rst rst-dir docutils literal notranslate"><span cla
 </pre></div>
 </div>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [9]: </span><span class="n">plot</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
-<span class="gh">Out[9]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7fb8e75c86a0&gt;]</span>
+<span class="gh">Out[9]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f3235f5ad60&gt;]</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/plot_simple_python.png"><img alt="../_images/plot_simple_python.png" src="../_images/plot_simple_python.png" style="width: 4in;" /></a>
@@ -369,6 +370,7 @@ this page in Pseudo-Decorators section.</p>
 </pre></div>
 </div>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [10]: </span><span class="n">foo</span> <span class="o">=</span> <span class="s1">&#39;bar&#39;</span>
+<span class="gh">Out[10]: </span><span class="go">&#39;bar&#39;</span>
 
 <span class="gp">In [11]: </span><span class="n">foo</span><span class="p">[)</span>
 <span class="gt">  File</span><span class="nn"> &quot;&lt;ipython-input-11-edde7a2425af&gt;&quot;</span><span class="gt">, line </span><span class="mi">1</span>
@@ -408,6 +410,7 @@ suppresses the error during doc-builds.</p>
 <span class="gp">   ....: </span><span class="s1">        support &amp;</span><span class="se">\</span>
 <span class="gp">   ....: </span><span class="s1">        works&#39;</span>
 <span class="gp">   ....: </span>
+<span class="gh">Out[13]: </span><span class="go">&#39;Multi        line &amp;        support &amp;        works&#39;</span>
 
 <span class="gp">In [14]: </span><span class="nb">print</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;&amp;&#39;</span><span class="p">))</span>
 <span class="go">[&#39;Multi        line &#39;, &#39;        support &#39;, &#39;        works&#39;]</span>
@@ -449,7 +452,7 @@ block (e.g. <code class="xref py py-obj docutils literal notranslate"><span clas
 line just below them (eg <code class="xref py py-obj docutils literal notranslate"><span class="pre">&#64;savefig</span></code>).:</p>
 <dl class="function">
 <dt id="sphinx_directive.suppress">
-<code class="sig-prename descclassname">&#64;</code><code class="sig-name descname">suppress</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/sphinx_directive.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sphinx_directive.suppress" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">&#64;</code><code class="sig-name descname">suppress</code><a class="headerlink" href="#sphinx_directive.suppress" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute the IPython input block, but <em class="dfn">&#64;suppress</em> the input and output
 block from the rendered output.  Also, can be applied to the entire
 <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">ipython</span></code> block as a directive option with <code class="xref rst rst-dir docutils literal notranslate"><span class="pre">suppress</span></code>.</p>
@@ -457,7 +460,7 @@ block from the rendered output.  Also, can be applied to the entire
 
 <dl class="function">
 <dt id="sphinx_directive.verbatim">
-<code class="sig-prename descclassname">&#64;</code><code class="sig-name descname">verbatim</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/sphinx_directive.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sphinx_directive.verbatim" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">&#64;</code><code class="sig-name descname">verbatim</code><a class="headerlink" href="#sphinx_directive.verbatim" title="Permalink to this definition">¶</a></dt>
 <dd><p>Insert the input and output block in exactly as they were inputted, but
 prepend an IPython prompt if necessary.
 Auto-increment the prompt as appropriate for the state of the document.
@@ -469,7 +472,7 @@ directive option with <code class="xref rst rst-dir docutils literal notranslate
 
 <dl class="function">
 <dt id="sphinx_directive.savefig">
-<code class="sig-prename descclassname">&#64;</code><code class="sig-name descname">savefig</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/sphinx_directive.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sphinx_directive.savefig" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">&#64;</code><code class="sig-name descname">savefig</code><a class="headerlink" href="#sphinx_directive.savefig" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save the target of the directive to <em class="dfn">outfile</em>.
 <em>I think I’m just gonna rewrite this entire paragraph.</em>
 Save the figure to the static directory and insert it into the
@@ -481,7 +484,7 @@ Takes args to pass to the image directive (<em>scale</em>,
 
 <dl class="function">
 <dt id="sphinx_directive.doctest">
-<code class="sig-prename descclassname">&#64;</code><code class="sig-name descname">doctest</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/sphinx_directive.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sphinx_directive.doctest" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">&#64;</code><code class="sig-name descname">doctest</code><a class="headerlink" href="#sphinx_directive.doctest" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compare the pasted in output in the IPython block with the output
 generated at doc build time, and raise errors if they don’t
 match. Also, can be applied to the entire <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">ipython</span></code> block as a
@@ -490,7 +493,7 @@ directive option with <code class="docutils literal notranslate"><span class="pr
 
 <dl class="function">
 <dt>
-<code class="sig-prename descclassname">&#64;</code><code class="sig-name descname">suppress</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/sphinx_directive.py"><span class="viewcode-link">[source]</span></a></dt>
+<code class="sig-prename descclassname">&#64;</code><code class="sig-name descname">suppress</code></dt>
 <dd><p>Execute the ipython input block, but suppress the input and output
 block from the rendered output.  Also, can be applied to the entire
 <code class="docutils literal notranslate"><span class="pre">..ipython</span></code> block as a directive option with <code class="docutils literal notranslate"><span class="pre">:suppress:</span></code>.</p>
@@ -498,17 +501,17 @@ block from the rendered output.  Also, can be applied to the entire
 
 <dl class="function">
 <dt id="sphinx_directive.okexcept">
-<code class="sig-prename descclassname">&#64;</code><code class="sig-name descname">okexcept</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/sphinx_directive.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sphinx_directive.okexcept" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">&#64;</code><code class="sig-name descname">okexcept</code><a class="headerlink" href="#sphinx_directive.okexcept" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
 <dt id="sphinx_directive.okwarning">
-<code class="sig-prename descclassname">&#64;</code><code class="sig-name descname">okwarning</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/sphinx_directive.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sphinx_directive.okwarning" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">&#64;</code><code class="sig-name descname">okwarning</code><a class="headerlink" href="#sphinx_directive.okwarning" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
 <dt id="sphinx_directive.python">
-<code class="sig-prename descclassname">&#64;</code><code class="sig-name descname">python</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/sphinx_directive.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sphinx_directive.python" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">&#64;</code><code class="sig-name descname">python</code><a class="headerlink" href="#sphinx_directive.python" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <div class="admonition-todo admonition" id="id4">
@@ -720,17 +723,14 @@ obtainable from the “Show Source” button.</p>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../startup/index.html">IPython Startup</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../startup/rehashx.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">%rehashx</span></code> — Add executables to $PATH</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../startup/easy_import.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">04_easy_import</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../startup/ipython-logger.html">05_log — IPython logger</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../startup/help_helpers.html">06_Help_Helpers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../startup/aliases.html">System Aliases</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../startup/fzf.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">21_fzf</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../startup/fzf.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">21_fzf</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../startup/setup_readline.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">30_setup_readline</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../startup/completions.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">34_completions</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../startup/41_numpy.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">numpy</span></code> Initialization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../startup/42_pandas.html">Pandas Initialization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../startup/matplotlib_rc.html">Matplotlib Startup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../startup/sysexcept.html">Customized Exceptions</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../util/index.html">IPython Utilities</a><ul>
@@ -787,7 +787,7 @@ obtainable from the “Show Source” button.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Jan 20, 2020.
+      Last updated on Jan 21, 2020.
     </div>
   </body>
 </html>

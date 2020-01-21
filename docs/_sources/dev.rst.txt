@@ -14,42 +14,6 @@ Developer's Notes
 Installing
 ===========
 
-All of the resources necessary for installing the contents of this repository
-have been moved to the directory `tools <tools>`_.
-
-There are environment files for Conda on both `Linux
-<tools/environment_linux.txt>`_ and `Windows <tools/environment_windows.yml>`_,
-`a Pipfile <tools/Pipfile>`_, `a requirements.txt <tools/requirements.txt>`_,
-and another for a `development installation <tools/requirements_dev.txt>`_,
-as well as a `tox.ini <tools/tox.ini>`_.
-
-Therefore the number of files that one can use to install this repository grew
-large enough that they've all been moved to their own separate folder.
-
-
-Installation Assumptions
-------------------------
-
-In addition, the scripts therein make a few assumptions. One is that
-the repository at `<https://github.com/farisachugthai/Gruvbox-IPython>`_
-has been installed.
-
-The other assumption, the subject of many online debates, is that the user
-wants to use the text editor Neovim as their default editor.
-
-The editor will be invoked whenever the user runs the line magic `%edit`.
-
-If this behavior isn't desired, the following parameter needs to be
-changed like so::
-
-   from traitlets import get_config
-   c = get_config()
-   c.TerminalInteractiveShell.editor = 'nvim'
-
-
-Commands
---------
-
 In your console of choice, create a virtual environment.
 This can be done with::
 
@@ -73,17 +37,17 @@ Building Documentation
 Building the HTML documentation requires Sphinx and numpydoc, both of which
 can be installed using Anaconda::
 
-    conda install sphinx numpydoc
+   conda install sphinx numpydoc
 
 If you installed using another distribution of Python, these dependencies
 can also be installed using either ``easy_install`` or ``pip``::
 
-    easy_install install sphinx numpydoc
-    pip install sphinx numpydoc
+   easy_install install sphinx numpydoc
+   pip install sphinx numpydoc
 
 To build the HTML documentation on Windows using :command:`cmd`, run::
 
-    make html
+   make html
 
 From PowerShell, run.:
 
@@ -150,9 +114,9 @@ Utilizing Tagbar
 ----------------
 
 Out of the box, Exuberant ctags and even Universal ctags
-doesn't support rst documentation.
+do not support rst documentation in tag files.
 
-An external dependency in rst2ctags is required which can be
+An external dependency, ``rst2ctags``, is required. It can be
 found at `this repo <https://github.com/jszakmeister/rst2ctags.git>`_.
 
 .. code-block:: vim
@@ -202,3 +166,4 @@ Linting
 .. code-block:: bash
 
    flake8-rst --config=setup.cfg --show-source --statistics --doctest docs/source/**/*.rst --rst-directives=ipython --tee --output-file=flake8_output.log
+

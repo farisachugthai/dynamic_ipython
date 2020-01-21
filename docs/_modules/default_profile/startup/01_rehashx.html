@@ -7,32 +7,132 @@
     <title>default_profile.startup.01_rehashx &#8212; Dynamic IPython: version0.0.2</title>
     <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../../_static/copybutton.js"></script>
-    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/startup/01_rehashx.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-<link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" />
-<link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" media="screen" rel="stylesheet" type="text/css" />
-<link rel='stylesheet' href='//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.css'>
-<!--[if lte IE 6]>
-  <link
-    rel="stylesheet"
-    href="../../../_static/ie6.css"
-    type="text/css"
-    media="screen"
-    charset="utf-8"
-  />
-<![endif]-->
+<!-- <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" /> -->
+<!-- <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" media="screen" rel="stylesheet" type="text/css" /> -->
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <title>Floating label Demo</title>
+  <meta name="description" content="" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style type="text/css">
+    /* CSS styles */
+    /* Example by Matthias Benkort at http://codepen.io/KtorZ/pen/ZOzdqG */
+    @import url(
+      https://fonts.googleapis.com/css?family=Roboto:400,
+      300,
+      500,
+      700
+    );
+    .wrapper {
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
 
-  </head><body>
+    .material-textfield {
+      display: inline-block;
+      height: 4rem;
+      padding-top: 2rem;
+    }
+    .material-textfield input {
+      background: none;
+      border: none;
+      box-sizing: border-box;
+      display: block;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 1rem;
+      padding: 0.25rem 0.1rem;
+      width: 100%;
+    }
+    .material-textfield input:invalid {
+      box-shadow: none;
+    }
+    .material-textfield input:focus {
+      outline: none;
+    }
+    .material-textfield label {
+      display: inline-block;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 0;
+      pointer-events: none;
+      position: relative;
+      text-transform: uppercase;
+      width: 100%;
+    }
+    .material-textfield label::before {
+      content: attr(data-content);
+      position: relative;
+      transition: all 0.2s ease;
+      will-change: font-size, top;
+    }
+    .material-textfield label::after {
+      bottom: 0.9rem;
+      content: "";
+      height: 0.3rem;
+      left: 50%;
+      position: absolute;
+      transition: all 0.2s ease;
+      width: 0;
+      will-change: width, left;
+    }
+    .material-textfield label::before,
+    .material-textfield input[required]:focus ~ label::before {
+      font-size: 0.75rem;
+      top: -3.25rem;
+    }
+    .material-textfield input:focus ~ label::after {
+      left: 0%;
+      width: 100%;
+    }
+    .material-textfield input:invalid ~ label::before {
+      font-size: 1rem;
+      top: -2rem;
+    }
 
+    .material-textfield.blue input {
+      border-bottom: 0.1rem solid #03a9f4;
+      color: #0275a8;
+    }
+    .material-textfield.blue label::after {
+      background: #03a9f4;
+    }
+    .material-textfield.blue label::before,
+    .material-textfield.blue input[required]:focus ~ label::before {
+      color: #47c4fd;
+    }
+    .material-textfield.blue input:invalid ~ label::before {
+      color: #03a9f4;
+    }
+
+    .material-textfield.red input {
+      border-bottom: 0.1rem solid #f44336;
+      color: #d2190b;
+    }
+    .material-textfield.red label::after {
+      background: #f44336;
+    }
+    .material-textfield.red label::before,
+    .material-textfield.red input[required]:focus ~ label::before {
+      color: #f8877f;
+    }
+    .material-textfield.red input:invalid ~ label::before {
+      color: #f44336;
+    }
+  </style>
+</head>
+
+  </head><body> 
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -55,19 +155,45 @@
 <h1>Source code for default_profile.startup.01_rehashx</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python3</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;Run rehashx magic.</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
+<span class="sd">rehashx magic</span>
+<span class="sd">-------------</span>
 <span class="sd">This is an incredible little gem that&#39;s hugely useful for</span>
 <span class="sd">making IPython work as a more versatile system shell.</span>
+
+
+<span class="sd">Work in Progress</span>
+<span class="sd">-----------------</span>
 
 <span class="sd">The code that&#39;s more important than anything should execute regardless</span>
 <span class="sd">of whether someone has ``pip install``-ed it.</span>
 
+<span class="sd">In addition, enable faulthandler, tracemalloc and assign them to</span>
+<span class="sd">sys.excepthook, threading.excepthoook and others.</span>
+
+<span class="sd">A possible alternative to get_ipython().showsyntaxerror might possibly be</span>
+<span class="sd">:func:`dis.distb`.</span>
+
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">cgitb</span>
+<span class="kn">import</span> <span class="nn">code</span>
+<span class="kn">import</span> <span class="nn">faulthandler</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">runpy</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">trace</span>
+<span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Sequence</span>
 <span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">scandir</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">runpy</span> <span class="kn">import</span> <span class="n">run_module</span><span class="p">,</span> <span class="n">run_path</span>
+<span class="kn">from</span> <span class="nn">traceback</span> <span class="kn">import</span> <span class="n">FrameSummary</span><span class="p">,</span> <span class="n">StackSummary</span>
+<span class="kn">from</span> <span class="nn">tracemalloc</span> <span class="kn">import</span> <span class="n">Snapshot</span>
 
 <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+<span class="kn">from</span> <span class="nn">traitlets.config</span> <span class="kn">import</span> <span class="n">Configurable</span>
 
 
 <div class="viewcode-block" id="rehashx_run"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.rehashx_run">[docs]</a><span class="k">def</span> <span class="nf">rehashx_run</span><span class="p">():</span>
@@ -79,9 +205,37 @@
 <span class="sd">        IPython shell instance.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s2">&quot;rehashx&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_exec_dir"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.get_exec_dir">[docs]</a><span class="k">def</span> <span class="nf">get_exec_dir</span><span class="p">():</span>
     <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">_ip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">_ip</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s2">&quot;rehashx&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span></div>
+        <span class="n">profiledir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">_ip</span><span class="o">.</span><span class="n">profile_dir</span><span class="p">)</span>
+        <span class="n">exec_dir</span> <span class="o">=</span> <span class="n">profiledir</span> <span class="o">/</span> <span class="s2">&quot;startup&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">exec_dir</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span></div>
+
+
+<div class="viewcode-block" id="safe_run_path"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.safe_run_path">[docs]</a><span class="k">def</span> <span class="nf">safe_run_path</span><span class="p">(</span><span class="n">fileobj</span><span class="p">,</span> <span class="n">logger</span><span class="p">):</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;File to execute is: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">fileobj</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">runpy</span><span class="o">.</span><span class="n">run_path</span><span class="p">(</span><span class="n">fileobj</span><span class="p">,</span> <span class="n">init_globals</span><span class="o">=</span><span class="nb">globals</span><span class="p">(),</span> <span class="n">run_name</span><span class="o">=</span><span class="s2">&quot;rerun_startup&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;ImportError for mod: &quot;</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">last_traceback</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ConnectionResetError</span><span class="p">:</span>  <span class="c1"># happens in windows async loop all the time</span>
+        <span class="k">pass</span>
+    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="s2">&quot;winerror&quot;</span><span class="p">):</span>  <span class="c1"># same reason</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>  <span class="c1"># noqa</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        <span class="k">raise</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
+        <span class="k">raise</span></div>
 
 
 <div class="viewcode-block" id="rerun_startup"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.rerun_startup">[docs]</a><span class="k">def</span> <span class="nf">rerun_startup</span><span class="p">():</span>
@@ -94,14 +248,61 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ret</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">scandir</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.py&#39;</span><span class="p">):</span>
-            <span class="n">ret</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">runpy</span><span class="o">.</span><span class="n">run_path</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+    <span class="n">exec_dir</span> <span class="o">=</span> <span class="n">get_exec_dir</span><span class="p">()</span>
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="vm">__name__</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">())</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">scandir</span><span class="p">(</span><span class="n">exec_dir</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.py&quot;</span><span class="p">):</span>
+            <span class="n">safe_run_path</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">ret</span></div>
 
 
+<div class="viewcode-block" id="ExceptionHook"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.ExceptionHook">[docs]</a><span class="k">class</span> <span class="nc">ExceptionHook</span><span class="p">(</span><span class="n">Configurable</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Custom exception hook for IPython.&quot;&quot;&quot;</span>
+
+    <span class="n">instance</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="ExceptionHook.__init__"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.ExceptionHook.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">shell</span></div>
+
+<div class="viewcode-block" id="ExceptionHook.call"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.ExceptionHook.call">[docs]</a>    <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">etype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">evalue</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">etb</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Proxy for the call dunder.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">etype</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">evalue</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">etb</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">etype</span><span class="p">,</span> <span class="n">evalue</span><span class="p">,</span> <span class="n">etb</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">etype</span><span class="p">,</span> <span class="n">evalue</span><span class="p">,</span> <span class="n">etb</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">etype</span><span class="p">,</span> <span class="n">evalue</span><span class="p">,</span> <span class="n">etb</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;TODO.&quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&lt;</span><span class="si">{}</span><span class="s2"> &#39;</span><span class="si">{}</span><span class="s2">&#39;&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ExceptionTuple"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.ExceptionTuple">[docs]</a><span class="k">class</span> <span class="nc">ExceptionTuple</span><span class="p">(</span><span class="n">Sequence</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Simply a test for now but we need to provide the exception hook with this.</span>
+
+<span class="sd">    It needs a tuple of exceptions to catch.</span>
+
+<span class="sd">    Seemed like a good place to keep working with ABCs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">pass</span></div>
+
+
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">rehashx_run</span><span class="p">()</span>
+    <span class="n">faulthandler</span><span class="o">.</span><span class="n">enable</span><span class="p">()</span>
+    <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">_ip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">rehashx_run</span><span class="p">()</span>
+        <span class="n">handled</span> <span class="o">=</span> <span class="n">cgitb</span><span class="o">.</span><span class="n">Hook</span><span class="p">(</span>
+            <span class="n">logdir</span><span class="o">=</span><span class="n">_ip</span><span class="o">.</span><span class="n">profile_dir</span><span class="o">.</span><span class="n">log_dir</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;text&quot;</span>
+        <span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">excepthook</span> <span class="o">=</span> <span class="n">handled</span>
+        <span class="n">_ip</span><span class="o">.</span><span class="n">excepthook</span> <span class="o">=</span> <span class="n">handled</span>
 </pre></div>
 
           </div>
@@ -140,7 +341,6 @@
 <div id="sidebartoc">
     <p class="caption"><span class="caption-text">API</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../default_profile.html">Tailor-made profiles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../sphinxext/index.html">Sphinx Extensions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/ipython_sphinx_directive.html">IPython Sphinx Directive</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/lexer.html">New IPython Console Lexer</a></li>
@@ -151,17 +351,14 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../startup/index.html">IPython Startup</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/rehashx.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">%rehashx</span></code> — Add executables to $PATH</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../startup/easy_import.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">04_easy_import</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/ipython-logger.html">05_log — IPython logger</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/help_helpers.html">06_Help_Helpers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/aliases.html">System Aliases</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../startup/fzf.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">21_fzf</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/fzf.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">21_fzf</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/setup_readline.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">30_setup_readline</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/completions.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">34_completions</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/41_numpy.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">numpy</span></code> Initialization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../startup/42_pandas.html">Pandas Initialization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/matplotlib_rc.html">Matplotlib Startup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../startup/sysexcept.html">Customized Exceptions</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../util/index.html">IPython Utilities</a><ul>
@@ -180,13 +377,9 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Extensions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../jobcontrol.html">Job Control</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../todo.html">Todo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../default_profile.html">Tailor-made profiles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../dev.html">Developers Notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../jupyter/index.html">jupyter</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../jupyter/qtconsole.html">Jupyter QTConsole</a></li>
-</ul>
-</li>
 </ul>
 
     
@@ -210,7 +403,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Jan 06, 2020.
+      Last updated on Jan 21, 2020.
     </div>
   </body>
 </html>

@@ -7,32 +7,132 @@
     <title>default_profile.util.profile_override &#8212; Dynamic IPython: version0.0.2</title>
     <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../../_static/copybutton.js"></script>
-    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/util/profile_override.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-<link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" />
-<link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" media="screen" rel="stylesheet" type="text/css" />
-<link rel='stylesheet' href='//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.css'>
-<!--[if lte IE 6]>
-  <link
-    rel="stylesheet"
-    href="../../../_static/ie6.css"
-    type="text/css"
-    media="screen"
-    charset="utf-8"
-  />
-<![endif]-->
+<!-- <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" /> -->
+<!-- <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" media="screen" rel="stylesheet" type="text/css" /> -->
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <title>Floating label Demo</title>
+  <meta name="description" content="" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style type="text/css">
+    /* CSS styles */
+    /* Example by Matthias Benkort at http://codepen.io/KtorZ/pen/ZOzdqG */
+    @import url(
+      https://fonts.googleapis.com/css?family=Roboto:400,
+      300,
+      500,
+      700
+    );
+    .wrapper {
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
 
-  </head><body>
+    .material-textfield {
+      display: inline-block;
+      height: 4rem;
+      padding-top: 2rem;
+    }
+    .material-textfield input {
+      background: none;
+      border: none;
+      box-sizing: border-box;
+      display: block;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 1rem;
+      padding: 0.25rem 0.1rem;
+      width: 100%;
+    }
+    .material-textfield input:invalid {
+      box-shadow: none;
+    }
+    .material-textfield input:focus {
+      outline: none;
+    }
+    .material-textfield label {
+      display: inline-block;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 0;
+      pointer-events: none;
+      position: relative;
+      text-transform: uppercase;
+      width: 100%;
+    }
+    .material-textfield label::before {
+      content: attr(data-content);
+      position: relative;
+      transition: all 0.2s ease;
+      will-change: font-size, top;
+    }
+    .material-textfield label::after {
+      bottom: 0.9rem;
+      content: "";
+      height: 0.3rem;
+      left: 50%;
+      position: absolute;
+      transition: all 0.2s ease;
+      width: 0;
+      will-change: width, left;
+    }
+    .material-textfield label::before,
+    .material-textfield input[required]:focus ~ label::before {
+      font-size: 0.75rem;
+      top: -3.25rem;
+    }
+    .material-textfield input:focus ~ label::after {
+      left: 0%;
+      width: 100%;
+    }
+    .material-textfield input:invalid ~ label::before {
+      font-size: 1rem;
+      top: -2rem;
+    }
 
+    .material-textfield.blue input {
+      border-bottom: 0.1rem solid #03a9f4;
+      color: #0275a8;
+    }
+    .material-textfield.blue label::after {
+      background: #03a9f4;
+    }
+    .material-textfield.blue label::before,
+    .material-textfield.blue input[required]:focus ~ label::before {
+      color: #47c4fd;
+    }
+    .material-textfield.blue input:invalid ~ label::before {
+      color: #03a9f4;
+    }
+
+    .material-textfield.red input {
+      border-bottom: 0.1rem solid #f44336;
+      color: #d2190b;
+    }
+    .material-textfield.red label::after {
+      background: #f44336;
+    }
+    .material-textfield.red label::before,
+    .material-textfield.red input[required]:focus ~ label::before {
+      color: #f8877f;
+    }
+    .material-textfield.red input:invalid ~ label::before {
+      color: #f44336;
+    }
+  </style>
+</head>
+
+  </head><body> 
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -274,7 +374,6 @@
 <div id="sidebartoc">
     <p class="caption"><span class="caption-text">API</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../default_profile.html">Tailor-made profiles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../sphinxext/index.html">Sphinx Extensions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/ipython_sphinx_directive.html">IPython Sphinx Directive</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../sphinxext/lexer.html">New IPython Console Lexer</a></li>
@@ -285,17 +384,14 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../startup/index.html">IPython Startup</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/rehashx.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">%rehashx</span></code> — Add executables to $PATH</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../startup/easy_import.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">04_easy_import</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/ipython-logger.html">05_log — IPython logger</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/help_helpers.html">06_Help_Helpers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/aliases.html">System Aliases</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../startup/fzf.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">21_fzf</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../startup/fzf.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">21_fzf</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/setup_readline.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">30_setup_readline</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/completions.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">34_completions</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/41_numpy.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">numpy</span></code> Initialization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../startup/42_pandas.html">Pandas Initialization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../startup/matplotlib_rc.html">Matplotlib Startup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../startup/sysexcept.html">Customized Exceptions</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../util/index.html">IPython Utilities</a><ul>
@@ -314,13 +410,9 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../extensions.html">Extensions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../jobcontrol.html">Job Control</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../todo.html">Todo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../default_profile.html">Tailor-made profiles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../dev.html">Developers Notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../jupyter/index.html">jupyter</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../jupyter/qtconsole.html">Jupyter QTConsole</a></li>
-</ul>
-</li>
 </ul>
 
     
@@ -344,7 +436,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Jan 06, 2020.
+      Last updated on Jan 21, 2020.
     </div>
   </body>
 </html>

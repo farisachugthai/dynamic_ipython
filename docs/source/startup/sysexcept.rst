@@ -1,10 +1,10 @@
+:orphan:
+
 .. _customized-exceptions:
 
 =====================
 Customized Exceptions
 =====================
-
-.. currentmodule:: default_profile.startup.50_sysexception
 
 In this module we'll define our own exception hook for IPython.
 
@@ -216,11 +216,3 @@ However note the InteractiveTB being mentioned in these docstrings.:
 
 .. seealso:: init_traceback_handlers
 
-
-:mod:`~default_profile.startup.50_sysexception`
-===============================================
-
-.. automodule:: default_profile.startup.50_sysexception
-   :members:
-   :undoc-members:
-   :show-inheritance:

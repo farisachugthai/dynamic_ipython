@@ -11,7 +11,18 @@ from pathlib import Path
 import sphinx
 from IPython.lib.lexers import IPyLexer, IPythonTracebackLexer
 from IPython.sphinxext import ipython_directive
-from sphinx import addnodes  # noqa
+
+from pygments.lexers.markup import MarkdownLexer, RstLexer
+from pygments.lexers.shell import BashLexer, BashSessionLexer
+from pygments.lexers.textedit import VimLexer
+from pygments.lexers.python import (
+    NumPyLexer,
+    PythonConsoleLexer,
+    PythonLexer,
+    Python3TracebackLexer,
+    PythonTracebackLexer,
+)
+import sphinx
 from sphinx.domains.rst import ReSTDomain
 from sphinx.ext.autodoc import cut_lines
 from sphinx.util.docfields import GroupedField
@@ -62,34 +73,44 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.autosectionlabel",
     "sphinx.ext.autosummary",
-    "sphinx.ext.coverage",
     "sphinx.ext.doctest",
     "sphinx.ext.extlinks",
     "sphinx.ext.githubpages",
-    "sphinx.ext.ifconfig",
-    "sphinx.ext.inheritance_diagram",
     "sphinx.ext.intersphinx",
-    "sphinx.ext.linkcode",
-    "sphinx.ext.mathjax",
     "sphinx.ext.napoleon",
     "sphinx.ext.todo",
+    "sphinx.ext.viewcode",
     "IPython.sphinxext.ipython_directive",
     "default_profile.sphinxext.magics",
 ]
-
-# if ask_for_import('numpydoc'):
-#     extensions.append('numpydoc.numpydoc')
-#     DOCS_LOGGER.info('numpydoc in extensions')
 
 if ask_for_import("default_profile.sphinxext.magics"):
     extensions.append("default_profile.sphinxext.magics")
     DOCS_LOGGER.info("magics in extensions")
 
+if ask_for_import("matplotlib"):
+    extensions.extend(
+        ["matplotlib.sphinxext.plot_directive", "matplotlib.sphinxext.mathmpl",]
+    )
+
 if ask_for_import("flake8_rst"):
     extensions.extend(
-        ["flake8_rst.sphinxext.custom_roles", ]
+        ["flake8_rst.sphinxext.custom_roles",]
     )
     DOCS_LOGGER.info("flake8_rst in extensions")
+
+if ask_for_import("numpydoc"):
+    extensions.extend(["numpydoc.numpydoc"])
+
+if ask_for_import("recommonmark"):
+    DOCS_LOGGER.info("recommonmark in extensions")
+    extensions.extend(["recommonmark"])
+
+source_suffix = {
+    ".rst": "restructuredtext",
+    ".txt": "markdown",
+    ".md": "markdown",
+}
 
 # -- General Configuration ----------------------------------------
 
@@ -99,7 +120,6 @@ templates_path = ["_templates"]
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 
-# source_suffix = ['.rst', '.md']
 source_suffix = [".rst"]
 
 # The encoding of source files.
@@ -391,7 +411,7 @@ viewcode-follow-imported(app, modname, attribute)
 
 """
 
-# viewcode_follow_imported_members = False
+viewcode_follow_imported_members = False
 
 # -- IPython directive -------------------------------------------------------
 
@@ -403,8 +423,9 @@ ipython_warning_is_error = False
 ipython_execlines = [
     "import numpy",
     "import IPython",
-    "import pandas as pd",
     "import default_profile",
+    "import matplotlib as mpl",
+    "import matplotlib.pyplot",
 ]
 
 if ask_for_import("matplotlib"):
@@ -569,17 +590,6 @@ def rstjinja(app, docname, source):
     source[0] = rendered
 
 
-def del_later(app):
-    """Don't know where to move this but it's an interesting way of running
-    lambdas over an app to get logging statements."""
-    # workaround for RTD
-    from sphinx.util import logging
-
-    logger = logging.getLogger(__name__)
-    app.info = lambda *args, **kwargs: logger.info(*args, **kwargs)
-    app.warn = lambda *args, **kwargs: logger.warning(*args, **kwargs)
-    app.debug = lambda *args, **kwargs: logger.debug(*args, **kwargs)
-
 
 def setup(app):
     """ Add in jinja templates to the site.
@@ -595,6 +605,17 @@ def setup(app):
     app.connect("source-read", rstjinja)
     app.add_lexer("ipythontb", IPythonTracebackLexer)
     app.add_lexer("ipython", IPyLexer)
+    app.add_lexer("python3tb", Python3TracebackLexer)
+    app.add_lexer("python3", PythonLexer)
+    app.add_lexer("python", PythonLexer)
+    app.add_lexer("pycon", PythonConsoleLexer)
+    app.add_lexer("markdown", MarkdownLexer)
+    app.add_lexer("rst", RstLexer)
+    app.add_lexer("vim", VimLexer)
+
+    app.add_lexer("ipythontb", IPythonTracebackLexer)
+    # app.add_lexer("ipython3", IPython3Lexer)
+    app.add_lexer("numpy", NumPyLexer)
     app.connect("autodoc-process-docstring", cut_lines(4, what=["module"]))
     app.add_object_type(
         "confval",
@@ -615,5 +636,10 @@ def setup(app):
     # app.add_css_file('custom.css')
     # app.add_css_file('pygments.css')
     # There's a html.addjsfile call earlier in the file
-    app.add_js_file("copybutton.js")
+    # app.add_js_file("copybutton.js")
     app.add_object_type("directive", "dir", "pair: %s; directive")
+    return {
+        "version": "builtin",
+        "parallel_read_safe": True,
+        "parallel_write_safe": True,
+    }
