@@ -179,6 +179,21 @@ and validate IPython code, syntax highlight source code that’s been included
 literally, and embed plots based on the live embedded data.</p>
 <p>Specifically, the IPython Sphinx extension correctly parses standard
 IPython prompts, and extracts the input and output lines to generate HTML.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This tutorial should be read side-by-side with the
+<a class="reference external" href="../_sources/sphinxext.rst.txt">Sphinx source</a> that generated this
+document. With the exception of the example given above, the literal
+ReStructured Text will not be displayed alongside the rendered output.</p>
+</div>
+<div class="admonition-warning-is-error admonition">
+<p class="admonition-title">Warning is Error</p>
+<p>All warnings are treated as errors in the default configuration which
+will lead to frequent crashes while building documentation.
+The option where this behavior can be modified, <code class="docutils literal notranslate"><span class="pre">ipython_warning_is_error</span></code>
+is displayed in the IPython Sphinx directive module section at the
+bottom of the page.</p>
+</div>
 <div class="section" id="directive-and-options">
 <h2>Directive and options<a class="headerlink" href="#directive-and-options" title="Permalink to this headline">¶</a></h2>
 <p>The IPython directive takes a number of options detailed here.</p>
@@ -254,20 +269,13 @@ number displayed in the source code.</p>
 <span class="gh">Out[2]: </span><span class="go">8</span>
 </pre></div>
 </div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This tutorial should be read side-by-side with the
-<a class="reference external" href="../_sources/sphinxext.rst.txt">Sphinx source</a> that generated this
-document. With the exception of the example given above, the literal
-ReStructured Text will not be displayed alongside the rendered output.</p>
-</div>
-<div class="admonition-warning-is-error admonition">
-<p class="admonition-title">Warning is Error</p>
-<p>All warnings are treated as errors in the default configuration which
-will lead to frequent crashes while building documentation.
-The option where this behavior can be modified, <code class="docutils literal notranslate"><span class="pre">ipython_warning_is_error</span></code>
-is displayed in the IPython Sphinx directive module section at the
-bottom of the page.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#configuration-values"><span class="std std-ref">Configuration Values</span></a></dt><dd><p>Check towards the bottom of this document to view all IPython
+configuration options.</p>
+</dd>
+</dl>
 </div>
 </div>
 <div class="section" id="persisting-the-session-across-blocks">
@@ -346,13 +354,20 @@ as well as <code class="xref rst rst-dir docutils literal notranslate"><span cla
 </pre></div>
 </div>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [9]: </span><span class="n">plot</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
-<span class="gh">Out[9]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f42df67f700&gt;]</span>
+<span class="gh">Out[9]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7fb8e75c86a0&gt;]</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/plot_simple_python.png"><img alt="../_images/plot_simple_python.png" src="../_images/plot_simple_python.png" style="width: 4in;" /></a>
-<p>For more information on <a class="reference internal" href="#sphinx_directive.savefig" title="sphinx_directive.savefig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">savefig</span></code></a> decorator, please refer to the end of
+<p>For more information on the <code class="xref py py-obj docutils literal notranslate"><span class="pre">&#64;savefig</span></code> decorator, please refer to the end of
 this page in Pseudo-Decorators section.</p>
 <p>Similarly, <a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stderr" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stderr</span></code></a> is inserted.:</p>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">ipython</span><span class="p">::</span> python
+   <span class="nc">:okexcept:</span>
+
+   foo = &#39;bar&#39;
+   foo[)
+</pre></div>
+</div>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [10]: </span><span class="n">foo</span> <span class="o">=</span> <span class="s1">&#39;bar&#39;</span>
 
 <span class="gp">In [11]: </span><span class="n">foo</span><span class="p">[)</span>
@@ -375,14 +390,15 @@ this page in Pseudo-Decorators section.</p>
 <p>The following section attempts to execute faulty code, namely calling
 the <a class="reference external" href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.html#module-matplotlib.pyplot" title="(in Matplotlib v3.1.2)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">matplotlib.pyplot</span></code></a> functions <code class="docutils literal notranslate"><span class="pre">matplotlib.pyplot.ioff</span></code>
 and <code class="docutils literal notranslate"><span class="pre">matplotlib.pyplot.ion</span></code> which haven’t been defined in this session.</p>
-<div class="admonition-todo admonition" id="id3">
-<p class="admonition-title">Todo</p>
-<p>Remove this sentence below like wth?</p>
-<p>Let’s at least print the literal text and then show how we suppress the error
-rather than just silently doing so.</p>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">ipython</span><span class="p">::</span> python
+   <span class="nc">:suppress:</span>
+
+   ioff()
+   ion()
+</pre></div>
 </div>
-<p>If you don’t see the next code block then we can surmise that the
-<code class="xref py py-obj docutils literal notranslate"><span class="pre">&#64;suppress</span></code> decorator is behaving as expected.:</p>
+<p>As we observe, there is no code-block below, and the directive appropriately
+suppresses the error during doc-builds.</p>
 </div>
 <div class="section" id="splitting-python-statements-across-lines">
 <h2>Splitting Python statements across lines<a class="headerlink" href="#splitting-python-statements-across-lines" title="Permalink to this headline">¶</a></h2>
@@ -417,11 +433,6 @@ rather than just silently doing so.</p>
 <span class="go">4</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="configuring-the-build-environment">
-<h2>Configuring the Build Environment<a class="headerlink" href="#configuring-the-build-environment" title="Permalink to this headline">¶</a></h2>
-<p>I want to put this in the docstrings of those functions with the <code class="xref py py-obj docutils literal notranslate"><span class="pre">env</span></code>
-parameter that kept tripping me up. (ref)</p>
 <dl class="glossary simple">
 <dt id="term-environment">environment</dt><dd><p>A structure where information about all documents under the root is saved,
 and used for cross-referencing.  The environment is pickled after the
@@ -430,14 +441,12 @@ changed documents.</p>
 </dd>
 </dl>
 </div>
-<div class="section" id="supported-pseudo-decorators">
-<h2>Supported Pseudo-Decorators<a class="headerlink" href="#supported-pseudo-decorators" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="pseudo-decorators">
+<span id="id3"></span><h2>Pseudo-Decorators<a class="headerlink" href="#pseudo-decorators" title="Permalink to this headline">¶</a></h2>
 <p>Here are the supported decorators, and any optional arguments they
 take.  Some of the decorators can be used as options to the entire
 block (e.g. <code class="xref py py-obj docutils literal notranslate"><span class="pre">&#64;verbatim</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">&#64;suppress</span></code>), and some only apply to the
 line just below them (eg <code class="xref py py-obj docutils literal notranslate"><span class="pre">&#64;savefig</span></code>).:</p>
-<div class="section" id="pseudo-decorators">
-<span id="id4"></span><h3>Pseudo-Decorators<a class="headerlink" href="#pseudo-decorators" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
 <dt id="sphinx_directive.suppress">
 <code class="sig-prename descclassname">&#64;</code><code class="sig-name descname">suppress</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/sphinx_directive.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sphinx_directive.suppress" title="Permalink to this definition">¶</a></dt>
@@ -502,16 +511,15 @@ block from the rendered output.  Also, can be applied to the entire
 <code class="sig-prename descclassname">&#64;</code><code class="sig-name descname">python</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/sphinx_directive.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sphinx_directive.python" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<div class="admonition-todo admonition" id="id5">
+<div class="admonition-todo admonition" id="id4">
 <p class="admonition-title">Todo</p>
 <p>Document the magics.py sphinx extension!!</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">magic::</span></code> directive doesn’t appear to be documented at all.
 Actually wait. Does it ship with the IPython wheel?</p>
 </div>
 </div>
-</div>
 <div class="section" id="configuration-values">
-<span id="id6"></span><h2>Configuration Values<a class="headerlink" href="#configuration-values" title="Permalink to this headline">¶</a></h2>
+<span id="id5"></span><h2>Configuration Values<a class="headerlink" href="#configuration-values" title="Permalink to this headline">¶</a></h2>
 <p>The configurable options that can be placed in conf.py are:</p>
 <dl class="confval">
 <dt id="confval-ipython_savefig_dir">
@@ -531,9 +539,10 @@ You shouldn’t need to change this.</p>
 </dd></dl>
 
 <dl class="confval">
-<dt id="confval-ipython_warning_is_error:[defaulttoTrue]">
-<code class="sig-name descname">ipython_warning_is_error: [default to True]</code><a class="headerlink" href="#confval-ipython_warning_is_error:[defaulttoTrue]" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fail the build if something unexpected happen, for example
+<dt id="confval-ipython_warning_is_error">
+<code class="sig-name descname">ipython_warning_is_error</code><a class="headerlink" href="#confval-ipython_warning_is_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>[Default to True]
+Fail the build if something unexpected happen, for example
 if a block raise an exception but does not have the
 <code class="xref py py-obj docutils literal notranslate"><span class="pre">:okexcept:</span></code> flag. The exact behavior of
 what is considered strict, may change between the sphinx
@@ -614,22 +623,20 @@ one sets the backend to <a class="reference external" href="https://docs.python.
 <a class="reference external" href="`&lt;http://www.sphinx-doc.org/en/master/usage/restructuredtext/domains.html#the-restructuredtext-domain&gt;`">Sphinx</a>  project and Docutils.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference external" href="http://www.sphinx-doc.org/en/master/">The Sphinx documentation project</a>
-has phenomenal documentation and provides a good reference when working
-with rst files.</p>
-<p>In addition the source for each page of the documentation is easily
+<dl class="simple">
+<dt><a class="reference external" href="http://www.sphinx-doc.org/en/master/">The Sphinx documentation project</a></dt><dd><p>Sphinx has phenomenal documentation and provides a good reference when
+working with rst files.
+In addition the source for each page of the documentation is easily
 obtainable from the “Show Source” button.</p>
+</dd>
+</dl>
 </div>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference external" href="http://docutils.sourceforge.net/docs/ref/rst/directives.html#image">Image Options for rst directives from docutils</a>
-for details.</p>
-</div>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#configuration-values"><span class="std std-ref">Configuration Values</span></a></p>
-<p>Check towards the bottom of this document to view all IPython
-configuration options.</p>
+<dl class="simple">
+<dt><a class="reference external" href="http://docutils.sourceforge.net/docs/ref/rst/directives.html#image">http://docutils.sourceforge.net/docs/ref/rst/directives.html#image</a></dt><dd><p>Image Options for rst directives — from docutils.</p>
+</dd>
+</dl>
 </div>
 </div>
 </div>
@@ -686,11 +693,7 @@ configuration options.</p>
 </li>
 <li><a class="reference internal" href="#handling-comments">Handling Comments</a></li>
 <li><a class="reference internal" href="#splitting-python-statements-across-lines">Splitting Python statements across lines</a></li>
-<li><a class="reference internal" href="#configuring-the-build-environment">Configuring the Build Environment</a></li>
-<li><a class="reference internal" href="#supported-pseudo-decorators">Supported Pseudo-Decorators</a><ul>
 <li><a class="reference internal" href="#pseudo-decorators">Pseudo-Decorators</a></li>
-</ul>
-</li>
 <li><a class="reference internal" href="#configuration-values">Configuration Values</a><ul>
 <li><a class="reference internal" href="#see-also">See Also</a></li>
 </ul>

@@ -42,9 +42,9 @@ if ask_for_import("jinja2"):
     from jinja2 import FileSystemLoader
     from jinja2.environment import TRIM_BLOCKS, Environment
     from jinja2.lexer import get_lexer
-    fsloader = FileSystemLoader('_templates')
     TRIM_BLOCKS = True
-    env = Environment()
+    template_path = '_templates'
+    env = Environment(loader=FileSystemLoader(template_path), extensions=['jinja2.ext.i18n'])
     lexer = get_lexer(env)
     # TODO: keep going
 

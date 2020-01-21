@@ -33,6 +33,22 @@ Specifically, the IPython Sphinx extension correctly parses standard
 IPython prompts, and extracts the input and output lines to generate HTML.
 
 
+.. note::
+
+   This tutorial should be read side-by-side with the
+   `Sphinx source <../_sources/sphinxext.rst.txt>`_ that generated this
+   document. With the exception of the example given above, the literal
+   ReStructured Text will not be displayed alongside the rendered output.
+
+.. admonition:: Warning is Error
+
+   All warnings are treated as errors in the default configuration which
+   will lead to frequent crashes while building documentation.
+   The option where this behavior can be modified, ``ipython_warning_is_error``
+   is displayed in the IPython Sphinx directive module section at the
+   bottom of the page.
+
+
 Directive and options
 =====================
 
@@ -94,21 +110,12 @@ will be rendered as:
    In [137]: x**3
    Out[137]: 8
 
-.. note::
 
-   This tutorial should be read side-by-side with the
-   `Sphinx source <../_sources/sphinxext.rst.txt>`_ that generated this
-   document. With the exception of the example given above, the literal
-   ReStructured Text will not be displayed alongside the rendered output.
+.. seealso::
 
-.. admonition:: Warning is Error
-
-   All warnings are treated as errors in the default configuration which
-   will lead to frequent crashes while building documentation.
-   The option where this behavior can be modified, ``ipython_warning_is_error``
-   is displayed in the IPython Sphinx directive module section at the
-   bottom of the page.
-
+   :ref:`configuration-values`
+      Check towards the bottom of this document to view all IPython
+      configuration options.
 
 Persisting the session across blocks
 ====================================
@@ -206,10 +213,19 @@ These options can both be expressed with their decorator counterparts like so:
    @savefig plot_simple_python.png width=4in
    plot([1, 2, 3])
 
-For more information on `savefig` decorator, please refer to the end of
+For more information on the `@savefig` decorator, please refer to the end of
 this page in Pseudo-Decorators section.
 
 Similarly, :data:`sys.stderr` is inserted.:
+
+.. code-block:: rst
+
+   .. ipython:: python
+      :okexcept:
+
+      foo = 'bar'
+      foo[)
+
 
 .. ipython:: python
    :okexcept:
@@ -232,13 +248,16 @@ The following section attempts to execute faulty code, namely calling
 the :mod:`matplotlib.pyplot` functions ``matplotlib.pyplot.ioff``
 and ``matplotlib.pyplot.ion`` which haven't been defined in this session.
 
-.. todo:: Remove this sentence below like wth?
+.. code-block:: rst
 
-   Let's at least print the literal text and then show how we suppress the error
-   rather than just silently doing so.
+   .. ipython:: python
+      :suppress:
 
-If you don't see the next code block then we can surmise that the
-`@suppress` decorator is behaving as expected.:
+      ioff()
+      ion()
+
+As we observe, there is no code-block below, and the directive appropriately
+suppresses the error during doc-builds.
 
 .. ipython:: python
    :suppress:
@@ -282,13 +301,8 @@ And persist across sessions.:
    print(square(3))
    print(square(-2))
 
-
-
-Configuring the Build Environment
-=================================
-
-I want to put this in the docstrings of those functions with the `env`
-parameter that kept tripping me up. (ref)
+.. I want to put this in the docstrings of those functions with the `env`
+   parameter that kept tripping me up. (ref)
 
 .. glossary::
 
@@ -299,18 +313,15 @@ parameter that kept tripping me up. (ref)
       changed documents.
 
 
-Supported Pseudo-Decorators
-============================
+.. _pseudo-decorators:
+
+Pseudo-Decorators
+=================
 
 Here are the supported decorators, and any optional arguments they
 take.  Some of the decorators can be used as options to the entire
 block (e.g. `@verbatim` and `@suppress`), and some only apply to the
 line just below them (eg `@savefig`).:
-
-.. _pseudo-decorators:
-
-Pseudo-Decorators
------------------
 
 .. decorator:: suppress
 
@@ -387,8 +398,9 @@ The configurable options that can be placed in conf.py are:
    The default is `re.compile('In \\[(\\d+)\\]:\\s?(.*)\\s*')`.
    You shouldn't need to change this.
 
-.. confval:: ipython_warning_is_error: [default to True]
+.. confval:: ipython_warning_is_error
 
+   [Default to True]
    Fail the build if something unexpected happen, for example
    if a block raise an exception but does not have the
    `:okexcept:` flag. The exact behavior of
@@ -464,23 +476,14 @@ One may find it useful to reference the relevant documentation from the
 .. seealso::
 
    `The Sphinx documentation project <http://www.sphinx-doc.org/en/master/>`_
-   has phenomenal documentation and provides a good reference when working
-   with rst files.
-
-   In addition the source for each page of the documentation is easily
-   obtainable from the "Show Source" button.
+      Sphinx has phenomenal documentation and provides a good reference when
+      working with rst files.
+      In addition the source for each page of the documentation is easily
+      obtainable from the "Show Source" button.
 
 .. seealso::
 
-   `Image Options for rst directives from docutils
-   <http://docutils.sourceforge.net/docs/ref/rst/directives.html#image>`_
-   for details.
-
-.. seealso:: :ref:`configuration-values`
-
-   Check towards the bottom of this document to view all IPython
-   configuration options.
-
-
+   `<http://docutils.sourceforge.net/docs/ref/rst/directives.html#image>`_
+      Image Options for rst directives --- from docutils.
 
 .. Vim: set et:

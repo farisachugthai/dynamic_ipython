@@ -1,8 +1,3 @@
-.. IPython packages documentation master file, created by
-   sphinx-quickstart on Mon Feb 25 02:48:12 2019.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 ============================================
 Welcome to Dynamic IPython's documentation!
 ============================================

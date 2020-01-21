@@ -1,6 +1,6 @@
-===============
-default_profile
-===============
+=======================
+:mod:`default_profile`
+=======================
 
 .. module:: default_profile
    :synopsis: Root of the source code
