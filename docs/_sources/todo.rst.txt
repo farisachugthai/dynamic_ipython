@@ -78,18 +78,11 @@ Interact with the IPython :mod:`sqlite3` database.
 
 .. option:: trim
 
-       Trim the IPython history database to the last 1000 entries.
+   Trim the IPython history database to the last 1000 entries.
 
 .. option:: clear
 
-       Clear the IPython history database, deleting all entries.
-
-
-So where is this initially implemented?
-
-.. todo:: ipython-history command line definition
-
-   Where in the source code is this set up?
+   Clear the IPython history database, deleting all entries.
 
 Also the original implementation only defines 2 options for the subcommand.
 
@@ -105,11 +98,10 @@ Writing Magics For Our Users
 =============================
 
 In the documentation, it specifies the requirements for a magic.
-
-And qI quote the ``custommagics`` document.:
+And I quote the ``custommagics`` document.:
 
    There are two main ways to define your own magic functions: from standalone
-   functions and by inheriting from a base class provided by IPython:
+   functions and by inheriting from a base class provided by IPython,
    :class:`~IPython.core.magic.Magics`.
 
 It then gives an example.
@@ -144,11 +136,8 @@ It then gives an example.
             else:
                 print("Called as cell magic")
                 return line, cell
-
-
     # In order to actually use these magics, you must register them with a
-    # running IPython.
-
+    # running IPython instance.
     def load_ipython_extension(ipython):
         """
         Any module file that define a function named `load_ipython_extension`
@@ -160,7 +149,7 @@ It then gives an example.
         ipython.register_magics(MyMagics)
 
 
-How can we rewrite the magic implementation so that the decorator ``magics_class``
+How can we rewrite the magic implementation so that the decorator `magics_class`
 isn't required anymore?
 
 Like if they pass us a string can we not just feed it to our own home-brewed
@@ -190,7 +179,7 @@ wrapper function? Off the top of my head I'm guessing something like this.::
               # the usual stuff
 
 
-I'm sure that I poorly executed that here; however, after some delibration,
+I'm sure that I poorly executed that here; however, after some deliberation,
 would it be that hard to do?
 
 Prompt Toolkit
@@ -235,8 +224,6 @@ This doesn't even feel internally consistent. Alright let's play by his rules.::
 
    In [42]: _ip.pt_app.app.key_bindings.add()
    AttributeError: '_MergedKeyBindings' object has no attribute 'add'
-
-...??????
 
 So if I merge my key bindings at any point I shoot myself in the foot from
 adding more later?

@@ -20,21 +20,123 @@
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="04_easy_import" href="easy_import.html" />
     <link rel="prev" title="IPython Startup" href="index.html" />
-<link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" />
-<link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" media="screen" rel="stylesheet" type="text/css" />
-<link rel='stylesheet' href='//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.css'>
-<!--[if lte IE 6]>
-  <link
-    rel="stylesheet"
-    href="../_static/ie6.css"
-    type="text/css"
-    media="screen"
-    charset="utf-8"
-  />
-<![endif]-->
+<!-- <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" /> -->
+<!-- <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" media="screen" rel="stylesheet" type="text/css" /> -->
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <title>Floating label Demo</title>
+  <meta name="description" content="" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style type="text/css">
+    /* CSS styles */
+    /* Example by Matthias Benkort at http://codepen.io/KtorZ/pen/ZOzdqG */
+    @import url(
+      https://fonts.googleapis.com/css?family=Roboto:400,
+      300,
+      500,
+      700
+    );
+    .wrapper {
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
 
-  </head><body>
+    .material-textfield {
+      display: inline-block;
+      height: 4rem;
+      padding-top: 2rem;
+    }
+    .material-textfield input {
+      background: none;
+      border: none;
+      box-sizing: border-box;
+      display: block;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 1rem;
+      padding: 0.25rem 0.1rem;
+      width: 100%;
+    }
+    .material-textfield input:invalid {
+      box-shadow: none;
+    }
+    .material-textfield input:focus {
+      outline: none;
+    }
+    .material-textfield label {
+      display: inline-block;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 0;
+      pointer-events: none;
+      position: relative;
+      text-transform: uppercase;
+      width: 100%;
+    }
+    .material-textfield label::before {
+      content: attr(data-content);
+      position: relative;
+      transition: all 0.2s ease;
+      will-change: font-size, top;
+    }
+    .material-textfield label::after {
+      bottom: 0.9rem;
+      content: "";
+      height: 0.3rem;
+      left: 50%;
+      position: absolute;
+      transition: all 0.2s ease;
+      width: 0;
+      will-change: width, left;
+    }
+    .material-textfield label::before,
+    .material-textfield input[required]:focus ~ label::before {
+      font-size: 0.75rem;
+      top: -3.25rem;
+    }
+    .material-textfield input:focus ~ label::after {
+      left: 0%;
+      width: 100%;
+    }
+    .material-textfield input:invalid ~ label::before {
+      font-size: 1rem;
+      top: -2rem;
+    }
 
+    .material-textfield.blue input {
+      border-bottom: 0.1rem solid #03a9f4;
+      color: #0275a8;
+    }
+    .material-textfield.blue label::after {
+      background: #03a9f4;
+    }
+    .material-textfield.blue label::before,
+    .material-textfield.blue input[required]:focus ~ label::before {
+      color: #47c4fd;
+    }
+    .material-textfield.blue input:invalid ~ label::before {
+      color: #03a9f4;
+    }
+
+    .material-textfield.red input {
+      border-bottom: 0.1rem solid #f44336;
+      color: #d2190b;
+    }
+    .material-textfield.red label::after {
+      background: #f44336;
+    }
+    .material-textfield.red label::before,
+    .material-textfield.red input[required]:focus ~ label::before {
+      color: #f8877f;
+    }
+    .material-textfield.red input:invalid ~ label::before {
+      color: #f44336;
+    }
+  </style>
+</head>
+
+  </head><body> 
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -124,8 +226,14 @@ an error, so an empty <a class="reference external" href="https://docs.python.or
 <code class="docutils literal notranslate"><span class="pre">_stack_depth</span></code> = 2.</p>
 <p>This is added to ensure backward compatibility for use
 of <code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.core.magics.get_ipython().magic()</span></code></p>
-<span class="target" id="module-default_profile.startup.01_rehashx"></span><p>The code that’s more important than anything should execute regardless
+<span class="target" id="module-default_profile.startup.01_rehashx"></span><div class="section" id="work-in-progress">
+<h4>Work in Progress<a class="headerlink" href="#work-in-progress" title="Permalink to this headline">¶</a></h4>
+<p>The code that’s more important than anything should execute regardless
 of whether someone has <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span></code>-ed it.</p>
+<p>In addition, enable faulthandler, tracemalloc and assign them to
+sys.excepthook, threading.excepthoook and others.</p>
+<p>A possible alternative to get_ipython().showsyntaxerror might possibly be
+<a class="reference external" href="https://docs.python.org/3/library/dis.html#dis.distb" title="(in Python v3.8)"><code class="xref py py-func docutils literal notranslate"><span class="pre">dis.distb()</span></code></a>.</p>
 <dl class="function">
 <dt id="default_profile.startup.01_rehashx.rehashx_run">
 <code class="sig-name descname">rehashx_run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/01_rehashx.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.01_rehashx.rehashx_run" title="Permalink to this definition">¶</a></dt>
@@ -136,6 +244,16 @@ of whether someone has <code class="docutils literal notranslate"><span class="p
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="function">
+<dt id="default_profile.startup.01_rehashx.get_exec_dir">
+<code class="sig-name descname">get_exec_dir</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/01_rehashx.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.01_rehashx.get_exec_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="default_profile.startup.01_rehashx.safe_run_path">
+<code class="sig-name descname">safe_run_path</code><span class="sig-paren">(</span><em class="sig-param">fileobj</em>, <em class="sig-param">logger</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/01_rehashx.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.01_rehashx.safe_run_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="function">
 <dt id="default_profile.startup.01_rehashx.rerun_startup">
@@ -151,6 +269,39 @@ of whether someone has <code class="docutils literal notranslate"><span class="p
 </dl>
 </dd></dl>
 
+<dl class="class">
+<dt id="default_profile.startup.01_rehashx.ExceptionHook">
+<em class="property">class </em><code class="sig-name descname">ExceptionHook</code><span class="sig-paren">(</span><em class="sig-param">shell=None</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/01_rehashx.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.01_rehashx.ExceptionHook" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">traitlets.config.configurable.Configurable</span></code></p>
+<p>Custom exception hook for IPython.</p>
+<dl class="attribute">
+<dt id="default_profile.startup.01_rehashx.ExceptionHook.instance">
+<code class="sig-name descname">instance</code><em class="property"> = None</em><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/01_rehashx.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.01_rehashx.ExceptionHook.instance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="default_profile.startup.01_rehashx.ExceptionHook.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">shell=None</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/01_rehashx.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.01_rehashx.ExceptionHook.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="default_profile.startup.01_rehashx.ExceptionHook.call">
+<code class="sig-name descname">call</code><span class="sig-paren">(</span><em class="sig-param">etype=None</em>, <em class="sig-param">evalue=None</em>, <em class="sig-param">etb=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/01_rehashx.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.01_rehashx.ExceptionHook.call" title="Permalink to this definition">¶</a></dt>
+<dd><p>Proxy for the call dunder.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="default_profile.startup.01_rehashx.ExceptionTuple">
+<em class="property">class </em><code class="sig-name descname">ExceptionTuple</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/01_rehashx.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.01_rehashx.ExceptionTuple" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Sequence</span></code></a></p>
+<p>Simply a test for now but we need to provide the exception hook with this.</p>
+<p>It needs a tuple of exceptions to catch.</p>
+<p>Seemed like a good place to keep working with ABCs.</p>
+</dd></dl>
+
+</div>
 </div>
 </div>
 </div>
@@ -200,7 +351,10 @@ of whether someone has <code class="docutils literal notranslate"><span class="p
 <li><a class="reference internal" href="#parameters">Parameters</a></li>
 <li><a class="reference internal" href="#notes">Notes</a></li>
 <li><a class="reference internal" href="#usage">Usage</a><ul>
-<li><a class="reference internal" href="#stack-depth"><code class="docutils literal notranslate"><span class="pre">_stack_depth</span></code></a></li>
+<li><a class="reference internal" href="#stack-depth"><code class="docutils literal notranslate"><span class="pre">_stack_depth</span></code></a><ul>
+<li><a class="reference internal" href="#work-in-progress">Work in Progress</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -254,7 +408,6 @@ of whether someone has <code class="docutils literal notranslate"><span class="p
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../extensions.html">Extensions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../jobcontrol.html">Job Control</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../todo.html">Todo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../default_profile.html">Tailor-made profiles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../dev.html">Developers Notes</a></li>
@@ -293,7 +446,7 @@ of whether someone has <code class="docutils literal notranslate"><span class="p
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Jan 11, 2020.
+      Last updated on Jan 20, 2020.
     </div>
   </body>
 </html>

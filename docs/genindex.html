@@ -19,21 +19,123 @@
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/genindex.html" />
     <link rel="index" title="Index" href="#" />
     <link rel="search" title="Search" href="search.html" />
-<link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" />
-<link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" media="screen" rel="stylesheet" type="text/css" />
-<link rel='stylesheet' href='//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.css'>
-<!--[if lte IE 6]>
-  <link
-    rel="stylesheet"
-    href="_static/ie6.css"
-    type="text/css"
-    media="screen"
-    charset="utf-8"
-  />
-<![endif]-->
+<!-- <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" /> -->
+<!-- <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" media="screen" rel="stylesheet" type="text/css" /> -->
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <title>Floating label Demo</title>
+  <meta name="description" content="" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style type="text/css">
+    /* CSS styles */
+    /* Example by Matthias Benkort at http://codepen.io/KtorZ/pen/ZOzdqG */
+    @import url(
+      https://fonts.googleapis.com/css?family=Roboto:400,
+      300,
+      500,
+      700
+    );
+    .wrapper {
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
 
-  </head><body>
+    .material-textfield {
+      display: inline-block;
+      height: 4rem;
+      padding-top: 2rem;
+    }
+    .material-textfield input {
+      background: none;
+      border: none;
+      box-sizing: border-box;
+      display: block;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 1rem;
+      padding: 0.25rem 0.1rem;
+      width: 100%;
+    }
+    .material-textfield input:invalid {
+      box-shadow: none;
+    }
+    .material-textfield input:focus {
+      outline: none;
+    }
+    .material-textfield label {
+      display: inline-block;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 0;
+      pointer-events: none;
+      position: relative;
+      text-transform: uppercase;
+      width: 100%;
+    }
+    .material-textfield label::before {
+      content: attr(data-content);
+      position: relative;
+      transition: all 0.2s ease;
+      will-change: font-size, top;
+    }
+    .material-textfield label::after {
+      bottom: 0.9rem;
+      content: "";
+      height: 0.3rem;
+      left: 50%;
+      position: absolute;
+      transition: all 0.2s ease;
+      width: 0;
+      will-change: width, left;
+    }
+    .material-textfield label::before,
+    .material-textfield input[required]:focus ~ label::before {
+      font-size: 0.75rem;
+      top: -3.25rem;
+    }
+    .material-textfield input:focus ~ label::after {
+      left: 0%;
+      width: 100%;
+    }
+    .material-textfield input:invalid ~ label::before {
+      font-size: 1rem;
+      top: -2rem;
+    }
 
+    .material-textfield.blue input {
+      border-bottom: 0.1rem solid #03a9f4;
+      color: #0275a8;
+    }
+    .material-textfield.blue label::after {
+      background: #03a9f4;
+    }
+    .material-textfield.blue label::before,
+    .material-textfield.blue input[required]:focus ~ label::before {
+      color: #47c4fd;
+    }
+    .material-textfield.blue input:invalid ~ label::before {
+      color: #03a9f4;
+    }
+
+    .material-textfield.red input {
+      border-bottom: 0.1rem solid #f44336;
+      color: #d2190b;
+    }
+    .material-textfield.red label::after {
+      background: #f44336;
+    }
+    .material-textfield.red label::before,
+    .material-textfield.red input[required]:focus ~ label::before {
+      color: #f8877f;
+    }
+    .material-textfield.red input:invalid ~ label::before {
+      color: #f44336;
+    }
+  </style>
+</head>
+
+  </head><body> 
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -67,7 +169,6 @@
  | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
  | <a href="#J"><strong>J</strong></a>
- | <a href="#K"><strong>K</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
@@ -87,39 +188,27 @@
       <li><a href="util/timer.html#default_profile.util.timer.ArgReparser.__init__">__init__() (ArgReparser method)</a>
 
       <ul>
-        <li><a href="jobcontrol.html#default_profile.extensions.job_control.AsyncJobQ.__init__">(AsyncJobQ method)</a>
-</li>
         <li><a href="extensions.html#default_profile.extensions.termux_clipboard.ClipboardMagics.__init__">(ClipboardMagics method)</a>
 </li>
         <li><a href="startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.__init__">(CommonAliases method)</a>
 </li>
         <li><a href="util/copytree.html#default_profile.util.copytree.CopyTree.__init__">(CopyTree method)</a>
 </li>
-        <li><a href="startup/easy_import.html#default_profile.startup.04_easy_import.DeepReload.__init__">(DeepReload method)</a>
-</li>
         <li><a href="util/profile_override.html#default_profile.util.profile_override.DirectoryChecker.__init__">(DirectoryChecker method)</a>
 </li>
         <li><a href="util/machine.html#default_profile.util.machine.DisplayAliases.__init__">(DisplayAliases method)</a>
 </li>
-        <li><a href="startup/42_pandas.html#default_profile.startup.42_pandas_init.DisplayHTML.__init__">(DisplayHTML method)</a>
-</li>
-        <li><a href="startup/sysexcept.html#default_profile.startup.50_sysexception.ExceptionHook.__init__">(ExceptionHook method)</a>
+        <li><a href="startup/rehashx.html#default_profile.startup.01_rehashx.ExceptionHook.__init__">(ExceptionHook method)</a>
 </li>
         <li><a href="startup/fzf.html#default_profile.startup.21_fzf.Executable.__init__">(Executable method)</a>
 </li>
         <li><a href="startup/fzf.html#default_profile.startup.21_fzf.FZF.__init__">(FZF method)</a>
 </li>
-        <li><a href="startup/easy_import.html#default_profile.startup.04_easy_import.IOStream.__init__">(IOStream method)</a>
-</li>
         <li><a href="startup/aliases.html#default_profile.startup.20_aliases.LinuxAliases.__init__">(LinuxAliases method)</a>
-</li>
-        <li><a href="startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.__init__">(LoggerManager method)</a>
 </li>
         <li><a href="util/pager2.html#default_profile.util.pager2.NotInIPythonError.__init__">(NotInIPythonError method)</a>
 </li>
         <li><a href="util/module_log.html#default_profile.util.module_log.NoUnNamedLoggers.__init__">(NoUnNamedLoggers method)</a>
-</li>
-        <li><a href="startup/easy_import.html#default_profile.startup.04_easy_import.NvimHook.__init__">(NvimHook method)</a>
 </li>
         <li><a href="util/paths.html#default_profile.util.paths.PathValidator.__init__">(PathValidator method)</a>
 </li>
@@ -146,8 +235,6 @@
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="jobcontrol.html#default_profile.extensions.job_control.AsyncJobQ.add">add() (AsyncJobQ method)</a>
-</li>
       <li>
     alias
 
@@ -157,11 +244,7 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.append">append() (LoggerManager method)</a>
-</li>
       <li><a href="util/timer.html#default_profile.util.timer.ArgReparser">ArgReparser (class in default_profile.util.timer)</a>
-</li>
-      <li><a href="jobcontrol.html#default_profile.extensions.job_control.AsyncJobQ">AsyncJobQ (class in default_profile.extensions.job_control)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -169,14 +252,12 @@
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.backup">backup() (LoggerManager method)</a>
-</li>
       <li><a href="util/module_log.html#default_profile.util.module_log.betterConfig">betterConfig() (in module default_profile.util.module_log)</a>
+</li>
+      <li><a href="util/pager2.html#default_profile.util.pager2.blocking_pager">blocking_pager() (in module default_profile.util.pager2)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="util/pager2.html#default_profile.util.pager2.blocking_pager">blocking_pager() (in module default_profile.util.pager2)</a>
-</li>
       <li><a href="startup/aliases.html#default_profile.startup.20_aliases.LinuxAliases.busybox">busybox() (LinuxAliases method)</a>
 </li>
       <li><a href="startup/fzf.html#default_profile.startup.21_fzf.busybox_hack">busybox_hack() (in module default_profile.startup.21_fzf)</a>
@@ -189,7 +270,7 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="util/pager2.html#default_profile.util.pager2.c">c() (in module default_profile.util.pager2)</a>
 </li>
-      <li><a href="startup/sysexcept.html#default_profile.startup.50_sysexception.ExceptionHook.call">call() (ExceptionHook method)</a>
+      <li><a href="startup/rehashx.html#default_profile.startup.01_rehashx.ExceptionHook.call">call() (ExceptionHook method)</a>
 
       <ul>
         <li><a href="util/pager2.html#default_profile.util.pager2.PyPager.call">(PyPager method)</a>
@@ -262,8 +343,6 @@
       </ul></li>
       <li><a href="util/timer.html#default_profile.util.timer.debug">debug() (in module default_profile.util.timer)</a>
 </li>
-      <li><a href="startup/easy_import.html#default_profile.startup.04_easy_import.DeepReload">DeepReload (class in default_profile.startup.04_easy_import)</a>
-</li>
       <li><a href="startup/fzf.html#default_profile.startup.21_fzf.FZF.default_cmd">default_cmd() (FZF property)</a>
 </li>
       <li><a href="startup/fzf.html#default_profile.startup.21_fzf.FZF.default_cmds">default_cmds() (FZF property)</a>
@@ -273,8 +352,6 @@
       <li><a href="extensions.html#module-default_profile.extensions">default_profile.extensions (module)</a>
 </li>
       <li><a href="extensions.html#module-default_profile.extensions.event_watcher_example">default_profile.extensions.event_watcher_example (module)</a>
-</li>
-      <li><a href="jobcontrol.html#module-default_profile.extensions.job_control">default_profile.extensions.job_control (module)</a>
 </li>
       <li><a href="extensions.html#module-default_profile.extensions.load_ext">default_profile.extensions.load_ext (module)</a>
 </li>
@@ -310,10 +387,10 @@
 </li>
       <li><a href="startup/setup_readline.html#module-default_profile.startup.30_setup_readline">default_profile.startup.30_setup_readline (module)</a>
 </li>
-      <li><a href="startup/completions.html#module-default_profile.startup.34_completions">default_profile.startup.34_completions (module)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="startup/completions.html#module-default_profile.startup.34_completions">default_profile.startup.34_completions (module)</a>
+</li>
       <li><a href="startup/41_numpy.html#module-default_profile.startup.41_numpy_init">default_profile.startup.41_numpy_init (module)</a>
 </li>
       <li><a href="startup/42_pandas.html#module-default_profile.startup.42_pandas_init">default_profile.startup.42_pandas_init (module)</a>
@@ -348,8 +425,6 @@
 </li>
       <li><a href="util/copytree.html#default_profile.util.copytree.CopyTree.destination_files">destination_files() (CopyTree property)</a>
 </li>
-      <li><a href="jobcontrol.html#default_profile.extensions.job_control.determine_use_shell">determine_use_shell() (in module default_profile.extensions.job_control)</a>
-</li>
       <li><a href="dev.html#module-developers-notes">developers-notes (module)</a>
 </li>
       <li><a href="startup/aliases.html#index-8">DIRCMD</a>
@@ -360,15 +435,9 @@
 </li>
       <li><a href="util/machine.html#default_profile.util.machine.DisplayAliases">DisplayAliases (class in default_profile.util.machine)</a>
 </li>
-      <li><a href="startup/42_pandas.html#default_profile.startup.42_pandas_init.DisplayHTML">DisplayHTML (class in default_profile.startup.42_pandas_init)</a>
-</li>
       <li><a href="sphinxext/ipython_sphinx_directive.html#sphinx_directive.doctest">doctest() (in module sphinx_directive)</a>
 </li>
       <li><a href="sphinxext/custom_doctests.html#doctests">doctests (built-in variable)</a>
-</li>
-      <li><a href="startup/easy_import.html#default_profile.startup.04_easy_import.DeepReload.dreload">dreload() (DeepReload method)</a>
-</li>
-      <li><a href="jobcontrol.html#default_profile.extensions.job_control.AsyncJobQ.dumpoutput">dumpoutput() (AsyncJobQ method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -376,8 +445,6 @@
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="startup/easy_import.html#default_profile.startup.04_easy_import.easy_import">easy_import() (in module default_profile.startup.04_easy_import)</a>
-</li>
       <li><a href="util/pager2.html#index-1">EDITOR</a>
 </li>
       <li><a href="util/profile_override.html#default_profile.util.profile_override.DirectoryChecker.ensure_dir_exists">ensure_dir_exists() (DirectoryChecker static method)</a>
@@ -419,11 +486,9 @@
 </li>
       <li><a href="util/timer.html#default_profile.util.timer.exc_timer">exc_timer() (in module default_profile.util.timer)</a>
 </li>
-      <li><a href="startup/sysexcept.html#default_profile.startup.50_sysexception.ExceptionHook">ExceptionHook (class in default_profile.startup.50_sysexception)</a>
+      <li><a href="startup/rehashx.html#default_profile.startup.01_rehashx.ExceptionHook">ExceptionHook (class in default_profile.startup.01_rehashx)</a>
 </li>
-      <li><a href="startup/sysexcept.html#default_profile.startup.50_sysexception.ExceptionTuple">ExceptionTuple (class in default_profile.startup.50_sysexception)</a>
-</li>
-      <li><a href="startup/easy_import.html#default_profile.startup.04_easy_import.DeepReload.excludes">excludes (DeepReload attribute)</a>, <a href="startup/easy_import.html#default_profile.startup.04_easy_import.DeepReload.excludes">[1]</a>
+      <li><a href="startup/rehashx.html#default_profile.startup.01_rehashx.ExceptionTuple">ExceptionTuple (class in default_profile.startup.01_rehashx)</a>
 </li>
       <li><a href="startup/fzf.html#default_profile.startup.21_fzf.Executable">Executable (class in default_profile.startup.21_fzf)</a>
 </li>
@@ -449,8 +514,6 @@
 </li>
       <li><a href="util/module_log.html#default_profile.util.module_log.JsonFormatter.format">format() (JsonFormatter method)</a>
 </li>
-      <li><a href="startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.formatter_style">formatter_style (LoggerManager attribute)</a>
-</li>
       <li><a href="startup/fzf.html#default_profile.startup.21_fzf.FZF">FZF (class in default_profile.startup.21_fzf)</a>
 </li>
       <li><a href="startup/fzf.html#default_profile.startup.21_fzf.FZF.fzf_alias">fzf_alias (FZF attribute)</a>
@@ -469,11 +532,9 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="startup/rehashx.html#default_profile.startup.01_rehashx.get_exec_dir">get_exec_dir() (in module default_profile.startup.01_rehashx)</a>
+</li>
       <li><a href="startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.git">git() (CommonAliases class method)</a>
-</li>
-      <li><a href="startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.global_mode">global_mode() (LoggerManager method)</a>
-</li>
-      <li><a href="jobcontrol.html#default_profile.extensions.job_control.IpyPopen.go">go() (IpyPopen method)</a>
 </li>
       <li><a href="startup/help_helpers.html#default_profile.startup.06_help_helpers.grep">grep() (in module default_profile.startup.06_help_helpers)</a>
 </li>
@@ -505,35 +566,19 @@
         <li><a href="todo.html#cmdoption-history-arg-trim">trim</a>
 </li>
       </ul></li>
-      <li><a href="startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.home">home (LoggerManager attribute)</a>
-</li>
   </ul></td>
 </tr></table>
 
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.init_filter">init_filter() (LoggerManager method)</a>
-</li>
-      <li><a href="startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.init_formatter">init_formatter() (LoggerManager method)</a>
-</li>
-      <li><a href="startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.init_handler">init_handler() (LoggerManager method)</a>
-</li>
-      <li><a href="startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.init_logger">init_logger() (LoggerManager method)</a>
-</li>
       <li><a href="util/profile_override.html#default_profile.util.profile_override.DirectoryChecker.initialize">initialize() (DirectoryChecker method)</a>
 </li>
       <li><a href="util/profile_override.html#default_profile.util.profile_override.DirectoryChecker.initialize_profile">initialize_profile() (DirectoryChecker method)</a>
 </li>
-      <li><a href="jobcontrol.html#default_profile.extensions.job_control.install">install() (in module default_profile.extensions.job_control)</a>
-</li>
-      <li><a href="startup/sysexcept.html#default_profile.startup.50_sysexception.ExceptionHook.instance">instance (ExceptionHook attribute)</a>
-</li>
-      <li><a href="startup/easy_import.html#default_profile.startup.04_easy_import.IOStream">IOStream (class in default_profile.startup.04_easy_import)</a>
+      <li><a href="startup/rehashx.html#default_profile.startup.01_rehashx.ExceptionHook.instance">instance (ExceptionHook attribute)</a>
 </li>
       <li><a href="sphinxext/lexer.html#IPyLexer">IPyLexer (built-in class)</a>
-</li>
-      <li><a href="jobcontrol.html#default_profile.extensions.job_control.IpyPopen">IpyPopen (class in default_profile.extensions.job_control)</a>
 </li>
       <li><a href="sphinxext/ipython_sphinx_directive.html#directive-ipython">ipython (directive)</a>
 
@@ -575,8 +620,6 @@
       </ul></li>
       <li><a href="startup/ipython-logger.html#default_profile.startup.05_log.ipython_logger">ipython_logger() (in module default_profile.startup.05_log)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     ipython_mplbackend
 
@@ -591,6 +634,8 @@
         <li><a href="sphinxext/ipython_sphinx_directive.html#confval-ipython_promptin">configuration value</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     ipython_promptout
 
@@ -660,31 +705,11 @@
 <h2 id="J">J</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="jobcontrol.html#module-job_control">job_control (module)</a>
-</li>
-      <li><a href="jobcontrol.html#default_profile.extensions.job_control.job_list">job_list() (in module default_profile.extensions.job_control)</a>
-</li>
-      <li><a href="jobcontrol.html#default_profile.extensions.job_control.jobctrl_prefilter_f">jobctrl_prefilter_f() (in module default_profile.extensions.job_control)</a>
-</li>
-      <li><a href="jobcontrol.html#default_profile.extensions.job_control.jobctrl_shellcmd">jobctrl_shellcmd() (in module default_profile.extensions.job_control)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="jobcontrol.html#default_profile.extensions.job_control.jobq_output_hook">jobq_output_hook() (in module default_profile.extensions.job_control)</a>
-</li>
-      <li><a href="jobcontrol.html#default_profile.extensions.job_control.jobqueue_f">jobqueue_f() (in module default_profile.extensions.job_control)</a>
-</li>
       <li><a href="util/module_log.html#default_profile.util.module_log.json_logger">json_logger() (in module default_profile.util.module_log)</a>
 </li>
-      <li><a href="util/module_log.html#default_profile.util.module_log.JsonFormatter">JsonFormatter (class in default_profile.util.module_log)</a>
-</li>
   </ul></td>
-</tr></table>
-
-<h2 id="K">K</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="jobcontrol.html#default_profile.extensions.job_control.IpyPopen.kill">kill() (IpyPopen method)</a>
+      <li><a href="util/module_log.html#default_profile.util.module_log.JsonFormatter">JsonFormatter (class in default_profile.util.module_log)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -704,35 +729,13 @@
         <li><a href="extensions.html#default_profile.extensions.event_watcher_example.VarWatcher.load_ipython_extension">(VarWatcher method)</a>
 </li>
       </ul></li>
-      <li><a href="startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.log">log() (LoggerManager method)</a>
-
-      <ul>
-        <li><a href="util/module_log.html#default_profile.util.module_log.VerboseLoggingConfigurable.log">(VerboseLoggingConfigurable method)</a>
-</li>
-      </ul></li>
-      <li><a href="startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.log_active">log_active (LoggerManager attribute)</a>, <a href="startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.log_active">[1]</a>
-</li>
-      <li><a href="startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.log_output">log_output (LoggerManager attribute)</a>, <a href="startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.log_output">[1]</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.log_raw_input">log_raw_input (LoggerManager attribute)</a>, <a href="startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.log_raw_input">[1]</a>
-</li>
-      <li><a href="startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.logappend">logappend() (LoggerManager method)</a>
-</li>
-      <li><a href="startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.logfile">logfile (LoggerManager attribute)</a>, <a href="startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.logfile">[1]</a>
+      <li><a href="util/module_log.html#default_profile.util.module_log.VerboseLoggingConfigurable.log">log() (VerboseLoggingConfigurable method)</a>
 </li>
       <li><a href="util/machine.html#default_profile.util.machine.Platform.LOGGER">LOGGER (Platform attribute)</a>, <a href="util/machine.html#default_profile.util.machine.Platform.LOGGER">[1]</a>
 </li>
-      <li><a href="startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager">LoggerManager (class in default_profile.startup.05_log)</a>
-</li>
       <li><a href="util/module_log.html#default_profile.util.module_log.logging_decorator">logging_decorator() (in module default_profile.util.module_log)</a>
-</li>
-      <li><a href="startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.loghead">loghead (LoggerManager attribute)</a>
-</li>
-      <li><a href="startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.logmode">logmode (LoggerManager attribute)</a>
-</li>
-      <li><a href="startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.logstart">logstart() (LoggerManager class method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -755,10 +758,6 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="jobcontrol.html#default_profile.extensions.job_control.magic_kill">magic_kill() (in module default_profile.extensions.job_control)</a>
-</li>
-      <li><a href="jobcontrol.html#default_profile.extensions.job_control.magic_tasks">magic_tasks() (in module default_profile.extensions.job_control)</a>
-</li>
       <li><a href="extensions.html#default_profile.extensions.termux_clipboard.ClipboardMagics.magics">magics (ClipboardMagics attribute)</a>
 </li>
       <li><a href="startup/fzf.html#default_profile.startup.21_fzf.main">main() (in module default_profile.startup.21_fzf)</a>
@@ -773,15 +772,11 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="util/pager2.html#default_profile.util.pager2.NotInIPythonError">NotInIPythonError</a>
 </li>
-      <li><a href="util/module_log.html#default_profile.util.module_log.NoUnNamedLoggers">NoUnNamedLoggers</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="util/module_log.html#default_profile.util.module_log.NoUnNamedLoggers">NoUnNamedLoggers</a>
+</li>
       <li><a href="startup/41_numpy.html#default_profile.startup.41_numpy_init.numpy_setup">numpy_setup() (in module default_profile.startup.41_numpy_init)</a>
-</li>
-      <li><a href="startup/easy_import.html#default_profile.startup.04_easy_import.NvimHook.nvim_quickfix_file">nvim_quickfix_file() (NvimHook method)</a>
-</li>
-      <li><a href="startup/easy_import.html#default_profile.startup.04_easy_import.NvimHook">NvimHook (class in default_profile.startup.04_easy_import)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -803,6 +798,8 @@
         <li><a href="sphinxext/ipython_sphinx_directive.html#directive:option-ipython-okexcept">ipython (directive)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     :okwarning: (directive option)
 
@@ -810,17 +807,11 @@
         <li><a href="sphinxext/ipython_sphinx_directive.html#directive:option-ipython-okwarning">ipython (directive)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="sphinxext/ipython_sphinx_directive.html#sphinx_directive.okexcept">okexcept() (in module sphinx_directive)</a>
 </li>
       <li><a href="sphinxext/ipython_sphinx_directive.html#sphinx_directive.okwarning">okwarning() (in module sphinx_directive)</a>
 </li>
       <li><a href="util/paths.html#default_profile.util.paths.PathValidator.OS">OS() (PathValidator property)</a>
-</li>
-      <li><a href="startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.output_file">output_file() (LoggerManager property)</a>
-</li>
-      <li><a href="startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.over">over() (LoggerManager method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -840,8 +831,6 @@
       <li><a href="startup/help_helpers.html#default_profile.startup.06_help_helpers.page_help">page_help() (in module default_profile.startup.06_help_helpers)</a>
 </li>
       <li><a href="util/pager2.html#index-0">PAGER</a>, <a href="util/pager2.html#index-3">[1]</a>
-</li>
-      <li><a href="startup/42_pandas.html#default_profile.startup.42_pandas_init.pandas_init">pandas_init() (in module default_profile.startup.42_pandas_init)</a>
 </li>
       <li><a href="sphinxext/magics.html#default_profile.sphinxext.magics.parse_cell_magic">parse_cell_magic() (in module default_profile.sphinxext.magics)</a>
 </li>
@@ -866,10 +855,10 @@
 </li>
       <li><a href="util/machine.html#default_profile.util.machine.Platform">Platform (class in default_profile.util.machine)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="extensions.html#default_profile.extensions.event_watcher_example.VarWatcher.post_execute">post_execute() (VarWatcher method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="extensions.html#default_profile.extensions.event_watcher_example.VarWatcher.post_run_cell">post_run_cell() (VarWatcher method)</a>
 </li>
       <li><a href="startup/aliases.html#default_profile.startup.20_aliases.WindowsAliases.powershell_aliases">powershell_aliases() (WindowsAliases class method)</a>
@@ -913,8 +902,6 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="startup/easy_import.html#default_profile.startup.04_easy_import.IOStream.read">read() (IOStream method)</a>
-</li>
       <li><a href="startup/aliases.html#default_profile.startup.20_aliases.redefine_aliases">redefine_aliases() (in module default_profile.startup.20_aliases)</a>
 </li>
       <li><a href="extensions.html#default_profile.extensions.termux_clipboard.ClipboardMagics.registered">registered (ClipboardMagics attribute)</a>
@@ -926,12 +913,10 @@
         <li><a href="startup/rehashx.html#magic-rehashx">magic command</a>
 </li>
       </ul></li>
-      <li><a href="startup/rehashx.html#default_profile.startup.01_rehashx.rehashx_run">rehashx_run() (in module default_profile.startup.01_rehashx)</a>
-</li>
-      <li><a href="startup/easy_import.html#default_profile.startup.04_easy_import.DeepReload.reload">reload() (DeepReload method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="startup/rehashx.html#default_profile.startup.01_rehashx.rehashx_run">rehashx_run() (in module default_profile.startup.01_rehashx)</a>
+</li>
       <li><a href="util/profile_override.html#default_profile.util.profile_override.ReprProfileDir">ReprProfileDir (class in default_profile.util.profile_override)</a>
 </li>
       <li><a href="startup/rehashx.html#rerun_startup">rerun_startup() (built-in function)</a>
@@ -941,14 +926,6 @@
 </li>
       </ul></li>
       <li><a href="index.html#module-root_index">root_index (module)</a>
-</li>
-      <li><a href="jobcontrol.html#default_profile.extensions.job_control.AsyncJobQ.run">run() (AsyncJobQ method)</a>
-
-      <ul>
-        <li><a href="startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.run">(LoggerManager method)</a>
-</li>
-      </ul></li>
-      <li><a href="startup/easy_import.html#default_profile.startup.04_easy_import.NvimHook.run_nvim">run_nvim() (NvimHook method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -972,18 +949,18 @@
       </ul></li>
       <li><a href="startup/fzf.html#default_profile.startup.21_fzf.FZF.safe_default_cmd">safe_default_cmd() (FZF property)</a>
 </li>
+      <li><a href="startup/rehashx.html#default_profile.startup.01_rehashx.safe_run_path">safe_run_path() (in module default_profile.startup.01_rehashx)</a>
+</li>
       <li><a href="startup/help_helpers.html#default_profile.startup.06_help_helpers.save_help">save_help() (in module default_profile.startup.06_help_helpers)</a>
 </li>
       <li><a href="sphinxext/ipython_sphinx_directive.html#sphinx_directive.savefig">savefig() (in module sphinx_directive)</a>
 </li>
       <li><a href="startup/41_numpy.html#default_profile.startup.41_numpy_init.set_numpy_printoptions">set_numpy_printoptions() (in module default_profile.startup.41_numpy_init)</a>
 </li>
-      <li><a href="startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.set_output_file">set_output_file() (LoggerManager property)</a>
-</li>
-      <li><a href="startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.set_user_aliases">set_user_aliases() (CommonAliases method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.set_user_aliases">set_user_aliases() (CommonAliases method)</a>
+</li>
       <li><a href="sphinxext/lexer.html#setup">setup() (built-in function)</a>
 
       <ul>
@@ -994,15 +971,9 @@
 </li>
       <li><a href="util/machine.html#default_profile.util.machine.Shell">Shell (class in default_profile.util.machine)</a>
 </li>
-      <li><a href="startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.shell">shell (LoggerManager attribute)</a>
-
-      <ul>
-        <li><a href="util/module_log.html#default_profile.util.module_log.VerboseLoggingConfigurable.shell">(VerboseLoggingConfigurable attribute)</a>
+      <li><a href="util/module_log.html#default_profile.util.module_log.VerboseLoggingConfigurable.shell">shell (VerboseLoggingConfigurable attribute)</a>
 </li>
-      </ul></li>
       <li><a href="sphinxext/ipython_sphinx_directive.html#module-sphinx_directive">sphinx_directive (module)</a>
-</li>
-      <li><a href="jobcontrol.html#default_profile.extensions.job_control.startjob">startjob() (in module default_profile.extensions.job_control)</a>
 </li>
       <li><a href="sphinxext/custom_doctests.html#default_profile.sphinxext.custom_doctests.str_to_array">str_to_array() (in module default_profile.sphinxext.custom_doctests)</a>
 </li>
@@ -1016,22 +987,16 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="startup/42_pandas.html#default_profile.startup.42_pandas_init.DisplayHTML.template">template (DisplayHTML attribute)</a>
-</li>
       <li><a href="extensions.html#default_profile.extensions.termux_clipboard.ClipboardMagics.termux_clipboard_get">termux_clipboard_get() (ClipboardMagics method)</a>
 </li>
       <li><a href="startup/aliases.html#default_profile.startup.20_aliases.LinuxAliases.thirdparty">thirdparty() (LinuxAliases method)</a>
 </li>
-      <li><a href="startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.time_format">time_format (LoggerManager attribute)</a>
-</li>
       <li><a href="util/timer.html#default_profile.util.timer.timer">timer() (in module default_profile.util.timer)</a>
 </li>
-      <li><a href="startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.timestamp">timestamp (LoggerManager attribute)</a>, <a href="startup/ipython-logger.html#default_profile.startup.05_log.LoggerManager.timestamp">[1]</a>
+      <li><a href="todo.html#module-todo">todo (module)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="todo.html#module-todo">todo (module)</a>
-</li>
       <li>
     trim
 
@@ -1100,11 +1065,9 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="util/pager2.html#default_profile.util.pager2.were_in_ipython">were_in_ipython() (in module default_profile.util.pager2)</a>
 </li>
-      <li><a href="startup/aliases.html#default_profile.startup.20_aliases.WindowsAliases">WindowsAliases (class in default_profile.startup.20_aliases)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="startup/easy_import.html#default_profile.startup.04_easy_import.IOStream.write">write() (IOStream method)</a>
+      <li><a href="startup/aliases.html#default_profile.startup.20_aliases.WindowsAliases">WindowsAliases (class in default_profile.startup.20_aliases)</a>
 </li>
       <li><a href="startup/help_helpers.html#default_profile.startup.06_help_helpers.write_help">write_help() (in module default_profile.startup.06_help_helpers)</a>
 </li>
@@ -1184,7 +1147,6 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="extensions.html">Extensions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="jobcontrol.html">Job Control</a></li>
 <li class="toctree-l1"><a class="reference internal" href="todo.html">Todo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="default_profile.html">Tailor-made profiles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dev.html">Developers Notes</a></li>
@@ -1210,7 +1172,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Jan 11, 2020.
+      Last updated on Jan 20, 2020.
     </div>
   </body>
 </html>

@@ -20,21 +20,123 @@
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Matplotlib Startup" href="matplotlib_rc.html" />
     <link rel="prev" title="numpy Initialization" href="41_numpy.html" />
-<link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" />
-<link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" media="screen" rel="stylesheet" type="text/css" />
-<link rel='stylesheet' href='//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.css'>
-<!--[if lte IE 6]>
-  <link
-    rel="stylesheet"
-    href="../_static/ie6.css"
-    type="text/css"
-    media="screen"
-    charset="utf-8"
-  />
-<![endif]-->
+<!-- <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" /> -->
+<!-- <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" media="screen" rel="stylesheet" type="text/css" /> -->
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <title>Floating label Demo</title>
+  <meta name="description" content="" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style type="text/css">
+    /* CSS styles */
+    /* Example by Matthias Benkort at http://codepen.io/KtorZ/pen/ZOzdqG */
+    @import url(
+      https://fonts.googleapis.com/css?family=Roboto:400,
+      300,
+      500,
+      700
+    );
+    .wrapper {
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
 
-  </head><body>
+    .material-textfield {
+      display: inline-block;
+      height: 4rem;
+      padding-top: 2rem;
+    }
+    .material-textfield input {
+      background: none;
+      border: none;
+      box-sizing: border-box;
+      display: block;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 1rem;
+      padding: 0.25rem 0.1rem;
+      width: 100%;
+    }
+    .material-textfield input:invalid {
+      box-shadow: none;
+    }
+    .material-textfield input:focus {
+      outline: none;
+    }
+    .material-textfield label {
+      display: inline-block;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 0;
+      pointer-events: none;
+      position: relative;
+      text-transform: uppercase;
+      width: 100%;
+    }
+    .material-textfield label::before {
+      content: attr(data-content);
+      position: relative;
+      transition: all 0.2s ease;
+      will-change: font-size, top;
+    }
+    .material-textfield label::after {
+      bottom: 0.9rem;
+      content: "";
+      height: 0.3rem;
+      left: 50%;
+      position: absolute;
+      transition: all 0.2s ease;
+      width: 0;
+      will-change: width, left;
+    }
+    .material-textfield label::before,
+    .material-textfield input[required]:focus ~ label::before {
+      font-size: 0.75rem;
+      top: -3.25rem;
+    }
+    .material-textfield input:focus ~ label::after {
+      left: 0%;
+      width: 100%;
+    }
+    .material-textfield input:invalid ~ label::before {
+      font-size: 1rem;
+      top: -2rem;
+    }
 
+    .material-textfield.blue input {
+      border-bottom: 0.1rem solid #03a9f4;
+      color: #0275a8;
+    }
+    .material-textfield.blue label::after {
+      background: #03a9f4;
+    }
+    .material-textfield.blue label::before,
+    .material-textfield.blue input[required]:focus ~ label::before {
+      color: #47c4fd;
+    }
+    .material-textfield.blue input:invalid ~ label::before {
+      color: #03a9f4;
+    }
+
+    .material-textfield.red input {
+      border-bottom: 0.1rem solid #f44336;
+      color: #d2190b;
+    }
+    .material-textfield.red label::after {
+      background: #f44336;
+    }
+    .material-textfield.red label::before,
+    .material-textfield.red input[required]:focus ~ label::before {
+      color: #f8877f;
+    }
+    .material-textfield.red input:invalid ~ label::before {
+      color: #f44336;
+    }
+  </style>
+</head>
+
+  </head><body> 
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -62,42 +164,7 @@
             
 <div class="section" id="pandas-initialization">
 <span id="pandas-init"></span><h1>Pandas Initialization<a class="headerlink" href="#pandas-initialization" title="Permalink to this headline">¶</a></h1>
-<span class="target" id="module-default_profile.startup.42_pandas_init"></span><dl class="function">
-<dt id="default_profile.startup.42_pandas_init.pandas_init">
-<code class="sig-name descname">pandas_init</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/42_pandas_init.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.42_pandas_init.pandas_init" title="Permalink to this definition">¶</a></dt>
-<dd><p>Define options for <code class="xref py py-mod docutils literal notranslate"><span class="pre">pandas</span></code> startup.</p>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>Don’t set <code class="xref py py-obj docutils literal notranslate"><span class="pre">start.options['show_dimensions']</span> <span class="pre">to</span> <span class="pre">``False`</span></code>.
-<code class="docutils literal notranslate"><span class="pre">'show_dimensions'</span></code> means show the size of the <code class="xref py py-obj docutils literal notranslate"><span class="pre">pd.DataFrame</span></code> object.</p>
-</div>
-<p><code class="docutils literal notranslate"><span class="pre">truncate</span></code> indicates to only display it when the DataFrame is…
-well truncated. <a class="footnote-reference brackets" href="#id2" id="id1">1</a></p>
-<dl class="footnote brackets">
-<dt class="label" id="id2"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
-<dd><p><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/user-guide/options.html">https://pandas.pydata.org/pandas-docs/stable/user-guide/options.html</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="class">
-<dt id="default_profile.startup.42_pandas_init.DisplayHTML">
-<em class="property">class </em><code class="sig-name descname">DisplayHTML</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/42_pandas_init.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.42_pandas_init.DisplayHTML" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<p>Display HTML representation of multiple objects</p>
-<dl class="attribute">
-<dt id="default_profile.startup.42_pandas_init.DisplayHTML.template">
-<code class="sig-name descname">template</code><em class="property"> = '\n    &lt;div style=&quot;float: left; padding: 10px;&quot;&gt;\n    &lt;p style=\'font-family:\'DejaVu Sans Mono\',\n    &quot;Courier New&quot;, Courier, monospace\'&gt;{0}&lt;/p&gt;{1}\n    &lt;/div&gt;\n    '</em><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/42_pandas_init.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.42_pandas_init.DisplayHTML.template" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="default_profile.startup.42_pandas_init.DisplayHTML.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/42_pandas_init.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.42_pandas_init.DisplayHTML.__init__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</div>
+<span class="target" id="module-default_profile.startup.42_pandas_init"></span></div>
 
 
           </div>
@@ -177,7 +244,6 @@ well truncated. <a class="footnote-reference brackets" href="#id2" id="id1">1</a
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../extensions.html">Extensions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../jobcontrol.html">Job Control</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../todo.html">Todo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../default_profile.html">Tailor-made profiles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../dev.html">Developers Notes</a></li>
@@ -216,7 +282,7 @@ well truncated. <a class="footnote-reference brackets" href="#id2" id="id1">1</a
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Jan 11, 2020.
+      Last updated on Jan 20, 2020.
     </div>
   </body>
 </html>

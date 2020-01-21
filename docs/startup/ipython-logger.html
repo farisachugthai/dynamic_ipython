@@ -20,21 +20,123 @@
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="06_Help_Helpers" href="help_helpers.html" />
     <link rel="prev" title="04_easy_import" href="easy_import.html" />
-<link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" />
-<link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" media="screen" rel="stylesheet" type="text/css" />
-<link rel='stylesheet' href='//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.css'>
-<!--[if lte IE 6]>
-  <link
-    rel="stylesheet"
-    href="../_static/ie6.css"
-    type="text/css"
-    media="screen"
-    charset="utf-8"
-  />
-<![endif]-->
+<!-- <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" /> -->
+<!-- <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" media="screen" rel="stylesheet" type="text/css" /> -->
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <title>Floating label Demo</title>
+  <meta name="description" content="" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style type="text/css">
+    /* CSS styles */
+    /* Example by Matthias Benkort at http://codepen.io/KtorZ/pen/ZOzdqG */
+    @import url(
+      https://fonts.googleapis.com/css?family=Roboto:400,
+      300,
+      500,
+      700
+    );
+    .wrapper {
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
 
-  </head><body>
+    .material-textfield {
+      display: inline-block;
+      height: 4rem;
+      padding-top: 2rem;
+    }
+    .material-textfield input {
+      background: none;
+      border: none;
+      box-sizing: border-box;
+      display: block;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 1rem;
+      padding: 0.25rem 0.1rem;
+      width: 100%;
+    }
+    .material-textfield input:invalid {
+      box-shadow: none;
+    }
+    .material-textfield input:focus {
+      outline: none;
+    }
+    .material-textfield label {
+      display: inline-block;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 0;
+      pointer-events: none;
+      position: relative;
+      text-transform: uppercase;
+      width: 100%;
+    }
+    .material-textfield label::before {
+      content: attr(data-content);
+      position: relative;
+      transition: all 0.2s ease;
+      will-change: font-size, top;
+    }
+    .material-textfield label::after {
+      bottom: 0.9rem;
+      content: "";
+      height: 0.3rem;
+      left: 50%;
+      position: absolute;
+      transition: all 0.2s ease;
+      width: 0;
+      will-change: width, left;
+    }
+    .material-textfield label::before,
+    .material-textfield input[required]:focus ~ label::before {
+      font-size: 0.75rem;
+      top: -3.25rem;
+    }
+    .material-textfield input:focus ~ label::after {
+      left: 0%;
+      width: 100%;
+    }
+    .material-textfield input:invalid ~ label::before {
+      font-size: 1rem;
+      top: -2rem;
+    }
 
+    .material-textfield.blue input {
+      border-bottom: 0.1rem solid #03a9f4;
+      color: #0275a8;
+    }
+    .material-textfield.blue label::after {
+      background: #03a9f4;
+    }
+    .material-textfield.blue label::before,
+    .material-textfield.blue input[required]:focus ~ label::before {
+      color: #47c4fd;
+    }
+    .material-textfield.blue input:invalid ~ label::before {
+      color: #03a9f4;
+    }
+
+    .material-textfield.red input {
+      border-bottom: 0.1rem solid #f44336;
+      color: #d2190b;
+    }
+    .material-textfield.red label::after {
+      background: #f44336;
+    }
+    .material-textfield.red label::before,
+    .material-textfield.red input[required]:focus ~ label::before {
+      color: #f8877f;
+    }
+    .material-textfield.red input:invalid ~ label::before {
+      color: #f44336;
+    }
+  </style>
+</head>
+
+  </head><body> 
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -94,242 +196,6 @@ double quotes and in the comment add system info like py version, venv,
 conda, any of the 1000000 things you could add.</p></li>
 </ul>
 </div>
-<dl class="class">
-<dt id="default_profile.startup.05_log.LoggerManager">
-<em class="property">class </em><code class="sig-name descname">LoggerManager</code><span class="sig-paren">(</span><em class="sig-param">logger_name='IPython_Logger_Manager'</em>, <em class="sig-param">logfname='Logger.log'</em>, <em class="sig-param">logger_log_level=None</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.LoggerManager" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">traitlets.config.configurable.LoggingConfigurable</span></code></p>
-<p>Let’s give cleanup a shot.</p>
-<p>Now with all of this effort put in to determine the mode that the user
-wants and how to best put the file where they’ll expect it, it’s safe to
-say that we know that we don’t need a FileHandler.</p>
-<p>But let’s add a StreamHandler and set the level. And make them configurable right?</p>
-<dl class="attribute">
-<dt id="default_profile.startup.05_log.LoggerManager.logfile">
-<code class="sig-name descname">logfile</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.LoggerManager.logfile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Be careful to not set this immediately. We set it with
-<a class="reference internal" href="#default_profile.startup.05_log.LoggerManager.logstart" title="default_profile.startup.05_log.LoggerManager.logstart"><code class="xref py py-meth docutils literal notranslate"><span class="pre">logstart()</span></code></a> and it will raise an error if set early.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a> (os.Pathlike)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="default_profile.startup.05_log.LoggerManager.log_raw_input">
-<code class="sig-name descname">log_raw_input</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.LoggerManager.log_raw_input" title="Permalink to this definition">¶</a></dt>
-<dd><p>Whether to log raw or processed input.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="default_profile.startup.05_log.LoggerManager.log_output">
-<code class="sig-name descname">log_output</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.LoggerManager.log_output" title="Permalink to this definition">¶</a></dt>
-<dd><p>Whether to also log output.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="default_profile.startup.05_log.LoggerManager.timestamp">
-<code class="sig-name descname">timestamp</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.LoggerManager.timestamp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Whether to put timestamps before each log entry.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="default_profile.startup.05_log.LoggerManager.log_active">
-<code class="sig-name descname">log_active</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.LoggerManager.log_active" title="Permalink to this definition">¶</a></dt>
-<dd><p>activity control flags</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="default_profile.startup.05_log.LoggerManager.home">
-<code class="sig-name descname">home</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.LoggerManager.home" title="Permalink to this definition">¶</a></dt>
-<dd><p>Not in init because it doesn’t make any sense to override where
-your home directory is.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Uses pathlib internally and externally.</p>
-</div>
-<dl class="attribute">
-<dt>
-<code class="sig-name descname">logfile</code><em class="property"> = None</em><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt>
-<code class="sig-name descname">log_raw_input</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>A boolean (True, False) trait.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt>
-<code class="sig-name descname">log_output</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>A boolean (True, False) trait.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt>
-<code class="sig-name descname">timestamp</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>A boolean (True, False) trait.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt>
-<code class="sig-name descname">log_active</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>A boolean (True, False) trait.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="default_profile.startup.05_log.LoggerManager.loghead">
-<code class="sig-name descname">loghead</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.LoggerManager.loghead" title="Permalink to this definition">¶</a></dt>
-<dd><p>A trait which allows any value.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="default_profile.startup.05_log.LoggerManager.formatter_style">
-<code class="sig-name descname">formatter_style</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.LoggerManager.formatter_style" title="Permalink to this definition">¶</a></dt>
-<dd><p>A trait for unicode strings.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="default_profile.startup.05_log.LoggerManager.time_format">
-<code class="sig-name descname">time_format</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.LoggerManager.time_format" title="Permalink to this definition">¶</a></dt>
-<dd><p>A trait for unicode strings.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="default_profile.startup.05_log.LoggerManager.logmode">
-<code class="sig-name descname">logmode</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.LoggerManager.logmode" title="Permalink to this definition">¶</a></dt>
-<dd><p>A trait for unicode strings.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="default_profile.startup.05_log.LoggerManager.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">logger_name='IPython_Logger_Manager'</em>, <em class="sig-param">logfname='Logger.log'</em>, <em class="sig-param">logger_log_level=None</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.LoggerManager.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>New LoggerManager.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>logfname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Is set to the attribute ‘logfile’ in method <a class="reference internal" href="#default_profile.startup.05_log.LoggerManager.logstart" title="default_profile.startup.05_log.LoggerManager.logstart"><code class="xref py py-meth docutils literal notranslate"><span class="pre">logstart()</span></code></a>.
-But logfile is also a property now which we need to fix as properties
-aren’t callables but that’s kinda the point of ahving the reference
-to it.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="default_profile.startup.05_log.LoggerManager.shell">
-<code class="sig-name descname">shell</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.LoggerManager.shell" title="Permalink to this definition">¶</a></dt>
-<dd><p>A trait whose value must be an instance of a specified class.</p>
-<p>The value can also be an instance of a subclass of the specified class.</p>
-<p>Subclasses can declare default classes by overriding the klass attribute</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="default_profile.startup.05_log.LoggerManager.log">
-<code class="sig-name descname">log</code><span class="sig-paren">(</span><em class="sig-param">msg</em>, <em class="sig-param">level=30</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.LoggerManager.log" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="default_profile.startup.05_log.LoggerManager.init_logger">
-<code class="sig-name descname">init_logger</code><span class="sig-paren">(</span><em class="sig-param">override_level=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.LoggerManager.init_logger" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="default_profile.startup.05_log.LoggerManager.init_handler">
-<code class="sig-name descname">init_handler</code><span class="sig-paren">(</span><em class="sig-param">override_level=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.LoggerManager.init_handler" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="default_profile.startup.05_log.LoggerManager.init_formatter">
-<code class="sig-name descname">init_formatter</code><span class="sig-paren">(</span><em class="sig-param">override_style=None</em>, <em class="sig-param">formatter_style=None</em>, <em class="sig-param">time_format=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.LoggerManager.init_formatter" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="default_profile.startup.05_log.LoggerManager.init_filter">
-<code class="sig-name descname">init_filter</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.LoggerManager.init_filter" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="default_profile.startup.05_log.LoggerManager.logappend">
-<code class="sig-name descname">logappend</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.LoggerManager.logappend" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="default_profile.startup.05_log.LoggerManager.append">
-<code class="sig-name descname">append</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.LoggerManager.append" title="Permalink to this definition">¶</a></dt>
-<dd><p>Called when logmode is set to append.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="default_profile.startup.05_log.LoggerManager.backup">
-<code class="sig-name descname">backup</code><span class="sig-paren">(</span><em class="sig-param">backupext='~'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.LoggerManager.backup" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a logging file and backups as necessary at path ‘target’.</p>
-<p>Added a backupext parameter so that can be changed.</p>
-<p>Also changed the logfile to be open in append mode so we don’t have
-to worry about whether we have more.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="default_profile.startup.05_log.LoggerManager.global_mode">
-<code class="sig-name descname">global_mode</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.LoggerManager.global_mode" title="Permalink to this definition">¶</a></dt>
-<dd><p>I’m changing this. Global mode shouldn’t dump files in the home dir.</p>
-<p>Global means put it iin teh IPython dir not the profile dir.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="default_profile.startup.05_log.LoggerManager.over">
-<code class="sig-name descname">over</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.LoggerManager.over" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="default_profile.startup.05_log.LoggerManager.output_file">
-<em class="property">property </em><code class="sig-name descname">output_file</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.LoggerManager.output_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="default_profile.startup.05_log.LoggerManager.set_output_file">
-<em class="property">property </em><code class="sig-name descname">set_output_file</code><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.LoggerManager.set_output_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="default_profile.startup.05_log.LoggerManager.logstart">
-<em class="property">classmethod </em><code class="sig-name descname">logstart</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.LoggerManager.logstart" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate a new log-file with a default header.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="default_profile.startup.05_log.LoggerManager.run">
-<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.LoggerManager.run" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
 <dl class="function">
 <dt id="default_profile.startup.05_log.ipython_logger">
 <code class="sig-name descname">ipython_logger</code><span class="sig-paren">(</span><em class="sig-param">shell=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/05_log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.ipython_logger" title="Permalink to this definition">¶</a></dt>
@@ -448,7 +314,6 @@ named based on the date.</p>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../extensions.html">Extensions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../jobcontrol.html">Job Control</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../todo.html">Todo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../default_profile.html">Tailor-made profiles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../dev.html">Developers Notes</a></li>
@@ -487,7 +352,7 @@ named based on the date.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Last updated on Jan 11, 2020.
+      Last updated on Jan 20, 2020.
     </div>
   </body>
 </html>
