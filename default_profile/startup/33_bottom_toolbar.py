@@ -23,17 +23,20 @@ import pygments
 from IPython.core.getipython import get_ipython
 
 try:
-    from gruvbox.style import GruvboxDarkHard
+    from gruvbox.gruvbox import Gruvbox
 except:
-    GruvboxDarkHard = None
+    Gruvbox = None
 
 
 class BottomToolbar:
-
     """Display the current input mode.
 
-    Ooo this might be a fun time to really see how far I can stretch
-    pythons new string formatting.
+    As the bottom_toolbar property exists in both a prompt_toolkit PromptSession
+    and Application, both are accessible from the `session` and `pt_app`
+    attributes.
+
+    Defines a method :meth:`rerender` and calls it whenever the instance is called
+    via ``__call__``.
     """
 
     completion_displays_to_styles = {
@@ -64,12 +67,21 @@ class BottomToolbar:
             return False
 
     def __repr__(self):
-        f"{self.__class__.__name__}:> {self.rerender}"
+        return f"<{self.__class__.__name__}:>"
 
     def __call__(self):
-        self.rerender()
+        return self.rerender()
 
     def rerender(self):
+        """Render the toolbar at the bottom for prompt_toolkit.
+
+        .. warning::
+            Simple reminder about the difference between running an
+            expression and returning one.
+            If you accidentally forget the `return` keyword, nothing will
+            display.
+            That's all.
+        """
         if self.is_vi_mode:
             return self._render_vi()
         else:
@@ -87,8 +99,13 @@ class BottomToolbar:
     def _render_emacs(self):
         return f" [F4] Emacs: {Path.cwd()} {date.today()}"
 
+    def init_style(self):
+        if Gruvbox is not None:
+            bt_style = Gruvbox()
+            return style_from_pygments_dict(bt_style.style)
+
     def override_style(self):
-        """Could be easily modified to utilize traitlets."""
+        """Could be easily modified to utilize traitlets. However currently not used"""
         style_overrides_env = env.get("PTK_STYLE_OVERRIDES")
         if style_overrides_env:
             try:
@@ -103,6 +120,14 @@ def add_toolbar(toolbar=None):
     _ip = get_ipython()
 
     _ip.pt_app.bottom_toolbar = toolbar()
+
+
+def _(event):
+    """Toggle between Emacs and Vi mode."""
+    if event.app.editing_mode == EditingMode.VI:
+        event.app.editing_mode = EditingMode.EMACS
+    else:
+        event.app.editing_mode = EditingMode.VI
 
 
 # Don't uncomment! This fucks up the keybindings so that the only way a line

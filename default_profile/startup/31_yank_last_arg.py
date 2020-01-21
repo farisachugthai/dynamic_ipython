@@ -134,7 +134,6 @@ def if_no_repeat(event: E) -> bool:
 
 
 def additional_bindings():
-
     registry = KeyBindings()
 
     ip = get_ipython()

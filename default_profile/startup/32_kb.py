@@ -116,6 +116,30 @@ So far so good?::
         ValueError: 'r' is not a valid Keys
 
 Yup. We have to redefine what a key is.
+
+
+Fun with Vim
+============
+
+Dude these are all the vi modes prompt_toolkit has...lol
+So I just checked. Wanna know what it does?
+They're basically enums that get compared to editing_mode.input_mode. lol kinda dumb right.
+
+from prompt_toolkit.filters.app import (
+    vi_selection_mode,
+    vi_recording_macro,
+    vi_register_names,
+    vi_mode,
+    vi_replace_mode,
+    vi_waiting_for_text_object_mode,
+    vi_insert_mode,
+    vi_search_direction_reversed,
+    vi_navigation_mode,
+    vi_digraph_mode,
+    vi_insert_multiple_mode,
+)
+
+
 """
 import logging
 import reprlib
@@ -127,13 +151,9 @@ from IPython.core.getipython import get_ipython
 import prompt_toolkit
 from prompt_toolkit.application.current import get_app
 from prompt_toolkit.cache import SimpleCache
-from prompt_toolkit.enums import DEFAULT_BUFFER, SEARCH_BUFFER
-from prompt_toolkit.filters import Condition
-from prompt_toolkit.key_binding.defaults import load_key_bindings
-from prompt_toolkit.key_binding.bindings.vi import (
-    load_vi_bindings,
-    load_vi_search_bindings,
-)
+
+# from prompt_toolkit.enums import DEFAULT_BUFFER, SEARCH_BUFFER
+# from prompt_toolkit.filters import Condition
 from prompt_toolkit.key_binding.defaults import load_key_bindings, load_vi_bindings
 from prompt_toolkit.key_binding.key_bindings import (
     KeyBindings,
@@ -141,23 +161,11 @@ from prompt_toolkit.key_binding.key_bindings import (
     _MergedKeyBindings,
     merge_key_bindings,
 )
+from prompt_toolkit.key_binding.bindings.vi import (
+    load_vi_bindings,
+    load_vi_search_bindings,
+)
 from prompt_toolkit.keys import Keys
-
-# Dude these are all the vi modes prompt_toolkit has...lol
-# So I just checked. Wanna know what it does? They're basically enums that get compared to editing_mode.input_mode. lol kinda dumb right.
-# from prompt_toolkit.filters.app import (
-#     vi_selection_mode,
-#     vi_recording_macro,
-#     vi_register_names,
-#     vi_mode,
-#     vi_replace_mode,
-#     vi_waiting_for_text_object_mode,
-#     vi_insert_mode,
-#     vi_search_direction_reversed,
-#     vi_navigation_mode,
-#     vi_digraph_mode,
-#     vi_insert_multiple_mode,
-# )
 
 
 class KeyBindingsManager(KeyBindingsBase):
@@ -181,12 +189,30 @@ class KeyBindingsManager(KeyBindingsBase):
 
     """
 
-    def __init__(self, kb=None, shell=None):
+    def __init__(self, kb=None, shell=None, **kwargs):
+        """Initialize the class.
+
+        Parameters
+        ----------
+        kb : KeyBindings
+            Any KeyBindings you wanna throw us right off the bat.
+            Handling this is gonna be hard unfortunately.
+        """
         self.shell = shell or get_ipython()
         if self.shell is not None:
-            self.kb = kb or self.shell.pt_app.app.key_bindings
-            if self.kb is None:
-                self.kb = load_key_bindings()
+            if kb is None:
+                if hasattr(self.shell, "pt_app"):
+                    self.kb = self.shell.pt_app.app.key_bindings
+                elif hasattr(ip, "pt_cli"):
+                    self.kb = self.shell.pt_cli.application.key_bindings_registry
+                else:
+                    self.kb = None
+            else:
+                self.kb = kb
+
+        # So this should cover both IPython and pt aps that don't have self.shell set!
+        if self.kb is None:
+            self.kb = load_key_bindings()
         # idk what this is but pt requires it
         self._get_bindings_for_keys_cache = SimpleCache(maxsize=10000)
         self._get_bindings_starting_with_keys_cache = SimpleCache(maxsize=1000)
@@ -220,7 +246,6 @@ class KeyBindingsManager(KeyBindingsBase):
         """
         return len(self.kb.bindings)
 
-    @property
     def len(self):
         return self.__len__()
 
@@ -262,7 +287,7 @@ class KeyBindingsManager(KeyBindingsBase):
 
     @property
     def _version(self):
-        self._version = 0
+        return self.__version
 
     @_version.setter
     def _clear_cache(self):
@@ -270,37 +295,38 @@ class KeyBindingsManager(KeyBindingsBase):
         self._get_bindings_for_keys_cache.clear()
         self._get_bindings_starting_with_keys_cache.clear()
 
+    def get_keys(self, keys):
+        result = []
+        # Dude don't define the vars inside the for loop
+        # It's easier to segregate them at the top and then work with them
+        any_count = 0
+        for binding in self.bindings:
+            if len(keys) == len(binding.keys):
+                match = True
+                for i, j in zip(binding.keys, keys):
+                    if i != j and i != Keys.Any:
+                        match = False
+                        break
+
+                    if i == Keys.Any:
+                        any_count += 1
+
+                if match:
+                    result.append((any_count, b))
+
+        # Place bindings that have more 'Any' occurrences in them at the end.
+        result = sorted(result, key=lambda item: -item[0])
+
+        return [item[1] for item in result]
+
     def get_bindings_for_keys(self, keys):
-        """
-        Return a list of key bindings that can handle this key.
+        """Return a list of key bindings that can handle this key.
+
         (This return also inactive bindings, so the `filter` still has to be
         called, for checking it.)
         :param keys: tuple of keys.
         """
-
-        def get():
-            result = []
-            for b in self.bindings:
-                if len(keys) == len(b.keys):
-                    match = True
-                    any_count = 0
-
-                    for i, j in zip(b.keys, keys):
-                        if i != j and i != Keys.Any:
-                            match = False
-                            break
-
-                        if i == Keys.Any:
-                            any_count += 1
-
-                    if match:
-                        result.append((any_count, b))
-
-            # Place bindings that have more 'Any' occurrences in them at the end.
-            result = sorted(result, key=lambda item: -item[0])
-
-            return [item[1] for item in result]
-
+        self.get(keys)
         return self._get_bindings_for_keys_cache.get(keys, get)
 
     def get_bindings_starting_with_keys(self, keys):
@@ -331,7 +357,7 @@ class KeyBindingsManager(KeyBindingsBase):
 class ApplicationKB(KeyBindingsManager):
     """Functionally the exact same thing except now we're bound to _ip.pt_app."""
 
-    def __init__(self, kb=None, shell=None, *args, **kwargs):
+    def __init__(self, kb=None, shell=None, **kwargs):
         self.shell = shell or get_ipython()
         if self.shell is not None:
             self.kb = kb or self.shell.pt_app.key_bindings
@@ -433,22 +459,14 @@ def _rewritten_add(registry, _binding):
 
 
 # @_rewritten_add(registries, Keys.F4)
-def _(event):
-    """Toggle between Emacs and Vi mode."""
-    if event.app.editing_mode == EditingMode.VI:
-        event.app.editing_mode = EditingMode.EMACS
-    else:
-        event.app.editing_mode = EditingMode.VI
-
 
 if __name__ == "__main__":
-    basic_bindings = load_key_bindings()
     _ip = get_ipython()
     # Let's side step all those fuckups
     # This is probably a terrible thing to rely on, and not a guaranteed order but....
     if _ip is not None:
         kb_manager = KeyBindingsManager()
-        if _ip.editing_mode == "vi":
-            vi_bindings = basic_bindings.registries[0]
-            vi_mouse = basic_bindings.registries[1]
-            vi_cpr = basic_bindings.registries[2]
+        # if _ip.editing_mode == "vi":
+        #     vi_bindings = basic_bindings.registries[0]
+        #     vi_mouse = basic_bindings.registries[1]
+        #     vi_cpr = basic_bindings.registries[2]

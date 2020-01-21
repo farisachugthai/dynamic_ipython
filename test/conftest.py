@@ -53,11 +53,15 @@ def pytest_collection_modifyitems(config, items):
             item.add_marker(skip_slow)
 
 
-def pytest_report_header(config):
-    """Present a custom header. Did this wrong because mpl is installed."""
-    return "\nMatplotlib: {}\nSQLite3: {}\n".format(
-        ("matplotlib" in sys.modules), ("sqlite3" in sys.modules)
-    )
+def pytest_report_header():
+    """Try to imitate the nosetests header."""
+    # return f"\nMatplotlib:\n {matplotlib in sys.modules}\nPygments:\n {pygments in sys.modules}\nSQLite3:\n {sqlite3 in sys.modules}\n"
+    # crashes
+    ret = []
+    for i in ['matplotlib', 'sqlite3', 'pygments']:
+        if sys.modules[i]:
+            ret.append(i)
+    return ret
 
 
 def pytest_runtest_makereport(item, call):

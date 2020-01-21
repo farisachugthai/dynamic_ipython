@@ -71,7 +71,7 @@ if __name__ == "__main__":
 
     # supposed to be used on the class not the instance
     # _ip.add_traits({"interpreter": code.InteractiveConsole(locals())})
-
+    _ip = get_ipython()
     _ip.interpreter = interpreter
     _ip.showsyntaxerror = _ip.interpreter.showsyntaxerror
     _ip.showtraceback = _ip.interpreter.showtraceback
