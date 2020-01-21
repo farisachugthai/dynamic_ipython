@@ -5,14 +5,18 @@
   <head>
     <meta charset="utf-8" />
     <title>IPython Sphinx Directive &#8212; Dynamic IPython: version0.0.2</title>
-    <link rel="stylesheet" href="../_static/pyramid.css" type="text/css" />
+    
+    <link rel="stylesheet" href="../_static/scrolls.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/print.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/language_data.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/theme_extras.js"></script>
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/sphinxext/ipython_sphinx_directive.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -135,31 +139,42 @@
 </head>
 
   </head><body> 
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="lexer.html" title="New IPython Console Lexer"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="index.html" title="Sphinx extensions"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Dynamic IPython</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Sphinx extensions</a> &#187;</li> 
-      </ul>
-    </div>  
+    <div id="content">
+      <div class="header">
+        <h1 class="heading"><a href="../index.html"
+          title="back to the documentation overview"><span>IPython Sphinx Directive</span></a></h1>
+      </div>
+      <div class="relnav" role="navigation" aria-label="related navigation">
+        <a href="index.html">&laquo; Sphinx extensions</a> |
+        <a href="#">IPython Sphinx Directive</a>
+        | <a href="lexer.html">New IPython Console Lexer &raquo;</a>
+      </div>
+      <div id="contentwrapper">
+        <div id="toc" role="navigation" aria-label="table of contents navigation">
+          <h3>Table of Contents</h3>
+          <ul>
+<li><a class="reference internal" href="#">IPython Sphinx Directive</a><ul>
+<li><a class="reference internal" href="#directive-and-options">Directive and options</a></li>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#persisting-the-session-across-blocks">Persisting the session across blocks</a></li>
+<li><a class="reference internal" href="#multi-line-input">Multi-line input</a><ul>
+<li><a class="reference internal" href="#writing-pure-python-code">Writing Pure Python Code</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#handling-comments">Handling Comments</a></li>
+<li><a class="reference internal" href="#splitting-python-statements-across-lines">Splitting Python statements across lines</a></li>
+<li><a class="reference internal" href="#pseudo-decorators">Pseudo-Decorators</a></li>
+<li><a class="reference internal" href="#configuration-values">Configuration Values</a><ul>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
+        </div>
+        <div role="main">
+        
 <div class="section" id="module-sphinx_directive">
 <span id="id1"></span><span id="ipython-sphinx-directive"></span><h1>IPython Sphinx Directive<a class="headerlink" href="#module-sphinx_directive" title="Permalink to this headline">¶</a></h1>
 <p>The <a class="reference internal" href="#directive-ipython" title="ipython directive"><code class="xref rst rst-dir docutils literal notranslate"><span class="pre">ipython</span></code></a> directive is a stateful shell that can be used
@@ -262,7 +277,6 @@ number displayed in the source code.</p>
 </div>
 <p>will be rendered as:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="n">x</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="gh">Out[1]: </span><span class="go">2</span>
 
 <span class="gp">In [2]: </span><span class="n">x</span><span class="o">**</span><span class="mi">3</span>
 <span class="gh">Out[2]: </span><span class="go">8</span>
@@ -333,13 +347,11 @@ python interpreter. The following markup:</p>
 </div>
 <p>Renders as</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">foo</span> <span class="o">=</span> <span class="s1">&#39;bar&#39;</span>
-<span class="gh">Out[5]: </span><span class="go">&#39;bar&#39;</span>
 
 <span class="gp">In [6]: </span><span class="nb">print</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span>
 <span class="go">bar</span>
 
 <span class="gp">In [7]: </span><span class="n">foo</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="gh">Out[7]: </span><span class="go">2</span>
 
 <span class="gp">In [8]: </span><span class="n">foo</span><span class="o">**</span><span class="mi">2</span>
 <span class="gh">Out[8]: </span><span class="go">4</span>
@@ -355,7 +367,7 @@ as well as <code class="xref rst rst-dir docutils literal notranslate"><span cla
 </pre></div>
 </div>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [9]: </span><span class="n">plot</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
-<span class="gh">Out[9]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f3235f5ad60&gt;]</span>
+<span class="gh">Out[9]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f43c8d76340&gt;]</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/plot_simple_python.png"><img alt="../_images/plot_simple_python.png" src="../_images/plot_simple_python.png" style="width: 4in;" /></a>
@@ -370,7 +382,6 @@ this page in Pseudo-Decorators section.</p>
 </pre></div>
 </div>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [10]: </span><span class="n">foo</span> <span class="o">=</span> <span class="s1">&#39;bar&#39;</span>
-<span class="gh">Out[10]: </span><span class="go">&#39;bar&#39;</span>
 
 <span class="gp">In [11]: </span><span class="n">foo</span><span class="p">[)</span>
 <span class="gt">  File</span><span class="nn"> &quot;&lt;ipython-input-11-edde7a2425af&gt;&quot;</span><span class="gt">, line </span><span class="mi">1</span>
@@ -410,7 +421,6 @@ suppresses the error during doc-builds.</p>
 <span class="gp">   ....: </span><span class="s1">        support &amp;</span><span class="se">\</span>
 <span class="gp">   ....: </span><span class="s1">        works&#39;</span>
 <span class="gp">   ....: </span>
-<span class="gh">Out[13]: </span><span class="go">&#39;Multi        line &amp;        support &amp;        works&#39;</span>
 
 <span class="gp">In [14]: </span><span class="nb">print</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;&amp;&#39;</span><span class="p">))</span>
 <span class="go">[&#39;Multi        line &#39;, &#39;        support &#39;, &#39;        works&#39;]</span>
@@ -646,146 +656,10 @@ obtainable from the “Show Source” button.</p>
 </div>
 
 
-          </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
-    <h3>Quick search</h3>
-    <div class="searchformwrapper">
-        <form class="search" action="../search.html" method="get">
-            <input type="text" name="q" />
-            <input type="submit" value="Go" />
-        </form>
     </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
 
-
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="../index.html">Documentation overview</a>
-    <ul>
-      <li><a href="index.html">Sphinx extensions</a>
-        <ul>
-          <li>Previous: <a href="index.html" title="previous chapter">Sphinx extensions</a></li>
-          <li>Next: <a href="lexer.html" title="next chapter">New IPython Console Lexer</a></li>
-        </ul>
-      </li>
-    </ul>
-</ul>
-</li>
-
-
-
-<h3><a href="../index.html">On This Page:</a></h3>
-
-<div>&nbsp;</div>
-
-<div id="sidebartoc">
-
-    <ul>
-<li><a class="reference internal" href="#">IPython Sphinx Directive</a><ul>
-<li><a class="reference internal" href="#directive-and-options">Directive and options</a></li>
-<li><a class="reference internal" href="#usage">Usage</a></li>
-<li><a class="reference internal" href="#persisting-the-session-across-blocks">Persisting the session across blocks</a></li>
-<li><a class="reference internal" href="#multi-line-input">Multi-line input</a><ul>
-<li><a class="reference internal" href="#writing-pure-python-code">Writing Pure Python Code</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#handling-comments">Handling Comments</a></li>
-<li><a class="reference internal" href="#splitting-python-statements-across-lines">Splitting Python statements across lines</a></li>
-<li><a class="reference internal" href="#pseudo-decorators">Pseudo-Decorators</a></li>
-<li><a class="reference internal" href="#configuration-values">Configuration Values</a><ul>
-<li><a class="reference internal" href="#see-also">See Also</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-
-</div>
-
-<h3><a href="../index.html">Table of Contents</a></h3>
-<div>&nbsp;</div>
-<div id="sidebartoc">
-    <p class="caption"><span class="caption-text">API</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="index.html">Sphinx Extensions</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">IPython Sphinx Directive</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lexer.html">New IPython Console Lexer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="custom_doctests.html">Custom Doctests</a></li>
-<li class="toctree-l2"><a class="reference internal" href="magics.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">magics</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="make.html">Make — Automated Documentation Builder</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../startup/index.html">IPython Startup</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../startup/rehashx.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">%rehashx</span></code> — Add executables to $PATH</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../startup/ipython-logger.html">05_log — IPython logger</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../startup/help_helpers.html">06_Help_Helpers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../startup/aliases.html">System Aliases</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../startup/fzf.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">21_fzf</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../startup/setup_readline.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">30_setup_readline</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../startup/completions.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">34_completions</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../startup/41_numpy.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">numpy</span></code> Initialization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../startup/matplotlib_rc.html">Matplotlib Startup</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../util/index.html">IPython Utilities</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../util/base16.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">base_16</span></code> module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../util/command_chain.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">command_chain</span></code> module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../util/copytree.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">copytree</span></code> module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../util/ipython_get_history.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ipython_get_history</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../util/machine.html">machine</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../util/module_log.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">module_log</span></code> module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../util/nb_stripper.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">nb_stripper</span></code> module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../util/pager2.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pager2</span></code> module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../util/paths.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paths</span></code> module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../util/profile_override.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">profile_override</span></code> module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../util/timer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">timer</span></code> module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../util/trio_testing.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trio_testing</span></code> module</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../extensions.html">Extensions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../todo.html">Todo</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../default_profile.html">Tailor-made profiles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../dev.html">Developers Notes</a></li>
-</ul>
-
-    
-</div>
-
-<div role="note" aria-label="source link">
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/sphinxext/ipython_sphinx_directive.rst.txt" rel="nofollow">Show Source</a></li>
-  </ul>
-</div>
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="lexer.html" title="New IPython Console Lexer"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="index.html" title="Sphinx extensions"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Dynamic IPython</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" >Sphinx extensions</a> &#187;</li> 
-      </ul>
-    </div>
     <div class="footer" role="contentinfo">
       Last updated on Jan 21, 2020.
     </div>

@@ -53,9 +53,12 @@ if ask_for_import("jinja2"):
     from jinja2 import FileSystemLoader
     from jinja2.environment import TRIM_BLOCKS, Environment
     from jinja2.lexer import get_lexer
+
     TRIM_BLOCKS = True
-    template_path = '_templates'
-    env = Environment(loader=FileSystemLoader(template_path), extensions=['jinja2.ext.i18n'])
+    template_path = "_templates"
+    env = Environment(
+        loader=FileSystemLoader(template_path), extensions=["jinja2.ext.i18n"]
+    )
     lexer = get_lexer(env)
     # TODO: keep going
 
@@ -239,7 +242,8 @@ warning_is_error = False
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 
-html_theme = "pyramid"
+# html_theme = "pyramid"
+html_theme = "scrolls"
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -588,7 +592,6 @@ def rstjinja(app, docname, source):
     src = source[0]
     rendered = app.builder.templates.render_string(src, app.config.html_context)
     source[0] = rendered
-
 
 
 def setup(app):
