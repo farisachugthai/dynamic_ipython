@@ -14,9 +14,6 @@ from IPython.core.magic import line_magic
 from IPython.core.magics.namespace import NamespaceMagics
 from IPython.core.page import pager_page
 
-# from IPython.core.magics import
-# Might need some of the funcs from IPython.utils.{PyColorize,coloransi,colorable}
-
 
 class NotInIPythonError(RuntimeError):
     """Error raised when a magic is invoked outside of IPython."""
@@ -43,7 +40,7 @@ class PyPager:
         """
         self.text = text
         self.use_pager = use_pager
-        self.call(*args)
+        # self.call(*args)
 
     def __repr__(self):
         return "".join(self.__class__.__name__)
@@ -55,7 +52,7 @@ class PyPager:
         return pydoc.tempfilepager(self.text, self.use_pager)
 
     def call(self, text, use_pager=True):
-        return self.__call__(text, use_pager=use_pager)
+        return self.__call__()
 
 
 def blocking_pager(text):
@@ -84,7 +81,8 @@ def were_in_ipython():
     shell = get_ipython()
     if shell is None:
         raise NotInIPythonError
-    # ('Not in IPython.')
+    else:
+        return True
 
 
 def provided_or_last(s=None, shell=None):
@@ -107,9 +105,15 @@ def provided_or_last(s=None, shell=None):
     stores a :attr:`last_execution_result` or maybe a
     :attr:`last_execution_succeeded`.
 
+    Well the classes that they made for the last_execution_result and info
+    are odd to say the least.
+
+    Also we should consider using something else to find user code.
     """
     if shell is None:
         shell = get_ipython()
+    if shell is None:
+        return
     if s is not None:
         code_to_page = shell.find_user_code(s, skip_encoding_cookie=True)
     else:
@@ -147,11 +151,6 @@ def c(s=None):
             return
     else:
         raise UsageError("ya dun goofed")
-
-
-# def superhelper(x):
-#     """Stolen from xonsh. And wow this is a weird module."""
-#     inspector.pinfo(x, =)
 
 
 if __name__ == "__main__":

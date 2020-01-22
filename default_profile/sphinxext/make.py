@@ -31,36 +31,24 @@ class GitProject:
     def __init__(self, **kwargs):
         """Override anything you like as a keyword argument. My personal choices for defaults are provided here."""
         self.cwd = Path.cwd()
+        self.get_git_root()
 
     def get_git_root(self):
+        """Determine the root of the repo."""
         root = subprocess.run(["git", "rev-parse", "--show-toplevel"])
         self.root = root
         return root
 
-        # good try but it raises a KeyError
-        # self.doc_root = kwargs.pop('doc_root') or Path(self.root).joinpath('docs')
-        # self.build_path = kwargs.pop('build_path') or self.doc_root.joinpath('build')
-        # self.source_dir = kwargs.pop('source_dir') or self.doc_root.joinpath('source')
-        # self.project = kwargs.pop('Project') or Project(srcdir=self.source_dir, source_suffix='rst')
-        # self.templates_path = kwargs.pop('templates_path') or self.source_dir.joinpath('_templates')
-
     def __repr__(self):
-        return "".join(self.__class__.__name__)
+        return f"{self.__class__.__name__}"
 
     def __str__(self):
-        return "".format("Git Repository:\nself.root")
-
-
-# Probably should initialize in a different/ better way but eh
-env = Environment()
-repo = GitProject(**{})
-
-sphinx_fs = SphinxFileSystemLoader(searchpath=repo.templates_path)
+        return f"{self.__class__.__name__}\nself.root: {self.root}"
 
 
 def _setup_make_logging():
     """Setup the logging. Add a filter with no args to allow everything."""
-    BASIC_FORMAT = "%(created)f  %(module)s  %(levelname)s  %(message)s"
+    BASIC_FORMAT = "[%(created)f %(module)s ] %(levelname)s  %(message)s"
 
     logger = logging.getLogger(name="docs.sphinxext").getChild("make")
     logger.setLevel(logging.DEBUG)
@@ -163,7 +151,7 @@ def _parse_arguments(cmds=None) -> argparse.ArgumentParser:
 
     if len(sys.argv[1:]) == 0:
         parser.print_help()
-        sys.exit("Args not provided.")
+        raise argparse.ArgumentError(None, "Args not provided.")
 
     return user_args
 
@@ -228,7 +216,7 @@ class DocBuilder:
             self.status("Removing previous builds…")
             shutil.rmtree("build")
         except OSError as e:
-            MAKE_LOGGER.error(e)
+            self.MAKE_LOGGER.error(e)
 
     def sphinx_build(self):
         """Build docs.
@@ -253,7 +241,7 @@ class DocBuilder:
             os.path.join(BUILD_PATH, "doctrees"),
             os.path.join(BUILD_PATH, self.kind),
         ]
-        MAKE_LOGGER.debug("Cmd is ", cmd)
+        self.MAKE_LOGGER.debug("Cmd is ", cmd)
         return cmd
 
     def run(self):
@@ -281,27 +269,6 @@ class DocBuilder:
         url = os.path.join("file://", DOC_PATH, "build", "html", doc)
         self.status("Opening path to: {!s}".format(url))
         webbrowser.open(url, new=2)
-
-    @classmethod
-    def html(cls):
-        """Build HTML documentation.
-
-        .. todo:: Practice making classmethods
-
-            Double check that this is created correctly.
-            Probably should review the git log if you're wondering why this is
-            so bare.
-
-        Parameters
-        ----------
-        cls : class
-            By convention?
-
-        """
-        # so do we not set self.kind to html? Just pass it in like that?
-        ret_code = cls.sphinx_build("html")
-
-        return ret_code
 
 
 def termux_hack():
@@ -361,39 +328,33 @@ def gather_sphinx_options(argv: List[str]) -> Any:
             ["-b", builder, SOURCE_PATH, BUILD_PATH, "-j", jobs, "-" + verbosity * "v"]
         )
     )
-    ret = build_main(["-b", builder, SOURCE_PATH, BUILD_PATH])
+    ret = ["-b", builder, SOURCE_PATH, BUILD_PATH]
     return ret
 
 
+def generate_sphinx_app():
+
+    srcdir = confdir = "source"
+    doctreedir = "build/.doctrees"
+    outdir = "build/html"
+    app = Sphinx(
+        buildername="html",
+        srcdir=srcdir,
+        outdir=outdir,
+        doctreedir=doctreedir,
+        confdir=confdir,
+    )
+    return app
+
+
 def main():
-    """Set everything up."""
-    args = _parse_arguments()
-
-    # there's a default for all arguments so no need for try/excepts
-    log_level = args.log_level.upper()
-    MAKE_LOGGER.setLevel(log_level)
-    jobs = args.jobs
-    verbosity = args.verbose
-    builder = args.builder
-
-    sphinx_shell = DocBuilder(kind=builder, num_jobs=jobs, verbosity=verbosity)
-    output = sphinx_shell.run()
-
-    if output.returncode != 0:
-        print("Command failed with return code: {} ".format(output.returncode))
-        sys.exit(output.stderr)
-
-    if args.open_browser:
-        sphinx_shell.open_browser()
-        sphinx_shell.status("Opening browser!")
-
-    return output
+    build_opts = gather_sphinx_options([])
+    # Probably should initialize in a different/ better way but eh
+    env = Environment()
+    sphinx_fs = SphinxFileSystemLoader(searchpath=repo.templates_path)
+    app = generate_sphinx_app()
+    build_main(build_opts)
 
 
 if __name__ == "__main__":
-    # status = main()
-    # pprint(status)
-    # print(rsync())
-    MAKE_LOGGER = _setup_make_logging()
-    argv = sys.argv[1:]
-    pprint(gather_sphinx_options(argv))
+    sys.exit(main())
