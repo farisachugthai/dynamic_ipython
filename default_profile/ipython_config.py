@@ -36,7 +36,8 @@ from IPython.terminal.prompts import ClassicPrompts
 # THIS IS THE MODULE! Its too exciting to able to execute this script
 # directly from within python and not get an error for a func call with no
 # import
-from traitlets.config import Configurable, get_config
+from traitlets.config.configurable import LoggingConfigurable, ConfigurableError
+from traitlets.config.application import get_config, ApplicationError
 
 default_log_format = (
         "[ %(name)s : %(relativeCreated)d :] %(levelname)s : %(module)s : --- %(message)s "
@@ -45,8 +46,6 @@ default_log_format = (
 logging.basicConfig(level=logging.INFO, format=default_log_format)
 
 c = get_config()
-# admonition: Don't it this way
-# c = Configurable()
 
 try:
     import default_profile
@@ -122,21 +121,6 @@ home = get_home()
 # Should variables loaded at startup (by startup files, exec_lines, etc.) be
 # hidden from tools like %who?
 c.InteractiveShellApp.hide_initial_ns = False
-
-# Configure matplotlib for interactive use with the default matplotlib backend.
-
-#     Default: None
-#     Choices: ['auto', 'agg', 'gtk', 'gtk3', 'inline', 'ipympl', 'nbagg',
-#     notebook', 'osx', 'pdf', 'ps', 'qt', 'qt4', 'qt5', 'svg', 'tk',
-#     widget', 'wx']
-#     Configure matplotlib for interactive use with the default matplotlib
-#     backend.
-# try:
-#     import matplotlib
-# except (ImportError, ModuleNotFoundError):
-#     c.InteractiveShellApp.matplotlib = None
-# else:
-#     c.InteractiveShellApp.matplotlib = 'auto'
 
 # Run the module as a script.
 # c.InteractiveShellApp.module_to_run = ''
@@ -297,7 +281,6 @@ c.InteractiveShell.autocall = 0
 # Enable magic commands to be called without the leading %.
 # c.InteractiveShell.automagic = True
 
-
 # Set the size of the output cache. The default is 1000, you can change it
 # permanently in your config file. Setting it to 0 completely disables the
 # caching system, and the minimum value accepted is 3 (if you provide a value
@@ -421,7 +404,7 @@ c.InteractiveShell.wildcards_case_sensitive = False
 # Switch modes for the IPython exception handlers.
 # Default: 'Context'
 # Choices: ['Context', 'Plain', 'Verbose', 'Minimal']
-# c.InteractiveShell.xmode = 'Context'
+c.InteractiveShell.xmode = 'Verbose'
 
 # ----------------------------------------------------------------------------
 # TerminalInteractiveShell(InteractiveShell) configuration
@@ -713,7 +696,7 @@ c.ProfileDir.location = os.path.join(home, "", ".ipython")
 # ----------------------------------------------------------------------------
 
 
-class BaseFormatterDoc(Configurable):
+class BaseFormatterDoc(LoggingConfigurable):
     """A base formatter class that is configurable.
 
     This formatter should usually be used as the base class of all formatters. It
@@ -831,17 +814,18 @@ class TimedFormatter(BaseFormatterDoc):
     module. If that doesn't seem to be working namedtuples are similar.
     """
 
-    def __init__(self, precision=None, *args, **kwargs):
+    loops: int
+    precision: int
+    repeat: int
+    all_runs: set
 
+
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.loops = loops
-        self.repeat = repeat
-        self.best = best
-        self.worst = worst
-        self.all_runs = all_runs
-        self.compile_time = compile_time
-        self._precision = precision
-        self.timings = [dt / self.loops for dt in all_runs]
+        # self.repeat = repeat
+        # self.best = best
+        # self.worst = worst
+        # self.compile_time = compile_time
 
     def __str__(self):
         pm = "+-"
@@ -861,30 +845,31 @@ class TimedFormatter(BaseFormatterDoc):
             std=_format_time(self.stdev, self._precision),
         )
 
+    def timings(self):
+         yield [dt / self.loops for dt in self.all_runs]
 
 # ----------------------------------------------------------------------------
 # Completer(Configurable) configuration
 # ----------------------------------------------------------------------------
 
 # Enable unicode completions, e.g. \alpha<tab> . Includes completion of latex
-#  commands, unicode names, and expanding unicode characters back to latex
-#  commands.
+# commands, unicode names, and expanding unicode characters back to latex
+# commands.
 # c.Completer.backslash_combining_completions = True
 
 # Enable debug for the Completer. Mostly print extra information for
-#  experimental jedi integration.
+# experimental jedi integration.
 c.Completer.debug = False
 
 # Activate greedy completion PENDING DEPRECTION. this is now mostly taken care
-#  of with Jedi.
-#
-#  This will enable completion on elements of lists, results of function calls,
-#  etc., but can be unsafe because the code is actually evaluated on TAB.
+# of with Jedi.
+# This will enable completion on elements of lists, results of function calls,
+# etc., but can be unsafe because the code is actually evaluated on TAB.
 # c.Completer.greedy = False
 
 # Experimental: restrict time (in milliseconds) during which Jedi can compute
-#  types. Set to 0 to stop computing types. Non-zero value lower than 100ms may
-#  hurt performance by preventing jedi to build its cache.
+# types. Set to 0 to stop computing types. Non-zero value lower than 100ms may
+# hurt performance by preventing jedi to build its cache.
 c.Completer.jedi_compute_type_timeout = 0
 
 # Experimental: Use Jedi to generate autocompletions. Default to True if jedi
@@ -903,29 +888,16 @@ c.Completer.use_jedi = False
 # ----------------------------------------------------------------------------
 
 # Extension of the completer class with IPython-specific features
-
-# DEPRECATED as of version 5.0.
-#
-#  Instruct the completer to use __all__ for the completion
-#
-#  Specifically, when completing on ``object.<tab>``.
-#
-#  When True: only those names in obj.__all__ will be included.
-#
-#  When False [default]: the __all__ attribute is ignored
-# c.IPCompleter.limit_to__all__ = False
-
 # Whether to merge completion results into a single list
-#
 # If False, only the completion results from the first non-empty completer will
 # be returned.
 # c.IPCompleter.merge_completions = True
 
 # Instruct the completer to omit private method names
-#  Specifically, when completing on ``object.<tab>``.
-#  When 2 [default]: all names that start with '_' will be excluded.
-#  When 1: all 'magic' names (``__foo__``) will be excluded.
-#  When 0: nothing will be excluded.
+# Specifically, when completing on ``object.<tab>``.
+# When 2 [default]: all names that start with '_' will be excluded.
+# When 1: all 'magic' names (``__foo__``) will be excluded.
+# When 0: nothing will be excluded.
 c.IPCompleter.omit__names = 1
 
 # ----------------------------------------------------------------------------
@@ -933,13 +905,12 @@ c.IPCompleter.omit__names = 1
 # ----------------------------------------------------------------------------
 
 # Magics for talking to scripts
-# This defines a base `%%script` cell magic for running a cell with a program
-# in a subprocess, and registers a few top-level magics that call %%script with
-# common interpreters.
+# This defines a base `%%script` cell magic for running a cell with a
+# program in a subprocess, and registers a few top-level magics that call
+# %%script with common interpreters.
 
 # Extra script cell magics to define
 # This generates simple wrappers of `%%script foo` as `%%foo`.
-#
 # If you want to add script magics that aren't on your path, specify them in
 # script_paths
 # c.ScriptMagics.script_magics = []
@@ -962,7 +933,5 @@ c.LoggingMagics.quiet = True
 # ----------------------------------------------------------------------------
 
 # Lightweight persistence for python variables.
-# Provides the %store magic.
-# If True, any %store-d variables will be automatically restored when IPython
-# starts.
+# If True, any %store-d variables will be automatically restored
 # c.StoreMagics.autorestore = False
