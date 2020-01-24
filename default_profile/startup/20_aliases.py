@@ -6,21 +6,9 @@ import os
 import shutil
 import traceback
 
+from IPython.core.alias import InvalidAliasError
 from IPython.core.getipython import get_ipython
-
-from default_profile import ask_for_import
-
-# TODO: allow these imports to run and allow fall backs otherwise
-from default_profile.util.module_log import stream_logger
-from default_profile.util.machine import Platform
-
-ALIAS_LOGGER = stream_logger(
-    logger="default_profile.startup.20_aliases",
-    msg_format=(
-        "[ %(name)s  %(relativeCreated)d ] %(levelname)s %(module)s %(message)s "
-    ),
-    log_level=logging.WARNING,
-)
+from traitlets.config.application import ApplicationError
 
 
 class CommonAliases:
@@ -168,8 +156,6 @@ class CommonAliases:
         don't you think?
 
         .. todo::
-            shutil.chown
-            shutil.which
             os.environ => env
 
         """
@@ -179,6 +165,11 @@ class CommonAliases:
         if "apropos" in self.user_aliases:
             self.unalias("apropos")
             from pydoc import apropos
+        if "which" in self.user_aliases:
+            self.unalias("which")
+            from shutil import which
+        if "chown" in self.user_aliases:
+            from shutil import chown
 
     @classmethod
     def git(cls):
@@ -200,6 +191,38 @@ class CommonAliases:
 
         Unless otherwise noted every alias uses ``%l`` to allow the user to specify
         any relevant options or flags on the command line as necessary.
+
+        Returns
+        -------
+        user_aliases : A list of tuples
+            The format of IPython aliases got taken it's logical conclusion
+            and probably pushed a little further than that.
+
+            In order to make new subcommands in a way similar to how git allows
+            one to come up with aliases, I first tried using whitespace in
+            the alias.::
+
+                ('git last', 'git log -1 HEAD %l')
+
+            However that simply registers the word ``git`` as an alias and then
+            sends ``git last`` to the underlying shell, which it may or may
+            not recognize.
+
+            Therefore I tried using a hyphen to separate the words, but the
+            python interpreter uses hyphens as well as whitespace to separate
+            keywords, and as a result, would split the alias in the middle of
+            the command.
+
+        Examples
+        --------
+        ::
+
+            In [58]: %git_staged?
+            Object `staged` not found.
+
+            In [60]: %git_staged?
+            Object `%git_staged` not found.
+
         """
         cls.user_aliases += [
             ("g", "git diff --staged --stat %l"),
@@ -241,25 +264,23 @@ class CommonAliases:
             ("ggc", "git gc %l"),
             ("ggcp", "git gc --prune %l"),
             ("git", "git %l"),
-            ("git config-list", "git config --get --global %l"),
-            ("git config-glob", "git config --get-regex --global %l.*"),
+            ("git_config_list", "git config --get --global %l"),
+            ("git_config_glob", "git config --get-regex --global %l.*"),
             # If you're on a topic branch, shows commit msgs since split
-            ("git fork", "git show-branch --current %l"),
+            ("git_fork", "git show-branch --current %l"),
             (
-                "git hist",
+                "git_hist",
                 'git log --pretty="format:%h %ad | %d [%an]" --graph --date=short '
                 "--branches --abbrev-commit --oneline %l",
             ),
-            ("git last", "git log -1 HEAD %l"),
-            ("git staged", "git diff --cached %l"),
-            ("git rel", "git rev-parse --show-prefix %l"),
-            ("git root", "git rev-parse --show-toplevel %l"),
-            ("git unstage", "git reset HEAD %l"),
-            ("git unstaged", "git diff %l"),
-            (
-                "gl",
-                "git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative %l",
-            ),
+            ("git_last_msg", "git log -1 HEAD -- ."),
+            ("git_last_patch", "git show --source"),
+            ("git_staged", "git diff --cached %l"),
+            ("git_rel", "git rev-parse --show-prefix %l"),
+            ("git_root", "git rev-parse --show-toplevel %l"),
+            ("git_unstage", "git reset HEAD %l"),
+            ("git_unstaged", "git diff %l"),
+            ("gl", 'git log --pretty=format:"%Cred%h%Creset %C(yellow)%d%Creset %Cgreen(%cr) %C(bold blue)<%an>%Creset" --all --abbrev-commit --abbrev=7 --date=relative --graph --decorate %l'),
             ("glo", "git log %l"),
             (
                 "glog",
@@ -600,52 +621,38 @@ class WindowsAliases(CommonAliases):
         elif os.environ.get("COMSPEC"):
             return os.environ.get("COMSPEC")
         else:
-            ALIAS_LOGGER.warning(
-                "%s is None as are %s and %s", self.shell, "$SHELL", "$COMSPEC"
-            )
+            raise OSError("Neither $SHELL nor $COMSPEC set. Can't determine running terminal.")
 
 
-def generate_aliases():
+def generate_aliases(_ip=None):
     """Set up aliases for the user namespace for IPython.
 
     Planning on coming up with a new way of introducing the aliases into the user namespace.
 
     """
+    if _ip is None:
+        _ip = get_ipython()
     if not hasattr(_ip, "magics_manager"):
-        raise Exception("Are you running in IPython?")
+        raise ApplicationError("Are you running in IPython?")
 
     common = CommonAliases(user_aliases=_ip.alias_manager.user_aliases)
 
+    from default_profile.util.machine import Platform
     machine = Platform()
     # TODO: Work in the Executable() class check.
-    user_aliases = common.git()
+    common_aliases = CommonAliases()
+    common_aliases.python_exes()
 
+    user_aliases = CommonAliases.git()
     if machine.is_linux:
         # user_aliases += LinuxAliases().busybox()
         linux_aliases = LinuxAliases()
         user_aliases.extend(linux_aliases.busybox())
-        # yeah i know that it's dumb that the common class has a platform specific method
-        common.python_exes()
-
     elif machine.is_win:
         # finish the shell class in default_profile.util.machine
         # then we can create a shell class that determines if
         # we're in cmd or pwsh
-        try:
-            user_aliases += WindowsAliases.cmd_aliases()
-        except SyntaxError as e:
-            if hasattr(e, "lineno", None):
-                print(
-                    "Error | default_profile.startup.20_aliases:main | line: {}".format(
-                        e.lineno
-                    )
-                )
-            else:
-                print(e)
-
-    # _ip.alias_manager.user_aliases = user_aliases
-    # Apparently the big part i was missing was rerunning the init_aliases method
-    # _ip.alias_manager.init_aliases()
+        user_aliases += WindowsAliases.cmd_aliases()
     return user_aliases
 
 
@@ -653,8 +660,11 @@ def redefine_aliases(aliases, shell=None):
     """Now a function to allow the user to rerun as necesaary."""
     if shell is None:
         shell = get_ipython()
-    for i in aliases:
-        shell.alias_manager.define_alias(*i)
+    try:
+        for i in aliases:
+            shell.alias_manager.define_alias(*i)
+    except InvalidAliasError:
+        pass
 
 
 if __name__ == "__main__":
@@ -663,4 +673,13 @@ if __name__ == "__main__":
     if _ip is not None:
         all_aliases = generate_aliases()
         redefine_aliases(all_aliases)
+        from default_profile.util.module_log import stream_logger
+        ALIAS_LOGGER = stream_logger(
+            logger="default_profile.startup.20_aliases",
+            msg_format=(
+                "[ %(name)s  %(relativeCreated)d ] %(levelname)s %(module)s %(message)s "
+            ),
+            log_level=logging.WARNING,
+        )
+
         ALIAS_LOGGER.info("Number of aliases is: %s" % all_aliases)
