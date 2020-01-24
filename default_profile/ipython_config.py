@@ -522,10 +522,6 @@ except (ImportError, ModuleNotFoundError):
     c.TerminalInteractiveShell.highlighting_style = "friendly"
 else:
     c.TerminalInteractiveShell.highlighting_style = Gruvbox
-    # Idk if we're supposed to do this
-    # you're not it's not a recognized option. unfortunately it's definitely
-    # an attribute that can be set. fuck.
-    # c.TerminalInteractiveShell.style = Gruvbox()
 
 
 def get_env():

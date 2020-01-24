@@ -16,7 +16,9 @@ from _pytest import unittest
 try:
     import default_profile
 except:
-    pass
+    sys.exit('Not installed.')
+else:
+    from default_profile import ask_for_import
 
 
 def pytest_load_initial_conftests(args):
@@ -59,6 +61,7 @@ def pytest_report_header():
     # crashes
     ret = []
     for i in ['matplotlib', 'sqlite3', 'pygments']:
+        ask_for_import(i)
         if sys.modules[i]:
             ret.append(i)
     return ret
