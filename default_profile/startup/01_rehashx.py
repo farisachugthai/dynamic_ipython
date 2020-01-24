@@ -56,8 +56,7 @@ def rehashx_run():
 def get_exec_dir():
     _ip = get_ipython()
     if _ip is not None:
-        profiledir = Path(_ip.profile_dir)
-        exec_dir = profiledir / "startup"
+        exec_dir = _ip.profile_dir.startup_dir
     else:
         exec_dir = "."
 
@@ -102,6 +101,11 @@ def rerun_startup():
             safe_run_path(i.name, logger=logger)
     return ret
 
+
+def execfile(filename, global_namespace=None, local_namespace=None):
+    """Python3 doesn't have this but it'd be nice to have a utility to exec a file at once."""
+    with open(filename, 'rb') as f:
+        return exec(compile(f.read(), filename, 'exec'), global_namespace, local_namespace)
 
 class ExceptionHook(Configurable):
     """Custom exception hook for IPython."""

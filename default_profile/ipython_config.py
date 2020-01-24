@@ -39,7 +39,7 @@ from IPython.terminal.prompts import ClassicPrompts
 from traitlets.config import Configurable, get_config
 
 default_log_format = (
-    "[ %(name)s  %(relativeCreated)d ] %(levelname)s %(module)s %(message)s "
+        "[ %(name)s : %(relativeCreated)d :] %(levelname)s : %(module)s : --- %(message)s "
 )
 
 logging.basicConfig(level=logging.INFO, format=default_log_format)
@@ -52,7 +52,7 @@ try:
     import default_profile
 except (ImportError, ModuleNotFoundError):
     default_profile = None
-    logging.error("import error for default_profile")
+    logging.error("Import error. Try relaunching IPython in the root of this repository.")
     # todo: realistically we should also set exec_files to None since everything ./startup is gonna crash
 else:
     from default_profile import PROFILE_DEFAULT_LOG
@@ -529,27 +529,20 @@ c.TerminalInteractiveShell.extra_open_editor_shortcuts = True
 # Try to import my Gruvbox class. Can be found at
 # https://github.com/farisachugthai/Gruvbox_IPython
 
-if platform.system() == "Windows":
-    from pygments.styles.friendly import FriendlyStyle
+try:
+    from gruvbox import Gruvbox
+except (ImportError, ModuleNotFoundError):
+    # Shown here we're actually supposed to hand off the module name.
+    from pygments.styles import friendly
 
     # I know it's odd making this platform specific but everything is completely illegible otherwise
     c.TerminalInteractiveShell.highlighting_style = "friendly"
 else:
-    # try:
-    #     from gruvbox import gruvbox
-    # except (ImportError, ModuleNotFoundError):
-    #     # Shown here we're actually supposed to hand off the module name.
-    #     from pygments.styles import friendly
-
-    #     c.TerminalInteractiveShell.highlighting_style = "friendly"
-
-    # else:
-    #     c.TerminalInteractiveShell.highlighting_style = "gruvbox"
+    c.TerminalInteractiveShell.highlighting_style = Gruvbox
     # Idk if we're supposed to do this
     # you're not it's not a recognized option. unfortunately it's definitely
     # an attribute that can be set. fuck.
     # c.TerminalInteractiveShell.style = Gruvbox()
-    c.TerminalInteractiveShell.highlighting_style = "friendly"
 
 
 def get_env():

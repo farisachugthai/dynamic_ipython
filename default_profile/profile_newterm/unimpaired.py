@@ -1,22 +1,29 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from IPython.extensions.storemagic import StoreMagics
+import code
+import cgitb
+import faulthandler
 import functools
 import logging
 import os
 import pathlib
 from reprlib import Repr
 import sys
+import trace
 import traceback
-import traitlets
 
 from prompt_toolkit import HTML
 from prompt_toolkit.key_binding import KeyBindings
-from IPython.terminal.interactiveshell import TerminalInteractiveShell
+from prompt_toolkit.key_binding.defaults import load_key_bindings
+
+import traitlets
+from traitlets.config.loader import Config
+from traitlets.config.application import Application
 from IPython.core.magics.basic import BasicMagics
 from IPython.core.getipython import get_ipython
 from IPython.core.profiledir import ProfileDir, ProfileDirError
-from traitlets.config.loader import Config
+from IPython.extensions.storemagic import StoreMagics
+from IPython.terminal.interactiveshell import TerminalInteractiveShell
 
 
 logging.basicConfig(level=logging.INFO)
@@ -31,10 +38,11 @@ class TerminallyUnimpaired(TerminalInteractiveShell):
     Uhh I'm just gonna add a Config to ensure that it's there.
 
     """
+    kb = KeyBindings()
+    all_kb = load_key_bindings()
 
     def __repr__(self):
-        truncated = Repr().repr(self.__class__.__name__)
-        return "".format(truncated)
+        return f"<{Repr().repr(self.__class__.__name__)}>:"
 
     def begin(self):
         """The superclass already defined initialize and a few other methods.
@@ -219,8 +227,18 @@ def load_ipython_extension(ip=None):
 
 
 if __name__ == "__main__":
+    if Application.initialized():
+        config = Application.instance().config
+    else:
+        # If we try starting a new application or shell here, it'll raise
+        # either an ApplicationError or a TraitError. Which I guess we could
+        # catch but f it
+        sys.exit()
+
+    logging.info('Config was %s', config)
+
     try:
-        shell = TerminallyUnimpaired()
+        unimpaired = TerminallyUnimpaired()
     except Exception as e:  # noqa
         logging.exception(e)
         shell = None

@@ -38,7 +38,12 @@ import logging
 import os
 from pathlib import Path
 import platform
+import rlcompleter
 from rlcompleter import Completer
+try:
+    import readline
+except ImportError:
+    pass
 
 from IPython.core.getipython import get_ipython
 

@@ -42,10 +42,10 @@ except:
 
 from asyncio.tasks import current_task, all_tasks, create_task
 
-try:
-    from trio import run
-except:
-    from asyncio import run
+# try:
+#     from trio import run
+# except:
+#     from asyncio import run
 
 from asyncio.format_helpers import extract_stack
 try:
