@@ -18,8 +18,7 @@ from prompt_toolkit.styles.pygments import (
     style_from_pygments_dict,
 )
 
-import pygments
-
+from pygments.token import Token
 from IPython.core.getipython import get_ipython
 
 try:
@@ -97,9 +96,14 @@ class BottomToolbar:
         return toolbar
 
     def _render_emacs(self):
+        # return [(Token.Generic.Heading, "[F4] Emacs: "),
+        #         (Token.Generic.Prompt, f"{Path.cwd()} {date.today()}")]
+        # Nope! str and _Token can't be concatenated and this'll not only freeze
+        # the running session but the terminal itself
         return f" [F4] Emacs: {Path.cwd()} {date.today()}"
 
     def init_style(self):
+        # Could set this to _ip.pt_app.style i suppose
         if Gruvbox is not None:
             bt_style = Gruvbox()
             return style_from_pygments_dict(bt_style.style)

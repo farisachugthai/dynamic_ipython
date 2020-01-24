@@ -41,7 +41,7 @@ try:  # new replacement for the pkg_resources API
 except ImportError:
     importlib_metadata = None
 
-
+# Lol note that there are FOUR different logging.Formatter.fmt strings in this module
 default_log_format = (
     "[ %(name)s  %(relativeCreated)d ] %(levelname)s %(module)s %(message)s "
 )
@@ -184,10 +184,12 @@ def setup_logging(debug=True, logfile=None):
     handlers = []
     handlers.append(QueueHandler(QUEUE))
     if not logfile:
-        if logfile == "-":
-            handlers.append(logging.StreamHandler())
+        handlers.append(logging.StreamHandler())
     else:
-        handlers.append(logging.FileHandler(logfile))
+        if logfile == "-":
+            handlers.append(logging.FileHandler(logfile))
+        elif not Path(logfile).exists():
+            handlers.append(logging.FileHandler(get_ipython().log_dir))
 
     for handler in handlers:
         handler.setLevel(log_level)
