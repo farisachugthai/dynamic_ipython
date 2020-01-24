@@ -26,7 +26,6 @@ import sphinx
 from sphinx.domains.rst import ReSTDomain
 from sphinx.ext.autodoc import cut_lines
 from sphinx.util.docfields import GroupedField
-from sphinx.util.logging import getLogger
 
 import default_profile
 from default_profile.__about__ import __version__
@@ -42,7 +41,6 @@ DOCS_HANDLER = logging.StreamHandler()
 DOCS_LOGGER.addHandler(DOCS_HANDLER)
 DOCS_LOGGER.setLevel(logging.INFO)
 
-sphinx_logger = getLogger(name=__name__).setLevel(logging.DEBUG)
 # Gotta hack at sys.path a little
 DOCS = Path(__file__).resolve().parent.parent
 ROOT = DOCS.parent
@@ -50,18 +48,34 @@ JUPYTER = ROOT.joinpath("jupyter_conf")
 sys.path.insert(0, str(JUPYTER))
 
 if ask_for_import("jinja2"):
-    from jinja2 import FileSystemLoader
-    from jinja2.environment import TRIM_BLOCKS, Environment
+    # from jinja2.constants import TRIM_BLOCKS, LSTRIP_BLOCKS
+    from jinja2.environment import Environment
+    from jinja2.exceptions import TemplateError
+    from jinja2.ext import autoescape, do, with_
+    from jinja2.loaders import FileSystemLoader
     from jinja2.lexer import get_lexer
 
-    TRIM_BLOCKS = True
-    template_path = "_templates"
-    env = Environment(
-        loader=FileSystemLoader(template_path), extensions=["jinja2.ext.i18n"]
-    )
-    lexer = get_lexer(env)
-    # TODO: keep going
 
+    def create_jinja_env():
+        """Use jinja to set up the Sphinx environment."""
+        TRIM_BLOCKS = True
+        LSTRIP_BLOCKS = True
+        template_path = "_templates"
+        try:
+            loader=FileSystemLoader(template_path)
+        except TemplateError:
+            return
+        env = Environment(
+                trim_blocks=TRIM_BLOCKS,
+                lstrip_blocks=LSTRIP_BLOCKS,
+                loader=FileSystemLoader(template_path),
+                extensions=["jinja2.ext.i18n", autoescape, do, with_],
+                enable_async=True
+        )
+        return env
+
+
+    lexer = get_lexer(create_jinja_env())
 
 # -- Imports ---------------------------------------------------
 

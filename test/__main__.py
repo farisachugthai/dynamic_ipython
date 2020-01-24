@@ -1,3 +1,4 @@
+"""Create a single entry point for the test suite."""
 import doctest
 import importlib
 import sys
