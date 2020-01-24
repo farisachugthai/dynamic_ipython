@@ -240,3 +240,4 @@ python. But it doesn't copy over the __doc__ from the old magic.
 
 There's a ton of good information that gets lost going from `%edit` to `%ed` and
 `%history` to `%hist`. Anything we can do about that?
+

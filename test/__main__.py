@@ -3,7 +3,6 @@ import importlib
 import sys
 import unittest
 from unittest.suite import TestSuite
-from unittest.case import TestCase
 
 from IPython.testing.tools import get_ipython_cmd
 
