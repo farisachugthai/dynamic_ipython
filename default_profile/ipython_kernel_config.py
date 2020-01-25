@@ -12,12 +12,17 @@ c = get_config()  # noqa
 
 kernel_logger = logging.getLogger(name=__name__)
 
+log_datefmt = "%Y-%m-%d %H:%M:%S"
 # The date format used by logging formatters for %(asctime)s
-c.Application.log_datefmt = "%Y-%m-%d %H:%M:%S"
-
+c.Application.log_datefmt = log_datefmt
 # The Logging format template
 
 BASIC_FORMAT = "[%(created)f %(levelname)s ] %(module)s  %(message)s : "
+
+kernel_formatter = logging.Formatter(fmt=BASIC_FORMAT, datefmt=log_datefmt)
+
+kernel_logger.addHandler(logging.StreamHandler().addFormatter(kernel_formatter))
+kernel_logger.setLevel(logging.WARNING)
 
 c.Application.log_format = BASIC_FORMAT
 
@@ -168,7 +173,7 @@ c.IPythonKernel.help_links = [
 # c.InteractiveShell.ast_transformers = []
 
 # Automatically run await statement in the top level repl.
-if platform().startswith('Win'):
+if platform().startswith("Win"):
     c.InteractiveShell.autoawait = False
 else:
     c.InteractiveShell.autoawait = True

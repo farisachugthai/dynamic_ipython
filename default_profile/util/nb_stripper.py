@@ -8,7 +8,7 @@ Useful as a :command:`git` filter or pre-commit hook for users who don't want to
 This does mostly the same thing as the `Clear All Output` command in the notebook UI.
 
 """
-import io
+import codecs
 import sys
 
 try:
@@ -64,13 +64,14 @@ def strip_output(nb):
 
 def main():
     """Strip output from a user's notebook."""
-    filename = sys.argv[1]
-    with io.open(filename, "r", encoding="utf8") as f:
+    try:
+        filename = sys.argv[1]
+    except IndexError:
+        sys.exit('Usage: TODO')
+
+    with codecs.open(filename, "r+", encoding="utf8") as f:
         nb = read(f, as_version=NO_CONVERT)
         nb = strip_output(nb)
-    with io.open(filenaedfbf8eme, "w", encoding="utf8") as f:
-        write(nb, f)
-
 
 if __name__ == "__main__":
     sys.exit(main())

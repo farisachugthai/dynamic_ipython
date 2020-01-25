@@ -32,19 +32,33 @@ with the sphinx build so it's cool to see it in this context.
 import sys
 import warnings
 
-from IPython import get_ipython
+from IPython.core.get import get_ipython
 
 
-def run_pytest():
-    """Make sure pytest is installed before running."""
-    try:
-        import pytest  # noqa F401
-    except ImportError as e:
-        warnings.warn(e)
-        pytest = None
-    if pytest is not None:
-        pytest.main()
+COLORS = {
+    "red": "\x1b[31m",
+    "green": "\x1b[32m",
+    "yellow": "\x1b[33m",
+    "bold": "\x1b[1m",
+    "reset": "\x1b[0m",
+}
+RE_COLORS = {k: re.escape(v) for k, v in COLORS.items()}
 
 
-if __name__ == "__main__":
-    run_pytest()
+class Option:
+    def __init__(self, verbosity=0):
+        self.verbosity = verbosity
+
+    @property
+    def args(self):
+        values = []
+        values.append("--verbosity=%d" % self.verbosity)
+        return values
+
+
+@pytest.fixture(
+    params=[Option(verbosity=0), Option(verbosity=1), Option(verbosity=-1)],
+    ids=["default", "verbose", "quiet"],
+)
+def option(request):
+    return request.param

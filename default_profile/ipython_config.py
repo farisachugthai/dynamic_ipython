@@ -33,25 +33,23 @@ from pathlib import Path
 from IPython.core.release import version_info
 from IPython.terminal.prompts import ClassicPrompts
 
-# THIS IS THE MODULE! Its too exciting to able to execute this script
-# directly from within python and not get an error for a func call with no
-# import
-from traitlets.config.configurable import LoggingConfigurable, ConfigurableError
-from traitlets.config.application import get_config, ApplicationError
-
+log_datefmt="%Y-%m-%d %H:%M:%S"
 default_log_format = (
-        "[ %(name)s : %(relativeCreated)d :] %(levelname)s : %(module)s : --- %(message)s "
+    "[ %(name)s : %(relativeCreated)d :] %(levelname)s : %(module)s : --- %(message)s "
 )
 
-logging.basicConfig(level=logging.INFO, format=default_log_format)
+logging.basicConfig(level=logging.INFO, format=default_log_format, datefmt=log_datefmt)
 
-c = get_config()
+from traitlets.config.configurable import LoggingConfigurable, ConfigurableError
+from traitlets.config.application import get_config, ApplicationError
 
 try:
     import default_profile
 except (ImportError, ModuleNotFoundError):
     default_profile = None
-    logging.error("Import error. Try relaunching IPython in the root of this repository.")
+    logging.error(
+        "Import error. Try relaunching IPython in the root of this repository."
+    )
     # todo: realistically we should also set exec_files to None since everything ./startup is gonna crash
 else:
     from default_profile import PROFILE_DEFAULT_LOG
@@ -73,6 +71,8 @@ def get_home():
 
 
 home = get_home()
+
+c = get_config()
 
 # ----------------------------------------------------------------------------
 # InteractiveShellApp(Configurable) configuration
@@ -146,14 +146,12 @@ c.InteractiveShellApp.reraise_ipython_extension_failures = False
 
 # The date format used by logging formatters for %(asctime)s
 # Default: '%Y-%m-%d %H:%M:%S'
-c.Application.log_datefmt = "%Y-%m-%d %H:%M:%S"
+c.Application.log_datefmt = log_datefmt
 
 # The Logging format template
 # Default: '[%(name)s]%(highlevel)s %(message)s'
 # Todo: Import traitlets.config.application.LevelFormatter
-c.Application.log_format = (
-    c.TerminalIPythonApplication.log_format
-) = "[ %(name)s  %(relativeCreated)d ] %(levelname)s %(module)s %(message)s "
+c.Application.log_format = "[ %(name)s  %(relativeCreated)d ] %(levelname)s %(module)s %(message)s "
 
 # Set the log level by value or name.
 c.Application.log_level = 20
@@ -214,6 +212,9 @@ c.TerminalIPythonApp.force_interact = False
 #  custom Frontends
 # c.TerminalIPythonApp.interactive_shell_class =
 # 'IPython.terminal.interactiveshell.TerminalInteractiveShell'
+
+
+c.TerminalIPythonApplication.log_format = "[ %(name)s  %(relativeCreated)d ] %(levelname)s %(module)s %(message)s "
 
 # Start IPython quickly by skipping the loading of config files.
 # c.TerminalIPythonApp.quick = False
@@ -404,7 +405,7 @@ c.InteractiveShell.wildcards_case_sensitive = False
 # Switch modes for the IPython exception handlers.
 # Default: 'Context'
 # Choices: ['Context', 'Plain', 'Verbose', 'Minimal']
-c.InteractiveShell.xmode = 'Verbose'
+c.InteractiveShell.xmode = "Verbose"
 
 # ----------------------------------------------------------------------------
 # TerminalInteractiveShell(InteractiveShell) configuration
@@ -513,12 +514,9 @@ c.TerminalInteractiveShell.extra_open_editor_shortcuts = True
 # https://github.com/farisachugthai/Gruvbox_IPython
 
 try:
-    from gruvbox import Gruvbox
+    from gruvbox.gruvbox import Gruvbox
 except (ImportError, ModuleNotFoundError):
-    # Shown here we're actually supposed to hand off the module name.
     from pygments.styles import friendly
-
-    # I know it's odd making this platform specific but everything is completely illegible otherwise
     c.TerminalInteractiveShell.highlighting_style = "friendly"
 else:
     c.TerminalInteractiveShell.highlighting_style = Gruvbox
@@ -529,6 +527,7 @@ def get_env():
     return os.environ.copy()
 
 
+# NOTE: This was for molokai
 # Override highlighting format for specific tokens
 # Comments were genuinely impossible to read. Might need to override
 # punctuation next.
@@ -600,7 +599,7 @@ c.TerminalInteractiveShell.true_color = True
 # Switch modes for the IPython exception handlers.
 # Default: 'Context'
 # Choices: ['Context', 'Plain', 'Verbose', 'Minimal']
-c.TerminalInteractiveShell.xmode = "Minimal"
+c.TerminalInteractiveShell.xmode = "Verbose"
 
 # ----------------------------------------------------------------------------
 # HistoryAccessor(HistoryAccessorBase) configuration
@@ -799,14 +798,14 @@ class BaseFormatterDoc(LoggingConfigurable):
         Oh holy shit. Well if you see the string method...I'm putting this
         in a new class wtf.
         """
-        p.text(u"<TimeitResult : " + unic + u">")
+        p.text("<TimeitResult : " + unic + ">")
 
 
 @dataclasses.dataclass
 class TimedFormatter(BaseFormatterDoc):
-    """I'd imagine this would benefit from a dataclass. Don't instantiate!
+    """I'd imagine this would benefit from a dataclass.
 
-    *sigh*. Rewrite the init so that it takes advantage of the dataclass
+    Rewrite the init so that it takes advantage of the dataclass
     module. If that doesn't seem to be working namedtuples are similar.
     """
 
@@ -815,7 +814,6 @@ class TimedFormatter(BaseFormatterDoc):
     repeat: int
     all_runs: set
 
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # self.repeat = repeat
@@ -823,26 +821,31 @@ class TimedFormatter(BaseFormatterDoc):
         # self.worst = worst
         # self.compile_time = compile_time
 
-    def __str__(self):
+    def summary(self):
         pm = "+-"
         if hasattr(sys.stdout, "encoding") and sys.stdout.encoding:
             try:
-                u"\xb1".encode(sys.stdout.encoding)
-                pm = u"\xb1"
+                "\xb1".encode(sys.stdout.encoding)
+                pm = "\xb1"
             except:
                 pass
-        return u"{mean} {pm} {std} per loop (mean {pm} std. dev. of {runs} run{run_plural}, {loops} loop{loop_plural} each)".format(
-            pm=pm,
-            runs=self.repeat,
-            loops=self.loops,
-            loop_plural="" if self.loops == 1 else "s",
-            run_plural="" if self.repeat == 1 else "s",
-            mean=_format_time(self.average, self._precision),
-            std=_format_time(self.stdev, self._precision),
-        )
+        ret = []
+        ret.append(f"{_format_time(self.average, self._precision)}")
+        ret.append(f"{pm} {_format_time(self.stdev, self._precision)} per loop")
+        ret.append(f"{mean} {pm} std. dev. of {self.repeat} run.")
+        ret.append(f"{'' if self.repeat == 1 else 's'} {self.loops} loop")
+        ret.append(f"{'' if self.loops == 1 else 's'} each")
+        return ret
 
     def timings(self):
-         yield [dt / self.loops for dt in self.all_runs]
+        yield [dt / self.loops for dt in self.all_runs]
+
+    def __str__(self):
+        return self.summary()
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}"
+
 
 # ----------------------------------------------------------------------------
 # Completer(Configurable) configuration
@@ -850,8 +853,9 @@ class TimedFormatter(BaseFormatterDoc):
 
 # Enable unicode completions, e.g. \alpha<tab> . Includes completion of latex
 # commands, unicode names, and expanding unicode characters back to latex
-# commands.
-# c.Completer.backslash_combining_completions = True
+# commands. Outside of how bad the IPython completion implementation is,
+# also consider Windows users might want cd \ to not complete alpha
+c.Completer.backslash_combining_completions = False
 
 # Enable debug for the Completer. Mostly print extra information for
 # experimental jedi integration.
@@ -908,7 +912,8 @@ c.IPCompleter.omit__names = 1
 # Extra script cell magics to define
 # This generates simple wrappers of `%%script foo` as `%%foo`.
 # If you want to add script magics that aren't on your path, specify them in
-# script_paths
+# script_paths.
+# TODO: I wonder if exes like cmd or pwsh would work here.
 # c.ScriptMagics.script_magics = []
 
 # Dict mapping short 'ruby' names to full paths, such as '/opt/secret/bin/ruby'

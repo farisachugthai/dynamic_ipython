@@ -71,20 +71,30 @@ def _test():
     return 0
 
 
+
 if __name__ == "__main__":
-    # Believe it or not this is in fact necessary
-    old_sys_argv = sys.argv[:]
-    # DONT FORGET SPACES
-    # sys.argv = [sys.executable, ' -m', ' unittest', ' -v']
-    sys.argv = get_ipython_cmd(as_string=False)
-    # todo: add options
-    test_00_ipython = importlib.import_module("test_00_ipython", package=".")
-    test_20_aliases = importlib.import_module("test_20_aliases", package=".")
 
-    suite = TestSuite()
-    suite.addTest(test_00_ipython.TestIPython())
-    suite.addTest(test_20_aliases.TestAliases())
-    unittest.main()
+    try:
+        import pytest  # noqa F401
+    except ImportError as e:
 
-    _test()
-    # sys.argv = old_sys_argv
+        warnings.warn('No Pytest. Using unittest.')
+
+        # Believe it or not this is in fact necessary if you want to run
+        # the tests inside of IPython.
+        old_sys_argv = sys.argv[:]
+        # DONT FORGET SPACES
+        # sys.argv = [sys.executable, ' -m', ' unittest', ' -v']
+        sys.argv = get_ipython_cmd(as_string=False)
+        # todo: add options
+        test_00_ipython = importlib.import_module("test_00_ipython", package=".")
+        test_20_aliases = importlib.import_module("test_20_aliases", package=".")
+
+        suite = TestSuite()
+        suite.addTest(test_00_ipython.TestIPython())
+        suite.addTest(test_20_aliases.TestAliases())
+        unittest.main()
+
+        _test()
+    else:
+        pytest.main()
