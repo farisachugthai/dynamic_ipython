@@ -151,7 +151,7 @@ c.Application.log_datefmt = log_datefmt
 # The Logging format template
 # Default: '[%(name)s]%(highlevel)s %(message)s'
 # Todo: Import traitlets.config.application.LevelFormatter
-c.Application.log_format = "[ %(name)s  %(relativeCreated)d ] %(levelname)s %(module)s %(message)s "
+c.Application.log_format = default_log_format
 
 # Set the log level by value or name.
 c.Application.log_level = 20
@@ -214,7 +214,7 @@ c.TerminalIPythonApp.force_interact = False
 # 'IPython.terminal.interactiveshell.TerminalInteractiveShell'
 
 
-c.TerminalIPythonApplication.log_format = "[ %(name)s  %(relativeCreated)d ] %(levelname)s %(module)s %(message)s "
+c.TerminalIPythonApplication.log_format = default_log_format
 
 # Start IPython quickly by skipping the loading of config files.
 # c.TerminalIPythonApp.quick = False

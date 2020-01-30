@@ -20,9 +20,14 @@ from prompt_toolkit.filters import (
 from prompt_toolkit.keys import Keys
 
 # TODO:
-from xonsh.aliases import xonsh_exit
-from xonsh.tools import check_for_partial_string, get_line_continuation
-from xonsh.shell import transform_command
+try:
+    from xonsh.aliases import xonsh_exit
+    from xonsh.tools import check_for_partial_string, get_line_continuation
+    from xonsh.shell import transform_command
+except ImportError:
+    xonsh_exit = False
+
+from IPython.core.getipython import get_ipython
 
 DEDENT_TOKENS = frozenset(["raise", "return", "pass", "break", "continue"])
 
@@ -101,77 +106,9 @@ class Helpers:
         return self.session.style
 
 
-def carriage_return(b, cli, *, autoindent=True):
-    """Preliminary parser to determine if 'Enter' key should send command to the
-    xonsh parser for execution or should insert a newline for continued input.
-
-    Current 'triggers' for inserting a newline are:
-    - Not on first line of buffer and line is non-empty
-    - Previous character is a colon (covers if, for, etc...)
-    - User is in an open paren-block
-    - Line ends with backslash
-    - Any text exists below cursor position (relevant when editing previous
-    multiline blocks)
-    """
-    doc = b.document
-    at_end_of_line = _is_blank(doc.current_line_after_cursor)
-    current_line_blank = _is_blank(doc.current_line)
-
-    env = builtins.__xonsh__.env
-    indent = env.get("INDENT") if autoindent else ""
-
-    partial_string_info = check_for_partial_string(doc.text)
-    in_partial_string = (
-        partial_string_info[0] is not None and partial_string_info[1] is None
-    )
-
-    # indent after a colon
-    if doc.current_line_before_cursor.strip().endswith(":") and at_end_of_line:
-        b.newline(copy_margin=autoindent)
-        b.insert_text(indent, fire_event=False)
-    # if current line isn't blank, check dedent tokens
-    elif (
-        not current_line_blank
-        and doc.current_line.split(maxsplit=1)[0] in DEDENT_TOKENS
-        and doc.line_count > 1
-    ):
-        b.newline(copy_margin=autoindent)
-        b.delete_before_cursor(count=len(indent))
-    elif not doc.on_first_line and not current_line_blank:
-        b.newline(copy_margin=autoindent)
-    elif doc.current_line.endswith(get_line_continuation()):
-        b.newline(copy_margin=autoindent)
-    elif doc.find_next_word_beginning() is not None and (
-        any(not _is_blank(i) for i in doc.lines_from_current[1:])
-    ):
-        b.newline(copy_margin=autoindent)
-    elif not current_line_blank and not can_compile(doc.text):
-        b.newline(copy_margin=autoindent)
-    elif current_line_blank and in_partial_string:
-        b.newline(copy_margin=autoindent)
-    else:
-        b.validate_and_handle()
-
-
+@Condition
 def _is_blank(l):
     return len(l.strip()) == 0
-
-
-def can_compile(src):
-    """Returns whether the code can be compiled, i.e. it is valid xonsh."""
-    src = src if src.endswith("\n") else src + "\n"
-    src = transform_command(src, show_diff=False)
-    src = src.lstrip()
-    try:
-        builtins.__xonsh__.execer.compile(
-            src, mode="single", glbs=None, locs=builtins.__xonsh__.ctx
-        )
-        rtn = True
-    except SyntaxError:
-        rtn = False
-    except Exception:
-        rtn = True
-    return rtn
 
 
 @Condition
@@ -212,36 +149,6 @@ def end_of_line():
 
 
 @Condition
-def should_confirm_completion():
-    """Check if completion needs confirmation"""
-    return (
-        builtins.__xonsh__.env.get("COMPLETIONS_CONFIRM")
-        and get_app().current_buffer.complete_state
-    )
-
-
-# Copied from prompt-toolkit's key_binding/bindings/basic.py
-@Condition
-def ctrl_d_condition():
-    """Ctrl-D binding is only active when the default buffer is selected and
-    empty.
-    """
-    if builtins.__xonsh__.env.get("IGNOREEOF"):
-        return False
-    else:
-        app = get_app()
-        buffer_name = app.current_buffer.name
-
-        return buffer_name == DEFAULT_BUFFER and not app.current_buffer.text
-
-
-@Condition
-def autopair_condition():
-    """Check if XONSH_AUTOPAIR is set"""
-    return builtins.__xonsh__.env.get("XONSH_AUTOPAIR", False)
-
-
-@Condition
 def whitespace_or_bracket_before():
     """Check if there is whitespace or an opening
        bracket to the left of the cursor"""
@@ -265,13 +172,49 @@ def whitespace_or_bracket_after():
     )
 
 
+
 def load_xonsh_bindings(key_bindings):
     """
     Load custom key bindings.
     """
+
+    ip = get_ipython()
+
+    key_bindings = ip.pt_app.app.key_bindings
     handle = key_bindings.add
     has_selection = HasSelection()
     insert_mode = ViInsertMode() | EmacsInsertMode()
+
+    @Condition
+    def should_confirm_completion():
+        """Check if completion needs confirmation"""
+        return (
+            builtins.__xonsh__.env.get("COMPLETIONS_CONFIRM")
+            and get_app().current_buffer.complete_state
+        )
+
+    @handle(Keys.ControlX, Keys.ControlE, filter=~has_selection)
+    def open_editor(event):
+        """ Open current buffer in editor """
+        event.current_buffer.open_in_editor(event.cli)
+
+    @Condition
+    def ctrl_d_condition():
+        """Ctrl-D binding is only active when the default buffer is selected and
+        empty.
+        """
+        if builtins.__xonsh__.env.get("IGNOREEOF"):
+            return False
+        else:
+            app = get_app()
+            buffer_name = app.current_buffer.name
+
+            return buffer_name == DEFAULT_BUFFER and not app.current_buffer.text
+
+    @Condition
+    def autopair_condition():
+        """Check if XONSH_AUTOPAIR is set"""
+        return builtins.__xonsh__.env.get("XONSH_AUTOPAIR", False)
 
     @handle(Keys.Tab, filter=tab_insert_indent)
     def insert_indent(event):
@@ -281,11 +224,6 @@ def load_xonsh_bindings(key_bindings):
         """
         env = builtins.__xonsh__.env
         event.cli.current_buffer.insert_text(env.get("INDENT"))
-
-    @handle(Keys.ControlX, Keys.ControlE, filter=~has_selection)
-    def open_editor(event):
-        """ Open current buffer in editor """
-        event.current_buffer.open_in_editor(event.cli)
 
     @handle(Keys.BackTab, filter=insert_mode)
     def insert_literal_tab(event):
@@ -430,6 +368,73 @@ def load_xonsh_bindings(key_bindings):
     def accept_search(event):
         search.accept_search()
 
+    def can_compile(src):
+        """Returns whether the code can be compiled, i.e. it is valid xonsh."""
+        src = src if src.endswith("\n") else src + "\n"
+        src = transform_command(src, show_diff=False)
+        src = src.lstrip()
+        try:
+            builtins.__xonsh__.execer.compile(
+                src, mode="single", glbs=None, locs=builtins.__xonsh__.ctx
+            )
+            rtn = True
+        except SyntaxError:
+            rtn = False
+        except Exception:
+            rtn = True
+        return rtn
+
+    def carriage_return(b, cli, *, autoindent=True):
+        """Preliminary parser to determine if 'Enter' key should send command to the
+        xonsh parser for execution or should insert a newline for continued input.
+
+        Current 'triggers' for inserting a newline are:
+        - Not on first line of buffer and line is non-empty
+        - Previous character is a colon (covers if, for, etc...)
+        - User is in an open paren-block
+        - Line ends with backslash
+        - Any text exists below cursor position (relevant when editing previous
+        multiline blocks)
+        """
+        doc = b.document
+        at_end_of_line = _is_blank(doc.current_line_after_cursor)
+        current_line_blank = _is_blank(doc.current_line)
+
+        env = builtins.__xonsh__.env
+        indent = env.get("INDENT") if autoindent else ""
+
+        partial_string_info = check_for_partial_string(doc.text)
+        in_partial_string = (
+            partial_string_info[0] is not None and partial_string_info[1] is None
+        )
+
+        # indent after a colon
+        if doc.current_line_before_cursor.strip().endswith(":") and at_end_of_line:
+            b.newline(copy_margin=autoindent)
+            b.insert_text(indent, fire_event=False)
+        # if current line isn't blank, check dedent tokens
+        elif (
+            not current_line_blank
+            and doc.current_line.split(maxsplit=1)[0] in DEDENT_TOKENS
+            and doc.line_count > 1
+        ):
+            b.newline(copy_margin=autoindent)
+            b.delete_before_cursor(count=len(indent))
+        elif not doc.on_first_line and not current_line_blank:
+            b.newline(copy_margin=autoindent)
+        elif doc.current_line.endswith(get_line_continuation()):
+            b.newline(copy_margin=autoindent)
+        elif doc.find_next_word_beginning() is not None and (
+            any(not _is_blank(i) for i in doc.lines_from_current[1:])
+        ):
+            b.newline(copy_margin=autoindent)
+        elif not current_line_blank and not can_compile(doc.text):
+            b.newline(copy_margin=autoindent)
+        elif current_line_blank and in_partial_string:
+            b.newline(copy_margin=autoindent)
+        else:
+            b.validate_and_handle()
 
 if __name__ == "__main__":
     pt = Helpers()
+

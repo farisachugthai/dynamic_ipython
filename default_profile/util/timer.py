@@ -11,8 +11,6 @@ Might need to review logging best practices. I don't want the logger from
 this module to emit anything, but it seems tedious to place that burden
 on any module that imports from here.
 
-See Also
---------
 .. seealso::
 
     :mod:`cProfile`
@@ -23,8 +21,12 @@ See Also
 """
 import functools
 import logging
+from os import scandir
+from runpy import run_path
 import time
 from timeit import Timer
+
+from IPython.core.getipython import get_ipython
 
 logging.basicConfig(level=logging.INFO)
 
@@ -81,17 +83,13 @@ def debug(func):
     return wrapper_debug
 
 
-def exc_timer(statement):
+def exc_timer(statement, setup=None):
     """A non-decorator implementation that uses `timeit.`"""
-    t = Timer(statement)  # outside the try/except
+    t = Timer(stmt=statement, setup=setup)  # outside the try/except
     try:
-        t.timeit()
-    # or t.repeat(...)
+        return t.timeit()
     except Exception:  # noqa E722
         t.print_exc()
-    # else:
-    # TODO:
-
 
 class ArgReparser:
     """Class decorator that echoes out the arguments a function was called with."""
@@ -108,3 +106,22 @@ class ArgReparser:
             i = i + 1
 
         return self.func(*args, **kwargs)
+
+
+def time_dir(directory=None):
+    if directory is None:
+        directory = get_ipython().startup_dir
+    result = []
+    for i in scandir('.'):
+        if i.name.endswith('.py'):
+            file = i.name
+            print(file)
+            print(time.time())
+            start_time = time.time()
+            exec(compile(open(file).read(), 'timer', 'exec'))
+            end = time.time()
+            diff = end - start_time
+            print(f"{diff}")
+            result.append((file, diff))
+
+    return result

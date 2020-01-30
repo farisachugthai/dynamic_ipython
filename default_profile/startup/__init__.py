@@ -45,4 +45,3 @@ bottom_toolbar_mod = importlib.import_module(
 completion_mod = importlib.import_module("default_profile.startup.34_completion")
 
 numpy_init_mod = importlib.import_module("default_profile.startup.41_numpy_init")
-matplotlib_mod = importlib.import_module("default_profile.startup.43_matplotlib")

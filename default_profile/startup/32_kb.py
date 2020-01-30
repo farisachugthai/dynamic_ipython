@@ -119,25 +119,25 @@ Yup. We have to redefine what a key is.
 
 
 Fun with Vim
-============
+------------
 
 Dude these are all the vi modes prompt_toolkit has...lol
 So I just checked. Wanna know what it does?
-They're basically enums that get compared to editing_mode.input_mode. lol kinda dumb right.
+They're basically enums that get compared to editing_mode.input_mode. lol kinda dumb right.::
 
-from prompt_toolkit.filters.app import (
-    vi_selection_mode,
-    vi_recording_macro,
-    vi_register_names,
-    vi_mode,
-    vi_replace_mode,
-    vi_waiting_for_text_object_mode,
-    vi_insert_mode,
-    vi_search_direction_reversed,
-    vi_navigation_mode,
-    vi_digraph_mode,
-    vi_insert_multiple_mode,
-)
+    from prompt_toolkit.filters.app import (
+        vi_selection_mode,
+        vi_recording_macro,
+        vi_register_names,
+        vi_mode,
+        vi_replace_mode,
+        vi_waiting_for_text_object_mode,
+        vi_insert_mode,
+        vi_search_direction_reversed,
+        vi_navigation_mode,
+        vi_digraph_mode,
+        vi_insert_multiple_mode,
+    )
 
 
 """
@@ -154,6 +154,7 @@ from prompt_toolkit.cache import SimpleCache
 
 # from prompt_toolkit.enums import DEFAULT_BUFFER, SEARCH_BUFFER
 # from prompt_toolkit.filters import Condition
+# from prompt_toolkit.filters import ViInsertMode
 from prompt_toolkit.key_binding.defaults import load_key_bindings, load_vi_bindings
 from prompt_toolkit.key_binding.key_bindings import (
     KeyBindings,
@@ -161,10 +162,7 @@ from prompt_toolkit.key_binding.key_bindings import (
     _MergedKeyBindings,
     merge_key_bindings,
 )
-from prompt_toolkit.key_binding.bindings.vi import (
-    load_vi_bindings,
-    load_vi_search_bindings,
-)
+# from prompt_toolkit.key_binding.key_processor import KeyPress
 from prompt_toolkit.keys import Keys
 
 
@@ -366,11 +364,6 @@ class ApplicationKB(KeyBindingsManager):
         super().__init__(kb=self.kb, shell=self.shell, *args, **kwargs)
 
 
-def unpack(i):
-    # raise NotImplementedError
-    pass
-
-
 class HandlesMergedKB(KeyBindingsManager):
     """It might be easier to handle the insufferable discrepencies in implementation
     between _MergedKeyBindings and ConditionalKeyBindings through class attributes.
@@ -385,9 +378,10 @@ class HandlesMergedKB(KeyBindingsManager):
             if kb is None:
                 kb = load_key_bindings()
             else:
-                if isinstance(kb, _MergedKeyBindings):
-                    for i in kb.registries:
-                        unpack(i)
+                pass  # todo
+                # if isinstance(kb, _MergedKeyBindings):
+                #     for i in kb.registries:
+                #         unpack(i)
 
     def __init__(self, kb=None, shell=None, *args, **kwargs):
         """Honestly can't say I have a great grasp on proper initialization
@@ -397,7 +391,6 @@ class HandlesMergedKB(KeyBindingsManager):
 
 
 def unnest_merged_kb(kb, pre_existing_list=None):
-    # So I tried this again and it more than likely isn't gonna work
     if pre_existing_list:
         ret = pre_existing_list
     else:
@@ -418,35 +411,34 @@ def safely_get_registry(_ip):
     if _ip is not None:
         if hasattr(_ip, "pt_app"):
             registry = _ip.pt_app.app.key_bindings
-            if type(registry) == _MergedKeyBindings:
-                unnest_merged_kb(registry)
+            # todo
+            # if type(registry) == _MergedKeyBindings:
+            #     unnest_merged_kb(registry)
 
 
 def kb_main(_ip=None):
-    """DON'T CALL."""
-    warnings.warn("This calls merge_key_bindings")
-    # This doesn't do much of anything right now.
     if _ip is not None:
-        ipy_registry = safely_get_registry(_ip)
-        ipython_registry = safely_get_registry(_ip)
-        for i in basic_bindings.bindings:
-            ipython_registry = _rewritten_add(ipython_registry, i)
+        # TODO:
+        # ipython_registry = safely_get_registry(_ip)
+        # for i in basic_bindings.bindings:
+        #     ipython_registry = _rewritten_add(ipython_registry, i)
 
-        assert (
-            ipython_registry
-            is not prompt_toolkit.key_binding.key_bindings._MergedKeyBindings
-        )
-        _ip.pt_app.app.key_bindings = ipython_registry
+        # assert (
+        #     ipython_registry
+        #     is not prompt_toolkit.key_binding.key_bindings._MergedKeyBindings
+        # )
+        # _ip.pt_app.app.key_bindings = ipython_registry
         # Dude holy shit does this give you a lot
         if _ip.editing_mode == "vi":
             more_keybindings = merge_key_bindings(
                 [_ip.pt_app.app.key_bindings, load_vi_bindings()]
             )
         else:
-            more_keybindings = _ip.pt_app.app.key_bindings
-        container_kb = KeyBindingsManager(shell=_ip, kb=ipy_registry.bindings)
+            more_keybindings = merge_key_bindings([_ip.pt_app.app.key_bindings,
+                load_key_bindings()])
+        return more_keybindings
     else:
-        # TODO
+        # TODO: Get the keybindings from an app instance.
         running_app = get_app()
 
 
@@ -458,15 +450,18 @@ def _rewritten_add(registry, _binding):
     return registry
 
 
-# @_rewritten_add(registries, Keys.F4)
-
 if __name__ == "__main__":
     _ip = get_ipython()
     # Let's side step all those fuckups
     # This is probably a terrible thing to rely on, and not a guaranteed order but....
     if _ip is not None:
-        kb_manager = KeyBindingsManager()
         # if _ip.editing_mode == "vi":
         #     vi_bindings = basic_bindings.registries[0]
         #     vi_mouse = basic_bindings.registries[1]
         #     vi_cpr = basic_bindings.registries[2]
+        full_registry = kb_main(_ip)
+        container_kb = KeyBindingsManager(shell=_ip, kb=full_registry.bindings)
+
+        # no really dont use it.got rid of the <CR> handler
+        # _ip.pt_app.app.key_bindings = full_registry
+

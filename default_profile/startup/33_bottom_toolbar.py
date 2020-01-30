@@ -54,13 +54,13 @@ class BottomToolbar:
         return self.shell.pt_app
 
     @property
-    def pt_app(self):
+    def app(self):
         # TODO: Be more consistent and check multiple versions of pt as done in other files
         return self.shell.pt_app.app
 
     @property
     def is_vi_mode(self):
-        if self.pt_app.editing_mode == EditingMode.VI:
+        if self.app.editing_mode == EditingMode.VI:
             return True
         else:
             return False
@@ -90,7 +90,7 @@ class BottomToolbar:
         # TODO:
         # add more styling:
         # [('class:toolbar', ' [F4] %s ' % text)]
-        current_vi_mode = self.pt_app.vi_state.input_mode
+        current_vi_mode = self.app.vi_state.input_mode
         toolbar = f" [F4] Vi: {current_vi_mode}  {date.today()}"
         # toolbar.append(style=default_pygments_style())
         return toolbar
@@ -125,13 +125,6 @@ def add_toolbar(toolbar=None):
 
     _ip.pt_app.bottom_toolbar = toolbar()
 
-
-def _(event):
-    """Toggle between Emacs and Vi mode."""
-    if event.app.editing_mode == EditingMode.VI:
-        event.app.editing_mode = EditingMode.EMACS
-    else:
-        event.app.editing_mode = EditingMode.VI
 
 
 # Don't uncomment! This fucks up the keybindings so that the only way a line
