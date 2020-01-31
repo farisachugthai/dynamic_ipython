@@ -1,0 +1,628 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>default_profile.startup.32_kb &#8212; Dynamic IPython: version0.0.2</title>
+    
+    <link rel="stylesheet" href="../../../_static/scrolls.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/print.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../../../_static/theme_extras.js"></script>
+    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/startup/32_kb.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<!-- <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" /> -->
+<!-- <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" media="screen" rel="stylesheet" type="text/css" /> -->
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <title>Floating label Demo</title>
+  <meta name="description" content="" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style type="text/css">
+    /* CSS styles */
+    /* Example by Matthias Benkort at http://codepen.io/KtorZ/pen/ZOzdqG */
+    @import url(
+      https://fonts.googleapis.com/css?family=Roboto:400,
+      300,
+      500,
+      700
+    );
+    .wrapper {
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .material-textfield {
+      display: inline-block;
+      height: 4rem;
+      padding-top: 2rem;
+    }
+    .material-textfield input {
+      background: none;
+      border: none;
+      box-sizing: border-box;
+      display: block;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 1rem;
+      padding: 0.25rem 0.1rem;
+      width: 100%;
+    }
+    .material-textfield input:invalid {
+      box-shadow: none;
+    }
+    .material-textfield input:focus {
+      outline: none;
+    }
+    .material-textfield label {
+      display: inline-block;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 0;
+      pointer-events: none;
+      position: relative;
+      text-transform: uppercase;
+      width: 100%;
+    }
+    .material-textfield label::before {
+      content: attr(data-content);
+      position: relative;
+      transition: all 0.2s ease;
+      will-change: font-size, top;
+    }
+    .material-textfield label::after {
+      bottom: 0.9rem;
+      content: "";
+      height: 0.3rem;
+      left: 50%;
+      position: absolute;
+      transition: all 0.2s ease;
+      width: 0;
+      will-change: width, left;
+    }
+    .material-textfield label::before,
+    .material-textfield input[required]:focus ~ label::before {
+      font-size: 0.75rem;
+      top: -3.25rem;
+    }
+    .material-textfield input:focus ~ label::after {
+      left: 0%;
+      width: 100%;
+    }
+    .material-textfield input:invalid ~ label::before {
+      font-size: 1rem;
+      top: -2rem;
+    }
+
+    .material-textfield.blue input {
+      border-bottom: 0.1rem solid #03a9f4;
+      color: #0275a8;
+    }
+    .material-textfield.blue label::after {
+      background: #03a9f4;
+    }
+    .material-textfield.blue label::before,
+    .material-textfield.blue input[required]:focus ~ label::before {
+      color: #47c4fd;
+    }
+    .material-textfield.blue input:invalid ~ label::before {
+      color: #03a9f4;
+    }
+
+    .material-textfield.red input {
+      border-bottom: 0.1rem solid #f44336;
+      color: #d2190b;
+    }
+    .material-textfield.red label::after {
+      background: #f44336;
+    }
+    .material-textfield.red label::before,
+    .material-textfield.red input[required]:focus ~ label::before {
+      color: #f8877f;
+    }
+    .material-textfield.red input:invalid ~ label::before {
+      color: #f44336;
+    }
+  </style>
+</head>
+
+  </head><body> 
+    <div id="content">
+      <div class="header">
+        <h1 class="heading"><a href="../../../index.html"
+          title="back to the documentation overview"><span>default_profile.startup.32_kb</span></a></h1>
+      </div>
+      <div class="relnav" role="navigation" aria-label="related navigation">
+        <a href="#">default_profile.startup.32_kb</a>
+      </div>
+      <div id="contentwrapper">
+        <div role="main">
+        
+<h1>Source code for default_profile.startup.32_kb</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="sd">&quot;&quot;&quot;Make prompt_toolkit&#39;s keybindings more extensible.</span>
+
+<span class="sd">Reminder of where you left off:</span>
+
+<span class="sd">Bottom toolbar works but isn&#39;t bound to a key idk why it isn&#39;t working.</span>
+<span class="sd">The seemingly recommended interface is to merge with merge_key_bindings</span>
+<span class="sd">Difficult to add key_bindings after the merge though.</span>
+<span class="sd">Mostly everything&#39;s behaving as it should however.</span>
+
+<span class="sd">I&#39;m just gonna note how much this bugs me though.::</span>
+
+<span class="sd">    In [30]: p = PromptSessionKB()</span>
+<span class="sd">    Out[30]: &lt;PromptSessionKB&gt;: 13</span>
+
+<span class="sd">    In [31]: a = ApplicationKB()</span>
+<span class="sd">    Out[31]: &lt;ApplicationKB&gt;: 24</span>
+
+<span class="sd">Alright now I need to start keeping track because this is rough.::</span>
+
+<span class="sd">    In [1]: _ip.pt_app.app  # Application. _ip.pt_app is the PromptSession.</span>
+<span class="sd">    Out[1]: &lt;prompt_toolkit.application.application.Application at 0x7f2710ac7d90&gt;</span>
+
+
+<span class="sd">    In [9]: _ip.pt_app.current_buffer</span>
+<span class="sd">    AttributeError: &#39;PromptSession&#39; object has no attribute &#39;current_buffer&#39;</span>
+
+<span class="sd">    In [2]: _ip.pt_app.app.current_buffer</span>
+<span class="sd">    Out[2]: &lt;Buffer(name=&#39;DEFAULT_BUFFER&#39;, text=&#39;_ip.pt_app.a...&#39;) at 139805760009696&gt;</span>
+
+<span class="sd">    In [3]: _ip.pt_app.validator</span>
+
+<span class="sd">    In [4]: _ip.pt_app.app.validator</span>
+<span class="sd">    AttributeError: &#39;Application&#39; object has no attribute &#39;validator&#39;</span>
+
+<span class="sd">Alright so they&#39;re not the similar after all right?</span>
+<span class="sd">From the docs.:</span>
+
+<span class="sd">    Dynamically switch between Emacs and Vi mode</span>
+
+<span class="sd">    The Application has an editing_mode attribute.</span>
+<span class="sd">    We can change the key bindings by changing this attribute from</span>
+<span class="sd">    EditingMode.VI to EditingMode.EMACS.</span>
+
+<span class="sd">Guess what else has an editing_mode attribute.::</span>
+
+<span class="sd">    In [5]: _ip.pt_app.editing_mode</span>
+<span class="sd">    Out[5]: &lt;EditingMode.VI: &#39;VI&#39;&gt;</span>
+
+<span class="sd">    In [6]: _ip.pt_app.app.editing_mode</span>
+<span class="sd">    Out[6]: &lt;EditingMode.VI: &#39;VI&#39;&gt;</span>
+
+
+<span class="sd">Dude mergedkeybindings are horrible.::</span>
+
+<span class="sd">    In [30]: _ip.pt_app.app.key_bindings</span>
+<span class="sd">    Out[30]: &lt;prompt_toolkit.key_binding.key_bindings._MergedKeyBindings at 0x7f271047f340&gt;</span>
+
+<span class="sd">    In [31]: _ip.pt_app.app.key_bindings.registries</span>
+<span class="sd">    Out[31]:</span>
+<span class="sd">    [&lt;prompt_toolkit.key_binding.key_bindings._MergedKeyBindings at 0x7f2710ac7b50&gt;,</span>
+<span class="sd">    &lt;prompt_toolkit.key_binding.key_bindings.ConditionalKeyBindings at 0x7f2710447430&gt;]</span>
+
+<span class="sd">    In [32]: _ip.pt_app.app.key_bindings.registries[0]</span>
+<span class="sd">    Out[32]: &lt;prompt_toolkit.key_binding.key_bindings._MergedKeyBindings at 0x7f2710ac7b50&gt;</span>
+
+<span class="sd">    In [33]: _ip.pt_app.app.key_bindings.registries[0].registries</span>
+<span class="sd">    Out[33]:</span>
+<span class="sd">    [&lt;prompt_toolkit.key_binding.key_bindings._MergedKeyBindings at 0x7f2710ac77f0&gt;,</span>
+<span class="sd">    &lt;prompt_toolkit.key_binding.key_bindings.DynamicKeyBindings at 0x7f2710ac79a0&gt;]</span>
+
+<span class="sd">    In [34]: _ip.pt_app.app.key_bindings.registries[0].registries[0]</span>
+<span class="sd">    Out[34]: &lt;prompt_toolkit.key_binding.key_bindings._MergedKeyBindings at 0x7f2710ac77f0&gt;</span>
+
+<span class="sd">    In [35]: _ip.pt_app.app.key_bindings.registries[0].registries[0].registries[0]</span>
+<span class="sd">    Out[35]: &lt;prompt_toolkit.key_binding.key_bindings.KeyBindings at 0x7f2710ac3160&gt;</span>
+
+<span class="sd">    In [36]: _ip.pt_app.app.key_bindings.registries[0].registries[0].registries[0].bindings</span>
+<span class="sd">    Out[36]:</span>
+<span class="sd">    [Binding(keys=(&lt;Keys.Right: &#39;right&#39;&gt;,), handler=&lt;function load_auto_suggest_bindings.&lt;locals&gt;._ at 0x7f2710aadd30&gt;),</span>
+<span class="sd">    Binding(keys=(&lt;Keys.ControlE: &#39;c-e&#39;&gt;,), handler=&lt;function load_auto_suggest_bindings.&lt;locals&gt;._ at 0x7f2710aadd30&gt;),</span>
+<span class="sd">    Binding(keys=(&lt;Keys.ControlF: &#39;c-f&#39;&gt;,), handler=&lt;function load_auto_suggest_bindings.&lt;locals&gt;._ at 0x7f2710aadd30&gt;),</span>
+<span class="sd">    Binding(keys=(&lt;Keys.Escape: &#39;escape&#39;&gt;, &#39;f&#39;), handler=&lt;function load_auto_suggest_bindings.&lt;locals&gt;._ at 0x7f2710aadc10&gt;)]</span>
+
+<span class="sd">And you kinda can&#39;t do anything about it.::</span>
+
+<span class="sd">    In [39]: did_we_make_it_better = DynamicKeyBindings(_ip.pt_app.app.key_bindings)</span>
+<span class="sd">    Out[39]: &lt;prompt_toolkit.key_binding.key_bindings.DynamicKeyBindings at 0x7f26f7d9ba30&gt;</span>
+
+<span class="sd">    In [40]: did_we_make_it_better.bindings</span>
+<span class="sd">    TypeError: &#39;_MergedKeyBindings&#39; object is not callable</span>
+
+<span class="sd">Can&#39;t extract anything from them.::</span>
+
+<span class="sd">    In [42]: for i in load_key_bindings().registries[0].bindings:</span>
+<span class="sd">        ...:     _ip.pt_app.key_bindings.add(i.keys)(i.handler)</span>
+<span class="sd">        ...: ValueError: Invalid key: (&lt;Keys.ControlX: &#39;c-x&#39;&gt;, &#39;r&#39;, &#39;y&#39;)</span>
+
+<span class="sd">Gotta be honest I felt very creative workibg ny way up to that one.</span>
+<span class="sd">If we can&#39;t do that, lets keep working at the individual bindings.::</span>
+
+<span class="sd">    In [43]: i.keys</span>
+<span class="sd">    Out[43]: (&lt;Keys.ControlX: &#39;c-x&#39;&gt;, &#39;r&#39;, &#39;y&#39;)</span>
+<span class="sd">    In [44]: type(i.keys)</span>
+<span class="sd">    Out[44]: tuple</span>
+<span class="sd">    In [45]: i.keys[0]</span>
+<span class="sd">    Out[45]: &lt;Keys.ControlX: &#39;c-x&#39;&gt;</span>
+
+<span class="sd">So far so good?::</span>
+
+<span class="sd">    In [57]: c = &quot;&quot;</span>
+<span class="sd">    ...: for j in i.keys:</span>
+<span class="sd">    ...:     c += Keys(j)</span>
+<span class="sd">    ...: ValueError: &#39;r&#39; is not a valid Keys</span>
+<span class="sd">        During handling of the above exception, another exception occurred:</span>
+<span class="sd">        ValueError: &#39;r&#39; is not a valid Keys</span>
+
+<span class="sd">Yup. We have to redefine what a key is.</span>
+
+
+<span class="sd">Fun with Vim</span>
+<span class="sd">------------</span>
+
+<span class="sd">Dude these are all the vi modes prompt_toolkit has...lol</span>
+<span class="sd">So I just checked. Wanna know what it does?</span>
+<span class="sd">They&#39;re basically enums that get compared to editing_mode.input_mode. lol kinda dumb right.::</span>
+
+<span class="sd">    from prompt_toolkit.filters.app import (</span>
+<span class="sd">        vi_selection_mode,</span>
+<span class="sd">        vi_recording_macro,</span>
+<span class="sd">        vi_register_names,</span>
+<span class="sd">        vi_mode,</span>
+<span class="sd">        vi_replace_mode,</span>
+<span class="sd">        vi_waiting_for_text_object_mode,</span>
+<span class="sd">        vi_insert_mode,</span>
+<span class="sd">        vi_search_direction_reversed,</span>
+<span class="sd">        vi_navigation_mode,</span>
+<span class="sd">        vi_digraph_mode,</span>
+<span class="sd">        vi_insert_multiple_mode,</span>
+<span class="sd">    )</span>
+
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">reprlib</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+
+<span class="kn">import</span> <span class="nn">prompt_toolkit</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.application.current</span> <span class="kn">import</span> <span class="n">get_app</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.cache</span> <span class="kn">import</span> <span class="n">SimpleCache</span>
+
+<span class="c1"># from prompt_toolkit.enums import DEFAULT_BUFFER, SEARCH_BUFFER</span>
+<span class="c1"># from prompt_toolkit.filters import Condition</span>
+<span class="c1"># from prompt_toolkit.filters import ViInsertMode</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.defaults</span> <span class="kn">import</span> <span class="n">load_key_bindings</span><span class="p">,</span> <span class="n">load_vi_bindings</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.key_bindings</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">KeyBindings</span><span class="p">,</span>
+    <span class="n">KeyBindingsBase</span><span class="p">,</span>
+    <span class="n">_MergedKeyBindings</span><span class="p">,</span>
+    <span class="n">merge_key_bindings</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="c1"># from prompt_toolkit.key_binding.key_processor import KeyPress</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.keys</span> <span class="kn">import</span> <span class="n">Keys</span>
+
+
+<div class="viewcode-block" id="KeyBindingsManager"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.32_kb.KeyBindingsManager">[docs]</a><span class="k">class</span> <span class="nc">KeyBindingsManager</span><span class="p">(</span><span class="n">KeyBindingsBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Bind an interface with IPython&#39;s keybindings and define dunders so this behaves properly.</span>
+
+<span class="sd">    I think that I&#39;m going to continue this by making a subclass that validates the bindings it&#39;s being given</span>
+<span class="sd">    because you can add the same keybinding over and over and that&#39;s probably</span>
+<span class="sd">    never what the user wants to have happen.</span>
+
+<span class="sd">    In order to properly take over the keybindings class we&#39;re given,</span>
+<span class="sd">    I&#39;m assuming wed need to implement the methods provided by the class</span>
+<span class="sd">    KeyBindingsBase.</span>
+
+<span class="sd">    *Fun fact:* This used to be a class in prompt_toolkit!</span>
+
+<span class="sd">    Copy pasted it below.</span>
+
+<span class="sd">    .. todo::</span>
+<span class="sd">        ``__getitem__`` so we have a properly constructed sequence.</span>
+<span class="sd">        Jan 03, 2020: Done! Just ensure everything works upon usage.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="KeyBindingsManager.__init__"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.32_kb.KeyBindingsManager.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kb</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize the class.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        kb : KeyBindings</span>
+<span class="sd">            Any KeyBindings you wanna throw us right off the bat.</span>
+<span class="sd">            Handling this is gonna be hard unfortunately.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">shell</span> <span class="ow">or</span> <span class="n">get_ipython</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">kb</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="p">,</span> <span class="s2">&quot;pt_app&quot;</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">kb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span>
+                <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ip</span><span class="p">,</span> <span class="s2">&quot;pt_cli&quot;</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">kb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">pt_cli</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">key_bindings_registry</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">kb</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">kb</span> <span class="o">=</span> <span class="n">kb</span>
+
+        <span class="c1"># So this should cover both IPython and pt aps that don&#39;t have self.shell set!</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">kb</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">kb</span> <span class="o">=</span> <span class="n">load_key_bindings</span><span class="p">()</span>
+        <span class="c1"># idk what this is but pt requires it</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_get_bindings_for_keys_cache</span> <span class="o">=</span> <span class="n">SimpleCache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_get_bindings_starting_with_keys_cache</span> <span class="o">=</span> <span class="n">SimpleCache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__version</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># For cache invalidation.</span></div>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&lt;</span><span class="si">{}</span><span class="s2">&gt;: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kb</span><span class="o">.</span><span class="n">bindings</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">another_one</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Honestly not sure if this returns anything.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">kb</span><span class="o">.</span><span class="n">add_binding</span><span class="p">(</span><span class="n">another_one</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__iadd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">another_one</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__add__</span><span class="p">(</span><span class="n">another_one</span><span class="p">)</span>
+
+<div class="viewcode-block" id="KeyBindingsManager.add"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.32_kb.KeyBindingsManager.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">another_one</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__add__</span><span class="p">(</span><span class="n">another_one</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. admonition:: From pydoc.help(&#39;SPECIALMETHODS&#39;)</span>
+
+<span class="sd">            object.__bool__(self)</span>
+<span class="sd">                Called to implement truth value testing and the built-in operation</span>
+<span class="sd">                &quot;bool()&quot;; should return &quot;False&quot; or &quot;True&quot;.  When this method is not</span>
+<span class="sd">                defined, &quot;__len__()&quot; is called, if it is defined, and the object is</span>
+<span class="sd">                considered true if its result is nonzero.  If a class defines</span>
+<span class="sd">                neither &quot;__len__()&quot; nor &quot;__bool__()&quot;, all its instances are</span>
+<span class="sd">                considered true.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kb</span><span class="o">.</span><span class="n">bindings</span><span class="p">)</span>
+
+<div class="viewcode-block" id="KeyBindingsManager.len"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.32_kb.KeyBindingsManager.len">[docs]</a>    <span class="k">def</span> <span class="nf">len</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__len__</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">6</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">reprlib</span><span class="o">.</span><span class="n">Repr</span><span class="p">()</span><span class="o">.</span><span class="n">repr_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kb</span><span class="o">.</span><span class="n">bindings</span><span class="p">,</span> <span class="n">level</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__repr_pretty</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">cycle</span><span class="p">):</span>
+        <span class="c1"># I don&#39;t know why it has that call signature</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{self.__class__.__name__}</span><span class="s2">:&gt; - {reprlib.recursive_repr(self.kb.bindings)}&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Simply calls the str method until we figure something out.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span>
+
+    <span class="c1"># def __index__(self):</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;This file in general is gonna suck to test isn&#39;t it?&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kb</span><span class="o">.</span><span class="n">bindings</span><span class="p">):</span>
+                <span class="k">yield</span> <span class="n">i</span>
+        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+            <span class="k">raise</span>  <span class="c1"># uhm idk</span>
+        <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">kb</span><span class="o">.</span><span class="n">bindings</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+
+<div class="viewcode-block" id="KeyBindingsManager.bindings"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.32_kb.KeyBindingsManager.bindings">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">bindings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">kb</span><span class="o">.</span><span class="n">bindings</span></div>
+
+<div class="viewcode-block" id="KeyBindingsManager.call_iadd"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.32_kb.KeyBindingsManager.call_iadd">[docs]</a>    <span class="nd">@bindings</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">call_iadd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="fm">__iadd__</span><span class="p">(</span><span class="n">other</span><span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__version</span>
+
+    <span class="nd">@_version</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">_clear_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_version</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_get_bindings_for_keys_cache</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_get_bindings_starting_with_keys_cache</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+<div class="viewcode-block" id="KeyBindingsManager.get_keys"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.32_kb.KeyBindingsManager.get_keys">[docs]</a>    <span class="k">def</span> <span class="nf">get_keys</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keys</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># Dude don&#39;t define the vars inside the for loop</span>
+        <span class="c1"># It&#39;s easier to segregate them at the top and then work with them</span>
+        <span class="n">any_count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">binding</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bindings</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">keys</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">binding</span><span class="o">.</span><span class="n">keys</span><span class="p">):</span>
+                <span class="n">match</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">binding</span><span class="o">.</span><span class="n">keys</span><span class="p">,</span> <span class="n">keys</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">j</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">Keys</span><span class="o">.</span><span class="n">Any</span><span class="p">:</span>
+                        <span class="n">match</span> <span class="o">=</span> <span class="kc">False</span>
+                        <span class="k">break</span>
+
+                    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">Keys</span><span class="o">.</span><span class="n">Any</span><span class="p">:</span>
+                        <span class="n">any_count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">any_count</span><span class="p">,</span> <span class="n">b</span><span class="p">))</span>
+
+        <span class="c1"># Place bindings that have more &#39;Any&#39; occurrences in them at the end.</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">item</span><span class="p">:</span> <span class="o">-</span><span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">result</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="KeyBindingsManager.get_bindings_for_keys"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.32_kb.KeyBindingsManager.get_bindings_for_keys">[docs]</a>    <span class="k">def</span> <span class="nf">get_bindings_for_keys</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keys</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a list of key bindings that can handle this key.</span>
+
+<span class="sd">        (This return also inactive bindings, so the `filter` still has to be</span>
+<span class="sd">        called, for checking it.)</span>
+<span class="sd">        :param keys: tuple of keys.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">keys</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_bindings_for_keys_cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">get</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="KeyBindingsManager.get_bindings_starting_with_keys"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.32_kb.KeyBindingsManager.get_bindings_starting_with_keys">[docs]</a>    <span class="k">def</span> <span class="nf">get_bindings_starting_with_keys</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keys</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a list of key bindings that handle a key sequence starting with</span>
+<span class="sd">        `keys`. (It does only return bindings for which the sequences are</span>
+<span class="sd">        longer than `keys`. And like `get_bindings_for_keys`, it also includes</span>
+<span class="sd">        inactive bindings.)</span>
+<span class="sd">        :param keys: tuple of keys.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">get</span><span class="p">():</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bindings</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">keys</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">keys</span><span class="p">):</span>
+                    <span class="n">match</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">keys</span><span class="p">,</span> <span class="n">keys</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">j</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">Keys</span><span class="o">.</span><span class="n">Any</span><span class="p">:</span>
+                            <span class="n">match</span> <span class="o">=</span> <span class="kc">False</span>
+                            <span class="k">break</span>
+                    <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+                        <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">result</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_bindings_starting_with_keys_cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">get</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="ApplicationKB"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.32_kb.ApplicationKB">[docs]</a><span class="k">class</span> <span class="nc">ApplicationKB</span><span class="p">(</span><span class="n">KeyBindingsManager</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Functionally the exact same thing except now we&#39;re bound to _ip.pt_app.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ApplicationKB.__init__"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.32_kb.ApplicationKB.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kb</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">shell</span> <span class="ow">or</span> <span class="n">get_ipython</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">kb</span> <span class="o">=</span> <span class="n">kb</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">key_bindings</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">kb</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">kb</span> <span class="o">=</span> <span class="n">load_key_bindings</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">kb</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">kb</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="HandlesMergedKB"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.32_kb.HandlesMergedKB">[docs]</a><span class="k">class</span> <span class="nc">HandlesMergedKB</span><span class="p">(</span><span class="n">KeyBindingsManager</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;It might be easier to handle the insufferable discrepencies in implementation</span>
+<span class="sd">    between _MergedKeyBindings and ConditionalKeyBindings through class attributes.</span>
+
+<span class="sd">    .. todo:: Unpacking the KeyBindings registry attribute.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">shell</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">shell</span><span class="p">,</span> <span class="s2">&quot;pt_app&quot;</span><span class="p">):</span>
+            <span class="n">kb</span> <span class="o">=</span> <span class="n">shell</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span>
+            <span class="k">if</span> <span class="n">kb</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">kb</span> <span class="o">=</span> <span class="n">load_key_bindings</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">pass</span>  <span class="c1"># todo</span>
+                <span class="c1"># if isinstance(kb, _MergedKeyBindings):</span>
+                <span class="c1">#     for i in kb.registries:</span>
+                <span class="c1">#         unpack(i)</span>
+
+<div class="viewcode-block" id="HandlesMergedKB.__init__"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.32_kb.HandlesMergedKB.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kb</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Honestly can&#39;t say I have a great grasp on proper initialization</span>
+<span class="sd">        of subclasses with both class attributes and __init__&#39;s.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">kb</span><span class="o">=</span><span class="n">kb</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="n">shell</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="unnest_merged_kb"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.32_kb.unnest_merged_kb">[docs]</a><span class="k">def</span> <span class="nf">unnest_merged_kb</span><span class="p">(</span><span class="n">kb</span><span class="p">,</span> <span class="n">pre_existing_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">pre_existing_list</span><span class="p">:</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">pre_existing_list</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">kb</span><span class="p">)</span> <span class="o">==</span> <span class="n">_MergedKeyBindings</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">kb</span><span class="o">.</span><span class="n">registries</span><span class="p">:</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ret</span><span class="p">:</span>
+            <span class="n">unnest_merged_kb</span><span class="p">(</span><span class="n">kb</span><span class="p">,</span> <span class="n">pre_existing_list</span><span class="o">=</span><span class="n">ret</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">ret</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ret</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span></div>
+
+
+<div class="viewcode-block" id="safely_get_registry"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.32_kb.safely_get_registry">[docs]</a><span class="k">def</span> <span class="nf">safely_get_registry</span><span class="p">(</span><span class="n">_ip</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">_ip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_ip</span><span class="p">,</span> <span class="s2">&quot;pt_app&quot;</span><span class="p">):</span>
+            <span class="n">registry</span> <span class="o">=</span> <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span></div>
+            <span class="c1"># todo</span>
+            <span class="c1"># if type(registry) == _MergedKeyBindings:</span>
+            <span class="c1">#     unnest_merged_kb(registry)</span>
+
+
+<div class="viewcode-block" id="kb_main"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.32_kb.kb_main">[docs]</a><span class="k">def</span> <span class="nf">kb_main</span><span class="p">(</span><span class="n">_ip</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">_ip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># TODO:</span>
+        <span class="c1"># ipython_registry = safely_get_registry(_ip)</span>
+        <span class="c1"># for i in basic_bindings.bindings:</span>
+        <span class="c1">#     ipython_registry = _rewritten_add(ipython_registry, i)</span>
+
+        <span class="c1"># assert (</span>
+        <span class="c1">#     ipython_registry</span>
+        <span class="c1">#     is not prompt_toolkit.key_binding.key_bindings._MergedKeyBindings</span>
+        <span class="c1"># )</span>
+        <span class="c1"># _ip.pt_app.app.key_bindings = ipython_registry</span>
+        <span class="c1"># Dude holy shit does this give you a lot</span>
+        <span class="k">if</span> <span class="n">_ip</span><span class="o">.</span><span class="n">editing_mode</span> <span class="o">==</span> <span class="s2">&quot;vi&quot;</span><span class="p">:</span>
+            <span class="n">more_keybindings</span> <span class="o">=</span> <span class="n">merge_key_bindings</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span><span class="p">,</span> <span class="n">load_vi_bindings</span><span class="p">()]</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">more_keybindings</span> <span class="o">=</span> <span class="n">merge_key_bindings</span><span class="p">([</span><span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span><span class="p">,</span>
+                <span class="n">load_key_bindings</span><span class="p">()])</span>
+        <span class="k">return</span> <span class="n">more_keybindings</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># TODO: Get the keybindings from an app instance.</span>
+        <span class="n">running_app</span> <span class="o">=</span> <span class="n">get_app</span><span class="p">()</span></div>
+
+
+<span class="k">def</span> <span class="nf">_rewritten_add</span><span class="p">(</span><span class="n">registry</span><span class="p">,</span> <span class="n">_binding</span><span class="p">):</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="n">_binding</span><span class="o">.</span><span class="n">keys</span>
+    <span class="nb">filter</span> <span class="o">=</span> <span class="n">_binding</span><span class="o">.</span><span class="n">filter</span>
+    <span class="n">handler</span> <span class="o">=</span> <span class="n">_binding</span><span class="o">.</span><span class="n">handler</span>
+    <span class="n">registry</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="nb">filter</span><span class="p">)(</span><span class="n">handler</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">registry</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+    <span class="c1"># Let&#39;s side step all those fuckups</span>
+    <span class="c1"># This is probably a terrible thing to rely on, and not a guaranteed order but....</span>
+    <span class="k">if</span> <span class="n">_ip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># if _ip.editing_mode == &quot;vi&quot;:</span>
+        <span class="c1">#     vi_bindings = basic_bindings.registries[0]</span>
+        <span class="c1">#     vi_mouse = basic_bindings.registries[1]</span>
+        <span class="c1">#     vi_cpr = basic_bindings.registries[2]</span>
+        <span class="n">full_registry</span> <span class="o">=</span> <span class="n">kb_main</span><span class="p">(</span><span class="n">_ip</span><span class="p">)</span>
+        <span class="n">container_kb</span> <span class="o">=</span> <span class="n">KeyBindingsManager</span><span class="p">(</span><span class="n">shell</span><span class="o">=</span><span class="n">_ip</span><span class="p">,</span> <span class="n">kb</span><span class="o">=</span><span class="n">full_registry</span><span class="o">.</span><span class="n">bindings</span><span class="p">)</span>
+
+        <span class="c1"># no really dont use it.got rid of the &lt;CR&gt; handler</span>
+        <span class="c1"># _ip.pt_app.app.key_bindings = full_registry</span>
+</pre></div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+      Last updated on Jan 31, 2020.
+    </div>
+  </body>
+</html>
