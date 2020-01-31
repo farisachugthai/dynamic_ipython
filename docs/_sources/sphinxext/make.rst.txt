@@ -2,13 +2,12 @@
 Make --- Automated Documentation Builder
 ========================================
 
-Usage
-------
+.. currentmodule:: default_profile.sphinxext.make
 
 While still being actively worked on, the ideal usage would begin with the user
 in the `<../docs>`_ directory of the repository and running.:
 
-.. code-block:: shell-session
+.. code-block:: bash
 
     python3 sphinx_extensions/make html
 
@@ -23,24 +22,13 @@ Moving output files
 >>> import subprocess
 >>> BUILD_DIR = pjoin('build', 'html')
 >>> if shutil.which('rsync'):
-    >>> subprocess.run(['rsync', '-hv8r', BUILD_DIR, '.'])
+>>>     subprocess.run(['rsync', '-hv8r', BUILD_DIR, '.'])
 
 You could even add one of the *delete on destination* options that rsync has.
 
 One of them specifies to delete anything at the destination not in source.
 Obviously be careful beforehand but that could be a really simple way to
 automatically keep the documentation fresh.
-
-Todo
------
-Incorporate this in.
-
->>> from sphinx.application import Sphinx
->>> srcdir=confdir='source'
->>> doctreedir='build/.doctrees'
->>> outdir='build/html'
->>> app = Sphinx(buildername='html', srcdir=srcdir, outdir=outdir, doctreedir=doctreedir, confdir=confdir)
-
 
 See Also
 --------
@@ -52,16 +40,6 @@ See Also
       The pure python replacement for a ``Makefile``.
    sphinx.util.osutil
       OS utilities.
-
-
-Notes
------
-Wait why don't we just do something like:
-
->>> import sphinx
->>> from sphinx.cmd.build import make
-
-Or whatever it's called and run that? It'd be way easier...
 
 
 API

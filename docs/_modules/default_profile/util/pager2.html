@@ -165,9 +165,6 @@
 <span class="kn">from</span> <span class="nn">IPython.core.magics.namespace</span> <span class="kn">import</span> <span class="n">NamespaceMagics</span>
 <span class="kn">from</span> <span class="nn">IPython.core.page</span> <span class="kn">import</span> <span class="n">pager_page</span>
 
-<span class="c1"># from IPython.core.magics import</span>
-<span class="c1"># Might need some of the funcs from IPython.utils.{PyColorize,coloransi,colorable}</span>
-
 
 <div class="viewcode-block" id="NotInIPythonError"><a class="viewcode-back" href="../../../util/pager2.html#default_profile.util.pager2.NotInIPythonError">[docs]</a><span class="k">class</span> <span class="nc">NotInIPythonError</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Error raised when a magic is invoked outside of IPython.&quot;&quot;&quot;</span>
@@ -193,8 +190,8 @@
 <span class="sd">            Whether to print to the shell or pipe to a pager.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">text</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">use_pager</span> <span class="o">=</span> <span class="n">use_pager</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_pager</span> <span class="o">=</span> <span class="n">use_pager</span></div>
+        <span class="c1"># self.call(*args)</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
@@ -206,7 +203,7 @@
         <span class="k">return</span> <span class="n">pydoc</span><span class="o">.</span><span class="n">tempfilepager</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_pager</span><span class="p">)</span>
 
 <div class="viewcode-block" id="PyPager.call"><a class="viewcode-back" href="../../../util/pager2.html#default_profile.util.pager2.PyPager.call">[docs]</a>    <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">use_pager</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">use_pager</span><span class="o">=</span><span class="n">use_pager</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__call__</span><span class="p">()</span></div></div>
 
 
 <div class="viewcode-block" id="blocking_pager"><a class="viewcode-back" href="../../../util/pager2.html#default_profile.util.pager2.blocking_pager">[docs]</a><span class="k">def</span> <span class="nf">blocking_pager</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
@@ -234,8 +231,9 @@
     <span class="sd">&quot;&quot;&quot;Call ipython to make sure we&#39;re really in it.&quot;&quot;&quot;</span>
     <span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">shell</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">NotInIPythonError</span></div>
-    <span class="c1"># (&#39;Not in IPython.&#39;)</span>
+        <span class="k">raise</span> <span class="n">NotInIPythonError</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
 
 
 <div class="viewcode-block" id="provided_or_last"><a class="viewcode-back" href="../../../util/pager2.html#default_profile.util.pager2.provided_or_last">[docs]</a><span class="k">def</span> <span class="nf">provided_or_last</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -258,9 +256,15 @@
 <span class="sd">    stores a :attr:`last_execution_result` or maybe a</span>
 <span class="sd">    :attr:`last_execution_succeeded`.</span>
 
+<span class="sd">    Well the classes that they made for the last_execution_result and info</span>
+<span class="sd">    are odd to say the least.</span>
+
+<span class="sd">    Also we should consider using something else to find user code.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">shell</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">shell</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span>
     <span class="k">if</span> <span class="n">s</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">code_to_page</span> <span class="o">=</span> <span class="n">shell</span><span class="o">.</span><span class="n">find_user_code</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">skip_encoding_cookie</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
@@ -300,11 +304,6 @@
         <span class="k">raise</span> <span class="n">UsageError</span><span class="p">(</span><span class="s2">&quot;ya dun goofed&quot;</span><span class="p">)</span></div>
 
 
-<span class="c1"># def superhelper(x):</span>
-<span class="c1">#     &quot;&quot;&quot;Stolen from xonsh. And wow this is a weird module.&quot;&quot;&quot;</span>
-<span class="c1">#     inspector.pinfo(x, =)</span>
-
-
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">register_magic_function</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
     <span class="n">inspector</span> <span class="o">=</span> <span class="n">IPython</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">oinspect</span><span class="o">.</span><span class="n">Inspector</span><span class="p">()</span>
@@ -317,7 +316,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Jan 21, 2020.
+      Last updated on Jan 31, 2020.
     </div>
   </body>
 </html>

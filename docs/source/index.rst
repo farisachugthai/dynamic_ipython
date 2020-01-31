@@ -149,12 +149,10 @@ Table of Contents
    :titlesonly:
    :caption: API
 
-   Sphinx Extensions <sphinxext/index>
    IPython Startup <startup/index>
    IPython Utilities </util/index>
    extensions
-   todo
-   Tailor-made profiles <default_profile>
+   Sphinx Extensions <sphinxext/index>
    Developers Notes <dev>
 
 

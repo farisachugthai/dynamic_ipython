@@ -207,8 +207,7 @@
 <div class="viewcode-block" id="get_exec_dir"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.get_exec_dir">[docs]</a><span class="k">def</span> <span class="nf">get_exec_dir</span><span class="p">():</span>
     <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">_ip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">profiledir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">_ip</span><span class="o">.</span><span class="n">profile_dir</span><span class="p">)</span>
-        <span class="n">exec_dir</span> <span class="o">=</span> <span class="n">profiledir</span> <span class="o">/</span> <span class="s2">&quot;startup&quot;</span>
+        <span class="n">exec_dir</span> <span class="o">=</span> <span class="n">_ip</span><span class="o">.</span><span class="n">profile_dir</span><span class="o">.</span><span class="n">startup_dir</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">exec_dir</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span></div>
 
@@ -254,6 +253,11 @@
     <span class="k">return</span> <span class="n">ret</span></div>
 
 
+<div class="viewcode-block" id="execfile"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.execfile">[docs]</a><span class="k">def</span> <span class="nf">execfile</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">global_namespace</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">local_namespace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Python3 doesn&#39;t have this but it&#39;d be nice to have a utility to exec a file at once.&quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">exec</span><span class="p">(</span><span class="nb">compile</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;exec&#39;</span><span class="p">),</span> <span class="n">global_namespace</span><span class="p">,</span> <span class="n">local_namespace</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="ExceptionHook"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.ExceptionHook">[docs]</a><span class="k">class</span> <span class="nc">ExceptionHook</span><span class="p">(</span><span class="n">Configurable</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Custom exception hook for IPython.&quot;&quot;&quot;</span>
 
@@ -294,9 +298,7 @@
 
     <span class="k">if</span> <span class="n">_ip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">rehashx_run</span><span class="p">()</span>
-        <span class="n">handled</span> <span class="o">=</span> <span class="n">cgitb</span><span class="o">.</span><span class="n">Hook</span><span class="p">(</span>
-            <span class="n">logdir</span><span class="o">=</span><span class="n">_ip</span><span class="o">.</span><span class="n">profile_dir</span><span class="o">.</span><span class="n">log_dir</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;text&quot;</span>
-        <span class="p">)</span>
+        <span class="n">handled</span> <span class="o">=</span> <span class="n">cgitb</span><span class="o">.</span><span class="n">Hook</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="p">)</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">excepthook</span> <span class="o">=</span> <span class="n">handled</span>
         <span class="n">_ip</span><span class="o">.</span><span class="n">excepthook</span> <span class="o">=</span> <span class="n">handled</span>
 </pre></div>
@@ -306,7 +308,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Jan 21, 2020.
+      Last updated on Jan 31, 2020.
     </div>
   </body>
 </html>

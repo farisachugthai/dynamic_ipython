@@ -1,6 +1,8 @@
-===========
+:orphan:
+
+=====
 Todo
-===========
+=====
 
 .. module:: todo
    :synopsis: List of improvements

@@ -57,7 +57,7 @@ These are the auto-generated API docs for IPython's startup.
    aliases
    fzf
    setup_readline
-   completions
+   prompt_toolkit
    41_numpy
-   matplotlib_rc
+   eventloops
 

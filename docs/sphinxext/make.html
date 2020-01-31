@@ -20,7 +20,7 @@
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/sphinxext/make.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="IPython Startup" href="../startup/index.html" />
+    <link rel="next" title="Developer’s Notes" href="../dev.html" />
     <link rel="prev" title="magics" href="magics.html" />
 <!-- <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" /> -->
 <!-- <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" media="screen" rel="stylesheet" type="text/css" /> -->
@@ -147,18 +147,15 @@
       <div class="relnav" role="navigation" aria-label="related navigation">
         <a href="magics.html">&laquo; <code class="xref py py-mod docutils literal notranslate"><span class="pre">magics</span></code></a> |
         <a href="#">Make — Automated Documentation Builder</a>
-        | <a href="../startup/index.html">IPython Startup &raquo;</a>
+        | <a href="../dev.html">Developer’s Notes &raquo;</a>
       </div>
       <div id="contentwrapper">
         <div id="toc" role="navigation" aria-label="table of contents navigation">
           <h3>Table of Contents</h3>
           <ul>
 <li><a class="reference internal" href="#">Make — Automated Documentation Builder</a><ul>
-<li><a class="reference internal" href="#usage">Usage</a></li>
 <li><a class="reference internal" href="#moving-output-files">Moving output files</a></li>
-<li><a class="reference internal" href="#todo">Todo</a></li>
-<li><a class="reference internal" href="#see-also">See Also</a></li>
-<li><a class="reference internal" href="#notes">Notes</a><ul>
+<li><a class="reference internal" href="#see-also">See Also</a><ul>
 <li><a class="reference internal" href="#module-default_profile.sphinxext.make">API</a></li>
 </ul>
 </li>
@@ -171,16 +168,13 @@
         
 <div class="section" id="make-automated-documentation-builder">
 <h1>Make — Automated Documentation Builder<a class="headerlink" href="#make-automated-documentation-builder" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <p>While still being actively worked on, the ideal usage would begin with the user
 in the <a class="reference external" href="../docs">../docs</a> directory of the repository and running.:</p>
-<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="go">python3 sphinx_extensions/make html</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3 sphinx_extensions/make html
 </pre></div>
 </div>
 <p>Where <em>html</em> can be replaced with one of <em>html</em>, <em>singlehtml</em>, <em>doctest</em> or
 <em>linkcheck</em>. Not all <strong class="command">sphinx-build</strong> options are currently supported.</p>
-</div>
 <div class="section" id="moving-output-files">
 <h2>Moving output files<a class="headerlink" href="#moving-output-files" title="Permalink to this headline">¶</a></h2>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">shutil</span>
@@ -188,24 +182,13 @@ in the <a class="reference external" href="../docs">../docs</a> directory of the
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">subprocess</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">BUILD_DIR</span> <span class="o">=</span> <span class="n">pjoin</span><span class="p">(</span><span class="s1">&#39;build&#39;</span><span class="p">,</span> <span class="s1">&#39;html&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s1">&#39;rsync&#39;</span><span class="p">):</span>
-<span class="go">    &gt;&gt;&gt; subprocess.run([&#39;rsync&#39;, &#39;-hv8r&#39;, BUILD_DIR, &#39;.&#39;])</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="s1">&#39;rsync&#39;</span><span class="p">,</span> <span class="s1">&#39;-hv8r&#39;</span><span class="p">,</span> <span class="n">BUILD_DIR</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>You could even add one of the <em>delete on destination</em> options that rsync has.</p>
 <p>One of them specifies to delete anything at the destination not in source.
 Obviously be careful beforehand but that could be a really simple way to
 automatically keep the documentation fresh.</p>
-</div>
-<div class="section" id="todo">
-<h2>Todo<a class="headerlink" href="#todo" title="Permalink to this headline">¶</a></h2>
-<p>Incorporate this in.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sphinx.application</span> <span class="kn">import</span> <span class="n">Sphinx</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">srcdir</span><span class="o">=</span><span class="n">confdir</span><span class="o">=</span><span class="s1">&#39;source&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">doctreedir</span><span class="o">=</span><span class="s1">&#39;build/.doctrees&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">outdir</span><span class="o">=</span><span class="s1">&#39;build/html&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">app</span> <span class="o">=</span> <span class="n">Sphinx</span><span class="p">(</span><span class="n">buildername</span><span class="o">=</span><span class="s1">&#39;html&#39;</span><span class="p">,</span> <span class="n">srcdir</span><span class="o">=</span><span class="n">srcdir</span><span class="p">,</span> <span class="n">outdir</span><span class="o">=</span><span class="n">outdir</span><span class="p">,</span> <span class="n">doctreedir</span><span class="o">=</span><span class="n">doctreedir</span><span class="p">,</span> <span class="n">confdir</span><span class="o">=</span><span class="n">confdir</span><span class="p">)</span>
-</pre></div>
-</div>
 </div>
 <div class="section" id="see-also">
 <h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
@@ -220,15 +203,6 @@ automatically keep the documentation fresh.</p>
 </dd>
 </dl>
 </div>
-</div>
-<div class="section" id="notes">
-<h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
-<p>Wait why don’t we just do something like:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sphinx</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sphinx.cmd.build</span> <span class="kn">import</span> <span class="n">make</span>
-</pre></div>
-</div>
-<p>Or whatever it’s called and run that? It’d be way easier…</p>
 <div class="section" id="module-default_profile.sphinxext.make">
 <span id="api"></span><h3>API<a class="headerlink" href="#module-default_profile.sphinxext.make" title="Permalink to this headline">¶</a></h3>
 </div>
@@ -241,7 +215,7 @@ automatically keep the documentation fresh.</p>
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Jan 21, 2020.
+      Last updated on Jan 31, 2020.
     </div>
   </body>
 </html>

@@ -26,7 +26,6 @@ file as the older ones.
 ---------------------------------------------
 
 .. automodule:: default_profile.startup.05_log
-   :synopsis: Are we allowed to do this.
    :members:
    :undoc-members:
    :show-inheritance:
