@@ -13,7 +13,7 @@ except:
 # useful alias to tack on!
 
 # Print instance variables (usage "pi classInst")
-alias pi {i:j for i,j in %1.__dict__.items()}
+alias pi {i:j for i,j in sorted(%1.__dict__.items(), key=lambda i: i[0])}
 alias pr pp pi %1
 # alias pi for k in %1.__dict__.keys(): print("%1.", k, "=", %1.__dict__[k])  # noqa
 # Print instance variables in self
@@ -33,7 +33,8 @@ alias pd pp {k: v for k, v in sorted(dict(%*).items(), key=lambda i: i[0])}
 # Print the member variables of a thing.
 # alias pi pd %*.__dict__
 
-alias pii pd dict(inspect.getmembers(%1))
+# invalid syntax?
+# alias pii pd dict(inspect.getmembers(%1))
 
 # Print the member variables of self.
 alias ps pi self
@@ -49,7 +50,7 @@ alias sl s;;l
 
 # Oh i want up and down too
 alias ul u;;l
-alias dl u;;l
+alias dl d;;l
 alias ull u;;ll
 alias dll d;;ll
 
