@@ -4,11 +4,23 @@
 import logging
 import os
 import shutil
+import subprocess
 import traceback
 
 from IPython.core.alias import InvalidAliasError
 from IPython.core.getipython import get_ipython
 from traitlets.config.application import ApplicationError
+
+try:
+    from git import Git
+except:
+    Git = None
+else:
+    from git import Repo
+
+
+def git_cur_branch():
+    return subprocess.run(["git", "rev-parse", "--abbrev-ref", "HEAD"])
 
 
 class CommonAliases:

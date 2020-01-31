@@ -7,15 +7,16 @@ Trying to rework this over in ../extensions/namespaces.py
 Also worth noting the aliasmanager rewrite in ./22_alias_manager.py
 
 """
-from contextlib import ContextDecorator
 import functools
 import os
-import shutil
 import shlex
+import shutil
 import subprocess
-from subprocess import Popen, CompletedProcess, CalledProcessError, PIPE, DEVNULL
 import sys
 import types
+from contextlib import ContextDecorator
+from subprocess import (DEVNULL, PIPE, CalledProcessError, CompletedProcess,
+                        Popen)
 from typing import get_type_hints  # what is this?
 
 from IPython.core.getipython import get_ipython
@@ -190,7 +191,8 @@ def main():
 
         fzf_aliases = FZF._setup_fzf()
         shell.alias_manager.define_alias("fzf", "fzf-tmux")
-        os.environ.setdefault("FZF_DEFAULT_COMMAND", fzf_aliases.default_cmds)
+        # default_command = fzf_aliases.default_cmds
+        # os.environ.setdefault("FZF_DEFAULT_COMMAND", default_command)
 
 
 if __name__ == "__main__":

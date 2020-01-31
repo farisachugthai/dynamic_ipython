@@ -437,4 +437,3 @@ def load_xonsh_bindings(key_bindings):
 
 if __name__ == "__main__":
     pt = Helpers()
-

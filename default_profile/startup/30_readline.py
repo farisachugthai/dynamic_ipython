@@ -50,17 +50,11 @@ from IPython.core.getipython import get_ipython
 from default_profile.util.module_log import betterConfig
 
 
-def readline_logging():
-    """TODO: Fallback in case IPYTHONDIR isn't set"""
-    if os.environ.get("IPYTHONDIR"):
-        LOG_FILENAME = os.path.join(os.environ.get("IPYTHONDIR"), "completer.log")
-        logging.basicConfig(
-            format="%(message)s", filename=LOG_FILENAME, level=logging.DEBUG,
-        )
-        return betterConfig(parent="default_profile.startup", name=__name__)
-
-
-rl_logger = readline_logging()
+if os.environ.get("IPYTHONDIR"):
+    LOG_FILENAME = os.path.join(os.environ.get("IPYTHONDIR"), "completer.log")
+    logging.basicConfig(
+        format="%(message)s", filename=LOG_FILENAME, level=logging.DEBUG,
+    )
 
 
 def bind_readline_keys():
@@ -149,7 +143,7 @@ def return_readline():
         try:
             import pyreadline as readline
         except (ImportError, ModuleNotFoundError):
-            rl_logger.warning("Readline not imported.")
+            logging.warning("Readline not imported.")
             raise
         else:
             from pyreadline.rlmain import Readline
