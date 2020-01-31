@@ -125,6 +125,11 @@ try:
 except (ImportError, ModuleNotFoundError):
     pass
 
+try:
+    import __about__
+except:
+    pass
+
 
 # More logging stuff
 

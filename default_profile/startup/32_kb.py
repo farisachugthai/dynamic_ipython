@@ -3,10 +3,10 @@
 
 Reminder of where you left off:
 
-    Bottom toolbar works but isn't bound to a key idk why it isn't working.
-    The seemingly recommended interface is to merge with merge_key_bindings
-    Difficult to add key_bindings after the merge though.
-    Mostly everything's behaving as it should however.
+Bottom toolbar works but isn't bound to a key idk why it isn't working.
+The seemingly recommended interface is to merge with merge_key_bindings
+Difficult to add key_bindings after the merge though.
+Mostly everything's behaving as it should however.
 
 I'm just gonna note how much this bugs me though.::
 

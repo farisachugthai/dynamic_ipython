@@ -99,6 +99,8 @@ class TerminallyUnimpaired(TerminalInteractiveShell):
         sys.last_type = exception_type
         sys.last_value = value
         sys.last_traceback = tb
+        if tb is None:
+            return
         if filename and exception_type is SyntaxError:
             # Work hard to stuff the correct filename in the exception
             try:
@@ -110,8 +112,9 @@ class TerminallyUnimpaired(TerminalInteractiveShell):
                 # Stuff in the right filename
                 value = SyntaxError(msg, (filename, lineno, offset, line))
                 sys.last_value = value
-        _ = traceback.format_exception_only(exception_type, value)
-        sys.stderr.write("".join(_))
+        formatted = traceback.format_exception_only(exception_type, value)
+        sys.stderr.write("".join(formatted))
+        return formatted
 
     def showtraceback(self, *args, **kwargs):
         """Display the exception that just occurred."""
@@ -162,9 +165,10 @@ class Terminally(TerminalInteractiveShell):
         """
         super().__init__(*args, **kwargs)
         self.config = config or self._create_config()
-        self.Completer = self.create_completer()
+        self.create_completer()
 
     def __call__(self):
+        # or run_code might be of interest.
         super().prompt_for_code()
 
     @staticmethod
@@ -177,17 +181,16 @@ class Terminally(TerminalInteractiveShell):
 
     def create_kb(self):
         # TODO
-        raise NotImplementedError
+        self.kb = load_key_bindings()
 
     def create_lexer(self):
         # TODO
         raise NotImplementedError
 
-    @staticmethod
-    def create_completer():
+    def create_completer(self):
         import rlcompleter
 
-        return rlcompleter.Completer
+        self.Completer = rlcompleter.Completer
 
     def _extra_prompt_options(self, **kwargs):
         """Override the superclasses method because this feels like a solid spot to inject some configurability."""
@@ -235,10 +238,13 @@ if __name__ == "__main__":
         # catch but f it
         sys.exit()
 
-    logging.info('Config was %s', config)
+    logging.debug('Config was %s', config)
 
+    cgitb.enable()
+    faulthandler.enable()
+    trace.Trace()
     try:
-        unimpaired = TerminallyUnimpaired()
+        unimpaired = Terminally()
     except Exception as e:  # noqa
         logging.exception(e)
         shell = None

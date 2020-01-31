@@ -2,30 +2,6 @@
 # -*- coding: utf-8 -*-
 """Create an installable package for this repository.
 
-Setuptools + Setup
-==================
-
-The file in which we make this project:
-
-#) Installable from pypi
-#) An official python package
-#) Able to import modules from one folder above itself....
-
-``bdist_conda``
-----------------
-
-Now let's add support for ``python setup.py bdist_conda``.
-
-Ran that command with a :kbd:`-h` flag and got these 2 relevant options.
-
-  --buildnum          The build number of the conda package. Defaults to
-                      0, or the ``conda_buildnum`` specified in the `setup`
-                      function. The command line flag overrides the option to
-                      `setup`.
-  --anaconda-upload   Upload the finished package to anaconda.org
-
-
-
 See Also
 --------
 .. seealso::
@@ -51,16 +27,12 @@ import os
 from pathlib import Path
 from runpy import run_path, run_module
 from shutil import rmtree
-
-# Why does Coc keep complaining about resolving the import sys???
 import sys
 
 logging.basicConfig()
 
 from setuptools import setup, find_packages, Command, Extension
 
-# how are we allowed to do this you can't force a dependency before installation
-# from default_profile import __about__.__version__
 # Conda Support: {{{1
 
 try:
@@ -102,33 +74,20 @@ with codecs.open(README, encoding="utf-8") as f:
 # TODO: How to do conditionals? Only windows needs pyreadline
 REQUIRED = [
     "IPython>=7.10",
-    "prompt_toolkit",
-    "traitlets>=4.3",
-    "pygments",
-    "jedi>=0.15",
-    "sphinx",
 ]
 
 EXTRAS = {
     "develop": [
         "pipenv",
-        "flake8>=3.7.1",
-        "yapf>=0.27.0",
-        "numpy",
         "pandas",
         "matplotlib",
     ],
     "docs": [
         "sphinx>=2.2",
-        # Project uses reStructuredText, so ensure that the docutils get
-        # installed or upgraded on the target machine
-        "docutils>=0.3",
         "matplotlib>=3.0.0",
         "numpydoc>=0.9",
-        "flake8-rst",
-        "flake8-docstrings",
     ],
-    "test": ["pytest", "tox", "nose", "testpath",],
+    "test": ["pytest", "testpath",],
 }
 
 # }}}}
@@ -229,6 +188,7 @@ setup(
         "Programming Language :: Python :: 3 :: Only",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: Implementation :: CPython",
     ],
     # $ setup.py publish support.
@@ -240,6 +200,6 @@ setup(
         "Source Code": "https://www.github.com/farisachugthai/dynamic_ipython",
     }
     # could also include long_description, download_url, classifiers, etc.
-)
+)  # }}}
 
 # Vim: set fdm=marker:

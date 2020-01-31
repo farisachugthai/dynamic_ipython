@@ -1,12 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-==========
-Numpy Init
-==========
+"""Set printing options.
 
-.. ipython::
-   :verbatim:
+These options determine the way floating point numbers, arrays and
+other NumPy objects are displayed.::
 
    numpy.set_printoptions = set_printoptions(
        precision=None, threshold=None, edgeitems=None, linewidth=None,
@@ -14,10 +11,6 @@ Numpy Init
        floatmode=None, ``**kwarg``
    )
 
-Set printing options.
-
-These options determine the way floating point numbers, arrays and
-other NumPy objects are displayed.
 
 Parameters
 ----------

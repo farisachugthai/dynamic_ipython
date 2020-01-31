@@ -1,6 +1,25 @@
+"""Build our lexer in addition to utilizing already built ones.
+
+Pygments, IPython, prompt_toolkit, Jinja2 and Sphinx all come
+with their own concepts of lexers which doesn't include
+the built-in modules.:
+
+- :mod:`parser`
+
+- :mod:`token`
+
+- :mod:`tokenizer`
+
+- :mod:`re`
+
+- :mod:`ast`
+
+"""
 from traitlets.config import LoggingConfigurable
 from traitlets.traitlets import Instance
 from pygments.lexer import Lexer
+from pygments.lexers.python import  PythonLexer
+from pygments.formatters.terminal256 import TerminalTrueColorFormatter
 
 from prompt_toolkit.lexers.pygments import PygmentsLexer
 
@@ -36,6 +55,7 @@ class IPythonConfigurableLexer(LoggingConfigurable):
             recommended to disable this for inputs that are expected to be more
             than 1,000 lines.
         :param syntax_sync: `SyntaxSync` object.
+
     """
 
     shell = Instance(InteractiveShellABC, allow_none=True)
@@ -66,12 +86,47 @@ class IPythonConfigurableLexer(LoggingConfigurable):
     def __init__(self, shell=None, original_lexer=None, **kwargs):
         super().__init__(**kwargs)
         self.shell = shell
+        if self.shell is None:
+            self.shell = get_ipython()
+
         if self.shell is not None:
             self.original_lexer = self.shell.pt_app.lexer
         else:
             self.original_lexer = None
 
 
+class Colorizer:
+    """Make pygments.highlight even easier to work with.
+
+    Additionally utilize ``__slots__`` to conserve memory.
+
+    .. todo:: Do dunders go in slots?
+
+    """
+
+    __slots__ = {
+            'pylexer': PythonLexer.__doc__,
+            'formatter': TerminalTrueColorFormatter.__doc__,
+            # 'highlight': pygments.highlight.__doc__
+            }
+
+    def __init__(self, pylexer=None, formatter=None):
+        if pylexer is None:
+            self.pylexer = PythonLexer()
+        if formatter is None:
+            self.formatter = TerminalTrueColorFormatter()
+
+    def __call__(self, code):
+        return self.highlight(code)
+
+    def highlight(self, code):
+        return pygments.highlight(code, self.pylexer, self.formatter)
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}"
+
+
 if __name__ == "__main__":
     lexer = IPythonConfigurableLexer()
     # TODO: isn't there a method like _ip.add_trait or something?
+

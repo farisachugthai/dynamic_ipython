@@ -147,8 +147,6 @@ if __name__ == "__main__":
 
     if _ip is not None:
         rehashx_run()
-        handled = cgitb.Hook(
-            logdir=_ip.profile_dir.log_dir, file=sys.stdout, format="text"
-        )
+        handled = cgitb.Hook(file=sys.stdout, format="text")
         sys.excepthook = handled
         _ip.excepthook = handled

@@ -1,7 +1,10 @@
 import abc
 import keyword
 import re
-from typing import Callable, Dict, Iterable, List, NamedTuple, Optional, Tuple, Union
+import runpy
+from typing import Iterable, TYPE_CHECKING
+
+from jedi.api import replstartup
 
 from IPython.core.getipython import get_ipython
 
@@ -121,19 +124,26 @@ def get_word_completer():
     )
 
 
+def will_break_pt_app():
+    # ergh
+    merged_completers = merge_completers(
+        [
+            get_ipython().pt_app.completer,
+            SimpleCompletions(),
+            get_path_completer(),
+            get_fuzzy_keyword_completer(),
+            get_word_completer(),
+        ]
+    )
+    get_ipython().pt_app.completer = merged_completers
+
+
 if __name__ == "__main__":
     if get_ipython() is not None:
-        # XXX:
-        # merged_completers = merge_completers(
-        #     [
-        #         SimpleCompletions(),
-        #         get_path_completer(),
-        #         get_fuzzy_keyword_completer(),
-        #         get_word_completer(),
-        #     ]
-        # )
-        # threaded = ThreadedCompleter(merged_completers)
+        threaded = ThreadedCompleter(get_word_completer)
         get_ipython().set_custom_completer(get_path_completer())
-
-        # Jesus Christ. This was so easy to implement that why not just mix it in with another file.
+        get_ipython().set_custom_completer(get_fuzzy_keyword_completer)
         get_ipython().pt_app.auto_suggest = AutoSuggestFromHistory()
+
+        import jedi
+        jedi_settings = runpy.run_module('jedi.settings')

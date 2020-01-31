@@ -31,12 +31,12 @@ from IPython.core.getipython import get_ipython
 
 DEDENT_TOKENS = frozenset(["raise", "return", "pass", "break", "continue"])
 
-
 class Helpers:
     """I think this class is probably the easiest summary of my frustration."""
 
     def __init__(self):
         self.shell = get_ipython()
+        self.app()
 
     @property
     def is_running(self):
@@ -45,9 +45,8 @@ class Helpers:
     def __repr__(self):
         return f"{self.pt_app}"
 
-    @staticmethod
-    def app():
-        return get_app()
+    def app(self):
+        self._app = get_app()
 
     @property
     def pt_app(self):
@@ -104,6 +103,9 @@ class Helpers:
     @property
     def session_style(self):
         return self.session.style
+
+    def buf(self):
+        return self.layout.current_buffer
 
 
 @Condition
@@ -437,3 +439,8 @@ def load_xonsh_bindings(key_bindings):
 
 if __name__ == "__main__":
     pt = Helpers()
+    # unrelated but heres something sweet
+
+    ip = get_ipython()
+    ip.pt_app.app.output.enable_bracketed_paste()
+

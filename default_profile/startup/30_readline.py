@@ -181,7 +181,7 @@ def teardown_historyfile(histfile=None):
     if not Path(histfile).exists():
         Path(histfile).expanduser().touch()
     try:
-        atexit.register(readline.write_history_file, histfile)
+        readline.write_history_file(histfile)
     except OSError:
         logging.error(
             "History not saved. There were problems saving to ~/.python_history"
