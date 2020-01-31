@@ -29,10 +29,13 @@ That's pretty neat! I feel like I was trying to set something like that up
 with the sphinx build so it's cool to see it in this context.
 
 """
+import re
 import sys
 import warnings
 
-from IPython.core.get import get_ipython
+from IPython.core.getipython import get_ipython
+
+import pytest
 
 
 COLORS = {

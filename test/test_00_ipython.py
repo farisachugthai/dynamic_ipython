@@ -18,34 +18,6 @@ def remove_tmpdir(dirname):
     shutil.rmtree(dirname)
 
 
-class TestIPython(unittest.TestCase):
-    """For debugging the test suite.
-
-    Who knew overriding the :class:`unittest.TestCase()` ``__init__`` method would be
-    such a hassle?
-    """
-
-    shell = get_ipython()
-
-    def test_ipython(self):
-        """Produces unexpected results. TODO."""
-        # print(type(self.shell))
-        # self.assertIsInstance(self.shell, IPython.core.interactiveshell.InteractiveShell)
-        self.assertIsInstance(self.shell, str)
-
-    def runTest(self):
-        """runTest function for:
-
-        :mod:`test_00_ipython`
-        :class:`TestIPython()`
-        :func:`runTest`
-
-        As a result, the only use of this function will be to call the necessary
-        methods.
-        """
-        return self.test_ipython()
-
-
 ######################################################################
 # 9. Example Usage
 ######################################################################
