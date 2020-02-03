@@ -1,36 +1,33 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Let's try setting up readline.
+"""Module where readline is properly configured before prompt_toolkit is loaded.
 
-Reimplementing Readline
-========================
+Summary
+-------
 
-Unsure of how pronounced the effect is going to be since IPython has
-prompt_toolkit for most readline features and basic movement bindings
-seem to work just fine.
+Readline is implemented in the repository for a few reasons.
 
-Ooo also I want to reimplement jedi as the completer because IPython's is
-confusingly slow.
+#) It's ubiquity in open source programming
 
+#) In addition, it's utilized here to compensate for the weaknesses of other
+   implementations.
 
-IPython Custom Completers
--------------------------
+   #) IPython's auto-completion is entirely unconfigurable and exceedingly slow
 
-.. ipython::
-   :verbatim:
+      #) Frequently auto-completion will time out rather than serving a response
 
-    In [69]: _ip.set_custom_completer?
-    Signature: _ip.set_custom_completer(completer, pos=0)
-    Docstring:
-    Adds a new custom completer function.
+   #) `prompt_toolkit` has a rather rigid interface for it's API. There are
+      assert's all over the code base ensuring that the proper type is passed
+      to a class constructer, in spite of the Python's dynamically typed
+      foundation.
 
-    The position argument (defaults to 0) is the index in the completers
-    list where you want the completer to be inserted.
+Extended Summary
+----------------
 
+.. did you know that this is a numpydoc header? lol
 
-.. todo:: Shoot all of these functions depend on readline existing so nothing
-          can be imported. They should be methods in a class so that we
-          know that we have that state pre-established right?
+This module assumes
+
 
 """
 import atexit
@@ -40,37 +37,17 @@ from pathlib import Path
 import platform
 import rlcompleter
 from rlcompleter import Completer
-try:
-    import readline
-except ImportError:
-    pass
+import traceback
 
 from IPython.core.getipython import get_ipython
-
-from default_profile.util.module_log import betterConfig
-
 
 if os.environ.get("IPYTHONDIR"):
     LOG_FILENAME = os.path.join(os.environ.get("IPYTHONDIR"), "completer.log")
     logging.basicConfig(
         format="%(message)s", filename=LOG_FILENAME, level=logging.DEBUG,
     )
-
-
-def bind_readline_keys():
-    readline.parse_and_bind("tab: complete")
-    readline.parse_and_bind('"\\e[B": history-search-forward')
-    readline.parse_and_bind('"\\e[A": history-search-backward')
-
-
-def read_inputrc():
-    """Check for an inputrc file."""
-    if os.environ.get("INPUTRC"):
-        readline.read_inputrc_file(os.environ.get("INPUTRC"))
-    elif Path("~/pyreadlineconfig.ini").is_file():
-        readline.read_inputrc_file(str(Path("~/pyreadlineconfig.ini")))
-    elif Path("~/.inputrc").is_file():
-        readline.read_inputrc_file(os.expanduser("~/.inputrc"))
+else:
+    logging.basicConfig(format="%(message)s", level=logging.DEBUG)
 
 
 class SimpleCompleter:
@@ -121,13 +98,18 @@ class SimpleCompleter:
 
 
 def input_loop():
-    """
-    todo:
+    """Simulate a runnnig loop with a call to `input`.
 
-        # Register the completer function
-        # OPTIONS = ['start', 'stop', 'list', 'print']
-        # readline.set_completer(SimpleCompleter(OPTIONS).complete)
-        # TODO: Check what the API is to add a completer to ipython. _ip.add_completer?
+    .. todo::
+
+        Register the completer function.::
+
+            OPTIONS = ['start', 'stop', 'list', 'print']
+            readline.set_completer(SimpleCompleter(OPTIONS).complete)
+
+        Check what the API is to add a completer to ipython.
+        I think it's |ip|\`.set_custom_completer`.
+
     """
     line = ""
     while line != "stop":
@@ -135,7 +117,87 @@ def input_loop():
         print("Dispatch {}".format(line))
 
 
-def return_readline():
+# Readline Config
+
+
+def readline_config(history_file=None):
+    """The main point of execution for the readline module.
+
+    This sets up history where the history file is saved to and calls
+    `atexit` with the `setup_historyfile` and `teardown_historyfile` functions
+    as parameters.
+
+    Parameters
+    ----------
+    history_file : str, path or `os.Pathlike`
+        Where to save the history
+
+    """
+    histfile = "~/.python_history"
+    readline.parse_and_bind("tab: complete")
+    readline.parse_and_bind('"\\e[B": history-search-forward')
+    readline.parse_and_bind('"\\e[A": history-search-backward')
+
+    setup_historyfile(histfile)
+    atexit.register(teardown_historyfile, histfile)
+
+    # Check for an inputrc file.
+    if os.environ.get("INPUTRC"):
+        readline.read_inputrc_file(os.environ.get("INPUTRC"))
+    elif Path("~/pyreadlineconfig.ini").is_file():
+        readline.read_inputrc_file(str(Path("~/pyreadlineconfig.ini")))
+    elif Path("~/.inputrc").is_file():
+        readline.read_inputrc_file(os.expanduser("~/.inputrc"))
+    readline.set_completer_delims(" \t\n`@#$%^&*()=+[{]}\\|;:'\",<>?")
+    readline.set_completer(Completer().complete)
+
+    readline.read_init_file()
+
+
+# History
+
+
+def setup_historyfile(filename=None):
+    """Add a history file to readline.
+
+    Parameters
+    ----------
+    filename : str, path, or `os.Pathlike`
+        path to the history file. Internally converted to a `pathlib.Path`.
+
+    """
+    if filename is None:
+        filename = "~/.python_history"
+    histfile = Path(filename).resolve()
+    if not histfile.exists():
+        try:
+            histfile.touch()
+        except PermissionError:
+            raise
+        except OSError as e:
+            traceback.print_tb(e)
+
+    histfile_str = str(histfile)
+    try:
+        readline.read_history_file(histfile_str)
+    except OSError as e:
+        traceback.print_exc(e)
+    else:
+        readline.set_history_length(2000)
+
+
+def teardown_historyfile(histfile=None):
+    if not histfile:
+        return
+    try:
+        readline.write_history_file(histfile)
+    except OSError:
+        logging.error(
+            "History not saved. There were problems saving to ~/.python_history"
+        )
+
+
+if __name__ == "__main__":
     try:
         import readline
     except (ImportError, ModuleNotFoundError):
@@ -145,76 +207,7 @@ def return_readline():
         except (ImportError, ModuleNotFoundError):
             logging.warning("Readline not imported.")
             raise
-        else:
-            from pyreadline.rlmain import Readline
 
-            rl = Readline()
-            # So apparently readline.rl in the pyreadline module is an instantiated rlcompleter?
-            readline.set_completer(readline.rl.complete)
-            return readline
-    else:
-        return readline
+    readline_config()
 
-
-# History
-
-
-def setup_historyfile(filename=None):
-    """Add a history file to readline."""
-    if not hasattr(locals(), "readline"):
-        readline = return_readline()
-    if filename is None:
-        filename = "~/.pdb_history"
-    histfile = os.path.expanduser(filename)
-    try:
-        readline.read_history_file(filename)
-    except OSError:
-        pass
-    else:
-        readline.set_history_length(200)
-
-
-def teardown_historyfile(histfile=None):
-    """Can we cascade atexit calls like this?"""
-    if not histfile:
-        return
-    if not Path(histfile).exists():
-        Path(histfile).expanduser().touch()
-    try:
-        readline.write_history_file(histfile)
-    except OSError:
-        logging.error(
-            "History not saved. There were problems saving to ~/.python_history"
-        )
-
-
-def jedi_readline():
-    try:
-        import jedi
-    except (ImportError, ModuleNotFoundError):
-        jedi = None
-    else:
-        from jedi.utils import setup_readline
-
-        setup_readline()
-        jedi.settings.add_bracket_after_function = False
-        # jedi.settings
-
-
-if __name__ == "__main__":
-    jedi_readline()
-    readline = return_readline()
-    if getattr(readline, "parse_and_bind", None):
-        bind_readline_keys()
-    if getattr(readline, "read_inputrc_file", None):
-        read_inputrc()
-
-    readline.set_completer_delims(" \t\n`@#$%^&*()=+[{]}\\|;:'\",<>?")
-    readline.set_completer(Completer().complete)
-
-    # history
-    histfile = "~/.python_history"
-    # Fallback to the stdlib readline completer if it is installed.
-    # Taken from http://docs.python.org/2/library/rlcompleter.html
-    setup_historyfile(histfile)
-    atexit.register(teardown_historyfile, histfile)
+    breakpoint()

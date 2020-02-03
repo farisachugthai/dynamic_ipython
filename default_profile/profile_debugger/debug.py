@@ -18,27 +18,26 @@ Huh! This is neat. He imports pdb.Restart. Check out the call signature.
 import argparse
 import logging
 import os
-from pdb import Restart
 import sys
 import traceback
 from bdb import BdbQuit
 from contextlib import contextmanager
+from pathlib import Path
+from pdb import Restart
+from textwrap import dedent
 
 try:
     from .pdbrc import MyPdb
 except:  # noqa
     MyPdb = None
 
-try:
-    import readline
-except (ImportError, ModuleNotFoundError):
-    readline = None
-
+from jedi.api import replstartup
 from IPython.core.getipython import get_ipython
 from IPython.terminal.embed import InteractiveShellEmbed
 from IPython.terminal.ipapp import TerminalIPythonApp
 
-# __version__ = "0.10.3"
+
+logger = logging.getLogger()
 
 
 def _init_pdb(context=3, commands=None, debugger_kls=None):
@@ -120,31 +119,51 @@ def launch_ipdb_on_exception():
 def get_parser():
     """Factored out of main. Well sweet this now rasies an error."""
     parser = argparse.ArgumentParser(
-        prog="`Batteries included and the kitchen sink too`-PDB",
+        prog="ipdb+",
         description=(
-            "You're debugging code you don't want to figure out if you"
-            "imported something or not."
+            "An IPython flavored version of pdb with even more useful features."
+            "\nWhy?\nYou're debugging code you don't want to figure out if you"
+            " imported something or not."
         ),
     )
 
-    parser.add_argument("-v", "--version", action="version")
+    parser.add_argument(
+        "-f", "--file", metavar="File to execute",
+        dest="mainpyfile", action='store',
+        # type=argparse.FileType
+    )
 
     parser.add_argument(
         "-c",
-        "--command",
-        metavar="Commands",
+        "--commands",
         nargs="*",
         type=list,
         help="List of commands to run before starting.",
-        dest="commands",
         default=[],
+        action="append"
     )
 
     parser.add_argument(
-        "-m", "--module", nargs="?", help="Module to debug", dest="mod",
+        "-m", "--module", nargs="?",
+        help=dedent(
+            "Module to debug. Note that the provided module will be subject"
+            " to all the standard rules that any imported module would be"
+            " as per the import rules specified in the language/library"
+            " references."),
+        dest="mod",
     )
 
+    parser.add_argument(
+        "-i", "--interactive", help="Force interactivity.",
+        # const=  wait what the hell does const do again?
+        const=True, nargs='?', default=False)
+
+    parser.add_argument("-v", "--version", action="version")
+
     return parser
+
+
+# def debug_forever():
 
 
 def main():
@@ -153,48 +172,45 @@ def main():
     if not args:
         sys.exit(parser.print_help())
 
-    try:
-        mainpyfile = args[0]  # Get script filename
-    except IndexError:
-        sys.exit(parser.print_help())
-
-    if not os.path.exists(mainpyfile):
-        raise FileNotFoundError
-
-    sys.argv = args  # Hide "pdb.py" from argument list
     namespace = parser.parse_args(args)
 
+    if hasattr(namespace, 'mainpyfile'):
+        if not Path.exists(namespace.mainpyfile):
+            raise FileNotFoundError
+
     # Replace pdb's dir with script's dir in front of module search path.
-    sys.path[0] = os.path.dirname(mainpyfile)
+    sys.path.insert(0, os.path.dirname(mainpyfile))
 
     # Note on saving/restoring sys.argv: it's a good idea when sys.argv was
     # modified by the script being debugged. It's a bad idea when it was
     # changed by the user from the command line. There is a "restart" command
     # which allows explicit specification of command line arguments.
-    pdb = _init_pdb(commands=commands)
+    pdb = _init_pdb(commands=namespace.commands)
+
     while True:
-        try:
-            pdb._runscript(mainpyfile)
-            if pdb._user_requested_quit:
-                break
-            logger.warning("The program finished and will be restarted")
-        except Restart:
-            logger.info(f"Restarting {mainpyfile} with arguments:\t{str(sys.argv[1:])}")
-        except SystemExit:
-            # In most cases SystemExit does not warrant a post-mortem session.
-            print("The program exited via sys.exit(). Exit status: ", end="")
-            print(sys.exc_info()[1])
-        except:
-            traceback.print_exc()
-            print("Uncaught exception. Entering post mortem debugging")
-            print("Running 'cont' or 'step' will restart the program")
-            t = sys.exc_info()[2]
-            pdb.interaction(None, t)
-            print(
-                "Post mortem debugger finished. The "
-                + mainpyfile
-                + " will be restarted"
-            )
+        debug_forever()
+    try:
+        pdb._runscript(mainpyfile)
+        if pdb._user_requested_quit:
+            return
+        logger.warning("The program finished and will be restarted")
+    except Restart:
+        logger.info(f"Restarting {mainpyfile} with arguments:\t{str(sys.argv[1:])}")
+    except SystemExit:
+        # In most cases SystemExit does not warrant a post-mortem session.
+        print("The program exited via sys.exit(). Exit status: ", end="")
+        print(sys.exc_info()[1])
+    except:
+        traceback.print_exc()
+        print("Uncaught exception. Entering post mortem debugging")
+        print("Running 'cont' or 'step' will restart the program")
+        t = sys.exc_info()[2]
+        pdb.interaction(None, t)
+        print(
+            "Post mortem debugger finished. The "
+            + mainpyfile
+            + " will be restarted"
+        )
 
 
 if __name__ == "__main__":

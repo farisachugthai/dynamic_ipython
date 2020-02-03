@@ -104,49 +104,34 @@ def rerun_startup():
 
 def execfile(filename, global_namespace=None, local_namespace=None):
     """Python3 doesn't have this but it'd be nice to have a utility to exec a file at once."""
-    with open(filename, 'rb') as f:
-        return exec(compile(f.read(), filename, 'exec'), global_namespace, local_namespace)
-
-class ExceptionHook(Configurable):
-    """Custom exception hook for IPython."""
-
-    instance = None
-
-    def __init__(self, shell=None, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.shell = shell
-
-    def call(self, etype=None, evalue=None, etb=None):
-        """Proxy for the call dunder."""
-        if etype is None and evalue is None and etb is None:
-            etype, evalue, etb = sys.exc_info()
-        self.__call__(self, etype, evalue, etb)
-
-    def __call__(self, etype, evalue, etb):
-        """TODO."""
-        pass
-
-    def __repr__(self):
-        return "<{} '{}'>".format(self.__class__.__name__, self.instance)
+    if global_namespace is not dict:  # catch both None and any wrong formats
+        global_namespace = globals()
+    if local_namespace is not dict:  # catch both None and any wrong formats
+        local_namespace = locals()
+    with open(filename, "rb") as f:
+        return exec(
+            compile(f.read(), filename, "exec"), global_namespace, local_namespace
+        )
 
 
-class ExceptionTuple(Sequence):
-    """Simply a test for now but we need to provide the exception hook with this.
+def ipy_execfile(directory):
+    """Create a function that actually does what  `execfile` was trying to do.
 
-    It needs a tuple of exceptions to catch.
-
-    Seemed like a good place to keep working with ABCs.
+    Because `execfile` executes everything in separate namespaces, it doesn't
+    get added into the user's `locals`, which is fairly pointless for
+    interactive use.
     """
-
-    pass
+    for i in scandir(directory):
+        get_ipython().run_line_magic("run", i.name)
 
 
 if __name__ == "__main__":
     faulthandler.enable()
+    handled = cgitb.Hook(file=sys.stdout, format="text")
+    sys.excepthook = handled
+
     _ip = get_ipython()
 
     if _ip is not None:
         rehashx_run()
-        handled = cgitb.Hook(file=sys.stdout, format="text")
-        sys.excepthook = handled
         _ip.excepthook = handled

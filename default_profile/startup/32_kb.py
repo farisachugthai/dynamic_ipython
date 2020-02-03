@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Make prompt_toolkit's keybindings more extensible.
+"""Effectively me rewriting Prompt Toolkits keybindings handlers.
+
+Summary
+-------
+Make prompt_toolkit's keybindings more extensible.
 
 Reminder of where you left off:
 
@@ -151,10 +155,7 @@ from IPython.core.getipython import get_ipython
 import prompt_toolkit
 from prompt_toolkit.application.current import get_app
 from prompt_toolkit.cache import SimpleCache
-
-# from prompt_toolkit.enums import DEFAULT_BUFFER, SEARCH_BUFFER
-# from prompt_toolkit.filters import Condition
-# from prompt_toolkit.filters import ViInsertMode
+from prompt_toolkit.document import Document
 from prompt_toolkit.key_binding.defaults import load_key_bindings, load_vi_bindings
 from prompt_toolkit.key_binding.key_bindings import (
     KeyBindings,
@@ -418,30 +419,6 @@ def safely_get_registry(_ip):
 
 
 def kb_main(_ip=None):
-    if _ip is not None:
-        # TODO:
-        # ipython_registry = safely_get_registry(_ip)
-        # for i in basic_bindings.bindings:
-        #     ipython_registry = _rewritten_add(ipython_registry, i)
-
-        # assert (
-        #     ipython_registry
-        #     is not prompt_toolkit.key_binding.key_bindings._MergedKeyBindings
-        # )
-        # _ip.pt_app.app.key_bindings = ipython_registry
-        # Dude holy shit does this give you a lot
-        if _ip.editing_mode == "vi":
-            more_keybindings = merge_key_bindings(
-                [_ip.pt_app.app.key_bindings, load_vi_bindings()]
-            )
-        else:
-            more_keybindings = merge_key_bindings(
-                [_ip.pt_app.app.key_bindings, load_key_bindings()]
-            )
-        return more_keybindings
-    else:
-        # TODO: Get the keybindings from an app instance.
-        running_app = get_app()
 
 
 def _rewritten_add(registry, _binding):
@@ -452,17 +429,14 @@ def _rewritten_add(registry, _binding):
     return registry
 
 
-if __name__ == "__main__":
-    _ip = get_ipython()
-    # Let's side step all those fuckups
-    # This is probably a terrible thing to rely on, and not a guaranteed order but....
-    if _ip is not None:
-        # if _ip.editing_mode == "vi":
-        #     vi_bindings = basic_bindings.registries[0]
-        #     vi_mouse = basic_bindings.registries[1]
-        #     vi_cpr = basic_bindings.registries[2]
-        full_registry = kb_main(_ip)
-        container_kb = KeyBindingsManager(shell=_ip, kb=full_registry.bindings)
+class Documented(Document):
+    """I'll admit this subclass doesn't exist for much of a reason.
 
-        # no really dont use it.got rid of the <CR> handler
-        # _ip.pt_app.app.key_bindings = full_registry
+    However, it's a LOT easier to work with classes with their dunders defined.
+    """
+
+    def __len__(self):
+        return self.cursor_position
+
+    def __iter__(self):
+        return iter(self.text)

@@ -1,13 +1,12 @@
 import code
 import functools
-from pathlib import Path
 import runpy
 import sys
+from pathlib import Path
 
 import pygments
-from pygments.formatters.terminal256 import TerminalTrueColorFormatter
-
 from IPython.core.getipython import get_ipython
+from pygments.formatters.terminal256 import TerminalTrueColorFormatter
 
 
 class SubvertedInterpreter(code.InteractiveInterpreter):

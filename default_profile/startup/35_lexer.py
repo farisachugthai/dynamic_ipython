@@ -18,7 +18,7 @@ the built-in modules.:
 from traitlets.config import LoggingConfigurable
 from traitlets.traitlets import Instance
 from pygments.lexer import Lexer
-from pygments.lexers.python import  PythonLexer
+from pygments.lexers.python import PythonLexer
 from pygments.formatters.terminal256 import TerminalTrueColorFormatter
 
 from prompt_toolkit.lexers.pygments import PygmentsLexer
@@ -105,10 +105,10 @@ class Colorizer:
     """
 
     __slots__ = {
-            'pylexer': PythonLexer.__doc__,
-            'formatter': TerminalTrueColorFormatter.__doc__,
-            # 'highlight': pygments.highlight.__doc__
-            }
+        "pylexer": PythonLexer.__doc__,
+        "formatter": TerminalTrueColorFormatter.__doc__,
+        # 'highlight': pygments.highlight.__doc__
+    }
 
     def __init__(self, pylexer=None, formatter=None):
         if pylexer is None:
@@ -129,4 +129,3 @@ class Colorizer:
 if __name__ == "__main__":
     lexer = IPythonConfigurableLexer()
     # TODO: isn't there a method like _ip.add_trait or something?
-

@@ -292,7 +292,10 @@ class CommonAliases:
             ("git_root", "git rev-parse --show-toplevel %l"),
             ("git_unstage", "git reset HEAD %l"),
             ("git_unstaged", "git diff %l"),
-            ("gl", 'git log --pretty=format:"%Cred%h%Creset %C(yellow)%d%Creset %Cgreen(%cr) %C(bold blue)<%an>%Creset" --all --abbrev-commit --abbrev=7 --date=relative --graph --decorate %l'),
+            (
+                "gl",
+                'git log --pretty=format:"%Cred%h%Creset %C(yellow)%d%Creset %Cgreen(%cr) %C(bold blue)<%an>%Creset" --all --abbrev-commit --abbrev=7 --date=relative --graph --decorate %l',
+            ),
             ("glo", "git log %l"),
             (
                 "glog",
@@ -633,7 +636,9 @@ class WindowsAliases(CommonAliases):
         elif os.environ.get("COMSPEC"):
             return os.environ.get("COMSPEC")
         else:
-            raise OSError("Neither $SHELL nor $COMSPEC set. Can't determine running terminal.")
+            raise OSError(
+                "Neither $SHELL nor $COMSPEC set. Can't determine running terminal."
+            )
 
 
 def generate_aliases(_ip=None):
@@ -650,6 +655,7 @@ def generate_aliases(_ip=None):
     common = CommonAliases(user_aliases=_ip.alias_manager.user_aliases)
 
     from default_profile.util.machine import Platform
+
     machine = Platform()
     # TODO: Work in the Executable() class check.
     common_aliases = CommonAliases()
@@ -686,6 +692,7 @@ if __name__ == "__main__":
         all_aliases = generate_aliases()
         redefine_aliases(all_aliases)
         from default_profile.util.module_log import stream_logger
+
         ALIAS_LOGGER = stream_logger(
             logger="default_profile.startup.20_aliases",
             msg_format=(

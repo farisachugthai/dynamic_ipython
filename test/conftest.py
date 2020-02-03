@@ -16,7 +16,7 @@ from _pytest import unittest
 try:
     import default_profile
 except:
-    sys.exit('Not installed.')
+    sys.exit("Not installed.")
 else:
     from default_profile import ask_for_import
 
@@ -60,7 +60,7 @@ def pytest_report_header():
     # return f"\nMatplotlib:\n {matplotlib in sys.modules}\nPygments:\n {pygments in sys.modules}\nSQLite3:\n {sqlite3 in sys.modules}\n"
     # crashes
     ret = []
-    for i in ['matplotlib', 'sqlite3', 'pygments']:
+    for i in ["matplotlib", "sqlite3", "pygments"]:
         ask_for_import(i)
         if sys.modules[i]:
             ret.append(i)

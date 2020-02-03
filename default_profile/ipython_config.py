@@ -21,7 +21,6 @@ Therefore that function shouldn't be used anywhere in this file.
 
 """
 import builtins
-import dataclasses
 import logging
 import os
 import platform
@@ -801,50 +800,57 @@ class BaseFormatterDoc(LoggingConfigurable):
         p.text("<TimeitResult : " + unic + ">")
 
 
-@dataclasses.dataclass
-class TimedFormatter(BaseFormatterDoc):
-    """I'd imagine this would benefit from a dataclass.
+try:
+    import dataclasses
+except ImportError:
+    pass
+else:
 
-    Rewrite the init so that it takes advantage of the dataclass
-    module. If that doesn't seem to be working namedtuples are similar.
-    """
 
-    loops: int
-    precision: int
-    repeat: int
-    all_runs: set
+    @dataclasses.dataclass
+    class TimedFormatter(BaseFormatterDoc):
+        """I'd imagine this would benefit from a dataclass.
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # self.repeat = repeat
-        # self.best = best
-        # self.worst = worst
-        # self.compile_time = compile_time
+        Rewrite the init so that it takes advantage of the dataclass
+        module. If that doesn't seem to be working namedtuples are similar.
+        """
 
-    def summary(self):
-        pm = "+-"
-        if hasattr(sys.stdout, "encoding") and sys.stdout.encoding:
-            try:
-                "\xb1".encode(sys.stdout.encoding)
-                pm = "\xb1"
-            except:
-                pass
-        ret = []
-        ret.append(f"{_format_time(self.average, self._precision)}")
-        ret.append(f"{pm} {_format_time(self.stdev, self._precision)} per loop")
-        ret.append(f"{mean} {pm} std. dev. of {self.repeat} run.")
-        ret.append(f"{'' if self.repeat == 1 else 's'} {self.loops} loop")
-        ret.append(f"{'' if self.loops == 1 else 's'} each")
-        return ret
+        loops: int
+        precision: int
+        repeat: int
+        all_runs: set
 
-    def timings(self):
-        yield [dt / self.loops for dt in self.all_runs]
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            # self.repeat = repeat
+            # self.best = best
+            # self.worst = worst
+            # self.compile_time = compile_time
 
-    def __str__(self):
-        return self.summary()
+        def summary(self):
+            pm = "+-"
+            if hasattr(sys.stdout, "encoding") and sys.stdout.encoding:
+                try:
+                    "\xb1".encode(sys.stdout.encoding)
+                    pm = "\xb1"
+                except:
+                    pass
+            ret = []
+            ret.append(f"{_format_time(self.average, self._precision)}")
+            ret.append(f"{pm} {_format_time(self.stdev, self._precision)} per loop")
+            ret.append(f"{mean} {pm} std. dev. of {self.repeat} run.")
+            ret.append(f"{'' if self.repeat == 1 else 's'} {self.loops} loop")
+            ret.append(f"{'' if self.loops == 1 else 's'} each")
+            return ret
 
-    def __repr__(self):
-        return f"{self.__class__.__name__}"
+        def timings(self):
+            yield [dt / self.loops for dt in self.all_runs]
+
+        def __str__(self):
+            return self.summary()
+
+        def __repr__(self):
+            return f"{self.__class__.__name__}"
 
 
 # ----------------------------------------------------------------------------
