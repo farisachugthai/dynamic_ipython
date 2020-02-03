@@ -1,14 +1,19 @@
-"""
-Started with:
+"""Add keybindings.
 
-https://gist.githubusercontent.com/konradkonrad/7143fa8407804e37132e4ea90175f2d8/raw/ef2f570fc67fd5d9d227f9ae0363e10907831c97/01-esc-dot.py
+Slowly becoming where all my consolidated scripts for making prompt_toolkit's
+handling of keypresses cohesive.
 
-Has since grown to ~200 key bindings.
 """
 from collections import namedtuple
 
+from prompt_toolkit.application.current import get_app
 from prompt_toolkit.enums import DEFAULT_BUFFER
-from prompt_toolkit.filters import has_selection, Condition
+from prompt_toolkit.filters import (
+    Condition,
+    IsMultiline,
+    HasSelection,
+    IsSearching,
+)
 from prompt_toolkit.filters.app import emacs_insert_mode, vi_insert_mode, has_focus
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.key_binding.bindings.completion import (
@@ -17,15 +22,108 @@ from prompt_toolkit.key_binding.bindings.completion import (
 from prompt_toolkit.key_binding.bindings.named_commands import get_by_name
 from prompt_toolkit.key_binding.key_processor import KeyPress, KeyPressEvent
 from prompt_toolkit.keys import Keys
+from prompt_toolkit.key_binding.vi_state import InputMode
 
 from IPython.core.getipython import get_ipython
-from prompt_toolkit.key_binding.vi_state import InputMode
-from prompt_toolkit.application.current import get_app
 
 E = KeyPressEvent
 
+# Conditions:
+
 # fun fact. ViInsertMode is deprecated
 insert_mode = vi_insert_mode() | emacs_insert_mode()
+
+@Condition
+def should_confirm_completion():
+    """Check if completion needs confirmation"""
+    return get_app().current_buffer.complete_state
+
+
+@Condition
+def has_text_before_cursor() -> bool:
+    return bool(get_app().current_buffer.text)
+
+
+@Condition
+def ctrl_d_condition():
+    """Ctrl-D binding is only active when the default buffer is selected and
+    empty.
+    """
+    app = get_app()
+    buffer_name = app.current_buffer.name
+
+    return buffer_name == DEFAULT_BUFFER and not app.current_buffer.text
+
+
+@Condition
+def _is_blank(l):
+    return len(l.strip()) == 0
+
+
+@Condition
+def tab_insert_indent():
+    """Check if <Tab> should insert indent instead of starting autocompletion.
+    Checks if there are only whitespaces before the cursor - if so indent
+    should be inserted, otherwise autocompletion.
+
+    """
+    before_cursor = get_app().current_buffer.document.current_line_before_cursor
+
+    return bool(before_cursor.isspace())
+
+
+@Condition
+def beginning_of_line():
+    """Check if cursor is at beginning of a line other than the first line in a
+    multiline document
+    """
+    app = get_app()
+    before_cursor = app.current_buffer.document.current_line_before_cursor
+
+    return bool(
+        len(before_cursor) == 0 and not app.current_buffer.document.on_first_line
+    )
+
+
+@Condition
+def end_of_line():
+    """Check if cursor is at the end of a line other than the last line in a
+    multiline document
+    """
+    d = get_app().current_buffer.document
+    at_end = d.is_cursor_at_the_end_of_line
+    last_line = d.is_cursor_at_the_end
+
+    return bool(at_end and not last_line)
+
+
+@Condition
+def whitespace_or_bracket_before():
+    """Check if there is whitespace or an opening
+       bracket to the left of the cursor"""
+    d = get_app().current_buffer.document
+    return bool(
+        d.cursor_position == 0
+        or d.char_before_cursor.isspace()
+        or d.char_before_cursor in "([{"
+    )
+
+
+@Condition
+def whitespace_or_bracket_after():
+    """Check if there is whitespace or a closing
+       bracket to the right of the cursor"""
+    d = get_app().current_buffer.document
+    return bool(
+        d.is_cursor_at_the_end_of_line
+        or d.current_char.isspace()
+        or d.current_char in ")]}"
+    )
+
+
+@Condition
+def in_quoted_insert() -> bool:
+    return get_app().quoted_insert
 
 
 def get_key_bindings(custom_key_bindings=None):
@@ -206,11 +304,6 @@ def additional_bindings():
     handle("pageup", filter=~has_selection)(get_by_name("previous-history"))
     handle("pagedown", filter=~has_selection)(get_by_name("next-history"))
 
-    # CTRL keys.
-    @Condition
-    def has_text_before_cursor() -> bool:
-        return bool(get_app().current_buffer.text)
-
     handle("c-d")(get_by_name("delete-char"))
 
     @handle("enter")
@@ -275,10 +368,6 @@ def additional_bindings():
 
         event.current_buffer.insert_text(data)
 
-    @Condition
-    def in_quoted_insert() -> bool:
-        return get_app().quoted_insert
-
     @handle(Keys.Any, filter=in_quoted_insert, eager=True)
     def _(event: E) -> None:
         """
@@ -292,3 +381,12 @@ def additional_bindings():
 
 if __name__ == "__main__":
     additional_bindings()
+    _ip = get_ipython()
+    if _ip is not None:
+        full_registry = kb_main(_ip)
+        container_kb = KeyBindingsManager(shell=_ip, kb=full_registry.bindings)
+
+    # unrelated but heres something sweet
+
+    ip = get_ipython()
+    ip.pt_app.app.output.enable_bracketed_paste()

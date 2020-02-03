@@ -9,14 +9,6 @@ import builtins
 from prompt_toolkit import search
 from prompt_toolkit.application.current import get_app
 from prompt_toolkit.enums import DEFAULT_BUFFER
-from prompt_toolkit.filters import (
-    Condition,
-    IsMultiline,
-    HasSelection,
-    EmacsInsertMode,
-    ViInsertMode,
-    IsSearching,
-)
 from prompt_toolkit.keys import Keys
 
 # TODO:
@@ -105,74 +97,14 @@ class Helpers:
     def session_style(self):
         return self.session.style
 
-    def buf(self):
+    @property
+    def buffer(self):
         return self.layout.current_buffer
 
+    @property
+    def document(self):
+        return self.buffer.document
 
-@Condition
-def _is_blank(l):
-    return len(l.strip()) == 0
-
-
-@Condition
-def tab_insert_indent():
-    """Check if <Tab> should insert indent instead of starting autocompletion.
-    Checks if there are only whitespaces before the cursor - if so indent
-    should be inserted, otherwise autocompletion.
-
-    """
-    before_cursor = get_app().current_buffer.document.current_line_before_cursor
-
-    return bool(before_cursor.isspace())
-
-
-@Condition
-def beginning_of_line():
-    """Check if cursor is at beginning of a line other than the first line in a
-    multiline document
-    """
-    app = get_app()
-    before_cursor = app.current_buffer.document.current_line_before_cursor
-
-    return bool(
-        len(before_cursor) == 0 and not app.current_buffer.document.on_first_line
-    )
-
-
-@Condition
-def end_of_line():
-    """Check if cursor is at the end of a line other than the last line in a
-    multiline document
-    """
-    d = get_app().current_buffer.document
-    at_end = d.is_cursor_at_the_end_of_line
-    last_line = d.is_cursor_at_the_end
-
-    return bool(at_end and not last_line)
-
-
-@Condition
-def whitespace_or_bracket_before():
-    """Check if there is whitespace or an opening
-       bracket to the left of the cursor"""
-    d = get_app().current_buffer.document
-    return bool(
-        d.cursor_position == 0
-        or d.char_before_cursor.isspace()
-        or d.char_before_cursor in "([{"
-    )
-
-
-@Condition
-def whitespace_or_bracket_after():
-    """Check if there is whitespace or a closing
-       bracket to the right of the cursor"""
-    d = get_app().current_buffer.document
-    return bool(
-        d.is_cursor_at_the_end_of_line
-        or d.current_char.isspace()
-        or d.current_char in ")]}"
-    )
 
 
 def load_xonsh_bindings(key_bindings):
@@ -187,36 +119,10 @@ def load_xonsh_bindings(key_bindings):
     has_selection = HasSelection()
     insert_mode = ViInsertMode() | EmacsInsertMode()
 
-    @Condition
-    def should_confirm_completion():
-        """Check if completion needs confirmation"""
-        return (
-            builtins.__xonsh__.env.get("COMPLETIONS_CONFIRM")
-            and get_app().current_buffer.complete_state
-        )
-
     @handle(Keys.ControlX, Keys.ControlE, filter=~has_selection)
     def open_editor(event):
         """ Open current buffer in editor """
         event.current_buffer.open_in_editor(event.cli)
-
-    @Condition
-    def ctrl_d_condition():
-        """Ctrl-D binding is only active when the default buffer is selected and
-        empty.
-        """
-        if builtins.__xonsh__.env.get("IGNOREEOF"):
-            return False
-        else:
-            app = get_app()
-            buffer_name = app.current_buffer.name
-
-            return buffer_name == DEFAULT_BUFFER and not app.current_buffer.text
-
-    @Condition
-    def autopair_condition():
-        """Check if XONSH_AUTOPAIR is set"""
-        return builtins.__xonsh__.env.get("XONSH_AUTOPAIR", False)
 
     @handle(Keys.Tab, filter=tab_insert_indent)
     def insert_indent(event):
@@ -224,8 +130,7 @@ def load_xonsh_bindings(key_bindings):
         If there are only whitespaces before current cursor position insert
         indent instead of autocompleting.
         """
-        env = builtins.__xonsh__.env
-        event.cli.current_buffer.insert_text(env.get("INDENT"))
+        event.cli.current_buffer.insert_text()
 
     @handle(Keys.BackTab, filter=insert_mode)
     def insert_literal_tab(event):
@@ -440,7 +345,3 @@ def load_xonsh_bindings(key_bindings):
 
 if __name__ == "__main__":
     pt = Helpers()
-    # unrelated but heres something sweet
-
-    ip = get_ipython()
-    ip.pt_app.app.output.enable_bracketed_paste()

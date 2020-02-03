@@ -1,10 +1,16 @@
 import abc
 import keyword
+import logging
+from pathlib import Path
 import re
 import runpy
 from typing import Iterable, TYPE_CHECKING
 
+import jedi
 from jedi.api import replstartup
+from jedi.api.project import get_default_project
+from jedi.utils import setup_readline
+from jedi.api.environment import get_cached_default_environment, InvalidPythonEnvironment
 
 from IPython.core.getipython import get_ipython
 
@@ -97,10 +103,15 @@ class SimpleCompletions(Completer):
 
 
 class PathCallable(PathCompleter):
-    """OF COURSE ITS NOT CALLABLE."""
+    """OF COURSE ITS NOT CALLABLE.
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    Also why is get_paths even a method? If someones looking for a relative
+    directory, why wouldn't you assume that it's relative **to their current
+    working directory??**
+
+    """
+
+    get_paths = Path()
 
     def __call__(
         self, document: Document, complete_event: CompleteEvent
@@ -139,12 +150,33 @@ def will_break_pt_app():
 
 
 if __name__ == "__main__":
+    setup_readline()
+    # To set up Script or Interpreter later
+    try:
+        project = get_cached_default_project()
+    except InvalidPythonEnvironment:
+        logging.warning("Jedi couldn't get the default project.")
+
+    jedi.settings.add_bracket_after_function = False
+
     if get_ipython() is not None:
+        _ip = get_ipython()
         threaded = ThreadedCompleter(get_word_completer)
-        get_ipython().set_custom_completer(get_path_completer())
-        get_ipython().set_custom_completer(get_fuzzy_keyword_completer)
-        get_ipython().pt_app.auto_suggest = AutoSuggestFromHistory()
+        _ip.set_custom_completer(get_path_completer())
+        _ip.set_custom_completer(get_fuzzy_keyword_completer)
+        _ip.pt_app.auto_suggest = AutoSuggestFromHistory()
 
-        import jedi
+        # TODO:
+        # Dude holy shit does this give you a lot
+        if _ip.editing_mode == "vi":
+            more_keybindings = merge_key_bindings(
+                [_ip.pt_app.app.key_bindings, load_vi_bindings()]
+            )
+        else:
+            more_keybindings = merge_key_bindings(
+                [_ip.pt_app.app.key_bindings, load_key_bindings()]
+            )
+        more_keybindings
 
-        jedi_settings = runpy.run_module("jedi.settings")
+    _ip.pt_app.app.key_bindings = more_keybindings
+    _ip.pt_app.app.key_bindings._update_cache()
