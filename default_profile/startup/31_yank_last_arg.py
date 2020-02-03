@@ -11,7 +11,6 @@ from prompt_toolkit.enums import DEFAULT_BUFFER
 from prompt_toolkit.filters import (
     Condition,
     IsMultiline,
-    HasSelection,
     IsSearching,
 )
 from prompt_toolkit.filters.app import emacs_insert_mode, vi_insert_mode, has_focus
@@ -301,8 +300,8 @@ def additional_bindings():
     # should delete using [^a-zA-Z0-9] as a boundary.
     handle("c-w", filter=insert_mode)(get_by_name("unix-word-rubout"))
 
-    handle("pageup", filter=~has_selection)(get_by_name("previous-history"))
-    handle("pagedown", filter=~has_selection)(get_by_name("next-history"))
+    handle("pageup")(get_by_name("previous-history"))
+    handle("pagedown")(get_by_name("next-history"))
 
     handle("c-d")(get_by_name("delete-char"))
 
@@ -334,7 +333,7 @@ def additional_bindings():
     def _(event: E) -> None:
         event.current_buffer.auto_down(count=event.arg)
 
-    @handle("delete", filter=has_selection)
+    @handle("delete")
     def _(event: E) -> None:
         data = event.current_buffer.cut_selection()
         event.app.clipboard.set_data(data)
@@ -380,13 +379,11 @@ def additional_bindings():
 
 
 if __name__ == "__main__":
-    additional_bindings()
     _ip = get_ipython()
     if _ip is not None:
-        full_registry = kb_main(_ip)
-        container_kb = KeyBindingsManager(shell=_ip, kb=full_registry.bindings)
+        full_registry = additional_bindings()
+        # container_kb = KeyBindingsManager(shell=_ip, kb=full_registry.bindings)
 
     # unrelated but heres something sweet
-
     ip = get_ipython()
     ip.pt_app.app.output.enable_bracketed_paste()

@@ -418,9 +418,6 @@ def safely_get_registry(_ip):
             #     unnest_merged_kb(registry)
 
 
-def kb_main(_ip=None):
-
-
 def _rewritten_add(registry, _binding):
     key = _binding.keys
     filter = _binding.filter

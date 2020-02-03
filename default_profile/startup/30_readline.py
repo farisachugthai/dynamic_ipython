@@ -153,7 +153,6 @@ def readline_config(history_file=None):
 
     readline.read_init_file()
 
-
 # History
 
 
@@ -168,20 +167,20 @@ def setup_historyfile(filename=None):
     """
     if filename is None:
         filename = "~/.python_history"
-    histfile = Path(filename).resolve()
+    histfile = Path(filename).expanduser()
     if not histfile.exists():
         try:
             histfile.touch()
         except PermissionError:
             raise
-        except OSError as e:
-            traceback.print_tb(e)
+        except OSError:
+            logging.exception('Could not create the history file.')
 
     histfile_str = str(histfile)
     try:
         readline.read_history_file(histfile_str)
     except OSError as e:
-        traceback.print_exc(e)
+        logging.exception('Could not read the history file.')
     else:
         readline.set_history_length(2000)
 
@@ -209,5 +208,3 @@ if __name__ == "__main__":
             raise
 
     readline_config()
-
-    breakpoint()

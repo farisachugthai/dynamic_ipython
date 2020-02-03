@@ -152,8 +152,9 @@ def will_break_pt_app():
 if __name__ == "__main__":
     setup_readline()
     # To set up Script or Interpreter later
+    project = get_default_project()
     try:
-        project = get_cached_default_project()
+        environment = get_cached_default_environment()
     except InvalidPythonEnvironment:
         logging.warning("Jedi couldn't get the default project.")
 
@@ -166,8 +167,6 @@ if __name__ == "__main__":
         _ip.set_custom_completer(get_fuzzy_keyword_completer)
         _ip.pt_app.auto_suggest = AutoSuggestFromHistory()
 
-        # TODO:
-        # Dude holy shit does this give you a lot
         if _ip.editing_mode == "vi":
             more_keybindings = merge_key_bindings(
                 [_ip.pt_app.app.key_bindings, load_vi_bindings()]
@@ -176,7 +175,6 @@ if __name__ == "__main__":
             more_keybindings = merge_key_bindings(
                 [_ip.pt_app.app.key_bindings, load_key_bindings()]
             )
-        more_keybindings
 
-    _ip.pt_app.app.key_bindings = more_keybindings
-    _ip.pt_app.app.key_bindings._update_cache()
+    # _ip.pt_app.app.key_bindings = more_keybindings
+    # _ip.pt_app.app.key_bindings._update_cache()
