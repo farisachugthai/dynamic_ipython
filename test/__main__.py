@@ -72,6 +72,7 @@ def _test():
 
 
 if __name__ == "__main__":
+    doctest_suite = doctest.DocTestSuite(module='default_profile')
 
     try:
         import pytest  # noqa F401
@@ -96,4 +97,5 @@ if __name__ == "__main__":
 
         _test()
     else:
+        from _pytest.collect import Collector
         pytest.main()

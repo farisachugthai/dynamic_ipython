@@ -98,7 +98,7 @@ class SimpleCompleter:
 
 
 def input_loop():
-    """Simulate a runnnig loop with a call to `input`.
+    r"""Simulate a runnnig loop with a call to `input`.
 
     .. todo::
 

@@ -14,6 +14,7 @@ because wth is this saying?
     to it. Interesting.
 
 """
+from contextlib import suppress
 import unittest
 from unittest.case import TestCase
 
@@ -29,6 +30,7 @@ else:
 
 from default_profile.startup import aliases_mod
 import pytest
+from _pytest.outcomes import Skipped
 
 
 def test_alias_lifecycle(_ip):
@@ -96,4 +98,6 @@ def test_alias_args_commented_nargs(_ip):
 
 
 if __name__ == "__main__":
-    pytest.main()
+    with suppress(Skipped):
+        pytest.importorskip('nose')
+        pytest.main()
