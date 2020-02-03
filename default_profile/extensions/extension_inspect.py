@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-Few more things we might wanna work out here.
+"""Few more things we might wanna work out here.
 
 Our lack of the module :mod:`inspect` is pretty surprising.
 
@@ -14,8 +13,7 @@ from pprint import pformat
 from pygments import highlight
 from pygments.formatters import Terminal256Formatter  # Or TerminalFormatter
 
-# from pygments.lexers import PythonLexer
-from IPython import get_ipython
+from IPython.core.getipython import get_ipython
 from IPython.core.magic import Magics, magics_class, line_magic
 from IPython.core.magic import register_line_magic, magic_escapes
 from IPython.lib.lexers import IPyLexer
@@ -78,10 +76,4 @@ def load_ipython_extension(shell=None):
 
 
 if __name__ == "__main__":
-    # Register with IPython
-    ip = get_ipython()
-    # ip.register_magics(PrettyColorfulInspector)
-    # which one? load_extension or register
-
-    register_line_magic()
-    load_ipython_extension(ip)
+    load_ipython_extension(get_ipython())

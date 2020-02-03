@@ -43,6 +43,7 @@ except:
     from asyncio.tasks import Task
 
 from asyncio.tasks import current_task, all_tasks, create_task
+
 # messes up %run
 try:
     from trio import run as _async_run
@@ -50,6 +51,7 @@ except:
     from asyncio import run as _async_run
 
 from asyncio.format_helpers import extract_stack
+
 try:
     from asyncio.windows_events import ProactorEventLoop, IocpProactor
 except ImportError:
@@ -97,7 +99,9 @@ async def system_command(command_to_run):
         if not hasattr(command_to_run, "append"):
             raise TypeError
 
-    await get_ipython().pt_app.app.run_system_command(command=com, wait_for_enter=False, wait_text='', display_before_text='')
+    await get_ipython().pt_app.app.run_system_command(
+        command=com, wait_for_enter=False, wait_text="", display_before_text=""
+    )
 
 
 if __name__ == "__main__":
@@ -107,4 +111,3 @@ if __name__ == "__main__":
     if platform.platform().startswith("Win"):
         proactor = IocpProactor()
         loop = ProactorEventLoop(proactor=proactor)
-

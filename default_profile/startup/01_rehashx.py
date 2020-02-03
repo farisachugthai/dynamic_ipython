@@ -108,13 +108,15 @@ def execfile(filename, global_namespace=None, local_namespace=None):
         global_namespace = globals()
     if local_namespace is not dict:  # catch both None and any wrong formats
         local_namespace = locals()
-    with open(filename, 'rb') as f:
-        return exec(compile(f.read(), filename, 'exec'), global_namespace, local_namespace)
+    with open(filename, "rb") as f:
+        return exec(
+            compile(f.read(), filename, "exec"), global_namespace, local_namespace
+        )
 
 
 def ipy_execfile(directory):
     for i in scandir(directory):
-        get_ipython().run_line_magic('run', i.name)
+        get_ipython().run_line_magic("run", i.name)
 
 
 class ExceptionHook(Configurable):

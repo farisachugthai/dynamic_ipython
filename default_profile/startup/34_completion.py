@@ -146,4 +146,5 @@ if __name__ == "__main__":
         get_ipython().pt_app.auto_suggest = AutoSuggestFromHistory()
 
         import jedi
-        jedi_settings = runpy.run_module('jedi.settings')
+
+        jedi_settings = runpy.run_module("jedi.settings")

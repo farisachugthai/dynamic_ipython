@@ -127,7 +127,6 @@ def add_toolbar(toolbar=None):
     _ip.pt_app.bottom_toolbar = toolbar()
 
 
-
 # Don't uncomment! This fucks up the keybindings so that the only way a line
 # executes is if you use C-r to get into a search then hit something to regain
 # focus and then hit enter.

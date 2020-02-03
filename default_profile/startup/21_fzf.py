@@ -15,8 +15,7 @@ import subprocess
 import sys
 import types
 from contextlib import ContextDecorator
-from subprocess import (DEVNULL, PIPE, CalledProcessError, CompletedProcess,
-                        Popen)
+from subprocess import DEVNULL, PIPE, CalledProcessError, CompletedProcess, Popen
 from typing import get_type_hints  # what is this?
 
 from IPython.core.getipython import get_ipython
