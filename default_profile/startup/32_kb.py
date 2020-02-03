@@ -162,6 +162,7 @@ from prompt_toolkit.key_binding.key_bindings import (
     _MergedKeyBindings,
     merge_key_bindings,
 )
+
 # from prompt_toolkit.key_binding.key_processor import KeyPress
 from prompt_toolkit.keys import Keys
 
@@ -434,8 +435,9 @@ def kb_main(_ip=None):
                 [_ip.pt_app.app.key_bindings, load_vi_bindings()]
             )
         else:
-            more_keybindings = merge_key_bindings([_ip.pt_app.app.key_bindings,
-                load_key_bindings()])
+            more_keybindings = merge_key_bindings(
+                [_ip.pt_app.app.key_bindings, load_key_bindings()]
+            )
         return more_keybindings
     else:
         # TODO: Get the keybindings from an app instance.
@@ -464,4 +466,3 @@ if __name__ == "__main__":
 
         # no really dont use it.got rid of the <CR> handler
         # _ip.pt_app.app.key_bindings = full_registry
-

@@ -41,7 +41,9 @@ def get_key_bindings(custom_key_bindings=None):
 
     Based on prompt_toolkit.key_binding.defaults.load_key_bindings()
     """
-    from prompt_toolkit.key_binding.bindings.auto_suggest import load_auto_suggest_bindings
+    from prompt_toolkit.key_binding.bindings.auto_suggest import (
+        load_auto_suggest_bindings,
+    )
     from prompt_toolkit.key_binding.bindings.basic import load_basic_bindings
     from prompt_toolkit.key_binding.bindings.cpr import load_cpr_bindings
     from prompt_toolkit.key_binding.bindings.emacs import (
@@ -55,6 +57,7 @@ def get_key_bindings(custom_key_bindings=None):
     from prompt_toolkit.key_binding.bindings.page_navigation import (
         load_page_navigation_bindings,
     )
+
     if custom_key_bindings is None:
         custom_key_bindings = KeyBindings()
     return [
@@ -77,7 +80,7 @@ class State:
 
 state = State()
 
-state_ = namedtuple('State_', field_names='depth')
+state_ = namedtuple("State_", field_names="depth")
 
 
 def reset_last_arg_depth():
@@ -216,6 +219,7 @@ def additional_bindings():
         Newline (in case of multiline input.
         """
         from prompt_toolkit.filters import in_paste_mode
+
         event.current_buffer.newline(copy_margin=not in_paste_mode())
 
     @handle("c-j")

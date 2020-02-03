@@ -31,6 +31,7 @@ from IPython.core.getipython import get_ipython
 
 DEDENT_TOKENS = frozenset(["raise", "return", "pass", "break", "continue"])
 
+
 class Helpers:
     """I think this class is probably the easiest summary of my frustration."""
 
@@ -172,7 +173,6 @@ def whitespace_or_bracket_after():
         or d.current_char.isspace()
         or d.current_char in ")]}"
     )
-
 
 
 def load_xonsh_bindings(key_bindings):
@@ -437,10 +437,10 @@ def load_xonsh_bindings(key_bindings):
         else:
             b.validate_and_handle()
 
+
 if __name__ == "__main__":
     pt = Helpers()
     # unrelated but heres something sweet
 
     ip = get_ipython()
     ip.pt_app.app.output.enable_bracketed_paste()
-
