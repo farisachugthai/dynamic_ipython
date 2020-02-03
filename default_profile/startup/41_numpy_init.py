@@ -145,7 +145,7 @@ Long arrays can be summarised:
 
 >>> import numpy as np
 >>> np.set_printoptions(threshold=5)
->>> print(np.arange(10))
+>>> print(np.arange(10))   # doctest: +NORMALIZE_WHITESPACE
 [0 1 2 ... 7 8 9]
 
 Small results can be suppressed:
@@ -156,17 +156,17 @@ Small results can be suppressed:
 >>> x**2 - (x + eps)**2
 array([-4.9304e-32, -4.4409e-16,  0.0000e+00,  0.0000e+00])
 >>> np.set_printoptions(suppress=True)
->>> x**2 - (x + eps)**2
+>>> x**2 - (x + eps)**2  # doctest: +NORMALIZE_WHITESPACE
 array([-0., -0.,  0.,  0.])
 
 A custom formatter can be used to display array elements as desired:
 
 >>> np.set_printoptions(formatter={'all':lambda x: 'int: '+str(-x)})
 >>> x = np.arange(3)
->>> x
+>>> x   # doctest: +NORMALIZE_WHITESPACE
 array([int: 0, int: -1, int: -2])
 >>> np.set_printoptions()  # formatter gets reset
->>> x
+>>> x   # doctest: +NORMALIZE_WHITESPACE
 array([0, 1, 2])
 
 To put back the default options, you can use:

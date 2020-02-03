@@ -39,8 +39,6 @@ from traitlets.config import get_config, Configurable
 
 logging.basicConfig(level=logging.INFO, format=logging.BASIC_FORMAT)
 c = get_config()
-# Don't it this way
-# c = Configurable()
 
 try:
     import default_profile
@@ -96,68 +94,7 @@ if ModuleNotFoundError not in dir(builtins):
 #  Provides configurables for loading extensions and executing files as part of
 #  configuring a Shell environment.
 #
-#  The following methods should be called by the :meth:`initialize` method of
-#  the subclass:
-#
-#    - :meth:`init_path`
-#    - :meth:`init_shell` (to be implemented by the subclass)
-#    - :meth:`init_gui_pylab`
-#    - :meth:`init_extensions`
-#    - :meth:`init_code`
 
-# Execute the given command string.
-# c.InteractiveShellApp.code_to_run = ''
-
-# Run the file referenced by the PYTHONSTARTUP environment variable at IPython
-# startup.
-# c.InteractiveShellApp.exec_PYTHONSTARTUP = True
-
-# List of files to run at IPython startup.
-# c.InteractiveShellApp.exec_files = []
-
-# lines of code to run at IPython startup.
-# c.InteractiveShellApp.exec_lines = []
-
-# A list of dotted module names of IPython extensions to load.
-c.InteractiveShellApp.extensions = []
-
-# dotted module name of an IPython extension to load.
-# c.InteractiveShellApp.extra_extension = ''
-
-# A file to be run
-# c.InteractiveShellApp.file_to_run = ''
-
-# Enable GUI event loop integration with any of ('asyncio', 'glut', 'gtk',
-#  'gtk2', 'gtk3', 'osx', 'pyglet', 'qt', 'qt4', 'qt5', 'tk', 'wx', 'gtk2',
-#  'qt4').
-# c.InteractiveShellApp.gui = None
-
-# Should variables loaded at startup (by startup files, exec_lines, etc.) be
-# hidden from tools like %who?
-# c.InteractiveShellApp.hide_initial_ns = True
-
-# Configure matplotlib for interactive use with the default matplotlib backend.
-
-#     Default: None
-#     Choices: ['auto', 'agg', 'gtk', 'gtk3', 'inline', 'ipympl', 'nbagg',
-#     notebook', 'osx', 'pdf', 'ps', 'qt', 'qt4', 'qt5', 'svg', 'tk',
-#     widget', 'wx']
-#     Configure matplotlib for interactive use with the default matplotlib
-#     backend.
-
-# Run the module as a script.
-# c.InteractiveShellApp.module_to_run = ''
-
-# Pre-load matplotlib and numpy for interactive use, selecting a particular
-# matplotlib backend and loop integration.
-# See matplotlib choices above:
-# c.InteractiveShellApp.pylab = None
-
-# If true, IPython will populate the user namespace with numpy, pylab, etc. and
-#  an ``import *`` is done from numpy and pylab, when using pylab mode.
-# Dude I never noticed that this defaults to True like whatttt
-#  When False, pylab mode should not import any names into the user namespace.
-# c.InteractiveShellApp.pylab_import_all = True
 # Reraise exceptions encountered loading IPython extensions?
 c.InteractiveShellApp.reraise_ipython_extension_failures = False
 
@@ -173,7 +110,8 @@ c.Application.log_datefmt = "%Y-%m-%d %H:%M:%S"
 
 # The Logging format template
 # Default: '[%(name)s]%(highlevel)s %(message)s'
-# c.Application.log_format = '%(module) : %(created)f : [%(name)s] : %(highlevel)s : %(message)s : '
+
+c.Application.log_format = '%(module) : %(created)f : [%(name)s] : %(highlevel)s : %(message)s : '
 
 # Set the log level by value or name.
 c.Application.log_level = 30
@@ -262,7 +200,7 @@ c.TerminalIPythonApp.force_interact = True
 # c.TerminalIPythonApp.quick = False
 
 # Dec 08, 2019: Adding this in
-# c.TerminalIPythonApp.log_format = '%(module) : %(created)f : [%(name)s] : %(highlevel)s : %(message)s : '
+c.TerminalIPythonApp.log_format = '%(module) : %(created)f : [%(name)s] : %(highlevel)s : %(message)s : '
 
 
 # ------------------------------------------------------------------------------
@@ -386,7 +324,7 @@ c.InteractiveShell.history_load_length = 10000
 # c.InteractiveShell.object_info_string_level = 0
 
 # Automatically call the pdb debugger after every exception.
-# c.InteractiveShell.pdb = False
+c.InteractiveShell.pdb = True
 
 c.InteractiveShell.quiet = False
 
@@ -409,7 +347,7 @@ c.InteractiveShell.wildcards_case_sensitive = False
 # Switch modes for the IPython exception handlers.
 # Default: 'Context'
 # Choices: ['Context', 'Plain', 'Verbose', 'Minimal']
-c.InteractiveShell.xmode = "Minimal"
+c.InteractiveShell.xmode = "Verbose"
 
 # ----------------------------------------------------------------------------
 # TerminalInteractiveShell(InteractiveShell) configuration
@@ -492,26 +430,6 @@ if platform.system() == "Windows":
 
     # I know it's odd making this platform specific but everything is completely illegible otherwise
     c.TerminalInteractiveShell.highlighting_style = friendly
-
-
-environment = get_env()
-if "LESS" not in environment:
-    os.environ.setdefault("LESS", "JRKMLigeF")
-    os.environ.setdefault("LESSHISTSIZE", "5000")
-if "LESS_TERMCAP_mb" not in environment:
-    # Who is curios as to whether this is gonna work or not?
-    os.environ.setdefault("LESS_TERMCAP_mb", r"\e[01;31m")
-    os.environ.setdefault("LESS_TERMCAP_md", r"\e[01;38;5;180m")
-    os.environ.setdefault("LESS_TERMCAP_me", r"\e[0m")
-    os.environ.setdefault("LESS_TERMCAP_se", r"\e[0m")
-    os.environ.setdefault("LESS_TERMCAP_so", r"\e[03;38;5;202m")
-    os.environ.setdefault("LESS_TERMCAP_ue", r"\e[0m")
-    os.environ.setdefault("LESS_TERMCAP_us", r"\e[04;38;5;139m")
-
-# Override highlighting format for specific tokens
-# Comments were genuinely impossible to read. Might need to override
-# punctuation next.
-# c.TerminalInteractiveShell.highlighting_style_overrides = {Comment: '#ffffff'}
 
 
 # No help docs? Update when you find the sauce

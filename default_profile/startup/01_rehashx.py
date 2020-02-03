@@ -104,8 +104,18 @@ def rerun_startup():
 
 def execfile(filename, global_namespace=None, local_namespace=None):
     """Python3 doesn't have this but it'd be nice to have a utility to exec a file at once."""
+    if global_namespace is not dict:  # catch both None and any wrong formats
+        global_namespace = globals()
+    if local_namespace is not dict:  # catch both None and any wrong formats
+        local_namespace = locals()
     with open(filename, 'rb') as f:
         return exec(compile(f.read(), filename, 'exec'), global_namespace, local_namespace)
+
+
+def ipy_execfile(directory):
+    for i in scandir(directory):
+        get_ipython().run_line_magic('run', i.name)
+
 
 class ExceptionHook(Configurable):
     """Custom exception hook for IPython."""

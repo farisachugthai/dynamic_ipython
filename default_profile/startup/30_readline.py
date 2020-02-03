@@ -55,6 +55,8 @@ if os.environ.get("IPYTHONDIR"):
     logging.basicConfig(
         format="%(message)s", filename=LOG_FILENAME, level=logging.DEBUG,
     )
+else:
+    logging.basicConfig(format="%(message)s", level=logging.DEBUG)
 
 
 def bind_readline_keys():

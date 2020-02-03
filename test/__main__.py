@@ -71,14 +71,13 @@ def _test():
     return 0
 
 
-
 if __name__ == "__main__":
 
     try:
         import pytest  # noqa F401
     except ImportError as e:
 
-        warnings.warn('No Pytest. Using unittest.')
+        warnings.warn("No Pytest. Using unittest.")
 
         # Believe it or not this is in fact necessary if you want to run
         # the tests inside of IPython.

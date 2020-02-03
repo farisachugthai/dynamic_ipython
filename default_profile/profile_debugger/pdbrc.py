@@ -19,6 +19,7 @@ import inspect
 import keyword
 from logging import getLogger, StreamHandler, BufferingFormatter, Filter
 from pathlib import Path
+from pprint import pprint as print
 import pdb
 import pydoc
 import rlcompleter
@@ -40,7 +41,7 @@ logger = getLogger(name=__name__)
 handler = StreamHandler()
 formatter = BufferingFormatter(linefmt=log_format)
 handler.setFormatter(formatter)
-logger.addFilter(logging.Filter())
+logger.addFilter(Filter())
 logger.addHandler(handler)
 logger.setLevel(30)
 
@@ -48,9 +49,8 @@ faulthandler.enable()
 cgitb.enable(format="text")
 
 try:
-    from prompt_toolkit.shortcuts import print_formatted_text as print
+    import prompt_toolkit
 except:  # noqa
-    from pprint import pprint as print
     debugger_completer = rlcompleter.Completer.complete
 else:
     from prompt_toolkit.completion.fuzzy_completer import FuzzyWordCompleter
@@ -77,27 +77,8 @@ try:
     import readline
 except:
     pass
-else:# this makes completions look classic IPython style
+else:  # this makes completions look classic IPython style
     readline.parse_and_bind("Tab:menu-complete")
-
-# I have a really useful module for importing readline on windows, linux,
-# WSL, and anything else you can imagine. let's use it.
-try:
-    from default_profile.startup import __main__
-except:  # noqa
-    pass
-else:
-
-    readline_mod = runpy.run_path(
-        Path("../startup/30_readline.py").__fspath__(), init_globals=globals()
-    )
-    # runpy.run_path returns a dict with the modules namespace so let's get
-    # the keys and check if we imported readline
-    if "readline" in readline_mod.keys():
-        readline = readline_mod["readline"]
-    if "setup_readline" in readline_mod.keys():
-        setup_readline = readline_mod["setup_readline"]
-        setup_readline()
 
 
 def save_history(hist_path=None):
@@ -109,7 +90,7 @@ def save_history(hist_path=None):
     if not hist_path:
         hist_path = Path("~/.pdb_history.py").resolve()
         if not hist_path.exists():
-            logging.warning("Creating PDB history file at ~/.pdb_history.")
+            logger.warning("Creating PDB history file at ~/.pdb_history.")
             hist_path.touch()
         hist_path = hist_path.__fspath__()
 
@@ -127,9 +108,6 @@ except:  # noqa
         save_history(historyPath)
 
     atexit.register(save_history, hist_path=historyPath)
-else:
-
-    readline_mod.setup_historyfile("~/.pdb_history")
 
 # Yes I'm still importing stuff
 
@@ -143,7 +121,6 @@ else:
 
     lexer = PythonLexer()
     formatter = TerminalTrueColorFormatter()
-
 
     def colorizer(code):
         return pygments.highlight(code, lexer, formatter)

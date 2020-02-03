@@ -19,6 +19,8 @@ from prompt_toolkit.key_binding.key_processor import KeyPress, KeyPressEvent
 from prompt_toolkit.keys import Keys
 
 from IPython.core.getipython import get_ipython
+from prompt_toolkit.key_binding.vi_state import InputMode
+from prompt_toolkit.application.current import get_app
 
 E = KeyPressEvent
 
