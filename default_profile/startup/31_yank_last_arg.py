@@ -12,13 +12,16 @@ from prompt_toolkit.filters import (
     Condition,
     IsMultiline,
     IsSearching,
+    in_paste_mode,
 )
+
 from prompt_toolkit.filters.app import emacs_insert_mode, vi_insert_mode, has_focus
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.key_binding.bindings.completion import (
     display_completions_like_readline,
 )
 from prompt_toolkit.key_binding.bindings.named_commands import get_by_name
+from prompt_toolkit.key_binding.key_bindings import merge_key_bindings
 from prompt_toolkit.key_binding.key_processor import KeyPress, KeyPressEvent
 from prompt_toolkit.keys import Keys
 from prompt_toolkit.key_binding.vi_state import InputMode
@@ -234,6 +237,49 @@ def if_no_repeat(event: E) -> bool:
     return not event.is_repeat
 
 
+def document_is_multiline_python(document):
+    """Determine whether this is a multiline Python document."""
+
+    def ends_in_multiline_string():
+        """
+        ``True`` if we're inside a multiline string at the end of the text.
+        """
+        _multiline_string_delims = re.compile('''[']{3}|["]{3}''')
+
+        delims = _multiline_string_delims.findall(document.text)
+        opening = None
+        for delim in delims:
+            if opening is None:
+                opening = delim
+            elif delim == opening:
+                opening = None
+        return bool(opening)
+
+    if '\n' in document.text or ends_in_multiline_string():
+        return True
+
+    def line_ends_with_colon():
+        return document.current_line.rstrip()[-1:] == ':'
+
+    # If we just typed a colon, or still have open brackets, always insert a real newline.
+    if line_ends_with_colon() or \
+            (document.is_cursor_at_the_end and
+             has_unclosed_brackets(document.text_before_cursor)) or \
+            document.text.startswith('@'):
+        return True
+
+    # If the character before the cursor is a backslash (line continuation
+    # char), insert a new line.
+    elif document.text_before_cursor[-1:] == '\\':
+        return True
+
+    return False
+
+@Condition
+def is_multiline():
+    return document_is_multiline_python(python_input.default_buffer.document)
+
+
 def additional_bindings():
     registry = KeyBindings()
 
@@ -310,8 +356,6 @@ def additional_bindings():
         """
         Newline (in case of multiline input.
         """
-        from prompt_toolkit.filters import in_paste_mode
-
         event.current_buffer.newline(copy_margin=not in_paste_mode())
 
     @handle("c-j")
@@ -350,7 +394,10 @@ def additional_bindings():
         When the system bindings are loaded and suspend-to-background is
         supported, that will override this binding.
         """
-        event.current_buffer.insert_text(event.data)
+        if event.enable_system_bindings:
+            event.app.suspend_to_background()
+        else:
+            event.current_buffer.insert_text(event.data)
 
     @handle(Keys.BracketedPaste)
     def _(event: E) -> None:
@@ -375,6 +422,24 @@ def additional_bindings():
         event.current_buffer.insert_text(event.data, overwrite=False)
         event.app.quoted_insert = False
 
+    @handle('f4')
+    def _(event):
+        """Toggle between Vi and Emacs mode.
+
+        See Also
+        --------
+        `34_bottom_toolbar`
+            Utilized for this purpose.
+        """
+        event.editing_mode = not event.editing_mode == 'vi'
+
+    @handle('f6')
+    def _(event):
+        """
+        Enable/Disable paste mode.
+        """
+        event.paste_mode = not event.paste_mode
+
     return registry
 
 
@@ -387,3 +452,5 @@ if __name__ == "__main__":
     # unrelated but heres something sweet
     ip = get_ipython()
     ip.pt_app.app.output.enable_bracketed_paste()
+    # What teh hell is blocking or jamming <CR>
+    # ip.pt_app.app.key_bindings = merge_key_bindings([ip.pt_app.app.key_bindings, full_registry])

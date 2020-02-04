@@ -174,7 +174,6 @@
 <span id="prompt-toolkit"></span><h1>Prompt Toolkit<a class="headerlink" href="#module-prompt_toolkit_modules" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-default_profile.startup.31_yank_last_arg">
 <span id="yank-last-arg"></span><h2><a class="reference internal" href="#module-default_profile.startup.31_yank_last_arg" title="default_profile.startup.31_yank_last_arg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">31_yank_last_arg</span></code></a><a class="headerlink" href="#module-default_profile.startup.31_yank_last_arg" title="Permalink to this headline">¶</a></h2>
-<p>Has since grown to ~200 key bindings.</p>
 <dl class="function">
 <dt id="default_profile.startup.31_yank_last_arg.get_key_bindings">
 <code class="sig-name descname">get_key_bindings</code><span class="sig-paren">(</span><em class="sig-param">custom_key_bindings=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/31_yank_last_arg.html#get_key_bindings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.31_yank_last_arg.get_key_bindings" title="Permalink to this definition">¶</a></dt>
@@ -226,7 +225,7 @@ inserting the last word of each line in turn.</p>
 <dl class="function">
 <dt id="default_profile.startup.31_yank_last_arg.switch_to_navigation_mode">
 <code class="sig-name descname">switch_to_navigation_mode</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/31_yank_last_arg.html#switch_to_navigation_mode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.31_yank_last_arg.switch_to_navigation_mode" title="Permalink to this definition">¶</a></dt>
-<dd><p>Switches <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.11.1)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> from Vim insert mode to Vim normal mode.</p>
+<dd><p>Switches <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.12.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> from Vim insert mode to Vim normal mode.</p>
 <p>The function we can work with in the future if we want to change the
 keybinding for insert to navigation mode.</p>
 </dd></dl>
@@ -246,6 +245,8 @@ another handler.</p>
 </div>
 <div class="section" id="module-default_profile.startup.32_kb">
 <span id="kb"></span><h2><a class="reference internal" href="#module-default_profile.startup.32_kb" title="default_profile.startup.32_kb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">32_kb</span></code></a><a class="headerlink" href="#module-default_profile.startup.32_kb" title="Permalink to this headline">¶</a></h2>
+<p>Make prompt_toolkit’s keybindings more extensible.</p>
+<p>Reminder of where you left off:</p>
 <p>Bottom toolbar works but isn’t bound to a key idk why it isn’t working.
 The seemingly recommended interface is to merge with merge_key_bindings
 Difficult to add key_bindings after the merge though.
@@ -498,10 +499,13 @@ of subclasses with both class attributes and __init__’s.</p>
 <code class="sig-name descname">safely_get_registry</code><span class="sig-paren">(</span><em class="sig-param">_ip</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/32_kb.html#safely_get_registry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.32_kb.safely_get_registry" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="function">
-<dt id="default_profile.startup.32_kb.kb_main">
-<code class="sig-name descname">kb_main</code><span class="sig-paren">(</span><em class="sig-param">_ip=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/32_kb.html#kb_main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.32_kb.kb_main" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dl class="class">
+<dt id="default_profile.startup.32_kb.Documented">
+<em class="property">class </em><code class="sig-name descname">Documented</code><span class="sig-paren">(</span><em class="sig-param">text: str = ''</em>, <em class="sig-param">cursor_position: Optional[int] = None</em>, <em class="sig-param">selection: Optional[prompt_toolkit.selection.SelectionState] = None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/32_kb.html#Documented"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.32_kb.Documented" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">prompt_toolkit.document.Document</span></code></p>
+<p>I’ll admit this subclass doesn’t exist for much of a reason.</p>
+<p>However, it’s a LOT easier to work with classes with their dunders defined.</p>
+</dd></dl>
 
 </div>
 </div>
@@ -593,7 +597,7 @@ That’s all.</p>
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Jan 31, 2020.
+      Last updated on Feb 03, 2020.
     </div>
   </body>
 </html>
