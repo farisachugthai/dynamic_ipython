@@ -91,51 +91,6 @@ EXTRAS = {
 }
 
 # }}}}
-class UploadCommand(Command):  # {{{1
-    """Support setup.py upload."""
-
-    description = "Build and publish the package."
-    user_options = []
-    root = Path(__file__).parent
-
-    @staticmethod
-    def status(output):
-        """Print output in bold."""
-        print("\033[1m{0}\033[0m".format(output))
-
-    def initialize_options(self):
-        """Initialize upload options."""
-        pass
-
-    def finalize_options(self):
-        """Finalize upload options."""
-        pass
-
-    def run(self):
-        """Upload package."""
-        try:
-            self.status("Removing previous builds…")
-            rmtree(os.path.join(str(self.root), "dist"))
-        except OSError:
-            logging.warning("Could not renove previous builds")
-
-        self.status("Building Source and Wheel (universal) distribution…")
-
-        # I really dislike the idea of forking a new process from python to make
-        # a new python process....will this work the same way with exec(compile)?
-        os.system("{0} setup.py sdist bdist_wheel --universal".format(sys.executable))
-
-        self.status("Uploading the package to PyPI via Twine…")
-        os.system("twine upload dist/*")
-
-        self.status("Pushing git tags…")
-        os.system("git tag v{0}".format(__version__))
-        os.system("git push --tags")
-
-        sys.exit()
-
-
-# }}}
 # Where the magic happens: {{{1
 
 setup(
@@ -182,7 +137,7 @@ setup(
         "Natural Language :: English",
         "Operating System :: Android",
         "Operating System :: Microsoft :: Windows :: Windows 10",
-        "OperatingSystem ::POSIX:: Linux",
+        "Operating System :: POSIX:: Linux",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3 :: Only",
@@ -201,5 +156,51 @@ setup(
     }
     # could also include long_description, download_url, classifiers, etc.
 )  # }}}
+class UploadCommand(Command):  # {{{
+    """Support setup.py upload."""
+
+    description = "Build and publish the package."
+    user_options = []
+    root = Path(__file__).parent
+
+    @staticmethod
+    def status(output):
+        """Print output in bold."""
+        print("\033[1m{0}\033[0m".format(output))
+
+    def initialize_options(self):
+        """Initialize upload options."""
+        pass
+
+    def finalize_options(self):
+        """Finalize upload options."""
+        pass
+
+    def run(self):
+        """Upload package."""
+        try:
+            self.status("Removing previous builds…")
+            rmtree(os.path.join(str(self.root), "dist"))
+        except OSError:
+            logging.warning("Could not remove previous builds")
+
+        self.status("Building Source and Wheel (universal) distribution…")
+
+        # I really dislike the idea of forking a new process from python to make
+        # a new python process....will this work the same way with exec(compile)?
+        # os.system("{0} setup.py sdist bdist_wheel --universal".format(sys.executable))
+        setup()
+
+        self.status("Uploading the package to PyPI via Twine…")
+        os.system("twine upload dist/*")
+
+        self.status("Pushing git tags…")
+        os.system("git tag v{0}".format(__version__))
+        os.system("git push --tags")
+
+        sys.exit()
+
+
+# }}}
 
 # Vim: set fdm=marker:
