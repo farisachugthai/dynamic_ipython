@@ -1,3 +1,12 @@
+"""Try to make viewing large amounts of aliases a bit more manageable.
+
+As a product of running `%rehashx` the alias magic is unusable.
+
+In addition, we try to add enough dunders to the new `ReprAlias` class
+constructed here that it appropriately follows the ``mapping`` protocol
+as specified in the Python Language Reference.
+
+"""
 import copy
 import logging
 from reprlib import Repr
@@ -111,6 +120,7 @@ class ReprAlias(Repr):
     def __repr__(self):
         return "<{}>: {} aliases".format(self.__class__.__name__, len(self.aliases))
 
+    @reprlib.recursive_repr
     def __str__(self, maxdict=30):
         return "<{}>\n{}".format(
             self.__class__.__name__, self.repr_dict(self.aliases_dict, maxdict)
@@ -145,10 +155,13 @@ class ReprAlias(Repr):
         return other in self.aliases_dict
 
     def __iter__(self):
+        # Almost forgot the stopiteration!
         try:
             return iter(self.aliases)
         except TypeError:
             raise
+        except StopIteration:
+            pass
 
 
 if __name__ == "__main__":
