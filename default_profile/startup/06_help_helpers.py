@@ -48,6 +48,7 @@ class HelpMagics(Magics):
 
     """
 
+    @line_magic
     def print_help(self, arg=None):
         """Redirect :func:`help` to ``sys.stderr``.
 
@@ -60,6 +61,7 @@ class HelpMagics(Magics):
         with contextlib.redirect_stdout(sys.stderr):
             pydoc.help(arg)
 
+    @line_magic
     def save_help(self, redirected):
         """Redirect output from sys.stdout to a string."""
         saved = io.StringIO()
@@ -67,6 +69,7 @@ class HelpMagics(Magics):
             help(redirected)
             return saved
 
+    @line_magic
     def write_help(self, output_file, arg=None):
         """Write :func:`help` to a file.
 
@@ -82,20 +85,20 @@ class HelpMagics(Magics):
             with contextlib.redirect_stdout(f):
                 help(arg)
 
+    @line_magic
     def page_help(self, arg=None):
-        """Using IPython's `%pinfo` magic to page information to the console.
-
-        Also noting it's the only function in this module that actually needs
-        the IPython instance so the imports were moved here.
+        """Use pydoc's pager function to display docs.
 
         Parameters
         ----------
         arg : obj, optional
             Object to run :magic:`pinfo` on.
         """
-        if hasattr(self.shell, "pinfo"):
-            self.shell.pinfo(arg)
+        if arg is None:
+            return
+        return pydoc.pager(pydoc.getdoc(arg))
 
+    @line_magic
     def grep(self, obj, pattern=None):
         """Use :func:`re.compile` to match a pattern that may be in ``dir(obj)``.
 
@@ -125,6 +128,7 @@ class HelpMagics(Magics):
         attributes = dir(obj)
         yield "\n".join(i for i in attributes if re.search(compiled, i))
 
+    @line_magic
     def dirip(self):
         """Accomodations for dir(get_ipython()).
 
@@ -140,8 +144,7 @@ class HelpMagics(Magics):
 
         Examples
         ---------
-        >>> from default_profile.startup import help_helpers_mod
-        >>> i = help_helpers_mod.dirip()
+        >>> i = %dirip()
         >>> i.grep('complete')
         ['Completer', 'check_complete', 'complete', 'init_completer', 'pt_complete_style', 'set_completer_frame', 'set_custom_completer']
 
@@ -158,12 +161,64 @@ class HelpMagics(Magics):
 
 
 def load_ipython_extension(shell=None):
-    """Add to the list of extensions used by IPython."""
+    """Add to the list of extensions used by IPython.
+
+    ...wth happened here?
+
+    ~/projects/dynamic_ipython/default_profile/startup/06_help_helpers.py in <module>
+        176
+        177
+    --> 178 load_ipython_extension()
+            global load_ipython_extension = <function load_ipython_extension at 0x75e606d3a0>
+
+    ~/projects/dynamic_ipython/default_profile/startup/06_help_helpers.py in load_ipython_extension(shell=<IPython.terminal.interactiveshell.TerminalInteractiveShell object>)
+        173     register_line_magic(HelpMagics.write_help)
+        174     register_line_magic(HelpMagics.dirip)
+    --> 175     shell.register_magics(HelpMagics)
+            shell.register_magics = <bound method MagicsManager.register of <IPython.core.magic.MagicsManager object at 0x75e7612670>>
+            global HelpMagics = <class 'default_profile.startup.06_help_helpers.HelpMagics'>
+        176
+        177
+
+    ~/.local/share/virtualenvs/dynamic_ipython-mVJ3Ohov/lib/python3.8/site-packages/IPython/core/magic.py in register(self=<IPython.core.magic.MagicsManager object>, *magic_objects=(<class 'default_profile.startup.06_help_helpers.HelpMagics'>,))
+        403             if isinstance(m, type):
+        404                 # If we're given an uninstantiated class
+    --> 405                 m = m(shell=self.shell)
+            m = <class 'default_profile.startup.06_help_helpers.HelpMagics'>
+            global shell = undefined
+            self.shell = <IPython.terminal.interactiveshell.TerminalInteractiveShell object at 0x75e8c691f0>
+        406
+        407             # Now that we have an instance, we can register it and update the
+
+    ~/.local/share/virtualenvs/dynamic_ipython-mVJ3Ohov/lib/python3.8/site-packages/IPython/core/magic.py in __init__(self=<default_profile.startup.06_help_helpers.HelpMagics object>, shell=<IPython.terminal.interactiveshell.TerminalInteractiveShell object>, **kwargs={'parent': <IPython.terminal.interactiveshell.TerminalInteractiveShell object>})
+        533                 if isinstance(meth_name, str):
+        534                     # it's a method name, grab it
+    --> 535                     tab[magic_name] = getattr(self, meth_name)
+            tab = {}
+            magic_name = 'c'
+            global getattr = undefined
+            self = <default_profile.startup.06_help_helpers.HelpMagics object at 0x75e606cc10>
+            meth_name = 'c'
+        536                 else:
+        537                     # it's the real thing
+
+    AttributeError: 'HelpMagics' object has no attribute 'c'
+
+    First what the fuck are those variable names? Just the letters c and m?
+    Second how are so many unbound? I didnt call the function incorrectly 
+    so I imagine that thats unintentional.
+
+    """
     if shell is None:
         shell = get_ipython()
+
+    # todo: unittest that asserts this is in _ip.magics_manager.registry after registering.
+    register_line_magic(HelpMagics.grep)
+    register_line_magic(HelpMagics.page_help)
+    register_line_magic(HelpMagics.save_help)
+    register_line_magic(HelpMagics.write_help)
+    register_line_magic(HelpMagics.dirip)
     shell.register_magics(HelpMagics)
-    shell.register_line_magic(HelpMagics.grep)
-    shell.register_line_magic(HelpMagics.page_help)
-    shell.register_line_magic(HelpMagics.save_help)
-    shell.register_line_magic(HelpMagics.write_help)
-    shell.register_line_magic(HelpMagics.dirip)
+
+
+load_ipython_extension()
