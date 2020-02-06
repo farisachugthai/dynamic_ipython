@@ -29,9 +29,11 @@ That's pretty neat! I feel like I was trying to set something like that up
 with the sphinx build so it's cool to see it in this context.
 
 """
+import importlib
 import re
 import sys
 import warnings
+import unittest
 
 from IPython.core.getipython import get_ipython
 
@@ -65,3 +67,22 @@ class Option:
 )
 def option(request):
     return request.param
+
+
+# Here's the unittest alternative to pytest.importorskip
+def import_module(name, deprecated=False, *, required_on=()):
+    """Import and return the module to be tested, raising SkipTest if
+    it is not available.
+
+    If deprecated is True, any module or package deprecation messages
+    will be suppressed. If a module is required on a platform but optional for
+    others, set required_on to an iterable of platform prefixes which will be
+    compared against sys.platform.
+    """
+    with _ignore_deprecated_imports(deprecated):
+        try:
+            return importlib.import_module(name)
+        except ImportError as msg:
+            if sys.platform.startswith(tuple(required_on)):
+                raise
+            raise unittest.SkipTest(str(msg))
