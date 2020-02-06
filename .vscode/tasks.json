@@ -64,20 +64,26 @@
       "type": "shell"
     },
     {
-      "command": "${config:python.pythonPath}",
+      "command": "${config:python.pythonPath} -m sphinx-build ",
       "dependsOrder": "sequence",
       "group": "build",
-      "label": "second try sphinx-build",
+      "label": "sphinx-build",
       "type": "process",
+      "args": [
+        "-b",
+        "html",
+        "-o"
+      ],
       "windows": {
         "args": [
-          "-m",
-          "sphinx-build",
-          "-b",
-          "html",
-          "-o",
           "docs\\build\\html",
           "docs\\source"
+        ]
+      },
+      "linux": {
+        "args": [
+          "docs/build/html",
+          "docs/source"
         ]
       }
     },
@@ -107,9 +113,16 @@
       ],
       "command": "${config:python.pythonPath}",
       "group": "none",
-      "label": "python",
-      "type": "process",
-      "name": "YAPF current file"
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "label": "yapf file",
+      "type": "process"
     },
     {
       "label": "npm-install jupyter_conf",
@@ -125,10 +138,16 @@
       "args": [
         "."
       ],
+      "label": "electron",
       "command": [
         "npx",
         "electron"
       ]
+    },
+    {
+      "type": "npm",
+      "script": "install",
+      "problemMatcher": []
     }
   ],
   "version": "2.0.0"
