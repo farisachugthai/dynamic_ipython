@@ -9,7 +9,7 @@ as specified in the Python Language Reference.
 """
 import copy
 import logging
-from reprlib import Repr
+import reprlib
 
 from IPython.core.getipython import get_ipython
 
@@ -24,7 +24,7 @@ def get_aliases(shell=None):
     return shell.alias_manager.aliases
 
 
-class ReprAlias(Repr):
+class ReprAlias(reprlib.Repr):
     """Take user aliases and transform them to a dictionary.
 
     Then utilize :class:`reprlib.Repr` to print the structure.
@@ -72,28 +72,19 @@ class ReprAlias(Repr):
         return self.alias_manager.get_alias(self, other)
 
     def __getitem__(self, other):
-        """Implementation is wrong.
+        try:
+            return self.aliases_dict[other]
+        except TypeError:
+            raise
 
-        Traceback
-        ---------
-        >>> from wcwidth import wcswidth
-        >>> from default_profile.startup.repralias import ReprAlias, get_aliases
-        >>> aliases = ReprAlias(get_aliases)
-        >>> wcswidth(aliases)
-        Traceback (most recent call last):
-        File "/data/data/com.termux/files/home/.local/share/virtualenvs/dynamic_ipython-mVJ3Ohov/lib/python3.8/site-packages/IPython/core/interactiveshell.py", line 3319, in run_code
-        exec(code_obj, self.user_global_ns, self.user_ns)
-        File "<ipython-input-67-0ba317adf8d3>", line 1, in <module>
-        wcswidth(aliases)
-        File "/data/data/com.termux/files/home/.local/share/virtualenvs/dynamic_ipython-mVJ3Ohov/lib/python3.8/site-packages/wcwidth/wcwidth.py", line 201, in wcswidth
-        for char in pwcs[idx]:
-        File "/data/data/com.termux/files/home/projects/dynamic_ipython/default_profile/startup/repralias.py",
-        line 63, in __getitem__
-        return other in self.aliases_dict
-        TypeError: unhashable type: 'slice'
+    def __index__(self, other):
+        """I  think the difference is ``__getitem__`` ==> ReprAlias['ls']
+        and ``__index__`` ==> ReprAlias[0]."""
+        return self.keys()[other]
 
-        """
-        return other in self.aliases_dict
+    def keys(self):
+        # Well of course the above doesn't work i never defined keys
+        return self.aliases_dict.keys()
 
     def transform_aliases_to_dict(self):
         """Ensure everythings funcional. Then.
@@ -148,6 +139,9 @@ class ReprAlias(Repr):
     def __add__(self, alias):
         self.soft_define_alias(alias)
 
+    def __iadd__(self, alias):
+        self.soft_define_alias(alias)
+
     def __copy__(self):
         return copy.copy(self.aliases)
 
@@ -157,7 +151,7 @@ class ReprAlias(Repr):
     def __iter__(self):
         # Almost forgot the stopiteration!
         try:
-            return iter(self.aliases)
+            return iter(self.aliases_dict.items())
         except TypeError:
             raise
         except StopIteration:

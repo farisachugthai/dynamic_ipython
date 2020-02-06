@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """Create OS specific aliases to allow a user to use IPython anywhere."""
+from collections import UserDict
 import logging
 import os
 import shutil
 import subprocess
 import traceback
 
-from IPython.core.alias import InvalidAliasError
+from IPython.core.alias import InvalidAliasError, default_aliases
 from IPython.core.getipython import get_ipython
 from traitlets.config.application import ApplicationError
 
@@ -20,10 +21,11 @@ else:
 
 
 def git_cur_branch():
-    return subprocess.run(["git", "rev-parse", "--abbrev-ref", "HEAD"])
+    """Return the 'stdout' atribute of a `subprocess.CompletedProcess` checking what the branch of the repo is."""
+    return subprocess.run(["git", "rev-parse", "--abbrev-ref", "HEAD"]).stdout
 
 
-class CommonAliases:
+class CommonAliases(UserDict):
     r"""Add aliases common to all OSes. Overwhelmingly :command:`Git` aliases.
 
     This method adds around 100 aliases that can be
@@ -42,9 +44,7 @@ class CommonAliases:
 
     """
 
-    user_aliases = []
-
-    def __init__(self, shell=None, **kwargs):
+    def __init__(self, shell=None, user_aliases=None, **kwargs):
         """OS Agnostic aliases.
 
         Parameters
@@ -55,31 +55,71 @@ class CommonAliases:
         """
         self.shell = shell or get_ipython()
 
-        # todo: shit this was needs dict to tuple
-        # if kwargs:
-        #     self.tuple_to_dict(kwargs)
-        if self.user_aliases is None:
-            self.set_user_aliases()
+        if user_aliases is None:
+            self.user_aliases = default_aliases()
+        else:
+            self.user_aliases = user_aliases
+        self.dict_aliases = self.tuple_to_dict()
+        super().__init__(**kwargs)
 
     def __iter__(self):
         return self._generator()
 
     def _generator(self):
-        for itm in self.user_aliases:
+        for itm in self.dict_aliases:
             yield itm
 
     def __repr__(self):  # reprlib?
-        return "<Common Aliases>: # of aliases: {!r} ".format(len(self.user_aliases))
+        return "<Common Aliases>: # of aliases: {!r} ".format(len(self.dict_aliases))
 
-    def __getitem__(self, arg1):
-        # Todo: Make sure this works
-        return self[arg1]
+    # def __getitem__(self, arg1):
+    #     # Todo: Make sure this works
+    #     return self[arg1]
 
-    def set_user_aliases(self):
-        if len(self.shell.alias_manager.aliases) > 0:
-            self.user_aliases = self.shell.alias_manager.aliases
+    def extend(self, list_aliases):
+        """Implement the method `extend` in a similar way to how `list.extend` works."""
+        for i in list_aliases:
+            self.shell.alias_manager.define_alias(*alias)
 
-    def tuple_to_dict(tuple_):
+    def update(self, other):
+        """Properly map aliases as dictionaries.
+
+        As stated in the language reference under Common Sequence Operations.:
+
+            Concatenating immutable sequences always results in a new object.
+            This means that building up a sequence by repeated concatenation
+            will have a quadratic runtime cost in the total sequence length.
+            To get a linear runtime cost, you must switch to one of the
+            alternatives below:
+
+                - **If concatenating tuple objects, extend a list instead.**
+
+        """
+        try:
+            self.dict_aliases.update(other)
+        except TypeError:
+            raise
+
+    def __add__(self, other):
+        return self.update(other)
+
+    def __iadd__(self, other):
+        return self.update(other)
+
+    def __mul__(self):
+        raise NotImplementedError
+
+    def __len__(self):
+        return len(self.dict_aliases)
+
+    def len(self):
+        return self.__len__()
+
+    def append(self, list_aliases):
+        for i in list_aliases:
+            self.shell.alias_manager.define_alias(alias)
+
+    def tuple_to_dict(self):
         """Showcasing how to convert a tuple into a dict.
 
         Nothing particularly hard, just a good exercise.
@@ -128,8 +168,8 @@ class CommonAliases:
 
         """
         ret = {}
-        for i, j in enumerate(tuple_):
-            ret[tuple_[i][0]] = tuple_[i][1]
+        for i, j in enumerate(self.user_aliases):
+            ret[self.user_aliases[i][0]] = self.user_aliases[i][1]
 
         return ret
 
@@ -183,8 +223,7 @@ class CommonAliases:
         if "chown" in self.user_aliases:
             from shutil import chown
 
-    @classmethod
-    def git(cls):
+    def git(self):
         """100+ git aliases.
 
         Notes
@@ -236,7 +275,7 @@ class CommonAliases:
             Object `%git_staged` not found.
 
         """
-        cls.user_aliases += [
+        self.user_aliases += [
             ("g", "git diff --staged --stat %l"),
             ("ga", "git add -v %l"),
             ("gaa", "git add --all %l"),
@@ -344,23 +383,10 @@ class CommonAliases:
             ("..", "cd .."),
             ("...", "cd ../.."),
         ]
-        return cls.user_aliases
 
 
 class LinuxAliases(CommonAliases):
     """Add Linux specific aliases."""
-
-    def __init__(self, shell=None, aliases=None, **kwargs):
-        """The WindowsAliases implementation of this is odd so maybe branch off.
-
-        Parameters
-        ----------
-        user_aliases : list of ('alias', 'system command') tuples
-            User aliases to add the user's namespace.
-
-        """
-        super().__init__(**kwargs)
-        self.busybox()
 
     def __repr__(self):
         return "Linux Aliases: {!r}".format(len(self.user_aliases))
@@ -455,28 +481,6 @@ class WindowsAliases(CommonAliases):
 
     """
 
-    def __init__(self, shell=None, aliases=None, **kwargs):
-        """Initialize the platform specific alias manager with IPython.
-
-        Parameters
-        ----------
-        shell : str (external command), optional
-            The command used to invoke the system shell. If none
-            is provided during instantiation, the function will
-            set :attr:`WindowsAliases.shell` to the
-            |ip| instance.
-
-        user_aliases : list of ('alias', 'system command') tuples
-            User aliases to add the user's namespace.
-
-        """
-        if aliases is not None:
-            self.user_aliases = aliases
-        else:
-            self.user_aliases = self.set_user_aliases()
-        self.shell = shell or get_ipython()
-        super().__init__(**kwargs)
-
     @staticmethod
     def _find_exe(self, exe=None):
         """Use :func:`shutil.which` to determine whether an executable exists.
@@ -523,6 +527,8 @@ class WindowsAliases(CommonAliases):
         """
         cls.user_aliases = [
             ("assoc", "assoc %l"),
+            ("cd", "cd %l"),
+            ("chdir", "chdir %l"),
             ("control", "control %l"),
             ("controlpanel", "control %l"),
             ("copy", "copy %s %s"),
@@ -646,41 +652,69 @@ def generate_aliases(_ip=None):
 
     Planning on coming up with a new way of introducing the aliases into the user namespace.
 
+    # TODO: Work in the Executable() class check.
     """
     if _ip is None:
         _ip = get_ipython()
     if not hasattr(_ip, "magics_manager"):
         raise ApplicationError("Are you running in IPython?")
 
-    common = CommonAliases(user_aliases=_ip.alias_manager.user_aliases)
+    common_aliases = CommonAliases(
+        shell=_ip, user_aliases=_ip.alias_manager.user_aliases
+    )
+    common_aliases.git()
+    common_aliases.python_exes()
 
     from default_profile.util.machine import Platform
 
     machine = Platform()
-    # TODO: Work in the Executable() class check.
-    common_aliases = CommonAliases()
-    common_aliases.python_exes()
 
-    user_aliases = CommonAliases.git()
     if machine.is_linux:
-        # user_aliases += LinuxAliases().busybox()
         linux_aliases = LinuxAliases()
-        user_aliases.extend(linux_aliases.busybox())
+        # common_aliases.user_aliases.append(linux_aliases.user_aliases)
     elif machine.is_win:
-        # finish the shell class in default_profile.util.machine
-        # then we can create a shell class that determines if
-        # we're in cmd or pwsh
-        user_aliases += WindowsAliases.cmd_aliases()
-    return user_aliases
+        windows_aliases = WindowsAliases()
+        # common_aliases.user_aliases.append(windows_aliases.user_aliases)
+
+    # TODO: allow adding of these classes
+    return common_aliases
 
 
 def redefine_aliases(aliases, shell=None):
-    """Now a function to allow the user to rerun as necesaary."""
+    """Now a function to allow the user to rerun as necesaary.
+
+    Parameters
+    ----------
+    aliases : list of tuples
+        Aliases to rerun. Can be easily generated from `generate_aliases`
+
+    Returns
+    -------
+    None
+
+    Raises
+    ------
+    :exc:`traitlets.config.application.ApplicationError`
+
+    Examples
+    --------
+    >>> shell = get_ipython()
+    >>> len(shell.alias_manager.user_aliases)  # DOCTEST: +SKIP 
+        3
+    >>> # and even if it's not
+    >>> shell.alias_manager.user_aliases = [('a', 'a'), ('b', 'b'), ('c', 'c')]
+    >>> redefine_aliases([('ls', 'ls -F')])
+    >>> shell.alias_manager.user_aliases
+        4
+
+    """
     if shell is None:
         shell = get_ipython()
+    if not hasattr(shell, "alias_manager"):
+        raise ApplicationError
     try:
         for i in aliases:
-            shell.alias_manager.define_alias(*i)
+            shell.alias_manager.define_alias(i[0], i[1])
     except InvalidAliasError:
         pass
 

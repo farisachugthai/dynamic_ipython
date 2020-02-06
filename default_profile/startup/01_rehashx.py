@@ -25,6 +25,7 @@ import cgitb
 import code
 import faulthandler
 import logging
+import platform
 import runpy
 import sys
 import threading
@@ -133,5 +134,7 @@ if __name__ == "__main__":
     _ip = get_ipython()
 
     if _ip is not None:
-        rehashx_run()
         _ip.excepthook = handled
+        if not platform.platform().startswith('Win'):
+            # yeah it executes everything in the dir but checks for permission incorrectly
+            rehashx_run()

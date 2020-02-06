@@ -1,7 +1,7 @@
-"""Holy fuck this works."""
+import functools
 from datetime import date
 from pathlib import Path
-import functools
+from shutil import get_terminal_size
 from traceback import print_exception
 
 from prompt_toolkit import ANSI, HTML
@@ -20,11 +20,10 @@ from prompt_toolkit.styles.pygments import (
 
 from pygments.token import Token
 from IPython.core.getipython import get_ipython
-from testpath import env
 
 try:
     from gruvbox.gruvbox import Gruvbox
-except:
+except ImportError:
     Gruvbox = None
 
 
@@ -72,6 +71,10 @@ class BottomToolbar:
     def __call__(self):
         return self.rerender()
 
+    def __len__(self):
+        """Returns `shutil.get_terminal_size.columns`."""
+        return get_terminal_size().columns
+
     def rerender(self):
         """Render the toolbar at the bottom for prompt_toolkit.
 
@@ -101,7 +104,11 @@ class BottomToolbar:
         #         (Token.Generic.Prompt, f"{Path.cwd()} {date.today()}")]
         # Nope! str and _Token can't be concatenated and this'll not only freeze
         # the running session but the terminal itself
-        return f" [F4] Emacs: {Path.cwd()} {date.today()}"
+        toolbar = f" [F4] Emacs: {Path.cwd()}                 {date.today()!a}"
+        # really upset this didn't work `{date.today():>{len(self)}}"
+        # goddamn neither did that
+        # return "{} {:>150}".format(toolbar, date.today())
+        return toolbar
 
     def init_style(self):
         # Could set this to _ip.pt_app.style i suppose
@@ -111,13 +118,11 @@ class BottomToolbar:
 
     def override_style(self):
         """Could be easily modified to utilize traitlets. However currently not used"""
-        style_overrides_env = env.get("PTK_STYLE_OVERRIDES")
-        if style_overrides_env:
-            try:
-                style_overrides = Style.from_dict(style_overrides_env)
-                prompt_args["style"] = merge_styles([style, style_overrides])
-            except (AttributeError, TypeError, ValueError):
-                print_exception()
+        try:
+            style_overrides = Style.from_dict(style_overrides_env)
+            prompt_args["style"] = merge_styles([style, style_overrides])
+        except (AttributeError, TypeError, ValueError):
+            print_exception()
 
 
 def add_toolbar(toolbar=None):

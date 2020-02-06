@@ -218,7 +218,7 @@ def load_ipython_extension(shell=None):
     register_line_magic(HelpMagics.save_help)
     register_line_magic(HelpMagics.write_help)
     register_line_magic(HelpMagics.dirip)
-    shell.register_magics(HelpMagics)
+    # shell.register_magics(HelpMagics)
 
 
 load_ipython_extension()

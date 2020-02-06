@@ -3,9 +3,11 @@
 
 Opens a notebook, strips its output, and overwrites the original file.
 
-Useful as a :command:`git` filter or pre-commit hook for users who don't want to track output in VCS.
+Useful as a :command:`git` filter or pre-commit hook for users who don't want
+to track output in VCS.
 
-This does mostly the same thing as the `Clear All Output` command in the notebook UI.
+This does mostly the same thing as the ``Clear All Output`` command
+in the notebook UI.
 
 """
 import codecs
@@ -67,11 +69,12 @@ def main():
     try:
         filename = sys.argv[1]
     except IndexError:
-        sys.exit('Usage: TODO')
+        sys.exit("Usage: TODO")
 
     with codecs.open(filename, "r+", encoding="utf8") as f:
         nb = read(f, as_version=NO_CONVERT)
         nb = strip_output(nb)
+
 
 if __name__ == "__main__":
     sys.exit(main())
