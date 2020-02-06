@@ -32,7 +32,7 @@ from pathlib import Path
 from IPython.core.release import version_info
 from IPython.terminal.prompts import ClassicPrompts
 
-log_datefmt="%Y-%m-%d %H:%M:%S"
+log_datefmt = "%Y-%m-%d %H:%M:%S"
 default_log_format = (
     "[ %(name)s : %(relativeCreated)d :] %(levelname)s : %(module)s : --- %(message)s "
 )
@@ -516,6 +516,7 @@ try:
     from gruvbox.gruvbox import Gruvbox
 except (ImportError, ModuleNotFoundError):
     from pygments.styles import friendly
+
     c.TerminalInteractiveShell.highlighting_style = "friendly"
 else:
     c.TerminalInteractiveShell.highlighting_style = Gruvbox
@@ -805,7 +806,6 @@ try:
 except ImportError:
     pass
 else:
-
 
     @dataclasses.dataclass
     class TimedFormatter(BaseFormatterDoc):

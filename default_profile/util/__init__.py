@@ -43,7 +43,6 @@ from default_profile.util.copytree import CopyTree
 from default_profile.util.machine import Platform
 from default_profile.util.module_log import stream_logger
 from default_profile.util.paths import _path_build, PathValidator
-from default_profile.util.pager2 import c
 from default_profile.util.profile_override import ReprProfileDir
 from default_profile.util.timer import timer as _itimer
 

@@ -21,7 +21,8 @@ BASIC_FORMAT = "[%(created)f %(levelname)s ] %(module)s  %(message)s : "
 
 kernel_formatter = logging.Formatter(fmt=BASIC_FORMAT, datefmt=log_datefmt)
 
-kernel_logger.addHandler(logging.StreamHandler().addFormatter(kernel_formatter))
+handler = logging.StreamHandler().setFormatter(kernel_formatter)
+kernel_logger.addHandler()
 kernel_logger.setLevel(logging.WARNING)
 
 c.Application.log_format = BASIC_FORMAT

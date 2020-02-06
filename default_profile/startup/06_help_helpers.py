@@ -159,66 +159,23 @@ class HelpMagics(Magics):
         shell_list = SList(dir(self.shell))
         return shell_list
 
+    def load(self):
+        load_ipython_extension()
+
 
 def load_ipython_extension(shell=None):
-    """Add to the list of extensions used by IPython.
-
-    ...wth happened here?
-
-    ~/projects/dynamic_ipython/default_profile/startup/06_help_helpers.py in <module>
-        176
-        177
-    --> 178 load_ipython_extension()
-            global load_ipython_extension = <function load_ipython_extension at 0x75e606d3a0>
-
-    ~/projects/dynamic_ipython/default_profile/startup/06_help_helpers.py in load_ipython_extension(shell=<IPython.terminal.interactiveshell.TerminalInteractiveShell object>)
-        173     register_line_magic(HelpMagics.write_help)
-        174     register_line_magic(HelpMagics.dirip)
-    --> 175     shell.register_magics(HelpMagics)
-            shell.register_magics = <bound method MagicsManager.register of <IPython.core.magic.MagicsManager object at 0x75e7612670>>
-            global HelpMagics = <class 'default_profile.startup.06_help_helpers.HelpMagics'>
-        176
-        177
-
-    ~/.local/share/virtualenvs/dynamic_ipython-mVJ3Ohov/lib/python3.8/site-packages/IPython/core/magic.py in register(self=<IPython.core.magic.MagicsManager object>, *magic_objects=(<class 'default_profile.startup.06_help_helpers.HelpMagics'>,))
-        403             if isinstance(m, type):
-        404                 # If we're given an uninstantiated class
-    --> 405                 m = m(shell=self.shell)
-            m = <class 'default_profile.startup.06_help_helpers.HelpMagics'>
-            global shell = undefined
-            self.shell = <IPython.terminal.interactiveshell.TerminalInteractiveShell object at 0x75e8c691f0>
-        406
-        407             # Now that we have an instance, we can register it and update the
-
-    ~/.local/share/virtualenvs/dynamic_ipython-mVJ3Ohov/lib/python3.8/site-packages/IPython/core/magic.py in __init__(self=<default_profile.startup.06_help_helpers.HelpMagics object>, shell=<IPython.terminal.interactiveshell.TerminalInteractiveShell object>, **kwargs={'parent': <IPython.terminal.interactiveshell.TerminalInteractiveShell object>})
-        533                 if isinstance(meth_name, str):
-        534                     # it's a method name, grab it
-    --> 535                     tab[magic_name] = getattr(self, meth_name)
-            tab = {}
-            magic_name = 'c'
-            global getattr = undefined
-            self = <default_profile.startup.06_help_helpers.HelpMagics object at 0x75e606cc10>
-            meth_name = 'c'
-        536                 else:
-        537                     # it's the real thing
-
-    AttributeError: 'HelpMagics' object has no attribute 'c'
-
-    First what the fuck are those variable names? Just the letters c and m?
-    Second how are so many unbound? I didnt call the function incorrectly 
-    so I imagine that thats unintentional.
-
-    """
+    """Add to the list of extensions used by IPython."""
     if shell is None:
         shell = get_ipython()
 
+    hm = HelpMagics()
     # todo: unittest that asserts this is in _ip.magics_manager.registry after registering.
-    register_line_magic(HelpMagics.grep)
-    register_line_magic(HelpMagics.page_help)
-    register_line_magic(HelpMagics.save_help)
-    register_line_magic(HelpMagics.write_help)
-    register_line_magic(HelpMagics.dirip)
+    shell.register_magic_function(hm.grep)
+    shell.register_magic_function(hm.page_help)
+    shell.register_magic_function(hm.save_help)
+    shell.register_magic_function(hm.write_help)
+    shell.register_magic_function(hm.dirip)
     # shell.register_magics(HelpMagics)
 
 
-load_ipython_extension()
+# load_ipython_extension()

@@ -137,7 +137,19 @@ def readline_config(history_file=None):
     readline.parse_and_bind("tab: complete")
     readline.parse_and_bind('"\\e[B": history-search-forward')
     readline.parse_and_bind('"\\e[A": history-search-backward')
+    readline.parse_and_bind('"\\C-l": clear-screen')
+    readline.parse_and_bind('set show-all-if-ambiguous on')
+    readline.parse_and_bind('"\\C-o": tab-insert')
+    readline.parse_and_bind('"\\C-r": reverse-search-history'),
+    readline.parse_and_bind('"\\C-s": forward-search-history'),
+    readline.parse_and_bind('"\\C-p": "history-search-backward'),
+    readline.parse_and_bind('"\\C-n": "history-search-forward"'),
+    readline.parse_and_bind('"\\e[A": "history-search-backward"'),
+    readline.parse_and_bind('"\\e[B": "history-search-forward"'),
+    readline.parse_and_bind('"\\C-k": "kill-line"'),
+    readline.parse_and_bind('"\\C-u": unix-line-discard'),
 
+# Deprecated, use PromptManager.in2_template
     setup_historyfile(histfile)
     atexit.register(teardown_historyfile, histfile)
 
@@ -206,5 +218,9 @@ if __name__ == "__main__":
         except (ImportError, ModuleNotFoundError):
             logging.warning("Readline not imported.")
             raise
+        else:
+            from pyreadline.rlmain import Readline
+            line_editor = Readline()
+            line_editor.read_inputrc()  # This parses that pyreadlineconfig.ini we have
 
     readline_config()

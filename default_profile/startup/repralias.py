@@ -55,6 +55,7 @@ class ReprAlias(reprlib.Repr):
             self.shell = get_ipython()
         self.alias_manager = self.shell.alias_manager
         self.aliases_dict = self.transform_aliases_to_dict()
+        self.idx = 0
         super().__init__()
 
     def get_alias(self, other):
@@ -80,7 +81,7 @@ class ReprAlias(reprlib.Repr):
     def __index__(self, other):
         """I  think the difference is ``__getitem__`` ==> ReprAlias['ls']
         and ``__index__`` ==> ReprAlias[0]."""
-        return self.keys()[other]
+        return index(self.keys(), other)
 
     def keys(self):
         # Well of course the above doesn't work i never defined keys
@@ -149,14 +150,20 @@ class ReprAlias(reprlib.Repr):
         return other in self.aliases_dict
 
     def __iter__(self):
-        # Almost forgot the stopiteration!
-        try:
-            return iter(self.aliases_dict.items())
-        except TypeError:
-            raise
-        except StopIteration:
-            pass
+        return iter(self.aliases_dict.items())
+
+    def __next__(self):
+        max = len(self)
+        if max >= self.idx:
+            # Reset the loop and raise stopiteration
+            self.idx = 0
+            raise StopIteration
+        self.idx += 1
+        return self.aliases_dict[self.idx]
 
 
 if __name__ == "__main__":
+
     aliases = ReprAlias(get_aliases())
+
+# Vim: set et:
