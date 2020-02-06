@@ -10,6 +10,8 @@ Todo
 Subcommands in IPython and Jupyter.
 ===================================
 
+.. program:: ipython
+
 There's a ton that could be done here.
 Well I guess sub-apps would be a better name for it but whatever.
 
@@ -43,6 +45,8 @@ and was being called with 4. *sigh*.
 IPython history
 ===============
 
+.. cmdoption:: history
+
 Here's some seemingly inconsistent behavior.
 
 .. code-block:: shell
@@ -60,29 +64,26 @@ Here's some seemingly inconsistent behavior.
    on using subcommand 'cmd', do: `ipython-history cmd -h`.
 
 
-So there we have instructions to use the invocation ``ipython-history``.::
+So there we have instructions to use the invocation ``ipython-history``.
+
+.. code-block:: bash
 
    $: ipython-history -h
    ipython-history: command not found
 
-
 Erhm. That's confusing.
-
 So how does the `history` command work?
-
 
 IPython History API
 ===================
 
 Interact with the IPython :mod:`sqlite3` database.
 
-.. program:: history
-
-.. option:: trim
+.. cmdoption:: trim
 
    Trim the IPython history database to the last 1000 entries.
 
-.. option:: clear
+.. cmdoption:: clear
 
    Clear the IPython history database, deleting all entries.
 

@@ -182,7 +182,7 @@
 <p>Still considering different ways of designing a new Windows specific pager
 on IPython. It’s a bit difficult as the default implementation is over 10
 years old, and it seems to mirror a similar setup from <a class="reference external" href="https://docs.python.org/3/library/pydoc.html#module-pydoc" title="(in Python v3.8)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pydoc</span></code></a> where a
-Windows user who doesn’t have <span class="target" id="index-0"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PAGER</span></code> set will use a home-brewed
+Windows user who doesn’t have <span class="target" id="index-0"></span><a class="reference internal" href="#envvar-PAGER"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PAGER</span></code></a> set will use a home-brewed
 <strong class="command">more</strong> lite type pager.</p>
 <p>However, I haven’t found anywhere in the docs where this is mentioned which
 is frustrating, in addition to the fact that both APIs are written with no
@@ -201,17 +201,17 @@ the function <code class="docutils literal notranslate"><span class="pre">read_p
 <blockquote>
 <div><p>If True (the default), and the encoding declaration is found in the first
 two lines, that line will be excluded from the output - compiling a
-unicode string with an encoding declaration is a SyntaxError in Python 2.</p>
+unicode string with an encoding declaration is a <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#SyntaxError" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SyntaxError</span></code></a> in Python 2.</p>
 </div></blockquote>
 <div class="section" id="ipython-core-page-page">
-<h3><a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.page.html#IPython.core.page.page" title="(in IPython v7.12.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.core.page.page()</span></code></a><a class="headerlink" href="#ipython-core-page-page" title="Permalink to this headline">¶</a></h3>
+<h3><a class="reference internal" href="#IPython.core.page.page" title="IPython.core.page.page"><code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.core.page.page()</span></code></a><a class="headerlink" href="#ipython-core-page-page" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
-<dt id="default_profile.util.pager2.page.page">
-<code class="sig-prename descclassname">page.</code><code class="sig-name descname">page</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#default_profile.util.pager2.page.page" title="Permalink to this definition">¶</a></dt>
+<dt id="IPython.core.page.page">
+<code class="sig-name descname">page</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/IPython/core/page.html#page"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IPython.core.page.page" title="Permalink to this definition">¶</a></dt>
 <dd><p>Pretty print an object and display it through the pager.</p>
 </dd></dl>
 
-<p>What’s that <a class="reference internal" href="#default_profile.util.pager2.page.page" title="default_profile.util.pager2.page.page"><code class="xref py py-obj docutils literal notranslate"><span class="pre">page.page</span></code></a> line? Well…time to go exploring!</p>
+<p>What’s that <code class="xref py py-obj docutils literal notranslate"><span class="pre">page.page</span></code> line? Well…time to go exploring!</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">IPython.core.magics.basic</span> <span class="kn">import</span> <span class="n">BasicMagics</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">BasicMagics</span><span class="o">.</span><span class="n">page</span>
 </pre></div>
@@ -254,6 +254,13 @@ unicode string with an encoding declaration is a SyntaxError in Python 2.</p>
 </div>
 <div class="section" id="rewriting-the-pager">
 <h2>Rewriting the pager<a class="headerlink" href="#rewriting-the-pager" title="Permalink to this headline">¶</a></h2>
+<dl class="envvar">
+<dt id="envvar-PAGER">
+<code class="sig-name descname">PAGER</code><a class="headerlink" href="#envvar-PAGER" title="Permalink to this definition">¶</a></dt>
+<dd><p>An environment variable set to the value of what the user wants to view
+text with on the cmd line.</p>
+</dd></dl>
+
 <p>Found some platform specific code. I think we’re in the right direction.</p>
 <p>Aug 17, 2019:</p>
 <p>Think I got it.</p>
@@ -292,43 +299,18 @@ if the user has a pager they wanna implement!</p>
 <p>Oct 28, 2019:</p>
 <p>Just ran this in the shell and I’m really pleased with it.</p>
 <p>It utilizes the <code class="xref py py-attr docutils literal notranslate"><span class="pre">autocall</span></code> functionality of IPython, works with the
-pycolorize utils, uses the page.page core function.</p>
+<code class="docutils literal notranslate"><span class="pre">pycolorize</span></code> utils, uses the <a class="reference internal" href="#IPython.core.page.page" title="IPython.core.page.page"><code class="xref py py-obj docutils literal notranslate"><span class="pre">page</span></code></a> core function.</p>
 <p>If the user doesn’t provide an argument, then just show them the last input
 they gave us especially since that var is <strong>guaranteed</strong> to always
 be there.</p>
 <p>Like solid shit man. And I came up with this in 10 minutes too!</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="nd">@line_magic</span>
-<span class="gt">  File</span><span class="nn"> &quot;&lt;ipython-input-1-087d3f929ee3&gt;&quot;</span><span class="gt">, line </span><span class="mi">1</span>
-    <span class="nd">@line_magic</span>
-               <span class="o">^</span>
-<span class="ne">SyntaxError</span>: unexpected EOF while parsing
-
-
-<span class="gp">In [2]: </span><span class="o">/</span><span class="n">p</span>
-<span class="gt">--------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
-<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">2</span><span class="o">-</span><span class="n">d40139f363ae</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">p</span><span class="p">()</span>
-
-<span class="ne">NameError</span>: name &#39;p&#39; is not defined
-</pre></div>
-</div>
-<div class="admonition-todo admonition" id="id1">
-<p class="admonition-title">Todo</p>
-<p>Literally how is this the part that’s giving me errors.</p>
-</div>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">PAGER_LOGGER</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;default_profile.util&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">getchild</span><span class="p">(</span><span class="s1">&#39;pager2&#39;</span><span class="p">)</span>
-<span class="n">PAGER_HANDLER</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">()</span>
-<span class="n">PAGER_LOGGER</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">PAGER_HANDLER</span><span class="p">)</span>
-</pre></div>
-</div>
 </div>
 <div class="section" id="original-pydoc-implementation-and-errors">
 <h3>Original Pydoc Implementation and Errors<a class="headerlink" href="#original-pydoc-implementation-and-errors" title="Permalink to this headline">¶</a></h3>
 <p>Outside of the stupid traceback, that command worked perfectly for me.</p>
-<p>I have <span class="target" id="index-3"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PAGER</span></code> set on Windows {which I realize isn’t typical},
+<p>I have <span class="target" id="index-3"></span><a class="reference internal" href="#envvar-PAGER"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PAGER</span></code></a> set on Windows {which I realize isn’t typical},
 however we should re-use this implementation entirely and cut
-<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.page.html#IPython.core.page.page" title="(in IPython v7.12.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IPython.core.page.page</span></code></a> out.</p>
+<a class="reference internal" href="#IPython.core.page.page" title="IPython.core.page.page"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IPython.core.page.page</span></code></a> out.</p>
 <p>Also worth noting <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.payloadpage.html#IPython.core.payloadpage.page" title="(in IPython v7.12.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IPython.core.payloadpage.page</span></code></a>.:</p>
 <blockquote>
 <div><p>In [63]: pydoc.pipepager(inspect.getdoc(arg), os.environ.get(‘PAGER’))</p>
@@ -340,117 +322,7 @@ for a str.</p>
 <p><a class="reference external" href="https://docs.python.org/3/library/inspect.html#module-inspect" title="(in Python v3.8)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">inspect</span></code></a> has a million more methods and pydoc does too so possibly change the
 <a class="reference external" href="https://docs.python.org/3/library/inspect.html#inspect.getdoc" title="(in Python v3.8)"><code class="xref py py-func docutils literal notranslate"><span class="pre">inspect.getdoc()</span></code></a> part, but honestly that one line is 80% of the way
 to what I’ve been trying to do.</p>
-<span class="target" id="module-default_profile.util.pager2"></span><dl class="exception">
-<dt id="default_profile.util.pager2.NotInIPythonError">
-<em class="property">exception </em><code class="sig-name descname">NotInIPythonError</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/util/pager2.html#NotInIPythonError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.pager2.NotInIPythonError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">RuntimeError</span></code></a></p>
-<p>Error raised when a magic is invoked outside of IPython.</p>
-<dl class="method">
-<dt id="default_profile.util.pager2.NotInIPythonError.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/util/pager2.html#NotInIPythonError.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.pager2.NotInIPythonError.__init__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="default_profile.util.pager2.PyPager">
-<em class="property">class </em><code class="sig-name descname">PyPager</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">text=None</em>, <em class="sig-param">use_pager=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/util/pager2.html#PyPager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.pager2.PyPager" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<p>A pager if you’re outside of IPython.</p>
-<dl class="method">
-<dt id="default_profile.util.pager2.PyPager.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">*args</em>, <em class="sig-param">text=None</em>, <em class="sig-param">use_pager=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/util/pager2.html#PyPager.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.pager2.PyPager.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initializes the class.</p>
-<p>This occurs by binding an optional text to the instance and determining
-whether to use a pager or output by printing to the shell.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul>
-<li><p><strong>text</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – Text to page</p></li>
-<li><p><strong>use_pager</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to print to the shell or pipe to a pager.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="default_profile.util.pager2.PyPager.call">
-<code class="sig-name descname">call</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">text</em>, <em class="sig-param">use_pager=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/util/pager2.html#PyPager.call"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.pager2.PyPager.call" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="function">
-<dt id="default_profile.util.pager2.blocking_pager">
-<code class="sig-name descname">blocking_pager</code><span class="sig-paren">(</span><em class="sig-param">text</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/util/pager2.html#blocking_pager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.pager2.blocking_pager" title="Permalink to this definition">¶</a></dt>
-<dd><p>A pipe pager that works on Windows. Doesn’t colorize anything.</p>
-<p>It’s better that way though as we can send the contents elsewhere to
-be highlighted.</p>
-<p>Better to keep things separated.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="default_profile.util.pager2.get_docs_and_page">
-<code class="sig-name descname">get_docs_and_page</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/util/pager2.html#get_docs_and_page"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.pager2.get_docs_and_page" title="Permalink to this definition">¶</a></dt>
-<dd><p>Resourceful way to parse sys.argv and then expand a <code class="docutils literal notranslate"><span class="pre">*args</span></code>.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="default_profile.util.pager2.were_in_ipython">
-<code class="sig-name descname">were_in_ipython</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/util/pager2.html#were_in_ipython"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.pager2.were_in_ipython" title="Permalink to this definition">¶</a></dt>
-<dd><p>Call ipython to make sure we’re really in it.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="default_profile.util.pager2.provided_or_last">
-<code class="sig-name descname">provided_or_last</code><span class="sig-paren">(</span><em class="sig-param">s=None</em>, <em class="sig-param">shell=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/util/pager2.html#provided_or_last"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.pager2.provided_or_last" title="Permalink to this definition">¶</a></dt>
-<dd><p>Either run a provided code_cell from a user or rerun their last input.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul>
-<li><p><strong>s</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – str to page</p></li>
-<li><p><strong>shell</strong> (<em>IPython instance</em><em>, </em><em>optional</em>) – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Found user code.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>code_to_page</p>
-</dd>
-</dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>What is the actual implementation name for the var <code class="docutils literal notranslate"><span class="pre">_i</span></code>? I think IPython
-stores a <code class="xref py py-attr docutils literal notranslate"><span class="pre">last_execution_result</span></code> or maybe a
-<code class="xref py py-attr docutils literal notranslate"><span class="pre">last_execution_succeeded</span></code>.</p>
-<p>Well the classes that they made for the last_execution_result and info
-are odd to say the least.</p>
-<p>Also we should consider using something else to find user code.</p>
-</div>
-</dd></dl>
-
-<dl class="function">
-<dt id="default_profile.util.pager2.c">
-<code class="sig-name descname">c</code><span class="sig-paren">(</span><em class="sig-param">s=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/util/pager2.html#c"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.pager2.c" title="Permalink to this definition">¶</a></dt>
-<dd><p>Intentionally abbreviated function call to <code class="xref py py-obj docutils literal notranslate"><span class="pre">%pycat</span></code>.</p>
-<p>This implementation has the added benefit of wrapping everything in a
-try/except that catches KeyboardInterrupts and EOFErrors because pycat
-doesn’t.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The internal variable namespace, or an instance of the magic
-<code class="xref py py-class docutils literal notranslate"><span class="pre">NameSpaceMagics</span></code>
-can display the magics through the attribute …magics.</p>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>s</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – String to page.</p>
-</dd>
-</dl>
-</dd></dl>
-
-</div>
+<span class="target" id="module-default_profile.util.pager2"></span></div>
 </div>
 </div>
 
@@ -460,7 +332,7 @@ can display the magics through the attribute …magics.</p>
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 03, 2020.
+      Last updated on Feb 05, 2020.
     </div>
   </body>
 </html>

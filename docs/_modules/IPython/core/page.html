@@ -1,0 +1,505 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>IPython.core.page &#8212; Dynamic IPython: version0.0.2</title>
+    
+    <link rel="stylesheet" href="../../../_static/scrolls.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/print.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../../../_static/theme_extras.js"></script>
+    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/IPython/core/page.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<!-- <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" /> -->
+<!-- <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" media="screen" rel="stylesheet" type="text/css" /> -->
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <title>Floating label Demo</title>
+  <meta name="description" content="" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style type="text/css">
+    /* CSS styles */
+    /* Example by Matthias Benkort at http://codepen.io/KtorZ/pen/ZOzdqG */
+    @import url(
+      https://fonts.googleapis.com/css?family=Roboto:400,
+      300,
+      500,
+      700
+    );
+    .wrapper {
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .material-textfield {
+      display: inline-block;
+      height: 4rem;
+      padding-top: 2rem;
+    }
+    .material-textfield input {
+      background: none;
+      border: none;
+      box-sizing: border-box;
+      display: block;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 1rem;
+      padding: 0.25rem 0.1rem;
+      width: 100%;
+    }
+    .material-textfield input:invalid {
+      box-shadow: none;
+    }
+    .material-textfield input:focus {
+      outline: none;
+    }
+    .material-textfield label {
+      display: inline-block;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 0;
+      pointer-events: none;
+      position: relative;
+      text-transform: uppercase;
+      width: 100%;
+    }
+    .material-textfield label::before {
+      content: attr(data-content);
+      position: relative;
+      transition: all 0.2s ease;
+      will-change: font-size, top;
+    }
+    .material-textfield label::after {
+      bottom: 0.9rem;
+      content: "";
+      height: 0.3rem;
+      left: 50%;
+      position: absolute;
+      transition: all 0.2s ease;
+      width: 0;
+      will-change: width, left;
+    }
+    .material-textfield label::before,
+    .material-textfield input[required]:focus ~ label::before {
+      font-size: 0.75rem;
+      top: -3.25rem;
+    }
+    .material-textfield input:focus ~ label::after {
+      left: 0%;
+      width: 100%;
+    }
+    .material-textfield input:invalid ~ label::before {
+      font-size: 1rem;
+      top: -2rem;
+    }
+
+    .material-textfield.blue input {
+      border-bottom: 0.1rem solid #03a9f4;
+      color: #0275a8;
+    }
+    .material-textfield.blue label::after {
+      background: #03a9f4;
+    }
+    .material-textfield.blue label::before,
+    .material-textfield.blue input[required]:focus ~ label::before {
+      color: #47c4fd;
+    }
+    .material-textfield.blue input:invalid ~ label::before {
+      color: #03a9f4;
+    }
+
+    .material-textfield.red input {
+      border-bottom: 0.1rem solid #f44336;
+      color: #d2190b;
+    }
+    .material-textfield.red label::after {
+      background: #f44336;
+    }
+    .material-textfield.red label::before,
+    .material-textfield.red input[required]:focus ~ label::before {
+      color: #f8877f;
+    }
+    .material-textfield.red input:invalid ~ label::before {
+      color: #f44336;
+    }
+  </style>
+</head>
+
+  </head><body> 
+    <div id="content">
+      <div class="header">
+        <h1 class="heading"><a href="../../../index.html"
+          title="back to the documentation overview"><span>IPython.core.page</span></a></h1>
+      </div>
+      <div class="relnav" role="navigation" aria-label="related navigation">
+        <a href="#">IPython.core.page</a>
+      </div>
+      <div id="contentwrapper">
+        <div role="main">
+        
+<h1>Source code for IPython.core.page</h1><div class="highlight"><pre>
+<span></span><span class="c1"># encoding: utf-8</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Paging capabilities for IPython.core</span>
+
+<span class="sd">Notes</span>
+<span class="sd">-----</span>
+
+<span class="sd">For now this uses IPython hooks, so it can&#39;t be in IPython.utils.  If we can get</span>
+<span class="sd">rid of that dependency, we could move it there.</span>
+<span class="sd">-----</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># Copyright (c) IPython Development Team.</span>
+<span class="c1"># Distributed under the terms of the Modified BSD License.</span>
+
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">io</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+
+<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">UnsupportedOperation</span>
+
+<span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+<span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">display</span>
+<span class="kn">from</span> <span class="nn">IPython.core.error</span> <span class="kn">import</span> <span class="n">TryNext</span>
+<span class="kn">from</span> <span class="nn">IPython.utils.data</span> <span class="kn">import</span> <span class="n">chop</span>
+<span class="kn">from</span> <span class="nn">IPython.utils.process</span> <span class="kn">import</span> <span class="n">system</span>
+<span class="kn">from</span> <span class="nn">IPython.utils.terminal</span> <span class="kn">import</span> <span class="n">get_terminal_size</span>
+<span class="kn">from</span> <span class="nn">IPython.utils</span> <span class="kn">import</span> <span class="n">py3compat</span>
+
+
+<span class="k">def</span> <span class="nf">display_page</span><span class="p">(</span><span class="n">strng</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">screen_lines</span><span class="o">=</span><span class="mi">25</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Just display, no paging. screen_lines is ignored.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">strng</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">strng</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">start</span><span class="p">:</span>
+            <span class="n">strng</span> <span class="o">=</span> <span class="sa">u</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">strng</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()[</span><span class="n">start</span><span class="p">:])</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;text/plain&#39;</span><span class="p">:</span> <span class="n">strng</span> <span class="p">}</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">as_hook</span><span class="p">(</span><span class="n">page_func</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Wrap a pager func to strip the `self` arg</span>
+<span class="sd">    </span>
+<span class="sd">    so it can be called as a hook.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="k">lambda</span> <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">page_func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+<span class="n">esc_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(\x1b[^m]+m)&quot;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">page_dumb</span><span class="p">(</span><span class="n">strng</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">screen_lines</span><span class="o">=</span><span class="mi">25</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Very dumb &#39;pager&#39; in Python, for when nothing else works.</span>
+
+<span class="sd">    Only moves forward, same interface as page(), except for pager_cmd and</span>
+<span class="sd">    mode.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">strng</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">strng</span> <span class="o">=</span> <span class="n">strng</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;text/plain&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">out_ln</span>  <span class="o">=</span> <span class="n">strng</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()[</span><span class="n">start</span><span class="p">:]</span>
+    <span class="n">screens</span> <span class="o">=</span> <span class="n">chop</span><span class="p">(</span><span class="n">out_ln</span><span class="p">,</span><span class="n">screen_lines</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">screens</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">linesep</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">screens</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">last_escape</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">scr</span> <span class="ow">in</span> <span class="n">screens</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="n">hunk</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">linesep</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">scr</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">last_escape</span> <span class="o">+</span> <span class="n">hunk</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">page_more</span><span class="p">():</span>
+                <span class="k">return</span>
+            <span class="n">esc_list</span> <span class="o">=</span> <span class="n">esc_re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">hunk</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">esc_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">last_escape</span> <span class="o">=</span> <span class="n">esc_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">last_escape</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">linesep</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">screens</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+<span class="k">def</span> <span class="nf">_detect_screen_size</span><span class="p">(</span><span class="n">screen_lines_def</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Attempt to work out the number of lines on the screen.</span>
+
+<span class="sd">    This is called by page(). It can raise an error (e.g. when run in the</span>
+<span class="sd">    test suite), so it&#39;s separated out so it can easily be called in a try block.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">TERM</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;TERM&#39;</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span><span class="p">((</span><span class="n">TERM</span><span class="o">==</span><span class="s1">&#39;xterm&#39;</span> <span class="ow">or</span> <span class="n">TERM</span><span class="o">==</span><span class="s1">&#39;xterm-color&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">!=</span> <span class="s1">&#39;sunos5&#39;</span><span class="p">):</span>
+        <span class="c1"># curses causes problems on many terminals other than xterm, and</span>
+        <span class="c1"># some termios calls lock up on Sun OS5.</span>
+        <span class="k">return</span> <span class="n">screen_lines_def</span>
+    
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">termios</span>
+        <span class="kn">import</span> <span class="nn">curses</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">screen_lines_def</span>
+    
+    <span class="c1"># There is a bug in curses, where *sometimes* it fails to properly</span>
+    <span class="c1"># initialize, and then after the endwin() call is made, the</span>
+    <span class="c1"># terminal is left in an unusable state.  Rather than trying to</span>
+    <span class="c1"># check every time for this (by requesting and comparing termios</span>
+    <span class="c1"># flags each time), we just save the initial terminal state and</span>
+    <span class="c1"># unconditionally reset it every time.  It&#39;s cheaper than making</span>
+    <span class="c1"># the checks.</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">term_flags</span> <span class="o">=</span> <span class="n">termios</span><span class="o">.</span><span class="n">tcgetattr</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">termios</span><span class="o">.</span><span class="n">error</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="c1"># can fail on Linux 2.6, pager_page will catch the TypeError</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;termios error: </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">err</span><span class="p">))</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">scr</span> <span class="o">=</span> <span class="n">curses</span><span class="o">.</span><span class="n">initscr</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+        <span class="c1"># Curses on Solaris may not be complete, so we can&#39;t use it there</span>
+        <span class="k">return</span> <span class="n">screen_lines_def</span>
+    
+    <span class="n">screen_lines_real</span><span class="p">,</span><span class="n">screen_cols</span> <span class="o">=</span> <span class="n">scr</span><span class="o">.</span><span class="n">getmaxyx</span><span class="p">()</span>
+    <span class="n">curses</span><span class="o">.</span><span class="n">endwin</span><span class="p">()</span>
+
+    <span class="c1"># Restore terminal state in case endwin() didn&#39;t.</span>
+    <span class="n">termios</span><span class="o">.</span><span class="n">tcsetattr</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span><span class="n">termios</span><span class="o">.</span><span class="n">TCSANOW</span><span class="p">,</span><span class="n">term_flags</span><span class="p">)</span>
+    <span class="c1"># Now we have what we needed: the screen size in rows/columns</span>
+    <span class="k">return</span> <span class="n">screen_lines_real</span>
+    <span class="c1">#print &#39;***Screen size:&#39;,screen_lines_real,&#39;lines x&#39;,\</span>
+    <span class="c1">#screen_cols,&#39;columns.&#39; # dbg</span>
+
+<span class="k">def</span> <span class="nf">pager_page</span><span class="p">(</span><span class="n">strng</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">screen_lines</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">pager_cmd</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Display a string, piping through a pager after a certain length.</span>
+<span class="sd">    </span>
+<span class="sd">    strng can be a mime-bundle dict, supplying multiple representations,</span>
+<span class="sd">    keyed by mime-type.</span>
+
+<span class="sd">    The screen_lines parameter specifies the number of *usable* lines of your</span>
+<span class="sd">    terminal screen (total lines minus lines you need to reserve to show other</span>
+<span class="sd">    information).</span>
+
+<span class="sd">    If you set screen_lines to a number &lt;=0, page() will try to auto-determine</span>
+<span class="sd">    your screen size and will only use up to (screen_size+screen_lines) for</span>
+<span class="sd">    printing, paging after that. That is, if you want auto-detection but need</span>
+<span class="sd">    to reserve the bottom 3 lines of the screen, use screen_lines = -3, and for</span>
+<span class="sd">    auto-detection without any lines reserved simply use screen_lines = 0.</span>
+
+<span class="sd">    If a string won&#39;t fit in the allowed lines, it is sent through the</span>
+<span class="sd">    specified pager command. If none given, look for PAGER in the environment,</span>
+<span class="sd">    and ultimately default to less.</span>
+
+<span class="sd">    If no system pager works, the string is sent through a &#39;dumb pager&#39;</span>
+<span class="sd">    written in python, very simplistic.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="c1"># for compatibility with mime-bundle form:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">strng</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">strng</span> <span class="o">=</span> <span class="n">strng</span><span class="p">[</span><span class="s1">&#39;text/plain&#39;</span><span class="p">]</span>
+
+    <span class="c1"># Ugly kludge, but calling curses.initscr() flat out crashes in emacs</span>
+    <span class="n">TERM</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;TERM&#39;</span><span class="p">,</span><span class="s1">&#39;dumb&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">TERM</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;dumb&#39;</span><span class="p">,</span><span class="s1">&#39;emacs&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s1">&#39;nt&#39;</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">strng</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="c1"># chop off the topmost part of the string we don&#39;t want to see</span>
+    <span class="n">str_lines</span> <span class="o">=</span> <span class="n">strng</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()[</span><span class="n">start</span><span class="p">:]</span>
+    <span class="n">str_toprint</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">linesep</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">str_lines</span><span class="p">)</span>
+    <span class="n">num_newlines</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">str_lines</span><span class="p">)</span>
+    <span class="n">len_str</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">str_toprint</span><span class="p">)</span>
+
+    <span class="c1"># Dumb heuristics to guesstimate number of on-screen lines the string</span>
+    <span class="c1"># takes.  Very basic, but good enough for docstrings in reasonable</span>
+    <span class="c1"># terminals. If someone later feels like refining it, it&#39;s not hard.</span>
+    <span class="n">numlines</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">num_newlines</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">len_str</span><span class="o">/</span><span class="mi">80</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">screen_lines_def</span> <span class="o">=</span> <span class="n">get_terminal_size</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># auto-determine screen size</span>
+    <span class="k">if</span> <span class="n">screen_lines</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">screen_lines</span> <span class="o">+=</span> <span class="n">_detect_screen_size</span><span class="p">(</span><span class="n">screen_lines_def</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="n">UnsupportedOperation</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">str_toprint</span><span class="p">)</span>
+            <span class="k">return</span>
+
+    <span class="c1">#print &#39;numlines&#39;,numlines,&#39;screenlines&#39;,screen_lines  # dbg</span>
+    <span class="k">if</span> <span class="n">numlines</span> <span class="o">&lt;=</span> <span class="n">screen_lines</span> <span class="p">:</span>
+        <span class="c1">#print &#39;*** normal print&#39;  # dbg</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">str_toprint</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Try to open pager and default to internal one if that fails.</span>
+        <span class="c1"># All failure modes are tagged as &#39;retval=1&#39;, to match the return</span>
+        <span class="c1"># value of a failed system command.  If any intermediate attempt</span>
+        <span class="c1"># sets retval to 1, at the end we resort to our own page_dumb() pager.</span>
+        <span class="n">pager_cmd</span> <span class="o">=</span> <span class="n">get_pager_cmd</span><span class="p">(</span><span class="n">pager_cmd</span><span class="p">)</span>
+        <span class="n">pager_cmd</span> <span class="o">+=</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">get_pager_start</span><span class="p">(</span><span class="n">pager_cmd</span><span class="p">,</span><span class="n">start</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;nt&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">pager_cmd</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">):</span>
+                <span class="c1"># The default WinXP &#39;type&#39; command is failing on complex strings.</span>
+                <span class="n">retval</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">fd</span><span class="p">,</span> <span class="n">tmpname</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">(</span><span class="s1">&#39;.txt&#39;</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
+                    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">tmpname</span><span class="p">,</span> <span class="s1">&#39;wt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">tmpfile</span><span class="p">:</span>
+                        <span class="n">tmpfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">strng</span><span class="p">)</span>
+                        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> &lt; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">pager_cmd</span><span class="p">,</span> <span class="n">tmpname</span><span class="p">)</span>
+                    <span class="c1"># tmpfile needs to be closed for windows</span>
+                    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">cmd</span><span class="p">):</span>
+                        <span class="n">retval</span> <span class="o">=</span> <span class="mi">1</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">retval</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">finally</span><span class="p">:</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">tmpname</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">retval</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="c1"># Emulate os.popen, but redirect stderr</span>
+                <span class="n">proc</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">pager_cmd</span><span class="p">,</span>
+                                <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                <span class="n">stdin</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
+                                <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">DEVNULL</span>
+                                <span class="p">)</span>
+                <span class="n">pager</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">_wrap_close</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">TextIOWrapper</span><span class="p">(</span><span class="n">proc</span><span class="o">.</span><span class="n">stdin</span><span class="p">),</span> <span class="n">proc</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">pager_encoding</span> <span class="o">=</span> <span class="n">pager</span><span class="o">.</span><span class="n">encoding</span> <span class="ow">or</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">encoding</span>
+                    <span class="n">pager</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">strng</span><span class="p">)</span>
+                <span class="k">finally</span><span class="p">:</span>
+                    <span class="n">retval</span> <span class="o">=</span> <span class="n">pager</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">IOError</span> <span class="k">as</span> <span class="n">msg</span><span class="p">:</span>  <span class="c1"># broken pipe when user quits</span>
+                <span class="k">if</span> <span class="n">msg</span><span class="o">.</span><span class="n">args</span> <span class="o">==</span> <span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="s1">&#39;Broken pipe&#39;</span><span class="p">):</span>
+                    <span class="n">retval</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">retval</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+                <span class="c1"># Other strange problems, sometimes seen in Win2k/cygwin</span>
+                <span class="n">retval</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">retval</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">page_dumb</span><span class="p">(</span><span class="n">strng</span><span class="p">,</span><span class="n">screen_lines</span><span class="o">=</span><span class="n">screen_lines</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="page"><a class="viewcode-back" href="../../../util/pager2.html#IPython.core.page.page">[docs]</a><span class="k">def</span> <span class="nf">page</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">screen_lines</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">pager_cmd</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Display content in a pager, piping through a pager after a certain length.</span>
+<span class="sd">    </span>
+<span class="sd">    data can be a mime-bundle dict, supplying multiple representations,</span>
+<span class="sd">    keyed by mime-type, or text.</span>
+<span class="sd">    </span>
+<span class="sd">    Pager is dispatched via the `show_in_pager` IPython hook.</span>
+<span class="sd">    If no hook is registered, `pager_page` will be used.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Some routines may auto-compute start offsets incorrectly and pass a</span>
+    <span class="c1"># negative value.  Offset to 0 for robustness.</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">start</span><span class="p">)</span>
+
+    <span class="c1"># first, try the hook</span>
+    <span class="n">ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">ip</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">ip</span><span class="o">.</span><span class="n">hooks</span><span class="o">.</span><span class="n">show_in_pager</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span> <span class="n">screen_lines</span><span class="o">=</span><span class="n">screen_lines</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">except</span> <span class="n">TryNext</span><span class="p">:</span>
+            <span class="k">pass</span>
+    
+    <span class="c1"># fallback on default pager</span>
+    <span class="k">return</span> <span class="n">pager_page</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">screen_lines</span><span class="p">,</span> <span class="n">pager_cmd</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">page_file</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">pager_cmd</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Page a file, using an optional pager command and starting line.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">pager_cmd</span> <span class="o">=</span> <span class="n">get_pager_cmd</span><span class="p">(</span><span class="n">pager_cmd</span><span class="p">)</span>
+    <span class="n">pager_cmd</span> <span class="o">+=</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">get_pager_start</span><span class="p">(</span><span class="n">pager_cmd</span><span class="p">,</span><span class="n">start</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;TERM&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;emacs&#39;</span><span class="p">,</span><span class="s1">&#39;dumb&#39;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">EnvironmentError</span>
+        <span class="n">system</span><span class="p">(</span><span class="n">pager_cmd</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">start</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">start</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="n">page</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span><span class="n">start</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Unable to show file&#39;</span><span class="p">,</span><span class="nb">repr</span><span class="p">(</span><span class="n">fname</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">get_pager_cmd</span><span class="p">(</span><span class="n">pager_cmd</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return a pager command.</span>
+
+<span class="sd">    Makes some attempts at finding an OS-correct one.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;posix&#39;</span><span class="p">:</span>
+        <span class="n">default_pager_cmd</span> <span class="o">=</span> <span class="s1">&#39;less -R&#39;</span>  <span class="c1"># -R for color control sequences</span>
+    <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;nt&#39;</span><span class="p">,</span><span class="s1">&#39;dos&#39;</span><span class="p">]:</span>
+        <span class="n">default_pager_cmd</span> <span class="o">=</span> <span class="s1">&#39;type&#39;</span>
+
+    <span class="k">if</span> <span class="n">pager_cmd</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">pager_cmd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;PAGER&#39;</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">pager_cmd</span> <span class="o">=</span> <span class="n">default_pager_cmd</span>
+    
+    <span class="k">if</span> <span class="n">pager_cmd</span> <span class="o">==</span> <span class="s1">&#39;less&#39;</span> <span class="ow">and</span> <span class="s1">&#39;-r&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;LESS&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+        <span class="n">pager_cmd</span> <span class="o">+=</span> <span class="s1">&#39; -R&#39;</span>
+    
+    <span class="k">return</span> <span class="n">pager_cmd</span>
+
+
+<span class="k">def</span> <span class="nf">get_pager_start</span><span class="p">(</span><span class="n">pager</span><span class="p">,</span> <span class="n">start</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return the string for paging files with an offset.</span>
+
+<span class="sd">    This is the &#39;+N&#39; argument which less and more (under Unix) accept.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">pager</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;less&#39;</span><span class="p">,</span><span class="s1">&#39;more&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">start</span><span class="p">:</span>
+            <span class="n">start_string</span> <span class="o">=</span> <span class="s1">&#39;+&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">start</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">start_string</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">start_string</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">start_string</span>
+
+
+<span class="c1"># (X)emacs on win32 doesn&#39;t like to be bypassed with msvcrt.getch()</span>
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;nt&#39;</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;TERM&#39;</span><span class="p">,</span><span class="s1">&#39;dumb&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="s1">&#39;emacs&#39;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">msvcrt</span>
+    <span class="k">def</span> <span class="nf">page_more</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot; Smart pausing between pages</span>
+
+<span class="sd">        @return:    True if need print more lines, False if quit</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;---Return to continue, q to quit--- &#39;</span><span class="p">)</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="n">msvcrt</span><span class="o">.</span><span class="n">getwch</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">ans</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;q&quot;</span><span class="p">,</span> <span class="s2">&quot;Q&quot;</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\b</span><span class="s2">&quot;</span><span class="o">*</span><span class="mi">37</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">*</span><span class="mi">37</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\b</span><span class="s2">&quot;</span><span class="o">*</span><span class="mi">37</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">page_more</span><span class="p">():</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="n">py3compat</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="s1">&#39;---Return to continue, q to quit--- &#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ans</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;q&#39;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+</pre></div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+      Last updated on Feb 05, 2020.
+    </div>
+  </body>
+</html>

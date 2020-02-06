@@ -64,13 +64,6 @@ typical Bash shell that Unix OSes provide. While a terminal provides a
 huge number of powerful commands and the ability to pipe them together,
 Bash still has a number of inconsistencies and oddities in its behavior.
 
-As a result I've created a few `extensions <extensions/README.rst>`_ and
-written a few scripts that are run during the initialization stage of
-IPython's `startup <profile_default/startup/README.rst>`_.
-If this is not true, the ``highlighting_color`` parameter will fallback
-to Monokai.
-
-
 Installation
 ============
 
@@ -151,7 +144,7 @@ Table of Contents
 
    IPython Startup <startup/index>
    IPython Utilities </util/index>
-   extensions
+   Extensions <ext>
    Sphinx Extensions <sphinxext/index>
    Developers Notes <dev>
 

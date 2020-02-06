@@ -1,6 +1,8 @@
 =================================================
-:mod:`~default_profile.startup.30_setup_readline`
+Setting up readline
 =================================================
+
+.. currentmodule:: default_profile.startup.30_setup_readline
 
 Setting up autocompletion
 -------------------------
@@ -44,11 +46,10 @@ Did you know.:
 
 Useful to see the ``magic_matches``, ``dict_key_matches``,
 ``file_matches`` and I think there's supposed to be a python_matches
-or a kw specific one.
-
+or a keyword specific one.
 
 Interestingly, there's also a method on the completer that returns a
-strdispatch class.
+StrDispatch class.
 
 Possibly the only use I've seen in the repo of this.::
 
@@ -74,7 +75,6 @@ Possibly the only use I've seen in the repo of this.::
    >>> print(list(dis.flat_matches('hei')))
    [123, 34, 686]
 
-
 I've formatted the below for my own sake to improve readability.
 
 .. code-block:: ipython
@@ -92,32 +92,7 @@ I've formatted the below for my own sake to improve readability.
 
    In [46]: dir(_ip.Completer.custom_completers)
    Out[46]:
-   ['__class__',
-    '__delattr__',
-    '__dict__',
-    '__dir__',
-    '__doc__',
-    '__eq__',
-    '__format__',
-    '__ge__',
-    '__getattribute__',
-    '__gt__',
-    '__hash__',
-    '__init__',
-    '__init_subclass__',
-    '__le__',
-    '__lt__',
-    '__module__',
-    '__ne__',
-    '__new__',
-    '__reduce__',
-    '__reduce_ex__',
-    '__repr__',
-    '__setattr__',
-    '__sizeof__',
-    '__str__',
-    '__subclasshook__',
-    '__weakref__',
+    '...',
     'add_re',
     'add_s',
     'dispatch',

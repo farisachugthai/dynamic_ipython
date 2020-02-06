@@ -8,4 +8,8 @@ to a file or output to :data:`sys.stdout`.
 ``06_help_helpers`` module
 ==========================
 
-.. automodule::   default_profile.startup.06_help_helpers
+.. automodule:: default_profile.startup.06_help_helpers
+   :synopsis: Create a magic to supplant the %pinfo family.
+   :members:
+   :undoc-members:
+   :show-inheritance:

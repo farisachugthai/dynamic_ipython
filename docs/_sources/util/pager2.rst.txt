@@ -71,13 +71,15 @@ the function ``read_py_file``.::
 
    If True (the default), and the encoding declaration is found in the first
    two lines, that line will be excluded from the output - compiling a
-   unicode string with an encoding declaration is a SyntaxError in Python 2.
+   unicode string with an encoding declaration is a `SyntaxError` in Python 2.
 
 
 :func:`IPython.core.page.page`
 ------------------------------
 
-.. function:: page.page
+.. currentmodule:: IPython.core.page
+
+.. function:: page
 
    Pretty print an object and display it through the pager.
 
@@ -125,6 +127,11 @@ Eh I don't know if that was it.
 
 Rewriting the pager
 ===================
+
+.. envvar:: PAGER
+
+   An environment variable set to the value of what the user wants to view
+   text with on the cmd line.
 
 Found some platform specific code. I think we're in the right direction.
 
@@ -176,7 +183,7 @@ Oct 28, 2019:
 Just ran this in the shell and I'm really pleased with it.
 
 It utilizes the :attr:`autocall` functionality of IPython, works with the
-pycolorize utils, uses the page.page core function.
+``pycolorize`` utils, uses the `page` core function.
 
 If the user doesn't provide an argument, then just show them the last input
 they gave us especially since that var is **guaranteed** to always
@@ -191,6 +198,7 @@ Like solid shit man. And I came up with this in 10 minutes too!
     from IPython.core.magic import line_magic
 
 .. ipython::
+   :verbatim:
 
     In [105]: @line_magic
          ...: def p(shell=None, s=None):
@@ -212,13 +220,6 @@ Like solid shit man. And I came up with this in 10 minutes too!
             IPython.core.page.page(shell.pycolorize(shell.find_user_code(s, skip_encoding_cookie=True)))
 
 
-.. todo:: Literally how is this the part that's giving me errors.
-
-::
-
-    PAGER_LOGGER = logging.getLogger(name='default_profile.util').getchild('pager2')
-    PAGER_HANDLER = logging.StreamHandler()
-    PAGER_LOGGER.addHandler(PAGER_HANDLER)
 
 
 Original Pydoc Implementation and Errors

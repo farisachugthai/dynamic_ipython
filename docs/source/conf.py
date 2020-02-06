@@ -32,8 +32,6 @@ from default_profile.__about__ import __version__
 
 from default_profile import ask_for_import
 from default_profile.sphinxext.magics import CellMagicRole, LineMagicRole
-from default_profile.startup import *
-from default_profile.util import *
 
 # Logging
 DOCS_LOGGER = logging.getLogger(name=__name__)
@@ -45,7 +43,16 @@ DOCS_LOGGER.setLevel(logging.INFO)
 DOCS = Path(__file__).resolve().parent.parent
 ROOT = DOCS.parent
 JUPYTER = ROOT.joinpath("jupyter_conf")
+
 sys.path.insert(0, str(JUPYTER))
+# I'll admit i don't know why i need this one
+STARTUP = ROOT.joinpath("default_profile/startup")
+
+sys.path.insert(0, STARTUP)
+
+UTIL = ROOT.joinpath("default_profile/util")
+
+sys.path.insert(0, UTIL)
 
 if ask_for_import("jinja2"):
     # from jinja2.constants import TRIM_BLOCKS, LSTRIP_BLOCKS
@@ -379,6 +386,9 @@ text_secnumber_suffix = ""
 
 # -- Options for intersphinx extension ---------------------------------------
 
+# Double the original cache limit
+intersphinx_cache_limit = 10
+
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3/", None),
@@ -389,6 +399,7 @@ intersphinx_mapping = {
     "jupyter": ("https://jupyter.readthedocs.io/en/latest/", None),
     "numpy": ("https://docs.scipy.org/doc/numpy/", None),
 }
+
 
 # -- Options for todo extension ----------------------------------------------
 

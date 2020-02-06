@@ -73,7 +73,7 @@ Here's a little info from the Sphinx website.
 
    The default language to highlight source code in.  The default is
    ``'python3'``.  The value should be a valid Pygments lexer name, see
-   :ref:`code-examples` for more details.
+   ``code-examples`` for more details.
 
    .. versionadded:: 0.5
 
