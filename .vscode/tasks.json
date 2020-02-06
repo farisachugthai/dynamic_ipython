@@ -44,10 +44,7 @@
     },
     {
       "command": "${config:python.pythonPath} -m unittest",
-      "group": {
-        "kind": "test",
-        "isDefault": true
-      },
+      "group": "test",
       "label": "unittest",
       "presentation": {
         "focus": true,
@@ -110,52 +107,28 @@
       ],
       "command": "${config:python.pythonPath}",
       "group": "none",
-      "label": "YAPF current file",
-      "type": "process"
+      "label": "python",
+      "type": "process",
+      "name": "YAPF current file"
     },
     {
-      "command": "sphinx-build",
-      "group": {
-        "isDefault": true,
-        "kind": "build"
-      },
-      "label": "sphinx-build with pwsh",
-      "options": {
-        "shell": {
-          "args": [
-            "-NoProfile",
-            "-NoLogo",
-            "-NoExit"
-          ],
-          "executable": "pwsh"
-        }
-      },
-      "type": "shell",
-      "windows": {
-        "args": [
-          "sphinx-build",
-          "-n",
-          "-b",
-          "html",
-          "-o",
-          "docs\\build\\html",
-          "docs\\source",
-          "-d",
-          "docs\\build\\doctrees"
-        ]
-      }
-    },
-    {
-      "label": "npm",
+      "label": "npm-install jupyter_conf",
       "path": "jupyter_conf/",
       "script": "install",
       "type": "npm"
     },
     {
-      "path": "docs/",
-      "problemMatcher": [],
-      "script": "install",
-      "type": "npm"
+      "type": "process",
+      "windows": {
+        "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
+      },
+      "args": [
+        "."
+      ],
+      "command": [
+        "npx",
+        "electron"
+      ]
     }
   ],
   "version": "2.0.0"

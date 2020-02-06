@@ -5,6 +5,7 @@ import logging
 import os
 import platform
 import shutil
+
 # import sys
 import webbrowser
 
@@ -116,6 +117,7 @@ c.Application.log_level = 30
 
 class NonGraphicalEnvironmentError(OSError):
     """Raised when we can't get any kind of a reasonable browser."""
+
     def __init__(self, *args, **kwargs):
         """Todo. Need to create a more user error message."""
         super().__init__(self, *args, **kwargs)
@@ -238,7 +240,7 @@ if platform.system() == "Linux":
 # c.NotebookApp.iopub_msg_rate_limit = 1000
 
 # The IP address the notebook server will listen on.
-c.NotebookApp.ip = 'localhost'
+c.NotebookApp.ip = "localhost"
 
 # Supply extra arguments that will be passed to Jinja environment.
 # c.NotebookApp.jinja_environment_options = {}
@@ -263,7 +265,7 @@ c.NotebookApp.ip = 'localhost'
 #
 #  Local IP addresses (such as 127.0.0.1 and ::1) are automatically accepted as
 #  local as well.
-c.NotebookApp.local_hostnames = ['localhost']
+c.NotebookApp.local_hostnames = ["localhost"]
 
 # The login handler class to use.
 # c.NotebookApp.login_handler_class = 'notebook.auth.login.LoginHandler'
@@ -377,7 +379,7 @@ c.NotebookApp.reraise_server_extension_failures = False
 #
 #  Setting to an empty string disables authentication altogether, which is NOT
 #  RECOMMENDED.
-c.NotebookApp.token = ''
+c.NotebookApp.token = ""
 
 # Supply overrides for the tornado.web.Application that the Jupyter notebook
 #  uses.

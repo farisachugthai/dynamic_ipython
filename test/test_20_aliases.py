@@ -97,7 +97,17 @@ def test_alias_args_commented_nargs(_ip):
     nt.assert_equal(thealias.nargs, 1)
 
 
+# TODO: well i suppose it should be obvious that you shouldn't do something like
+# this because nobody wants interactive tests.
+# @pytest.mark.xfail
+# def test_that_hyphens_cant_be_aliases(_ip):
+#     """This is a simple reminder that this won't behave as expected/desired."""
+#     am = _ip.alias_manager
+#     am.define_alias("fzf-tmux", "fzf-tmux -d 50")
+#     _ip.run_line_magic("fzf-tmux", "")
+
+
 if __name__ == "__main__":
     with suppress(Skipped):
-        pytest.importorskip('nose')
+        pytest.importorskip("nose")
         pytest.main()
