@@ -456,8 +456,7 @@ if __name__ == "__main__":
         full_registry = additional_bindings()
         # container_kb = KeyBindingsManager(shell=_ip, kb=full_registry.bindings)
 
-    # unrelated but heres something sweet
-    ip = get_ipython()
-    ip.pt_app.app.output.enable_bracketed_paste()
-    # What teh hell is blocking or jamming <CR>
-    # ip.pt_app.app.key_bindings = merge_key_bindings([ip.pt_app.app.key_bindings, full_registry])
+        # unrelated but heres something sweet
+        _ip.pt_app.app.output.enable_bracketed_paste()
+        # What the hell is blocking or jamming <CR>
+        # _ip.pt_app.app.key_bindings = merge_key_bindings([ip.pt_app.app.key_bindings, full_registry])

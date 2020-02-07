@@ -134,36 +134,47 @@ def readline_config(history_file=None):
 
     """
     histfile = "~/.python_history"
-    readline.parse_and_bind("tab: complete")
+    readline.parse_and_bind("TAB: menu-complete")
     readline.parse_and_bind('"\\e[B": history-search-forward')
     readline.parse_and_bind('"\\e[A": history-search-backward')
     readline.parse_and_bind('"\\C-l": clear-screen')
-    readline.parse_and_bind('set show-all-if-ambiguous on')
+    readline.parse_and_bind("set show-all-if-ambiguous on")
     readline.parse_and_bind('"\\C-o": tab-insert')
     readline.parse_and_bind('"\\C-r": reverse-search-history'),
     readline.parse_and_bind('"\\C-s": forward-search-history'),
-    readline.parse_and_bind('"\\C-p": "history-search-backward'),
+    readline.parse_and_bind('"\\C-p": "history-search-backward"'),
     readline.parse_and_bind('"\\C-n": "history-search-forward"'),
     readline.parse_and_bind('"\\e[A": "history-search-backward"'),
     readline.parse_and_bind('"\\e[B": "history-search-forward"'),
     readline.parse_and_bind('"\\C-k": "kill-line"'),
     readline.parse_and_bind('"\\C-u": unix-line-discard'),
 
-# Deprecated, use PromptManager.in2_template
+    # Deprecated, use PromptManager.in2_template
     setup_historyfile(histfile)
     atexit.register(teardown_historyfile, histfile)
-
-    # Check for an inputrc file.
-    if os.environ.get("INPUTRC"):
-        readline.read_inputrc_file(os.environ.get("INPUTRC"))
-    elif Path("~/pyreadlineconfig.ini").is_file():
-        readline.read_inputrc_file(str(Path("~/pyreadlineconfig.ini")))
-    elif Path("~/.inputrc").is_file():
-        readline.read_inputrc_file(os.expanduser("~/.inputrc"))
-    readline.set_completer_delims(" \t\n`@#$%^&*()=+[{]}\\|;:'\",<>?")
+    readline.read_init_file()
     readline.set_completer(Completer().complete)
 
-    readline.read_init_file()
+
+def py_readline(rl):
+    """Utilize the pyreadline API.
+
+    Parameters
+    ----------
+    :class:`pyreadline.rlmain.Console` or something
+
+    """
+    # This is actually really neat
+    rl.allow_ctrl_c = True
+    rl.command_color = "#7daea3"
+    # # Check for an inputrc file.
+    # if os.environ.get("INPUTRC"):
+    #     readline.read_inputrc_file(os.environ.get("INPUTRC"))
+    # elif Path("~/pyreadlineconfig.ini").is_file():
+    #     readline.read_inputrc_file(str(Path("~/pyreadlineconfig.ini")))
+    # elif Path("~/.inputrc").expanduser().is_file():
+    #     readline.read_inputrc_file(os.expanduser("~/.inputrc"))
+    # readline.set_completer_delims(r" \t\n`@#$%^&*()=+[{]}\\|;:'\",<>?")
 
 
 # History
@@ -210,18 +221,22 @@ def teardown_historyfile(histfile=None):
 
 
 if __name__ == "__main__":
+    # Interestingly this can work on Windows with a simple pip install pyreadline
+    # however it can be imported as readline no alias so check it first
+    try:
+        import pyreadline as readline
+    except (ImportError, ModuleNotFoundError):
+        pass
+    else:
+        from pyreadline.rlmain import Readline
+
+        line_editor = Readline()
+        py_readline(line_editor)
+
     try:
         import readline
     except (ImportError, ModuleNotFoundError):
-        # Interestingly this can work on Windows with a simple pip install pyreadline
-        try:
-            import pyreadline as readline
-        except (ImportError, ModuleNotFoundError):
-            logging.warning("Readline not imported.")
-            raise
-        else:
-            from pyreadline.rlmain import Readline
-            line_editor = Readline()
-            line_editor.read_inputrc()  # This parses that pyreadlineconfig.ini we have
+        logging.warning("Readline not imported.")
+        raise
 
     readline_config()

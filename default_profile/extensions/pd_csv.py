@@ -6,7 +6,7 @@ import sys
 
 from IPython.core.getipython import get_ipython
 
-if sys.version_info() < (3, 7):
+if sys.version_info < (3, 7):
     from default_profile import ModuleNotFoundError
 
 try:

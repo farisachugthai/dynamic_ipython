@@ -19,16 +19,17 @@ except ImportError:
     clipboard = None
 else:
     from prompt_toolkit.clipboard.pyperclip import PyperclipClipboard
-    from pyperclip import determine_clipboard
+    # from pyperclip import determine_clipboard
 
-    copy, paste = determine_clipboard()
+    # copy, paste = determine_clipboard()
 
 from prompt_toolkit.clipboard import ClipboardData, InMemoryClipboard, DynamicClipboard
 
-try:
-    from default_profile.extensions import termux_clipboard
-except (ImportError, ModuleNotFoundError):
-    termux_clipboard = None
+# TODO: this isn't used so commenting it out but it should be used
+# try:
+#     from default_profile.extensions import termux_clipboard
+# except (ImportError, ModuleNotFoundError):
+#     termux_clipboard = None
 
 
 class ClipboardEmpty(ValueError):

@@ -23,23 +23,23 @@ Also a good check to see whats being counted as a package is:
 
 """
 import importlib
-import logging
-import sys
-from collections import deque
-from traitlets.config.application import LevelFormatter
-
+import inspect
 import logging
 import os
 import pkgutil
+import sys
+from collections import deque
+from pathlib import Path
 
 # from pkg_resources import declare_namespace
 from setuptools import find_packages, find_namespace_packages
-import sys
 
 try:  # new replacement for the pkg_resources API
     import importlib_metadata
 except ImportError:
     importlib_metadata = None
+
+from traitlets.config.application import LevelFormatter
 
 # Lol note that there are FOUR different logging.Formatter.fmt strings in this module
 default_log_format = (
@@ -93,6 +93,13 @@ def ask_for_import(mod, package=None):
         Module as imported by :func:`importlib.import_module`.
 
     """
+    # Go for the low hanging fruit first
+    if inspect.ismodule(mod):
+        return importlib.import_module(mod, package=package)
+    if inspect.getmodulename(mod):
+        return importlib.import_module(inspect.getmodulename(mod), package=package)
+
+    # Otherwise
     try:
         imported = importlib.import_module(mod, package=package)
     except (ImportError, ModuleNotFoundError):
@@ -137,10 +144,10 @@ except:
 class QueueHandler(logging.Handler):
     """This handler store logs events into a queue."""
 
-    def __init__(self, queue):
+    def __init__(self, queue, level=30):
         """Initialize an instance, using the passed queue."""
-        logging.Handler.__init__(self)
         self.queue = queue
+        super().__init__(level=level)
 
     def enqueue(self, record):
         """Enqueue a log record."""
@@ -192,8 +199,10 @@ def setup_logging(debug=True, logfile=None):
         handlers.append(logging.StreamHandler())
     else:
         if logfile == "-":
-            handlers.append(logging.FileHandler(logfile))
+            handlers.append(logging.StreamHandler())
         elif not Path(logfile).exists():
+            handlers.append(logging.StreamHandler())
+        else:
             handlers.append(logging.FileHandler(get_ipython().log_dir))
 
     for handler in handlers:

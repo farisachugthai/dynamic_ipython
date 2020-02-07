@@ -39,10 +39,6 @@ class CwdPrompt(Prompts):
             self.old_prompt = self.shell.prompts
             super().__init__(self.shell, *args, **kwargs)
 
-    # this returns a list
-    # def __repr__(self):
-    #     return self.in_prompt_tokens(cli=self.shell)
-
     def __repr__(self):
         return "{!r}".format(self.in_prompt_tokens(cli=self.shell))
 
