@@ -1,3 +1,9 @@
+"""Draw a toolbar for the shell using prompt_toolkit.
+
+Takes into consideration whether Emacs mode or Vi mode is set
+and adds :kbd:`F4` as a keybindings to toggle between each.
+
+"""
 import functools
 from datetime import date
 from pathlib import Path
@@ -65,15 +71,22 @@ class BottomToolbar:
         else:
             return False
 
+    def __str__(self):
+        return f"<{self.__class__.__name__!s}:>"
+
     def __repr__(self):
-        return f"<{self.__class__.__name__}:>"
+        return f"{self.rerender()!r}"
 
     def __call__(self):
         return self.rerender()
 
-    def __len__(self):
+    def terminal_width(self):
         """Returns `shutil.get_terminal_size.columns`."""
         return get_terminal_size().columns
+
+    def __len__(self):
+        """The length of the text we display."""
+        return len(self.rerender())
 
     def rerender(self):
         """Render the toolbar at the bottom for prompt_toolkit.

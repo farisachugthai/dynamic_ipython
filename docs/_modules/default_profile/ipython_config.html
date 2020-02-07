@@ -5,52 +5,149 @@
   <head>
     <meta charset="utf-8" />
     <title>default_profile.ipython_config &#8212; Dynamic IPython: version0.0.2</title>
-    <link rel="stylesheet" href="../../_static/pyramid.css" type="text/css" />
+    
+    <link rel="stylesheet" href="../../_static/scrolls.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <link rel="stylesheet" href="_static/print.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../../_static/theme_extras.js"></script>
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/ipython_config.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-<link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" />
-<link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" media="screen" rel="stylesheet" type="text/css" />
-<link rel='stylesheet' href='//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.css'>
-<!--[if lte IE 6]>
-  <link
-    rel="stylesheet"
-    href="../../_static/ie6.css"
-    type="text/css"
-    media="screen"
-    charset="utf-8"
-  />
-<![endif]-->
+<!-- <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" /> -->
+<!-- <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" media="screen" rel="stylesheet" type="text/css" /> -->
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <title>Floating label Demo</title>
+  <meta name="description" content="" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style type="text/css">
+    /* CSS styles */
+    /* Example by Matthias Benkort at http://codepen.io/KtorZ/pen/ZOzdqG */
+    @import url(
+      https://fonts.googleapis.com/css?family=Roboto:400,
+      300,
+      500,
+      700
+    );
+    .wrapper {
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
 
-  </head><body>
+    .material-textfield {
+      display: inline-block;
+      height: 4rem;
+      padding-top: 2rem;
+    }
+    .material-textfield input {
+      background: none;
+      border: none;
+      box-sizing: border-box;
+      display: block;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 1rem;
+      padding: 0.25rem 0.1rem;
+      width: 100%;
+    }
+    .material-textfield input:invalid {
+      box-shadow: none;
+    }
+    .material-textfield input:focus {
+      outline: none;
+    }
+    .material-textfield label {
+      display: inline-block;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 0;
+      pointer-events: none;
+      position: relative;
+      text-transform: uppercase;
+      width: 100%;
+    }
+    .material-textfield label::before {
+      content: attr(data-content);
+      position: relative;
+      transition: all 0.2s ease;
+      will-change: font-size, top;
+    }
+    .material-textfield label::after {
+      bottom: 0.9rem;
+      content: "";
+      height: 0.3rem;
+      left: 50%;
+      position: absolute;
+      transition: all 0.2s ease;
+      width: 0;
+      will-change: width, left;
+    }
+    .material-textfield label::before,
+    .material-textfield input[required]:focus ~ label::before {
+      font-size: 0.75rem;
+      top: -3.25rem;
+    }
+    .material-textfield input:focus ~ label::after {
+      left: 0%;
+      width: 100%;
+    }
+    .material-textfield input:invalid ~ label::before {
+      font-size: 1rem;
+      top: -2rem;
+    }
 
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">Dynamic IPython</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
-      </ul>
-    </div>  
+    .material-textfield.blue input {
+      border-bottom: 0.1rem solid #03a9f4;
+      color: #0275a8;
+    }
+    .material-textfield.blue label::after {
+      background: #03a9f4;
+    }
+    .material-textfield.blue label::before,
+    .material-textfield.blue input[required]:focus ~ label::before {
+      color: #47c4fd;
+    }
+    .material-textfield.blue input:invalid ~ label::before {
+      color: #03a9f4;
+    }
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
+    .material-textfield.red input {
+      border-bottom: 0.1rem solid #f44336;
+      color: #d2190b;
+    }
+    .material-textfield.red label::after {
+      background: #f44336;
+    }
+    .material-textfield.red label::before,
+    .material-textfield.red input[required]:focus ~ label::before {
+      color: #f8877f;
+    }
+    .material-textfield.red input:invalid ~ label::before {
+      color: #f44336;
+    }
+  </style>
+</head>
+
+  </head><body> 
+    <div id="content">
+      <div class="header">
+        <h1 class="heading"><a href="../../index.html"
+          title="back to the documentation overview"><span>default_profile.ipython_config</span></a></h1>
+      </div>
+      <div class="relnav" role="navigation" aria-label="related navigation">
+        <a href="#">default_profile.ipython_config</a>
+      </div>
+      <div id="contentwrapper">
+        <div role="main">
+        
 <h1>Source code for default_profile.ipython_config</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python3</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
@@ -58,57 +155,6 @@
 <span class="sd">==================================================</span>
 <span class="sd">IPython --- Configuration file for :mod:`IPython`.</span>
 <span class="sd">==================================================</span>
-<span class="sd">.. highlight:: ipython</span>
-
-
-<span class="sd">Python3.6</span>
-<span class="sd">=========</span>
-
-<span class="sd">.. ipython::</span>
-<span class="sd">    :verbatim:</span>
-
-<span class="sd">    File &quot;/home/farbuntu/.ipython/profile_default/ipython_config.py&quot;, line 454, in &lt;module&gt;</span>
-<span class="sd">        if ModuleNotFoundError not in builtins:</span>
-<span class="sd">    TypeError: argument of type &#39;module&#39; is not iterable</span>
-
-<span class="sd">So we have a python3.6 error. The problem is more that the only reason I noticed</span>
-<span class="sd">it is because the default python ran, and by default in 3.7 it never does.</span>
-
-<span class="sd">So fix that so we can maintain *some* minimal 3.6 compatability.</span>
-
-<span class="sd">See Also</span>
-<span class="sd">--------</span>
-<span class="sd">.. seealso::</span>
-
-<span class="sd">    :mod:`IPython.core.profileapp`.</span>
-
-<span class="sd">I don&#39;t know if that properly belongs here, so figure out what needs to</span>
-<span class="sd">be modified if so.</span>
-
-<span class="sd">.. code-block:: console</span>
-
-<span class="sd">    $: ipython locate profile --&lt;Tab&gt;</span>
-
-<span class="sd">    --LocateIPythonApp.auto_create=</span>
-
-<span class="sd">    --LocateIPythonApp.copy_config_files=</span>
-
-<span class="sd">    --LocateIPythonApp.extra_config_file=</span>
-
-<span class="sd">    --LocateIPythonApp.ipython_dir=</span>
-
-<span class="sd">    --LocateIPythonApp.log_datefmt=</span>
-
-<span class="sd">    --LocateIPythonApp.log_format=</span>
-
-<span class="sd">    --LocateIPythonApp.log_level=</span>
-
-<span class="sd">    --LocateIPythonApp.overwrite=</span>
-
-<span class="sd">    --LocateIPythonApp.profile=</span>
-
-<span class="sd">    --LocateIPythonApp.verbose_crash=</span>
-
 
 <span class="sd">Notes</span>
 <span class="sd">-----</span>
@@ -128,23 +174,41 @@
 <span class="kn">import</span> <span class="nn">builtins</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">import</span> <span class="nn">platform</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">from</span> <span class="nn">tempfile</span> <span class="kn">import</span> <span class="n">TemporaryDirectory</span>
+<span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
-<span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">version_info</span>
-<span class="kn">from</span> <span class="nn">IPython.paths</span> <span class="kn">import</span> <span class="n">get_ipython_dir</span>
-<span class="c1"># THIS IS THE MODULE! Its too exciting to able to execute this script</span>
-<span class="c1"># directly from within python and not get an error for a func call with no</span>
-<span class="c1"># import</span>
-<span class="kn">from</span> <span class="nn">traitlets.config</span> <span class="kn">import</span> <span class="n">get_config</span><span class="p">,</span> <span class="n">Configurable</span>
+<span class="kn">from</span> <span class="nn">IPython.core.release</span> <span class="kn">import</span> <span class="n">version_info</span>
+<span class="kn">from</span> <span class="nn">IPython.terminal.prompts</span> <span class="kn">import</span> <span class="n">ClassicPrompts</span>
 
-<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">BASIC_FORMAT</span><span class="p">)</span>
-<span class="n">c</span> <span class="o">=</span> <span class="n">get_config</span><span class="p">()</span>
-<span class="c1"># Don&#39;t it this way</span>
-<span class="c1"># c = Configurable()</span>
+<span class="n">log_datefmt</span> <span class="o">=</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span>
+<span class="n">default_log_format</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">&quot;[ </span><span class="si">%(name)s</span><span class="s2"> : </span><span class="si">%(relativeCreated)d</span><span class="s2"> :] </span><span class="si">%(levelname)s</span><span class="s2"> : </span><span class="si">%(module)s</span><span class="s2"> : --- </span><span class="si">%(message)s</span><span class="s2"> &quot;</span>
+<span class="p">)</span>
+
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">default_log_format</span><span class="p">,</span> <span class="n">datefmt</span><span class="o">=</span><span class="n">log_datefmt</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">traitlets.config.configurable</span> <span class="kn">import</span> <span class="n">LoggingConfigurable</span><span class="p">,</span> <span class="n">ConfigurableError</span>
+<span class="kn">from</span> <span class="nn">traitlets.config.application</span> <span class="kn">import</span> <span class="n">get_config</span><span class="p">,</span> <span class="n">ApplicationError</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">default_profile</span>
+<span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="n">ModuleNotFoundError</span><span class="p">):</span>
+    <span class="n">default_profile</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+        <span class="s2">&quot;Import error. Try relaunching IPython in the root of this repository.&quot;</span>
+    <span class="p">)</span>
+    <span class="c1"># todo: realistically we should also set exec_files to None since everything ./startup is gonna crash</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">default_profile</span> <span class="kn">import</span> <span class="n">PROFILE_DEFAULT_LOG</span>
+
+    <span class="kn">import</span> <span class="nn">__main__</span>
+
+    <span class="c1"># 3.6 compat</span>
+    <span class="k">if</span> <span class="n">ModuleNotFoundError</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">builtins</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">default_profile</span> <span class="kn">import</span> <span class="n">ModuleNotFoundError</span>
 
 
 <div class="viewcode-block" id="get_home"><a class="viewcode-back" href="../../startup/index.html#default_profile.ipython_config.get_home">[docs]</a><span class="k">def</span> <span class="nf">get_home</span><span class="p">():</span>
@@ -158,13 +222,7 @@
 
 <span class="n">home</span> <span class="o">=</span> <span class="n">get_home</span><span class="p">()</span>
 
-<span class="c1"># def loaded_config(loaded=None):</span>
-<span class="c1">#     &quot;&quot;&quot;Just noticed IPython loads this file twice.&quot;&quot;&quot;</span>
-<span class="c1">#     if loaded is None:</span>
-<span class="c1">#         pass</span>
-<span class="c1">#     loaded = True</span>
-
-<span class="c1"># loaded_config(loaded)  # noqa F821</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">get_config</span><span class="p">()</span>
 
 <span class="c1"># ----------------------------------------------------------------------------</span>
 <span class="c1"># InteractiveShellApp(Configurable) configuration</span>
@@ -198,7 +256,6 @@
 <span class="c1"># c.InteractiveShellApp.exec_lines = []</span>
 
 <span class="c1"># A list of dotted module names of IPython extensions to load.</span>
-<span class="c1"># c.InteractiveShellApp.extensions = []</span>
 
 <span class="c1"># dotted module name of an IPython extension to load.</span>
 <span class="c1"># c.InteractiveShellApp.extra_extension = &#39;&#39;</span>
@@ -206,30 +263,14 @@
 <span class="c1"># A file to be run</span>
 <span class="c1"># c.InteractiveShellApp.file_to_run = &#39;&#39;</span>
 
-<span class="c1"># Enable GUI event loop integration with any of (&#39;glut&#39;, &#39;gtk&#39;, &#39;gtk2&#39;, &#39;gtk3&#39;,</span>
-<span class="c1"># &#39;osx&#39;, &#39;pyglet&#39;, &#39;qt&#39;, &#39;qt4&#39;, &#39;qt5&#39;, &#39;tk&#39;, &#39;wx&#39;, &#39;gtk2&#39;, &#39;qt4&#39;).</span>
-<span class="c1"># c.InteractiveShellApp.gui =&#39;qt5&#39;</span>
+<span class="c1"># Enable GUI event loop integration with any of (&#39;asyncio&#39;, &#39;glut&#39;, &#39;gtk&#39;,</span>
+<span class="c1">#  &#39;gtk2&#39;, &#39;gtk3&#39;, &#39;osx&#39;, &#39;pyglet&#39;, &#39;qt&#39;, &#39;qt4&#39;, &#39;qt5&#39;, &#39;tk&#39;, &#39;wx&#39;, &#39;gtk2&#39;,</span>
+<span class="c1">#  &#39;qt4&#39;).</span>
+<span class="c1"># c.InteractiveShellApp.gui = None</span>
 
 <span class="c1"># Should variables loaded at startup (by startup files, exec_lines, etc.) be</span>
 <span class="c1"># hidden from tools like %who?</span>
-<span class="c1"># c.InteractiveShellApp.hide_initial_ns = True</span>
-
-<span class="c1"># Configure matplotlib for interactive use with the default matplotlib backend.</span>
-
-<span class="c1"># TerminalIPythonApp.matplotlib=&lt;CaselessStrEnum&gt;</span>
-<span class="c1">#     Default: None</span>
-<span class="c1">#     Choices: [&#39;auto&#39;, &#39;agg&#39;, &#39;gtk&#39;, &#39;gtk3&#39;, &#39;inline&#39;, &#39;ipympl&#39;, &#39;nbagg&#39;,</span>
-<span class="c1">#     notebook&#39;, &#39;osx&#39;, &#39;pdf&#39;, &#39;ps&#39;, &#39;qt&#39;, &#39;qt4&#39;, &#39;qt5&#39;, &#39;svg&#39;, &#39;tk&#39;,</span>
-<span class="c1">#     widget&#39;, &#39;wx&#39;]</span>
-<span class="c1">#     Configure matplotlib for interactive use with the default matplotlib</span>
-<span class="c1">#     backend.</span>
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">matplotlib</span>
-<span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="ne">ModuleNotFoundError</span><span class="p">):</span>
-    <span class="n">c</span><span class="o">.</span><span class="n">InteractiveShellApp</span><span class="o">.</span><span class="n">matplotlib</span> <span class="o">=</span> <span class="bp">None</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="n">c</span><span class="o">.</span><span class="n">InteractiveShellApp</span><span class="o">.</span><span class="n">matplotlib</span> <span class="o">=</span> <span class="s1">&#39;auto&#39;</span>
-    <span class="n">c</span><span class="o">.</span><span class="n">InteractiveShellApp</span><span class="o">.</span><span class="n">pylab</span> <span class="o">=</span> <span class="s1">&#39;auto&#39;</span>
+<span class="n">c</span><span class="o">.</span><span class="n">InteractiveShellApp</span><span class="o">.</span><span class="n">hide_initial_ns</span> <span class="o">=</span> <span class="kc">False</span>
 
 <span class="c1"># Run the module as a script.</span>
 <span class="c1"># c.InteractiveShellApp.module_to_run = &#39;&#39;</span>
@@ -244,15 +285,8 @@
 <span class="c1"># Dude I never noticed that this defaults to True like whatttt</span>
 <span class="c1">#  When False, pylab mode should not import any names into the user namespace.</span>
 <span class="c1"># c.InteractiveShellApp.pylab_import_all = True</span>
-
 <span class="c1"># Reraise exceptions encountered loading IPython extensions?</span>
-<span class="c1"># if you realize this is a bad idea please leave a note why</span>
-<span class="c1"># i&#39;m actually curious</span>
-
-<span class="n">c</span><span class="o">.</span><span class="n">InteractiveShellApp</span><span class="o">.</span><span class="n">reraise_ipython_extension_failures</span> <span class="o">=</span> <span class="bp">False</span>
-
-<span class="c1"># I&#39;m assuming these are related and please don&#39;t crash the interpreter</span>
-<span class="c1"># from a simple mistake</span>
+<span class="n">c</span><span class="o">.</span><span class="n">InteractiveShellApp</span><span class="o">.</span><span class="n">reraise_ipython_extension_failures</span> <span class="o">=</span> <span class="kc">False</span>
 
 <span class="c1"># ----------------------------------------------------------------------------</span>
 <span class="c1"># Application(SingletonConfigurable) configuration</span>
@@ -262,14 +296,15 @@
 
 <span class="c1"># The date format used by logging formatters for %(asctime)s</span>
 <span class="c1"># Default: &#39;%Y-%m-%d %H:%M:%S&#39;</span>
-<span class="n">c</span><span class="o">.</span><span class="n">Application</span><span class="o">.</span><span class="n">log_datefmt</span> <span class="o">=</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span>
+<span class="n">c</span><span class="o">.</span><span class="n">Application</span><span class="o">.</span><span class="n">log_datefmt</span> <span class="o">=</span> <span class="n">log_datefmt</span>
 
 <span class="c1"># The Logging format template</span>
-<span class="c1">#Default: &#39;[%(name)s]%(highlevel)s %(message)s&#39;</span>
-<span class="n">c</span><span class="o">.</span><span class="n">Application</span><span class="o">.</span><span class="n">log_format</span> <span class="o">=</span> <span class="s1">&#39;%(module) : </span><span class="si">%(created)f</span><span class="s1"> : [</span><span class="si">%(name)s</span><span class="s1">] : </span><span class="si">%(highlevel)s</span><span class="s1"> : </span><span class="si">%(message)s</span><span class="s1"> : &#39;</span>
+<span class="c1"># Default: &#39;[%(name)s]%(highlevel)s %(message)s&#39;</span>
+<span class="c1"># Todo: Import traitlets.config.application.LevelFormatter</span>
+<span class="n">c</span><span class="o">.</span><span class="n">Application</span><span class="o">.</span><span class="n">log_format</span> <span class="o">=</span> <span class="n">default_log_format</span>
 
 <span class="c1"># Set the log level by value or name.</span>
-<span class="n">c</span><span class="o">.</span><span class="n">Application</span><span class="o">.</span><span class="n">log_level</span> <span class="o">=</span> <span class="mi">30</span>
+<span class="n">c</span><span class="o">.</span><span class="n">Application</span><span class="o">.</span><span class="n">log_level</span> <span class="o">=</span> <span class="mi">20</span>
 
 <span class="c1"># ----------------------------------------------------------------------------</span>
 <span class="c1"># BaseIPythonApplication(Application) configuration</span>
@@ -293,7 +328,7 @@
 
 <span class="c1"># The name of the IPython directory. This directory is used for logging</span>
 <span class="c1"># configuration (through profiles), history storage, etc. The default is</span>
-<span class="c1"># $HOME/.ipython. This option can also be specified through the environment</span>
+<span class="c1"># usually $HOME/.ipython. This option can also be specified through the environment</span>
 <span class="c1"># variable IPYTHONDIR.</span>
 <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;IPYTHONDIR&quot;</span><span class="p">):</span>
     <span class="n">c</span><span class="o">.</span><span class="n">BaseIPythonApplication</span><span class="o">.</span><span class="n">ipython_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;IPYTHONDIR&quot;</span><span class="p">)</span>
@@ -305,22 +340,22 @@
 <span class="c1"># c.BaseIPythonApplication.overwrite = False</span>
 
 <span class="c1"># The IPython profile to use.</span>
-<span class="n">c</span><span class="o">.</span><span class="n">BaseIPythonApplication</span><span class="o">.</span><span class="n">profile</span> <span class="o">=</span> <span class="s1">&#39;default&#39;</span>
+<span class="n">c</span><span class="o">.</span><span class="n">BaseIPythonApplication</span><span class="o">.</span><span class="n">profile</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span>
 
 <span class="c1"># Create a massive crash report when IPython encounters what may be an internal</span>
 <span class="c1">#  error.  The default is to append a short message to the usual traceback</span>
-<span class="n">c</span><span class="o">.</span><span class="n">BaseIPythonApplication</span><span class="o">.</span><span class="n">verbose_crash</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="n">c</span><span class="o">.</span><span class="n">BaseIPythonApplication</span><span class="o">.</span><span class="n">verbose_crash</span> <span class="o">=</span> <span class="kc">False</span>
 
 <span class="c1"># ----------------------------------------------------------------------------</span>
 <span class="c1"># TerminalIPythonApp(BaseIPythonApplication,InteractiveShellApp) configuration</span>
 <span class="c1"># ----------------------------------------------------------------------------</span>
 
 <span class="c1"># Whether to display a banner upon starting IPython.</span>
-<span class="n">c</span><span class="o">.</span><span class="n">TerminalIPythonApp</span><span class="o">.</span><span class="n">display_banner</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="c1"># c.TerminalIPythonApp.display_banner = False</span>
 
 <span class="c1"># If a command or file is given via the command-line, e.g. &#39;ipython foo.py&#39;,</span>
 <span class="c1">#  start an interactive shell after executing the file or command.</span>
-<span class="n">c</span><span class="o">.</span><span class="n">TerminalIPythonApp</span><span class="o">.</span><span class="n">force_interact</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="n">c</span><span class="o">.</span><span class="n">TerminalIPythonApp</span><span class="o">.</span><span class="n">force_interact</span> <span class="o">=</span> <span class="kc">False</span>
 
 <span class="c1"># ---</span>
 <span class="c1"># Class to use to instantiate the TerminalInteractiveShell object. Useful for</span>
@@ -328,14 +363,36 @@
 <span class="c1"># c.TerminalIPythonApp.interactive_shell_class =</span>
 <span class="c1"># &#39;IPython.terminal.interactiveshell.TerminalInteractiveShell&#39;</span>
 
-<span class="c1"># I think the original code is above.</span>
-<span class="c1"># shell_cls = &#39;IPython.terminal.interactiveshell.TerminalInteractiveShell&#39;</span>
-<span class="c1"># c.TerminalIPythonApp.interactive_shell_class = shell_cls</span>
-<span class="c1"># ---</span>
-<span class="c1"># Damn that seems like some real useful code.</span>
+
+<span class="n">c</span><span class="o">.</span><span class="n">TerminalIPythonApplication</span><span class="o">.</span><span class="n">log_format</span> <span class="o">=</span> <span class="n">default_log_format</span>
 
 <span class="c1"># Start IPython quickly by skipping the loading of config files.</span>
 <span class="c1"># c.TerminalIPythonApp.quick = False</span>
+
+<span class="c1"># Configure matplotlib for interactive use with the default matplotlib backend.</span>
+
+<span class="c1"># TerminalIPythonApp.matplotlib=&lt;CaselessStrEnum&gt;</span>
+<span class="c1">#     Default: None</span>
+<span class="c1">#     Choices: [&#39;auto&#39;, &#39;agg&#39;, &#39;gtk&#39;, &#39;gtk3&#39;, &#39;inline&#39;, &#39;ipympl&#39;, &#39;nbagg&#39;,</span>
+<span class="c1">#     notebook&#39;, &#39;osx&#39;, &#39;pdf&#39;, &#39;ps&#39;, &#39;qt&#39;, &#39;qt4&#39;, &#39;qt5&#39;, &#39;svg&#39;, &#39;tk&#39;,</span>
+<span class="c1">#     widget&#39;, &#39;wx&#39;]</span>
+<span class="c1">#     Configure matplotlib for interactive use with the default matplotlib</span>
+<span class="c1">#     backend.</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="n">ModuleNotFoundError</span><span class="p">):</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">TerminalIPythonApp</span><span class="o">.</span><span class="n">matplotlib</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">TerminalIPythonApp</span><span class="o">.</span><span class="n">matplotlib</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">sys</span><span class="p">,</span> <span class="s2">&quot;exc_info&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">()[</span><span class="mi">2</span><span class="p">])</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">TerminalIPythonApp</span><span class="o">.</span><span class="n">matplotlib</span> <span class="o">=</span> <span class="s2">&quot;auto&quot;</span>
+    <span class="c1"># TODO: I accidentally set this as a config of InteractiveShellApp.</span>
+    <span class="c1"># Was this why i&#39;ve eeen having so many unexplainable mpl problems?</span>
+    <span class="c1"># Why is this a problem and what causes it?</span>
+    <span class="c1"># c.InteractiveShellApp.pylab = &#39;auto&#39;</span>
 
 <span class="c1"># ------------------------------------------------------------------------------</span>
 <span class="c1"># InteractiveShell(SingletonConfigurable) configuration</span>
@@ -343,11 +400,19 @@
 
 <span class="c1"># An enhanced, interactive shell for Python.</span>
 
-<span class="c1"># &#39;all&#39;, &#39;last&#39;, &#39;last_expr&#39; or &#39;none&#39;, &#39;last_expr_or_assign&#39; specifying which</span>
+<span class="c1"># AKA:  Make IPython automatically call any callable object even if you didn&#39;t type</span>
+<span class="c1"># c.InteractiveShell.autocall = True</span>
+
+<span class="c1"># A list of ast.NodeTransformer subclass instances, which will be applied to</span>
+<span class="c1">#  user input before code is run.</span>
+<span class="c1"># c.InteractiveShell.ast_transformers = []</span>
+
+<span class="c1"># Automatically run await statement in the top level repl.</span>
+<span class="c1"># Must be boolean. Where do we specify the runner?</span>
 <span class="k">if</span> <span class="n">version_info</span> <span class="o">&gt;</span> <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
-    <span class="n">c</span><span class="o">.</span><span class="n">InteractiveShell</span><span class="o">.</span><span class="n">autoawait</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">InteractiveShell</span><span class="o">.</span><span class="n">autoawait</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="n">c</span><span class="o">.</span><span class="n">InteractiveShell</span><span class="o">.</span><span class="n">autoawait</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">InteractiveShell</span><span class="o">.</span><span class="n">autoawait</span> <span class="o">=</span> <span class="kc">False</span>
 
 <span class="c1"># Make IPython automatically call any callable object even if you didn&#39;t type</span>
 <span class="c1"># explicit parentheses. For example, &#39;str 43&#39; becomes &#39;str(43)&#39; automatically.</span>
@@ -365,26 +430,7 @@
 <span class="c1">#     pass</span>
 
 <span class="c1"># Enable magic commands to be called without the leading %.</span>
-<span class="n">c</span><span class="o">.</span><span class="n">InteractiveShell</span><span class="o">.</span><span class="n">automagic</span> <span class="o">=</span> <span class="bp">True</span>
-
-<span class="c1"># The part of the banner to be printed before the profile</span>
-<span class="n">c</span><span class="o">.</span><span class="n">InteractiveShell</span><span class="o">.</span><span class="n">banner1</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-
-<span class="c1"># Let&#39;s try rewriting the banner.</span>
-<span class="c1"># check IPython/core/usage.py</span>
-<span class="c1"># unfortunately this doesn&#39;t work yet. release isn&#39;t defined and idk where</span>
-<span class="c1"># they define it in the original file.</span>
-<span class="c1"># rewritten_banner_parts = [</span>
-<span class="c1">#     &quot;Python %s\n&quot; % sys.version.split(&quot;\n&quot;)[0],</span>
-<span class="c1">#     &quot;IPython {version} &quot;.format(version=release.version),</span>
-<span class="c1"># ]</span>
-
-<span class="c1">#  rewritten_banner = &#39;&#39;.join(rewritten_banner_parts)</span>
-
-<span class="c1">#  c.InteractiveShell.banner1 = rewritten_banner</span>
-
-<span class="c1"># The part of the banner to be printed after the profile</span>
-<span class="c1"># c.InteractiveShell.banner2 = &#39;&#39;</span>
+<span class="c1"># c.InteractiveShell.automagic = True</span>
 
 <span class="c1"># Set the size of the output cache. The default is 1000, you can change it</span>
 <span class="c1"># permanently in your config file. Setting it to 0 completely disables the</span>
@@ -392,17 +438,17 @@
 <span class="c1"># less than 3, it is reset to 0 and a warning is issued). This limit is defined</span>
 <span class="c1"># because otherwise you&#39;ll spend more time re-flushing a too small cache than</span>
 <span class="c1"># working</span>
-<span class="n">c</span><span class="o">.</span><span class="n">InteractiveShell</span><span class="o">.</span><span class="n">cache_size</span> <span class="o">=</span> <span class="mi">100000</span>
+<span class="n">c</span><span class="o">.</span><span class="n">InteractiveShell</span><span class="o">.</span><span class="n">cache_size</span> <span class="o">=</span> <span class="mi">10000</span>
 
 <span class="c1"># Use colors for displaying information about objects. Because this information</span>
 <span class="c1">#  is passed through a pager (like &#39;less&#39;), and some pagers get confused with</span>
 <span class="c1">#  color codes, this capability can be turned off.</span>
-<span class="n">c</span><span class="o">.</span><span class="n">InteractiveShell</span><span class="o">.</span><span class="n">color_info</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">c</span><span class="o">.</span><span class="n">InteractiveShell</span><span class="o">.</span><span class="n">color_info</span> <span class="o">=</span> <span class="kc">True</span>
 
 <span class="c1"># Set the color scheme (NoColor, Neutral, Linux, or LightBG).</span>
-<span class="n">c</span><span class="o">.</span><span class="n">InteractiveShell</span><span class="o">.</span><span class="n">colors</span> <span class="o">=</span> <span class="s1">&#39;Linux&#39;</span>
+<span class="n">c</span><span class="o">.</span><span class="n">InteractiveShell</span><span class="o">.</span><span class="n">colors</span> <span class="o">=</span> <span class="s2">&quot;Linux&quot;</span>
 
-<span class="c1"># c.InteractiveShell.debug = False</span>
+<span class="n">c</span><span class="o">.</span><span class="n">InteractiveShell</span><span class="o">.</span><span class="n">debug</span> <span class="o">=</span> <span class="kc">True</span>
 
 <span class="c1"># Don&#39;t call post-execute functions that have failed in the past.</span>
 <span class="c1"># c.InteractiveShell.disable_failing_post_execute = False</span>
@@ -411,10 +457,11 @@
 <span class="c1">#  regular output instead.</span>
 <span class="c1"># Only if we don&#39;t have bat.</span>
 
-<span class="k">if</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s1">&#39;bat&#39;</span><span class="p">):</span>
-    <span class="n">c</span><span class="o">.</span><span class="n">InteractiveShell</span><span class="o">.</span><span class="n">display_page</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="k">if</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;Windows&quot;</span><span class="p">:</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">InteractiveShell</span><span class="o">.</span><span class="n">display_page</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="n">c</span><span class="o">.</span><span class="n">InteractiveShell</span><span class="o">.</span><span class="n">display_page</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="k">if</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;bat&quot;</span><span class="p">):</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">InteractiveShell</span><span class="o">.</span><span class="n">display_page</span> <span class="o">=</span> <span class="kc">False</span>
 
 <span class="c1"># (Provisional API) enables html representation in mime bundles sent to pagers.</span>
 <span class="c1"># c.InteractiveShell.enable_html_pager = False</span>
@@ -424,7 +471,7 @@
 
 <span class="c1"># The number of saved history entries to be loaded into the history buffer at</span>
 <span class="c1">#  startup.</span>
-<span class="n">c</span><span class="o">.</span><span class="n">InteractiveShell</span><span class="o">.</span><span class="n">history_load_length</span> <span class="o">=</span> <span class="mi">10000</span>
+<span class="n">c</span><span class="o">.</span><span class="n">InteractiveShell</span><span class="o">.</span><span class="n">history_load_length</span> <span class="o">=</span> <span class="mi">1000</span>
 
 <span class="c1"># c.InteractiveShell.ipython_dir = &#39;&#39;</span>
 
@@ -443,8 +490,17 @@
 <span class="c1"># Select the loop runner that will be used to execute top-level asynchronous</span>
 <span class="c1"># code</span>
 <span class="c1"># c.InteractiveShell.loop_runner = &#39;IPython.core.interactiveshell._asyncio_runner&#39;</span>
+<span class="c1"># c.InteractiveShell.loop_runner = None</span>
+
+<span class="c1"># TODO: allow_none should be added to the loop runner. Check below tb</span>
+
+<span class="c1"># File &quot;/data/data/com.termux/files/home/.local/share/virtualenvs/dynamic_ipython-mVJ3Ohov/lib/python3.8/site-packages/IPython/core/interactiveshell.py&quot;, line 402, in _import_runner</span>
+<span class="c1">#     raise ValueError(&#39;loop_runner must be callable&#39;)</span>
+
+<span class="c1"># ValueError: loop_runner must be callable</span>
 
 <span class="c1"># TODO: What is this?</span>
+
 <span class="c1"># --TerminalInteractiveShell.object_info_string_level=&lt;Enum&gt;</span>
 <span class="c1">#     Default: 0</span>
 <span class="c1">#     Choices: (0, 1, 2)</span>
@@ -472,7 +528,7 @@
 <span class="c1"># TerminalInteractiveShell.prompts object directly.</span>
 <span class="c1"># c.InteractiveShell.prompts_pad_left = True</span>
 
-<span class="n">c</span><span class="o">.</span><span class="n">InteractiveShell</span><span class="o">.</span><span class="n">quiet</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="n">c</span><span class="o">.</span><span class="n">InteractiveShell</span><span class="o">.</span><span class="n">quiet</span> <span class="o">=</span> <span class="kc">False</span>
 
 <span class="c1"># c.InteractiveShell.separate_in = &#39;\n&#39;</span>
 
@@ -494,58 +550,103 @@
 <span class="c1"># c.InteractiveShell.sphinxify_docstring = False</span>
 <span class="c1">#  module).</span>
 
-<span class="n">c</span><span class="o">.</span><span class="n">InteractiveShell</span><span class="o">.</span><span class="n">wildcards_case_sensitive</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="n">c</span><span class="o">.</span><span class="n">InteractiveShell</span><span class="o">.</span><span class="n">wildcards_case_sensitive</span> <span class="o">=</span> <span class="kc">False</span>
 
 <span class="c1"># Switch modes for the IPython exception handlers.</span>
 <span class="c1"># Default: &#39;Context&#39;</span>
 <span class="c1"># Choices: [&#39;Context&#39;, &#39;Plain&#39;, &#39;Verbose&#39;, &#39;Minimal&#39;]</span>
-<span class="c1"># c.InteractiveShell.xmode = &#39;Context&#39;</span>
+<span class="n">c</span><span class="o">.</span><span class="n">InteractiveShell</span><span class="o">.</span><span class="n">xmode</span> <span class="o">=</span> <span class="s2">&quot;Verbose&quot;</span>
 
 <span class="c1"># ----------------------------------------------------------------------------</span>
 <span class="c1"># TerminalInteractiveShell(InteractiveShell) configuration</span>
 <span class="c1"># ----------------------------------------------------------------------------</span>
 
+<span class="c1"># &#39;all&#39;, &#39;last&#39;, &#39;last_expr&#39; or &#39;none&#39;, &#39;last_expr_or_assign&#39; specifying which</span>
+<span class="c1">#  nodes should be run interactively (displaying output from expressions).</span>
+<span class="n">c</span><span class="o">.</span><span class="n">TerminalInteractiveShell</span><span class="o">.</span><span class="n">ast_node_interactivity</span> <span class="o">=</span> <span class="s2">&quot;last_expr_or_assign&quot;</span>
+
+<span class="c1"># Autoformatter to reformat Terminal code. Can be `&#39;black&#39;` or `None`</span>
+<span class="n">c</span><span class="o">.</span><span class="n">TerminalInteractiveShell</span><span class="o">.</span><span class="n">autoformatter</span> <span class="o">=</span> <span class="kc">None</span>
+
 <span class="c1"># Set to confirm when you try to exit IPython with an EOF (Control-D in Unix,</span>
 <span class="c1">#  Control-Z/Enter in Windows). By typing &#39;exit&#39; or &#39;quit&#39;, you can force a</span>
 <span class="c1">#  direct exit without any confirmation.</span>
-<span class="n">c</span><span class="o">.</span><span class="n">TerminalInteractiveShell</span><span class="o">.</span><span class="n">confirm_exit</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="n">c</span><span class="o">.</span><span class="n">TerminalInteractiveShell</span><span class="o">.</span><span class="n">confirm_exit</span> <span class="o">=</span> <span class="kc">False</span>
 
 <span class="c1"># Options for displaying tab completions, &#39;column&#39;, &#39;multicolumn&#39;, and</span>
 <span class="c1">#  &#39;readlinelike&#39;. These options are for `prompt_toolkit`, see `prompt_toolkit`</span>
 <span class="c1">#  documentation for more information.</span>
-<span class="n">c</span><span class="o">.</span><span class="n">TerminalInteractiveShell</span><span class="o">.</span><span class="n">display_completions</span> <span class="o">=</span> <span class="s1">&#39;multicolumn&#39;</span>
+<span class="n">c</span><span class="o">.</span><span class="n">TerminalInteractiveShell</span><span class="o">.</span><span class="n">display_completions</span> <span class="o">=</span> <span class="s2">&quot;multicolumn&quot;</span>
 
 <span class="c1"># Shortcut style to use at the prompt. &#39;vi&#39; or &#39;emacs&#39;.</span>
 <span class="c1"># Ah I forgot &lt;C-a&gt; on Tmux and Emacs clobber.</span>
 
 <span class="c1"># Well windows doesn&#39;t get tmux so.</span>
 
-<span class="k">if</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;Windows&#39;</span><span class="p">:</span>
-    <span class="n">c</span><span class="o">.</span><span class="n">TerminalInteractiveShell</span><span class="o">.</span><span class="n">editing_mode</span> <span class="o">=</span> <span class="s1">&#39;emacs&#39;</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;TMUX&quot;</span><span class="p">):</span>
-        <span class="n">c</span><span class="o">.</span><span class="n">TerminalInteractiveShell</span><span class="o">.</span><span class="n">editing_mode</span> <span class="o">=</span> <span class="s1">&#39;vi&#39;</span>
-        <span class="c1"># I don&#39;t know if this is the right way to do this</span>
-        <span class="n">c</span><span class="o">.</span><span class="n">TerminalInteractiveShell</span><span class="o">.</span><span class="n">prompt_includes_vi_mode</span> <span class="o">=</span> <span class="bp">False</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">c</span><span class="o">.</span><span class="n">TerminalInteractiveShell</span><span class="o">.</span><span class="n">editing_mode</span> <span class="o">=</span> <span class="s1">&#39;emacs&#39;</span>
 
-<span class="c1"># TODO:</span>
-<span class="c1"># c_logger.info(&quot;Editing Mode:\t {!s}&quot;, c.TerminalInteractiveShell.editing_mode)</span>
+<div class="viewcode-block" id="conditional_editing_mode"><a class="viewcode-back" href="../../startup/index.html#default_profile.ipython_config.conditional_editing_mode">[docs]</a><span class="k">def</span> <span class="nf">conditional_editing_mode</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Execute this function to enable the emacs editing mode on Windows and vi only in tmux.&quot;&quot;&quot;</span>
+    <span class="c1"># Honestly making this conditional makes it hard to remember what&#39;s what.</span>
+    <span class="k">if</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;Windows&quot;</span><span class="p">:</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">TerminalInteractiveShell</span><span class="o">.</span><span class="n">editing_mode</span> <span class="o">=</span> <span class="s2">&quot;emacs&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;TMUX&quot;</span><span class="p">):</span>
+            <span class="n">c</span><span class="o">.</span><span class="n">TerminalInteractiveShell</span><span class="o">.</span><span class="n">editing_mode</span> <span class="o">=</span> <span class="s2">&quot;vi&quot;</span>
+            <span class="c1"># I don&#39;t know if this is the right way to do this</span>
+            <span class="n">c</span><span class="o">.</span><span class="n">TerminalInteractiveShell</span><span class="o">.</span><span class="n">prompt_includes_vi_mode</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">c</span><span class="o">.</span><span class="n">TerminalInteractiveShell</span><span class="o">.</span><span class="n">editing_mode</span> <span class="o">=</span> <span class="s2">&quot;emacs&quot;</span></div>
+
+
+<span class="n">c</span><span class="o">.</span><span class="n">TerminalInteractiveShell</span><span class="o">.</span><span class="n">editing_mode</span> <span class="o">=</span> <span class="s2">&quot;emacs&quot;</span>
+
+
+<span class="c1">##########</span>
+<span class="c1"># Banner</span>
+<span class="c1">##########</span>
+
+<span class="c1"># The part of the banner to be printed before the profile</span>
+
+<span class="c1"># c.InteractiveShell.banner1 = &quot;&quot;</span>
+<span class="c1"># Let&#39;s try rewriting the banner.</span>
+<span class="c1"># check IPython/core/usage.py</span>
+<span class="c1"># unfortunately this doesn&#39;t work yet. release isn&#39;t defined and idk where</span>
+<span class="c1"># they define it in the original file.</span>
+<span class="c1"># rewritten_banner_parts = [</span>
+<span class="c1">#     &quot;Python %s\n&quot; % sys.version.split(&quot;\n&quot;)[0],</span>
+<span class="c1">#     &quot;IPython {version} &quot;.format(version=release.version),</span>
+<span class="c1"># ]</span>
+
+<span class="c1">#  rewritten_banner = &#39;&#39;.join(rewritten_banner_parts)</span>
+
+<span class="c1">#  c.InteractiveShell.banner1 = rewritten_banner</span>
+
+<span class="c1"># The part of the banner to be printed after the profile</span>
+<span class="n">c</span><span class="o">.</span><span class="n">InteractiveShell</span><span class="o">.</span><span class="n">banner2</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+<span class="n">c</span><span class="o">.</span><span class="n">TerminalInteractiveShell</span><span class="o">.</span><span class="n">banner1</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">&quot;Press Control-Y to paste from the system clipboard.</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;Press Control-Space or Control-@ to enter selection mode.</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;Press Control-W to cut to clipboard.</span><span class="se">\n</span><span class="s2">&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># TODO: What is the API for traitlets.LazyConfigValue? It doesn&#39;t have a log method.</span>
+<span class="c1"># c.log(&quot;Editing Mode:\t {!s}&quot;.format(c.TerminalInteractiveShell.editing_mode))</span>
 
 <span class="c1"># Set the editor used by IPython (default to $EDITOR/vi/notepad).</span>
-<span class="n">c</span><span class="o">.</span><span class="n">TerminalInteractiveShell</span><span class="o">.</span><span class="n">editor</span> <span class="o">=</span> <span class="s1">&#39;nvim&#39;</span>
+<span class="n">c</span><span class="o">.</span><span class="n">TerminalInteractiveShell</span><span class="o">.</span><span class="n">editor</span> <span class="o">=</span> <span class="s2">&quot;nvim&quot;</span>
 
 <span class="c1"># Allows to enable/disable the prompt toolkit history search</span>
 <span class="c1"># c.TerminalInteractiveShell.enable_history_search = True</span>
 
 <span class="c1"># Enable vi (v) or Emacs (C-X C-E) shortcuts to open an external editor.</span>
 <span class="c1"># This is in addition to the F2 binding, which is always enabled.</span>
-<span class="n">c</span><span class="o">.</span><span class="n">TerminalInteractiveShell</span><span class="o">.</span><span class="n">extra_open_editor_shortcuts</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">c</span><span class="o">.</span><span class="n">TerminalInteractiveShell</span><span class="o">.</span><span class="n">extra_open_editor_shortcuts</span> <span class="o">=</span> <span class="kc">True</span>
 
 <span class="c1"># Provide an alternative handler to be called when the user presses Return.</span>
 <span class="c1"># This is an advanced option intended for debugging, which may be changed or</span>
 <span class="c1"># removed in later releases.</span>
+<span class="c1"># Wth no it&#39;s not? It&#39;s a feature not something that should be subject to removal.</span>
 <span class="c1"># c.TerminalInteractiveShell.handle_return = None</span>
 
 <span class="c1"># Highlight matching brackets.</span>
@@ -553,6 +654,7 @@
 
 <span class="c1"># The name or class of a Pygments style to use for syntax highlighting.</span>
 <span class="c1"># To see available styles, run `pygmentize -L styles`.</span>
+<span class="c1"># c.TerminalInteractiveShell.highlighting_style = traitlets.Undefined</span>
 
 <span class="c1"># default, emacs, friendly, colorful, autumn, murphy, manni, monokai, perldoc,</span>
 <span class="c1"># pastie, borland, trac, native, fruity, bw, vim, vs, tango, rrt, xcode, igor,</span>
@@ -560,34 +662,64 @@
 
 <span class="c1"># Try to import my Gruvbox class. Can be found at</span>
 <span class="c1"># https://github.com/farisachugthai/Gruvbox_IPython</span>
-<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">):</span>
-    <span class="k">if</span> <span class="ne">ModuleNotFoundError</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">builtins</span><span class="p">):</span>
-
-        <span class="k">class</span> <span class="nc">ModuleNotFoundError</span><span class="p">(</span><span class="ne">ImportError</span><span class="p">):</span>
-            <span class="sd">&quot;&quot;&quot;Subclass ImportErrors.&quot;&quot;&quot;</span>
-
-            <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-                <span class="s2">&quot; I wouldn&#39;t limit this section of code to only py3 up but I think that py2 doesn&#39;t accept that super() use below so I will for now.&quot;</span> <span class="s2">&quot;&quot;</span>
-                <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">gruvbox.style</span> <span class="kn">import</span> <span class="n">GruvboxDarkHard</span>
-<span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="ne">ModuleNotFoundError</span><span class="p">):</span>
-    <span class="n">c</span><span class="o">.</span><span class="n">TerminalInteractiveShell</span><span class="o">.</span><span class="n">highlighting_style</span> <span class="o">=</span> <span class="s1">&#39;monokai&#39;</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="n">c</span><span class="o">.</span><span class="n">TerminalInteractiveShell</span><span class="o">.</span><span class="n">highlighting_style</span> <span class="o">=</span> <span class="n">GruvboxDarkHard</span>
+    <span class="kn">from</span> <span class="nn">gruvbox.gruvbox</span> <span class="kn">import</span> <span class="n">Gruvbox</span>
+<span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="n">ModuleNotFoundError</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">pygments.styles</span> <span class="kn">import</span> <span class="n">friendly</span>
 
+    <span class="n">c</span><span class="o">.</span><span class="n">TerminalInteractiveShell</span><span class="o">.</span><span class="n">highlighting_style</span> <span class="o">=</span> <span class="s2">&quot;friendly&quot;</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">TerminalInteractiveShell</span><span class="o">.</span><span class="n">highlighting_style</span> <span class="o">=</span> <span class="n">Gruvbox</span>
+
+
+<div class="viewcode-block" id="get_env"><a class="viewcode-back" href="../../startup/index.html#default_profile.ipython_config.get_env">[docs]</a><span class="k">def</span> <span class="nf">get_env</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Would it make sense to combine functools.lru_cache with this?&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
+
+
+<span class="c1"># NOTE: This was for molokai</span>
 <span class="c1"># Override highlighting format for specific tokens</span>
 <span class="c1"># Comments were genuinely impossible to read. Might need to override</span>
 <span class="c1"># punctuation next.</span>
 <span class="c1"># c.TerminalInteractiveShell.highlighting_style_overrides = {Comment: &#39;#ffffff&#39;}</span>
+
+<span class="c1"># No help docs? Update when you find the sauce</span>
+<span class="c1"># c.TerminalInteractiveShell.mime_renderers = {}</span>
 
 <span class="c1"># Enable mouse support in the prompt (Note: prevents selecting text with the</span>
 <span class="c1"># mouse)</span>
 <span class="c1"># c.TerminalInteractiveShell.mouse_support = False</span>
 
 <span class="c1"># Class used to generate Prompt token for prompt_toolkit</span>
+<span class="c1"># So this wouldn&#39;t be a block of code to build off of but here&#39;s something</span>
+<span class="c1"># so you can get an idea of what&#39;s going on</span>
+
+
+<div class="viewcode-block" id="StandardPythonPrompt"><a class="viewcode-back" href="../../startup/index.html#default_profile.ipython_config.StandardPythonPrompt">[docs]</a><span class="k">class</span> <span class="nc">StandardPythonPrompt</span><span class="p">(</span><span class="n">ClassicPrompts</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create a no-op class to demonstrate usage of the ClassicPrompts class.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; from IPython.terminal.prompts import ClassicPrompts</span>
+<span class="sd">    &gt;&gt;&gt; from IPython.core.getipython import get_ipython</span>
+<span class="sd">    &gt;&gt;&gt; ClassicPrompts(get_ipython()).continuation_prompt_tokens()</span>
+<span class="sd">    [(Token.Prompt, &#39;... &#39;)]</span>
+<span class="sd">    &gt;&gt;&gt; ClassicPrompts(get_ipython()).continuation_prompt_tokens()</span>
+<span class="sd">    [(Token.Prompt, &#39;&gt;&gt;&gt; &#39;)]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The most boiler-platey repr I can come up with.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+
+        <span class="c1"># def __call__(self):</span>
+        <span class="sd">&quot;&quot;&quot;TODO&quot;&quot;&quot;</span></div>
+        <span class="c1"># return</span>
+
+
+<span class="c1"># As an aside I believe that this attr is the same as Prompt</span>
 <span class="c1"># c.TerminalInteractiveShell.prompts_class = &#39;IPython.terminal.prompts.Prompts&#39;</span>
 
 <span class="c1"># Use `raw_input` for the REPL, without completion and prompt colors.</span>
@@ -604,16 +736,21 @@
 <span class="n">c</span><span class="o">.</span><span class="n">TerminalInteractiveShell</span><span class="o">.</span><span class="n">space_for_menu</span> <span class="o">=</span> <span class="mi">6</span>
 
 <span class="c1"># Automatically set the terminal title</span>
-<span class="n">c</span><span class="o">.</span><span class="n">TerminalInteractiveShell</span><span class="o">.</span><span class="n">term_title</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">c</span><span class="o">.</span><span class="n">TerminalInteractiveShell</span><span class="o">.</span><span class="n">term_title</span> <span class="o">=</span> <span class="kc">True</span>
 
 <span class="c1"># Customize the terminal title format.  This is a python format string.</span>
 <span class="c1"># Available substitutions are: {cwd}.</span>
-<span class="n">c</span><span class="o">.</span><span class="n">TerminalInteractiveShell</span><span class="o">.</span><span class="n">term_title_format</span> <span class="o">=</span> <span class="s1">&#39;IPython: {cwd}&#39;</span>
+<span class="n">c</span><span class="o">.</span><span class="n">TerminalInteractiveShell</span><span class="o">.</span><span class="n">term_title_format</span> <span class="o">=</span> <span class="s2">&quot;IPython: </span><span class="si">{cwd}</span><span class="s2">&quot;</span>
 
 <span class="c1"># Use 24bit colors instead of 256 colors in prompt highlighting. If your</span>
 <span class="c1"># terminal supports true color, the following command should print &#39;TRUECOLOR&#39;</span>
 <span class="c1"># in orange: printf &quot;\x1b[38;2;255;100;0mTRUECOLOR\x1b[0m\n&quot;</span>
-<span class="n">c</span><span class="o">.</span><span class="n">TerminalInteractiveShell</span><span class="o">.</span><span class="n">true_color</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">c</span><span class="o">.</span><span class="n">TerminalInteractiveShell</span><span class="o">.</span><span class="n">true_color</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="c1"># Switch modes for the IPython exception handlers.</span>
+<span class="c1"># Default: &#39;Context&#39;</span>
+<span class="c1"># Choices: [&#39;Context&#39;, &#39;Plain&#39;, &#39;Verbose&#39;, &#39;Minimal&#39;]</span>
+<span class="n">c</span><span class="o">.</span><span class="n">TerminalInteractiveShell</span><span class="o">.</span><span class="n">xmode</span> <span class="o">=</span> <span class="s2">&quot;Verbose&quot;</span>
 
 <span class="c1"># ----------------------------------------------------------------------------</span>
 <span class="c1"># HistoryAccessor(HistoryAccessorBase) configuration</span>
@@ -632,14 +769,14 @@
 <span class="c1"># Options for configuring the SQLite connection</span>
 
 <span class="c1"># These options are passed as keyword args to sqlite3.connect when establishing</span>
-<span class="c1"># database conenctions.</span>
+<span class="c1">#  database connections.</span>
 <span class="c1"># c.HistoryAccessor.connection_options = {}</span>
 
 <span class="c1"># enable the SQLite history</span>
 
 <span class="c1"># set enabled=False to disable the SQLite history, in which case there will be</span>
 <span class="c1"># no stored history, no SQLite connection, and no background saving thread.</span>
-<span class="c1"># This may be necessary in some threaded environments where IPython is embedded</span>
+<span class="c1"># This may be necessary in some threaded environments where IPython is embedded.</span>
 <span class="c1"># c.HistoryAccessor.enabled = True</span>
 
 <span class="c1"># Path to file to use for SQLite history database.</span>
@@ -679,7 +816,7 @@
 <span class="n">c</span><span class="o">.</span><span class="n">HistoryManager</span><span class="o">.</span><span class="n">db_cache_size</span> <span class="o">=</span> <span class="mi">16</span>
 
 <span class="c1"># Should the history database include output? (default: no)</span>
-<span class="n">c</span><span class="o">.</span><span class="n">HistoryManager</span><span class="o">.</span><span class="n">db_log_output</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">c</span><span class="o">.</span><span class="n">HistoryManager</span><span class="o">.</span><span class="n">db_log_output</span> <span class="o">=</span> <span class="kc">True</span>
 
 <span class="c1"># ----------------------------------------------------------------------------</span>
 <span class="c1"># ProfileDir(LoggingConfigurable) configuration</span>
@@ -698,14 +835,14 @@
 
 <span class="c1"># 05/18/19: I&#39;m enabling this as it overrides the logic used for profile in</span>
 <span class="c1"># the `BaseIPythonApplication` section</span>
-<span class="n">c</span><span class="o">.</span><span class="n">ProfileDir</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">home</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;ipython&#39;</span><span class="p">)</span>
+<span class="n">c</span><span class="o">.</span><span class="n">ProfileDir</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">home</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;.ipython&quot;</span><span class="p">)</span>
 
 <span class="c1"># ----------------------------------------------------------------------------</span>
 <span class="c1"># BaseFormatter(Configurable) configuration</span>
 <span class="c1"># ----------------------------------------------------------------------------</span>
 
 
-<div class="viewcode-block" id="BaseFormatterDoc"><a class="viewcode-back" href="../../startup/index.html#default_profile.ipython_config.BaseFormatterDoc">[docs]</a><span class="k">class</span> <span class="nc">BaseFormatterDoc</span><span class="p">(</span><span class="n">Configurable</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseFormatterDoc"><a class="viewcode-back" href="../../startup/index.html#default_profile.ipython_config.BaseFormatterDoc">[docs]</a><span class="k">class</span> <span class="nc">BaseFormatterDoc</span><span class="p">(</span><span class="n">LoggingConfigurable</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A base formatter class that is configurable.</span>
 
 <span class="sd">    This formatter should usually be used as the base class of all formatters. It</span>
@@ -746,20 +883,22 @@
 <span class="sd">            c.BaseFormatter.type_printers = {}</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_example_subclass</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        -----------------------------------------------------------------------------</span>
 <span class="sd">        PlainTextFormatter(BaseFormatter) configuration</span>
-<span class="sd">        ----------------------------------------------------------------------------</span>
+<span class="sd">        -----------------------------------------------</span>
 
 <span class="sd">        The default pretty-printer.</span>
 
-<span class="sd">        This uses :mod:`IPython.lib.pretty` to compute the format data of the object.</span>
-<span class="sd">        If the object cannot be pretty printed, :func:`repr` is used. See the</span>
-<span class="sd">        documentation of :mod:`IPython.lib.pretty` for details on how to write pretty</span>
-<span class="sd">        printers.  Here is a simple example::</span>
+<span class="sd">        This uses :mod:`IPython.lib.pretty` to compute the format data of</span>
+<span class="sd">        the object.</span>
+
+<span class="sd">        If the object cannot be pretty printed, :func:`repr` is used.</span>
+
+<span class="sd">        See the documentation of :mod:`IPython.lib.pretty` for details on</span>
+<span class="sd">        how to write pretty printers.  Here is a simple example::</span>
 
 <span class="sd">            def dtype_pprinter(obj, p, cycle):</span>
 <span class="sd">                if cycle:</span>
@@ -796,7 +935,73 @@
         <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_example_subclass</span><span class="p">()</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_example_subclass</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_repr_pretty_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">cycle</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;ExecutionMagics has an example of how to use this method...</span>
+
+<span class="sd">        Well...erhm. I guess so anyway.::</span>
+
+<span class="sd">            unic = self.__str__()</span>
+<span class="sd">            p.text(u&#39;&lt;TimeitResult : &#39;+unic+u&#39;&gt;&#39;)</span>
+
+<span class="sd">        What is p? And we don&#39;t use cycle so...</span>
+<span class="sd">        Oh holy shit. Well if you see the string method...I&#39;m putting this</span>
+<span class="sd">        in a new class wtf.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="s2">&quot;&lt;TimeitResult : &quot;</span> <span class="o">+</span> <span class="n">unic</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">)</span></div>
+
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">dataclasses</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="k">pass</span>
+<span class="k">else</span><span class="p">:</span>
+
+<div class="viewcode-block" id="TimedFormatter"><a class="viewcode-back" href="../../startup/index.html#default_profile.ipython_config.TimedFormatter">[docs]</a>    <span class="nd">@dataclasses</span><span class="o">.</span><span class="n">dataclass</span>
+    <span class="k">class</span> <span class="nc">TimedFormatter</span><span class="p">(</span><span class="n">BaseFormatterDoc</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;I&#39;d imagine this would benefit from a dataclass.</span>
+
+<span class="sd">        Rewrite the init so that it takes advantage of the dataclass</span>
+<span class="sd">        module. If that doesn&#39;t seem to be working namedtuples are similar.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">loops</span><span class="p">:</span> <span class="nb">int</span>
+        <span class="n">precision</span><span class="p">:</span> <span class="nb">int</span>
+        <span class="n">repeat</span><span class="p">:</span> <span class="nb">int</span>
+        <span class="n">all_runs</span><span class="p">:</span> <span class="nb">set</span>
+
+<div class="viewcode-block" id="TimedFormatter.__init__"><a class="viewcode-back" href="../../startup/index.html#default_profile.ipython_config.TimedFormatter.__init__">[docs]</a>        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+            <span class="c1"># self.repeat = repeat</span>
+            <span class="c1"># self.best = best</span>
+            <span class="c1"># self.worst = worst</span>
+            <span class="c1"># self.compile_time = compile_time</span>
+
+<div class="viewcode-block" id="TimedFormatter.summary"><a class="viewcode-back" href="../../startup/index.html#default_profile.ipython_config.TimedFormatter.summary">[docs]</a>        <span class="k">def</span> <span class="nf">summary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="n">pm</span> <span class="o">=</span> <span class="s2">&quot;+-&quot;</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="s2">&quot;encoding&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">encoding</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="s2">&quot;</span><span class="se">\xb1</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">encoding</span><span class="p">)</span>
+                    <span class="n">pm</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\xb1</span><span class="s2">&quot;</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="k">pass</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;{_format_time(self.average, self._precision)}&quot;</span><span class="p">)</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{pm}</span><span class="s2"> {_format_time(self.stdev, self._precision)} per loop&quot;</span><span class="p">)</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{mean}</span><span class="s2"> </span><span class="si">{pm}</span><span class="s2"> std. dev. of </span><span class="si">{self.repeat}</span><span class="s2"> run.&quot;</span><span class="p">)</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;{&#39;&#39; if self.repeat == 1 else &#39;s&#39;} </span><span class="si">{self.loops}</span><span class="s2"> loop&quot;</span><span class="p">)</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;{&#39;&#39; if self.loops == 1 else &#39;s&#39;} each&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ret</span></div>
+
+<div class="viewcode-block" id="TimedFormatter.timings"><a class="viewcode-back" href="../../startup/index.html#default_profile.ipython_config.TimedFormatter.timings">[docs]</a>        <span class="k">def</span> <span class="nf">timings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="p">[</span><span class="n">dt</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">loops</span> <span class="k">for</span> <span class="n">dt</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_runs</span><span class="p">]</span></div>
+
+        <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+
+        <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{self.__class__.__name__}</span><span class="s2">&quot;</span></div>
 
 
 <span class="c1"># ----------------------------------------------------------------------------</span>
@@ -804,63 +1009,52 @@
 <span class="c1"># ----------------------------------------------------------------------------</span>
 
 <span class="c1"># Enable unicode completions, e.g. \alpha&lt;tab&gt; . Includes completion of latex</span>
-<span class="c1">#  commands, unicode names, and expanding unicode characters back to latex</span>
-<span class="c1">#  commands.</span>
-<span class="c1"># c.Completer.backslash_combining_completions = True</span>
+<span class="c1"># commands, unicode names, and expanding unicode characters back to latex</span>
+<span class="c1"># commands. Outside of how bad the IPython completion implementation is,</span>
+<span class="c1"># also consider Windows users might want cd \ to not complete alpha</span>
+<span class="n">c</span><span class="o">.</span><span class="n">Completer</span><span class="o">.</span><span class="n">backslash_combining_completions</span> <span class="o">=</span> <span class="kc">False</span>
 
 <span class="c1"># Enable debug for the Completer. Mostly print extra information for</span>
-<span class="c1">#  experimental jedi integration.</span>
-<span class="n">c</span><span class="o">.</span><span class="n">Completer</span><span class="o">.</span><span class="n">debug</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="c1"># experimental jedi integration.</span>
+<span class="n">c</span><span class="o">.</span><span class="n">Completer</span><span class="o">.</span><span class="n">debug</span> <span class="o">=</span> <span class="kc">False</span>
 
 <span class="c1"># Activate greedy completion PENDING DEPRECTION. this is now mostly taken care</span>
-<span class="c1">#  of with Jedi.</span>
-<span class="c1">#</span>
-<span class="c1">#  This will enable completion on elements of lists, results of function calls,</span>
-<span class="c1">#  etc., but can be unsafe because the code is actually evaluated on TAB.</span>
+<span class="c1"># of with Jedi.</span>
+<span class="c1"># This will enable completion on elements of lists, results of function calls,</span>
+<span class="c1"># etc., but can be unsafe because the code is actually evaluated on TAB.</span>
 <span class="c1"># c.Completer.greedy = False</span>
 
 <span class="c1"># Experimental: restrict time (in milliseconds) during which Jedi can compute</span>
-<span class="c1">#  types. Set to 0 to stop computing types. Non-zero value lower than 100ms may</span>
-<span class="c1">#  hurt performance by preventing jedi to build its cache.</span>
-<span class="n">c</span><span class="o">.</span><span class="n">Completer</span><span class="o">.</span><span class="n">jedi_compute_type_timeout</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="c1"># types. Set to 0 to stop computing types. Non-zero value lower than 100ms may</span>
+<span class="c1"># hurt performance by preventing jedi to build its cache.</span>
+<span class="n">c</span><span class="o">.</span><span class="n">Completer</span><span class="o">.</span><span class="n">jedi_compute_type_timeout</span> <span class="o">=</span> <span class="mi">0</span>
 
 <span class="c1"># Experimental: Use Jedi to generate autocompletions. Default to True if jedi</span>
 <span class="c1"># is installed</span>
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">jedi</span>
-<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>  <span class="c1"># clearly not installed</span>
-    <span class="n">c</span><span class="o">.</span><span class="n">Completer</span><span class="o">.</span><span class="n">use_jedi</span> <span class="o">=</span> <span class="bp">False</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="n">c</span><span class="o">.</span><span class="n">Completer</span><span class="o">.</span><span class="n">use_jedi</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="c1"># try:</span>
+<span class="c1">#     import jedi</span>
+<span class="c1"># except ImportError:  # clearly not installed</span>
+<span class="n">c</span><span class="o">.</span><span class="n">Completer</span><span class="o">.</span><span class="n">use_jedi</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="c1"># else:</span>
+<span class="c1">#     c.Completer.use_jedi = True</span>
+
+<span class="c1"># It&#39;s not that I don&#39;t want to use jedi, it&#39;s that our implementation is awful</span>
 
 <span class="c1"># ----------------------------------------------------------------------------</span>
 <span class="c1"># IPCompleter(Completer) configuration</span>
 <span class="c1"># ----------------------------------------------------------------------------</span>
 
 <span class="c1"># Extension of the completer class with IPython-specific features</span>
-
-<span class="c1"># DEPRECATED as of version 5.0.</span>
-<span class="c1">#</span>
-<span class="c1">#  Instruct the completer to use __all__ for the completion</span>
-<span class="c1">#</span>
-<span class="c1">#  Specifically, when completing on ``object.&lt;tab&gt;``.</span>
-<span class="c1">#</span>
-<span class="c1">#  When True: only those names in obj.__all__ will be included.</span>
-<span class="c1">#</span>
-<span class="c1">#  When False [default]: the __all__ attribute is ignored</span>
-<span class="c1"># c.IPCompleter.limit_to__all__ = False</span>
-
 <span class="c1"># Whether to merge completion results into a single list</span>
-<span class="c1">#</span>
 <span class="c1"># If False, only the completion results from the first non-empty completer will</span>
 <span class="c1"># be returned.</span>
 <span class="c1"># c.IPCompleter.merge_completions = True</span>
 
 <span class="c1"># Instruct the completer to omit private method names</span>
-<span class="c1">#  Specifically, when completing on ``object.&lt;tab&gt;``.</span>
-<span class="c1">#  When 2 [default]: all names that start with &#39;_&#39; will be excluded.</span>
-<span class="c1">#  When 1: all &#39;magic&#39; names (``__foo__``) will be excluded.</span>
-<span class="c1">#  When 0: nothing will be excluded.</span>
+<span class="c1"># Specifically, when completing on ``object.&lt;tab&gt;``.</span>
+<span class="c1"># When 2 [default]: all names that start with &#39;_&#39; will be excluded.</span>
+<span class="c1"># When 1: all &#39;magic&#39; names (``__foo__``) will be excluded.</span>
+<span class="c1"># When 0: nothing will be excluded.</span>
 <span class="n">c</span><span class="o">.</span><span class="n">IPCompleter</span><span class="o">.</span><span class="n">omit__names</span> <span class="o">=</span> <span class="mi">1</span>
 
 <span class="c1"># ----------------------------------------------------------------------------</span>
@@ -868,15 +1062,15 @@
 <span class="c1"># ----------------------------------------------------------------------------</span>
 
 <span class="c1"># Magics for talking to scripts</span>
-<span class="c1"># This defines a base `%%script` cell magic for running a cell with a program</span>
-<span class="c1"># in a subprocess, and registers a few top-level magics that call %%script with</span>
-<span class="c1"># common interpreters.</span>
+<span class="c1"># This defines a base `%%script` cell magic for running a cell with a</span>
+<span class="c1"># program in a subprocess, and registers a few top-level magics that call</span>
+<span class="c1"># %%script with common interpreters.</span>
 
 <span class="c1"># Extra script cell magics to define</span>
 <span class="c1"># This generates simple wrappers of `%%script foo` as `%%foo`.</span>
-<span class="c1">#</span>
 <span class="c1"># If you want to add script magics that aren&#39;t on your path, specify them in</span>
-<span class="c1"># script_paths</span>
+<span class="c1"># script_paths.</span>
+<span class="c1"># TODO: I wonder if exes like cmd or pwsh would work here.</span>
 <span class="c1"># c.ScriptMagics.script_magics = []</span>
 
 <span class="c1"># Dict mapping short &#39;ruby&#39; names to full paths, such as &#39;/opt/secret/bin/ruby&#39;</span>
@@ -890,95 +1084,23 @@
 
 <span class="c1"># Magics related to all logging machinery.</span>
 <span class="c1"># Suppress output of log state when logging is enabled</span>
-<span class="n">c</span><span class="o">.</span><span class="n">LoggingMagics</span><span class="o">.</span><span class="n">quiet</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">c</span><span class="o">.</span><span class="n">LoggingMagics</span><span class="o">.</span><span class="n">quiet</span> <span class="o">=</span> <span class="kc">True</span>
 
 <span class="c1"># ----------------------------------------------------------------------------</span>
 <span class="c1"># StoreMagics(Magics) configuration</span>
 <span class="c1"># ----------------------------------------------------------------------------</span>
 
 <span class="c1"># Lightweight persistence for python variables.</span>
-<span class="c1"># Provides the %store magic.</span>
-<span class="c1"># If True, any %store-d variables will be automatically restored when IPython</span>
-<span class="c1"># starts.</span>
+<span class="c1"># If True, any %store-d variables will be automatically restored</span>
 <span class="c1"># c.StoreMagics.autorestore = False</span>
 </pre></div>
 
-          </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
-    <h3>Quick search</h3>
-    <div class="searchformwrapper">
-        <form class="search" action="../../search.html" method="get">
-            <input type="text" name="q" />
-            <input type="submit" value="Go" />
-        </form>
     </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
 
-
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="../../index.html">Documentation overview</a>
-    <ul>
-      <li><a href="../index.html">Module code</a>
-        <ul>
-        </ul>
-      </li>
-    </ul>
-</ul>
-</li>
-
-
-
-<h3><a href="../../index.html">Table of Contents</a></h3>
-
-<div>&nbsp;</div>
-<div id="sidebartoc">
-    <p class="caption"><span class="caption-text">Tutorial</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../jobcontrol.html">Job Control</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../subcommands.html">Subcommands</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../sphinxext/index.html">Sphinx Extensions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../dev.html">Developers Notes</a></li>
-</ul>
-<p class="caption"><span class="caption-text">API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../startup/index.html">IPython Startup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../util/index.html">IPython Utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../kernel.html">IPython Kernel</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../jupyter/index.html">Jupyter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../extensions.html">Extensions</a></li>
-</ul>
-
-    
-
-</div>
-
-
-
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">Dynamic IPython</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
-      </ul>
-    </div>
     <div class="footer" role="contentinfo">
-      Last updated on Oct 15, 2019.
+      Last updated on Feb 07, 2020.
     </div>
   </body>
 </html>

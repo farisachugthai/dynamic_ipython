@@ -154,7 +154,10 @@
           <h3>Table of Contents</h3>
           <ul>
 <li><a class="reference internal" href="#">IPython Utilities</a><ul>
-<li><a class="reference internal" href="#module-default_profile.util">Module contents</a></li>
+<li><a class="reference internal" href="#module-default_profile.util">Module contents</a><ul>
+<li><a class="reference internal" href="#goals">Goals</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#utilities-submodules">Utilities Submodules</a></li>
 </ul>
 </li>
@@ -167,6 +170,26 @@
 <span id="utilities"></span><h1>IPython Utilities<a class="headerlink" href="#ipython-utilities" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-default_profile.util">
 <span id="module-contents"></span><span id="util-contents"></span><h2>Module contents<a class="headerlink" href="#module-default_profile.util" title="Permalink to this headline">¶</a></h2>
+<p>They’re still all useful in their current state and when the user is
+running IPython interactively, but none of the scripts havet been fleshed out
+to the extent that they could be easily changed to IPython extensions.</p>
+<div class="section" id="goals">
+<h3>Goals<a class="headerlink" href="#goals" title="Permalink to this headline">¶</a></h3>
+<p>Currently the module aims to:</p>
+<ol class="arabic">
+<li><p>Create consistent <a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Logger" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">logging.Logger</span></code></a> objects</p></li>
+<li><p>Make a better pager on Windows</p></li>
+<li><p>Create a collection of classes that can more easily remove
+platform-specific issues that continue to arise.</p></li>
+</ol>
+<p>In addition, configure a module-wide logger by equating <code class="xref py py-obj docutils literal notranslate"><span class="pre">logging.BASIC_FORMAT</span></code>
+with a pre-determined template string like so:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">logging</span><span class="o">.</span><span class="n">BASIC_FORMAT</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> : </span><span class="si">%(levelname)s</span><span class="s1"> : </span><span class="si">%(message)s</span><span class="s1">&#39;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">UTIL_LOGGER</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;default_profile.util&#39;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">UTIL_LOGGER</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
 <p>The submodules contained in this package are as follows:</p>
 </div>
 <div class="section" id="utilities-submodules">
@@ -197,7 +220,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 06, 2020.
+      Last updated on Feb 07, 2020.
     </div>
   </body>
 </html>

@@ -157,7 +157,10 @@
 <li><a class="reference internal" href="#parameters">Parameters</a></li>
 <li><a class="reference internal" href="#notes">Notes</a></li>
 <li><a class="reference internal" href="#usage">Usage</a><ul>
-<li><a class="reference internal" href="#stack-depth"><code class="docutils literal notranslate"><span class="pre">_stack_depth</span></code></a></li>
+<li><a class="reference internal" href="#stack-depth"><code class="docutils literal notranslate"><span class="pre">_stack_depth</span></code></a><ul>
+<li><a class="reference internal" href="#work-in-progress">Work in Progress</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -231,7 +234,66 @@ an error, so an empty <a class="reference external" href="https://docs.python.or
 <code class="docutils literal notranslate"><span class="pre">_stack_depth</span></code> = 2.</p>
 <p>This is added to ensure backward compatibility for use
 of <code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.core.magics.get_ipython().magic()</span></code></p>
-<span class="target" id="module-default_profile.startup.01_rehashx"></span></div>
+<span class="target" id="module-default_profile.startup.01_rehashx"></span><div class="section" id="work-in-progress">
+<h4>Work in Progress<a class="headerlink" href="#work-in-progress" title="Permalink to this headline">¶</a></h4>
+<p>The code that’s more important than anything should execute regardless
+of whether someone has <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span></code>-ed it.</p>
+<p>In addition, enable faulthandler, tracemalloc and assign them to
+sys.excepthook, threading.excepthoook and others.</p>
+<p>A possible alternative to get_ipython().showsyntaxerror might possibly be
+<a class="reference external" href="https://docs.python.org/3/library/dis.html#dis.distb" title="(in Python v3.8)"><code class="xref py py-func docutils literal notranslate"><span class="pre">dis.distb()</span></code></a>.</p>
+<dl class="function">
+<dt id="default_profile.startup.01_rehashx.rehashx_run">
+<code class="sig-name descname">rehashx_run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/01_rehashx.html#rehashx_run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.01_rehashx.rehashx_run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add all executables on the user’s <span class="target" id="index-0"></span><a class="reference external" href="https://matplotlib.org/faq/environment_variables_faq.html#envvar-PATH" title="(in Matplotlib v3.1.2)"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PATH</span></code></a> into the IPython ns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>shell</strong> (<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.12.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveShell</span></code></a> instance) – IPython shell instance.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="default_profile.startup.01_rehashx.get_exec_dir">
+<code class="sig-name descname">get_exec_dir</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/01_rehashx.html#get_exec_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.01_rehashx.get_exec_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="default_profile.startup.01_rehashx.safe_run_path">
+<code class="sig-name descname">safe_run_path</code><span class="sig-paren">(</span><em class="sig-param">fileobj</em>, <em class="sig-param">logger</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/01_rehashx.html#safe_run_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.01_rehashx.safe_run_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="default_profile.startup.01_rehashx.rerun_startup">
+<code class="sig-name descname">rerun_startup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/01_rehashx.html#rerun_startup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.01_rehashx.rerun_startup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rerun the files in the startup directory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>ret</strong> – Namespace of all successful files.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="default_profile.startup.01_rehashx.execfile">
+<code class="sig-name descname">execfile</code><span class="sig-paren">(</span><em class="sig-param">filename</em>, <em class="sig-param">global_namespace=None</em>, <em class="sig-param">local_namespace=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/01_rehashx.html#execfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.01_rehashx.execfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Python3 doesn’t have this but it’d be nice to have a utility to exec a file at once.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="default_profile.startup.01_rehashx.ipy_execfile">
+<code class="sig-name descname">ipy_execfile</code><span class="sig-paren">(</span><em class="sig-param">directory</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/01_rehashx.html#ipy_execfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.01_rehashx.ipy_execfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a function that actually does what  <a class="reference internal" href="#default_profile.startup.01_rehashx.execfile" title="default_profile.startup.01_rehashx.execfile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">execfile</span></code></a> was trying to do.</p>
+<p>Because <a class="reference internal" href="#default_profile.startup.01_rehashx.execfile" title="default_profile.startup.01_rehashx.execfile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">execfile</span></code></a> executes everything in separate namespaces, it doesn’t
+get added into the user’s <a class="reference external" href="https://docs.python.org/3/library/functions.html#locals" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">locals</span></code></a>, which is fairly pointless for
+interactive use.</p>
+</dd></dl>
+
+</div>
+</div>
 </div>
 </div>
 
@@ -241,7 +303,7 @@ of <code class="xref py py-func docutils literal notranslate"><span class="pre">
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 06, 2020.
+      Last updated on Feb 07, 2020.
     </div>
   </body>
 </html>

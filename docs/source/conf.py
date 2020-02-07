@@ -471,13 +471,6 @@ else:
 # Autosummary
 # -------------------------------------------------------------------
 
-autodoc_mock_imports = [
-    "default_profile",
-    "default_profile.util",
-    "default_profile.sphinxext",
-    "extensions",
-]
-
 autosummary_generate = True
 
 autosummary_imported_members = False

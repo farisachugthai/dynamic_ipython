@@ -11,7 +11,7 @@ below without intermingling.
 >>> for i in pkg_resources.find_distributions('.'):
 ...     print(i)
 ...
-dynamic-ipython 0.0.1
+dynamic-ipython 0.0.2
 
 Also a good check to see whats being counted as a package is:
 
@@ -70,8 +70,8 @@ default_formatter = LevelFormatter(fmt=default_traitlets_log_format)
 #     "Found namespace packages were: {}".format(found_namespace_packages)
 # )
 
-PROFILE_DEFAULT_LOG.debug("Sys.path before:" + str(sys.path))
-PROFILE_DEFAULT_LOG.debug("Sys path after:" + str(sys.path))
+PROFILE_DEFAULT_LOG.debug("sys.path before:" + str(sys.path))
+PROFILE_DEFAULT_LOG.debug("sys.path after:" + str(sys.path))
 
 if hasattr(locals(), "__path__"):
     ___path__ = pkgutil.extend_path(__path__, __name__)

@@ -1,8 +1,6 @@
 """Initialize a debugger profile for IPython."""
-import logging
-from logging import StreamHandler
+from default_profile import PROFILE_DEFAULT_LOG, QueueHandler
+from default_profile import ask_for_import  # noqa F401
 
-# from default_profile.profile_debugger.ipd import IPD
-# from . import debug
-
-debugger_logger = logging.getLogger(__name__).addHandler(StreamHandler())
+debugger_logger = PROFILE_DEFAULT_LOG.getChild()
+debugger_logger.addHandler(QueueHandler())

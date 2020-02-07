@@ -662,7 +662,7 @@ def generate_aliases(_ip=None):
     if machine.is_linux:
         linux_aliases = LinuxAliases()
         # common_aliases.user_aliases.append(linux_aliases.user_aliases)
-    elif machine.is_win:
+    elif machine.is_windows:
         windows_aliases = WindowsAliases()
         # common_aliases.user_aliases.append(windows_aliases.user_aliases)
 

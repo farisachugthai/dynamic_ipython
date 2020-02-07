@@ -27,14 +27,11 @@ See Also
 from pathlib import Path
 import logging
 import os
-from os import _Environ
 import platform
 import reprlib
 import sys
 
-from IPython import get_ipython
-
-from default_profile.util import module_log
+from IPython.core.getipython import get_ipython
 
 
 class Platform:
@@ -57,13 +54,7 @@ class Platform:
 
     """
 
-    LOGGER = module_log.stream_logger(
-        logger="util.machine.Platform",
-        msg_format="%(asctime)s : %(levelname)s : %(lineNo)d : %(message)s : ",
-        log_level=logging.INFO,
-    )
-
-    def __init__(self, shell=None, env=None, LOGGER=None):
+    def __init__(self, shell=None, env=None, **kwargs):
         """Initialize a user specific object.
 
         Parameters
@@ -81,36 +72,39 @@ class Platform:
             Value returned by sys.platform
 
         """
-        if not shell:
-            try:
-                self.shell = get_ipython()
-            except Exception as e:
-                LOGGER.error(e, exc_info=True)
+        try:
+            self.logger = kwargs["LOGGER"]
+        except KeyError:
+            self.logger = logging.basicConfig(level=logging.INFO)
 
-            if shell:
-                self.shell = shell
+        self.shell = shell
+        if self.shell is None:
+            self.shell = get_ipython()
 
         if env is None:
             self.env = self.get_env()
         else:
             self.env = env
 
-        self._sys_platform = sys.platform.lower()
-        self._sys_check = platform.uname().system
+        self._sys_platform = sys.platform.lower() or _sys_platform
         self._platform_system = platform.system()
-        self.is_win = self.is_windows()
-        self.is_conemu = self.is_conemu_ansi()
         self.Path = Path
 
     def __repr__(self):
         return "{!r}: {!r}.".format(self.__class__.__name__, self._sys_platform)
 
+    @property
     def is_windows(self):
         return self._sys_platform.startswith("win")
 
-    def is_conemu_ansi(self):
+    @property
+    def uname(self):
+        return platform.uname().system
+
+    @property
+    def is_conemu(self):
         # refactor to self.env.keys().index('ConEmuAnsi')?
-        return self.is_windows() and os.environ.get("ConEmuANSI", "OFF") == "ON"
+        return self.is_windows and os.environ.get("ConEmuANSI", "OFF") == "ON"
 
     @property
     def is_win_vt100(self):
@@ -129,7 +123,7 @@ class Platform:
 
     @staticmethod
     def get_env():
-        """Unsurprisingly stolen from IPython.
+        """
 
         Returns
         --------
@@ -172,49 +166,17 @@ class Shell(Platform):
         pass
 
 
-class DisplayAliases(reprlib.Repr):
-    """Because I literally lose the output from other commands I wanted to see because of my aliases.
-
-    Examples
-    --------
-    ::
-
-        In[54]: DisplayAliases()
-        Out[54]: {'..': 'cd ..', '...': 'cd ../..', 'copy': 'copy %s %s', 'cp': 'copy %s %s', ...}
-
-    """
-
-    def __init__(self, shell=None, user_aliases=None):
-        self.shell = shell or get_ipython()
-        self.maxdict = 20
-        self.user_aliases = user_aliases or self.shell.alias_manager.user_aliases
-        super().__init__()
-
-    @property
-    def _dict_user_aliases(self):
-        return self.flatten()
-
-    def flatten(self):
-        dict_aliases = {}
-        if len(self.user_aliases) == 0:
-            return
-        for idx, alias_tuple in enumerate(self.user_aliases):
-            dict_aliases[self.user_aliases[idx][0]] = self.user_aliases[idx][1]
-            return dict_aliases
-
-    def __repr__(self):
-        """TODO"""
-        return self.repr_dict(self._dict_user_aliases, 50)
-
-
 if __name__ == "__main__":
-    # Modules kept importing this and ending up with 2 loggers and i was confused
-    MACHINE_LOGGER = module_log.stream_logger(
-        logger="util.machine",
+    # put the import in the if main so that we can still doc this without
+    # installing it
+    from default_profile.util.module_log import stream_logger
+
+    MACHINE_LOGGER = stream_logger(
+        logger="default_profile.util.machine",
         msg_format="%(asctime)s : %(levelname)s : %(module)s : %(message)s : ",
         log_level=logging.INFO,
     )
 
-    # Not useful as i have it here but it's a good reference for the user env
-    Environ = _Environ()
-    Platform()
+    users_machine = Platform(
+        shell=get_ipython(), LOGGER=MACHINE_LOGGER, env=os.environ.copy()
+    )

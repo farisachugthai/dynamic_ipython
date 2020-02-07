@@ -9,6 +9,7 @@ Let's re-implement it as an `abstract factory
 """
 import subprocess
 
+from IPython.core.getipython import get_ipython
 from IPython.core.error import TryNext
 
 try:

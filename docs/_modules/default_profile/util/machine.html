@@ -178,14 +178,11 @@
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">_Environ</span>
 <span class="kn">import</span> <span class="nn">platform</span>
 <span class="kn">import</span> <span class="nn">reprlib</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 
-<span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
-
-<span class="kn">from</span> <span class="nn">default_profile.util</span> <span class="kn">import</span> <span class="n">module_log</span>
+<span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 
 
 <div class="viewcode-block" id="Platform"><a class="viewcode-back" href="../../../util/machine.html#default_profile.util.machine.Platform">[docs]</a><span class="k">class</span> <span class="nc">Platform</span><span class="p">:</span>
@@ -208,13 +205,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">LOGGER</span> <span class="o">=</span> <span class="n">module_log</span><span class="o">.</span><span class="n">stream_logger</span><span class="p">(</span>
-        <span class="n">logger</span><span class="o">=</span><span class="s2">&quot;util.machine.Platform&quot;</span><span class="p">,</span>
-        <span class="n">msg_format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> : </span><span class="si">%(levelname)s</span><span class="s2"> : </span><span class="si">%(lineNo)d</span><span class="s2"> : </span><span class="si">%(message)s</span><span class="s2"> : &quot;</span><span class="p">,</span>
-        <span class="n">log_level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span>
-    <span class="p">)</span>
-
-<div class="viewcode-block" id="Platform.__init__"><a class="viewcode-back" href="../../../util/machine.html#default_profile.util.machine.Platform.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">LOGGER</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Platform.__init__"><a class="viewcode-back" href="../../../util/machine.html#default_profile.util.machine.Platform.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize a user specific object.</span>
 
 <span class="sd">        Parameters</span>
@@ -232,36 +223,39 @@
 <span class="sd">            Value returned by sys.platform</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">shell</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;LOGGER&quot;</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="n">shell</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">shell</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">shell</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">env</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_env</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="n">env</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_sys_platform</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_sys_check</span> <span class="o">=</span> <span class="n">platform</span><span class="o">.</span><span class="n">uname</span><span class="p">()</span><span class="o">.</span><span class="n">system</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sys_platform</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">or</span> <span class="n">_sys_platform</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_platform_system</span> <span class="o">=</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">is_win</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_windows</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">is_conemu</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_conemu_ansi</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Path</span> <span class="o">=</span> <span class="n">Path</span></div>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{!r}</span><span class="s2">: </span><span class="si">{!r}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sys_platform</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Platform.is_windows"><a class="viewcode-back" href="../../../util/machine.html#default_profile.util.machine.Platform.is_windows">[docs]</a>    <span class="k">def</span> <span class="nf">is_windows</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Platform.is_windows"><a class="viewcode-back" href="../../../util/machine.html#default_profile.util.machine.Platform.is_windows">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">is_windows</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sys_platform</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;win&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Platform.is_conemu_ansi"><a class="viewcode-back" href="../../../util/machine.html#default_profile.util.machine.Platform.is_conemu_ansi">[docs]</a>    <span class="k">def</span> <span class="nf">is_conemu_ansi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Platform.uname"><a class="viewcode-back" href="../../../util/machine.html#default_profile.util.machine.Platform.uname">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">uname</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">platform</span><span class="o">.</span><span class="n">uname</span><span class="p">()</span><span class="o">.</span><span class="n">system</span></div>
+
+<div class="viewcode-block" id="Platform.is_conemu"><a class="viewcode-back" href="../../../util/machine.html#default_profile.util.machine.Platform.is_conemu">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">is_conemu</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># refactor to self.env.keys().index(&#39;ConEmuAnsi&#39;)?</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_windows</span><span class="p">()</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ConEmuANSI&quot;</span><span class="p">,</span> <span class="s2">&quot;OFF&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;ON&quot;</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_windows</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ConEmuANSI&quot;</span><span class="p">,</span> <span class="s2">&quot;OFF&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;ON&quot;</span></div>
 
 <div class="viewcode-block" id="Platform.is_win_vt100"><a class="viewcode-back" href="../../../util/machine.html#default_profile.util.machine.Platform.is_win_vt100">[docs]</a>    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">is_win_vt100</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -280,7 +274,7 @@
 
 <div class="viewcode-block" id="Platform.get_env"><a class="viewcode-back" href="../../../util/machine.html#default_profile.util.machine.Platform.get_env">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_env</span><span class="p">():</span>
-        <span class="sd">&quot;&quot;&quot;Unsurprisingly stolen from IPython.</span>
+        <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        --------</span>
@@ -323,52 +317,20 @@
         <span class="k">pass</span></div></div>
 
 
-<div class="viewcode-block" id="DisplayAliases"><a class="viewcode-back" href="../../../util/machine.html#default_profile.util.machine.DisplayAliases">[docs]</a><span class="k">class</span> <span class="nc">DisplayAliases</span><span class="p">(</span><span class="n">reprlib</span><span class="o">.</span><span class="n">Repr</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Because I literally lose the output from other commands I wanted to see because of my aliases.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    ::</span>
-
-<span class="sd">        In[54]: DisplayAliases()</span>
-<span class="sd">        Out[54]: {&#39;..&#39;: &#39;cd ..&#39;, &#39;...&#39;: &#39;cd ../..&#39;, &#39;copy&#39;: &#39;copy %s %s&#39;, &#39;cp&#39;: &#39;copy %s %s&#39;, ...}</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-
-<div class="viewcode-block" id="DisplayAliases.__init__"><a class="viewcode-back" href="../../../util/machine.html#default_profile.util.machine.DisplayAliases.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">user_aliases</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">shell</span> <span class="ow">or</span> <span class="n">get_ipython</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">maxdict</span> <span class="o">=</span> <span class="mi">20</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="n">user_aliases</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">user_aliases</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span></div>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">_dict_user_aliases</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
-
-<div class="viewcode-block" id="DisplayAliases.flatten"><a class="viewcode-back" href="../../../util/machine.html#default_profile.util.machine.DisplayAliases.flatten">[docs]</a>    <span class="k">def</span> <span class="nf">flatten</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">dict_aliases</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">return</span>
-        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">alias_tuple</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span><span class="p">):</span>
-            <span class="n">dict_aliases</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
-            <span class="k">return</span> <span class="n">dict_aliases</span></div>
-
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;TODO&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">repr_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dict_user_aliases</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span></div>
-
-
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="c1"># Modules kept importing this and ending up with 2 loggers and i was confused</span>
-    <span class="n">MACHINE_LOGGER</span> <span class="o">=</span> <span class="n">module_log</span><span class="o">.</span><span class="n">stream_logger</span><span class="p">(</span>
-        <span class="n">logger</span><span class="o">=</span><span class="s2">&quot;util.machine&quot;</span><span class="p">,</span>
+    <span class="c1"># put the import in the if main so that we can still doc this without</span>
+    <span class="c1"># installing it</span>
+    <span class="kn">from</span> <span class="nn">default_profile.util.module_log</span> <span class="kn">import</span> <span class="n">stream_logger</span>
+
+    <span class="n">MACHINE_LOGGER</span> <span class="o">=</span> <span class="n">stream_logger</span><span class="p">(</span>
+        <span class="n">logger</span><span class="o">=</span><span class="s2">&quot;default_profile.util.machine&quot;</span><span class="p">,</span>
         <span class="n">msg_format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> : </span><span class="si">%(levelname)s</span><span class="s2"> : </span><span class="si">%(module)s</span><span class="s2"> : </span><span class="si">%(message)s</span><span class="s2"> : &quot;</span><span class="p">,</span>
         <span class="n">log_level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="c1"># Not useful as i have it here but it&#39;s a good reference for the user env</span>
-    <span class="n">Environ</span> <span class="o">=</span> <span class="n">_Environ</span><span class="p">()</span>
-    <span class="n">Platform</span><span class="p">()</span>
+    <span class="n">users_machine</span> <span class="o">=</span> <span class="n">Platform</span><span class="p">(</span>
+        <span class="n">shell</span><span class="o">=</span><span class="n">get_ipython</span><span class="p">(),</span> <span class="n">LOGGER</span><span class="o">=</span><span class="n">MACHINE_LOGGER</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="p">)</span>
 </pre></div>
 
         </div>
@@ -376,7 +338,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 03, 2020.
+      Last updated on Feb 07, 2020.
     </div>
   </body>
 </html>

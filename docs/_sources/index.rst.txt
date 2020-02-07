@@ -140,11 +140,27 @@ Table of Contents
 
 .. toctree::
    :titlesonly:
-   :caption: API
+   :caption: IPython Startup
 
-   IPython Startup <startup/index>
-   IPython Utilities </util/index>
-   Extensions <ext>
+   Startup <startup/index>
+   rehashx <startup/rehashx>
+   ipython-logger <startup/ipython-logger>
+   help_helpers <startup/help_helpers.rst>
+   aliases <startup/aliases>
+   fzf <startup/fzf>
+   setup_readline <startup/setup_readline>
+   prompt_toolkit <startup/prompt_toolkit>
+   41_numpy <startup/41_numpy>
+   eventloops <startup/eventloops>
+
+
+.. toctree::
+   :titlesonly:
+   :caption: Remaining API
+
+   IPython Utilities <util/index>
+   Extensions <extensions/index>
+   Pandas CSV <extensions/pandas_csv>
    Sphinx Extensions <sphinxext/index>
    Developers Notes <dev>
 

@@ -42,22 +42,3 @@ As a result, it heavily utilizes the ``traitlets`` module.
    :show-inheritance:
 
 
-API
-====
-
-These are the auto-generated API docs for IPython's startup.
-
-.. toctree::
-   :titlesonly:
-   :caption: List of IPython startup files
-
-   rehashx
-   ipython-logger
-   help_helpers
-   aliases
-   fzf
-   setup_readline
-   prompt_toolkit
-   41_numpy
-   eventloops
-
