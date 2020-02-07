@@ -27,7 +27,7 @@ from pdb import Restart
 from textwrap import dedent
 
 try:
-    from .pdbrc import MyPdb
+    from pdbrc import MyPdb
 except:  # noqa
     MyPdb = None
 
@@ -121,20 +121,27 @@ def get_parser():
     parser = argparse.ArgumentParser(
         prog="ipdb+",
         description=(
-            "An IPython flavored version of pdb with even more useful features."
+            "\nAn IPython flavored version of pdb with even more useful features."
             "\nWhy?\nYou're debugging code you don't want to figure out if you"
-            " imported something or not."
+            " imported something or not.\n\n"
         ),
     )
 
+    # i hate positionals but hang on to it for a little
+    # parser.add_argument(
+    #     "mainpyfile",
+    #     metavar="File to execute",
+    #     action="store",
+        # type=argparse.Filetype  this doesnt work?
+        # also can we add nargs and have more than one?
+        # help="File to run under the debugger."
+    # )
     parser.add_argument(
-        "-f",
-        "--file",
-        metavar="File to execute",
-        dest="mainpyfile",
-        action="store",
-        # type=argparse.FileType
-    )
+            "-f", "--file",
+            action="store",
+            dest="mainpyfile",
+            help="File to run under the debugger.",
+            )
 
     parser.add_argument(
         "-c",
@@ -162,8 +169,7 @@ def get_parser():
     parser.add_argument(
         "-i",
         "--interactive",
-        help="Force interactivity.",
-        # const=  wait what the hell does const do again?
+        help="Force interactivity if pdb would otherwise exit.",
         const=True,
         nargs="?",
         default=False,
@@ -186,11 +192,13 @@ def main():
     namespace = parser.parse_args(args)
 
     if hasattr(namespace, "mainpyfile"):
-        if not Path.exists(namespace.mainpyfile):
+        if not Path(namespace.mainpyfile).exists():
             raise FileNotFoundError
 
-    # Replace pdb's dir with script's dir in front of module search path.
-    sys.path.insert(0, os.path.dirname(mainpyfile))
+        mainpyfile = namespace.mainpyfile
+        # Replace pdb's dir with script's dir in front of module search path.
+        sys.path.insert(0, os.path.dirname(mainpyfile))
+    # should probably make an else. 
 
     # Note on saving/restoring sys.argv: it's a good idea when sys.argv was
     # modified by the script being debugged. It's a bad idea when it was
@@ -198,8 +206,9 @@ def main():
     # which allows explicit specification of command line arguments.
     pdb = _init_pdb(commands=namespace.commands)
 
-    while True:
-        debug_forever()
+    # ????
+    # while True:
+    #     debug_forever()
     try:
         pdb._runscript(mainpyfile)
         if pdb._user_requested_quit:
@@ -242,6 +251,19 @@ if __name__ == "__main__":
                 "the configuration will not be loaded.\n\n"
             )
 
+    # todo: so the actual implementation of this in ipython is shell.debugger()
+    # a method to run IPython.core.ultratb.AutoformattedTB.debugger()
+    # AutoFormattedTB is bound to the shell as InteractiveTB.
+    # It also doesnt have a debugger method but subclasses VerboseTB which does.
+    # So if we bind this debugger class to the `debugger` attribute
+    # A) things becone a little less interconnected and fucky and
+    # B) itll probably run faster since it wont need to resolve mixins on  subclasses on subclasses
+
+    # Also of note.:
+    # :attr:`debugger_history`
+    # In [43]: _ip.debugger_history
+    # Out[43]: <prompt_toolkit.history.InMemoryHistory at 0x7e42910490>
+    # add an arg for log file and switch this to a FileHistory
     global debugger_cls
     debugger_cls = MyPdb
     main()

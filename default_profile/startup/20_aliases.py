@@ -12,18 +12,6 @@ from IPython.core.alias import InvalidAliasError, default_aliases
 from IPython.core.getipython import get_ipython
 from traitlets.config.application import ApplicationError
 
-try:
-    from git import Git
-except:
-    Git = None
-else:
-    from git import Repo
-
-
-def git_cur_branch():
-    """Return the 'stdout' atribute of a `subprocess.CompletedProcess` checking what the branch of the repo is."""
-    return subprocess.run(["git", "rev-parse", "--abbrev-ref", "HEAD"]).stdout
-
 
 class CommonAliases(UserDict):
     r"""Add aliases common to all OSes. Overwhelmingly :command:`Git` aliases.
@@ -335,6 +323,8 @@ class CommonAliases(UserDict):
                 "gl",
                 'git log --pretty=format:"%Cred%h%Creset %C(yellow)%d%Creset %Cgreen(%cr) %C(bold blue)<%an>%Creset" --all --abbrev-commit --abbrev=7 --date=relative --graph --decorate %l',
             ),
+            #  gl with a message
+            ("glg", "git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --all --abbrev-commit --date=relative %l"),
             ("glo", "git log %l"),
             (
                 "glog",
@@ -712,11 +702,11 @@ def redefine_aliases(aliases, shell=None):
         shell = get_ipython()
     if not hasattr(shell, "alias_manager"):
         raise ApplicationError
-    try:
-        for i in aliases:
-            shell.alias_manager.define_alias(i[0], i[1])
-    except InvalidAliasError:
-        pass
+    for i,j in enumerate(aliases):
+        try:
+            shell.alias_manager.define_alias(j, all_aliases.dict_aliases[j])
+        except InvalidAliasError:
+            raise
 
 
 if __name__ == "__main__":
@@ -724,7 +714,9 @@ if __name__ == "__main__":
 
     if _ip is not None:
         all_aliases = generate_aliases()
-        redefine_aliases(all_aliases)
+        # our combined classes have an attribute dict_aliases
+        # that makes operations a lot easier to perform
+        redefine_aliases(all_aliases.dict_aliases)
         from default_profile.util.module_log import stream_logger
 
         ALIAS_LOGGER = stream_logger(
