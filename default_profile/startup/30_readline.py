@@ -165,6 +165,7 @@ def readline_config(history_file=None):
 
     readline.read_init_file()
 
+
 # History
 
 
@@ -186,13 +187,13 @@ def setup_historyfile(filename=None):
         except PermissionError:
             raise
         except OSError:
-            logging.exception('Could not create the history file.')
+            logging.exception("Could not create the history file.")
 
     histfile_str = str(histfile)
     try:
         readline.read_history_file(histfile_str)
     except OSError as e:
-        logging.exception('Could not read the history file.')
+        logging.exception("Could not read the history file.")
     else:
         readline.set_history_length(2000)
 

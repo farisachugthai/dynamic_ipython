@@ -106,7 +106,6 @@ class Helpers:
         return self.buffer.document
 
 
-
 def load_xonsh_bindings(key_bindings):
     """
     Load custom key bindings.

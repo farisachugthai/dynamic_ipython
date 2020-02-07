@@ -111,7 +111,9 @@ c.Application.log_datefmt = "%Y-%m-%d %H:%M:%S"
 # The Logging format template
 # Default: '[%(name)s]%(highlevel)s %(message)s'
 
-c.Application.log_format = '%(module) : %(created)f : [%(name)s] : %(highlevel)s : %(message)s : '
+c.Application.log_format = (
+    "%(module) : %(created)f : [%(name)s] : %(highlevel)s : %(message)s : "
+)
 
 # Set the log level by value or name.
 c.Application.log_level = 30
@@ -200,7 +202,9 @@ c.TerminalIPythonApp.force_interact = True
 # c.TerminalIPythonApp.quick = False
 
 # Dec 08, 2019: Adding this in
-c.TerminalIPythonApp.log_format = '%(module) : %(created)f : [%(name)s] : %(highlevel)s : %(message)s : '
+c.TerminalIPythonApp.log_format = (
+    "%(module) : %(created)f : [%(name)s] : %(highlevel)s : %(message)s : "
+)
 
 
 # ------------------------------------------------------------------------------

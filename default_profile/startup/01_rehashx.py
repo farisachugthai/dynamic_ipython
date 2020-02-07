@@ -135,6 +135,6 @@ if __name__ == "__main__":
 
     if _ip is not None:
         _ip.excepthook = handled
-        if not platform.platform().startswith('Win'):
+        if not platform.platform().startswith("Win"):
             # yeah it executes everything in the dir but checks for permission incorrectly
             rehashx_run()

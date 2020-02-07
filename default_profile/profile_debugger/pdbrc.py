@@ -54,6 +54,7 @@ except:  # noqa
     debugger_completer = rlcompleter.Completer.complete
 else:
     from prompt_toolkit.completion.fuzzy_completer import FuzzyWordCompleter
+
     debugger_completer = FuzzyWordCompleter(words=keyword.kwlist).get_completions
 
 
@@ -82,7 +83,7 @@ else:  # this makes completions look classic IPython style
 
 
 def save_history(hist_path=None):
-    if not hasattr(locals, 'readline'):
+    if not hasattr(locals, "readline"):
         return
     if not hasattr(readline, "append_history_file"):
         print("ERR: no append_history_file method in readline")
@@ -125,17 +126,19 @@ else:
     def colorizer(code):
         return pygments.highlight(code, lexer, formatter)
 
+
 # Customized Pdb
 
 
 class MyPdb(pdb.Pdb):
     """Subclass Pdb."""
+
     prompt = f"<YourPdb> : "
     doc_header = ""
 
     def __init__(
         self,
-        completekey='tab',
+        completekey="tab",
         skip="traitlets",
         prompt=None,
         doc_header=None,
@@ -187,7 +190,7 @@ class MyPdb(pdb.Pdb):
     @staticmethod
     def help():
         # Ill concede this has nothing to do with anything but I find it helpful
-        pydoc.pipepager(inspect.getsource(pdb.Pdb), os.environ.get('PAGER'))
+        pydoc.pipepager(inspect.getsource(pdb.Pdb), os.environ.get("PAGER"))
 
 
 debugger = MyPdb()

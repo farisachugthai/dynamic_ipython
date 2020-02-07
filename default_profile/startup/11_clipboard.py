@@ -34,16 +34,7 @@ class ClipboardEmpty(ValueError):
     pass
 
 
-def win32_clipboard_get():
-    """Get the current clipboard's text on Windows.
-
-    Admittedly difficult to explain why it's not listed in the dependencies
-    though.
-
-    Note
-    ----
-    Requires Mark Hammond's pywin32 extensions.
-    """
+def win_clip_pywin32():
     try:
         import win32clipboard
     except ImportError:
@@ -61,7 +52,29 @@ def win32_clipboard_get():
             raise ClipboardEmpty
     finally:
         win32clipboard.CloseClipboard()
+
     return text
+
+
+def win32_clipboard_get():
+    """Get the current clipboard's text on Windows.
+
+    Admittedly difficult to explain why it's not listed in the dependencies
+    though.
+
+    Note
+    ----
+    Requires Mark Hammond's pywin32 extensions.
+    """
+    try:
+        return win_clip_pywin32()
+    except TryNext:
+        pass
+    try:
+        # or something
+        return subprocess.run(["win32yank -i crlf -o lf"])
+    except subprocess.CalledProcessError:
+        raise
 
 
 def tkinter_clipboard_get():

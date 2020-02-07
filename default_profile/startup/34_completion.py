@@ -10,7 +10,10 @@ import jedi
 from jedi.api import replstartup
 from jedi.api.project import get_default_project
 from jedi.utils import setup_readline
-from jedi.api.environment import get_cached_default_environment, InvalidPythonEnvironment
+from jedi.api.environment import (
+    get_cached_default_environment,
+    InvalidPythonEnvironment,
+)
 
 from IPython.core.getipython import get_ipython
 
