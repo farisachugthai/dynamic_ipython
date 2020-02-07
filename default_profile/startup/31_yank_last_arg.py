@@ -35,6 +35,7 @@ E = KeyPressEvent
 # fun fact. ViInsertMode is deprecated
 insert_mode = vi_insert_mode() | emacs_insert_mode()
 
+
 @Condition
 def should_confirm_completion():
     """Check if completion needs confirmation"""
@@ -244,7 +245,7 @@ def document_is_multiline_python(document):
         """
         ``True`` if we're inside a multiline string at the end of the text.
         """
-        _multiline_string_delims = re.compile('''[']{3}|["]{3}''')
+        _multiline_string_delims = re.compile("""[']{3}|["]{3}""")
 
         delims = _multiline_string_delims.findall(document.text)
         opening = None
@@ -255,25 +256,30 @@ def document_is_multiline_python(document):
                 opening = None
         return bool(opening)
 
-    if '\n' in document.text or ends_in_multiline_string():
+    if "\n" in document.text or ends_in_multiline_string():
         return True
 
     def line_ends_with_colon():
-        return document.current_line.rstrip()[-1:] == ':'
+        return document.current_line.rstrip()[-1:] == ":"
 
     # If we just typed a colon, or still have open brackets, always insert a real newline.
-    if line_ends_with_colon() or \
-            (document.is_cursor_at_the_end and
-             has_unclosed_brackets(document.text_before_cursor)) or \
-            document.text.startswith('@'):
+    if (
+        line_ends_with_colon()
+        or (
+            document.is_cursor_at_the_end
+            and has_unclosed_brackets(document.text_before_cursor)
+        )
+        or document.text.startswith("@")
+    ):
         return True
 
     # If the character before the cursor is a backslash (line continuation
     # char), insert a new line.
-    elif document.text_before_cursor[-1:] == '\\':
+    elif document.text_before_cursor[-1:] == "\\":
         return True
 
     return False
+
 
 @Condition
 def is_multiline():
@@ -422,7 +428,7 @@ def additional_bindings():
         event.current_buffer.insert_text(event.data, overwrite=False)
         event.app.quoted_insert = False
 
-    @handle('f4')
+    @handle("f4")
     def _(event):
         """Toggle between Vi and Emacs mode.
 
@@ -431,9 +437,9 @@ def additional_bindings():
         `34_bottom_toolbar`
             Utilized for this purpose.
         """
-        event.editing_mode = not event.editing_mode == 'vi'
+        event.editing_mode = not event.editing_mode == "vi"
 
-    @handle('f6')
+    @handle("f6")
     def _(event):
         """
         Enable/Disable paste mode.

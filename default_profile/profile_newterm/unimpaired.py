@@ -38,6 +38,7 @@ class TerminallyUnimpaired(TerminalInteractiveShell):
     Uhh I'm just gonna add a Config to ensure that it's there.
 
     """
+
     kb = KeyBindings()
     all_kb = load_key_bindings()
 
@@ -238,7 +239,7 @@ if __name__ == "__main__":
         # catch but f it
         sys.exit()
 
-    logging.debug('Config was %s', config)
+    logging.debug("Config was %s", config)
 
     cgitb.enable()
     faulthandler.enable()

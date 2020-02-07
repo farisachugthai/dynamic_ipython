@@ -91,6 +91,7 @@ def exc_timer(statement, setup=None):
     except Exception:  # noqa E722
         t.print_exc()
 
+
 class ArgReparser:
     """Class decorator that echoes out the arguments a function was called with."""
 
@@ -112,13 +113,13 @@ def time_dir(directory=None):
     if directory is None:
         directory = get_ipython().startup_dir
     result = []
-    for i in scandir('.'):
-        if i.name.endswith('.py'):
+    for i in scandir("."):
+        if i.name.endswith(".py"):
             file = i.name
             print(file)
             print(time.time())
             start_time = time.time()
-            exec(compile(open(file).read(), 'timer', 'exec'))
+            exec(compile(open(file).read(), "timer", "exec"))
             end = time.time()
             diff = end - start_time
             print(f"{diff}")

@@ -128,8 +128,11 @@ def get_parser():
     )
 
     parser.add_argument(
-        "-f", "--file", metavar="File to execute",
-        dest="mainpyfile", action='store',
+        "-f",
+        "--file",
+        metavar="File to execute",
+        dest="mainpyfile",
+        action="store",
         # type=argparse.FileType
     )
 
@@ -140,23 +143,31 @@ def get_parser():
         type=list,
         help="List of commands to run before starting.",
         default=[],
-        action="append"
+        action="append",
     )
 
     parser.add_argument(
-        "-m", "--module", nargs="?",
+        "-m",
+        "--module",
+        nargs="?",
         help=dedent(
             "Module to debug. Note that the provided module will be subject"
             " to all the standard rules that any imported module would be"
             " as per the import rules specified in the language/library"
-            " references."),
+            " references."
+        ),
         dest="mod",
     )
 
     parser.add_argument(
-        "-i", "--interactive", help="Force interactivity.",
+        "-i",
+        "--interactive",
+        help="Force interactivity.",
         # const=  wait what the hell does const do again?
-        const=True, nargs='?', default=False)
+        const=True,
+        nargs="?",
+        default=False,
+    )
 
     parser.add_argument("-v", "--version", action="version")
 
@@ -174,7 +185,7 @@ def main():
 
     namespace = parser.parse_args(args)
 
-    if hasattr(namespace, 'mainpyfile'):
+    if hasattr(namespace, "mainpyfile"):
         if not Path.exists(namespace.mainpyfile):
             raise FileNotFoundError
 
@@ -206,11 +217,7 @@ def main():
         print("Running 'cont' or 'step' will restart the program")
         t = sys.exc_info()[2]
         pdb.interaction(None, t)
-        print(
-            "Post mortem debugger finished. The "
-            + mainpyfile
-            + " will be restarted"
-        )
+        print("Post mortem debugger finished. The " + mainpyfile + " will be restarted")
 
 
 if __name__ == "__main__":

@@ -169,21 +169,21 @@ def busybox_hack(shell):
     shell.alias_manager.user_aliases += aliases_mod.LinuxAliases().busybox()
     shell.alias_manager.init_aliases()
     shoddy_hack_for_aliases = [
-                 ("l", "ls -CF --hide=NTUSER.* --color=always %l"),
-                ("la", "ls -AF --hide=NTUSER.* --color=always %l"),
-              ("ldir", "ls -Apo --hide=NTUSER.*  --color=always %l | grep /$"),
-              # ('lf' ,     'ls -Fo --color=always | grep ^-'),
-              # ('ll' ,          'ls -AFho --color=always %l'),
-                ("ls", "ls -F --hide=NTUSER.* --color=always %l"),
-                ("lr", "ls -AgFhtr --hide=NTUSER.*  --color=always %l"),
-                ("lt", "ls -AgFht --hide=NTUSER.* --color=always %l"),
-                ("lx", "ls -Fo --hide=NTUSER.* --color=always | grep ^-..x"),
-            # ('ldir' ,               'ls -Fhpo | grep /$ %l'),
-                ("lf", "ls -Foh --hide=NTUSER.* --color=always | grep ^- %l"),
-                ("ll", "ls -AgFh --hide=NTUSER.* --color=always %l"),
-              # ('lt' ,          'ls -Altc --color=always %l'),
-              # ('lr' ,         'ls -Altcr --color=always %l')
-              ]
+        ("l", "ls -CF --hide=NTUSER.* --color=always %l"),
+        ("la", "ls -AF --hide=NTUSER.* --color=always %l"),
+        ("ldir", "ls -Apo --hide=NTUSER.*  --color=always %l | grep /$"),
+        # ('lf' ,     'ls -Fo --color=always | grep ^-'),
+        # ('ll' ,          'ls -AFho --color=always %l'),
+        ("ls", "ls -F --hide=NTUSER.* --color=always %l"),
+        ("lr", "ls -AgFhtr --hide=NTUSER.*  --color=always %l"),
+        ("lt", "ls -AgFht --hide=NTUSER.* --color=always %l"),
+        ("lx", "ls -Fo --hide=NTUSER.* --color=always | grep ^-..x"),
+        # ('ldir' ,               'ls -Fhpo | grep /$ %l'),
+        ("lf", "ls -Foh --hide=NTUSER.* --color=always | grep ^- %l"),
+        ("ll", "ls -AgFh --hide=NTUSER.* --color=always %l"),
+        # ('lt' ,          'ls -Altc --color=always %l'),
+        # ('lr' ,         'ls -Altcr --color=always %l')
+    ]
     for i in shoddy_hack_for_aliases:
         shell.alias_manager.define_alias(*i)
 
@@ -196,7 +196,7 @@ def main():
     >>> user_aliases = [('rg', 'rg --hidden --no-messages %l')]
 
     """
-    shell= get_ipython()
+    shell = get_ipython()
     if shell is not None:
         if sys.platform == "win32":
             try:
@@ -206,7 +206,7 @@ def main():
             else:
                 busybox_hack(shell)
 
-        fzf_aliases= FZF._setup_fzf()
+        fzf_aliases = FZF._setup_fzf()
         shell.alias_manager.define_alias("fzf", "fzf-tmux")
         # default_command = fzf_aliases.default_cmds
         # os.environ.setdefault("FZF_DEFAULT_COMMAND", default_command)
@@ -217,4 +217,4 @@ if __name__ == "__main__":
     if fuf is not None:
 
         class Fuf(FZF, FzfPrompt):
-            fzf_default_opts= None
+            fzf_default_opts = None
