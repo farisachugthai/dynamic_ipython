@@ -43,15 +43,16 @@ class SessionPrompt(Prompts):
         ).tag(config=True)
 
 
-current_configurable = get_config()
-if getattr(current_configurable, "Prompts", None):
-    current_configurable.Prompts = SessionPrompt
-else:
-    logging.error(
-        "New PromptSession did not work. Prompt attr: %s",
-        getattr(current_configurable, "Prompts", None),
-    )
+if __name__ == "__main__":
+    current_configurable = get_config()
+    if getattr(current_configurable, "Prompts", None):
+        current_configurable.Prompts = SessionPrompt
+    else:
+        logging.error(
+            "New PromptSession did not work. Prompt attr: %s",
+            getattr(current_configurable, "Prompts", None),
+        )
 
-shell = get_ipython()
-if getattr(shell, "prompts_class", None):
-    shell.prompts_class = SessionPrompt
+    shell = get_ipython()
+    if getattr(shell, "prompts_class", None):
+        shell.prompts_class = SessionPrompt

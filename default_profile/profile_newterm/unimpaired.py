@@ -65,6 +65,32 @@ except:
 logging.basicConfig(level=logging.INFO)
 
 
+class HistoryConsole(code.InteractiveConsole):
+    """From the readline docs."""
+
+    def __init__(
+        self,
+        locals=None,
+        filename="<console>",
+        histfile=os.path.expanduser("~/.console-history"),
+    ):
+        super().__init__(locals, filename)
+        self.init_history(histfile)
+
+    def init_history(self, histfile):
+        readline.parse_and_bind("tab: complete")
+        if hasattr(readline, "read_history_file"):
+            try:
+                readline.read_history_file(histfile)
+            except FileNotFoundError:
+                pass
+            atexit.register(self.save_history, histfile)
+
+    def save_history(self, histfile):
+        readline.set_history_length(1000)
+        readline.write_history_file(histfile)
+
+
 class TerminallyUnimpaired(TerminalInteractiveShell):
     """What do we need to implement?
 
@@ -76,15 +102,15 @@ class TerminallyUnimpaired(TerminalInteractiveShell):
     """
 
     def init(self):
-        self.interactive_console = code.InteractiveConsole()
+        self.interactive_console = HistoryConsole()
         self.lexer = pygments.lexers.python.Python3Lexer()
         self.formatter = TerminalTrueColorFormatter()
         self.Path = Path
 
         # Should make an else. *shrugs*
-        self.ipython_dir = os.path.expanduser('~/.ipython')
+        self.ipython_dir = os.path.expanduser("~/.ipython")
         self.profile_dir = ProfileDir()
-        self._profile_dir = os.path.expanduser('~/.ipython/profile_default')
+        self._profile_dir = os.path.expanduser("~/.ipython/profile_default")
 
     def __init__(self, user_module=None, **kwargs):
 
@@ -120,7 +146,7 @@ class TerminallyUnimpaired(TerminalInteractiveShell):
         # much legacy code that expects ip.db to exist.
         # self.db = PickleShareDB(os.path.join(self.profile_dir.location, "db"))
         pdb.set_trace()
-        self.history_dir = Path(self.profile_dir.location + 'log')
+        self.history_dir = Path(self.profile_dir.location + "log")
         self.history = FileHistory(self.history_dir)
         self.init_history()
         self.init_encoding()
@@ -168,7 +194,6 @@ class TerminallyUnimpaired(TerminalInteractiveShell):
         # `ipykernel.kernelapp`.
         self.trio_runner = None
 
-
         # mine
         self.create_completer()
         self.create_kb()
@@ -183,7 +208,7 @@ class TerminallyUnimpaired(TerminalInteractiveShell):
         return self.interactive_console.showsyntaxerror(*args, **kwargs)
 
     def showtraceback(self, *args, **kwargs):
-        if not hasattr(sys, 'last_type'):
+        if not hasattr(sys, "last_type"):
             return
 
         if sys.last_type == NameError:  # 90% of the time I mistyped something
@@ -275,7 +300,7 @@ class TerminallyUnimpaired(TerminalInteractiveShell):
         **kwargs :
 
         """
-        print('SyntaxError')
+        print("SyntaxError")
 
     def _showsyntaxerror(self, *args, **kwargs):
         # Override for avoid using sys.excepthook PY-12600
