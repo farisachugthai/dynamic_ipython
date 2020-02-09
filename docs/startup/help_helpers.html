@@ -154,7 +154,7 @@
           <h3>Table of Contents</h3>
           <ul>
 <li><a class="reference internal" href="#">06_Help_Helpers</a><ul>
-<li><a class="reference internal" href="#module-default_profile.startup.06_help_helpers"><code class="docutils literal notranslate"><span class="pre">06_help_helpers</span></code> module</a></li>
+<li><a class="reference internal" href="#help-helpers-module"><code class="docutils literal notranslate"><span class="pre">06_help_helpers</span></code> module</a></li>
 </ul>
 </li>
 </ul>
@@ -166,148 +166,8 @@
 <h1>06_Help_Helpers<a class="headerlink" href="#help-helpers" title="Permalink to this headline">¶</a></h1>
 <p>Creates 2 functions in userspace to save the output of <code class="docutils literal notranslate"><span class="pre">help(python_object)</span></code>
 to a file or output to <a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stdout" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stdout</span></code></a>.</p>
-<div class="section" id="module-default_profile.startup.06_help_helpers">
-<span id="help-helpers-module"></span><h2><code class="docutils literal notranslate"><span class="pre">06_help_helpers</span></code> module<a class="headerlink" href="#module-default_profile.startup.06_help_helpers" title="Permalink to this headline">¶</a></h2>
-<p>In addition to utilizing <a class="reference external" href="https://docs.python.org/3/library/contextlib.html#module-contextlib" title="(in Python v3.8)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">contextlib</span></code></a>, we create a function that allows
-that allows searching through the members of an object.</p>
-<p>This is intended to be exposed to the user as a quick, interactive tool
-with an easier “grep-like” interface for objects that are too large
-to be quickly and easily understood based on the output of <a class="reference external" href="https://docs.python.org/3/library/functions.html#dir" title="(in Python v3.8)"><code class="xref py py-func docutils literal notranslate"><span class="pre">dir()</span></code></a>.</p>
-<div class="admonition-todo admonition" id="id1">
-<p class="admonition-title">Todo</p>
-<p><a class="reference external" href="https://docs.python.org/3/library/pydoc.html#module-pydoc" title="(in Python v3.8)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pydoc</span></code></a> actually has a giant API so we could also use that.</p>
-</div>
-<dl class="exception">
-<dt id="default_profile.startup.06_help_helpers.UsageError">
-<em class="property">exception </em><code class="sig-name descname">UsageError</code><a class="reference internal" href="../_modules/default_profile/startup/06_help_helpers.html#UsageError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.06_help_helpers.UsageError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
-<dl class="method">
-<dt id="default_profile.startup.06_help_helpers.UsageError.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/06_help_helpers.html#UsageError.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.06_help_helpers.UsageError.__init__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="default_profile.startup.06_help_helpers.HelpMagics">
-<em class="property">class </em><code class="sig-name descname">HelpMagics</code><span class="sig-paren">(</span><em class="sig-param">shell=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/06_help_helpers.html#HelpMagics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.06_help_helpers.HelpMagics" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.magic.html#IPython.core.magic.Magics" title="(in IPython v7.12.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.magic.Magics</span></code></a></p>
-<p>Useful magics for when you’re introspecting things.</p>
-<p>Similar to a few of the existing namespace magics.</p>
-<div class="admonition-todo admonition" id="id2">
-<p class="admonition-title">Todo</p>
-<p>args = self.parse_args()
-I feel like that should be in the base Magics class’s <code class="docutils literal notranslate"><span class="pre">__call__</span></code>
-method. Or something that we don’t have to manually call it every
-single time we need it.</p>
-</div>
-<dl class="method">
-<dt id="default_profile.startup.06_help_helpers.HelpMagics.print_help">
-<code class="sig-name descname">print_help</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">arg=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/06_help_helpers.html#HelpMagics.print_help"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.06_help_helpers.HelpMagics.print_help" title="Permalink to this definition">¶</a></dt>
-<dd><p>Redirect <a class="reference external" href="https://docs.python.org/3/library/functions.html#help" title="(in Python v3.8)"><code class="xref py py-func docutils literal notranslate"><span class="pre">help()</span></code></a> to <code class="docutils literal notranslate"><span class="pre">sys.stderr</span></code>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>arg</strong> (<em>obj</em><em>, </em><em>optional</em>) – Object to run <a class="reference external" href="https://ipython.readthedocs.io/en/stable/interactive/magics.html#magic-pinfo" title="(in IPython v7.12.0)"><code class="xref std std-magic docutils literal notranslate"><span class="pre">pinfo</span></code></a> on.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="default_profile.startup.06_help_helpers.HelpMagics.save_help">
-<code class="sig-name descname">save_help</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">redirected</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/06_help_helpers.html#HelpMagics.save_help"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.06_help_helpers.HelpMagics.save_help" title="Permalink to this definition">¶</a></dt>
-<dd><p>Redirect output from sys.stdout to a string.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="default_profile.startup.06_help_helpers.HelpMagics.write_help">
-<code class="sig-name descname">write_help</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">output_file</em>, <em class="sig-param">arg=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/06_help_helpers.html#HelpMagics.write_help"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.06_help_helpers.HelpMagics.write_help" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write <a class="reference external" href="https://docs.python.org/3/library/functions.html#help" title="(in Python v3.8)"><code class="xref py py-func docutils literal notranslate"><span class="pre">help()</span></code></a> to a file.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul>
-<li><p><strong>output_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em> (</em><em>os.Pathlike</em><em>)</em>) – File to write to.</p></li>
-<li><p><strong>arg</strong> (<em>obj</em><em>, </em><em>optional</em>) – Object to run <a class="reference external" href="https://ipython.readthedocs.io/en/stable/interactive/magics.html#magic-pinfo" title="(in IPython v7.12.0)"><code class="xref std std-magic docutils literal notranslate"><span class="pre">pinfo</span></code></a> on.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="default_profile.startup.06_help_helpers.HelpMagics.page_help">
-<code class="sig-name descname">page_help</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">arg=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/06_help_helpers.html#HelpMagics.page_help"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.06_help_helpers.HelpMagics.page_help" title="Permalink to this definition">¶</a></dt>
-<dd><p>Use pydoc’s pager function to display docs.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>arg</strong> (<em>obj</em><em>, </em><em>optional</em>) – Object to run <a class="reference external" href="https://ipython.readthedocs.io/en/stable/interactive/magics.html#magic-pinfo" title="(in IPython v7.12.0)"><code class="xref std std-magic docutils literal notranslate"><span class="pre">pinfo</span></code></a> on.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="default_profile.startup.06_help_helpers.HelpMagics.grep">
-<code class="sig-name descname">grep</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">obj</em>, <em class="sig-param">pattern=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/06_help_helpers.html#HelpMagics.grep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.06_help_helpers.HelpMagics.grep" title="Permalink to this definition">¶</a></dt>
-<dd><p>Use <a class="reference external" href="https://docs.python.org/3/library/re.html#re.compile" title="(in Python v3.8)"><code class="xref py py-func docutils literal notranslate"><span class="pre">re.compile()</span></code></a> to match a pattern that may be in <code class="docutils literal notranslate"><span class="pre">dir(obj)</span></code>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul>
-<li><p><strong>obj</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><em>object</em></a>) – Any object who has a large enough namespace to warrant a <strong class="command">grep</strong>.</p></li>
-<li><p><strong>pattern</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em>, </em><em>optional</em>) – <p>Unfortunately, lists are mutable objects and can’t be used as
-default parameters.
-Therefore a default value of:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">pattern</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;^a-z.*$&#39;</span><span class="p">]</span>
-</pre></div>
-</div>
-<p>Is only presented inside of the function.</p>
-</p></li>
-</ul>
-</dd>
-<dt class="field-even">Yields</dt>
-<dd class="field-even"><p><strong>matched_attributes</strong> (<em>str</em>)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="default_profile.startup.06_help_helpers.HelpMagics.dirip">
-<code class="sig-name descname">dirip</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/06_help_helpers.html#HelpMagics.dirip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.06_help_helpers.HelpMagics.dirip" title="Permalink to this definition">¶</a></dt>
-<dd><p>Accomodations for dir(get_ipython()).</p>
-<p>The list of attributes that the IPython InteractiveShell class has is
-so long that it requires a pager to see all of it.</p>
-<p>Which is pretty inconvenient.</p>
-<p>This function utilizes the IPython <code class="xref py py-obj docutils literal notranslate"><span class="pre">SList</span></code> class to make it easier
-to work with.</p>
-<p>Methods of note are the <a class="reference internal" href="#default_profile.startup.06_help_helpers.HelpMagics.grep" title="default_profile.startup.06_help_helpers.HelpMagics.grep"><code class="xref py py-meth docutils literal notranslate"><span class="pre">grep()</span></code></a> and <code class="docutils literal notranslate"><span class="pre">s</span></code>, <code class="docutils literal notranslate"><span class="pre">l</span></code> and <code class="docutils literal notranslate"><span class="pre">p</span></code> attributes.</p>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">i</span> <span class="o">=</span> <span class="o">%</span><span class="n">dirip</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">i</span><span class="o">.</span><span class="n">grep</span><span class="p">(</span><span class="s1">&#39;complete&#39;</span><span class="p">)</span>
-<span class="go">[&#39;Completer&#39;, &#39;check_complete&#39;, &#39;complete&#39;, &#39;init_completer&#39;, &#39;pt_complete_style&#39;, &#39;set_completer_frame&#39;, &#39;set_custom_completer&#39;]</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="method">
-<dt id="default_profile.startup.06_help_helpers.HelpMagics.load">
-<code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/06_help_helpers.html#HelpMagics.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.06_help_helpers.HelpMagics.load" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="default_profile.startup.06_help_helpers.HelpMagics.magics">
-<code class="sig-name descname">magics</code><em class="property"> = {'cell': {}, 'line': {'dirip': 'dirip', 'grep': 'grep', 'page_help': 'page_help', 'print_help': 'print_help', 'save_help': 'save_help', 'write_help': 'write_help'}}</em><a class="headerlink" href="#default_profile.startup.06_help_helpers.HelpMagics.magics" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="default_profile.startup.06_help_helpers.HelpMagics.registered">
-<code class="sig-name descname">registered</code><em class="property"> = True</em><a class="headerlink" href="#default_profile.startup.06_help_helpers.HelpMagics.registered" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="function">
-<dt id="default_profile.startup.06_help_helpers.load_ipython_extension">
-<code class="sig-name descname">load_ipython_extension</code><span class="sig-paren">(</span><em class="sig-param">shell=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/06_help_helpers.html#load_ipython_extension"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.06_help_helpers.load_ipython_extension" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add to the list of extensions used by IPython.</p>
-</dd></dl>
-
+<div class="section" id="help-helpers-module">
+<h2><code class="docutils literal notranslate"><span class="pre">06_help_helpers</span></code> module<a class="headerlink" href="#help-helpers-module" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 
@@ -317,7 +177,7 @@ to work with.</p>
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 07, 2020.
+      Last updated on Feb 09, 2020.
     </div>
   </body>
 </html>

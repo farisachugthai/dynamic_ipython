@@ -180,10 +180,10 @@
 <span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 
 
-<div class="viewcode-block" id="VarWatcher"><a class="viewcode-back" href="../../../extensions/index.html#default_profile.extensions.event_watcher_example.VarWatcher">[docs]</a><span class="k">class</span> <span class="nc">VarWatcher</span><span class="p">:</span>
+<div class="viewcode-block" id="VarWatcher"><a class="viewcode-back" href="../../../extensions.html#default_profile.extensions.event_watcher_example.VarWatcher">[docs]</a><span class="k">class</span> <span class="nc">VarWatcher</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Initialize an object that tracks different variables in the user namespace.&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="VarWatcher.__init__"><a class="viewcode-back" href="../../../extensions/index.html#default_profile.extensions.event_watcher_example.VarWatcher.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ip</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">last_x</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="VarWatcher.__init__"><a class="viewcode-back" href="../../../extensions.html#default_profile.extensions.event_watcher_example.VarWatcher.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ip</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">last_x</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set :attr:`self.shell` to the global IPython instance and :attr:`self.last_x` to some var.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">ip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">ip</span>
@@ -191,22 +191,22 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_x</span> <span class="o">=</span> <span class="n">last_x</span> <span class="ow">or</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="VarWatcher.pre_execute"><a class="viewcode-back" href="../../../extensions/index.html#default_profile.extensions.event_watcher_example.VarWatcher.pre_execute">[docs]</a>    <span class="k">def</span> <span class="nf">pre_execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="VarWatcher.pre_execute"><a class="viewcode-back" href="../../../extensions.html#default_profile.extensions.event_watcher_example.VarWatcher.pre_execute">[docs]</a>    <span class="k">def</span> <span class="nf">pre_execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">user_ns</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="VarWatcher.pre_run_cell"><a class="viewcode-back" href="../../../extensions/index.html#default_profile.extensions.event_watcher_example.VarWatcher.pre_run_cell">[docs]</a>    <span class="k">def</span> <span class="nf">pre_run_cell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+<div class="viewcode-block" id="VarWatcher.pre_run_cell"><a class="viewcode-back" href="../../../extensions.html#default_profile.extensions.event_watcher_example.VarWatcher.pre_run_cell">[docs]</a>    <span class="k">def</span> <span class="nf">pre_run_cell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Cell code: &quot;</span><span class="si">%s</span><span class="s1">&quot;&#39;</span> <span class="o">%</span> <span class="n">info</span><span class="o">.</span><span class="n">raw_cell</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="VarWatcher.post_execute"><a class="viewcode-back" href="../../../extensions/index.html#default_profile.extensions.event_watcher_example.VarWatcher.post_execute">[docs]</a>    <span class="k">def</span> <span class="nf">post_execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="VarWatcher.post_execute"><a class="viewcode-back" href="../../../extensions.html#default_profile.extensions.event_watcher_example.VarWatcher.post_execute">[docs]</a>    <span class="k">def</span> <span class="nf">post_execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">user_ns</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_x</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x changed!&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="VarWatcher.post_run_cell"><a class="viewcode-back" href="../../../extensions/index.html#default_profile.extensions.event_watcher_example.VarWatcher.post_run_cell">[docs]</a>    <span class="k">def</span> <span class="nf">post_run_cell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
+<div class="viewcode-block" id="VarWatcher.post_run_cell"><a class="viewcode-back" href="../../../extensions.html#default_profile.extensions.event_watcher_example.VarWatcher.post_run_cell">[docs]</a>    <span class="k">def</span> <span class="nf">post_run_cell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Cell code: &quot;</span><span class="si">%s</span><span class="s1">&quot;&#39;</span> <span class="o">%</span> <span class="n">result</span><span class="o">.</span><span class="n">info</span><span class="o">.</span><span class="n">raw_cell</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">error_before_exec</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error before execution: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">result</span><span class="o">.</span><span class="n">error_before_exec</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="VarWatcher.load_ipython_extension"><a class="viewcode-back" href="../../../extensions/index.html#default_profile.extensions.event_watcher_example.VarWatcher.load_ipython_extension">[docs]</a>    <span class="k">def</span> <span class="nf">load_ipython_extension</span><span class="p">(</span><span class="n">ip</span><span class="p">):</span>
+<div class="viewcode-block" id="VarWatcher.load_ipython_extension"><a class="viewcode-back" href="../../../extensions.html#default_profile.extensions.event_watcher_example.VarWatcher.load_ipython_extension">[docs]</a>    <span class="k">def</span> <span class="nf">load_ipython_extension</span><span class="p">(</span><span class="n">ip</span><span class="p">):</span>
         <span class="n">vw</span> <span class="o">=</span> <span class="n">VarWatcher</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span>
         <span class="n">ip</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;pre_execute&quot;</span><span class="p">,</span> <span class="n">vw</span><span class="o">.</span><span class="n">pre_execute</span><span class="p">)</span>
         <span class="n">ip</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;pre_run_cell&quot;</span><span class="p">,</span> <span class="n">vw</span><span class="o">.</span><span class="n">pre_run_cell</span><span class="p">)</span>
@@ -219,7 +219,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 07, 2020.
+      Last updated on Feb 09, 2020.
     </div>
   </body>
 </html>

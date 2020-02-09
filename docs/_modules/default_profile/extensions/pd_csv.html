@@ -151,40 +151,22 @@
 <h1>Source code for default_profile.extensions.pd_csv</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">============</span>
-<span class="sd">Pandas CSV</span>
-<span class="sd">============</span>
-
-<span class="sd">.. magic:: pd_csv</span>
-
-<span class="sd">Magic that reads in a string and parses it as a :mod:`CSV` with :mod:`pandas`.</span>
-
-<span class="sd">Example of creating a magic from **IPython Interactive Computing and</span>
-<span class="sd">Visualization Cookbook by Cyrille Roussou.**</span>
-
-<span class="sd">The example specifically is from pages 32 to 35.</span>
-
-<span class="sd">It also shows the following simpler example:</span>
-
-<span class="sd">.. ipython::</span>
-
-<span class="sd">    In [1]: from IPython.core.magic import (register_line_magic, register_cell_magic)</span>
-<span class="sd">    In [2]: @register_line_magic</span>
-<span class="sd">            def hello(line):</span>
-<span class="sd">                if line == &#39;french&#39;:</span>
-<span class="sd">                    print(&quot;Salut tout le monde!&quot;)</span>
-<span class="sd">                else:</span>
-<span class="sd">                    print(&quot;Hello world!&quot;)</span>
-
-<span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="kn">import</span> <span class="nn">sys</span>
 
-<span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+<span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">default_profile</span> <span class="kn">import</span> <span class="n">ModuleNotFoundError</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">pd</span> <span class="o">=</span> <span class="kc">None</span>
 
 
-<div class="viewcode-block" id="pd_csv"><a class="viewcode-back" href="../../../extensions.html#default_profile.extensions.pd_csv.pd_csv">[docs]</a><span class="k">def</span> <span class="nf">pd_csv</span><span class="p">(</span><span class="n">cell</span><span class="p">):</span>
+<div class="viewcode-block" id="pd_csv"><a class="viewcode-back" href="../../../extensions/pandas_csv.html#default_profile.extensions.pd_csv.pd_csv">[docs]</a><span class="k">def</span> <span class="nf">pd_csv</span><span class="p">(</span><span class="n">cell</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Read in an :class:`io.StringIO()` and parse it with pandas.</span>
 
 <span class="sd">    Parameters</span>
@@ -197,15 +179,17 @@
 <span class="sd">    df : pandas.DataFrame</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">pd</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span>  <span class="c1"># should this simply raise?</span>
     <span class="n">sio</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">sio</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="load_ipython_extension"><a class="viewcode-back" href="../../../extensions.html#default_profile.extensions.pd_csv.load_ipython_extension">[docs]</a><span class="k">def</span> <span class="nf">load_ipython_extension</span><span class="p">(</span><span class="n">ip</span><span class="p">):</span>
+<div class="viewcode-block" id="load_ipython_extension"><a class="viewcode-back" href="../../../extensions/pandas_csv.html#default_profile.extensions.pd_csv.load_ipython_extension">[docs]</a><span class="k">def</span> <span class="nf">load_ipython_extension</span><span class="p">(</span><span class="n">ip</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;This function is called when the extension is loaded.</span>
 
 <span class="sd">    It accepts an IPython |ip| instance. We can register the magic</span>
-<span class="sd">    with the :func:`IPython.core.magics.register_magic_function()`</span>
+<span class="sd">    with the :func:`IPython.core.magics.register_magic_function`</span>
 <span class="sd">    method.</span>
 
 <span class="sd">    Parameters</span>
@@ -214,17 +198,6 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ip</span><span class="o">.</span><span class="n">register_magic_function</span><span class="p">(</span><span class="s2">&quot;pd_csv&quot;</span><span class="p">)</span></div>
-
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-    <span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="n">ModuleNotFoundError</span><span class="p">):</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{lib}</span><span class="s2"> not installed.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lib</span><span class="o">=</span><span class="s2">&quot;Pandas&quot;</span><span class="p">))</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">shell</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">load_ipython_extension</span><span class="p">(</span><span class="n">shell</span><span class="p">)</span>
 </pre></div>
 
         </div>
@@ -232,7 +205,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 03, 2020.
+      Last updated on Feb 09, 2020.
     </div>
   </body>
 </html>

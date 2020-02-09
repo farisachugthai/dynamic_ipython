@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import cgitb
 import logging
 import math
 import re
@@ -8,7 +9,6 @@ from datetime import datetime
 from importlib import import_module
 from pathlib import Path
 
-import sphinx
 from IPython.lib.lexers import IPyLexer, IPythonTracebackLexer
 from IPython.sphinxext import ipython_directive
 
@@ -26,6 +26,7 @@ import sphinx
 from sphinx.domains.rst import ReSTDomain
 from sphinx.ext.autodoc import cut_lines
 from sphinx.util.docfields import GroupedField
+from sphinx.util.template import ReSTRenderer
 
 import default_profile
 from default_profile.__about__ import __version__
@@ -62,25 +63,23 @@ if ask_for_import("jinja2"):
     from jinja2.loaders import FileSystemLoader
     from jinja2.lexer import get_lexer
 
-
     def create_jinja_env():
         """Use jinja to set up the Sphinx environment."""
         TRIM_BLOCKS = True
         LSTRIP_BLOCKS = True
         template_path = "_templates"
         try:
-            loader=FileSystemLoader(template_path)
+            loader = FileSystemLoader(template_path)
         except TemplateError:
             return
         env = Environment(
-                trim_blocks=TRIM_BLOCKS,
-                lstrip_blocks=LSTRIP_BLOCKS,
-                loader=FileSystemLoader(template_path),
-                extensions=["jinja2.ext.i18n", autoescape, do, with_],
-                enable_async=True
+            trim_blocks=TRIM_BLOCKS,
+            lstrip_blocks=LSTRIP_BLOCKS,
+            loader=FileSystemLoader(template_path),
+            extensions=["jinja2.ext.i18n", autoescape, do, with_],
+            enable_async=True,
         )
         return env
-
 
     lexer = get_lexer(create_jinja_env())
 
@@ -116,35 +115,36 @@ if ask_for_import("matplotlib"):
     extensions.extend(
         ["matplotlib.sphinxext.plot_directive", "matplotlib.sphinxext.mathmpl",]
     )
-
+0
 if ask_for_import("flake8_rst"):
-    extensions.extend(
-        ["flake8_rst.sphinxext.custom_roles",]
+    extensions.append(
+        "flake8_rst.sphinxext.custom_roles"
     )
     DOCS_LOGGER.info("flake8_rst in extensions")
 
 if ask_for_import("numpydoc"):
-    extensions.extend(["numpydoc.numpydoc"])
+    extensions.append("numpydoc.numpydoc")
+    DOCS_LOGGER.info("numpydoc in extensions")
 
-if ask_for_import("recommonmark"):
-    DOCS_LOGGER.info("recommonmark in extensions")
-    extensions.extend(["recommonmark"])
-
-source_suffix = {
-    ".rst": "restructuredtext",
-    ".txt": "markdown",
-    ".md": "markdown",
-}
 
 # -- General Configuration ----------------------------------------
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
 
+renderers = ReSTRenderer(templates_path)
+
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
+source_suffix = {
+    ".rst": "restructuredtext",
+    ".txt": "markdown",
+}
 
-source_suffix = [".rst"]
+if ask_for_import("recommonmark"):
+    DOCS_LOGGER.info("recommonmark in extensions")
+    extensions.append("recommonmark")
+    source_suffix.update({".md": "markdown"})
 
 # The encoding of source files.
 source_encoding = u"utf-8"
@@ -221,12 +221,11 @@ default_role = "py:obj"
 
 # If true, the current module name will be prepended to all description
 # unit titles (such as .. function::).
-add_module_names = False
+# add_module_names = False
 
 # If true, sectionauthor and moduleauthor directives will be shown in the
 # output. They are ignored by default.
 # show_authors = False
-
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = "sphinx"
@@ -234,12 +233,12 @@ pygments_style = "sphinx"
 # A list of ignored prefixes for module index sorting.
 # NOTE: lol you have to put a dot at the end otherwise all your modules will start
 # with a period
-modindex_common_prefix = [
-    "default_profile.",
-    "default_profile.extensions.",
-    "default_profile.startup.",
-    "default_profile.util.",
-]
+# modindex_common_prefix = [
+#     "default_profile.",
+#     "default_profile.extensions.",
+#     "default_profile.startup.",
+#     "default_profile.util.",
+# ]
 
 # -- General Output Options --------------------------------------------------
 
@@ -358,6 +357,7 @@ man_show_urls = True
 # Grouping the document tree into Texinfo files. List of tuples
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
+
 # -- Options for Epub output ----------------------------------------
 
 # Bibliographic Dublin Core info.
@@ -623,6 +623,8 @@ def setup(app):
 
     """
     DOCS_LOGGER.info("Initializing the Sphinx instance.")
+
+    cgitb.enable(format="text")
     app.connect("source-read", rstjinja)
     app.add_lexer("ipythontb", IPythonTracebackLexer)
     app.add_lexer("ipython", IPyLexer)
