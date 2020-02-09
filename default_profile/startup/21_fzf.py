@@ -14,7 +14,7 @@ import shutil
 import subprocess
 import sys
 import types
-from contextlib import ContextDecorator
+from contextlib import ContextDecorator, contextmanager
 from subprocess import DEVNULL, PIPE, CalledProcessError, CompletedProcess, Popen
 from typing import get_type_hints  # what is this?
 
@@ -69,7 +69,22 @@ class Executable(ContextDecorator):
                 func(*args, **kwargs)
 
 
-# @Executable('fzf')
+class RedirectStdout:
+    """Need to determine whether to use homebrewed class or contextlib.redirect_stdout."""
+
+    def __init__(self, new_stdout=None):
+        """If stdout is None, redirect to /dev/null"""
+        self._new_stdout = new_stdout or open(os.devnull, "w")
+ 
+    def __enter__(self):
+        sys.stdout.reconfigure(line_buffering=True)  # implies flush
+        self.oldstdout_fno = os.dup(sys.stdout.fileno())
+        os.dup2(self._new_stdout.fileno(), 1)
+ 
+    def __exit__(self, exc_type, exc_value, traceback):
+        self._new_stdout.flush()
+        os.dup2(self.oldstdout_fno, 1)
+        os.close(self.oldstdout_fno)
 
 
 class FZF:
@@ -81,6 +96,7 @@ class FZF:
         self.fzf_alias = fzf_alias or ""
         self.fzf_config = fzf_configs or {}
         self._setup_fzf()
+        super().__init__()
 
     def __repr__(self):
         return "{}    {}".format(self.__class__.__name__, self.fzf_alias)
@@ -94,9 +110,7 @@ class FZF:
 
     @property
     def default_cmds(self):
-        return (
-            "rg --pretty --hidden --max-columns-preview --no-heading --no-messages --no-column --no-line-number -C 0 -e ^ | fzf --ansi --multi ",
-        )
+        return "rg --pretty --hidden --max-columns-preview --no-heading --no-messages --no-column --no-line-number -C 0 -e ^ | fzf --ansi --multi "
 
     @property
     def default_cmd(self):
@@ -124,9 +138,9 @@ class FZF:
             "--multi",
         ]
 
-    @property
+    @contextmanager
     def safe_default_cmd(self):
-        return shlex.split(shlex.quote(self.default_cmd_str))
+        return shlex.split(shlex.quote(self.default_cmds))
 
     @classmethod
     def _setup_fzf(cls, *args):

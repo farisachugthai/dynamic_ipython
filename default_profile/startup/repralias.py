@@ -163,7 +163,6 @@ class ReprAlias(reprlib.Repr):
 
 
 if __name__ == "__main__":
-
     aliases = ReprAlias(get_aliases())
 
 # Vim: set et:

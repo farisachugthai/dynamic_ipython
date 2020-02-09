@@ -1,5 +1,3 @@
-from default_profile.startup.repralias import ReprAlias
-
 import pytest
 
 
@@ -22,3 +20,5 @@ def test_alias_manager_aliases_greater_than_user_aliases(_ip):
 # the object. iter(main_class()) calls the fixture which pytest will raise
 #  a Failure for. :/
 # assert iter(main_class)
+if __name__ == "__main__":
+    pytest.importorskip("ReprAlias", package=default_profile.startup.repralias)

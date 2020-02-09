@@ -91,6 +91,7 @@ class IPythonConfigurableLexer(LoggingConfigurable):
 
         if self.shell is not None:
             self.original_lexer = self.shell.pt_app.lexer
+            self.shell.configurables.append("DynamicAliasManager")
         else:
             self.original_lexer = None
 
@@ -129,3 +130,4 @@ class Colorizer:
 if __name__ == "__main__":
     lexer = IPythonConfigurableLexer()
     # TODO: isn't there a method like _ip.add_trait or something?
+    colorizer = Colorizer()

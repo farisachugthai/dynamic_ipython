@@ -46,15 +46,10 @@ def ipython_logger(shell=None):
         return
     log_dir = shell.profile_dir.log_dir
     fname = "log-" + shell.profile + "-" + time.strftime("%Y-%m-%d") + ".py"
-    logmode = "append"
-    log_output = True
     filename = path.join(log_dir, fname)
     notnew = path.exists(filename)
-    logger = shell.logger
-    logger.logmode = logmode
-    logger.log_output = log_output
-    logger.timestamp = True
     try:
+        logger = shell.logger
         # added -t to get timestamps
         logger.logstart(filename)
         if notnew:
@@ -75,3 +70,9 @@ def ipython_logger(shell=None):
 if __name__ == "__main__":
     _ip = get_ipython()
     logger = ipython_logger(_ip)
+    if logger is not None:
+        logmode = "append"
+        log_output = True
+        logger.logmode = logmode
+        logger.log_output = log_output
+        logger.timestamp = True

@@ -15,6 +15,7 @@ because wth is this saying?
 
 """
 from contextlib import suppress
+import importlib
 import unittest
 from unittest.case import TestCase
 
@@ -28,7 +29,6 @@ except (ImportError, ModuleNotFoundError):
 else:
     NO_NOSE = None
 
-from default_profile.startup import aliases_mod
 import pytest
 from _pytest.outcomes import Skipped
 
@@ -108,6 +108,9 @@ def test_alias_args_commented_nargs(_ip):
 
 
 if __name__ == "__main__":
+    with suppress(ImportError):
+        from default_profile.startup import aliases_mod
     with suppress(Skipped):
         pytest.importorskip("nose")
         pytest.main()
+

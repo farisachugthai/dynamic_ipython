@@ -40,6 +40,9 @@ def pytest_addoption(parser):
         "--slow", action="store_true", default=False, help="run slow tests"
     )
 
+# def pytest_cmdline_preparse(config, args):
+#     args[:] = ["--no-success-flaky-report", "--no-flaky-report"] + args
+
 
 def pytest_configure(config):
     config.addinivalue_line("markers", "slow: mark test as slow to run")
@@ -59,6 +62,9 @@ def pytest_report_header():
     """Try to imitate the nosetests header."""
     # return f"\nMatplotlib:\n {matplotlib in sys.modules}\nPygments:\n {pygments in sys.modules}\nSQLite3:\n {sqlite3 in sys.modules}\n"
     # crashes
+    import IPython
+    print("IPython %s" % (IPython.__version__))
+
     ret = []
     for i in ["matplotlib", "sqlite3", "pygments"]:
         ask_for_import(i)

@@ -47,8 +47,14 @@ class CommonAliases(UserDict):
             self.user_aliases = default_aliases()
         else:
             self.user_aliases = user_aliases
-        self.dict_aliases = self.tuple_to_dict()
-        super().__init__(**kwargs)
+        self.git()
+        self.dict_aliases = self.tuple_to_dict(self.user_aliases)
+        self.python_exes()
+        # if kwargs is not None:
+        # surprisingly that doesnt work
+        if len(kwargs) != 0:
+            self.update(**kwargs)
+        super().__init__(self.dict_aliases)
 
     def __iter__(self):
         return self._generator()
@@ -60,12 +66,34 @@ class CommonAliases(UserDict):
     def __repr__(self):  # reprlib?
         return "<Common Aliases>: # of aliases: {!r} ".format(len(self.dict_aliases))
 
-    # def __getitem__(self, arg1):
-    #     # Todo: Make sure this works
-    #     return self[arg1]
+    @staticmethod
+    def _find_exe(self, exe=None):
+        """Use :func:`shutil.which` to determine whether an executable exists.
+
+        Parameters
+        ----------
+        exe : command, optional
+            The command to check.
+
+        Returns
+        -------
+        path : str (path-like)
+            Where the executable is located.
+
+        Note
+        ----
+        shutil.which actually checks :envvar:`PATHEXT`! That's real nice.
+
+        """
+        return shutil.which(exe)
 
     def extend(self, list_aliases):
-        """Implement the method `extend` in a similar way to how `list.extend` works."""
+        """Implement the method `extend` in a similar way to how `list.extend` works.
+
+        Parameters
+        ----------
+        list_aliases : list of tuple
+        """
         for i in list_aliases:
             self.shell.alias_manager.define_alias(*alias)
 
@@ -107,7 +135,7 @@ class CommonAliases(UserDict):
         for i in list_aliases:
             self.shell.alias_manager.define_alias(alias)
 
-    def tuple_to_dict(self):
+    def tuple_to_dict(self, list_of_tuples):
         """Showcasing how to convert a tuple into a dict.
 
         Nothing particularly hard, just a good exercise.
@@ -155,9 +183,12 @@ class CommonAliases(UserDict):
             'BlinkLightGray': '5;37'}
 
         """
+        a = list_of_tuples
+        if a is None:
+            a = self.user_aliases
         ret = {}
-        for i, j in enumerate(self.user_aliases):
-            ret[self.user_aliases[i][0]] = self.user_aliases[i][1]
+        for i, j in enumerate(a):
+            ret[a[i][0]] = a[i][1]
 
         return ret
 
@@ -199,16 +230,17 @@ class CommonAliases(UserDict):
             os.environ => env
 
         """
-        if "pydoc" in self.user_aliases:
+        if "pydoc" in self.dict_aliases.keys():
             self.unalias("pydoc")
             import pydoc
-        if "apropos" in self.user_aliases:
+        if "apropos" in self.dict_aliases.keys():
             self.unalias("apropos")
             from pydoc import apropos
-        if "which" in self.user_aliases:
+        if "which" in self.dict_aliases.keys():
             self.unalias("which")
             from shutil import which
-        if "chown" in self.user_aliases:
+        if "chown" in self.dict_aliases.keys():
+            self.unalias("chown")
             from shutil import chown
 
     def git(self):
@@ -324,7 +356,10 @@ class CommonAliases(UserDict):
                 'git log --pretty=format:"%Cred%h%Creset %C(yellow)%d%Creset %Cgreen(%cr) %C(bold blue)<%an>%Creset" --all --abbrev-commit --abbrev=7 --date=relative --graph --decorate %l',
             ),
             #  gl with a message
-            ("glg", "git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --all --abbrev-commit --date=relative %l"),
+            (
+                "glg",
+                r'git log --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset%Cwhite %Cgreen(%cr) %C(bold blue)<%an>%Creset" --all --abbrev-commit --date=relative',
+            ),
             ("glo", "git log %l"),
             (
                 "glog",
@@ -471,31 +506,9 @@ class WindowsAliases(CommonAliases):
 
     """
 
-    @staticmethod
-    def _find_exe(self, exe=None):
-        """Use :func:`shutil.which` to determine whether an executable exists.
-
-        Parameters
-        ----------
-        exe : command, optional
-            The command to check.
-
-        Returns
-        -------
-        path : str (path-like)
-            Where the executable is located.
-
-        Note
-        ----
-        shutil.which actually checks :envvar:`PATHEXT`! That's real nice.
-
-        """
-        return shutil.which(exe) or None
-
     def __repr__(self):
         return "Windows Aliases: {!r}".format(len(self.user_aliases))
 
-    @classmethod
     def cmd_aliases(cls):
         r"""Aliases for the :command:`cmd` shell.
 
@@ -548,7 +561,6 @@ class WindowsAliases(CommonAliases):
         ]
         return cls.user_aliases
 
-    @classmethod
     def powershell_aliases(cls):
         r"""Aliases for Windows OSes using :command:`powershell`.
 
@@ -652,9 +664,6 @@ def generate_aliases(_ip=None):
     common_aliases = CommonAliases(
         shell=_ip, user_aliases=_ip.alias_manager.user_aliases
     )
-    common_aliases.git()
-    common_aliases.python_exes()
-
     from default_profile.util.machine import Platform
 
     machine = Platform()
@@ -702,7 +711,7 @@ def redefine_aliases(aliases, shell=None):
         shell = get_ipython()
     if not hasattr(shell, "alias_manager"):
         raise ApplicationError
-    for i,j in enumerate(aliases):
+    for i, j in enumerate(aliases):
         try:
             shell.alias_manager.define_alias(j, all_aliases.dict_aliases[j])
         except InvalidAliasError:
@@ -728,3 +737,4 @@ if __name__ == "__main__":
         )
 
         ALIAS_LOGGER.info("Number of aliases is: %s" % all_aliases)
+        _ip.run_line_magic("alias_magic", "p pycat")

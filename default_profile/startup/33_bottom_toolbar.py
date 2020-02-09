@@ -25,12 +25,43 @@ from prompt_toolkit.styles.pygments import (
 )
 
 from pygments.token import Token
+from pygments.lexers.python import PythonLexer
+from pygments.formatters.terminal256 import TerminalTrueColorFormatter
 from IPython.core.getipython import get_ipython
 
 try:
     from gruvbox.gruvbox import Gruvbox
 except ImportError:
     Gruvbox = None
+
+completion_displays_to_styles = {
+    "multi": CompleteStyle.MULTI_COLUMN,
+    "single": CompleteStyle.COLUMN,
+    "readline": CompleteStyle.READLINE_LIKE,
+    "none": None,
+}
+
+def init_style():
+    # Could set this to _ip.pt_app.style i suppose
+    if Gruvbox is not None:
+        bt_style = Gruvbox()
+        return style_from_pygments_dict(bt_style.style_rules)
+
+
+def override_style(style_overrides):
+    style = init_style()
+    if not hasattr(style_overrides):
+        raise TypeError
+    style_overrides = Style.from_dict(style_overrides)
+    try:
+        return merge_styles([style, style_overrides])
+    except (AttributeError, TypeError, ValueError):
+        print_exc()
+
+
+def merged_styles(overides=None):
+    base = init_style()
+    return merge_styles([base, overrides, default_pygments_style()])
 
 
 class BottomToolbar:
@@ -44,16 +75,11 @@ class BottomToolbar:
     via ``__call__``.
     """
 
-    completion_displays_to_styles = {
-        "multi": CompleteStyle.MULTI_COLUMN,
-        "single": CompleteStyle.COLUMN,
-        "readline": CompleteStyle.READLINE_LIKE,
-        "none": None,
-    }
-
     def __init__(self, *args, **kwargs):
         self.shell = get_ipython()
-        self.unfinished_toolbar = ""
+        self.unfinished_toolbar = self._rerender()
+        self.PythonLexer = PythonLexer()
+        self.Formatter = TerminalTrueColorFormatter()
 
     @property
     def session(self):
@@ -78,7 +104,7 @@ class BottomToolbar:
         return f"{self.rerender()!r}"
 
     def __call__(self):
-        return self.rerender()
+        return f"{self.rerender()}"
 
     def terminal_width(self):
         """Returns `shutil.get_terminal_size.columns`."""
@@ -92,7 +118,7 @@ class BottomToolbar:
         """Bool indicating bottom toolbar == shutil.get_terminal_size().columns."""
         return len(self) == self.terminal_width()
 
-    def rerender(self, ):
+    def rerender(self):
         """Render the toolbar at the bottom for prompt_toolkit.
 
         .. warning::
@@ -127,26 +153,12 @@ class BottomToolbar:
         # return "{} {:>150}".format(toolbar, date.today())
         return toolbar
 
-    def init_style(self):
-        # Could set this to _ip.pt_app.style i suppose
-        if Gruvbox is not None:
-            bt_style = Gruvbox()
-            return style_from_pygments_dict(bt_style.style)
-
-    def override_style(self):
-        """Could be easily modified to utilize traitlets. However currently not used"""
-        try:
-            style_overrides = Style.from_dict(style_overrides_env)
-            prompt_args["style"] = merge_styles([style, style_overrides])
-        except (AttributeError, TypeError, ValueError):
-            print_exception()
-
 
 def add_toolbar(toolbar=None):
     """Get the running IPython instance and add 'bottom_toolbar'."""
     _ip = get_ipython()
-
-    _ip.pt_app.bottom_toolbar = toolbar()
+    if hasattr(_ip, "pt_app.bottom_toolbar"):
+        _ip.pt_app.bottom_toolbar = toolbar()
 
 
 # Don't uncomment! This fucks up the keybindings so that the only way a line

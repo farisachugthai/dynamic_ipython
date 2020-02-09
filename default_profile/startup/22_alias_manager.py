@@ -76,6 +76,3 @@ class DynamicAliasManager(AliasManager):
 if __name__ == "__main__":
     # Forgive me for all these terrible hacks
     shell = get_ipython()
-    if shell is not None:
-        shell.run_line_magic("alias_magic", "p pycat")
-        shell.configurables.append("DynamicAliasManager")
