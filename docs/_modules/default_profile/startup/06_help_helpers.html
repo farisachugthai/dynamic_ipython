@@ -170,126 +170,166 @@
 <span class="kn">import</span> <span class="nn">contextlib</span>
 <span class="kn">import</span> <span class="nn">io</span>
 <span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">pydoc</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">traceback</span> <span class="kn">import</span> <span class="n">print_exc</span>
+
+<span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+<span class="kn">from</span> <span class="nn">IPython.core.magic</span> <span class="kn">import</span> <span class="n">Magics</span><span class="p">,</span> <span class="n">magics_class</span><span class="p">,</span> <span class="n">register_line_magic</span><span class="p">,</span> <span class="n">line_magic</span>
+<span class="kn">from</span> <span class="nn">IPython.utils.text</span> <span class="kn">import</span> <span class="n">SList</span>
 
 
-<div class="viewcode-block" id="print_help"><a class="viewcode-back" href="../../../startup/help_helpers.html#default_profile.startup.06_help_helpers.print_help">[docs]</a><span class="k">def</span> <span class="nf">print_help</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Redirect :func:`help` to ``sys.stderr``.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    arg : obj, optional</span>
-<span class="sd">        Object to run :magic:`pinfo` on.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">redirect_stdout</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">):</span>
-        <span class="n">help</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span></div>
+<div class="viewcode-block" id="UsageError"><a class="viewcode-back" href="../../../startup/help_helpers.html#default_profile.startup.06_help_helpers.UsageError">[docs]</a><span class="k">class</span> <span class="nc">UsageError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<div class="viewcode-block" id="UsageError.__init__"><a class="viewcode-back" href="../../../startup/help_helpers.html#default_profile.startup.06_help_helpers.UsageError.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">___init__</span><span class="p">()</span></div></div>
 
 
-<div class="viewcode-block" id="save_help"><a class="viewcode-back" href="../../../startup/help_helpers.html#default_profile.startup.06_help_helpers.save_help">[docs]</a><span class="k">def</span> <span class="nf">save_help</span><span class="p">(</span><span class="n">redirected</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Redirect output from sys.stdout to a string.&quot;&quot;&quot;</span>
-    <span class="n">saved</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">()</span>
-    <span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">redirect_stdout</span><span class="p">(</span><span class="n">saved</span><span class="p">):</span>
-        <span class="n">help</span><span class="p">(</span><span class="n">redirected</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">saved</span></div>
+<div class="viewcode-block" id="HelpMagics"><a class="viewcode-back" href="../../../startup/help_helpers.html#default_profile.startup.06_help_helpers.HelpMagics">[docs]</a><span class="nd">@magics_class</span>
+<span class="k">class</span> <span class="nc">HelpMagics</span><span class="p">(</span><span class="n">Magics</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Useful magics for when you&#39;re introspecting things.</span>
 
+<span class="sd">    Similar to a few of the existing namespace magics.</span>
 
-<div class="viewcode-block" id="write_help"><a class="viewcode-back" href="../../../startup/help_helpers.html#default_profile.startup.06_help_helpers.write_help">[docs]</a><span class="k">def</span> <span class="nf">write_help</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="n">arg</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Write :func:`help` to a file.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    output_file : str (os.Pathlike)</span>
-<span class="sd">        File to write to.</span>
-<span class="sd">    arg : obj, optional</span>
-<span class="sd">        Object to run :magic:`pinfo` on.</span>
+<span class="sd">    .. todo::</span>
+<span class="sd">        args = self.parse_args()</span>
+<span class="sd">        I feel like that should be in the base Magics class&#39;s ``__call__``</span>
+<span class="sd">        method. Or something that we don&#39;t have to manually call it every</span>
+<span class="sd">        single time we need it.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="s2">&quot;xt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">redirect_stdout</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-            <span class="n">help</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HelpMagics.print_help"><a class="viewcode-back" href="../../../startup/help_helpers.html#default_profile.startup.06_help_helpers.HelpMagics.print_help">[docs]</a>    <span class="nd">@line_magic</span>
+    <span class="k">def</span> <span class="nf">print_help</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Redirect :func:`help` to ``sys.stderr``.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        arg : obj, optional</span>
+<span class="sd">            Object to run :magic:`pinfo` on.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">redirect_stdout</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">):</span>
+            <span class="n">pydoc</span><span class="o">.</span><span class="n">help</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HelpMagics.save_help"><a class="viewcode-back" href="../../../startup/help_helpers.html#default_profile.startup.06_help_helpers.HelpMagics.save_help">[docs]</a>    <span class="nd">@line_magic</span>
+    <span class="k">def</span> <span class="nf">save_help</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">redirected</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Redirect output from sys.stdout to a string.&quot;&quot;&quot;</span>
+        <span class="n">saved</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">redirect_stdout</span><span class="p">(</span><span class="n">saved</span><span class="p">):</span>
+            <span class="n">help</span><span class="p">(</span><span class="n">redirected</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">saved</span></div>
+
+<div class="viewcode-block" id="HelpMagics.write_help"><a class="viewcode-back" href="../../../startup/help_helpers.html#default_profile.startup.06_help_helpers.HelpMagics.write_help">[docs]</a>    <span class="nd">@line_magic</span>
+    <span class="k">def</span> <span class="nf">write_help</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_file</span><span class="p">,</span> <span class="n">arg</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Write :func:`help` to a file.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        output_file : str (os.Pathlike)</span>
+<span class="sd">            File to write to.</span>
+<span class="sd">        arg : obj, optional</span>
+<span class="sd">            Object to run :magic:`pinfo` on.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="s2">&quot;xt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">redirect_stdout</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+                <span class="n">help</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HelpMagics.page_help"><a class="viewcode-back" href="../../../startup/help_helpers.html#default_profile.startup.06_help_helpers.HelpMagics.page_help">[docs]</a>    <span class="nd">@line_magic</span>
+    <span class="k">def</span> <span class="nf">page_help</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Use pydoc&#39;s pager function to display docs.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        arg : obj, optional</span>
+<span class="sd">            Object to run :magic:`pinfo` on.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">arg</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">return</span> <span class="n">pydoc</span><span class="o">.</span><span class="n">pager</span><span class="p">(</span><span class="n">pydoc</span><span class="o">.</span><span class="n">getdoc</span><span class="p">(</span><span class="n">arg</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="HelpMagics.grep"><a class="viewcode-back" href="../../../startup/help_helpers.html#default_profile.startup.06_help_helpers.HelpMagics.grep">[docs]</a>    <span class="nd">@line_magic</span>
+    <span class="k">def</span> <span class="nf">grep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Use :func:`re.compile` to match a pattern that may be in ``dir(obj)``.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        obj : object</span>
+<span class="sd">            Any object who has a large enough namespace to warrant a :command:`grep`.</span>
+<span class="sd">        pattern : list, optional</span>
+<span class="sd">            Unfortunately, lists are mutable objects and can&#39;t be used as</span>
+<span class="sd">            default parameters.</span>
+<span class="sd">            Therefore a default value of::</span>
+
+<span class="sd">                pattern = [&#39;^a-z.*$&#39;]</span>
+
+<span class="sd">            Is only presented inside of the function.</span>
+
+<span class="sd">        Yields</span>
+<span class="sd">        ------</span>
+<span class="sd">        matched_attributes : str</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">last_execution_result</span>
+        <span class="k">if</span> <span class="n">pattern</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">pattern</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;^a-z.*$&quot;</span><span class="p">]</span>
+        <span class="n">compiled</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="o">*</span><span class="n">pattern</span><span class="p">)</span>
+        <span class="n">attributes</span> <span class="o">=</span> <span class="nb">dir</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="k">yield</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">attributes</span> <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">compiled</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="HelpMagics.dirip"><a class="viewcode-back" href="../../../startup/help_helpers.html#default_profile.startup.06_help_helpers.HelpMagics.dirip">[docs]</a>    <span class="nd">@line_magic</span>
+    <span class="k">def</span> <span class="nf">dirip</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Accomodations for dir(get_ipython()).</span>
+
+<span class="sd">        The list of attributes that the IPython InteractiveShell class has is</span>
+<span class="sd">        so long that it requires a pager to see all of it.</span>
+
+<span class="sd">        Which is pretty inconvenient.</span>
+
+<span class="sd">        This function utilizes the IPython `SList` class to make it easier</span>
+<span class="sd">        to work with.</span>
+
+<span class="sd">        Methods of note are the :meth:`grep` and ``s``, ``l`` and ``p`` attributes.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        ---------</span>
+<span class="sd">        &gt;&gt;&gt; i = %dirip()</span>
+<span class="sd">        &gt;&gt;&gt; i.grep(&#39;complete&#39;)</span>
+<span class="sd">        [&#39;Completer&#39;, &#39;check_complete&#39;, &#39;complete&#39;, &#39;init_completer&#39;, &#39;pt_complete_style&#39;, &#39;set_completer_frame&#39;, &#39;set_custom_completer&#39;]</span>
+
+<span class="sd">        .. where did completer go?</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="s2">&quot;Are you in in IPython? get_ipython() did not return anything&quot;</span>
+            <span class="p">)</span>
+            <span class="k">return</span>
+        <span class="n">shell_list</span> <span class="o">=</span> <span class="n">SList</span><span class="p">(</span><span class="nb">dir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">shell_list</span></div>
+
+<div class="viewcode-block" id="HelpMagics.load"><a class="viewcode-back" href="../../../startup/help_helpers.html#default_profile.startup.06_help_helpers.HelpMagics.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">load_ipython_extension</span><span class="p">()</span></div></div>
 
 
-<div class="viewcode-block" id="page_help"><a class="viewcode-back" href="../../../startup/help_helpers.html#default_profile.startup.06_help_helpers.page_help">[docs]</a><span class="k">def</span> <span class="nf">page_help</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Using IPython&#39;s `%pinfo` magic to page information to the console.</span>
+<div class="viewcode-block" id="load_ipython_extension"><a class="viewcode-back" href="../../../startup/help_helpers.html#default_profile.startup.06_help_helpers.load_ipython_extension">[docs]</a><span class="k">def</span> <span class="nf">load_ipython_extension</span><span class="p">(</span><span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Add to the list of extensions used by IPython.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">shell</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
 
-<span class="sd">    Also noting it&#39;s the only function in this module that actually needs</span>
-<span class="sd">    the IPython instance so the imports were moved here.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    arg : obj, optional</span>
-<span class="sd">        Object to run :magic:`pinfo` on.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
-
-    <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_ip</span><span class="p">,</span> <span class="s2">&quot;pinfo&quot;</span><span class="p">):</span>
-        <span class="n">_ip</span><span class="o">.</span><span class="n">pinfo</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span></div>
+    <span class="n">hm</span> <span class="o">=</span> <span class="n">HelpMagics</span><span class="p">()</span>
+    <span class="c1"># todo: unittest that asserts this is in _ip.magics_manager.registry after registering.</span>
+    <span class="n">shell</span><span class="o">.</span><span class="n">register_magic_function</span><span class="p">(</span><span class="n">hm</span><span class="o">.</span><span class="n">grep</span><span class="p">)</span>
+    <span class="n">shell</span><span class="o">.</span><span class="n">register_magic_function</span><span class="p">(</span><span class="n">hm</span><span class="o">.</span><span class="n">page_help</span><span class="p">)</span>
+    <span class="n">shell</span><span class="o">.</span><span class="n">register_magic_function</span><span class="p">(</span><span class="n">hm</span><span class="o">.</span><span class="n">save_help</span><span class="p">)</span>
+    <span class="n">shell</span><span class="o">.</span><span class="n">register_magic_function</span><span class="p">(</span><span class="n">hm</span><span class="o">.</span><span class="n">write_help</span><span class="p">)</span>
+    <span class="n">shell</span><span class="o">.</span><span class="n">register_magic_function</span><span class="p">(</span><span class="n">hm</span><span class="o">.</span><span class="n">dirip</span><span class="p">)</span></div>
+    <span class="c1"># shell.register_magics(HelpMagics)</span>
 
 
-<div class="viewcode-block" id="grep"><a class="viewcode-back" href="../../../startup/help_helpers.html#default_profile.startup.06_help_helpers.grep">[docs]</a><span class="k">def</span> <span class="nf">grep</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Use :func:`re.compile` to match a pattern that may be in ``dir(obj)``.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    obj : object</span>
-<span class="sd">        Any object who has a large enough namespace to warrant a :command:`grep`.</span>
-<span class="sd">    pattern : list, optional</span>
-<span class="sd">        Unfortunately, lists are mutable objects and can&#39;t be used as</span>
-<span class="sd">        default parameters.</span>
-<span class="sd">        Therefore a default value of::</span>
-
-<span class="sd">            pattern = [&#39;^a-z.*$&#39;]</span>
-
-<span class="sd">        Is only presented inside of the function.</span>
-
-<span class="sd">    Yields</span>
-<span class="sd">    ------</span>
-<span class="sd">    matched_attributes : str</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">pattern</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">pattern</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;^a-z.*$&quot;</span><span class="p">]</span>
-    <span class="n">compiled</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="o">*</span><span class="n">pattern</span><span class="p">)</span>
-    <span class="n">attributes</span> <span class="o">=</span> <span class="nb">dir</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
-    <span class="k">yield</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">attributes</span> <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">compiled</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span></div>
-
-
-<div class="viewcode-block" id="dirip"><a class="viewcode-back" href="../../../startup/help_helpers.html#default_profile.startup.06_help_helpers.dirip">[docs]</a><span class="k">def</span> <span class="nf">dirip</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Accomodations for dir(get_ipython()).</span>
-
-<span class="sd">    The list of attributes that the IPython InteractiveShell class has is</span>
-<span class="sd">    so long that it requires a pager to see all of it.</span>
-
-<span class="sd">    Which is pretty inconvenient.</span>
-
-<span class="sd">    This function utilizes the IPython `SList` class to make it easier</span>
-<span class="sd">    to work with.</span>
-
-<span class="sd">    Methods of note are the :meth:`grep` and ``s``, ``l`` and ``p`` attributes.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    ---------</span>
-<span class="sd">    &gt;&gt;&gt; from default_profile.startup import help_helpers_mod</span>
-<span class="sd">    &gt;&gt;&gt; i = help_helpers_mod.dirip()</span>
-<span class="sd">    &gt;&gt;&gt; i.grep(&#39;complete&#39;)</span>
-<span class="sd">    [&#39;Completer&#39;, &#39;check_complete&#39;, &#39;complete&#39;, &#39;init_completer&#39;, &#39;pt_complete_style&#39;, &#39;set_completer_frame&#39;, &#39;set_custom_completer&#39;]</span>
-
-<span class="sd">    .. where did completer go?</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
-
-    <span class="n">shell_attributes</span> <span class="o">=</span> <span class="nb">dir</span><span class="p">(</span><span class="n">get_ipython</span><span class="p">())</span>
-    <span class="k">if</span> <span class="n">shell_attributes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Are you in in IPython? get_ipython() did not return anything&quot;</span><span class="p">)</span>
-        <span class="k">return</span>
-    <span class="kn">from</span> <span class="nn">IPython.utils.text</span> <span class="kn">import</span> <span class="n">SList</span>
-
-    <span class="n">shell_list</span> <span class="o">=</span> <span class="n">SList</span><span class="p">(</span><span class="n">shell_attributes</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">shell_list</span></div>
+<span class="c1"># load_ipython_extension()</span>
 </pre></div>
 
         </div>

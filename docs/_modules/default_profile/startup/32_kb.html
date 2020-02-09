@@ -150,7 +150,11 @@
         
 <h1>Source code for default_profile.startup.32_kb</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python3</span>
-<span class="sd">&quot;&quot;&quot;Make prompt_toolkit&#39;s keybindings more extensible.</span>
+<span class="sd">&quot;&quot;&quot;Effectively me rewriting Prompt Toolkits keybindings handlers.</span>
+
+<span class="sd">Summary</span>
+<span class="sd">-------</span>
+<span class="sd">Make prompt_toolkit&#39;s keybindings more extensible.</span>
 
 <span class="sd">Reminder of where you left off:</span>
 
@@ -302,10 +306,7 @@
 <span class="kn">import</span> <span class="nn">prompt_toolkit</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.application.current</span> <span class="kn">import</span> <span class="n">get_app</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.cache</span> <span class="kn">import</span> <span class="n">SimpleCache</span>
-
-<span class="c1"># from prompt_toolkit.enums import DEFAULT_BUFFER, SEARCH_BUFFER</span>
-<span class="c1"># from prompt_toolkit.filters import Condition</span>
-<span class="c1"># from prompt_toolkit.filters import ViInsertMode</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.document</span> <span class="kn">import</span> <span class="n">Document</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.defaults</span> <span class="kn">import</span> <span class="n">load_key_bindings</span><span class="p">,</span> <span class="n">load_vi_bindings</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.key_bindings</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">KeyBindings</span><span class="p">,</span>
@@ -313,6 +314,7 @@
     <span class="n">_MergedKeyBindings</span><span class="p">,</span>
     <span class="n">merge_key_bindings</span><span class="p">,</span>
 <span class="p">)</span>
+
 <span class="c1"># from prompt_toolkit.key_binding.key_processor import KeyPress</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.keys</span> <span class="kn">import</span> <span class="n">Keys</span>
 
@@ -567,32 +569,6 @@
             <span class="c1">#     unnest_merged_kb(registry)</span>
 
 
-<div class="viewcode-block" id="kb_main"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.32_kb.kb_main">[docs]</a><span class="k">def</span> <span class="nf">kb_main</span><span class="p">(</span><span class="n">_ip</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">_ip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="c1"># TODO:</span>
-        <span class="c1"># ipython_registry = safely_get_registry(_ip)</span>
-        <span class="c1"># for i in basic_bindings.bindings:</span>
-        <span class="c1">#     ipython_registry = _rewritten_add(ipython_registry, i)</span>
-
-        <span class="c1"># assert (</span>
-        <span class="c1">#     ipython_registry</span>
-        <span class="c1">#     is not prompt_toolkit.key_binding.key_bindings._MergedKeyBindings</span>
-        <span class="c1"># )</span>
-        <span class="c1"># _ip.pt_app.app.key_bindings = ipython_registry</span>
-        <span class="c1"># Dude holy shit does this give you a lot</span>
-        <span class="k">if</span> <span class="n">_ip</span><span class="o">.</span><span class="n">editing_mode</span> <span class="o">==</span> <span class="s2">&quot;vi&quot;</span><span class="p">:</span>
-            <span class="n">more_keybindings</span> <span class="o">=</span> <span class="n">merge_key_bindings</span><span class="p">(</span>
-                <span class="p">[</span><span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span><span class="p">,</span> <span class="n">load_vi_bindings</span><span class="p">()]</span>
-            <span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">more_keybindings</span> <span class="o">=</span> <span class="n">merge_key_bindings</span><span class="p">([</span><span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span><span class="p">,</span>
-                <span class="n">load_key_bindings</span><span class="p">()])</span>
-        <span class="k">return</span> <span class="n">more_keybindings</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="c1"># TODO: Get the keybindings from an app instance.</span>
-        <span class="n">running_app</span> <span class="o">=</span> <span class="n">get_app</span><span class="p">()</span></div>
-
-
 <span class="k">def</span> <span class="nf">_rewritten_add</span><span class="p">(</span><span class="n">registry</span><span class="p">,</span> <span class="n">_binding</span><span class="p">):</span>
     <span class="n">key</span> <span class="o">=</span> <span class="n">_binding</span><span class="o">.</span><span class="n">keys</span>
     <span class="nb">filter</span> <span class="o">=</span> <span class="n">_binding</span><span class="o">.</span><span class="n">filter</span>
@@ -601,20 +577,17 @@
     <span class="k">return</span> <span class="n">registry</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-    <span class="c1"># Let&#39;s side step all those fuckups</span>
-    <span class="c1"># This is probably a terrible thing to rely on, and not a guaranteed order but....</span>
-    <span class="k">if</span> <span class="n">_ip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="c1"># if _ip.editing_mode == &quot;vi&quot;:</span>
-        <span class="c1">#     vi_bindings = basic_bindings.registries[0]</span>
-        <span class="c1">#     vi_mouse = basic_bindings.registries[1]</span>
-        <span class="c1">#     vi_cpr = basic_bindings.registries[2]</span>
-        <span class="n">full_registry</span> <span class="o">=</span> <span class="n">kb_main</span><span class="p">(</span><span class="n">_ip</span><span class="p">)</span>
-        <span class="n">container_kb</span> <span class="o">=</span> <span class="n">KeyBindingsManager</span><span class="p">(</span><span class="n">shell</span><span class="o">=</span><span class="n">_ip</span><span class="p">,</span> <span class="n">kb</span><span class="o">=</span><span class="n">full_registry</span><span class="o">.</span><span class="n">bindings</span><span class="p">)</span>
+<div class="viewcode-block" id="Documented"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.32_kb.Documented">[docs]</a><span class="k">class</span> <span class="nc">Documented</span><span class="p">(</span><span class="n">Document</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;I&#39;ll admit this subclass doesn&#39;t exist for much of a reason.</span>
 
-        <span class="c1"># no really dont use it.got rid of the &lt;CR&gt; handler</span>
-        <span class="c1"># _ip.pt_app.app.key_bindings = full_registry</span>
+<span class="sd">    However, it&#39;s a LOT easier to work with classes with their dunders defined.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cursor_position</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">)</span></div>
 </pre></div>
 
         </div>

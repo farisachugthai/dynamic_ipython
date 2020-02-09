@@ -149,32 +149,136 @@
         <div role="main">
         
 <h1>Source code for default_profile.startup.31_yank_last_arg</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Started with:</span>
+<span></span><span class="sd">&quot;&quot;&quot;Add keybindings.</span>
 
-<span class="sd">https://gist.githubusercontent.com/konradkonrad/7143fa8407804e37132e4ea90175f2d8/raw/ef2f570fc67fd5d9d227f9ae0363e10907831c97/01-esc-dot.py</span>
+<span class="sd">Slowly becoming where all my consolidated scripts for making prompt_toolkit&#39;s</span>
+<span class="sd">handling of keypresses cohesive.</span>
 
-<span class="sd">Has since grown to ~200 key bindings.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
 
+<span class="kn">from</span> <span class="nn">prompt_toolkit.application.current</span> <span class="kn">import</span> <span class="n">get_app</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.enums</span> <span class="kn">import</span> <span class="n">DEFAULT_BUFFER</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.filters</span> <span class="kn">import</span> <span class="n">has_selection</span><span class="p">,</span> <span class="n">Condition</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.filters</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Condition</span><span class="p">,</span>
+    <span class="n">IsMultiline</span><span class="p">,</span>
+    <span class="n">IsSearching</span><span class="p">,</span>
+    <span class="n">in_paste_mode</span><span class="p">,</span>
+<span class="p">)</span>
+
 <span class="kn">from</span> <span class="nn">prompt_toolkit.filters.app</span> <span class="kn">import</span> <span class="n">emacs_insert_mode</span><span class="p">,</span> <span class="n">vi_insert_mode</span><span class="p">,</span> <span class="n">has_focus</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding</span> <span class="kn">import</span> <span class="n">KeyBindings</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.completion</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">display_completions_like_readline</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.named_commands</span> <span class="kn">import</span> <span class="n">get_by_name</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.key_bindings</span> <span class="kn">import</span> <span class="n">merge_key_bindings</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.key_processor</span> <span class="kn">import</span> <span class="n">KeyPress</span><span class="p">,</span> <span class="n">KeyPressEvent</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.keys</span> <span class="kn">import</span> <span class="n">Keys</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.vi_state</span> <span class="kn">import</span> <span class="n">InputMode</span>
 
 <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+<span class="kn">from</span> <span class="nn">IPython.terminal.shortcuts</span> <span class="kn">import</span> <span class="n">create_ipython_shortcuts</span>
 
 <span class="n">E</span> <span class="o">=</span> <span class="n">KeyPressEvent</span>
 
+<span class="c1"># Conditions:</span>
+
 <span class="c1"># fun fact. ViInsertMode is deprecated</span>
 <span class="n">insert_mode</span> <span class="o">=</span> <span class="n">vi_insert_mode</span><span class="p">()</span> <span class="o">|</span> <span class="n">emacs_insert_mode</span><span class="p">()</span>
+
+
+<span class="nd">@Condition</span>
+<span class="k">def</span> <span class="nf">should_confirm_completion</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Check if completion needs confirmation&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">get_app</span><span class="p">()</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">complete_state</span>
+
+
+<span class="nd">@Condition</span>
+<span class="k">def</span> <span class="nf">has_text_before_cursor</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">get_app</span><span class="p">()</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+
+
+<span class="nd">@Condition</span>
+<span class="k">def</span> <span class="nf">ctrl_d_condition</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Ctrl-D binding is only active when the default buffer is selected and</span>
+<span class="sd">    empty.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">get_app</span><span class="p">()</span>
+    <span class="n">buffer_name</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="k">return</span> <span class="n">buffer_name</span> <span class="o">==</span> <span class="n">DEFAULT_BUFFER</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">app</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">text</span>
+
+
+<span class="nd">@Condition</span>
+<span class="k">def</span> <span class="nf">_is_blank</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="o">==</span> <span class="mi">0</span>
+
+
+<span class="nd">@Condition</span>
+<span class="k">def</span> <span class="nf">tab_insert_indent</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Check if &lt;Tab&gt; should insert indent instead of starting autocompletion.</span>
+<span class="sd">    Checks if there are only whitespaces before the cursor - if so indent</span>
+<span class="sd">    should be inserted, otherwise autocompletion.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">before_cursor</span> <span class="o">=</span> <span class="n">get_app</span><span class="p">()</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">current_line_before_cursor</span>
+
+    <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">before_cursor</span><span class="o">.</span><span class="n">isspace</span><span class="p">())</span>
+
+
+<span class="nd">@Condition</span>
+<span class="k">def</span> <span class="nf">beginning_of_line</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Check if cursor is at beginning of a line other than the first line in a</span>
+<span class="sd">    multiline document</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">get_app</span><span class="p">()</span>
+    <span class="n">before_cursor</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">current_line_before_cursor</span>
+
+    <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span>
+        <span class="nb">len</span><span class="p">(</span><span class="n">before_cursor</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">app</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">on_first_line</span>
+    <span class="p">)</span>
+
+
+<span class="nd">@Condition</span>
+<span class="k">def</span> <span class="nf">end_of_line</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Check if cursor is at the end of a line other than the last line in a</span>
+<span class="sd">    multiline document</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">get_app</span><span class="p">()</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">document</span>
+    <span class="n">at_end</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">is_cursor_at_the_end_of_line</span>
+    <span class="n">last_line</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">is_cursor_at_the_end</span>
+
+    <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">at_end</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">last_line</span><span class="p">)</span>
+
+
+<span class="nd">@Condition</span>
+<span class="k">def</span> <span class="nf">whitespace_or_bracket_before</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Check if there is whitespace or an opening</span>
+<span class="sd">       bracket to the left of the cursor&quot;&quot;&quot;</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">get_app</span><span class="p">()</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">document</span>
+    <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span>
+        <span class="n">d</span><span class="o">.</span><span class="n">cursor_position</span> <span class="o">==</span> <span class="mi">0</span>
+        <span class="ow">or</span> <span class="n">d</span><span class="o">.</span><span class="n">char_before_cursor</span><span class="o">.</span><span class="n">isspace</span><span class="p">()</span>
+        <span class="ow">or</span> <span class="n">d</span><span class="o">.</span><span class="n">char_before_cursor</span> <span class="ow">in</span> <span class="s2">&quot;([{&quot;</span>
+    <span class="p">)</span>
+
+
+<span class="nd">@Condition</span>
+<span class="k">def</span> <span class="nf">whitespace_or_bracket_after</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Check if there is whitespace or a closing</span>
+<span class="sd">       bracket to the right of the cursor&quot;&quot;&quot;</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">get_app</span><span class="p">()</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">document</span>
+    <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span>
+        <span class="n">d</span><span class="o">.</span><span class="n">is_cursor_at_the_end_of_line</span>
+        <span class="ow">or</span> <span class="n">d</span><span class="o">.</span><span class="n">current_char</span><span class="o">.</span><span class="n">isspace</span><span class="p">()</span>
+        <span class="ow">or</span> <span class="n">d</span><span class="o">.</span><span class="n">current_char</span> <span class="ow">in</span> <span class="s2">&quot;)]}&quot;</span>
+    <span class="p">)</span>
+
+
+<span class="nd">@Condition</span>
+<span class="k">def</span> <span class="nf">in_quoted_insert</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">get_app</span><span class="p">()</span><span class="o">.</span><span class="n">quoted_insert</span>
 
 
 <div class="viewcode-block" id="get_key_bindings"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.31_yank_last_arg.get_key_bindings">[docs]</a><span class="k">def</span> <span class="nf">get_key_bindings</span><span class="p">(</span><span class="n">custom_key_bindings</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -190,7 +294,9 @@
 
 <span class="sd">    Based on prompt_toolkit.key_binding.defaults.load_key_bindings()</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.auto_suggest</span> <span class="kn">import</span> <span class="n">load_auto_suggest_bindings</span>
+    <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.auto_suggest</span> <span class="kn">import</span> <span class="p">(</span>
+        <span class="n">load_auto_suggest_bindings</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.basic</span> <span class="kn">import</span> <span class="n">load_basic_bindings</span>
     <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.cpr</span> <span class="kn">import</span> <span class="n">load_cpr_bindings</span>
     <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.emacs</span> <span class="kn">import</span> <span class="p">(</span>
@@ -204,6 +310,7 @@
     <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.page_navigation</span> <span class="kn">import</span> <span class="p">(</span>
         <span class="n">load_page_navigation_bindings</span><span class="p">,</span>
     <span class="p">)</span>
+
     <span class="k">if</span> <span class="n">custom_key_bindings</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">custom_key_bindings</span> <span class="o">=</span> <span class="n">KeyBindings</span><span class="p">()</span>
     <span class="k">return</span> <span class="p">[</span>
@@ -226,7 +333,7 @@
 
 <span class="n">state</span> <span class="o">=</span> <span class="n">State</span><span class="p">()</span>
 
-<span class="n">state_</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;State_&#39;</span><span class="p">,</span> <span class="n">field_names</span><span class="o">=</span><span class="s1">&#39;depth&#39;</span><span class="p">)</span>
+<span class="n">state_</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;State_&quot;</span><span class="p">,</span> <span class="n">field_names</span><span class="o">=</span><span class="s2">&quot;depth&quot;</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="reset_last_arg_depth"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.31_yank_last_arg.reset_last_arg_depth">[docs]</a><span class="k">def</span> <span class="nf">reset_last_arg_depth</span><span class="p">():</span>
@@ -281,6 +388,54 @@
     <span class="sd">&quot;&quot;&quot; Callable that returns True when the previous event was delivered to</span>
 <span class="sd">    another handler. &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="ow">not</span> <span class="n">event</span><span class="o">.</span><span class="n">is_repeat</span></div>
+
+
+<div class="viewcode-block" id="document_is_multiline_python"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.31_yank_last_arg.document_is_multiline_python">[docs]</a><span class="k">def</span> <span class="nf">document_is_multiline_python</span><span class="p">(</span><span class="n">document</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Determine whether this is a multiline Python document.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">ends_in_multiline_string</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        ``True`` if we&#39;re inside a multiline string at the end of the text.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_multiline_string_delims</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;[&#39;]</span><span class="si">{3}</span><span class="s2">|[&quot;]</span><span class="si">{3}</span><span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+
+        <span class="n">delims</span> <span class="o">=</span> <span class="n">_multiline_string_delims</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">document</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+        <span class="n">opening</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">delim</span> <span class="ow">in</span> <span class="n">delims</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">opening</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">opening</span> <span class="o">=</span> <span class="n">delim</span>
+            <span class="k">elif</span> <span class="n">delim</span> <span class="o">==</span> <span class="n">opening</span><span class="p">:</span>
+                <span class="n">opening</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">opening</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="ow">in</span> <span class="n">document</span><span class="o">.</span><span class="n">text</span> <span class="ow">or</span> <span class="n">ends_in_multiline_string</span><span class="p">():</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">line_ends_with_colon</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">document</span><span class="o">.</span><span class="n">current_line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">:]</span> <span class="o">==</span> <span class="s2">&quot;:&quot;</span>
+
+    <span class="c1"># If we just typed a colon, or still have open brackets, always insert a real newline.</span>
+    <span class="k">if</span> <span class="p">(</span>
+        <span class="n">line_ends_with_colon</span><span class="p">()</span>
+        <span class="ow">or</span> <span class="p">(</span>
+            <span class="n">document</span><span class="o">.</span><span class="n">is_cursor_at_the_end</span>
+            <span class="ow">and</span> <span class="n">has_unclosed_brackets</span><span class="p">(</span><span class="n">document</span><span class="o">.</span><span class="n">text_before_cursor</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="ow">or</span> <span class="n">document</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;@&quot;</span><span class="p">)</span>
+    <span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="c1"># If the character before the cursor is a backslash (line continuation</span>
+    <span class="c1"># char), insert a new line.</span>
+    <span class="k">elif</span> <span class="n">document</span><span class="o">.</span><span class="n">text_before_cursor</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">:]</span> <span class="o">==</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<span class="nd">@Condition</span>
+<span class="k">def</span> <span class="nf">is_multiline</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">document_is_multiline_python</span><span class="p">(</span><span class="n">python_input</span><span class="o">.</span><span class="n">default_buffer</span><span class="o">.</span><span class="n">document</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="additional_bindings"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.31_yank_last_arg.additional_bindings">[docs]</a><span class="k">def</span> <span class="nf">additional_bindings</span><span class="p">():</span>
@@ -349,13 +504,8 @@
     <span class="c1"># should delete using [^a-zA-Z0-9] as a boundary.</span>
     <span class="n">handle</span><span class="p">(</span><span class="s2">&quot;c-w&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;unix-word-rubout&quot;</span><span class="p">))</span>
 
-    <span class="n">handle</span><span class="p">(</span><span class="s2">&quot;pageup&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=~</span><span class="n">has_selection</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;previous-history&quot;</span><span class="p">))</span>
-    <span class="n">handle</span><span class="p">(</span><span class="s2">&quot;pagedown&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=~</span><span class="n">has_selection</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;next-history&quot;</span><span class="p">))</span>
-
-    <span class="c1"># CTRL keys.</span>
-    <span class="nd">@Condition</span>
-    <span class="k">def</span> <span class="nf">has_text_before_cursor</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">get_app</span><span class="p">()</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+    <span class="n">handle</span><span class="p">(</span><span class="s2">&quot;pageup&quot;</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;previous-history&quot;</span><span class="p">))</span>
+    <span class="n">handle</span><span class="p">(</span><span class="s2">&quot;pagedown&quot;</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;next-history&quot;</span><span class="p">))</span>
 
     <span class="n">handle</span><span class="p">(</span><span class="s2">&quot;c-d&quot;</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;delete-char&quot;</span><span class="p">))</span>
 
@@ -364,7 +514,6 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Newline (in case of multiline input.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="kn">from</span> <span class="nn">prompt_toolkit.filters</span> <span class="kn">import</span> <span class="n">in_paste_mode</span>
         <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">newline</span><span class="p">(</span><span class="n">copy_margin</span><span class="o">=</span><span class="ow">not</span> <span class="n">in_paste_mode</span><span class="p">())</span>
 
     <span class="nd">@handle</span><span class="p">(</span><span class="s2">&quot;c-j&quot;</span><span class="p">)</span>
@@ -386,7 +535,7 @@
     <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">E</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">auto_down</span><span class="p">(</span><span class="n">count</span><span class="o">=</span><span class="n">event</span><span class="o">.</span><span class="n">arg</span><span class="p">)</span>
 
-    <span class="nd">@handle</span><span class="p">(</span><span class="s2">&quot;delete&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">has_selection</span><span class="p">)</span>
+    <span class="nd">@handle</span><span class="p">(</span><span class="s2">&quot;delete&quot;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">E</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">cut_selection</span><span class="p">()</span>
         <span class="n">event</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">clipboard</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
@@ -403,7 +552,10 @@
 <span class="sd">        When the system bindings are loaded and suspend-to-background is</span>
 <span class="sd">        supported, that will override this binding.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">insert_text</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">enable_system_bindings</span><span class="p">:</span>
+            <span class="n">event</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">suspend_to_background</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">insert_text</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
 
     <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">BracketedPaste</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">E</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -420,10 +572,6 @@
 
         <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">insert_text</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
-    <span class="nd">@Condition</span>
-    <span class="k">def</span> <span class="nf">in_quoted_insert</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">get_app</span><span class="p">()</span><span class="o">.</span><span class="n">quoted_insert</span>
-
     <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">in_quoted_insert</span><span class="p">,</span> <span class="n">eager</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">E</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -432,11 +580,37 @@
         <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">insert_text</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="n">event</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">quoted_insert</span> <span class="o">=</span> <span class="kc">False</span>
 
+    <span class="nd">@handle</span><span class="p">(</span><span class="s2">&quot;f4&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Toggle between Vi and Emacs mode.</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+<span class="sd">        `34_bottom_toolbar`</span>
+<span class="sd">            Utilized for this purpose.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">event</span><span class="o">.</span><span class="n">editing_mode</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">event</span><span class="o">.</span><span class="n">editing_mode</span> <span class="o">==</span> <span class="s2">&quot;vi&quot;</span>
+
+    <span class="nd">@handle</span><span class="p">(</span><span class="s2">&quot;f6&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Enable/Disable paste mode.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">event</span><span class="o">.</span><span class="n">paste_mode</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">event</span><span class="o">.</span><span class="n">paste_mode</span>
+
     <span class="k">return</span> <span class="n">registry</span></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">additional_bindings</span><span class="p">()</span>
+    <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">_ip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">full_registry</span> <span class="o">=</span> <span class="n">additional_bindings</span><span class="p">()</span>
+        <span class="c1"># container_kb = KeyBindingsManager(shell=_ip, kb=full_registry.bindings)</span>
+
+        <span class="c1"># unrelated but heres something sweet</span>
+        <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">enable_bracketed_paste</span><span class="p">()</span>
+        <span class="c1"># What the hell is blocking or jamming &lt;CR&gt;</span>
+        <span class="c1"># _ip.pt_app.app.key_bindings = merge_key_bindings([ip.pt_app.app.key_bindings, full_registry])</span>
 </pre></div>
 
         </div>

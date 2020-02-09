@@ -197,15 +197,10 @@
         <span class="k">return</span>
     <span class="n">log_dir</span> <span class="o">=</span> <span class="n">shell</span><span class="o">.</span><span class="n">profile_dir</span><span class="o">.</span><span class="n">log_dir</span>
     <span class="n">fname</span> <span class="o">=</span> <span class="s2">&quot;log-&quot;</span> <span class="o">+</span> <span class="n">shell</span><span class="o">.</span><span class="n">profile</span> <span class="o">+</span> <span class="s2">&quot;-&quot;</span> <span class="o">+</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.py&quot;</span>
-    <span class="n">logmode</span> <span class="o">=</span> <span class="s2">&quot;append&quot;</span>
-    <span class="n">log_output</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="n">filename</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">log_dir</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
     <span class="n">notnew</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-    <span class="n">logger</span> <span class="o">=</span> <span class="n">shell</span><span class="o">.</span><span class="n">logger</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">logmode</span> <span class="o">=</span> <span class="n">logmode</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">log_output</span> <span class="o">=</span> <span class="n">log_output</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">timestamp</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="k">try</span><span class="p">:</span>
+        <span class="n">logger</span> <span class="o">=</span> <span class="n">shell</span><span class="o">.</span><span class="n">logger</span>
         <span class="c1"># added -t to get timestamps</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">logstart</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">notnew</span><span class="p">:</span>
@@ -226,6 +221,12 @@
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
     <span class="n">logger</span> <span class="o">=</span> <span class="n">ipython_logger</span><span class="p">(</span><span class="n">_ip</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">logger</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">logmode</span> <span class="o">=</span> <span class="s2">&quot;append&quot;</span>
+        <span class="n">log_output</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">logmode</span> <span class="o">=</span> <span class="n">logmode</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_output</span> <span class="o">=</span> <span class="n">log_output</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">timestamp</span> <span class="o">=</span> <span class="kc">True</span>
 </pre></div>
 
         </div>

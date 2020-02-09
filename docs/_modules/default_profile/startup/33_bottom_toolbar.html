@@ -149,10 +149,16 @@
         <div role="main">
         
 <h1>Source code for default_profile.startup.33_bottom_toolbar</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Holy fuck this works.&quot;&quot;&quot;</span>
+<span></span><span class="sd">&quot;&quot;&quot;Draw a toolbar for the shell using prompt_toolkit.</span>
+
+<span class="sd">Takes into consideration whether Emacs mode or Vi mode is set</span>
+<span class="sd">and adds :kbd:`F4` as a keybindings to toggle between each.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">functools</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">from</span> <span class="nn">shutil</span> <span class="kn">import</span> <span class="n">get_terminal_size</span>
 <span class="kn">from</span> <span class="nn">traceback</span> <span class="kn">import</span> <span class="n">print_exception</span>
 
 <span class="kn">from</span> <span class="nn">prompt_toolkit</span> <span class="kn">import</span> <span class="n">ANSI</span><span class="p">,</span> <span class="n">HTML</span>
@@ -163,19 +169,50 @@
 <span class="kn">from</span> <span class="nn">prompt_toolkit.shortcuts</span> <span class="kn">import</span> <span class="n">print_formatted_text</span><span class="p">,</span> <span class="n">CompleteStyle</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.styles</span> <span class="kn">import</span> <span class="n">default_pygments_style</span>
 
-<span class="kn">from</span> <span class="nn">prompt_toolkit.styles</span> <span class="kn">import</span> <span class="n">merge_styles</span><span class="p">,</span> <span class="n">Style</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.styles</span> <span class="kn">import</span> <span class="n">Style</span><span class="p">,</span> <span class="n">merge_styles</span><span class="p">,</span> <span class="n">style</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.styles.pygments</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">style_from_pygments_cls</span><span class="p">,</span>
     <span class="n">style_from_pygments_dict</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="kn">from</span> <span class="nn">pygments.token</span> <span class="kn">import</span> <span class="n">Token</span>
+<span class="kn">from</span> <span class="nn">pygments.lexers.python</span> <span class="kn">import</span> <span class="n">PythonLexer</span>
+<span class="kn">from</span> <span class="nn">pygments.formatters.terminal256</span> <span class="kn">import</span> <span class="n">TerminalTrueColorFormatter</span>
 <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">gruvbox.gruvbox</span> <span class="kn">import</span> <span class="n">Gruvbox</span>
-<span class="k">except</span><span class="p">:</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">Gruvbox</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="n">completion_displays_to_styles</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;multi&quot;</span><span class="p">:</span> <span class="n">CompleteStyle</span><span class="o">.</span><span class="n">MULTI_COLUMN</span><span class="p">,</span>
+    <span class="s2">&quot;single&quot;</span><span class="p">:</span> <span class="n">CompleteStyle</span><span class="o">.</span><span class="n">COLUMN</span><span class="p">,</span>
+    <span class="s2">&quot;readline&quot;</span><span class="p">:</span> <span class="n">CompleteStyle</span><span class="o">.</span><span class="n">READLINE_LIKE</span><span class="p">,</span>
+    <span class="s2">&quot;none&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">}</span>
+
+<div class="viewcode-block" id="init_style"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.init_style">[docs]</a><span class="k">def</span> <span class="nf">init_style</span><span class="p">():</span>
+    <span class="c1"># Could set this to _ip.pt_app.style i suppose</span>
+    <span class="k">if</span> <span class="n">Gruvbox</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">bt_style</span> <span class="o">=</span> <span class="n">Gruvbox</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">style_from_pygments_dict</span><span class="p">(</span><span class="n">bt_style</span><span class="o">.</span><span class="n">style_rules</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="override_style"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.override_style">[docs]</a><span class="k">def</span> <span class="nf">override_style</span><span class="p">(</span><span class="n">style_overrides</span><span class="p">):</span>
+    <span class="n">style</span> <span class="o">=</span> <span class="n">init_style</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">style_overrides</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span>
+    <span class="n">style_overrides</span> <span class="o">=</span> <span class="n">Style</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">style_overrides</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">merge_styles</span><span class="p">([</span><span class="n">style</span><span class="p">,</span> <span class="n">style_overrides</span><span class="p">])</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+        <span class="n">print_exc</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="merged_styles"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.merged_styles">[docs]</a><span class="k">def</span> <span class="nf">merged_styles</span><span class="p">(</span><span class="n">overides</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">base</span> <span class="o">=</span> <span class="n">init_style</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">merge_styles</span><span class="p">([</span><span class="n">base</span><span class="p">,</span> <span class="n">overrides</span><span class="p">,</span> <span class="n">default_pygments_style</span><span class="p">()])</span></div>
 
 
 <div class="viewcode-block" id="BottomToolbar"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.BottomToolbar">[docs]</a><span class="k">class</span> <span class="nc">BottomToolbar</span><span class="p">:</span>
@@ -189,16 +226,11 @@
 <span class="sd">    via ``__call__``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">completion_displays_to_styles</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;multi&quot;</span><span class="p">:</span> <span class="n">CompleteStyle</span><span class="o">.</span><span class="n">MULTI_COLUMN</span><span class="p">,</span>
-        <span class="s2">&quot;single&quot;</span><span class="p">:</span> <span class="n">CompleteStyle</span><span class="o">.</span><span class="n">COLUMN</span><span class="p">,</span>
-        <span class="s2">&quot;readline&quot;</span><span class="p">:</span> <span class="n">CompleteStyle</span><span class="o">.</span><span class="n">READLINE_LIKE</span><span class="p">,</span>
-        <span class="s2">&quot;none&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="p">}</span>
-
 <div class="viewcode-block" id="BottomToolbar.__init__"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.BottomToolbar.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">unfinished_toolbar</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unfinished_toolbar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rerender</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">PythonLexer</span> <span class="o">=</span> <span class="n">PythonLexer</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Formatter</span> <span class="o">=</span> <span class="n">TerminalTrueColorFormatter</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="BottomToolbar.session"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.BottomToolbar.session">[docs]</a>    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">session</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -216,11 +248,26 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span></div>
 
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{self.__class__.__name__!s}</span><span class="s2">:&gt;&quot;</span>
+
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{self.__class__.__name__}</span><span class="s2">:&gt;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;{self.rerender()!r}&quot;</span>
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rerender</span><span class="p">()</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;{self.rerender()}&quot;</span>
+
+<div class="viewcode-block" id="BottomToolbar.terminal_width"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.BottomToolbar.terminal_width">[docs]</a>    <span class="k">def</span> <span class="nf">terminal_width</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns `shutil.get_terminal_size.columns`.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">get_terminal_size</span><span class="p">()</span><span class="o">.</span><span class="n">columns</span></div>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The length of the text we display.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rerender</span><span class="p">())</span>
+
+<div class="viewcode-block" id="BottomToolbar.full_width"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.BottomToolbar.full_width">[docs]</a>    <span class="k">def</span> <span class="nf">full_width</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Bool indicating bottom toolbar == shutil.get_terminal_size().columns.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">terminal_width</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="BottomToolbar.rerender"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.BottomToolbar.rerender">[docs]</a>    <span class="k">def</span> <span class="nf">rerender</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Render the toolbar at the bottom for prompt_toolkit.</span>
@@ -242,7 +289,7 @@
         <span class="c1"># add more styling:</span>
         <span class="c1"># [(&#39;class:toolbar&#39;, &#39; [F4] %s &#39; % text)]</span>
         <span class="n">current_vi_mode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">vi_state</span><span class="o">.</span><span class="n">input_mode</span>
-        <span class="n">toolbar</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot; [F4] Vi: </span><span class="si">{current_vi_mode}</span><span class="s2">  {date.today()}&quot;</span>
+        <span class="n">toolbar</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot; [F4] Vi: </span><span class="si">{current_vi_mode!r}</span><span class="s2">  {date.today()!r}&quot;</span>
         <span class="c1"># toolbar.append(style=default_pygments_style())</span>
         <span class="k">return</span> <span class="n">toolbar</span>
 
@@ -251,31 +298,18 @@
         <span class="c1">#         (Token.Generic.Prompt, f&quot;{Path.cwd()} {date.today()}&quot;)]</span>
         <span class="c1"># Nope! str and _Token can&#39;t be concatenated and this&#39;ll not only freeze</span>
         <span class="c1"># the running session but the terminal itself</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot; [F4] Emacs: {Path.cwd()} {date.today()}&quot;</span>
-
-<div class="viewcode-block" id="BottomToolbar.init_style"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.BottomToolbar.init_style">[docs]</a>    <span class="k">def</span> <span class="nf">init_style</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># Could set this to _ip.pt_app.style i suppose</span>
-        <span class="k">if</span> <span class="n">Gruvbox</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">bt_style</span> <span class="o">=</span> <span class="n">Gruvbox</span><span class="p">()</span>
-            <span class="k">return</span> <span class="n">style_from_pygments_dict</span><span class="p">(</span><span class="n">bt_style</span><span class="o">.</span><span class="n">style</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="BottomToolbar.override_style"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.BottomToolbar.override_style">[docs]</a>    <span class="k">def</span> <span class="nf">override_style</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Could be easily modified to utilize traitlets. However currently not used&quot;&quot;&quot;</span>
-        <span class="n">style_overrides_env</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PTK_STYLE_OVERRIDES&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">style_overrides_env</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">style_overrides</span> <span class="o">=</span> <span class="n">Style</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">style_overrides_env</span><span class="p">)</span>
-                <span class="n">prompt_args</span><span class="p">[</span><span class="s2">&quot;style&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">merge_styles</span><span class="p">([</span><span class="n">style</span><span class="p">,</span> <span class="n">style_overrides</span><span class="p">])</span>
-            <span class="k">except</span> <span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
-                <span class="n">print_exception</span><span class="p">()</span></div></div>
+        <span class="n">toolbar</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot; [F4] Emacs: {Path.cwd()!r} {date.today()!a}&quot;</span>
+        <span class="c1"># really upset this didn&#39;t work `{date.today():&gt;{len(self)}}&quot;</span>
+        <span class="c1"># goddamn neither did that</span>
+        <span class="c1"># return &quot;{} {:&gt;150}&quot;.format(toolbar, date.today())</span>
+        <span class="k">return</span> <span class="n">toolbar</span></div>
 
 
 <div class="viewcode-block" id="add_toolbar"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.add_toolbar">[docs]</a><span class="k">def</span> <span class="nf">add_toolbar</span><span class="p">(</span><span class="n">toolbar</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Get the running IPython instance and add &#39;bottom_toolbar&#39;.&quot;&quot;&quot;</span>
     <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-
-    <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">bottom_toolbar</span> <span class="o">=</span> <span class="n">toolbar</span><span class="p">()</span></div>
-
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_ip</span><span class="p">,</span> <span class="s2">&quot;pt_app.bottom_toolbar&quot;</span><span class="p">):</span>
+        <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">bottom_toolbar</span> <span class="o">=</span> <span class="n">toolbar</span><span class="p">()</span></div>
 
 
 <span class="c1"># Don&#39;t uncomment! This fucks up the keybindings so that the only way a line</span>
