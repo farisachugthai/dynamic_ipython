@@ -156,5 +156,7 @@ def c(s=None):
 if __name__ == "__main__":
     get_ipython().register_magic_function(c)
     inspector = IPython.core.oinspect.Inspector()
-    if len(sys.argv[:]) > 1:
-        c(sys.argv[1:])
+
+    # I don't think using sys.argv is the way to go. pytest, nose, and IPython all fight to claim it
+    # if len(sys.argv[:]) > 1:
+    #     c(sys.argv[1:])

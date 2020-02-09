@@ -10,7 +10,7 @@ import logging
 import unittest
 import shutil
 import tempfile
-import unittest
+import pytest
 
 
 def remove_tmpdir(dirname):
@@ -130,4 +130,5 @@ class FixturesTest(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    unittest.main()
+    doctest.testmod()
+    pytest.main()

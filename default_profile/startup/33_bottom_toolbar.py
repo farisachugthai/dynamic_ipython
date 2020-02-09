@@ -88,7 +88,11 @@ class BottomToolbar:
         """The length of the text we display."""
         return len(self.rerender())
 
-    def rerender(self):
+    def full_width(self):
+        """Bool indicating bottom toolbar == shutil.get_terminal_size().columns."""
+        return len(self) == self.terminal_width()
+
+    def rerender(self, ):
         """Render the toolbar at the bottom for prompt_toolkit.
 
         .. warning::
@@ -108,7 +112,7 @@ class BottomToolbar:
         # add more styling:
         # [('class:toolbar', ' [F4] %s ' % text)]
         current_vi_mode = self.app.vi_state.input_mode
-        toolbar = f" [F4] Vi: {current_vi_mode}  {date.today()}"
+        toolbar = f" [F4] Vi: {current_vi_mode!r}  {date.today()!r}"
         # toolbar.append(style=default_pygments_style())
         return toolbar
 
@@ -117,7 +121,7 @@ class BottomToolbar:
         #         (Token.Generic.Prompt, f"{Path.cwd()} {date.today()}")]
         # Nope! str and _Token can't be concatenated and this'll not only freeze
         # the running session but the terminal itself
-        toolbar = f" [F4] Emacs: {Path.cwd()}                 {date.today()!a}"
+        toolbar = f" [F4] Emacs: {Path.cwd()!r} {date.today()!a}"
         # really upset this didn't work `{date.today():>{len(self)}}"
         # goddamn neither did that
         # return "{} {:>150}".format(toolbar, date.today())
