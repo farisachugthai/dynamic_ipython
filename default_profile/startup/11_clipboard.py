@@ -9,8 +9,10 @@ Let's re-implement it as an `abstract factory
 """
 import subprocess
 
-from IPython.core.getipython import get_ipython
 from IPython.core.error import TryNext
+from IPython.core.getipython import get_ipython
+from prompt_toolkit.clipboard import (ClipboardData, DynamicClipboard,
+                                      InMemoryClipboard)
 
 try:
     import pyperclip
@@ -23,7 +25,6 @@ else:
 
     # copy, paste = determine_clipboard()
 
-from prompt_toolkit.clipboard import ClipboardData, InMemoryClipboard, DynamicClipboard
 
 # TODO: this isn't used so commenting it out but it should be used
 # try:

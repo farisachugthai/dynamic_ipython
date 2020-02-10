@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """Build our lexer in addition to utilizing already built ones.
 
 Pygments, IPython, prompt_toolkit, Jinja2 and Sphinx all come

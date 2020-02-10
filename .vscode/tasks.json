@@ -55,9 +55,6 @@
     },
     {
       "command": "pipenv shell",
-      "dependsOn": [
-        "pipenv"
-      ],
       "group": "build",
       "isBackground": true,
       "label": "pipenv",
@@ -66,7 +63,10 @@
     {
       "command": "${config:python.pythonPath} -m sphinx-build ",
       "dependsOrder": "sequence",
-      "group": "build",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
       "label": "sphinx-build",
       "type": "process",
       "args": [
@@ -100,7 +100,6 @@
     },
     {
       "command": "${config:python.pythonPath}",
-      "group": "none",
       "label": "autopep8 current file. process?",
       "type": "process"
     },

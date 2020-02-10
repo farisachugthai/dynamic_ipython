@@ -8,7 +8,7 @@ import functools
 from datetime import date
 from pathlib import Path
 from shutil import get_terminal_size
-from traceback import print_exception
+from traceback import print_exc
 
 from prompt_toolkit import ANSI, HTML
 from prompt_toolkit.enums import EditingMode
@@ -59,8 +59,9 @@ def override_style(style_overrides):
         print_exc()
 
 
-def merged_styles(overides=None):
+def merged_styles(overrides=None):
     base = init_style()
+    
     return merge_styles([base, overrides, default_pygments_style()])
 
 

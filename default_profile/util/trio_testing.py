@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """
 
 Whoa!::
@@ -18,13 +20,15 @@ else:
     import trio
 
 
-def trio_traiging(filename):
+async def trio_traiging(filename):
     if trio is None:
         return
     async with await trio.open_file(filename) as f:
         async for line in f:
             print(line)
-            yield from line
+            # yield from line
+            # apparently that's a no no
+            yield line
 
 
 if __name__ == "__main__":
