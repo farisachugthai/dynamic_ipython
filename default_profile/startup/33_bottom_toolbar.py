@@ -78,7 +78,7 @@ class BottomToolbar:
 
     def __init__(self, *args, **kwargs):
         self.shell = get_ipython()
-        self.unfinished_toolbar = self._rerender()
+        self.unfinished_toolbar = self.rerender()
         self.PythonLexer = PythonLexer()
         self.Formatter = TerminalTrueColorFormatter()
 
@@ -158,8 +158,8 @@ class BottomToolbar:
 def add_toolbar(toolbar=None):
     """Get the running IPython instance and add 'bottom_toolbar'."""
     _ip = get_ipython()
-    if hasattr(_ip, "pt_app.bottom_toolbar"):
-        _ip.pt_app.bottom_toolbar = toolbar()
+    if hasattr(_ip, "pt_app"):
+        _ip.pt_app.bottom_toolbar = toolbar
 
 
 # Don't uncomment! This fucks up the keybindings so that the only way a line

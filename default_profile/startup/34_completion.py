@@ -35,6 +35,11 @@ from prompt_toolkit.completion import (
 from prompt_toolkit.completion.fuzzy_completer import FuzzyWordCompleter, FuzzyCompleter
 from prompt_toolkit.document import Document
 
+from prompt_toolkit.key_binding import merge_key_bindings
+
+from traitlets.traitlets import Instance
+from traitlets.config import LoggingConfigurable
+
 
 class SimpleCompleter(Completer, abc.ABC):
     @abc.abstractproperty
@@ -75,7 +80,6 @@ class SimpleCompletions(SimpleCompleter):
     def __repr__(self):
         return f"{self.__class__.__name__}>"
 
-    @property
     def document(self):
         return self.shell.pt_app.app.current_buffer.document
 
@@ -113,7 +117,7 @@ class PathCallable(PathCompleter):
     def __call__(
         self, document: Document, complete_event: CompleteEvent
     ) -> Iterable[Completion]:
-        super().get_completions(doc=document, complete_event=complete_event)
+        self.get_completions(doc=document, complete_event=complete_event)
 
 
 def get_path_completer():
@@ -161,9 +165,15 @@ def will_break_pt_app():
 
 
 class CustomCompleter(Completer):
+    """A completer that attempts to meet prompt_toolkits API as generically as possible."""
 
     def __repr__(self):
         return f"{self.__class__.__name__}>"
+
+    def __call__(
+        self, document: Document, complete_event: CompleteEvent
+    ) -> Iterable[Completion]:
+        self.get_completions(doc=document, complete_event=complete_event)
 
     def get_completions(self, document, complete_event):
         global options
