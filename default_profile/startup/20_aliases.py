@@ -8,6 +8,7 @@ import shutil
 import subprocess
 import traceback
 
+# from IPython.core.alias import AliasManager, default_aliases, AliasError
 from IPython.core.alias import InvalidAliasError, default_aliases
 from IPython.core.getipython import get_ipython
 from traitlets.config.application import ApplicationError
@@ -55,6 +56,26 @@ class CommonAliases(UserDict):
         if len(kwargs) != 0:
             self.update(**kwargs)
         super().__init__(self.dict_aliases)
+
+    def alias_manager(self):
+        return self.shell.alias_manager
+
+    def define_alias(self, name, cmd):
+        self.alias_manager.define_alias(name, cmd)
+
+    def soft_define_alias(self, name, cmd):
+        self.alias_manager.soft_define_alias(name, cmd)
+
+    def undefine_alias(self, name):
+        """Override to raise AliasError not ValueError.
+
+        We're not subclassing AliasManager here but still attempting to
+        match it's interface.
+        """
+        if self.is_alias(name):
+            del self.linemagics[name]
+        else:
+            raise AliasError("%s is not an alias" % name)
 
     def __iter__(self):
         return self._generator()
@@ -116,11 +137,16 @@ class CommonAliases(UserDict):
         except TypeError:
             raise
 
-    def __add__(self, other):
-        return self.update(other)
+    def __add__(self, name=None, cmd=None, *args):
+        """Allow name or cmd to not be specified. But if you pass non-kwargs please keep it in a tuple."""
+        # I think i made this as flexible as possible. Cross your fingers.
+        if name is None and cmd is None:
+            if len(args) != 2:
+                raise AliasError
+            else:
+                name, cmd = args
+        self.define_alias(name, cmd)
 
-    def __iadd__(self, other):
-        return self.update(other)
 
     def __mul__(self):
         raise NotImplementedError
@@ -376,6 +402,9 @@ class CommonAliases(UserDict):
             ("gpo", "git pull origin %l"),
             ("gpom", "git pull origin master %l"),
             ("gpu", "git push %l"),
+            ("gpuf", "git push --force $args"),
+            ("gpuo", "git push origin $args"),
+            ("gpuof", "git push origin --force $args"),
             ("gr", "git remote -v %l"),
             ("grb", "git rebase %l"),
             ("grba", "git rebase --abort %l"),
@@ -383,6 +412,7 @@ class CommonAliases(UserDict):
             ("grbi", "git rebase --interactive %l"),
             ("gre", "git remote %l"),
             ("gs", "git status %l"),
+            ("gsb", "git status -sb %l"),
             ("gsh", "git stash %l"),
             ("gsha", "git stash apply %l"),
             ("gshc", "git stash clear %l"),
@@ -397,12 +427,6 @@ class CommonAliases(UserDict):
             ("gswm", "git switch --progress master %l"),
             ("gt", "git tag --list %l"),
             ("gtd", "git tag --delete %l"),
-            ("lswitch", "legit switch"),
-            ("lsync", "legit sync"),
-            ("lpublish", "legit publish"),
-            ("lunpublish", "legit unpublish"),
-            ("lundo", "legit undo"),
-            ("lbranches", "legit branches"),
             ("ssh-day", 'eval "$(ssh-agent -s)"; ssh-add %l'),
             ("xx", "quit"),  # this is a sweet one
             ("..", "cd .."),
@@ -449,19 +473,16 @@ class LinuxAliases(CommonAliases):
             ),
             ("head", "head -n 30 %l"),
             ("l", "ls -CF --color=always %l"),
-            ("la", "ls -AF --color=always %l"),
-            ("ldir", "ls -Apo --color=always %l | grep /$"),
-            # ('lf', 'ls -Fo --color=always | grep ^-'),
-            # ('ll', 'ls -AFho --color=always %l'),
-            ("ls", "ls -F --color=always %l"),
+            ("la", "ls -AFh --color=always %l"),
+            ("ldir", "ls -Fhpo --color=always %l | grep /$"),
+            ("lf", "ls -Foh --color=always | grep ^-"),
+            ("ll", "ls -FAgh --color=always %l"),
+            ("ls", "ls -Fh --color=always %l"),
+            # alternatively -Altcr
             ("lr", "ls -AgFhtr --color=always %l"),
+            # alternatively could do ls -Altc
             ("lt", "ls -AgFht --color=always %l"),
             ("lx", "ls -Fo --color=always | grep ^-..x"),
-            # ('ldir', 'ls -Fhpo | grep /$ %l'),
-            ("lf", "ls -Foh --color=always | grep ^- %l"),
-            ("ll", "ls -AgFh --color=always %l"),
-            # ('lt', 'ls -Altc --color=always %l'),
-            # ('lr', 'ls -Altcr --color=always %l'),
             ("mk", "mkdir -pv %l && cd %l"),  # check if this works. only mkdir
             ("mkdir", "mkdir -pv %l"),
             ("mv", "mv -v %l"),
@@ -509,7 +530,7 @@ class WindowsAliases(CommonAliases):
     def __repr__(self):
         return "Windows Aliases: {!r}".format(len(self.user_aliases))
 
-    def cmd_aliases(cls):
+    def cmd_aliases(self):
         r"""Aliases for the :command:`cmd` shell.
 
         .. todo:: Cmd, :envvar:`COPYCMD` and IPython
@@ -528,10 +549,11 @@ class WindowsAliases(CommonAliases):
         Also note :envvar:`DIRCMD` for :command:`dir`.
 
         """
-        cls.user_aliases = [
+        self.user_aliases = [
             ("assoc", "assoc %l"),
             ("cd", "cd %l"),
             ("chdir", "chdir %l"),
+            ("cmd", "cmd /U /E:ON /F:ON %l"),
             ("control", "control %l"),
             ("controlpanel", "control %l"),
             ("copy", "copy %s %s"),
@@ -561,7 +583,7 @@ class WindowsAliases(CommonAliases):
         ]
         return cls.user_aliases
 
-    def powershell_aliases(cls):
+    def powershell_aliases(self):
         r"""Aliases for Windows OSes using :command:`powershell`.
 
         Has only been tested on Windows 10 in a heavily configured environment.
@@ -573,7 +595,7 @@ class WindowsAliases(CommonAliases):
         that this section is still under development and frequently changes.
 
         """
-        cls.user_aliases = [
+        self.user_aliases = [
             ("ac", "Add-Content %l"),
             ("asnp", "Add-PSSnapin %l"),
             ("cat", "Get-Content %l"),
@@ -698,7 +720,7 @@ def redefine_aliases(aliases, shell=None):
     Examples
     --------
     >>> shell = get_ipython()
-    >>> len(shell.alias_manager.user_aliases)  # DOCTEST: +SKIP 
+    >>> len(shell.alias_manager.user_aliases)  # DOCTEST: +SKIP
         3
     >>> # and even if it's not
     >>> shell.alias_manager.user_aliases = [('a', 'a'), ('b', 'b'), ('c', 'c')]

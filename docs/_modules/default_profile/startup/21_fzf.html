@@ -166,8 +166,7 @@
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">types</span>
 <span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">ContextDecorator</span>
-<span class="kn">from</span> <span class="nn">subprocess</span> <span class="kn">import</span> <span class="p">(</span><span class="n">DEVNULL</span><span class="p">,</span> <span class="n">PIPE</span><span class="p">,</span> <span class="n">CalledProcessError</span><span class="p">,</span> <span class="n">CompletedProcess</span><span class="p">,</span>
-                        <span class="n">Popen</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">subprocess</span> <span class="kn">import</span> <span class="n">DEVNULL</span><span class="p">,</span> <span class="n">PIPE</span><span class="p">,</span> <span class="n">CalledProcessError</span><span class="p">,</span> <span class="n">CompletedProcess</span><span class="p">,</span> <span class="n">Popen</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">get_type_hints</span>  <span class="c1"># what is this?</span>
 
 <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
@@ -213,10 +212,10 @@
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;Executable: </span><span class="si">{!r}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="p">)</span>
 
-    <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span>
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">command_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
 
+            <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span>
             <span class="k">def</span> <span class="nf">wrapped</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
                 <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
@@ -319,7 +318,25 @@
     <span class="kn">from</span> <span class="nn">default_profile.startup</span> <span class="kn">import</span> <span class="n">aliases_mod</span>
 
     <span class="n">shell</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">+=</span> <span class="n">aliases_mod</span><span class="o">.</span><span class="n">LinuxAliases</span><span class="p">()</span><span class="o">.</span><span class="n">busybox</span><span class="p">()</span>
-    <span class="n">shell</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">init_aliases</span><span class="p">()</span></div>
+    <span class="n">shell</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">init_aliases</span><span class="p">()</span>
+    <span class="n">shoddy_hack_for_aliases</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;l&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -CF --hide=NTUSER.* --color=always %l&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;la&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -AF --hide=NTUSER.* --color=always %l&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;ldir&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -Apo --hide=NTUSER.*  --color=always %l | grep /$&quot;</span><span class="p">),</span>
+        <span class="c1"># (&#39;lf&#39; ,     &#39;ls -Fo --color=always | grep ^-&#39;),</span>
+        <span class="c1"># (&#39;ll&#39; ,          &#39;ls -AFho --color=always %l&#39;),</span>
+        <span class="p">(</span><span class="s2">&quot;ls&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -F --hide=NTUSER.* --color=always %l&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;lr&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -AgFhtr --hide=NTUSER.*  --color=always %l&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;lt&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -AgFht --hide=NTUSER.* --color=always %l&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;lx&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -Fo --hide=NTUSER.* --color=always | grep ^-..x&quot;</span><span class="p">),</span>
+        <span class="c1"># (&#39;ldir&#39; ,               &#39;ls -Fhpo | grep /$ %l&#39;),</span>
+        <span class="p">(</span><span class="s2">&quot;lf&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -Foh --hide=NTUSER.* --color=always | grep ^- %l&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;ll&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -AgFh --hide=NTUSER.* --color=always %l&quot;</span><span class="p">),</span>
+        <span class="c1"># (&#39;lt&#39; ,          &#39;ls -Altc --color=always %l&#39;),</span>
+        <span class="c1"># (&#39;lr&#39; ,         &#39;ls -Altcr --color=always %l&#39;)</span>
+    <span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">shoddy_hack_for_aliases</span><span class="p">:</span>
+        <span class="n">shell</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">define_alias</span><span class="p">(</span><span class="o">*</span><span class="n">i</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
@@ -359,7 +376,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 09, 2020.
+      Last updated on Feb 07, 2020.
     </div>
   </body>
 </html>

@@ -1,17 +1,22 @@
+"""Use both Jedi and prompt_toolkit to aide IPython out.
+"""
 import abc
 import keyword
 import logging
 from pathlib import Path
 import re
 import runpy
+from types import MethodType
 from typing import Iterable, TYPE_CHECKING
 
 import jedi
+from jedi import Script
 from jedi.api import replstartup
 from jedi.api.project import get_default_project
 from jedi.utils import setup_readline
 from jedi.api.environment import (
     get_cached_default_environment,
+    find_virtualenvs,
     InvalidPythonEnvironment,
 )
 
@@ -27,18 +32,8 @@ from prompt_toolkit.completion import (
     WordCompleter,
     merge_completers,
 )
-from prompt_toolkit.completion.fuzzy_completer import FuzzyWordCompleter
+from prompt_toolkit.completion.fuzzy_completer import FuzzyWordCompleter, FuzzyCompleter
 from prompt_toolkit.document import Document
-
-from traitlets.traitlets import Instance
-from traitlets.config import LoggingConfigurable
-
-
-class ConfigurableCompleter(LoggingConfigurable):
-    shell = Instance("IPython.core.interactiveshell.InteractiveShellABC")
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
 
 class SimpleCompleter(Completer, abc.ABC):
@@ -47,24 +42,16 @@ class SimpleCompleter(Completer, abc.ABC):
         # does it make sense to create these 2 as abstract properties?
         raise
 
-    # @abc.abstractproperty
-    # def current_text(self):
-    #     raise
-
     @abc.abstractmethod
     def get_completions(self, doc=None, complete_event=None, **kwargs):
         raise
-
-    # @abc.abstractmethod
-    # def _initialize_completer(self, *args, **kwargs):
-    #     raise
 
     @abc.abstractmethod
     def __call__(self, document, event):
         return self.get_completions(doc=document, complete_event=event)
 
 
-class SimpleCompletions(Completer):
+class SimpleCompletions(SimpleCompleter):
     # Do you make super calls after subclassing ABC?
     # shit do we have to mix something else in?
 
@@ -83,6 +70,10 @@ class SimpleCompletions(Completer):
                 self.user_ns, pattern=re.compile(r"^([a-zA-Z0-9_.]+|[^a-zA-Z0-9_.\s]+)")
             )
         # TODO: else:
+
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}>"
 
     @property
     def document(self):
@@ -115,6 +106,9 @@ class PathCallable(PathCompleter):
     """
 
     get_paths = Path()
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}>"
 
     def __call__(
         self, document: Document, complete_event: CompleteEvent
@@ -151,6 +145,59 @@ def will_break_pt_app():
     )
     get_ipython().pt_app.completer = merged_completers
 
+    _ip = get_ipython()
+    # Here's a different way to break it
+    if _ip.editing_mode == "vi":
+        more_keybindings = merge_key_bindings(
+            [_ip.pt_app.app.key_bindings, load_vi_bindings()]
+        )
+    else:
+        more_keybindings = merge_key_bindings(
+            [_ip.pt_app.app.key_bindings, load_key_bindings()]
+        )
+
+    _ip.pt_app.app.key_bindings = more_keybindings
+    _ip.pt_app.app.key_bindings._update_cache()
+
+
+class CustomCompleter(Completer):
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}>"
+
+    def get_completions(self, document, complete_event):
+        global options
+        method_dict = get_options()
+        word = document.get_word_before_cursor()
+
+        methods = list(method_dict.items())
+
+        selected = document.text.split()
+        if len(selected) > 0:
+            selected = selected[-1]
+            if not selected.startswith("--"):
+                current = method_dict.get(selected)
+                if current is not None:
+                    has_options = method_dict.get(selected)["options"]
+                    if has_options is not None:
+                        options = [
+                            ("--{}".format(o["flag"]), {"meta": o["meta"]})
+                            for o in has_options
+                        ]
+                        methods = options + methods
+            else:
+                methods = options
+
+        for m in methods:
+            method_name, flag = m
+            if method_name.startswith(word):
+                meta = (
+                    flag["meta"] if isinstance(flag, dict) and flag.get("meta") else ""
+                )
+                yield Completion(
+                    method_name, start_position=-len(word), display_meta=meta,
+                )
+
 
 if __name__ == "__main__":
     setup_readline()
@@ -158,6 +205,7 @@ if __name__ == "__main__":
     project = get_default_project()
     try:
         environment = get_cached_default_environment()
+        venvs = find_virtualenvs()
     except InvalidPythonEnvironment:
         logging.warning("Jedi couldn't get the default project.")
 
@@ -165,19 +213,13 @@ if __name__ == "__main__":
 
     if get_ipython() is not None:
         _ip = get_ipython()
+        # alternatively to set_custom_completer, can i skip the types.methodtype part and just do:
+        _ip.Completer.matchers.append(FuzzyCompleter(CustomCompleter))
+
         threaded = ThreadedCompleter(get_word_completer)
         _ip.set_custom_completer(get_path_completer())
         _ip.set_custom_completer(get_fuzzy_keyword_completer)
         _ip.pt_app.auto_suggest = AutoSuggestFromHistory()
 
-        if _ip.editing_mode == "vi":
-            more_keybindings = merge_key_bindings(
-                [_ip.pt_app.app.key_bindings, load_vi_bindings()]
-            )
-        else:
-            more_keybindings = merge_key_bindings(
-                [_ip.pt_app.app.key_bindings, load_key_bindings()]
-            )
-
-    # _ip.pt_app.app.key_bindings = more_keybindings
-    # _ip.pt_app.app.key_bindings._update_cache()
+        current_document = _ip.pt_app.default_buffer.document
+        script = Script(current_document.text, environment=environment)
