@@ -24,7 +24,10 @@ else:
 if "pyreadline" in sys.modules:
     pyreadline = sys.modules["pyreadline"]
 else:
-    import pyreadline
+    try:
+        import readline
+    except ImportError:
+        raise
 
 
 class SimpleCompleter:

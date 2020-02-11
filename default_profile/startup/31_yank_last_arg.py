@@ -3,11 +3,18 @@
 Slowly becoming where all my consolidated scripts for making prompt_toolkit's
 handling of keypresses cohesive.
 
+TODO: still need C-d, C-c.
+
+However <CR> and <C-m> work as expected. haven't even tried navigation mode;
+however, there's supposed to be ~500 key bindings so I'm excited.
+
 """
 from collections import namedtuple
 
 from prompt_toolkit.application.current import get_app
+
 # from prompt_toolkit.buffer import YankNthArgState
+from prompt_toolkit.clipboard import ClipboardData
 from prompt_toolkit.enums import DEFAULT_BUFFER
 from prompt_toolkit.filters import (
     Condition,
@@ -17,20 +24,33 @@ from prompt_toolkit.filters import (
 )
 
 from prompt_toolkit.filters.app import emacs_insert_mode, vi_insert_mode, has_focus
+
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.key_binding.bindings.completion import (
     display_completions_like_readline,
 )
-from prompt_toolkit.key_binding.bindings.named_commands import get_by_name
+from prompt_toolkit.key_binding.bindings.named_commands import (
+    accept_line,
+    self_insert,
+    backward_delete_char,
+    get_by_name,
+)
 from prompt_toolkit.key_binding.key_bindings import merge_key_bindings
 from prompt_toolkit.key_binding.key_processor import KeyPress, KeyPressEvent
-from prompt_toolkit.keys import Keys
 from prompt_toolkit.key_binding.vi_state import InputMode
+from prompt_toolkit.keys import Keys
+
+from prompt_toolkit.input.vt100_parser import ANSI_SEQUENCES
+
+from prompt_toolkit.selection import SelectionState
 
 from IPython.core.getipython import get_ipython
 from IPython.terminal.shortcuts import create_ipython_shortcuts
 
 E = KeyPressEvent
+
+DEDENT_TOKENS = frozenset(["raise", "return", "pass", "break", "continue"])
+
 
 # Conditions:
 
@@ -154,7 +174,6 @@ def if_no_repeat(event: E) -> bool:
     return not event.is_repeat
 
 
-
 def get_key_bindings(custom_key_bindings=None):
     """
     The ``__init__`` for `_MergedKeyBindings` features this.:
@@ -217,10 +236,116 @@ def add_bindings():
 
     handle("home")(get_by_name("beginning-of-line"))
     handle(Keys.ControlA)(get_by_name("beginning-of-line"))
+
     handle("end")(get_by_name("end-of-line"))
     handle(Keys.ControlE)(get_by_name("end-of-line"))
-    handle("left")(get_by_name("backward-char"))
-    handle("right")(get_by_name("forward-char"))
+
+    # alternatively:
+
+    @handle(Keys.Escape, "<")
+    def beginning(event):
+        """Move to the beginning of our recorded history."""
+        event.current_buffer.cursor_position = 0
+
+    @handle(Keys.Escape, ">")
+    def end(event):
+        """Move to the end."""
+        event.current_buffer.cursor_position = len(event.current_buffer.text)
+
+    # handle("left")(get_by_name("backward-char"))
+    # handle("right")(get_by_name("forward-char"))
+
+
+    is_returnable = Condition(
+        lambda: get_app().current_buffer.is_returnable)
+
+    @handle(Keys.Left)
+    def left_multiline(event):
+        """
+        Left that wraps around in multiline.
+        """
+        if event.current_buffer.cursor_position - event.arg >= 0:
+            event.current_buffer.cursor_position -= event.arg
+
+        if getattr(event.current_buffer.selection_state, "shift_arrow", False):
+            event.current_buffer.selection_state = None
+
+    @handle(Keys.Right)
+    def right_multiline(event):
+        """
+        Right that wraps around in multiline.
+        """
+        if event.current_buffer.cursor_position + event.arg <= len(
+            event.current_buffer.text
+        ):
+            event.current_buffer.cursor_position += event.arg
+
+        if getattr(event.current_buffer.selection_state, "shift_arrow", False):
+            event.current_buffer.selection_state = None
+
+    # Speaking of multiline
+    @handle(Keys.Enter, filter=is_returnable)
+    def multiline_enter(event):
+        """
+        When not in multiline, execute. When in multiline, try to
+        intelligently add a newline or execute.
+        """
+        buffer = event.current_buffer
+        document = buffer.document
+        # multiline = document_is_multiline_python(document)
+
+        text_after_cursor = document.text_after_cursor
+        text_before_cursor = document.text_before_cursor
+        text = buffer.text
+        # isspace doesn't respect vacuous truth
+        if (
+            not text_after_cursor or text_after_cursor.isspace()
+        ) and text_before_cursor.replace(" ", "").endswith("\n"):
+            # If we are at the end of the buffer, accept unless we are in a
+            # docstring
+            row, col = document.translate_index_to_position(buffer.cursor_position)
+            row += 1
+            accept_line(event)
+        else:
+            accept_line(event)
+        # elif not multiline:
+        # Always accept a single valid line. Also occurs for unclosed single
+        # quoted strings (which will give a syntax error)
+        # accept_line(event)
+        # else:
+        #     auto_newline(event.current_buffer)
+
+    # Always accept the line if the previous key was Up
+    # Requires https://github.com/jonathanslenders/python-prompt-toolkit/pull/492.
+    # We don't need a parallel for down because down is already at the end of the
+    # prompt.
+
+    @handle(Keys.Enter, filter=is_returnable)
+    def accept_after_history_backward(event):
+        pks = event.previous_key_sequence
+        if (
+            pks
+            and getattr(pks[-1], "accept_next", False)
+            and (
+                (len(pks) == 1 and pks[0].key == "up")
+                or (
+                    len(pks) == 2
+                    and pks[0].key == "escape"
+                    and isinstance(pks[1].key, str)
+                    and pks[1].key in "pP"
+                )
+            )
+        ):
+            accept_line(event)
+        else:
+            multiline_enter(event)
+
+
+    @handle(Keys.ControlX, Keys.ControlE)
+    def open_in_editor(event):
+        event.current_buffer.open_in_editor(event.app)
+
+
     handle("c-up")(get_by_name("previous-history"))
     handle(Keys.ControlP)(get_by_name("previous-history"))
     handle("c-down")(get_by_name("next-history"))
@@ -292,7 +417,7 @@ def add_bindings():
         When the system bindings are loaded and suspend-to-background is
         supported, that will override this binding.
         """
-        if event.enable_system_bindings:
+        if event.app.enable_system_bindings:
             event.app.suspend_to_background()
         else:
             event.current_buffer.insert_text(event.data)
@@ -329,14 +454,131 @@ def add_bindings():
         `34_bottom_toolbar`
             Utilized for this purpose.
         """
-        event.editing_mode = not event.editing_mode == "vi"
+        event.app.editing_mode = not event.app.editing_mode == "vi"
 
     @handle("f6")
     def _(event):
         """
         Enable/Disable paste mode.
         """
-        event.paste_mode = not event.paste_mode
+        event.app.paste_mode = not event.app.paste_mode
+
+
+
+    @handle(Keys.ControlC)
+    def _(event):
+        """
+        Pressing Ctrl-C will exit the user interface.
+        Setting a return value means: quit the event loop that drives the user
+        interface and return this value from the `Application.run()` call.
+        """
+        event.app.exit()
+
+    @handle(Keys.ControlD)
+    def _(event):
+        raise EOFError
+
+    @handle(Keys.ControlX, Keys.ControlE, filter=~has_selection)
+    def open_editor(event):
+        """ Open current buffer in editor """
+        event.current_buffer.open_in_editor(event.cli)
+
+    @handle(Keys.Tab, filter=tab_insert_indent)
+    def insert_indent(event):
+        """
+        If there are only whitespaces before current cursor position insert
+        indent instead of autocompleting.
+        """
+        event.cli.current_buffer.insert_text()
+
+    @handle(Keys.BackTab, filter=insert_mode)
+    def insert_literal_tab(event):
+        """ Insert literal tab on Shift+Tab instead of autocompleting """
+        b = event.current_buffer
+        if b.complete_state:
+            b.complete_previous()
+        else:
+            event.cli.current_buffer.insert_text("    "))
+
+    @handle("(", filter=autopair_condition & whitespace_or_bracket_after)
+    def insert_right_parens(event):
+        event.cli.current_buffer.insert_text("(")
+        event.cli.current_buffer.insert_text(")", move_cursor=False)
+
+    @handle(")", filter=autopair_condition)
+    def overwrite_right_parens(event):
+        buffer = event.cli.current_buffer
+        if buffer.document.current_char == ")":
+            buffer.cursor_position += 1
+        else:
+            buffer.insert_text(")")
+
+    @handle("[", filter=autopair_condition & whitespace_or_bracket_after)
+    def insert_right_bracket(event):
+        event.cli.current_buffer.insert_text("[")
+        event.cli.current_buffer.insert_text("]", move_cursor=False)
+
+    @handle("]", filter=autopair_condition)
+    def overwrite_right_bracket(event):
+        buffer = event.cli.current_buffer
+
+        if buffer.document.current_char == "]":
+            buffer.cursor_position += 1
+        else:
+            buffer.insert_text("]")
+
+    @handle("{", filter=autopair_condition & whitespace_or_bracket_after)
+    def insert_right_brace(event):
+        event.cli.current_buffer.insert_text("{")
+        event.cli.current_buffer.insert_text("}", move_cursor=False)
+
+    @handle("}", filter=autopair_condition)
+    def overwrite_right_brace(event):
+        buffer = event.cli.current_buffer
+
+        if buffer.document.current_char == "}":
+            buffer.cursor_position += 1
+        else:
+            buffer.insert_text("}")
+
+    @handle("'", filter=autopair_condition)
+    def insert_right_quote(event):
+        buffer = event.cli.current_buffer
+
+        if buffer.document.current_char == "'":
+            buffer.cursor_position += 1
+        elif whitespace_or_bracket_before() and whitespace_or_bracket_after():
+            buffer.insert_text("'")
+            buffer.insert_text("'", move_cursor=False)
+        else:
+            buffer.insert_text("'")
+
+    @handle('"', filter=autopair_condition)
+    def insert_right_double_quote(event):
+        buffer = event.cli.current_buffer
+
+        if buffer.document.current_char == '"':
+            buffer.cursor_position += 1
+        elif whitespace_or_bracket_before() and whitespace_or_bracket_after():
+            buffer.insert_text('"')
+            buffer.insert_text('"', move_cursor=False)
+        else:
+            buffer.insert_text('"')
+
+    @handle(Keys.Backspace, filter=autopair_condition)
+    def delete_brackets_or_quotes(event):
+        """Delete empty pair of brackets or quotes"""
+        buffer = event.cli.current_buffer
+        before = buffer.document.char_before_cursor
+        after = buffer.document.current_char
+
+        if any(
+            [before == b and after == a for (b, a) in ["()", "[]", "{}", "''", '""']]
+        ):
+            buffer.delete(1)
+
+        buffer.delete_before_cursor(1)
+
 
     return registry
 

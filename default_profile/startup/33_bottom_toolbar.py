@@ -15,6 +15,10 @@ from prompt_toolkit.enums import EditingMode
 from prompt_toolkit.keys import Keys
 from prompt_toolkit.key_binding import KeyBindings
 
+from prompt_toolkit.layout.containers import HSplit, VSplit, Window, WindowAlign
+from prompt_toolkit.layout.controls import BufferControl, FormattedTextControl
+from prompt_toolkit.layout.layout import Layout
+
 from prompt_toolkit.shortcuts import print_formatted_text, CompleteStyle
 from prompt_toolkit.shortcuts.utils import print_container
 
@@ -71,6 +75,13 @@ def merged_styles(overrides=None):
     base = init_style()
 
     return merge_styles([base, overrides, default_pygments_style()])
+
+
+def get_titlebar_text():
+    return [
+        ("class:title", "Hello World!"),
+        ("class:title", " (Press [TODO] to quit.)"),
+    ]
 
 
 class BottomToolbar:
@@ -147,19 +158,19 @@ class BottomToolbar:
         # add more styling:
         # [('class:toolbar', ' [F4] %s ' % text)]
         current_vi_mode = self.app.vi_state.input_mode
+        # temp_toolbar = f" [F4] Vi: {current_vi_mode!r}  {date.today()!r}"
+        # toolbar = Frame(TextArea(temp_toolbar))
+        # return toolbar.body
         toolbar = f" [F4] Vi: {current_vi_mode!r}  {date.today()!r}"
-        # toolbar.append(style=default_pygments_style())
         return toolbar
 
     def _render_emacs(self):
         # return [(Token.Generic.Heading, "[F4] Emacs: "),
         #         (Token.Generic.Prompt, f"{Path.cwd()} {date.today()}")]
-        # Nope! str and _Token can't be concatenated and this'll not only freeze
-        # the running session but the terminal itself
+        # temp_toolbar = f" [F4] Emacs: {Path.cwd()!r} {date.today()!a}"
+        # toolbar = Frame(TextArea(temp_toolbar))
+        # return toolbar.body
         toolbar = f" [F4] Emacs: {Path.cwd()!r} {date.today()!a}"
-        # really upset this didn't work `{date.today():>{len(self)}}"
-        # goddamn neither did that
-        # return "{} {:>150}".format(toolbar, date.today())
         return toolbar
 
 
@@ -179,3 +190,8 @@ if __name__ == "__main__":
         add_toolbar(BottomToolbar)
 
     print_container(show_header())
+
+    # Bind to IPython TODO:
+    root_container = HSplit([
+        Window(height=1, content=FormattedTextControl(get_titlebar_text), align=WindowAlign.CENTER,),
+        Window(height=1, char="-", style="class:line"), ])
