@@ -1,35 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Module where readline is properly configured before prompt_toolkit is loaded.
-
-Summary
--------
-
-Readline is implemented in the repository for a few reasons.
-
-#) It's ubiquity in open source programming
-
-#) In addition, it's utilized here to compensate for the weaknesses of other
-   implementations.
-
-   #) IPython's auto-completion is entirely unconfigurable and exceedingly slow
-
-      #) Frequently auto-completion will time out rather than serving a response
-
-   #) `prompt_toolkit` has a rather rigid interface for it's API. There are
-      assert's all over the code base ensuring that the proper type is passed
-      to a class constructer, in spite of the Python's dynamically typed
-      foundation.
-
-Extended Summary
-----------------
-
-.. did you know that this is a numpydoc header? lol
-
-This module assumes
-
-
-"""
+"""Module where readline is properly configured before prompt_toolkit is loaded."""
 import atexit
 import logging
 import os
@@ -37,6 +8,7 @@ from pathlib import Path
 import platform
 import rlcompleter
 from rlcompleter import Completer
+import sys
 import traceback
 
 from IPython.core.getipython import get_ipython
@@ -48,6 +20,11 @@ if os.environ.get("IPYTHONDIR"):
     )
 else:
     logging.basicConfig(format="%(message)s", level=logging.DEBUG)
+
+if "pyreadline" in sys.modules:
+    pyreadline = sys.modules["pyreadline"]
+else:
+    import pyreadline
 
 
 class SimpleCompleter:
@@ -156,7 +133,7 @@ def readline_config(history_file=None):
     readline.set_completer(Completer().complete)
 
 
-def py_readline(rl):
+def py_readline(rl=None):
     """Utilize the pyreadline API.
 
     Parameters
@@ -164,17 +141,11 @@ def py_readline(rl):
     :class:`pyreadline.rlmain.Console` or something
 
     """
+    if rl is None:
+        return
     # This is actually really neat
     rl.allow_ctrl_c = True
     rl.command_color = "#7daea3"
-    # # Check for an inputrc file.
-    # if os.environ.get("INPUTRC"):
-    #     readline.read_inputrc_file(os.environ.get("INPUTRC"))
-    # elif Path("~/pyreadlineconfig.ini").is_file():
-    #     readline.read_inputrc_file(str(Path("~/pyreadlineconfig.ini")))
-    # elif Path("~/.inputrc").expanduser().is_file():
-    #     readline.read_inputrc_file(os.expanduser("~/.inputrc"))
-    # readline.set_completer_delims(r" \t\n`@#$%^&*()=+[{]}\\|;:'\",<>?")
 
 
 # History
@@ -229,9 +200,11 @@ if __name__ == "__main__":
         pass
     else:
         from pyreadline.rlmain import Readline
+        # from pyreadline.lineobj.history import EscapeHistory, LineEditor
+        from pyreadline.lineeditor.lineobj import ReadLineTextBuffer
 
-        line_editor = Readline()
-        py_readline(line_editor)
+        main_readline_obj = Readline()
+        py_readline(main_readline_obj)
 
     try:
         import readline

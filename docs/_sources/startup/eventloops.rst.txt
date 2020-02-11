@@ -1,8 +1,44 @@
 ==================================================
-:mod:`~default_profile.startup.eventloops` module
+:mod:`~default_profile.startup.event_loops` module
 ==================================================
 
-.. automodule:: default_profile.startup.eventloops
+.. currentmodule:: default_profile.startup.event_loops
+
+This is a collection of my initial experimentation with the
+:mod:`asyncio` modules. These have proven particularly interesting, especially
+given the complex API Windows uses around multiprocessing, and as a result,
+don't entirely seem well supported in the python standard library yet.
+
+
+Asyncio operations
+------------------
+Here's a useful asyncio function::
+
+    def extract_stack(f=None, limit=None):
+        Replacement for traceback.extract_stack() that only does the
+        necessary work for asyncio debug mode.
+
+Well thats awesome.
+
+
+Bug
+-----
+
+What the hell is this?::
+
+    In [29]: %edit event_loops.py
+    Editing... done. Executing edited code...
+    ModuleNotFoundError: No module named '_overlapped'
+
+    > /home/farbuntu/miniconda3/envs/working/lib/python3.8/asyncio/windows_events.py(3)<module>()
+        1 # "Selector and proactor event loops for Windows.
+        2
+    ----> 3 import _overlapped
+        4 import _winapi
+        5 import errno
+
+.. automodule:: default_profile.startup.event_loops
+   :synopsis: Incrementally begin experimenting with asynchronous event loops.
    :members:
    :undoc-members:
    :show-inheritance:

@@ -97,5 +97,4 @@ if __name__ == "__main__":
 
         _test()
     else:
-        from _pytest.collect import Collector
         pytest.main()

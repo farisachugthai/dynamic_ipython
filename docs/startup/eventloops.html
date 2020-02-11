@@ -4,19 +4,19 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>eventloops module &#8212; Dynamic IPython: version0.0.2</title>
+    <title>event_loops module &#8212; Dynamic IPython: version0.0.2</title>
     
     <link rel="stylesheet" href="../_static/scrolls.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/print.css" type="text/css" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script type="text/javascript" src="../_static/copybutton.js"></script>
-    <script type="text/javascript" src="../_static/theme_extras.js"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/theme_extras.js"></script>
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/startup/eventloops.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -142,18 +142,83 @@
     <div id="content">
       <div class="header">
         <h1 class="heading"><a href="../index.html"
-          title="back to the documentation overview"><span>eventloops module</span></a></h1>
+          title="back to the documentation overview"><span>event_loops module</span></a></h1>
       </div>
       <div class="relnav" role="navigation" aria-label="related navigation">
         <a href="41_numpy.html">&laquo; <code class="xref py py-mod docutils literal notranslate"><span class="pre">numpy</span></code> Initialization</a> |
-        <a href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">eventloops</span></code> module</a>
+        <a href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">event_loops</span></code> module</a>
         | <a href="../util/index.html">IPython Utilities &raquo;</a>
       </div>
       <div id="contentwrapper">
+        <div id="toc" role="navigation" aria-label="table of contents navigation">
+          <h3>Table of Contents</h3>
+          <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">event_loops</span></code> module</a><ul>
+<li><a class="reference internal" href="#asyncio-operations">Asyncio operations</a></li>
+<li><a class="reference internal" href="#bug">Bug</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
         <div role="main">
         
-<div class="section" id="eventloops-module">
-<h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">eventloops</span></code> module<a class="headerlink" href="#eventloops-module" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="event-loops-module">
+<h1><a class="reference internal" href="#module-default_profile.startup.event_loops" title="default_profile.startup.event_loops: Incrementally begin experimenting with asynchronous event loops."><code class="xref py py-mod docutils literal notranslate"><span class="pre">event_loops</span></code></a> module<a class="headerlink" href="#event-loops-module" title="Permalink to this headline">¶</a></h1>
+<p>This is a collection of my initial experimentation with the
+<a class="reference external" href="https://docs.python.org/3/library/asyncio.html#module-asyncio" title="(in Python v3.8)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">asyncio</span></code></a> modules. These have proven particularly interesting, especially
+given the complex API Windows uses around multiprocessing, and as a result,
+don’t entirely seem well supported in the python standard library yet.</p>
+<div class="section" id="asyncio-operations">
+<h2>Asyncio operations<a class="headerlink" href="#asyncio-operations" title="Permalink to this headline">¶</a></h2>
+<p>Here’s a useful asyncio function:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">extract_stack</span><span class="p">(</span><span class="n">f</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">Replacement</span> <span class="k">for</span> <span class="n">traceback</span><span class="o">.</span><span class="n">extract_stack</span><span class="p">()</span> <span class="n">that</span> <span class="n">only</span> <span class="n">does</span> <span class="n">the</span>
+    <span class="n">necessary</span> <span class="n">work</span> <span class="k">for</span> <span class="n">asyncio</span> <span class="n">debug</span> <span class="n">mode</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>Well thats awesome.</p>
+</div>
+<div class="section" id="bug">
+<h2>Bug<a class="headerlink" href="#bug" title="Permalink to this headline">¶</a></h2>
+<p>What the hell is this?:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [29]: </span><span class="o">%</span><span class="k">edit</span> event_loops.py
+<span class="go">Editing... done. Executing edited code...</span>
+<span class="go">ModuleNotFoundError: No module named &#39;_overlapped&#39;</span>
+
+<span class="go">&gt; /home/farbuntu/miniconda3/envs/working/lib/python3.8/asyncio/windows_events.py(3)&lt;module&gt;()</span>
+<span class="go">    1 # &quot;Selector and proactor event loops for Windows.</span>
+<span class="go">    2</span>
+<span class="go">----&gt; 3 import _overlapped</span>
+<span class="go">    4 import _winapi</span>
+<span class="go">    5 import errno</span>
+</pre></div>
+</div>
+<span class="target" id="module-default_profile.startup.event_loops"></span><dl class="function">
+<dt id="default_profile.startup.event_loops.children">
+<code class="sig-prename descclassname">default_profile.startup.event_loops.</code><code class="sig-name descname">children</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/event_loops.html#children"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.event_loops.children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simply to save the typing.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="default_profile.startup.event_loops.enable_multiprocessing_logging">
+<code class="sig-prename descclassname">default_profile.startup.event_loops.</code><code class="sig-name descname">enable_multiprocessing_logging</code><span class="sig-paren">(</span><em class="sig-param">level=30</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/event_loops.html#enable_multiprocessing_logging"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.event_loops.enable_multiprocessing_logging" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="default_profile.startup.event_loops.system_command">
+<em class="property">async </em><code class="sig-prename descclassname">default_profile.startup.event_loops.</code><code class="sig-name descname">system_command</code><span class="sig-paren">(</span><em class="sig-param">command_to_run</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/event_loops.html#system_command"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.event_loops.system_command" title="Permalink to this definition">¶</a></dt>
+<dd><div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [40]: </span><span class="k">await</span> <span class="n">system_command</span><span class="p">(</span><span class="s1">&#39;ls&#39;</span><span class="p">)</span>
+
+<span class="go">01_rehashx.py       20_aliases.py        31_yank_last_arg.py   36_ptutils.py     cscope.out</span>
+<span class="go">05_log.py           21_fzf.py            32_kb.py              41_numpy_init.py  event_loops.py 06_help_helpers.py  22_alias_manager.py  33_bottom_toolbar.py  43_matplotlib.py  interpreter.py 10_envvar.py        23_git_commands.py   34_completion.py      __init__.py       repralias.py</span>
+<span class="go">11_clipboard.py     30_readline.py       35_lexer.py           __main__.py       tags</span>
+</pre></div>
+</div>
+<p>Whoo!</p>
+</dd></dl>
+
+</div>
 </div>
 
 
@@ -162,7 +227,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 09, 2020.
+      Last updated on Feb 11, 2020.
     </div>
   </body>
 </html>

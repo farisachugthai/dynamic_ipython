@@ -10,13 +10,13 @@
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/print.css" type="text/css" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script type="text/javascript" src="../_static/copybutton.js"></script>
-    <script type="text/javascript" src="../_static/theme_extras.js"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/theme_extras.js"></script>
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/sphinxext/make.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -206,25 +206,6 @@ automatically keep the documentation fresh.</p>
 <div class="section" id="module-default_profile.sphinxext.make">
 <span id="api"></span><h3>API<a class="headerlink" href="#module-default_profile.sphinxext.make" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
-<dt id="default_profile.sphinxext.make.GitProject">
-<em class="property">class </em><code class="sig-prename descclassname">default_profile.sphinxext.make.</code><code class="sig-name descname">GitProject</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/sphinxext/make.html#GitProject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.sphinxext.make.GitProject" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<p>Determine the root of the repo and work from there.</p>
-<dl class="method">
-<dt id="default_profile.sphinxext.make.GitProject.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/sphinxext/make.html#GitProject.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.sphinxext.make.GitProject.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Override anything you like as a keyword argument. My personal choices for defaults are provided here.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="default_profile.sphinxext.make.GitProject.get_git_root">
-<code class="sig-name descname">get_git_root</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/sphinxext/make.html#GitProject.get_git_root"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.sphinxext.make.GitProject.get_git_root" title="Permalink to this definition">¶</a></dt>
-<dd><p>Determine the root of the repo.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
 <dt id="default_profile.sphinxext.make.DocBuilder">
 <em class="property">class </em><code class="sig-prename descclassname">default_profile.sphinxext.make.</code><code class="sig-name descname">DocBuilder</code><span class="sig-paren">(</span><em class="sig-param">kind=None</em>, <em class="sig-param">num_jobs=1</em>, <em class="sig-param">verbosity=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/sphinxext/make.html#DocBuilder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.sphinxext.make.DocBuilder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
@@ -358,8 +339,14 @@ need to catch
 <dd></dd></dl>
 
 <dl class="function">
+<dt id="default_profile.sphinxext.make.setup_jinja">
+<code class="sig-prename descclassname">default_profile.sphinxext.make.</code><code class="sig-name descname">setup_jinja</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/sphinxext/make.html#setup_jinja"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.sphinxext.make.setup_jinja" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use jinja to set up the Sphinx environment.</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="default_profile.sphinxext.make.main">
-<code class="sig-prename descclassname">default_profile.sphinxext.make.</code><code class="sig-name descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/sphinxext/make.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.sphinxext.make.main" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">default_profile.sphinxext.make.</code><code class="sig-name descname">main</code><span class="sig-paren">(</span><em class="sig-param">repo_root=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/sphinxext/make.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.sphinxext.make.main" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>
@@ -372,7 +359,7 @@ need to catch
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 09, 2020.
+      Last updated on Feb 11, 2020.
     </div>
   </body>
 </html>
