@@ -60,7 +60,26 @@ completions in a similar manner to the fish shell.
 `~default_profile.startup.35_lexer`
 ===========================================
 
+Build our lexer in addition to utilizing already built ones.
+
+Pygments, IPython, prompt_toolkit, Jinja2 and Sphinx all come
+with their own concepts of lexers which doesn't include
+the built-in modules.:
+
+- :mod:`parser`
+
+- :mod:`token`
+
+- :mod:`tokenizer`
+
+- :mod:`re`
+
+- :mod:`ast`
+
+So it'd be tough to say we're at a lack of tools!
+
 .. automodule:: default_profile.startup.35_lexer
+   :synopsis: Generate a lexer to provide syntax highlighting in the REPL.
    :members:
    :undoc-members:
    :show-inheritance:

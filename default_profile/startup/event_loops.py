@@ -1,34 +1,5 @@
-"""
-
-Asyncio operations
-------------------
-Here's a useful asyncio function::
-
-    def extract_stack(f=None, limit=None):
-        Replacement for traceback.extract_stack() that only does the
-        necessary work for asyncio debug mode.
-
-Well thats awesome.
-
-
-Bug
------
-
-What the hell is this?::
-
-    In [29]: %edit event_loops.py
-    Editing... done. Executing edited code...
-    ModuleNotFoundError: No module named '_overlapped'
-
-    > /home/farbuntu/miniconda3/envs/working/lib/python3.8/asyncio/windows_events.py(3)<module>()
-        1 # "Selector and proactor event loops for Windows.
-        2
-    ----> 3 import _overlapped
-        4 import _winapi
-        5 import errno
-
-
-"""
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import asyncio
 from asyncio.events import (
     get_child_watcher,

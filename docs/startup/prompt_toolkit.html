@@ -164,7 +164,7 @@
 <li><a class="reference internal" href="#auto-suggestions">Auto-Suggestions</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-default_profile.startup.35_lexer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">35_lexer</span></code></a></li>
+<li><a class="reference internal" href="#lexer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">35_lexer</span></code></a></li>
 <li><a class="reference internal" href="#module-default_profile.startup.36_ptutils"><code class="xref py py-obj docutils literal notranslate"><span class="pre">36_ptutils</span></code></a></li>
 </ul>
 </li>
@@ -707,9 +707,12 @@ working directory??</strong></p>
 
 </div>
 </div>
-<div class="section" id="module-default_profile.startup.35_lexer">
-<span id="lexer"></span><h2><a class="reference internal" href="#module-default_profile.startup.35_lexer" title="default_profile.startup.35_lexer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">35_lexer</span></code></a><a class="headerlink" href="#module-default_profile.startup.35_lexer" title="Permalink to this headline">¶</a></h2>
-<p>the built-in modules.:</p>
+<div class="section" id="lexer">
+<h2><a class="reference internal" href="#module-default_profile.startup.35_lexer" title="default_profile.startup.35_lexer: Generate a lexer to provide syntax highlighting in the REPL."><code class="xref py py-obj docutils literal notranslate"><span class="pre">35_lexer</span></code></a><a class="headerlink" href="#lexer" title="Permalink to this headline">¶</a></h2>
+<p>Build our lexer in addition to utilizing already built ones.</p>
+<p>Pygments, IPython, prompt_toolkit, Jinja2 and Sphinx all come
+with their own concepts of lexers which doesn’t include
+the built-in modules.:</p>
 <ul>
 <li><a class="reference external" href="https://docs.python.org/3/library/parser.html#module-parser" title="(in Python v3.8)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">parser</span></code></a></li>
 <li><a class="reference external" href="https://docs.python.org/3/library/token.html#module-token" title="(in Python v3.8)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">token</span></code></a></li>
@@ -717,7 +720,8 @@ working directory??</strong></p>
 <li><a class="reference external" href="https://docs.python.org/3/library/re.html#module-re" title="(in Python v3.8)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">re</span></code></a></li>
 <li><a class="reference external" href="https://docs.python.org/3/library/ast.html#module-ast" title="(in Python v3.8)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ast</span></code></a></li>
 </ul>
-<dl class="class">
+<p>So it’d be tough to say we’re at a lack of tools!</p>
+<span class="target" id="module-default_profile.startup.35_lexer"></span><dl class="class">
 <dt id="default_profile.startup.35_lexer.IPythonConfigurableLexer">
 <em class="property">class </em><code class="sig-prename descclassname">default_profile.startup.35_lexer.</code><code class="sig-name descname">IPythonConfigurableLexer</code><span class="sig-paren">(</span><em class="sig-param">shell=None</em>, <em class="sig-param">original_lexer=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/35_lexer.html#IPythonConfigurableLexer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.35_lexer.IPythonConfigurableLexer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">traitlets.config.configurable.LoggingConfigurable</span></code></p>
@@ -817,12 +821,8 @@ than 1,000 lines.</p>
 <dt id="default_profile.startup.35_lexer.Colorizer">
 <em class="property">class </em><code class="sig-prename descclassname">default_profile.startup.35_lexer.</code><code class="sig-name descname">Colorizer</code><span class="sig-paren">(</span><em class="sig-param">pylexer=None</em>, <em class="sig-param">formatter=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/35_lexer.html#Colorizer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.35_lexer.Colorizer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<p>Make pygments.highlight even easier to work with.</p>
+<p>Make <code class="xref py py-obj docutils literal notranslate"><span class="pre">pygments.highlight</span></code> even easier to work with.</p>
 <p>Additionally utilize <code class="docutils literal notranslate"><span class="pre">__slots__</span></code> to conserve memory.</p>
-<div class="admonition-todo admonition" id="id3">
-<p class="admonition-title">Todo</p>
-<p>Do dunders go in slots?</p>
-</div>
 <dl class="method">
 <dt id="default_profile.startup.35_lexer.Colorizer.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">pylexer=None</em>, <em class="sig-param">formatter=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/35_lexer.html#Colorizer.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.35_lexer.Colorizer.__init__" title="Permalink to this definition">¶</a></dt>
@@ -841,7 +841,7 @@ alias <code class="docutils literal notranslate"><span class="pre">Python3Lexer<
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>For <a href="#id4"><span class="problematic" id="id5">`</span></a>Python &lt;http</p>
+<dd class="field-odd"><p>For <a href="#id3"><span class="problematic" id="id4">`</span></a>Python &lt;http</p>
 </dd>
 </dl>
 </dd></dl>
@@ -977,7 +977,7 @@ Out[109]: &lt;prompt_toolkit.styles.base.DynamicStyle at 0x7f1658a90a30&gt;</p>
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 10, 2020.
+      Last updated on Feb 11, 2020.
     </div>
   </body>
 </html>

@@ -1,22 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Build our lexer in addition to utilizing already built ones.
-
-Pygments, IPython, prompt_toolkit, Jinja2 and Sphinx all come
-with their own concepts of lexers which doesn't include
-the built-in modules.:
-
-- :mod:`parser`
-
-- :mod:`token`
-
-- :mod:`tokenizer`
-
-- :mod:`re`
-
-- :mod:`ast`
-
-"""
 from traitlets.config import LoggingConfigurable
 from traitlets.traitlets import Instance
 from pygments.lexer import Lexer
@@ -99,12 +82,9 @@ class IPythonConfigurableLexer(LoggingConfigurable):
 
 
 class Colorizer:
-    """Make pygments.highlight even easier to work with.
+    """Make `pygments.highlight` even easier to work with.
 
     Additionally utilize ``__slots__`` to conserve memory.
-
-    .. todo:: Do dunders go in slots?
-
     """
 
     __slots__ = {
