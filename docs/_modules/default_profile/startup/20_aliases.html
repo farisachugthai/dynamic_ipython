@@ -10,13 +10,13 @@
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/print.css" type="text/css" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../_static/language_data.js"></script>
-    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
-    <script type="text/javascript" src="../../../_static/theme_extras.js"></script>
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script src="../../../_static/theme_extras.js"></script>
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/startup/20_aliases.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -159,6 +159,7 @@
 <span class="kn">import</span> <span class="nn">subprocess</span>
 <span class="kn">import</span> <span class="nn">traceback</span>
 
+<span class="c1"># from IPython.core.alias import AliasManager, default_aliases, AliasError</span>
 <span class="kn">from</span> <span class="nn">IPython.core.alias</span> <span class="kn">import</span> <span class="n">InvalidAliasError</span><span class="p">,</span> <span class="n">default_aliases</span>
 <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 <span class="kn">from</span> <span class="nn">traitlets.config.application</span> <span class="kn">import</span> <span class="n">ApplicationError</span>
@@ -207,6 +208,26 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dict_aliases</span><span class="p">)</span></div>
 
+<div class="viewcode-block" id="CommonAliases.alias_manager"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.alias_manager">[docs]</a>    <span class="k">def</span> <span class="nf">alias_manager</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">alias_manager</span></div>
+
+<div class="viewcode-block" id="CommonAliases.define_alias"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.define_alias">[docs]</a>    <span class="k">def</span> <span class="nf">define_alias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">cmd</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">define_alias</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">cmd</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CommonAliases.soft_define_alias"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.soft_define_alias">[docs]</a>    <span class="k">def</span> <span class="nf">soft_define_alias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">cmd</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">soft_define_alias</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">cmd</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CommonAliases.undefine_alias"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.undefine_alias">[docs]</a>    <span class="k">def</span> <span class="nf">undefine_alias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Override to raise AliasError not ValueError.</span>
+
+<span class="sd">        We&#39;re not subclassing AliasManager here but still attempting to</span>
+<span class="sd">        match it&#39;s interface.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_alias</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">linemagics</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">AliasError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> is not an alias&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span></div>
+
     <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generator</span><span class="p">()</span>
 
@@ -217,6 +238,10 @@
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># reprlib?</span>
         <span class="k">return</span> <span class="s2">&quot;&lt;Common Aliases&gt;: # of aliases: </span><span class="si">{!r}</span><span class="s2"> &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dict_aliases</span><span class="p">))</span>
 
+    <span class="c1"># def __contains__(self, other):</span>
+    <span class="c1"># is this the right definition for contains?</span>
+    <span class="c1"># if other in self.dict_aliases:</span>
+    <span class="c1"># return True</span>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_find_exe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exe</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Use :func:`shutil.which` to determine whether an executable exists.</span>
@@ -267,11 +292,15 @@
         <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
             <span class="k">raise</span></div>
 
-    <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="fm">__iadd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmd</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Allow name or cmd to not be specified. But if you pass non-kwargs please keep it in a tuple.&quot;&quot;&quot;</span>
+        <span class="c1"># I think i made this as flexible as possible. Cross your fingers.</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">cmd</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">AliasError</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">name</span><span class="p">,</span> <span class="n">cmd</span> <span class="o">=</span> <span class="n">args</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">define_alias</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">cmd</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>
@@ -527,6 +556,9 @@
             <span class="p">(</span><span class="s2">&quot;gpo&quot;</span><span class="p">,</span> <span class="s2">&quot;git pull origin %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;gpom&quot;</span><span class="p">,</span> <span class="s2">&quot;git pull origin master %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;gpu&quot;</span><span class="p">,</span> <span class="s2">&quot;git push %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gpuf&quot;</span><span class="p">,</span> <span class="s2">&quot;git push --force $args&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gpuo&quot;</span><span class="p">,</span> <span class="s2">&quot;git push origin $args&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gpuof&quot;</span><span class="p">,</span> <span class="s2">&quot;git push origin --force $args&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;gr&quot;</span><span class="p">,</span> <span class="s2">&quot;git remote -v %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;grb&quot;</span><span class="p">,</span> <span class="s2">&quot;git rebase %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;grba&quot;</span><span class="p">,</span> <span class="s2">&quot;git rebase --abort %l&quot;</span><span class="p">),</span>
@@ -534,6 +566,7 @@
             <span class="p">(</span><span class="s2">&quot;grbi&quot;</span><span class="p">,</span> <span class="s2">&quot;git rebase --interactive %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;gre&quot;</span><span class="p">,</span> <span class="s2">&quot;git remote %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;gs&quot;</span><span class="p">,</span> <span class="s2">&quot;git status %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;gsb&quot;</span><span class="p">,</span> <span class="s2">&quot;git status -sb %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;gsh&quot;</span><span class="p">,</span> <span class="s2">&quot;git stash %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;gsha&quot;</span><span class="p">,</span> <span class="s2">&quot;git stash apply %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;gshc&quot;</span><span class="p">,</span> <span class="s2">&quot;git stash clear %l&quot;</span><span class="p">),</span>
@@ -548,12 +581,6 @@
             <span class="p">(</span><span class="s2">&quot;gswm&quot;</span><span class="p">,</span> <span class="s2">&quot;git switch --progress master %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;gt&quot;</span><span class="p">,</span> <span class="s2">&quot;git tag --list %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;gtd&quot;</span><span class="p">,</span> <span class="s2">&quot;git tag --delete %l&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;lswitch&quot;</span><span class="p">,</span> <span class="s2">&quot;legit switch&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;lsync&quot;</span><span class="p">,</span> <span class="s2">&quot;legit sync&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;lpublish&quot;</span><span class="p">,</span> <span class="s2">&quot;legit publish&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;lunpublish&quot;</span><span class="p">,</span> <span class="s2">&quot;legit unpublish&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;lundo&quot;</span><span class="p">,</span> <span class="s2">&quot;legit undo&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;lbranches&quot;</span><span class="p">,</span> <span class="s2">&quot;legit branches&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;ssh-day&quot;</span><span class="p">,</span> <span class="s1">&#39;eval &quot;$(ssh-agent -s)&quot;; ssh-add %l&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;xx&quot;</span><span class="p">,</span> <span class="s2">&quot;quit&quot;</span><span class="p">),</span>  <span class="c1"># this is a sweet one</span>
             <span class="p">(</span><span class="s2">&quot;..&quot;</span><span class="p">,</span> <span class="s2">&quot;cd ..&quot;</span><span class="p">),</span>
@@ -600,19 +627,16 @@
             <span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;head&quot;</span><span class="p">,</span> <span class="s2">&quot;head -n 30 %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;l&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -CF --color=always %l&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;la&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -AF --color=always %l&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;ldir&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -Apo --color=always %l | grep /$&quot;</span><span class="p">),</span>
-            <span class="c1"># (&#39;lf&#39;, &#39;ls -Fo --color=always | grep ^-&#39;),</span>
-            <span class="c1"># (&#39;ll&#39;, &#39;ls -AFho --color=always %l&#39;),</span>
-            <span class="p">(</span><span class="s2">&quot;ls&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -F --color=always %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;la&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -AFh --color=always %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;ldir&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -Fhpo --color=always %l | grep /$&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;lf&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -Foh --color=always | grep ^-&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;ll&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -FAgh --color=always %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;ls&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -Fh --color=always %l&quot;</span><span class="p">),</span>
+            <span class="c1"># alternatively -Altcr</span>
             <span class="p">(</span><span class="s2">&quot;lr&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -AgFhtr --color=always %l&quot;</span><span class="p">),</span>
+            <span class="c1"># alternatively could do ls -Altc</span>
             <span class="p">(</span><span class="s2">&quot;lt&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -AgFht --color=always %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;lx&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -Fo --color=always | grep ^-..x&quot;</span><span class="p">),</span>
-            <span class="c1"># (&#39;ldir&#39;, &#39;ls -Fhpo | grep /$ %l&#39;),</span>
-            <span class="p">(</span><span class="s2">&quot;lf&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -Foh --color=always | grep ^- %l&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;ll&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -AgFh --color=always %l&quot;</span><span class="p">),</span>
-            <span class="c1"># (&#39;lt&#39;, &#39;ls -Altc --color=always %l&#39;),</span>
-            <span class="c1"># (&#39;lr&#39;, &#39;ls -Altcr --color=always %l&#39;),</span>
             <span class="p">(</span><span class="s2">&quot;mk&quot;</span><span class="p">,</span> <span class="s2">&quot;mkdir -pv %l &amp;&amp; cd %l&quot;</span><span class="p">),</span>  <span class="c1"># check if this works. only mkdir</span>
             <span class="p">(</span><span class="s2">&quot;mkdir&quot;</span><span class="p">,</span> <span class="s2">&quot;mkdir -pv %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;mv&quot;</span><span class="p">,</span> <span class="s2">&quot;mv -v %l&quot;</span><span class="p">),</span>
@@ -660,7 +684,7 @@
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;Windows Aliases: </span><span class="si">{!r}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span><span class="p">))</span>
 
-<div class="viewcode-block" id="WindowsAliases.cmd_aliases"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.WindowsAliases.cmd_aliases">[docs]</a>    <span class="k">def</span> <span class="nf">cmd_aliases</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+<div class="viewcode-block" id="WindowsAliases.cmd_aliases"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.WindowsAliases.cmd_aliases">[docs]</a>    <span class="k">def</span> <span class="nf">cmd_aliases</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Aliases for the :command:`cmd` shell.</span>
 
 <span class="sd">        .. todo:: Cmd, :envvar:`COPYCMD` and IPython</span>
@@ -679,10 +703,11 @@
 <span class="sd">        Also note :envvar:`DIRCMD` for :command:`dir`.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="p">[</span>
             <span class="p">(</span><span class="s2">&quot;assoc&quot;</span><span class="p">,</span> <span class="s2">&quot;assoc %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;cd&quot;</span><span class="p">,</span> <span class="s2">&quot;cd %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;chdir&quot;</span><span class="p">,</span> <span class="s2">&quot;chdir %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;cmd&quot;</span><span class="p">,</span> <span class="s2">&quot;cmd /U /E:ON /F:ON %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;control&quot;</span><span class="p">,</span> <span class="s2">&quot;control %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;controlpanel&quot;</span><span class="p">,</span> <span class="s2">&quot;control %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;copy&quot;</span><span class="p">,</span> <span class="s2">&quot;copy </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">),</span>
@@ -712,7 +737,7 @@
         <span class="p">]</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">user_aliases</span></div>
 
-<div class="viewcode-block" id="WindowsAliases.powershell_aliases"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.WindowsAliases.powershell_aliases">[docs]</a>    <span class="k">def</span> <span class="nf">powershell_aliases</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+<div class="viewcode-block" id="WindowsAliases.powershell_aliases"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.WindowsAliases.powershell_aliases">[docs]</a>    <span class="k">def</span> <span class="nf">powershell_aliases</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Aliases for Windows OSes using :command:`powershell`.</span>
 
 <span class="sd">        Has only been tested on Windows 10 in a heavily configured environment.</span>
@@ -724,7 +749,7 @@
 <span class="sd">        that this section is still under development and frequently changes.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="p">[</span>
             <span class="p">(</span><span class="s2">&quot;ac&quot;</span><span class="p">,</span> <span class="s2">&quot;Add-Content %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;asnp&quot;</span><span class="p">,</span> <span class="s2">&quot;Add-PSSnapin %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;cat&quot;</span><span class="p">,</span> <span class="s2">&quot;Get-Content %l&quot;</span><span class="p">),</span>
@@ -849,7 +874,7 @@
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; shell = get_ipython()</span>
-<span class="sd">    &gt;&gt;&gt; len(shell.alias_manager.user_aliases)  # DOCTEST: +SKIP </span>
+<span class="sd">    &gt;&gt;&gt; len(shell.alias_manager.user_aliases)  # DOCTEST: +SKIP</span>
 <span class="sd">        3</span>
 <span class="sd">    &gt;&gt;&gt; # and even if it&#39;s not</span>
 <span class="sd">    &gt;&gt;&gt; shell.alias_manager.user_aliases = [(&#39;a&#39;, &#39;a&#39;), (&#39;b&#39;, &#39;b&#39;), (&#39;c&#39;, &#39;c&#39;)]</span>
@@ -896,7 +921,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 09, 2020.
+      Last updated on Feb 10, 2020.
     </div>
   </body>
 </html>

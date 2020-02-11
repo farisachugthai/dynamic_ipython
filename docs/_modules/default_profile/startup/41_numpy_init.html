@@ -10,13 +10,13 @@
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/print.css" type="text/css" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../_static/language_data.js"></script>
-    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
-    <script type="text/javascript" src="../../../_static/theme_extras.js"></script>
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script src="../../../_static/theme_extras.js"></script>
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/startup/41_numpy_init.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -153,180 +153,6 @@
 <span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;Set printing options.</span>
 
-<span class="sd">These options determine the way floating point numbers, arrays and</span>
-<span class="sd">other NumPy objects are displayed.::</span>
-
-<span class="sd">   numpy.set_printoptions = set_printoptions(</span>
-<span class="sd">       precision=None, threshold=None, edgeitems=None, linewidth=None,</span>
-<span class="sd">       suppress=None, nanstr=None, infstr=None, formatter=None, sign=None,</span>
-<span class="sd">       floatmode=None, ``**kwarg``</span>
-<span class="sd">   )</span>
-
-
-<span class="sd">Parameters</span>
-<span class="sd">----------</span>
-<span class="sd">precision : int or None, optional</span>
-<span class="sd">    Number of digits of precision for floating point output (default 8).</span>
-<span class="sd">    May be `None` if `floatmode` is not `fixed`, to print as many digits as</span>
-<span class="sd">    necessary to uniquely specify the value.</span>
-
-<span class="sd">threshold : int, optional</span>
-<span class="sd">    Total number of array elements which trigger summarization</span>
-<span class="sd">    rather than full repr (default 1000).</span>
-
-<span class="sd">edgeitems : int, optional</span>
-<span class="sd">    Number of array items in summary at beginning and end of</span>
-<span class="sd">    each dimension (default 3).</span>
-
-<span class="sd">linewidth : int, optional</span>
-<span class="sd">    The number of characters per line for the purpose of inserting</span>
-<span class="sd">    line breaks (default 75).</span>
-
-<span class="sd">suppress : bool, optional</span>
-<span class="sd">    If True, always print floating point numbers using fixed point</span>
-<span class="sd">    notation, in which case numbers equal to zero in the current precision</span>
-<span class="sd">    will print as zero.  If False, then scientific notation is used when</span>
-<span class="sd">    absolute value of the smallest number is &lt; 1e-4 or the ratio of the</span>
-<span class="sd">    maximum absolute value to the minimum is &gt; 1e3. The default is False.</span>
-
-<span class="sd">nanstr : str, optional</span>
-<span class="sd">    String representation of floating point not-a-number (default nan).</span>
-
-<span class="sd">infstr : str, optional</span>
-<span class="sd">    String representation of floating point infinity (default inf).</span>
-
-<span class="sd">sign : string, either &#39;-&#39;, &#39;+&#39;, or &#39; &#39;, optional</span>
-<span class="sd">    Controls printing of the sign of floating-point types. If &#39;+&#39;, always</span>
-<span class="sd">    print the sign of positive values. If &#39; &#39;, always prints a space</span>
-<span class="sd">    (whitespace character) in the sign position of positive values.  If</span>
-<span class="sd">    &#39;-&#39;, omit the sign character of positive values. (default &#39;-&#39;)</span>
-
-<span class="sd">formatter : dict of callables, optional</span>
-<span class="sd">    If not None, the keys should indicate the type(s) that the respective</span>
-<span class="sd">    formatting function applies to.  Callables should return a string.</span>
-<span class="sd">    Types that are not specified (by their corresponding keys) are handled</span>
-<span class="sd">    by the default formatters.  Individual types for which a formatter</span>
-<span class="sd">    can be set are:</span>
-
-<span class="sd">- &#39;bool&#39;</span>
-
-<span class="sd">- &#39;int&#39;</span>
-
-<span class="sd">- &#39;timedelta&#39; : a `numpy.timedelta64`</span>
-
-<span class="sd">- &#39;datetime&#39; : a `numpy.datetime64`</span>
-
-<span class="sd">- &#39;float&#39;</span>
-
-<span class="sd">- &#39;longfloat&#39; : 128-bit floats</span>
-
-<span class="sd">- &#39;complexfloat&#39;</span>
-
-<span class="sd">- &#39;longcomplexfloat&#39; : composed of two 128-bit floats</span>
-
-<span class="sd">- &#39;numpystr&#39; : types `numpy.string_` and `numpy.unicode_`</span>
-
-<span class="sd">- &#39;object&#39; : `np.object_` arrays</span>
-
-<span class="sd">- &#39;str&#39; : all other strings</span>
-
-<span class="sd">Other keys that can be used to set a group of types at once are:</span>
-
-<span class="sd">- &#39;all&#39; : sets all types</span>
-
-<span class="sd">- &#39;int_kind&#39; : sets &#39;int&#39;</span>
-
-<span class="sd">- &#39;float_kind&#39; : sets &#39;float&#39; and &#39;longfloat&#39;</span>
-
-<span class="sd">- &#39;complex_kind&#39; : sets &#39;complexfloat&#39; and &#39;longcomplexfloat&#39;</span>
-
-<span class="sd">- &#39;str_kind&#39; : sets &#39;str&#39; and &#39;numpystr&#39;</span>
-
-
-<span class="sd">floatmode : str, optional</span>
-<span class="sd">    Controls the interpretation of the `precision` option for</span>
-<span class="sd">    floating-point types. Can take the following values:</span>
-
-<span class="sd">* &#39;fixed&#39;: Always print exactly `precision` fractional digits,</span>
-<span class="sd">   even if this would print more or fewer digits than</span>
-<span class="sd">   necessary to specify the value uniquely.</span>
-
-<span class="sd">* &#39;unique&#39;: Print the minimum number of fractional digits necessary</span>
-<span class="sd">   to represent each value uniquely. Different elements may</span>
-<span class="sd">   have a different number of digits. The value of the</span>
-<span class="sd">   `precision` option is ignored.</span>
-
-<span class="sd">* &#39;maxprec&#39;: Print at most `precision` fractional digits, but if</span>
-<span class="sd">   an element can be uniquely represented with fewer digits</span>
-<span class="sd">   only print it with that many.</span>
-
-<span class="sd">* &#39;maxprec_equal&#39;: Print at most `precision` fractional digits,</span>
-<span class="sd">   but if every element in the array can be uniquely</span>
-<span class="sd">   represented with an equal number of fewer digits, use that</span>
-<span class="sd">   many digits for all elements.</span>
-
-<span class="sd">legacy : string or `False`, optional</span>
-<span class="sd">    If set to the string `&#39;1.13&#39;` enables 1.13 legacy printing mode. This</span>
-<span class="sd">    approximates numpy 1.13 print output by including a space in the sign</span>
-<span class="sd">    position of floats and different behavior for 0d arrays. If set to</span>
-<span class="sd">    `False`, disables legacy mode. Unrecognized strings will be ignored</span>
-<span class="sd">    with a warning for forward compatibility.</span>
-
-<span class="sd">.. versionadded:: 1.14.0</span>
-
-
-<span class="sd">See Also</span>
-<span class="sd">--------</span>
-<span class="sd">get_printoptions, set_string_function, array2string</span>
-
-<span class="sd">Notes</span>
-<span class="sd">-----</span>
-<span class="sd">`formatter` is always reset with a call to `set_printoptions`.</span>
-
-<span class="sd">Examples</span>
-<span class="sd">--------</span>
-<span class="sd">Floating point precision can be set:</span>
-
-<span class="sd">&gt;&gt;&gt; import numpy as np</span>
-<span class="sd">&gt;&gt;&gt; np.set_printoptions(precision=4)</span>
-<span class="sd">&gt;&gt;&gt; print(np.array([1.123456789]))</span>
-<span class="sd">[1.1235]</span>
-
-<span class="sd">Long arrays can be summarised:</span>
-
-<span class="sd">&gt;&gt;&gt; import numpy as np</span>
-<span class="sd">&gt;&gt;&gt; np.set_printoptions(threshold=5)</span>
-<span class="sd">&gt;&gt;&gt; print(np.arange(10))   # doctest: +NORMALIZE_WHITESPACE</span>
-<span class="sd">[0 1 2 ... 7 8 9]</span>
-
-<span class="sd">Small results can be suppressed:</span>
-
-<span class="sd">&gt;&gt;&gt; import numpy as np</span>
-<span class="sd">&gt;&gt;&gt; eps = np.finfo(float).eps</span>
-<span class="sd">&gt;&gt;&gt; x = np.arange(4.)</span>
-<span class="sd">&gt;&gt;&gt; x**2 - (x + eps)**2</span>
-<span class="sd">array([-4.9304e-32, -4.4409e-16,  0.0000e+00,  0.0000e+00])</span>
-<span class="sd">&gt;&gt;&gt; np.set_printoptions(suppress=True)</span>
-<span class="sd">&gt;&gt;&gt; x**2 - (x + eps)**2  # doctest: +NORMALIZE_WHITESPACE</span>
-<span class="sd">array([-0., -0.,  0.,  0.])</span>
-
-<span class="sd">A custom formatter can be used to display array elements as desired:</span>
-
-<span class="sd">&gt;&gt;&gt; np.set_printoptions(formatter={&#39;all&#39;:lambda x: &#39;int: &#39;+str(-x)})</span>
-<span class="sd">&gt;&gt;&gt; x = np.arange(3)</span>
-<span class="sd">&gt;&gt;&gt; x   # doctest: +NORMALIZE_WHITESPACE</span>
-<span class="sd">array([int: 0, int: -1, int: -2])</span>
-<span class="sd">&gt;&gt;&gt; np.set_printoptions()  # formatter gets reset</span>
-<span class="sd">&gt;&gt;&gt; x   # doctest: +NORMALIZE_WHITESPACE</span>
-<span class="sd">array([0, 1, 2])</span>
-
-<span class="sd">To put back the default options, you can use:</span>
-
-<span class="sd">&gt;&gt;&gt; np.set_printoptions(edgeitems=3,infstr=&#39;inf&#39;,</span>
-<span class="sd">... linewidth=75, nanstr=&#39;nan&#39;, precision=8,</span>
-<span class="sd">... suppress=False, threshold=1000, formatter=None)</span>
-
-
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">ctypes</span>
 <span class="kn">import</span> <span class="nn">doctest</span>
@@ -403,7 +229,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 09, 2020.
+      Last updated on Feb 10, 2020.
     </div>
   </body>
 </html>

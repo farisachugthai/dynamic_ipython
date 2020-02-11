@@ -41,27 +41,6 @@ def get_home():
 # BaseIPythonApplication(Application) configuration
 # -----------------------------------------------------------------------------
 
-# IPython: an enhanced interactive Python shell.
-
-# Whether to create profile dir if it doesn't exist
-# c.BaseIPythonApplication.auto_create = True
-
-# Whether to install the default config files into the profile dir. If a new
-# profile is being created, and IPython contains config files for that profile,
-# then they will be staged into the new directory.  Otherwise, default config
-# files will be automatically generated.
-# c.BaseIPythonApplication.copy_config_files = True
-
-# Path to an extra config file to load.
-#
-# If specified, load this config file in addition to any other IPython config.
-# c.BaseIPythonApplication.extra_config_file = ''
-
-# The name of the IPython directory. This directory is used for logging
-# configuration (through profiles), history storage, etc. The default is usually
-# $HOME/.ipython. This option can also be specified through the environment
-# variable IPYTHONDIR.
-
 # The name of the IPython directory. This directory is used for logging
 # configuration (through profiles), history storage, etc. The default is
 # usually $HOME/.ipython. This option can also be specified through the environment
@@ -71,7 +50,6 @@ if os.environ.get("IPYTHONDIR"):
 else:
     # Assume home was defined correctly up top. Will need to rewrite for windows
     c.BaseIPythonApplication.ipython_dir = os.path.join(get_home(), ".ipython")
-
 
 # Whether to overwrite existing config files when copying
 # c.BaseIPythonApplication.overwrite = False
@@ -94,7 +72,8 @@ else:
 # c.IPKernelApp.displayhook_class = 'ipykernel.displayhook.ZMQDisplayHook'
 
 # ONLY USED ON WINDOWS Interrupt this process when the parent is signaled.
-# c.IPKernelApp.interrupt = 0
+if platform().startswith('Win'):
+    c.IPKernelApp.interrupt = 1
 
 # The Kernel subclass to be used.
 #
@@ -116,7 +95,7 @@ else:
 # c.IPKernelApp.parent_handle = 0
 
 # Only send stdout/stderr to output stream
-# c.IPKernelApp.quiet = True
+c.IPKernelApp.quiet = False
 
 # -----------------------------------------------------------------------------
 # Kernel(SingletonConfigurable) configuration
@@ -158,7 +137,7 @@ c.IPythonKernel.help_links = [
 
 # Set this flag to False to deactivate the use of experimental IPython
 # completion APIs.
-# c.IPythonKernel.use_experimental_completions = True
+c.IPythonKernel.use_experimental_completions = True
 
 # -----------------------------------------------------------------------------
 # InteractiveShell(SingletonConfigurable) configuration
@@ -168,6 +147,9 @@ c.IPythonKernel.help_links = [
 
 # 'all', 'last', 'last_expr' or 'none', 'last_expr_or_assign' specifying which
 # nodes should be run interactively (displaying output from expressions).
+
+try:
+    c.InteractiveShell.ast_node_interactivity = "last_expr_or_assign"
 
 # A list of ast.NodeTransformer subclass instances, which will be applied to
 # user input before code is run.
@@ -204,7 +186,7 @@ c.InteractiveShell.banner1 = ""
 
 # This limit is defined because otherwise you'll spend more time
 # re-flushing a too small cache than working
-c.InteractiveShell.cache_size = 100000
+c.InteractiveShell.cache_size = 1000
 
 # Use colors for displaying information about objects. Because this information
 # is passed through a pager (like 'less'), and some pagers get confused with
@@ -233,7 +215,7 @@ c.InteractiveShell.history_length = 1000
 # startup.
 c.InteractiveShell.history_load_length = 100
 
-# c.InteractiveShell.ipython_dir = ''
+c.InteractiveShell.ipython_dir = str(get_home().joinpath(".ipython"))
 
 # Start logging to the given file in append mode. Use `logfile` to
 # specify a log file to **overwrite** logs to.
@@ -262,7 +244,7 @@ c.InteractiveShell.sphinxify_docstring = False
 # c.InteractiveShell.wildcards_case_sensitive = False
 
 # Switch modes for the IPython exception handlers.
-# c.InteractiveShell.xmode = 'Context'
+c.InteractiveShell.xmode = 'Verbose'
 
 # -----------------------------------------------------------------------------
 # ZMQInteractiveShell(InteractiveShell) configuration

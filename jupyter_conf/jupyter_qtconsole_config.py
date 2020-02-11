@@ -328,12 +328,12 @@ c.JupyterWidget.editor_line = "-c {line} -- {filename}"
 # If not empty, use this Pygments style for syntax highlighting. Otherwise, the
 #  style sheet is queried for Pygments style information.
 
-try:
-    from gruvbox.style import GruvboxDarkHard
-except (ImportError, ModuleNotFoundError):
-    c.JupyterWidget.syntax_style = "Solarized Dark"
-else:
-    c.JupyterWidget.syntax_style = "GruvboxDarkHard"
+# try:
+#     from gruvbox.style import GruvboxDarkHard
+# except (ImportError, ModuleNotFoundError):
+#     c.JupyterWidget.syntax_style = "Solarized Dark"
+# else:
+#     c.JupyterWidget.syntax_style = "GruvboxDarkHard"
 
 # ------------------------------------------------------------------------------
 # KernelManager(ConnectionFileMixin) configuration
@@ -483,7 +483,6 @@ if __name__ == "__main__":
     except ImportError:
         sys.exit("QTConsole not installed.")
 
-    try:
+    from qtconsole import ZMQ
+
         from jupyter_core.paths import get_home_dir
-    except ImportError:
-        sys.exit("Jupyter not installed. Exiting.")

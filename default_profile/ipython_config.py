@@ -513,13 +513,13 @@ c.TerminalInteractiveShell.extra_open_editor_shortcuts = True
 # https://github.com/farisachugthai/Gruvbox_IPython
 
 try:
-    from gruvbox.gruvbox import Gruvbox
+    from gruvbox.ptgruvbox import PtGruvbox
 except (ImportError, ModuleNotFoundError):
     from pygments.styles import friendly
 
     c.TerminalInteractiveShell.highlighting_style = "friendly"
 else:
-    c.TerminalInteractiveShell.highlighting_style = Gruvbox
+    c.TerminalInteractiveShell.highlighting_style = PtGruvbox
 
 
 def get_env():
