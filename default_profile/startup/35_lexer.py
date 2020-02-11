@@ -4,12 +4,20 @@ from traitlets.config import LoggingConfigurable
 from traitlets.traitlets import Instance
 from pygments.lexer import Lexer
 from pygments.lexers.python import PythonLexer
+
 from pygments.formatters.terminal256 import TerminalTrueColorFormatter
 
 from prompt_toolkit.lexers.pygments import PygmentsLexer
+from prompt_toolkit.lexers.base import DynamicLexer, SimpleLexer
 
 from IPython.core.getipython import get_ipython
 from IPython.core.interactiveshell import InteractiveShellABC
+from IPython.lib.lexers import IPyLexer, IPythonTracebackLexer
+
+
+def get_lexer():
+    _ = PygmentsLexer(PythonLexer)
+    return _
 
 
 class IPythonConfigurableLexer(LoggingConfigurable):
@@ -113,3 +121,4 @@ if __name__ == "__main__":
     lexer = IPythonConfigurableLexer()
     # TODO: isn't there a method like _ip.add_trait or something?
     colorizer = Colorizer()
+    pt_lexer = get_lexer()

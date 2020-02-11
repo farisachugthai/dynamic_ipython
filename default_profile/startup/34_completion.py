@@ -1,4 +1,14 @@
 """Use both Jedi and prompt_toolkit to aide IPython out.
+
+.. code-block::
+
+    fuzzy_completer = FuzzyCompleter(ExecutableCompleter())
+    dynamic_completer = DynamicCompleter(fuzzy_completer)
+
+Doesn't work because the dynamic_completer requires a callable and the fuzzy
+isn't. Omg.
+
+Sweet. Realizing at this moment that set_custom_completer doesn't work either.
 """
 import abc
 import keyword
@@ -24,14 +34,15 @@ from IPython.core.getipython import get_ipython
 
 from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
 from prompt_toolkit.completion import (
-    CompleteEvent,
     Completer,
+    CompleteEvent,
     Completion,
     PathCompleter,
     ThreadedCompleter,
     WordCompleter,
-    merge_completers,
 )
+from prompt_toolkit.completion.base import DynamicCompleter
+from prompt_toolkit.completion.filesystem import ExecutableCompleter
 from prompt_toolkit.completion.fuzzy_completer import FuzzyWordCompleter, FuzzyCompleter
 from prompt_toolkit.document import Document
 
@@ -163,6 +174,11 @@ def will_break_pt_app():
     _ip.pt_app.app.key_bindings._update_cache()
 
 
+def venvs():
+    """Use `jedi.api.find_virtualenvs` and return all values."""
+    return [i for i in find_virtualenvs()]
+
+
 class CustomCompleter(Completer):
     """A completer that attempts to meet prompt_toolkits API as generically as possible."""
 
@@ -208,13 +224,61 @@ class CustomCompleter(Completer):
                 )
 
 
+class MergedCompleter(Completer):
+    """Combine several completers into one."""
+
+    def __init__(self, completers):
+        """His `_MergedCompleter` class without the asserts."""
+        self.completers = completers
+
+    def get_completions(self, document, complete_event):
+        # Get all completions from the other completers in a blocking way.
+        for completer in self.completers:
+            for c in completer.get_completions(document, complete_event):
+                yield c
+
+    def get_completions_async(self, document, complete_event):
+        # Get all completions from the other completers in a blocking way.
+        for completer in self.completers:
+            # Consume async generator -> item can be `AsyncGeneratorItem` or
+            # `Future`.
+            for item in completer.get_completions_async(document, complete_event):
+                yield item
+
+class FuzzyCallable(FuzzyCompleter):
+
+    def __init__(self, completer=None, words=None, meta_dict=None, WORD=False):
+        """The exact code for FuzzyWordCompleter...except callable."""
+        # assert callable(words) or all(isinstance(w, string_types) for w in words)
+        self.words = words
+        if self.words is None:
+            self.words = keyword.kwlist
+        self.meta_dict = meta_dict or {}
+        self.WORD = WORD
+
+        self.word_completer = WordCompleter(
+            words=lambda: self.words,
+            WORD=self.WORD)
+
+        self.fuzzy_completer = FuzzyCompleter(
+            self.word_completer,
+            WORD=self.WORD)
+
+        self.completer = self.fuzzy_completer
+        super().__init__(completer=self.completer)
+
+    def get_completions(self, document, complete_event):
+        return self.fuzzy_completer.get_completions(document, complete_event)
+
+    def __call__(self, document, complete_event):
+        return self.get_completions(document, complete_event)
+
 if __name__ == "__main__":
     setup_readline()
     # To set up Script or Interpreter later
     project = get_default_project()
     try:
         environment = get_cached_default_environment()
-        venvs = find_virtualenvs()
     except InvalidPythonEnvironment:
         logging.warning("Jedi couldn't get the default project.")
 
@@ -223,9 +287,15 @@ if __name__ == "__main__":
     if get_ipython() is not None:
         _ip = get_ipython()
         # alternatively to set_custom_completer, can i skip the types.methodtype part and just do:
-        _ip.Completer.matchers.append(FuzzyCompleter(CustomCompleter))
+        # _ip.Completer.matchers.append(FuzzyCompleter(CustomCompleter))
+        # seems to be working
+        # So let's see how far we can chain these
+        fuzzy_completer = FuzzyCallable(ExecutableCompleter())
+        merged_completer = MergedCompleter(fuzzy_completer)
 
-        threaded = ThreadedCompleter(get_word_completer)
+        _ip.Completer.matchers.append(merged_completer)
+
+        threaded = ThreadedCompleter(get_word_completer())
         _ip.set_custom_completer(get_path_completer())
         _ip.set_custom_completer(get_fuzzy_keyword_completer)
         _ip.pt_app.auto_suggest = AutoSuggestFromHistory()

@@ -52,7 +52,6 @@ def timer(func):
         Output of function :func:`time.perf_counter()`.
 
     """
-
     @functools.wraps(func)
     def wrapper_timer(*args, **kwargs):
         start_time = time.perf_counter()
@@ -69,7 +68,6 @@ def timer(func):
 # I mean while we're practicing decorators throw this in the mix
 def debug(func):
     """Print the function signature and return value"""
-
     @functools.wraps(func)
     def wrapper_debug(*args, **kwargs):
         args_repr = [repr(a) for a in args]  # 1
@@ -94,7 +92,6 @@ def exc_timer(statement, setup=None):
 
 class ArgReparser:
     """Class decorator that echoes out the arguments a function was called with."""
-
     def __init__(self, func):
         """Initialize the reparser with the function it wraps."""
         self.func = func

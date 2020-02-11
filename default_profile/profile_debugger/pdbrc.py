@@ -29,6 +29,9 @@ import time
 import trace
 import traceback
 
+if sys.version_info < (3, 7):
+    from default_profile import ModuleNotFoundError
+
 # Run all this before any non-std lib imports. They should get profiled too
 print(f".pdbrc.py started {time.ctime()}")
 
@@ -50,7 +53,7 @@ cgitb.enable(format="text")
 
 try:
     import prompt_toolkit
-except:  # noqa
+except ImportError:
     debugger_completer = rlcompleter.Completer.complete
 else:
     from prompt_toolkit.completion.fuzzy_completer import FuzzyWordCompleter
@@ -74,12 +77,8 @@ with suppress(ImportError):
 with suppress(ImportError):
     from jedi.api import replstartup
 
-try:
-    import readline
-except:
-    pass
-else:  # this makes completions look classic IPython style
-    readline.parse_and_bind("Tab:menu-complete")
+
+# History: Set up separately
 
 
 def save_history(hist_path=None):
@@ -98,34 +97,21 @@ def save_history(hist_path=None):
     readline.append_history_file(hist_path)
 
 
-# History: Set up separately
 try:
     from default_profile.startup import readline_mod
-except:  # noqa
-    historyPath = Path.expanduser("~/.pdb_history.py")
+    import readline
+except (ImportError, ModuleNotFoundError):  # noqa
+    history_path = Path.expanduser("~/.pdb_history.py")
 
-    if historyPath.exists():
-        readline.read_history_file(historyPath)
-        save_history(historyPath)
+    if not history_path.exists():
+        history_path.touch()
+
+else:
+    readline.parse_and_bind("Tab:menu-complete")
+    readline.read_history_file(historyPath)
+    save_history(historyPath)
 
     atexit.register(save_history, hist_path=historyPath)
-
-# Yes I'm still importing stuff
-
-try:
-    import pygments
-except ImportError:
-    colorizer = None
-else:
-    from pygments.lexers.python import PythonLexer
-    from pygments.formatters.terminal256 import TerminalTrueColorFormatter
-
-    lexer = PythonLexer()
-    formatter = TerminalTrueColorFormatter()
-
-    def colorizer(code):
-        return pygments.highlight(code, lexer, formatter)
-
 
 # Customized Pdb
 

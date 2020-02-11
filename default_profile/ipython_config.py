@@ -361,21 +361,6 @@ c.InteractiveShell.history_load_length = 1000
 # from time import time
 # Is the prompt manager class ignored? Yes!
 # c.PromptManager.in_template = u"{color.LightGreen}{time}{color.Yellow} {color.normal}>>>"
-# Deprecated since IPython 4.0 and ignored since 5.0, set
-# TerminalInteractiveShell.prompts object directly.
-# c.InteractiveShell.prompt_in1 = 'In [\\#]: '
-
-# Deprecated since IPython 4.0 and ignored since 5.0, set
-# TerminalInteractiveShell.prompts object directly.
-# c.InteractiveShell.prompt_in2 = '   .\\D.: '
-
-# Deprecated since IPython 4.0 and ignored since 5.0, set
-# TerminalInteractiveShell.prompts object directly.
-# c.InteractiveShell.prompt_out = 'Out[\\#]: '
-
-# Deprecated since IPython 4.0 and ignored since 5.0, set
-# TerminalInteractiveShell.prompts object directly.
-# c.InteractiveShell.prompts_pad_left = True
 
 c.InteractiveShell.quiet = False
 
@@ -404,7 +389,7 @@ c.InteractiveShell.wildcards_case_sensitive = False
 # Switch modes for the IPython exception handlers.
 # Default: 'Context'
 # Choices: ['Context', 'Plain', 'Verbose', 'Minimal']
-c.InteractiveShell.xmode = "Verbose"
+c.InteractiveShell.xmode = "Minimal"
 
 # ----------------------------------------------------------------------------
 # TerminalInteractiveShell(InteractiveShell) configuration
@@ -447,7 +432,7 @@ def conditional_editing_mode():
             c.TerminalInteractiveShell.editing_mode = "emacs"
 
 
-c.TerminalInteractiveShell.editing_mode = "emacs"
+c.TerminalInteractiveShell.editing_mode = "vi"
 
 
 ##########

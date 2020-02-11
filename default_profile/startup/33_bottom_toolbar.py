@@ -16,13 +16,16 @@ from prompt_toolkit.keys import Keys
 from prompt_toolkit.key_binding import KeyBindings
 
 from prompt_toolkit.shortcuts import print_formatted_text, CompleteStyle
-from prompt_toolkit.styles import default_pygments_style
+from prompt_toolkit.shortcuts.utils import print_container
 
+from prompt_toolkit.styles import default_pygments_style
 from prompt_toolkit.styles import Style, merge_styles, style
 from prompt_toolkit.styles.pygments import (
     style_from_pygments_cls,
     style_from_pygments_dict,
 )
+
+from prompt_toolkit.widgets import Frame, TextArea
 
 from pygments.token import Token
 from pygments.lexers.python import PythonLexer
@@ -40,6 +43,10 @@ completion_displays_to_styles = {
     "readline": CompleteStyle.READLINE_LIKE,
     "none": None,
 }
+
+
+def show_header():
+    return Frame(TextArea(get_ipython().banner))
 
 
 def init_style():
@@ -170,3 +177,5 @@ def add_toolbar(toolbar=None):
 if __name__ == "__main__":
     if get_ipython() is not None:
         add_toolbar(BottomToolbar)
+
+    print_container(show_header())

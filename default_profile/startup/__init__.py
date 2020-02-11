@@ -42,12 +42,12 @@ aliases_mod = importlib.import_module("default_profile.startup.20_aliases")
 fzf_mod = importlib.import_module("default_profile.startup.21_fzf")
 
 readline_mod = importlib.import_module("default_profile.startup.30_readline")
-yank_last_arg_mod = importlib.import_module("default_profile.startup.31_yank_last_arg")
-kb_mod = importlib.import_module("default_profile.startup.32_kb")
-bottom_toolbar_mod = importlib.import_module(
-    "default_profile.startup.33_bottom_toolbar"
-)
-completion_mod = importlib.import_module("default_profile.startup.34_completion")
+# yank_last_arg_mod = importlib.import_module("default_profile.startup.31_yank_last_arg")
+# kb_mod = importlib.import_module("default_profile.startup.32_kb")
+# bottom_toolbar_mod = importlib.import_module(
+#     "default_profile.startup.33_bottom_toolbar"
+# )
+# completion_mod = importlib.import_module("default_profile.startup.34_completion")
 
 numpy_init_mod = importlib.import_module("default_profile.startup.41_numpy_init")
 

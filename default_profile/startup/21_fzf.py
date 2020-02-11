@@ -214,7 +214,7 @@ def main():
     if shell is not None:
         if sys.platform == "win32":
             try:
-                from default_profile.startup import aliases_mod
+                from . import aliases_mod
             except ImportError:
                 pass
             else:
