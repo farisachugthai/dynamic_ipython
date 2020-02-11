@@ -160,7 +160,6 @@ Table of Contents
 
    IPython Utilities <util/index>
    Extensions <extensions/index>
-   Pandas CSV <extensions/pandas_csv>
    Sphinx Extensions <sphinxext/index>
    Developers Notes <dev>
 

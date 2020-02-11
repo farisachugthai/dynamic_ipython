@@ -13,53 +13,13 @@ Here are the varying `%magic` extensions that are bundled with this
 portion of the repository.
 
 
--------------------------------------------------------------------------
+.. toctree::
+   :maxdepth: 1
+   :glob:
+   :titlesonly:
+   :caption: Extensions
 
-
-:mod:`~default_profile.extensions.event_watcher_example`
-========================================================
-
-.. automodule:: default_profile.extensions.event_watcher_example
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-
--------------------------------------------------------------------------
-
-
-:mod:`~default_profile.extensions.load_ext`
-===========================================
-
-.. automodule:: default_profile.extensions.load_ext
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-
--------------------------------------------------------------------------
-
-
-:mod:`~default_profile.extensions.repr_requests`
-================================================
-
-.. automodule:: default_profile.extensions.repr_requests
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-
--------------------------------------------------------------------------
-
-
-:mod:`~default_profile.extensions.termux_clipboard`
-===================================================
-
-.. automodule:: default_profile.extensions.termux_clipboard
-   :synopsis: Patch the paste magic.
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
+   Pandas CSV <pandas_csv>
+   *
 
 Continue reading with the pandas extension at :ref:`Pandas-CSV`.

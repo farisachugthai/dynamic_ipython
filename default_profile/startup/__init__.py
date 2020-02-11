@@ -39,9 +39,7 @@ envvar_mod = importlib.import_module("default_profile.startup.10_envvar")
 clipboard_mod = importlib.import_module("default_profile.startup.11_clipboard")
 
 aliases_mod = importlib.import_module("default_profile.startup.20_aliases")
-# from aliases_mod import CommonAlias
 fzf_mod = importlib.import_module("default_profile.startup.21_fzf")
-alias_manager_mod = importlib.import_module("default_profile.startup.22_alias_manager")
 
 readline_mod = importlib.import_module("default_profile.startup.30_readline")
 yank_last_arg_mod = importlib.import_module("default_profile.startup.31_yank_last_arg")

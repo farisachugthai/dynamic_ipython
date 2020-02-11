@@ -35,11 +35,6 @@ import logging
 
 from traitlets.config.application import LevelFormatter
 
-from default_profile.util.base16 import Base16
-from default_profile.util.copytree import CopyTree
-
-# sqlite is being annoying on windows :/ go figure
-# from .ipython_get_history import get_history
 from default_profile.util.machine import Platform
 from default_profile.util.module_log import stream_logger
 from default_profile.util.paths import _path_build, PathValidator
