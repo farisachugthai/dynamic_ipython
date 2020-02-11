@@ -346,11 +346,43 @@ def generate_sphinx_app():
     )
     return app
 
+def setup_jinja():
+    """Setup a closure so it doesn't break if jinja isn't installed."""
+
+    # from jinja2.constants import TRIM_BLOCKS, LSTRIP_BLOCKS
+    from jinja2.environment import Environment
+    from jinja2.exceptions import TemplateError
+    from jinja2.ext import autoescape, do, with_
+    from jinja2.loaders import FileSystemLoader
+    from jinja2.lexer import get_lexer
+
+    def create_jinja_env():
+        """Use jinja to set up the Sphinx environment."""
+        TRIM_BLOCKS = True
+        LSTRIP_BLOCKS = True
+        template_path = "_templates"
+        try:
+            loader = FileSystemLoader(template_path)
+        except TemplateError:
+            return
+        env = Environment(
+            trim_blocks=TRIM_BLOCKS,
+            lstrip_blocks=LSTRIP_BLOCKS,
+            loader=FileSystemLoader(template_path),
+            extensions=["jinja2.ext.i18n", autoescape, do, with_],
+            enable_async=True,
+        )
+        return env
 
 def main():
     build_opts = gather_sphinx_options([])
     # Probably should initialize in a different/ better way but eh
-    env = Environment()
+    if ask_for_import('jinja2'):
+        setup_jinja()
+    else:
+        env = Environment()
+
+    lexer = get_lexer(create_jinja_env())
     sphinx_fs = SphinxFileSystemLoader(searchpath=repo.templates_path)
     app = generate_sphinx_app()
     build_main(build_opts)

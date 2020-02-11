@@ -169,7 +169,7 @@
 <span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 
 
-<div class="viewcode-block" id="repr_request"><a class="viewcode-back" href="../../../extensions/index.html#default_profile.extensions.repr_requests.repr_request">[docs]</a><span class="k">def</span> <span class="nf">repr_request</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">cycle</span><span class="p">):</span>
+<div class="viewcode-block" id="repr_request"><a class="viewcode-back" href="../../../extensions/repr_requests.html#default_profile.extensions.repr_requests.repr_request">[docs]</a><span class="k">def</span> <span class="nf">repr_request</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">cycle</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Generate a :func:`repr` for requests.models.Response objects.&quot;&quot;&quot;</span>
     <span class="n">p</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">url</span><span class="p">))</span>
     <span class="n">p</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="s2">&quot;headers: &quot;</span><span class="p">)</span>
@@ -193,7 +193,7 @@
                 <span class="n">p</span><span class="o">.</span><span class="n">pretty</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="load_ipython_extension"><a class="viewcode-back" href="../../../extensions/index.html#default_profile.extensions.repr_requests.load_ipython_extension">[docs]</a><span class="k">def</span> <span class="nf">load_ipython_extension</span><span class="p">(</span><span class="n">ip</span><span class="p">):</span>
+<div class="viewcode-block" id="load_ipython_extension"><a class="viewcode-back" href="../../../extensions/repr_requests.html#default_profile.extensions.repr_requests.load_ipython_extension">[docs]</a><span class="k">def</span> <span class="nf">load_ipython_extension</span><span class="p">(</span><span class="n">ip</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Load the pretty printed Response objects.&quot;&quot;&quot;</span>
     <span class="n">ip</span><span class="o">.</span><span class="n">display_formatter</span><span class="o">.</span><span class="n">formatters</span><span class="p">[</span><span class="s2">&quot;text/plain&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">for_type</span><span class="p">(</span>
         <span class="s2">&quot;requests.models.Response&quot;</span><span class="p">,</span> <span class="n">repr_request</span>

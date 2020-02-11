@@ -126,7 +126,7 @@ every option available through the `%config` magic.
 For commands that are more related to the interactive aspect of the shell,
 see the following::
 
-    >>> from IPython import get_ipython
+    >>> from IPython.core.getipython import get_ipython
     >>> _ip = get_ipython()
     >>> help(_ip)  # doctest: +SKIP
     >>> dir(_ip):  # doctest: +SKIP
@@ -161,6 +161,8 @@ Table of Contents
    IPython Utilities <util/index>
    Extensions <extensions/index>
    Pandas CSV <extensions/pandas_csv>
+   Clipboards <extensions/termux_clipboard>
+   Repr requests <extensions/repr_requests>
    Sphinx Extensions <sphinxext/index>
    Developers Notes <dev>
 

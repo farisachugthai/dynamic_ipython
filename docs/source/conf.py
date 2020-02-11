@@ -51,9 +51,9 @@ STARTUP = ROOT.joinpath("default_profile/startup")
 
 sys.path.insert(0, STARTUP)
 
-UTIL = ROOT.joinpath("default_profile/util")
+DEFAULT = ROOT.joinpath("default_profile")
 
-sys.path.insert(0, UTIL)
+sys.path.insert(0, DEFAULT)
 
 if ask_for_import("jinja2"):
     # from jinja2.constants import TRIM_BLOCKS, LSTRIP_BLOCKS
@@ -117,9 +117,7 @@ if ask_for_import("matplotlib"):
     )
 0
 if ask_for_import("flake8_rst"):
-    extensions.append(
-        "flake8_rst.sphinxext.custom_roles"
-    )
+    extensions.append("flake8_rst.sphinxext.custom_roles")
     DOCS_LOGGER.info("flake8_rst in extensions")
 
 if ask_for_import("numpydoc"):

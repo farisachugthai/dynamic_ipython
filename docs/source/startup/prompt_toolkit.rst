@@ -5,6 +5,7 @@ Prompt Toolkit
 .. module:: prompt_toolkit_modules
    :synopsis: Combined docs on all prompt_toolkit modules.
 
+.. currentmodule:: default_profile.startup
 
 `~default_profile.startup.31_yank_last_arg`
 ===========================================
@@ -47,6 +48,7 @@ Prompt Toolkit
 ===========================================
 
 .. automodule:: default_profile.startup.35_lexer
+   :synopsis: Instantiate a lexer for prompt_toolkit.
    :members:
    :undoc-members:
    :show-inheritance:

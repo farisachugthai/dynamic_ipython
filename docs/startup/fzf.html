@@ -152,8 +152,98 @@
       <div id="contentwrapper">
         <div role="main">
         
-<div class="section" id="fzf">
-<h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">21_fzf</span></code><a class="headerlink" href="#fzf" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-default_profile.startup.21_fzf">
+<span id="fzf"></span><h1><a class="reference internal" href="#module-default_profile.startup.21_fzf" title="default_profile.startup.21_fzf: Add FZF commands with aliases to the namespace."><code class="xref py py-mod docutils literal notranslate"><span class="pre">21_fzf</span></code></a><a class="headerlink" href="#module-default_profile.startup.21_fzf" title="Permalink to this headline">¶</a></h1>
+<p>Also worth noting the aliasmanager rewrite in ./22_alias_manager.py</p>
+<dl class="class">
+<dt id="default_profile.startup.21_fzf.Executable">
+<em class="property">class </em><code class="sig-prename descclassname">default_profile.startup.21_fzf.</code><code class="sig-name descname">Executable</code><span class="sig-paren">(</span><em class="sig-param">command</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/21_fzf.html#Executable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.21_fzf.Executable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/contextlib.html#contextlib.ContextDecorator" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">contextlib.ContextDecorator</span></code></a></p>
+<p>An object representing some executable on a user computer.</p>
+<dl class="method">
+<dt id="default_profile.startup.21_fzf.Executable.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">command</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/21_fzf.html#Executable.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.21_fzf.Executable.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize with <em>command</em>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="default_profile.startup.21_fzf.RedirectStdout">
+<em class="property">class </em><code class="sig-prename descclassname">default_profile.startup.21_fzf.</code><code class="sig-name descname">RedirectStdout</code><span class="sig-paren">(</span><em class="sig-param">new_stdout=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/21_fzf.html#RedirectStdout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.21_fzf.RedirectStdout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Need to determine whether to use homebrewed class or contextlib.redirect_stdout.</p>
+<dl class="method">
+<dt id="default_profile.startup.21_fzf.RedirectStdout.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">new_stdout=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/21_fzf.html#RedirectStdout.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.21_fzf.RedirectStdout.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>If stdout is None, redirect to /dev/null</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="default_profile.startup.21_fzf.FZF">
+<em class="property">class </em><code class="sig-prename descclassname">default_profile.startup.21_fzf.</code><code class="sig-name descname">FZF</code><span class="sig-paren">(</span><em class="sig-param">fzf_alias=None</em>, <em class="sig-param">fzf_configs=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/21_fzf.html#FZF"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.21_fzf.FZF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Wrap FZF together.</p>
+<dl class="method">
+<dt id="default_profile.startup.21_fzf.FZF.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">fzf_alias=None</em>, <em class="sig-param">fzf_configs=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/21_fzf.html#FZF.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.21_fzf.FZF.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="default_profile.startup.21_fzf.FZF.fzf_alias">
+<code class="sig-name descname">fzf_alias</code><em class="property"> = ''</em><a class="headerlink" href="#default_profile.startup.21_fzf.FZF.fzf_alias" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="default_profile.startup.21_fzf.FZF.default_cmds">
+<em class="property">property </em><code class="sig-name descname">default_cmds</code><a class="reference internal" href="../_modules/default_profile/startup/21_fzf.html#FZF.default_cmds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.21_fzf.FZF.default_cmds" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="default_profile.startup.21_fzf.FZF.default_cmd">
+<em class="property">property </em><code class="sig-name descname">default_cmd</code><a class="reference internal" href="../_modules/default_profile/startup/21_fzf.html#FZF.default_cmd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.21_fzf.FZF.default_cmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define the cmd for FZF.</p>
+<p>In the sane vein as json.load and json.loads, separate the 2 based on
+the ‘s’.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="default_profile.startup.21_fzf.FZF.safe_default_cmd">
+<code class="sig-name descname">safe_default_cmd</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/21_fzf.html#FZF.safe_default_cmd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.21_fzf.FZF.safe_default_cmd" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="default_profile.startup.21_fzf.is_tmux">
+<code class="sig-prename descclassname">default_profile.startup.21_fzf.</code><code class="sig-name descname">is_tmux</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/21_fzf.html#is_tmux"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.21_fzf.is_tmux" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if we’re using tmux or not.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="default_profile.startup.21_fzf.is_rg">
+<code class="sig-prename descclassname">default_profile.startup.21_fzf.</code><code class="sig-name descname">is_rg</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/21_fzf.html#is_rg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.21_fzf.is_rg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the path to rg.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="default_profile.startup.21_fzf.busybox_hack">
+<code class="sig-prename descclassname">default_profile.startup.21_fzf.</code><code class="sig-name descname">busybox_hack</code><span class="sig-paren">(</span><em class="sig-param">shell</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/21_fzf.html#busybox_hack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.21_fzf.busybox_hack" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="default_profile.startup.21_fzf.main">
+<code class="sig-prename descclassname">default_profile.startup.21_fzf.</code><code class="sig-name descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/21_fzf.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.21_fzf.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adding fzf.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">deque</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">user_aliases</span> <span class="o">=</span> <span class="n">deque</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">user_aliases</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;rg&#39;</span><span class="p">,</span> <span class="s1">&#39;rg --hidden --no-messages %l&#39;</span><span class="p">)]</span>
+</pre></div>
+</div>
+</dd></dl>
+
 </div>
 
 

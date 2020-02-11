@@ -10,13 +10,13 @@
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/print.css" type="text/css" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../_static/language_data.js"></script>
-    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
-    <script type="text/javascript" src="../../../_static/theme_extras.js"></script>
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script src="../../../_static/theme_extras.js"></script>
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/startup/01_rehashx.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -158,18 +158,27 @@
 <span class="sd">This is an incredible little gem that&#39;s hugely useful for</span>
 <span class="sd">making IPython work as a more versatile system shell.</span>
 
+<span class="sd">Unfortunately, it executes files in the cwd in an odd manner on Windows,</span>
+<span class="sd">and believes files on Dropbox should be executed without checking a filetype.</span>
 
 <span class="sd">Work in Progress</span>
 <span class="sd">-----------------</span>
 
+<span class="sd">Reorganizing this code to focus on setting up tracers, debuggers and</span>
+<span class="sd">formatters for exceptions.</span>
+
 <span class="sd">The code that&#39;s more important than anything should execute regardless</span>
 <span class="sd">of whether someone has ``pip install``-ed it.</span>
+<span class="sd">As a result, local imports or any imports not in the standard library</span>
+<span class="sd">should be discouraged here.</span>
 
-<span class="sd">In addition, enable faulthandler, tracemalloc and assign them to</span>
-<span class="sd">sys.excepthook, threading.excepthoook and others.</span>
+<span class="sd">In addition, enable `faulthandler`, tracemalloc and assign them to</span>
+<span class="sd">sys.excepthook, threading.excepthook and others.</span>
 
-<span class="sd">A possible alternative to get_ipython().showsyntaxerror might possibly be</span>
-<span class="sd">:func:`dis.distb`.</span>
+<span class="sd">.. tip::</span>
+
+<span class="sd">    A possible alternative to get_ipython().showsyntaxerror might</span>
+<span class="sd">    possibly be :func:`dis.distb`.</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">cgitb</span>
@@ -186,11 +195,36 @@
 <span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">scandir</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span> <span class="nn">runpy</span> <span class="kn">import</span> <span class="n">run_module</span><span class="p">,</span> <span class="n">run_path</span>
-<span class="kn">from</span> <span class="nn">traceback</span> <span class="kn">import</span> <span class="n">FrameSummary</span><span class="p">,</span> <span class="n">StackSummary</span>
+<span class="kn">from</span> <span class="nn">traceback</span> <span class="kn">import</span> <span class="n">FrameSummary</span><span class="p">,</span> <span class="n">StackSummary</span><span class="p">,</span> <span class="n">format_exc</span><span class="p">,</span> <span class="n">format_tb</span>
 <span class="kn">from</span> <span class="nn">tracemalloc</span> <span class="kn">import</span> <span class="n">Snapshot</span>
+
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
 
 <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 <span class="kn">from</span> <span class="nn">traitlets.config</span> <span class="kn">import</span> <span class="n">Configurable</span>
+
+
+<div class="viewcode-block" id="formatted_tb"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.formatted_tb">[docs]</a><span class="k">def</span> <span class="nf">formatted_tb</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;A view of the last exception that intentionally doesn&#39;t require arguments.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    .. ipython::</span>
+<span class="sd">        :okexcept:</span>
+
+<span class="sd">        &gt;&gt;&gt; raise NotImplementedError</span>
+<span class="sd">        &gt;&gt;&gt; formatted_tb()</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">format_tb</span><span class="p">(</span><span class="o">*</span><span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="last_exc"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.last_exc">[docs]</a><span class="k">def</span> <span class="nf">last_exc</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">format_exc</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="rehashx_run"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.rehashx_run">[docs]</a><span class="k">def</span> <span class="nf">rehashx_run</span><span class="p">():</span>
@@ -266,15 +300,27 @@
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="ipy_execfile"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.ipy_execfile">[docs]</a><span class="k">def</span> <span class="nf">ipy_execfile</span><span class="p">(</span><span class="n">directory</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Create a function that actually does what  `execfile` was trying to do.</span>
+<div class="viewcode-block" id="ipy_execfile"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.ipy_execfile">[docs]</a><span class="k">def</span> <span class="nf">ipy_execfile</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s2">&quot;run&quot;</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span></div>
 
-<span class="sd">    Because `execfile` executes everything in separate namespaces, it doesn&#39;t</span>
-<span class="sd">    get added into the user&#39;s `locals`, which is fairly pointless for</span>
-<span class="sd">    interactive use.</span>
+<div class="viewcode-block" id="ipy_execdir"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.ipy_execdir">[docs]</a><span class="k">def</span> <span class="nf">ipy_execdir</span><span class="p">(</span><span class="n">directory</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Execute the python files in `directory`.</span>
+
+<span class="sd">    The idea was to create a function that actually does what</span>
+<span class="sd">    the function in this module `execfile` was trying to do.</span>
+<span class="sd">    Because that `execfile` executes everything in separate namespaces,</span>
+<span class="sd">    it doesn&#39;t get added into the user&#39;s `locals`, which is fairly</span>
+<span class="sd">    pointless for interactive use.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    directory : str (os.Pathlike)</span>
+<span class="sd">        Dir to execute.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">scandir</span><span class="p">(</span><span class="n">directory</span><span class="p">):</span>
-        <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s2">&quot;run&quot;</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
+        <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;py&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;ipy&#39;</span><span class="p">):</span>
+            <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s2">&quot;run&quot;</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
@@ -296,7 +342,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 07, 2020.
+      Last updated on Feb 10, 2020.
     </div>
   </body>
 </html>

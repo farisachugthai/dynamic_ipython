@@ -150,10 +150,214 @@
         | <a href="eventloops.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">eventloops</span></code> module &raquo;</a>
       </div>
       <div id="contentwrapper">
+        <div id="toc" role="navigation" aria-label="table of contents navigation">
+          <h3>Table of Contents</h3>
+          <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">numpy</span></code> Initialization</a><ul>
+<li><a class="reference internal" href="#numpy-s-printing-options">Numpy’s Printing Options</a><ul>
+<li><a class="reference internal" href="#parameters">Parameters</a></li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+<li><a class="reference internal" href="#notes">Notes</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
         <div role="main">
         
 <div class="section" id="numpy-initialization">
 <span id="numpy"></span><h1><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/index.html#module-numpy" title="(in NumPy v1.17)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">numpy</span></code></a> Initialization<a class="headerlink" href="#numpy-initialization" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="numpy-s-printing-options">
+<h2>Numpy’s Printing Options<a class="headerlink" href="#numpy-s-printing-options" title="Permalink to this headline">¶</a></h2>
+<p>These options determine the way floating point numbers, arrays and
+other NumPy objects are displayed.:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>numpy.set_printoptions = set_printoptions(
+    precision=None, threshold=None, edgeitems=None, linewidth=None,
+    suppress=None, nanstr=None, infstr=None, formatter=None, sign=None,
+    floatmode=None, ``**kwarg``
+)
+</pre></div>
+</div>
+<div class="section" id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>precision<span class="classifier">int or None, optional</span></dt><dd><p>Number of digits of precision for floating point output (default 8).
+May be <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a> if <code class="xref py py-obj docutils literal notranslate"><span class="pre">floatmode</span></code> is not <code class="xref py py-obj docutils literal notranslate"><span class="pre">fixed</span></code>, to print as many digits as
+necessary to uniquely specify the value.</p>
+</dd>
+<dt>threshold<span class="classifier">int, optional</span></dt><dd><p>Total number of array elements which trigger summarization
+rather than full repr (default 1000).</p>
+</dd>
+<dt>edgeitems<span class="classifier">int, optional</span></dt><dd><p>Number of array items in summary at beginning and end of
+each dimension (default 3).</p>
+</dd>
+<dt>linewidth<span class="classifier">int, optional</span></dt><dd><p>The number of characters per line for the purpose of inserting
+line breaks (default 75).</p>
+</dd>
+<dt>suppress<span class="classifier">bool, optional</span></dt><dd><p>If True, always print floating point numbers using fixed point
+notation, in which case numbers equal to zero in the current precision
+will print as zero.  If False, then scientific notation is used when
+absolute value of the smallest number is &lt; 1e-4 or the ratio of the
+maximum absolute value to the minimum is &gt; 1e3. The default is False.</p>
+</dd>
+<dt>nanstr<span class="classifier">str, optional</span></dt><dd><p>String representation of floating point not-a-number (default nan).</p>
+</dd>
+<dt>infstr<span class="classifier">str, optional</span></dt><dd><p>String representation of floating point infinity (default inf).</p>
+</dd>
+<dt>sign<span class="classifier">string, either ‘-‘, ‘+’, or ‘ ‘, optional</span></dt><dd><p>Controls printing of the sign of floating-point types. If ‘+’, always
+print the sign of positive values. If ‘ ‘, always prints a space
+(whitespace character) in the sign position of positive values.  If
+‘-‘, omit the sign character of positive values. (default ‘-‘)</p>
+</dd>
+<dt>formatter<span class="classifier">dict of callables, optional</span></dt><dd><p>If not None, the keys should indicate the type(s) that the respective
+formatting function applies to.  Callables should return a string.
+Types that are not specified (by their corresponding keys) are handled
+by the default formatters.  Individual types for which a formatter
+can be set are:</p>
+</dd>
+</dl>
+<ul>
+<li><p>‘bool’</p></li>
+<li><p>‘int’</p></li>
+<li><p>‘timedelta’ : a <code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.timedelta64</span></code></p></li>
+<li><p>‘datetime’ : a <code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.datetime64</span></code></p></li>
+<li><p>‘float’</p></li>
+<li><p>‘longfloat’ : 128-bit floats</p></li>
+<li><p>‘complexfloat’</p></li>
+<li><p>‘longcomplexfloat’ : composed of two 128-bit floats</p></li>
+<li><p>‘numpystr’ : types <code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.string_</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.unicode_</span></code></p></li>
+<li><p>‘object’ : <code class="xref py py-obj docutils literal notranslate"><span class="pre">np.object_</span></code> arrays</p></li>
+<li><p>‘str’ : all other strings</p></li>
+</ul>
+<p>Other keys that can be used to set a group of types at once are:</p>
+<ul>
+<li><p>‘all’ : sets all types</p></li>
+<li><p>‘int_kind’ : sets ‘int’</p></li>
+<li><p>‘float_kind’ : sets ‘float’ and ‘longfloat’</p></li>
+<li><p>‘complex_kind’ : sets ‘complexfloat’ and ‘longcomplexfloat’</p></li>
+<li><p>‘str_kind’ : sets ‘str’ and ‘numpystr’</p></li>
+</ul>
+<dl class="simple">
+<dt>floatmode<span class="classifier">str, optional</span></dt><dd><p>Controls the interpretation of the <code class="xref py py-obj docutils literal notranslate"><span class="pre">precision</span></code> option for
+floating-point types. Can take the following values:</p>
+</dd>
+</dl>
+<ul>
+<li><dl class="simple">
+<dt>‘fixed’: Always print exactly <code class="xref py py-obj docutils literal notranslate"><span class="pre">precision</span></code> fractional digits,</dt><dd><p>even if this would print more or fewer digits than
+necessary to specify the value uniquely.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>‘unique’: Print the minimum number of fractional digits necessary</dt><dd><p>to represent each value uniquely. Different elements may
+have a different number of digits. The value of the
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">precision</span></code> option is ignored.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>‘maxprec’: Print at most <code class="xref py py-obj docutils literal notranslate"><span class="pre">precision</span></code> fractional digits, but if</dt><dd><p>an element can be uniquely represented with fewer digits
+only print it with that many.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>‘maxprec_equal’: Print at most <code class="xref py py-obj docutils literal notranslate"><span class="pre">precision</span></code> fractional digits,</dt><dd><p>but if every element in the array can be uniquely
+represented with an equal number of fewer digits, use that
+many digits for all elements.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<dl>
+<dt>legacy<span class="classifier">string or <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a>, optional</span></dt><dd><p>If set to the string <code class="xref py py-obj docutils literal notranslate"><span class="pre">'1.13'</span></code> enables 1.13 legacy printing mode. This
+approximates numpy 1.13 print output by including a space in the sign
+position of floats and different behavior for 0d arrays. If set to
+<a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a>, disables legacy mode. Unrecognized strings will be ignored
+with a warning for forward compatibility.</p>
+</dd>
+</dl>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.14.0.</span></p>
+</div>
+</div>
+<div class="section" id="see-also">
+<h3>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h3>
+<p>get_printoptions, set_string_function, array2string</p>
+</div>
+<div class="section" id="notes">
+<h3>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="https://docs.python.org/3/library/formatter.html#module-formatter" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">formatter</span></code></a> is always reset with a call to <code class="xref py py-obj docutils literal notranslate"><span class="pre">set_printoptions</span></code>.</p>
+</div>
+<div class="section" id="examples">
+<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
+<p>Floating point precision can be set:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">precision</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.123456789</span><span class="p">]))</span>
+<span class="go">[1.1235]</span>
+</pre></div>
+</div>
+<p>Long arrays can be summarised:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">threshold</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>   
+<span class="go">[0 1 2 ... 7 8 9]</span>
+</pre></div>
+</div>
+<p>Small results can be suppressed:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">4.</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">eps</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+<span class="go">array([-4.9304e-32, -4.4409e-16,  0.0000e+00,  0.0000e+00])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">suppress</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">eps</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>  
+<span class="go">array([-0., -0.,  0.,  0.])</span>
+</pre></div>
+</div>
+<p>A custom formatter can be used to display array elements as desired:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">formatter</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;all&#39;</span><span class="p">:</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s1">&#39;int: &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">)})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span>   
+<span class="go">array([int: 0, int: -1, int: -2])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">()</span>  <span class="c1"># formatter gets reset</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span>   
+<span class="go">array([0, 1, 2])</span>
+</pre></div>
+</div>
+<p>To put back the default options, you can use:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">edgeitems</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">infstr</span><span class="o">=</span><span class="s1">&#39;inf&#39;</span><span class="p">,</span>
+<span class="gp">... </span><span class="n">linewidth</span><span class="o">=</span><span class="mi">75</span><span class="p">,</span> <span class="n">nanstr</span><span class="o">=</span><span class="s1">&#39;nan&#39;</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+<span class="gp">... </span><span class="n">suppress</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">formatter</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<span class="target" id="module-default_profile.startup.41_numpy_init"></span><dl class="function">
+<dt id="default_profile.startup.41_numpy_init.numpy_setup">
+<code class="sig-prename descclassname">default_profile.startup.41_numpy_init.</code><code class="sig-name descname">numpy_setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/41_numpy_init.html#numpy_setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.41_numpy_init.numpy_setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Jeez this got platform specific.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="default_profile.startup.41_numpy_init.set_numpy_printoptions">
+<code class="sig-prename descclassname">default_profile.startup.41_numpy_init.</code><code class="sig-name descname">set_numpy_printoptions</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/41_numpy_init.html#set_numpy_printoptions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.41_numpy_init.set_numpy_printoptions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define this function only if numpy can be imported.</p>
+<p>But don’t end the script with sys.exit() because anything that imports
+this module will exit too. As the <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> imports this module
+the whole package breaks due to a simple installation issue.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a>) – Any options that should be overridden.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
 </div>
 
 

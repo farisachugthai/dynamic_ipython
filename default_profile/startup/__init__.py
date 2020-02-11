@@ -31,35 +31,37 @@ STARTUP_HANDLER.setFormatter(STARTUP_FORMATTER)
 STARTUP_LOGGER.addHandler(STARTUP_HANDLER)
 STARTUP_LOGGER.setLevel(logging.WARNING)
 
-rehashx_mod = importlib.import_module("01_rehashx", package="default_profile.startup")
+# rehashx_mod = importlib.import_module('default_profile.startup.01_rehashx')
 
-log_mod = importlib.import_module("05_log", package="default_profile.startup")
+# rehashx_mod = importlib.import_module("01_rehashx", package="default_profile.startup")
 
-help_helpers_mod = importlib.import_module(
-    "06_help_helpers", package="default_profile.startup"
-)
+# log_mod = importlib.import_module("05_log", package="default_profile.startup")
 
-envvar_mod = importlib.import_module("10_envvar", package="default_profile.startup")
+# help_helpers_mod = importlib.import_module(
+#     "06_help_helpers", package="default_profile.startup"
+# )
 
-clipboard_mod = importlib.import_module(
-    "11_clipboard", package="default_profile.startup"
-)
+# envvar_mod = importlib.import_module("10_envvar", package="default_profile.startup")
 
-aliases_mod = importlib.import_module("20_aliases", package="default_profile.startup")
+# clipboard_mod = importlib.import_module(
+#     "11_clipboard", package="default_profile.startup"
+# )
 
-fzf_mod = importlib.import_module("21_fzf", package="default_profile.startup")
+# aliases_mod = importlib.import_module("20_aliases", package="default_profile.startup")
 
-readline_mod = importlib.import_module("30_readline", package="default_profile.startup")
+# fzf_mod = importlib.import_module("21_fzf", package="default_profile.startup")
 
-yank_last_arg_mod = importlib.import_module(
-    "31_yank_last_arg", package="default_profile.startup"
-)
+# readline_mod = importlib.import_module("30_readline", package="default_profile.startup")
 
-kb_mod = importlib.import_module("32_kb", package="default_profile.startup")
+# yank_last_arg_mod = importlib.import_module(
+#     "31_yank_last_arg", package="default_profile.startup"
+# )
 
-bottom_toolbar_mod = importlib.import_module(
-    "33_bottom_toolbar", package="default_profile.startup"
-)
+# kb_mod = importlib.import_module("32_kb", package="default_profile.startup")
+
+# bottom_toolbar_mod = importlib.import_module(
+#     "33_bottom_toolbar", package="default_profile.startup"
+# )
 
 completion_mod = importlib.import_module("default_profile.startup.34_completion")
 
@@ -70,5 +72,5 @@ try:
     from repralias import ReprAlias
 except ImportError:
     pass
-import pygit
-import event_loops
+# import pygit
+# import event_loops

@@ -10,13 +10,13 @@
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/print.css" type="text/css" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../_static/language_data.js"></script>
-    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
-    <script type="text/javascript" src="../../../_static/theme_extras.js"></script>
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script src="../../../_static/theme_extras.js"></script>
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/startup/35_lexer.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -149,7 +149,9 @@
         <div role="main">
         
 <h1>Source code for default_profile.startup.35_lexer</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Build our lexer in addition to utilizing already built ones.</span>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;Build our lexer in addition to utilizing already built ones.</span>
 
 <span class="sd">Pygments, IPython, prompt_toolkit, Jinja2 and Sphinx all come</span>
 <span class="sd">with their own concepts of lexers which doesn&#39;t include</span>
@@ -242,6 +244,7 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">original_lexer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">lexer</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">configurables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;DynamicAliasManager&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">original_lexer</span> <span class="o">=</span> <span class="kc">None</span></div></div>
 
@@ -280,6 +283,7 @@
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">lexer</span> <span class="o">=</span> <span class="n">IPythonConfigurableLexer</span><span class="p">()</span>
     <span class="c1"># TODO: isn&#39;t there a method like _ip.add_trait or something?</span>
+    <span class="n">colorizer</span> <span class="o">=</span> <span class="n">Colorizer</span><span class="p">()</span>
 </pre></div>
 
         </div>
@@ -287,7 +291,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 07, 2020.
+      Last updated on Feb 10, 2020.
     </div>
   </body>
 </html>
