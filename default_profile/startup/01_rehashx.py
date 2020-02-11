@@ -152,6 +152,7 @@ def execfile(filename, global_namespace=None, local_namespace=None):
 def ipy_execfile(f):
     get_ipython().run_line_magic("run", f)
 
+
 def ipy_execdir(directory):
     """Execute the python files in `directory`.
 
@@ -168,7 +169,7 @@ def ipy_execdir(directory):
 
     """
     for i in scandir(directory):
-        if i.name.endswith('py') or i.name.endswith('ipy'):
+        if i.name.endswith("py") or i.name.endswith("ipy"):
             get_ipython().run_line_magic("run", i.name)
 
 

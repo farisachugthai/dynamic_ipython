@@ -88,9 +88,9 @@ class CommonAliases(UserDict):
         return "<Common Aliases>: # of aliases: {!r} ".format(len(self.dict_aliases))
 
     # def __contains__(self, other):
-        # is this the right definition for contains?
-        # if other in self.dict_aliases:
-        # return True
+    # is this the right definition for contains?
+    # if other in self.dict_aliases:
+    # return True
     @staticmethod
     def _find_exe(self, exe=None):
         """Use :func:`shutil.which` to determine whether an executable exists.
@@ -150,7 +150,6 @@ class CommonAliases(UserDict):
             else:
                 name, cmd = args
         self.define_alias(name, cmd)
-
 
     def __mul__(self):
         raise NotImplementedError

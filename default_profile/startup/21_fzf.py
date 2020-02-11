@@ -75,12 +75,12 @@ class RedirectStdout:
     def __init__(self, new_stdout=None):
         """If stdout is None, redirect to /dev/null"""
         self._new_stdout = new_stdout or open(os.devnull, "w")
- 
+
     def __enter__(self):
         sys.stdout.reconfigure(line_buffering=True)  # implies flush
         self.oldstdout_fno = os.dup(sys.stdout.fileno())
         os.dup2(self._new_stdout.fileno(), 1)
- 
+
     def __exit__(self, exc_type, exc_value, traceback):
         self._new_stdout.flush()
         os.dup2(self.oldstdout_fno, 1)

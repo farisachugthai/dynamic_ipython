@@ -132,16 +132,17 @@ def get_parser():
     #     "mainpyfile",
     #     metavar="File to execute",
     #     action="store",
-        # type=argparse.Filetype  this doesnt work?
-        # also can we add nargs and have more than one?
-        # help="File to run under the debugger."
+    # type=argparse.Filetype  this doesnt work?
+    # also can we add nargs and have more than one?
+    # help="File to run under the debugger."
     # )
     parser.add_argument(
-            "-f", "--file",
-            action="store",
-            dest="mainpyfile",
-            help="File to run under the debugger.",
-            )
+        "-f",
+        "--file",
+        action="store",
+        dest="mainpyfile",
+        help="File to run under the debugger.",
+    )
 
     parser.add_argument(
         "-c",
@@ -198,7 +199,7 @@ def main():
         mainpyfile = namespace.mainpyfile
         # Replace pdb's dir with script's dir in front of module search path.
         sys.path.insert(0, os.path.dirname(mainpyfile))
-    # should probably make an else. 
+    # should probably make an else.
 
     # Note on saving/restoring sys.argv: it's a good idea when sys.argv was
     # modified by the script being debugged. It's a bad idea when it was

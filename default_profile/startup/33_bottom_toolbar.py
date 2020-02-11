@@ -41,6 +41,7 @@ completion_displays_to_styles = {
     "none": None,
 }
 
+
 def init_style():
     # Could set this to _ip.pt_app.style i suppose
     if Gruvbox is not None:
@@ -61,7 +62,7 @@ def override_style(style_overrides):
 
 def merged_styles(overrides=None):
     base = init_style()
-    
+
     return merge_styles([base, overrides, default_pygments_style()])
 
 

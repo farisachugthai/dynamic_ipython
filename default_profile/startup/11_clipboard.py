@@ -11,8 +11,7 @@ import subprocess
 
 from IPython.core.error import TryNext
 from IPython.core.getipython import get_ipython
-from prompt_toolkit.clipboard import (ClipboardData, DynamicClipboard,
-                                      InMemoryClipboard)
+from prompt_toolkit.clipboard import ClipboardData, DynamicClipboard, InMemoryClipboard
 
 try:
     import pyperclip
@@ -21,6 +20,7 @@ except ImportError:
     clipboard = None
 else:
     from prompt_toolkit.clipboard.pyperclip import PyperclipClipboard
+
     # from pyperclip import determine_clipboard
 
     # copy, paste = determine_clipboard()

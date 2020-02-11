@@ -11,39 +11,29 @@ import sys
 from typing import List, Any
 import webbrowser
 
+if sys.version_info < (3, 7):
+    from default_profile import ModuleNotFoundError
+
 try:
     import sphinx
 except (ImportError, ModuleNotFoundError):
     sys.exit("Sphinx documentation module not found. Exiting.")
 
-from jinja2.environment import Environment
 from sphinx.application import Sphinx
+from sphinx.cmd.make_mode import build_main
+from sphinx.errors import ApplicationError
 from sphinx.jinja2glue import SphinxFileSystemLoader
 from sphinx.project import Project
-from sphinx.cmd.make_mode import build_main
 
+# from jinja2.constants import TRIM_BLOCKS, LSTRIP_BLOCKS
+from jinja2.environment import Environment
+from jinja2.exceptions import TemplateError
+from jinja2.ext import autoescape, do, with_
+from jinja2.loaders import FileSystemLoader
+from jinja2.lexer import get_lexer
+
+from default_profile import ask_for_import
 from default_profile.__about__ import __version__
-
-
-class GitProject:
-    """Determine the root of the repo and work from there."""
-
-    def __init__(self, **kwargs):
-        """Override anything you like as a keyword argument. My personal choices for defaults are provided here."""
-        self.cwd = Path.cwd()
-        self.get_git_root()
-
-    def get_git_root(self):
-        """Determine the root of the repo."""
-        root = subprocess.run(["git", "rev-parse", "--show-toplevel"])
-        self.root = root
-        return root
-
-    def __repr__(self):
-        return f"{self.__class__.__name__}"
-
-    def __str__(self):
-        return f"{self.__class__.__name__}\nself.root: {self.root}"
 
 
 def _setup_make_logging():
@@ -151,7 +141,9 @@ def _parse_arguments(cmds=None) -> argparse.ArgumentParser:
 
     if len(sys.argv[1:]) == 0:
         parser.print_help()
-        raise argparse.ArgumentError(None, "Args not provided.")
+        # This is actually annoying
+        # raise argparse.ArgumentError(None, "Args not provided.")
+        sys.exit()
 
     return user_args
 
@@ -346,47 +338,43 @@ def generate_sphinx_app():
     )
     return app
 
+
 def setup_jinja():
-    """Setup a closure so it doesn't break if jinja isn't installed."""
+    """Use jinja to set up the Sphinx environment."""
+    TRIM_BLOCKS = True
+    LSTRIP_BLOCKS = True
+    template_path = "_templates"
+    try:
+        loader = FileSystemLoader(template_path)
+    except TemplateError:
+        return
+    env = Environment(
+        trim_blocks=TRIM_BLOCKS,
+        lstrip_blocks=LSTRIP_BLOCKS,
+        loader=FileSystemLoader(template_path),
+        extensions=["jinja2.ext.i18n", autoescape, do, with_],
+        enable_async=True,
+    )
+    return env
 
-    # from jinja2.constants import TRIM_BLOCKS, LSTRIP_BLOCKS
-    from jinja2.environment import Environment
-    from jinja2.exceptions import TemplateError
-    from jinja2.ext import autoescape, do, with_
-    from jinja2.loaders import FileSystemLoader
-    from jinja2.lexer import get_lexer
 
-    def create_jinja_env():
-        """Use jinja to set up the Sphinx environment."""
-        TRIM_BLOCKS = True
-        LSTRIP_BLOCKS = True
-        template_path = "_templates"
-        try:
-            loader = FileSystemLoader(template_path)
-        except TemplateError:
-            return
-        env = Environment(
-            trim_blocks=TRIM_BLOCKS,
-            lstrip_blocks=LSTRIP_BLOCKS,
-            loader=FileSystemLoader(template_path),
-            extensions=["jinja2.ext.i18n", autoescape, do, with_],
-            enable_async=True,
-        )
-        return env
-
-def main():
-    build_opts = gather_sphinx_options([])
+def main(repo_root=None):
     # Probably should initialize in a different/ better way but eh
-    if ask_for_import('jinja2'):
-        setup_jinja()
+    if ask_for_import("jinja2"):
+        env = setup_jinja()
     else:
         env = Environment()
 
-    lexer = get_lexer(create_jinja_env())
-    sphinx_fs = SphinxFileSystemLoader(searchpath=repo.templates_path)
-    app = generate_sphinx_app()
+    lexer = setup_jinja()
+    project = Project(repo_root, source_suffix="rst")
+    # sphinx_fs = SphinxFileSystemLoader(searchpath=project.templates_path)
+    build_opts = gather_sphinx_options([])
     build_main(build_opts)
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+
+    logger = _setup_make_logging()
+    git_root = subprocess.run(["git", "rev-parse", "--show-root"]).stdout
+    logger.debug(f"git root was: {git_root}")
+    sys.exit(main(git_root))

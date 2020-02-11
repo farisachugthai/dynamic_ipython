@@ -23,7 +23,6 @@ class ShellRepo:
         self.current_branch = self.git_cur_branch()
         self.logger = logging.getLogger(name=__name__)
 
-
     def __repr__(self):
         return f"{self.__class__.__name__}>"
 
