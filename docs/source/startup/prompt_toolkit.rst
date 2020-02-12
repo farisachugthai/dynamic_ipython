@@ -194,9 +194,24 @@ to aide us as well.
 
 Auto-Suggestions
 ------------------
+
 In addition, `prompt_toolkit` provides a class
 :class:`prompt_toolkit.auto_suggest.AutoSuggestFromHistory` to give
 completions in a similar manner to the fish shell.
+
+.. admonition:: The API for for adding custom completers doesn't seem to be having an effect.
+
+   Specifically ``get_ipython.set_custom_completer``.
+
+
+.. code-block::
+
+    fuzzy_completer = FuzzyCompleter(ExecutableCompleter())
+    dynamic_completer = DynamicCompleter(fuzzy_completer)
+
+Doesn't work because the 'dynamic_completer' requires a callable and the fuzzy
+isn't one.
+
 
 .. automodule:: default_profile.startup.34_completion
    :synopsis: add new completions to the shell to speed up autocompletion.
@@ -225,6 +240,41 @@ the built-in modules.:
 - :mod:`ast`
 
 So it'd be tough to say we're at a lack of tools!
+
+.. class:: IPythonConfigurableLexer
+
+   A class to merge the seemingly disjoint APIs of IPython, traitlets,
+   prompt_toolkit and pygments.
+
+   TODO: The `IPython.terminal.lexer.IPythonPTLexer` also should have a few
+   of these attributes as well.
+
+    And here's how you join the bridge.
+
+.. class:: PygmentsLexer(Lexer):
+
+   Lexer that calls a pygments lexer.
+
+   Example::
+
+      from pygments.lexers.html import HtmlLexer
+      lexer = PygmentsLexer(HtmlLexer)
+
+   Note: Don't forget to also load a Pygments compatible style. E.g.::
+
+      from prompt_toolkit.styles.from_pygments import style_from_pygments_cls
+      from pygments.styles import get_style_by_name
+      style = style_from_pygments_cls(get_style_by_name('monokai'))
+
+   :param pygments_lexer_cls: A `Lexer` from Pygments.
+   :param sync_from_start: Start lexing at the start of the document. This
+      will always give the best results, but it will be slow for bigger
+      documents. (When the last part of the document is display, then the
+      whole document will be lexed by Pygments on every key stroke.) It is
+      recommended to disable this for inputs that are expected to be more
+      than 1,000 lines.
+   :param syntax_sync: `SyntaxSync` object.
+
 
 .. automodule:: default_profile.startup.35_lexer
    :synopsis: Generate a lexer to provide syntax highlighting in the REPL.

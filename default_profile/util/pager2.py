@@ -97,8 +97,9 @@ def provided_or_last(s=None, shell=None):
     code_to_page :
         Found user code.
 
-    Note
-    -----
+    Notes
+    -------
+
     What is the actual implementation name for the var ``_i``? I think IPython
     stores a :attr:`last_execution_result` or maybe a
     :attr:`last_execution_succeeded`.

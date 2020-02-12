@@ -154,6 +154,9 @@
 <span class="sd">Takes into consideration whether Emacs mode or Vi mode is set</span>
 <span class="sd">and adds :kbd:`F4` as a keybindings to toggle between each.</span>
 
+<span class="sd">TODO: currently initialize a titlebar, an exit button and a few</span>
+<span class="sd">other things that aren&#39;t utilized at all.</span>
+
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">functools</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span>
@@ -162,18 +165,27 @@
 <span class="kn">from</span> <span class="nn">traceback</span> <span class="kn">import</span> <span class="n">print_exc</span>
 
 <span class="kn">from</span> <span class="nn">prompt_toolkit</span> <span class="kn">import</span> <span class="n">ANSI</span><span class="p">,</span> <span class="n">HTML</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.application.current</span> <span class="kn">import</span> <span class="n">get_app</span>
+
 <span class="kn">from</span> <span class="nn">prompt_toolkit.enums</span> <span class="kn">import</span> <span class="n">EditingMode</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.keys</span> <span class="kn">import</span> <span class="n">Keys</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding</span> <span class="kn">import</span> <span class="n">KeyBindings</span>
 
-<span class="kn">from</span> <span class="nn">prompt_toolkit.shortcuts</span> <span class="kn">import</span> <span class="n">print_formatted_text</span><span class="p">,</span> <span class="n">CompleteStyle</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.styles</span> <span class="kn">import</span> <span class="n">default_pygments_style</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.layout.containers</span> <span class="kn">import</span> <span class="n">HSplit</span><span class="p">,</span> <span class="n">VSplit</span><span class="p">,</span> <span class="n">Window</span><span class="p">,</span> <span class="n">WindowAlign</span><span class="p">,</span> <span class="n">FloatContainer</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.layout.controls</span> <span class="kn">import</span> <span class="n">BufferControl</span><span class="p">,</span> <span class="n">FormattedTextControl</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.layout.layout</span> <span class="kn">import</span> <span class="n">Layout</span>
 
+<span class="kn">from</span> <span class="nn">prompt_toolkit.shortcuts</span> <span class="kn">import</span> <span class="n">print_formatted_text</span><span class="p">,</span> <span class="n">CompleteStyle</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.shortcuts.utils</span> <span class="kn">import</span> <span class="n">print_container</span>
+
+<span class="kn">from</span> <span class="nn">prompt_toolkit.styles</span> <span class="kn">import</span> <span class="n">default_pygments_style</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.styles</span> <span class="kn">import</span> <span class="n">Style</span><span class="p">,</span> <span class="n">merge_styles</span><span class="p">,</span> <span class="n">style</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.styles.pygments</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">style_from_pygments_cls</span><span class="p">,</span>
     <span class="n">style_from_pygments_dict</span><span class="p">,</span>
 <span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">prompt_toolkit.widgets</span> <span class="kn">import</span> <span class="n">Frame</span><span class="p">,</span> <span class="n">TextArea</span><span class="p">,</span> <span class="n">Button</span>
 
 <span class="kn">from</span> <span class="nn">pygments.token</span> <span class="kn">import</span> <span class="n">Token</span>
 <span class="kn">from</span> <span class="nn">pygments.lexers.python</span> <span class="kn">import</span> <span class="n">PythonLexer</span>
@@ -185,12 +197,51 @@
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">Gruvbox</span> <span class="o">=</span> <span class="kc">None</span>
 
+
 <span class="n">completion_displays_to_styles</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;multi&quot;</span><span class="p">:</span> <span class="n">CompleteStyle</span><span class="o">.</span><span class="n">MULTI_COLUMN</span><span class="p">,</span>
     <span class="s2">&quot;single&quot;</span><span class="p">:</span> <span class="n">CompleteStyle</span><span class="o">.</span><span class="n">COLUMN</span><span class="p">,</span>
     <span class="s2">&quot;readline&quot;</span><span class="p">:</span> <span class="n">CompleteStyle</span><span class="o">.</span><span class="n">READLINE_LIKE</span><span class="p">,</span>
     <span class="s2">&quot;none&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">}</span>
+
+
+<div class="viewcode-block" id="exit_clicked"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.exit_clicked">[docs]</a><span class="k">def</span> <span class="nf">exit_clicked</span><span class="p">():</span>
+    <span class="n">get_app</span><span class="p">()</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span></div>
+
+
+<span class="n">exit_button</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span><span class="s2">&quot;Exit&quot;</span><span class="p">,</span> <span class="n">handler</span><span class="o">=</span><span class="n">exit_clicked</span><span class="p">)</span>
+<span class="c1"># Thisll probably be useful</span>
+<span class="c1"># from prompt_toolkit.mouse_events import MouseEvent, MouseEventType</span>
+
+<span class="c1"># float_container = FloatContainer(content=Window(...),</span>
+<span class="c1">#                        floats=[</span>
+<span class="c1">#                            Float(xcursor=True,</span>
+<span class="c1">#                                 ycursor=True,</span>
+<span class="c1">#                                 layout=CompletionMenu(...))</span>
+<span class="c1">#                        ])</span>
+
+
+<div class="viewcode-block" id="show_header"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.show_header">[docs]</a><span class="k">def</span> <span class="nf">show_header</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">Frame</span><span class="p">(</span><span class="n">TextArea</span><span class="p">(</span><span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">banner</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="LineCounter"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.LineCounter">[docs]</a><span class="k">class</span> <span class="nc">LineCounter</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Really basic counter displayed inspired by Doug Hellman.</span>
+
+<span class="sd">    :URL: https://pymotw.com/3/sys/interpreter.html</span>
+
+<span class="sd">    Need to set this to the rprompt.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="LineCounter.__init__"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.LineCounter.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%H:%M:%S&#39;</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Yes!!! This now behaves as expected.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="s1">&#39;(&lt; In[</span><span class="si">{:3d}</span><span class="s1">]: Time:</span><span class="si">{}</span><span class="s1">  )&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="init_style"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.init_style">[docs]</a><span class="k">def</span> <span class="nf">init_style</span><span class="p">():</span>
@@ -215,6 +266,13 @@
     <span class="n">base</span> <span class="o">=</span> <span class="n">init_style</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">merge_styles</span><span class="p">([</span><span class="n">base</span><span class="p">,</span> <span class="n">overrides</span><span class="p">,</span> <span class="n">default_pygments_style</span><span class="p">()])</span></div>
+
+
+<div class="viewcode-block" id="get_titlebar_text"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.get_titlebar_text">[docs]</a><span class="k">def</span> <span class="nf">get_titlebar_text</span><span class="p">():</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;class:title&quot;</span><span class="p">,</span> <span class="s2">&quot;Hello World!&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;class:title&quot;</span><span class="p">,</span> <span class="s2">&quot; (Press [TODO] to quit.)&quot;</span><span class="p">),</span>
+    <span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="BottomToolbar"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.BottomToolbar">[docs]</a><span class="k">class</span> <span class="nc">BottomToolbar</span><span class="p">:</span>
@@ -291,19 +349,19 @@
         <span class="c1"># add more styling:</span>
         <span class="c1"># [(&#39;class:toolbar&#39;, &#39; [F4] %s &#39; % text)]</span>
         <span class="n">current_vi_mode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">vi_state</span><span class="o">.</span><span class="n">input_mode</span>
+        <span class="c1"># temp_toolbar = f&quot; [F4] Vi: {current_vi_mode!r}  {date.today()!r}&quot;</span>
+        <span class="c1"># toolbar = Frame(TextArea(temp_toolbar))</span>
+        <span class="c1"># return toolbar.body</span>
         <span class="n">toolbar</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot; [F4] Vi: </span><span class="si">{current_vi_mode!r}</span><span class="s2">  {date.today()!r}&quot;</span>
-        <span class="c1"># toolbar.append(style=default_pygments_style())</span>
         <span class="k">return</span> <span class="n">toolbar</span>
 
     <span class="k">def</span> <span class="nf">_render_emacs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># return [(Token.Generic.Heading, &quot;[F4] Emacs: &quot;),</span>
         <span class="c1">#         (Token.Generic.Prompt, f&quot;{Path.cwd()} {date.today()}&quot;)]</span>
-        <span class="c1"># Nope! str and _Token can&#39;t be concatenated and this&#39;ll not only freeze</span>
-        <span class="c1"># the running session but the terminal itself</span>
+        <span class="c1"># temp_toolbar = f&quot; [F4] Emacs: {Path.cwd()!r} {date.today()!a}&quot;</span>
+        <span class="c1"># toolbar = Frame(TextArea(temp_toolbar))</span>
+        <span class="c1"># return toolbar.body</span>
         <span class="n">toolbar</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot; [F4] Emacs: {Path.cwd()!r} {date.today()!a}&quot;</span>
-        <span class="c1"># really upset this didn&#39;t work `{date.today():&gt;{len(self)}}&quot;</span>
-        <span class="c1"># goddamn neither did that</span>
-        <span class="c1"># return &quot;{} {:&gt;150}&quot;.format(toolbar, date.today())</span>
         <span class="k">return</span> <span class="n">toolbar</span></div>
 
 
@@ -321,6 +379,13 @@
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">get_ipython</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">add_toolbar</span><span class="p">(</span><span class="n">BottomToolbar</span><span class="p">)</span>
+
+    <span class="n">print_container</span><span class="p">(</span><span class="n">show_header</span><span class="p">())</span>
+
+    <span class="c1"># Bind to IPython TODO:</span>
+    <span class="n">root_container</span> <span class="o">=</span> <span class="n">HSplit</span><span class="p">([</span>
+        <span class="n">Window</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="n">FormattedTextControl</span><span class="p">(</span><span class="n">get_titlebar_text</span><span class="p">),</span> <span class="n">align</span><span class="o">=</span><span class="n">WindowAlign</span><span class="o">.</span><span class="n">CENTER</span><span class="p">,),</span>
+        <span class="n">Window</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">char</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;class:line&quot;</span><span class="p">),</span> <span class="p">])</span>
 </pre></div>
 
         </div>

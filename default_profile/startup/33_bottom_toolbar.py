@@ -3,6 +3,9 @@
 Takes into consideration whether Emacs mode or Vi mode is set
 and adds :kbd:`F4` as a keybindings to toggle between each.
 
+TODO: currently initialize a titlebar, an exit button and a few
+other things that aren't utilized at all.
+
 """
 import functools
 from datetime import date
@@ -11,11 +14,13 @@ from shutil import get_terminal_size
 from traceback import print_exc
 
 from prompt_toolkit import ANSI, HTML
+from prompt_toolkit.application.current import get_app
+
 from prompt_toolkit.enums import EditingMode
 from prompt_toolkit.keys import Keys
 from prompt_toolkit.key_binding import KeyBindings
 
-from prompt_toolkit.layout.containers import HSplit, VSplit, Window, WindowAlign
+from prompt_toolkit.layout.containers import HSplit, VSplit, Window, WindowAlign, FloatContainer
 from prompt_toolkit.layout.controls import BufferControl, FormattedTextControl
 from prompt_toolkit.layout.layout import Layout
 
@@ -29,7 +34,7 @@ from prompt_toolkit.styles.pygments import (
     style_from_pygments_dict,
 )
 
-from prompt_toolkit.widgets import Frame, TextArea
+from prompt_toolkit.widgets import Frame, TextArea, Button
 
 from pygments.token import Token
 from pygments.lexers.python import PythonLexer
@@ -41,6 +46,7 @@ try:
 except ImportError:
     Gruvbox = None
 
+
 completion_displays_to_styles = {
     "multi": CompleteStyle.MULTI_COLUMN,
     "single": CompleteStyle.COLUMN,
@@ -49,8 +55,42 @@ completion_displays_to_styles = {
 }
 
 
+def exit_clicked():
+    get_app().exit()
+
+
+exit_button = Button("Exit", handler=exit_clicked)
+# Thisll probably be useful
+# from prompt_toolkit.mouse_events import MouseEvent, MouseEventType
+
+# float_container = FloatContainer(content=Window(...),
+#                        floats=[
+#                            Float(xcursor=True,
+#                                 ycursor=True,
+#                                 layout=CompletionMenu(...))
+#                        ])
+
+
 def show_header():
     return Frame(TextArea(get_ipython().banner))
+
+
+class LineCounter:
+    """Really basic counter displayed inspired by Doug Hellman.
+
+    :URL: https://pymotw.com/3/sys/interpreter.html
+
+    Need to set this to the rprompt.
+    """
+
+    def __init__(self):
+        self.count = 0
+        self.time = strftime('%H:%M:%S')
+
+    def __call__(self):
+        """Yes!!! This now behaves as expected."""
+        self.count += 1
+        return '(< In[{:3d}]: Time:{}  )'.format(self.count, self.time)
 
 
 def init_style():

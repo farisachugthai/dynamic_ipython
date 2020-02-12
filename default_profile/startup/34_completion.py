@@ -1,15 +1,4 @@
-"""Use both Jedi and prompt_toolkit to aide IPython out.
-
-.. code-block::
-
-    fuzzy_completer = FuzzyCompleter(ExecutableCompleter())
-    dynamic_completer = DynamicCompleter(fuzzy_completer)
-
-Doesn't work because the dynamic_completer requires a callable and the fuzzy
-isn't. Omg.
-
-Sweet. Realizing at this moment that set_custom_completer doesn't work either.
-"""
+"""Use both Jedi and prompt_toolkit to aide IPython out."""
 import abc
 import keyword
 import logging

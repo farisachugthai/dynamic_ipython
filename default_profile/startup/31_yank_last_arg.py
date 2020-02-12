@@ -25,6 +25,16 @@ from prompt_toolkit.filters import (
 
 from prompt_toolkit.filters.app import emacs_insert_mode, vi_insert_mode, has_focus
 
+from prompt_toolkit.filters.cli import HasSelection
+# These are neat
+# "ViMode",
+# "ViNavigationMode",
+# "ViInsertMode",
+# "ViInsertMultipleMode",
+# "ViReplaceMode",
+# "ViSelectionMode",
+# "ViWaitingForTextObjectMode",
+# "ViDigraphMode",
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.key_binding.bindings.completion import (
     display_completions_like_readline,
@@ -252,12 +262,7 @@ def add_bindings():
         """Move to the end."""
         event.current_buffer.cursor_position = len(event.current_buffer.text)
 
-    # handle("left")(get_by_name("backward-char"))
-    # handle("right")(get_by_name("forward-char"))
-
-
-    is_returnable = Condition(
-        lambda: get_app().current_buffer.is_returnable)
+    is_returnable = Condition(lambda: get_app().current_buffer.is_returnable)
 
     @handle(Keys.Left)
     def left_multiline(event):
@@ -272,9 +277,7 @@ def add_bindings():
 
     @handle(Keys.Right)
     def right_multiline(event):
-        """
-        Right that wraps around in multiline.
-        """
+        """Right that wraps around in multiline."""
         if event.current_buffer.cursor_position + event.arg <= len(
             event.current_buffer.text
         ):
@@ -343,7 +346,7 @@ def add_bindings():
 
     @handle(Keys.ControlX, Keys.ControlE)
     def open_in_editor(event):
-        event.current_buffer.open_in_editor(event.app)
+        event.current_buffer.open_in_editor()
 
 
     handle("c-up")(get_by_name("previous-history"))
@@ -476,12 +479,12 @@ def add_bindings():
 
     @handle(Keys.ControlD)
     def _(event):
-        raise EOFError
+        get_app().exit()
 
-    @handle(Keys.ControlX, Keys.ControlE, filter=~has_selection)
-    def open_editor(event):
-        """ Open current buffer in editor """
-        event.current_buffer.open_in_editor(event.cli)
+    # @handle(Keys.ControlX, Keys.ControlE, filter=HasSelection)
+    # def open_editor(event):
+    #     """ Open current buffer in editor """
+    #     event.current_buffer.open_in_editor(event.cli)
 
     @handle(Keys.Tab, filter=tab_insert_indent)
     def insert_indent(event):
@@ -498,14 +501,14 @@ def add_bindings():
         if b.complete_state:
             b.complete_previous()
         else:
-            event.cli.current_buffer.insert_text("    "))
+            event.cli.current_buffer.insert_text("    ")
 
-    @handle("(", filter=autopair_condition & whitespace_or_bracket_after)
+    @handle("(", filter=whitespace_or_bracket_after)
     def insert_right_parens(event):
         event.cli.current_buffer.insert_text("(")
         event.cli.current_buffer.insert_text(")", move_cursor=False)
 
-    @handle(")", filter=autopair_condition)
+    @handle(")")
     def overwrite_right_parens(event):
         buffer = event.cli.current_buffer
         if buffer.document.current_char == ")":
@@ -513,12 +516,12 @@ def add_bindings():
         else:
             buffer.insert_text(")")
 
-    @handle("[", filter=autopair_condition & whitespace_or_bracket_after)
+    @handle("[", filter=whitespace_or_bracket_after)
     def insert_right_bracket(event):
         event.cli.current_buffer.insert_text("[")
         event.cli.current_buffer.insert_text("]", move_cursor=False)
 
-    @handle("]", filter=autopair_condition)
+    @handle("]")
     def overwrite_right_bracket(event):
         buffer = event.cli.current_buffer
 
@@ -527,12 +530,12 @@ def add_bindings():
         else:
             buffer.insert_text("]")
 
-    @handle("{", filter=autopair_condition & whitespace_or_bracket_after)
+    @handle("{", filter=whitespace_or_bracket_after)
     def insert_right_brace(event):
         event.cli.current_buffer.insert_text("{")
         event.cli.current_buffer.insert_text("}", move_cursor=False)
 
-    @handle("}", filter=autopair_condition)
+    @handle("}")
     def overwrite_right_brace(event):
         buffer = event.cli.current_buffer
 
@@ -541,7 +544,7 @@ def add_bindings():
         else:
             buffer.insert_text("}")
 
-    @handle("'", filter=autopair_condition)
+    @handle("'")
     def insert_right_quote(event):
         buffer = event.cli.current_buffer
 
@@ -553,7 +556,7 @@ def add_bindings():
         else:
             buffer.insert_text("'")
 
-    @handle('"', filter=autopair_condition)
+    @handle('"')
     def insert_right_double_quote(event):
         buffer = event.cli.current_buffer
 
@@ -565,7 +568,7 @@ def add_bindings():
         else:
             buffer.insert_text('"')
 
-    @handle(Keys.Backspace, filter=autopair_condition)
+    @handle(Keys.Backspace)
     def delete_brackets_or_quotes(event):
         """Delete empty pair of brackets or quotes"""
         buffer = event.cli.current_buffer

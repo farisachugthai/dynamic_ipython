@@ -175,7 +175,10 @@
 <span class="k">if</span> <span class="s2">&quot;pyreadline&quot;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
     <span class="n">pyreadline</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="s2">&quot;pyreadline&quot;</span><span class="p">]</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">pyreadline</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">readline</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="k">raise</span>
 
 
 <div class="viewcode-block" id="SimpleCompleter"><a class="viewcode-back" href="../../../startup/setup_readline.html#default_profile.startup.30_readline.SimpleCompleter">[docs]</a><span class="k">class</span> <span class="nc">SimpleCompleter</span><span class="p">:</span>
