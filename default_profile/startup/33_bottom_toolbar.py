@@ -17,6 +17,7 @@ from prompt_toolkit import ANSI, HTML
 from prompt_toolkit.application.current import get_app
 
 from prompt_toolkit.enums import EditingMode
+from prompt_toolkit.formatted_text import FormattedText
 from prompt_toolkit.keys import Keys
 from prompt_toolkit.key_binding import KeyBindings
 
@@ -35,6 +36,7 @@ from prompt_toolkit.styles.pygments import (
 )
 
 from prompt_toolkit.widgets import Frame, TextArea, Button
+from prompt_toolkit.widgets.toolbars import FormattedTextToolbar
 
 from pygments.token import Token
 from pygments.lexers.python import PythonLexer
@@ -220,6 +222,24 @@ def add_toolbar(toolbar=None):
     if hasattr(_ip, "pt_app"):
         _ip.pt_app.bottom_toolbar = toolbar
 
+
+class Attempt2(BottomToolbar, FormattedTextToolbar):
+    pass
+
+class Attempt3(BottomToolbar):
+    def __init__(self):
+        super().__init__()
+
+    def _rerender(self):
+        self.rerender()
+
+    def __call__(self):
+        return f"{self.toolbar()}"
+
+    def toolbar(self):
+        tmp = self._rerender()
+        fmt = FormattedText(tmp)
+        return FormattedTextToolbar(fmt)
 
 # Don't uncomment! This fucks up the keybindings so that the only way a line
 # executes is if you use C-r to get into a search then hit something to regain

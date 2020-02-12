@@ -10,13 +10,13 @@
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/print.css" type="text/css" />
     
-    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/language_data.js"></script>
-    <script src="../../../_static/copybutton.js"></script>
-    <script src="../../../_static/theme_extras.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../../../_static/theme_extras.js"></script>
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/startup/30_readline.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -172,13 +172,6 @@
 <span class="k">else</span><span class="p">:</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
 
-<span class="k">if</span> <span class="s2">&quot;pyreadline&quot;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
-    <span class="n">pyreadline</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="s2">&quot;pyreadline&quot;</span><span class="p">]</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="kn">import</span> <span class="nn">readline</span>
-    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-        <span class="k">raise</span>
 
 
 <div class="viewcode-block" id="SimpleCompleter"><a class="viewcode-back" href="../../../startup/setup_readline.html#default_profile.startup.30_readline.SimpleCompleter">[docs]</a><span class="k">class</span> <span class="nc">SimpleCompleter</span><span class="p">:</span>
@@ -251,20 +244,16 @@
 <span class="c1"># Readline Config</span>
 
 
-<div class="viewcode-block" id="readline_config"><a class="viewcode-back" href="../../../startup/setup_readline.html#default_profile.startup.30_readline.readline_config">[docs]</a><span class="k">def</span> <span class="nf">readline_config</span><span class="p">(</span><span class="n">history_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;The main point of execution for the readline module.</span>
+<div class="viewcode-block" id="readline_config"><a class="viewcode-back" href="../../../startup/setup_readline.html#default_profile.startup.30_readline.readline_config">[docs]</a><span class="k">def</span> <span class="nf">readline_config</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;The main point of execution for the readline configs.</span>
+
+<span class="sd">    Should be cross-platform and independent of GNU readline or py readline.</span>
 
 <span class="sd">    This sets up history where the history file is saved to and calls</span>
 <span class="sd">    `atexit` with the `setup_historyfile` and `teardown_historyfile` functions</span>
 <span class="sd">    as parameters.</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    history_file : str, path or `os.Pathlike`</span>
-<span class="sd">        Where to save the history</span>
-
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">histfile</span> <span class="o">=</span> <span class="s2">&quot;~/.python_history&quot;</span>
     <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s2">&quot;TAB: menu-complete&quot;</span><span class="p">)</span>
     <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">e[B&quot;: history-search-forward&#39;</span><span class="p">)</span>
     <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">e[A&quot;: history-search-backward&#39;</span><span class="p">)</span>
@@ -280,9 +269,6 @@
     <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-k&quot;: &quot;kill-line&quot;&#39;</span><span class="p">),</span>
     <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-u&quot;: unix-line-discard&#39;</span><span class="p">),</span>
 
-    <span class="c1"># Deprecated, use PromptManager.in2_template</span>
-    <span class="n">setup_historyfile</span><span class="p">(</span><span class="n">histfile</span><span class="p">)</span>
-    <span class="n">atexit</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">teardown_historyfile</span><span class="p">,</span> <span class="n">histfile</span><span class="p">)</span>
     <span class="n">readline</span><span class="o">.</span><span class="n">read_init_file</span><span class="p">()</span>
     <span class="n">readline</span><span class="o">.</span><span class="n">set_completer</span><span class="p">(</span><span class="n">Completer</span><span class="p">()</span><span class="o">.</span><span class="n">complete</span><span class="p">)</span></div>
 
@@ -292,15 +278,26 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    :class:`pyreadline.rlmain.Console` or something</span>
+<span class="sd">    :class:`pyreadline.rlmain.Readline`</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Currently None. Seemingly works by modifying attributes on the instance</span>
+<span class="sd">    and relying on side effects.</span>
+
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">rl</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span>
     <span class="c1"># This is actually really neat</span>
     <span class="n">rl</span><span class="o">.</span><span class="n">allow_ctrl_c</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="n">rl</span><span class="o">.</span><span class="n">command_color</span> <span class="o">=</span> <span class="s2">&quot;#7daea3&quot;</span></div>
-
+    <span class="n">rl</span><span class="o">.</span><span class="n">command_color</span> <span class="o">=</span> <span class="s2">&quot;#7daea3&quot;</span>
+    <span class="n">rl</span><span class="o">.</span><span class="n">read_init_file</span><span class="p">()</span>
+    <span class="n">inputrc</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;INPUTRC&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">inputrc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">rl</span><span class="o">.</span><span class="n">read_inputrc</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s1">&#39;~/pyreadlineconfig.ini&#39;</span><span class="p">):</span>
+        <span class="n">rl</span><span class="o">.</span><span class="n">read_inputrc</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s1">&#39;~/pyreadlineconfig.ini&#39;</span><span class="p">))</span></div>
 
 <span class="c1"># History</span>
 
@@ -348,25 +345,29 @@
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="c1"># Interestingly this can work on Windows with a simple pip install pyreadline</span>
     <span class="c1"># however it can be imported as readline no alias so check it first</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="kn">import</span> <span class="nn">pyreadline</span> <span class="k">as</span> <span class="nn">readline</span>
-    <span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="n">ModuleNotFoundError</span><span class="p">):</span>
-        <span class="k">pass</span>
+    <span class="k">if</span> <span class="s2">&quot;pyreadline&quot;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
+        <span class="n">pyreadline</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="s2">&quot;pyreadline&quot;</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">import</span> <span class="nn">readline</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+            <span class="k">raise</span>
+
+    <span class="k">try</span><span class="p">:</span>
         <span class="kn">from</span> <span class="nn">pyreadline.rlmain</span> <span class="kn">import</span> <span class="n">Readline</span>
         <span class="c1"># from pyreadline.lineobj.history import EscapeHistory, LineEditor</span>
         <span class="kn">from</span> <span class="nn">pyreadline.lineeditor.lineobj</span> <span class="kn">import</span> <span class="n">ReadLineTextBuffer</span>
-
-        <span class="n">main_readline_obj</span> <span class="o">=</span> <span class="n">Readline</span><span class="p">()</span>
-        <span class="n">py_readline</span><span class="p">(</span><span class="n">main_readline_obj</span><span class="p">)</span>
-
-    <span class="k">try</span><span class="p">:</span>
-        <span class="kn">import</span> <span class="nn">readline</span>
     <span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="n">ModuleNotFoundError</span><span class="p">):</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Readline not imported.&quot;</span><span class="p">)</span>
-        <span class="k">raise</span>
+        <span class="k">pass</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">readline</span> <span class="o">=</span> <span class="n">Readline</span><span class="p">()</span>
+        <span class="n">py_readline</span><span class="p">(</span><span class="n">readline</span><span class="p">)</span>
+
 
     <span class="n">readline_config</span><span class="p">()</span>
+    <span class="n">histfile</span> <span class="o">=</span> <span class="s2">&quot;~/.python_history&quot;</span>
+    <span class="n">setup_historyfile</span><span class="p">(</span><span class="n">histfile</span><span class="p">)</span>
+    <span class="n">atexit</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">teardown_historyfile</span><span class="p">,</span> <span class="n">histfile</span><span class="p">)</span>
 </pre></div>
 
         </div>
@@ -374,7 +375,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 11, 2020.
+      Last updated on Feb 12, 2020.
     </div>
   </body>
 </html>

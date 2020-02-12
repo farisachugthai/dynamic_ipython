@@ -10,13 +10,13 @@
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/print.css" type="text/css" />
     
-    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/language_data.js"></script>
-    <script src="../../../_static/copybutton.js"></script>
-    <script src="../../../_static/theme_extras.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../../../_static/theme_extras.js"></script>
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/startup/33_bottom_toolbar.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -168,6 +168,7 @@
 <span class="kn">from</span> <span class="nn">prompt_toolkit.application.current</span> <span class="kn">import</span> <span class="n">get_app</span>
 
 <span class="kn">from</span> <span class="nn">prompt_toolkit.enums</span> <span class="kn">import</span> <span class="n">EditingMode</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.formatted_text</span> <span class="kn">import</span> <span class="n">FormattedText</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.keys</span> <span class="kn">import</span> <span class="n">Keys</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding</span> <span class="kn">import</span> <span class="n">KeyBindings</span>
 
@@ -186,6 +187,7 @@
 <span class="p">)</span>
 
 <span class="kn">from</span> <span class="nn">prompt_toolkit.widgets</span> <span class="kn">import</span> <span class="n">Frame</span><span class="p">,</span> <span class="n">TextArea</span><span class="p">,</span> <span class="n">Button</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.widgets.toolbars</span> <span class="kn">import</span> <span class="n">FormattedTextToolbar</span>
 
 <span class="kn">from</span> <span class="nn">pygments.token</span> <span class="kn">import</span> <span class="n">Token</span>
 <span class="kn">from</span> <span class="nn">pygments.lexers.python</span> <span class="kn">import</span> <span class="n">PythonLexer</span>
@@ -372,6 +374,24 @@
         <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">bottom_toolbar</span> <span class="o">=</span> <span class="n">toolbar</span></div>
 
 
+<div class="viewcode-block" id="Attempt2"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.Attempt2">[docs]</a><span class="k">class</span> <span class="nc">Attempt2</span><span class="p">(</span><span class="n">BottomToolbar</span><span class="p">,</span> <span class="n">FormattedTextToolbar</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Attempt3"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.Attempt3">[docs]</a><span class="k">class</span> <span class="nc">Attempt3</span><span class="p">(</span><span class="n">BottomToolbar</span><span class="p">):</span>
+<div class="viewcode-block" id="Attempt3.__init__"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.Attempt3.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">_rerender</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rerender</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;{self.toolbar()}&quot;</span>
+
+<div class="viewcode-block" id="Attempt3.toolbar"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.Attempt3.toolbar">[docs]</a>    <span class="k">def</span> <span class="nf">toolbar</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rerender</span><span class="p">()</span>
+        <span class="n">fmt</span> <span class="o">=</span> <span class="n">FormattedText</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">FormattedTextToolbar</span><span class="p">(</span><span class="n">fmt</span><span class="p">)</span></div></div>
+
 <span class="c1"># Don&#39;t uncomment! This fucks up the keybindings so that the only way a line</span>
 <span class="c1"># executes is if you use C-r to get into a search then hit something to regain</span>
 <span class="c1"># focus and then hit enter.</span>
@@ -393,7 +413,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 11, 2020.
+      Last updated on Feb 12, 2020.
     </div>
   </body>
 </html>

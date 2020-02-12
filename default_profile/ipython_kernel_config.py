@@ -22,7 +22,7 @@ BASIC_FORMAT = "[%(created)f %(levelname)s ] %(module)s  %(message)s : "
 kernel_formatter = logging.Formatter(fmt=BASIC_FORMAT, datefmt=log_datefmt)
 
 handler = logging.StreamHandler().setFormatter(kernel_formatter)
-kernel_logger.addHandler()
+kernel_logger.addHandler(handler)
 kernel_logger.setLevel(logging.WARNING)
 
 c.Application.log_format = BASIC_FORMAT
@@ -71,8 +71,8 @@ else:
 # The importstring for the DisplayHook factory
 # c.IPKernelApp.displayhook_class = 'ipykernel.displayhook.ZMQDisplayHook'
 
-# ONLY USED ON WINDOWS Interrupt this process when the parent is signaled.
-if platform().startswith('Win'):
+cur_platform = platform()
+if cur_platform.startswith('Win'):
     c.IPKernelApp.interrupt = 1
 
 # The Kernel subclass to be used.
@@ -150,13 +150,16 @@ c.IPythonKernel.use_experimental_completions = True
 
 try:
     c.InteractiveShell.ast_node_interactivity = "last_expr_or_assign"
+except:
+    c.InteractiveShell.ast_node_interactivity = "last_expr"
+
 
 # A list of ast.NodeTransformer subclass instances, which will be applied to
 # user input before code is run.
 # c.InteractiveShell.ast_transformers = []
 
 # Automatically run await statement in the top level repl.
-if platform().startswith("Win"):
+if cur_platform.startswith("Win"):
     c.InteractiveShell.autoawait = False
 else:
     c.InteractiveShell.autoawait = True

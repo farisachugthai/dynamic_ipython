@@ -35,6 +35,8 @@ from prompt_toolkit.filters.cli import HasSelection
 # "ViSelectionMode",
 # "ViWaitingForTextObjectMode",
 # "ViDigraphMode",
+from prompt_toolkit.input.vt100_parser import ANSI_SEQUENCES
+from prompt_toolkit.keys import Keys
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.key_binding.bindings.completion import (
     display_completions_like_readline,
@@ -48,10 +50,6 @@ from prompt_toolkit.key_binding.bindings.named_commands import (
 from prompt_toolkit.key_binding.key_bindings import merge_key_bindings
 from prompt_toolkit.key_binding.key_processor import KeyPress, KeyPressEvent
 from prompt_toolkit.key_binding.vi_state import InputMode
-from prompt_toolkit.keys import Keys
-
-from prompt_toolkit.input.vt100_parser import ANSI_SEQUENCES
-
 from prompt_toolkit.selection import SelectionState
 
 from IPython.core.getipython import get_ipython
@@ -343,11 +341,9 @@ def add_bindings():
         else:
             multiline_enter(event)
 
-
     @handle(Keys.ControlX, Keys.ControlE)
     def open_in_editor(event):
         event.current_buffer.open_in_editor()
-
 
     handle("c-up")(get_by_name("previous-history"))
     handle(Keys.ControlP)(get_by_name("previous-history"))
@@ -366,10 +362,6 @@ def add_bindings():
     handle("c-delete", filter=insert_mode, save_before=if_no_repeat)(
         get_by_name("delete-char")
     )
-    handle(Keys.Any, filter=insert_mode, save_before=if_no_repeat)(
-        get_by_name("self-insert")
-    )
-
     # TODO: FZF
     handle("c-t", filter=insert_mode)(get_by_name("transpose-chars"))
     handle("c-i", filter=insert_mode)(get_by_name("menu-complete"))
@@ -465,8 +457,6 @@ def add_bindings():
         Enable/Disable paste mode.
         """
         event.app.paste_mode = not event.app.paste_mode
-
-
 
     @handle(Keys.ControlC)
     def _(event):
@@ -582,6 +572,9 @@ def add_bindings():
 
         buffer.delete_before_cursor(1)
 
+    handle(Keys.Any, filter=insert_mode, save_before=if_no_repeat)(
+        get_by_name("self-insert")
+    )
 
     return registry
 

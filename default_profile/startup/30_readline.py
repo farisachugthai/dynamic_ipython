@@ -21,13 +21,6 @@ if os.environ.get("IPYTHONDIR"):
 else:
     logging.basicConfig(format="%(message)s", level=logging.DEBUG)
 
-if "pyreadline" in sys.modules:
-    pyreadline = sys.modules["pyreadline"]
-else:
-    try:
-        import readline
-    except ImportError:
-        raise
 
 
 class SimpleCompleter:
@@ -100,20 +93,16 @@ def input_loop():
 # Readline Config
 
 
-def readline_config(history_file=None):
-    """The main point of execution for the readline module.
+def readline_config():
+    """The main point of execution for the readline configs.
+
+    Should be cross-platform and independent of GNU readline or py readline.
 
     This sets up history where the history file is saved to and calls
     `atexit` with the `setup_historyfile` and `teardown_historyfile` functions
     as parameters.
 
-    Parameters
-    ----------
-    history_file : str, path or `os.Pathlike`
-        Where to save the history
-
     """
-    histfile = "~/.python_history"
     readline.parse_and_bind("TAB: menu-complete")
     readline.parse_and_bind('"\\e[B": history-search-forward')
     readline.parse_and_bind('"\\e[A": history-search-backward')
@@ -129,9 +118,6 @@ def readline_config(history_file=None):
     readline.parse_and_bind('"\\C-k": "kill-line"'),
     readline.parse_and_bind('"\\C-u": unix-line-discard'),
 
-    # Deprecated, use PromptManager.in2_template
-    setup_historyfile(histfile)
-    atexit.register(teardown_historyfile, histfile)
     readline.read_init_file()
     readline.set_completer(Completer().complete)
 
@@ -141,7 +127,13 @@ def py_readline(rl=None):
 
     Parameters
     ----------
-    :class:`pyreadline.rlmain.Console` or something
+    :class:`pyreadline.rlmain.Readline`
+
+    Returns
+    -------
+    Currently None. Seemingly works by modifying attributes on the instance
+    and relying on side effects.
+
 
     """
     if rl is None:
@@ -149,7 +141,12 @@ def py_readline(rl=None):
     # This is actually really neat
     rl.allow_ctrl_c = True
     rl.command_color = "#7daea3"
-
+    rl.read_init_file()
+    inputrc = os.environ.get("INPUTRC")
+    if inputrc is not None:
+        rl.read_inputrc()
+    elif os.path.expanduser('~/pyreadlineconfig.ini'):
+        rl.read_inputrc(os.path.expanduser('~/pyreadlineconfig.ini'))
 
 # History
 
@@ -197,22 +194,26 @@ def teardown_historyfile(histfile=None):
 if __name__ == "__main__":
     # Interestingly this can work on Windows with a simple pip install pyreadline
     # however it can be imported as readline no alias so check it first
-    try:
-        import pyreadline as readline
-    except (ImportError, ModuleNotFoundError):
-        pass
+    if "pyreadline" in sys.modules:
+        pyreadline = sys.modules["pyreadline"]
     else:
+        try:
+            import readline
+        except ImportError:
+            raise
+
+    try:
         from pyreadline.rlmain import Readline
         # from pyreadline.lineobj.history import EscapeHistory, LineEditor
         from pyreadline.lineeditor.lineobj import ReadLineTextBuffer
-
-        main_readline_obj = Readline()
-        py_readline(main_readline_obj)
-
-    try:
-        import readline
     except (ImportError, ModuleNotFoundError):
-        logging.warning("Readline not imported.")
-        raise
+        pass
+    else:
+        readline = Readline()
+        py_readline(readline)
+
 
     readline_config()
+    histfile = "~/.python_history"
+    setup_historyfile(histfile)
+    atexit.register(teardown_historyfile, histfile)

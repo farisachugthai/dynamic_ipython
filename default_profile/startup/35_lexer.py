@@ -7,17 +7,34 @@ from pygments.lexers.python import PythonLexer
 
 from pygments.formatters.terminal256 import TerminalTrueColorFormatter
 
-from prompt_toolkit.lexers.pygments import PygmentsLexer
+from prompt_toolkit.lexers.pygments import PygmentsLexer, PygmentsTokens
 from prompt_toolkit.lexers.base import DynamicLexer, SimpleLexer
+
+from prompt_toolkit.styles import style_from_pygments_cls
+from prompt_toolkit.styles.style import Style, merge_styles
 
 from IPython.core.getipython import get_ipython
 from IPython.core.interactiveshell import InteractiveShellABC
 from IPython.lib.lexers import IPyLexer, IPythonTracebackLexer
 
+try:
+    from gruvbox.ptgruvbox import Gruvbox
+except ImportError:
+    from pygments.styles.inkpot import InkPotStyle
+    Gruvbox = InkPotStyle  # surprise!
+
+
+def our_style():
+    return merge_styles([style_from_pygments_cls(Gruvbox), Style.from_dict({}))  # TODO
+
 
 def get_lexer():
-    _ = PygmentsLexer(PythonLexer)
-    return _
+    wrapped_lexer = PygmentsLexer(PythonLexer)
+    return wrapped_lexer
+
+def pygments_tokens():
+    """A  list of Pygments style tokens. In case you need that."""
+    return PygmentsTokens(Gruvbox.style_rules)
 
 
 class IPythonConfigurableLexer(LoggingConfigurable):

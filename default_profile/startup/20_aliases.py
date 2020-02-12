@@ -164,6 +164,10 @@ class CommonAliases(UserDict):
         for i in list_aliases:
             self.shell.alias_manager.define_alias(alias)
 
+    def __getattr__(self, attr):
+        """Define a getattr as dicts typically don't have one defined."""
+        return getattr(self, attr)
+    
     def tuple_to_dict(self, list_of_tuples):
         """Showcasing how to convert a tuple into a dict.
 
