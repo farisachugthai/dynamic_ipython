@@ -7,11 +7,13 @@ Let's re-implement it as an `abstract factory
 <https://en.wikipedia.org/wiki/Abstract_factory_pattern>`_.
 
 """
+import platform
 import subprocess
 
 from IPython.core.error import TryNext
 from IPython.core.getipython import get_ipython
-from prompt_toolkit.clipboard import ClipboardData, DynamicClipboard, InMemoryClipboard
+from prompt_toolkit.clipboard.base import ClipboardData, Clipboard
+from prompt_toolkit.clipboard.in_memory import InMemoryClipboard
 
 try:
     import pyperclip
@@ -62,22 +64,27 @@ def win_clip_pywin32():
 def win32_clipboard_get():
     """Get the current clipboard's text on Windows.
 
-    Admittedly difficult to explain why it's not listed in the dependencies
-    though.
+    Returns
+    -------
+    todo
 
-    Note
-    ----
+    Notes
+    ------
     Requires Mark Hammond's pywin32 extensions.
+
+
     """
     try:
         return win_clip_pywin32()
-    except TryNext:
-        pass
-    try:
-        # or something
-        return subprocess.run(["win32yank -i crlf -o lf"])
-    except subprocess.CalledProcessError:
-        raise
+    except Exception:  # noqa
+        try:
+            # or something
+            return subprocess.run(
+                ["win32yank", "-o", "lf"], stdout=subprocess.PIPE
+            ).stdout
+            # "-i", "crlf", 
+        except subprocess.CalledProcessError:
+            raise
 
 
 def tkinter_clipboard_get():
@@ -86,6 +93,15 @@ def tkinter_clipboard_get():
     This is the default on systems that are not Windows or OS X. It may
     interfere with other UI toolkits and should be replaced with an
     implementation that uses that toolkit.
+
+    Requires
+    --------
+    :mod:`tkinter`
+
+    Raises
+    ------
+    :exc:`ClipboardEmpty`
+
     """
     try:
         from tkinter import Tk, TclError
@@ -105,10 +121,64 @@ def tkinter_clipboard_get():
     return text
 
 
+class UsefulClipboard(Clipboard):
+    """Clipboard class that can dynamically returns any Clipboard.
+
+    Uses more functionally applicable defaults and requires less boilerplate.
+    """
+
+    def __init__(self, clipboard=None):
+        super().__init__()
+        if clipboard is None:
+            self.clipboard = self._clipboard
+        else:
+            self.clipboard = clipboard
+
+    def _clipboard(self):
+        """TODO: This actually isn't gonna work.
+
+        We need to implement each individual function above
+        as a class that meets the required API for a Clipboard class aka
+        has methods set_data, set_text, rotate, and get_data.
+
+        In addition it must be callable. Jesus.
+        """
+        if platform.platform().startswith("Win"):
+            clipboard = win32_clipboard_get()
+        elif platform.platform().startswith("Linux"):
+            clipboard = tkinter_clipboard_get()
+        else:
+            clipboard = InMemoryClipboard()
+        return clipboard
+
+    def set_data(self, data):
+        self._clipboard().set_data(data)
+
+    def set_text(self, text):
+        self._clipboard().set_text(text)
+
+    def rotate(self):
+        self._clipboard().rotate()
+
+    def get_data(self):
+        return self._clipboard().get_data()
+
+    def __call__(self):
+        return self.get_data()
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}"
+
+    def __len__(self):
+        """The length of clipboard data on the clipboard."""
+        return len(self.get_data())
+
+
 if __name__ == "__main__":
     ipy = get_ipython()
     if ipy is not None:
-        if not hasattr(ipy, 'pt_app'):
+        # Because this occasionally happens and I have no idea why
+        if not hasattr(ipy, "pt_app"):
             breakpoint()
         elif ipy.pt_app is None:
             breakpoint()

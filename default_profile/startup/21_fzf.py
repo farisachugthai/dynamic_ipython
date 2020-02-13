@@ -108,11 +108,9 @@ class FZF:
         """
         subprocess.run([self.safe_default_cmd, *args], **kwargs)
 
-    @property
     def default_cmds(self):
         return "rg --pretty --hidden --max-columns-preview --no-heading --no-messages --no-column --no-line-number -C 0 -e ^ | fzf --ansi --multi "
 
-    @property
     def default_cmd(self):
         """Define the cmd for FZF.
 
@@ -140,7 +138,7 @@ class FZF:
 
     @contextmanager
     def safe_default_cmd(self):
-        return shlex.split(shlex.quote(self.default_cmds))
+        return shlex.split(shlex.quote(self.default_cmds()))
 
     @classmethod
     def _setup_fzf(cls, *args):
@@ -176,58 +174,10 @@ def is_rg():
     return shutil.which("rg")
 
 
-def busybox_hack(shell):
-    # HACK: dear god it feels horrible doing this but shit it works
-    from default_profile.startup import aliases_mod
-
-    shell.alias_manager.user_aliases += aliases_mod.LinuxAliases().busybox()
-    shell.alias_manager.init_aliases()
-    shoddy_hack_for_aliases = [
-        ("l", "ls -CF --hide=NTUSER.* --color=always %l"),
-        ("la", "ls -AF --hide=NTUSER.* --color=always %l"),
-        ("ldir", "ls -Apo --hide=NTUSER.*  --color=always %l | grep /$"),
-        # ('lf' ,     'ls -Fo --color=always | grep ^-'),
-        # ('ll' ,          'ls -AFho --color=always %l'),
-        ("ls", "ls -F --hide=NTUSER.* --color=always %l"),
-        ("lr", "ls -AgFhtr --hide=NTUSER.*  --color=always %l"),
-        ("lt", "ls -AgFht --hide=NTUSER.* --color=always %l"),
-        ("lx", "ls -Fo --hide=NTUSER.* --color=always | grep ^-..x"),
-        # ('ldir' ,               'ls -Fhpo | grep /$ %l'),
-        ("lf", "ls -Foh --hide=NTUSER.* --color=always | grep ^- %l"),
-        ("ll", "ls -AgFh --hide=NTUSER.* --color=always %l"),
-        # ('lt' ,          'ls -Altc --color=always %l'),
-        # ('lr' ,         'ls -Altcr --color=always %l')
-    ]
-    for i in shoddy_hack_for_aliases:
-        shell.alias_manager.define_alias(*i)
-
-
-def main():
-    """Adding fzf.
-
-    >>> from collections import deque
-    >>> user_aliases = deque()
-    >>> user_aliases = [('rg', 'rg --hidden --no-messages %l')]
-
-    """
-    shell = get_ipython()
-    if shell is not None:
-        if sys.platform == "win32":
-            try:
-                from . import aliases_mod
-            except ImportError:
-                pass
-            else:
-                busybox_hack(shell)
-
-        fzf_aliases = FZF._setup_fzf()
-        shell.alias_manager.define_alias("fzf", "fzf-tmux")
-        # default_command = fzf_aliases.default_cmds
-        # os.environ.setdefault("FZF_DEFAULT_COMMAND", default_command)
-
-
 if __name__ == "__main__":
-    main()
+    fzf_aliases = FZF._setup_fzf()
+    get_ipython().alias_manager.define_alias("fzf", "fzf-tmux")
+
     if fuf is not None:
 
         class Fuf(FZF, FzfPrompt):

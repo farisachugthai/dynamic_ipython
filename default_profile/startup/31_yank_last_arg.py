@@ -12,8 +12,6 @@ however, there's supposed to be ~500 key bindings so I'm excited.
 from collections import namedtuple
 
 from prompt_toolkit.application.current import get_app
-
-# from prompt_toolkit.buffer import YankNthArgState
 from prompt_toolkit.clipboard import ClipboardData
 from prompt_toolkit.enums import DEFAULT_BUFFER
 from prompt_toolkit.filters import (
@@ -22,31 +20,27 @@ from prompt_toolkit.filters import (
     IsSearching,
     in_paste_mode,
 )
-
 from prompt_toolkit.filters.app import emacs_insert_mode, vi_insert_mode, has_focus
+from prompt_toolkit.filters.cli import has_selection, ViInsertMode
 
-from prompt_toolkit.filters.cli import HasSelection
-# These are neat
 # "ViMode",
 # "ViNavigationMode",
-# "ViInsertMode",
 # "ViInsertMultipleMode",
 # "ViReplaceMode",
 # "ViSelectionMode",
 # "ViWaitingForTextObjectMode",
 # "ViDigraphMode",
-from prompt_toolkit.input.vt100_parser import ANSI_SEQUENCES
+
+# from prompt_toolkit.input.vt100_parser import ANSI_SEQUENCES
 from prompt_toolkit.keys import Keys
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.key_binding.bindings.completion import (
     display_completions_like_readline,
 )
-from prompt_toolkit.key_binding.bindings.named_commands import (
-    accept_line,
-    self_insert,
-    backward_delete_char,
-    get_by_name,
-)
+from prompt_toolkit.key_binding.bindings.named_commands import get_by_name
+
+# check out this dict for debugging
+# from prompt_toolkit.key_binding.bindings.named_commands import _readline_commands
 from prompt_toolkit.key_binding.key_bindings import merge_key_bindings
 from prompt_toolkit.key_binding.key_processor import KeyPress, KeyPressEvent
 from prompt_toolkit.key_binding.vi_state import InputMode
@@ -64,6 +58,12 @@ DEDENT_TOKENS = frozenset(["raise", "return", "pass", "break", "continue"])
 
 # fun fact. ViInsertMode is deprecated
 insert_mode = vi_insert_mode() | emacs_insert_mode()
+
+@Condition
+def is_returnable():
+    return get_app().current_buffer.is_returnable
+
+# is_returnable = Condition(lambda: get_app().current_buffer.is_returnable)
 
 
 @Condition
@@ -182,6 +182,21 @@ def if_no_repeat(event: E) -> bool:
     return not event.is_repeat
 
 
+@Condition
+def suggestion_available():
+    app = get_app()
+    return (app.current_buffer.suggestion is not None and
+            app.current_buffer.document.is_cursor_at_the_end)
+
+
+@Condition
+def has_selection():
+    """
+    Enable when the current buffer has a selection.
+    """
+    return bool(get_app().current_buffer.selection_state)
+
+
 def get_key_bindings(custom_key_bindings=None):
     """
     The ``__init__`` for `_MergedKeyBindings` features this.:
@@ -195,33 +210,20 @@ def get_key_bindings(custom_key_bindings=None):
 
     Based on prompt_toolkit.key_binding.defaults.load_key_bindings()
     """
-    from prompt_toolkit.key_binding.bindings.auto_suggest import (
-        load_auto_suggest_bindings,
-    )
-    from prompt_toolkit.key_binding.bindings.basic import load_basic_bindings
     from prompt_toolkit.key_binding.bindings.cpr import load_cpr_bindings
     from prompt_toolkit.key_binding.bindings.vi import (
         load_vi_bindings,
         load_vi_search_bindings,
     )
     from prompt_toolkit.key_binding.bindings.mouse import load_mouse_bindings
-    from prompt_toolkit.key_binding.bindings.open_in_editor import (
-        load_open_in_editor_bindings,
-    )
     from prompt_toolkit.key_binding.bindings.page_navigation import (
         load_page_navigation_bindings,
     )
-
-    if custom_key_bindings is None:
-        custom_key_bindings = KeyBindings()
     return [
-        load_auto_suggest_bindings(),
-        load_basic_bindings(),
         load_cpr_bindings(),
         load_vi_bindings(),
         load_vi_search_bindings(),
         load_mouse_bindings(),
-        load_open_in_editor_bindings(),
         load_page_navigation_bindings(),
         create_ipython_shortcuts(get_ipython()),
         custom_key_bindings,
@@ -232,23 +234,19 @@ def add_bindings():
     registry = KeyBindings()
 
     handle = registry.add
-    # So I think we can get away without using these because Buffer.yank_last_arg and others exist
-    # handle(Keys.Escape, u".")(yank_last_arg)
-    # handle(Keys.Escape, u"_")(yank_last_arg)
-    # ip = get_ipython()
-    # ip.events.register("post_execute", reset_last_arg_depth)
-    registry.add(Keys.ControlI)(display_completions_like_readline)
+    handle(Keys.ControlI)(display_completions_like_readline)
 
-    registry.add("j", "k")(switch_to_navigation_mode)
-    # From prompt_toolkit.key_binding.key_bindings.basic
+    handle("j", "k")(switch_to_navigation_mode)
 
     handle("home")(get_by_name("beginning-of-line"))
     handle(Keys.ControlA)(get_by_name("beginning-of-line"))
 
+    # TODO: auto suggest key
     handle("end")(get_by_name("end-of-line"))
     handle(Keys.ControlE)(get_by_name("end-of-line"))
 
-    # alternatively:
+    # Here's one from the named commands module
+    # handle("j", "j", filter=ViInsertMode())(_prefix_meta)
 
     @handle(Keys.Escape, "<")
     def beginning(event):
@@ -259,8 +257,6 @@ def add_bindings():
     def end(event):
         """Move to the end."""
         event.current_buffer.cursor_position = len(event.current_buffer.text)
-
-    is_returnable = Condition(lambda: get_app().current_buffer.is_returnable)
 
     @handle(Keys.Left)
     def left_multiline(event):
@@ -291,13 +287,13 @@ def add_bindings():
         When not in multiline, execute. When in multiline, try to
         intelligently add a newline or execute.
         """
+        accept_line = get_by_name(accept_line)
         buffer = event.current_buffer
         document = buffer.document
-        # multiline = document_is_multiline_python(document)
-
         text_after_cursor = document.text_after_cursor
         text_before_cursor = document.text_before_cursor
         text = buffer.text
+
         # isspace doesn't respect vacuous truth
         if (
             not text_after_cursor or text_after_cursor.isspace()
@@ -309,21 +305,18 @@ def add_bindings():
             accept_line(event)
         else:
             accept_line(event)
-        # elif not multiline:
-        # Always accept a single valid line. Also occurs for unclosed single
-        # quoted strings (which will give a syntax error)
-        # accept_line(event)
-        # else:
-        #     auto_newline(event.current_buffer)
-
-    # Always accept the line if the previous key was Up
-    # Requires https://github.com/jonathanslenders/python-prompt-toolkit/pull/492.
-    # We don't need a parallel for down because down is already at the end of the
-    # prompt.
 
     @handle(Keys.Enter, filter=is_returnable)
     def accept_after_history_backward(event):
+        """"Handle <CR>.
+
+        Always accept the line if the previous key was Up
+        Requires https://github.com/jonathanslenders/python-prompt-toolkit/pull/492.
+        We don't need a parallel for down because down is already at the end of the
+        prompt.
+        """
         pks = event.previous_key_sequence
+        accept_line = get_by_name(accept_line)
         if (
             pks
             and getattr(pks[-1], "accept_next", False)
@@ -341,18 +334,21 @@ def add_bindings():
         else:
             multiline_enter(event)
 
+
+    # originally from basic_bindings
     @handle(Keys.ControlX, Keys.ControlE)
     def open_in_editor(event):
-        event.current_buffer.open_in_editor()
+        # This is also firing on Alt-v?
+        event.current_buffer.open_in_editor(handle_and_execute=True)
 
     handle("c-up")(get_by_name("previous-history"))
     handle(Keys.ControlP)(get_by_name("previous-history"))
     handle("c-down")(get_by_name("next-history"))
     handle(Keys.ControlN)(get_by_name("next-history"))
-    handle("c-l")(get_by_name("clear-screen"))
+    handle(Keys.ControlL)(get_by_name("clear-screen"))
 
-    handle("c-k", filter=insert_mode)(get_by_name("kill-line"))
-    handle("c-u", filter=insert_mode)(get_by_name("unix-line-discard"))
+    handle(Keys.ControlK, filter=insert_mode)(get_by_name("kill-line"))
+    handle(Keys.ControlU, filter=insert_mode)(get_by_name("unix-line-discard"))
     handle("backspace", filter=insert_mode, save_before=if_no_repeat)(
         get_by_name("backward-delete-char")
     )
@@ -374,7 +370,101 @@ def add_bindings():
     handle("pageup")(get_by_name("previous-history"))
     handle("pagedown")(get_by_name("next-history"))
 
-    handle("c-d")(get_by_name("delete-char"))
+    ### Emacs:
+
+    handle('c-a')(get_by_name('beginning-of-line'))
+    handle('c-b')(get_by_name('backward-char'))
+    handle('c-delete', filter=insert_mode)(get_by_name('kill-word'))
+    handle('c-e')(get_by_name('end-of-line'))
+    handle('c-f')(get_by_name('forward-char'))
+    handle('c-left')(get_by_name('backward-word'))
+    handle('c-right')(get_by_name('forward-word'))
+    handle('c-x', 'r', 'y', filter=insert_mode)(get_by_name('yank'))
+    handle('c-y', filter=insert_mode)(get_by_name('yank'))
+    handle("c-_", save_before=(lambda e: False), filter=insert_mode)(
+        get_by_name("undo")
+    )
+
+    handle("c-x", "c-u", save_before=(lambda e: False), filter=insert_mode)(
+        get_by_name("undo")
+    )
+
+    handle("c-x", "(")(get_by_name("start-kbd-macro"))
+    handle("c-x", ")")(get_by_name("end-kbd-macro"))
+    handle("c-x", "e")(get_by_name("call-last-kbd-macro"))
+
+    # Meta + Enter: always accept input.
+    # handle('escape', 'enter', filter=insert_mode & is_returnable)(
+    #     get_by_name('accept-line'))
+
+    # Enter: accept input in single line mode.
+    # handle("enter", filter=insert_mode & is_returnable & ~is_multiline)(
+    #     get_by_name("accept-line")
+    # )
+
+    def character_search(buff, char, count):
+        if count < 0:
+            match = buff.document.find_backwards(
+                char, in_current_line=True, count=-count
+            )
+        else:
+            match = buff.document.find(char, in_current_line=True, count=count)
+
+        if match is not None:
+            buff.cursor_position += match
+
+    @handle("c-]", Keys.Any)
+    def _(event):
+        " When Ctl-] + a character is pressed. go to that character. "
+        # Also named 'character-search'
+        character_search(event.current_buffer, event.data, event.arg)
+
+    @handle('c-x', 'c-x')
+    def _(event):
+        """
+        Move cursor back and forth between the start and end of the current
+        line.
+        """
+        buffer = event.current_buffer
+
+        if buffer.document.is_cursor_at_the_end_of_line:
+            buffer.cursor_position += buffer.document.get_start_of_line_position(after_whitespace=False)
+        else:
+            buffer.cursor_position += buffer.document.get_end_of_line_position()
+
+    @handle('c-@')  # Control-space or Control-@
+    def _(event):
+        """
+        Start of the selection (if the current buffer is not empty).
+        """
+        # Take the current cursor position as the start of this selection.
+        buff = event.current_buffer
+        if buff.text:
+            buff.start_selection(selection_type=SelectionType.CHARACTERS)
+
+    @handle('c-g', filter=has_selection)
+    def _(event):
+        """
+        Control + G: Cancel completion menu and validation state.
+        """
+        event.current_buffer.complete_state = None
+        event.current_buffer.validation_error = None
+
+    @handle('c-g', filter=has_selection)
+    def _(event):
+        """
+        Cancel selection.
+        """
+        event.current_buffer.exit_selection()
+
+    @handle('c-w', filter=has_selection)
+    @handle('c-x', 'r', 'k', filter=has_selection)
+    def _(event):
+        """
+        Cut selected text.
+        """
+        data = event.current_buffer.cut_selection()
+        event.app.clipboard.set_data(data)
 
     @handle("c-j")
     def _(event: E) -> None:
@@ -384,8 +474,6 @@ def add_bindings():
         enter. - at least the Linux subsystem for Windows.)
         """
         event.key_processor.feed(KeyPress(Keys.ControlM, "\r"), first=True)
-
-    # Delete the word before the cursor.
 
     @handle("up")
     def _(event: E) -> None:
@@ -402,8 +490,8 @@ def add_bindings():
 
     # Global bindings.
 
-    @handle("c-z")
-    def _(event: E) -> None:
+    @handle(Keys.ControlZ)
+    def suspend_to_bg(event: E) -> None:
         """
         By default, control-Z should literally insert Ctrl-Z.
         (Ansi Ctrl-Z, code 26 in MSDOS means End-Of-File.
@@ -412,10 +500,7 @@ def add_bindings():
         When the system bindings are loaded and suspend-to-background is
         supported, that will override this binding.
         """
-        if event.app.enable_system_bindings:
-            event.app.suspend_to_background()
-        else:
-            event.current_buffer.insert_text(event.data)
+        event.app.suspend_to_background()
 
     @handle(Keys.BracketedPaste)
     def _(event: E) -> None:
@@ -469,12 +554,12 @@ def add_bindings():
 
     @handle(Keys.ControlD)
     def _(event):
-        get_app().exit()
-
-    # @handle(Keys.ControlX, Keys.ControlE, filter=HasSelection)
-    # def open_editor(event):
-    #     """ Open current buffer in editor """
-    #     event.current_buffer.open_in_editor(event.cli)
+        """Either delete a character or exit the application."""
+        buffer = event.cli.current_buffer
+        if buffer.document.current_char == "":
+            event.app.exit()
+        else:
+            event.current_buffer.delete(count=event.arg)
 
     @handle(Keys.Tab, filter=tab_insert_indent)
     def insert_indent(event):
@@ -576,6 +661,21 @@ def add_bindings():
         get_by_name("self-insert")
     )
 
+    # autosuggest
+
+
+    @handle('c-f', filter=suggestion_available)
+    @handle('c-e', filter=suggestion_available)
+    @handle('right', filter=suggestion_available)
+    def _(event):
+        " Accept suggestion. "
+        b = event.current_buffer
+        suggestion = b.suggestion
+
+        if suggestion:
+            b.insert_text(suggestion.text)
+
+
     return registry
 
 
@@ -587,6 +687,3 @@ if __name__ == "__main__":
         bindings = add_bindings()
         extra_bindings = merge_key_bindings(get_key_bindings(bindings))
         _ip.pt_app.app.key_bindings = extra_bindings
-        # _ip.pt_app.app.key_bindings._update_cache()
-    else:
-        sys.exit()
