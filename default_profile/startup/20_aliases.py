@@ -440,6 +440,29 @@ class CommonAliases(UserDict):
             ("...", "cd ../.."),
         ]
 
+    def ls_patch(self, shell):
+        shoddy_hack_for_aliases = [
+            ("l", "ls -CF --hide=NTUSER.* --color=always %l"),
+            ("la", "ls -AF --hide=NTUSER.* --color=always %l"),
+            ("ldir", "ls -Apo --hide=NTUSER.*  --color=always %l | grep /$"),
+            # ('lf' ,     'ls -Fo --color=always | grep ^-'),
+            # ('ll' ,          'ls -AFho --color=always %l'),
+            ("ls", "ls -F --hide=NTUSER.* --color=always %l"),
+            ("lr", "ls -AgFhtr --hide=NTUSER.*  --color=always %l"),
+            ("lt", "ls -AgFht --hide=NTUSER.* --color=always %l"),
+            ("lx", "ls -Fo --hide=NTUSER.* --color=always | grep ^-..x"),
+            # ('ldir' ,               'ls -Fhpo | grep /$ %l'),
+            ("lf", "ls -Foh --hide=NTUSER.* --color=always | grep ^- %l"),
+            ("ll", "ls -AgFh --hide=NTUSER.* --color=always %l"),
+            # ('lt' ,          'ls -Altc --color=always %l'),
+            # ('lr' ,         'ls -Altcr --color=always %l')
+        ]
+        for i in shoddy_hack_for_aliases:
+            try:
+                shell.alias_manager.define_alias(*i)
+            except InvalidAliasError:
+                raise
+
 
 class LinuxAliases(CommonAliases):
     """Add Linux specific aliases."""
@@ -699,12 +722,12 @@ def generate_aliases(_ip=None):
 
     if machine.is_linux:
         linux_aliases = LinuxAliases()
+        # TODO: allow adding of these classes
         # common_aliases.user_aliases.append(linux_aliases.user_aliases)
     elif machine.is_windows:
         windows_aliases = WindowsAliases()
         # common_aliases.user_aliases.append(windows_aliases.user_aliases)
 
-    # TODO: allow adding of these classes
     return common_aliases
 
 
@@ -767,3 +790,5 @@ if __name__ == "__main__":
 
         ALIAS_LOGGER.info("Number of aliases is: %s" % all_aliases)
         _ip.run_line_magic("alias_magic", "p pycat")
+        common_aliases = CommonAliases()
+        common_aliases.ls_patch(_ip)
