@@ -3,10 +3,18 @@
 Slowly becoming where all my consolidated scripts for making prompt_toolkit's
 handling of keypresses cohesive.
 
+TODO: still need C-d, C-c.
+
+However <CR> and <C-m> work as expected. haven't even tried navigation mode;
+however, there's supposed to be ~500 key bindings so I'm excited.
+
 """
 from collections import namedtuple
 
 from prompt_toolkit.application.current import get_app
+
+# from prompt_toolkit.buffer import YankNthArgState
+from prompt_toolkit.clipboard import ClipboardData
 from prompt_toolkit.enums import DEFAULT_BUFFER
 from prompt_toolkit.filters import (
     Condition,
@@ -16,20 +24,41 @@ from prompt_toolkit.filters import (
 )
 
 from prompt_toolkit.filters.app import emacs_insert_mode, vi_insert_mode, has_focus
+
+from prompt_toolkit.filters.cli import HasSelection
+# These are neat
+# "ViMode",
+# "ViNavigationMode",
+# "ViInsertMode",
+# "ViInsertMultipleMode",
+# "ViReplaceMode",
+# "ViSelectionMode",
+# "ViWaitingForTextObjectMode",
+# "ViDigraphMode",
+from prompt_toolkit.input.vt100_parser import ANSI_SEQUENCES
+from prompt_toolkit.keys import Keys
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.key_binding.bindings.completion import (
     display_completions_like_readline,
 )
-from prompt_toolkit.key_binding.bindings.named_commands import get_by_name
+from prompt_toolkit.key_binding.bindings.named_commands import (
+    accept_line,
+    self_insert,
+    backward_delete_char,
+    get_by_name,
+)
 from prompt_toolkit.key_binding.key_bindings import merge_key_bindings
 from prompt_toolkit.key_binding.key_processor import KeyPress, KeyPressEvent
-from prompt_toolkit.keys import Keys
 from prompt_toolkit.key_binding.vi_state import InputMode
+from prompt_toolkit.selection import SelectionState
 
 from IPython.core.getipython import get_ipython
 from IPython.terminal.shortcuts import create_ipython_shortcuts
 
 E = KeyPressEvent
+
+DEDENT_TOKENS = frozenset(["raise", "return", "pass", "break", "continue"])
+
 
 # Conditions:
 
@@ -59,9 +88,10 @@ def ctrl_d_condition():
     return buffer_name == DEFAULT_BUFFER and not app.current_buffer.text
 
 
-@Condition
-def _is_blank(l):
-    return len(l.strip()) == 0
+# This is erroring...is it because its the only condition that requires an argument?
+# @Condition
+# def _is_blank(l):
+#     return len(l.strip()) == 0
 
 
 @Condition
@@ -130,96 +160,9 @@ def in_quoted_insert() -> bool:
     return get_app().quoted_insert
 
 
-def get_key_bindings(custom_key_bindings=None):
-    """
-    The ``__init__`` for `_MergedKeyBindings` features this.:
-
-        def __init__(self, registries):
-            assert all(isinstance(r, KeyBindingsBase) for r in registries)
-            _Proxy.__init__(self)
-            self.registries = registries
-
-    As a result `None` can't be passed to merge_key_bindings.
-
-    Based on prompt_toolkit.key_binding.defaults.load_key_bindings()
-    """
-    from prompt_toolkit.key_binding.bindings.auto_suggest import (
-        load_auto_suggest_bindings,
-    )
-    from prompt_toolkit.key_binding.bindings.basic import load_basic_bindings
-    from prompt_toolkit.key_binding.bindings.cpr import load_cpr_bindings
-    from prompt_toolkit.key_binding.bindings.emacs import (
-        load_emacs_bindings,
-        load_emacs_search_bindings,
-    )
-    from prompt_toolkit.key_binding.bindings.mouse import load_mouse_bindings
-    from prompt_toolkit.key_binding.bindings.open_in_editor import (
-        load_open_in_editor_bindings,
-    )
-    from prompt_toolkit.key_binding.bindings.page_navigation import (
-        load_page_navigation_bindings,
-    )
-
-    if custom_key_bindings is None:
-        custom_key_bindings = KeyBindings()
-    return [
-        load_auto_suggest_bindings(),
-        load_basic_bindings(),
-        load_cpr_bindings(),
-        load_emacs_bindings(),
-        load_emacs_search_bindings(),
-        load_mouse_bindings(),
-        load_open_in_editor_bindings(),
-        load_page_navigation_bindings(),
-        custom_key_bindings,
-    ]
-
-
-class State:
-    def __init__(self):
-        self.depth = 0
-
-
-state = State()
-
-state_ = namedtuple("State_", field_names="depth")
-
-
-def reset_last_arg_depth():
-    state.depth = 0
-
-
-def yank_last_arg(event):
-    """:program:`readline` style 'yank-last-arg'
-
-    Insert last argument to the previous command (the last word of the
-    previous history entry).
-
-    Successive calls to yank-last-arg move back through the history list,
-    inserting the last word of each line in turn.
-
-    .. see: https://www.gnu.org/software/bash/manual/bashref.html#Commands-For-History
-
-    .. note: This doesn't support the numeric argument option of readline's
-             yank-last-arg
-
-    """
-    b = event.current_buffer
-    hist = ip.history_manager.input_hist_raw
-    if state.depth == 0:
-        state.depth = 1
-    else:
-        state.depth += 1
-
-    if len(hist) and len(hist) >= state.depth:
-        lastline = hist[-state.depth]
-
-        if state.depth > 1:
-            b.undo()
-
-        b.save_to_undo_stack()
-        if len(lastline.split()):
-            b.insert_text(lastline.split()[-1])
+@Condition
+def is_multiline():
+    return document_is_multiline_python(python_input.default_buffer.document)
 
 
 def switch_to_navigation_mode(event):
@@ -239,96 +182,173 @@ def if_no_repeat(event: E) -> bool:
     return not event.is_repeat
 
 
-def document_is_multiline_python(document):
-    """Determine whether this is a multiline Python document."""
+def get_key_bindings(custom_key_bindings=None):
+    """
+    The ``__init__`` for `_MergedKeyBindings` features this.:
 
-    def ends_in_multiline_string():
-        """
-        ``True`` if we're inside a multiline string at the end of the text.
-        """
-        _multiline_string_delims = re.compile("""[']{3}|["]{3}""")
+        def __init__(self, registries):
+            assert all(isinstance(r, KeyBindingsBase) for r in registries)
+            _Proxy.__init__(self)
+            self.registries = registries
 
-        delims = _multiline_string_delims.findall(document.text)
-        opening = None
-        for delim in delims:
-            if opening is None:
-                opening = delim
-            elif delim == opening:
-                opening = None
-        return bool(opening)
+    As a result `None` can't be passed to merge_key_bindings.
 
-    if "\n" in document.text or ends_in_multiline_string():
-        return True
+    Based on prompt_toolkit.key_binding.defaults.load_key_bindings()
+    """
+    from prompt_toolkit.key_binding.bindings.auto_suggest import (
+        load_auto_suggest_bindings,
+    )
+    from prompt_toolkit.key_binding.bindings.basic import load_basic_bindings
+    from prompt_toolkit.key_binding.bindings.cpr import load_cpr_bindings
+    from prompt_toolkit.key_binding.bindings.vi import (
+        load_vi_bindings,
+        load_vi_search_bindings,
+    )
+    from prompt_toolkit.key_binding.bindings.mouse import load_mouse_bindings
+    from prompt_toolkit.key_binding.bindings.open_in_editor import (
+        load_open_in_editor_bindings,
+    )
+    from prompt_toolkit.key_binding.bindings.page_navigation import (
+        load_page_navigation_bindings,
+    )
 
-    def line_ends_with_colon():
-        return document.current_line.rstrip()[-1:] == ":"
-
-    # If we just typed a colon, or still have open brackets, always insert a real newline.
-    if (
-        line_ends_with_colon()
-        or (
-            document.is_cursor_at_the_end
-            and has_unclosed_brackets(document.text_before_cursor)
-        )
-        or document.text.startswith("@")
-    ):
-        return True
-
-    # If the character before the cursor is a backslash (line continuation
-    # char), insert a new line.
-    elif document.text_before_cursor[-1:] == "\\":
-        return True
-
-    return False
-
-
-@Condition
-def is_multiline():
-    return document_is_multiline_python(python_input.default_buffer.document)
+    if custom_key_bindings is None:
+        custom_key_bindings = KeyBindings()
+    return [
+        load_auto_suggest_bindings(),
+        load_basic_bindings(),
+        load_cpr_bindings(),
+        load_vi_bindings(),
+        load_vi_search_bindings(),
+        load_mouse_bindings(),
+        load_open_in_editor_bindings(),
+        load_page_navigation_bindings(),
+        create_ipython_shortcuts(get_ipython()),
+        custom_key_bindings,
+    ]
 
 
-def additional_bindings():
+def add_bindings():
     registry = KeyBindings()
 
-    ip = get_ipython()
-
-    if getattr(ip, "pt_app", None):
-        orig_kb = ip.pt_app.app.key_bindings
-
-    elif getattr(ip, "pt_cli", None):
-        orig_kb = ip.pt_cli.application.key_bindings_registry
-    else:
-        raise NotImplementedError(
-            "IPython doesn't have prompt toolkit bindings. Exiting."
-        )
-
-    registry.add_binding(Keys.Escape, u".")(yank_last_arg)
-    registry.add_binding(Keys.Escape, u"_")(yank_last_arg)
-    ip.events.register("post_execute", reset_last_arg_depth)
+    handle = registry.add
+    # So I think we can get away without using these because Buffer.yank_last_arg and others exist
+    # handle(Keys.Escape, u".")(yank_last_arg)
+    # handle(Keys.Escape, u"_")(yank_last_arg)
+    # ip = get_ipython()
+    # ip.events.register("post_execute", reset_last_arg_depth)
     registry.add(Keys.ControlI)(display_completions_like_readline)
 
     registry.add("j", "k")(switch_to_navigation_mode)
-    # Keys.j and Keys.k don't exists
-    # registry.add(Keys.j, Keys.k)(switch_to_navigation_mode)
-    # add allll the defaults in and bind it back to the shell.
-    # If we did this correctly, running _ip.pt_app.app.key_bindings.bindings
-    # should display something like +100 bindings
-    # since we linked it to the correct attribute of pt_app this should work
-
-    # all_kb = get_key_bindings(registry)
-    # Overwrite our original keybindings
-    # orig_kb = all_kb
-    # _ip.pt_app.app.key_bindings = load_key_bindings()
-
     # From prompt_toolkit.key_binding.key_bindings.basic
-    handle = registry.add
 
     handle("home")(get_by_name("beginning-of-line"))
+    handle(Keys.ControlA)(get_by_name("beginning-of-line"))
+
     handle("end")(get_by_name("end-of-line"))
-    handle("left")(get_by_name("backward-char"))
-    handle("right")(get_by_name("forward-char"))
+    handle(Keys.ControlE)(get_by_name("end-of-line"))
+
+    # alternatively:
+
+    @handle(Keys.Escape, "<")
+    def beginning(event):
+        """Move to the beginning of our recorded history."""
+        event.current_buffer.cursor_position = 0
+
+    @handle(Keys.Escape, ">")
+    def end(event):
+        """Move to the end."""
+        event.current_buffer.cursor_position = len(event.current_buffer.text)
+
+    is_returnable = Condition(lambda: get_app().current_buffer.is_returnable)
+
+    @handle(Keys.Left)
+    def left_multiline(event):
+        """
+        Left that wraps around in multiline.
+        """
+        if event.current_buffer.cursor_position - event.arg >= 0:
+            event.current_buffer.cursor_position -= event.arg
+
+        if getattr(event.current_buffer.selection_state, "shift_arrow", False):
+            event.current_buffer.selection_state = None
+
+    @handle(Keys.Right)
+    def right_multiline(event):
+        """Right that wraps around in multiline."""
+        if event.current_buffer.cursor_position + event.arg <= len(
+            event.current_buffer.text
+        ):
+            event.current_buffer.cursor_position += event.arg
+
+        if getattr(event.current_buffer.selection_state, "shift_arrow", False):
+            event.current_buffer.selection_state = None
+
+    # Speaking of multiline
+    @handle(Keys.Enter, filter=is_returnable)
+    def multiline_enter(event):
+        """
+        When not in multiline, execute. When in multiline, try to
+        intelligently add a newline or execute.
+        """
+        buffer = event.current_buffer
+        document = buffer.document
+        # multiline = document_is_multiline_python(document)
+
+        text_after_cursor = document.text_after_cursor
+        text_before_cursor = document.text_before_cursor
+        text = buffer.text
+        # isspace doesn't respect vacuous truth
+        if (
+            not text_after_cursor or text_after_cursor.isspace()
+        ) and text_before_cursor.replace(" ", "").endswith("\n"):
+            # If we are at the end of the buffer, accept unless we are in a
+            # docstring
+            row, col = document.translate_index_to_position(buffer.cursor_position)
+            row += 1
+            accept_line(event)
+        else:
+            accept_line(event)
+        # elif not multiline:
+        # Always accept a single valid line. Also occurs for unclosed single
+        # quoted strings (which will give a syntax error)
+        # accept_line(event)
+        # else:
+        #     auto_newline(event.current_buffer)
+
+    # Always accept the line if the previous key was Up
+    # Requires https://github.com/jonathanslenders/python-prompt-toolkit/pull/492.
+    # We don't need a parallel for down because down is already at the end of the
+    # prompt.
+
+    @handle(Keys.Enter, filter=is_returnable)
+    def accept_after_history_backward(event):
+        pks = event.previous_key_sequence
+        if (
+            pks
+            and getattr(pks[-1], "accept_next", False)
+            and (
+                (len(pks) == 1 and pks[0].key == "up")
+                or (
+                    len(pks) == 2
+                    and pks[0].key == "escape"
+                    and isinstance(pks[1].key, str)
+                    and pks[1].key in "pP"
+                )
+            )
+        ):
+            accept_line(event)
+        else:
+            multiline_enter(event)
+
+    @handle(Keys.ControlX, Keys.ControlE)
+    def open_in_editor(event):
+        event.current_buffer.open_in_editor()
+
     handle("c-up")(get_by_name("previous-history"))
+    handle(Keys.ControlP)(get_by_name("previous-history"))
     handle("c-down")(get_by_name("next-history"))
+    handle(Keys.ControlN)(get_by_name("next-history"))
     handle("c-l")(get_by_name("clear-screen"))
 
     handle("c-k", filter=insert_mode)(get_by_name("kill-line"))
@@ -342,9 +362,7 @@ def additional_bindings():
     handle("c-delete", filter=insert_mode, save_before=if_no_repeat)(
         get_by_name("delete-char")
     )
-    handle(Keys.Any, filter=insert_mode, save_before=if_no_repeat)(
-        get_by_name("self-insert")
-    )
+    # TODO: FZF
     handle("c-t", filter=insert_mode)(get_by_name("transpose-chars"))
     handle("c-i", filter=insert_mode)(get_by_name("menu-complete"))
     handle("s-tab", filter=insert_mode)(get_by_name("menu-complete-backward"))
@@ -357,13 +375,6 @@ def additional_bindings():
     handle("pagedown")(get_by_name("next-history"))
 
     handle("c-d")(get_by_name("delete-char"))
-
-    @handle("enter")
-    def _(event: E) -> None:
-        """
-        Newline (in case of multiline input.
-        """
-        event.current_buffer.newline(copy_margin=not in_paste_mode())
 
     @handle("c-j")
     def _(event: E) -> None:
@@ -401,7 +412,7 @@ def additional_bindings():
         When the system bindings are loaded and suspend-to-background is
         supported, that will override this binding.
         """
-        if event.enable_system_bindings:
+        if event.app.enable_system_bindings:
             event.app.suspend_to_background()
         else:
             event.current_buffer.insert_text(event.data)
@@ -438,25 +449,144 @@ def additional_bindings():
         `34_bottom_toolbar`
             Utilized for this purpose.
         """
-        event.editing_mode = not event.editing_mode == "vi"
+        event.app.editing_mode = not event.app.editing_mode == "vi"
 
     @handle("f6")
     def _(event):
         """
         Enable/Disable paste mode.
         """
-        event.paste_mode = not event.paste_mode
+        event.app.paste_mode = not event.app.paste_mode
+
+    @handle(Keys.ControlC)
+    def _(event):
+        """
+        Pressing Ctrl-C will exit the user interface.
+        Setting a return value means: quit the event loop that drives the user
+        interface and return this value from the `Application.run()` call.
+        """
+        event.app.exit()
+
+    @handle(Keys.ControlD)
+    def _(event):
+        get_app().exit()
+
+    # @handle(Keys.ControlX, Keys.ControlE, filter=HasSelection)
+    # def open_editor(event):
+    #     """ Open current buffer in editor """
+    #     event.current_buffer.open_in_editor(event.cli)
+
+    @handle(Keys.Tab, filter=tab_insert_indent)
+    def insert_indent(event):
+        """
+        If there are only whitespaces before current cursor position insert
+        indent instead of autocompleting.
+        """
+        event.cli.current_buffer.insert_text()
+
+    @handle(Keys.BackTab, filter=insert_mode)
+    def insert_literal_tab(event):
+        """ Insert literal tab on Shift+Tab instead of autocompleting """
+        b = event.current_buffer
+        if b.complete_state:
+            b.complete_previous()
+        else:
+            event.cli.current_buffer.insert_text("    ")
+
+    @handle("(", filter=whitespace_or_bracket_after)
+    def insert_right_parens(event):
+        event.cli.current_buffer.insert_text("(")
+        event.cli.current_buffer.insert_text(")", move_cursor=False)
+
+    @handle(")")
+    def overwrite_right_parens(event):
+        buffer = event.cli.current_buffer
+        if buffer.document.current_char == ")":
+            buffer.cursor_position += 1
+        else:
+            buffer.insert_text(")")
+
+    @handle("[", filter=whitespace_or_bracket_after)
+    def insert_right_bracket(event):
+        event.cli.current_buffer.insert_text("[")
+        event.cli.current_buffer.insert_text("]", move_cursor=False)
+
+    @handle("]")
+    def overwrite_right_bracket(event):
+        buffer = event.cli.current_buffer
+
+        if buffer.document.current_char == "]":
+            buffer.cursor_position += 1
+        else:
+            buffer.insert_text("]")
+
+    @handle("{", filter=whitespace_or_bracket_after)
+    def insert_right_brace(event):
+        event.cli.current_buffer.insert_text("{")
+        event.cli.current_buffer.insert_text("}", move_cursor=False)
+
+    @handle("}")
+    def overwrite_right_brace(event):
+        buffer = event.cli.current_buffer
+
+        if buffer.document.current_char == "}":
+            buffer.cursor_position += 1
+        else:
+            buffer.insert_text("}")
+
+    @handle("'")
+    def insert_right_quote(event):
+        buffer = event.cli.current_buffer
+
+        if buffer.document.current_char == "'":
+            buffer.cursor_position += 1
+        elif whitespace_or_bracket_before() and whitespace_or_bracket_after():
+            buffer.insert_text("'")
+            buffer.insert_text("'", move_cursor=False)
+        else:
+            buffer.insert_text("'")
+
+    @handle('"')
+    def insert_right_double_quote(event):
+        buffer = event.cli.current_buffer
+
+        if buffer.document.current_char == '"':
+            buffer.cursor_position += 1
+        elif whitespace_or_bracket_before() and whitespace_or_bracket_after():
+            buffer.insert_text('"')
+            buffer.insert_text('"', move_cursor=False)
+        else:
+            buffer.insert_text('"')
+
+    @handle(Keys.Backspace)
+    def delete_brackets_or_quotes(event):
+        """Delete empty pair of brackets or quotes"""
+        buffer = event.cli.current_buffer
+        before = buffer.document.char_before_cursor
+        after = buffer.document.current_char
+
+        if any(
+            [before == b and after == a for (b, a) in ["()", "[]", "{}", "''", '""']]
+        ):
+            buffer.delete(1)
+
+        buffer.delete_before_cursor(1)
+
+    handle(Keys.Any, filter=insert_mode, save_before=if_no_repeat)(
+        get_by_name("self-insert")
+    )
 
     return registry
 
 
 if __name__ == "__main__":
+
     _ip = get_ipython()
     if _ip is not None:
-        full_registry = additional_bindings()
-        # container_kb = KeyBindingsManager(shell=_ip, kb=full_registry.bindings)
-
-        # unrelated but heres something sweet
         _ip.pt_app.app.output.enable_bracketed_paste()
-        # What the hell is blocking or jamming <CR>
-        # _ip.pt_app.app.key_bindings = merge_key_bindings([ip.pt_app.app.key_bindings, full_registry])
+        bindings = add_bindings()
+        extra_bindings = merge_key_bindings(get_key_bindings(bindings))
+        _ip.pt_app.app.key_bindings = extra_bindings
+        # _ip.pt_app.app.key_bindings._update_cache()
+    else:
+        sys.exit()

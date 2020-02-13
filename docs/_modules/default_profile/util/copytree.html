@@ -10,13 +10,13 @@
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/print.css" type="text/css" />
     
-    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/language_data.js"></script>
-    <script src="../../../_static/copybutton.js"></script>
-    <script src="../../../_static/theme_extras.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../../../_static/theme_extras.js"></script>
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/util/copytree.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -192,10 +192,14 @@
 
     <span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
 
-<div class="viewcode-block" id="CopyTree.__init__"><a class="viewcode-back" href="../../../util/copytree.html#default_profile.util.copytree.CopyTree.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="n">symlinks</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ignore</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">copy_function</span><span class="o">=</span><span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span>
-    <span class="p">):</span>
-        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;This class is going to be removed shortly.&quot;</span> <span class="s2">&quot;Discontinue usage.&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="CopyTree.__init__"><a class="viewcode-back" href="../../../util/copytree.html#default_profile.util.copytree.CopyTree.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">src</span><span class="p">,</span>
+                 <span class="n">dst</span><span class="p">,</span>
+                 <span class="n">symlinks</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">ignore</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">copy_function</span><span class="o">=</span><span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span><span class="p">):</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;This class is going to be removed shortly.&quot;</span>
+                      <span class="s2">&quot;Discontinue usage.&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">src</span> <span class="o">=</span> <span class="n">src</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dst</span> <span class="o">=</span> <span class="n">dst</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">symlinks</span> <span class="o">=</span> <span class="n">symlinks</span>
@@ -245,10 +249,13 @@
                         <span class="c1"># code with a custom `copy_function` may rely on copytree</span>
                         <span class="c1"># doing the right thing.</span>
                         <span class="n">os</span><span class="o">.</span><span class="n">symlink</span><span class="p">(</span><span class="n">linkto</span><span class="p">,</span> <span class="n">dstname</span><span class="p">)</span>
-                        <span class="n">copystat</span><span class="p">(</span><span class="n">srcname</span><span class="p">,</span> <span class="n">dstname</span><span class="p">,</span> <span class="n">follow_symlinks</span><span class="o">=</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">symlinks</span><span class="p">)</span>
+                        <span class="n">copystat</span><span class="p">(</span><span class="n">srcname</span><span class="p">,</span>
+                                 <span class="n">dstname</span><span class="p">,</span>
+                                 <span class="n">follow_symlinks</span><span class="o">=</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">symlinks</span><span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="c1"># ignore dangling symlink if the flag is on</span>
-                        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">linkto</span><span class="p">)</span> <span class="ow">and</span> <span class="n">ignore_dangling_symlinks</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span>
+                                <span class="n">linkto</span><span class="p">)</span> <span class="ow">and</span> <span class="n">ignore_dangling_symlinks</span><span class="p">:</span>
                             <span class="k">continue</span>
                         <span class="c1"># otherwise let the copy occurs. copy2 will raise an error</span>
                         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">srcname</span><span class="p">):</span>
@@ -262,9 +269,8 @@
                         <span class="k">else</span><span class="p">:</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">copy_function</span><span class="p">(</span><span class="n">srcname</span><span class="p">,</span> <span class="n">dstname</span><span class="p">)</span>
                 <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">srcname</span><span class="p">):</span>
-                    <span class="n">copytree</span><span class="p">(</span>
-                        <span class="n">srcname</span><span class="p">,</span> <span class="n">dstname</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">symlinks</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignore</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy_function</span>
-                    <span class="p">)</span>
+                    <span class="n">copytree</span><span class="p">(</span><span class="n">srcname</span><span class="p">,</span> <span class="n">dstname</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">symlinks</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignore</span><span class="p">,</span>
+                             <span class="bp">self</span><span class="o">.</span><span class="n">copy_function</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="c1"># Will raise a SpecialFileError for unsupported file types</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">copy_function</span><span class="p">(</span><span class="n">srcname</span><span class="p">,</span> <span class="n">dstname</span><span class="p">)</span>
@@ -289,7 +295,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 11, 2020.
+      Last updated on Feb 12, 2020.
     </div>
   </body>
 </html>

@@ -10,13 +10,13 @@
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/print.css" type="text/css" />
     
-    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/language_data.js"></script>
-    <script src="../../../_static/copybutton.js"></script>
-    <script src="../../../_static/theme_extras.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../../../_static/theme_extras.js"></script>
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/util/module_log.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -204,7 +204,6 @@
 
 <div class="viewcode-block" id="NoUnNamedLoggers"><a class="viewcode-back" href="../../../util/module_log.html#default_profile.util.module_log.NoUnNamedLoggers">[docs]</a><span class="k">class</span> <span class="nc">NoUnNamedLoggers</span><span class="p">(</span><span class="ne">NotImplementedError</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Raise this error if the logger a function was called with was anonymous.&quot;&quot;&quot;</span>
-
 <div class="viewcode-block" id="NoUnNamedLoggers.__init__"><a class="viewcode-back" href="../../../util/module_log.html#default_profile.util.module_log.NoUnNamedLoggers.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
@@ -266,11 +265,14 @@
     <span class="k">return</span> <span class="n">logger</span></div>
 
 
-<div class="viewcode-block" id="file_logger"><a class="viewcode-back" href="../../../util/module_log.html#default_profile.util.module_log.file_logger">[docs]</a><span class="k">def</span> <span class="nf">file_logger</span><span class="p">(</span>
-    <span class="n">filename</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="n">msg_format</span><span class="o">=</span><span class="kc">None</span>
-<span class="p">):</span>
+<div class="viewcode-block" id="file_logger"><a class="viewcode-back" href="../../../util/module_log.html#default_profile.util.module_log.file_logger">[docs]</a><span class="k">def</span> <span class="nf">file_logger</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span>
+                <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">log_level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span>
+                <span class="n">msg_format</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Removed docstring because it wouldn&#39;t stop emitting errors.&quot;&quot;&quot;</span>
-    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">shell</span><span class="p">,</span> <span class="p">(</span><span class="n">IPython</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">interactiveshell</span><span class="o">.</span><span class="n">InteractiveShell</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">shell</span><span class="p">,</span>
+                      <span class="p">(</span><span class="n">IPython</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">interactiveshell</span><span class="o">.</span><span class="n">InteractiveShell</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
 
     <span class="k">if</span> <span class="n">shell</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
@@ -289,7 +291,8 @@
     <span class="k">if</span> <span class="n">msg_format</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="n">msg_format</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> : </span><span class="si">%(levelname)s</span><span class="s2"> : </span><span class="si">%(message)s</span><span class="s2"> : &quot;</span><span class="p">)</span>
+        <span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span>
+            <span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> : </span><span class="si">%(levelname)s</span><span class="s2"> : </span><span class="si">%(message)s</span><span class="s2"> : &quot;</span><span class="p">)</span>
 
     <span class="n">handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
 
@@ -351,7 +354,6 @@
 
 <div class="viewcode-block" id="JsonFormatter"><a class="viewcode-back" href="../../../util/module_log.html#default_profile.util.module_log.JsonFormatter">[docs]</a><span class="k">class</span> <span class="nc">JsonFormatter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Return valid :mod:`json` for a configured handler.&quot;&quot;&quot;</span>
-
 <div class="viewcode-block" id="JsonFormatter.format"><a class="viewcode-back" href="../../../util/module_log.html#default_profile.util.module_log.JsonFormatter.format">[docs]</a>    <span class="k">def</span> <span class="nf">format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Format a :class:`logging.LogRecord()` from an :exc:Exception.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">record</span><span class="o">.</span><span class="n">exc_info</span><span class="p">:</span>
@@ -359,19 +361,24 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">exc</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
-            <span class="p">{</span>
-                <span class="s2">&quot;msg&quot;</span><span class="p">:</span> <span class="n">record</span><span class="o">.</span><span class="n">msg</span> <span class="o">%</span> <span class="n">record</span><span class="o">.</span><span class="n">args</span><span class="p">,</span>
-                <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">created</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
-                <span class="o">+</span> <span class="s2">&quot;Z&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;func&quot;</span><span class="p">:</span> <span class="n">record</span><span class="o">.</span><span class="n">funcName</span><span class="p">,</span>
-                <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="n">record</span><span class="o">.</span><span class="n">levelname</span><span class="p">,</span>
-                <span class="s2">&quot;module&quot;</span><span class="p">:</span> <span class="n">record</span><span class="o">.</span><span class="n">module</span><span class="p">,</span>
-                <span class="s2">&quot;process_id&quot;</span><span class="p">:</span> <span class="n">record</span><span class="o">.</span><span class="n">process</span><span class="p">,</span>
-                <span class="s2">&quot;thread_id&quot;</span><span class="p">:</span> <span class="n">record</span><span class="o">.</span><span class="n">thread</span><span class="p">,</span>
-                <span class="s2">&quot;exception&quot;</span><span class="p">:</span> <span class="n">exc</span><span class="p">,</span>
-            <span class="p">}</span>
-        <span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
+            <span class="s2">&quot;msg&quot;</span><span class="p">:</span>
+            <span class="n">record</span><span class="o">.</span><span class="n">msg</span> <span class="o">%</span> <span class="n">record</span><span class="o">.</span><span class="n">args</span><span class="p">,</span>
+            <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span>
+            <span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">created</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;Z&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;func&quot;</span><span class="p">:</span>
+            <span class="n">record</span><span class="o">.</span><span class="n">funcName</span><span class="p">,</span>
+            <span class="s2">&quot;level&quot;</span><span class="p">:</span>
+            <span class="n">record</span><span class="o">.</span><span class="n">levelname</span><span class="p">,</span>
+            <span class="s2">&quot;module&quot;</span><span class="p">:</span>
+            <span class="n">record</span><span class="o">.</span><span class="n">module</span><span class="p">,</span>
+            <span class="s2">&quot;process_id&quot;</span><span class="p">:</span>
+            <span class="n">record</span><span class="o">.</span><span class="n">process</span><span class="p">,</span>
+            <span class="s2">&quot;thread_id&quot;</span><span class="p">:</span>
+            <span class="n">record</span><span class="o">.</span><span class="n">thread</span><span class="p">,</span>
+            <span class="s2">&quot;exception&quot;</span><span class="p">:</span>
+            <span class="n">exc</span><span class="p">,</span>
+        <span class="p">})</span></div></div>
 
 
 <div class="viewcode-block" id="betterConfig"><a class="viewcode-back" href="../../../util/module_log.html#default_profile.util.module_log.betterConfig">[docs]</a><span class="k">def</span> <span class="nf">betterConfig</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -425,7 +432,11 @@
 
     <span class="n">shell</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="s2">&quot;InteractiveShellABC&quot;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="VerboseLoggingConfigurable.__init__"><a class="viewcode-back" href="../../../util/module_log.html#default_profile.util.module_log.VerboseLoggingConfigurable.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logger_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">logger_parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="VerboseLoggingConfigurable.__init__"><a class="viewcode-back" href="../../../util/module_log.html#default_profile.util.module_log.VerboseLoggingConfigurable.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">logger_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">logger_parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span> <span class="o">=</span> <span class="n">betterConfig</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">logger_name</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">logger_parent</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logger_name</span> <span class="o">=</span> <span class="n">logger_name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logger_parent</span> <span class="o">=</span> <span class="n">logger_parent</span>
@@ -473,7 +484,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 11, 2020.
+      Last updated on Feb 12, 2020.
     </div>
   </body>
 </html>

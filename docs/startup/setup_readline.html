@@ -10,13 +10,13 @@
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/print.css" type="text/css" />
     
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
-    <script src="../_static/copybutton.js"></script>
-    <script src="../_static/theme_extras.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/theme_extras.js"></script>
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/startup/setup_readline.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -340,23 +340,28 @@ I think it’s <a class="reference external" href="https://ipython.readthedocs.i
 
 <dl class="function">
 <dt id="default_profile.startup.30_readline.readline_config">
-<code class="sig-prename descclassname">default_profile.startup.30_readline.</code><code class="sig-name descname">readline_config</code><span class="sig-paren">(</span><em class="sig-param">history_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/30_readline.html#readline_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.30_readline.readline_config" title="Permalink to this definition">¶</a></dt>
-<dd><p>The main point of execution for the readline module.</p>
+<code class="sig-prename descclassname">default_profile.startup.30_readline.</code><code class="sig-name descname">readline_config</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/30_readline.html#readline_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.30_readline.readline_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>The main point of execution for the readline configs.</p>
+<p>Should be cross-platform and independent of GNU readline or py readline.</p>
 <p>This sets up history where the history file is saved to and calls
 <a class="reference external" href="https://docs.python.org/3/library/atexit.html#module-atexit" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atexit</span></code></a> with the <a class="reference internal" href="#default_profile.startup.30_readline.setup_historyfile" title="default_profile.startup.30_readline.setup_historyfile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup_historyfile</span></code></a> and <a class="reference internal" href="#default_profile.startup.30_readline.teardown_historyfile" title="default_profile.startup.30_readline.teardown_historyfile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">teardown_historyfile</span></code></a> functions
 as parameters.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>history_file</strong> (str, path or <code class="xref py py-obj docutils literal notranslate"><span class="pre">os.Pathlike</span></code>) – Where to save the history</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="default_profile.startup.30_readline.py_readline">
 <code class="sig-prename descclassname">default_profile.startup.30_readline.</code><code class="sig-name descname">py_readline</code><span class="sig-paren">(</span><em class="sig-param">rl=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/30_readline.html#py_readline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.30_readline.py_readline" title="Permalink to this definition">¶</a></dt>
 <dd><p>Utilize the pyreadline API.</p>
-<p>:param <code class="xref py py-class docutils literal notranslate"><span class="pre">pyreadline.rlmain.Console</span></code> or something:</p>
+<p>:param <code class="xref py py-class docutils literal notranslate"><span class="pre">pyreadline.rlmain.Readline</span></code>:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><ul>
+<li><p><em>Currently None. Seemingly works by modifying attributes on the instance</em></p></li>
+<li><p><em>and relying on side effects.</em></p></li>
+</ul>
+</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
@@ -384,7 +389,7 @@ as parameters.</p>
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 11, 2020.
+      Last updated on Feb 12, 2020.
     </div>
   </body>
 </html>

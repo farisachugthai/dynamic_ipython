@@ -51,7 +51,6 @@ class ReprProfileDir(ProfileDir):
     This object knows how to find, create and manage these directories. This
     should be used by any code that wants to handle profiles.
     """
-
     def __init__(self, *args, **kwargs):
         """Create an init and then make it way shorter."""
         super().__init__(*args, **kwargs)
@@ -59,7 +58,8 @@ class ReprProfileDir(ProfileDir):
         startup_dir = Unicode("startup")
         log_dir = Unicode("log")
         location = Unicode(
-            help="""Set the profile location directly. This overrides the logic used by the
+            help=
+            """Set the profile location directly. This overrides the logic used by the
             `profile` option.""",
             allow_none=True,
         ).tag(config=True)
@@ -105,7 +105,6 @@ class DirectoryChecker:
     Dude we're allowed to subclass os.Pathlike. I wonder if that'd make this
     easier.
     """
-
     def __init__(self, canary=None, *args, **kwargs):
         """Initialize our own version of ipython."""
         if canary is not None:
@@ -123,8 +122,7 @@ class DirectoryChecker:
             if isinstance(self.canary, InteractiveShellEmbed):
                 sys.stderr.write(
                     "\nYou are currently in an embedded IPython shell,\n"
-                    "the configuration will not be loaded.\n\n"
-                )
+                    "the configuration will not be loaded.\n\n")
         else:
             # Not inside IPython
             # Build a terminal app in order to force ipython to load the configuration
@@ -180,4 +178,5 @@ class DirectoryChecker:
         except OSError as e:
             print(e)
         else:
-            self.canary.profile_dir = os.path.expanduser("~/.ipython/default_profile")
+            self.canary.profile_dir = os.path.expanduser(
+                "~/.ipython/default_profile")

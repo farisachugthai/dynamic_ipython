@@ -3,6 +3,9 @@
 Takes into consideration whether Emacs mode or Vi mode is set
 and adds :kbd:`F4` as a keybindings to toggle between each.
 
+TODO: currently initialize a titlebar, an exit button and a few
+other things that aren't utilized at all.
+
 """
 import functools
 from datetime import date
@@ -11,18 +14,29 @@ from shutil import get_terminal_size
 from traceback import print_exc
 
 from prompt_toolkit import ANSI, HTML
+from prompt_toolkit.application.current import get_app
+
 from prompt_toolkit.enums import EditingMode
+from prompt_toolkit.formatted_text import FormattedText
 from prompt_toolkit.keys import Keys
 from prompt_toolkit.key_binding import KeyBindings
 
-from prompt_toolkit.shortcuts import print_formatted_text, CompleteStyle
-from prompt_toolkit.styles import default_pygments_style
+from prompt_toolkit.layout.containers import HSplit, VSplit, Window, WindowAlign, FloatContainer
+from prompt_toolkit.layout.controls import BufferControl, FormattedTextControl
+from prompt_toolkit.layout.layout import Layout
 
+from prompt_toolkit.shortcuts import print_formatted_text, CompleteStyle
+from prompt_toolkit.shortcuts.utils import print_container
+
+from prompt_toolkit.styles import default_pygments_style
 from prompt_toolkit.styles import Style, merge_styles, style
 from prompt_toolkit.styles.pygments import (
     style_from_pygments_cls,
     style_from_pygments_dict,
 )
+
+from prompt_toolkit.widgets import Frame, TextArea, Button
+from prompt_toolkit.widgets.toolbars import FormattedTextToolbar
 
 from pygments.token import Token
 from pygments.lexers.python import PythonLexer
@@ -34,12 +48,51 @@ try:
 except ImportError:
     Gruvbox = None
 
+
 completion_displays_to_styles = {
     "multi": CompleteStyle.MULTI_COLUMN,
     "single": CompleteStyle.COLUMN,
     "readline": CompleteStyle.READLINE_LIKE,
     "none": None,
 }
+
+
+def exit_clicked():
+    get_app().exit()
+
+
+exit_button = Button("Exit", handler=exit_clicked)
+# Thisll probably be useful
+# from prompt_toolkit.mouse_events import MouseEvent, MouseEventType
+
+# float_container = FloatContainer(content=Window(...),
+#                        floats=[
+#                            Float(xcursor=True,
+#                                 ycursor=True,
+#                                 layout=CompletionMenu(...))
+#                        ])
+
+
+def show_header():
+    return Frame(TextArea(get_ipython().banner))
+
+
+class LineCounter:
+    """Really basic counter displayed inspired by Doug Hellman.
+
+    :URL: https://pymotw.com/3/sys/interpreter.html
+
+    Need to set this to the rprompt.
+    """
+
+    def __init__(self):
+        self.count = 0
+        self.time = strftime('%H:%M:%S')
+
+    def __call__(self):
+        """Yes!!! This now behaves as expected."""
+        self.count += 1
+        return '(< In[{:3d}]: Time:{}  )'.format(self.count, self.time)
 
 
 def init_style():
@@ -64,6 +117,13 @@ def merged_styles(overrides=None):
     base = init_style()
 
     return merge_styles([base, overrides, default_pygments_style()])
+
+
+def get_titlebar_text():
+    return [
+        ("class:title", "Hello World!"),
+        ("class:title", " (Press [TODO] to quit.)"),
+    ]
 
 
 class BottomToolbar:
@@ -140,19 +200,19 @@ class BottomToolbar:
         # add more styling:
         # [('class:toolbar', ' [F4] %s ' % text)]
         current_vi_mode = self.app.vi_state.input_mode
+        # temp_toolbar = f" [F4] Vi: {current_vi_mode!r}  {date.today()!r}"
+        # toolbar = Frame(TextArea(temp_toolbar))
+        # return toolbar.body
         toolbar = f" [F4] Vi: {current_vi_mode!r}  {date.today()!r}"
-        # toolbar.append(style=default_pygments_style())
         return toolbar
 
     def _render_emacs(self):
         # return [(Token.Generic.Heading, "[F4] Emacs: "),
         #         (Token.Generic.Prompt, f"{Path.cwd()} {date.today()}")]
-        # Nope! str and _Token can't be concatenated and this'll not only freeze
-        # the running session but the terminal itself
+        # temp_toolbar = f" [F4] Emacs: {Path.cwd()!r} {date.today()!a}"
+        # toolbar = Frame(TextArea(temp_toolbar))
+        # return toolbar.body
         toolbar = f" [F4] Emacs: {Path.cwd()!r} {date.today()!a}"
-        # really upset this didn't work `{date.today():>{len(self)}}"
-        # goddamn neither did that
-        # return "{} {:>150}".format(toolbar, date.today())
         return toolbar
 
 
@@ -163,6 +223,24 @@ def add_toolbar(toolbar=None):
         _ip.pt_app.bottom_toolbar = toolbar
 
 
+class Attempt2(BottomToolbar, FormattedTextToolbar):
+    pass
+
+class Attempt3(BottomToolbar):
+    def __init__(self):
+        super().__init__()
+
+    def _rerender(self):
+        self.rerender()
+
+    def __call__(self):
+        return f"{self.toolbar()}"
+
+    def toolbar(self):
+        tmp = self._rerender()
+        fmt = FormattedText(tmp)
+        return FormattedTextToolbar(fmt)
+
 # Don't uncomment! This fucks up the keybindings so that the only way a line
 # executes is if you use C-r to get into a search then hit something to regain
 # focus and then hit enter.
@@ -170,3 +248,10 @@ def add_toolbar(toolbar=None):
 if __name__ == "__main__":
     if get_ipython() is not None:
         add_toolbar(BottomToolbar)
+
+    print_container(show_header())
+
+    # Bind to IPython TODO:
+    root_container = HSplit([
+        Window(height=1, content=FormattedTextControl(get_titlebar_text), align=WindowAlign.CENTER,),
+        Window(height=1, char="-", style="class:line"), ])

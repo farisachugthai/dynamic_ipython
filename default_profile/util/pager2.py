@@ -17,14 +17,12 @@ from IPython.core.page import pager_page
 
 class NotInIPythonError(RuntimeError):
     """Error raised when a magic is invoked outside of IPython."""
-
     def __init__(self, *args, **kwargs):
         super().__init__(self, *args, **kwargs)
 
 
 class PyPager:
     """A pager if you're outside of IPython."""
-
     def __init__(self, *args, text=None, use_pager=True):
         """Initializes the class.
 
@@ -99,8 +97,9 @@ def provided_or_last(s=None, shell=None):
     code_to_page :
         Found user code.
 
-    Note
-    -----
+    Notes
+    -------
+
     What is the actual implementation name for the var ``_i``? I think IPython
     stores a :attr:`last_execution_result` or maybe a
     :attr:`last_execution_succeeded`.

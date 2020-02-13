@@ -4,45 +4,40 @@ from traitlets.config import LoggingConfigurable
 from traitlets.traitlets import Instance
 from pygments.lexer import Lexer
 from pygments.lexers.python import PythonLexer
+
 from pygments.formatters.terminal256 import TerminalTrueColorFormatter
 
-from prompt_toolkit.lexers.pygments import PygmentsLexer
+from prompt_toolkit.lexers.pygments import PygmentsLexer, PygmentsTokens
+from prompt_toolkit.lexers.base import DynamicLexer, SimpleLexer
+
+from prompt_toolkit.styles import style_from_pygments_cls
+from prompt_toolkit.styles.style import Style, merge_styles
 
 from IPython.core.getipython import get_ipython
 from IPython.core.interactiveshell import InteractiveShellABC
+from IPython.lib.lexers import IPyLexer, IPythonTracebackLexer
+
+try:
+    from gruvbox.ptgruvbox import Gruvbox
+except ImportError:
+    from pygments.styles.inkpot import InkPotStyle
+    Gruvbox = InkPotStyle  # surprise!
+
+
+def our_style():
+    return merge_styles([style_from_pygments_cls(Gruvbox), Style.from_dict({}))  # TODO
+
+
+def get_lexer():
+    wrapped_lexer = PygmentsLexer(PythonLexer)
+    return wrapped_lexer
+
+def pygments_tokens():
+    """A  list of Pygments style tokens. In case you need that."""
+    return PygmentsTokens(Gruvbox.style_rules)
 
 
 class IPythonConfigurableLexer(LoggingConfigurable):
-    """ TODO: The IPythonPTLexer also should have a few of these attributes as well.
-
-    And here's how you join the bridge.
-
-    class PygmentsLexer(Lexer):
-
-        Lexer that calls a pygments lexer.
-
-        Example::
-
-            from pygments.lexers.html import HtmlLexer
-            lexer = PygmentsLexer(HtmlLexer)
-
-        Note: Don't forget to also load a Pygments compatible style. E.g.::
-
-            from prompt_toolkit.styles.from_pygments import style_from_pygments_cls
-            from pygments.styles import get_style_by_name
-            style = style_from_pygments_cls(get_style_by_name('monokai'))
-
-        :param pygments_lexer_cls: A `Lexer` from Pygments.
-        :param sync_from_start: Start lexing at the start of the document. This
-            will always give the best results, but it will be slow for bigger
-            documents. (When the last part of the document is display, then the
-            whole document will be lexed by Pygments on every key stroke.) It is
-            recommended to disable this for inputs that are expected to be more
-            than 1,000 lines.
-        :param syntax_sync: `SyntaxSync` object.
-
-    """
-
     shell = Instance(InteractiveShellABC, allow_none=True)
 
     lexer = Instance(Lexer, help="Instance that lexs documents.", allow_none=True).tag(
@@ -82,13 +77,14 @@ class IPythonConfigurableLexer(LoggingConfigurable):
 
 
 class Colorizer:
-    """Make `pygments.highlight` even easier to work with.
+    """Make the pygments function 'highlight' even easier to work with.
 
     Additionally utilize ``__slots__`` to conserve memory.
     """
 
     __slots__ = {
-        "pylexer": PythonLexer.__doc__,
+            # The original docstring for pylexer was raising an error in sphinx...
+        "pylexer": "A PythonLexer from Pygments",
         "formatter": TerminalTrueColorFormatter.__doc__,
         # 'highlight': pygments.highlight.__doc__
     }
@@ -113,3 +109,4 @@ if __name__ == "__main__":
     lexer = IPythonConfigurableLexer()
     # TODO: isn't there a method like _ip.add_trait or something?
     colorizer = Colorizer()
+    pt_lexer = get_lexer()

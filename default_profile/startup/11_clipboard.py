@@ -108,6 +108,11 @@ def tkinter_clipboard_get():
 if __name__ == "__main__":
     ipy = get_ipython()
     if ipy is not None:
+        if not hasattr(ipy, 'pt_app'):
+            breakpoint()
+        elif ipy.pt_app is None:
+            breakpoint()
+
         if PyperclipClipboard is not None:
             ipy.pt_app.clipboard = PyperclipClipboard()
         else:
