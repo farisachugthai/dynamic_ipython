@@ -253,7 +253,7 @@ rst_prolog = """
 
 trim_doctest_flags = True
 
-highlight_language = "ipython"
+highlight_language = "python"
 
 warning_is_error = False
 

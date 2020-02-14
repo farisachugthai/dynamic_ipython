@@ -10,13 +10,13 @@
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/print.css" type="text/css" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
-    <script type="text/javascript" src="_static/copybutton.js"></script>
-    <script type="text/javascript" src="_static/theme_extras.js"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/theme_extras.js"></script>
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/todo.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -175,13 +175,13 @@ doesn’t work the way it’s supposed to if you want to configure it.</p>
 it’ll complain that it needs a function that accepts 4 positional parameters.</p>
 <p>I’m pretty confident it isn’t just me calling the function wrong too.
 Try this.:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 <span class="n">ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
 <span class="n">ip</span><span class="o">.</span><span class="n">hooks</span><span class="p">[</span><span class="s1">&#39;editor&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">chain</span>
 <span class="c1"># inspect your hooks look normal</span>
 <span class="kn">from</span> <span class="nn">IPython.core.hooks</span> <span class="kn">import</span> <span class="n">fix_error_editor</span>
 <span class="n">ip</span><span class="o">.</span><span class="n">hooks</span><span class="p">[</span><span class="s1">&#39;editor&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">fix_error_editor</span><span class="p">)</span>
-<span class="o">%</span><span class="k">edit</span> # --&gt; complains that it needs 3 more positional parameters
+<span class="o">%</span><span class="n">edit</span> <span class="c1"># --&gt; complains that it needs 3 more positional parameters</span>
 </pre></div>
 </div>
 <p>Before I noticed this, I wrote a function that only accepts 1 positional arg,
@@ -294,7 +294,7 @@ functions and by inheriting from a base class provided by IPython,
 isn’t required anymore?</p>
 <p>Like if they pass us a string can we not just feed it to our own home-brewed
 wrapper function? Off the top of my head I’m guessing something like this.:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">arg</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">arg</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
 <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="s1">&#39;load_ext&#39;</span><span class="p">):</span>   <span class="c1"># or whatever interface is expected</span>
 
    <span class="nd">@magics_class</span>
@@ -324,7 +324,7 @@ would it be that hard to do?</p>
 <div class="section" id="prompt-toolkit">
 <h2>Prompt Toolkit<a class="headerlink" href="#prompt-toolkit" title="Permalink to this headline">¶</a></h2>
 <p>Modify the KeyBindings classes so that the following works.:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">shell</span><span class="o">.</span><span class="n">editing_mode</span> <span class="o">==</span> <span class="s1">&#39;vi&#39;</span><span class="p">:</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">shell</span><span class="o">.</span><span class="n">editing_mode</span> <span class="o">==</span> <span class="s1">&#39;vi&#39;</span><span class="p">:</span>
     <span class="c1"># kb.add(load_vi_bindings(), filter=(has_focus(DEFAULT_BUFFER)))</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">load_vi_bindings</span><span class="p">()</span><span class="o">.</span><span class="n">bindings</span><span class="p">:</span>
         <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">has_focus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)))</span>
@@ -342,7 +342,7 @@ would it be that hard to do?</p>
 </pre></div>
 </div>
 <p>Currently every part fails.:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">load_vi_bindings</span><span class="p">())</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">load_vi_bindings</span><span class="p">())</span>
 
 <span class="ne">TypeError</span><span class="p">:</span> <span class="nb">object</span> <span class="n">of</span> <span class="nb">type</span> <span class="s1">&#39;ConditionalKeyBindings&#39;</span> <span class="n">has</span> <span class="n">no</span> <span class="nb">len</span><span class="p">()</span>
 </pre></div>
@@ -350,16 +350,16 @@ would it be that hard to do?</p>
 <p>Uh that’s really confusing but when you go to
 prompt_toolkit.key_binding.key_bindings you’ll see a …wow I can’t find the
 method that this came from. Whatever. Next!:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [39]: </span><span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.defaults</span> <span class="kn">import</span> <span class="n">load_basic_bindings</span>
-<span class="gp">In [40]: </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">load_basic_bindings</span><span class="p">():</span>
-<span class="go">    ...:     print(i)</span>
-<span class="go">    ...:</span>
-<span class="go">         TypeError: &#39;KeyBindings&#39; object is not iterable</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">39</span><span class="p">]:</span> <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.defaults</span> <span class="kn">import</span> <span class="n">load_basic_bindings</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">40</span><span class="p">]:</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">load_basic_bindings</span><span class="p">():</span>
+    <span class="o">...</span><span class="p">:</span>     <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="o">...</span><span class="p">:</span>
+         <span class="ne">TypeError</span><span class="p">:</span> <span class="s1">&#39;KeyBindings&#39;</span> <span class="nb">object</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">iterable</span>
 </pre></div>
 </div>
 <p>This doesn’t even feel internally consistent. Alright let’s play by his rules.:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [42]: </span><span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span><span class="o">.</span><span class="n">add</span><span class="p">()</span>
-<span class="go">AttributeError: &#39;_MergedKeyBindings&#39; object has no attribute &#39;add&#39;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">42</span><span class="p">]:</span> <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span><span class="o">.</span><span class="n">add</span><span class="p">()</span>
+<span class="ne">AttributeError</span><span class="p">:</span> <span class="s1">&#39;_MergedKeyBindings&#39;</span> <span class="nb">object</span> <span class="n">has</span> <span class="n">no</span> <span class="n">attribute</span> <span class="s1">&#39;add&#39;</span>
 </pre></div>
 </div>
 <p>So if I merge my key bindings at any point I shoot myself in the foot from
@@ -382,7 +382,7 @@ python. But it doesn’t copy over the __doc__ from the old magic.</p>
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 12, 2020.
+      Last updated on Feb 13, 2020.
     </div>
   </body>
 </html>

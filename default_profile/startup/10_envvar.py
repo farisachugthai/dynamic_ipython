@@ -36,3 +36,7 @@ class EnvironMagics(Magics):
     @line_magic
     def unset(self, arg):
         return os.environ.unset(arg)
+
+    @line_magic
+    def symlink(self, dest, source=None):
+        pass

@@ -1,16 +1,32 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""This is the example from pygments.
+
+We could use this as a very easy hack to stop that error highlighting
+when the lexer sees a python statement that starts with a :kbd:`!` or
+:kbd:`%` at the beginning of magics.
+
+FYI.
+
+    In [46]: _ip.pt_app.lexer
+    Out[46]: <IPython.terminal.ptutils.IPythonPTLexer at 0x151087677c0>
+
+    In [47]: _ip.pt_app.lexer.python_lexer.pygments_lexer
+    Out[47]: <pygments.lexers.PythonLexer with {'stripnl': False, 'stripall': False, 'ensurenl': False}
+
+
+"""
 from traitlets.config import LoggingConfigurable
 from traitlets.traitlets import Instance
 from pygments.lexer import Lexer
 from pygments.lexers.python import PythonLexer
-
+from pygments.token import Keyword, Name
 from pygments.formatters.terminal256 import TerminalTrueColorFormatter
 
-from prompt_toolkit.lexers.pygments import PygmentsLexer, PygmentsTokens
+from prompt_toolkit.lexers.pygments import PygmentsLexer # , PygmentsTokens
 from prompt_toolkit.lexers.base import DynamicLexer, SimpleLexer
 
-from prompt_toolkit.styles import style_from_pygments_cls
+from prompt_toolkit.styles import style_from_pygments_cls, default_pygments_style
 from prompt_toolkit.styles.style import Style, merge_styles
 
 from IPython.core.getipython import get_ipython
@@ -25,7 +41,11 @@ except ImportError:
 
 
 def our_style():
-    return merge_styles([style_from_pygments_cls(Gruvbox), Style.from_dict({}))  # TODO
+    return merge_styles([
+        style_from_pygments_cls(Gruvbox),
+        default_pygments_style(),
+        #  Style.from_dict({'':''})
+    ])  # TODO
 
 
 def get_lexer():
@@ -104,9 +124,41 @@ class Colorizer:
     def __repr__(self):
         return f"{self.__class__.__name__}"
 
+class MyPythonLexer(PythonLexer):
+    # EXTRA_KEYWORDS = set(('foo', 'bar', 'foobar', 'barfoo', 'spam', 'eggs'))
+    EXTRA_KEYWORDS = set("!")
+
+    def get_tokens_unprocessed(self, text):
+        for index, token, value in PythonLexer.get_tokens_unprocessed(self, text):
+            # How silly is it that I just realized that class attributes
+            # still bind to the instance object?
+            if token is Name and value in self.EXTRA_KEYWORDS:
+                yield index, Keyword.Pseudo, value
+            else:
+                yield index, token, value
+
+
+class MyPythonLexer(PythonLexer):
+    # EXTRA_KEYWORDS = set(('foo', 'bar', 'foobar', 'barfoo', 'spam', 'eggs'))
+    EXTRA_KEYWORDS = set("!")
+
+    def get_tokens_unprocessed(self, text):
+        for index, token, value in PythonLexer.get_tokens_unprocessed(self, text):
+            # How silly is it that I just realized that class attributes
+            # still bind to the instance object?
+            if token is Name and value in self.EXTRA_KEYWORDS:
+                yield index, Keyword.Pseudo, value
+            else:
+                yield index, token, value
+
 
 if __name__ == "__main__":
-    lexer = IPythonConfigurableLexer()
-    # TODO: isn't there a method like _ip.add_trait or something?
-    colorizer = Colorizer()
-    pt_lexer = get_lexer()
+    # lexer = IPythonConfigurableLexer()
+    # colorizer = Colorizer()
+    # pt_lexer = get_lexer()
+    lexer = MyPythonLexer()
+    if hasattr(get_ipython(), 'pt_app.lexer'):
+        get_ipython().pt_app.lexer = lexer
+
+    elif hasattr(get_ipython(), 'pt_app.app.lexer'):
+        get_ipython().pt_app.app.lexer = lexer

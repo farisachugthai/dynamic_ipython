@@ -2,6 +2,8 @@
 System Aliases
 ==============
 
+.. highlight:: ipython
+
 .. currentmodule:: default_profile.startup.20_aliases
 
 To date there are well over 100 aliases manually added to the shell.
@@ -41,7 +43,7 @@ and if present, that value is used.
 Notes
 ------
 
-When writing aliases, an `%alias` definition can take various string
+When writing aliases, an ``%alias`` definition can take various string
 placeholders. As per the official documentation:
 
 
@@ -60,9 +62,12 @@ _ip : |ip|
 
 `%alias` magic
 ==============
+
 .. magic:: alias
 
-The official IPython documentation notes::
+The official IPython documentation notes.:
+
+.. ipython::
 
     In [2]: %alias bracket echo "Input in brackets: <%l>"
     In [3]: bracket hello world
@@ -155,13 +160,12 @@ Break linux up like so::
 Then maybe implement either a factory function or a factory manager but
 I haven't fleshed that part out in my head.
 
-This may have to take the backburner as I reorganize the rest of
+This may have to take the back-burner as I reorganize the rest of
 the repo.
 
 
 If you're breaking up Linux functionality, may I recommend the
 following man page to reference?:
-
 
    BASH-BUILTINS(7)          Miscellaneous Information Manual          BASH-BUILTINS(7)
 
@@ -179,7 +183,7 @@ following man page to reference?:
 
 
 I think that :command:`declare -f` could have a nice tie in to
-`inspect.is_function()` or whatever.
+`inspect.is_function` or whatever.
 
 Linux Aliases
 =============

@@ -10,13 +10,13 @@
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/print.css" type="text/css" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../_static/language_data.js"></script>
-    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
-    <script type="text/javascript" src="../../../_static/theme_extras.js"></script>
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script src="../../../_static/theme_extras.js"></script>
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/startup/35_lexer.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -151,24 +151,61 @@
 <h1>Source code for default_profile.startup.35_lexer</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;This is the example from pygments.</span>
+
+<span class="sd">We could use this as a very easy hack to stop that error highlighting</span>
+<span class="sd">when the lexer sees a python statement that starts with a :kbd:`!` or</span>
+<span class="sd">:kbd:`%` at the beginning of magics.</span>
+
+<span class="sd">FYI.</span>
+
+<span class="sd">    In [46]: _ip.pt_app.lexer</span>
+<span class="sd">    Out[46]: &lt;IPython.terminal.ptutils.IPythonPTLexer at 0x151087677c0&gt;</span>
+
+<span class="sd">    In [47]: _ip.pt_app.lexer.python_lexer.pygments_lexer</span>
+<span class="sd">    Out[47]: &lt;pygments.lexers.PythonLexer with {&#39;stripnl&#39;: False, &#39;stripall&#39;: False, &#39;ensurenl&#39;: False}</span>
+
+
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">traitlets.config</span> <span class="kn">import</span> <span class="n">LoggingConfigurable</span>
 <span class="kn">from</span> <span class="nn">traitlets.traitlets</span> <span class="kn">import</span> <span class="n">Instance</span>
 <span class="kn">from</span> <span class="nn">pygments.lexer</span> <span class="kn">import</span> <span class="n">Lexer</span>
 <span class="kn">from</span> <span class="nn">pygments.lexers.python</span> <span class="kn">import</span> <span class="n">PythonLexer</span>
-
+<span class="kn">from</span> <span class="nn">pygments.token</span> <span class="kn">import</span> <span class="n">Keyword</span><span class="p">,</span> <span class="n">Name</span>
 <span class="kn">from</span> <span class="nn">pygments.formatters.terminal256</span> <span class="kn">import</span> <span class="n">TerminalTrueColorFormatter</span>
 
-<span class="kn">from</span> <span class="nn">prompt_toolkit.lexers.pygments</span> <span class="kn">import</span> <span class="n">PygmentsLexer</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.lexers.pygments</span> <span class="kn">import</span> <span class="n">PygmentsLexer</span> <span class="c1"># , PygmentsTokens</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.lexers.base</span> <span class="kn">import</span> <span class="n">DynamicLexer</span><span class="p">,</span> <span class="n">SimpleLexer</span>
+
+<span class="kn">from</span> <span class="nn">prompt_toolkit.styles</span> <span class="kn">import</span> <span class="n">style_from_pygments_cls</span><span class="p">,</span> <span class="n">default_pygments_style</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.styles.style</span> <span class="kn">import</span> <span class="n">Style</span><span class="p">,</span> <span class="n">merge_styles</span>
 
 <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 <span class="kn">from</span> <span class="nn">IPython.core.interactiveshell</span> <span class="kn">import</span> <span class="n">InteractiveShellABC</span>
 <span class="kn">from</span> <span class="nn">IPython.lib.lexers</span> <span class="kn">import</span> <span class="n">IPyLexer</span><span class="p">,</span> <span class="n">IPythonTracebackLexer</span>
 
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">gruvbox.ptgruvbox</span> <span class="kn">import</span> <span class="n">Gruvbox</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pygments.styles.inkpot</span> <span class="kn">import</span> <span class="n">InkPotStyle</span>
+    <span class="n">Gruvbox</span> <span class="o">=</span> <span class="n">InkPotStyle</span>  <span class="c1"># surprise!</span>
+
+
+<div class="viewcode-block" id="our_style"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.35_lexer.our_style">[docs]</a><span class="k">def</span> <span class="nf">our_style</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">merge_styles</span><span class="p">([</span>
+        <span class="n">style_from_pygments_cls</span><span class="p">(</span><span class="n">Gruvbox</span><span class="p">),</span>
+        <span class="n">default_pygments_style</span><span class="p">(),</span>
+        <span class="c1">#  Style.from_dict({&#39;&#39;:&#39;&#39;})</span>
+    <span class="p">])</span>  <span class="c1"># TODO</span></div>
+
 
 <div class="viewcode-block" id="get_lexer"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.35_lexer.get_lexer">[docs]</a><span class="k">def</span> <span class="nf">get_lexer</span><span class="p">():</span>
-    <span class="n">_</span> <span class="o">=</span> <span class="n">PygmentsLexer</span><span class="p">(</span><span class="n">PythonLexer</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">_</span></div>
+    <span class="n">wrapped_lexer</span> <span class="o">=</span> <span class="n">PygmentsLexer</span><span class="p">(</span><span class="n">PythonLexer</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">wrapped_lexer</span></div>
+
+<div class="viewcode-block" id="pygments_tokens"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.35_lexer.pygments_tokens">[docs]</a><span class="k">def</span> <span class="nf">pygments_tokens</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;A  list of Pygments style tokens. In case you need that.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">PygmentsTokens</span><span class="p">(</span><span class="n">Gruvbox</span><span class="o">.</span><span class="n">style_rules</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="IPythonConfigurableLexer"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.35_lexer.IPythonConfigurableLexer">[docs]</a><span class="k">class</span> <span class="nc">IPythonConfigurableLexer</span><span class="p">(</span><span class="n">LoggingConfigurable</span><span class="p">):</span>
@@ -238,12 +275,44 @@
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{self.__class__.__name__}</span><span class="s2">&quot;</span></div>
 
+<span class="k">class</span> <span class="nc">MyPythonLexer</span><span class="p">(</span><span class="n">PythonLexer</span><span class="p">):</span>
+    <span class="c1"># EXTRA_KEYWORDS = set((&#39;foo&#39;, &#39;bar&#39;, &#39;foobar&#39;, &#39;barfoo&#39;, &#39;spam&#39;, &#39;eggs&#39;))</span>
+    <span class="n">EXTRA_KEYWORDS</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="s2">&quot;!&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_tokens_unprocessed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">PythonLexer</span><span class="o">.</span><span class="n">get_tokens_unprocessed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+            <span class="c1"># How silly is it that I just realized that class attributes</span>
+            <span class="c1"># still bind to the instance object?</span>
+            <span class="k">if</span> <span class="n">token</span> <span class="ow">is</span> <span class="n">Name</span> <span class="ow">and</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">EXTRA_KEYWORDS</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">index</span><span class="p">,</span> <span class="n">Keyword</span><span class="o">.</span><span class="n">Pseudo</span><span class="p">,</span> <span class="n">value</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">index</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">value</span>
+
+
+<div class="viewcode-block" id="MyPythonLexer"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.35_lexer.MyPythonLexer">[docs]</a><span class="k">class</span> <span class="nc">MyPythonLexer</span><span class="p">(</span><span class="n">PythonLexer</span><span class="p">):</span>
+    <span class="c1"># EXTRA_KEYWORDS = set((&#39;foo&#39;, &#39;bar&#39;, &#39;foobar&#39;, &#39;barfoo&#39;, &#39;spam&#39;, &#39;eggs&#39;))</span>
+    <span class="n">EXTRA_KEYWORDS</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="s2">&quot;!&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="MyPythonLexer.get_tokens_unprocessed"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.35_lexer.MyPythonLexer.get_tokens_unprocessed">[docs]</a>    <span class="k">def</span> <span class="nf">get_tokens_unprocessed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">PythonLexer</span><span class="o">.</span><span class="n">get_tokens_unprocessed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+            <span class="c1"># How silly is it that I just realized that class attributes</span>
+            <span class="c1"># still bind to the instance object?</span>
+            <span class="k">if</span> <span class="n">token</span> <span class="ow">is</span> <span class="n">Name</span> <span class="ow">and</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">EXTRA_KEYWORDS</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">index</span><span class="p">,</span> <span class="n">Keyword</span><span class="o">.</span><span class="n">Pseudo</span><span class="p">,</span> <span class="n">value</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">index</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">value</span></div></div>
+
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">lexer</span> <span class="o">=</span> <span class="n">IPythonConfigurableLexer</span><span class="p">()</span>
-    <span class="c1"># TODO: isn&#39;t there a method like _ip.add_trait or something?</span>
-    <span class="n">colorizer</span> <span class="o">=</span> <span class="n">Colorizer</span><span class="p">()</span>
-    <span class="n">pt_lexer</span> <span class="o">=</span> <span class="n">get_lexer</span><span class="p">()</span>
+    <span class="c1"># lexer = IPythonConfigurableLexer()</span>
+    <span class="c1"># colorizer = Colorizer()</span>
+    <span class="c1"># pt_lexer = get_lexer()</span>
+    <span class="n">lexer</span> <span class="o">=</span> <span class="n">MyPythonLexer</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">get_ipython</span><span class="p">(),</span> <span class="s1">&#39;pt_app.lexer&#39;</span><span class="p">):</span>
+        <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">lexer</span> <span class="o">=</span> <span class="n">lexer</span>
+
+    <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">get_ipython</span><span class="p">(),</span> <span class="s1">&#39;pt_app.app.lexer&#39;</span><span class="p">):</span>
+        <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">lexer</span> <span class="o">=</span> <span class="n">lexer</span>
 </pre></div>
 
         </div>
@@ -251,7 +320,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 12, 2020.
+      Last updated on Feb 13, 2020.
     </div>
   </body>
 </html>

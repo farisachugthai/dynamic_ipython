@@ -10,13 +10,13 @@
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/print.css" type="text/css" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../_static/language_data.js"></script>
-    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
-    <script type="text/javascript" src="../../../_static/theme_extras.js"></script>
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script src="../../../_static/theme_extras.js"></script>
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/startup/20_aliases.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -589,7 +589,30 @@
             <span class="p">(</span><span class="s2">&quot;xx&quot;</span><span class="p">,</span> <span class="s2">&quot;quit&quot;</span><span class="p">),</span>  <span class="c1"># this is a sweet one</span>
             <span class="p">(</span><span class="s2">&quot;..&quot;</span><span class="p">,</span> <span class="s2">&quot;cd ..&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;...&quot;</span><span class="p">,</span> <span class="s2">&quot;cd ../..&quot;</span><span class="p">),</span>
-        <span class="p">]</span></div></div>
+        <span class="p">]</span></div>
+
+<div class="viewcode-block" id="CommonAliases.ls_patch"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.ls_patch">[docs]</a>    <span class="k">def</span> <span class="nf">ls_patch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="p">):</span>
+        <span class="n">shoddy_hack_for_aliases</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="s2">&quot;l&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -CF --hide=NTUSER.* --color=always %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;la&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -AF --hide=NTUSER.* --color=always %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;ldir&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -Apo --hide=NTUSER.*  --color=always %l | grep /$&quot;</span><span class="p">),</span>
+            <span class="c1"># (&#39;lf&#39; ,     &#39;ls -Fo --color=always | grep ^-&#39;),</span>
+            <span class="c1"># (&#39;ll&#39; ,          &#39;ls -AFho --color=always %l&#39;),</span>
+            <span class="p">(</span><span class="s2">&quot;ls&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -F --hide=NTUSER.* --color=always %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;lr&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -AgFhtr --hide=NTUSER.*  --color=always %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;lt&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -AgFht --hide=NTUSER.* --color=always %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;lx&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -Fo --hide=NTUSER.* --color=always | grep ^-..x&quot;</span><span class="p">),</span>
+            <span class="c1"># (&#39;ldir&#39; ,               &#39;ls -Fhpo | grep /$ %l&#39;),</span>
+            <span class="p">(</span><span class="s2">&quot;lf&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -Foh --hide=NTUSER.* --color=always | grep ^- %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;ll&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -AgFh --hide=NTUSER.* --color=always %l&quot;</span><span class="p">),</span>
+            <span class="c1"># (&#39;lt&#39; ,          &#39;ls -Altc --color=always %l&#39;),</span>
+            <span class="c1"># (&#39;lr&#39; ,         &#39;ls -Altcr --color=always %l&#39;)</span>
+        <span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">shoddy_hack_for_aliases</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">shell</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">define_alias</span><span class="p">(</span><span class="o">*</span><span class="n">i</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">InvalidAliasError</span><span class="p">:</span>
+                <span class="k">raise</span></div></div>
 
 
 <div class="viewcode-block" id="LinuxAliases"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.LinuxAliases">[docs]</a><span class="k">class</span> <span class="nc">LinuxAliases</span><span class="p">(</span><span class="n">CommonAliases</span><span class="p">):</span>
@@ -850,12 +873,12 @@
 
     <span class="k">if</span> <span class="n">machine</span><span class="o">.</span><span class="n">is_linux</span><span class="p">:</span>
         <span class="n">linux_aliases</span> <span class="o">=</span> <span class="n">LinuxAliases</span><span class="p">()</span>
+        <span class="c1"># TODO: allow adding of these classes</span>
         <span class="c1"># common_aliases.user_aliases.append(linux_aliases.user_aliases)</span>
     <span class="k">elif</span> <span class="n">machine</span><span class="o">.</span><span class="n">is_windows</span><span class="p">:</span>
         <span class="n">windows_aliases</span> <span class="o">=</span> <span class="n">WindowsAliases</span><span class="p">()</span>
         <span class="c1"># common_aliases.user_aliases.append(windows_aliases.user_aliases)</span>
 
-    <span class="c1"># TODO: allow adding of these classes</span>
     <span class="k">return</span> <span class="n">common_aliases</span></div>
 
 
@@ -918,6 +941,8 @@
 
         <span class="n">ALIAS_LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Number of aliases is: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">all_aliases</span><span class="p">)</span>
         <span class="n">_ip</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s2">&quot;alias_magic&quot;</span><span class="p">,</span> <span class="s2">&quot;p pycat&quot;</span><span class="p">)</span>
+        <span class="n">common_aliases</span> <span class="o">=</span> <span class="n">CommonAliases</span><span class="p">()</span>
+        <span class="n">common_aliases</span><span class="o">.</span><span class="n">ls_patch</span><span class="p">(</span><span class="n">_ip</span><span class="p">)</span>
 </pre></div>
 
         </div>
@@ -925,7 +950,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 12, 2020.
+      Last updated on Feb 13, 2020.
     </div>
   </body>
 </html>
