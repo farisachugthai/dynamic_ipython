@@ -14,7 +14,7 @@ from shutil import get_terminal_size
 from traceback import print_exc
 
 from prompt_toolkit import ANSI, HTML
-from prompt_toolkit.application.current import get_app
+# from prompt_toolkit.application.current import get_app
 
 from prompt_toolkit.enums import EditingMode
 from prompt_toolkit.formatted_text import FormattedText
@@ -42,39 +42,55 @@ from pygments.token import Token
 from pygments.lexers.python import PythonLexer
 from pygments.formatters.terminal256 import TerminalTrueColorFormatter
 from IPython.core.getipython import get_ipython
+from IPython.terminal.ptutils import IPythonPTLexer
 
 try:
-    from gruvbox.gruvbox import Gruvbox
+    from gruvbox.gruvbox import GruvboxStyle
 except ImportError:
-    Gruvbox = None
+    GruvboxStyle = None
 
 
-completion_displays_to_styles = {
-    "multi": CompleteStyle.MULTI_COLUMN,
-    "single": CompleteStyle.COLUMN,
-    "readline": CompleteStyle.READLINE_LIKE,
-    "none": None,
-}
+def get_app():
+    """A patch to cover up the fact that get_app() returns a DummyApplication."""
+    if get_ipython() is not None:
+        return get_ipython().pt_app.app
 
 
 def exit_clicked():
     get_app().exit()
 
 
-exit_button = Button("Exit", handler=exit_clicked)
-# Thisll probably be useful
-# from prompt_toolkit.mouse_events import MouseEvent, MouseEventType
+def init_style():
+    # Could set this to _ip.pt_app.style i suppose
+    if GruvboxStyle is not None:
+        bt_style = GruvboxStyle()
+        return style_from_pygments_dict(bt_style.style_rules)
 
-# float_container = FloatContainer(content=Window(...),
-#                        floats=[
-#                            Float(xcursor=True,
-#                                 ycursor=True,
-#                                 layout=CompletionMenu(...))
-#                        ])
 
+def override_style(style_overrides):
+    style = init_style()
+    if not hasattr(style_overrides):
+        raise TypeError
+    style_overrides = Style.from_dict(style_overrides)
+    try:
+        return merge_styles([style, style_overrides])
+    except (AttributeError, TypeError, ValueError):
+        print_exc()
+
+
+def merged_styles(overrides=None):
+    base = init_style()
+    return merge_styles([base, overrides, default_pygments_style()])
+
+def merged_style_rules():
+    """Originally was going to call this in `show_header` but it raises if you
+    had it a list or a Style instance. It looks like it's only made to take 1
+    style anyway."""
+    return merged_styles().style_rules
 
 def show_header():
-    return Frame(TextArea(get_ipython().banner))
+    text_area = TextArea(get_ipython().banner, style='#ebdbb2')
+    return Frame(text_area)
 
 
 class LineCounter:
@@ -94,29 +110,6 @@ class LineCounter:
         self.count += 1
         return '(< In[{:3d}]: Time:{}  )'.format(self.count, self.time)
 
-
-def init_style():
-    # Could set this to _ip.pt_app.style i suppose
-    if Gruvbox is not None:
-        bt_style = Gruvbox()
-        return style_from_pygments_dict(bt_style.style_rules)
-
-
-def override_style(style_overrides):
-    style = init_style()
-    if not hasattr(style_overrides):
-        raise TypeError
-    style_overrides = Style.from_dict(style_overrides)
-    try:
-        return merge_styles([style, style_overrides])
-    except (AttributeError, TypeError, ValueError):
-        print_exc()
-
-
-def merged_styles(overrides=None):
-    base = init_style()
-
-    return merge_styles([base, overrides, default_pygments_style()])
 
 
 def get_titlebar_text():
@@ -249,9 +242,37 @@ if __name__ == "__main__":
     if get_ipython() is not None:
         add_toolbar(BottomToolbar)
 
+    completion_displays_to_styles = {
+        "multi": CompleteStyle.MULTI_COLUMN,
+        "single": CompleteStyle.COLUMN,
+        "readline": CompleteStyle.READLINE_LIKE,
+        "none": None,
+    }
+
+
+    exit_button = Button("Exit", handler=exit_clicked)
+
     print_container(show_header())
 
+    kb = get_ipython().pt_app.app.key_bindings.bindings
     # Bind to IPython TODO:
-    root_container = HSplit([
+    root_container = HSplit(children=[
         Window(height=1, content=FormattedTextControl(get_titlebar_text), align=WindowAlign.CENTER,),
-        Window(height=1, char="-", style="class:line"), ])
+        Window(height=1, char="-", style="class:line")],
+        key_bindings=kb,
+        # style=GruvboxStyle,
+        )
+
+    print('\n\n\n')
+    print_container(root_container)
+    # Thisll probably be useful
+    # from prompt_toolkit.mouse_events import MouseEvent, MouseEventType
+
+    # float_container = FloatContainer(content=Window(...),
+    #                        floats=[
+    #                            Float(xcursor=True,
+    #                                 ycursor=True,
+    #                                 layout=CompletionMenu(...))
+    #                        ])
+
+

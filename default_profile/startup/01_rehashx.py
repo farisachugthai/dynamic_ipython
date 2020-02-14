@@ -41,7 +41,7 @@ import threading
 import trace
 import traceback
 from collections.abc import Sequence
-from os import scandir
+from os import scandir, listdir
 from pathlib import Path
 from runpy import run_module, run_path
 from traceback import FrameSummary, StackSummary, format_exc, format_tb
@@ -182,6 +182,8 @@ if __name__ == "__main__":
 
     if _ip is not None:
         _ip.excepthook = handled
-        if not platform.platform().startswith("Win"):
+        if platform.platform().startswith("Win") and 'Dropbox' in listdir('.'):
             # yeah it executes everything in the dir but checks for permission incorrectly
+            pass
+        else:
             rehashx_run()

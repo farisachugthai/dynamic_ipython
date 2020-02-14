@@ -16,7 +16,7 @@ import sys
 import types
 from contextlib import ContextDecorator, contextmanager
 from subprocess import DEVNULL, PIPE, CalledProcessError, CompletedProcess, Popen
-from typing import get_type_hints  # what is this?
+from typing import get_type_hints, TYPE_CHECKING
 
 from IPython.core.getipython import get_ipython
 
@@ -30,6 +30,8 @@ else:
 
     fufpy = FzfPrompt()
     fuf = fufpy.prompt
+
+# if  TYPE_CHECKING: etc
 
 
 class Executable(ContextDecorator):
