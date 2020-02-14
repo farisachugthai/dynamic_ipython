@@ -10,13 +10,13 @@
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/print.css" type="text/css" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../_static/language_data.js"></script>
-    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
-    <script type="text/javascript" src="../../../_static/theme_extras.js"></script>
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script src="../../../_static/theme_extras.js"></script>
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/startup/21_fzf.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -259,12 +259,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">safe_default_cmd</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-<div class="viewcode-block" id="FZF.default_cmds"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.FZF.default_cmds">[docs]</a>    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">default_cmds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="FZF.default_cmds"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.FZF.default_cmds">[docs]</a>    <span class="k">def</span> <span class="nf">default_cmds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;rg --pretty --hidden --max-columns-preview --no-heading --no-messages --no-column --no-line-number -C 0 -e ^ | fzf --ansi --multi &quot;</span></div>
 
-<div class="viewcode-block" id="FZF.default_cmd"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.FZF.default_cmd">[docs]</a>    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">default_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="FZF.default_cmd"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.FZF.default_cmd">[docs]</a>    <span class="k">def</span> <span class="nf">default_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Define the cmd for FZF.</span>
 
 <span class="sd">        In the sane vein as json.load and json.loads, separate the 2 based on</span>
@@ -291,7 +289,7 @@
 
 <div class="viewcode-block" id="FZF.safe_default_cmd"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.FZF.safe_default_cmd">[docs]</a>    <span class="nd">@contextmanager</span>
     <span class="k">def</span> <span class="nf">safe_default_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">shlex</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">shlex</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default_cmds</span><span class="p">))</span></div>
+        <span class="k">return</span> <span class="n">shlex</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">shlex</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default_cmds</span><span class="p">()))</span></div>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">_setup_fzf</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
@@ -327,58 +325,10 @@
     <span class="k">return</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;rg&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="busybox_hack"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.busybox_hack">[docs]</a><span class="k">def</span> <span class="nf">busybox_hack</span><span class="p">(</span><span class="n">shell</span><span class="p">):</span>
-    <span class="c1"># HACK: dear god it feels horrible doing this but shit it works</span>
-    <span class="kn">from</span> <span class="nn">default_profile.startup</span> <span class="kn">import</span> <span class="n">aliases_mod</span>
-
-    <span class="n">shell</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">+=</span> <span class="n">aliases_mod</span><span class="o">.</span><span class="n">LinuxAliases</span><span class="p">()</span><span class="o">.</span><span class="n">busybox</span><span class="p">()</span>
-    <span class="n">shell</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">init_aliases</span><span class="p">()</span>
-    <span class="n">shoddy_hack_for_aliases</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="p">(</span><span class="s2">&quot;l&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -CF --hide=NTUSER.* --color=always %l&quot;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;la&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -AF --hide=NTUSER.* --color=always %l&quot;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;ldir&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -Apo --hide=NTUSER.*  --color=always %l | grep /$&quot;</span><span class="p">),</span>
-        <span class="c1"># (&#39;lf&#39; ,     &#39;ls -Fo --color=always | grep ^-&#39;),</span>
-        <span class="c1"># (&#39;ll&#39; ,          &#39;ls -AFho --color=always %l&#39;),</span>
-        <span class="p">(</span><span class="s2">&quot;ls&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -F --hide=NTUSER.* --color=always %l&quot;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;lr&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -AgFhtr --hide=NTUSER.*  --color=always %l&quot;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;lt&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -AgFht --hide=NTUSER.* --color=always %l&quot;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;lx&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -Fo --hide=NTUSER.* --color=always | grep ^-..x&quot;</span><span class="p">),</span>
-        <span class="c1"># (&#39;ldir&#39; ,               &#39;ls -Fhpo | grep /$ %l&#39;),</span>
-        <span class="p">(</span><span class="s2">&quot;lf&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -Foh --hide=NTUSER.* --color=always | grep ^- %l&quot;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;ll&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -AgFh --hide=NTUSER.* --color=always %l&quot;</span><span class="p">),</span>
-        <span class="c1"># (&#39;lt&#39; ,          &#39;ls -Altc --color=always %l&#39;),</span>
-        <span class="c1"># (&#39;lr&#39; ,         &#39;ls -Altcr --color=always %l&#39;)</span>
-    <span class="p">]</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">shoddy_hack_for_aliases</span><span class="p">:</span>
-        <span class="n">shell</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">define_alias</span><span class="p">(</span><span class="o">*</span><span class="n">i</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Adding fzf.</span>
-
-<span class="sd">    &gt;&gt;&gt; from collections import deque</span>
-<span class="sd">    &gt;&gt;&gt; user_aliases = deque()</span>
-<span class="sd">    &gt;&gt;&gt; user_aliases = [(&#39;rg&#39;, &#39;rg --hidden --no-messages %l&#39;)]</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">shell</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;win32&quot;</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">aliases_mod</span>
-            <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-                <span class="k">pass</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">busybox_hack</span><span class="p">(</span><span class="n">shell</span><span class="p">)</span>
-
-        <span class="n">fzf_aliases</span> <span class="o">=</span> <span class="n">FZF</span><span class="o">.</span><span class="n">_setup_fzf</span><span class="p">()</span>
-        <span class="n">shell</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">define_alias</span><span class="p">(</span><span class="s2">&quot;fzf&quot;</span><span class="p">,</span> <span class="s2">&quot;fzf-tmux&quot;</span><span class="p">)</span></div>
-        <span class="c1"># default_command = fzf_aliases.default_cmds</span>
-        <span class="c1"># os.environ.setdefault(&quot;FZF_DEFAULT_COMMAND&quot;, default_command)</span>
-
-
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">main</span><span class="p">()</span>
+    <span class="n">fzf_aliases</span> <span class="o">=</span> <span class="n">FZF</span><span class="o">.</span><span class="n">_setup_fzf</span><span class="p">()</span>
+    <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">define_alias</span><span class="p">(</span><span class="s2">&quot;fzf&quot;</span><span class="p">,</span> <span class="s2">&quot;fzf-tmux&quot;</span><span class="p">)</span>
+
     <span class="k">if</span> <span class="n">fuf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
 
         <span class="k">class</span> <span class="nc">Fuf</span><span class="p">(</span><span class="n">FZF</span><span class="p">,</span> <span class="n">FzfPrompt</span><span class="p">):</span>
@@ -390,7 +340,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 12, 2020.
+      Last updated on Feb 13, 2020.
     </div>
   </body>
 </html>

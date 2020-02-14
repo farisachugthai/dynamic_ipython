@@ -10,13 +10,13 @@
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/print.css" type="text/css" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script type="text/javascript" src="../_static/copybutton.js"></script>
-    <script type="text/javascript" src="../_static/theme_extras.js"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/theme_extras.js"></script>
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/startup/prompt_toolkit.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -229,28 +229,28 @@ The seemingly recommended interface is to merge with merge_key_bindings
 Difficult to add key_bindings after the merge though.
 Mostly everything’s behaving as it should however.</p>
 <p>I’m just gonna note how much this bugs me though.:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [30]: </span><span class="n">p</span> <span class="o">=</span> <span class="n">PromptSessionKB</span><span class="p">()</span>
-<span class="gh">Out[30]: </span><span class="go">&lt;PromptSessionKB&gt;: 13</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">30</span><span class="p">]:</span> <span class="n">p</span> <span class="o">=</span> <span class="n">PromptSessionKB</span><span class="p">()</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">30</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">PromptSessionKB</span><span class="o">&gt;</span><span class="p">:</span> <span class="mi">13</span>
 
-<span class="gp">In [31]: </span><span class="n">a</span> <span class="o">=</span> <span class="n">ApplicationKB</span><span class="p">()</span>
-<span class="gh">Out[31]: </span><span class="go">&lt;ApplicationKB&gt;: 24</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">31</span><span class="p">]:</span> <span class="n">a</span> <span class="o">=</span> <span class="n">ApplicationKB</span><span class="p">()</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">31</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">ApplicationKB</span><span class="o">&gt;</span><span class="p">:</span> <span class="mi">24</span>
 </pre></div>
 </div>
 <p>Alright now I need to start keeping track because this is rough.:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span>  <span class="c1"># Application. _ip.pt_app is the PromptSession.</span>
-<span class="gh">Out[1]: </span><span class="go">&lt;prompt_toolkit.application.application.Application at 0x7f2710ac7d90&gt;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span>  <span class="c1"># Application. _ip.pt_app is the PromptSession.</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">Application</span> <span class="n">at</span> <span class="mh">0x7f2710ac7d90</span><span class="o">&gt;</span>
 
 
-<span class="gp">In [9]: </span><span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">current_buffer</span>
-<span class="go">AttributeError: &#39;PromptSession&#39; object has no attribute &#39;current_buffer&#39;</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">9</span><span class="p">]:</span> <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">current_buffer</span>
+<span class="ne">AttributeError</span><span class="p">:</span> <span class="s1">&#39;PromptSession&#39;</span> <span class="nb">object</span> <span class="n">has</span> <span class="n">no</span> <span class="n">attribute</span> <span class="s1">&#39;current_buffer&#39;</span>
 
-<span class="gp">In [2]: </span><span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">current_buffer</span>
-<span class="gh">Out[2]: </span><span class="go">&lt;Buffer(name=&#39;DEFAULT_BUFFER&#39;, text=&#39;_ip.pt_app.a...&#39;) at 139805760009696&gt;</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">current_buffer</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">Buffer</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;DEFAULT_BUFFER&#39;</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s1">&#39;_ip.pt_app.a...&#39;</span><span class="p">)</span> <span class="n">at</span> <span class="mi">139805760009696</span><span class="o">&gt;</span>
 
-<span class="gp">In [3]: </span><span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">validator</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">validator</span>
 
-<span class="gp">In [4]: </span><span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">validator</span>
-<span class="go">AttributeError: &#39;Application&#39; object has no attribute &#39;validator&#39;</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">validator</span>
+<span class="ne">AttributeError</span><span class="p">:</span> <span class="s1">&#39;Application&#39;</span> <span class="nb">object</span> <span class="n">has</span> <span class="n">no</span> <span class="n">attribute</span> <span class="s1">&#39;validator&#39;</span>
 </pre></div>
 </div>
 <p>Alright so they’re not the similar after all right?
@@ -262,75 +262,75 @@ We can change the key bindings by changing this attribute from
 <code class="xref py py-obj docutils literal notranslate"><span class="pre">EditingMode.VI</span></code> to <code class="xref py py-obj docutils literal notranslate"><span class="pre">EditingMode.EMACS</span></code>.</p>
 </div></blockquote>
 <p>Guess what else has an editing_mode attribute.:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">editing_mode</span>
-<span class="gh">Out[5]: </span><span class="go">&lt;EditingMode.VI: &#39;VI&#39;&gt;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">5</span><span class="p">]:</span> <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">editing_mode</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">5</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">EditingMode</span><span class="o">.</span><span class="n">VI</span><span class="p">:</span> <span class="s1">&#39;VI&#39;</span><span class="o">&gt;</span>
 
-<span class="gp">In [6]: </span><span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">editing_mode</span>
-<span class="gh">Out[6]: </span><span class="go">&lt;EditingMode.VI: &#39;VI&#39;&gt;</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">6</span><span class="p">]:</span> <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">editing_mode</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">6</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">EditingMode</span><span class="o">.</span><span class="n">VI</span><span class="p">:</span> <span class="s1">&#39;VI&#39;</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <p>Dude <code class="xref py py-obj docutils literal notranslate"><span class="pre">_MergedKeyBindings</span></code> are horrible.:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [30]: </span><span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span>
-<span class="gh">Out[30]: </span><span class="go">&lt;prompt_toolkit.key_binding.key_bindings._MergedKeyBindings at 0x7f271047f340&gt;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">30</span><span class="p">]:</span> <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">30</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">key_binding</span><span class="o">.</span><span class="n">key_bindings</span><span class="o">.</span><span class="n">_MergedKeyBindings</span> <span class="n">at</span> <span class="mh">0x7f271047f340</span><span class="o">&gt;</span>
 
-<span class="gp">In [31]: </span><span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span><span class="o">.</span><span class="n">registries</span>
-<span class="gh">Out[31]:</span>
-<span class="go">[&lt;prompt_toolkit.key_binding.key_bindings._MergedKeyBindings at 0x7f2710ac7b50&gt;,</span>
-<span class="go">&lt;prompt_toolkit.key_binding.key_bindings.ConditionalKeyBindings at 0x7f2710447430&gt;]</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">31</span><span class="p">]:</span> <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span><span class="o">.</span><span class="n">registries</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">31</span><span class="p">]:</span>
+<span class="p">[</span><span class="o">&lt;</span><span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">key_binding</span><span class="o">.</span><span class="n">key_bindings</span><span class="o">.</span><span class="n">_MergedKeyBindings</span> <span class="n">at</span> <span class="mh">0x7f2710ac7b50</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="o">&lt;</span><span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">key_binding</span><span class="o">.</span><span class="n">key_bindings</span><span class="o">.</span><span class="n">ConditionalKeyBindings</span> <span class="n">at</span> <span class="mh">0x7f2710447430</span><span class="o">&gt;</span><span class="p">]</span>
 
-<span class="gp">In [32]: </span><span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span><span class="o">.</span><span class="n">registries</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="gh">Out[32]: </span><span class="go">&lt;prompt_toolkit.key_binding.key_bindings._MergedKeyBindings at 0x7f2710ac7b50&gt;</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">32</span><span class="p">]:</span> <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span><span class="o">.</span><span class="n">registries</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">32</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">key_binding</span><span class="o">.</span><span class="n">key_bindings</span><span class="o">.</span><span class="n">_MergedKeyBindings</span> <span class="n">at</span> <span class="mh">0x7f2710ac7b50</span><span class="o">&gt;</span>
 
-<span class="gp">In [33]: </span><span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span><span class="o">.</span><span class="n">registries</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">registries</span>
-<span class="gh">Out[33]:</span>
-<span class="go">[&lt;prompt_toolkit.key_binding.key_bindings._MergedKeyBindings at 0x7f2710ac77f0&gt;,</span>
-<span class="go">&lt;prompt_toolkit.key_binding.key_bindings.DynamicKeyBindings at 0x7f2710ac79a0&gt;]</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">33</span><span class="p">]:</span> <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span><span class="o">.</span><span class="n">registries</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">registries</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">33</span><span class="p">]:</span>
+<span class="p">[</span><span class="o">&lt;</span><span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">key_binding</span><span class="o">.</span><span class="n">key_bindings</span><span class="o">.</span><span class="n">_MergedKeyBindings</span> <span class="n">at</span> <span class="mh">0x7f2710ac77f0</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="o">&lt;</span><span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">key_binding</span><span class="o">.</span><span class="n">key_bindings</span><span class="o">.</span><span class="n">DynamicKeyBindings</span> <span class="n">at</span> <span class="mh">0x7f2710ac79a0</span><span class="o">&gt;</span><span class="p">]</span>
 
-<span class="gp">In [34]: </span><span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span><span class="o">.</span><span class="n">registries</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">registries</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="gh">Out[34]: </span><span class="go">&lt;prompt_toolkit.key_binding.key_bindings._MergedKeyBindings at 0x7f2710ac77f0&gt;</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">34</span><span class="p">]:</span> <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span><span class="o">.</span><span class="n">registries</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">registries</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">34</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">key_binding</span><span class="o">.</span><span class="n">key_bindings</span><span class="o">.</span><span class="n">_MergedKeyBindings</span> <span class="n">at</span> <span class="mh">0x7f2710ac77f0</span><span class="o">&gt;</span>
 
-<span class="gp">In [35]: </span><span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span><span class="o">.</span><span class="n">registries</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">registries</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">registries</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="gh">Out[35]: </span><span class="go">&lt;prompt_toolkit.key_binding.key_bindings.KeyBindings at 0x7f2710ac3160&gt;</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">35</span><span class="p">]:</span> <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span><span class="o">.</span><span class="n">registries</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">registries</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">registries</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">35</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">key_binding</span><span class="o">.</span><span class="n">key_bindings</span><span class="o">.</span><span class="n">KeyBindings</span> <span class="n">at</span> <span class="mh">0x7f2710ac3160</span><span class="o">&gt;</span>
 
-<span class="gp">In [36]: </span><span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span><span class="o">.</span><span class="n">registries</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">registries</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">registries</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">bindings</span>
-<span class="gh">Out[36]:</span>
-<span class="go">[Binding(keys=(&lt;Keys.Right: &#39;right&#39;&gt;,), handler=&lt;function load_auto_suggest_bindings.&lt;locals&gt;._ at 0x7f2710aadd30&gt;),</span>
-<span class="go">Binding(keys=(&lt;Keys.ControlE: &#39;c-e&#39;&gt;,), handler=&lt;function load_auto_suggest_bindings.&lt;locals&gt;._ at 0x7f2710aadd30&gt;),</span>
-<span class="go">Binding(keys=(&lt;Keys.ControlF: &#39;c-f&#39;&gt;,), handler=&lt;function load_auto_suggest_bindings.&lt;locals&gt;._ at 0x7f2710aadd30&gt;),</span>
-<span class="go">Binding(keys=(&lt;Keys.Escape: &#39;escape&#39;&gt;, &#39;f&#39;), handler=&lt;function load_auto_suggest_bindings.&lt;locals&gt;._ at 0x7f2710aadc10&gt;)]</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">36</span><span class="p">]:</span> <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span><span class="o">.</span><span class="n">registries</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">registries</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">registries</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">bindings</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">36</span><span class="p">]:</span>
+<span class="p">[</span><span class="n">Binding</span><span class="p">(</span><span class="n">keys</span><span class="o">=</span><span class="p">(</span><span class="o">&lt;</span><span class="n">Keys</span><span class="o">.</span><span class="n">Right</span><span class="p">:</span> <span class="s1">&#39;right&#39;</span><span class="o">&gt;</span><span class="p">,),</span> <span class="n">handler</span><span class="o">=&lt;</span><span class="n">function</span> <span class="n">load_auto_suggest_bindings</span><span class="o">.&lt;</span><span class="nb">locals</span><span class="o">&gt;.</span><span class="n">_</span> <span class="n">at</span> <span class="mh">0x7f2710aadd30</span><span class="o">&gt;</span><span class="p">),</span>
+<span class="n">Binding</span><span class="p">(</span><span class="n">keys</span><span class="o">=</span><span class="p">(</span><span class="o">&lt;</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlE</span><span class="p">:</span> <span class="s1">&#39;c-e&#39;</span><span class="o">&gt;</span><span class="p">,),</span> <span class="n">handler</span><span class="o">=&lt;</span><span class="n">function</span> <span class="n">load_auto_suggest_bindings</span><span class="o">.&lt;</span><span class="nb">locals</span><span class="o">&gt;.</span><span class="n">_</span> <span class="n">at</span> <span class="mh">0x7f2710aadd30</span><span class="o">&gt;</span><span class="p">),</span>
+<span class="n">Binding</span><span class="p">(</span><span class="n">keys</span><span class="o">=</span><span class="p">(</span><span class="o">&lt;</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlF</span><span class="p">:</span> <span class="s1">&#39;c-f&#39;</span><span class="o">&gt;</span><span class="p">,),</span> <span class="n">handler</span><span class="o">=&lt;</span><span class="n">function</span> <span class="n">load_auto_suggest_bindings</span><span class="o">.&lt;</span><span class="nb">locals</span><span class="o">&gt;.</span><span class="n">_</span> <span class="n">at</span> <span class="mh">0x7f2710aadd30</span><span class="o">&gt;</span><span class="p">),</span>
+<span class="n">Binding</span><span class="p">(</span><span class="n">keys</span><span class="o">=</span><span class="p">(</span><span class="o">&lt;</span><span class="n">Keys</span><span class="o">.</span><span class="n">Escape</span><span class="p">:</span> <span class="s1">&#39;escape&#39;</span><span class="o">&gt;</span><span class="p">,</span> <span class="s1">&#39;f&#39;</span><span class="p">),</span> <span class="n">handler</span><span class="o">=&lt;</span><span class="n">function</span> <span class="n">load_auto_suggest_bindings</span><span class="o">.&lt;</span><span class="nb">locals</span><span class="o">&gt;.</span><span class="n">_</span> <span class="n">at</span> <span class="mh">0x7f2710aadc10</span><span class="o">&gt;</span><span class="p">)]</span>
 </pre></div>
 </div>
 <p>And you kinda can’t do anything about it.:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [39]: </span><span class="n">did_we_make_it_better</span> <span class="o">=</span> <span class="n">DynamicKeyBindings</span><span class="p">(</span><span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span><span class="p">)</span>
-<span class="gh">Out[39]: </span><span class="go">&lt;prompt_toolkit.key_binding.key_bindings.DynamicKeyBindings at 0x7f26f7d9ba30&gt;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">39</span><span class="p">]:</span> <span class="n">did_we_make_it_better</span> <span class="o">=</span> <span class="n">DynamicKeyBindings</span><span class="p">(</span><span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span><span class="p">)</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">39</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">key_binding</span><span class="o">.</span><span class="n">key_bindings</span><span class="o">.</span><span class="n">DynamicKeyBindings</span> <span class="n">at</span> <span class="mh">0x7f26f7d9ba30</span><span class="o">&gt;</span>
 
-<span class="gp">In [40]: </span><span class="n">did_we_make_it_better</span><span class="o">.</span><span class="n">bindings</span>
-<span class="go">TypeError: &#39;_MergedKeyBindings&#39; object is not callable</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">40</span><span class="p">]:</span> <span class="n">did_we_make_it_better</span><span class="o">.</span><span class="n">bindings</span>
+<span class="ne">TypeError</span><span class="p">:</span> <span class="s1">&#39;_MergedKeyBindings&#39;</span> <span class="nb">object</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">callable</span>
 </pre></div>
 </div>
 <p>Can’t extract anything from them.:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [42]: </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">load_key_bindings</span><span class="p">()</span><span class="o">.</span><span class="n">registries</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">bindings</span><span class="p">:</span>
-<span class="go">    ...:     _ip.pt_app.key_bindings.add(i.keys)(i.handler)</span>
-<span class="go">    ...: ValueError: Invalid key: (&lt;Keys.ControlX: &#39;c-x&#39;&gt;, &#39;r&#39;, &#39;y&#39;)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">42</span><span class="p">]:</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">load_key_bindings</span><span class="p">()</span><span class="o">.</span><span class="n">registries</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">bindings</span><span class="p">:</span>
+    <span class="o">...</span><span class="p">:</span>     <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">key_bindings</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">keys</span><span class="p">)(</span><span class="n">i</span><span class="o">.</span><span class="n">handler</span><span class="p">)</span>
+    <span class="o">...</span><span class="p">:</span> <span class="ne">ValueError</span><span class="p">:</span> <span class="n">Invalid</span> <span class="n">key</span><span class="p">:</span> <span class="p">(</span><span class="o">&lt;</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlX</span><span class="p">:</span> <span class="s1">&#39;c-x&#39;</span><span class="o">&gt;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Gotta be honest I felt very creative working my way up to that one.
 If we can’t do that, lets keep working at the individual bindings.:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [43]: </span><span class="n">i</span><span class="o">.</span><span class="n">keys</span>
-<span class="gh">Out[43]: </span><span class="go">(&lt;Keys.ControlX: &#39;c-x&#39;&gt;, &#39;r&#39;, &#39;y&#39;)</span>
-<span class="gp">In [44]: </span><span class="nb">type</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">keys</span><span class="p">)</span>
-<span class="gh">Out[44]: </span><span class="go">tuple</span>
-<span class="gp">In [45]: </span><span class="n">i</span><span class="o">.</span><span class="n">keys</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="gh">Out[45]: </span><span class="go">&lt;Keys.ControlX: &#39;c-x&#39;&gt;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">43</span><span class="p">]:</span> <span class="n">i</span><span class="o">.</span><span class="n">keys</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">43</span><span class="p">]:</span> <span class="p">(</span><span class="o">&lt;</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlX</span><span class="p">:</span> <span class="s1">&#39;c-x&#39;</span><span class="o">&gt;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">)</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">44</span><span class="p">]:</span> <span class="nb">type</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">keys</span><span class="p">)</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">44</span><span class="p">]:</span> <span class="nb">tuple</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">45</span><span class="p">]:</span> <span class="n">i</span><span class="o">.</span><span class="n">keys</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">45</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlX</span><span class="p">:</span> <span class="s1">&#39;c-x&#39;</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <p>So far so good?:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [57]: </span><span class="n">c</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-<span class="go">...: for j in i.keys:</span>
-<span class="go">...:     c += Keys(j)</span>
-<span class="go">...: ValueError: &#39;r&#39; is not a valid Keys</span>
-<span class="go">    During handling of the above exception, another exception occurred:</span>
-<span class="go">    ValueError: &#39;r&#39; is not a valid Keys</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">57</span><span class="p">]:</span> <span class="n">c</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="o">...</span><span class="p">:</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">i</span><span class="o">.</span><span class="n">keys</span><span class="p">:</span>
+<span class="o">...</span><span class="p">:</span>     <span class="n">c</span> <span class="o">+=</span> <span class="n">Keys</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+<span class="o">...</span><span class="p">:</span> <span class="ne">ValueError</span><span class="p">:</span> <span class="s1">&#39;r&#39;</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">a</span> <span class="n">valid</span> <span class="n">Keys</span>
+    <span class="n">During</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">the</span> <span class="n">above</span> <span class="n">exception</span><span class="p">,</span> <span class="n">another</span> <span class="n">exception</span> <span class="n">occurred</span><span class="p">:</span>
+    <span class="ne">ValueError</span><span class="p">:</span> <span class="s1">&#39;r&#39;</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">a</span> <span class="n">valid</span> <span class="n">Keys</span>
 </pre></div>
 </div>
 <p>Yup. We have to redefine what a key is.</p>
@@ -340,7 +340,7 @@ If we can’t do that, lets keep working at the individual bindings.:</p>
 <p>Dude these are all the vi modes prompt_toolkit has…lol
 So I just checked. Wanna know what it does?
 They’re basically Enums that get compared to <code class="docutils literal notranslate"><span class="pre">editing_mode.input_mode</span></code>.:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">prompt_toolkit.filters.app</span> <span class="kn">import</span> <span class="p">(</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">prompt_toolkit.filters.app</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">vi_selection_mode</span><span class="p">,</span>
     <span class="n">vi_recording_macro</span><span class="p">,</span>
     <span class="n">vi_register_names</span><span class="p">,</span>
@@ -637,7 +637,7 @@ completions in a similar manner to the fish shell.</p>
 <p class="admonition-title">The API for for adding custom completers doesn’t seem to be having an effect.</p>
 <p>Specifically <code class="docutils literal notranslate"><span class="pre">get_ipython.set_custom_completer</span></code>.</p>
 </div>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">fuzzy_completer</span> <span class="o">=</span> <span class="n">FuzzyCompleter</span><span class="p">(</span><span class="n">ExecutableCompleter</span><span class="p">())</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fuzzy_completer</span> <span class="o">=</span> <span class="n">FuzzyCompleter</span><span class="p">(</span><span class="n">ExecutableCompleter</span><span class="p">())</span>
 <span class="n">dynamic_completer</span> <span class="o">=</span> <span class="n">DynamicCompleter</span><span class="p">(</span><span class="n">fuzzy_completer</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -697,7 +697,7 @@ directory, why wouldn’t you assume that it’s relative <strong>to their curre
 working directory??</strong></p>
 <dl class="attribute">
 <dt id="default_profile.startup.34_completion.PathCallable.get_paths">
-<code class="sig-name descname">get_paths</code><em class="property"> = PosixPath('.')</em><a class="headerlink" href="#default_profile.startup.34_completion.PathCallable.get_paths" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_paths</code><em class="property"> = WindowsPath('.')</em><a class="headerlink" href="#default_profile.startup.34_completion.PathCallable.get_paths" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -815,12 +815,12 @@ of these attributes as well.</p>
 <code class="sig-name descname">PygmentsLexer(Lexer):</code></dt>
 <dd><p>Lexer that calls a pygments lexer.</p>
 <p>Example:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pygments.lexers.html</span> <span class="kn">import</span> <span class="n">HtmlLexer</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pygments.lexers.html</span> <span class="kn">import</span> <span class="n">HtmlLexer</span>
 <span class="n">lexer</span> <span class="o">=</span> <span class="n">PygmentsLexer</span><span class="p">(</span><span class="n">HtmlLexer</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Note: Don’t forget to also load a Pygments compatible style. E.g.:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">prompt_toolkit.styles.from_pygments</span> <span class="kn">import</span> <span class="n">style_from_pygments_cls</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">prompt_toolkit.styles.from_pygments</span> <span class="kn">import</span> <span class="n">style_from_pygments_cls</span>
 <span class="kn">from</span> <span class="nn">pygments.styles</span> <span class="kn">import</span> <span class="n">get_style_by_name</span>
 <span class="n">style</span> <span class="o">=</span> <span class="n">style_from_pygments_cls</span><span class="p">(</span><span class="n">get_style_by_name</span><span class="p">(</span><span class="s1">&#39;monokai&#39;</span><span class="p">))</span>
 </pre></div>
@@ -841,10 +841,29 @@ than 1,000 lines.</p></li>
 </dl>
 </dd></dl>
 
-<span class="target" id="module-default_profile.startup.35_lexer"></span><dl class="function">
+<span class="target" id="module-default_profile.startup.35_lexer"></span><p><kbd class="kbd docutils literal notranslate">%</kbd> at the beginning of magics.</p>
+<p>FYI.</p>
+<blockquote>
+<div><p>In [46]: _ip.pt_app.lexer
+Out[46]: &lt;IPython.terminal.ptutils.IPythonPTLexer at 0x151087677c0&gt;</p>
+<p>In [47]: _ip.pt_app.lexer.python_lexer.pygments_lexer
+Out[47]: &lt;pygments.lexers.PythonLexer with {‘stripnl’: False, ‘stripall’: False, ‘ensurenl’: False}</p>
+</div></blockquote>
+<dl class="function">
+<dt id="default_profile.startup.35_lexer.our_style">
+<code class="sig-prename descclassname">default_profile.startup.35_lexer.</code><code class="sig-name descname">our_style</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/35_lexer.html#our_style"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.35_lexer.our_style" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
 <dt id="default_profile.startup.35_lexer.get_lexer">
 <code class="sig-prename descclassname">default_profile.startup.35_lexer.</code><code class="sig-name descname">get_lexer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/35_lexer.html#get_lexer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.35_lexer.get_lexer" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="function">
+<dt id="default_profile.startup.35_lexer.pygments_tokens">
+<code class="sig-prename descclassname">default_profile.startup.35_lexer.</code><code class="sig-name descname">pygments_tokens</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/35_lexer.html#pygments_tokens"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.35_lexer.pygments_tokens" title="Permalink to this definition">¶</a></dt>
+<dd><p>A  list of Pygments style tokens. In case you need that.</p>
+</dd></dl>
 
 <dl class="class">
 <dt id="default_profile.startup.35_lexer.IPythonConfigurableLexer">
@@ -946,6 +965,22 @@ are terminated at newlines, so that paging the output works correctly.</p>
 <dl class="method">
 <dt id="default_profile.startup.35_lexer.Colorizer.highlight">
 <code class="sig-name descname">highlight</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">code</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/35_lexer.html#Colorizer.highlight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.35_lexer.Colorizer.highlight" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="default_profile.startup.35_lexer.MyPythonLexer">
+<em class="property">class </em><code class="sig-prename descclassname">default_profile.startup.35_lexer.</code><code class="sig-name descname">MyPythonLexer</code><span class="sig-paren">(</span><em class="sig-param">**options</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/35_lexer.html#MyPythonLexer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.35_lexer.MyPythonLexer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pygments.lexers.python.PythonLexer</span></code></p>
+<dl class="attribute">
+<dt id="default_profile.startup.35_lexer.MyPythonLexer.EXTRA_KEYWORDS">
+<code class="sig-name descname">EXTRA_KEYWORDS</code><em class="property"> = {'!'}</em><a class="headerlink" href="#default_profile.startup.35_lexer.MyPythonLexer.EXTRA_KEYWORDS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="default_profile.startup.35_lexer.MyPythonLexer.get_tokens_unprocessed">
+<code class="sig-name descname">get_tokens_unprocessed</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">text</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/35_lexer.html#MyPythonLexer.get_tokens_unprocessed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.35_lexer.MyPythonLexer.get_tokens_unprocessed" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1057,7 +1092,7 @@ Out[109]: &lt;prompt_toolkit.styles.base.DynamicStyle at 0x7f1658a90a30&gt;</p>
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 12, 2020.
+      Last updated on Feb 13, 2020.
     </div>
   </body>
 </html>
