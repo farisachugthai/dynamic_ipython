@@ -1,38 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-===================
-Prepackaged Loggers
-===================
-
-Set up easily instantied :class:`logging.Logger` instances.
-
-Create a few formatters and logging instances that can be easily
-imported and utilized across the package.
-
-Currently :func:`~default_profile.util.module_log.stream_logger`
-is the easiest and most oft used entry point in this module.
-
-Raises
-------
-:exc:`NoUnNamedLoggers`
-    Exception raised when a function in this module is called without a
-    name argument for the logger.
-
-Doctest
--------
-.. testsetup::
-
-    >>> import logging
-    >>> import default_profile
-
-.. doctest::
-
-    >>> from default_profile.util import module_log
-    >>> module_log.stream_logger(logging.getLogger(__name__))
-
-
-"""
 import functools
 import json
 import logging
@@ -50,9 +17,12 @@ from traitlets.config.configurable import LoggingConfigurable
 from traitlets.config.application import LevelFormatter
 from traitlets.traitlets import Instance
 
+from default_profile import QueueHandler  # noqa F401
+
 
 class NoUnNamedLoggers(NotImplementedError):
     """Raise this error if the logger a function was called with was anonymous."""
+
     def __init__(self, *args, **kwargs):
         super().__init__(self, *args, **kwargs)
 
@@ -114,14 +84,11 @@ def stream_logger(logger, log_level=logging.INFO, msg_format=None):
     return logger
 
 
-def file_logger(filename,
-                logger=None,
-                shell=None,
-                log_level=logging.INFO,
-                msg_format=None):
+def file_logger(
+    filename, logger=None, shell=None, log_level=logging.INFO, msg_format=None
+):
     """Removed docstring because it wouldn't stop emitting errors."""
-    assert isinstance(shell,
-                      (IPython.core.interactiveshell.InteractiveShell, None))
+    assert isinstance(shell, (IPython.core.interactiveshell.InteractiveShell, None))
 
     if shell is None:
         shell = get_ipython()
@@ -140,8 +107,7 @@ def file_logger(filename,
     if msg_format is not None:
         formatter = logging.Formatter(msg_format)
     else:
-        formatter = logging.Formatter(
-            "%(asctime)s : %(levelname)s : %(message)s : ")
+        formatter = logging.Formatter("%(asctime)s : %(levelname)s : %(message)s : ")
 
     handler.setFormatter(formatter)
 
@@ -203,6 +169,7 @@ def json_logger(logger=None, json_formatter=None):
 
 class JsonFormatter(logging.Formatter):
     """Return valid :mod:`json` for a configured handler."""
+
     def format(self, record):
         """Format a :class:`logging.LogRecord()` from an :exc:Exception."""
         if record.exc_info:
@@ -210,24 +177,19 @@ class JsonFormatter(logging.Formatter):
         else:
             exc = None
 
-        return json.dumps({
-            "msg":
-            record.msg % record.args,
-            "timestamp":
-            datetime.utcfromtimestamp(record.created).isoformat() + "Z",
-            "func":
-            record.funcName,
-            "level":
-            record.levelname,
-            "module":
-            record.module,
-            "process_id":
-            record.process,
-            "thread_id":
-            record.thread,
-            "exception":
-            exc,
-        })
+        return json.dumps(
+            {
+                "msg": record.msg % record.args,
+                "timestamp": datetime.utcfromtimestamp(record.created).isoformat()
+                + "Z",
+                "func": record.funcName,
+                "level": record.levelname,
+                "module": record.module,
+                "process_id": record.process,
+                "thread_id": record.thread,
+                "exception": exc,
+            }
+        )
 
 
 def betterConfig(name=None, parent=None):
@@ -281,11 +243,7 @@ class VerboseLoggingConfigurable(LoggingConfigurable):
 
     shell = Instance("InteractiveShellABC")
 
-    def __init__(self,
-                 logger_name=None,
-                 logger_parent=None,
-                 shell=None,
-                 **kwargs):
+    def __init__(self, logger_name=None, logger_parent=None, shell=None, **kwargs):
         self.log = betterConfig(name=logger_name, parent=logger_parent)
         self.logger_name = logger_name
         self.logger_parent = logger_parent
@@ -293,6 +251,8 @@ class VerboseLoggingConfigurable(LoggingConfigurable):
         if self.shell is not None:
             self.config = shell.config
             self.parent = shell.parent
+        else:
+            raise UsageError
         super().__init__(shell=shell, **kwargs)
 
     def log(self, msg, level=None):

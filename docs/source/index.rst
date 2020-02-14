@@ -146,6 +146,7 @@ Table of Contents
    rehashx <startup/rehashx>
    ipython-logger <startup/ipython-logger>
    help_helpers <startup/help_helpers.rst>
+   clipboard <startup/clipboard>
    aliases <startup/aliases>
    fzf <startup/fzf>
    setup_readline <startup/setup_readline>

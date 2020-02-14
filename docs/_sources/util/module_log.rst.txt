@@ -1,47 +1,79 @@
+.. currentmodule:: default_profile.util.module_log
+
 ===============================================
 :mod:`~default_profile.util.module_log` module
 ===============================================
 
-.. function:: file_logger
 
-   Logging function that emits a :class:`logging.LogRecord` to ``filename``.
-   Logger uses the following formatting by default.:
+Summary
+========
 
-      %(asctime)s : %(levelname)s : %(message)s
+Set up easily instantiated :class:`logging.Logger` instances.
+
+Create a few formatters and logging instances that can be easily
+imported and utilized across the package.
+
+Currently :func:`~default_profile.util.module_log.stream_logger`
+is the easiest and most oft used entry point in this module.
+
+Exceptions
+===========
+
+:exc:`NoUnNamedLoggers`
+    Exception raised when a function in this module is called without a
+    name argument for the logger.
+
+Stream Logging
+==============
+
+.. function:: stream_logger(logger, log_level=logging.INFO, msg_format=None)
 
 
-.. todo:: Convert this to formatting specific to this function.
+Stream Logging Examples
+-------------------------
 
-   Appears to be for the whole module.
+.. testsetup::
+
+    >>> import logging
+    >>> import default_profile
+
+.. doctest::
+
+    >>> from default_profile.util import module_log
+    >>> module_log.stream_logger(logging.getLogger(__name__))
 
 
-Parameters
-----------
-filename : str
-      File to log a :class:`logging.LogRecord` to.
+File Logging
+================
 
-logger : :class:`logging.Logger`, optional
-      A :class:`logging.Logger` instantiated in the calling module.
+.. function:: file_logger(filename, logger=None, shell=None, log_level=None, msg_format=None
 
-shell : |ip|, optional
-      Global instance of IPython. Can be **None** if not run in
-      :mod:`IPython` though this hasn't been tested.
+    Logging function that emits a :class:`logging.LogRecord` to ``filename``.
+    Logger uses the following formatting by default.:
 
-log_level : int, optional
-      Level of log records.
+       %(asctime)s : %(levelname)s : %(message)s
 
-msg_format : str, optional
-      Representation of logging messages using parameters accepted by
-      :class:`logging.Formatter`. Uses standard :kbd:`%` style
-      string formatting.
+    :param filename: str
+       File to log a :class:`logging.LogRecord` to.
 
-Returns
--------
-logger : :class:`logging.Logger` instance
+    :param logger: :class:`logging.Logger`, optional
+       A :class:`logging.Logger` instantiated in the calling module.
 
-Raises
-------
-AssertionError
+    shell : |ip|, optional
+       Global instance of IPython. Can be **None** if not run in
+       :mod:`IPython` though this hasn't been tested.
+
+    log_level : int, optional
+       Level of log records.
+
+    msg_format : str, optional
+       Representation of logging messages using parameters accepted by
+       :class:`logging.Formatter`. Uses standard :kbd:`%` style
+       string formatting.
+
+   :param logger: :class:`logging.Logger` instance
+
+   :raises AssertionError: 
       *shell* is not `isinstance` |ip|.
 
 

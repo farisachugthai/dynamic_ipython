@@ -357,7 +357,14 @@
                         <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">result</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_bindings_starting_with_keys_cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">get</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_bindings_starting_with_keys_cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">get</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">__sizeof__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Unfortunately I&#39;ve added so much to this class that it might be necessary to check</span>
+        <span class="c1"># how big ano object is now</span>
+        <span class="k">return</span> <span class="nb">object</span><span class="o">.</span><span class="n">__sizeof__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">(</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">getsizeof</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="ApplicationKB"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.32_kb.ApplicationKB">[docs]</a><span class="k">class</span> <span class="nc">ApplicationKB</span><span class="p">(</span><span class="n">KeyBindingsManager</span><span class="p">):</span>
@@ -441,7 +448,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 13, 2020.
+      Last updated on Feb 14, 2020.
     </div>
   </body>
 </html>

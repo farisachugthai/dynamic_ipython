@@ -208,6 +208,13 @@ class KeyBindingsManager(KeyBindingsBase):
 
         return self._get_bindings_starting_with_keys_cache.get(keys, get)
 
+    def __sizeof__(self):
+        # Unfortunately I've added so much to this class that it might be necessary to check
+        # how big ano object is now
+        return object.__sizeof__(self) + sum(
+            sys.getsizeof(v) for v in self.__dict__.values()
+        )
+
 
 class ApplicationKB(KeyBindingsManager):
     """Functionally the exact same thing except now we're bound to _ip.pt_app."""

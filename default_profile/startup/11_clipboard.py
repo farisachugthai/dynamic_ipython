@@ -39,52 +39,77 @@ class ClipboardEmpty(ValueError):
     pass
 
 
-def win_clip_pywin32():
-    try:
-        import win32clipboard
-    except ImportError:
-        raise TryNext(
-            "Getting text from the clipboard requires the pywin32 "
-            "extensions: http://sourceforge.net/projects/pywin32/"
-        )
-    win32clipboard.OpenClipboard()
-    try:
-        text = win32clipboard.GetClipboardData(win32clipboard.CF_UNICODETEXT)
-    except (TypeError, win32clipboard.error):
-        try:
-            text = win32clipboard.GetClipboardData(win32clipboard.CF_TEXT)
-        except (TypeError, win32clipboard.error):
-            raise ClipboardEmpty
-    finally:
-        win32clipboard.CloseClipboard()
-
-    return text
-
-
-def win32_clipboard_get():
-    """Get the current clipboard's text on Windows.
-
-    Returns
-    -------
-    todo
+class WindowsClipboard(Clipboard):
+    """Creates a prompt_toolkit compatible implementation of a clipboard.
 
     Notes
     ------
     Requires Mark Hammond's pywin32 extensions.
 
-
     """
-    try:
-        return win_clip_pywin32()
-    except Exception:  # noqa
+
+    def __init__(self):
+        """Open a clipboard on windows with win32clipboard.OpenClipboard.
+
+        Raises
+        ------
+        :exc:`TryNext`
+            If win32clipboard can't be imported.
+
+        """
         try:
-            # or something
-            return subprocess.run(
-                ["win32yank", "-o", "lf"], stdout=subprocess.PIPE
-            ).stdout
-            # "-i", "crlf", 
-        except subprocess.CalledProcessError:
-            raise
+            import win32clipboard
+        except ImportError:
+            raise TryNext(
+                "Getting text from the clipboard requires the pywin32 "
+                "extensions: http://sourceforge.net/projects/pywin32/"
+            )
+        win32clipboard.OpenClipboard()
+
+    def win_clip_pywin32():
+        try:
+            text = win32clipboard.GetClipboardData(win32clipboard.CF_UNICODETEXT)
+        except (TypeError, win32clipboard.error):
+            try:
+                text = win32clipboard.GetClipboardData(win32clipboard.CF_TEXT)
+            except (TypeError, win32clipboard.error):
+                raise ClipboardEmpty
+        finally:
+            win32clipboard.CloseClipboard()
+
+        return text
+
+    def win32_clipboard_get():
+        """Get the current clipboard's text on Windows.
+
+        Runs :meth:`win_clip_pywin32` and if there's any exception
+        attempts to run :command:`win32yank` through a piped subprocess.
+
+        Returns
+        -------
+        Text as returned by win32clipboard.GetClipboardData or None.
+
+        """
+        try:
+            return self.win_clip_pywin32()
+        except ClipboardEmpty:
+            return
+        except Exception: # noqa
+            try:
+                # or something
+                return subprocess.run(
+                    ["win32yank", "-o", "lf"], stdout=subprocess.PIPE
+                ).stdout
+                # "-i", "crlf", 
+            except subprocess.CalledProcessError:
+                raise
+
+    # def __call__(self):
+        # how is this going to be called
+        # Todo
+
+    def get_text(self):
+        return self.win32_clipboard_get()
 
 
 def tkinter_clipboard_get():
@@ -94,9 +119,9 @@ def tkinter_clipboard_get():
     interfere with other UI toolkits and should be replaced with an
     implementation that uses that toolkit.
 
-    Requires
+    Notes
     --------
-    :mod:`tkinter`
+    Requires :mod:`tkinter`.
 
     Raises
     ------
@@ -128,7 +153,7 @@ class UsefulClipboard(Clipboard):
     """
 
     def __init__(self, clipboard=None):
-        super().__init__()
+        # super().__init__()
         if clipboard is None:
             self.clipboard = self._clipboard
         else:
@@ -144,7 +169,7 @@ class UsefulClipboard(Clipboard):
         In addition it must be callable. Jesus.
         """
         if platform.platform().startswith("Win"):
-            clipboard = win32_clipboard_get()
+            clipboard = WindowsClipboard()
         elif platform.platform().startswith("Linux"):
             clipboard = tkinter_clipboard_get()
         else:

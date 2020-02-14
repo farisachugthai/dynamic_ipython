@@ -49,11 +49,11 @@ sys.path.insert(0, str(JUPYTER))
 # I'll admit i don't know why i need this one
 STARTUP = ROOT.joinpath("default_profile/startup")
 
-sys.path.insert(0, STARTUP)
+sys.path.insert(0, str(STARTUP))
 
 UTIL = ROOT.joinpath("default_profile/util")
 
-sys.path.insert(0, UTIL)
+sys.path.insert(0, str(UTIL))
 
 if ask_for_import("jinja2"):
     # from jinja2.constants import TRIM_BLOCKS, LSTRIP_BLOCKS
