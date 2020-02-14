@@ -10,13 +10,13 @@
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/print.css" type="text/css" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script type="text/javascript" src="../_static/copybutton.js"></script>
-    <script type="text/javascript" src="../_static/theme_extras.js"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/theme_extras.js"></script>
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/startup/setup_readline.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -180,11 +180,13 @@ slow.</p>
 <li><p>Frequently auto-completion will time out rather than serving a response</p></li>
 </ol>
 </li>
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">prompt_toolkit</span></code> has a rather rigid interface for it’s API. There are
-<code class="xref py py-obj docutils literal notranslate"><span class="pre">assert</span></code>’s all over the code base ensuring that the proper type is passed
-to a class constructor, in spite of the Python’s dynamically typed
-foundation.</p></li>
 </ol>
+<dl class="simple">
+<dt># <code class="xref py py-obj docutils literal notranslate"><span class="pre">prompt_toolkit</span></code> has a rather rigid interface for it’s API. There are</dt><dd><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">assert</span></code>’s all over the code base ensuring that the proper type is passed
+to a class constructor, in spite of the Python’s dynamically typed
+foundation.</p>
+</dd>
+</dl>
 </li>
 </ol>
 </div>
@@ -237,18 +239,16 @@ or a keyword specific one.</p>
 <p>Interestingly, there’s also a method on the completer that returns a
 <code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.utils.strdispatchers.StrDispatch</span></code> class.</p>
 <p>If so, then that would possibly make it
-the only use I’ve seen in the repo of this.:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [10]: </span><span class="kn">from</span> <span class="nn">IPython.utils.strdispatch</span> <span class="kn">import</span> <span class="n">StrDispatch</span>
+the only use I’ve seen in the repo of this.</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">from</span> <span class="nn">IPython.utils.strdispatch</span> <span class="kn">import</span> <span class="n">StrDispatch</span>
 
-<span class="gp">In [11]: </span><span class="n">what</span> <span class="o">=</span> <span class="n">StrDispatch</span><span class="p">()</span>
-<span class="gh">Out[11]: </span><span class="go">&lt;Strdispatch {}, {}&gt;</span>
+<span class="gp">In [2]: </span><span class="n">what</span> <span class="o">=</span> <span class="n">StrDispatch</span><span class="p">()</span>
 
-<span class="gp">In [12]: </span>what<span class="o">?</span>
+<span class="gp">In [3]: </span>what<span class="o">?</span>
 <span class="go">Type:        StrDispatch</span>
 <span class="go">String form: &lt;Strdispatch {}, {}&gt;</span>
-<span class="go">File:</span>
-<span class="go">~/.local/share/virtualenvs/utilities-lAlPOULO/lib/python3.8/site-packages/IPython/utils/strdispatch.py</span>
-<span class="go">Docstring:</span>
+<span class="go">File:        c:\users\fac\.virtualenvs\dynamic_ipython-byhwmg8z\lib\site-packages\ipython\utils\strdispatch.py</span>
+<span class="go">Docstring:  </span>
 <span class="go">Dispatch (lookup) a set of strings / regexps for match.</span>
 
 <span class="go">Example:</span>
@@ -329,7 +329,7 @@ one at a time on subsequent calls.</p>
 <div class="admonition-todo admonition" id="id1">
 <p class="admonition-title">Todo</p>
 <p>Register the completer function.:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">OPTIONS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;start&#39;</span><span class="p">,</span> <span class="s1">&#39;stop&#39;</span><span class="p">,</span> <span class="s1">&#39;list&#39;</span><span class="p">,</span> <span class="s1">&#39;print&#39;</span><span class="p">]</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">OPTIONS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;start&#39;</span><span class="p">,</span> <span class="s1">&#39;stop&#39;</span><span class="p">,</span> <span class="s1">&#39;list&#39;</span><span class="p">,</span> <span class="s1">&#39;print&#39;</span><span class="p">]</span>
 <span class="n">readline</span><span class="o">.</span><span class="n">set_completer</span><span class="p">(</span><span class="n">SimpleCompleter</span><span class="p">(</span><span class="n">OPTIONS</span><span class="p">)</span><span class="o">.</span><span class="n">complete</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -389,7 +389,7 @@ as parameters.</p>
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 12, 2020.
+      Last updated on Feb 13, 2020.
     </div>
   </body>
 </html>

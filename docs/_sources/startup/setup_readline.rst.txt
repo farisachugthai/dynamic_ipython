@@ -19,7 +19,7 @@ Readline is implemented in the repository for a few reasons.
 
       #) Frequently auto-completion will time out rather than serving a response
 
-   #) `prompt_toolkit` has a rather rigid interface for it's API. There are
+   # `prompt_toolkit` has a rather rigid interface for it's API. There are
       `assert`\'s all over the code base ensuring that the proper type is passed
       to a class constructor, in spite of the Python's dynamically typed
       foundation.
@@ -81,7 +81,9 @@ Interestingly, there's also a method on the completer that returns a
 :class:`IPython.utils.strdispatchers.StrDispatch` class.
 
 If so, then that would possibly make it
-the only use I've seen in the repo of this.::
+the only use I've seen in the repo of this.
+
+.. ipython::
 
    In [10]: from IPython.utils.strdispatch import StrDispatch
 
