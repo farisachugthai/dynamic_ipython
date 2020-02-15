@@ -113,8 +113,6 @@ def readline_config():
     readline.parse_and_bind('"\\C-s": forward-search-history'),
     readline.parse_and_bind('"\\C-p": "history-search-backward"'),
     readline.parse_and_bind('"\\C-n": "history-search-forward"'),
-    readline.parse_and_bind('"\\e[A": "history-search-backward"'),
-    readline.parse_and_bind('"\\e[B": "history-search-forward"'),
     readline.parse_and_bind('"\\C-k": "kill-line"'),
     readline.parse_and_bind('"\\C-u": unix-line-discard'),
 

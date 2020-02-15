@@ -2,14 +2,13 @@
 `%rehashx` --- Add executables to $PATH
 ==========================================
 
-:synopsis: Run the rehashx magic and begin initializing IPython startup.
-
-.. magic:: rehashx
-
+.. currentmodule:: default_profile.startup.01_rehashx
 
 As the first file in startup this file plays an important role in setting
 everything else up. As a result, the first thing done is running the magic
 `%rehashx`.
+
+.. magic:: rehashx
 
 The IPython magic `%rehashx` allows you to reload all of your startup files
 and also adds system commands to the namespace!
@@ -24,17 +23,19 @@ can be overridden later.
 
 Aliases are easy to work with as they as composed of simple data structures.
 
-.. function:: rerun_startup
+.. function:: rerun_startup()
 
    This function can be run in an interactive session.
 
 Parameters
 ----------
 
-magic_name : str
+``magic_name`` : str
     Name of the desired magic function, without :kbd:`%` prefix.
-line : str
+
+``line`` : str
     The rest of the input line as a single string.
+
 ``_stack_depth`` : int, optional
     Number of recursive calls to an IPython magic.
 
@@ -78,7 +79,7 @@ This is added to ensure backward compatibility for use
 of :func:`IPython.core.magics.get_ipython().magic`
 
 .. automodule:: default_profile.startup.01_rehashx
-   :synopsis: Add all executables found on the system PATH to the namespace.
+   :synopsis: Run the rehashx magic and begin initializing IPython startup.
    :members:
    :undoc-members:
    :show-inheritance:

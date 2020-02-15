@@ -10,6 +10,7 @@ Prompt Toolkit
 ===========================================
 
 .. automodule:: default_profile.startup.31_yank_last_arg
+   :synopsis: All of the keybindings used in the application. Loads over 600.
    :members:
    :undoc-members:
    :show-inheritance:
@@ -176,6 +177,7 @@ They're basically Enums that get compared to ``editing_mode.input_mode``.::
 =============================================
 
 .. automodule:: default_profile.startup.33_bottom_toolbar
+   :synopsis: Generate a toolbar using lower-level controls.
    :members:
    :undoc-members:
    :show-inheritance:
@@ -220,8 +222,10 @@ isn't one.
    :show-inheritance:
 
 
-`~default_profile.startup.35_lexer`
+:mod:`~default_profile.startup.35_lexer`
 ===========================================
+
+.. currentmodule:: default_profile.startup.35_lexer
 
 Build our lexer in addition to utilizing already built ones.
 
@@ -283,10 +287,11 @@ So it'd be tough to say we're at a lack of tools!
    :show-inheritance:
 
 
-`~default_profile.startup.36_ptutils`
+:mod:`~default_profile.startup.ptoolkit`
 ===========================================
 
-.. automodule:: default_profile.startup.36_ptutils
+.. automodule:: default_profile.startup.ptoolkit
+   :synopsis: Generate a more generalized class to interact with prompt_toolkit.
    :members:
    :undoc-members:
    :show-inheritance:

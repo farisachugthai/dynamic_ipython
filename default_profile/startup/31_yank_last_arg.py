@@ -1,4 +1,4 @@
-"""Add keybindings.
+r"""Add keybindings.
 
 Slowly becoming where all my consolidated scripts for making prompt_toolkit's
 handling of keypresses cohesive.
@@ -9,6 +9,34 @@ Damnit I lost C-d again.
 
 However <CR> and <C-m> work as expected. haven't even tried navigation mode;
 however, there's supposed to be ~500 key bindings so I'm excited.
+
+.. warning::
+
+    This is very experimental code.
+
+Btw what is this?
+
+Calling exit doesn't work?
+
+[ins] In [2]: _ip.pt_app.app
+Out[2]: <prompt_toolkit.application.application.Application at 0x1f26c275250>
+
+[ins] In [3]: _ip.pt_app.app.exit()
+---------------------------------------------------------------------------
+Exception                                 Traceback (most recent call last)
+<ipython-input-3-8964da7b84f6> in <module>
+----> 1 _ip.pt_app.app.exit()
+        global _ip.pt_app.app.exit = <bound method Application.exit of <prompt_toolkit.application.application.Application object at 0x000001F26C275250>>
+
+~\scoop\apps\winpython\current\python-3.8.1.amd64\lib\site-packages\prompt_toolkit\application\application.py in exit(self=<prompt_toolkit.application.application.Application object>, result=None, exception=None, style='')
+    771
+    772         if self.future.done():
+--> 773             raise Exception(
+        global Exception = undefined
+    774                 'Return value already set. Application.exit() failed.')
+    775
+
+Exception: Return value already set. Application.exit() failed.
 
 """
 from collections import namedtuple
@@ -30,8 +58,9 @@ from prompt_toolkit.filters.app import (
     is_multiline,
     vi_mode,
     emacs_insert_mode,
+    emacs_mode,
     vi_insert_mode,
-    has_focus
+    has_focus,
 )
 from prompt_toolkit.filters.cli import has_selection
 
@@ -41,6 +70,8 @@ from prompt_toolkit.key_binding.bindings.completion import (
     display_completions_like_readline,
 )
 from prompt_toolkit.key_binding.bindings.named_commands import get_by_name
+from prompt_toolkit.key_binding.bindings.scroll import scroll_page_down, scroll_page_up
+from prompt_toolkit.key_binding.bindings.search import abort_search
 
 # check out this dict for debugging
 # from prompt_toolkit.key_binding.bindings.named_commands import _readline_commands
@@ -64,6 +95,7 @@ def get_app():
     """A patch to cover up the fact that get_app() returns a DummyApplication."""
     if get_ipython() is not None:
         return get_ipython().pt_app.app
+
 
 # Conditions:
 
@@ -203,16 +235,20 @@ def get_key_bindings(custom_key_bindings=None):
 
     Based on prompt_toolkit.key_binding.defaults.load_key_bindings()
     """
-    from prompt_toolkit.key_binding.bindings.auto_suggest import load_auto_suggest_bindings
+    from prompt_toolkit.key_binding.bindings.auto_suggest import (
+        load_auto_suggest_bindings,
+    )
     from prompt_toolkit.key_binding.bindings.cpr import load_cpr_bindings
     from prompt_toolkit.key_binding.bindings.emacs import (
         load_emacs_bindings,
         load_emacs_search_bindings,
     )
     from prompt_toolkit.key_binding.bindings.mouse import load_mouse_bindings
-    from prompt_toolkit.key_binding.bindings.page_navigation import (
-        load_page_navigation_bindings,
-    )
+
+    # This covers the search module too
+    # from prompt_toolkit.key_binding.bindings.page_navigation import (
+    #     load_page_navigation_bindings,
+    # )
     from prompt_toolkit.key_binding.bindings.vi import (
         load_vi_bindings,
         load_vi_search_bindings,
@@ -226,7 +262,7 @@ def get_key_bindings(custom_key_bindings=None):
         load_vi_bindings(),
         load_vi_search_bindings(),
         load_mouse_bindings(),
-        load_page_navigation_bindings(),
+        # load_page_navigation_bindings(),
         create_ipython_shortcuts(get_ipython()),
         custom_key_bindings,
     ]
@@ -247,7 +283,6 @@ def add_bindings():
         """
         event.app.vi_state.temporary_navigation_mode = True
 
-
     handle("j", "k", filter=insert_mode)(switch_to_navigation_mode)
 
     handle("home")(get_by_name("beginning-of-line"))
@@ -258,7 +293,7 @@ def add_bindings():
 
     # just snagged a new one from prompt_toolkit.key_binding.bindings.vi
 
-    @handle("c-x", "c-l", filter=insert_mode)
+    @handle(Keys.ControlX, Keys.ControlL, filter=insert_mode)
     def _(event: E) -> None:
         """
         Pressing the ControlX - ControlL sequence in Vi mode does line
@@ -305,15 +340,25 @@ def add_bindings():
         """
         event.app.vi_state.input_mode = InputMode.NAVIGATION
 
-    @handle(Keys.Escape, "<")
+    @handle(Keys.Escape, "<", filter=vi_navigation_mode)
     def beginning(event):
         """Move to the beginning of our recorded history."""
         event.current_buffer.cursor_position = 0
 
-    @handle(Keys.Escape, ">")
+    @handle(Keys.Escape, ">", filter=vi_navigation_mode)
     def end(event):
         """Move to the end."""
         event.current_buffer.cursor_position = len(event.current_buffer.text)
+
+    @handle(Keys.Left, filter=beginning_of_line)
+    def wrap_cursor_back(event):
+        """Move cursor to end of previous line unless at beginning of
+        document
+        """
+        b = event.cli.current_buffer
+        b.cursor_up(count=1)
+        relative_end_index = b.document.get_end_of_line_position()
+        b.cursor_right(count=relative_end_index)
 
     @handle(Keys.Left)
     def left_multiline(event):
@@ -325,6 +370,14 @@ def add_bindings():
 
         if getattr(event.current_buffer.selection_state, "shift_arrow", False):
             event.current_buffer.selection_state = None
+
+    @handle(Keys.Right, filter=end_of_line)
+    def wrap_cursor_forward(event):
+        """Move cursor to beginning of next line unless at end of document"""
+        b = event.cli.current_buffer
+        relative_begin_index = b.document.get_start_of_line_position()
+        b.cursor_left(count=abs(relative_begin_index))
+        b.cursor_down(count=1)
 
     @handle(Keys.Right)
     def right_multiline(event):
@@ -381,8 +434,17 @@ def add_bindings():
             count=event.arg
         )
 
-    @handle("c-n", filter=insert_mode)
-    def _(event: E) -> None:
+    @handle(Keys.ControlN, filter=insert_mode)
+    def start_or_cycle_completions(event: E) -> None:
+        b = event.current_buffer
+
+        if b.complete_state:
+            b.complete_next()
+        else:
+            b.start_completion(select_first=True)
+
+    @handle(Keys.Tab, filter=insert_mode)
+    def complete(event):
         b = event.current_buffer
 
         if b.complete_state:
@@ -402,28 +464,20 @@ def add_bindings():
         else:
             b.start_completion(select_last=True)
 
-    @handle("c-g", filter=insert_mode)
-    @handle("c-y", filter=insert_mode)
+    @handle(Keys.ControlG, filter=insert_mode)
+    @handle(Keys.ControlY, filter=insert_mode)
     def _(event: E) -> None:
-        """
-        Accept current completion.
-        """
+        """Accept current completion."""
         event.current_buffer.complete_state = None
 
-    @handle("c-e", filter=insert_mode)
-    def _(event: E) -> None:
-        """
-        Cancel completion. Go back to originally typed text.
-        """
-        event.current_buffer.cancel_completion()
+    # @handle("c-e", filter=insert_mode)
+    # def _(event: E) -> None:
+    #     """
+    #     Cancel completion. Go back to originally typed text.
+    #     """
+    #     event.current_buffer.cancel_completion()
 
     # originally from basic_bindings
-
-    handle("c-d", filter=has_text_before_cursor & insert_mode)(
-        get_by_name("delete-char")
-    )
-
-    handle(Keys.ControlD, filter=ctrl_d_condition)(get_by_name("end-of-file"))
 
     @handle(Keys.ControlX, Keys.ControlE)
     def open_in_editor(event):
@@ -436,9 +490,9 @@ def add_bindings():
         return not event.is_repeat
 
     handle("c-up")(get_by_name("previous-history"))
-    handle(Keys.ControlP)(get_by_name("previous-history"))
+    handle(Keys.ControlP, filter=emacs_mode)(get_by_name("previous-history"))
     handle("c-down")(get_by_name("next-history"))
-    handle(Keys.ControlN)(get_by_name("next-history"))
+    handle(Keys.ControlN, filter=emacs_mode)(get_by_name("next-history"))
     handle(Keys.ControlL)(get_by_name("clear-screen"))
 
     handle(Keys.ControlK, filter=insert_mode)(get_by_name("kill-line"))
@@ -461,33 +515,31 @@ def add_bindings():
 
     # Control-W should delete, using whitespace as separator, while M-Del
     # should delete using [^a-zA-Z0-9] as a boundary.
-    handle("c-w", filter=insert_mode)(get_by_name("unix-word-rubout"))
-
-    handle("pageup")(get_by_name("previous-history"))
-    handle("pagedown")(get_by_name("next-history"))
+    handle(Keys.ControlW, filter=insert_mode)(get_by_name("unix-word-rubout"))
 
     ### Emacs:
 
-    handle("c-a")(get_by_name("beginning-of-line"))
-    handle("c-b")(get_by_name("backward-char"))
+    handle(Keys.ControlA)(get_by_name("beginning-of-line"))
+    handle(Keys.ControlB)(get_by_name("backward-char"))
     handle("c-delete", filter=insert_mode)(get_by_name("kill-word"))
-    handle("c-e")(get_by_name("end-of-line"))
-    handle("c-f")(get_by_name("forward-char"))
+    # Don't forget the filter because auto_completion is also gonna want this key
+    handle(Keys.ControlE, filter=insert_mode)(get_by_name("end-of-line"))
+    handle(Keys.ControlF)(get_by_name("forward-char"))
     handle("c-left")(get_by_name("backward-word"))
     handle("c-right")(get_by_name("forward-word"))
-    handle("c-x", "r", "y", filter=insert_mode)(get_by_name("yank"))
-    handle("c-y", filter=insert_mode)(get_by_name("yank"))
+    handle(Keys.ControlX, "r", "y", filter=insert_mode)(get_by_name("yank"))
+    handle(Keys.ControlY, filter=insert_mode)(get_by_name("yank"))
     handle("c-_", save_before=(lambda e: False), filter=insert_mode)(
         get_by_name("undo")
     )
 
-    handle("c-x", "c-u", save_before=(lambda e: False), filter=insert_mode)(
-        get_by_name("undo")
-    )
+    handle(
+        Keys.ControlX, Keys.ControlU, save_before=(lambda e: False), filter=insert_mode
+    )(get_by_name("undo"))
 
-    handle("c-x", "(")(get_by_name("start-kbd-macro"))
-    handle("c-x", ")")(get_by_name("end-kbd-macro"))
-    handle("c-x", "e")(get_by_name("call-last-kbd-macro"))
+    handle(Keys.ControlX, "(")(get_by_name("start-kbd-macro"))
+    handle(Keys.ControlX, ")")(get_by_name("end-kbd-macro"))
+    handle(Keys.ControlX, "e")(get_by_name("call-last-kbd-macro"))
 
     def character_search(buff, char, count):
         if count < 0:
@@ -506,7 +558,7 @@ def add_bindings():
         # Also named 'character-search'
         character_search(event.current_buffer, event.data, event.arg)
 
-    @handle("c-x", "c-x")
+    @handle(Keys.ControlX, Keys.ControlX)
     def _(event):
         """
         Move cursor back and forth between the start and end of the current
@@ -531,7 +583,7 @@ def add_bindings():
         if buff.text:
             buff.start_selection(selection_type=SelectionType.CHARACTERS)
 
-    @handle("c-g", filter=has_selection)
+    @handle(Keys.ControlG, filter=has_selection)
     def _(event):
         """
         Control + G: Cancel completion menu and validation state.
@@ -539,14 +591,14 @@ def add_bindings():
         event.current_buffer.complete_state = None
         event.current_buffer.validation_error = None
 
-    @handle("c-g", filter=has_selection)
+    @handle(Keys.ControlG, filter=has_selection)
     def _(event):
         """
         Cancel selection.
         """
         event.current_buffer.exit_selection()
 
-    @handle("c-w", filter=has_selection)
+    @handle(Keys.ControlW, filter=has_selection)
     @handle("c-x", "r", "k", filter=has_selection)
     def _(event):
         """
@@ -555,7 +607,7 @@ def add_bindings():
         data = event.current_buffer.cut_selection()
         event.app.clipboard.set_data(data)
 
-    @handle("c-j")
+    @handle(Keys.ControlJ)
     def _(event: E) -> None:
         r"""
         By default, handle \n as if it were a \r (enter).
@@ -579,17 +631,17 @@ def add_bindings():
 
     # Global bindings.
 
-    @handle(Keys.ControlZ)
-    def suspend_to_bg(event: E) -> None:
-        """
-        By default, control-Z should literally insert Ctrl-Z.
-        (Ansi Ctrl-Z, code 26 in MSDOS means End-Of-File.
-        In a Python REPL for instance, it's possible to type
-        Control-Z followed by enter to quit.)
-        When the system bindings are loaded and suspend-to-background is
-        supported, that will override this binding.
-        """
-        event.app.suspend_to_background()
+    # @handle(Keys.ControlZ)
+    # def suspend_to_bg(event: E) -> None:
+    #     """
+    #     By default, control-Z should literally insert Ctrl-Z.
+    #     (Ansi Ctrl-Z, code 26 in MSDOS means End-Of-File.
+    #     In a Python REPL for instance, it's possible to type
+    #     Control-Z followed by enter to quit.)
+    #     When the system bindings are loaded and suspend-to-background is
+    #     supported, that will override this binding.
+    #     """
+    #     event.app.suspend_to_background()
 
     @handle(Keys.BracketedPaste)
     def _(event: E) -> None:
@@ -618,8 +670,8 @@ def add_bindings():
 
     # I added in some function keys
 
-    @handle("f4")
-    def _(event):
+    @handle(Keys.F4)
+    def toggle_editing_mode(event):
         """Toggle between Vi and Emacs mode.
 
         See Also
@@ -629,21 +681,22 @@ def add_bindings():
         """
         event.app.editing_mode = not event.app.editing_mode == "vi"
 
-    @handle("f6")
+    handle(Keys.Escape, Keys.ControlJ)(toggle_editing_mode)
+
+    @handle(Keys.F6)
     def _(event):
         """
         Enable/Disable paste mode.
         """
         event.app.paste_mode = not event.app.paste_mode
 
-    @handle(Keys.ControlC)
-    def _(event):
         """
         Pressing Ctrl-C will exit the user interface.
         Setting a return value means: quit the event loop that drives the user
         interface and return this value from the `Application.run()` call.
         """
-        event.app.exit()
+
+    # handle(Keys.ControlC)(get_by_name('kill_line'))
 
     @handle(Keys.ControlD, filter=ctrl_d_condition)
     def _(event):
@@ -655,6 +708,20 @@ def add_bindings():
         else:
             event.current_buffer.delete(count=event.arg)
 
+#     handle("c-d", filter=has_text_before_cursor & insert_mode)(
+#         get_by_name("delete-char")
+#     )
+
+    # this doesn't do what you'd expect.
+    # handle(Keys.ControlD)(get_by_name("end-of-file"))
+
+    @handle(Keys.ControlD)
+    def exit_app(event):
+        # HE CATCHES RUNTIMEERROR WHAT THE FUCK
+        # raise RuntimeError
+        # ugh why isn't this working :(
+        event.app.exit(result=False)
+
     # apparently that function requires a positional parameter 'data'
     # fuckkkk if we ocmment it out we lose autocompletion
     @handle(Keys.Tab, filter=tab_insert_indent & insert_mode)
@@ -664,6 +731,7 @@ def add_bindings():
         """
         event.cli.current_buffer.insert_text()
 
+
     @handle(Keys.BackTab, filter=insert_mode)
     def insert_literal_tab(event):
         """ Insert literal tab on Shift+Tab instead of autocompleting """
@@ -672,6 +740,8 @@ def add_bindings():
             b.complete_previous()
         else:
             event.cli.current_buffer.insert_text("    ")
+
+    # matchit: {{{
 
     @handle("(", filter=whitespace_or_bracket_after)
     def insert_right_parens(event):
@@ -752,11 +822,8 @@ def add_bindings():
 
         buffer.delete_before_cursor(1)
 
-    handle(Keys.Any, filter=insert_mode, save_before=if_no_repeat)(
-        get_by_name("self-insert")
-    )
-
-    # autosuggest
+    # }}}
+    # autosuggest: {{{
 
     @handle("c-f", filter=suggestion_available)
     @handle("c-e", filter=suggestion_available)
@@ -769,8 +836,22 @@ def add_bindings():
         if suggestion:
             b.insert_text(suggestion.text)
 
+    @handle(Keys.ControlM, filter=is_searching())
+    @handle(Keys.ControlJ, filter=is_searching())
+    def accept_search(event):
+        search.accept_search()
+
+    # page navigation *because  why are these conditional on editing mode*
+    handle("pagedown")(scroll_page_down)
+    handle("pageup")(scroll_page_up)
+
+    handle(Keys.Any, filter=insert_mode, save_before=if_no_repeat)(
+        get_by_name("self-insert")
+    )
+
     # return ConditionalKeyBindings(registry, filter=buffer_has_focus)
     return registry
+
 
 if __name__ == "__main__":
 
@@ -780,3 +861,5 @@ if __name__ == "__main__":
         bindings = add_bindings()
         extra_bindings = merge_key_bindings(get_key_bindings(bindings))
         _ip.pt_app.app.key_bindings = extra_bindings
+
+# Vim: set fdm=marker:

@@ -149,50 +149,87 @@
         <div role="main">
         
 <h1>Source code for default_profile.startup.31_yank_last_arg</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Add keybindings.</span>
+<span></span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Add keybindings.</span>
 
 <span class="sd">Slowly becoming where all my consolidated scripts for making prompt_toolkit&#39;s</span>
 <span class="sd">handling of keypresses cohesive.</span>
 
-<span class="sd">TODO: still need C-d, C-c.</span>
+<span class="sd">TODO: still need C-z</span>
+<span class="sd">Tab doesn&#39;t start autocompletion when no letters have been typed in.</span>
+<span class="sd">Damnit I lost C-d again.</span>
 
 <span class="sd">However &lt;CR&gt; and &lt;C-m&gt; work as expected. haven&#39;t even tried navigation mode;</span>
 <span class="sd">however, there&#39;s supposed to be ~500 key bindings so I&#39;m excited.</span>
 
+<span class="sd">.. warning::</span>
+
+<span class="sd">    This is very experimental code.</span>
+
+<span class="sd">Btw what is this?</span>
+
+<span class="sd">Calling exit doesn&#39;t work?</span>
+
+<span class="sd">[ins] In [2]: _ip.pt_app.app</span>
+<span class="sd">Out[2]: &lt;prompt_toolkit.application.application.Application at 0x1f26c275250&gt;</span>
+
+<span class="sd">[ins] In [3]: _ip.pt_app.app.exit()</span>
+<span class="sd">---------------------------------------------------------------------------</span>
+<span class="sd">Exception                                 Traceback (most recent call last)</span>
+<span class="sd">&lt;ipython-input-3-8964da7b84f6&gt; in &lt;module&gt;</span>
+<span class="sd">----&gt; 1 _ip.pt_app.app.exit()</span>
+<span class="sd">        global _ip.pt_app.app.exit = &lt;bound method Application.exit of &lt;prompt_toolkit.application.application.Application object at 0x000001F26C275250&gt;&gt;</span>
+
+<span class="sd">~\scoop\apps\winpython\current\python-3.8.1.amd64\lib\site-packages\prompt_toolkit\application\application.py in exit(self=&lt;prompt_toolkit.application.application.Application object&gt;, result=None, exception=None, style=&#39;&#39;)</span>
+<span class="sd">    771</span>
+<span class="sd">    772         if self.future.done():</span>
+<span class="sd">--&gt; 773             raise Exception(</span>
+<span class="sd">        global Exception = undefined</span>
+<span class="sd">    774                 &#39;Return value already set. Application.exit() failed.&#39;)</span>
+<span class="sd">    775</span>
+
+<span class="sd">Exception: Return value already set. Application.exit() failed.</span>
+
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
+<span class="kn">import</span> <span class="nn">ctypes</span>
+<span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">from</span> <span class="nn">traceback</span> <span class="kn">import</span> <span class="n">print_exception</span>
 
-<span class="kn">from</span> <span class="nn">prompt_toolkit.application.current</span> <span class="kn">import</span> <span class="n">get_app</span>
+<span class="c1"># from prompt_toolkit.application.current import get_app</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.clipboard</span> <span class="kn">import</span> <span class="n">ClipboardData</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.enums</span> <span class="kn">import</span> <span class="n">DEFAULT_BUFFER</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.filters</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">Condition</span><span class="p">,</span>
-    <span class="n">IsMultiline</span><span class="p">,</span>
-    <span class="n">IsSearching</span><span class="p">,</span>
+    <span class="n">is_searching</span><span class="p">,</span>
     <span class="n">in_paste_mode</span><span class="p">,</span>
+    <span class="n">buffer_has_focus</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.filters.app</span> <span class="kn">import</span> <span class="n">emacs_insert_mode</span><span class="p">,</span> <span class="n">vi_insert_mode</span><span class="p">,</span> <span class="n">has_focus</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.filters.cli</span> <span class="kn">import</span> <span class="n">has_selection</span><span class="p">,</span> <span class="n">ViInsertMode</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.filters.app</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">vi_navigation_mode</span><span class="p">,</span>
+    <span class="n">is_multiline</span><span class="p">,</span>
+    <span class="n">vi_mode</span><span class="p">,</span>
+    <span class="n">emacs_insert_mode</span><span class="p">,</span>
+    <span class="n">emacs_mode</span><span class="p">,</span>
+    <span class="n">vi_insert_mode</span><span class="p">,</span>
+    <span class="n">has_focus</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.filters.cli</span> <span class="kn">import</span> <span class="n">has_selection</span>
 
-<span class="c1"># &quot;ViMode&quot;,</span>
-<span class="c1"># &quot;ViNavigationMode&quot;,</span>
-<span class="c1"># &quot;ViInsertMultipleMode&quot;,</span>
-<span class="c1"># &quot;ViReplaceMode&quot;,</span>
-<span class="c1"># &quot;ViSelectionMode&quot;,</span>
-<span class="c1"># &quot;ViWaitingForTextObjectMode&quot;,</span>
-<span class="c1"># &quot;ViDigraphMode&quot;,</span>
-
-<span class="c1"># from prompt_toolkit.input.vt100_parser import ANSI_SEQUENCES</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.keys</span> <span class="kn">import</span> <span class="n">Keys</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding</span> <span class="kn">import</span> <span class="n">KeyBindings</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.completion</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">display_completions_like_readline</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.named_commands</span> <span class="kn">import</span> <span class="n">get_by_name</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.scroll</span> <span class="kn">import</span> <span class="n">scroll_page_down</span><span class="p">,</span> <span class="n">scroll_page_up</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.search</span> <span class="kn">import</span> <span class="n">abort_search</span>
 
 <span class="c1"># check out this dict for debugging</span>
 <span class="c1"># from prompt_toolkit.key_binding.bindings.named_commands import _readline_commands</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.key_bindings</span> <span class="kn">import</span> <span class="n">merge_key_bindings</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.key_bindings</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">merge_key_bindings</span><span class="p">,</span>
+    <span class="n">ConditionalKeyBindings</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.key_processor</span> <span class="kn">import</span> <span class="n">KeyPress</span><span class="p">,</span> <span class="n">KeyPressEvent</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.vi_state</span> <span class="kn">import</span> <span class="n">InputMode</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.selection</span> <span class="kn">import</span> <span class="n">SelectionState</span>
@@ -200,21 +237,23 @@
 <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 <span class="kn">from</span> <span class="nn">IPython.terminal.shortcuts</span> <span class="kn">import</span> <span class="n">create_ipython_shortcuts</span>
 
-<span class="n">E</span> <span class="o">=</span> <span class="n">KeyPressEvent</span>
 
-<span class="n">DEDENT_TOKENS</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">([</span><span class="s2">&quot;raise&quot;</span><span class="p">,</span> <span class="s2">&quot;return&quot;</span><span class="p">,</span> <span class="s2">&quot;pass&quot;</span><span class="p">,</span> <span class="s2">&quot;break&quot;</span><span class="p">,</span> <span class="s2">&quot;continue&quot;</span><span class="p">])</span>
+<span class="n">E</span> <span class="o">=</span> <span class="n">KeyPressEvent</span>
+<span class="n">insert_mode</span> <span class="o">=</span> <span class="n">vi_insert_mode</span> <span class="o">|</span> <span class="n">emacs_insert_mode</span>
+
+
+<div class="viewcode-block" id="get_app"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.31_yank_last_arg.get_app">[docs]</a><span class="k">def</span> <span class="nf">get_app</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;A patch to cover up the fact that get_app() returns a DummyApplication.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">get_ipython</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span></div>
 
 
 <span class="c1"># Conditions:</span>
 
-<span class="c1"># fun fact. ViInsertMode is deprecated</span>
-<span class="n">insert_mode</span> <span class="o">=</span> <span class="n">vi_insert_mode</span><span class="p">()</span> <span class="o">|</span> <span class="n">emacs_insert_mode</span><span class="p">()</span>
 
 <span class="nd">@Condition</span>
 <span class="k">def</span> <span class="nf">is_returnable</span><span class="p">():</span>
     <span class="k">return</span> <span class="n">get_app</span><span class="p">()</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">is_returnable</span>
-
-<span class="c1"># is_returnable = Condition(lambda: get_app().current_buffer.is_returnable)</span>
 
 
 <span class="nd">@Condition</span>
@@ -312,8 +351,15 @@
 
 
 <span class="nd">@Condition</span>
-<span class="k">def</span> <span class="nf">is_multiline</span><span class="p">():</span>
-    <span class="k">return</span> <span class="n">document_is_multiline_python</span><span class="p">(</span><span class="n">python_input</span><span class="o">.</span><span class="n">default_buffer</span><span class="o">.</span><span class="n">document</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">suggestion_available</span><span class="p">():</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">get_app</span><span class="p">()</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">app</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">suggestion</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="ow">and</span> <span class="n">app</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">is_cursor_at_the_end</span>
+    <span class="p">)</span>
+
+
+<span class="c1"># *** Key Bindings: ***</span>
 
 
 <div class="viewcode-block" id="switch_to_navigation_mode"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.31_yank_last_arg.switch_to_navigation_mode">[docs]</a><span class="k">def</span> <span class="nf">switch_to_navigation_mode</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
@@ -325,27 +371,6 @@
     <span class="n">vi_state</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">cli</span><span class="o">.</span><span class="n">vi_state</span>
     <span class="c1"># logger.debug(&#39;%s&#39;, dir(event))</span>
     <span class="n">vi_state</span><span class="o">.</span><span class="n">input_mode</span> <span class="o">=</span> <span class="n">InputMode</span><span class="o">.</span><span class="n">NAVIGATION</span></div>
-
-
-<div class="viewcode-block" id="if_no_repeat"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.31_yank_last_arg.if_no_repeat">[docs]</a><span class="k">def</span> <span class="nf">if_no_repeat</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">E</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot; Callable that returns True when the previous event was delivered to</span>
-<span class="sd">    another handler. &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="ow">not</span> <span class="n">event</span><span class="o">.</span><span class="n">is_repeat</span></div>
-
-
-<span class="nd">@Condition</span>
-<span class="k">def</span> <span class="nf">suggestion_available</span><span class="p">():</span>
-    <span class="n">app</span> <span class="o">=</span> <span class="n">get_app</span><span class="p">()</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">suggestion</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span>
-            <span class="n">app</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">is_cursor_at_the_end</span><span class="p">)</span>
-
-
-<span class="nd">@Condition</span>
-<span class="k">def</span> <span class="nf">has_selection</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Enable when the current buffer has a selection.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">get_app</span><span class="p">()</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">selection_state</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="get_key_bindings"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.31_yank_last_arg.get_key_bindings">[docs]</a><span class="k">def</span> <span class="nf">get_key_bindings</span><span class="p">(</span><span class="n">custom_key_bindings</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -361,21 +386,34 @@
 
 <span class="sd">    Based on prompt_toolkit.key_binding.defaults.load_key_bindings()</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.auto_suggest</span> <span class="kn">import</span> <span class="p">(</span>
+        <span class="n">load_auto_suggest_bindings</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.cpr</span> <span class="kn">import</span> <span class="n">load_cpr_bindings</span>
+    <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.emacs</span> <span class="kn">import</span> <span class="p">(</span>
+        <span class="n">load_emacs_bindings</span><span class="p">,</span>
+        <span class="n">load_emacs_search_bindings</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.mouse</span> <span class="kn">import</span> <span class="n">load_mouse_bindings</span>
+
+    <span class="c1"># This covers the search module too</span>
+    <span class="c1"># from prompt_toolkit.key_binding.bindings.page_navigation import (</span>
+    <span class="c1">#     load_page_navigation_bindings,</span>
+    <span class="c1"># )</span>
     <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.vi</span> <span class="kn">import</span> <span class="p">(</span>
         <span class="n">load_vi_bindings</span><span class="p">,</span>
         <span class="n">load_vi_search_bindings</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.mouse</span> <span class="kn">import</span> <span class="n">load_mouse_bindings</span>
-    <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.page_navigation</span> <span class="kn">import</span> <span class="p">(</span>
-        <span class="n">load_page_navigation_bindings</span><span class="p">,</span>
-    <span class="p">)</span>
+
     <span class="k">return</span> <span class="p">[</span>
+        <span class="n">load_auto_suggest_bindings</span><span class="p">(),</span>
         <span class="n">load_cpr_bindings</span><span class="p">(),</span>
+        <span class="n">load_emacs_bindings</span><span class="p">(),</span>
+        <span class="n">load_emacs_search_bindings</span><span class="p">(),</span>
         <span class="n">load_vi_bindings</span><span class="p">(),</span>
         <span class="n">load_vi_search_bindings</span><span class="p">(),</span>
         <span class="n">load_mouse_bindings</span><span class="p">(),</span>
-        <span class="n">load_page_navigation_bindings</span><span class="p">(),</span>
+        <span class="c1"># load_page_navigation_bindings(),</span>
         <span class="n">create_ipython_shortcuts</span><span class="p">(</span><span class="n">get_ipython</span><span class="p">()),</span>
         <span class="n">custom_key_bindings</span><span class="p">,</span>
     <span class="p">]</span></div>
@@ -387,27 +425,91 @@
     <span class="n">handle</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">add</span>
     <span class="n">handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlI</span><span class="p">)(</span><span class="n">display_completions_like_readline</span><span class="p">)</span>
 
-    <span class="n">handle</span><span class="p">(</span><span class="s2">&quot;j&quot;</span><span class="p">,</span> <span class="s2">&quot;k&quot;</span><span class="p">)(</span><span class="n">switch_to_navigation_mode</span><span class="p">)</span>
+    <span class="c1"># insert mode</span>
+
+    <span class="nd">@handle</span><span class="p">(</span><span class="s2">&quot;c-o&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">E</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Go into normal mode for one single action.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">event</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">vi_state</span><span class="o">.</span><span class="n">temporary_navigation_mode</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">handle</span><span class="p">(</span><span class="s2">&quot;j&quot;</span><span class="p">,</span> <span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">)(</span><span class="n">switch_to_navigation_mode</span><span class="p">)</span>
 
     <span class="n">handle</span><span class="p">(</span><span class="s2">&quot;home&quot;</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;beginning-of-line&quot;</span><span class="p">))</span>
-    <span class="n">handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlA</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;beginning-of-line&quot;</span><span class="p">))</span>
+    <span class="n">handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlA</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;beginning-of-line&quot;</span><span class="p">))</span>
 
-    <span class="c1"># TODO: auto suggest key</span>
     <span class="n">handle</span><span class="p">(</span><span class="s2">&quot;end&quot;</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;end-of-line&quot;</span><span class="p">))</span>
-    <span class="n">handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlE</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;end-of-line&quot;</span><span class="p">))</span>
+    <span class="n">handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlE</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;end-of-line&quot;</span><span class="p">))</span>
 
-    <span class="c1"># Here&#39;s one from the named commands module</span>
-    <span class="c1"># handle(&quot;j&quot;, &quot;j&quot;, filter=ViInsertMode())(_prefix_meta)</span>
+    <span class="c1"># just snagged a new one from prompt_toolkit.key_binding.bindings.vi</span>
 
-    <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">Escape</span><span class="p">,</span> <span class="s2">&quot;&lt;&quot;</span><span class="p">)</span>
+    <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlX</span><span class="p">,</span> <span class="n">Keys</span><span class="o">.</span><span class="n">ControlL</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">E</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Pressing the ControlX - ControlL sequence in Vi mode does line</span>
+<span class="sd">        completion based on the other lines in the document and the history.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">start_history_lines_completion</span><span class="p">()</span>
+
+    <span class="c1"># In navigation mode, pressing enter will always return the input.</span>
+    <span class="n">handle</span><span class="p">(</span><span class="s2">&quot;enter&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">vi_navigation_mode</span> <span class="o">&amp;</span> <span class="n">is_returnable</span><span class="p">)(</span>
+        <span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;accept-line&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="c1"># In insert mode, also accept input when enter is pressed, and the buffer</span>
+    <span class="c1"># has been marked as single line.</span>
+    <span class="n">handle</span><span class="p">(</span><span class="s2">&quot;enter&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">is_returnable</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">is_multiline</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;accept-line&quot;</span><span class="p">))</span>
+
+    <span class="nd">@handle</span><span class="p">(</span><span class="s2">&quot;enter&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=~</span><span class="n">is_returnable</span> <span class="o">&amp;</span> <span class="n">vi_navigation_mode</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">E</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Go to the beginning of next line.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span>
+        <span class="n">b</span><span class="o">.</span><span class="n">cursor_down</span><span class="p">(</span><span class="n">count</span><span class="o">=</span><span class="n">event</span><span class="o">.</span><span class="n">arg</span><span class="p">)</span>
+        <span class="n">b</span><span class="o">.</span><span class="n">cursor_position</span> <span class="o">+=</span> <span class="n">b</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">get_start_of_line_position</span><span class="p">(</span>
+            <span class="n">after_whitespace</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+
+    <span class="c1"># ** In navigation mode **</span>
+    <span class="c1"># Shit this should get broken up into it&#39;s own function it&#39;s really</span>
+    <span class="c1"># hard to navigate around</span>
+    <span class="c1"># List of navigation commands: http://hea-www.harvard.edu/~fine/Tech/vi.html</span>
+
+    <span class="nd">@handle</span><span class="p">(</span><span class="s2">&quot;insert&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">vi_navigation_mode</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">E</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Pressing the Insert key.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">event</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">vi_state</span><span class="o">.</span><span class="n">input_mode</span> <span class="o">=</span> <span class="n">InputMode</span><span class="o">.</span><span class="n">INSERT</span>
+
+    <span class="nd">@handle</span><span class="p">(</span><span class="s2">&quot;insert&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">E</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Pressing the Insert key.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">event</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">vi_state</span><span class="o">.</span><span class="n">input_mode</span> <span class="o">=</span> <span class="n">InputMode</span><span class="o">.</span><span class="n">NAVIGATION</span>
+
+    <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">Escape</span><span class="p">,</span> <span class="s2">&quot;&lt;&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">vi_navigation_mode</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">beginning</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Move to the beginning of our recorded history.&quot;&quot;&quot;</span>
         <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">cursor_position</span> <span class="o">=</span> <span class="mi">0</span>
 
-    <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">Escape</span><span class="p">,</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">)</span>
+    <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">Escape</span><span class="p">,</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">vi_navigation_mode</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">end</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Move to the end.&quot;&quot;&quot;</span>
         <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">cursor_position</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+
+    <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">Left</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">beginning_of_line</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">wrap_cursor_back</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Move cursor to end of previous line unless at beginning of</span>
+<span class="sd">        document</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">cli</span><span class="o">.</span><span class="n">current_buffer</span>
+        <span class="n">b</span><span class="o">.</span><span class="n">cursor_up</span><span class="p">(</span><span class="n">count</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">relative_end_index</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">get_end_of_line_position</span><span class="p">()</span>
+        <span class="n">b</span><span class="o">.</span><span class="n">cursor_right</span><span class="p">(</span><span class="n">count</span><span class="o">=</span><span class="n">relative_end_index</span><span class="p">)</span>
 
     <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">Left</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">left_multiline</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
@@ -420,6 +522,14 @@
         <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">selection_state</span><span class="p">,</span> <span class="s2">&quot;shift_arrow&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
             <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">selection_state</span> <span class="o">=</span> <span class="kc">None</span>
 
+    <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">Right</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">end_of_line</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">wrap_cursor_forward</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Move cursor to beginning of next line unless at end of document&quot;&quot;&quot;</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">cli</span><span class="o">.</span><span class="n">current_buffer</span>
+        <span class="n">relative_begin_index</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">get_start_of_line_position</span><span class="p">()</span>
+        <span class="n">b</span><span class="o">.</span><span class="n">cursor_left</span><span class="p">(</span><span class="n">count</span><span class="o">=</span><span class="nb">abs</span><span class="p">(</span><span class="n">relative_begin_index</span><span class="p">))</span>
+        <span class="n">b</span><span class="o">.</span><span class="n">cursor_down</span><span class="p">(</span><span class="n">count</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
     <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">Right</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">right_multiline</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Right that wraps around in multiline.&quot;&quot;&quot;</span>
@@ -431,71 +541,109 @@
         <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">selection_state</span><span class="p">,</span> <span class="s2">&quot;shift_arrow&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
             <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">selection_state</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="c1"># Speaking of multiline</span>
-    <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">Enter</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">is_returnable</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">multiline_enter</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+    <span class="nd">@handle</span><span class="p">(</span><span class="s2">&quot;up&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">vi_navigation_mode</span><span class="p">)</span>
+    <span class="nd">@handle</span><span class="p">(</span><span class="s2">&quot;c-p&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">vi_navigation_mode</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">E</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        When not in multiline, execute. When in multiline, try to</span>
-<span class="sd">        intelligently add a newline or execute.</span>
+<span class="sd">        Arrow up and ControlP in navigation mode go up.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">accept_line</span> <span class="o">=</span> <span class="n">get_by_name</span><span class="p">(</span><span class="n">accept_line</span><span class="p">)</span>
-        <span class="n">buffer</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span>
-        <span class="n">document</span> <span class="o">=</span> <span class="n">buffer</span><span class="o">.</span><span class="n">document</span>
-        <span class="n">text_after_cursor</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">text_after_cursor</span>
-        <span class="n">text_before_cursor</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">text_before_cursor</span>
-        <span class="n">text</span> <span class="o">=</span> <span class="n">buffer</span><span class="o">.</span><span class="n">text</span>
+        <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">auto_up</span><span class="p">(</span><span class="n">count</span><span class="o">=</span><span class="n">event</span><span class="o">.</span><span class="n">arg</span><span class="p">)</span>
 
-        <span class="c1"># isspace doesn&#39;t respect vacuous truth</span>
-        <span class="k">if</span> <span class="p">(</span>
-            <span class="ow">not</span> <span class="n">text_after_cursor</span> <span class="ow">or</span> <span class="n">text_after_cursor</span><span class="o">.</span><span class="n">isspace</span><span class="p">()</span>
-        <span class="p">)</span> <span class="ow">and</span> <span class="n">text_before_cursor</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">):</span>
-            <span class="c1"># If we are at the end of the buffer, accept unless we are in a</span>
-            <span class="c1"># docstring</span>
-            <span class="n">row</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">translate_index_to_position</span><span class="p">(</span><span class="n">buffer</span><span class="o">.</span><span class="n">cursor_position</span><span class="p">)</span>
-            <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="n">accept_line</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">accept_line</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
-
-    <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">Enter</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">is_returnable</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">accept_after_history_backward</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;&quot;Handle &lt;CR&gt;.</span>
-
-<span class="sd">        Always accept the line if the previous key was Up</span>
-<span class="sd">        Requires https://github.com/jonathanslenders/python-prompt-toolkit/pull/492.</span>
-<span class="sd">        We don&#39;t need a parallel for down because down is already at the end of the</span>
-<span class="sd">        prompt.</span>
+    <span class="nd">@handle</span><span class="p">(</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">vi_navigation_mode</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">E</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Go up, but if we enter a new history entry, move to the start of the</span>
+<span class="sd">        line.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">pks</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">previous_key_sequence</span>
-        <span class="n">accept_line</span> <span class="o">=</span> <span class="n">get_by_name</span><span class="p">(</span><span class="n">accept_line</span><span class="p">)</span>
-        <span class="k">if</span> <span class="p">(</span>
-            <span class="n">pks</span>
-            <span class="ow">and</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">pks</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;accept_next&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-            <span class="ow">and</span> <span class="p">(</span>
-                <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pks</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">pks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;up&quot;</span><span class="p">)</span>
-                <span class="ow">or</span> <span class="p">(</span>
-                    <span class="nb">len</span><span class="p">(</span><span class="n">pks</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
-                    <span class="ow">and</span> <span class="n">pks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;escape&quot;</span>
-                    <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pks</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">key</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
-                    <span class="ow">and</span> <span class="n">pks</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">key</span> <span class="ow">in</span> <span class="s2">&quot;pP&quot;</span>
-                <span class="p">)</span>
-            <span class="p">)</span>
-        <span class="p">):</span>
-            <span class="n">accept_line</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">multiline_enter</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+        <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">auto_up</span><span class="p">(</span>
+            <span class="n">count</span><span class="o">=</span><span class="n">event</span><span class="o">.</span><span class="n">arg</span><span class="p">,</span> <span class="n">go_to_start_of_line_if_history_changes</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
 
+    <span class="nd">@handle</span><span class="p">(</span><span class="s2">&quot;down&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">vi_navigation_mode</span><span class="p">)</span>
+    <span class="nd">@handle</span><span class="p">(</span><span class="s2">&quot;c-n&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">vi_navigation_mode</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">E</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Arrow down and Control-N in navigation mode.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">auto_down</span><span class="p">(</span><span class="n">count</span><span class="o">=</span><span class="n">event</span><span class="o">.</span><span class="n">arg</span><span class="p">)</span>
+
+    <span class="nd">@handle</span><span class="p">(</span><span class="s2">&quot;j&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">vi_navigation_mode</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">E</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Go down, but if we enter a new history entry, go to the start of the line.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">auto_down</span><span class="p">(</span>
+            <span class="n">count</span><span class="o">=</span><span class="n">event</span><span class="o">.</span><span class="n">arg</span><span class="p">,</span> <span class="n">go_to_start_of_line_if_history_changes</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+
+    <span class="nd">@handle</span><span class="p">(</span><span class="s2">&quot;backspace&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">vi_navigation_mode</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">E</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        In navigation-mode, move cursor.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">cursor_position</span> <span class="o">+=</span> <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">get_cursor_left_position</span><span class="p">(</span>
+            <span class="n">count</span><span class="o">=</span><span class="n">event</span><span class="o">.</span><span class="n">arg</span>
+        <span class="p">)</span>
+
+    <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlN</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">start_or_cycle_completions</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">E</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span>
+
+        <span class="k">if</span> <span class="n">b</span><span class="o">.</span><span class="n">complete_state</span><span class="p">:</span>
+            <span class="n">b</span><span class="o">.</span><span class="n">complete_next</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">b</span><span class="o">.</span><span class="n">start_completion</span><span class="p">(</span><span class="n">select_first</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">Tab</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">complete</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span>
+
+        <span class="k">if</span> <span class="n">b</span><span class="o">.</span><span class="n">complete_state</span><span class="p">:</span>
+            <span class="n">b</span><span class="o">.</span><span class="n">complete_next</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">b</span><span class="o">.</span><span class="n">start_completion</span><span class="p">(</span><span class="n">select_first</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="nd">@handle</span><span class="p">(</span><span class="s2">&quot;c-p&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">E</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Control-P: To previous completion.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span>
+
+        <span class="k">if</span> <span class="n">b</span><span class="o">.</span><span class="n">complete_state</span><span class="p">:</span>
+            <span class="n">b</span><span class="o">.</span><span class="n">complete_previous</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">b</span><span class="o">.</span><span class="n">start_completion</span><span class="p">(</span><span class="n">select_last</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlG</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">)</span>
+    <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlY</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">E</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Accept current completion.&quot;&quot;&quot;</span>
+        <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">complete_state</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># @handle(&quot;c-e&quot;, filter=insert_mode)</span>
+    <span class="c1"># def _(event: E) -&gt; None:</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#     Cancel completion. Go back to originally typed text.</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#     event.current_buffer.cancel_completion()</span>
 
     <span class="c1"># originally from basic_bindings</span>
+
     <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlX</span><span class="p">,</span> <span class="n">Keys</span><span class="o">.</span><span class="n">ControlE</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">open_in_editor</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
         <span class="c1"># This is also firing on Alt-v?</span>
         <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">open_in_editor</span><span class="p">(</span><span class="n">handle_and_execute</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
+    <span class="k">def</span> <span class="nf">if_no_repeat</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">E</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; Callable that returns True when the previous event was delivered to</span>
+<span class="sd">        another handler. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="ow">not</span> <span class="n">event</span><span class="o">.</span><span class="n">is_repeat</span>
+
     <span class="n">handle</span><span class="p">(</span><span class="s2">&quot;c-up&quot;</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;previous-history&quot;</span><span class="p">))</span>
-    <span class="n">handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlP</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;previous-history&quot;</span><span class="p">))</span>
+    <span class="n">handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlP</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">emacs_mode</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;previous-history&quot;</span><span class="p">))</span>
     <span class="n">handle</span><span class="p">(</span><span class="s2">&quot;c-down&quot;</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;next-history&quot;</span><span class="p">))</span>
-    <span class="n">handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlN</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;next-history&quot;</span><span class="p">))</span>
+    <span class="n">handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlN</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">emacs_mode</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;next-history&quot;</span><span class="p">))</span>
     <span class="n">handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlL</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;clear-screen&quot;</span><span class="p">))</span>
 
     <span class="n">handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlK</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;kill-line&quot;</span><span class="p">))</span>
@@ -511,47 +659,38 @@
     <span class="p">)</span>
     <span class="c1"># TODO: FZF</span>
     <span class="n">handle</span><span class="p">(</span><span class="s2">&quot;c-t&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;transpose-chars&quot;</span><span class="p">))</span>
+
     <span class="n">handle</span><span class="p">(</span><span class="s2">&quot;c-i&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;menu-complete&quot;</span><span class="p">))</span>
+
     <span class="n">handle</span><span class="p">(</span><span class="s2">&quot;s-tab&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;menu-complete-backward&quot;</span><span class="p">))</span>
 
     <span class="c1"># Control-W should delete, using whitespace as separator, while M-Del</span>
     <span class="c1"># should delete using [^a-zA-Z0-9] as a boundary.</span>
-    <span class="n">handle</span><span class="p">(</span><span class="s2">&quot;c-w&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;unix-word-rubout&quot;</span><span class="p">))</span>
-
-    <span class="n">handle</span><span class="p">(</span><span class="s2">&quot;pageup&quot;</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;previous-history&quot;</span><span class="p">))</span>
-    <span class="n">handle</span><span class="p">(</span><span class="s2">&quot;pagedown&quot;</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;next-history&quot;</span><span class="p">))</span>
+    <span class="n">handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlW</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;unix-word-rubout&quot;</span><span class="p">))</span>
 
     <span class="c1">### Emacs:</span>
 
-    <span class="n">handle</span><span class="p">(</span><span class="s1">&#39;c-a&#39;</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s1">&#39;beginning-of-line&#39;</span><span class="p">))</span>
-    <span class="n">handle</span><span class="p">(</span><span class="s1">&#39;c-b&#39;</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s1">&#39;backward-char&#39;</span><span class="p">))</span>
-    <span class="n">handle</span><span class="p">(</span><span class="s1">&#39;c-delete&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s1">&#39;kill-word&#39;</span><span class="p">))</span>
-    <span class="n">handle</span><span class="p">(</span><span class="s1">&#39;c-e&#39;</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s1">&#39;end-of-line&#39;</span><span class="p">))</span>
-    <span class="n">handle</span><span class="p">(</span><span class="s1">&#39;c-f&#39;</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s1">&#39;forward-char&#39;</span><span class="p">))</span>
-    <span class="n">handle</span><span class="p">(</span><span class="s1">&#39;c-left&#39;</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s1">&#39;backward-word&#39;</span><span class="p">))</span>
-    <span class="n">handle</span><span class="p">(</span><span class="s1">&#39;c-right&#39;</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s1">&#39;forward-word&#39;</span><span class="p">))</span>
-    <span class="n">handle</span><span class="p">(</span><span class="s1">&#39;c-x&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s1">&#39;yank&#39;</span><span class="p">))</span>
-    <span class="n">handle</span><span class="p">(</span><span class="s1">&#39;c-y&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s1">&#39;yank&#39;</span><span class="p">))</span>
+    <span class="n">handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlA</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;beginning-of-line&quot;</span><span class="p">))</span>
+    <span class="n">handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlB</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;backward-char&quot;</span><span class="p">))</span>
+    <span class="n">handle</span><span class="p">(</span><span class="s2">&quot;c-delete&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;kill-word&quot;</span><span class="p">))</span>
+    <span class="c1"># Don&#39;t forget the filter because auto_completion is also gonna want this key</span>
+    <span class="n">handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlE</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;end-of-line&quot;</span><span class="p">))</span>
+    <span class="n">handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlF</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;forward-char&quot;</span><span class="p">))</span>
+    <span class="n">handle</span><span class="p">(</span><span class="s2">&quot;c-left&quot;</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;backward-word&quot;</span><span class="p">))</span>
+    <span class="n">handle</span><span class="p">(</span><span class="s2">&quot;c-right&quot;</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;forward-word&quot;</span><span class="p">))</span>
+    <span class="n">handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlX</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;yank&quot;</span><span class="p">))</span>
+    <span class="n">handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlY</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;yank&quot;</span><span class="p">))</span>
     <span class="n">handle</span><span class="p">(</span><span class="s2">&quot;c-_&quot;</span><span class="p">,</span> <span class="n">save_before</span><span class="o">=</span><span class="p">(</span><span class="k">lambda</span> <span class="n">e</span><span class="p">:</span> <span class="kc">False</span><span class="p">),</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">)(</span>
         <span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;undo&quot;</span><span class="p">)</span>
     <span class="p">)</span>
 
-    <span class="n">handle</span><span class="p">(</span><span class="s2">&quot;c-x&quot;</span><span class="p">,</span> <span class="s2">&quot;c-u&quot;</span><span class="p">,</span> <span class="n">save_before</span><span class="o">=</span><span class="p">(</span><span class="k">lambda</span> <span class="n">e</span><span class="p">:</span> <span class="kc">False</span><span class="p">),</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">)(</span>
-        <span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;undo&quot;</span><span class="p">)</span>
-    <span class="p">)</span>
+    <span class="n">handle</span><span class="p">(</span>
+        <span class="n">Keys</span><span class="o">.</span><span class="n">ControlX</span><span class="p">,</span> <span class="n">Keys</span><span class="o">.</span><span class="n">ControlU</span><span class="p">,</span> <span class="n">save_before</span><span class="o">=</span><span class="p">(</span><span class="k">lambda</span> <span class="n">e</span><span class="p">:</span> <span class="kc">False</span><span class="p">),</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span>
+    <span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;undo&quot;</span><span class="p">))</span>
 
-    <span class="n">handle</span><span class="p">(</span><span class="s2">&quot;c-x&quot;</span><span class="p">,</span> <span class="s2">&quot;(&quot;</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;start-kbd-macro&quot;</span><span class="p">))</span>
-    <span class="n">handle</span><span class="p">(</span><span class="s2">&quot;c-x&quot;</span><span class="p">,</span> <span class="s2">&quot;)&quot;</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;end-kbd-macro&quot;</span><span class="p">))</span>
-    <span class="n">handle</span><span class="p">(</span><span class="s2">&quot;c-x&quot;</span><span class="p">,</span> <span class="s2">&quot;e&quot;</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;call-last-kbd-macro&quot;</span><span class="p">))</span>
-
-    <span class="c1"># Meta + Enter: always accept input.</span>
-    <span class="c1"># handle(&#39;escape&#39;, &#39;enter&#39;, filter=insert_mode &amp; is_returnable)(</span>
-    <span class="c1">#     get_by_name(&#39;accept-line&#39;))</span>
-
-    <span class="c1"># Enter: accept input in single line mode.</span>
-    <span class="c1"># handle(&quot;enter&quot;, filter=insert_mode &amp; is_returnable &amp; ~is_multiline)(</span>
-    <span class="c1">#     get_by_name(&quot;accept-line&quot;)</span>
-    <span class="c1"># )</span>
+    <span class="n">handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlX</span><span class="p">,</span> <span class="s2">&quot;(&quot;</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;start-kbd-macro&quot;</span><span class="p">))</span>
+    <span class="n">handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlX</span><span class="p">,</span> <span class="s2">&quot;)&quot;</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;end-kbd-macro&quot;</span><span class="p">))</span>
+    <span class="n">handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlX</span><span class="p">,</span> <span class="s2">&quot;e&quot;</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;call-last-kbd-macro&quot;</span><span class="p">))</span>
 
     <span class="k">def</span> <span class="nf">character_search</span><span class="p">(</span><span class="n">buff</span><span class="p">,</span> <span class="n">char</span><span class="p">,</span> <span class="n">count</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">count</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -570,7 +709,7 @@
         <span class="c1"># Also named &#39;character-search&#39;</span>
         <span class="n">character_search</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">arg</span><span class="p">)</span>
 
-    <span class="nd">@handle</span><span class="p">(</span><span class="s1">&#39;c-x&#39;</span><span class="p">,</span> <span class="s1">&#39;c-x&#39;</span><span class="p">)</span>
+    <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlX</span><span class="p">,</span> <span class="n">Keys</span><span class="o">.</span><span class="n">ControlX</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Move cursor back and forth between the start and end of the current</span>
@@ -579,11 +718,13 @@
         <span class="n">buffer</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span>
 
         <span class="k">if</span> <span class="n">buffer</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">is_cursor_at_the_end_of_line</span><span class="p">:</span>
-            <span class="n">buffer</span><span class="o">.</span><span class="n">cursor_position</span> <span class="o">+=</span> <span class="n">buffer</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">get_start_of_line_position</span><span class="p">(</span><span class="n">after_whitespace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">buffer</span><span class="o">.</span><span class="n">cursor_position</span> <span class="o">+=</span> <span class="n">buffer</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">get_start_of_line_position</span><span class="p">(</span>
+                <span class="n">after_whitespace</span><span class="o">=</span><span class="kc">False</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">buffer</span><span class="o">.</span><span class="n">cursor_position</span> <span class="o">+=</span> <span class="n">buffer</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">get_end_of_line_position</span><span class="p">()</span>
 
-    <span class="nd">@handle</span><span class="p">(</span><span class="s1">&#39;c-@&#39;</span><span class="p">)</span>  <span class="c1"># Control-space or Control-@</span>
+    <span class="nd">@handle</span><span class="p">(</span><span class="s2">&quot;c-@&quot;</span><span class="p">)</span>  <span class="c1"># Control-space or Control-@</span>
     <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Start of the selection (if the current buffer is not empty).</span>
@@ -593,7 +734,7 @@
         <span class="k">if</span> <span class="n">buff</span><span class="o">.</span><span class="n">text</span><span class="p">:</span>
             <span class="n">buff</span><span class="o">.</span><span class="n">start_selection</span><span class="p">(</span><span class="n">selection_type</span><span class="o">=</span><span class="n">SelectionType</span><span class="o">.</span><span class="n">CHARACTERS</span><span class="p">)</span>
 
-    <span class="nd">@handle</span><span class="p">(</span><span class="s1">&#39;c-g&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">has_selection</span><span class="p">)</span>
+    <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlG</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">has_selection</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Control + G: Cancel completion menu and validation state.</span>
@@ -601,15 +742,15 @@
         <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">complete_state</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">validation_error</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="nd">@handle</span><span class="p">(</span><span class="s1">&#39;c-g&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">has_selection</span><span class="p">)</span>
+    <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlG</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">has_selection</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Cancel selection.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">exit_selection</span><span class="p">()</span>
 
-    <span class="nd">@handle</span><span class="p">(</span><span class="s1">&#39;c-w&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">has_selection</span><span class="p">)</span>
-    <span class="nd">@handle</span><span class="p">(</span><span class="s1">&#39;c-x&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">has_selection</span><span class="p">)</span>
+    <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlW</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">has_selection</span><span class="p">)</span>
+    <span class="nd">@handle</span><span class="p">(</span><span class="s2">&quot;c-x&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">has_selection</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Cut selected text.</span>
@@ -617,7 +758,7 @@
         <span class="n">data</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">cut_selection</span><span class="p">()</span>
         <span class="n">event</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">clipboard</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
-    <span class="nd">@handle</span><span class="p">(</span><span class="s2">&quot;c-j&quot;</span><span class="p">)</span>
+    <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlJ</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">E</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        By default, handle \n as if it were a \r (enter).</span>
@@ -641,17 +782,17 @@
 
     <span class="c1"># Global bindings.</span>
 
-    <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlZ</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">suspend_to_bg</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">E</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        By default, control-Z should literally insert Ctrl-Z.</span>
-<span class="sd">        (Ansi Ctrl-Z, code 26 in MSDOS means End-Of-File.</span>
-<span class="sd">        In a Python REPL for instance, it&#39;s possible to type</span>
-<span class="sd">        Control-Z followed by enter to quit.)</span>
-<span class="sd">        When the system bindings are loaded and suspend-to-background is</span>
-<span class="sd">        supported, that will override this binding.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">event</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">suspend_to_background</span><span class="p">()</span>
+    <span class="c1"># @handle(Keys.ControlZ)</span>
+    <span class="c1"># def suspend_to_bg(event: E) -&gt; None:</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#     By default, control-Z should literally insert Ctrl-Z.</span>
+    <span class="c1">#     (Ansi Ctrl-Z, code 26 in MSDOS means End-Of-File.</span>
+    <span class="c1">#     In a Python REPL for instance, it&#39;s possible to type</span>
+    <span class="c1">#     Control-Z followed by enter to quit.)</span>
+    <span class="c1">#     When the system bindings are loaded and suspend-to-background is</span>
+    <span class="c1">#     supported, that will override this binding.</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#     event.app.suspend_to_background()</span>
 
     <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">BracketedPaste</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">E</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -676,8 +817,12 @@
         <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">insert_text</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="n">event</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">quoted_insert</span> <span class="o">=</span> <span class="kc">False</span>
 
-    <span class="nd">@handle</span><span class="p">(</span><span class="s2">&quot;f4&quot;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+    <span class="c1"># End basic bindings</span>
+
+    <span class="c1"># I added in some function keys</span>
+
+    <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">F4</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">toggle_editing_mode</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Toggle between Vi and Emacs mode.</span>
 
 <span class="sd">        See Also</span>
@@ -687,38 +832,56 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">event</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">editing_mode</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">event</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">editing_mode</span> <span class="o">==</span> <span class="s2">&quot;vi&quot;</span>
 
-    <span class="nd">@handle</span><span class="p">(</span><span class="s2">&quot;f6&quot;</span><span class="p">)</span>
+    <span class="n">handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">Escape</span><span class="p">,</span> <span class="n">Keys</span><span class="o">.</span><span class="n">ControlJ</span><span class="p">)(</span><span class="n">toggle_editing_mode</span><span class="p">)</span>
+
+    <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">F6</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Enable/Disable paste mode.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">event</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">paste_mode</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">event</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">paste_mode</span>
 
-    <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlC</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Pressing Ctrl-C will exit the user interface.</span>
 <span class="sd">        Setting a return value means: quit the event loop that drives the user</span>
 <span class="sd">        interface and return this value from the `Application.run()` call.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">event</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
 
-    <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlD</span><span class="p">)</span>
+    <span class="c1"># handle(Keys.ControlC)(get_by_name(&#39;kill_line&#39;))</span>
+
+    <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlD</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">ctrl_d_condition</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Either delete a character or exit the application.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Either delete a character or exit the application. TODO: this doesn&#39;t work&quot;&quot;&quot;</span>
         <span class="n">buffer</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">cli</span><span class="o">.</span><span class="n">current_buffer</span>
+
         <span class="k">if</span> <span class="n">buffer</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">current_char</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
             <span class="n">event</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">count</span><span class="o">=</span><span class="n">event</span><span class="o">.</span><span class="n">arg</span><span class="p">)</span>
 
-    <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">Tab</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">tab_insert_indent</span><span class="p">)</span>
+<span class="c1">#     handle(&quot;c-d&quot;, filter=has_text_before_cursor &amp; insert_mode)(</span>
+<span class="c1">#         get_by_name(&quot;delete-char&quot;)</span>
+<span class="c1">#     )</span>
+
+    <span class="c1"># this doesn&#39;t do what you&#39;d expect.</span>
+    <span class="c1"># handle(Keys.ControlD)(get_by_name(&quot;end-of-file&quot;))</span>
+
+    <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlD</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">exit_app</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+        <span class="c1"># HE CATCHES RUNTIMEERROR WHAT THE FUCK</span>
+        <span class="c1"># raise RuntimeError</span>
+        <span class="c1"># ugh why isn&#39;t this working :(</span>
+        <span class="n">event</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">result</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1"># apparently that function requires a positional parameter &#39;data&#39;</span>
+    <span class="c1"># fuckkkk if we ocmment it out we lose autocompletion</span>
+    <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">Tab</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">tab_insert_indent</span> <span class="o">&amp;</span> <span class="n">insert_mode</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">insert_indent</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        If there are only whitespaces before current cursor position insert</span>
+        <span class="sd">&quot;&quot;&quot;If there are only whitespaces before current cursor position insert</span>
 <span class="sd">        indent instead of autocompleting.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">event</span><span class="o">.</span><span class="n">cli</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">insert_text</span><span class="p">()</span>
+
 
     <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">BackTab</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">insert_literal_tab</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
@@ -728,6 +891,8 @@
             <span class="n">b</span><span class="o">.</span><span class="n">complete_previous</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">event</span><span class="o">.</span><span class="n">cli</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">insert_text</span><span class="p">(</span><span class="s2">&quot;    &quot;</span><span class="p">)</span>
+
+    <span class="c1"># matchit: {{{</span>
 
     <span class="nd">@handle</span><span class="p">(</span><span class="s2">&quot;(&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">whitespace_or_bracket_after</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">insert_right_parens</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
@@ -808,16 +973,12 @@
 
         <span class="n">buffer</span><span class="o">.</span><span class="n">delete_before_cursor</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
-    <span class="n">handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">,</span> <span class="n">save_before</span><span class="o">=</span><span class="n">if_no_repeat</span><span class="p">)(</span>
-        <span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;self-insert&quot;</span><span class="p">)</span>
-    <span class="p">)</span>
+    <span class="c1"># }}}</span>
+    <span class="c1"># autosuggest: {{{</span>
 
-    <span class="c1"># autosuggest</span>
-
-
-    <span class="nd">@handle</span><span class="p">(</span><span class="s1">&#39;c-f&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">suggestion_available</span><span class="p">)</span>
-    <span class="nd">@handle</span><span class="p">(</span><span class="s1">&#39;c-e&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">suggestion_available</span><span class="p">)</span>
-    <span class="nd">@handle</span><span class="p">(</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">suggestion_available</span><span class="p">)</span>
+    <span class="nd">@handle</span><span class="p">(</span><span class="s2">&quot;c-f&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">suggestion_available</span><span class="p">)</span>
+    <span class="nd">@handle</span><span class="p">(</span><span class="s2">&quot;c-e&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">suggestion_available</span><span class="p">)</span>
+    <span class="nd">@handle</span><span class="p">(</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">suggestion_available</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
         <span class="s2">&quot; Accept suggestion. &quot;</span>
         <span class="n">b</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span>
@@ -826,7 +987,20 @@
         <span class="k">if</span> <span class="n">suggestion</span><span class="p">:</span>
             <span class="n">b</span><span class="o">.</span><span class="n">insert_text</span><span class="p">(</span><span class="n">suggestion</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
 
+    <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlM</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">is_searching</span><span class="p">())</span>
+    <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlJ</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">is_searching</span><span class="p">())</span>
+    <span class="k">def</span> <span class="nf">accept_search</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+        <span class="n">search</span><span class="o">.</span><span class="n">accept_search</span><span class="p">()</span>
 
+    <span class="c1"># page navigation *because  why are these conditional on editing mode*</span>
+    <span class="n">handle</span><span class="p">(</span><span class="s2">&quot;pagedown&quot;</span><span class="p">)(</span><span class="n">scroll_page_down</span><span class="p">)</span>
+    <span class="n">handle</span><span class="p">(</span><span class="s2">&quot;pageup&quot;</span><span class="p">)(</span><span class="n">scroll_page_up</span><span class="p">)</span>
+
+    <span class="n">handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">,</span> <span class="n">save_before</span><span class="o">=</span><span class="n">if_no_repeat</span><span class="p">)(</span>
+        <span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;self-insert&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="c1"># return ConditionalKeyBindings(registry, filter=buffer_has_focus)</span>
     <span class="k">return</span> <span class="n">registry</span></div>
 
 
@@ -838,6 +1012,8 @@
         <span class="n">bindings</span> <span class="o">=</span> <span class="n">add_bindings</span><span class="p">()</span>
         <span class="n">extra_bindings</span> <span class="o">=</span> <span class="n">merge_key_bindings</span><span class="p">(</span><span class="n">get_key_bindings</span><span class="p">(</span><span class="n">bindings</span><span class="p">))</span>
         <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span> <span class="o">=</span> <span class="n">extra_bindings</span>
+
+<span class="c1"># Vim: set fdm=marker:</span>
 </pre></div>
 
         </div>

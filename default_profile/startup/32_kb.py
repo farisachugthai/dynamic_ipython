@@ -8,7 +8,6 @@ import warnings
 from IPython.core.getipython import get_ipython
 
 import prompt_toolkit
-from prompt_toolkit.application.current import get_app
 from prompt_toolkit.cache import SimpleCache
 from prompt_toolkit.document import Document
 from prompt_toolkit.key_binding.defaults import load_key_bindings, load_vi_bindings

@@ -174,7 +174,7 @@
 <span class="kn">from</span> <span class="nn">pygments.token</span> <span class="kn">import</span> <span class="n">Keyword</span><span class="p">,</span> <span class="n">Name</span>
 <span class="kn">from</span> <span class="nn">pygments.formatters.terminal256</span> <span class="kn">import</span> <span class="n">TerminalTrueColorFormatter</span>
 
-<span class="kn">from</span> <span class="nn">prompt_toolkit.lexers.pygments</span> <span class="kn">import</span> <span class="n">PygmentsLexer</span> <span class="c1"># , PygmentsTokens</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.lexers.pygments</span> <span class="kn">import</span> <span class="n">PygmentsLexer</span>  <span class="c1"># , PygmentsTokens</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.lexers.base</span> <span class="kn">import</span> <span class="n">DynamicLexer</span><span class="p">,</span> <span class="n">SimpleLexer</span>
 
 <span class="kn">from</span> <span class="nn">prompt_toolkit.styles</span> <span class="kn">import</span> <span class="n">style_from_pygments_cls</span><span class="p">,</span> <span class="n">default_pygments_style</span>
@@ -188,20 +188,24 @@
     <span class="kn">from</span> <span class="nn">gruvbox.ptgruvbox</span> <span class="kn">import</span> <span class="n">Gruvbox</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">pygments.styles.inkpot</span> <span class="kn">import</span> <span class="n">InkPotStyle</span>
+
     <span class="n">Gruvbox</span> <span class="o">=</span> <span class="n">InkPotStyle</span>  <span class="c1"># surprise!</span>
 
 
 <div class="viewcode-block" id="our_style"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.35_lexer.our_style">[docs]</a><span class="k">def</span> <span class="nf">our_style</span><span class="p">():</span>
-    <span class="k">return</span> <span class="n">merge_styles</span><span class="p">([</span>
-        <span class="n">style_from_pygments_cls</span><span class="p">(</span><span class="n">Gruvbox</span><span class="p">),</span>
-        <span class="n">default_pygments_style</span><span class="p">(),</span>
-        <span class="c1">#  Style.from_dict({&#39;&#39;:&#39;&#39;})</span>
-    <span class="p">])</span>  <span class="c1"># TODO</span></div>
+    <span class="k">return</span> <span class="n">merge_styles</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="n">style_from_pygments_cls</span><span class="p">(</span><span class="n">Gruvbox</span><span class="p">),</span>
+            <span class="n">default_pygments_style</span><span class="p">(),</span>
+            <span class="c1">#  Style.from_dict({&#39;&#39;:&#39;&#39;})</span>
+        <span class="p">]</span>
+    <span class="p">)</span>  <span class="c1"># TODO</span></div>
 
 
 <div class="viewcode-block" id="get_lexer"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.35_lexer.get_lexer">[docs]</a><span class="k">def</span> <span class="nf">get_lexer</span><span class="p">():</span>
     <span class="n">wrapped_lexer</span> <span class="o">=</span> <span class="n">PygmentsLexer</span><span class="p">(</span><span class="n">PythonLexer</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">wrapped_lexer</span></div>
+
 
 <div class="viewcode-block" id="pygments_tokens"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.35_lexer.pygments_tokens">[docs]</a><span class="k">def</span> <span class="nf">pygments_tokens</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;A  list of Pygments style tokens. In case you need that.&quot;&quot;&quot;</span>
@@ -254,7 +258,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="c1"># The original docstring for pylexer was raising an error in sphinx...</span>
+        <span class="c1"># The original docstring for pylexer was raising an error in sphinx...</span>
         <span class="s2">&quot;pylexer&quot;</span><span class="p">:</span> <span class="s2">&quot;A PythonLexer from Pygments&quot;</span><span class="p">,</span>
         <span class="s2">&quot;formatter&quot;</span><span class="p">:</span> <span class="n">TerminalTrueColorFormatter</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">,</span>
         <span class="c1"># &#39;highlight&#39;: pygments.highlight.__doc__</span>
@@ -274,6 +278,7 @@
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{self.__class__.__name__}</span><span class="s2">&quot;</span></div>
+
 
 <span class="k">class</span> <span class="nc">MyPythonLexer</span><span class="p">(</span><span class="n">PythonLexer</span><span class="p">):</span>
     <span class="c1"># EXTRA_KEYWORDS = set((&#39;foo&#39;, &#39;bar&#39;, &#39;foobar&#39;, &#39;barfoo&#39;, &#39;spam&#39;, &#39;eggs&#39;))</span>
@@ -308,10 +313,10 @@
     <span class="c1"># colorizer = Colorizer()</span>
     <span class="c1"># pt_lexer = get_lexer()</span>
     <span class="n">lexer</span> <span class="o">=</span> <span class="n">MyPythonLexer</span><span class="p">()</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">get_ipython</span><span class="p">(),</span> <span class="s1">&#39;pt_app.lexer&#39;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">get_ipython</span><span class="p">(),</span> <span class="s2">&quot;pt_app.lexer&quot;</span><span class="p">):</span>
         <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">lexer</span> <span class="o">=</span> <span class="n">lexer</span>
 
-    <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">get_ipython</span><span class="p">(),</span> <span class="s1">&#39;pt_app.app.lexer&#39;</span><span class="p">):</span>
+    <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">get_ipython</span><span class="p">(),</span> <span class="s2">&quot;pt_app.app.lexer&quot;</span><span class="p">):</span>
         <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">lexer</span> <span class="o">=</span> <span class="n">lexer</span>
 </pre></div>
 

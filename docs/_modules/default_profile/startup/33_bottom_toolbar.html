@@ -165,14 +165,21 @@
 <span class="kn">from</span> <span class="nn">traceback</span> <span class="kn">import</span> <span class="n">print_exc</span>
 
 <span class="kn">from</span> <span class="nn">prompt_toolkit</span> <span class="kn">import</span> <span class="n">ANSI</span><span class="p">,</span> <span class="n">HTML</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.application.current</span> <span class="kn">import</span> <span class="n">get_app</span>
+
+<span class="c1"># from prompt_toolkit.application.current import get_app</span>
 
 <span class="kn">from</span> <span class="nn">prompt_toolkit.enums</span> <span class="kn">import</span> <span class="n">EditingMode</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.formatted_text</span> <span class="kn">import</span> <span class="n">FormattedText</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.keys</span> <span class="kn">import</span> <span class="n">Keys</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding</span> <span class="kn">import</span> <span class="n">KeyBindings</span>
 
-<span class="kn">from</span> <span class="nn">prompt_toolkit.layout.containers</span> <span class="kn">import</span> <span class="n">HSplit</span><span class="p">,</span> <span class="n">VSplit</span><span class="p">,</span> <span class="n">Window</span><span class="p">,</span> <span class="n">WindowAlign</span><span class="p">,</span> <span class="n">FloatContainer</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.layout.containers</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">HSplit</span><span class="p">,</span>
+    <span class="n">VSplit</span><span class="p">,</span>
+    <span class="n">Window</span><span class="p">,</span>
+    <span class="n">WindowAlign</span><span class="p">,</span>
+    <span class="n">FloatContainer</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.layout.controls</span> <span class="kn">import</span> <span class="n">BufferControl</span><span class="p">,</span> <span class="n">FormattedTextControl</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.layout.layout</span> <span class="kn">import</span> <span class="n">Layout</span>
 
@@ -193,63 +200,28 @@
 <span class="kn">from</span> <span class="nn">pygments.lexers.python</span> <span class="kn">import</span> <span class="n">PythonLexer</span>
 <span class="kn">from</span> <span class="nn">pygments.formatters.terminal256</span> <span class="kn">import</span> <span class="n">TerminalTrueColorFormatter</span>
 <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+<span class="kn">from</span> <span class="nn">IPython.terminal.ptutils</span> <span class="kn">import</span> <span class="n">IPythonPTLexer</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">gruvbox.gruvbox</span> <span class="kn">import</span> <span class="n">Gruvbox</span>
+    <span class="kn">from</span> <span class="nn">gruvbox.gruvbox</span> <span class="kn">import</span> <span class="n">GruvboxStyle</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="n">Gruvbox</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">GruvboxStyle</span> <span class="o">=</span> <span class="kc">None</span>
 
 
-<span class="n">completion_displays_to_styles</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;multi&quot;</span><span class="p">:</span> <span class="n">CompleteStyle</span><span class="o">.</span><span class="n">MULTI_COLUMN</span><span class="p">,</span>
-    <span class="s2">&quot;single&quot;</span><span class="p">:</span> <span class="n">CompleteStyle</span><span class="o">.</span><span class="n">COLUMN</span><span class="p">,</span>
-    <span class="s2">&quot;readline&quot;</span><span class="p">:</span> <span class="n">CompleteStyle</span><span class="o">.</span><span class="n">READLINE_LIKE</span><span class="p">,</span>
-    <span class="s2">&quot;none&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-<span class="p">}</span>
+<div class="viewcode-block" id="get_app"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.get_app">[docs]</a><span class="k">def</span> <span class="nf">get_app</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;A patch to cover up the fact that get_app() returns a DummyApplication.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">get_ipython</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span></div>
 
 
 <div class="viewcode-block" id="exit_clicked"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.exit_clicked">[docs]</a><span class="k">def</span> <span class="nf">exit_clicked</span><span class="p">():</span>
-    <span class="n">get_app</span><span class="p">()</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span></div>
-
-
-<span class="n">exit_button</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span><span class="s2">&quot;Exit&quot;</span><span class="p">,</span> <span class="n">handler</span><span class="o">=</span><span class="n">exit_clicked</span><span class="p">)</span>
-<span class="c1"># Thisll probably be useful</span>
-<span class="c1"># from prompt_toolkit.mouse_events import MouseEvent, MouseEventType</span>
-
-<span class="c1"># float_container = FloatContainer(content=Window(...),</span>
-<span class="c1">#                        floats=[</span>
-<span class="c1">#                            Float(xcursor=True,</span>
-<span class="c1">#                                 ycursor=True,</span>
-<span class="c1">#                                 layout=CompletionMenu(...))</span>
-<span class="c1">#                        ])</span>
-
-
-<div class="viewcode-block" id="show_header"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.show_header">[docs]</a><span class="k">def</span> <span class="nf">show_header</span><span class="p">():</span>
-    <span class="k">return</span> <span class="n">Frame</span><span class="p">(</span><span class="n">TextArea</span><span class="p">(</span><span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">banner</span><span class="p">))</span></div>
-
-
-<div class="viewcode-block" id="LineCounter"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.LineCounter">[docs]</a><span class="k">class</span> <span class="nc">LineCounter</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Really basic counter displayed inspired by Doug Hellman.</span>
-
-<span class="sd">    :URL: https://pymotw.com/3/sys/interpreter.html</span>
-
-<span class="sd">    Need to set this to the rprompt.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-<div class="viewcode-block" id="LineCounter.__init__"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.LineCounter.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%H:%M:%S&#39;</span><span class="p">)</span></div>
-
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Yes!!! This now behaves as expected.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="k">return</span> <span class="s1">&#39;(&lt; In[</span><span class="si">{:3d}</span><span class="s1">]: Time:</span><span class="si">{}</span><span class="s1">  )&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">)</span></div>
+    <span class="n">get_app</span><span class="p">()</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">exception</span><span class="o">=</span><span class="ne">EOFError</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="init_style"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.init_style">[docs]</a><span class="k">def</span> <span class="nf">init_style</span><span class="p">():</span>
     <span class="c1"># Could set this to _ip.pt_app.style i suppose</span>
-    <span class="k">if</span> <span class="n">Gruvbox</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">bt_style</span> <span class="o">=</span> <span class="n">Gruvbox</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">GruvboxStyle</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">bt_style</span> <span class="o">=</span> <span class="n">GruvboxStyle</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">style_from_pygments_dict</span><span class="p">(</span><span class="n">bt_style</span><span class="o">.</span><span class="n">style_rules</span><span class="p">)</span></div>
 
 
@@ -266,8 +238,37 @@
 
 <div class="viewcode-block" id="merged_styles"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.merged_styles">[docs]</a><span class="k">def</span> <span class="nf">merged_styles</span><span class="p">(</span><span class="n">overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="n">base</span> <span class="o">=</span> <span class="n">init_style</span><span class="p">()</span>
-
     <span class="k">return</span> <span class="n">merge_styles</span><span class="p">([</span><span class="n">base</span><span class="p">,</span> <span class="n">overrides</span><span class="p">,</span> <span class="n">default_pygments_style</span><span class="p">()])</span></div>
+
+
+<div class="viewcode-block" id="merged_style_rules"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.merged_style_rules">[docs]</a><span class="k">def</span> <span class="nf">merged_style_rules</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Originally was going to call this in `show_header` but it raises if you</span>
+<span class="sd">    had it a list or a Style instance. It looks like it&#39;s only made to take 1</span>
+<span class="sd">    style anyway.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">merged_styles</span><span class="p">()</span><span class="o">.</span><span class="n">style_rules</span></div>
+
+
+<div class="viewcode-block" id="show_header"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.show_header">[docs]</a><span class="k">def</span> <span class="nf">show_header</span><span class="p">():</span>
+    <span class="n">text_area</span> <span class="o">=</span> <span class="n">TextArea</span><span class="p">(</span><span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">banner</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;#ebdbb2&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Frame</span><span class="p">(</span><span class="n">text_area</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LineCounter"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.LineCounter">[docs]</a><span class="k">class</span> <span class="nc">LineCounter</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Really basic counter displayed inspired by Doug Hellman.</span>
+
+<span class="sd">    :URL: https://pymotw.com/3/sys/interpreter.html</span>
+
+<span class="sd">    Need to set this to the rprompt.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="LineCounter.__init__"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.LineCounter.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%H:%M:%S&quot;</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Yes!!! This now behaves as expected.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="s2">&quot;(&lt; In[</span><span class="si">{:3d}</span><span class="s2">]: Time:</span><span class="si">{}</span><span class="s2">  )&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="get_titlebar_text"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.get_titlebar_text">[docs]</a><span class="k">def</span> <span class="nf">get_titlebar_text</span><span class="p">():</span>
@@ -377,6 +378,7 @@
 <div class="viewcode-block" id="Attempt2"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.Attempt2">[docs]</a><span class="k">class</span> <span class="nc">Attempt2</span><span class="p">(</span><span class="n">BottomToolbar</span><span class="p">,</span> <span class="n">FormattedTextToolbar</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
+
 <div class="viewcode-block" id="Attempt3"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.Attempt3">[docs]</a><span class="k">class</span> <span class="nc">Attempt3</span><span class="p">(</span><span class="n">BottomToolbar</span><span class="p">):</span>
 <div class="viewcode-block" id="Attempt3.__init__"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.Attempt3.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span></div>
@@ -392,6 +394,39 @@
         <span class="n">fmt</span> <span class="o">=</span> <span class="n">FormattedText</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">FormattedTextToolbar</span><span class="p">(</span><span class="n">fmt</span><span class="p">)</span></div></div>
 
+
+<div class="viewcode-block" id="generate_and_print_hsplit"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.generate_and_print_hsplit">[docs]</a><span class="k">def</span> <span class="nf">generate_and_print_hsplit</span><span class="p">():</span>
+    <span class="n">kb</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span><span class="o">.</span><span class="n">bindings</span>
+    <span class="c1"># Bind to IPython TODO:</span>
+    <span class="n">root_container</span> <span class="o">=</span> <span class="n">HSplit</span><span class="p">(</span>
+        <span class="n">children</span><span class="o">=</span><span class="p">[</span>
+            <span class="n">Window</span><span class="p">(</span>
+                <span class="n">height</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">content</span><span class="o">=</span><span class="n">FormattedTextControl</span><span class="p">(</span><span class="n">get_titlebar_text</span><span class="p">),</span>
+                <span class="n">align</span><span class="o">=</span><span class="n">WindowAlign</span><span class="o">.</span><span class="n">CENTER</span><span class="p">,</span>
+                <span class="n">wrap_lines</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">Window</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">char</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;class:line&quot;</span><span class="p">),</span>
+        <span class="p">],</span>
+        <span class="c1"># key_bindings=kb,</span>
+        <span class="c1"># style=GruvboxStyle,</span>
+        <span class="n">style</span><span class="o">=</span><span class="s2">&quot;#fe8019&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">print_container</span><span class="p">(</span><span class="n">root_container</span><span class="p">)</span>
+    <span class="c1"># Thisll probably be useful</span>
+    <span class="c1"># from prompt_toolkit.mouse_events import MouseEvent, MouseEventType</span>
+
+    <span class="c1"># float_container = FloatContainer(content=Window(...),</span>
+    <span class="c1">#                        floats=[</span>
+    <span class="c1">#                            Float(xcursor=True,</span>
+    <span class="c1">#                                 ycursor=True,</span>
+    <span class="c1">#                                 layout=CompletionMenu(...))</span>
+    <span class="c1">#                        ])</span>
+    <span class="k">return</span> <span class="n">root_container</span></div>
+
+
 <span class="c1"># Don&#39;t uncomment! This fucks up the keybindings so that the only way a line</span>
 <span class="c1"># executes is if you use C-r to get into a search then hit something to regain</span>
 <span class="c1"># focus and then hit enter.</span>
@@ -400,12 +435,16 @@
     <span class="k">if</span> <span class="n">get_ipython</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">add_toolbar</span><span class="p">(</span><span class="n">BottomToolbar</span><span class="p">)</span>
 
-    <span class="n">print_container</span><span class="p">(</span><span class="n">show_header</span><span class="p">())</span>
+    <span class="n">completion_displays_to_styles</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;multi&quot;</span><span class="p">:</span> <span class="n">CompleteStyle</span><span class="o">.</span><span class="n">MULTI_COLUMN</span><span class="p">,</span>
+        <span class="s2">&quot;single&quot;</span><span class="p">:</span> <span class="n">CompleteStyle</span><span class="o">.</span><span class="n">COLUMN</span><span class="p">,</span>
+        <span class="s2">&quot;readline&quot;</span><span class="p">:</span> <span class="n">CompleteStyle</span><span class="o">.</span><span class="n">READLINE_LIKE</span><span class="p">,</span>
+        <span class="s2">&quot;none&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">}</span>
 
-    <span class="c1"># Bind to IPython TODO:</span>
-    <span class="n">root_container</span> <span class="o">=</span> <span class="n">HSplit</span><span class="p">([</span>
-        <span class="n">Window</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="n">FormattedTextControl</span><span class="p">(</span><span class="n">get_titlebar_text</span><span class="p">),</span> <span class="n">align</span><span class="o">=</span><span class="n">WindowAlign</span><span class="o">.</span><span class="n">CENTER</span><span class="p">,),</span>
-        <span class="n">Window</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">char</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;class:line&quot;</span><span class="p">),</span> <span class="p">])</span>
+    <span class="n">exit_button</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span><span class="s2">&quot;Exit&quot;</span><span class="p">,</span> <span class="n">handler</span><span class="o">=</span><span class="n">exit_clicked</span><span class="p">)</span>
+
+    <span class="n">print_container</span><span class="p">(</span><span class="n">show_header</span><span class="p">())</span>
 </pre></div>
 
         </div>

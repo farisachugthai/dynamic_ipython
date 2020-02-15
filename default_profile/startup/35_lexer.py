@@ -23,7 +23,7 @@ from pygments.lexers.python import PythonLexer
 from pygments.token import Keyword, Name
 from pygments.formatters.terminal256 import TerminalTrueColorFormatter
 
-from prompt_toolkit.lexers.pygments import PygmentsLexer # , PygmentsTokens
+from prompt_toolkit.lexers.pygments import PygmentsLexer  # , PygmentsTokens
 from prompt_toolkit.lexers.base import DynamicLexer, SimpleLexer
 
 from prompt_toolkit.styles import style_from_pygments_cls, default_pygments_style
@@ -37,20 +37,24 @@ try:
     from gruvbox.ptgruvbox import Gruvbox
 except ImportError:
     from pygments.styles.inkpot import InkPotStyle
+
     Gruvbox = InkPotStyle  # surprise!
 
 
 def our_style():
-    return merge_styles([
-        style_from_pygments_cls(Gruvbox),
-        default_pygments_style(),
-        #  Style.from_dict({'':''})
-    ])  # TODO
+    return merge_styles(
+        [
+            style_from_pygments_cls(Gruvbox),
+            default_pygments_style(),
+            #  Style.from_dict({'':''})
+        ]
+    )  # TODO
 
 
 def get_lexer():
     wrapped_lexer = PygmentsLexer(PythonLexer)
     return wrapped_lexer
+
 
 def pygments_tokens():
     """A  list of Pygments style tokens. In case you need that."""
@@ -103,7 +107,7 @@ class Colorizer:
     """
 
     __slots__ = {
-            # The original docstring for pylexer was raising an error in sphinx...
+        # The original docstring for pylexer was raising an error in sphinx...
         "pylexer": "A PythonLexer from Pygments",
         "formatter": TerminalTrueColorFormatter.__doc__,
         # 'highlight': pygments.highlight.__doc__
@@ -123,6 +127,7 @@ class Colorizer:
 
     def __repr__(self):
         return f"{self.__class__.__name__}"
+
 
 class MyPythonLexer(PythonLexer):
     # EXTRA_KEYWORDS = set(('foo', 'bar', 'foobar', 'barfoo', 'spam', 'eggs'))
@@ -157,8 +162,8 @@ if __name__ == "__main__":
     # colorizer = Colorizer()
     # pt_lexer = get_lexer()
     lexer = MyPythonLexer()
-    if hasattr(get_ipython(), 'pt_app.lexer'):
+    if hasattr(get_ipython(), "pt_app.lexer"):
         get_ipython().pt_app.lexer = lexer
 
-    elif hasattr(get_ipython(), 'pt_app.app.lexer'):
+    elif hasattr(get_ipython(), "pt_app.app.lexer"):
         get_ipython().pt_app.app.lexer = lexer

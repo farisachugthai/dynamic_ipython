@@ -14,6 +14,7 @@ from shutil import get_terminal_size
 from traceback import print_exc
 
 from prompt_toolkit import ANSI, HTML
+
 # from prompt_toolkit.application.current import get_app
 
 from prompt_toolkit.enums import EditingMode
@@ -21,7 +22,13 @@ from prompt_toolkit.formatted_text import FormattedText
 from prompt_toolkit.keys import Keys
 from prompt_toolkit.key_binding import KeyBindings
 
-from prompt_toolkit.layout.containers import HSplit, VSplit, Window, WindowAlign, FloatContainer
+from prompt_toolkit.layout.containers import (
+    HSplit,
+    VSplit,
+    Window,
+    WindowAlign,
+    FloatContainer,
+)
 from prompt_toolkit.layout.controls import BufferControl, FormattedTextControl
 from prompt_toolkit.layout.layout import Layout
 
@@ -57,7 +64,7 @@ def get_app():
 
 
 def exit_clicked():
-    get_app().exit()
+    get_app().exit(exception=EOFError)
 
 
 def init_style():
@@ -82,14 +89,16 @@ def merged_styles(overrides=None):
     base = init_style()
     return merge_styles([base, overrides, default_pygments_style()])
 
+
 def merged_style_rules():
     """Originally was going to call this in `show_header` but it raises if you
     had it a list or a Style instance. It looks like it's only made to take 1
     style anyway."""
     return merged_styles().style_rules
 
+
 def show_header():
-    text_area = TextArea(get_ipython().banner, style='#ebdbb2')
+    text_area = TextArea(get_ipython().banner, style="#ebdbb2")
     return Frame(text_area)
 
 
@@ -103,13 +112,12 @@ class LineCounter:
 
     def __init__(self):
         self.count = 0
-        self.time = strftime('%H:%M:%S')
+        self.time = strftime("%H:%M:%S")
 
     def __call__(self):
         """Yes!!! This now behaves as expected."""
         self.count += 1
-        return '(< In[{:3d}]: Time:{}  )'.format(self.count, self.time)
-
+        return "(< In[{:3d}]: Time:{}  )".format(self.count, self.time)
 
 
 def get_titlebar_text():
@@ -219,6 +227,7 @@ def add_toolbar(toolbar=None):
 class Attempt2(BottomToolbar, FormattedTextToolbar):
     pass
 
+
 class Attempt3(BottomToolbar):
     def __init__(self):
         super().__init__()
@@ -233,6 +242,39 @@ class Attempt3(BottomToolbar):
         tmp = self._rerender()
         fmt = FormattedText(tmp)
         return FormattedTextToolbar(fmt)
+
+
+def generate_and_print_hsplit():
+    kb = get_ipython().pt_app.app.key_bindings.bindings
+    # Bind to IPython TODO:
+    root_container = HSplit(
+        children=[
+            Window(
+                height=1,
+                content=FormattedTextControl(get_titlebar_text),
+                align=WindowAlign.CENTER,
+                wrap_lines=True,
+            ),
+            Window(height=1, char="-", style="class:line"),
+        ],
+        # key_bindings=kb,
+        # style=GruvboxStyle,
+        style="#fe8019",
+    )
+
+    print("\n\n\n")
+    print_container(root_container)
+    # Thisll probably be useful
+    # from prompt_toolkit.mouse_events import MouseEvent, MouseEventType
+
+    # float_container = FloatContainer(content=Window(...),
+    #                        floats=[
+    #                            Float(xcursor=True,
+    #                                 ycursor=True,
+    #                                 layout=CompletionMenu(...))
+    #                        ])
+    return root_container
+
 
 # Don't uncomment! This fucks up the keybindings so that the only way a line
 # executes is if you use C-r to get into a search then hit something to regain
@@ -249,30 +291,6 @@ if __name__ == "__main__":
         "none": None,
     }
 
-
     exit_button = Button("Exit", handler=exit_clicked)
 
     print_container(show_header())
-
-    kb = get_ipython().pt_app.app.key_bindings.bindings
-    # Bind to IPython TODO:
-    root_container = HSplit(children=[
-        Window(height=1, content=FormattedTextControl(get_titlebar_text), align=WindowAlign.CENTER,),
-        Window(height=1, char="-", style="class:line")],
-        key_bindings=kb,
-        # style=GruvboxStyle,
-        )
-
-    print('\n\n\n')
-    print_container(root_container)
-    # Thisll probably be useful
-    # from prompt_toolkit.mouse_events import MouseEvent, MouseEventType
-
-    # float_container = FloatContainer(content=Window(...),
-    #                        floats=[
-    #                            Float(xcursor=True,
-    #                                 ycursor=True,
-    #                                 layout=CompletionMenu(...))
-    #                        ])
-
-
