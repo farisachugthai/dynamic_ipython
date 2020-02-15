@@ -7,18 +7,14 @@ import warnings
 
 from IPython.core.getipython import get_ipython
 
-import prompt_toolkit
 from prompt_toolkit.cache import SimpleCache
 from prompt_toolkit.document import Document
-from prompt_toolkit.key_binding.defaults import load_key_bindings, load_vi_bindings
+from prompt_toolkit.key_binding.defaults import load_key_bindings
 from prompt_toolkit.key_binding.key_bindings import (
-    KeyBindings,
     KeyBindingsBase,
     _MergedKeyBindings,
-    merge_key_bindings,
 )
 
-# from prompt_toolkit.key_binding.key_processor import KeyPress
 from prompt_toolkit.keys import Keys
 
 
@@ -231,7 +227,9 @@ class HandlesMergedKB(KeyBindingsManager):
     """It might be easier to handle the insufferable discrepencies in implementation
     between _MergedKeyBindings and ConditionalKeyBindings through class attributes.
 
-    .. todo:: Unpacking the KeyBindings registry attribute.
+    .. todo::
+        Unpacking the KeyBindings registry attribute.
+
     """
 
     shell = get_ipython()

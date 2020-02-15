@@ -1,0 +1,262 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>default_profile.startup.ptoolkit &#8212; Dynamic IPython: version0.0.2</title>
+    
+    <link rel="stylesheet" href="../../../_static/scrolls.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/print.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script src="../../../_static/theme_extras.js"></script>
+    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/startup/ptoolkit.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<!-- <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" /> -->
+<!-- <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" media="screen" rel="stylesheet" type="text/css" /> -->
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <title>Floating label Demo</title>
+  <meta name="description" content="" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style type="text/css">
+    /* CSS styles */
+    /* Example by Matthias Benkort at http://codepen.io/KtorZ/pen/ZOzdqG */
+    @import url(
+      https://fonts.googleapis.com/css?family=Roboto:400,
+      300,
+      500,
+      700
+    );
+    .wrapper {
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .material-textfield {
+      display: inline-block;
+      height: 4rem;
+      padding-top: 2rem;
+    }
+    .material-textfield input {
+      background: none;
+      border: none;
+      box-sizing: border-box;
+      display: block;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 1rem;
+      padding: 0.25rem 0.1rem;
+      width: 100%;
+    }
+    .material-textfield input:invalid {
+      box-shadow: none;
+    }
+    .material-textfield input:focus {
+      outline: none;
+    }
+    .material-textfield label {
+      display: inline-block;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 0;
+      pointer-events: none;
+      position: relative;
+      text-transform: uppercase;
+      width: 100%;
+    }
+    .material-textfield label::before {
+      content: attr(data-content);
+      position: relative;
+      transition: all 0.2s ease;
+      will-change: font-size, top;
+    }
+    .material-textfield label::after {
+      bottom: 0.9rem;
+      content: "";
+      height: 0.3rem;
+      left: 50%;
+      position: absolute;
+      transition: all 0.2s ease;
+      width: 0;
+      will-change: width, left;
+    }
+    .material-textfield label::before,
+    .material-textfield input[required]:focus ~ label::before {
+      font-size: 0.75rem;
+      top: -3.25rem;
+    }
+    .material-textfield input:focus ~ label::after {
+      left: 0%;
+      width: 100%;
+    }
+    .material-textfield input:invalid ~ label::before {
+      font-size: 1rem;
+      top: -2rem;
+    }
+
+    .material-textfield.blue input {
+      border-bottom: 0.1rem solid #03a9f4;
+      color: #0275a8;
+    }
+    .material-textfield.blue label::after {
+      background: #03a9f4;
+    }
+    .material-textfield.blue label::before,
+    .material-textfield.blue input[required]:focus ~ label::before {
+      color: #47c4fd;
+    }
+    .material-textfield.blue input:invalid ~ label::before {
+      color: #03a9f4;
+    }
+
+    .material-textfield.red input {
+      border-bottom: 0.1rem solid #f44336;
+      color: #d2190b;
+    }
+    .material-textfield.red label::after {
+      background: #f44336;
+    }
+    .material-textfield.red label::before,
+    .material-textfield.red input[required]:focus ~ label::before {
+      color: #f8877f;
+    }
+    .material-textfield.red input:invalid ~ label::before {
+      color: #f44336;
+    }
+  </style>
+</head>
+
+  </head><body> 
+    <div id="content">
+      <div class="header">
+        <h1 class="heading"><a href="../../../index.html"
+          title="back to the documentation overview"><span>default_profile.startup.ptoolkit</span></a></h1>
+      </div>
+      <div class="relnav" role="navigation" aria-label="related navigation">
+        <a href="#">default_profile.startup.ptoolkit</a>
+      </div>
+      <div id="contentwrapper">
+        <div role="main">
+        
+<h1>Source code for default_profile.startup.ptoolkit</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">prompt_toolkit</span> <span class="kn">import</span> <span class="n">search</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.application.current</span> <span class="kn">import</span> <span class="n">get_app</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.enums</span> <span class="kn">import</span> <span class="n">DEFAULT_BUFFER</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.keys</span> <span class="kn">import</span> <span class="n">Keys</span>
+
+<span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+
+<span class="n">DEDENT_TOKENS</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">([</span><span class="s2">&quot;raise&quot;</span><span class="p">,</span> <span class="s2">&quot;return&quot;</span><span class="p">,</span> <span class="s2">&quot;pass&quot;</span><span class="p">,</span> <span class="s2">&quot;break&quot;</span><span class="p">,</span> <span class="s2">&quot;continue&quot;</span><span class="p">])</span>
+
+
+<div class="viewcode-block" id="get_app"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.get_app">[docs]</a><span class="k">def</span> <span class="nf">get_app</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;A patch to cover up the fact that get_app() returns a DummyApplication.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">get_ipython</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span></div>
+
+
+<div class="viewcode-block" id="Helpers"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers">[docs]</a><span class="k">class</span> <span class="nc">Helpers</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;I think this class is probably the easiest summary of my frustration.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Helpers.__init__"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Helpers.is_running"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.is_running">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">is_running</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{self.pt_app}</span><span class="s2">&quot;</span>
+
+<div class="viewcode-block" id="Helpers.app"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.app">[docs]</a>    <span class="k">def</span> <span class="nf">app</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_app</span> <span class="o">=</span> <span class="n">get_app</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Helpers.pt_app"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.pt_app">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">pt_app</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span></div>
+
+<div class="viewcode-block" id="Helpers.session"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.session">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">session</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">pt_app</span></div>
+
+<div class="viewcode-block" id="Helpers.pt_app_kb"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.pt_app_kb">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">pt_app_kb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Application instance keybindings.</span>
+
+<span class="sd">        NOT the same as &#39;session_kb&#39;.</span>
+
+<span class="sd">        In [103]: pt.pt_app_kb == pt.session_kb</span>
+<span class="sd">        Out[103]: False</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">key_bindings</span></div>
+
+<div class="viewcode-block" id="Helpers.session_kb"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.session_kb">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">session_kb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">key_bindings</span></div>
+
+<div class="viewcode-block" id="Helpers.app_layout"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.app_layout">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">app_layout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The same as session_layout *thank god*.</span>
+
+<span class="sd">        In [102]: pt.app_layout == pt.session_layout</span>
+<span class="sd">        Out[102]: True</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">layout</span></div>
+
+<div class="viewcode-block" id="Helpers.session_layout"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.session_layout">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">session_layout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">layout</span></div>
+
+<div class="viewcode-block" id="Helpers.layout"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.layout">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">layout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">app_layout</span></div>
+
+<div class="viewcode-block" id="Helpers.pt_app_style"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.pt_app_style">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">pt_app_style</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Of course it&#39;s not the same as the session_style.</span>
+
+<span class="sd">        In [108]: pt.pt_app.style</span>
+<span class="sd">        Out[108]: &lt;prompt_toolkit.styles.base.DynamicStyle at 0x7f164da54f40&gt;</span>
+
+<span class="sd">        In [109]: pt.session.style</span>
+<span class="sd">        Out[109]: &lt;prompt_toolkit.styles.base.DynamicStyle at 0x7f1658a90a30&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">style</span></div>
+
+<div class="viewcode-block" id="Helpers.session_style"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.session_style">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">session_style</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">style</span></div>
+
+<div class="viewcode-block" id="Helpers.buffer"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.buffer">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">buffer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">current_buffer</span></div>
+
+<div class="viewcode-block" id="Helpers.document"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.document">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">document</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="o">.</span><span class="n">document</span></div></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">pt</span> <span class="o">=</span> <span class="n">Helpers</span><span class="p">()</span>
+</pre></div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+      Last updated on Feb 14, 2020.
+    </div>
+  </body>
+</html>

@@ -1,5 +1,5 @@
 r"""Add keybindings.
-
+{{{
 Slowly becoming where all my consolidated scripts for making prompt_toolkit's
 handling of keypresses cohesive.
 
@@ -16,29 +16,31 @@ however, there's supposed to be ~500 key bindings so I'm excited.
 
 Btw what is this?
 
-Calling exit doesn't work?
+Calling exit doesn't work?::
 
-[ins] In [2]: _ip.pt_app.app
-Out[2]: <prompt_toolkit.application.application.Application at 0x1f26c275250>
+    In [2]: _ip.pt_app.app
+    Out[2]: <prompt_toolkit.application.application.Application at 0x1f26c275250>
 
-[ins] In [3]: _ip.pt_app.app.exit()
----------------------------------------------------------------------------
-Exception                                 Traceback (most recent call last)
-<ipython-input-3-8964da7b84f6> in <module>
-----> 1 _ip.pt_app.app.exit()
-        global _ip.pt_app.app.exit = <bound method Application.exit of <prompt_toolkit.application.application.Application object at 0x000001F26C275250>>
+    In [3]: _ip.pt_app.app.exit()
 
-~\scoop\apps\winpython\current\python-3.8.1.amd64\lib\site-packages\prompt_toolkit\application\application.py in exit(self=<prompt_toolkit.application.application.Application object>, result=None, exception=None, style='')
-    771
-    772         if self.future.done():
---> 773             raise Exception(
-        global Exception = undefined
-    774                 'Return value already set. Application.exit() failed.')
-    775
+    Exception                                 Traceback (most recent call last)
+    <ipython-input-3-8964da7b84f6> in <module>
+    ----> 1 _ip.pt_app.app.exit()
+            global _ip.pt_app.app.exit = <bound method Application.exit of <prompt_toolkit.application.application.Application object at 0x000001F26C275250>>
 
-Exception: Return value already set. Application.exit() failed.
+    ~\scoop\apps\winpython\current\python-3.8.1.amd64\lib\site-packages\prompt_toolkit\application\application.py in exit(self=<prompt_toolkit.application.application.Application object>, result=None, exception=None, style='')
+        771
+        772         if self.future.done():
+    --> 773             raise Exception(
+            global Exception = undefined
+        774                 'Return value already set. Application.exit() failed.')
+        775
 
+    Exception: Return value already set. Application.exit() failed.
+
+}}}
 """
+# {{{
 from collections import namedtuple
 import ctypes
 import functools
@@ -86,18 +88,15 @@ from prompt_toolkit.selection import SelectionState
 from IPython.core.getipython import get_ipython
 from IPython.terminal.shortcuts import create_ipython_shortcuts
 
+from default_profile.startup.ptoolkit import get_app
+
+# }}}
 
 E = KeyPressEvent
 insert_mode = vi_insert_mode | emacs_insert_mode
 
 
-def get_app():
-    """A patch to cover up the fact that get_app() returns a DummyApplication."""
-    if get_ipython() is not None:
-        return get_ipython().pt_app.app
-
-
-# Conditions:
+# Conditions: {{{
 
 
 @Condition
@@ -222,7 +221,10 @@ def switch_to_navigation_mode(event):
     vi_state.input_mode = InputMode.NAVIGATION
 
 
-def get_key_bindings(custom_key_bindings=None):
+# }}}
+
+
+def get_key_bindings(custom_key_bindings=None):  # {{{
     """
     The ``__init__`` for `_MergedKeyBindings` features this.:
 
@@ -239,89 +241,55 @@ def get_key_bindings(custom_key_bindings=None):
         load_auto_suggest_bindings,
     )
     from prompt_toolkit.key_binding.bindings.cpr import load_cpr_bindings
-    from prompt_toolkit.key_binding.bindings.emacs import (
-        load_emacs_bindings,
-        load_emacs_search_bindings,
-    )
+
+    # from prompt_toolkit.key_binding.bindings.emacs import (
+    #     load_emacs_bindings,
+    #     load_emacs_search_bindings,
+    # )
     from prompt_toolkit.key_binding.bindings.mouse import load_mouse_bindings
+    from prompt_toolkit.key_binding.defaults import load_key_bindings
 
     # This covers the search module too
     # from prompt_toolkit.key_binding.bindings.page_navigation import (
     #     load_page_navigation_bindings,
     # )
-    from prompt_toolkit.key_binding.bindings.vi import (
-        load_vi_bindings,
-        load_vi_search_bindings,
-    )
+    # from prompt_toolkit.key_binding.bindings.vi import (
+    #     load_vi_bindings,
+    #     load_vi_search_bindings,
+    # )
 
-    return [
+    kb = [
         load_auto_suggest_bindings(),
         load_cpr_bindings(),
-        load_emacs_bindings(),
-        load_emacs_search_bindings(),
-        load_vi_bindings(),
-        load_vi_search_bindings(),
+        # load_emacs_bindings(),
+        # load_emacs_search_bindings(),
+        # load_vi_bindings(),
+        # load_vi_search_bindings(),
+        load_key_bindings(),
         load_mouse_bindings(),
         # load_page_navigation_bindings(),
         create_ipython_shortcuts(get_ipython()),
-        custom_key_bindings,
     ]
+    if custom_key_bindings is not None:
+        kb.append(custom_key_bindings)
+
+    return kb  # }}}
 
 
-def add_bindings():
+def add_bindings():  # {{{
     registry = KeyBindings()
 
     handle = registry.add
-    handle(Keys.ControlI)(display_completions_like_readline)
 
-    # insert mode
-
-    @handle("c-o", filter=insert_mode)
-    def _(event: E) -> None:
-        """
-        Go into normal mode for one single action.
-        """
-        event.app.vi_state.temporary_navigation_mode = True
-
-    handle("j", "k", filter=insert_mode)(switch_to_navigation_mode)
-
+    # basic: {{{
     handle("home")(get_by_name("beginning-of-line"))
     handle(Keys.ControlA, filter=insert_mode)(get_by_name("beginning-of-line"))
 
     handle("end")(get_by_name("end-of-line"))
     handle(Keys.ControlE, filter=insert_mode)(get_by_name("end-of-line"))
 
-    # just snagged a new one from prompt_toolkit.key_binding.bindings.vi
-
-    @handle(Keys.ControlX, Keys.ControlL, filter=insert_mode)
-    def _(event: E) -> None:
-        """
-        Pressing the ControlX - ControlL sequence in Vi mode does line
-        completion based on the other lines in the document and the history.
-        """
-        event.current_buffer.start_history_lines_completion()
-
-    # In navigation mode, pressing enter will always return the input.
-    handle("enter", filter=vi_navigation_mode & is_returnable)(
-        get_by_name("accept-line")
-    )
-
-    # In insert mode, also accept input when enter is pressed, and the buffer
-    # has been marked as single line.
-    handle("enter", filter=is_returnable & ~is_multiline)(get_by_name("accept-line"))
-
-    @handle("enter", filter=~is_returnable & vi_navigation_mode)
-    def _(event: E) -> None:
-        """
-        Go to the beginning of next line.
-        """
-        b = event.current_buffer
-        b.cursor_down(count=event.arg)
-        b.cursor_position += b.document.get_start_of_line_position(
-            after_whitespace=True
-        )
-
-    # ** In navigation mode **
+    # }}}
+    # ** In navigation mode **: {{{
     # Shit this should get broken up into it's own function it's really
     # hard to navigate around
     # List of navigation commands: http://hea-www.harvard.edu/~fine/Tech/vi.html
@@ -433,6 +401,67 @@ def add_bindings():
         event.current_buffer.cursor_position += event.current_buffer.document.get_cursor_left_position(
             count=event.arg
         )
+        # }}}
+
+    # vi insert mode: {{{
+
+    # apparently that function requires a positional parameter 'data'
+    # fuckkkk if we ocmment it out we lose autocompletion
+    @handle(Keys.Tab, filter=tab_insert_indent & insert_mode)
+    def insert_indent(event):
+        """If there are only whitespaces before current cursor position insert
+        indent instead of autocompleting.
+        """
+        event.cli.current_buffer.insert_text()
+
+    @handle(Keys.BackTab, filter=insert_mode)
+    def insert_literal_tab(event):
+        """ Insert literal tab on Shift+Tab instead of autocompleting """
+        b = event.current_buffer
+        if b.complete_state:
+            b.complete_previous()
+        else:
+            event.cli.current_buffer.insert_text("    ")
+
+    handle(Keys.ControlI)(display_completions_like_readline)
+
+    @handle("c-o", filter=insert_mode)
+    def _(event: E) -> None:
+        """
+        Go into normal mode for one single action.
+        """
+        event.app.vi_state.temporary_navigation_mode = True
+
+    handle("j", "k", filter=insert_mode)(switch_to_navigation_mode)
+    # In navigation mode, pressing enter will always return the input.
+    handle("enter", filter=vi_navigation_mode & is_returnable)(
+        get_by_name("accept-line")
+    )
+
+    # In insert mode, also accept input when enter is pressed, and the buffer
+    # has been marked as single line.
+    handle("enter", filter=is_returnable & ~is_multiline)(get_by_name("accept-line"))
+
+    @handle("enter", filter=~is_returnable & vi_navigation_mode)
+    def _(event: E) -> None:
+        """
+        Go to the beginning of next line.
+        """
+        b = event.current_buffer
+        b.cursor_down(count=event.arg)
+        b.cursor_position += b.document.get_start_of_line_position(
+            after_whitespace=True
+        )
+
+    # just snagged a new one from prompt_toolkit.key_binding.bindings.vi
+
+    @handle(Keys.ControlX, Keys.ControlL, filter=insert_mode)
+    def _(event: E) -> None:
+        """
+        Pressing the ControlX - ControlL sequence in Vi mode does line
+        completion based on the other lines in the document and the history.
+        """
+        event.current_buffer.start_history_lines_completion()
 
     @handle(Keys.ControlN, filter=insert_mode)
     def start_or_cycle_completions(event: E) -> None:
@@ -516,8 +545,9 @@ def add_bindings():
     # Control-W should delete, using whitespace as separator, while M-Del
     # should delete using [^a-zA-Z0-9] as a boundary.
     handle(Keys.ControlW, filter=insert_mode)(get_by_name("unix-word-rubout"))
+    # }}}
 
-    ### Emacs:
+    ### Emacs: {{{
 
     handle(Keys.ControlA)(get_by_name("beginning-of-line"))
     handle(Keys.ControlB)(get_by_name("backward-char"))
@@ -573,6 +603,9 @@ def add_bindings():
         else:
             buffer.cursor_position += buffer.document.get_end_of_line_position()
 
+    # }}}
+
+    # Has selection: {{{
     @handle("c-@")  # Control-space or Control-@
     def _(event):
         """
@@ -629,7 +662,9 @@ def add_bindings():
         data = event.current_buffer.cut_selection()
         event.app.clipboard.set_data(data)
 
-    # Global bindings.
+    # }}}
+
+    # Global bindings.: {{{
 
     # @handle(Keys.ControlZ)
     # def suspend_to_bg(event: E) -> None:
@@ -708,9 +743,9 @@ def add_bindings():
         else:
             event.current_buffer.delete(count=event.arg)
 
-#     handle("c-d", filter=has_text_before_cursor & insert_mode)(
-#         get_by_name("delete-char")
-#     )
+    #     handle("c-d", filter=has_text_before_cursor & insert_mode)(
+    #         get_by_name("delete-char")
+    #     )
 
     # this doesn't do what you'd expect.
     # handle(Keys.ControlD)(get_by_name("end-of-file"))
@@ -722,24 +757,7 @@ def add_bindings():
         # ugh why isn't this working :(
         event.app.exit(result=False)
 
-    # apparently that function requires a positional parameter 'data'
-    # fuckkkk if we ocmment it out we lose autocompletion
-    @handle(Keys.Tab, filter=tab_insert_indent & insert_mode)
-    def insert_indent(event):
-        """If there are only whitespaces before current cursor position insert
-        indent instead of autocompleting.
-        """
-        event.cli.current_buffer.insert_text()
-
-
-    @handle(Keys.BackTab, filter=insert_mode)
-    def insert_literal_tab(event):
-        """ Insert literal tab on Shift+Tab instead of autocompleting """
-        b = event.current_buffer
-        if b.complete_state:
-            b.complete_previous()
-        else:
-            event.cli.current_buffer.insert_text("    ")
+    # }}}
 
     # matchit: {{{
 
@@ -823,6 +841,7 @@ def add_bindings():
         buffer.delete_before_cursor(1)
 
     # }}}
+
     # autosuggest: {{{
 
     @handle("c-f", filter=suggestion_available)
@@ -848,18 +867,25 @@ def add_bindings():
     handle(Keys.Any, filter=insert_mode, save_before=if_no_repeat)(
         get_by_name("self-insert")
     )
-
+    # }}}
     # return ConditionalKeyBindings(registry, filter=buffer_has_focus)
-    return registry
+    return registry  # }}}
 
+
+def get_extra_bindings():  # }}}
+    pass
+
+
+# }}}
 
 if __name__ == "__main__":
 
     _ip = get_ipython()
     if _ip is not None:
-        _ip.pt_app.app.output.enable_bracketed_paste()
-        bindings = add_bindings()
-        extra_bindings = merge_key_bindings(get_key_bindings(bindings))
+        # bindings = add_bindings()
+        # Let's see if i can't get a more consistent result without my bindings
+        extra_bindings = merge_key_bindings(get_key_bindings())
         _ip.pt_app.app.key_bindings = extra_bindings
+        _ip.pt_app.app.output.enable_bracketed_paste()
 
-# Vim: set fdm=marker:
+# Vim: set fdm=marker fdls=0:

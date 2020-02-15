@@ -1,26 +1,22 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
+# Whoa!::
 
-Whoa!::
-
-    In [15]: trio_traiging('base16.py')
-    Out[15]: <async_generator object trio_traiging at 0x7f9471739310>
-
-"""
+#     In [15]: trio_traiging('base16.py')
+#     Out[15]: <async_generator object trio_traiging at 0x7f9471739310>
 import sys
 
 try:
     from trio import run
 except:
     from asyncio.runners import run
-
     trio = None
 else:
     import trio
 
 
 async def trio_traiging(filename):
+    # how does yield from work?
     if trio is None:
         return
     async with await trio.open_file(filename) as f:

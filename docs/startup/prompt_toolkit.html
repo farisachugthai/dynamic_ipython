@@ -154,10 +154,7 @@
           <h3>Table of Contents</h3>
           <ul>
 <li><a class="reference internal" href="#">Prompt Toolkit</a><ul>
-<li><a class="reference internal" href="#module-default_profile.startup.31_yank_last_arg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">31_yank_last_arg</span></code></a><ul>
-<li><a class="reference internal" href="#ins-in-3-ip-pt-app-app-exit">[ins] In [3]: _ip.pt_app.app.exit()</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#module-default_profile.startup.31_yank_last_arg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">31_yank_last_arg</span></code></a></li>
 <li><a class="reference internal" href="#kb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">32_kb</span></code></a><ul>
 <li><a class="reference internal" href="#summary">Summary</a></li>
 <li><a class="reference internal" href="#fun-with-vim">Fun with Vim</a></li>
@@ -191,35 +188,29 @@ however, there’s supposed to be ~500 key bindings so I’m excited.</p>
 <p>This is very experimental code.</p>
 </div>
 <p>Btw what is this?</p>
-<p>Calling exit doesn’t work?</p>
-<p>[ins] In [2]: _ip.pt_app.app
-Out[2]: &lt;prompt_toolkit.application.application.Application at 0x1f26c275250&gt;</p>
-<div class="section" id="ins-in-3-ip-pt-app-app-exit">
-<h3>[ins] In [3]: _ip.pt_app.app.exit()<a class="headerlink" href="#ins-in-3-ip-pt-app-app-exit" title="Permalink to this headline">¶</a></h3>
-<p>Exception                                 Traceback (most recent call last)
-&lt;ipython-input-3-8964da7b84f6&gt; in &lt;module&gt;
-—-&gt; 1 _ip.pt_app.app.exit()</p>
-<blockquote>
-<div><p>global _ip.pt_app.app.exit = &lt;bound method Application.exit of &lt;prompt_toolkit.application.application.Application object at 0x000001F26C275250&gt;&gt;</p>
-</div></blockquote>
-<dl>
-<dt>~scoopappswinpythoncurrentpython-3.8.1.amd64libsite-packagesprompt_toolkitapplicationapplication.py in exit(self=&lt;prompt_toolkit.application.application.Application object&gt;, result=None, exception=None, style=’’)</dt><dd><p>771
-772         if self.future.done():</p>
-</dd>
-<dt>–&gt; 773             raise Exception(</dt><dd><blockquote>
-<div><p>global Exception = undefined</p>
-</div></blockquote>
-<p>774                 ‘Return value already set. Application.exit() failed.’)
-775</p>
-</dd>
-</dl>
-<p>Exception: Return value already set. Application.exit() failed.</p>
-<dl class="function">
-<dt id="default_profile.startup.31_yank_last_arg.get_app">
-<code class="sig-prename descclassname">default_profile.startup.31_yank_last_arg.</code><code class="sig-name descname">get_app</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/31_yank_last_arg.html#get_app"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.31_yank_last_arg.get_app" title="Permalink to this definition">¶</a></dt>
-<dd><p>A patch to cover up the fact that get_app() returns a DummyApplication.</p>
-</dd></dl>
+<p>Calling exit doesn’t work?:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">Application</span> <span class="n">at</span> <span class="mh">0x1f26c275250</span><span class="o">&gt;</span>
 
+<span class="n">In</span> <span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+
+<span class="ne">Exception</span>                                 <span class="n">Traceback</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">)</span>
+<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">3</span><span class="o">-</span><span class="mi">8964</span><span class="n">da7b84f6</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="o">----&gt;</span> <span class="mi">1</span> <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+        <span class="k">global</span> <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">exit</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">bound</span> <span class="n">method</span> <span class="n">Application</span><span class="o">.</span><span class="n">exit</span> <span class="n">of</span> <span class="o">&lt;</span><span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">Application</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x000001F26C275250</span><span class="o">&gt;&gt;</span>
+
+<span class="o">~</span>\<span class="n">scoop</span>\<span class="n">apps</span>\<span class="n">winpython</span>\<span class="n">current</span>\<span class="n">python</span><span class="o">-</span><span class="mf">3.8</span><span class="o">.</span><span class="mf">1.</span><span class="n">amd64</span>\<span class="n">lib</span>\<span class="n">site</span><span class="o">-</span><span class="n">packages</span>\<span class="n">prompt_toolkit</span>\<span class="n">application</span>\<span class="n">application</span><span class="o">.</span><span class="n">py</span> <span class="ow">in</span> <span class="n">exit</span><span class="p">(</span><span class="bp">self</span><span class="o">=&lt;</span><span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">Application</span> <span class="nb">object</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exception</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="mi">771</span>
+    <span class="mi">772</span>         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">future</span><span class="o">.</span><span class="n">done</span><span class="p">():</span>
+<span class="o">--&gt;</span> <span class="mi">773</span>             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+        <span class="k">global</span> <span class="ne">Exception</span> <span class="o">=</span> <span class="n">undefined</span>
+    <span class="mi">774</span>                 <span class="s1">&#39;Return value already set. Application.exit() failed.&#39;</span><span class="p">)</span>
+    <span class="mi">775</span>
+
+<span class="ne">Exception</span><span class="p">:</span> <span class="n">Return</span> <span class="n">value</span> <span class="n">already</span> <span class="nb">set</span><span class="o">.</span> <span class="n">Application</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span> <span class="n">failed</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>}}}</p>
 <dl class="function">
 <dt id="default_profile.startup.31_yank_last_arg.switch_to_navigation_mode">
 <code class="sig-prename descclassname">default_profile.startup.31_yank_last_arg.</code><code class="sig-name descname">switch_to_navigation_mode</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/31_yank_last_arg.html#switch_to_navigation_mode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.31_yank_last_arg.switch_to_navigation_mode" title="Permalink to this definition">¶</a></dt>
@@ -249,7 +240,11 @@ self.registries = registries</p>
 <code class="sig-prename descclassname">default_profile.startup.31_yank_last_arg.</code><code class="sig-name descname">add_bindings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/31_yank_last_arg.html#add_bindings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.31_yank_last_arg.add_bindings" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-</div>
+<dl class="function">
+<dt id="default_profile.startup.31_yank_last_arg.get_extra_bindings">
+<code class="sig-prename descclassname">default_profile.startup.31_yank_last_arg.</code><code class="sig-name descname">get_extra_bindings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/31_yank_last_arg.html#get_extra_bindings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.31_yank_last_arg.get_extra_bindings" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </div>
 <div class="section" id="kb">
 <h2><a class="reference internal" href="#module-default_profile.startup.32_kb" title="default_profile.startup.32_kb: Begin reworking prompt_toolkit's keybindings."><code class="xref py py-obj docutils literal notranslate"><span class="pre">32_kb</span></code></a><a class="headerlink" href="#kb" title="Permalink to this headline">¶</a></h2>
@@ -1040,6 +1035,12 @@ are terminated at newlines, so that paging the output works correctly.</p>
 </div>
 <div class="section" id="module-default_profile.startup.ptoolkit">
 <span id="ptoolkit"></span><h2><a class="reference internal" href="#module-default_profile.startup.ptoolkit" title="default_profile.startup.ptoolkit: Generate a more generalized class to interact with prompt_toolkit."><code class="xref py py-mod docutils literal notranslate"><span class="pre">ptoolkit</span></code></a><a class="headerlink" href="#module-default_profile.startup.ptoolkit" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="default_profile.startup.ptoolkit.get_app">
+<code class="sig-prename descclassname">default_profile.startup.ptoolkit.</code><code class="sig-name descname">get_app</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#get_app"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.get_app" title="Permalink to this definition">¶</a></dt>
+<dd><p>A patch to cover up the fact that get_app() returns a DummyApplication.</p>
+</dd></dl>
+
 <dl class="class">
 <dt id="default_profile.startup.ptoolkit.Helpers">
 <em class="property">class </em><code class="sig-prename descclassname">default_profile.startup.ptoolkit.</code><code class="sig-name descname">Helpers</code><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#Helpers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.Helpers" title="Permalink to this definition">¶</a></dt>

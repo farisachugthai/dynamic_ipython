@@ -151,27 +151,23 @@
 <h1>Source code for default_profile.util.trio_testing</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># Whoa!::</span>
 
-<span class="sd">Whoa!::</span>
-
-<span class="sd">    In [15]: trio_traiging(&#39;base16.py&#39;)</span>
-<span class="sd">    Out[15]: &lt;async_generator object trio_traiging at 0x7f9471739310&gt;</span>
-
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1">#     In [15]: trio_traiging(&#39;base16.py&#39;)</span>
+<span class="c1">#     Out[15]: &lt;async_generator object trio_traiging at 0x7f9471739310&gt;</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">trio</span> <span class="kn">import</span> <span class="n">run</span>
 <span class="k">except</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">asyncio.runners</span> <span class="kn">import</span> <span class="n">run</span>
-
     <span class="n">trio</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">trio</span>
 
 
 <div class="viewcode-block" id="trio_traiging"><a class="viewcode-back" href="../../../util/trio_testing.html#default_profile.util.trio_testing.trio_traiging">[docs]</a><span class="k">async</span> <span class="k">def</span> <span class="nf">trio_traiging</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="c1"># how does yield from work?</span>
     <span class="k">if</span> <span class="n">trio</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span>
     <span class="k">async</span> <span class="k">with</span> <span class="k">await</span> <span class="n">trio</span><span class="o">.</span><span class="n">open_file</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>

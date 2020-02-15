@@ -159,8 +159,11 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">platform</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">import</span> <span class="nn">sys</span>
 
+<span class="kn">from</span> <span class="nn">IPython.core.magic</span> <span class="kn">import</span> <span class="n">line_magic</span><span class="p">,</span> <span class="n">Magics</span><span class="p">,</span> <span class="n">magics_class</span>
 <span class="kn">from</span> <span class="nn">IPython.core.error</span> <span class="kn">import</span> <span class="n">TryNext</span>
 <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.clipboard.base</span> <span class="kn">import</span> <span class="n">ClipboardData</span><span class="p">,</span> <span class="n">Clipboard</span>
@@ -296,6 +299,52 @@
         <span class="n">root</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">text</span></div>
 
+
+<div class="viewcode-block" id="ClipboardMagics"><a class="viewcode-back" href="../../../startup/clipboard.html#default_profile.startup.11_clipboard.ClipboardMagics">[docs]</a><span class="nd">@magics_class</span>
+<span class="k">class</span> <span class="nc">ClipboardMagics</span><span class="p">(</span><span class="n">Magics</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Haven&#39;t seen it implemented in a different way than this.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ClipboardMagics.__init__"><a class="viewcode-back" href="../../../startup/clipboard.html#default_profile.startup.11_clipboard.ClipboardMagics.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Bind the IPython instance and it&#39;s config and parent attributes.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">shell</span> <span class="ow">or</span> <span class="n">get_ipython</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="p">,</span> <span class="s2">&quot;config&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">config</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="p">,</span> <span class="s2">&quot;parent&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">parent</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&lt;</span><span class="si">{}</span><span class="s2">&gt;:&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ClipboardMagics.load_ipython_extension"><a class="viewcode-back" href="../../../startup/clipboard.html#default_profile.startup.11_clipboard.ClipboardMagics.load_ipython_extension">[docs]</a>    <span class="k">def</span> <span class="nf">load_ipython_extension</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sep 20, 2019: Works!&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">set_hook</span><span class="p">(</span><span class="s2">&quot;clipboard_get&quot;</span><span class="p">,</span> <span class="n">termux_clipboard_get</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ClipboardMagics.termux_clipboard_get"><a class="viewcode-back" href="../../../startup/clipboard.html#default_profile.startup.11_clipboard.ClipboardMagics.termux_clipboard_get">[docs]</a>    <span class="nd">@line_magic</span>
+    <span class="k">def</span> <span class="nf">termux_clipboard_get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;termux-clipboard-get&quot;</span><span class="p">):</span>
+            <span class="k">return</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="s2">&quot;termux-clipboard-get&quot;</span><span class="p">],</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">stdout</span>
+        <span class="k">return</span> <span class="n">text</span></div>
+
+<div class="viewcode-block" id="ClipboardMagics.pyperclip_magic"><a class="viewcode-back" href="../../../startup/clipboard.html#default_profile.startup.11_clipboard.ClipboardMagics.pyperclip_magic">[docs]</a>    <span class="nd">@line_magic</span>
+    <span class="k">def</span> <span class="nf">pyperclip_magic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># This is what you were looking for.</span>
+            <span class="kn">from</span> <span class="nn">prompt_toolkit.clipboard.pyperclip</span> <span class="kn">import</span> <span class="n">PyperclipClipboard</span>
+        <span class="k">except</span> <span class="n">ModuleNotFoundError</span><span class="p">:</span>
+            <span class="c1"># womp</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;pyperclip not imported.&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">clipboard</span> <span class="o">=</span> <span class="n">PyperclipClipboard</span><span class="p">()</span></div></div>
 
 <div class="viewcode-block" id="UsefulClipboard"><a class="viewcode-back" href="../../../startup/clipboard.html#default_profile.startup.11_clipboard.UsefulClipboard">[docs]</a><span class="k">class</span> <span class="nc">UsefulClipboard</span><span class="p">(</span><span class="n">Clipboard</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Clipboard class that can dynamically returns any Clipboard.</span>

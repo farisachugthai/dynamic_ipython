@@ -150,7 +150,7 @@
         
 <h1>Source code for default_profile.startup.31_yank_last_arg</h1><div class="highlight"><pre>
 <span></span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Add keybindings.</span>
-
+<span class="sd">{{{</span>
 <span class="sd">Slowly becoming where all my consolidated scripts for making prompt_toolkit&#39;s</span>
 <span class="sd">handling of keypresses cohesive.</span>
 
@@ -167,29 +167,31 @@
 
 <span class="sd">Btw what is this?</span>
 
-<span class="sd">Calling exit doesn&#39;t work?</span>
+<span class="sd">Calling exit doesn&#39;t work?::</span>
 
-<span class="sd">[ins] In [2]: _ip.pt_app.app</span>
-<span class="sd">Out[2]: &lt;prompt_toolkit.application.application.Application at 0x1f26c275250&gt;</span>
+<span class="sd">    In [2]: _ip.pt_app.app</span>
+<span class="sd">    Out[2]: &lt;prompt_toolkit.application.application.Application at 0x1f26c275250&gt;</span>
 
-<span class="sd">[ins] In [3]: _ip.pt_app.app.exit()</span>
-<span class="sd">---------------------------------------------------------------------------</span>
-<span class="sd">Exception                                 Traceback (most recent call last)</span>
-<span class="sd">&lt;ipython-input-3-8964da7b84f6&gt; in &lt;module&gt;</span>
-<span class="sd">----&gt; 1 _ip.pt_app.app.exit()</span>
-<span class="sd">        global _ip.pt_app.app.exit = &lt;bound method Application.exit of &lt;prompt_toolkit.application.application.Application object at 0x000001F26C275250&gt;&gt;</span>
+<span class="sd">    In [3]: _ip.pt_app.app.exit()</span>
 
-<span class="sd">~\scoop\apps\winpython\current\python-3.8.1.amd64\lib\site-packages\prompt_toolkit\application\application.py in exit(self=&lt;prompt_toolkit.application.application.Application object&gt;, result=None, exception=None, style=&#39;&#39;)</span>
-<span class="sd">    771</span>
-<span class="sd">    772         if self.future.done():</span>
-<span class="sd">--&gt; 773             raise Exception(</span>
-<span class="sd">        global Exception = undefined</span>
-<span class="sd">    774                 &#39;Return value already set. Application.exit() failed.&#39;)</span>
-<span class="sd">    775</span>
+<span class="sd">    Exception                                 Traceback (most recent call last)</span>
+<span class="sd">    &lt;ipython-input-3-8964da7b84f6&gt; in &lt;module&gt;</span>
+<span class="sd">    ----&gt; 1 _ip.pt_app.app.exit()</span>
+<span class="sd">            global _ip.pt_app.app.exit = &lt;bound method Application.exit of &lt;prompt_toolkit.application.application.Application object at 0x000001F26C275250&gt;&gt;</span>
 
-<span class="sd">Exception: Return value already set. Application.exit() failed.</span>
+<span class="sd">    ~\scoop\apps\winpython\current\python-3.8.1.amd64\lib\site-packages\prompt_toolkit\application\application.py in exit(self=&lt;prompt_toolkit.application.application.Application object&gt;, result=None, exception=None, style=&#39;&#39;)</span>
+<span class="sd">        771</span>
+<span class="sd">        772         if self.future.done():</span>
+<span class="sd">    --&gt; 773             raise Exception(</span>
+<span class="sd">            global Exception = undefined</span>
+<span class="sd">        774                 &#39;Return value already set. Application.exit() failed.&#39;)</span>
+<span class="sd">        775</span>
 
+<span class="sd">    Exception: Return value already set. Application.exit() failed.</span>
+
+<span class="sd">}}}</span>
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># {{{</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
 <span class="kn">import</span> <span class="nn">ctypes</span>
 <span class="kn">import</span> <span class="nn">functools</span>
@@ -237,18 +239,15 @@
 <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 <span class="kn">from</span> <span class="nn">IPython.terminal.shortcuts</span> <span class="kn">import</span> <span class="n">create_ipython_shortcuts</span>
 
+<span class="kn">from</span> <span class="nn">default_profile.startup.ptoolkit</span> <span class="kn">import</span> <span class="n">get_app</span>
+
+<span class="c1"># }}}</span>
 
 <span class="n">E</span> <span class="o">=</span> <span class="n">KeyPressEvent</span>
 <span class="n">insert_mode</span> <span class="o">=</span> <span class="n">vi_insert_mode</span> <span class="o">|</span> <span class="n">emacs_insert_mode</span>
 
 
-<div class="viewcode-block" id="get_app"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.31_yank_last_arg.get_app">[docs]</a><span class="k">def</span> <span class="nf">get_app</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;A patch to cover up the fact that get_app() returns a DummyApplication.&quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">get_ipython</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span></div>
-
-
-<span class="c1"># Conditions:</span>
+<span class="c1"># Conditions: {{{</span>
 
 
 <span class="nd">@Condition</span>
@@ -373,7 +372,10 @@
     <span class="n">vi_state</span><span class="o">.</span><span class="n">input_mode</span> <span class="o">=</span> <span class="n">InputMode</span><span class="o">.</span><span class="n">NAVIGATION</span></div>
 
 
-<div class="viewcode-block" id="get_key_bindings"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.31_yank_last_arg.get_key_bindings">[docs]</a><span class="k">def</span> <span class="nf">get_key_bindings</span><span class="p">(</span><span class="n">custom_key_bindings</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="c1"># }}}</span>
+
+
+<div class="viewcode-block" id="get_key_bindings"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.31_yank_last_arg.get_key_bindings">[docs]</a><span class="k">def</span> <span class="nf">get_key_bindings</span><span class="p">(</span><span class="n">custom_key_bindings</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  <span class="c1"># {{{</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The ``__init__`` for `_MergedKeyBindings` features this.:</span>
 
@@ -390,89 +392,55 @@
         <span class="n">load_auto_suggest_bindings</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.cpr</span> <span class="kn">import</span> <span class="n">load_cpr_bindings</span>
-    <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.emacs</span> <span class="kn">import</span> <span class="p">(</span>
-        <span class="n">load_emacs_bindings</span><span class="p">,</span>
-        <span class="n">load_emacs_search_bindings</span><span class="p">,</span>
-    <span class="p">)</span>
+
+    <span class="c1"># from prompt_toolkit.key_binding.bindings.emacs import (</span>
+    <span class="c1">#     load_emacs_bindings,</span>
+    <span class="c1">#     load_emacs_search_bindings,</span>
+    <span class="c1"># )</span>
     <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.mouse</span> <span class="kn">import</span> <span class="n">load_mouse_bindings</span>
+    <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.defaults</span> <span class="kn">import</span> <span class="n">load_key_bindings</span>
 
     <span class="c1"># This covers the search module too</span>
     <span class="c1"># from prompt_toolkit.key_binding.bindings.page_navigation import (</span>
     <span class="c1">#     load_page_navigation_bindings,</span>
     <span class="c1"># )</span>
-    <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.vi</span> <span class="kn">import</span> <span class="p">(</span>
-        <span class="n">load_vi_bindings</span><span class="p">,</span>
-        <span class="n">load_vi_search_bindings</span><span class="p">,</span>
-    <span class="p">)</span>
+    <span class="c1"># from prompt_toolkit.key_binding.bindings.vi import (</span>
+    <span class="c1">#     load_vi_bindings,</span>
+    <span class="c1">#     load_vi_search_bindings,</span>
+    <span class="c1"># )</span>
 
-    <span class="k">return</span> <span class="p">[</span>
+    <span class="n">kb</span> <span class="o">=</span> <span class="p">[</span>
         <span class="n">load_auto_suggest_bindings</span><span class="p">(),</span>
         <span class="n">load_cpr_bindings</span><span class="p">(),</span>
-        <span class="n">load_emacs_bindings</span><span class="p">(),</span>
-        <span class="n">load_emacs_search_bindings</span><span class="p">(),</span>
-        <span class="n">load_vi_bindings</span><span class="p">(),</span>
-        <span class="n">load_vi_search_bindings</span><span class="p">(),</span>
+        <span class="c1"># load_emacs_bindings(),</span>
+        <span class="c1"># load_emacs_search_bindings(),</span>
+        <span class="c1"># load_vi_bindings(),</span>
+        <span class="c1"># load_vi_search_bindings(),</span>
+        <span class="n">load_key_bindings</span><span class="p">(),</span>
         <span class="n">load_mouse_bindings</span><span class="p">(),</span>
         <span class="c1"># load_page_navigation_bindings(),</span>
         <span class="n">create_ipython_shortcuts</span><span class="p">(</span><span class="n">get_ipython</span><span class="p">()),</span>
-        <span class="n">custom_key_bindings</span><span class="p">,</span>
-    <span class="p">]</span></div>
+    <span class="p">]</span>
+    <span class="k">if</span> <span class="n">custom_key_bindings</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">kb</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">custom_key_bindings</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">kb</span>  <span class="c1"># }}}</span></div>
 
 
-<div class="viewcode-block" id="add_bindings"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.31_yank_last_arg.add_bindings">[docs]</a><span class="k">def</span> <span class="nf">add_bindings</span><span class="p">():</span>
+<div class="viewcode-block" id="add_bindings"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.31_yank_last_arg.add_bindings">[docs]</a><span class="k">def</span> <span class="nf">add_bindings</span><span class="p">():</span>  <span class="c1"># {{{</span>
     <span class="n">registry</span> <span class="o">=</span> <span class="n">KeyBindings</span><span class="p">()</span>
 
     <span class="n">handle</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">add</span>
-    <span class="n">handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlI</span><span class="p">)(</span><span class="n">display_completions_like_readline</span><span class="p">)</span>
 
-    <span class="c1"># insert mode</span>
-
-    <span class="nd">@handle</span><span class="p">(</span><span class="s2">&quot;c-o&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">E</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Go into normal mode for one single action.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">event</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">vi_state</span><span class="o">.</span><span class="n">temporary_navigation_mode</span> <span class="o">=</span> <span class="kc">True</span>
-
-    <span class="n">handle</span><span class="p">(</span><span class="s2">&quot;j&quot;</span><span class="p">,</span> <span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">)(</span><span class="n">switch_to_navigation_mode</span><span class="p">)</span>
-
+    <span class="c1"># basic: {{{</span>
     <span class="n">handle</span><span class="p">(</span><span class="s2">&quot;home&quot;</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;beginning-of-line&quot;</span><span class="p">))</span>
     <span class="n">handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlA</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;beginning-of-line&quot;</span><span class="p">))</span>
 
     <span class="n">handle</span><span class="p">(</span><span class="s2">&quot;end&quot;</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;end-of-line&quot;</span><span class="p">))</span>
     <span class="n">handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlE</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;end-of-line&quot;</span><span class="p">))</span>
 
-    <span class="c1"># just snagged a new one from prompt_toolkit.key_binding.bindings.vi</span>
-
-    <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlX</span><span class="p">,</span> <span class="n">Keys</span><span class="o">.</span><span class="n">ControlL</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">E</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Pressing the ControlX - ControlL sequence in Vi mode does line</span>
-<span class="sd">        completion based on the other lines in the document and the history.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">start_history_lines_completion</span><span class="p">()</span>
-
-    <span class="c1"># In navigation mode, pressing enter will always return the input.</span>
-    <span class="n">handle</span><span class="p">(</span><span class="s2">&quot;enter&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">vi_navigation_mode</span> <span class="o">&amp;</span> <span class="n">is_returnable</span><span class="p">)(</span>
-        <span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;accept-line&quot;</span><span class="p">)</span>
-    <span class="p">)</span>
-
-    <span class="c1"># In insert mode, also accept input when enter is pressed, and the buffer</span>
-    <span class="c1"># has been marked as single line.</span>
-    <span class="n">handle</span><span class="p">(</span><span class="s2">&quot;enter&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">is_returnable</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">is_multiline</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;accept-line&quot;</span><span class="p">))</span>
-
-    <span class="nd">@handle</span><span class="p">(</span><span class="s2">&quot;enter&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=~</span><span class="n">is_returnable</span> <span class="o">&amp;</span> <span class="n">vi_navigation_mode</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">E</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Go to the beginning of next line.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">b</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span>
-        <span class="n">b</span><span class="o">.</span><span class="n">cursor_down</span><span class="p">(</span><span class="n">count</span><span class="o">=</span><span class="n">event</span><span class="o">.</span><span class="n">arg</span><span class="p">)</span>
-        <span class="n">b</span><span class="o">.</span><span class="n">cursor_position</span> <span class="o">+=</span> <span class="n">b</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">get_start_of_line_position</span><span class="p">(</span>
-            <span class="n">after_whitespace</span><span class="o">=</span><span class="kc">True</span>
-        <span class="p">)</span>
-
-    <span class="c1"># ** In navigation mode **</span>
+    <span class="c1"># }}}</span>
+    <span class="c1"># ** In navigation mode **: {{{</span>
     <span class="c1"># Shit this should get broken up into it&#39;s own function it&#39;s really</span>
     <span class="c1"># hard to navigate around</span>
     <span class="c1"># List of navigation commands: http://hea-www.harvard.edu/~fine/Tech/vi.html</span>
@@ -584,6 +552,67 @@
         <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">cursor_position</span> <span class="o">+=</span> <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">get_cursor_left_position</span><span class="p">(</span>
             <span class="n">count</span><span class="o">=</span><span class="n">event</span><span class="o">.</span><span class="n">arg</span>
         <span class="p">)</span>
+        <span class="c1"># }}}</span>
+
+    <span class="c1"># vi insert mode: {{{</span>
+
+    <span class="c1"># apparently that function requires a positional parameter &#39;data&#39;</span>
+    <span class="c1"># fuckkkk if we ocmment it out we lose autocompletion</span>
+    <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">Tab</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">tab_insert_indent</span> <span class="o">&amp;</span> <span class="n">insert_mode</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">insert_indent</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;If there are only whitespaces before current cursor position insert</span>
+<span class="sd">        indent instead of autocompleting.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">event</span><span class="o">.</span><span class="n">cli</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">insert_text</span><span class="p">()</span>
+
+    <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">BackTab</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">insert_literal_tab</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Insert literal tab on Shift+Tab instead of autocompleting &quot;&quot;&quot;</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span>
+        <span class="k">if</span> <span class="n">b</span><span class="o">.</span><span class="n">complete_state</span><span class="p">:</span>
+            <span class="n">b</span><span class="o">.</span><span class="n">complete_previous</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">event</span><span class="o">.</span><span class="n">cli</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">insert_text</span><span class="p">(</span><span class="s2">&quot;    &quot;</span><span class="p">)</span>
+
+    <span class="n">handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlI</span><span class="p">)(</span><span class="n">display_completions_like_readline</span><span class="p">)</span>
+
+    <span class="nd">@handle</span><span class="p">(</span><span class="s2">&quot;c-o&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">E</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Go into normal mode for one single action.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">event</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">vi_state</span><span class="o">.</span><span class="n">temporary_navigation_mode</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">handle</span><span class="p">(</span><span class="s2">&quot;j&quot;</span><span class="p">,</span> <span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">)(</span><span class="n">switch_to_navigation_mode</span><span class="p">)</span>
+    <span class="c1"># In navigation mode, pressing enter will always return the input.</span>
+    <span class="n">handle</span><span class="p">(</span><span class="s2">&quot;enter&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">vi_navigation_mode</span> <span class="o">&amp;</span> <span class="n">is_returnable</span><span class="p">)(</span>
+        <span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;accept-line&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="c1"># In insert mode, also accept input when enter is pressed, and the buffer</span>
+    <span class="c1"># has been marked as single line.</span>
+    <span class="n">handle</span><span class="p">(</span><span class="s2">&quot;enter&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">is_returnable</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">is_multiline</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;accept-line&quot;</span><span class="p">))</span>
+
+    <span class="nd">@handle</span><span class="p">(</span><span class="s2">&quot;enter&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=~</span><span class="n">is_returnable</span> <span class="o">&amp;</span> <span class="n">vi_navigation_mode</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">E</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Go to the beginning of next line.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span>
+        <span class="n">b</span><span class="o">.</span><span class="n">cursor_down</span><span class="p">(</span><span class="n">count</span><span class="o">=</span><span class="n">event</span><span class="o">.</span><span class="n">arg</span><span class="p">)</span>
+        <span class="n">b</span><span class="o">.</span><span class="n">cursor_position</span> <span class="o">+=</span> <span class="n">b</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">get_start_of_line_position</span><span class="p">(</span>
+            <span class="n">after_whitespace</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+
+    <span class="c1"># just snagged a new one from prompt_toolkit.key_binding.bindings.vi</span>
+
+    <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlX</span><span class="p">,</span> <span class="n">Keys</span><span class="o">.</span><span class="n">ControlL</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">E</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Pressing the ControlX - ControlL sequence in Vi mode does line</span>
+<span class="sd">        completion based on the other lines in the document and the history.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">start_history_lines_completion</span><span class="p">()</span>
 
     <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlN</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">start_or_cycle_completions</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">E</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -667,8 +696,9 @@
     <span class="c1"># Control-W should delete, using whitespace as separator, while M-Del</span>
     <span class="c1"># should delete using [^a-zA-Z0-9] as a boundary.</span>
     <span class="n">handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlW</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;unix-word-rubout&quot;</span><span class="p">))</span>
+    <span class="c1"># }}}</span>
 
-    <span class="c1">### Emacs:</span>
+    <span class="c1">### Emacs: {{{</span>
 
     <span class="n">handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlA</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;beginning-of-line&quot;</span><span class="p">))</span>
     <span class="n">handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlB</span><span class="p">)(</span><span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;backward-char&quot;</span><span class="p">))</span>
@@ -724,6 +754,9 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">buffer</span><span class="o">.</span><span class="n">cursor_position</span> <span class="o">+=</span> <span class="n">buffer</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">get_end_of_line_position</span><span class="p">()</span>
 
+    <span class="c1"># }}}</span>
+
+    <span class="c1"># Has selection: {{{</span>
     <span class="nd">@handle</span><span class="p">(</span><span class="s2">&quot;c-@&quot;</span><span class="p">)</span>  <span class="c1"># Control-space or Control-@</span>
     <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -780,7 +813,9 @@
         <span class="n">data</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">cut_selection</span><span class="p">()</span>
         <span class="n">event</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">clipboard</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
-    <span class="c1"># Global bindings.</span>
+    <span class="c1"># }}}</span>
+
+    <span class="c1"># Global bindings.: {{{</span>
 
     <span class="c1"># @handle(Keys.ControlZ)</span>
     <span class="c1"># def suspend_to_bg(event: E) -&gt; None:</span>
@@ -859,9 +894,9 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">count</span><span class="o">=</span><span class="n">event</span><span class="o">.</span><span class="n">arg</span><span class="p">)</span>
 
-<span class="c1">#     handle(&quot;c-d&quot;, filter=has_text_before_cursor &amp; insert_mode)(</span>
-<span class="c1">#         get_by_name(&quot;delete-char&quot;)</span>
-<span class="c1">#     )</span>
+    <span class="c1">#     handle(&quot;c-d&quot;, filter=has_text_before_cursor &amp; insert_mode)(</span>
+    <span class="c1">#         get_by_name(&quot;delete-char&quot;)</span>
+    <span class="c1">#     )</span>
 
     <span class="c1"># this doesn&#39;t do what you&#39;d expect.</span>
     <span class="c1"># handle(Keys.ControlD)(get_by_name(&quot;end-of-file&quot;))</span>
@@ -873,24 +908,7 @@
         <span class="c1"># ugh why isn&#39;t this working :(</span>
         <span class="n">event</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">result</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-    <span class="c1"># apparently that function requires a positional parameter &#39;data&#39;</span>
-    <span class="c1"># fuckkkk if we ocmment it out we lose autocompletion</span>
-    <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">Tab</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">tab_insert_indent</span> <span class="o">&amp;</span> <span class="n">insert_mode</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">insert_indent</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;If there are only whitespaces before current cursor position insert</span>
-<span class="sd">        indent instead of autocompleting.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">event</span><span class="o">.</span><span class="n">cli</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">insert_text</span><span class="p">()</span>
-
-
-    <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">BackTab</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">insert_literal_tab</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Insert literal tab on Shift+Tab instead of autocompleting &quot;&quot;&quot;</span>
-        <span class="n">b</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span>
-        <span class="k">if</span> <span class="n">b</span><span class="o">.</span><span class="n">complete_state</span><span class="p">:</span>
-            <span class="n">b</span><span class="o">.</span><span class="n">complete_previous</span><span class="p">()</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">event</span><span class="o">.</span><span class="n">cli</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">insert_text</span><span class="p">(</span><span class="s2">&quot;    &quot;</span><span class="p">)</span>
+    <span class="c1"># }}}</span>
 
     <span class="c1"># matchit: {{{</span>
 
@@ -974,6 +992,7 @@
         <span class="n">buffer</span><span class="o">.</span><span class="n">delete_before_cursor</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="c1"># }}}</span>
+
     <span class="c1"># autosuggest: {{{</span>
 
     <span class="nd">@handle</span><span class="p">(</span><span class="s2">&quot;c-f&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">suggestion_available</span><span class="p">)</span>
@@ -999,21 +1018,28 @@
     <span class="n">handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">insert_mode</span><span class="p">,</span> <span class="n">save_before</span><span class="o">=</span><span class="n">if_no_repeat</span><span class="p">)(</span>
         <span class="n">get_by_name</span><span class="p">(</span><span class="s2">&quot;self-insert&quot;</span><span class="p">)</span>
     <span class="p">)</span>
-
+    <span class="c1"># }}}</span>
     <span class="c1"># return ConditionalKeyBindings(registry, filter=buffer_has_focus)</span>
-    <span class="k">return</span> <span class="n">registry</span></div>
+    <span class="k">return</span> <span class="n">registry</span>  <span class="c1"># }}}</span></div>
 
+
+<div class="viewcode-block" id="get_extra_bindings"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.31_yank_last_arg.get_extra_bindings">[docs]</a><span class="k">def</span> <span class="nf">get_extra_bindings</span><span class="p">():</span>  <span class="c1"># }}}</span>
+    <span class="k">pass</span></div>
+
+
+<span class="c1"># }}}</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
 
     <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">_ip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">enable_bracketed_paste</span><span class="p">()</span>
-        <span class="n">bindings</span> <span class="o">=</span> <span class="n">add_bindings</span><span class="p">()</span>
-        <span class="n">extra_bindings</span> <span class="o">=</span> <span class="n">merge_key_bindings</span><span class="p">(</span><span class="n">get_key_bindings</span><span class="p">(</span><span class="n">bindings</span><span class="p">))</span>
+        <span class="c1"># bindings = add_bindings()</span>
+        <span class="c1"># Let&#39;s see if i can&#39;t get a more consistent result without my bindings</span>
+        <span class="n">extra_bindings</span> <span class="o">=</span> <span class="n">merge_key_bindings</span><span class="p">(</span><span class="n">get_key_bindings</span><span class="p">())</span>
         <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span> <span class="o">=</span> <span class="n">extra_bindings</span>
+        <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">enable_bracketed_paste</span><span class="p">()</span>
 
-<span class="c1"># Vim: set fdm=marker:</span>
+<span class="c1"># Vim: set fdm=marker fdls=0:</span>
 </pre></div>
 
         </div>

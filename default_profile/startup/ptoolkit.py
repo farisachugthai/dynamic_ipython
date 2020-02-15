@@ -8,6 +8,12 @@ from IPython.core.getipython import get_ipython
 DEDENT_TOKENS = frozenset(["raise", "return", "pass", "break", "continue"])
 
 
+def get_app():
+    """A patch to cover up the fact that get_app() returns a DummyApplication."""
+    if get_ipython() is not None:
+        return get_ipython().pt_app.app
+
+
 class Helpers:
     """I think this class is probably the easiest summary of my frustration."""
 
