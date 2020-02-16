@@ -15,13 +15,8 @@ import sys
 from IPython.core.getipython import get_ipython
 
 # Are you allowed to do this? This shit confuses me so much
-# Nope
+# Nope! Gotta figure out how relative imports and implicit imports work.
 # from . import STARTUP_LOGGER
-
-shell = get_ipython()
-
-if not shell:
-    sys.exit("startup.__main__: get_ipython returned None")
 
 
 def exec_startup():
@@ -32,3 +27,10 @@ def exec_startup():
 
     """
     exec(compile(open(__file__).read(), "<string>", "exec",), globals(), locals())
+
+
+if "__name__" == "__main":
+    shell = get_ipython()
+
+    if not shell:
+        sys.exit("startup.__main__: get_ipython returned None")

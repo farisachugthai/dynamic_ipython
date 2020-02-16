@@ -64,7 +64,8 @@ def get_app():
 
 
 def exit_clicked():
-    get_app().exit(exception=EOFError)
+    """Exit from the prompt_toolkit side of things."""
+    get_app().exit(result=False, exception=EOFError)
 
 
 def init_style():
@@ -123,7 +124,7 @@ class LineCounter:
 def get_titlebar_text():
     return [
         ("class:title", "Hello World!"),
-        ("class:title", " (Press [TODO] to quit.)"),
+        ("class:title", " (Press <Exit> to quit.)"),
     ]
 
 
@@ -276,11 +277,15 @@ def generate_and_print_hsplit():
     #                                 ycursor=True,
     #                                 layout=CompletionMenu(...))
     #                        ])
+    exit_button = Button("Exit", handler=exit_clicked)
+    print_container(exit_button)
+
     return root_container
 
 
 if __name__ == "__main__":
-    if get_ipython() is not None:
+    shell = get_ipython()
+    if shell is not None:
         add_toolbar(BottomToolbar)
 
     completion_displays_to_styles = {
@@ -290,6 +295,5 @@ if __name__ == "__main__":
         "none": None,
     }
 
-    exit_button = Button("Exit", handler=exit_clicked)
-
     print_container(show_header())
+    generate_and_print_hsplit()

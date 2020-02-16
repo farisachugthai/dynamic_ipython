@@ -45,6 +45,7 @@ Calling exit doesn't work?::
 # import ctypes
 # import functools
 # from traceback import print_exception
+import logging
 
 from prompt_toolkit.clipboard import ClipboardData
 from prompt_toolkit.enums import DEFAULT_BUFFER
@@ -86,9 +87,12 @@ from prompt_toolkit.selection import SelectionState
 from IPython.core.getipython import get_ipython
 from IPython.terminal.shortcuts import create_ipython_shortcuts
 
+from default_profile.startup import STARTUP_LOGGER
 from default_profile.startup.ptoolkit import get_app
 
 # }}}
+
+logger = STARTUP_LOGGER.getChild('thirty-one')
 
 E = KeyPressEvent
 insert_mode = vi_insert_mode | emacs_insert_mode
@@ -122,8 +126,10 @@ def ctrl_d_condition():
     """
     app = get_app()
     buffer_name = app.current_buffer.name
-
-    return buffer_name == DEFAULT_BUFFER and not app.current_buffer.text
+    if not beginning_of_line:
+        return False
+    if buffer_name == DEFAULT_BUFFER and not app.current_buffer.text:
+        return True
 
 
 # This is erroring...is it because its the only condition that requires an argument?
@@ -208,23 +214,6 @@ def suggestion_available():
     )
 
 
-def switch_to_navigation_mode(event):
-    """Switches :mod:`IPython` from Vim insert mode to Vim normal mode.
-
-    The function we can work with in the future if we want to change the
-    keybinding for insert to navigation mode.
-    """
-    vi_state = event.cli.vi_state
-    # logger.debug('%s', dir(event))
-    vi_state.input_mode = InputMode.NAVIGATION
-
-
-def if_no_repeat(event: E) -> bool:
-    """ Callable that returns True when the previous event was delivered to
-    another handler. """
-    return not event.is_repeat
-
-
 @Condition
 def suggestion_available():
     app = get_app()
@@ -244,28 +233,56 @@ def has_selection():
 
 # }}}
 
+# Not conditions: {{{
+
+
+def switch_to_navigation_mode(event):
+    """Switches :mod:`IPython` from Vim insert mode to Vim normal mode.
+
+    The function we can work with in the future if we want to change the
+    keybinding for insert to navigation mode.
+    """
+    vi_state = event.cli.vi_state
+    # logger.debug('%s', dir(event))
+    vi_state.input_mode = InputMode.NAVIGATION
+
+
+def if_no_repeat(event: E) -> bool:
+    """ Callable that returns True when the previous event was delivered to
+    another handler. """
+    return not event.is_repeat
+
+
+# }}}
 
 # {{{
 
 
 def get_key_bindings(custom_key_bindings=None):
-    """
-    The ``__init__`` for `_MergedKeyBindings` features this.:
+    """Load key_bindings for the application and customize as necessary.
 
-        def __init__(self, registries):
-            assert all(isinstance(r, KeyBindingsBase) for r in registries)
-            _Proxy.__init__(self)
-            self.registries = registries
+    Parameters
+    ----------
+    custom_key_bindings : KeyBindings
+        The return value of the function in this module `add_bindings`.
 
-    As a result `None` can't be passed to merge_key_bindings.
+    Notes
+    ------
+    .. warning::
 
-    Based on prompt_toolkit.key_binding.defaults.load_key_bindings()
+        The ``__init__`` for `_MergedKeyBindings` features this.::
+
+            def __init__(self, registries):
+                assert all(isinstance(r, KeyBindingsBase) for r in registries)
+                _Proxy.__init__(self)
+                self.registries = registries
+
+        As a result `None` can't be passed to `merge_key_bindings`.
+
     """
     from prompt_toolkit.key_binding.bindings.auto_suggest import (
         load_auto_suggest_bindings,
     )
-    from prompt_toolkit.key_binding.bindings.cpr import load_cpr_bindings
-    from prompt_toolkit.key_binding.bindings.mouse import load_mouse_bindings
     from prompt_toolkit.key_binding.defaults import load_key_bindings
 
     from prompt_toolkit.key_binding.bindings.page_navigation import (
@@ -273,17 +290,17 @@ def get_key_bindings(custom_key_bindings=None):
     )
 
     kb = [
-        load_auto_suggest_bindings(),
-        load_cpr_bindings(),
-        load_key_bindings(),
-        load_mouse_bindings(),
         create_ipython_shortcuts(get_ipython()),
+        load_auto_suggest_bindings(),
+        load_key_bindings(),
+        load_page_navigation_bindings(),
     ]
     if custom_key_bindings is not None:
         kb.append(custom_key_bindings)
-    merge_key_bindings(kb)
+    merged = merge_key_bindings(kb)
 
-    return kb  # }}}
+    return merged  # }}}
+
 
 def add_bindings():  # {{{
     registry = KeyBindings()
@@ -305,9 +322,11 @@ def add_bindings():  # {{{
     handle(Keys.ControlF)(get_by_name("forward-char"))
     handle("c-left")(get_by_name("backward-word"))
     handle("c-right")(get_by_name("forward-word"))
+
     handle(Keys.ControlX, "r", "y", filter=insert_mode)(get_by_name("yank"))
+
     handle(Keys.ControlY, filter=insert_mode)(get_by_name("yank"))
-    handle("c-_", save_before=(lambda e: False), filter=insert_mode)(
+    handle(Keys.ControlUnderscore, save_before=(lambda e: False), filter=insert_mode)(
         get_by_name("undo")
     )
 
@@ -423,14 +442,6 @@ def add_bindings():  # {{{
         if getattr(event.current_buffer.selection_state, "shift_arrow", False):
             event.current_buffer.selection_state = None
 
-    @handle("up", filter=vi_navigation_mode)
-    @handle("c-p", filter=vi_navigation_mode)
-    def _(event: E) -> None:
-        """
-        Arrow up and ControlP in navigation mode go up.
-        """
-        event.current_buffer.auto_up(count=event.arg)
-
     @handle("k", filter=vi_navigation_mode)
     def _(event: E) -> None:
         """
@@ -460,9 +471,7 @@ def add_bindings():  # {{{
 
     @handle("backspace", filter=vi_navigation_mode)
     def _(event: E) -> None:
-        """
-        In navigation-mode, move cursor.
-        """
+        """In navigation-mode, move cursor."""
         event.current_buffer.cursor_position += event.current_buffer.document.get_cursor_left_position(
             count=event.arg
         )
@@ -470,14 +479,8 @@ def add_bindings():  # {{{
 
     # vi insert mode: {{{
 
-    # apparently that function requires a positional parameter 'data'
-    # fuckkkk if we ocmment it out we lose autocompletion
-    @handle(Keys.Tab, filter=tab_insert_indent & insert_mode)
-    def insert_indent(event):
-        """If there are only whitespaces before current cursor position insert
-        indent instead of autocompleting.
-        """
-        event.cli.current_buffer.insert_text()
+    # This'll be nice
+    handle(Keys.ControlSpace, filter=insert_mode)(get_by_name("complete"))
 
     @handle(Keys.BackTab, filter=insert_mode)
     def insert_literal_tab(event):
@@ -490,7 +493,7 @@ def add_bindings():  # {{{
 
     handle(Keys.ControlI)(display_completions_like_readline)
 
-    @handle("c-o", filter=insert_mode)
+    @handle("c-o", filter=vi_insert_mode)
     def _(event: E) -> None:
         """
         Go into normal mode for one single action.
@@ -498,25 +501,24 @@ def add_bindings():  # {{{
         event.app.vi_state.temporary_navigation_mode = True
 
     handle("j", "k", filter=insert_mode)(switch_to_navigation_mode)
-    # In navigation mode, pressing enter will always return the input.
-    handle("enter", filter=vi_navigation_mode & is_returnable)(
-        get_by_name("accept-line")
-    )
+
 
     # In insert mode, also accept input when enter is pressed, and the buffer
     # has been marked as single line.
-    handle("enter", filter=is_returnable & ~is_multiline)(get_by_name("accept-line"))
+    handle("enter", filter=is_returnable)(get_by_name("accept-line"))
 
-    @handle("enter", filter=~is_returnable & vi_navigation_mode)
-    def _(event: E) -> None:
-        """
-        Go to the beginning of next line.
-        """
-        b = event.current_buffer
-        b.cursor_down(count=event.arg)
-        b.cursor_position += b.document.get_start_of_line_position(
-            after_whitespace=True
-        )
+    # why the literal fuck did i do this
+    # @handle("")
+    # def _(event: E) -> None:
+    #     """
+    #     Go to the beginning of next line.
+    #     In navigation mode, pressing enter will always return the input.
+    #     """
+    #     b = event.current_buffer
+    #     b.cursor_down(count=event.arg)
+    #     b.cursor_position += b.document.get_start_of_line_position(
+    #         after_whitespace=True
+    #     )
 
     # just snagged a new one from prompt_toolkit.key_binding.bindings.vi
 
@@ -546,11 +548,9 @@ def add_bindings():  # {{{
         else:
             b.start_completion(select_first=True)
 
-    @handle("c-p", filter=insert_mode)
-    def _(event: E) -> None:
-        """
-        Control-P: To previous completion.
-        """
+    @handle(Keys.ControlX, Keys.ControlP, filter=insert_mode)
+    def ctrlp(event):
+        """Autocomplete things. Or if we already opened the completions go back."""
         b = event.current_buffer
 
         if b.complete_state:
@@ -558,11 +558,32 @@ def add_bindings():  # {{{
         else:
             b.start_completion(select_last=True)
 
-    @handle(Keys.ControlG, filter=insert_mode)
-    @handle(Keys.ControlY, filter=insert_mode)
-    def _(event: E) -> None:
-        """Accept current completion."""
-        event.current_buffer.complete_state = None
+
+    @handle("up", filter=vi_navigation_mode)
+    @handle("c-p", filter=vi_navigation_mode)
+    @handle(Keys.ControlP, filter=insert_mode)
+    def either_previous_completion_or_go_up(event: E) -> None:
+        """Control-P: To previous completion.
+
+        Otherwise, if we're in emacs mode go up a line or to the previous_history
+        Shit so should we use auto_up?
+
+        Arrow up and ControlP in navigation mode go up.
+        """
+        b = event.current_buffer
+
+        if b.complete_state:
+            b.complete_previous()
+        else:
+            event.current_buffer.auto_up(count=event.arg)
+            # b.start_completion(select_last=True)
+            # I feel like this should still be go up a line
+
+    # @handle(Keys.ControlG, filter=insert_mode)
+    # @handle(Keys.ControlY, filter=insert_mode)
+    # def _(event: E) -> None:
+    #     """Accept current completion."""
+    #     event.current_buffer.complete_state = None
 
     # originally from basic_bindings
 
@@ -577,9 +598,12 @@ def add_bindings():  # {{{
         return not event.is_repeat
 
     handle("c-up")(get_by_name("previous-history"))
+
+    # So we have handlers for everything else right?
     handle(Keys.ControlP, filter=emacs_mode)(get_by_name("previous-history"))
-    handle("c-down")(get_by_name("next-history"))
     handle(Keys.ControlN, filter=emacs_mode)(get_by_name("next-history"))
+
+    handle("c-down")(get_by_name("next-history"))
     handle(Keys.ControlL)(get_by_name("clear-screen"))
 
     handle(Keys.ControlK, filter=insert_mode)(get_by_name("kill-line"))
@@ -603,8 +627,7 @@ def add_bindings():  # {{{
     # Control-W should delete, using whitespace as separator, while M-Del
     # should delete using [^a-zA-Z0-9] as a boundary.
     handle(Keys.ControlW, filter=insert_mode)(get_by_name("unix-word-rubout"))
-    handle("pageup")(get_by_name("previous-history"))
-    handle("pagedown")(get_by_name("next-history"))
+
     # }}}
 
     # Has selection: {{{
@@ -668,6 +691,7 @@ def add_bindings():  # {{{
 
     # Global bindings.: {{{
 
+    # No filters i want this recognized all the time.
     @handle(Keys.ControlZ)
     def suspend_to_bg(event: E) -> None:
         """
@@ -716,6 +740,7 @@ def add_bindings():  # {{{
             Utilized for this purpose.
         """
         event.app.editing_mode = not event.app.editing_mode == "vi"
+        event.app.key_bindings._update_cache()
 
     handle(Keys.Escape, Keys.ControlJ)(toggle_editing_mode)
 
@@ -732,8 +757,6 @@ def add_bindings():  # {{{
         interface and return this value from the `Application.run()` call.
         """
 
-    # handle(Keys.ControlC)(get_by_name('kill_line'))
-
     @handle(Keys.ControlD, filter=ctrl_d_condition)
     def _(event):
         """Either delete a character or exit the application. TODO: this doesn't work"""
@@ -744,19 +767,31 @@ def add_bindings():  # {{{
         else:
             event.current_buffer.delete(count=event.arg)
 
-    #     handle("c-d", filter=has_text_before_cursor & insert_mode)(
-    #         get_by_name("delete-char")
-    #     )
+    handle("c-d", filter=has_text_before_cursor & insert_mode)(
+        get_by_name("delete-char")
+    )
 
     # this doesn't do what you'd expect.
     # handle(Keys.ControlD)(get_by_name("end-of-file"))
 
-    @handle(Keys.ControlD)
+    # @handle(Keys.ControlD)
+    # def exit_app(event):
+    # HE CATCHES RUNTIMEERROR WHAT THE FUCK
+    # raise RuntimeError
+    # ugh why isn't this working :(
+    # event.app.exit(result=False)
+    # I'm actually not sure why that isn't working. It raises an error because
+    # a concurrent.future.Future object already completed. However we can do
+    # this on te IPython side and it'll work easily
+    @handle(Keys.ControlD, filter=insert_mode)
     def exit_app(event):
-        # HE CATCHES RUNTIMEERROR WHAT THE FUCK
-        # raise RuntimeError
-        # ugh why isn't this working :(
-        event.app.exit(result=False)
+        """Invoke the |ip| method *ask_exit*."""
+        if get_ipython() is not None:
+            return get_ipython().ask_exit()
+
+    # @handle(Keys.ControlD, filter=vi_navigation_mode)(scroll_page_down)
+    # todo: gotta do this for c-d in navigation mode too
+    # @handle(Keys.ControlF, filter=vi_navigation_mode)(scroll_page_down)
 
     # }}}
 
@@ -880,8 +915,9 @@ if __name__ == "__main__":
     if _ip is not None:
         # bindings = add_bindings()
         # Let's see if i can't get a more consistent result without my bindings
-        extra_bindings = merge_key_bindings(get_key_bindings())
+        extra_bindings = get_key_bindings(add_bindings())
         _ip.pt_app.app.key_bindings = extra_bindings
+
         _ip.pt_app.app.output.enable_bracketed_paste()
 
 # Vim: set fdm=marker fdls=0:

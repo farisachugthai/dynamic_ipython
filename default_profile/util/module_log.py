@@ -1,23 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import functools
 import json
 import logging
-import os
-import reprlib
+from pathlib import Path
 import sys
 import traceback
 from datetime import datetime
 
 import IPython
 from IPython.core.getipython import get_ipython
-from IPython.core.interactiveshell import InteractiveShellABC
 
 from traitlets.config.configurable import LoggingConfigurable
 from traitlets.config.application import LevelFormatter
 from traitlets.traitlets import Instance
-
-from default_profile import QueueHandler  # noqa F401
 
 
 class NoUnNamedLoggers(NotImplementedError):
@@ -95,7 +90,8 @@ def file_logger(
 
     logdir = shell.profile_dir.log_dir
 
-    log_file = os.path.join(logdir, filename)
+    log_file = Path(logdir).joinpath(filename)
+
     handler = logging.FileHandler(log_file)
 
     handler.setLevel(log_level)
@@ -190,99 +186,3 @@ class JsonFormatter(logging.Formatter):
                 "exception": exc,
             }
         )
-
-
-def betterConfig(name=None, parent=None):
-    """Similar to :func:`logging.basicConfig`.
-
-    Parameters
-    ----------
-    None
-
-    Returns
-    -------
-    :class:`logging.Logger()`
-        Anonymous Logger instance.
-
-    Notes
-    -----
-    If a :class:`logging.Filter` class is initialized with no args,
-    it's default behavior is to allow all :class:`logging.LogRecords` to pass.
-
-    """
-    BASIC_FORMAT = (
-        "[ %(name)s  %(relativeCreated)d ] %(levelname)s %(module)s %(message)s "
-    )
-    if name is None:
-        name = "mod_log"
-    if parent:
-        better_logger = logging.getLogger(name=name).getChild(parent)
-    else:
-        better_logger = logging.getLogger(name=name)
-
-    better_logger.setLevel(logging.WARNING)
-
-    better_stream = logging.StreamHandler()
-    better_stream.setLevel(logging.WARNING)
-    better_logger.addHandler(better_stream)
-
-    better_formatter = LevelFormatter(BASIC_FORMAT + "%(highlevel)s")
-    better_stream.setFormatter(better_formatter)
-
-    better_logger.addFilter(logging.Filter())
-
-    return better_logger
-
-
-class VerboseLoggingConfigurable(LoggingConfigurable):
-    """Tried building on the LoggingConfigurable. Doesn't work currently.
-
-    We need to register the currently running IPython instance so it gets
-    access to the config and parent attributes.
-    """
-
-    shell = Instance("InteractiveShellABC")
-
-    def __init__(self, logger_name=None, logger_parent=None, shell=None, **kwargs):
-        self.log = betterConfig(name=logger_name, parent=logger_parent)
-        self.logger_name = logger_name
-        self.logger_parent = logger_parent
-        self.shell = shell
-        if self.shell is not None:
-            self.config = shell.config
-            self.parent = shell.parent
-        else:
-            raise UsageError
-        super().__init__(shell=shell, **kwargs)
-
-    def log(self, msg, level=None):
-        """Isn't it weird that the default logging.Logger made the level positional?
-
-        Idk I might just be THAT lazy.
-        """
-        if level is None:
-            level = logging.WARNING
-        self.log.log(msg, level=level)
-
-    def __repr__(self):
-        return reprlib.Repr().repr_dict(self.traits(), level=6)
-
-    @property
-    def handlers(self):
-        return self.log.handlers
-
-    @property
-    def filters(self):
-        return self.log.filters
-
-
-def logging_decorator(f):
-    @functools.wraps(f)
-    def wrapper(*args, **kwargs):
-        logging.debug("Entering %s", f.__name__)
-        start = time.time()
-        f(*args, **kwargs)
-        end = time.time()
-        logging.debug("Exiting %s in %-5.2f secs", f.__name__, end - start)
-
-    return wrapper

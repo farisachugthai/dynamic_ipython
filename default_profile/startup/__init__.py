@@ -20,9 +20,8 @@ from default_profile import QueueHandler
 
 BASIC_FORMAT = default_profile.default_log_format
 
-STARTUP_LOGGER = logging.getLogger(name=__name__).getChild("startup")
+STARTUP_LOGGER = logging.getLogger(name=__name__)
 
-# STARTUP_HANDLER = QueueHandler()
 STARTUP_HANDLER = logging.StreamHandler()
 STARTUP_FORMATTER = logging.Formatter(fmt=BASIC_FORMAT)
 STARTUP_FILTERER = logging.Filterer()
