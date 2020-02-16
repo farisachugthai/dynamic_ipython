@@ -221,5 +221,5 @@ if __name__ == "__main__":
     readline_config()
     history_file = "~/.python_history"
     setup_historyfile(history_file)
-    atexit.register(teardown_historyfile, kwargs={"histfile": history_file})
+    atexit.register(teardown_historyfile, history_file)
 

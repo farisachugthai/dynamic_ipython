@@ -201,9 +201,11 @@ class BottomToolbar:
         # temp_toolbar = f" [F4] Vi: {current_vi_mode!r}  {date.today()!r}"
         # toolbar = Frame(TextArea(temp_toolbar))
         # return toolbar.body
-        text = f" [F4] Vi: {current_vi_mode!r}  {date.today()!r}"
-        toolbar = [('class:toolbar', ' %s ' % text)]
 
+        # doing it this way only prints the words class:toolbar at the bottom
+        # text = f" [F4] Vi: {current_vi_mode!r}  {date.today()!r}"
+        # toolbar = [('class:toolbar', ' %s ' % text)]
+        toolbar = f" [F4] Vi: {current_vi_mode!r}  {date.today()!r}"
         return toolbar
 
     def _render_emacs(self):
@@ -228,6 +230,8 @@ class Attempt2(BottomToolbar, FormattedTextToolbar):
 
 
 class Attempt3(BottomToolbar):
+    """Try stylizing the toolbar."""
+
     def __init__(self):
         super().__init__()
 
@@ -244,7 +248,7 @@ class Attempt3(BottomToolbar):
 
 
 def generate_and_print_hsplit():
-    kb = get_ipython().pt_app.app.key_bindings.bindings
+    # kb = get_ipython().pt_app.app.key_bindings.bindings
     # Bind to IPython TODO:
     root_container = HSplit(
         children=[
@@ -275,10 +279,6 @@ def generate_and_print_hsplit():
     return root_container
 
 
-# Don't uncomment! This fucks up the keybindings so that the only way a line
-# executes is if you use C-r to get into a search then hit something to regain
-# focus and then hit enter.
-# Unbelievable. It wasn't this block. it was load_key_bindings()?????
 if __name__ == "__main__":
     if get_ipython() is not None:
         add_toolbar(BottomToolbar)

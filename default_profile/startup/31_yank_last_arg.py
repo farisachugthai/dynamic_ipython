@@ -41,19 +41,17 @@ Calling exit doesn't work?::
 }}}
 """
 # {{{
-from collections import namedtuple
-import ctypes
-import functools
-from traceback import print_exception
+# from collections import namedtuple
+# import ctypes
+# import functools
+# from traceback import print_exception
 
-# from prompt_toolkit.application.current import get_app
 from prompt_toolkit.clipboard import ClipboardData
 from prompt_toolkit.enums import DEFAULT_BUFFER
 from prompt_toolkit.filters import (
     Condition,
     is_searching,
     in_paste_mode,
-<<<<<<< Updated upstream
     buffer_has_focus,
 )
 from prompt_toolkit.filters.app import (
@@ -64,32 +62,8 @@ from prompt_toolkit.filters.app import (
     emacs_mode,
     vi_insert_mode,
     has_focus,
-||||||| constructed merge base
-=======
-    FilterOrBool,
->>>>>>> Stashed changes
 )
-<<<<<<< Updated upstream
-from prompt_toolkit.filters.cli import has_selection
-
-||||||| constructed merge base
-from prompt_toolkit.filters.app import emacs_insert_mode, vi_insert_mode, has_focus
 from prompt_toolkit.filters.cli import has_selection, ViInsertMode
-
-# "ViMode",
-# "ViNavigationMode",
-# "ViInsertMultipleMode",
-# "ViReplaceMode",
-# "ViSelectionMode",
-# "ViWaitingForTextObjectMode",
-# "ViDigraphMode",
-
-# from prompt_toolkit.input.vt100_parser import ANSI_SEQUENCES
-=======
-from prompt_toolkit.filters.app import emacs_insert_mode, vi_insert_mode, has_focus
-from prompt_toolkit.filters.cli import has_selection, ViInsertMode
-from prompt_toolkit.filters.cli import HasSelection
->>>>>>> Stashed changes
 from prompt_toolkit.keys import Keys
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.key_binding.bindings.completion import (
@@ -119,33 +93,16 @@ from default_profile.startup.ptoolkit import get_app
 E = KeyPressEvent
 insert_mode = vi_insert_mode | emacs_insert_mode
 
-
 # Conditions: {{{
 
-<<<<<<< Updated upstream
-||||||| constructed merge base
-# fun fact. ViInsertMode is deprecated
-insert_mode = vi_insert_mode() | emacs_insert_mode()
-=======
-# fun fact. ViInsertMode is deprecated
-insert_mode = vi_insert_mode() | emacs_insert_mode()
-has_selection = HasSelection()
-
->>>>>>> Stashed changes
 
 @Condition
 def is_returnable():
     return get_app().current_buffer.is_returnable
 
-<<<<<<< Updated upstream
-||||||| constructed merge base
-# is_returnable = Condition(lambda: get_app().current_buffer.is_returnable)
-
-=======
 
 # is_returnable = Condition(lambda: get_app().current_buffer.is_returnable)
 
->>>>>>> Stashed changes
 
 @Condition
 def should_confirm_completion():
@@ -170,6 +127,7 @@ def ctrl_d_condition():
 
 
 # This is erroring...is it because its the only condition that requires an argument?
+# So far I think so
 # @Condition
 # def _is_blank(l):
 #     return len(l.strip()) == 0
@@ -250,9 +208,6 @@ def suggestion_available():
     )
 
 
-# *** Key Bindings: ***
-
-
 def switch_to_navigation_mode(event):
     """Switches :mod:`IPython` from Vim insert mode to Vim normal mode.
 
@@ -262,7 +217,6 @@ def switch_to_navigation_mode(event):
     vi_state = event.cli.vi_state
     # logger.debug('%s', dir(event))
     vi_state.input_mode = InputMode.NAVIGATION
-# }}}
 
 
 def if_no_repeat(event: E) -> bool:
@@ -274,8 +228,10 @@ def if_no_repeat(event: E) -> bool:
 @Condition
 def suggestion_available():
     app = get_app()
-    return (app.current_buffer.suggestion is not None and
-            app.current_buffer.document.is_cursor_at_the_end)
+    return (
+        app.current_buffer.suggestion is not None
+        and app.current_buffer.document.is_cursor_at_the_end
+    )
 
 
 @Condition
@@ -285,7 +241,14 @@ def has_selection():
     """
     return bool(get_app().current_buffer.selection_state)
 
-def get_key_bindings(custom_key_bindings=None):  # {{{
+
+# }}}
+
+
+# {{{
+
+
+def get_key_bindings(custom_key_bindings=None):
     """
     The ``__init__`` for `_MergedKeyBindings` features this.:
 
@@ -308,6 +271,7 @@ def get_key_bindings(custom_key_bindings=None):  # {{{
     from prompt_toolkit.key_binding.bindings.page_navigation import (
         load_page_navigation_bindings,
     )
+
     kb = [
         load_auto_suggest_bindings(),
         load_cpr_bindings(),
@@ -317,9 +281,9 @@ def get_key_bindings(custom_key_bindings=None):  # {{{
     ]
     if custom_key_bindings is not None:
         kb.append(custom_key_bindings)
+    merge_key_bindings(kb)
 
     return kb  # }}}
-
 
 def add_bindings():  # {{{
     registry = KeyBindings()
@@ -333,7 +297,63 @@ def add_bindings():  # {{{
     handle("end")(get_by_name("end-of-line"))
     handle(Keys.ControlE, filter=insert_mode)(get_by_name("end-of-line"))
 
+    handle(Keys.ControlA)(get_by_name("beginning-of-line"))
+    handle(Keys.ControlB)(get_by_name("backward-char"))
+    handle("c-delete", filter=insert_mode)(get_by_name("kill-word"))
+    # Don't forget the filter because auto_completion is also gonna want this key
+    handle(Keys.ControlE, filter=insert_mode)(get_by_name("end-of-line"))
+    handle(Keys.ControlF)(get_by_name("forward-char"))
+    handle("c-left")(get_by_name("backward-word"))
+    handle("c-right")(get_by_name("forward-word"))
+    handle(Keys.ControlX, "r", "y", filter=insert_mode)(get_by_name("yank"))
+    handle(Keys.ControlY, filter=insert_mode)(get_by_name("yank"))
+    handle("c-_", save_before=(lambda e: False), filter=insert_mode)(
+        get_by_name("undo")
+    )
+
+    handle(
+        Keys.ControlX, Keys.ControlU, save_before=(lambda e: False), filter=insert_mode
+    )(get_by_name("undo"))
+
+    handle(Keys.ControlX, "(")(get_by_name("start-kbd-macro"))
+    handle(Keys.ControlX, ")")(get_by_name("end-kbd-macro"))
+    handle(Keys.ControlX, "e")(get_by_name("call-last-kbd-macro"))
+
+    def character_search(buff, char, count):
+        if count < 0:
+            match = buff.document.find_backwards(
+                char, in_current_line=True, count=-count
+            )
+        else:
+            match = buff.document.find(char, in_current_line=True, count=count)
+
+        if match is not None:
+            buff.cursor_position += match
+
+    @handle("c-]", Keys.Any)
+    def _(event):
+        " When Ctl-] + a character is pressed. go to that character. "
+        # Also named 'character-search'
+        character_search(event.current_buffer, event.data, event.arg)
+
+    @handle(Keys.ControlX, Keys.ControlX)
+    def _(event):
+        """
+        Move cursor back and forth between the start and end of the current
+        line.
+        """
+        buffer = event.current_buffer
+
+        if buffer.document.is_cursor_at_the_end_of_line:
+            buffer.cursor_position += buffer.document.get_start_of_line_position(
+                after_whitespace=False
+            )
+        else:
+            buffer.cursor_position += buffer.document.get_end_of_line_position()
+
     # }}}
+    # End basic bindings
+
     # ** In navigation mode **: {{{
     # Shit this should get broken up into it's own function it's really
     # hard to navigate around
@@ -517,7 +537,6 @@ def add_bindings():  # {{{
         else:
             b.start_completion(select_first=True)
 
-<<<<<<< Updated upstream
     @handle(Keys.Tab, filter=insert_mode)
     def complete(event):
         b = event.current_buffer
@@ -545,17 +564,6 @@ def add_bindings():  # {{{
         """Accept current completion."""
         event.current_buffer.complete_state = None
 
-    # @handle("c-e", filter=insert_mode)
-    # def _(event: E) -> None:
-    #     """
-    #     Cancel completion. Go back to originally typed text.
-    #     """
-    #     event.current_buffer.cancel_completion()
-
-||||||| constructed merge base
-
-=======
->>>>>>> Stashed changes
     # originally from basic_bindings
 
     @handle(Keys.ControlX, Keys.ControlE)
@@ -594,123 +602,13 @@ def add_bindings():  # {{{
 
     # Control-W should delete, using whitespace as separator, while M-Del
     # should delete using [^a-zA-Z0-9] as a boundary.
-<<<<<<< Updated upstream
     handle(Keys.ControlW, filter=insert_mode)(get_by_name("unix-word-rubout"))
-    # }}}
-||||||| constructed merge base
-    handle("c-w", filter=insert_mode)(get_by_name("unix-word-rubout"))
-
     handle("pageup")(get_by_name("previous-history"))
     handle("pagedown")(get_by_name("next-history"))
-
-    ### Emacs:
-
-    handle('c-a')(get_by_name('beginning-of-line'))
-    handle('c-b')(get_by_name('backward-char'))
-    handle('c-delete', filter=insert_mode)(get_by_name('kill-word'))
-    handle('c-e')(get_by_name('end-of-line'))
-    handle('c-f')(get_by_name('forward-char'))
-    handle('c-left')(get_by_name('backward-word'))
-    handle('c-right')(get_by_name('forward-word'))
-    handle('c-x', 'r', 'y', filter=insert_mode)(get_by_name('yank'))
-    handle('c-y', filter=insert_mode)(get_by_name('yank'))
-    handle("c-_", save_before=(lambda e: False), filter=insert_mode)(
-        get_by_name("undo")
-    )
-=======
-    handle("c-w", filter=insert_mode)(get_by_name("unix-word-rubout"))
-
-    handle("pageup")(get_by_name("previous-history"))
-    handle("pagedown")(get_by_name("next-history"))
-
-    ### Emacs:
-
-    handle("c-a")(get_by_name("beginning-of-line"))
-    handle("c-b")(get_by_name("backward-char"))
-    handle("c-delete", filter=insert_mode)(get_by_name("kill-word"))
-    handle("c-e")(get_by_name("end-of-line"))
-    handle("c-f")(get_by_name("forward-char"))
-    handle("c-left")(get_by_name("backward-word"))
-    handle("c-right")(get_by_name("forward-word"))
-    handle("c-x", "r", "y", filter=insert_mode)(get_by_name("yank"))
-    handle("c-y", filter=insert_mode)(get_by_name("yank"))
-    handle("c-_", save_before=(lambda e: False), filter=insert_mode)(
-        get_by_name("undo")
-    )
->>>>>>> Stashed changes
-
-    ### Emacs: {{{
-
-    handle(Keys.ControlA)(get_by_name("beginning-of-line"))
-    handle(Keys.ControlB)(get_by_name("backward-char"))
-    handle("c-delete", filter=insert_mode)(get_by_name("kill-word"))
-    # Don't forget the filter because auto_completion is also gonna want this key
-    handle(Keys.ControlE, filter=insert_mode)(get_by_name("end-of-line"))
-    handle(Keys.ControlF)(get_by_name("forward-char"))
-    handle("c-left")(get_by_name("backward-word"))
-    handle("c-right")(get_by_name("forward-word"))
-    handle(Keys.ControlX, "r", "y", filter=insert_mode)(get_by_name("yank"))
-    handle(Keys.ControlY, filter=insert_mode)(get_by_name("yank"))
-    handle("c-_", save_before=(lambda e: False), filter=insert_mode)(
-        get_by_name("undo")
-    )
-
-    handle(
-        Keys.ControlX, Keys.ControlU, save_before=(lambda e: False), filter=insert_mode
-    )(get_by_name("undo"))
-
-    handle(Keys.ControlX, "(")(get_by_name("start-kbd-macro"))
-    handle(Keys.ControlX, ")")(get_by_name("end-kbd-macro"))
-    handle(Keys.ControlX, "e")(get_by_name("call-last-kbd-macro"))
-
-    def character_search(buff, char, count):
-        if count < 0:
-            match = buff.document.find_backwards(
-                char, in_current_line=True, count=-count
-            )
-        else:
-            match = buff.document.find(char, in_current_line=True, count=count)
-
-        if match is not None:
-            buff.cursor_position += match
-
-    @handle("c-]", Keys.Any)
-    def _(event):
-        " When Ctl-] + a character is pressed. go to that character. "
-        # Also named 'character-search'
-        character_search(event.current_buffer, event.data, event.arg)
-
-<<<<<<< Updated upstream
-    @handle(Keys.ControlX, Keys.ControlX)
-||||||| constructed merge base
-    @handle('c-x', 'c-x')
-=======
-    @handle("c-x", "c-x")
->>>>>>> Stashed changes
-    def _(event):
-        """
-        Move cursor back and forth between the start and end of the current
-        line.
-        """
-        buffer = event.current_buffer
-
-        if buffer.document.is_cursor_at_the_end_of_line:
-            buffer.cursor_position += buffer.document.get_start_of_line_position(
-                after_whitespace=False
-            )
-        else:
-            buffer.cursor_position += buffer.document.get_end_of_line_position()
-
-<<<<<<< Updated upstream
     # }}}
 
     # Has selection: {{{
     @handle("c-@")  # Control-space or Control-@
-||||||| constructed merge base
-    @handle('c-@')  # Control-space or Control-@
-=======
-    @handle("c-@")  # Control-space or Control-@
->>>>>>> Stashed changes
     def _(event):
         """
         Start of the selection (if the current buffer is not empty).
@@ -720,13 +618,7 @@ def add_bindings():  # {{{
         if buff.text:
             buff.start_selection(selection_type=SelectionType.CHARACTERS)
 
-<<<<<<< Updated upstream
     @handle(Keys.ControlG, filter=has_selection)
-||||||| constructed merge base
-    @handle('c-g', filter=has_selection)
-=======
-    @handle("c-g", filter=has_selection)
->>>>>>> Stashed changes
     def _(event):
         """
         Control + G: Cancel completion menu and validation state.
@@ -734,29 +626,15 @@ def add_bindings():  # {{{
         event.current_buffer.complete_state = None
         event.current_buffer.validation_error = None
 
-<<<<<<< Updated upstream
     @handle(Keys.ControlG, filter=has_selection)
-||||||| constructed merge base
-    @handle('c-g', filter=has_selection)
-=======
-    @handle("c-g", filter=has_selection)
->>>>>>> Stashed changes
     def _(event):
         """
         Cancel selection.
         """
         event.current_buffer.exit_selection()
 
-<<<<<<< Updated upstream
     @handle(Keys.ControlW, filter=has_selection)
-    @handle("c-x", "r", "k", filter=has_selection)
-||||||| constructed merge base
-    @handle('c-w', filter=has_selection)
-    @handle('c-x', 'r', 'k', filter=has_selection)
-=======
-    @handle("c-w", filter=has_selection)
-    @handle("c-x", "r", "k", filter=has_selection)
->>>>>>> Stashed changes
+    @handle(Keys.ControlX, "r", "k", filter=has_selection)
     def _(event):
         """
         Cut selected text.
@@ -790,17 +668,17 @@ def add_bindings():  # {{{
 
     # Global bindings.: {{{
 
-    # @handle(Keys.ControlZ)
-    # def suspend_to_bg(event: E) -> None:
-    #     """
-    #     By default, control-Z should literally insert Ctrl-Z.
-    #     (Ansi Ctrl-Z, code 26 in MSDOS means End-Of-File.
-    #     In a Python REPL for instance, it's possible to type
-    #     Control-Z followed by enter to quit.)
-    #     When the system bindings are loaded and suspend-to-background is
-    #     supported, that will override this binding.
-    #     """
-    #     event.app.suspend_to_background()
+    @handle(Keys.ControlZ)
+    def suspend_to_bg(event: E) -> None:
+        """
+        By default, control-Z should literally insert Ctrl-Z.
+        (Ansi Ctrl-Z, code 26 in MSDOS means End-Of-File.
+        In a Python REPL for instance, it's possible to type
+        Control-Z followed by enter to quit.)
+        When the system bindings are loaded and suspend-to-background is
+        supported, that will override this binding.
+        """
+        event.app.suspend_to_background()
 
     @handle(Keys.BracketedPaste)
     def _(event: E) -> None:
@@ -808,7 +686,6 @@ def add_bindings():  # {{{
         Pasting from clipboard.
         """
         data = event.data
-
         # Be sure to use \n as line ending.
         # Some terminals (Like iTerm2) seem to paste \r\n line endings in a
         # bracketed paste. See: https://github.com/ipython/ipython/issues/9737
@@ -825,9 +702,9 @@ def add_bindings():  # {{{
         event.current_buffer.insert_text(event.data, overwrite=False)
         event.app.quoted_insert = False
 
-    # End basic bindings
+    # }}}
 
-    # I added in some function keys
+    # I added in some function keys: {{{
 
     @handle(Keys.F4)
     def toggle_editing_mode(event):
@@ -979,7 +856,6 @@ def add_bindings():  # {{{
         if suggestion:
             b.insert_text(suggestion.text)
 
-<<<<<<< Updated upstream
     @handle(Keys.ControlM, filter=is_searching())
     @handle(Keys.ControlJ, filter=is_searching())
     def accept_search(event):
@@ -994,14 +870,9 @@ def add_bindings():  # {{{
     )
     # }}}
     # return ConditionalKeyBindings(registry, filter=buffer_has_focus)
+
     return registry  # }}}
 
-
-def get_extra_bindings():  # }}}
-    pass
-
-
-# }}}
 
 if __name__ == "__main__":
 
