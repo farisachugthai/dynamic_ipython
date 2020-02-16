@@ -1,18 +1,36 @@
 r"""Add keybindings.
+
 {{{
-Slowly becoming where all my consolidated scripts for making prompt_toolkit's
-handling of keypresses cohesive.
 
-TODO: still need C-z
-Tab doesn't start autocompletion when no letters have been typed in.
-Damnit I lost C-d again.
+    note: VS Code has fdm set to indent. whatever.
 
-However <CR> and <C-m> work as expected. haven't even tried navigation mode;
-however, there's supposed to be ~500 key bindings so I'm excited.
+    Slowly becoming where all my consolidated scripts for making prompt_toolkit's
+    handling of keypresses cohesive.
 
-.. warning::
+    TODO: still need C-z
+    Tab doesn't start autocompletion when no letters have been typed in.
+    Damnit I lost C-d again.
+    Holy hell now it gives us this admonition about the truth of a function.
+    Sounds biblical.
 
-    This is very experimental code.
+    Alright I should probably make a list of the keys in vi_insert_mode that
+    I really want and work up from there.
+    C-a -> beginning_of_line
+    C-e -> end of line
+    C-l -> redraw (Not working)
+    C-p -> go up or go back in history or autocomplete or go to previous autocompletion
+    C-f -> go forward 1 char
+    C-b -> go back 1 char
+
+    These 3 are really important
+    C-d -> **exit**
+    C-z -> suspend
+    C-c -> kill_line
+
+So far in Vim insert mode:
+C-u works
+C-d works
+C-a, C-b, C-f and C-e all work
 
 Btw what is this?
 
@@ -70,8 +88,16 @@ from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.key_binding.bindings.completion import (
     display_completions_like_readline,
 )
-from prompt_toolkit.key_binding.bindings.named_commands import get_by_name
-from prompt_toolkit.key_binding.bindings.scroll import scroll_page_down, scroll_page_up
+from prompt_toolkit.key_binding.bindings.named_commands import (
+    get_by_name,
+    backward_kill_word,
+)
+from prompt_toolkit.key_binding.bindings.scroll import (
+    scroll_page_down,
+    scroll_page_up,
+    scroll_half_page_down,
+    scroll_half_page_up,
+)
 from prompt_toolkit.key_binding.bindings.search import abort_search
 
 # check out this dict for debugging
@@ -92,7 +118,7 @@ from default_profile.startup.ptoolkit import get_app
 
 # }}}
 
-logger = STARTUP_LOGGER.getChild('thirty-one')
+logger = STARTUP_LOGGER.getChild("thirty-one")
 
 E = KeyPressEvent
 insert_mode = vi_insert_mode | emacs_insert_mode
@@ -101,35 +127,21 @@ insert_mode = vi_insert_mode | emacs_insert_mode
 
 
 @Condition
-def is_returnable():
-    return get_app().current_buffer.is_returnable
-
-
-# is_returnable = Condition(lambda: get_app().current_buffer.is_returnable)
-
-
-@Condition
-def should_confirm_completion():
-    """Check if completion needs confirmation"""
-    return get_app().current_buffer.complete_state
-
-
-@Condition
 def has_text_before_cursor() -> bool:
     return bool(get_app().current_buffer.text)
 
 
-@Condition
-def ctrl_d_condition():
-    """Ctrl-D binding is only active when the default buffer is selected and
-    empty.
-    """
-    app = get_app()
-    buffer_name = app.current_buffer.name
-    if not beginning_of_line:
-        return False
-    if buffer_name == DEFAULT_BUFFER and not app.current_buffer.text:
-        return True
+# Yeah and this straight up doesn't work
+# @Condition
+# def ctrl_d_condition():
+#     """Ctrl-D binding is only active when the default buffer is selected and
+#     empty.
+#     """
+#     app = get_app()
+#     buffer_name = app.current_buffer.name
+#     if not beginning_of_line:
+#         return False
+#     return buffer_name == DEFAULT_BUFFER and not app.current_buffer.text
 
 
 # This is erroring...is it because its the only condition that requires an argument?
@@ -139,16 +151,16 @@ def ctrl_d_condition():
 #     return len(l.strip()) == 0
 
 
-@Condition
-def tab_insert_indent():
-    """Check if <Tab> should insert indent instead of starting autocompletion.
-    Checks if there are only whitespaces before the cursor - if so indent
-    should be inserted, otherwise autocompletion.
+# @Condition
+# def tab_insert_indent():
+#     """Check if <Tab> should insert indent instead of starting autocompletion.
+#     Checks if there are only whitespaces before the cursor - if so indent
+#     should be inserted, otherwise autocompletion.
 
-    """
-    before_cursor = get_app().current_buffer.document.current_line_before_cursor
+#     """
+#     before_cursor = get_app().current_buffer.document.current_line_before_cursor
 
-    return bool(before_cursor.isspace())
+#     return bool(before_cursor.isspace())
 
 
 @Condition
@@ -214,26 +226,19 @@ def suggestion_available():
     )
 
 
-@Condition
-def suggestion_available():
-    app = get_app()
-    return (
-        app.current_buffer.suggestion is not None
-        and app.current_buffer.document.is_cursor_at_the_end
-    )
-
-
-@Condition
-def has_selection():
-    """
-    Enable when the current buffer has a selection.
-    """
-    return bool(get_app().current_buffer.selection_state)
-
-
 # }}}
 
 # Not conditions: {{{
+
+
+def character_search(buff, char, count):
+    if count < 0:
+        match = buff.document.find_backwards(char, in_current_line=True, count=-count)
+    else:
+        match = buff.document.find(char, in_current_line=True, count=count)
+
+    if match is not None:
+        buff.cursor_position += match
 
 
 def switch_to_navigation_mode(event):
@@ -255,229 +260,12 @@ def if_no_repeat(event: E) -> bool:
 
 # }}}
 
-# {{{
 
-
-def get_key_bindings(custom_key_bindings=None):
-    """Load key_bindings for the application and customize as necessary.
-
-    Parameters
-    ----------
-    custom_key_bindings : KeyBindings
-        The return value of the function in this module `add_bindings`.
-
-    Notes
-    ------
-    .. warning::
-
-        The ``__init__`` for `_MergedKeyBindings` features this.::
-
-            def __init__(self, registries):
-                assert all(isinstance(r, KeyBindingsBase) for r in registries)
-                _Proxy.__init__(self)
-                self.registries = registries
-
-        As a result `None` can't be passed to `merge_key_bindings`.
-
-    """
-    from prompt_toolkit.key_binding.bindings.auto_suggest import (
-        load_auto_suggest_bindings,
-    )
-    from prompt_toolkit.key_binding.defaults import load_key_bindings
-
-    from prompt_toolkit.key_binding.bindings.page_navigation import (
-        load_page_navigation_bindings,
-    )
-
-    kb = [
-        create_ipython_shortcuts(get_ipython()),
-        load_auto_suggest_bindings(),
-        load_key_bindings(),
-        load_page_navigation_bindings(),
-    ]
-    if custom_key_bindings is not None:
-        kb.append(custom_key_bindings)
-    merged = merge_key_bindings(kb)
-
-    return merged  # }}}
-
-
-def add_bindings():  # {{{
+def generate_insert_mode_bindings():  # {{{
+    # insert mode (emacs or vi): {{{
     registry = KeyBindings()
 
     handle = registry.add
-
-    # basic: {{{
-    handle("home")(get_by_name("beginning-of-line"))
-    handle(Keys.ControlA, filter=insert_mode)(get_by_name("beginning-of-line"))
-
-    handle("end")(get_by_name("end-of-line"))
-    handle(Keys.ControlE, filter=insert_mode)(get_by_name("end-of-line"))
-
-    handle(Keys.ControlA)(get_by_name("beginning-of-line"))
-    handle(Keys.ControlB)(get_by_name("backward-char"))
-    handle("c-delete", filter=insert_mode)(get_by_name("kill-word"))
-    # Don't forget the filter because auto_completion is also gonna want this key
-    handle(Keys.ControlE, filter=insert_mode)(get_by_name("end-of-line"))
-    handle(Keys.ControlF)(get_by_name("forward-char"))
-    handle("c-left")(get_by_name("backward-word"))
-    handle("c-right")(get_by_name("forward-word"))
-
-    handle(Keys.ControlX, "r", "y", filter=insert_mode)(get_by_name("yank"))
-
-    handle(Keys.ControlY, filter=insert_mode)(get_by_name("yank"))
-    handle(Keys.ControlUnderscore, save_before=(lambda e: False), filter=insert_mode)(
-        get_by_name("undo")
-    )
-
-    handle(
-        Keys.ControlX, Keys.ControlU, save_before=(lambda e: False), filter=insert_mode
-    )(get_by_name("undo"))
-
-    handle(Keys.ControlX, "(")(get_by_name("start-kbd-macro"))
-    handle(Keys.ControlX, ")")(get_by_name("end-kbd-macro"))
-    handle(Keys.ControlX, "e")(get_by_name("call-last-kbd-macro"))
-
-    def character_search(buff, char, count):
-        if count < 0:
-            match = buff.document.find_backwards(
-                char, in_current_line=True, count=-count
-            )
-        else:
-            match = buff.document.find(char, in_current_line=True, count=count)
-
-        if match is not None:
-            buff.cursor_position += match
-
-    @handle("c-]", Keys.Any)
-    def _(event):
-        " When Ctl-] + a character is pressed. go to that character. "
-        # Also named 'character-search'
-        character_search(event.current_buffer, event.data, event.arg)
-
-    @handle(Keys.ControlX, Keys.ControlX)
-    def _(event):
-        """
-        Move cursor back and forth between the start and end of the current
-        line.
-        """
-        buffer = event.current_buffer
-
-        if buffer.document.is_cursor_at_the_end_of_line:
-            buffer.cursor_position += buffer.document.get_start_of_line_position(
-                after_whitespace=False
-            )
-        else:
-            buffer.cursor_position += buffer.document.get_end_of_line_position()
-
-    # }}}
-    # End basic bindings
-
-    # ** In navigation mode **: {{{
-    # Shit this should get broken up into it's own function it's really
-    # hard to navigate around
-    # List of navigation commands: http://hea-www.harvard.edu/~fine/Tech/vi.html
-
-    @handle("insert", filter=vi_navigation_mode)
-    def _(event: E) -> None:
-        """
-        Pressing the Insert key.
-        """
-        event.app.vi_state.input_mode = InputMode.INSERT
-
-    @handle("insert", filter=insert_mode)
-    def _(event: E) -> None:
-        """
-        Pressing the Insert key.
-        """
-        event.app.vi_state.input_mode = InputMode.NAVIGATION
-
-    @handle(Keys.Escape, "<", filter=vi_navigation_mode)
-    def beginning(event):
-        """Move to the beginning of our recorded history."""
-        event.current_buffer.cursor_position = 0
-
-    @handle(Keys.Escape, ">", filter=vi_navigation_mode)
-    def end(event):
-        """Move to the end."""
-        event.current_buffer.cursor_position = len(event.current_buffer.text)
-
-    @handle(Keys.Left, filter=beginning_of_line)
-    def wrap_cursor_back(event):
-        """Move cursor to end of previous line unless at beginning of
-        document
-        """
-        b = event.cli.current_buffer
-        b.cursor_up(count=1)
-        relative_end_index = b.document.get_end_of_line_position()
-        b.cursor_right(count=relative_end_index)
-
-    @handle(Keys.Left)
-    def left_multiline(event):
-        """
-        Left that wraps around in multiline.
-        """
-        if event.current_buffer.cursor_position - event.arg >= 0:
-            event.current_buffer.cursor_position -= event.arg
-
-        if getattr(event.current_buffer.selection_state, "shift_arrow", False):
-            event.current_buffer.selection_state = None
-
-    @handle(Keys.Right, filter=end_of_line)
-    def wrap_cursor_forward(event):
-        """Move cursor to beginning of next line unless at end of document"""
-        b = event.cli.current_buffer
-        relative_begin_index = b.document.get_start_of_line_position()
-        b.cursor_left(count=abs(relative_begin_index))
-        b.cursor_down(count=1)
-
-    @handle(Keys.Right)
-    def right_multiline(event):
-        """Right that wraps around in multiline."""
-        if event.current_buffer.cursor_position + event.arg <= len(
-            event.current_buffer.text
-        ):
-            event.current_buffer.cursor_position += event.arg
-
-        if getattr(event.current_buffer.selection_state, "shift_arrow", False):
-            event.current_buffer.selection_state = None
-
-    @handle("k", filter=vi_navigation_mode)
-    def _(event: E) -> None:
-        """
-        Go up, but if we enter a new history entry, move to the start of the
-        line.
-        """
-        event.current_buffer.auto_up(
-            count=event.arg, go_to_start_of_line_if_history_changes=True
-        )
-
-    @handle("down", filter=vi_navigation_mode)
-    @handle("c-n", filter=vi_navigation_mode)
-    def _(event: E) -> None:
-        """
-        Arrow down and Control-N in navigation mode.
-        """
-        event.current_buffer.auto_down(count=event.arg)
-
-    @handle("j", filter=vi_navigation_mode)
-    def _(event: E) -> None:
-        """
-        Go down, but if we enter a new history entry, go to the start of the line.
-        """
-        event.current_buffer.auto_down(
-            count=event.arg, go_to_start_of_line_if_history_changes=True
-        )
-
-    @handle("backspace", filter=vi_navigation_mode)
-    def _(event: E) -> None:
-        """In navigation-mode, move cursor."""
-        event.current_buffer.cursor_position += event.current_buffer.document.get_cursor_left_position(
-            count=event.arg
-        )
-        # }}}
-
-    # vi insert mode: {{{
 
     # This'll be nice
     handle(Keys.ControlSpace, filter=insert_mode)(get_by_name("complete"))
@@ -493,7 +281,7 @@ def add_bindings():  # {{{
 
     handle(Keys.ControlI)(display_completions_like_readline)
 
-    @handle("c-o", filter=vi_insert_mode)
+    @handle(Keys.ControlO, filter=insert_mode)
     def _(event: E) -> None:
         """
         Go into normal mode for one single action.
@@ -501,11 +289,11 @@ def add_bindings():  # {{{
         event.app.vi_state.temporary_navigation_mode = True
 
     handle("j", "k", filter=insert_mode)(switch_to_navigation_mode)
-
+    handle("j", "j", filter=insert_mode)(get_by_name("prefix-meta"))
 
     # In insert mode, also accept input when enter is pressed, and the buffer
     # has been marked as single line.
-    handle("enter", filter=is_returnable)(get_by_name("accept-line"))
+    handle(Keys.Enter, filter=insert_mode)(get_by_name("accept-line"))
 
     # why the literal fuck did i do this
     # @handle("")
@@ -558,9 +346,17 @@ def add_bindings():  # {{{
         else:
             b.start_completion(select_last=True)
 
+    @handle(Keys.ControlJ, filter=insert_mode)
+    def _(event: E) -> None:
+        r"""
+        By default, handle \n as if it were a \r (enter).
+        (It appears that some terminals send \n instead of \r when pressing
+        enter. - at least the Linux subsystem for Windows.)
+        """
+        event.key_processor.feed(KeyPress(Keys.ControlM, "\r"), first=True)
 
-    @handle("up", filter=vi_navigation_mode)
-    @handle("c-p", filter=vi_navigation_mode)
+    @handle(Keys.Up, filter=vi_navigation_mode)
+    @handle(Keys.ControlP, filter=vi_navigation_mode)
     @handle(Keys.ControlP, filter=insert_mode)
     def either_previous_completion_or_go_up(event: E) -> None:
         """Control-P: To previous completion.
@@ -575,17 +371,13 @@ def add_bindings():  # {{{
         if b.complete_state:
             b.complete_previous()
         else:
-            event.current_buffer.auto_up(count=event.arg)
             # b.start_completion(select_last=True)
             # I feel like this should still be go up a line
+            event.current_buffer.auto_up(count=event.arg)
 
-    # @handle(Keys.ControlG, filter=insert_mode)
-    # @handle(Keys.ControlY, filter=insert_mode)
-    # def _(event: E) -> None:
-    #     """Accept current completion."""
-    #     event.current_buffer.complete_state = None
+    # }}}
 
-    # originally from basic_bindings
+    # originally from basic_bindings: {{{
 
     @handle(Keys.ControlX, Keys.ControlE)
     def open_in_editor(event):
@@ -608,6 +400,7 @@ def add_bindings():  # {{{
 
     handle(Keys.ControlK, filter=insert_mode)(get_by_name("kill-line"))
     handle(Keys.ControlU, filter=insert_mode)(get_by_name("unix-line-discard"))
+
     handle("backspace", filter=insert_mode, save_before=if_no_repeat)(
         get_by_name("backward-delete-char")
     )
@@ -626,7 +419,194 @@ def add_bindings():  # {{{
 
     # Control-W should delete, using whitespace as separator, while M-Del
     # should delete using [^a-zA-Z0-9] as a boundary.
-    handle(Keys.ControlW, filter=insert_mode)(get_by_name("unix-word-rubout"))
+    # handle(Keys.ControlW, filter=insert_mode)(get_by_name("unix-word-rubout"))
+    # Yeah i hate that readline doesn't delimit by whitespace or path separators
+    # Use the command that's usually assocaited with Alt-BS
+    handle(Keys.ControlW, filter=insert_mode)(backward_kill_word)
+
+    # }}}
+
+    # basic bindings: {{{
+    handle("home", filter=insert_mode)(get_by_name("beginning-of-line"))
+    handle(Keys.ControlA, filter=insert_mode)(get_by_name("beginning-of-line"))
+
+    handle("end", filter=insert_mode)(get_by_name("end-of-line"))
+
+    handle(Keys.ControlC)(get_by_name("kill-line"))
+
+    # Don't forget the filter because auto_completion is also gonna want this key
+    handle(Keys.ControlE, filter=insert_mode)(get_by_name("end-of-line"))
+    handle("c-left", filter=insert_mode)(get_by_name("backward-word"))
+    handle("c-right", filter=insert_mode)(get_by_name("forward-word"))
+    handle("c-delete", filter=insert_mode)(get_by_name("kill-word"))
+    handle(Keys.ControlX, "r", "y", filter=insert_mode)(get_by_name("yank"))
+
+    handle(Keys.ControlY, filter=insert_mode)(get_by_name("yank"))
+    handle(Keys.ControlUnderscore, save_before=(lambda e: False), filter=insert_mode)(
+        get_by_name("undo")
+    )
+
+    handle(
+        Keys.ControlX, Keys.ControlU, save_before=(lambda e: False), filter=insert_mode
+    )(get_by_name("undo"))
+
+    handle(Keys.ControlX, "(")(get_by_name("start-kbd-macro"))
+    handle(Keys.ControlX, ")")(get_by_name("end-kbd-macro"))
+    handle(Keys.ControlX, "e")(get_by_name("call-last-kbd-macro"))
+
+    @handle("c-]", Keys.Any)
+    def _(event):
+        " When Ctl-] + a character is pressed. go to that character. "
+        # Also named 'character-search'
+        character_search(event.current_buffer, event.data, event.arg)
+
+    @handle(Keys.ControlX, Keys.ControlX)
+    def _(event):
+        """
+        Move cursor back and forth between the start and end of the current
+        line.
+        """
+        buffer = event.current_buffer
+
+        if buffer.document.is_cursor_at_the_end_of_line:
+            buffer.cursor_position += buffer.document.get_start_of_line_position(
+                after_whitespace=False
+            )
+        else:
+            buffer.cursor_position += buffer.document.get_end_of_line_position()
+
+    handle(Keys.Any, filter=insert_mode, save_before=if_no_repeat)(
+        get_by_name("self-insert")
+    )
+
+    @handle(Keys.ControlB, filter=insert_mode)
+    @handle(Keys.Left, filter=insert_mode)
+    def left_multiline(event):
+        """Left that wraps around in multiline. Also C-b"""
+        if event.current_buffer.cursor_position - event.arg >= 0:
+            event.current_buffer.cursor_position -= event.arg
+
+        if getattr(event.current_buffer.selection_state, "shift_arrow", False):
+            event.current_buffer.selection_state = None
+
+    @handle(Keys.ControlF, filter=end_of_line)
+    @handle(Keys.Right, filter=end_of_line)
+    def right_multiline(event):
+        """Right that wraps around in multiline."""
+        if event.current_buffer.cursor_position + event.arg <= len(
+            event.current_buffer.text
+        ):
+            event.current_buffer.cursor_position += event.arg
+
+        if getattr(event.current_buffer.selection_state, "shift_arrow", False):
+            event.current_buffer.selection_state = None
+
+    # }}}
+
+    # Control-D: {{{
+
+    @handle(Keys.ControlD, filter=insert_mode & has_text_before_cursor)
+    def deletechar(event):
+        event.current_buffer.delete(count=event.arg)
+
+    @handle(Keys.ControlD, filter=insert_mode)
+    def exit_this(event):
+        """Either delete a character or exit the application. TODO: this doesn't work"""
+        if get_ipython() is not None:
+            return get_ipython().ask_exit()
+
+    # this doesn't do what you'd expect.
+    # handle(Keys.ControlD)(get_by_name("end-of-file"))
+
+    # @handle(Keys.ControlD)
+    # def exit_app(event):
+    # HE CATCHES RUNTIMEERROR WHAT THE FUCK
+    # raise RuntimeError
+    # ugh why isn't this working :(
+    # event.app.exit(result=False)
+    # I'm actually not sure why that isn't working. It raises an error because
+    # a concurrent.future.Future object already completed. However we can do
+    # this on te IPython side and it'll work easily
+
+    # }}}
+
+    return registry
+    # }}}
+
+def add_bindings():  # {{{
+    registry = KeyBindings()
+
+    handle = registry.add
+
+    # ** In navigation mode **: {{{
+
+    # Shit this should get broken up into it's own function it's really
+    # hard to navigate around
+    # List of navigation commands: http://hea-www.harvard.edu/~fine/Tech/vi.html
+
+    @handle("insert", filter=vi_navigation_mode)
+    def _(event: E) -> None:
+        """
+        Pressing the Insert key.
+        """
+        event.app.vi_state.input_mode = InputMode.INSERT
+
+
+    @handle(Keys.Left, filter=beginning_of_line)
+    def wrap_cursor_back(event):
+        """Move cursor to end of previous line unless at beginning of
+        document
+        """
+        b = event.cli.current_buffer
+        b.cursor_up(count=1)
+        relative_end_index = b.document.get_end_of_line_position()
+        b.cursor_right(count=relative_end_index)
+
+    @handle(Keys.Right, filter=end_of_line)
+    def wrap_cursor_forward(event):
+        """Move cursor to beginning of next line unless at end of document"""
+        b = event.cli.current_buffer
+        relative_begin_index = b.document.get_start_of_line_position()
+        b.cursor_left(count=abs(relative_begin_index))
+        b.cursor_down(count=1)
+
+    @handle("k", filter=vi_navigation_mode)
+    def vi_navigation_up(event: E) -> None:
+        """
+        Go up, but if we enter a new history entry, move to the start of the
+        line.
+        """
+        event.current_buffer.auto_up(
+            count=event.arg, go_to_start_of_line_if_history_changes=True
+        )
+
+    @handle(Keys.Down, filter=vi_navigation_mode)
+    @handle(Keys.ControlN, filter=vi_navigation_mode)
+    def vi_navigation_down(event: E) -> None:
+        """Arrow down and Control-N in navigation mode."""
+        event.current_buffer.auto_down(count=event.arg)
+
+    @handle("j", filter=vi_navigation_mode)
+    def vi_navigation_down_and_start(event: E) -> None:
+        """
+        Go down, but if we enter a new history entry, go to the start of the line.
+        """
+        event.current_buffer.auto_down(
+            count=event.arg, go_to_start_of_line_if_history_changes=True
+        )
+
+    @handle("backspace", filter=vi_navigation_mode)
+    def vi_navigation_bs(event: E) -> None:
+        """In navigation-mode, move cursor."""
+        event.current_buffer.cursor_position += event.current_buffer.document.get_cursor_left_position(
+            count=event.arg
+        )
+
+    handle(Keys.ControlD, filter=vi_navigation_mode)(scroll_half_page_down)
+    handle(Keys.ControlU, filter=vi_navigation_mode)(scroll_half_page_up)
+
+    handle(Keys.ControlF, filter=vi_navigation_mode)(scroll_page_down)
+    handle(Keys.ControlB, filter=vi_navigation_mode)(scroll_page_down)
 
     # }}}
 
@@ -643,17 +623,13 @@ def add_bindings():  # {{{
 
     @handle(Keys.ControlG, filter=has_selection)
     def _(event):
-        """
-        Control + G: Cancel completion menu and validation state.
-        """
+        """Control + G: Cancel completion menu and validation state."""
         event.current_buffer.complete_state = None
         event.current_buffer.validation_error = None
 
     @handle(Keys.ControlG, filter=has_selection)
     def _(event):
-        """
-        Cancel selection.
-        """
+        """Cancel selection."""
         event.current_buffer.exit_selection()
 
     @handle(Keys.ControlW, filter=has_selection)
@@ -665,23 +641,6 @@ def add_bindings():  # {{{
         data = event.current_buffer.cut_selection()
         event.app.clipboard.set_data(data)
 
-    @handle(Keys.ControlJ)
-    def _(event: E) -> None:
-        r"""
-        By default, handle \n as if it were a \r (enter).
-        (It appears that some terminals send \n instead of \r when pressing
-        enter. - at least the Linux subsystem for Windows.)
-        """
-        event.key_processor.feed(KeyPress(Keys.ControlM, "\r"), first=True)
-
-    @handle("up")
-    def _(event: E) -> None:
-        event.current_buffer.auto_up(count=event.arg)
-
-    @handle("down")
-    def _(event: E) -> None:
-        event.current_buffer.auto_down(count=event.arg)
-
     @handle("delete")
     def _(event: E) -> None:
         data = event.current_buffer.cut_selection()
@@ -690,6 +649,14 @@ def add_bindings():  # {{{
     # }}}
 
     # Global bindings.: {{{
+
+    @handle(Keys.Up)
+    def _(event: E) -> None:
+        event.current_buffer.auto_up(count=event.arg)
+
+    @handle(Keys.Down)
+    def _(event: E) -> None:
+        event.current_buffer.auto_down(count=event.arg)
 
     # No filters i want this recognized all the time.
     @handle(Keys.ControlZ)
@@ -717,16 +684,6 @@ def add_bindings():  # {{{
         data = data.replace("\r", "\n")
 
         event.current_buffer.insert_text(data)
-
-    @handle(Keys.Any, filter=in_quoted_insert, eager=True)
-    def _(event: E) -> None:
-        """
-        Handle quoted insert.
-        """
-        event.current_buffer.insert_text(event.data, overwrite=False)
-        event.app.quoted_insert = False
-
-    # }}}
 
     # I added in some function keys: {{{
 
@@ -757,42 +714,7 @@ def add_bindings():  # {{{
         interface and return this value from the `Application.run()` call.
         """
 
-    @handle(Keys.ControlD, filter=ctrl_d_condition)
-    def _(event):
-        """Either delete a character or exit the application. TODO: this doesn't work"""
-        buffer = event.cli.current_buffer
-
-        if buffer.document.current_char == "":
-            event.app.exit()
-        else:
-            event.current_buffer.delete(count=event.arg)
-
-    handle("c-d", filter=has_text_before_cursor & insert_mode)(
-        get_by_name("delete-char")
-    )
-
-    # this doesn't do what you'd expect.
-    # handle(Keys.ControlD)(get_by_name("end-of-file"))
-
-    # @handle(Keys.ControlD)
-    # def exit_app(event):
-    # HE CATCHES RUNTIMEERROR WHAT THE FUCK
-    # raise RuntimeError
-    # ugh why isn't this working :(
-    # event.app.exit(result=False)
-    # I'm actually not sure why that isn't working. It raises an error because
-    # a concurrent.future.Future object already completed. However we can do
-    # this on te IPython side and it'll work easily
-    @handle(Keys.ControlD, filter=insert_mode)
-    def exit_app(event):
-        """Invoke the |ip| method *ask_exit*."""
-        if get_ipython() is not None:
-            return get_ipython().ask_exit()
-
-    # @handle(Keys.ControlD, filter=vi_navigation_mode)(scroll_page_down)
-    # todo: gotta do this for c-d in navigation mode too
-    # @handle(Keys.ControlF, filter=vi_navigation_mode)(scroll_page_down)
-
+    # }}}
     # }}}
 
     # matchit: {{{
@@ -880,9 +802,9 @@ def add_bindings():  # {{{
 
     # autosuggest: {{{
 
-    @handle("c-f", filter=suggestion_available)
-    @handle("c-e", filter=suggestion_available)
-    @handle("right", filter=suggestion_available)
+    @handle(Keys.ControlF, filter=suggestion_available)
+    @handle(Keys.ControlE, filter=suggestion_available)
+    @handle(Keys.Right, filter=suggestion_available)
     def _(event):
         " Accept suggestion. "
         b = event.current_buffer
@@ -897,17 +819,65 @@ def add_bindings():  # {{{
         search.accept_search()
 
     # page navigation *because  why are these conditional on editing mode*
-    handle("pagedown")(scroll_page_down)
-    handle("pageup")(scroll_page_up)
+    handle(Keys.PageDown, filter=vi_navigation_mode)(scroll_page_down)
+    handle(Keys.PageUp, filter=vi_navigation_mode)(scroll_page_up)
 
-    handle(Keys.Any, filter=insert_mode, save_before=if_no_repeat)(
-        get_by_name("self-insert")
-    )
+    @handle(Keys.Any, filter=in_quoted_insert, eager=True)
+    def _(event: E) -> None:
+        """
+        Handle quoted insert.
+        """
+        event.current_buffer.insert_text(event.data, overwrite=False)
+        event.app.quoted_insert = False
+
+    return registry
     # }}}
-    # return ConditionalKeyBindings(registry, filter=buffer_has_focus)
 
-    return registry  # }}}
 
+
+def get_key_bindings(custom_key_bindings=None):
+    """Load key_bindings for the application and customize as necessary.
+
+    Parameters
+    ----------
+    custom_key_bindings : KeyBindings
+        The return value of the function in this module `add_bindings`.
+
+    Notes
+    ------
+    .. warning::
+
+        The ``__init__`` for `_MergedKeyBindings` features this.::
+
+            def __init__(self, registries):
+                assert all(isinstance(r, KeyBindingsBase) for r in registries)
+                _Proxy.__init__(self)
+                self.registries = registries
+
+        As a result `None` can't be passed to `merge_key_bindings`.
+
+    """
+    from prompt_toolkit.key_binding.bindings.auto_suggest import (
+        load_auto_suggest_bindings,
+    )
+    from prompt_toolkit.key_binding.defaults import load_key_bindings
+
+    from prompt_toolkit.key_binding.bindings.page_navigation import (
+        load_page_navigation_bindings,
+    )
+
+    kb = [
+        create_ipython_shortcuts(get_ipython()),
+        load_auto_suggest_bindings(),
+        load_key_bindings(),
+        load_page_navigation_bindings(),
+        generate_insert_mode_bindings(),
+    ]
+    if custom_key_bindings is not None:
+        kb.append(custom_key_bindings)
+    merged = merge_key_bindings(kb)
+
+    return merged  # }}}
 
 if __name__ == "__main__":
 

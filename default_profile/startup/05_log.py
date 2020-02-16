@@ -229,4 +229,4 @@ if __name__ == "__main__":
         logger.log_output = log_output
         logger.timestamp = True
 
-    extra_logger = betterConfig(name=__name__, parent=STARTUP_LOGGER.name)
+        extra_logger = betterConfig(name=__name__, parent=STARTUP_LOGGER.name)
