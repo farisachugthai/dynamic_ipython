@@ -22,7 +22,6 @@ else:
     logging.basicConfig(format="%(message)s", level=logging.DEBUG)
 
 
-
 class SimpleCompleter:
     """
     :URL: https://pymotw.com/3/readline/
@@ -143,8 +142,9 @@ def py_readline(rl=None):
     inputrc = os.environ.get("INPUTRC")
     if inputrc is not None:
         rl.read_inputrc()
-    elif os.path.expanduser('~/pyreadlineconfig.ini'):
-        rl.read_inputrc(os.path.expanduser('~/pyreadlineconfig.ini'))
+    elif os.path.expanduser("~/pyreadlineconfig.ini"):
+        rl.read_inputrc(os.path.expanduser("~/pyreadlineconfig.ini"))
+
 
 # History
 
@@ -182,26 +182,13 @@ def teardown_historyfile(histfile=None):
     if not histfile:
         return
     try:
-        readline.write_history_file(histfile)
-    except OSError:
-        logging.error(
-            "History not saved. There were problems saving to ~/.python_history"
-        )
-
-
-if __name__ == "__main__":
-    # Interestingly this can work on Windows with a simple pip install pyreadline
-    # however it can be imported as readline no alias so check it first
-    if "pyreadline" in sys.modules:
-        pyreadline = sys.modules["pyreadline"]
-    else:
-        try:
-            import readline
-        except ImportError:
-            raise
+        import readline
+    except ImportError:
+        pass
 
     try:
         from pyreadline.rlmain import Readline
+
         # from pyreadline.lineobj.history import EscapeHistory, LineEditor
         from pyreadline.lineeditor.lineobj import ReadLineTextBuffer
     except (ImportError, ModuleNotFoundError):
@@ -210,7 +197,37 @@ if __name__ == "__main__":
         readline = Readline()
         py_readline(readline)
 
+    try:
+        readline.write_history_file(histfile)
+    except OSError:
+        logging.error(
+            "History not saved. There were problems saving to ~/.python_history"
+        )
 
+
+# Interestingly this can work on Windows with a simple pip install pyreadline
+# however it can be imported as readline no alias so check it first
+if "pyreadline" in sys.modules:
+    pyreadline = sys.modules["pyreadline"]
+
+try:
+    import readline
+except ImportError:
+    pass
+
+try:
+    from pyreadline.rlmain import Readline
+
+    # from pyreadline.lineobj.history import EscapeHistory, LineEditor
+    from pyreadline.lineeditor.lineobj import ReadLineTextBuffer
+except (ImportError, ModuleNotFoundError):
+    pass
+else:
+    readline = Readline()
+    py_readline(readline)
+
+
+if __name__ == "__main__":
     readline_config()
     histfile = "~/.python_history"
     setup_historyfile(histfile)
