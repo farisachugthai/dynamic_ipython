@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
+r"""
 ===================================
 IPython-specific Sphinx extensions.
 ===================================
@@ -16,14 +16,22 @@ would emit :exc:`ImportError` on startup, which would be frustrating for
 users.
 
 """
-from default_profile import ask_for_import
 import importlib
 import logging
 import pkgutil
 import sys
 from pathlib import Path
 
-logging.getLogger(name="docs").getChild("sphinxext").addHandler(logging.StreamHandler())
+from default_profile import ask_for_import
+from default_profile import default_log_format
+
+sphinxext_logger = logging.getLogger(name="default_profile").getChild("sphinxext")
+sphinxext_formatter = logging.Formatter(default_log_format)
+sphinxext_handler = logging.StreamHandler()
+sphinxext_handler.setFormatter(sphinxext_formatter)
+sphinxext_handler.setLevel(logging.WARNING)
+sphinxext_logger.addHandler(sphinxext_handler)
+sphinxext_logger.setLevel(logging.WARNING)
 
 # How to check the current namespace
 if hasattr(locals(), "__path__"):

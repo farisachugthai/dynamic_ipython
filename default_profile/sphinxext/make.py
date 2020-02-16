@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import argparse
-import logging
+import codecs
 import os
 from pathlib import Path
 from pprint import pprint
@@ -34,20 +34,7 @@ from jinja2.lexer import get_lexer
 
 from default_profile import ask_for_import
 from default_profile.__about__ import __version__
-
-
-def _setup_make_logging():
-    """Setup the logging. Add a filter with no args to allow everything."""
-    BASIC_FORMAT = "[%(created)f %(module)s ] %(levelname)s  %(message)s"
-
-    logger = logging.getLogger(name="docs.sphinxext").getChild("make")
-    logger.setLevel(logging.DEBUG)
-    make_handler = logging.StreamHandler(stream=sys.stdout)
-    make_handler.setLevel(logging.DEBUG)
-    make_handler.setFormatter(logging.Formatter(fmt=BASIC_FORMAT))
-    logger.addHandler(make_handler)
-    logger.addFilter(logging.Filter())
-    return logger
+from default_profile.sphinxext import sphinxext_logger
 
 
 def _parse_arguments(cmds=None) -> argparse.ArgumentParser:
@@ -161,7 +148,7 @@ class DocBuilder:
 
     """
 
-    MAKE_LOGGER = _setup_make_logging()
+    MAKE_LOGGER = sphinxext_logger
 
     def __init__(self, kind=None, num_jobs=1, verbosity=0):
         """Kind has to be first in case the user uses the class with a positional parameter.
@@ -294,39 +281,34 @@ def rsync():
         return output
 
 
-def gather_sphinx_options(argv: List[str]) -> Any:
-    """Gather parsed arguments and hand them to sphinx-build in a more direct manner.
+# def gather_sphinx_options() -> Any:
+#     """Gather parsed arguments and hand them to sphinx-build in a more direct manner.
 
-    Parameters
-    ----------
-    argv : list
-        User provided arguments
+#     Parameters
+#     ----------
+#     argv : list
+#         User provided arguments
 
-    Returns
-    -------
-    ret : int (? or maybe just the parsed options?)
-        Return code from sphinx-build
+#     Returns
+#     -------
+#     ret : int (? or maybe just the parsed options?)
+#         Return code from sphinx-build
 
-    """
-    args = _parse_arguments()
-    jobs = args.jobs
-    verbosity = args.verbose
-    builder = args.builder
-
-    # Necessary enough to justify not making a logrecord.
-    pprint(
-        "Your sphinx-build command was: "
-        + str(
-            ["-b", builder, SOURCE_PATH, BUILD_PATH, "-j", jobs, "-" + verbosity * "v"]
-        )
-    )
-    ret = ["-b", builder, SOURCE_PATH, BUILD_PATH]
-    return ret
+#     """
+#     args = _parse_arguments()
+#     # Necessary enough to justify not making a logrecord.
+#     pprint(
+#         "Your sphinx-build command was: "
+#         + str(
+#             ["-b", builder, SOURCE_PATH, BUILD_PATH, "-j", jobs, "-" + verbosity * "v"]
+#         )
+#     )
+#     ret = ["-b", builder, SOURCE_PATH, BUILD_PATH]
+#     return ret
 
 
-def generate_sphinx_app():
-
-    srcdir = confdir = "source"
+def generate_sphinx_app(root):
+    srcdir = confdir = root.joinpath("source")
     doctreedir = "build/.doctrees"
     outdir = "build/html"
     app = Sphinx(
@@ -360,21 +342,31 @@ def setup_jinja():
 
 def main(repo_root=None):
     # Probably should initialize in a different/ better way but eh
+    # build_opts = gather_sphinx_options()
+    build_opts = _parse_arguments()
+
     if ask_for_import("jinja2"):
         env = setup_jinja()
     else:
         env = Environment()
 
-    lexer = setup_jinja()
-    project = Project(repo_root, source_suffix="rst")
-    # sphinx_fs = SphinxFileSystemLoader(searchpath=project.templates_path)
-    build_opts = gather_sphinx_options([])
+    doc_root = Path(git_root).joinpath("docs")
+    app = generate_sphinx_app(doc_root)
+    project = Project(doc_root, source_suffix="rst")
+    sphinx_fs = SphinxFileSystemLoader(
+        searchpath=doc_root.joinpath("source/_templates")
+    )
     build_main(build_opts)
 
 
 if __name__ == "__main__":
 
-    logger = _setup_make_logging()
-    git_root = subprocess.run(["git", "rev-parse", "--show-root"]).stdout
-    logger.debug(f"git root was: {git_root}")
+    git_root = codecs.decode(
+        subprocess.run(
+            ["git", "rev-parse", "--show-toplevel"], stdout=subprocess.PIPE
+        ).stdout,
+        "utf-8",
+    ).strip()
+    sphinxext_logger.setLevel(30)
+    sphinxext_logger.debug(f"git root was: {git_root}")
     sys.exit(main(git_root))

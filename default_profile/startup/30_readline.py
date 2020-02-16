@@ -21,6 +21,10 @@ if os.environ.get("IPYTHONDIR"):
 else:
     logging.basicConfig(format="%(message)s", level=logging.DEBUG)
 
+if "pyreadline" in sys.modules:
+    pyreadline = sys.modules["pyreadline"]
+else:
+    import readline
 
 
 class SimpleCompleter:
@@ -143,8 +147,9 @@ def py_readline(rl=None):
     inputrc = os.environ.get("INPUTRC")
     if inputrc is not None:
         rl.read_inputrc()
-    elif os.path.expanduser('~/pyreadlineconfig.ini'):
-        rl.read_inputrc(os.path.expanduser('~/pyreadlineconfig.ini'))
+    elif os.path.expanduser("~/pyreadlineconfig.ini"):
+        rl.read_inputrc(os.path.expanduser("~/pyreadlineconfig.ini"))
+
 
 # History
 
@@ -202,6 +207,7 @@ if __name__ == "__main__":
 
     try:
         from pyreadline.rlmain import Readline
+
         # from pyreadline.lineobj.history import EscapeHistory, LineEditor
         from pyreadline.lineeditor.lineobj import ReadLineTextBuffer
     except (ImportError, ModuleNotFoundError):
@@ -209,7 +215,6 @@ if __name__ == "__main__":
     else:
         readline = Readline()
         py_readline(readline)
-
 
     readline_config()
     histfile = "~/.python_history"

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Effectively me rewriting Prompt Toolkits keybindings handlers."""
 import logging
+import operator
 import reprlib
 from typing import Callable, Optional
 import warnings
@@ -125,7 +126,7 @@ class KeyBindingsManager(KeyBindingsBase):
             pass
 
     def __getitem__(self, index):
-        return self.kb.bindings[index]
+        return operator.getitem(self.kb.bindings, index)
 
     @property
     def bindings(self):
