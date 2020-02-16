@@ -21,26 +21,20 @@ if os.environ.get("IPYTHONDIR"):
 else:
     logging.basicConfig(format="%(message)s", level=logging.DEBUG)
 
+if "pyreadline" in sys.modules:
+    pyreadline = sys.modules["pyreadline"]
+else:
+    import readline
+
 
 class SimpleCompleter:
-    """
+    """Completion mechanism that tracks candidates for different subcommands.
+
     :URL: https://pymotw.com/3/readline/
 
     The SimpleCompleter class keeps a list of options that are candidates
-    for auto-completion. The complete() method for an instance is designed
-    to be registered with readline as the source of completions.
-
-    The arguments are a text string to complete and a state value,
-    indicating how many times the function has been called with the
-    same text.
-
-    The function is called repeatedly with the state incremented
-    each time. It should return a string if there is a candidate for that
-    state value or None if there are no more candidates.
-
-    The implementation of complete() here looks for a set of
-    matches when state is 0, and then returns all of the candidate matches
-    one at a time on subsequent calls.
+    for auto-completion. The *complete* method for an instance is designed
+    to be registered with `readline` as the source of completions.
 
     """
 
@@ -48,6 +42,20 @@ class SimpleCompleter:
         self.options = sorted(options)
 
     def complete(self, text, state):
+        """Complete a user's input.
+
+        The arguments are a text string to complete and a state value,
+        indicating how many times the function has been called with the
+        same text.
+
+        The function is called repeatedly with the state incremented
+        each time. It should return a string if there is a candidate for that
+        state value or None if there are no more candidates.
+
+        The implementation of *complete* here looks for a set of
+        matches when state is 0, and then returns all of the candidate matches
+        one at a time on subsequent calls.
+        """
         response = None
         if state == 0:
             # This is the first time for this text,
@@ -179,24 +187,6 @@ def setup_historyfile(filename=None):
 
 
 def teardown_historyfile(histfile=None):
-    if not histfile:
-        return
-    try:
-        import readline
-    except ImportError:
-        pass
-
-    try:
-        from pyreadline.rlmain import Readline
-
-        # from pyreadline.lineobj.history import EscapeHistory, LineEditor
-        from pyreadline.lineeditor.lineobj import ReadLineTextBuffer
-    except (ImportError, ModuleNotFoundError):
-        pass
-    else:
-        readline = Readline()
-        py_readline(readline)
-
     try:
         readline.write_history_file(histfile)
     except OSError:
@@ -229,6 +219,7 @@ else:
 
 if __name__ == "__main__":
     readline_config()
-    histfile = "~/.python_history"
-    setup_historyfile(histfile)
-    atexit.register(teardown_historyfile, histfile)
+    history_file = "~/.python_history"
+    setup_historyfile(history_file)
+    atexit.register(teardown_historyfile, kwargs={"histfile": history_file})
+

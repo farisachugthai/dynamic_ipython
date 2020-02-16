@@ -72,7 +72,7 @@ else:
 # c.IPKernelApp.displayhook_class = 'ipykernel.displayhook.ZMQDisplayHook'
 
 cur_platform = platform()
-if cur_platform.startswith('Win'):
+if cur_platform.startswith("Win"):
     c.IPKernelApp.interrupt = 1
 
 # The Kernel subclass to be used.
@@ -247,7 +247,7 @@ c.InteractiveShell.sphinxify_docstring = False
 # c.InteractiveShell.wildcards_case_sensitive = False
 
 # Switch modes for the IPython exception handlers.
-c.InteractiveShell.xmode = 'Verbose'
+c.InteractiveShell.xmode = "Verbose"
 
 # -----------------------------------------------------------------------------
 # ZMQInteractiveShell(InteractiveShell) configuration

@@ -49,6 +49,10 @@ def our_style():
             #  Style.from_dict({'':''})
         ]
     )  # TODO
+    return merge_styles([
+        style_from_pygments_cls(Gruvbox),
+        default_pygments_style(),
+    ])  # TODO
 
 
 def get_lexer():
@@ -130,32 +134,14 @@ class Colorizer:
 
 
 class MyPythonLexer(PythonLexer):
-    # EXTRA_KEYWORDS = set(('foo', 'bar', 'foobar', 'barfoo', 'spam', 'eggs'))
     EXTRA_KEYWORDS = set("!")
 
     def get_tokens_unprocessed(self, text):
         for index, token, value in PythonLexer.get_tokens_unprocessed(self, text):
-            # How silly is it that I just realized that class attributes
-            # still bind to the instance object?
             if token is Name and value in self.EXTRA_KEYWORDS:
                 yield index, Keyword.Pseudo, value
             else:
                 yield index, token, value
-
-
-class MyPythonLexer(PythonLexer):
-    # EXTRA_KEYWORDS = set(('foo', 'bar', 'foobar', 'barfoo', 'spam', 'eggs'))
-    EXTRA_KEYWORDS = set("!")
-
-    def get_tokens_unprocessed(self, text):
-        for index, token, value in PythonLexer.get_tokens_unprocessed(self, text):
-            # How silly is it that I just realized that class attributes
-            # still bind to the instance object?
-            if token is Name and value in self.EXTRA_KEYWORDS:
-                yield index, Keyword.Pseudo, value
-            else:
-                yield index, token, value
-
 
 if __name__ == "__main__":
     # lexer = IPythonConfigurableLexer()

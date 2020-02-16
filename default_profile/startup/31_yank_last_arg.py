@@ -53,6 +53,7 @@ from prompt_toolkit.filters import (
     Condition,
     is_searching,
     in_paste_mode,
+<<<<<<< Updated upstream
     buffer_has_focus,
 )
 from prompt_toolkit.filters.app import (
@@ -63,9 +64,32 @@ from prompt_toolkit.filters.app import (
     emacs_mode,
     vi_insert_mode,
     has_focus,
+||||||| constructed merge base
+=======
+    FilterOrBool,
+>>>>>>> Stashed changes
 )
+<<<<<<< Updated upstream
 from prompt_toolkit.filters.cli import has_selection
 
+||||||| constructed merge base
+from prompt_toolkit.filters.app import emacs_insert_mode, vi_insert_mode, has_focus
+from prompt_toolkit.filters.cli import has_selection, ViInsertMode
+
+# "ViMode",
+# "ViNavigationMode",
+# "ViInsertMultipleMode",
+# "ViReplaceMode",
+# "ViSelectionMode",
+# "ViWaitingForTextObjectMode",
+# "ViDigraphMode",
+
+# from prompt_toolkit.input.vt100_parser import ANSI_SEQUENCES
+=======
+from prompt_toolkit.filters.app import emacs_insert_mode, vi_insert_mode, has_focus
+from prompt_toolkit.filters.cli import has_selection, ViInsertMode
+from prompt_toolkit.filters.cli import HasSelection
+>>>>>>> Stashed changes
 from prompt_toolkit.keys import Keys
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.key_binding.bindings.completion import (
@@ -98,11 +122,30 @@ insert_mode = vi_insert_mode | emacs_insert_mode
 
 # Conditions: {{{
 
+<<<<<<< Updated upstream
+||||||| constructed merge base
+# fun fact. ViInsertMode is deprecated
+insert_mode = vi_insert_mode() | emacs_insert_mode()
+=======
+# fun fact. ViInsertMode is deprecated
+insert_mode = vi_insert_mode() | emacs_insert_mode()
+has_selection = HasSelection()
+
+>>>>>>> Stashed changes
 
 @Condition
 def is_returnable():
     return get_app().current_buffer.is_returnable
 
+<<<<<<< Updated upstream
+||||||| constructed merge base
+# is_returnable = Condition(lambda: get_app().current_buffer.is_returnable)
+
+=======
+
+# is_returnable = Condition(lambda: get_app().current_buffer.is_returnable)
+
+>>>>>>> Stashed changes
 
 @Condition
 def should_confirm_completion():
@@ -219,10 +262,28 @@ def switch_to_navigation_mode(event):
     vi_state = event.cli.vi_state
     # logger.debug('%s', dir(event))
     vi_state.input_mode = InputMode.NAVIGATION
-
-
 # }}}
 
+
+def if_no_repeat(event: E) -> bool:
+    """ Callable that returns True when the previous event was delivered to
+    another handler. """
+    return not event.is_repeat
+
+
+@Condition
+def suggestion_available():
+    app = get_app()
+    return (app.current_buffer.suggestion is not None and
+            app.current_buffer.document.is_cursor_at_the_end)
+
+
+@Condition
+def has_selection():
+    """
+    Enable when the current buffer has a selection.
+    """
+    return bool(get_app().current_buffer.selection_state)
 
 def get_key_bindings(custom_key_bindings=None):  # {{{
     """
@@ -241,33 +302,17 @@ def get_key_bindings(custom_key_bindings=None):  # {{{
         load_auto_suggest_bindings,
     )
     from prompt_toolkit.key_binding.bindings.cpr import load_cpr_bindings
-
-    # from prompt_toolkit.key_binding.bindings.emacs import (
-    #     load_emacs_bindings,
-    #     load_emacs_search_bindings,
-    # )
     from prompt_toolkit.key_binding.bindings.mouse import load_mouse_bindings
     from prompt_toolkit.key_binding.defaults import load_key_bindings
 
-    # This covers the search module too
-    # from prompt_toolkit.key_binding.bindings.page_navigation import (
-    #     load_page_navigation_bindings,
-    # )
-    # from prompt_toolkit.key_binding.bindings.vi import (
-    #     load_vi_bindings,
-    #     load_vi_search_bindings,
-    # )
-
+    from prompt_toolkit.key_binding.bindings.page_navigation import (
+        load_page_navigation_bindings,
+    )
     kb = [
         load_auto_suggest_bindings(),
         load_cpr_bindings(),
-        # load_emacs_bindings(),
-        # load_emacs_search_bindings(),
-        # load_vi_bindings(),
-        # load_vi_search_bindings(),
         load_key_bindings(),
         load_mouse_bindings(),
-        # load_page_navigation_bindings(),
         create_ipython_shortcuts(get_ipython()),
     ]
     if custom_key_bindings is not None:
@@ -472,6 +517,7 @@ def add_bindings():  # {{{
         else:
             b.start_completion(select_first=True)
 
+<<<<<<< Updated upstream
     @handle(Keys.Tab, filter=insert_mode)
     def complete(event):
         b = event.current_buffer
@@ -506,6 +552,10 @@ def add_bindings():  # {{{
     #     """
     #     event.current_buffer.cancel_completion()
 
+||||||| constructed merge base
+
+=======
+>>>>>>> Stashed changes
     # originally from basic_bindings
 
     @handle(Keys.ControlX, Keys.ControlE)
@@ -544,8 +594,50 @@ def add_bindings():  # {{{
 
     # Control-W should delete, using whitespace as separator, while M-Del
     # should delete using [^a-zA-Z0-9] as a boundary.
+<<<<<<< Updated upstream
     handle(Keys.ControlW, filter=insert_mode)(get_by_name("unix-word-rubout"))
     # }}}
+||||||| constructed merge base
+    handle("c-w", filter=insert_mode)(get_by_name("unix-word-rubout"))
+
+    handle("pageup")(get_by_name("previous-history"))
+    handle("pagedown")(get_by_name("next-history"))
+
+    ### Emacs:
+
+    handle('c-a')(get_by_name('beginning-of-line'))
+    handle('c-b')(get_by_name('backward-char'))
+    handle('c-delete', filter=insert_mode)(get_by_name('kill-word'))
+    handle('c-e')(get_by_name('end-of-line'))
+    handle('c-f')(get_by_name('forward-char'))
+    handle('c-left')(get_by_name('backward-word'))
+    handle('c-right')(get_by_name('forward-word'))
+    handle('c-x', 'r', 'y', filter=insert_mode)(get_by_name('yank'))
+    handle('c-y', filter=insert_mode)(get_by_name('yank'))
+    handle("c-_", save_before=(lambda e: False), filter=insert_mode)(
+        get_by_name("undo")
+    )
+=======
+    handle("c-w", filter=insert_mode)(get_by_name("unix-word-rubout"))
+
+    handle("pageup")(get_by_name("previous-history"))
+    handle("pagedown")(get_by_name("next-history"))
+
+    ### Emacs:
+
+    handle("c-a")(get_by_name("beginning-of-line"))
+    handle("c-b")(get_by_name("backward-char"))
+    handle("c-delete", filter=insert_mode)(get_by_name("kill-word"))
+    handle("c-e")(get_by_name("end-of-line"))
+    handle("c-f")(get_by_name("forward-char"))
+    handle("c-left")(get_by_name("backward-word"))
+    handle("c-right")(get_by_name("forward-word"))
+    handle("c-x", "r", "y", filter=insert_mode)(get_by_name("yank"))
+    handle("c-y", filter=insert_mode)(get_by_name("yank"))
+    handle("c-_", save_before=(lambda e: False), filter=insert_mode)(
+        get_by_name("undo")
+    )
+>>>>>>> Stashed changes
 
     ### Emacs: {{{
 
@@ -588,7 +680,13 @@ def add_bindings():  # {{{
         # Also named 'character-search'
         character_search(event.current_buffer, event.data, event.arg)
 
+<<<<<<< Updated upstream
     @handle(Keys.ControlX, Keys.ControlX)
+||||||| constructed merge base
+    @handle('c-x', 'c-x')
+=======
+    @handle("c-x", "c-x")
+>>>>>>> Stashed changes
     def _(event):
         """
         Move cursor back and forth between the start and end of the current
@@ -603,10 +701,16 @@ def add_bindings():  # {{{
         else:
             buffer.cursor_position += buffer.document.get_end_of_line_position()
 
+<<<<<<< Updated upstream
     # }}}
 
     # Has selection: {{{
     @handle("c-@")  # Control-space or Control-@
+||||||| constructed merge base
+    @handle('c-@')  # Control-space or Control-@
+=======
+    @handle("c-@")  # Control-space or Control-@
+>>>>>>> Stashed changes
     def _(event):
         """
         Start of the selection (if the current buffer is not empty).
@@ -616,7 +720,13 @@ def add_bindings():  # {{{
         if buff.text:
             buff.start_selection(selection_type=SelectionType.CHARACTERS)
 
+<<<<<<< Updated upstream
     @handle(Keys.ControlG, filter=has_selection)
+||||||| constructed merge base
+    @handle('c-g', filter=has_selection)
+=======
+    @handle("c-g", filter=has_selection)
+>>>>>>> Stashed changes
     def _(event):
         """
         Control + G: Cancel completion menu and validation state.
@@ -624,15 +734,29 @@ def add_bindings():  # {{{
         event.current_buffer.complete_state = None
         event.current_buffer.validation_error = None
 
+<<<<<<< Updated upstream
     @handle(Keys.ControlG, filter=has_selection)
+||||||| constructed merge base
+    @handle('c-g', filter=has_selection)
+=======
+    @handle("c-g", filter=has_selection)
+>>>>>>> Stashed changes
     def _(event):
         """
         Cancel selection.
         """
         event.current_buffer.exit_selection()
 
+<<<<<<< Updated upstream
     @handle(Keys.ControlW, filter=has_selection)
     @handle("c-x", "r", "k", filter=has_selection)
+||||||| constructed merge base
+    @handle('c-w', filter=has_selection)
+    @handle('c-x', 'r', 'k', filter=has_selection)
+=======
+    @handle("c-w", filter=has_selection)
+    @handle("c-x", "r", "k", filter=has_selection)
+>>>>>>> Stashed changes
     def _(event):
         """
         Cut selected text.
@@ -855,6 +979,7 @@ def add_bindings():  # {{{
         if suggestion:
             b.insert_text(suggestion.text)
 
+<<<<<<< Updated upstream
     @handle(Keys.ControlM, filter=is_searching())
     @handle(Keys.ControlJ, filter=is_searching())
     def accept_search(event):

@@ -197,14 +197,13 @@ class BottomToolbar:
             return self._render_emacs()
 
     def _render_vi(self):
-        # TODO:
-        # add more styling:
-        # [('class:toolbar', ' [F4] %s ' % text)]
         current_vi_mode = self.app.vi_state.input_mode
         # temp_toolbar = f" [F4] Vi: {current_vi_mode!r}  {date.today()!r}"
         # toolbar = Frame(TextArea(temp_toolbar))
         # return toolbar.body
-        toolbar = f" [F4] Vi: {current_vi_mode!r}  {date.today()!r}"
+        text = f" [F4] Vi: {current_vi_mode!r}  {date.today()!r}"
+        toolbar = [('class:toolbar', ' %s ' % text)]
+
         return toolbar
 
     def _render_emacs(self):
