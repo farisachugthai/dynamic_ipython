@@ -1,18 +1,30 @@
 """Subclass of InteractiveShell for terminal based frontends.
-
 """
 import bdb
 import os
+from pathlib import Path
+import readline
+import rlcompleter
 import sys
 from warnings import warn
 
-from IPython.core.error import TryNext
+from jedi.api import replstartup
+
+from IPython.core.completerlib import (
+    module_completer,
+    magic_run_completer,
+    cd_completer,
+    reset_completer,
+)
+
+from IPython.core.displayhook import DisplayHook
+from IPython.core.error import TryNext, UsageError
 from IPython.core.interactiveshell import InteractiveShell, InteractiveShellABC
-from IPython.core.usage import interactive_usage
+
 from IPython.terminal.interactiveshell import TerminalInteractiveShell
 from IPython.terminal.magics import TerminalMagics
+
 from IPython.utils.contexts import NoOpContext
-from IPython.utils.encoding import get_stream_enc
 from IPython.utils.process import abbrev_cwd
 from IPython.utils.strdispatch import StrDispatch
 from IPython.utils.terminal import set_term_title, toggle_set_term_title
@@ -21,12 +33,6 @@ from traitlets import CBool, Integer, Unicode, default
 
 
 def get_default_editor():
-    """
-
-    Returns
-    -------
-
-    """
     try:
         return os.environ["EDITOR"]
     except UnicodeError:
@@ -79,6 +85,13 @@ def no_op(*a, **kw):
     kw :
     """
     pass
+
+
+def int0(x):
+    try:
+        return int(x)
+    except TypeError:
+        return 0
 
 
 class ReadlineNoRecord:
@@ -140,10 +153,7 @@ class ReadlineNoRecord:
 
 
 class ReadlineInteractiveShell(InteractiveShell):
-    """Subclass InteractiveShell.
-
-
-    """
+    """Subclass InteractiveShell."""
 
     autoedit_syntax = CBool(False, help="auto editing of files with syntax errors.")
     confirm_exit = CBool(
@@ -167,7 +177,6 @@ class ReadlineInteractiveShell(InteractiveShell):
     pager = Unicode("less", help="The shell program to be used for paging.").tag(
         config=True
     )
-
     screen_length = Integer(
         0,
         help="""Number of lines of your screen, used to control printing of very
@@ -195,8 +204,6 @@ class ReadlineInteractiveShell(InteractiveShell):
 
     @default("displayhook_class")
     def _displayhook_class_default(self):
-        from IPython.core.displayhook import DisplayHook
-
         class OldSchoolPrompt(DisplayHook):
             out = "\033[31mOut[\033[31;1m{}\033[0;31m]: "
             reset = self._term_reset
@@ -211,11 +218,6 @@ class ReadlineInteractiveShell(InteractiveShell):
     term_title = CBool(False, help="Enable auto setting the terminal title.").tag(
         config=True
     )
-    usage = Unicode(
-        interactive_usage,
-        help=("now made configurable so you can tell it to shut the fuck up."),
-    ).tag(config=True)
-
     # This `using_paste_magics` is used to detect whether the code is being
     # executed via paste magics functions
     using_paste_magics = CBool(False)
@@ -268,13 +270,12 @@ class ReadlineInteractiveShell(InteractiveShell):
         ]
         self.readline_remove_delims = "-/~"
         self.multiline_history = False
-        if self.readline_use:
-            from . import rlineimpl as readline
-
         self.rl_next_input = None
         self.rl_do_indent = False
 
-        if not self.readline_use or not readline.have_readline:
+        self.home_dir = Path.home()
+
+        if not self.readline_use:
             self.readline = None
             # Set a number of methods that depend on readline to be no-op
             self.readline_no_record = NoOpContext()
@@ -303,7 +304,8 @@ class ReadlineInteractiveShell(InteractiveShell):
 
             # load IPython config before inputrc if default
             # skip if libedit because parse_and_bind syntax is different
-            if not self._custom_readline_config and not readline.uses_libedit:
+
+            if not self._custom_readline_config:
                 for rlcommand in self.readline_parse_and_bind:
                     readline.parse_and_bind(rlcommand)
 
@@ -311,10 +313,8 @@ class ReadlineInteractiveShell(InteractiveShell):
             # Or if libedit is used, load editrc.
             inputrc_name = os.environ.get("INPUTRC")
             if inputrc_name is None:
-                inputrc_name = ".inputrc"
-                if readline.uses_libedit:
-                    inputrc_name = ".editrc"
                 inputrc_name = os.path.join(self.home_dir, inputrc_name)
+
             if os.path.isfile(inputrc_name):
                 try:
                     readline.read_init_file(inputrc_name)
@@ -357,19 +357,13 @@ class ReadlineInteractiveShell(InteractiveShell):
         (typically over the network by remote frontends).
         """
         # from .completer import RLCompleter
-        from IPython.core.completerlib import (
-            module_completer,
-            magic_run_completer,
-            cd_completer,
-            reset_completer,
-        )
-
-        self.Completer = RLCompleter(
-            shell=self,
-            namespace=self.user_ns,
-            global_namespace=self.user_global_ns,
-            parent=self,
-        )
+        self.Completer = rlcompleter.Completer
+        # (
+        #     shell=self,
+        #     namespace=self.user_ns,
+        #     global_namespace=self.user_global_ns,
+        #     parent=self,
+        # )
         self.configurables.append(self.Completer)
 
         # Add custom completers to the basic ones built into IPCompleter
@@ -456,9 +450,6 @@ class ReadlineInteractiveShell(InteractiveShell):
         self.init_term_title()
 
     def init_term_title(self):
-        """
-
-        """
         # Enable or disable the terminal title.
         if self.term_title:
             toggle_set_term_title(True)
@@ -718,7 +709,6 @@ class ReadlineInteractiveShell(InteractiveShell):
             "<BackgroundJob compilation>",
             None,
         ):
-
             return False
         try:
             if self.autoedit_syntax and not self.ask_yes_no(
@@ -727,12 +717,6 @@ class ReadlineInteractiveShell(InteractiveShell):
                 return False
         except EOFError:
             return False
-
-        def int0(x):
-            try:
-                return int(x)
-            except TypeError:
-                return 0
 
         # always pass integer line and offset values to editor hook
         try:
@@ -767,16 +751,10 @@ class ReadlineInteractiveShell(InteractiveShell):
     # -------------------------------------------------------------------------
 
     def init_magics(self):
-        """
-
-        """
         super().init_magics()
         self.register_magics(TerminalMagics)
 
     def showindentationerror(self):
-        """
-
-        """
         super().showindentationerror()
         if not self.using_paste_magics:
             print(
@@ -785,6 +763,7 @@ class ReadlineInteractiveShell(InteractiveShell):
             )
 
 
-InteractiveShellABC.register(TerminalInteractiveShell)
-
-# Vim: set ft=python:
+if __name__ == "__main__":
+    InteractiveShellABC.register(ReadlineInteractiveShell)
+    rl_shell = ReadlineInteractiveShell()
+    rl_shell.interact()

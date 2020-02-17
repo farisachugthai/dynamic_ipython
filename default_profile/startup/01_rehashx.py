@@ -96,7 +96,9 @@ def get_exec_dir():
         exec_dir = "."
 
 
-def safe_run_path(fileobj, logger):
+def safe_run_path(fileobj, logger=None):
+    if logger is None:
+        logger = logging.getLogger(name=__name__)
     logger.debug("File to execute is: %s", fileobj)
     try:
         return runpy.run_path(fileobj, init_globals=globals(), run_name="rerun_startup")
@@ -130,6 +132,7 @@ def rerun_startup():
     exec_dir = get_exec_dir()
     logger = logging.getLogger(name=__name__)
     logger.addHandler(logging.StreamHandler())
+    logger.addFilter(logging.Filter())
     logger.setLevel(logging.WARNING)
     for i in scandir(exec_dir):
         if i.name.endswith(".py"):
@@ -150,7 +153,7 @@ def execfile(filename, global_namespace=None, local_namespace=None):
 
 
 def ipy_execfile(f):
-    get_ipython().run_line_magic("run", f)
+    get_ipython().run_line_magic("run", "-i", f)
 
 
 def ipy_execdir(directory):
@@ -170,7 +173,7 @@ def ipy_execdir(directory):
     """
     for i in scandir(directory):
         if i.name.endswith("py") or i.name.endswith("ipy"):
-            get_ipython().run_line_magic("run", i.name)
+            get_ipython().run_line_magic("run", "-i", i.name)
 
 
 if __name__ == "__main__":

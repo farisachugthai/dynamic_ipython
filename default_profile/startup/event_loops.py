@@ -20,16 +20,6 @@ try:
     from trio import run as _async_run
 except:
     from asyncio import run as _async_run
-
-from asyncio.format_helpers import extract_stack
-
-try:
-    from asyncio.windows_events import ProactorEventLoop, IocpProactor
-except ImportError:
-    # not available
-    # from asyncio import ProactorEventLoop, IocpProactor
-    pass
-
 import logging
 import multiprocessing
 from multiprocessing.process import current_process
@@ -75,10 +65,3 @@ async def system_command(command_to_run):
     )
 
 
-if __name__ == "__main__":
-    asyncio.log.logger.setLevel(logging.ERROR)
-
-    # This doesn't do anything yet but hey at least we found the API
-    if platform.platform().startswith("Win"):
-        proactor = IocpProactor()
-        loop = ProactorEventLoop(proactor=proactor)
