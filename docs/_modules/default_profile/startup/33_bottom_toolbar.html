@@ -215,7 +215,8 @@
 
 
 <div class="viewcode-block" id="exit_clicked"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.exit_clicked">[docs]</a><span class="k">def</span> <span class="nf">exit_clicked</span><span class="p">():</span>
-    <span class="n">get_app</span><span class="p">()</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">exception</span><span class="o">=</span><span class="ne">EOFError</span><span class="p">)</span></div>
+    <span class="sd">&quot;&quot;&quot;Exit from the prompt_toolkit side of things.&quot;&quot;&quot;</span>
+    <span class="n">get_app</span><span class="p">()</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">exception</span><span class="o">=</span><span class="ne">EOFError</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="init_style"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.init_style">[docs]</a><span class="k">def</span> <span class="nf">init_style</span><span class="p">():</span>
@@ -274,7 +275,7 @@
 <div class="viewcode-block" id="get_titlebar_text"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.get_titlebar_text">[docs]</a><span class="k">def</span> <span class="nf">get_titlebar_text</span><span class="p">():</span>
     <span class="k">return</span> <span class="p">[</span>
         <span class="p">(</span><span class="s2">&quot;class:title&quot;</span><span class="p">,</span> <span class="s2">&quot;Hello World!&quot;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;class:title&quot;</span><span class="p">,</span> <span class="s2">&quot; (Press [TODO] to quit.)&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;class:title&quot;</span><span class="p">,</span> <span class="s2">&quot; (Press &lt;Exit&gt; to quit.)&quot;</span><span class="p">),</span>
     <span class="p">]</span></div>
 
 
@@ -348,13 +349,14 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_render_emacs</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="nf">_render_vi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># TODO:</span>
-        <span class="c1"># add more styling:</span>
-        <span class="c1"># [(&#39;class:toolbar&#39;, &#39; [F4] %s &#39; % text)]</span>
         <span class="n">current_vi_mode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">vi_state</span><span class="o">.</span><span class="n">input_mode</span>
         <span class="c1"># temp_toolbar = f&quot; [F4] Vi: {current_vi_mode!r}  {date.today()!r}&quot;</span>
         <span class="c1"># toolbar = Frame(TextArea(temp_toolbar))</span>
         <span class="c1"># return toolbar.body</span>
+
+        <span class="c1"># doing it this way only prints the words class:toolbar at the bottom</span>
+        <span class="c1"># text = f&quot; [F4] Vi: {current_vi_mode!r}  {date.today()!r}&quot;</span>
+        <span class="c1"># toolbar = [(&#39;class:toolbar&#39;, &#39; %s &#39; % text)]</span>
         <span class="n">toolbar</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot; [F4] Vi: </span><span class="si">{current_vi_mode!r}</span><span class="s2">  {date.today()!r}&quot;</span>
         <span class="k">return</span> <span class="n">toolbar</span>
 
@@ -380,6 +382,8 @@
 
 
 <div class="viewcode-block" id="Attempt3"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.Attempt3">[docs]</a><span class="k">class</span> <span class="nc">Attempt3</span><span class="p">(</span><span class="n">BottomToolbar</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Try stylizing the toolbar.&quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="Attempt3.__init__"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.Attempt3.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span></div>
 
@@ -396,7 +400,7 @@
 
 
 <div class="viewcode-block" id="generate_and_print_hsplit"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.generate_and_print_hsplit">[docs]</a><span class="k">def</span> <span class="nf">generate_and_print_hsplit</span><span class="p">():</span>
-    <span class="n">kb</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span><span class="o">.</span><span class="n">bindings</span>
+    <span class="c1"># kb = get_ipython().pt_app.app.key_bindings.bindings</span>
     <span class="c1"># Bind to IPython TODO:</span>
     <span class="n">root_container</span> <span class="o">=</span> <span class="n">HSplit</span><span class="p">(</span>
         <span class="n">children</span><span class="o">=</span><span class="p">[</span>
@@ -424,15 +428,15 @@
     <span class="c1">#                                 ycursor=True,</span>
     <span class="c1">#                                 layout=CompletionMenu(...))</span>
     <span class="c1">#                        ])</span>
+    <span class="n">exit_button</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span><span class="s2">&quot;Exit&quot;</span><span class="p">,</span> <span class="n">handler</span><span class="o">=</span><span class="n">exit_clicked</span><span class="p">)</span>
+    <span class="n">print_container</span><span class="p">(</span><span class="n">exit_button</span><span class="p">)</span>
+
     <span class="k">return</span> <span class="n">root_container</span></div>
 
 
-<span class="c1"># Don&#39;t uncomment! This fucks up the keybindings so that the only way a line</span>
-<span class="c1"># executes is if you use C-r to get into a search then hit something to regain</span>
-<span class="c1"># focus and then hit enter.</span>
-<span class="c1"># Unbelievable. It wasn&#39;t this block. it was load_key_bindings()?????</span>
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">get_ipython</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">shell</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">add_toolbar</span><span class="p">(</span><span class="n">BottomToolbar</span><span class="p">)</span>
 
     <span class="n">completion_displays_to_styles</span> <span class="o">=</span> <span class="p">{</span>
@@ -442,9 +446,8 @@
         <span class="s2">&quot;none&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">}</span>
 
-    <span class="n">exit_button</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span><span class="s2">&quot;Exit&quot;</span><span class="p">,</span> <span class="n">handler</span><span class="o">=</span><span class="n">exit_clicked</span><span class="p">)</span>
-
     <span class="n">print_container</span><span class="p">(</span><span class="n">show_header</span><span class="p">())</span>
+    <span class="n">generate_and_print_hsplit</span><span class="p">()</span>
 </pre></div>
 
         </div>
@@ -452,7 +455,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 14, 2020.
+      Last updated on Feb 18, 2020.
     </div>
   </body>
 </html>

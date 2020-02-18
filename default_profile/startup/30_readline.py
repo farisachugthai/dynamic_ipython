@@ -221,7 +221,7 @@ if __name__ == "__main__":
             history_file = os.path.expanduser("~/.python_history")
             readline.read_history_file(history_file)
             readline.set_history_length(2000)
-            atexit.register(append_history_file)
+            atexit.register(append_history_file, history_file)
 
     else:
         # All the pyreadline submodules have to be called as pyreadline.

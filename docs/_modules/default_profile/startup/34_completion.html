@@ -385,8 +385,8 @@
             <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">completer</span><span class="o">.</span><span class="n">get_completions_async</span><span class="p">(</span><span class="n">document</span><span class="p">,</span> <span class="n">complete_event</span><span class="p">):</span>
                 <span class="k">yield</span> <span class="n">item</span></div></div>
 
-<div class="viewcode-block" id="FuzzyCallable"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.34_completion.FuzzyCallable">[docs]</a><span class="k">class</span> <span class="nc">FuzzyCallable</span><span class="p">(</span><span class="n">FuzzyCompleter</span><span class="p">):</span>
 
+<div class="viewcode-block" id="FuzzyCallable"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.34_completion.FuzzyCallable">[docs]</a><span class="k">class</span> <span class="nc">FuzzyCallable</span><span class="p">(</span><span class="n">FuzzyCompleter</span><span class="p">):</span>
 <div class="viewcode-block" id="FuzzyCallable.__init__"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.34_completion.FuzzyCallable.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">completer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">words</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">meta_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">WORD</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The exact code for FuzzyWordCompleter...except callable.&quot;&quot;&quot;</span>
         <span class="c1"># assert callable(words) or all(isinstance(w, string_types) for w in words)</span>
@@ -396,13 +396,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">meta_dict</span> <span class="o">=</span> <span class="n">meta_dict</span> <span class="ow">or</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">WORD</span> <span class="o">=</span> <span class="n">WORD</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">word_completer</span> <span class="o">=</span> <span class="n">WordCompleter</span><span class="p">(</span>
-            <span class="n">words</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">words</span><span class="p">,</span>
-            <span class="n">WORD</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">WORD</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">word_completer</span> <span class="o">=</span> <span class="n">WordCompleter</span><span class="p">(</span><span class="n">words</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">words</span><span class="p">,</span> <span class="n">WORD</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">WORD</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_completer</span> <span class="o">=</span> <span class="n">FuzzyCompleter</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">word_completer</span><span class="p">,</span>
-            <span class="n">WORD</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">WORD</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_completer</span> <span class="o">=</span> <span class="n">FuzzyCompleter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">word_completer</span><span class="p">,</span> <span class="n">WORD</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">WORD</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">completer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_completer</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">completer</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">completer</span><span class="p">)</span></div>
@@ -412,6 +408,7 @@
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">document</span><span class="p">,</span> <span class="n">complete_event</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_completions</span><span class="p">(</span><span class="n">document</span><span class="p">,</span> <span class="n">complete_event</span><span class="p">)</span></div>
+
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">setup_readline</span><span class="p">()</span>
@@ -449,7 +446,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 14, 2020.
+      Last updated on Feb 18, 2020.
     </div>
   </body>
 </html>

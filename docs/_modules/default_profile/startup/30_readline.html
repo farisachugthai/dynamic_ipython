@@ -173,26 +173,14 @@
     <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
 
 
-
 <div class="viewcode-block" id="SimpleCompleter"><a class="viewcode-back" href="../../../startup/setup_readline.html#default_profile.startup.30_readline.SimpleCompleter">[docs]</a><span class="k">class</span> <span class="nc">SimpleCompleter</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Completion mechanism that tracks candidates for different subcommands.</span>
+
 <span class="sd">    :URL: https://pymotw.com/3/readline/</span>
 
 <span class="sd">    The SimpleCompleter class keeps a list of options that are candidates</span>
-<span class="sd">    for auto-completion. The complete() method for an instance is designed</span>
-<span class="sd">    to be registered with readline as the source of completions.</span>
-
-<span class="sd">    The arguments are a text string to complete and a state value,</span>
-<span class="sd">    indicating how many times the function has been called with the</span>
-<span class="sd">    same text.</span>
-
-<span class="sd">    The function is called repeatedly with the state incremented</span>
-<span class="sd">    each time. It should return a string if there is a candidate for that</span>
-<span class="sd">    state value or None if there are no more candidates.</span>
-
-<span class="sd">    The implementation of complete() here looks for a set of</span>
-<span class="sd">    matches when state is 0, and then returns all of the candidate matches</span>
-<span class="sd">    one at a time on subsequent calls.</span>
+<span class="sd">    for auto-completion. The *complete* method for an instance is designed</span>
+<span class="sd">    to be registered with `readline` as the source of completions.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -200,6 +188,20 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">options</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SimpleCompleter.complete"><a class="viewcode-back" href="../../../startup/setup_readline.html#default_profile.startup.30_readline.SimpleCompleter.complete">[docs]</a>    <span class="k">def</span> <span class="nf">complete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Complete a user&#39;s input.</span>
+
+<span class="sd">        The arguments are a text string to complete and a state value,</span>
+<span class="sd">        indicating how many times the function has been called with the</span>
+<span class="sd">        same text.</span>
+
+<span class="sd">        The function is called repeatedly with the state incremented</span>
+<span class="sd">        each time. It should return a string if there is a candidate for that</span>
+<span class="sd">        state value or None if there are no more candidates.</span>
+
+<span class="sd">        The implementation of *complete* here looks for a set of</span>
+<span class="sd">        matches when state is 0, and then returns all of the candidate matches</span>
+<span class="sd">        one at a time on subsequent calls.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">response</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">state</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="c1"># This is the first time for this text,</span>
@@ -254,21 +256,31 @@
 <span class="sd">    as parameters.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s2">&quot;set show-all-if-ambiguous on&quot;</span><span class="p">)</span>
     <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s2">&quot;TAB: menu-complete&quot;</span><span class="p">)</span>
+    <span class="c1"># readline.parse_and_bind(&quot;CR: accept-line&quot;)</span>
     <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">e[B&quot;: history-search-forward&#39;</span><span class="p">)</span>
     <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">e[A&quot;: history-search-backward&#39;</span><span class="p">)</span>
+    <span class="c1"># readline.parse_and_bind(&#39;&quot;\\C-d&quot;: end-of-file&#39;)</span>
+    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-e&quot;: end-of-line&#39;</span><span class="p">)</span>
+    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-h&quot;: backward-delete-char&#39;</span><span class="p">)</span>
+    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-i&quot;: tab-insert&#39;</span><span class="p">)</span>
+    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-j&quot;: accept-line&#39;</span><span class="p">)</span>
+    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-k&quot;: &quot;kill-whole-line&quot;&#39;</span><span class="p">)</span>
     <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-l&quot;: clear-screen&#39;</span><span class="p">)</span>
-    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s2">&quot;set show-all-if-ambiguous on&quot;</span><span class="p">)</span>
-    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-o&quot;: tab-insert&#39;</span><span class="p">)</span>
-    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-r&quot;: reverse-search-history&#39;</span><span class="p">),</span>
-    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-s&quot;: forward-search-history&#39;</span><span class="p">),</span>
-    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-p&quot;: &quot;history-search-backward&quot;&#39;</span><span class="p">),</span>
-    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-n&quot;: &quot;history-search-forward&quot;&#39;</span><span class="p">),</span>
-    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-k&quot;: &quot;kill-line&quot;&#39;</span><span class="p">),</span>
-    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-u&quot;: unix-line-discard&#39;</span><span class="p">),</span>
+    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-m&quot;: accept-line&#39;</span><span class="p">)</span>
+    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-n&quot;: complete&#39;</span><span class="p">)</span>
+    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-r&quot;: reverse-search-history&#39;</span><span class="p">)</span>
+    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-s&quot;: forward-search-history&#39;</span><span class="p">)</span>
+    <span class="c1"># readline.parse_and_bind(&#39;&quot;\\C-p&quot;: &quot;history-search-backward&quot;&#39;),</span>
+    <span class="c1"># readline.parse_and_bind(&#39;&quot;\\C-n&quot;: &quot;history-search-forward&quot;&#39;),</span>
+    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-u&quot;: unix-line-discard&#39;</span><span class="p">)</span>
 
-    <span class="n">readline</span><span class="o">.</span><span class="n">read_init_file</span><span class="p">()</span>
-    <span class="n">readline</span><span class="o">.</span><span class="n">set_completer</span><span class="p">(</span><span class="n">Completer</span><span class="p">()</span><span class="o">.</span><span class="n">complete</span><span class="p">)</span></div>
+    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-w&quot;: unix-word-rubout&#39;</span><span class="p">)</span>
+    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-]&quot;: character-search&#39;</span><span class="p">)</span>
+    <span class="c1"># readline.parse_and_bind(&#39;&quot;\\e\C-]&quot;: character-search-backward&#39;)</span>
+    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;Insert&quot;: overwrite-mode&#39;</span><span class="p">)</span></div>
+    <span class="c1"># readline.set_completer(Completer().complete)</span>
 
 
 <div class="viewcode-block" id="py_readline"><a class="viewcode-back" href="../../../startup/setup_readline.html#default_profile.startup.30_readline.py_readline">[docs]</a><span class="k">def</span> <span class="nf">py_readline</span><span class="p">(</span><span class="n">rl</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -294,8 +306,9 @@
     <span class="n">inputrc</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;INPUTRC&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">inputrc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">rl</span><span class="o">.</span><span class="n">read_inputrc</span><span class="p">()</span>
-    <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s1">&#39;~/pyreadlineconfig.ini&#39;</span><span class="p">):</span>
-        <span class="n">rl</span><span class="o">.</span><span class="n">read_inputrc</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s1">&#39;~/pyreadlineconfig.ini&#39;</span><span class="p">))</span></div>
+    <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~/pyreadlineconfig.ini&quot;</span><span class="p">):</span>
+        <span class="n">rl</span><span class="o">.</span><span class="n">read_inputrc</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~/pyreadlineconfig.ini&quot;</span><span class="p">))</span></div>
+
 
 <span class="c1"># History</span>
 
@@ -330,10 +343,8 @@
 
 
 <div class="viewcode-block" id="teardown_historyfile"><a class="viewcode-back" href="../../../startup/setup_readline.html#default_profile.startup.30_readline.teardown_historyfile">[docs]</a><span class="k">def</span> <span class="nf">teardown_historyfile</span><span class="p">(</span><span class="n">histfile</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">histfile</span><span class="p">:</span>
-        <span class="k">return</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">readline</span><span class="o">.</span><span class="n">write_history_file</span><span class="p">(</span><span class="n">histfile</span><span class="p">)</span>
+        <span class="n">append_history_file</span><span class="p">(</span><span class="n">histfile</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
             <span class="s2">&quot;History not saved. There were problems saving to ~/.python_history&quot;</span>
@@ -345,27 +356,47 @@
     <span class="c1"># however it can be imported as readline no alias so check it first</span>
     <span class="k">if</span> <span class="s2">&quot;pyreadline&quot;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
         <span class="n">pyreadline</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="s2">&quot;pyreadline&quot;</span><span class="p">]</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="kn">import</span> <span class="nn">readline</span>
-        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-            <span class="k">raise</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">from</span> <span class="nn">pyreadline.rlmain</span> <span class="kn">import</span> <span class="n">Readline</span>
+
         <span class="c1"># from pyreadline.lineobj.history import EscapeHistory, LineEditor</span>
-        <span class="kn">from</span> <span class="nn">pyreadline.lineeditor.lineobj</span> <span class="kn">import</span> <span class="n">ReadLineTextBuffer</span>
     <span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="n">ModuleNotFoundError</span><span class="p">):</span>
-        <span class="k">pass</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">import</span> <span class="nn">readline</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">readline</span> <span class="kn">import</span> <span class="n">append_history_file</span>
+
+            <span class="n">history_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~/.python_history&quot;</span><span class="p">)</span>
+            <span class="n">readline</span><span class="o">.</span><span class="n">read_history_file</span><span class="p">(</span><span class="n">history_file</span><span class="p">)</span>
+            <span class="n">readline</span><span class="o">.</span><span class="n">set_history_length</span><span class="p">(</span><span class="mi">2000</span><span class="p">)</span>
+            <span class="n">atexit</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">append_history_file</span><span class="p">,</span> <span class="n">history_file</span><span class="p">)</span>
+
     <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># All the pyreadline submodules have to be called as pyreadline.</span>
+        <span class="c1"># not all clases show up though, so they have to be called as readline</span>
+        <span class="c1"># in that case</span>
+        <span class="kn">from</span> <span class="nn">pyreadline.lineeditor.lineobj</span> <span class="kn">import</span> <span class="n">ReadLineTextBuffer</span>
+        <span class="kn">from</span> <span class="nn">readline</span> <span class="kn">import</span> <span class="n">GetOutputFile</span>  <span class="c1"># output console via ctype</span>
+
+        <span class="n">out_console</span> <span class="o">=</span> <span class="n">GetOutputFile</span><span class="p">()</span>
+        <span class="kn">from</span> <span class="nn">pyreadline.console.ansi</span> <span class="kn">import</span> <span class="n">AnsiState</span><span class="p">,</span> <span class="n">AnsiWriter</span>
+
+        <span class="c1"># from pyreadline import append_history_file</span>
         <span class="n">readline</span> <span class="o">=</span> <span class="n">Readline</span><span class="p">()</span>
         <span class="n">py_readline</span><span class="p">(</span><span class="n">readline</span><span class="p">)</span>
+        <span class="kn">from</span> <span class="nn">pyreadline.modes.emacs</span> <span class="kn">import</span> <span class="n">EmacsMode</span>
+        <span class="kn">from</span> <span class="nn">pyreadline.modes.vi</span> <span class="kn">import</span> <span class="n">ViMode</span>
 
+        <span class="n">emacs_mode</span> <span class="o">=</span> <span class="n">EmacsMode</span><span class="p">(</span><span class="n">pyreadline</span><span class="o">.</span><span class="n">Readline</span><span class="p">())</span>
+        <span class="n">vi_mode</span> <span class="o">=</span> <span class="n">ViMode</span><span class="p">(</span><span class="n">pyreadline</span><span class="o">.</span><span class="n">Readline</span><span class="p">())</span>
+        <span class="n">history_file</span> <span class="o">=</span> <span class="s2">&quot;~/.python_history&quot;</span>
+        <span class="n">setup_historyfile</span><span class="p">(</span><span class="n">history_file</span><span class="p">)</span>
+        <span class="n">atexit</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">readline</span><span class="o">.</span><span class="n">write_history_file</span><span class="p">)</span>
 
     <span class="n">readline_config</span><span class="p">()</span>
-    <span class="n">histfile</span> <span class="o">=</span> <span class="s2">&quot;~/.python_history&quot;</span>
-    <span class="n">setup_historyfile</span><span class="p">(</span><span class="n">histfile</span><span class="p">)</span>
-    <span class="n">atexit</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">teardown_historyfile</span><span class="p">,</span> <span class="n">histfile</span><span class="p">)</span>
 </pre></div>
 
         </div>
@@ -373,7 +404,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 14, 2020.
+      Last updated on Feb 18, 2020.
     </div>
   </body>
 </html>

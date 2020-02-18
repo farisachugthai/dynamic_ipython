@@ -138,8 +138,12 @@ form of rst docs and :abbr:`ipynb` notebooks.
 Table of Contents
 ==================
 
+Startup
+-------
+
 .. toctree::
    :titlesonly:
+   :maxdepth: 2
    :caption: IPython Startup
 
    Startup <startup/index>
@@ -155,13 +159,35 @@ Table of Contents
    eventloops <startup/eventloops>
 
 
+.. _sphinxext-package:
+
+Sphinx Extensions
+-----------------
+
+The `default_profile.sphinxext` package.
+
+.. toctree::
+   :maxdepth: 2
+   :titlesonly:
+   :caption: sphinx
+
+   sphinxext/ipython_sphinx_directive
+   sphinxext/lexer
+   sphinxext/custom_doctests
+   sphinxext/magics
+   sphinxext/make
+
+
+Remaining API
+-------------
+
 .. toctree::
    :titlesonly:
    :caption: Remaining API
+   :maxdepth: 2
 
    IPython Utilities <util/index>
    Extensions <extensions/index>
-   Sphinx Extensions <sphinxext/index>
    Developers Notes <dev>
 
 

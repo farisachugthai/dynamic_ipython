@@ -171,16 +171,6 @@
     <span class="kn">from</span> <span class="nn">trio</span> <span class="kn">import</span> <span class="n">run</span> <span class="k">as</span> <span class="n">_async_run</span>
 <span class="k">except</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">asyncio</span> <span class="kn">import</span> <span class="n">run</span> <span class="k">as</span> <span class="n">_async_run</span>
-
-<span class="kn">from</span> <span class="nn">asyncio.format_helpers</span> <span class="kn">import</span> <span class="n">extract_stack</span>
-
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">asyncio.windows_events</span> <span class="kn">import</span> <span class="n">ProactorEventLoop</span><span class="p">,</span> <span class="n">IocpProactor</span>
-<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="c1"># not available</span>
-    <span class="c1"># from asyncio import ProactorEventLoop, IocpProactor</span>
-    <span class="k">pass</span>
-
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">multiprocessing</span>
 <span class="kn">from</span> <span class="nn">multiprocessing.process</span> <span class="kn">import</span> <span class="n">current_process</span>
@@ -208,9 +198,14 @@
 
 <span class="sd">        In [40]: await system_command(&#39;ls&#39;)</span>
 
-<span class="sd">        01_rehashx.py       20_aliases.py        31_yank_last_arg.py   36_ptutils.py     cscope.out</span>
-<span class="sd">        05_log.py           21_fzf.py            32_kb.py              41_numpy_init.py  event_loops.py 06_help_helpers.py  22_alias_manager.py  33_bottom_toolbar.py  43_matplotlib.py  interpreter.py 10_envvar.py        23_git_commands.py   34_completion.py      __init__.py       repralias.py</span>
-<span class="sd">        11_clipboard.py     30_readline.py       35_lexer.py           __main__.py       tags</span>
+<span class="sd">        01_rehashx.py       20_aliases.py        31_yank_last_arg.py  </span>
+<span class="sd">        36_ptutils.py     cscope.out  05_log.py           21_fzf.py</span>
+<span class="sd">        32_kb.py              41_numpy_init.py  event_loops.py 06_help_helpers.py</span>
+<span class="sd">        22_alias_manager.py  33_bottom_toolbar.py  43_matplotlib.py</span>
+<span class="sd">        interpreter.py 10_envvar.py        23_git_commands.py   34_completion.py</span>
+<span class="sd">        __init__.py       repralias.py</span>
+<span class="sd">        11_clipboard.py     30_readline.py       35_lexer.py</span>
+<span class="sd">        __main__.py       tags</span>
 
 <span class="sd">    Whoo!</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -224,15 +219,6 @@
     <span class="k">await</span> <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">run_system_command</span><span class="p">(</span>
         <span class="n">command</span><span class="o">=</span><span class="n">com</span><span class="p">,</span> <span class="n">wait_for_enter</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">wait_text</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">display_before_text</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
     <span class="p">)</span></div>
-
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">asyncio</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">ERROR</span><span class="p">)</span>
-
-    <span class="c1"># This doesn&#39;t do anything yet but hey at least we found the API</span>
-    <span class="k">if</span> <span class="n">platform</span><span class="o">.</span><span class="n">platform</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;Win&quot;</span><span class="p">):</span>
-        <span class="n">proactor</span> <span class="o">=</span> <span class="n">IocpProactor</span><span class="p">()</span>
-        <span class="n">loop</span> <span class="o">=</span> <span class="n">ProactorEventLoop</span><span class="p">(</span><span class="n">proactor</span><span class="o">=</span><span class="n">proactor</span><span class="p">)</span>
 </pre></div>
 
         </div>
@@ -240,7 +226,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 14, 2020.
+      Last updated on Feb 18, 2020.
     </div>
   </body>
 </html>

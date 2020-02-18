@@ -199,6 +199,9 @@
             <span class="n">default_pygments_style</span><span class="p">(),</span>
             <span class="c1">#  Style.from_dict({&#39;&#39;:&#39;&#39;})</span>
         <span class="p">]</span>
+    <span class="p">)</span>  <span class="c1"># TODO</span>
+    <span class="k">return</span> <span class="n">merge_styles</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">style_from_pygments_cls</span><span class="p">(</span><span class="n">Gruvbox</span><span class="p">),</span> <span class="n">default_pygments_style</span><span class="p">(),]</span>
     <span class="p">)</span>  <span class="c1"># TODO</span></div>
 
 
@@ -280,28 +283,11 @@
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{self.__class__.__name__}</span><span class="s2">&quot;</span></div>
 
 
-<span class="k">class</span> <span class="nc">MyPythonLexer</span><span class="p">(</span><span class="n">PythonLexer</span><span class="p">):</span>
-    <span class="c1"># EXTRA_KEYWORDS = set((&#39;foo&#39;, &#39;bar&#39;, &#39;foobar&#39;, &#39;barfoo&#39;, &#39;spam&#39;, &#39;eggs&#39;))</span>
-    <span class="n">EXTRA_KEYWORDS</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="s2">&quot;!&quot;</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">get_tokens_unprocessed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">PythonLexer</span><span class="o">.</span><span class="n">get_tokens_unprocessed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
-            <span class="c1"># How silly is it that I just realized that class attributes</span>
-            <span class="c1"># still bind to the instance object?</span>
-            <span class="k">if</span> <span class="n">token</span> <span class="ow">is</span> <span class="n">Name</span> <span class="ow">and</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">EXTRA_KEYWORDS</span><span class="p">:</span>
-                <span class="k">yield</span> <span class="n">index</span><span class="p">,</span> <span class="n">Keyword</span><span class="o">.</span><span class="n">Pseudo</span><span class="p">,</span> <span class="n">value</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">yield</span> <span class="n">index</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">value</span>
-
-
 <div class="viewcode-block" id="MyPythonLexer"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.35_lexer.MyPythonLexer">[docs]</a><span class="k">class</span> <span class="nc">MyPythonLexer</span><span class="p">(</span><span class="n">PythonLexer</span><span class="p">):</span>
-    <span class="c1"># EXTRA_KEYWORDS = set((&#39;foo&#39;, &#39;bar&#39;, &#39;foobar&#39;, &#39;barfoo&#39;, &#39;spam&#39;, &#39;eggs&#39;))</span>
     <span class="n">EXTRA_KEYWORDS</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="s2">&quot;!&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="MyPythonLexer.get_tokens_unprocessed"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.35_lexer.MyPythonLexer.get_tokens_unprocessed">[docs]</a>    <span class="k">def</span> <span class="nf">get_tokens_unprocessed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">PythonLexer</span><span class="o">.</span><span class="n">get_tokens_unprocessed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
-            <span class="c1"># How silly is it that I just realized that class attributes</span>
-            <span class="c1"># still bind to the instance object?</span>
             <span class="k">if</span> <span class="n">token</span> <span class="ow">is</span> <span class="n">Name</span> <span class="ow">and</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">EXTRA_KEYWORDS</span><span class="p">:</span>
                 <span class="k">yield</span> <span class="n">index</span><span class="p">,</span> <span class="n">Keyword</span><span class="o">.</span><span class="n">Pseudo</span><span class="p">,</span> <span class="n">value</span>
             <span class="k">else</span><span class="p">:</span>
@@ -325,7 +311,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 14, 2020.
+      Last updated on Feb 18, 2020.
     </div>
   </body>
 </html>

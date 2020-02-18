@@ -171,6 +171,8 @@
 <span class="sd">Therefore that function shouldn&#39;t be used anywhere in this file.</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">traitlets.config.application</span> <span class="kn">import</span> <span class="n">get_config</span><span class="p">,</span> <span class="n">ApplicationError</span>
+<span class="kn">from</span> <span class="nn">traitlets.config.configurable</span> <span class="kn">import</span> <span class="n">LoggingConfigurable</span><span class="p">,</span> <span class="n">ConfigurableError</span>
 <span class="kn">import</span> <span class="nn">builtins</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -190,8 +192,6 @@
 
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">default_log_format</span><span class="p">,</span> <span class="n">datefmt</span><span class="o">=</span><span class="n">log_datefmt</span><span class="p">)</span>
 
-<span class="kn">from</span> <span class="nn">traitlets.config.configurable</span> <span class="kn">import</span> <span class="n">LoggingConfigurable</span><span class="p">,</span> <span class="n">ConfigurableError</span>
-<span class="kn">from</span> <span class="nn">traitlets.config.application</span> <span class="kn">import</span> <span class="n">get_config</span><span class="p">,</span> <span class="n">ApplicationError</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">default_profile</span>
@@ -499,8 +499,8 @@
 
 <span class="c1"># ValueError: loop_runner must be callable</span>
 
-<span class="c1"># TODO: What is this?</span>
-
+<span class="c1"># What is this?</span>
+<span class="c1"># Answer: Traits from an IPython.core.oinspect.Inspector object.</span>
 <span class="c1"># --TerminalInteractiveShell.object_info_string_level=&lt;Enum&gt;</span>
 <span class="c1">#     Default: 0</span>
 <span class="c1">#     Choices: (0, 1, 2)</span>
@@ -639,8 +639,6 @@
 
 <span class="c1"># The name or class of a Pygments style to use for syntax highlighting.</span>
 <span class="c1"># To see available styles, run `pygmentize -L styles`.</span>
-<span class="c1"># c.TerminalInteractiveShell.highlighting_style = traitlets.Undefined</span>
-
 <span class="c1"># default, emacs, friendly, colorful, autumn, murphy, manni, monokai, perldoc,</span>
 <span class="c1"># pastie, borland, trac, native, fruity, bw, vim, vs, tango, rrt, xcode, igor,</span>
 <span class="c1"># paraiso-light, paraiso-dark, lovelace, algol, algol_nu, arduino, rainbow_dash</span>
@@ -649,13 +647,13 @@
 <span class="c1"># https://github.com/farisachugthai/Gruvbox_IPython</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">gruvbox.gruvbox</span> <span class="kn">import</span> <span class="n">PtGruvbox</span>
+    <span class="kn">from</span> <span class="nn">gruvbox</span> <span class="kn">import</span> <span class="n">PtGruvboxStyle</span>
 <span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="n">ModuleNotFoundError</span><span class="p">):</span>
-    <span class="kn">from</span> <span class="nn">pygments.styles</span> <span class="kn">import</span> <span class="n">friendly</span>
+    <span class="kn">from</span> <span class="nn">pygments.styles</span> <span class="kn">import</span> <span class="n">inkpot</span>
 
-    <span class="n">c</span><span class="o">.</span><span class="n">TerminalInteractiveShell</span><span class="o">.</span><span class="n">highlighting_style</span> <span class="o">=</span> <span class="s2">&quot;friendly&quot;</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">TerminalInteractiveShell</span><span class="o">.</span><span class="n">highlighting_style</span> <span class="o">=</span> <span class="s2">&quot;inkpot&quot;</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="n">c</span><span class="o">.</span><span class="n">TerminalInteractiveShell</span><span class="o">.</span><span class="n">highlighting_style</span> <span class="o">=</span> <span class="n">PtGruvbox</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">TerminalInteractiveShell</span><span class="o">.</span><span class="n">highlighting_style</span> <span class="o">=</span> <span class="n">PtGruvboxStyle</span>
 
 
 <div class="viewcode-block" id="get_env"><a class="viewcode-back" href="../../startup/index.html#default_profile.ipython_config.get_env">[docs]</a><span class="k">def</span> <span class="nf">get_env</span><span class="p">():</span>
@@ -975,7 +973,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 14, 2020.
+      Last updated on Feb 18, 2020.
     </div>
   </body>
 </html>

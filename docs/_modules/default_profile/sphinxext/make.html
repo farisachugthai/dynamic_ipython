@@ -152,7 +152,7 @@
 <span></span><span class="ch">#!/usr/bin/env python3</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="kn">import</span> <span class="nn">argparse</span>
-<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">codecs</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
@@ -185,20 +185,7 @@
 
 <span class="kn">from</span> <span class="nn">default_profile</span> <span class="kn">import</span> <span class="n">ask_for_import</span>
 <span class="kn">from</span> <span class="nn">default_profile.__about__</span> <span class="kn">import</span> <span class="n">__version__</span>
-
-
-<span class="k">def</span> <span class="nf">_setup_make_logging</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Setup the logging. Add a filter with no args to allow everything.&quot;&quot;&quot;</span>
-    <span class="n">BASIC_FORMAT</span> <span class="o">=</span> <span class="s2">&quot;[</span><span class="si">%(created)f</span><span class="s2"> </span><span class="si">%(module)s</span><span class="s2"> ] </span><span class="si">%(levelname)s</span><span class="s2">  </span><span class="si">%(message)s</span><span class="s2">&quot;</span>
-
-    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;docs.sphinxext&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">getChild</span><span class="p">(</span><span class="s2">&quot;make&quot;</span><span class="p">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
-    <span class="n">make_handler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">(</span><span class="n">stream</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
-    <span class="n">make_handler</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
-    <span class="n">make_handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="n">fmt</span><span class="o">=</span><span class="n">BASIC_FORMAT</span><span class="p">))</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">make_handler</span><span class="p">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">addFilter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Filter</span><span class="p">())</span>
-    <span class="k">return</span> <span class="n">logger</span>
+<span class="kn">from</span> <span class="nn">default_profile.sphinxext</span> <span class="kn">import</span> <span class="n">sphinxext_logger</span>
 
 
 <span class="k">def</span> <span class="nf">_parse_arguments</span><span class="p">(</span><span class="n">cmds</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">:</span>
@@ -312,7 +299,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">MAKE_LOGGER</span> <span class="o">=</span> <span class="n">_setup_make_logging</span><span class="p">()</span>
+    <span class="n">MAKE_LOGGER</span> <span class="o">=</span> <span class="n">sphinxext_logger</span>
 
 <div class="viewcode-block" id="DocBuilder.__init__"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.DocBuilder.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbosity</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Kind has to be first in case the user uses the class with a positional parameter.</span>
@@ -445,39 +432,34 @@
         <span class="k">return</span> <span class="n">output</span></div>
 
 
-<div class="viewcode-block" id="gather_sphinx_options"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.gather_sphinx_options">[docs]</a><span class="k">def</span> <span class="nf">gather_sphinx_options</span><span class="p">(</span><span class="n">argv</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Gather parsed arguments and hand them to sphinx-build in a more direct manner.</span>
+<span class="c1"># def gather_sphinx_options() -&gt; Any:</span>
+<span class="c1">#     &quot;&quot;&quot;Gather parsed arguments and hand them to sphinx-build in a more direct manner.</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    argv : list</span>
-<span class="sd">        User provided arguments</span>
+<span class="c1">#     Parameters</span>
+<span class="c1">#     ----------</span>
+<span class="c1">#     argv : list</span>
+<span class="c1">#         User provided arguments</span>
 
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    ret : int (? or maybe just the parsed options?)</span>
-<span class="sd">        Return code from sphinx-build</span>
+<span class="c1">#     Returns</span>
+<span class="c1">#     -------</span>
+<span class="c1">#     ret : int (? or maybe just the parsed options?)</span>
+<span class="c1">#         Return code from sphinx-build</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">args</span> <span class="o">=</span> <span class="n">_parse_arguments</span><span class="p">()</span>
-    <span class="n">jobs</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">jobs</span>
-    <span class="n">verbosity</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span>
-    <span class="n">builder</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">builder</span>
-
-    <span class="c1"># Necessary enough to justify not making a logrecord.</span>
-    <span class="n">pprint</span><span class="p">(</span>
-        <span class="s2">&quot;Your sphinx-build command was: &quot;</span>
-        <span class="o">+</span> <span class="nb">str</span><span class="p">(</span>
-            <span class="p">[</span><span class="s2">&quot;-b&quot;</span><span class="p">,</span> <span class="n">builder</span><span class="p">,</span> <span class="n">SOURCE_PATH</span><span class="p">,</span> <span class="n">BUILD_PATH</span><span class="p">,</span> <span class="s2">&quot;-j&quot;</span><span class="p">,</span> <span class="n">jobs</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span> <span class="o">+</span> <span class="n">verbosity</span> <span class="o">*</span> <span class="s2">&quot;v&quot;</span><span class="p">]</span>
-        <span class="p">)</span>
-    <span class="p">)</span>
-    <span class="n">ret</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;-b&quot;</span><span class="p">,</span> <span class="n">builder</span><span class="p">,</span> <span class="n">SOURCE_PATH</span><span class="p">,</span> <span class="n">BUILD_PATH</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">ret</span></div>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     args = _parse_arguments()</span>
+<span class="c1">#     # Necessary enough to justify not making a logrecord.</span>
+<span class="c1">#     pprint(</span>
+<span class="c1">#         &quot;Your sphinx-build command was: &quot;</span>
+<span class="c1">#         + str(</span>
+<span class="c1">#             [&quot;-b&quot;, builder, SOURCE_PATH, BUILD_PATH, &quot;-j&quot;, jobs, &quot;-&quot; + verbosity * &quot;v&quot;]</span>
+<span class="c1">#         )</span>
+<span class="c1">#     )</span>
+<span class="c1">#     ret = [&quot;-b&quot;, builder, SOURCE_PATH, BUILD_PATH]</span>
+<span class="c1">#     return ret</span>
 
 
-<div class="viewcode-block" id="generate_sphinx_app"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.generate_sphinx_app">[docs]</a><span class="k">def</span> <span class="nf">generate_sphinx_app</span><span class="p">():</span>
-
-    <span class="n">srcdir</span> <span class="o">=</span> <span class="n">confdir</span> <span class="o">=</span> <span class="s2">&quot;source&quot;</span>
+<div class="viewcode-block" id="generate_sphinx_app"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.generate_sphinx_app">[docs]</a><span class="k">def</span> <span class="nf">generate_sphinx_app</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
+    <span class="n">srcdir</span> <span class="o">=</span> <span class="n">confdir</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="s2">&quot;source&quot;</span><span class="p">)</span>
     <span class="n">doctreedir</span> <span class="o">=</span> <span class="s2">&quot;build/.doctrees&quot;</span>
     <span class="n">outdir</span> <span class="o">=</span> <span class="s2">&quot;build/html&quot;</span>
     <span class="n">app</span> <span class="o">=</span> <span class="n">Sphinx</span><span class="p">(</span>
@@ -511,23 +493,33 @@
 
 <div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">repo_root</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="c1"># Probably should initialize in a different/ better way but eh</span>
+    <span class="c1"># build_opts = gather_sphinx_options()</span>
+    <span class="n">build_opts</span> <span class="o">=</span> <span class="n">_parse_arguments</span><span class="p">()</span>
+
     <span class="k">if</span> <span class="n">ask_for_import</span><span class="p">(</span><span class="s2">&quot;jinja2&quot;</span><span class="p">):</span>
         <span class="n">env</span> <span class="o">=</span> <span class="n">setup_jinja</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">env</span> <span class="o">=</span> <span class="n">Environment</span><span class="p">()</span>
 
-    <span class="n">lexer</span> <span class="o">=</span> <span class="n">setup_jinja</span><span class="p">()</span>
-    <span class="n">project</span> <span class="o">=</span> <span class="n">Project</span><span class="p">(</span><span class="n">repo_root</span><span class="p">,</span> <span class="n">source_suffix</span><span class="o">=</span><span class="s2">&quot;rst&quot;</span><span class="p">)</span>
-    <span class="c1"># sphinx_fs = SphinxFileSystemLoader(searchpath=project.templates_path)</span>
-    <span class="n">build_opts</span> <span class="o">=</span> <span class="n">gather_sphinx_options</span><span class="p">([])</span>
+    <span class="n">doc_root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">git_root</span><span class="p">)</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="s2">&quot;docs&quot;</span><span class="p">)</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">generate_sphinx_app</span><span class="p">(</span><span class="n">doc_root</span><span class="p">)</span>
+    <span class="n">project</span> <span class="o">=</span> <span class="n">Project</span><span class="p">(</span><span class="n">doc_root</span><span class="p">,</span> <span class="n">source_suffix</span><span class="o">=</span><span class="s2">&quot;rst&quot;</span><span class="p">)</span>
+    <span class="n">sphinx_fs</span> <span class="o">=</span> <span class="n">SphinxFileSystemLoader</span><span class="p">(</span>
+        <span class="n">searchpath</span><span class="o">=</span><span class="n">doc_root</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="s2">&quot;source/_templates&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
     <span class="n">build_main</span><span class="p">(</span><span class="n">build_opts</span><span class="p">)</span></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
 
-    <span class="n">logger</span> <span class="o">=</span> <span class="n">_setup_make_logging</span><span class="p">()</span>
-    <span class="n">git_root</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="s2">&quot;git&quot;</span><span class="p">,</span> <span class="s2">&quot;rev-parse&quot;</span><span class="p">,</span> <span class="s2">&quot;--show-root&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">stdout</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;git root was: </span><span class="si">{git_root}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">git_root</span> <span class="o">=</span> <span class="n">codecs</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span>
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+            <span class="p">[</span><span class="s2">&quot;git&quot;</span><span class="p">,</span> <span class="s2">&quot;rev-parse&quot;</span><span class="p">,</span> <span class="s2">&quot;--show-toplevel&quot;</span><span class="p">],</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span>
+        <span class="s2">&quot;utf-8&quot;</span><span class="p">,</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">sphinxext_logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+    <span class="n">sphinxext_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;git root was: </span><span class="si">{git_root}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">main</span><span class="p">(</span><span class="n">git_root</span><span class="p">))</span>
 </pre></div>
 
@@ -536,7 +528,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 14, 2020.
+      Last updated on Feb 18, 2020.
     </div>
   </body>
 </html>

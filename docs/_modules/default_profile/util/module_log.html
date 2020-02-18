@@ -151,24 +151,19 @@
 <h1>Source code for default_profile.util.module_log</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="kn">import</span> <span class="nn">functools</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">reprlib</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">traceback</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 
 <span class="kn">import</span> <span class="nn">IPython</span>
 <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
-<span class="kn">from</span> <span class="nn">IPython.core.interactiveshell</span> <span class="kn">import</span> <span class="n">InteractiveShellABC</span>
 
 <span class="kn">from</span> <span class="nn">traitlets.config.configurable</span> <span class="kn">import</span> <span class="n">LoggingConfigurable</span>
 <span class="kn">from</span> <span class="nn">traitlets.config.application</span> <span class="kn">import</span> <span class="n">LevelFormatter</span>
 <span class="kn">from</span> <span class="nn">traitlets.traitlets</span> <span class="kn">import</span> <span class="n">Instance</span>
-
-<span class="kn">from</span> <span class="nn">default_profile</span> <span class="kn">import</span> <span class="n">QueueHandler</span>  <span class="c1"># noqa F401</span>
 
 
 <div class="viewcode-block" id="NoUnNamedLoggers"><a class="viewcode-back" href="../../../util/module_log.html#default_profile.util.module_log.NoUnNamedLoggers">[docs]</a><span class="k">class</span> <span class="nc">NoUnNamedLoggers</span><span class="p">(</span><span class="ne">NotImplementedError</span><span class="p">):</span>
@@ -246,7 +241,8 @@
 
     <span class="n">logdir</span> <span class="o">=</span> <span class="n">shell</span><span class="o">.</span><span class="n">profile_dir</span><span class="o">.</span><span class="n">log_dir</span>
 
-    <span class="n">log_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">logdir</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+    <span class="n">log_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">logdir</span><span class="p">)</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
     <span class="n">handler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="p">(</span><span class="n">log_file</span><span class="p">)</span>
 
     <span class="n">handler</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">log_level</span><span class="p">)</span>
@@ -341,102 +337,6 @@
                 <span class="s2">&quot;exception&quot;</span><span class="p">:</span> <span class="n">exc</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">)</span></div></div>
-
-
-<div class="viewcode-block" id="betterConfig"><a class="viewcode-back" href="../../../util/module_log.html#default_profile.util.module_log.betterConfig">[docs]</a><span class="k">def</span> <span class="nf">betterConfig</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Similar to :func:`logging.basicConfig`.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    None</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    :class:`logging.Logger()`</span>
-<span class="sd">        Anonymous Logger instance.</span>
-
-<span class="sd">    Notes</span>
-<span class="sd">    -----</span>
-<span class="sd">    If a :class:`logging.Filter` class is initialized with no args,</span>
-<span class="sd">    it&#39;s default behavior is to allow all :class:`logging.LogRecords` to pass.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">BASIC_FORMAT</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="s2">&quot;[ </span><span class="si">%(name)s</span><span class="s2">  </span><span class="si">%(relativeCreated)d</span><span class="s2"> ] </span><span class="si">%(levelname)s</span><span class="s2"> </span><span class="si">%(module)s</span><span class="s2"> </span><span class="si">%(message)s</span><span class="s2"> &quot;</span>
-    <span class="p">)</span>
-    <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;mod_log&quot;</span>
-    <span class="k">if</span> <span class="n">parent</span><span class="p">:</span>
-        <span class="n">better_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">getChild</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">better_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
-
-    <span class="n">better_logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
-
-    <span class="n">better_stream</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">()</span>
-    <span class="n">better_stream</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
-    <span class="n">better_logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">better_stream</span><span class="p">)</span>
-
-    <span class="n">better_formatter</span> <span class="o">=</span> <span class="n">LevelFormatter</span><span class="p">(</span><span class="n">BASIC_FORMAT</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%(highlevel)s</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="n">better_stream</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">better_formatter</span><span class="p">)</span>
-
-    <span class="n">better_logger</span><span class="o">.</span><span class="n">addFilter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Filter</span><span class="p">())</span>
-
-    <span class="k">return</span> <span class="n">better_logger</span></div>
-
-
-<div class="viewcode-block" id="VerboseLoggingConfigurable"><a class="viewcode-back" href="../../../util/module_log.html#default_profile.util.module_log.VerboseLoggingConfigurable">[docs]</a><span class="k">class</span> <span class="nc">VerboseLoggingConfigurable</span><span class="p">(</span><span class="n">LoggingConfigurable</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Tried building on the LoggingConfigurable. Doesn&#39;t work currently.</span>
-
-<span class="sd">    We need to register the currently running IPython instance so it gets</span>
-<span class="sd">    access to the config and parent attributes.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">shell</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="s2">&quot;InteractiveShellABC&quot;</span><span class="p">)</span>
-
-<div class="viewcode-block" id="VerboseLoggingConfigurable.__init__"><a class="viewcode-back" href="../../../util/module_log.html#default_profile.util.module_log.VerboseLoggingConfigurable.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logger_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">logger_parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">log</span> <span class="o">=</span> <span class="n">betterConfig</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">logger_name</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">logger_parent</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger_name</span> <span class="o">=</span> <span class="n">logger_name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger_parent</span> <span class="o">=</span> <span class="n">logger_parent</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">shell</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">shell</span><span class="o">.</span><span class="n">config</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">shell</span><span class="o">.</span><span class="n">parent</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">UsageError</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">shell</span><span class="o">=</span><span class="n">shell</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="VerboseLoggingConfigurable.log"><a class="viewcode-back" href="../../../util/module_log.html#default_profile.util.module_log.VerboseLoggingConfigurable.log">[docs]</a>    <span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Isn&#39;t it weird that the default logging.Logger made the level positional?</span>
-
-<span class="sd">        Idk I might just be THAT lazy.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">level</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">level</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">)</span></div>
-
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">reprlib</span><span class="o">.</span><span class="n">Repr</span><span class="p">()</span><span class="o">.</span><span class="n">repr_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">traits</span><span class="p">(),</span> <span class="n">level</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
-
-<div class="viewcode-block" id="VerboseLoggingConfigurable.handlers"><a class="viewcode-back" href="../../../util/module_log.html#default_profile.util.module_log.VerboseLoggingConfigurable.handlers">[docs]</a>    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">handlers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">handlers</span></div>
-
-<div class="viewcode-block" id="VerboseLoggingConfigurable.filters"><a class="viewcode-back" href="../../../util/module_log.html#default_profile.util.module_log.VerboseLoggingConfigurable.filters">[docs]</a>    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">filters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">filters</span></div></div>
-
-
-<div class="viewcode-block" id="logging_decorator"><a class="viewcode-back" href="../../../util/module_log.html#default_profile.util.module_log.logging_decorator">[docs]</a><span class="k">def</span> <span class="nf">logging_decorator</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-    <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Entering </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
-        <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-        <span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Exiting </span><span class="si">%s</span><span class="s2"> in </span><span class="si">%-5.2f</span><span class="s2"> secs&quot;</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">wrapper</span></div>
 </pre></div>
 
         </div>
@@ -444,7 +344,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 14, 2020.
+      Last updated on Feb 18, 2020.
     </div>
   </body>
 </html>

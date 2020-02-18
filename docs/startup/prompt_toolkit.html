@@ -178,15 +178,30 @@
 <span id="prompt-toolkit"></span><h1>Prompt Toolkit<a class="headerlink" href="#module-prompt_toolkit_modules" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-default_profile.startup.31_yank_last_arg">
 <span id="yank-last-arg"></span><h2><a class="reference internal" href="#module-default_profile.startup.31_yank_last_arg" title="default_profile.startup.31_yank_last_arg: All of the keybindings used in the application. Loads over 600."><code class="xref py py-obj docutils literal notranslate"><span class="pre">31_yank_last_arg</span></code></a><a class="headerlink" href="#module-default_profile.startup.31_yank_last_arg" title="Permalink to this headline">¶</a></h2>
+<p>note: VS Code has fdm set to indent. whatever.</p>
+<p>Slowly becoming where all my consolidated scripts for making prompt_toolkit’s
+handling of keypresses cohesive.</p>
 <p>TODO: still need C-z
 Tab doesn’t start autocompletion when no letters have been typed in.
-Damnit I lost C-d again.</p>
-<p>However &lt;CR&gt; and &lt;C-m&gt; work as expected. haven’t even tried navigation mode;
-however, there’s supposed to be ~500 key bindings so I’m excited.</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>This is very experimental code.</p>
-</div>
+Damnit I lost C-d again.
+Holy hell now it gives us this admonition about the truth of a function.
+Sounds biblical.</p>
+<p>Alright I should probably make a list of the keys in vi_insert_mode that
+I really want and work up from there.
+C-a -&gt; beginning_of_line
+C-e -&gt; end of line
+C-l -&gt; redraw (Not working)
+C-p -&gt; go up or go back in history or autocomplete or go to previous autocompletion
+C-f -&gt; go forward 1 char
+C-b -&gt; go back 1 char</p>
+<p>These 3 are really important
+C-d -&gt; <strong>exit</strong>
+C-z -&gt; suspend
+C-c -&gt; kill_line</p>
+<p>So far in Vim insert mode:
+C-u works
+C-d works
+C-a, C-b, C-f and C-e all work</p>
 <p>Btw what is this?</p>
 <p>Calling exit doesn’t work?:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span>
@@ -212,6 +227,11 @@ however, there’s supposed to be ~500 key bindings so I’m excited.</p>
 </div>
 <p>}}}</p>
 <dl class="function">
+<dt id="default_profile.startup.31_yank_last_arg.character_search">
+<code class="sig-prename descclassname">default_profile.startup.31_yank_last_arg.</code><code class="sig-name descname">character_search</code><span class="sig-paren">(</span><em class="sig-param">buff</em>, <em class="sig-param">char</em>, <em class="sig-param">count</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/31_yank_last_arg.html#character_search"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.31_yank_last_arg.character_search" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
 <dt id="default_profile.startup.31_yank_last_arg.switch_to_navigation_mode">
 <code class="sig-prename descclassname">default_profile.startup.31_yank_last_arg.</code><code class="sig-name descname">switch_to_navigation_mode</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/31_yank_last_arg.html#switch_to_navigation_mode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.31_yank_last_arg.switch_to_navigation_mode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Switches <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.12.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> from Vim insert mode to Vim normal mode.</p>
@@ -220,20 +240,16 @@ keybinding for insert to navigation mode.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="default_profile.startup.31_yank_last_arg.get_key_bindings">
-<code class="sig-prename descclassname">default_profile.startup.31_yank_last_arg.</code><code class="sig-name descname">get_key_bindings</code><span class="sig-paren">(</span><em class="sig-param">custom_key_bindings=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/31_yank_last_arg.html#get_key_bindings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.31_yank_last_arg.get_key_bindings" title="Permalink to this definition">¶</a></dt>
-<dd><p>The <code class="docutils literal notranslate"><span class="pre">__init__</span></code> for <code class="xref py py-obj docutils literal notranslate"><span class="pre">_MergedKeyBindings</span></code> features this.:</p>
-<blockquote>
-<div><dl class="simple">
-<dt>def __init__(self, registries):</dt><dd><p>assert all(isinstance(r, KeyBindingsBase) for r in registries)
-_Proxy.__init__(self)
-self.registries = registries</p>
-</dd>
-</dl>
-</div></blockquote>
-<p>As a result <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a> can’t be passed to merge_key_bindings.</p>
-<p>Based on prompt_toolkit.key_binding.defaults.load_key_bindings()</p>
+<dt id="default_profile.startup.31_yank_last_arg.if_no_repeat">
+<code class="sig-prename descclassname">default_profile.startup.31_yank_last_arg.</code><code class="sig-name descname">if_no_repeat</code><span class="sig-paren">(</span><em class="sig-param">event: prompt_toolkit.key_binding.key_processor.KeyPressEvent</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="../_modules/default_profile/startup/31_yank_last_arg.html#if_no_repeat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.31_yank_last_arg.if_no_repeat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callable that returns True when the previous event was delivered to
+another handler.</p>
 </dd></dl>
+
+<dl class="function">
+<dt id="default_profile.startup.31_yank_last_arg.generate_insert_mode_bindings">
+<code class="sig-prename descclassname">default_profile.startup.31_yank_last_arg.</code><code class="sig-name descname">generate_insert_mode_bindings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/31_yank_last_arg.html#generate_insert_mode_bindings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.31_yank_last_arg.generate_insert_mode_bindings" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="function">
 <dt id="default_profile.startup.31_yank_last_arg.add_bindings">
@@ -241,9 +257,27 @@ self.registries = registries</p>
 <dd></dd></dl>
 
 <dl class="function">
-<dt id="default_profile.startup.31_yank_last_arg.get_extra_bindings">
-<code class="sig-prename descclassname">default_profile.startup.31_yank_last_arg.</code><code class="sig-name descname">get_extra_bindings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/31_yank_last_arg.html#get_extra_bindings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.31_yank_last_arg.get_extra_bindings" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="default_profile.startup.31_yank_last_arg.get_key_bindings">
+<code class="sig-prename descclassname">default_profile.startup.31_yank_last_arg.</code><code class="sig-name descname">get_key_bindings</code><span class="sig-paren">(</span><em class="sig-param">custom_key_bindings=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/31_yank_last_arg.html#get_key_bindings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.31_yank_last_arg.get_key_bindings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load key_bindings for the application and customize as necessary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>custom_key_bindings</strong> (<em>KeyBindings</em>) – The return value of the function in this module <a class="reference internal" href="#default_profile.startup.31_yank_last_arg.add_bindings" title="default_profile.startup.31_yank_last_arg.add_bindings"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_bindings</span></code></a>.</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">__init__</span></code> for <code class="xref py py-obj docutils literal notranslate"><span class="pre">_MergedKeyBindings</span></code> features this.:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">registries</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">KeyBindingsBase</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">registries</span><span class="p">)</span>
+    <span class="n">_Proxy</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">registries</span> <span class="o">=</span> <span class="n">registries</span>
+</pre></div>
+</div>
+<p>As a result <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a> can’t be passed to <code class="xref py py-obj docutils literal notranslate"><span class="pre">merge_key_bindings</span></code>.</p>
+</div>
+</dd></dl>
 
 </div>
 <div class="section" id="kb">
@@ -523,7 +557,8 @@ other things that aren’t utilized at all.</p>
 <dl class="function">
 <dt id="default_profile.startup.33_bottom_toolbar.exit_clicked">
 <code class="sig-prename descclassname">default_profile.startup.33_bottom_toolbar.</code><code class="sig-name descname">exit_clicked</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#exit_clicked"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.exit_clicked" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Exit from the prompt_toolkit side of things.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="default_profile.startup.33_bottom_toolbar.init_style">
@@ -650,6 +685,7 @@ That’s all.</p>
 <dt id="default_profile.startup.33_bottom_toolbar.Attempt3">
 <em class="property">class </em><code class="sig-prename descclassname">default_profile.startup.33_bottom_toolbar.</code><code class="sig-name descname">Attempt3</code><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#Attempt3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.Attempt3" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#default_profile.startup.33_bottom_toolbar.BottomToolbar" title="default_profile.startup.33_bottom_toolbar.BottomToolbar"><code class="xref py py-class docutils literal notranslate"><span class="pre">default_profile.startup.33_bottom_toolbar.BottomToolbar</span></code></a></p>
+<p>Try stylizing the toolbar.</p>
 <dl class="method">
 <dt id="default_profile.startup.33_bottom_toolbar.Attempt3.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#Attempt3.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.Attempt3.__init__" title="Permalink to this definition">¶</a></dt>
@@ -1139,7 +1175,7 @@ Out[109]: &lt;prompt_toolkit.styles.base.DynamicStyle at 0x7f1658a90a30&gt;</p>
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 14, 2020.
+      Last updated on Feb 18, 2020.
     </div>
   </body>
 </html>

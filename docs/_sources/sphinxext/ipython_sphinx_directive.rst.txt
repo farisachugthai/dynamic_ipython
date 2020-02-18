@@ -58,22 +58,33 @@ The IPython directive takes a number of options detailed here.
 
    Create an IPython directive.
 
-   .. rst:directive:option:: doctest: Run a doctest on IPython code blocks in rst.
+   .. rst:directive:option:: doctest
 
-   .. rst:directive:option:: python: Used to indicate that the relevant code block does not have IPython prompts.
+      Run a doctest on IPython code blocks in rst.
 
-   .. rst:directive:option:: okexcept: Allow the code block to raise an exception.
+   .. rst:directive:option:: python
 
-   .. rst:directive:option:: okwarning: Allow the code block to emit an warning.
+      Used to indicate that the relevant code block does not have IPython prompts.
 
-   .. rst:directive:option:: suppress: Silence any warnings or expected errors.
+   .. rst:directive:option:: okexcept
 
-   .. rst:directive:option:: verbatim: A noop that allows for any text to be syntax highlighted as valid IPython code.
+      Allow the code block to raise an exception.
 
-   .. rst:directive:option:: savefig: Save output from matplotlib to *outfile*.
-                                      OUTFILE [IMAGE_OPTIONS]
+   .. rst:directive:option:: okwarning
 
+      Allow the code block to emit an warning.
 
+   .. rst:directive:option:: suppress
+
+      Silence any warnings or expected errors.
+
+   .. rst:directive:option:: verbatim
+
+      A noop that allows for any text to be syntax highlighted as valid IPython code.
+
+   .. rst:directive:option:: savefig: OUTFILE [IMAGE_OPTIONS]
+
+      Save output from matplotlib to *outfile*.
 
 It's important to note that all of these options can be used for the entire
 directive block or they can decorate individual lines of code as explained
@@ -101,7 +112,7 @@ For example, code blocks like the following::
      In [137]: x**3
      Out[137]: 8
 
-will be rendered as:
+Will be rendered as:
 
 .. ipython::
 
