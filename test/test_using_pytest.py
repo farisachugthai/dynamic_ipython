@@ -6,9 +6,14 @@
 
 Came across an interesting function today.
 
-.. func:: pytest.importorskip
+.. function:: pytest.importorskip
 
-    pytest.importorskip = importorskip(modname: str, minversion: Union[str, NoneType] = None, reason: Union[str, NoneType] = None) -> Any
+    pytest.importorskip = importorskip(
+                modname: str,
+                minversion: Union[str, NoneType] = None,
+                reason: Union[str, NoneType] = None
+        ) -> Any
+
     Imports and returns the requested module ``modname``, or skip the
     current test if the module cannot be imported.
 
@@ -21,7 +26,7 @@ Came across an interesting function today.
     :returns: The imported module. This should be assigned to its canonical
         name.
 
-Example::
+Example:
 
     docutils = pytest.importorskip("docutils")
 
@@ -32,7 +37,6 @@ with the sphinx build so it's cool to see it in this context.
 import importlib
 import re
 import sys
-import warnings
 import unittest
 
 from IPython.core.getipython import get_ipython
@@ -51,7 +55,10 @@ RE_COLORS = {k: re.escape(v) for k, v in COLORS.items()}
 
 
 class Option:
+    """Create a new class for pytest options."""
+
     def __init__(self, verbosity=0):
+        """Initialize with optional parameter for verbosity."""
         self.verbosity = verbosity
 
     @property

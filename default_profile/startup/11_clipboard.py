@@ -97,19 +97,19 @@ class WindowsClipboard(Clipboard):
             return self.win_clip_pywin32()
         except ClipboardEmpty:
             return
-        except Exception: # noqa
+        except Exception:  # noqa
             try:
                 # or something
                 return subprocess.run(
                     ["win32yank", "-o", "lf"], stdout=subprocess.PIPE
                 ).stdout
-                # "-i", "crlf", 
+                # "-i", "crlf",
             except subprocess.CalledProcessError:
                 raise
 
     # def __call__(self):
-        # how is this going to be called
-        # Todo
+    # how is this going to be called
+    # Todo
 
     def get_text(self):
         return self.win32_clipboard_get()
@@ -194,6 +194,7 @@ class ClipboardMagics(Magics):
             print("pyperclip not imported.")
         else:
             self.shell.pt_app.clipboard = PyperclipClipboard()
+
 
 class UsefulClipboard(Clipboard):
     """Clipboard class that can dynamically returns any Clipboard.

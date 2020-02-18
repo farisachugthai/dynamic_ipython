@@ -185,7 +185,7 @@ if __name__ == "__main__":
 
     if _ip is not None:
         _ip.excepthook = handled
-        if platform.platform().startswith("Win") and 'Dropbox' in listdir('.'):
+        if platform.platform().startswith("Win") and "Dropbox" in listdir("."):
             # yeah it executes everything in the dir but checks for permission incorrectly
             pass
         else:

@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import logging
 from pathlib import Path
+import subprocess
 
 try:
     from git import Git

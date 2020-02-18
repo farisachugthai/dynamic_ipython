@@ -49,10 +49,9 @@ def our_style():
             #  Style.from_dict({'':''})
         ]
     )  # TODO
-    return merge_styles([
-        style_from_pygments_cls(Gruvbox),
-        default_pygments_style(),
-    ])  # TODO
+    return merge_styles(
+        [style_from_pygments_cls(Gruvbox), default_pygments_style(),]
+    )  # TODO
 
 
 def get_lexer():
@@ -142,6 +141,7 @@ class MyPythonLexer(PythonLexer):
                 yield index, Keyword.Pseudo, value
             else:
                 yield index, token, value
+
 
 if __name__ == "__main__":
     # lexer = IPythonConfigurableLexer()

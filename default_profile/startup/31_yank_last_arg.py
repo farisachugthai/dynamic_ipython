@@ -299,10 +299,11 @@ def generate_insert_mode_bindings():  # {{{
     @handle(Keys.Enter, filter=insert_mode)
     def validate_and_CR(event):
         event.current_buffer.document = Document(
-                text=b.text.rstrip(),
-                cursor_position=len(b.text.rstrip()))
+            text=b.text.rstrip(), cursor_position=len(b.text.rstrip())
+        )
 
         event.current_buffer.validate_and_handle()
+
     # why the literal fuck did i do this
     # @handle("")
     # def _(event: E) -> None:
@@ -896,50 +897,6 @@ def get_key_bindings(custom_key_bindings=None):
         load_key_bindings(),
         load_page_navigation_bindings(),
         generate_insert_mode_bindings(),
-    ]
-    if custom_key_bindings is not None:
-        kb.append(custom_key_bindings)
-    merged = merge_key_bindings(kb)
-
-    return merged  # }}}
-
-
-def get_key_bindings(custom_key_bindings=None):
-    """Load key_bindings for the application and customize as necessary.
-
-    Parameters
-    ----------
-    custom_key_bindings : KeyBindings
-        The return value of the function in this module `add_bindings`.
-
-    Notes
-    ------
-    .. warning::
-
-        The ``__init__`` for `_MergedKeyBindings` features this.::
-
-            def __init__(self, registries):
-                assert all(isinstance(r, KeyBindingsBase) for r in registries)
-                _Proxy.__init__(self)
-                self.registries = registries
-
-        As a result `None` can't be passed to `merge_key_bindings`.
-
-    """
-    from prompt_toolkit.key_binding.bindings.auto_suggest import (
-        load_auto_suggest_bindings,
-    )
-    from prompt_toolkit.key_binding.defaults import load_key_bindings
-
-    from prompt_toolkit.key_binding.bindings.page_navigation import (
-        load_page_navigation_bindings,
-    )
-
-    kb = [
-        create_ipython_shortcuts(get_ipython()),
-        load_auto_suggest_bindings(),
-        load_key_bindings(),
-        load_page_navigation_bindings(),
     ]
     if custom_key_bindings is not None:
         kb.append(custom_key_bindings)

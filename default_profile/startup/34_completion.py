@@ -234,8 +234,8 @@ class MergedCompleter(Completer):
             for item in completer.get_completions_async(document, complete_event):
                 yield item
 
-class FuzzyCallable(FuzzyCompleter):
 
+class FuzzyCallable(FuzzyCompleter):
     def __init__(self, completer=None, words=None, meta_dict=None, WORD=False):
         """The exact code for FuzzyWordCompleter...except callable."""
         # assert callable(words) or all(isinstance(w, string_types) for w in words)
@@ -245,13 +245,9 @@ class FuzzyCallable(FuzzyCompleter):
         self.meta_dict = meta_dict or {}
         self.WORD = WORD
 
-        self.word_completer = WordCompleter(
-            words=lambda: self.words,
-            WORD=self.WORD)
+        self.word_completer = WordCompleter(words=lambda: self.words, WORD=self.WORD)
 
-        self.fuzzy_completer = FuzzyCompleter(
-            self.word_completer,
-            WORD=self.WORD)
+        self.fuzzy_completer = FuzzyCompleter(self.word_completer, WORD=self.WORD)
 
         self.completer = self.fuzzy_completer
         super().__init__(completer=self.completer)
@@ -261,6 +257,7 @@ class FuzzyCallable(FuzzyCompleter):
 
     def __call__(self, document, complete_event):
         return self.get_completions(document, complete_event)
+
 
 if __name__ == "__main__":
     setup_readline()

@@ -47,9 +47,14 @@ async def system_command(command_to_run):
 
         In [40]: await system_command('ls')
 
-        01_rehashx.py       20_aliases.py        31_yank_last_arg.py   36_ptutils.py     cscope.out
-        05_log.py           21_fzf.py            32_kb.py              41_numpy_init.py  event_loops.py 06_help_helpers.py  22_alias_manager.py  33_bottom_toolbar.py  43_matplotlib.py  interpreter.py 10_envvar.py        23_git_commands.py   34_completion.py      __init__.py       repralias.py
-        11_clipboard.py     30_readline.py       35_lexer.py           __main__.py       tags
+        01_rehashx.py       20_aliases.py        31_yank_last_arg.py  
+        36_ptutils.py     cscope.out  05_log.py           21_fzf.py
+        32_kb.py              41_numpy_init.py  event_loops.py 06_help_helpers.py
+        22_alias_manager.py  33_bottom_toolbar.py  43_matplotlib.py
+        interpreter.py 10_envvar.py        23_git_commands.py   34_completion.py
+        __init__.py       repralias.py
+        11_clipboard.py     30_readline.py       35_lexer.py
+        __main__.py       tags
 
     Whoo!
     """
@@ -63,5 +68,3 @@ async def system_command(command_to_run):
     await get_ipython().pt_app.app.run_system_command(
         command=com, wait_for_enter=False, wait_text="", display_before_text=""
     )
-
-

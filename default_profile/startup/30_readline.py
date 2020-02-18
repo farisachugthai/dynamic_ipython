@@ -217,6 +217,7 @@ if __name__ == "__main__":
             pass
         else:
             from readline import append_history_file
+
             history_file = os.path.expanduser("~/.python_history")
             readline.read_history_file(history_file)
             readline.set_history_length(2000)
@@ -231,11 +232,13 @@ if __name__ == "__main__":
 
         out_console = GetOutputFile()
         from pyreadline.console.ansi import AnsiState, AnsiWriter
+
         # from pyreadline import append_history_file
         readline = Readline()
         py_readline(readline)
         from pyreadline.modes.emacs import EmacsMode
         from pyreadline.modes.vi import ViMode
+
         emacs_mode = EmacsMode(pyreadline.Readline())
         vi_mode = ViMode(pyreadline.Readline())
         history_file = "~/.python_history"

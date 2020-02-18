@@ -54,7 +54,7 @@ class KeyBindingsManager(KeyBindingsBase):
             if kb is None:
                 if hasattr(self.shell, "pt_app"):
                     self.kb = self.shell.pt_app.app.key_bindings
-                elif hasattr(ip, "pt_cli"):
+                elif hasattr(shell, "pt_cli"):
                     self.kb = self.shell.pt_cli.application.key_bindings_registry
                 else:
                     self.kb = None

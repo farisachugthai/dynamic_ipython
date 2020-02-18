@@ -1,12 +1,34 @@
 import importlib
-import pytest
+from io import StringIO
+from unittest import TestCase
+from unittest.mock import patch
 
 # Doesn't work. Says theres no bt_mod. Ugh
 # bt_mod = importlib.import_module('default_profile.startup.33_bottom_toolbar')
 # from bt_mod import BottomToolbar  # noqa
 # maybe we should do
-# importlib.util.spec_from_file_location
-# importlib.util.mod_from_spec then proceed?
+spec = importlib.util.spec_from_file_location(
+    "../default_profile/startup/33_bottom_toolbar"
+)
+if spec is not None:
+    bt_mod = importlib.util.module_from_spec(spec)
+else:
+    bt_mod = importlib.import_module("default_profile.startup.33_bottom_toolbar")
+
+if bt_mod is None:
+    unittest.skip()
 
 # def test_bottom_toolbar_exists():
 #     assert BottomToolbar()
+
+
+class TestBottomToolbar(TestCase):
+    def test_toolbar_existence(self):
+        self.assertExists(bt_mod.BottomToolbar())
+
+    def test_toolbar_gets_to_stdout(self):
+        with patch("sys.stdout", new=StringIO()) as fake_out:
+            tb = bt_mod.BottomToolbar()
+            print(tb)
+
+        self.assertIsInstance(fake_out.getvalue(), str)
