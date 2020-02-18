@@ -20,6 +20,8 @@ Notes
 Therefore that function shouldn't be used anywhere in this file.
 
 """
+from traitlets.config.application import get_config, ApplicationError
+from traitlets.config.configurable import LoggingConfigurable, ConfigurableError
 import builtins
 import logging
 import os
@@ -39,8 +41,6 @@ default_log_format = (
 
 logging.basicConfig(level=logging.INFO, format=default_log_format, datefmt=log_datefmt)
 
-from traitlets.config.configurable import LoggingConfigurable, ConfigurableError
-from traitlets.config.application import get_config, ApplicationError
 
 try:
     import default_profile
@@ -348,8 +348,8 @@ c.InteractiveShell.history_load_length = 1000
 
 # ValueError: loop_runner must be callable
 
-# TODO: What is this?
-
+# What is this?
+# Answer: Traits from an IPython.core.oinspect.Inspector object.
 # --TerminalInteractiveShell.object_info_string_level=<Enum>
 #     Default: 0
 #     Choices: (0, 1, 2)
@@ -488,8 +488,6 @@ c.TerminalInteractiveShell.extra_open_editor_shortcuts = True
 
 # The name or class of a Pygments style to use for syntax highlighting.
 # To see available styles, run `pygmentize -L styles`.
-# c.TerminalInteractiveShell.highlighting_style = traitlets.Undefined
-
 # default, emacs, friendly, colorful, autumn, murphy, manni, monokai, perldoc,
 # pastie, borland, trac, native, fruity, bw, vim, vs, tango, rrt, xcode, igor,
 # paraiso-light, paraiso-dark, lovelace, algol, algol_nu, arduino, rainbow_dash
@@ -498,13 +496,13 @@ c.TerminalInteractiveShell.extra_open_editor_shortcuts = True
 # https://github.com/farisachugthai/Gruvbox_IPython
 
 try:
-    from gruvbox.gruvbox import PtGruvbox
+    from gruvbox import PtGruvboxStyle
 except (ImportError, ModuleNotFoundError):
-    from pygments.styles import friendly
+    from pygments.styles import inkpot
 
-    c.TerminalInteractiveShell.highlighting_style = "friendly"
+    c.TerminalInteractiveShell.highlighting_style = "inkpot"
 else:
-    c.TerminalInteractiveShell.highlighting_style = PtGruvbox
+    c.TerminalInteractiveShell.highlighting_style = PtGruvboxStyle
 
 
 def get_env():

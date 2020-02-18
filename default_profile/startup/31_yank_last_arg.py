@@ -2,30 +2,30 @@ r"""Add keybindings.
 
 {{{
 
-    note: VS Code has fdm set to indent. whatever.
+note: VS Code has fdm set to indent. whatever.
 
-    Slowly becoming where all my consolidated scripts for making prompt_toolkit's
-    handling of keypresses cohesive.
+Slowly becoming where all my consolidated scripts for making prompt_toolkit's
+handling of keypresses cohesive.
 
-    TODO: still need C-z
-    Tab doesn't start autocompletion when no letters have been typed in.
-    Damnit I lost C-d again.
-    Holy hell now it gives us this admonition about the truth of a function.
-    Sounds biblical.
+TODO: still need C-z
+Tab doesn't start autocompletion when no letters have been typed in.
+Damnit I lost C-d again.
+Holy hell now it gives us this admonition about the truth of a function.
+Sounds biblical.
 
-    Alright I should probably make a list of the keys in vi_insert_mode that
-    I really want and work up from there.
-    C-a -> beginning_of_line
-    C-e -> end of line
-    C-l -> redraw (Not working)
-    C-p -> go up or go back in history or autocomplete or go to previous autocompletion
-    C-f -> go forward 1 char
-    C-b -> go back 1 char
+Alright I should probably make a list of the keys in vi_insert_mode that
+I really want and work up from there.
+C-a -> beginning_of_line
+C-e -> end of line
+C-l -> redraw (Not working)
+C-p -> go up or go back in history or autocomplete or go to previous autocompletion
+C-f -> go forward 1 char
+C-b -> go back 1 char
 
-    These 3 are really important
-    C-d -> **exit**
-    C-z -> suspend
-    C-c -> kill_line
+These 3 are really important
+C-d -> **exit**
+C-z -> suspend
+C-c -> kill_line
 
 So far in Vim insert mode:
 C-u works
@@ -66,6 +66,7 @@ Calling exit doesn't work?::
 import logging
 
 from prompt_toolkit.clipboard import ClipboardData
+from prompt_toolkit.document import Document
 from prompt_toolkit.enums import DEFAULT_BUFFER
 from prompt_toolkit.filters import (
     Condition,
@@ -293,8 +294,15 @@ def generate_insert_mode_bindings():  # {{{
 
     # In insert mode, also accept input when enter is pressed, and the buffer
     # has been marked as single line.
-    handle(Keys.Enter, filter=insert_mode)(get_by_name("accept-line"))
+    # handle(Keys.Enter, filter=insert_mode)(get_by_name("accept-line"))
 
+    @handle(Keys.Enter, filter=insert_mode)
+    def validate_and_CR(event):
+        event.current_buffer.document = Document(
+                text=b.text.rstrip(),
+                cursor_position=len(b.text.rstrip()))
+
+        event.current_buffer.validate_and_handle()
     # why the literal fuck did i do this
     # @handle("")
     # def _(event: E) -> None:
@@ -346,6 +354,7 @@ def generate_insert_mode_bindings():  # {{{
         else:
             b.start_completion(select_last=True)
 
+    @handle(Keys.Enter, filter=insert_mode)
     @handle(Keys.ControlJ, filter=insert_mode)
     def _(event: E) -> None:
         r"""
@@ -396,7 +405,15 @@ def generate_insert_mode_bindings():  # {{{
     handle(Keys.ControlN, filter=emacs_mode)(get_by_name("next-history"))
 
     handle("c-down")(get_by_name("next-history"))
-    handle(Keys.ControlL)(get_by_name("clear-screen"))
+
+    # handle(Keys.ControlL)(get_by_name("clear-screen"))
+
+    @handle("c-l")
+    def _(event):
+        """
+        Clear whole screen and render again -- also when the sidebar is visible.
+        """
+        event.app.renderer.clear()
 
     handle(Keys.ControlK, filter=insert_mode)(get_by_name("kill-line"))
     handle(Keys.ControlU, filter=insert_mode)(get_by_name("unix-line-discard"))
@@ -432,7 +449,9 @@ def generate_insert_mode_bindings():  # {{{
 
     handle("end", filter=insert_mode)(get_by_name("end-of-line"))
 
-    handle(Keys.ControlC)(get_by_name("kill-line"))
+    # There should be one in basic_bindins fuck it. Oh wait it won't work because
+    # his is filtered and vi insert oesnt get it fuck
+    handle(Keys.ControlC, filter=insert_mode)(get_by_name("kill-line"))
 
     # Don't forget the filter because auto_completion is also gonna want this key
     handle(Keys.ControlE, filter=insert_mode)(get_by_name("end-of-line"))
@@ -512,8 +531,13 @@ def generate_insert_mode_bindings():  # {{{
     @handle(Keys.ControlD, filter=insert_mode)
     def exit_this(event):
         """Either delete a character or exit the application. TODO: this doesn't work"""
-        if get_ipython() is not None:
-            return get_ipython().ask_exit()
+        # Oddly this doesn't close anything. It simply closes it after the end
+        # of your next command like wth
+        try:
+            event.app.exit()
+        except Exception:
+            if get_ipython() is not None:
+                return get_ipython().ask_exit()
 
     # this doesn't do what you'd expect.
     # handle(Keys.ControlD)(get_by_name("end-of-file"))
@@ -533,6 +557,7 @@ def generate_insert_mode_bindings():  # {{{
     return registry
     # }}}
 
+
 def add_bindings():  # {{{
     registry = KeyBindings()
 
@@ -550,7 +575,6 @@ def add_bindings():  # {{{
         Pressing the Insert key.
         """
         event.app.vi_state.input_mode = InputMode.INSERT
-
 
     @handle(Keys.Left, filter=beginning_of_line)
     def wrap_cursor_back(event):
@@ -699,7 +723,8 @@ def add_bindings():  # {{{
         event.app.editing_mode = not event.app.editing_mode == "vi"
         event.app.key_bindings._update_cache()
 
-    handle(Keys.Escape, Keys.ControlJ)(toggle_editing_mode)
+    # This ends up bindin to only C-j
+    # handle(Keys.Escape, Keys.ControlJ)(toggle_editing_mode)
 
     @handle(Keys.F6)
     def _(event):
@@ -834,7 +859,6 @@ def add_bindings():  # {{{
     # }}}
 
 
-
 def get_key_bindings(custom_key_bindings=None):
     """Load key_bindings for the application and customize as necessary.
 
@@ -879,12 +903,60 @@ def get_key_bindings(custom_key_bindings=None):
 
     return merged  # }}}
 
+
+def get_key_bindings(custom_key_bindings=None):
+    """Load key_bindings for the application and customize as necessary.
+
+    Parameters
+    ----------
+    custom_key_bindings : KeyBindings
+        The return value of the function in this module `add_bindings`.
+
+    Notes
+    ------
+    .. warning::
+
+        The ``__init__`` for `_MergedKeyBindings` features this.::
+
+            def __init__(self, registries):
+                assert all(isinstance(r, KeyBindingsBase) for r in registries)
+                _Proxy.__init__(self)
+                self.registries = registries
+
+        As a result `None` can't be passed to `merge_key_bindings`.
+
+    """
+    from prompt_toolkit.key_binding.bindings.auto_suggest import (
+        load_auto_suggest_bindings,
+    )
+    from prompt_toolkit.key_binding.defaults import load_key_bindings
+
+    from prompt_toolkit.key_binding.bindings.page_navigation import (
+        load_page_navigation_bindings,
+    )
+
+    kb = [
+        create_ipython_shortcuts(get_ipython()),
+        load_auto_suggest_bindings(),
+        load_key_bindings(),
+        load_page_navigation_bindings(),
+    ]
+    if custom_key_bindings is not None:
+        kb.append(custom_key_bindings)
+    merged = merge_key_bindings(kb)
+
+    return merged  # }}}
+
+
 if __name__ == "__main__":
 
     _ip = get_ipython()
     if _ip is not None:
         # bindings = add_bindings()
         # Let's see if i can't get a more consistent result without my bindings
+        # extra_bindings = get_key_bindings()
+        # As lame as it is, there's a correct handler for Vi inert mode C-d, Enter and
+        # C-c....so we gotta keep it
         extra_bindings = get_key_bindings(add_bindings())
         _ip.pt_app.app.key_bindings = extra_bindings
 

@@ -21,11 +21,6 @@ if os.environ.get("IPYTHONDIR"):
 else:
     logging.basicConfig(format="%(message)s", level=logging.DEBUG)
 
-if "pyreadline" in sys.modules:
-    pyreadline = sys.modules["pyreadline"]
-else:
-    import readline
-
 
 class SimpleCompleter:
     """Completion mechanism that tracks candidates for different subcommands.
@@ -110,21 +105,31 @@ def readline_config():
     as parameters.
 
     """
+    readline.parse_and_bind("set show-all-if-ambiguous on")
     readline.parse_and_bind("TAB: menu-complete")
+    # readline.parse_and_bind("CR: accept-line")
     readline.parse_and_bind('"\\e[B": history-search-forward')
     readline.parse_and_bind('"\\e[A": history-search-backward')
+    # readline.parse_and_bind('"\\C-d": end-of-file')
+    readline.parse_and_bind('"\\C-e": end-of-line')
+    readline.parse_and_bind('"\\C-h": backward-delete-char')
+    readline.parse_and_bind('"\\C-i": tab-insert')
+    readline.parse_and_bind('"\\C-j": accept-line')
+    readline.parse_and_bind('"\\C-k": "kill-whole-line"')
     readline.parse_and_bind('"\\C-l": clear-screen')
-    readline.parse_and_bind("set show-all-if-ambiguous on")
-    readline.parse_and_bind('"\\C-o": tab-insert')
-    readline.parse_and_bind('"\\C-r": reverse-search-history'),
-    readline.parse_and_bind('"\\C-s": forward-search-history'),
-    readline.parse_and_bind('"\\C-p": "history-search-backward"'),
-    readline.parse_and_bind('"\\C-n": "history-search-forward"'),
-    readline.parse_and_bind('"\\C-k": "kill-line"'),
-    readline.parse_and_bind('"\\C-u": unix-line-discard'),
+    readline.parse_and_bind('"\\C-m": accept-line')
+    readline.parse_and_bind('"\\C-n": complete')
+    readline.parse_and_bind('"\\C-r": reverse-search-history')
+    readline.parse_and_bind('"\\C-s": forward-search-history')
+    # readline.parse_and_bind('"\\C-p": "history-search-backward"'),
+    # readline.parse_and_bind('"\\C-n": "history-search-forward"'),
+    readline.parse_and_bind('"\\C-u": unix-line-discard')
 
-    readline.read_init_file()
-    readline.set_completer(Completer().complete)
+    readline.parse_and_bind('"\\C-w": unix-word-rubout')
+    readline.parse_and_bind('"\\C-]": character-search')
+    # readline.parse_and_bind('"\\e\C-]": character-search-backward')
+    readline.parse_and_bind('"Insert": overwrite-mode')
+    # readline.set_completer(Completer().complete)
 
 
 def py_readline(rl=None):
@@ -188,38 +193,53 @@ def setup_historyfile(filename=None):
 
 def teardown_historyfile(histfile=None):
     try:
-        readline.write_history_file(histfile)
+        append_history_file(histfile)
     except OSError:
         logging.error(
             "History not saved. There were problems saving to ~/.python_history"
         )
 
 
-# Interestingly this can work on Windows with a simple pip install pyreadline
-# however it can be imported as readline no alias so check it first
-if "pyreadline" in sys.modules:
-    pyreadline = sys.modules["pyreadline"]
-
-try:
-    import readline
-except ImportError:
-    pass
-
-try:
-    from pyreadline.rlmain import Readline
-
-    # from pyreadline.lineobj.history import EscapeHistory, LineEditor
-    from pyreadline.lineeditor.lineobj import ReadLineTextBuffer
-except (ImportError, ModuleNotFoundError):
-    pass
-else:
-    readline = Readline()
-    py_readline(readline)
-
-
 if __name__ == "__main__":
-    readline_config()
-    history_file = "~/.python_history"
-    setup_historyfile(history_file)
-    atexit.register(teardown_historyfile, history_file)
+    # Interestingly this can work on Windows with a simple pip install pyreadline
+    # however it can be imported as readline no alias so check it first
+    if "pyreadline" in sys.modules:
+        pyreadline = sys.modules["pyreadline"]
 
+    try:
+        from pyreadline.rlmain import Readline
+
+        # from pyreadline.lineobj.history import EscapeHistory, LineEditor
+    except (ImportError, ModuleNotFoundError):
+        try:
+            import readline
+        except ImportError:
+            pass
+        else:
+            from readline import append_history_file
+            history_file = os.path.expanduser("~/.python_history")
+            readline.read_history_file(history_file)
+            readline.set_history_length(2000)
+            atexit.register(append_history_file)
+
+    else:
+        # All the pyreadline submodules have to be called as pyreadline.
+        # not all clases show up though, so they have to be called as readline
+        # in that case
+        from pyreadline.lineeditor.lineobj import ReadLineTextBuffer
+        from readline import GetOutputFile  # output console via ctype
+
+        out_console = GetOutputFile()
+        from pyreadline.console.ansi import AnsiState, AnsiWriter
+        # from pyreadline import append_history_file
+        readline = Readline()
+        py_readline(readline)
+        from pyreadline.modes.emacs import EmacsMode
+        from pyreadline.modes.vi import ViMode
+        emacs_mode = EmacsMode(pyreadline.Readline())
+        vi_mode = ViMode(pyreadline.Readline())
+        history_file = "~/.python_history"
+        setup_historyfile(history_file)
+        atexit.register(readline.write_history_file)
+
+    readline_config()
