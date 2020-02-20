@@ -13,20 +13,17 @@ security dir, etc.
 I get why it's difficult to run it selectively but it automatically creates
 them in the wrong dir often enough that it should be toggleable behavior.
 
-.. todo:: How much can we delete?
-
 See Also
 --------
 
-.. seealso::
-
-    :mod:`IPython.core.profileapp`.
+:mod:`IPython.core.profileapp`.
 
 """
 import errno
 import os
 import shutil
 from pathlib import Path
+from traceback import print_exc
 
 from IPython.terminal.embed import InteractiveShellEmbed
 from IPython.terminal.ipapp import TerminalIPythonApp
@@ -34,11 +31,10 @@ from IPython.core.profiledir import ProfileDir
 
 # from IPython.paths import ensure_dir_exists, get_ipython_package_dir
 from traitlets.config import Bool, Unicode, observe
+from traitlets.traitlets import TraitError
 
 
 class ProfileDirError(Exception):
-    """Foo."""
-
     pass
 
 
@@ -51,6 +47,7 @@ class ReprProfileDir(ProfileDir):
     This object knows how to find, create and manage these directories. This
     should be used by any code that wants to handle profiles.
     """
+
     def __init__(self, *args, **kwargs):
         """Create an init and then make it way shorter."""
         super().__init__(*args, **kwargs)
@@ -58,8 +55,7 @@ class ReprProfileDir(ProfileDir):
         startup_dir = Unicode("startup")
         log_dir = Unicode("log")
         location = Unicode(
-            help=
-            """Set the profile location directly. This overrides the logic used by the
+            help="""Set the profile location directly. This overrides the logic used by the
             `profile` option.""",
             allow_none=True,
         ).tag(config=True)
@@ -74,9 +70,16 @@ class ReprProfileDir(ProfileDir):
 
     @observe("location")
     def _location_changed(self, change):
-        """This is so odd to me. What is change when does it get called?"""
+        """This is so odd to me. What is change when does it get called?
+
+        Raises
+        ------
+        TraitError
+            No longer raises RuntimeError because that's insane
+
+        """
         if self._location_isset:
-            raise RuntimeError("Cannot set profile location more than once.")
+            raise TraitError("Cannot set profile location more than once.")
         self._location_isset = True
         new = change["new"]
         self.ensure_dir_exists(new)
@@ -105,6 +108,7 @@ class DirectoryChecker:
     Dude we're allowed to subclass os.Pathlike. I wonder if that'd make this
     easier.
     """
+
     def __init__(self, canary=None, *args, **kwargs):
         """Initialize our own version of ipython."""
         if canary is not None:
@@ -122,7 +126,8 @@ class DirectoryChecker:
             if isinstance(self.canary, InteractiveShellEmbed):
                 sys.stderr.write(
                     "\nYou are currently in an embedded IPython shell,\n"
-                    "the configuration will not be loaded.\n\n")
+                    "the configuration will not be loaded.\n\n"
+                )
         else:
             # Not inside IPython
             # Build a terminal app in order to force ipython to load the configuration
@@ -161,9 +166,9 @@ class DirectoryChecker:
                 os.makedirs(path, mode=mode)
             except OSError as e:
                 if e.errno != errno.EEXIST:
-                    raise IOError(e)
+                    raise
         elif not os.path.isdir(path):
-            raise IOError("%r exists but is not a directory" % path)
+            raise IsADirectoryError("%r exists but is not a directory" % path)
 
     def initialize_profile(self):
         """Initialize the profile but sidestep the IPython.core.ProfileDir().
@@ -176,7 +181,6 @@ class DirectoryChecker:
         try:
             self.ensure_dir_exists(profile_to_load)
         except OSError as e:
-            print(e)
+            print_exc(e)
         else:
-            self.canary.profile_dir = os.path.expanduser(
-                "~/.ipython/default_profile")
+            self.canary.profile_dir = os.path.expanduser("~/.ipython/default_profile")

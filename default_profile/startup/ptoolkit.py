@@ -1,5 +1,24 @@
+"""Configure prompt_toolkit effectively within a running IPython instance.
+
+Summary
+-------
+Provides utilities functions and classes to work with both prompt_toolkit
+and IPython.
+
+The `Helpers` class gives a useful reference as to the relationship between
+a number of the intertwined classes in a running `PromptSession`.
+
+Notes
+-----
+Of use might be.:
+
+    get_ipython().pt_app.layout
+
+An object that contains the default_buffer, `DEFAULT_BUFFER`, a reference
+to a container `HSplit` and a few other things possibly worth exploring.
+
+"""
 from prompt_toolkit import search
-from prompt_toolkit.application.current import get_app
 from prompt_toolkit.enums import DEFAULT_BUFFER
 from prompt_toolkit.keys import Keys
 
@@ -15,7 +34,6 @@ def get_app():
 
 
 class Helpers:
-    """I think this class is probably the easiest summary of my frustration."""
 
     def __init__(self):
         self.shell = get_ipython()

@@ -1,11 +1,11 @@
 # Test iterators.
 
+import collections.abc
+import pickle
 import sys
 import unittest
-from test.support import run_unittest, TESTFN, unlink, cpython_only
-from test.support import check_free_after_iterating
-import pickle
-import collections.abc
+from test.support import (TESTFN, check_free_after_iterating, cpython_only,
+                          run_unittest, unlink)
 
 # Test result of triple loop (too big to inline)
 TRIPLETS = [
@@ -1059,4 +1059,3 @@ def test_main():
 
 if __name__ == "__main__":
     test_main()
-

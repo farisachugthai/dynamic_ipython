@@ -11,12 +11,15 @@ import functools
 import os
 import shlex
 import shutil
+import sqlite3
 import subprocess
 import sys
 import types
+
 from contextlib import ContextDecorator, contextmanager
 from subprocess import DEVNULL, PIPE, CalledProcessError, CompletedProcess, Popen
 from typing import get_type_hints, TYPE_CHECKING
+from pathlib import Path
 
 from IPython.core.getipython import get_ipython
 
@@ -31,6 +34,12 @@ else:
     fufpy = FzfPrompt()
     fuf = fufpy.prompt
 
+# try:
+#     import pandas as pd
+# except ImportError:
+#     pd = None
+
+# TODO
 # if  TYPE_CHECKING: etc
 
 
@@ -175,10 +184,31 @@ def is_rg():
     """Returns the path to rg."""
     return shutil.which("rg")
 
+def fzf_history(event):
+    if pd is None:
+        return
+    cnx = sqlite3.connect(home+'/.ipython/profile_default/history.sqlite')
+    fzf=FzfPrompt()
+    df = pd.read_sql_query("SELECT * FROM history", cnx)
+    itext=fzf.prompt(df['source'])
+    # print(itext)
+    if itext!=[]:
+        event.current_buffer.insert_text(itext[0])
+
+
+def add_fzf_binding():
+    insert_mode = ViInsertMode() | EmacsInsertMode()
+    registry = get_ipython().pt_app.key_binding
+
+    registry.add_binding(Keys.ControlY,
+                         filter=HasFocus(DEFAULT_BUFFER)
+                        )(fzf_history)
 
 if __name__ == "__main__":
     fzf_aliases = FZF._setup_fzf()
     get_ipython().alias_manager.define_alias("fzf", "fzf-tmux")
+
+    home = str(Path.home())
 
     if fuf is not None:
 

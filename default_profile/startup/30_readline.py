@@ -129,7 +129,7 @@ def readline_config():
     readline.parse_and_bind('"\\C-]": character-search')
     # readline.parse_and_bind('"\\e\C-]": character-search-backward')
     readline.parse_and_bind('"Insert": overwrite-mode')
-    # readline.set_completer(Completer().complete)
+    # readline.set_completer(Completer().complete
 
 
 def py_readline(rl=None):
@@ -158,6 +158,9 @@ def py_readline(rl=None):
     elif os.path.expanduser("~/pyreadlineconfig.ini"):
         rl.read_inputrc(os.path.expanduser("~/pyreadlineconfig.ini"))
 
+    # todo: check which mode we're in
+    # if pyreadline.editingmodes.
+    # readline.read_and_parse('z-=', "redraw-screen")
 
 # History
 
