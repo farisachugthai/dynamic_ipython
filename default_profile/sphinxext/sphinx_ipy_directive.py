@@ -1,7 +1,9 @@
-from docutils.parsers.rst import Directive, directives
+from docutils.parsers.rst import directives
 from docutils.parsers.rst.directives.images import Image
 
-from sphinx.application import Sphinx, ExtensionError, SphinxError
+from sphinx.application import Sphinx
+from sphinx.errors import ExtensionError, SphinxError
+from sphinx.util.docutils import SphinxDirective
 
 import IPython
 
@@ -10,7 +12,18 @@ class IPythonDirectiveError(SphinxError):
     category = "Uh?"
 
 
-class IPDirective(Directive):
+def python_validator(self):
+    pass
+
+def doctest_validator(self):
+    pass
+
+def verbatim_validator(self):
+    pass
+
+
+
+class IPDirective(SphinxDirective):
 
     has_content = True
     required_arguments = 1
@@ -25,16 +38,6 @@ class IPDirective(Directive):
     def run(self):
         # TODO
         raise NotImplementedError
-
-    def python_validator(self):
-        pass
-
-    def doctest_validator(self):
-        pass
-
-    def verbatim_validator(self):
-        pass
-
 
 # Sphinx.add_directive(IPDirective)
 # aka

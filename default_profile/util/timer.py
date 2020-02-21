@@ -19,6 +19,7 @@ on any module that imports from here.
     :magic:`timeit`
 
 """
+import datetime
 import functools
 import logging
 from os import scandir
@@ -27,6 +28,7 @@ import time
 from timeit import Timer
 
 from IPython.core.getipython import get_ipython
+from IPython.core.magics.execution import _format_time as format_delta
 
 logging.basicConfig(level=logging.INFO)
 
@@ -52,6 +54,7 @@ def timer(func):
         Output of function :func:`time.perf_counter()`.
 
     """
+
     @functools.wraps(func)
     def wrapper_timer(*args, **kwargs):
         start_time = time.perf_counter()
@@ -68,6 +71,7 @@ def timer(func):
 # I mean while we're practicing decorators throw this in the mix
 def debug(func):
     """Print the function signature and return value"""
+
     @functools.wraps(func)
     def wrapper_debug(*args, **kwargs):
         args_repr = [repr(a) for a in args]  # 1
@@ -92,6 +96,7 @@ def exc_timer(statement, setup=None):
 
 class ArgReparser:
     """Class decorator that echoes out the arguments a function was called with."""
+
     def __init__(self, func):
         """Initialize the reparser with the function it wraps."""
         self.func = func
@@ -123,3 +128,57 @@ def time_dir(directory=None):
             result.append((file, diff))
 
     return result
+
+
+class LineWatcher:
+    """Class that implements a basic timer.
+
+    Registers the `start` and `stop` methods with the IPython events API.
+    """
+
+    def __init__(self):
+        self.start_time = self.start()
+
+    def start(self):
+        return time.time()
+
+    def __repr__(self):
+        return f"{self.__class__.__name__} {self.start_time}"
+
+    def stop(self):
+        stop_time = time.time()
+
+        diff = abs(stop_time - self.start_time)
+        print("time: {}".format(format_delta(diff)))
+        return diff
+
+
+def load_ipython_extension(ip=None, line_watcher=None):
+    if ip is None:
+        ip = get_ipython()
+    if ip is None:
+        return
+
+    if line_watcher is None:
+        line_watcher = LineWatcher()
+    ip.events.register("pre_run_cell", line_watcher.start)
+    ip.events.register("post_run_cell", line_watcher.stop)
+
+
+def unload_ipython_extension(ip=None, line_watcher=None):
+    if ip is None:
+        ip = get_ipython()
+    if ip is None:
+        return
+
+    if line_watcher is None:
+        line_watcher = LineWatcher()
+    ip.events.unregister("pre_run_cell", line_watcher.start)
+    ip.events.unregister("post_run_cell", line_watcher.stop)
+
+
+if __name__ == "__main__":
+    watcher = LineWatcher()
+    # todo run this automatically only if we dont already have a prerun cell
+    # otherwise unload!
+    # load_ipython_extension(get_ipython(), watcher)

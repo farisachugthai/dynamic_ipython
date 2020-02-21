@@ -12,10 +12,12 @@ from IPython.utils.path import get_ipython_dir
 def print_history(hist_file):
     with sqlite3.connect(hist_file) as con:
         c = con.cursor()
-        c.execute("SELECT count(source_raw) as csr,\
+        c.execute(
+            "SELECT count(source_raw) as csr,\
                   source_raw FROM history\
                   GROUP BY source_raw\
-                  ORDER BY csr")
+                  ORDER BY csr"
+        )
         result = c.fetchall()
         pprint.pprint(result)
         c.close()
@@ -36,10 +38,8 @@ def get_history():
         # Profiles other than 'default' can be specified here with a profile= argument:
         hist = HistoryAccessor()
 
-        for session, lineno, cell in hist.get_range(session=session_number,
-                                                    raw=raw):
-            cell = cell.encode(
-                "utf-8")  # This line is only needed on Python 2.
+        for session, lineno, cell in hist.get_range(session=session_number, raw=raw):
+            cell = cell.encode("utf-8")  # This line is only needed on Python 2.
         dest.write(cell + "\n")
 
 
@@ -49,15 +49,3 @@ def history_printer():
 
     if os.path.exists(hist_file):
         print_history(hist_file)
-    else:
-        query_shell()
-
-
-def query_shell():
-    shell = get_ipython()
-    raise NotImplementedError
-    # todo. shell locate ipython profile dir in case they arent using profile_default!
-
-
-if __name__ == "__main__":
-    sys.exit(get_history())

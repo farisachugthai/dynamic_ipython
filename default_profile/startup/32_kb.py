@@ -3,8 +3,9 @@
 import logging
 import operator
 import reprlib
-from typing import Callable, Optional
 import warnings
+from collections import UserDict
+from typing import Callable, Optional
 
 from IPython.core.getipython import get_ipython
 
@@ -12,42 +13,24 @@ from prompt_toolkit.cache import SimpleCache
 from prompt_toolkit.document import Document
 from prompt_toolkit.key_binding.defaults import load_key_bindings
 from prompt_toolkit.key_binding.key_bindings import (
-    KeyBindingsBase,
+    # KeyBindingsBase,
     _MergedKeyBindings,
 )
 
 from prompt_toolkit.keys import Keys
 
 
-class KeyBindingsManager(KeyBindingsBase):
-    """Bind an interface with IPython's keybindings and define dunders so this behaves properly.
-
-    I think that I'm going to continue this by making a subclass that validates the bindings it's being given
-    because you can add the same keybinding over and over and that's probably
-    never what the user wants to have happen.
-
-    In order to properly take over the keybindings class we're given,
-    I'm assuming wed need to implement the methods provided by the class
-    KeyBindingsBase.
-
-    *Fun fact:* This used to be a class in prompt_toolkit!
-
-    Copy pasted it below.
-
-    .. todo::
-        ``__getitem__`` so we have a properly constructed sequence.
-        Jan 03, 2020: Done! Just ensure everything works upon usage.
-
-    """
+class KeyBindingsManager(UserDict):
 
     def __init__(self, kb=None, shell=None, **kwargs):
         """Initialize the class.
 
         Parameters
         ----------
-        kb : KeyBindings
+        kb : `KeyBindings`
             Any KeyBindings you wanna throw us right off the bat.
             Handling this is gonna be hard unfortunately.
+
         """
         self.shell = shell or get_ipython()
         if self.shell is not None:
@@ -83,18 +66,6 @@ class KeyBindingsManager(KeyBindingsBase):
         return self.__add__(another_one)
 
     def __len__(self):
-        """
-        .. admonition:: From pydoc.help('SPECIALMETHODS')
-
-            object.__bool__(self)
-                Called to implement truth value testing and the built-in operation
-                "bool()"; should return "False" or "True".  When this method is not
-                defined, "__len__()" is called, if it is defined, and the object is
-                considered true if its result is nonzero.  If a class defines
-                neither "__len__()" nor "__bool__()", all its instances are
-                considered true.
-
-        """
         return len(self.kb.bindings)
 
     def len(self):
@@ -112,8 +83,6 @@ class KeyBindingsManager(KeyBindingsBase):
     def __call__(self):
         """Simply calls the str method until we figure something out."""
         return self.__str__()
-
-    # def __index__(self):
 
     def __iter__(self):
         """This file in general is gonna suck to test isn't it?"""

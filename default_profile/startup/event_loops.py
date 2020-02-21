@@ -20,6 +20,7 @@ try:
     from trio import run as _async_run
 except:
     from asyncio import run as _async_run
+
 import logging
 import multiprocessing
 from multiprocessing.process import current_process
@@ -36,18 +37,22 @@ def children():
 
 
 def enable_multiprocessing_logging(level=30):
+    """Log to stderr."""
     logger = multiprocessing.log_to_stderr()
     logger.setLevel(30)
     return logger
 
 
 async def system_command(command_to_run):
-    """
+    """Run a system command.
+
+    Examples
+    --------
     ::
 
         In [40]: await system_command('ls')
 
-        01_rehashx.py       20_aliases.py        31_yank_last_arg.py  
+        01_rehashx.py       20_aliases.py        31_yank_last_arg.py
         36_ptutils.py     cscope.out  05_log.py           21_fzf.py
         32_kb.py              41_numpy_init.py  event_loops.py 06_help_helpers.py
         22_alias_manager.py  33_bottom_toolbar.py  43_matplotlib.py
@@ -68,3 +73,10 @@ async def system_command(command_to_run):
     await get_ipython().pt_app.app.run_system_command(
         command=com, wait_for_enter=False, wait_text="", display_before_text=""
     )
+
+
+if __name__ == "__main__":
+    if len(asyncio.log.logger.root.handlers) > 0:
+        asyncio.log.logger.root.handlers.pop()
+    asyncio.log.logger.setLevel(99)
+    enable_multiprocessing_logging()

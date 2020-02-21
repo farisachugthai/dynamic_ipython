@@ -18,6 +18,7 @@ An object that contains the default_buffer, `DEFAULT_BUFFER`, a reference
 to a container `HSplit` and a few other things possibly worth exploring.
 
 """
+import prompt_toolkit
 from prompt_toolkit import search
 from prompt_toolkit.enums import DEFAULT_BUFFER
 from prompt_toolkit.keys import Keys
@@ -113,6 +114,19 @@ class Helpers:
     def document(self):
         return self.buffer.document
 
+    def session_validator(self):
+        return self.session.validator
+
+    def app_validator(self):
+        return self.pt_app
+
+    def validate_validators(self):
+        # who watches the watchmen?
+        print(isinstance(session_validator, prompt_toolkit.validator.Validator))
+        return self.app_validator is self.session_validator
+
+
 
 if __name__ == "__main__":
     pt = Helpers()
+    app = get_app()

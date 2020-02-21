@@ -24,6 +24,11 @@ from pathlib import Path
 
 from default_profile import ask_for_import
 from default_profile import default_log_format
+from default_profile.sphinxext import custom_doctests  # noqa F401
+from default_profile.sphinxext.magics import (
+    LineMagicRole,
+    CellMagicRole,
+)  # noqa F401
 
 sphinxext_logger = logging.getLogger(name="default_profile").getChild("sphinxext")
 sphinxext_formatter = logging.Formatter(default_log_format)
@@ -32,23 +37,17 @@ sphinxext_handler.setFormatter(sphinxext_formatter)
 sphinxext_handler.setLevel(logging.WARNING)
 sphinxext_logger.addHandler(sphinxext_handler)
 sphinxext_logger.setLevel(logging.WARNING)
+sphinxext_filter = logging.Filter()
+sphinxext_logger.addFilter(sphinxext_filter)
 
 # How to check the current namespace
 if hasattr(locals(), "__path__"):
     __path__ = pkgutil.extend_path(__path__, __name__)
-else:
-    sys.path.insert(0, str(Path(__file__).resolve()))
+# else:
+#     sys.path.insert(0, str(Path(__file__).resolve()))
 
 
 # Don't emit an error on IPython startup if not installed.
 ask_for_import("IPython")
 
 # We kinda have to assume we're installed if we're building our docs
-if ask_for_import("sphinx"):
-    from default_profile.sphinxext import custom_doctests  # noqa F401
-
-    # from default_profile.sphinxext.ipython_directive import EmbeddedSphinxShell, IPythonDirective  # noqa F401
-    from default_profile.sphinxext.magics import (
-        LineMagicRole,
-        CellMagicRole,
-    )  # noqa F401

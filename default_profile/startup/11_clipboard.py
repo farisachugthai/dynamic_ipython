@@ -11,10 +11,12 @@ import platform
 import shutil
 import subprocess
 import sys
+from os import environ
 
 from IPython.core.magic import line_magic, Magics, magics_class
 from IPython.core.error import TryNext
 from IPython.core.getipython import get_ipython
+from prompt_toolkit.clipboard import DynamicClipboard
 from prompt_toolkit.clipboard.base import ClipboardData, Clipboard
 from prompt_toolkit.clipboard.in_memory import InMemoryClipboard
 
@@ -203,13 +205,18 @@ class UsefulClipboard(Clipboard):
     """
 
     def __init__(self, clipboard=None):
-        # super().__init__()
+        self._environ = environ.copy()
+        self.shell = get_ipython()
         if clipboard is None:
-            self.clipboard = self._clipboard
+            try:
+                self.clipboard = self.pyperclip()
+            except ClipboardEmpty:
+                self.clipboard = self.load()
+
         else:
             self.clipboard = clipboard
 
-    def _clipboard(self):
+    def load(self):
         """TODO: This actually isn't gonna work.
 
         We need to implement each individual function above
@@ -218,10 +225,14 @@ class UsefulClipboard(Clipboard):
 
         In addition it must be callable. Jesus.
         """
+        # self.shell.set_hook("clipboard_get", termux_clipboard_get)
         if platform.platform().startswith("Win"):
             clipboard = WindowsClipboard()
         elif platform.platform().startswith("Linux"):
-            clipboard = tkinter_clipboard_get()
+            if not self._environ.get('DISPLAY'):
+                clipboard =  self.termux_clipboard_get()
+            else:
+                clipboard = tkinter_clipboard_get()
         else:
             clipboard = InMemoryClipboard()
         return clipboard
@@ -245,8 +256,26 @@ class UsefulClipboard(Clipboard):
         return f"{self.__class__.__name__}"
 
     def __len__(self):
-        """The length of clipboard data on the clipboard."""
+        """Return the length of clipboard data on the clipboard."""
+        # return len(self.clipboard().text)
         return len(self.get_data())
+
+    def termux_clipboard_get(self):
+        if not shutil.which("termux-clipboard-get"):
+            return
+        p = subprocess.run(["termux-clipboard-get"], stdout=subprocess.PIPE)
+        text = p.stdout
+        return text
+
+    def pyperclip(self):
+        try:
+            # This is what you were looking for.
+            from prompt_toolkit.clipboard.pyperclip import PyperclipClipboard
+        except ModuleNotFoundError:
+            # womp
+            raise ClipboardEmpty
+        # else:
+        #     self.shell.pt_app.clipboard = PyperclipClipboard()
 
 
 if __name__ == "__main__":
@@ -258,7 +287,8 @@ if __name__ == "__main__":
         elif ipy.pt_app is None:
             breakpoint()
 
-        if PyperclipClipboard is not None:
-            ipy.pt_app.clipboard = PyperclipClipboard()
-        else:
-            ipy.pt_app.clipboard = InMemoryClipboard()
+        # only commented because ipy.pt_app.app.clipboard exists too
+        # if PyperclipClipboard is not None:
+        #     ipy.pt_app.clipboard = PyperclipClipboard()
+        # else:
+        #     ipy.pt_app.clipboard = InMemoryClipboard()

@@ -20,7 +20,7 @@ import functools
 import logging
 import reprlib
 import time
-from os import path
+from os import path, devnull
 from queue import SimpleQueue
 
 from IPython.core.getipython import get_ipython
@@ -63,10 +63,7 @@ def betterConfig(name=None, parent=None):
     log_level = logging.WARNING
 
     if name is None:
-        if shell.logger.logfile != "":
-            name = shell.logger.logfile
-        else:
-            name = "log_mod"
+        name = "log_mod"
 
     if parent:
         better_logger = logging.getLogger(name=name).getChild(parent)
@@ -75,7 +72,13 @@ def betterConfig(name=None, parent=None):
 
     # Now let's set up a couple handlers
     better_stream = logging.StreamHandler()
-    handler = logging.FileHandler(name)
+
+    if shell.logger.logfile != "":
+        logfileobject = shell.logger.logfile
+        logfile = logfileobject.name
+    else:
+        logfile = devnull
+    handler = logging.FileHandler(logfile)
     # And one of our own
     queue_handler = QueueHandler(SimpleQueue())
 
@@ -206,6 +209,9 @@ def ipython_logger(shell=None):
     except RuntimeError:
         print(" Already logging to " + logger.logfname)
         return
+    # todo
+    # else:
+    #     extra_logger = betterConfig(name=filename, parent=STARTUP_LOGGER.name)
 
     if notnew:
         logger.log_write("# =================================\n")
@@ -221,12 +227,13 @@ def ipython_logger(shell=None):
 
 if __name__ == "__main__":
 
-    logger = ipython_logger()
-    if logger is not None:
-        logmode = "append"
-        log_output = True
-        logger.logmode = logmode
-        logger.log_output = log_output
-        logger.timestamp = True
+    ipy_logger = ipython_logger()
+    if ipy_logger is not None:
+        if hasattr(ipy_logger, "logmode"):
+            logmode = "append"
+            log_output = True
+            ipy_logger.logmode = logmode
+            ipy_logger.log_output = log_output
+            ipy_logger.timestamp = True
 
-        extra_logger = betterConfig(name=__name__, parent=STARTUP_LOGGER.name)
+    better_logger = betterConfig()

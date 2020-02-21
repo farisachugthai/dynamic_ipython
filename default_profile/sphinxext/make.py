@@ -21,9 +21,12 @@ except (ImportError, ModuleNotFoundError):
 
 from sphinx.application import Sphinx
 from sphinx.cmd.make_mode import build_main
+from sphinx.config import Config, eval_config_file
 from sphinx.errors import ApplicationError
 from sphinx.jinja2glue import SphinxFileSystemLoader
 from sphinx.project import Project
+from sphinx.util.logging import getLogger
+from sphinx.util.tags import Tags
 
 # from jinja2.constants import TRIM_BLOCKS, LSTRIP_BLOCKS
 from jinja2.environment import Environment
@@ -35,6 +38,8 @@ from jinja2.lexer import get_lexer
 from default_profile import ask_for_import
 from default_profile.__about__ import __version__
 from default_profile.sphinxext import sphinxext_logger
+
+logger = getLogger(name=__name__)
 
 
 def _parse_arguments(cmds=None) -> argparse.ArgumentParser:
@@ -227,10 +232,10 @@ class DocBuilder:
         """Run :command:`sphinx-build`.
 
         The :attr:`check` argument to :func:`subprocess.run()`
-        is not enabled so there's no
-        need to catch
+        is not enabled so there's no need to catch
         :class:`subprocess.CalledProcessError()`.
         """
+        # Shit is that really the only time you gotta catch it?
         self.status("Running sphinx-build.")
         output = subprocess.run(
             self.sphinx_build(),
@@ -281,32 +286,6 @@ def rsync():
         return output
 
 
-# def gather_sphinx_options() -> Any:
-#     """Gather parsed arguments and hand them to sphinx-build in a more direct manner.
-
-#     Parameters
-#     ----------
-#     argv : list
-#         User provided arguments
-
-#     Returns
-#     -------
-#     ret : int (? or maybe just the parsed options?)
-#         Return code from sphinx-build
-
-#     """
-#     args = _parse_arguments()
-#     # Necessary enough to justify not making a logrecord.
-#     pprint(
-#         "Your sphinx-build command was: "
-#         + str(
-#             ["-b", builder, SOURCE_PATH, BUILD_PATH, "-j", jobs, "-" + verbosity * "v"]
-#         )
-#     )
-#     ret = ["-b", builder, SOURCE_PATH, BUILD_PATH]
-#     return ret
-
-
 def generate_sphinx_app(root):
     srcdir = confdir = root.joinpath("source")
     doctreedir = "build/.doctrees"
@@ -350,7 +329,7 @@ def main(repo_root=None):
     else:
         env = Environment()
 
-    doc_root = Path(git_root).joinpath("docs")
+    doc_root = Path(repo_root).joinpath("docs")
     app = generate_sphinx_app(doc_root)
     project = Project(doc_root, source_suffix="rst")
     sphinx_fs = SphinxFileSystemLoader(
@@ -359,14 +338,17 @@ def main(repo_root=None):
     build_main(build_opts)
 
 
-if __name__ == "__main__":
+def run_ext(command):
+    try:
+        return codecs.decode(
+            subprocess.run(command, stdout=subprocess.PIPE).stdout, "utf-8"
+        ).strip()
+    except subprocess.CalledProcessError as e:
+        logger.exception(e)
 
-    git_root = codecs.decode(
-        subprocess.run(
-            ["git", "rev-parse", "--show-toplevel"], stdout=subprocess.PIPE
-        ).stdout,
-        "utf-8",
-    ).strip()
+
+if __name__ == "__main__":
+    git_root = run_ext(["git", "rev-parse", "--show-toplevel"])
     sphinxext_logger.setLevel(30)
     sphinxext_logger.debug(f"git root was: {git_root}")
     sys.exit(main(git_root))
