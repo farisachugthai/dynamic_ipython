@@ -28,17 +28,6 @@ except ImportError:
 else:
     from prompt_toolkit.clipboard.pyperclip import PyperclipClipboard
 
-    # from pyperclip import determine_clipboard
-
-    # copy, paste = determine_clipboard()
-
-
-# TODO: this isn't used so commenting it out but it should be used
-# try:
-#     from default_profile.extensions import termux_clipboard
-# except (ImportError, ModuleNotFoundError):
-#     termux_clipboard = None
-
 
 class ClipboardEmpty(ValueError):
     pass
@@ -53,7 +42,7 @@ class WindowsClipboard(Clipboard):
 
     """
 
-    def __init__(self):
+    def __init__(self, clipboard=None, *args, **kwargs):
         """Open a clipboard on windows with win32clipboard.OpenClipboard.
 
         Raises
@@ -71,12 +60,13 @@ class WindowsClipboard(Clipboard):
             )
         win32clipboard.OpenClipboard()
 
-    def win_clip_pywin32():
+    def win_clip_pywin32(self):
         try:
             text = win32clipboard.GetClipboardData(win32clipboard.CF_UNICODETEXT)
         except (TypeError, win32clipboard.error):
             try:
                 text = win32clipboard.GetClipboardData(win32clipboard.CF_TEXT)
+
             except (TypeError, win32clipboard.error):
                 raise ClipboardEmpty
         finally:
@@ -84,7 +74,7 @@ class WindowsClipboard(Clipboard):
 
         return text
 
-    def win32_clipboard_get():
+    def win32_clipboard_get(self):
         """Get the current clipboard's text on Windows.
 
         Runs :meth:`win_clip_pywin32` and if there's any exception
@@ -109,9 +99,12 @@ class WindowsClipboard(Clipboard):
             except subprocess.CalledProcessError:
                 raise
 
-    # def __call__(self):
-    # how is this going to be called
-    # Todo
+    def __call__(self):
+        self.win32_clipboard_get()
+        # store the clipboarddata and put it on the stack
+
+    def rotate(self):
+        raise
 
     def get_text(self):
         return self.win32_clipboard_get()

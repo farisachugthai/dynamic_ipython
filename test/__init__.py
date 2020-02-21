@@ -25,17 +25,25 @@ import doctest
 import logging
 import os
 import sys
+import traceback
 import unittest
-import warnings
+from unittest.loader import TestLoader, defaultTestLoader, findTestCases
 
 import IPython
 from IPython import get_ipython
 
 try:
     import nose  # noqa F401
-    import default_profile
-except Exception as e:
-    warnings.warn(e)
+except ImportError as e:
+    # traceback.print_exc(e)
+    print(e)
+
+try:
+    import pytest
+except ImportError:
+    print('No pytest')
+
+import default_profile
 
 
 def setup_test_logging():
@@ -57,5 +65,6 @@ if __name__ == "__main__":
     sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 
     doctest_finder = doctest.DocTestFinder()
+    found_test_cases = findTestCases('*')
     unittest.main()
     doctest.DocTestSuite("__main__", globs="*")

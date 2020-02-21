@@ -8,29 +8,20 @@ other things that aren't utilized at all.
 
 """
 import functools
+import logging
 from datetime import date
 from pathlib import Path
 from shutil import get_terminal_size
 from traceback import print_exc
 
-from prompt_toolkit import ANSI, HTML
-
 # from prompt_toolkit.application.current import get_app
 
 from prompt_toolkit.enums import EditingMode
-from prompt_toolkit.formatted_text import FormattedText
-from prompt_toolkit.keys import Keys
-from prompt_toolkit.key_binding import KeyBindings
-
-from prompt_toolkit.layout.containers import (
-    HSplit,
-    VSplit,
-    Window,
-    WindowAlign,
-    FloatContainer,
-)
-from prompt_toolkit.layout.controls import BufferControl, FormattedTextControl
+from prompt_toolkit.formatted_text import FormattedText, to_formatted_text
+from prompt_toolkit.layout.controls import FormattedTextControl
+from prompt_toolkit.layout.containers import Window, Float
 from prompt_toolkit.layout.layout import Layout
+# from prompt_toolkit.layout.processors import DisplayMultipleMouses
 
 from prompt_toolkit.shortcuts import print_formatted_text, CompleteStyle
 from prompt_toolkit.shortcuts.utils import print_container
@@ -56,6 +47,7 @@ try:
 except ImportError:
     GruvboxStyle = None
 
+logging.basicConfig()
 
 def get_app():
     """A patch to cover up the fact that get_app() returns a DummyApplication."""
@@ -99,6 +91,7 @@ def merged_style_rules():
 
 
 def show_header():
+    # TODO: Should replace that text with somethin else
     text_area = TextArea(get_ipython().banner, style="#ebdbb2")
     return Frame(text_area)
 
@@ -121,13 +114,6 @@ class LineCounter:
         return "(< In[{:3d}]: Time:{}  )".format(self.count, self.time)
 
 
-def get_titlebar_text():
-    return [
-        ("class:title", "Hello World!"),
-        ("class:title", " (Press <Exit> to quit.)"),
-    ]
-
-
 class BottomToolbar:
     """Display the current input mode.
 
@@ -139,20 +125,22 @@ class BottomToolbar:
     via ``__call__``.
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, app, *args, **kwargs):
+        """Require an 'app' for initialization.
+
+        This will eliminate all IPython code out of this class and make things
+        a little more modular for the tests.
+        """
         self.shell = get_ipython()
+        self.app = app
         self.unfinished_toolbar = self.rerender()
         self.PythonLexer = PythonLexer()
         self.Formatter = TerminalTrueColorFormatter()
 
-    @property
-    def session(self):
-        return self.shell.pt_app
-
-    @property
-    def app(self):
-        # TODO: Be more consistent and check multiple versions of pt as done in other files
-        return self.shell.pt_app.app
+    # @property
+    # def app(self):
+    #     # TODO: Be more consistent and check multiple versions of pt as done in other files
+    #     return self.shell.pt_app.app
 
     @property
     def is_vi_mode(self):
@@ -193,9 +181,9 @@ class BottomToolbar:
             That's all.
         """
         if self.is_vi_mode:
-            return self._render_vi()
+            return to_formatted_text(self._render_vi(), style="class:toolbar=#ebdbb2")
         else:
-            return self._render_emacs()
+            return to_formatted_text(self._render_emacs())
 
     def _render_vi(self):
         current_vi_mode = self.app.vi_state.input_mode
@@ -233,8 +221,8 @@ class Attempt2(BottomToolbar, FormattedTextToolbar):
 class Attempt3(BottomToolbar):
     """Try stylizing the toolbar."""
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, app, *args, **kwargs):
+        super().__init__(app, *args, **kwargs)
 
     def _rerender(self):
         self.rerender()
@@ -248,52 +236,20 @@ class Attempt3(BottomToolbar):
         return FormattedTextToolbar(fmt)
 
 
-def generate_and_print_hsplit():
-    # kb = get_ipython().pt_app.app.key_bindings.bindings
-    # Bind to IPython TODO:
-    root_container = HSplit(
-        children=[
-            Window(
-                height=1,
-                content=FormattedTextControl(get_titlebar_text),
-                align=WindowAlign.CENTER,
-                wrap_lines=True,
-            ),
-            Window(height=1, char="-", style="class:line"),
-        ],
-        # key_bindings=kb,
-        # style=GruvboxStyle,
-        style="#fe8019",
-    )
-
-    print("\n\n\n")
-    print_container(root_container)
-    # Thisll probably be useful
-    # from prompt_toolkit.mouse_events import MouseEvent, MouseEventType
-
-    # float_container = FloatContainer(content=Window(...),
-    #                        floats=[
-    #                            Float(xcursor=True,
-    #                                 ycursor=True,
-    #                                 layout=CompletionMenu(...))
-    #                        ])
-    exit_button = Button("Exit", handler=exit_clicked)
-    print_container(exit_button)
-
-    return root_container
-
-
 if __name__ == "__main__":
-    shell = get_ipython()
-    if shell is not None:
-        add_toolbar(BottomToolbar)
+    bottom_text = BottomToolbar(get_app())
 
-    completion_displays_to_styles = {
-        "multi": CompleteStyle.MULTI_COLUMN,
-        "single": CompleteStyle.COLUMN,
-        "readline": CompleteStyle.READLINE_LIKE,
-        "none": None,
-    }
+    partial_window = Window(FormattedTextControl(bottom_text), width=10, height=2)
+
+    logging.debug(print_container(partial_window))
+    # Do frames not return container objects? Because this line is raisin an error?
+    # bottom_float = Float(Frame(partial_window, style="bg:#282828 #ffffff"), bottom=0)
+    # print_container(bottom_float)
+
+    shell = get_ipython()
+    # if shell is not None:
+    #     if hasattr(shell, "pt_app"):
+            # TODO:
+            # shell.pt_app.bottom_toolbar = bottom_float
 
     print_container(show_header())
-    generate_and_print_hsplit()

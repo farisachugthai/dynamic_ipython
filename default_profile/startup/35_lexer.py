@@ -1,37 +1,52 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""This is the example from pygments.
+"""Set up the lexer and highlighting processors for the app.
 
-We could use this as a very easy hack to stop that error highlighting
-when the lexer sees a python statement that starts with a :kbd:`!` or
-:kbd:`%` at the beginning of magics.
-
-FYI.
-
-    In [46]: _ip.pt_app.lexer
-    Out[46]: <IPython.terminal.ptutils.IPythonPTLexer at 0x151087677c0>
-
-    In [47]: _ip.pt_app.lexer.python_lexer.pygments_lexer
-    Out[47]: <pygments.lexers.PythonLexer with {'stripnl': False, 'stripall': False, 'ensurenl': False}
-
-
+After importing either a Gruvbox pygments Style or InkPotStyle,
+we `merge_styles` to return the final lexer.
 """
+# TODO
+# In [47]: _ip.pt_app.lexer.python_lexer.pygments_lexer
+# Out[47]: <pygments.lexers.PythonLexer with {'stripnl': False, 'stripall': False, 'ensurenl': False}
 from traitlets.config import LoggingConfigurable
 from traitlets.traitlets import Instance
+
 from pygments.lexer import Lexer
 from pygments.lexers.python import PythonLexer
 from pygments.token import Keyword, Name
 from pygments.formatters.terminal256 import TerminalTrueColorFormatter
 
+
+# from prompt_toolkit import ANSI, HTML
+from prompt_toolkit.layout.containers import (
+    HSplit,
+    # VSplit,
+    Window,
+    WindowAlign,
+    # for now
+    # FloatContainer,
+)
+from prompt_toolkit.layout.controls import BufferControl, FormattedTextControl
+from prompt_toolkit.layout.layout import Layout
+
+from prompt_toolkit.layout.processors import (
+    HighlightMatchingBracketProcessor,
+    DisplayMultipleCursors,
+    HighlightSearchProcessor,
+    HighlightIncrementalSearchProcessor,
+    HighlightSelectionProcessor,
+)
 from prompt_toolkit.lexers.pygments import PygmentsLexer  # , PygmentsTokens
 from prompt_toolkit.lexers.base import DynamicLexer, SimpleLexer
+from prompt_toolkit.shortcuts.utils import print_container
 
 from prompt_toolkit.styles import style_from_pygments_cls, default_pygments_style
-from prompt_toolkit.styles.style import Style, merge_styles
+from prompt_toolkit.styles.style import merge_styles  # , Style,
 
 from IPython.core.getipython import get_ipython
 from IPython.core.interactiveshell import InteractiveShellABC
-from IPython.lib.lexers import IPyLexer, IPythonTracebackLexer
+
+# from IPython.lib.lexers import IPyLexer, IPythonTracebackLexer
 
 try:
     from gruvbox.ptgruvbox import Gruvbox
@@ -143,13 +158,60 @@ class MyPythonLexer(PythonLexer):
                 yield index, token, value
 
 
+def get_titlebar_text():
+    """Return (style, text) tuples for startup."""
+    return [
+        ("class:title", "Hello World!"),
+        ("class:title", " (Press <Exit> to quit.)"),
+    ]
+
+
+def generate_and_print_hsplit():
+    """Generate a `prompt_toolkit.layout.container.HSplit`.
+
+    Originally was in 33_bottom_toolbar but moved here so we can use the lexer.
+    """
+    root_container = HSplit(
+        children=[
+            Window(
+                height=1,
+                content=FormattedTextControl(get_titlebar_text),
+                align=WindowAlign.CENTER,
+                wrap_lines=True,
+            ),
+            Window(height=1, char="-", style="class:line"),
+        ],
+        # key_bindings=kb,
+        # style=GruvboxStyle,
+        style="#fe8019",
+    )
+
+    print("\n\n\n")
+    print_container(root_container)
+    # Thisll probably be useful
+    # from prompt_toolkit.mouse_events import MouseEvent, MouseEventType
+
+    # float_container = FloatContainer(content=Window(...),
+    #                        floats=[
+    #                            Float(xcursor=True,
+    #                                 ycursor=True,
+    #                                 layout=CompletionMenu(...))
+    #                        ])
+    exit_button = Button("Exit", handler=exit_clicked)
+    print_container(exit_button)
+
+    return root_container
+
+
 if __name__ == "__main__":
     # lexer = IPythonConfigurableLexer()
     # colorizer = Colorizer()
     # pt_lexer = get_lexer()
-    lexer = MyPythonLexer()
-    if hasattr(get_ipython(), "pt_app.lexer"):
-        get_ipython().pt_app.lexer = lexer
 
-    elif hasattr(get_ipython(), "pt_app.app.lexer"):
-        get_ipython().pt_app.app.lexer = lexer
+    generate_and_print_hsplit()
+    lexer = MyPythonLexer()
+    # if hasattr(get_ipython(), "pt_app.lexer"):
+    #     get_ipython().pt_app.lexer = lexer
+
+    # elif hasattr(get_ipython(), "pt_app.app.lexer"):
+    #     get_ipython().pt_app.app.lexer = lexer

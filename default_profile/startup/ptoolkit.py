@@ -2,11 +2,14 @@
 
 Summary
 -------
-Provides utilities functions and classes to work with both prompt_toolkit
-and IPython.
+Provides utilities functions and classes to work with both `prompt_toolkit`
+and `IPython`. The APIs of both libraries can be individually quite
+overwhelming, and the combination and interaction of the 2 can prove difficult
+to stay on top of.
 
-The `Helpers` class gives a useful reference as to the relationship between
-a number of the intertwined classes in a running `PromptSession`.
+The `Helpers` class defined here gives a useful reference as to the
+relationship between a number of the intertwined classes in a running
+`PromptSession`.
 
 Notes
 -----
@@ -18,9 +21,7 @@ An object that contains the default_buffer, `DEFAULT_BUFFER`, a reference
 to a container `HSplit` and a few other things possibly worth exploring.
 
 """
-import prompt_toolkit
-from prompt_toolkit import search
-from prompt_toolkit.enums import DEFAULT_BUFFER
+from reprlib import repr
 from prompt_toolkit.keys import Keys
 
 from IPython.core.getipython import get_ipython
@@ -34,29 +35,20 @@ def get_app():
         return get_ipython().pt_app.app
 
 
-class Helpers:
+def get_session():
+    """A patch to cover up the fact that get_app() returns a DummyApplication."""
+    if get_ipython() is not None:
+        return get_ipython().pt_app
 
+
+class Helpers:
     def __init__(self):
         self.shell = get_ipython()
-        self.app()
-
-    @property
-    def is_running(self):
-        pass
+        self.pt_app = get_app()
+        self.session = get_session()
 
     def __repr__(self):
-        return f"{self.pt_app}"
-
-    def app(self):
-        self._app = get_app()
-
-    @property
-    def pt_app(self):
-        return self.shell.pt_app.app
-
-    @property
-    def session(self):
-        return self.shell.pt_app
+        return f"{self.__class__.__name__} with app at {self.pt_app}"
 
     @property
     def pt_app_kb(self):
@@ -84,11 +76,11 @@ class Helpers:
 
     @property
     def session_layout(self):
-        return self.pt_app.layout
+        return self.session.layout
 
     @property
     def layout(self):
-        self.app_layout
+        return self.app_layout
 
     @property
     def pt_app_style(self):
@@ -107,12 +99,57 @@ class Helpers:
         return self.session.style
 
     @property
-    def buffer(self):
+    def current_buffer(self):
         return self.layout.current_buffer
 
     @property
-    def document(self):
-        return self.buffer.document
+    def current_container(self):
+        """Return the HSplit defining the layout of the app."""
+        return self.layout.container
+
+    @property
+    def current_container_children(self):
+        """Return a list of the current container children.
+
+        I genuinely don't think I expected it to be so big.
+        """
+        return self.current_container.children
+
+    @property
+    def current_control(self):
+        """Return IPython's buffer control."""
+        return self.layout.current_control
+
+    @property
+    def current_document(self):
+        return self.current_buffer.document
+
+    @property
+    def current_buffer_texts(self):
+        """Return the 'text' attr of the current buffer as a string."""
+        return self.current_buffer.text
+
+    @property
+    def current_document_text(self):
+        """Return the 'lines' attr of the current document as a list."""
+        return self.current_document.lines
+
+    @property
+    def current_window(self):
+        return self.layout.current_window
+
+    @property
+    def current_content(self):
+        """The 'content' attribute of a `Window` returns a UIControl instance.
+
+        In this specific case, it returns a BufferControl.
+        """
+        return self.current_window.content
+
+    @property
+    def content_is_control(self):
+        """Is the `Window` content the control returned by the layout?"""
+        return self.current_content is self.current_control
 
     def session_validator(self):
         return self.session.validator
@@ -126,7 +163,5 @@ class Helpers:
         return self.app_validator is self.session_validator
 
 
-
 if __name__ == "__main__":
     pt = Helpers()
-    app = get_app()

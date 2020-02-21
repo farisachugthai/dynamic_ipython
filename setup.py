@@ -33,6 +33,23 @@ logging.basicConfig()
 
 from setuptools import setup, find_packages, Command, Extension, PackageFinder
 
+try:
+    from setuptools.wheel import (
+        Wheel,
+    )  # this module imports posixpath but that worked on win32 for me???
+except ImportError:
+    Wheel = None
+
+
+try:  # new replacement for the pkg_resources API
+    import importlib_metadata
+except ImportError:
+    importlib_metadata = None
+
+## Back to the import stuff i guess
+
+if importlib_metadata is not None:
+    our_dist = importlib_metadata.distribution("dynamic_ipython")
 # Conda Support: {{{1
 
 try:

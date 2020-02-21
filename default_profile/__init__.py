@@ -34,11 +34,6 @@ from pathlib import Path
 # from pkg_resources import declare_namespace
 from setuptools import find_packages, find_namespace_packages
 
-try:  # new replacement for the pkg_resources API
-    import importlib_metadata
-except ImportError:
-    importlib_metadata = None
-
 from traitlets.config.application import LevelFormatter
 
 # Lol note that there are FOUR different logging.Formatter.fmt strings in this module
@@ -133,7 +128,7 @@ except (ImportError, ModuleNotFoundError):
     pass
 
 try:
-    import __about__
+    import __about__  # noqa
 except:
     pass
 
@@ -212,3 +207,4 @@ def setup_logging(debug=True, logfile=None):
         root_logger.addHandler(handler)
 
     root_logger.setLevel(10)
+

@@ -4,6 +4,7 @@ import collections.abc
 import pickle
 import sys
 import unittest
+
 from test.support import (TESTFN, check_free_after_iterating, cpython_only,
                           run_unittest, unlink)
 
@@ -1058,4 +1059,5 @@ def test_main():
 
 
 if __name__ == "__main__":
+    unittest.skipIf(
     test_main()

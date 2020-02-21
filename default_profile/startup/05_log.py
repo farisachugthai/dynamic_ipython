@@ -212,7 +212,6 @@ def ipython_logger(shell=None):
     # todo
     # else:
     #     extra_logger = betterConfig(name=filename, parent=STARTUP_LOGGER.name)
-
     if notnew:
         logger.log_write("# =================================\n")
     else:
