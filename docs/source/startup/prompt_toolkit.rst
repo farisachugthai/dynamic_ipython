@@ -166,6 +166,26 @@ They're basically Enums that get compared to ``editing_mode.input_mode``.::
 `~default_profile.startup.33_bottom_toolbar`
 =============================================
 
+This module begins the section of the repository that entails more advanced
+customization of prompt_toolkit.
+
+Lower level constructs like widgets, toolbars and eventually the Layout classes
+are utilized quite heavily.
+
+.. admonition:: Be careful what the bottom toolbar is set to.
+
+   It's not very difficult to crash the entire application as a result of
+   giving it the wrong type.
+
+The |ip|\.`pt_app.bottom_toolbar` type is expected to be some kind of
+FormattedText. Unfortunately, feeding it an already populated control like a
+FormattedTextToolbar will break the application.
+
+Don't run.::
+
+    bottom_toolbar = FormattedTextToolbar(bottom_text)
+    shell.pt_app.bottom_toolbar = bottom_toolbar
+
 .. automodule:: default_profile.startup.33_bottom_toolbar
    :synopsis: Generate a toolbar using lower-level controls.
    :members:
@@ -243,6 +263,15 @@ So it'd be tough to say we're at a lack of tools!
 
 .. automodule:: default_profile.startup.ptoolkit
    :synopsis: Generate a more generalized class to interact with prompt_toolkit.
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+:mod:`~default_profile.startup.completions`
+===========================================
+
+.. automodule:: default_profile.startup.completions
    :members:
    :undoc-members:
    :show-inheritance:

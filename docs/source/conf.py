@@ -42,6 +42,7 @@ DOCS_LOGGER.setLevel(logging.INFO)
 
 # Gotta hack at sys.path a little
 DOCS = Path(__file__).resolve().parent.parent
+BUILD_DIR = DOCS.joinpath('build/html')
 ROOT = DOCS.parent
 JUPYTER = ROOT.joinpath("jupyter_conf")
 
@@ -115,11 +116,10 @@ if ask_for_import("matplotlib"):
     extensions.extend(
         ["matplotlib.sphinxext.plot_directive", "matplotlib.sphinxext.mathmpl",]
     )
-0
+    DOCS_LOGGER.info("matplotlib in extensions")
+
 if ask_for_import("flake8_rst"):
-    extensions.append(
-        "flake8_rst.sphinxext.custom_roles"
-    )
+    extensions.append("flake8_rst.sphinxext.custom_roles")
     DOCS_LOGGER.info("flake8_rst in extensions")
 
 if ask_for_import("numpydoc"):
@@ -138,7 +138,7 @@ renderers = ReSTRenderer(templates_path)
 # You can specify multiple suffix as a list of string:
 source_suffix = {
     ".rst": "restructuredtext",
-    ".txt": "markdown",
+    ".txt": "restructuredtext",
 }
 
 if ask_for_import("recommonmark"):
@@ -444,7 +444,7 @@ viewcode_follow_imported_members = False
 
 # -- IPython directive -------------------------------------------------------
 
-ipython_savefig_dir = DOCS.joinpath("_images").__fspath__()
+ipython_savefig_dir = BUILD_DIR.joinpath("_images").__fspath__()
 savefig_dir = ipython_savefig_dir
 
 ipython_warning_is_error = False

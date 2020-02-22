@@ -172,6 +172,7 @@
 <span class="kn">from</span> <span class="nn">prompt_toolkit.layout.controls</span> <span class="kn">import</span> <span class="n">FormattedTextControl</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.layout.containers</span> <span class="kn">import</span> <span class="n">Window</span><span class="p">,</span> <span class="n">Float</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.layout.layout</span> <span class="kn">import</span> <span class="n">Layout</span>
+
 <span class="c1"># from prompt_toolkit.layout.processors import DisplayMultipleMouses</span>
 
 <span class="kn">from</span> <span class="nn">prompt_toolkit.shortcuts</span> <span class="kn">import</span> <span class="n">print_formatted_text</span><span class="p">,</span> <span class="n">CompleteStyle</span>
@@ -199,6 +200,7 @@
     <span class="n">GruvboxStyle</span> <span class="o">=</span> <span class="kc">None</span>
 
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">()</span>
+
 
 <div class="viewcode-block" id="get_app"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.get_app">[docs]</a><span class="k">def</span> <span class="nf">get_app</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;A patch to cover up the fact that get_app() returns a DummyApplication.&quot;&quot;&quot;</span>
@@ -332,9 +334,9 @@
 <span class="sd">            That&#39;s all.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_vi_mode</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">to_formatted_text</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_render_vi</span><span class="p">(),</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;class:toolbar=#ebdbb2&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_render_vi</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">to_formatted_text</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_render_emacs</span><span class="p">())</span></div>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_render_emacs</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="nf">_render_vi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">current_vi_mode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">vi_state</span><span class="o">.</span><span class="n">input_mode</span>
@@ -365,28 +367,6 @@
         <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">bottom_toolbar</span> <span class="o">=</span> <span class="n">toolbar</span></div>
 
 
-<div class="viewcode-block" id="Attempt2"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.Attempt2">[docs]</a><span class="k">class</span> <span class="nc">Attempt2</span><span class="p">(</span><span class="n">BottomToolbar</span><span class="p">,</span> <span class="n">FormattedTextToolbar</span><span class="p">):</span>
-    <span class="k">pass</span></div>
-
-
-<div class="viewcode-block" id="Attempt3"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.Attempt3">[docs]</a><span class="k">class</span> <span class="nc">Attempt3</span><span class="p">(</span><span class="n">BottomToolbar</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Try stylizing the toolbar.&quot;&quot;&quot;</span>
-
-<div class="viewcode-block" id="Attempt3.__init__"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.Attempt3.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">app</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
-
-    <span class="k">def</span> <span class="nf">_rerender</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">rerender</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;{self.toolbar()}&quot;</span>
-
-<div class="viewcode-block" id="Attempt3.toolbar"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.Attempt3.toolbar">[docs]</a>    <span class="k">def</span> <span class="nf">toolbar</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rerender</span><span class="p">()</span>
-        <span class="n">fmt</span> <span class="o">=</span> <span class="n">FormattedText</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">FormattedTextToolbar</span><span class="p">(</span><span class="n">fmt</span><span class="p">)</span></div></div>
-
-
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">bottom_text</span> <span class="o">=</span> <span class="n">BottomToolbar</span><span class="p">(</span><span class="n">get_app</span><span class="p">())</span>
 
@@ -396,12 +376,13 @@
     <span class="c1"># Do frames not return container objects? Because this line is raisin an error?</span>
     <span class="c1"># bottom_float = Float(Frame(partial_window, style=&quot;bg:#282828 #ffffff&quot;), bottom=0)</span>
     <span class="c1"># print_container(bottom_float)</span>
+    <span class="n">bottom_toolbar</span> <span class="o">=</span> <span class="n">FormattedTextToolbar</span><span class="p">(</span><span class="n">bottom_text</span><span class="p">)</span>
 
     <span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
     <span class="c1"># if shell is not None:</span>
     <span class="c1">#     if hasattr(shell, &quot;pt_app&quot;):</span>
-            <span class="c1"># TODO:</span>
-            <span class="c1"># shell.pt_app.bottom_toolbar = bottom_float</span>
+    <span class="c1">#         # TODO:</span>
+    <span class="c1">#         shell.pt_app.bottom_toolbar = bottom_toolbar</span>
 
     <span class="n">print_container</span><span class="p">(</span><span class="n">show_header</span><span class="p">())</span>
 </pre></div>

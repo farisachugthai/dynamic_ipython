@@ -20,6 +20,24 @@ Here's a really good one to check out.:
 
 .. todo:: Why does the .egg_info/ dir get dropped in the cwd?
 
+.. todo::
+    When you run `%run setup.py` it raises this error.
+
+    .. code-block:: py3tb
+
+        File "/root/.local/share/virtualenvs/dynamic_ipython-DV6OEPaX/lib/python3.8/site-packages/IPython/core/ultratb.py", line 1151, in get_records
+        return _fixed_getinnerframes(etb, number_of_lines_of_context, tb_offset)
+        File "/root/.local/share/virtualenvs/dynamic_ipython-DV6OEPaX/lib/python3.8/site-packages/IPython/core/ultratb.py", line 319, in wrapped
+        return f(*args, **kwargs)
+        File "/root/.local/share/virtualenvs/dynamic_ipython-DV6OEPaX/lib/python3.8/site-packages/IPython/core/ultratb.py", line 353, in _fixed_getinnerframes
+        records = fix_frame_records_filenames(inspect.getinnerframes(etb, context))
+        File "/usr/lib64/python3.8/inspect.py", line 1503, in getinnerframes
+        frameinfo = (tb.tb_frame,) + getframeinfo(tb, context)
+        AttributeError: 'tuple' object has no attribute 'tb_frame'
+        INFO:root:
+        Unfortunately, your original traceback can not be constructed.
+
+        An exception has occurred, use %tb to see the full traceback.
 """
 import codecs
 import logging
@@ -33,12 +51,12 @@ logging.basicConfig()
 
 from setuptools import setup, find_packages, Command, Extension, PackageFinder
 
-try:
-    from setuptools.wheel import (
-        Wheel,
-    )  # this module imports posixpath but that worked on win32 for me???
-except ImportError:
-    Wheel = None
+# try:
+#     from setuptools.wheel import (
+#         Wheel,
+#     )  # this module imports posixpath but that worked on win32 for me???
+# except ImportError:
+#     Wheel = None
 
 
 try:  # new replacement for the pkg_resources API
@@ -50,6 +68,10 @@ except ImportError:
 
 if importlib_metadata is not None:
     our_dist = importlib_metadata.distribution("dynamic_ipython")
+    # TODO:
+    dynamic_entry_point = importlib_metadata.EntryPoint('foo', 'bar', 'dynamic_ipython')
+
+
 # Conda Support: {{{1
 
 try:

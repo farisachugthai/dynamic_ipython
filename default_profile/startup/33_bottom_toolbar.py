@@ -21,6 +21,7 @@ from prompt_toolkit.formatted_text import FormattedText, to_formatted_text
 from prompt_toolkit.layout.controls import FormattedTextControl
 from prompt_toolkit.layout.containers import Window, Float
 from prompt_toolkit.layout.layout import Layout
+
 # from prompt_toolkit.layout.processors import DisplayMultipleMouses
 
 from prompt_toolkit.shortcuts import print_formatted_text, CompleteStyle
@@ -48,6 +49,7 @@ except ImportError:
     GruvboxStyle = None
 
 logging.basicConfig()
+
 
 def get_app():
     """A patch to cover up the fact that get_app() returns a DummyApplication."""
@@ -181,9 +183,9 @@ class BottomToolbar:
             That's all.
         """
         if self.is_vi_mode:
-            return to_formatted_text(self._render_vi(), style="class:toolbar=#ebdbb2")
+            return self._render_vi()
         else:
-            return to_formatted_text(self._render_emacs())
+            return self._render_emacs()
 
     def _render_vi(self):
         current_vi_mode = self.app.vi_state.input_mode
@@ -214,28 +216,6 @@ def add_toolbar(toolbar=None):
         _ip.pt_app.bottom_toolbar = toolbar
 
 
-class Attempt2(BottomToolbar, FormattedTextToolbar):
-    pass
-
-
-class Attempt3(BottomToolbar):
-    """Try stylizing the toolbar."""
-
-    def __init__(self, app, *args, **kwargs):
-        super().__init__(app, *args, **kwargs)
-
-    def _rerender(self):
-        self.rerender()
-
-    def __call__(self):
-        return f"{self.toolbar()}"
-
-    def toolbar(self):
-        tmp = self._rerender()
-        fmt = FormattedText(tmp)
-        return FormattedTextToolbar(fmt)
-
-
 if __name__ == "__main__":
     bottom_text = BottomToolbar(get_app())
 
@@ -245,11 +225,12 @@ if __name__ == "__main__":
     # Do frames not return container objects? Because this line is raisin an error?
     # bottom_float = Float(Frame(partial_window, style="bg:#282828 #ffffff"), bottom=0)
     # print_container(bottom_float)
+    bottom_toolbar = FormattedTextToolbar(bottom_text)
 
     shell = get_ipython()
     # if shell is not None:
     #     if hasattr(shell, "pt_app"):
-            # TODO:
-            # shell.pt_app.bottom_toolbar = bottom_float
+    #         # TODO:
+    #         shell.pt_app.bottom_toolbar = bottom_toolbar
 
     print_container(show_header())

@@ -224,6 +224,20 @@ def teardown_historyfile(histfile=None):
         )
 
 
+def last_input():
+    """Returns the user's last input.
+
+    Utilizes the *raw_cell* attribute found on an
+    :class:`IPython.core.interactiveshell.ExecutionInfo` instance.
+    """
+    return get_ipython().last_execution_result.info.raw_cell
+
+
+def add_last_input():
+    """Calls readline's `add_history` function with `last_input`."""
+    return readline.add_history(last_input())
+
+
 if __name__ == "__main__":
     # Interestingly this can work on Windows with a simple pip install pyreadline
     # however it can be imported as readline no alias so check it first
@@ -238,14 +252,7 @@ if __name__ == "__main__":
         try:
             import readline
         except ImportError:
-            pass
-        else:
-            from readline import append_history_file
-
-            history_file = os.path.expanduser("~/.python_history")
-            readline.read_history_file(history_file)
-            readline.set_history_length(2000)
-            atexit.register(readline.write_history_file, history_file)
+            readline = None
 
     else:
         # All the pyreadline submodules have to be called as pyreadline.
@@ -265,8 +272,9 @@ if __name__ == "__main__":
 
         emacs_mode = EmacsMode(pyreadline.Readline())
         vi_mode = ViMode(pyreadline.Readline())
-        history_file = "~/.python_history"
-        setup_historyfile(history_file)
-        atexit.register(readline.write_history_file)
 
-    readline_config()
+    if readline is not None:
+        history_file = os.path.expanduser("~/.python_history")
+        setup_historyfile(history_file)
+        atexit.register(readline.write_history_file, history_file)
+        readline_config()
