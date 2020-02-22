@@ -5,6 +5,7 @@ Sorry for the sloppiness.
 from inspect import getdoc
 import logging
 import sys
+import tempfile
 
 from pyfzf.pyfzf import FzfPrompt
 
@@ -39,13 +40,30 @@ class TestInter(TerminalInteractiveShell):
         super().__init__(self, *args, **kwargs)
 
 
+def fzf_keys(inputted_list=None):
+    if inputted_list is None:
+        inputtted_list = []
+
+    # idk if you can do this.
+    with open(tempfile.mkstemp()) as f:
+        sys.stdout = f
+        sys.stdin = f
+        # also is this class a contextmanager because that'd be thoughtful
+        FzfPrompt(inputted_list)
+
+
 def new_shortcuts():
     """Let's overlay a few shortcuts with the default ones."""
     app = get_app()
     shell = get_ipython()
     kb = create_ipython_shortcuts(shell)
-    fzf_keys = (Keys.ControlT, HasFocus(DEFAULT_BUFFER))
+    if hasattr(kb, "add"):
+        handle = kb.add
+    else:
+        # probably should whine
+        return
 
+    handle(Keys.ControlT, HasFocus(DEFAULT_BUFFER))(fzf_keys)
     # not sure how pt wants us to do this part
     # with run_in_terminal(FzfPrompt(), render_cli_done=True, in_executor=True):
     # fzf_prompt = FzfPrompt()

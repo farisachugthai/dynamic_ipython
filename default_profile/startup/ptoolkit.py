@@ -22,8 +22,26 @@ to a container `HSplit` and a few other things possibly worth exploring.
 
 """
 from reprlib import repr
-from prompt_toolkit.keys import Keys
 
+from prompt_toolkit.buffer import Buffer
+from prompt_toolkit.document import Document
+from prompt_toolkit.filters import Condition, is_searching
+from prompt_toolkit.keys import Keys
+from prompt_toolkit.key_binding.key_bindings import KeyBindings
+from prompt_toolkit.key_binding.bindings import search
+from prompt_toolkit.layout.containers import HSplit, Window
+from prompt_toolkit.layout.controls import BufferControl
+from prompt_toolkit.layout.layout import Layout
+from prompt_toolkit.styles import Style
+from prompt_toolkit.widgets.toolbars import SearchToolbar
+from prompt_toolkit.layout.processors import (
+    ConditionalProcessor,
+    HighlightSearchProcessor,
+    HighlightIncrementalSearchProcessor,
+    HighlightSelectionProcessor,
+    HighlightMatchingBracketProcessor,
+    DisplayMultipleCursors,
+)
 from IPython.core.getipython import get_ipython
 
 DEDENT_TOKENS = frozenset(["raise", "return", "pass", "break", "continue"])
@@ -151,11 +169,21 @@ class Helpers:
         """Is the `Window` content the control returned by the layout?"""
         return self.current_content is self.current_control
 
+    @property
     def session_validator(self):
+        """The validator instance on the PromptSession.
+
+        Notes
+        -----
+        Not only do we not have this attribute on the App, it's not bound to
+        anything by default in IPython!
+        """
         return self.session.validator
 
-    def app_validator(self):
-        return self.pt_app
+    # Doesn't actually exist!
+    # @property
+    # def app_validator(self):
+    #     return self.pt_app.validator
 
     def validate_validators(self):
         # who watches the watchmen?
@@ -163,5 +191,75 @@ class Helpers:
         return self.app_validator is self.session_validator
 
 
+def all_processors_for_searching():
+    return [
+        ConditionalProcessor(HighlightSearchProcessor(), ~is_searching),
+        HighlightIncrementalSearchProcessor(),
+        HighlightSelectionProcessor(),
+        HighlightMatchingBracketProcessor(),
+        DisplayMultipleCursors(),
+    ]
+
+
+def search_layout():
+    all_input_processors = all_processors_for_searching()
+    search_toolbar = SearchToolbar(vi_mode=True)
+    # style = Style([("incsearch", "fg:ansibrightcyan reverse")])
+    control = BufferControl(
+        Buffer(document=Document(), read_only=True),
+        search_buffer_control=search_toolbar.control,
+        preview_search=True,
+        include_default_input_processors=False,
+        input_processors=all_input_processors,
+    )
+    # Apparently theres something wrong with the style other put it in the
+    # HSplit constructor
+    container = HSplit([Window(control), search_toolbar])
+    return container
+
+
+def create_searching_keybindings():
+
+    kb = KeyBindings()
+
+    @kb.add("q")
+    def _(event):
+        event.app.exit()
+
+    @Condition
+    def search_buffer_is_empty():
+        " Returns True when the search buffer is empty. "
+        return get_app().current_buffer.text == ""
+
+    kb.add("/")(search.start_forward_incremental_search)
+    kb.add("?")(search.start_reverse_incremental_search)
+    kb.add("enter", filter=is_searching)(search.accept_search)
+    kb.add("c-c")(search.abort_search)
+    kb.add("backspace", filter=search_buffer_is_empty)(search.abort_search)
+
+    @kb.add("n", filter=~is_searching)
+    def _(event):
+        search_state = get_app().current_search_state
+        current_buffer = get_app().current_buffer
+
+        cursor_position = current_buffer.get_search_position(
+            search_state, include_current_position=False
+        )
+        current_buffer.cursor_position = cursor_position
+
+    @kb.add("N", filter=~is_searching)
+    def _(event):
+        search_state = get_app().current_search_state
+        current_buffer = get_app().current_buffer
+
+        cursor_position = current_buffer.get_search_position(
+            ~search_state, include_current_position=False
+        )
+        current_buffer.cursor_position = cursor_position
+
+    return kb
+
+
 if __name__ == "__main__":
     pt = Helpers()
+    container_search = search_layout()
