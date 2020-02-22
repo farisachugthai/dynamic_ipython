@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>default_profile.startup.event_loops &#8212; Dynamic IPython: version0.0.2</title>
+    <title>default_profile.startup.event_loops &#8212; Dynamic IPython</title>
     
     <link rel="stylesheet" href="../../../_static/scrolls.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -15,7 +15,6 @@
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/language_data.js"></script>
-    <script src="../../../_static/copybutton.js"></script>
     <script src="../../../_static/theme_extras.js"></script>
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/startup/event_loops.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -25,7 +24,7 @@
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="x-ua-compatible" content="ie=edge" />
-  <title>Floating label Demo</title>
+  <title>Dynamic IPython --- IPython Extensions</title>
   <meta name="description" content="" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style type="text/css">
@@ -136,7 +135,8 @@
   </style>
 </head>
 
-  </head><body> 
+  </head><body>
+
     <div id="content">
       <div class="header">
         <h1 class="heading"><a href="../../../index.html"
@@ -171,6 +171,7 @@
     <span class="kn">from</span> <span class="nn">trio</span> <span class="kn">import</span> <span class="n">run</span> <span class="k">as</span> <span class="n">_async_run</span>
 <span class="k">except</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">asyncio</span> <span class="kn">import</span> <span class="n">run</span> <span class="k">as</span> <span class="n">_async_run</span>
+
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">multiprocessing</span>
 <span class="kn">from</span> <span class="nn">multiprocessing.process</span> <span class="kn">import</span> <span class="n">current_process</span>
@@ -187,18 +188,22 @@
 
 
 <div class="viewcode-block" id="enable_multiprocessing_logging"><a class="viewcode-back" href="../../../startup/eventloops.html#default_profile.startup.event_loops.enable_multiprocessing_logging">[docs]</a><span class="k">def</span> <span class="nf">enable_multiprocessing_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">30</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Log to stderr.&quot;&quot;&quot;</span>
     <span class="n">logger</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">log_to_stderr</span><span class="p">()</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">logger</span></div>
 
 
 <div class="viewcode-block" id="system_command"><a class="viewcode-back" href="../../../startup/eventloops.html#default_profile.startup.event_loops.system_command">[docs]</a><span class="k">async</span> <span class="k">def</span> <span class="nf">system_command</span><span class="p">(</span><span class="n">command_to_run</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Run a system command.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
 <span class="sd">    ::</span>
 
 <span class="sd">        In [40]: await system_command(&#39;ls&#39;)</span>
 
-<span class="sd">        01_rehashx.py       20_aliases.py        31_yank_last_arg.py  </span>
+<span class="sd">        01_rehashx.py       20_aliases.py        31_yank_last_arg.py</span>
 <span class="sd">        36_ptutils.py     cscope.out  05_log.py           21_fzf.py</span>
 <span class="sd">        32_kb.py              41_numpy_init.py  event_loops.py 06_help_helpers.py</span>
 <span class="sd">        22_alias_manager.py  33_bottom_toolbar.py  43_matplotlib.py</span>
@@ -219,6 +224,13 @@
     <span class="k">await</span> <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">run_system_command</span><span class="p">(</span>
         <span class="n">command</span><span class="o">=</span><span class="n">com</span><span class="p">,</span> <span class="n">wait_for_enter</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">wait_text</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">display_before_text</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
     <span class="p">)</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">asyncio</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">handlers</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">asyncio</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">handlers</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+    <span class="n">asyncio</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="mi">99</span><span class="p">)</span>
+    <span class="n">enable_multiprocessing_logging</span><span class="p">()</span>
 </pre></div>
 
         </div>
@@ -226,7 +238,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 18, 2020.
+      Last updated on Feb 21, 2020.
     </div>
   </body>
 </html>

@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>default_profile.startup.05_log &#8212; Dynamic IPython: version0.0.2</title>
+    <title>default_profile.startup.05_log &#8212; Dynamic IPython</title>
     
     <link rel="stylesheet" href="../../../_static/scrolls.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -15,7 +15,6 @@
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/language_data.js"></script>
-    <script src="../../../_static/copybutton.js"></script>
     <script src="../../../_static/theme_extras.js"></script>
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/startup/05_log.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -25,7 +24,7 @@
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="x-ua-compatible" content="ie=edge" />
-  <title>Floating label Demo</title>
+  <title>Dynamic IPython --- IPython Extensions</title>
   <meta name="description" content="" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style type="text/css">
@@ -136,7 +135,8 @@
   </style>
 </head>
 
-  </head><body> 
+  </head><body>
+
     <div id="content">
       <div class="header">
         <h1 class="heading"><a href="../../../index.html"
@@ -171,7 +171,7 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">reprlib</span>
 <span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">path</span>
+<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">path</span><span class="p">,</span> <span class="n">devnull</span>
 <span class="kn">from</span> <span class="nn">queue</span> <span class="kn">import</span> <span class="n">SimpleQueue</span>
 
 <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
@@ -214,10 +214,7 @@
     <span class="n">log_level</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span>
 
     <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">shell</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">logfile</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-            <span class="n">name</span> <span class="o">=</span> <span class="n">shell</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">logfile</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;log_mod&quot;</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;log_mod&quot;</span>
 
     <span class="k">if</span> <span class="n">parent</span><span class="p">:</span>
         <span class="n">better_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">getChild</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
@@ -226,7 +223,13 @@
 
     <span class="c1"># Now let&#39;s set up a couple handlers</span>
     <span class="n">better_stream</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">()</span>
-    <span class="n">handler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">shell</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">logfile</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+        <span class="n">logfileobject</span> <span class="o">=</span> <span class="n">shell</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">logfile</span>
+        <span class="n">logfile</span> <span class="o">=</span> <span class="n">logfileobject</span><span class="o">.</span><span class="n">name</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">logfile</span> <span class="o">=</span> <span class="n">devnull</span>
+    <span class="n">handler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="p">(</span><span class="n">logfile</span><span class="p">)</span>
     <span class="c1"># And one of our own</span>
     <span class="n">queue_handler</span> <span class="o">=</span> <span class="n">QueueHandler</span><span class="p">(</span><span class="n">SimpleQueue</span><span class="p">())</span>
 
@@ -357,7 +360,9 @@
     <span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; Already logging to &quot;</span> <span class="o">+</span> <span class="n">logger</span><span class="o">.</span><span class="n">logfname</span><span class="p">)</span>
         <span class="k">return</span>
-
+    <span class="c1"># todo</span>
+    <span class="c1"># else:</span>
+    <span class="c1">#     extra_logger = betterConfig(name=filename, parent=STARTUP_LOGGER.name)</span>
     <span class="k">if</span> <span class="n">notnew</span><span class="p">:</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">log_write</span><span class="p">(</span><span class="s2">&quot;# =================================</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
@@ -372,15 +377,16 @@
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
 
-    <span class="n">logger</span> <span class="o">=</span> <span class="n">ipython_logger</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">logger</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">logmode</span> <span class="o">=</span> <span class="s2">&quot;append&quot;</span>
-        <span class="n">log_output</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">logmode</span> <span class="o">=</span> <span class="n">logmode</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">log_output</span> <span class="o">=</span> <span class="n">log_output</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">timestamp</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">ipy_logger</span> <span class="o">=</span> <span class="n">ipython_logger</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">ipy_logger</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ipy_logger</span><span class="p">,</span> <span class="s2">&quot;logmode&quot;</span><span class="p">):</span>
+            <span class="n">logmode</span> <span class="o">=</span> <span class="s2">&quot;append&quot;</span>
+            <span class="n">log_output</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">ipy_logger</span><span class="o">.</span><span class="n">logmode</span> <span class="o">=</span> <span class="n">logmode</span>
+            <span class="n">ipy_logger</span><span class="o">.</span><span class="n">log_output</span> <span class="o">=</span> <span class="n">log_output</span>
+            <span class="n">ipy_logger</span><span class="o">.</span><span class="n">timestamp</span> <span class="o">=</span> <span class="kc">True</span>
 
-        <span class="n">extra_logger</span> <span class="o">=</span> <span class="n">betterConfig</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">STARTUP_LOGGER</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">better_logger</span> <span class="o">=</span> <span class="n">betterConfig</span><span class="p">()</span>
 </pre></div>
 
         </div>
@@ -388,7 +394,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 18, 2020.
+      Last updated on Feb 21, 2020.
     </div>
   </body>
 </html>

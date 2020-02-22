@@ -221,14 +221,14 @@ default_role = "py:obj"
 
 # If true, the current module name will be prepended to all description
 # unit titles (such as .. function::).
-# add_module_names = False
+add_module_names = False
 
 # If true, sectionauthor and moduleauthor directives will be shown in the
 # output. They are ignored by default.
 # show_authors = False
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = "sphinx"
+pygments_style = "friendly"
 
 # A list of ignored prefixes for module index sorting.
 # NOTE: lol you have to put a dot at the end otherwise all your modules will start
@@ -293,7 +293,7 @@ html_sidebars = {
     ]
 }
 
-html_title = u"Dynamic IPython: version" + __version__
+html_title = u"Dynamic IPython"
 
 html_short_title = u"Dynamic IPython"
 
@@ -312,7 +312,7 @@ html_compact_lists = False
 
 html_secnumber_suffix = " "
 
-html_js_files = ["copybutton.js"]
+# html_js_files = ["copybutton.js"]
 
 
 # -- Options for HTMLHelp output ---------------------------------------------

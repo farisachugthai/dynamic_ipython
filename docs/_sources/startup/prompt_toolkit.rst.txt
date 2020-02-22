@@ -6,16 +6,6 @@ Prompt Toolkit
    :synopsis: Combined docs on all prompt_toolkit modules.
 
 
-`~default_profile.startup.31_yank_last_arg`
-===========================================
-
-.. automodule:: default_profile.startup.31_yank_last_arg
-   :synopsis: All of the keybindings used in the application. Loads over 600.
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-
 `~default_profile.startup.32_kb`
 ===========================================
 

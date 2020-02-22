@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Prompt Toolkit &#8212; Dynamic IPython: version0.0.2</title>
+    <title>Prompt Toolkit &#8212; Dynamic IPython</title>
     
     <link rel="stylesheet" href="../_static/scrolls.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -15,7 +15,6 @@
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/language_data.js"></script>
-    <script src="../_static/copybutton.js"></script>
     <script src="../_static/theme_extras.js"></script>
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/startup/prompt_toolkit.html" />
     <link rel="index" title="Index" href="../genindex.html" />
@@ -27,7 +26,7 @@
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="x-ua-compatible" content="ie=edge" />
-  <title>Floating label Demo</title>
+  <title>Dynamic IPython --- IPython Extensions</title>
   <meta name="description" content="" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style type="text/css">
@@ -138,7 +137,8 @@
   </style>
 </head>
 
-  </head><body> 
+  </head><body>
+
     <div id="content">
       <div class="header">
         <h1 class="heading"><a href="../index.html"
@@ -154,7 +154,6 @@
           <h3>Table of Contents</h3>
           <ul>
 <li><a class="reference internal" href="#">Prompt Toolkit</a><ul>
-<li><a class="reference internal" href="#module-default_profile.startup.31_yank_last_arg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">31_yank_last_arg</span></code></a></li>
 <li><a class="reference internal" href="#kb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">32_kb</span></code></a><ul>
 <li><a class="reference internal" href="#summary">Summary</a></li>
 <li><a class="reference internal" href="#fun-with-vim">Fun with Vim</a></li>
@@ -176,110 +175,6 @@
         
 <div class="section" id="module-prompt_toolkit_modules">
 <span id="prompt-toolkit"></span><h1>Prompt Toolkit<a class="headerlink" href="#module-prompt_toolkit_modules" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-default_profile.startup.31_yank_last_arg">
-<span id="yank-last-arg"></span><h2><a class="reference internal" href="#module-default_profile.startup.31_yank_last_arg" title="default_profile.startup.31_yank_last_arg: All of the keybindings used in the application. Loads over 600."><code class="xref py py-obj docutils literal notranslate"><span class="pre">31_yank_last_arg</span></code></a><a class="headerlink" href="#module-default_profile.startup.31_yank_last_arg" title="Permalink to this headline">¶</a></h2>
-<p>note: VS Code has fdm set to indent. whatever.</p>
-<p>Slowly becoming where all my consolidated scripts for making prompt_toolkit’s
-handling of keypresses cohesive.</p>
-<p>TODO: still need C-z
-Tab doesn’t start autocompletion when no letters have been typed in.
-Damnit I lost C-d again.
-Holy hell now it gives us this admonition about the truth of a function.
-Sounds biblical.</p>
-<p>Alright I should probably make a list of the keys in vi_insert_mode that
-I really want and work up from there.
-C-a -&gt; beginning_of_line
-C-e -&gt; end of line
-C-l -&gt; redraw (Not working)
-C-p -&gt; go up or go back in history or autocomplete or go to previous autocompletion
-C-f -&gt; go forward 1 char
-C-b -&gt; go back 1 char</p>
-<p>These 3 are really important
-C-d -&gt; <strong>exit</strong>
-C-z -&gt; suspend
-C-c -&gt; kill_line</p>
-<p>So far in Vim insert mode:
-C-u works
-C-d works
-C-a, C-b, C-f and C-e all work</p>
-<p>Btw what is this?</p>
-<p>Calling exit doesn’t work?:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">Application</span> <span class="n">at</span> <span class="mh">0x1f26c275250</span><span class="o">&gt;</span>
-
-<span class="n">In</span> <span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
-
-<span class="ne">Exception</span>                                 <span class="n">Traceback</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">)</span>
-<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">3</span><span class="o">-</span><span class="mi">8964</span><span class="n">da7b84f6</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="o">----&gt;</span> <span class="mi">1</span> <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
-        <span class="k">global</span> <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">exit</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">bound</span> <span class="n">method</span> <span class="n">Application</span><span class="o">.</span><span class="n">exit</span> <span class="n">of</span> <span class="o">&lt;</span><span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">Application</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x000001F26C275250</span><span class="o">&gt;&gt;</span>
-
-<span class="o">~</span>\<span class="n">scoop</span>\<span class="n">apps</span>\<span class="n">winpython</span>\<span class="n">current</span>\<span class="n">python</span><span class="o">-</span><span class="mf">3.8</span><span class="o">.</span><span class="mf">1.</span><span class="n">amd64</span>\<span class="n">lib</span>\<span class="n">site</span><span class="o">-</span><span class="n">packages</span>\<span class="n">prompt_toolkit</span>\<span class="n">application</span>\<span class="n">application</span><span class="o">.</span><span class="n">py</span> <span class="ow">in</span> <span class="n">exit</span><span class="p">(</span><span class="bp">self</span><span class="o">=&lt;</span><span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">Application</span> <span class="nb">object</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exception</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-    <span class="mi">771</span>
-    <span class="mi">772</span>         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">future</span><span class="o">.</span><span class="n">done</span><span class="p">():</span>
-<span class="o">--&gt;</span> <span class="mi">773</span>             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
-        <span class="k">global</span> <span class="ne">Exception</span> <span class="o">=</span> <span class="n">undefined</span>
-    <span class="mi">774</span>                 <span class="s1">&#39;Return value already set. Application.exit() failed.&#39;</span><span class="p">)</span>
-    <span class="mi">775</span>
-
-<span class="ne">Exception</span><span class="p">:</span> <span class="n">Return</span> <span class="n">value</span> <span class="n">already</span> <span class="nb">set</span><span class="o">.</span> <span class="n">Application</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span> <span class="n">failed</span><span class="o">.</span>
-</pre></div>
-</div>
-<p>}}}</p>
-<dl class="function">
-<dt id="default_profile.startup.31_yank_last_arg.character_search">
-<code class="sig-prename descclassname">default_profile.startup.31_yank_last_arg.</code><code class="sig-name descname">character_search</code><span class="sig-paren">(</span><em class="sig-param">buff</em>, <em class="sig-param">char</em>, <em class="sig-param">count</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/31_yank_last_arg.html#character_search"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.31_yank_last_arg.character_search" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="default_profile.startup.31_yank_last_arg.switch_to_navigation_mode">
-<code class="sig-prename descclassname">default_profile.startup.31_yank_last_arg.</code><code class="sig-name descname">switch_to_navigation_mode</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/31_yank_last_arg.html#switch_to_navigation_mode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.31_yank_last_arg.switch_to_navigation_mode" title="Permalink to this definition">¶</a></dt>
-<dd><p>Switches <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.12.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> from Vim insert mode to Vim normal mode.</p>
-<p>The function we can work with in the future if we want to change the
-keybinding for insert to navigation mode.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="default_profile.startup.31_yank_last_arg.if_no_repeat">
-<code class="sig-prename descclassname">default_profile.startup.31_yank_last_arg.</code><code class="sig-name descname">if_no_repeat</code><span class="sig-paren">(</span><em class="sig-param">event: prompt_toolkit.key_binding.key_processor.KeyPressEvent</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="../_modules/default_profile/startup/31_yank_last_arg.html#if_no_repeat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.31_yank_last_arg.if_no_repeat" title="Permalink to this definition">¶</a></dt>
-<dd><p>Callable that returns True when the previous event was delivered to
-another handler.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="default_profile.startup.31_yank_last_arg.generate_insert_mode_bindings">
-<code class="sig-prename descclassname">default_profile.startup.31_yank_last_arg.</code><code class="sig-name descname">generate_insert_mode_bindings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/31_yank_last_arg.html#generate_insert_mode_bindings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.31_yank_last_arg.generate_insert_mode_bindings" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="default_profile.startup.31_yank_last_arg.add_bindings">
-<code class="sig-prename descclassname">default_profile.startup.31_yank_last_arg.</code><code class="sig-name descname">add_bindings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/31_yank_last_arg.html#add_bindings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.31_yank_last_arg.add_bindings" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="default_profile.startup.31_yank_last_arg.get_key_bindings">
-<code class="sig-prename descclassname">default_profile.startup.31_yank_last_arg.</code><code class="sig-name descname">get_key_bindings</code><span class="sig-paren">(</span><em class="sig-param">custom_key_bindings=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/31_yank_last_arg.html#get_key_bindings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.31_yank_last_arg.get_key_bindings" title="Permalink to this definition">¶</a></dt>
-<dd><p>Load key_bindings for the application and customize as necessary.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>custom_key_bindings</strong> (<em>KeyBindings</em>) – The return value of the function in this module <a class="reference internal" href="#default_profile.startup.31_yank_last_arg.add_bindings" title="default_profile.startup.31_yank_last_arg.add_bindings"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_bindings</span></code></a>.</p>
-</dd>
-</dl>
-<p class="rubric">Notes</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">__init__</span></code> for <code class="xref py py-obj docutils literal notranslate"><span class="pre">_MergedKeyBindings</span></code> features this.:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">registries</span><span class="p">):</span>
-    <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">KeyBindingsBase</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">registries</span><span class="p">)</span>
-    <span class="n">_Proxy</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">registries</span> <span class="o">=</span> <span class="n">registries</span>
-</pre></div>
-</div>
-<p>As a result <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a> can’t be passed to <code class="xref py py-obj docutils literal notranslate"><span class="pre">merge_key_bindings</span></code>.</p>
-</div>
-</dd></dl>
-
-</div>
 <div class="section" id="kb">
 <h2><a class="reference internal" href="#module-default_profile.startup.32_kb" title="default_profile.startup.32_kb: Begin reworking prompt_toolkit's keybindings."><code class="xref py py-obj docutils literal notranslate"><span class="pre">32_kb</span></code></a><a class="headerlink" href="#kb" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="summary">
@@ -419,29 +314,15 @@ They’re basically Enums that get compared to <code class="docutils literal not
 </div>
 <span class="target" id="module-default_profile.startup.32_kb"></span><dl class="class">
 <dt id="default_profile.startup.32_kb.KeyBindingsManager">
-<em class="property">class </em><code class="sig-prename descclassname">default_profile.startup.32_kb.</code><code class="sig-name descname">KeyBindingsManager</code><span class="sig-paren">(</span><em class="sig-param">kb=None</em>, <em class="sig-param">shell=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/32_kb.html#KeyBindingsManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.32_kb.KeyBindingsManager" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">prompt_toolkit.key_binding.key_bindings.KeyBindingsBase</span></code></p>
-<p>Bind an interface with IPython’s keybindings and define dunders so this behaves properly.</p>
-<p>I think that I’m going to continue this by making a subclass that validates the bindings it’s being given
-because you can add the same keybinding over and over and that’s probably
-never what the user wants to have happen.</p>
-<p>In order to properly take over the keybindings class we’re given,
-I’m assuming wed need to implement the methods provided by the class
-KeyBindingsBase.</p>
-<p><em>Fun fact:</em> This used to be a class in prompt_toolkit!</p>
-<p>Copy pasted it below.</p>
-<div class="admonition-todo admonition" id="id1">
-<p class="admonition-title">Todo</p>
-<p><code class="docutils literal notranslate"><span class="pre">__getitem__</span></code> so we have a properly constructed sequence.
-Jan 03, 2020: Done! Just ensure everything works upon usage.</p>
-</div>
+<em class="property">class </em><code class="sig-name descname">KeyBindingsManager</code><span class="sig-paren">(</span><em class="sig-param">kb=None</em>, <em class="sig-param">shell=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/32_kb.html#KeyBindingsManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.32_kb.KeyBindingsManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.UserDict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.UserDict</span></code></a></p>
 <dl class="method">
 <dt id="default_profile.startup.32_kb.KeyBindingsManager.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">kb=None</em>, <em class="sig-param">shell=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/32_kb.html#KeyBindingsManager.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.32_kb.KeyBindingsManager.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize the class.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>kb</strong> (<em>KeyBindings</em>) – Any KeyBindings you wanna throw us right off the bat.
+<dd class="field-odd"><p><strong>kb</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">KeyBindings</span></code>) – Any KeyBindings you wanna throw us right off the bat.
 Handling this is gonna be hard unfortunately.</p>
 </dd>
 </dl>
@@ -495,7 +376,7 @@ inactive bindings.)
 
 <dl class="class">
 <dt id="default_profile.startup.32_kb.ApplicationKB">
-<em class="property">class </em><code class="sig-prename descclassname">default_profile.startup.32_kb.</code><code class="sig-name descname">ApplicationKB</code><span class="sig-paren">(</span><em class="sig-param">kb=None</em>, <em class="sig-param">shell=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/32_kb.html#ApplicationKB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.32_kb.ApplicationKB" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">ApplicationKB</code><span class="sig-paren">(</span><em class="sig-param">kb=None</em>, <em class="sig-param">shell=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/32_kb.html#ApplicationKB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.32_kb.ApplicationKB" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#default_profile.startup.32_kb.KeyBindingsManager" title="default_profile.startup.32_kb.KeyBindingsManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">default_profile.startup.32_kb.KeyBindingsManager</span></code></a></p>
 <p>Functionally the exact same thing except now we’re bound to _ip.pt_app.</p>
 <dl class="method">
@@ -507,11 +388,11 @@ inactive bindings.)
 
 <dl class="class">
 <dt id="default_profile.startup.32_kb.HandlesMergedKB">
-<em class="property">class </em><code class="sig-prename descclassname">default_profile.startup.32_kb.</code><code class="sig-name descname">HandlesMergedKB</code><span class="sig-paren">(</span><em class="sig-param">kb=None</em>, <em class="sig-param">shell=None</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/32_kb.html#HandlesMergedKB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.32_kb.HandlesMergedKB" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">HandlesMergedKB</code><span class="sig-paren">(</span><em class="sig-param">kb=None</em>, <em class="sig-param">shell=None</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/32_kb.html#HandlesMergedKB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.32_kb.HandlesMergedKB" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#default_profile.startup.32_kb.KeyBindingsManager" title="default_profile.startup.32_kb.KeyBindingsManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">default_profile.startup.32_kb.KeyBindingsManager</span></code></a></p>
 <p>It might be easier to handle the insufferable discrepencies in implementation
 between _MergedKeyBindings and ConditionalKeyBindings through class attributes.</p>
-<div class="admonition-todo admonition" id="id2">
+<div class="admonition-todo admonition" id="id1">
 <p class="admonition-title">Todo</p>
 <p>Unpacking the KeyBindings registry attribute.</p>
 </div>
@@ -531,12 +412,12 @@ of subclasses with both class attributes and __init__’s.</p>
 
 <dl class="function">
 <dt id="default_profile.startup.32_kb.unnest_merged_kb">
-<code class="sig-prename descclassname">default_profile.startup.32_kb.</code><code class="sig-name descname">unnest_merged_kb</code><span class="sig-paren">(</span><em class="sig-param">kb</em>, <em class="sig-param">pre_existing_list=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/32_kb.html#unnest_merged_kb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.32_kb.unnest_merged_kb" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">unnest_merged_kb</code><span class="sig-paren">(</span><em class="sig-param">kb</em>, <em class="sig-param">pre_existing_list=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/32_kb.html#unnest_merged_kb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.32_kb.unnest_merged_kb" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="class">
 <dt id="default_profile.startup.32_kb.Documented">
-<em class="property">class </em><code class="sig-prename descclassname">default_profile.startup.32_kb.</code><code class="sig-name descname">Documented</code><span class="sig-paren">(</span><em class="sig-param">text: str = ''</em>, <em class="sig-param">cursor_position: Optional[int] = None</em>, <em class="sig-param">selection: Optional[prompt_toolkit.selection.SelectionState] = None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/32_kb.html#Documented"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.32_kb.Documented" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">Documented</code><span class="sig-paren">(</span><em class="sig-param">text: str = ''</em>, <em class="sig-param">cursor_position: Optional[int] = None</em>, <em class="sig-param">selection: Optional[prompt_toolkit.selection.SelectionState] = None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/32_kb.html#Documented"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.32_kb.Documented" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://python-prompt-toolkit.readthedocs.io/en/stable/pages/reference.html#prompt_toolkit.document.Document" title="(in prompt_toolkit v3.0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">prompt_toolkit.document.Document</span></code></a></p>
 <p>I’ll admit this subclass doesn’t exist for much of a reason.</p>
 <p>However, it’s a LOT easier to work with classes with their dunders defined.</p>
@@ -550,34 +431,34 @@ of subclasses with both class attributes and __init__’s.</p>
 other things that aren’t utilized at all.</p>
 <dl class="function">
 <dt id="default_profile.startup.33_bottom_toolbar.get_app">
-<code class="sig-prename descclassname">default_profile.startup.33_bottom_toolbar.</code><code class="sig-name descname">get_app</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#get_app"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.get_app" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_app</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#get_app"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.get_app" title="Permalink to this definition">¶</a></dt>
 <dd><p>A patch to cover up the fact that get_app() returns a DummyApplication.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="default_profile.startup.33_bottom_toolbar.exit_clicked">
-<code class="sig-prename descclassname">default_profile.startup.33_bottom_toolbar.</code><code class="sig-name descname">exit_clicked</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#exit_clicked"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.exit_clicked" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">exit_clicked</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#exit_clicked"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.exit_clicked" title="Permalink to this definition">¶</a></dt>
 <dd><p>Exit from the prompt_toolkit side of things.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="default_profile.startup.33_bottom_toolbar.init_style">
-<code class="sig-prename descclassname">default_profile.startup.33_bottom_toolbar.</code><code class="sig-name descname">init_style</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#init_style"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.init_style" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">init_style</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#init_style"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.init_style" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
 <dt id="default_profile.startup.33_bottom_toolbar.override_style">
-<code class="sig-prename descclassname">default_profile.startup.33_bottom_toolbar.</code><code class="sig-name descname">override_style</code><span class="sig-paren">(</span><em class="sig-param">style_overrides</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#override_style"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.override_style" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">override_style</code><span class="sig-paren">(</span><em class="sig-param">style_overrides</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#override_style"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.override_style" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
 <dt id="default_profile.startup.33_bottom_toolbar.merged_styles">
-<code class="sig-prename descclassname">default_profile.startup.33_bottom_toolbar.</code><code class="sig-name descname">merged_styles</code><span class="sig-paren">(</span><em class="sig-param">overrides=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#merged_styles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.merged_styles" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">merged_styles</code><span class="sig-paren">(</span><em class="sig-param">overrides=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#merged_styles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.merged_styles" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
 <dt id="default_profile.startup.33_bottom_toolbar.merged_style_rules">
-<code class="sig-prename descclassname">default_profile.startup.33_bottom_toolbar.</code><code class="sig-name descname">merged_style_rules</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#merged_style_rules"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.merged_style_rules" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">merged_style_rules</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#merged_style_rules"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.merged_style_rules" title="Permalink to this definition">¶</a></dt>
 <dd><p>Originally was going to call this in <a class="reference internal" href="#default_profile.startup.33_bottom_toolbar.show_header" title="default_profile.startup.33_bottom_toolbar.show_header"><code class="xref py py-obj docutils literal notranslate"><span class="pre">show_header</span></code></a> but it raises if you
 had it a list or a Style instance. It looks like it’s only made to take 1
 style anyway.</p>
@@ -585,12 +466,12 @@ style anyway.</p>
 
 <dl class="function">
 <dt id="default_profile.startup.33_bottom_toolbar.show_header">
-<code class="sig-prename descclassname">default_profile.startup.33_bottom_toolbar.</code><code class="sig-name descname">show_header</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#show_header"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.show_header" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">show_header</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#show_header"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.show_header" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="class">
 <dt id="default_profile.startup.33_bottom_toolbar.LineCounter">
-<em class="property">class </em><code class="sig-prename descclassname">default_profile.startup.33_bottom_toolbar.</code><code class="sig-name descname">LineCounter</code><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#LineCounter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.LineCounter" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">LineCounter</code><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#LineCounter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.LineCounter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Really basic counter displayed inspired by Doug Hellman.</p>
 <dl class="field-list simple">
@@ -606,35 +487,23 @@ style anyway.</p>
 
 </dd></dl>
 
-<dl class="function">
-<dt id="default_profile.startup.33_bottom_toolbar.get_titlebar_text">
-<code class="sig-prename descclassname">default_profile.startup.33_bottom_toolbar.</code><code class="sig-name descname">get_titlebar_text</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#get_titlebar_text"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.get_titlebar_text" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="class">
 <dt id="default_profile.startup.33_bottom_toolbar.BottomToolbar">
-<em class="property">class </em><code class="sig-prename descclassname">default_profile.startup.33_bottom_toolbar.</code><code class="sig-name descname">BottomToolbar</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#BottomToolbar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.BottomToolbar" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">BottomToolbar</code><span class="sig-paren">(</span><em class="sig-param">app</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#BottomToolbar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.BottomToolbar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Display the current input mode.</p>
 <p>As the bottom_toolbar property exists in both a prompt_toolkit PromptSession
-and Application, both are accessible from the <a class="reference internal" href="#default_profile.startup.33_bottom_toolbar.BottomToolbar.session" title="default_profile.startup.33_bottom_toolbar.BottomToolbar.session"><code class="xref py py-obj docutils literal notranslate"><span class="pre">session</span></code></a> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">pt_app</span></code>
+and Application, both are accessible from the <code class="xref py py-obj docutils literal notranslate"><span class="pre">session</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">pt_app</span></code>
 attributes.</p>
 <p>Defines a method <a class="reference internal" href="#default_profile.startup.33_bottom_toolbar.BottomToolbar.rerender" title="default_profile.startup.33_bottom_toolbar.BottomToolbar.rerender"><code class="xref py py-meth docutils literal notranslate"><span class="pre">rerender()</span></code></a> and calls it whenever the instance is called
 via <code class="docutils literal notranslate"><span class="pre">__call__</span></code>.</p>
 <dl class="method">
 <dt id="default_profile.startup.33_bottom_toolbar.BottomToolbar.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#BottomToolbar.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.BottomToolbar.__init__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="default_profile.startup.33_bottom_toolbar.BottomToolbar.session">
-<em class="property">property </em><code class="sig-name descname">session</code><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#BottomToolbar.session"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.BottomToolbar.session" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="default_profile.startup.33_bottom_toolbar.BottomToolbar.app">
-<em class="property">property </em><code class="sig-name descname">app</code><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#BottomToolbar.app"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.BottomToolbar.app" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">app</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#BottomToolbar.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.BottomToolbar.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Require an ‘app’ for initialization.</p>
+<p>This will eliminate all IPython code out of this class and make things
+a little more modular for the tests.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="default_profile.startup.33_bottom_toolbar.BottomToolbar.is_vi_mode">
@@ -671,24 +540,24 @@ That’s all.</p>
 
 <dl class="function">
 <dt id="default_profile.startup.33_bottom_toolbar.add_toolbar">
-<code class="sig-prename descclassname">default_profile.startup.33_bottom_toolbar.</code><code class="sig-name descname">add_toolbar</code><span class="sig-paren">(</span><em class="sig-param">toolbar=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#add_toolbar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.add_toolbar" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add_toolbar</code><span class="sig-paren">(</span><em class="sig-param">toolbar=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#add_toolbar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.add_toolbar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the running IPython instance and add ‘bottom_toolbar’.</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="default_profile.startup.33_bottom_toolbar.Attempt2">
-<em class="property">class </em><code class="sig-prename descclassname">default_profile.startup.33_bottom_toolbar.</code><code class="sig-name descname">Attempt2</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#Attempt2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.Attempt2" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">Attempt2</code><span class="sig-paren">(</span><em class="sig-param">app</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#Attempt2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.Attempt2" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#default_profile.startup.33_bottom_toolbar.BottomToolbar" title="default_profile.startup.33_bottom_toolbar.BottomToolbar"><code class="xref py py-class docutils literal notranslate"><span class="pre">default_profile.startup.33_bottom_toolbar.BottomToolbar</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">prompt_toolkit.widgets.toolbars.FormattedTextToolbar</span></code></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="default_profile.startup.33_bottom_toolbar.Attempt3">
-<em class="property">class </em><code class="sig-prename descclassname">default_profile.startup.33_bottom_toolbar.</code><code class="sig-name descname">Attempt3</code><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#Attempt3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.Attempt3" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">Attempt3</code><span class="sig-paren">(</span><em class="sig-param">app</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#Attempt3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.Attempt3" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#default_profile.startup.33_bottom_toolbar.BottomToolbar" title="default_profile.startup.33_bottom_toolbar.BottomToolbar"><code class="xref py py-class docutils literal notranslate"><span class="pre">default_profile.startup.33_bottom_toolbar.BottomToolbar</span></code></a></p>
 <p>Try stylizing the toolbar.</p>
 <dl class="method">
 <dt id="default_profile.startup.33_bottom_toolbar.Attempt3.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#Attempt3.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.Attempt3.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">app</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#Attempt3.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.Attempt3.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -697,11 +566,6 @@ That’s all.</p>
 <dd></dd></dl>
 
 </dd></dl>
-
-<dl class="function">
-<dt id="default_profile.startup.33_bottom_toolbar.generate_and_print_hsplit">
-<code class="sig-prename descclassname">default_profile.startup.33_bottom_toolbar.</code><code class="sig-name descname">generate_and_print_hsplit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#generate_and_print_hsplit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.generate_and_print_hsplit" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 </div>
 <div class="section" id="completion">
@@ -728,7 +592,7 @@ completions in a similar manner to the fish shell.</p>
 isn’t one.</p>
 <span class="target" id="module-default_profile.startup.34_completion"></span><dl class="class">
 <dt id="default_profile.startup.34_completion.SimpleCompleter">
-<em class="property">class </em><code class="sig-prename descclassname">default_profile.startup.34_completion.</code><code class="sig-name descname">SimpleCompleter</code><a class="reference internal" href="../_modules/default_profile/startup/34_completion.html#SimpleCompleter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.34_completion.SimpleCompleter" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">SimpleCompleter</code><a class="reference internal" href="../_modules/default_profile/startup/34_completion.html#SimpleCompleter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.34_completion.SimpleCompleter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">prompt_toolkit.completion.base.Completer</span></code>, <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a></p>
 <dl class="method">
 <dt id="default_profile.startup.34_completion.SimpleCompleter.document">
@@ -744,7 +608,7 @@ isn’t one.</p>
 
 <dl class="class">
 <dt id="default_profile.startup.34_completion.SimpleCompletions">
-<em class="property">class </em><code class="sig-prename descclassname">default_profile.startup.34_completion.</code><code class="sig-name descname">SimpleCompletions</code><span class="sig-paren">(</span><em class="sig-param">shell=None</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/34_completion.html#SimpleCompletions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.34_completion.SimpleCompletions" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">SimpleCompletions</code><span class="sig-paren">(</span><em class="sig-param">shell=None</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/34_completion.html#SimpleCompletions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.34_completion.SimpleCompletions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#default_profile.startup.34_completion.SimpleCompleter" title="default_profile.startup.34_completion.SimpleCompleter"><code class="xref py py-class docutils literal notranslate"><span class="pre">default_profile.startup.34_completion.SimpleCompleter</span></code></a></p>
 <dl class="method">
 <dt id="default_profile.startup.34_completion.SimpleCompletions.__init__">
@@ -772,7 +636,7 @@ get_async_completions method.</p>
 
 <dl class="class">
 <dt id="default_profile.startup.34_completion.PathCallable">
-<em class="property">class </em><code class="sig-prename descclassname">default_profile.startup.34_completion.</code><code class="sig-name descname">PathCallable</code><span class="sig-paren">(</span><em class="sig-param">only_directories: bool = False, get_paths: Optional[Callable[[], List[str]]] = None, file_filter: Optional[Callable[[str], bool]] = None, min_input_len: int = 0, expanduser: bool = False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/34_completion.html#PathCallable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.34_completion.PathCallable" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">PathCallable</code><span class="sig-paren">(</span><em class="sig-param">only_directories: bool = False, get_paths: Optional[Callable[[], List[str]]] = None, file_filter: Optional[Callable[[str], bool]] = None, min_input_len: int = 0, expanduser: bool = False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/34_completion.html#PathCallable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.34_completion.PathCallable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">prompt_toolkit.completion.filesystem.PathCompleter</span></code></p>
 <p>OF COURSE ITS NOT CALLABLE.</p>
 <p>Also why is get_paths even a method? If someones looking for a relative
@@ -787,35 +651,35 @@ working directory??</strong></p>
 
 <dl class="function">
 <dt id="default_profile.startup.34_completion.get_path_completer">
-<code class="sig-prename descclassname">default_profile.startup.34_completion.</code><code class="sig-name descname">get_path_completer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/34_completion.html#get_path_completer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.34_completion.get_path_completer" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_path_completer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/34_completion.html#get_path_completer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.34_completion.get_path_completer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Basically took this from Jon’s unit tests.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="default_profile.startup.34_completion.get_fuzzy_keyword_completer">
-<code class="sig-prename descclassname">default_profile.startup.34_completion.</code><code class="sig-name descname">get_fuzzy_keyword_completer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/34_completion.html#get_fuzzy_keyword_completer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.34_completion.get_fuzzy_keyword_completer" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_fuzzy_keyword_completer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/34_completion.html#get_fuzzy_keyword_completer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.34_completion.get_fuzzy_keyword_completer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return all valid Python keywords.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="default_profile.startup.34_completion.get_word_completer">
-<code class="sig-prename descclassname">default_profile.startup.34_completion.</code><code class="sig-name descname">get_word_completer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/34_completion.html#get_word_completer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.34_completion.get_word_completer" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_word_completer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/34_completion.html#get_word_completer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.34_completion.get_word_completer" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
 <dt id="default_profile.startup.34_completion.will_break_pt_app">
-<code class="sig-prename descclassname">default_profile.startup.34_completion.</code><code class="sig-name descname">will_break_pt_app</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/34_completion.html#will_break_pt_app"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.34_completion.will_break_pt_app" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">will_break_pt_app</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/34_completion.html#will_break_pt_app"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.34_completion.will_break_pt_app" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
 <dt id="default_profile.startup.34_completion.venvs">
-<code class="sig-prename descclassname">default_profile.startup.34_completion.</code><code class="sig-name descname">venvs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/34_completion.html#venvs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.34_completion.venvs" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">venvs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/34_completion.html#venvs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.34_completion.venvs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Use <code class="xref py py-obj docutils literal notranslate"><span class="pre">jedi.api.find_virtualenvs</span></code> and return all values.</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="default_profile.startup.34_completion.CustomCompleter">
-<em class="property">class </em><code class="sig-prename descclassname">default_profile.startup.34_completion.</code><code class="sig-name descname">CustomCompleter</code><a class="reference internal" href="../_modules/default_profile/startup/34_completion.html#CustomCompleter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.34_completion.CustomCompleter" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">CustomCompleter</code><a class="reference internal" href="../_modules/default_profile/startup/34_completion.html#CustomCompleter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.34_completion.CustomCompleter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">prompt_toolkit.completion.base.Completer</span></code></p>
 <p>A completer that attempts to meet prompt_toolkits API as generically as possible.</p>
 <dl class="method">
@@ -827,7 +691,7 @@ working directory??</strong></p>
 
 <dl class="class">
 <dt id="default_profile.startup.34_completion.MergedCompleter">
-<em class="property">class </em><code class="sig-prename descclassname">default_profile.startup.34_completion.</code><code class="sig-name descname">MergedCompleter</code><span class="sig-paren">(</span><em class="sig-param">completers</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/34_completion.html#MergedCompleter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.34_completion.MergedCompleter" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">MergedCompleter</code><span class="sig-paren">(</span><em class="sig-param">completers</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/34_completion.html#MergedCompleter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.34_completion.MergedCompleter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">prompt_toolkit.completion.base.Completer</span></code></p>
 <p>Combine several completers into one.</p>
 <dl class="method">
@@ -850,7 +714,7 @@ working directory??</strong></p>
 
 <dl class="class">
 <dt id="default_profile.startup.34_completion.FuzzyCallable">
-<em class="property">class </em><code class="sig-prename descclassname">default_profile.startup.34_completion.</code><code class="sig-name descname">FuzzyCallable</code><span class="sig-paren">(</span><em class="sig-param">completer=None</em>, <em class="sig-param">words=None</em>, <em class="sig-param">meta_dict=None</em>, <em class="sig-param">WORD=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/34_completion.html#FuzzyCallable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.34_completion.FuzzyCallable" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">FuzzyCallable</code><span class="sig-paren">(</span><em class="sig-param">completer=None</em>, <em class="sig-param">words=None</em>, <em class="sig-param">meta_dict=None</em>, <em class="sig-param">WORD=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/34_completion.html#FuzzyCallable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.34_completion.FuzzyCallable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">prompt_toolkit.completion.fuzzy_completer.FuzzyCompleter</span></code></p>
 <dl class="method">
 <dt id="default_profile.startup.34_completion.FuzzyCallable.__init__">
@@ -883,7 +747,7 @@ the built-in modules.:</p>
 <p>So it’d be tough to say we’re at a lack of tools!</p>
 <dl class="class">
 <dt id="default_profile.startup.35_lexer.IPythonConfigurableLexer">
-<em class="property">class </em><code class="sig-prename descclassname">default_profile.startup.35_lexer.</code><code class="sig-name descname">IPythonConfigurableLexer</code><a class="reference internal" href="../_modules/default_profile/startup/35_lexer.html#IPythonConfigurableLexer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.35_lexer.IPythonConfigurableLexer" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">IPythonConfigurableLexer</code><a class="reference internal" href="../_modules/default_profile/startup/35_lexer.html#IPythonConfigurableLexer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.35_lexer.IPythonConfigurableLexer" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class to merge the seemingly disjoint APIs of IPython, traitlets,
 prompt_toolkit and pygments.</p>
 <p>TODO: The <code class="xref py py-obj docutils literal notranslate"><span class="pre">IPython.terminal.lexer.IPythonPTLexer</span></code> also should have a few
@@ -924,33 +788,25 @@ than 1,000 lines.</p></li>
 </dl>
 </dd></dl>
 
-<span class="target" id="module-default_profile.startup.35_lexer"></span><p><kbd class="kbd docutils literal notranslate">%</kbd> at the beginning of magics.</p>
-<p>FYI.</p>
-<blockquote>
-<div><p>In [46]: _ip.pt_app.lexer
-Out[46]: &lt;IPython.terminal.ptutils.IPythonPTLexer at 0x151087677c0&gt;</p>
-<p>In [47]: _ip.pt_app.lexer.python_lexer.pygments_lexer
-Out[47]: &lt;pygments.lexers.PythonLexer with {‘stripnl’: False, ‘stripall’: False, ‘ensurenl’: False}</p>
-</div></blockquote>
-<dl class="function">
+<span class="target" id="module-default_profile.startup.35_lexer"></span><dl class="function">
 <dt id="default_profile.startup.35_lexer.our_style">
-<code class="sig-prename descclassname">default_profile.startup.35_lexer.</code><code class="sig-name descname">our_style</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/35_lexer.html#our_style"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.35_lexer.our_style" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">our_style</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/35_lexer.html#our_style"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.35_lexer.our_style" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
 <dt id="default_profile.startup.35_lexer.get_lexer">
-<code class="sig-prename descclassname">default_profile.startup.35_lexer.</code><code class="sig-name descname">get_lexer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/35_lexer.html#get_lexer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.35_lexer.get_lexer" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_lexer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/35_lexer.html#get_lexer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.35_lexer.get_lexer" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
 <dt id="default_profile.startup.35_lexer.pygments_tokens">
-<code class="sig-prename descclassname">default_profile.startup.35_lexer.</code><code class="sig-name descname">pygments_tokens</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/35_lexer.html#pygments_tokens"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.35_lexer.pygments_tokens" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">pygments_tokens</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/35_lexer.html#pygments_tokens"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.35_lexer.pygments_tokens" title="Permalink to this definition">¶</a></dt>
 <dd><p>A  list of Pygments style tokens. In case you need that.</p>
 </dd></dl>
 
 <dl class="class">
 <dt>
-<em class="property">class </em><code class="sig-prename descclassname">default_profile.startup.35_lexer.</code><code class="sig-name descname">IPythonConfigurableLexer</code><span class="sig-paren">(</span><em class="sig-param">shell=None</em>, <em class="sig-param">original_lexer=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/35_lexer.html#IPythonConfigurableLexer"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><code class="sig-name descname">IPythonConfigurableLexer</code><span class="sig-paren">(</span><em class="sig-param">shell=None</em>, <em class="sig-param">original_lexer=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/35_lexer.html#IPythonConfigurableLexer"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">traitlets.config.configurable.LoggingConfigurable</span></code></p>
 <dl class="attribute">
 <dt id="default_profile.startup.35_lexer.IPythonConfigurableLexer.lexer">
@@ -1013,7 +869,7 @@ Out[47]: &lt;pygments.lexers.PythonLexer with {‘stripnl’: False, ‘stripall
 
 <dl class="class">
 <dt id="default_profile.startup.35_lexer.Colorizer">
-<em class="property">class </em><code class="sig-prename descclassname">default_profile.startup.35_lexer.</code><code class="sig-name descname">Colorizer</code><span class="sig-paren">(</span><em class="sig-param">pylexer=None</em>, <em class="sig-param">formatter=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/35_lexer.html#Colorizer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.35_lexer.Colorizer" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">Colorizer</code><span class="sig-paren">(</span><em class="sig-param">pylexer=None</em>, <em class="sig-param">formatter=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/35_lexer.html#Colorizer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.35_lexer.Colorizer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Make the pygments function ‘highlight’ even easier to work with.</p>
 <p>Additionally utilize <code class="docutils literal notranslate"><span class="pre">__slots__</span></code> to conserve memory.</p>
@@ -1054,7 +910,7 @@ are terminated at newlines, so that paging the output works correctly.</p>
 
 <dl class="class">
 <dt id="default_profile.startup.35_lexer.MyPythonLexer">
-<em class="property">class </em><code class="sig-prename descclassname">default_profile.startup.35_lexer.</code><code class="sig-name descname">MyPythonLexer</code><span class="sig-paren">(</span><em class="sig-param">**options</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/35_lexer.html#MyPythonLexer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.35_lexer.MyPythonLexer" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">MyPythonLexer</code><span class="sig-paren">(</span><em class="sig-param">**options</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/35_lexer.html#MyPythonLexer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.35_lexer.MyPythonLexer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pygments.lexers.python.PythonLexer</span></code></p>
 <dl class="attribute">
 <dt id="default_profile.startup.35_lexer.MyPythonLexer.EXTRA_KEYWORDS">
@@ -1068,43 +924,55 @@ are terminated at newlines, so that paging the output works correctly.</p>
 
 </dd></dl>
 
+<dl class="function">
+<dt id="default_profile.startup.35_lexer.get_titlebar_text">
+<code class="sig-name descname">get_titlebar_text</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/35_lexer.html#get_titlebar_text"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.35_lexer.get_titlebar_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return (style, text) tuples for startup.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="default_profile.startup.35_lexer.generate_and_print_hsplit">
+<code class="sig-name descname">generate_and_print_hsplit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/35_lexer.html#generate_and_print_hsplit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.35_lexer.generate_and_print_hsplit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a <code class="xref py py-obj docutils literal notranslate"><span class="pre">prompt_toolkit.layout.container.HSplit</span></code>.</p>
+<p>Originally was in 33_bottom_toolbar but moved here so we can use the lexer.</p>
+</dd></dl>
+
 </div>
 <div class="section" id="module-default_profile.startup.ptoolkit">
 <span id="ptoolkit"></span><h2><a class="reference internal" href="#module-default_profile.startup.ptoolkit" title="default_profile.startup.ptoolkit: Generate a more generalized class to interact with prompt_toolkit."><code class="xref py py-mod docutils literal notranslate"><span class="pre">ptoolkit</span></code></a><a class="headerlink" href="#module-default_profile.startup.ptoolkit" title="Permalink to this headline">¶</a></h2>
+<p>Provides utilities functions and classes to work with both <code class="xref py py-obj docutils literal notranslate"><span class="pre">prompt_toolkit</span></code>
+and <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.12.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IPython</span></code></a>. The APIs of both libraries can be individually quite
+overwhelming, and the combination and interaction of the 2 can prove difficult
+to stay on top of.</p>
+<p>The <a class="reference internal" href="#default_profile.startup.ptoolkit.Helpers" title="default_profile.startup.ptoolkit.Helpers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Helpers</span></code></a> class defined here gives a useful reference as to the
+relationship between a number of the intertwined classes in a running
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">PromptSession</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>Of use might be.:</p>
+<blockquote>
+<div><p>get_ipython().pt_app.layout</p>
+</div></blockquote>
+<p>An object that contains the default_buffer, <code class="xref py py-obj docutils literal notranslate"><span class="pre">DEFAULT_BUFFER</span></code>, a reference
+to a container <code class="xref py py-obj docutils literal notranslate"><span class="pre">HSplit</span></code> and a few other things possibly worth exploring.</p>
 <dl class="function">
 <dt id="default_profile.startup.ptoolkit.get_app">
-<code class="sig-prename descclassname">default_profile.startup.ptoolkit.</code><code class="sig-name descname">get_app</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#get_app"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.get_app" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_app</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#get_app"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.get_app" title="Permalink to this definition">¶</a></dt>
+<dd><p>A patch to cover up the fact that get_app() returns a DummyApplication.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="default_profile.startup.ptoolkit.get_session">
+<code class="sig-name descname">get_session</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#get_session"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.get_session" title="Permalink to this definition">¶</a></dt>
 <dd><p>A patch to cover up the fact that get_app() returns a DummyApplication.</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="default_profile.startup.ptoolkit.Helpers">
-<em class="property">class </em><code class="sig-prename descclassname">default_profile.startup.ptoolkit.</code><code class="sig-name descname">Helpers</code><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#Helpers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.Helpers" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">Helpers</code><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#Helpers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.Helpers" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<p>I think this class is probably the easiest summary of my frustration.</p>
 <dl class="method">
 <dt id="default_profile.startup.ptoolkit.Helpers.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#Helpers.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.Helpers.__init__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="default_profile.startup.ptoolkit.Helpers.is_running">
-<em class="property">property </em><code class="sig-name descname">is_running</code><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#Helpers.is_running"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.Helpers.is_running" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="default_profile.startup.ptoolkit.Helpers.app">
-<code class="sig-name descname">app</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#Helpers.app"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.Helpers.app" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="default_profile.startup.ptoolkit.Helpers.pt_app">
-<em class="property">property </em><code class="sig-name descname">pt_app</code><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#Helpers.pt_app"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.Helpers.pt_app" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="default_profile.startup.ptoolkit.Helpers.session">
-<em class="property">property </em><code class="sig-name descname">session</code><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#Helpers.session"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.Helpers.session" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -1155,13 +1023,77 @@ Out[109]: &lt;prompt_toolkit.styles.base.DynamicStyle at 0x7f1658a90a30&gt;</p>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="default_profile.startup.ptoolkit.Helpers.buffer">
-<em class="property">property </em><code class="sig-name descname">buffer</code><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#Helpers.buffer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.Helpers.buffer" title="Permalink to this definition">¶</a></dt>
+<dt id="default_profile.startup.ptoolkit.Helpers.current_buffer">
+<em class="property">property </em><code class="sig-name descname">current_buffer</code><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#Helpers.current_buffer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.Helpers.current_buffer" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="default_profile.startup.ptoolkit.Helpers.document">
-<em class="property">property </em><code class="sig-name descname">document</code><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#Helpers.document"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.Helpers.document" title="Permalink to this definition">¶</a></dt>
+<dt id="default_profile.startup.ptoolkit.Helpers.current_container">
+<em class="property">property </em><code class="sig-name descname">current_container</code><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#Helpers.current_container"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.Helpers.current_container" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the HSplit defining the layout of the app.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="default_profile.startup.ptoolkit.Helpers.current_container_children">
+<em class="property">property </em><code class="sig-name descname">current_container_children</code><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#Helpers.current_container_children"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.Helpers.current_container_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of the current container children.</p>
+<p>I genuinely don’t think I expected it to be so big.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="default_profile.startup.ptoolkit.Helpers.current_control">
+<em class="property">property </em><code class="sig-name descname">current_control</code><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#Helpers.current_control"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.Helpers.current_control" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return IPython’s buffer control.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="default_profile.startup.ptoolkit.Helpers.current_document">
+<em class="property">property </em><code class="sig-name descname">current_document</code><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#Helpers.current_document"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.Helpers.current_document" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="default_profile.startup.ptoolkit.Helpers.current_buffer_texts">
+<em class="property">property </em><code class="sig-name descname">current_buffer_texts</code><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#Helpers.current_buffer_texts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.Helpers.current_buffer_texts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the ‘text’ attr of the current buffer as a string.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="default_profile.startup.ptoolkit.Helpers.current_document_text">
+<em class="property">property </em><code class="sig-name descname">current_document_text</code><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#Helpers.current_document_text"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.Helpers.current_document_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the ‘lines’ attr of the current document as a list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="default_profile.startup.ptoolkit.Helpers.current_window">
+<em class="property">property </em><code class="sig-name descname">current_window</code><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#Helpers.current_window"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.Helpers.current_window" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="default_profile.startup.ptoolkit.Helpers.current_content">
+<em class="property">property </em><code class="sig-name descname">current_content</code><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#Helpers.current_content"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.Helpers.current_content" title="Permalink to this definition">¶</a></dt>
+<dd><p>The ‘content’ attribute of a <code class="xref py py-obj docutils literal notranslate"><span class="pre">Window</span></code> returns a UIControl instance.</p>
+<p>In this specific case, it returns a BufferControl.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="default_profile.startup.ptoolkit.Helpers.content_is_control">
+<em class="property">property </em><code class="sig-name descname">content_is_control</code><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#Helpers.content_is_control"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.Helpers.content_is_control" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is the <code class="xref py py-obj docutils literal notranslate"><span class="pre">Window</span></code> content the control returned by the layout?</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="default_profile.startup.ptoolkit.Helpers.session_validator">
+<code class="sig-name descname">session_validator</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#Helpers.session_validator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.Helpers.session_validator" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="default_profile.startup.ptoolkit.Helpers.app_validator">
+<code class="sig-name descname">app_validator</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#Helpers.app_validator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.Helpers.app_validator" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="default_profile.startup.ptoolkit.Helpers.validate_validators">
+<code class="sig-name descname">validate_validators</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#Helpers.validate_validators"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.Helpers.validate_validators" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1175,7 +1107,7 @@ Out[109]: &lt;prompt_toolkit.styles.base.DynamicStyle at 0x7f1658a90a30&gt;</p>
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 18, 2020.
+      Last updated on Feb 21, 2020.
     </div>
   </body>
 </html>

@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>default_profile.startup.32_kb &#8212; Dynamic IPython: version0.0.2</title>
+    <title>default_profile.startup.32_kb &#8212; Dynamic IPython</title>
     
     <link rel="stylesheet" href="../../../_static/scrolls.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -15,7 +15,6 @@
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/language_data.js"></script>
-    <script src="../../../_static/copybutton.js"></script>
     <script src="../../../_static/theme_extras.js"></script>
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/startup/32_kb.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -25,7 +24,7 @@
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="x-ua-compatible" content="ie=edge" />
-  <title>Floating label Demo</title>
+  <title>Dynamic IPython --- IPython Extensions</title>
   <meta name="description" content="" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style type="text/css">
@@ -136,7 +135,8 @@
   </style>
 </head>
 
-  </head><body> 
+  </head><body>
+
     <div id="content">
       <div class="header">
         <h1 class="heading"><a href="../../../index.html"
@@ -154,8 +154,9 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">operator</span>
 <span class="kn">import</span> <span class="nn">reprlib</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">UserDict</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 
@@ -163,42 +164,24 @@
 <span class="kn">from</span> <span class="nn">prompt_toolkit.document</span> <span class="kn">import</span> <span class="n">Document</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.defaults</span> <span class="kn">import</span> <span class="n">load_key_bindings</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.key_bindings</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">KeyBindingsBase</span><span class="p">,</span>
+    <span class="c1"># KeyBindingsBase,</span>
     <span class="n">_MergedKeyBindings</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="kn">from</span> <span class="nn">prompt_toolkit.keys</span> <span class="kn">import</span> <span class="n">Keys</span>
 
 
-<div class="viewcode-block" id="KeyBindingsManager"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.32_kb.KeyBindingsManager">[docs]</a><span class="k">class</span> <span class="nc">KeyBindingsManager</span><span class="p">(</span><span class="n">KeyBindingsBase</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Bind an interface with IPython&#39;s keybindings and define dunders so this behaves properly.</span>
-
-<span class="sd">    I think that I&#39;m going to continue this by making a subclass that validates the bindings it&#39;s being given</span>
-<span class="sd">    because you can add the same keybinding over and over and that&#39;s probably</span>
-<span class="sd">    never what the user wants to have happen.</span>
-
-<span class="sd">    In order to properly take over the keybindings class we&#39;re given,</span>
-<span class="sd">    I&#39;m assuming wed need to implement the methods provided by the class</span>
-<span class="sd">    KeyBindingsBase.</span>
-
-<span class="sd">    *Fun fact:* This used to be a class in prompt_toolkit!</span>
-
-<span class="sd">    Copy pasted it below.</span>
-
-<span class="sd">    .. todo::</span>
-<span class="sd">        ``__getitem__`` so we have a properly constructed sequence.</span>
-<span class="sd">        Jan 03, 2020: Done! Just ensure everything works upon usage.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="KeyBindingsManager"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.32_kb.KeyBindingsManager">[docs]</a><span class="k">class</span> <span class="nc">KeyBindingsManager</span><span class="p">(</span><span class="n">UserDict</span><span class="p">):</span>
 
 <div class="viewcode-block" id="KeyBindingsManager.__init__"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.32_kb.KeyBindingsManager.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kb</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize the class.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        kb : KeyBindings</span>
+<span class="sd">        kb : `KeyBindings`</span>
 <span class="sd">            Any KeyBindings you wanna throw us right off the bat.</span>
 <span class="sd">            Handling this is gonna be hard unfortunately.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">shell</span> <span class="ow">or</span> <span class="n">get_ipython</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -234,18 +217,6 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__add__</span><span class="p">(</span><span class="n">another_one</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        .. admonition:: From pydoc.help(&#39;SPECIALMETHODS&#39;)</span>
-
-<span class="sd">            object.__bool__(self)</span>
-<span class="sd">                Called to implement truth value testing and the built-in operation</span>
-<span class="sd">                &quot;bool()&quot;; should return &quot;False&quot; or &quot;True&quot;.  When this method is not</span>
-<span class="sd">                defined, &quot;__len__()&quot; is called, if it is defined, and the object is</span>
-<span class="sd">                considered true if its result is nonzero.  If a class defines</span>
-<span class="sd">                neither &quot;__len__()&quot; nor &quot;__bool__()&quot;, all its instances are</span>
-<span class="sd">                considered true.</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kb</span><span class="o">.</span><span class="n">bindings</span><span class="p">)</span>
 
 <div class="viewcode-block" id="KeyBindingsManager.len"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.32_kb.KeyBindingsManager.len">[docs]</a>    <span class="k">def</span> <span class="nf">len</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -263,8 +234,6 @@
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Simply calls the str method until we figure something out.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span>
-
-    <span class="c1"># def __index__(self):</span>
 
     <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;This file in general is gonna suck to test isn&#39;t it?&quot;&quot;&quot;</span>
@@ -446,7 +415,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 18, 2020.
+      Last updated on Feb 21, 2020.
     </div>
   </body>
 </html>

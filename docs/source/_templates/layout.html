@@ -1,10 +1,11 @@
-{%- extends "!layout.html" %} {%- block extrahead %}
+{%- extends "!layout.html" %}
+{%- block extrahead %}
 <!-- <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" /> -->
 <!-- <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" media="screen" rel="stylesheet" type="text/css" /> -->
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="x-ua-compatible" content="ie=edge" />
-  <title>Floating label Demo</title>
+  <title>Dynamic IPython --- IPython Extensions</title>
   <meta name="description" content="" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style type="text/css">
@@ -122,7 +123,13 @@
     </a>
   </div>
 </div>
-{%- endif %} {% endblock %} {%- block sidebarlogo %} {%- endblock %} {%- block
-sidebarsourcelink %} {%- endblock %} {% if next %}
-<a href="{{ next.link|e }}">{{ next.title }}</a>
-{% endif %} {# Vim: set ft=htmljinja: #}
+{%- endif %}
+{% endblock %}
+{%- block sidebarlogo %}
+{%- endblock %}
+{%- block sidebarsourcelink %}
+{%- endblock %}
+{% if next %}
+<a href="{{ next.link|e }}">
+  {{ next.title }}</a>
+{% endif %}

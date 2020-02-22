@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>11_clipboard module &#8212; Dynamic IPython: version0.0.2</title>
+    <title>11_clipboard module &#8212; Dynamic IPython</title>
     
     <link rel="stylesheet" href="../_static/scrolls.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -15,7 +15,6 @@
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/language_data.js"></script>
-    <script src="../_static/copybutton.js"></script>
     <script src="../_static/theme_extras.js"></script>
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/startup/clipboard.html" />
     <link rel="index" title="Index" href="../genindex.html" />
@@ -27,7 +26,7 @@
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="x-ua-compatible" content="ie=edge" />
-  <title>Floating label Demo</title>
+  <title>Dynamic IPython --- IPython Extensions</title>
   <meta name="description" content="" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style type="text/css">
@@ -138,7 +137,8 @@
   </style>
 </head>
 
-  </head><body> 
+  </head><body>
+
     <div id="content">
       <div class="header">
         <h1 class="heading"><a href="../index.html"
@@ -169,20 +169,20 @@
 <p>Let’s re-implement it as an <a class="reference external" href="https://en.wikipedia.org/wiki/Abstract_factory_pattern">abstract factory</a>.</p>
 <dl class="exception">
 <dt id="default_profile.startup.11_clipboard.ClipboardEmpty">
-<em class="property">exception </em><code class="sig-prename descclassname">default_profile.startup.11_clipboard.</code><code class="sig-name descname">ClipboardEmpty</code><a class="reference internal" href="../_modules/default_profile/startup/11_clipboard.html#ClipboardEmpty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.11_clipboard.ClipboardEmpty" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><code class="sig-name descname">ClipboardEmpty</code><a class="reference internal" href="../_modules/default_profile/startup/11_clipboard.html#ClipboardEmpty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.11_clipboard.ClipboardEmpty" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code></a></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="default_profile.startup.11_clipboard.WindowsClipboard">
-<em class="property">class </em><code class="sig-prename descclassname">default_profile.startup.11_clipboard.</code><code class="sig-name descname">WindowsClipboard</code><a class="reference internal" href="../_modules/default_profile/startup/11_clipboard.html#WindowsClipboard"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.11_clipboard.WindowsClipboard" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">WindowsClipboard</code><span class="sig-paren">(</span><em class="sig-param">clipboard=None</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/11_clipboard.html#WindowsClipboard"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.11_clipboard.WindowsClipboard" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">prompt_toolkit.clipboard.base.Clipboard</span></code></p>
 <p>Creates a prompt_toolkit compatible implementation of a clipboard.</p>
 <p class="rubric">Notes</p>
 <p>Requires Mark Hammond’s pywin32 extensions.</p>
 <dl class="method">
 <dt id="default_profile.startup.11_clipboard.WindowsClipboard.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/11_clipboard.html#WindowsClipboard.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.11_clipboard.WindowsClipboard.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">clipboard=None</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/11_clipboard.html#WindowsClipboard.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.11_clipboard.WindowsClipboard.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Open a clipboard on windows with win32clipboard.OpenClipboard.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Raises</dt>
@@ -193,12 +193,12 @@
 
 <dl class="method">
 <dt id="default_profile.startup.11_clipboard.WindowsClipboard.win_clip_pywin32">
-<code class="sig-name descname">win_clip_pywin32</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/11_clipboard.html#WindowsClipboard.win_clip_pywin32"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.11_clipboard.WindowsClipboard.win_clip_pywin32" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">win_clip_pywin32</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/11_clipboard.html#WindowsClipboard.win_clip_pywin32"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.11_clipboard.WindowsClipboard.win_clip_pywin32" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="default_profile.startup.11_clipboard.WindowsClipboard.win32_clipboard_get">
-<code class="sig-name descname">win32_clipboard_get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/11_clipboard.html#WindowsClipboard.win32_clipboard_get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.11_clipboard.WindowsClipboard.win32_clipboard_get" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">win32_clipboard_get</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/11_clipboard.html#WindowsClipboard.win32_clipboard_get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.11_clipboard.WindowsClipboard.win32_clipboard_get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the current clipboard’s text on Windows.</p>
 <p>Runs <a class="reference internal" href="#default_profile.startup.11_clipboard.WindowsClipboard.win_clip_pywin32" title="default_profile.startup.11_clipboard.WindowsClipboard.win_clip_pywin32"><code class="xref py py-meth docutils literal notranslate"><span class="pre">win_clip_pywin32()</span></code></a> and if there’s any exception
 attempts to run <strong class="command">win32yank</strong> through a piped subprocess.</p>
@@ -213,6 +213,11 @@ attempts to run <strong class="command">win32yank</strong> through a piped subpr
 </dd></dl>
 
 <dl class="method">
+<dt id="default_profile.startup.11_clipboard.WindowsClipboard.rotate">
+<code class="sig-name descname">rotate</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/11_clipboard.html#WindowsClipboard.rotate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.11_clipboard.WindowsClipboard.rotate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="default_profile.startup.11_clipboard.WindowsClipboard.get_text">
 <code class="sig-name descname">get_text</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/11_clipboard.html#WindowsClipboard.get_text"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.11_clipboard.WindowsClipboard.get_text" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -221,7 +226,7 @@ attempts to run <strong class="command">win32yank</strong> through a piped subpr
 
 <dl class="function">
 <dt id="default_profile.startup.11_clipboard.tkinter_clipboard_get">
-<code class="sig-prename descclassname">default_profile.startup.11_clipboard.</code><code class="sig-name descname">tkinter_clipboard_get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/11_clipboard.html#tkinter_clipboard_get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.11_clipboard.tkinter_clipboard_get" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">tkinter_clipboard_get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/11_clipboard.html#tkinter_clipboard_get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.11_clipboard.tkinter_clipboard_get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the clipboard’s text using Tkinter.</p>
 <p>This is the default on systems that are not Windows or OS X. It may
 interfere with other UI toolkits and should be replaced with an
@@ -237,7 +242,7 @@ implementation that uses that toolkit.</p>
 
 <dl class="class">
 <dt id="default_profile.startup.11_clipboard.ClipboardMagics">
-<em class="property">class </em><code class="sig-prename descclassname">default_profile.startup.11_clipboard.</code><code class="sig-name descname">ClipboardMagics</code><span class="sig-paren">(</span><em class="sig-param">shell=None</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/11_clipboard.html#ClipboardMagics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.11_clipboard.ClipboardMagics" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">ClipboardMagics</code><span class="sig-paren">(</span><em class="sig-param">shell=None</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/11_clipboard.html#ClipboardMagics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.11_clipboard.ClipboardMagics" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.magic.html#IPython.core.magic.Magics" title="(in IPython v7.12.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.magic.Magics</span></code></a></p>
 <p>Haven’t seen it implemented in a different way than this.</p>
 <dl class="method">
@@ -276,7 +281,7 @@ implementation that uses that toolkit.</p>
 
 <dl class="class">
 <dt id="default_profile.startup.11_clipboard.UsefulClipboard">
-<em class="property">class </em><code class="sig-prename descclassname">default_profile.startup.11_clipboard.</code><code class="sig-name descname">UsefulClipboard</code><span class="sig-paren">(</span><em class="sig-param">clipboard=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/11_clipboard.html#UsefulClipboard"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.11_clipboard.UsefulClipboard" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">UsefulClipboard</code><span class="sig-paren">(</span><em class="sig-param">clipboard=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/11_clipboard.html#UsefulClipboard"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.11_clipboard.UsefulClipboard" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">prompt_toolkit.clipboard.base.Clipboard</span></code></p>
 <p>Clipboard class that can dynamically returns any Clipboard.</p>
 <p>Uses more functionally applicable defaults and requires less boilerplate.</p>
@@ -284,6 +289,16 @@ implementation that uses that toolkit.</p>
 <dt id="default_profile.startup.11_clipboard.UsefulClipboard.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">clipboard=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/11_clipboard.html#UsefulClipboard.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.11_clipboard.UsefulClipboard.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="method">
+<dt id="default_profile.startup.11_clipboard.UsefulClipboard.load">
+<code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/11_clipboard.html#UsefulClipboard.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.11_clipboard.UsefulClipboard.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO: This actually isn’t gonna work.</p>
+<p>We need to implement each individual function above
+as a class that meets the required API for a Clipboard class aka
+has methods set_data, set_text, rotate, and get_data.</p>
+<p>In addition it must be callable. Jesus.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="default_profile.startup.11_clipboard.UsefulClipboard.set_data">
@@ -305,6 +320,16 @@ implementation that uses that toolkit.</p>
 <code class="sig-name descname">get_data</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/11_clipboard.html#UsefulClipboard.get_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.11_clipboard.UsefulClipboard.get_data" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="method">
+<dt id="default_profile.startup.11_clipboard.UsefulClipboard.termux_clipboard_get">
+<code class="sig-name descname">termux_clipboard_get</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/11_clipboard.html#UsefulClipboard.termux_clipboard_get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.11_clipboard.UsefulClipboard.termux_clipboard_get" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="default_profile.startup.11_clipboard.UsefulClipboard.pyperclip">
+<code class="sig-name descname">pyperclip</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/11_clipboard.html#UsefulClipboard.pyperclip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.11_clipboard.UsefulClipboard.pyperclip" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 </div>
@@ -316,7 +341,7 @@ implementation that uses that toolkit.</p>
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 18, 2020.
+      Last updated on Feb 21, 2020.
     </div>
   </body>
 </html>

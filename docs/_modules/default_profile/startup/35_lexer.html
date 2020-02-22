@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>default_profile.startup.35_lexer &#8212; Dynamic IPython: version0.0.2</title>
+    <title>default_profile.startup.35_lexer &#8212; Dynamic IPython</title>
     
     <link rel="stylesheet" href="../../../_static/scrolls.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -15,7 +15,6 @@
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/language_data.js"></script>
-    <script src="../../../_static/copybutton.js"></script>
     <script src="../../../_static/theme_extras.js"></script>
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/startup/35_lexer.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -25,7 +24,7 @@
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="x-ua-compatible" content="ie=edge" />
-  <title>Floating label Demo</title>
+  <title>Dynamic IPython --- IPython Extensions</title>
   <meta name="description" content="" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style type="text/css">
@@ -136,7 +135,8 @@
   </style>
 </head>
 
-  </head><body> 
+  </head><body>
+
     <div id="content">
       <div class="header">
         <h1 class="heading"><a href="../../../index.html"
@@ -151,38 +151,53 @@
 <h1>Source code for default_profile.startup.35_lexer</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;This is the example from pygments.</span>
+<span class="sd">&quot;&quot;&quot;Set up the lexer and highlighting processors for the app.</span>
 
-<span class="sd">We could use this as a very easy hack to stop that error highlighting</span>
-<span class="sd">when the lexer sees a python statement that starts with a :kbd:`!` or</span>
-<span class="sd">:kbd:`%` at the beginning of magics.</span>
-
-<span class="sd">FYI.</span>
-
-<span class="sd">    In [46]: _ip.pt_app.lexer</span>
-<span class="sd">    Out[46]: &lt;IPython.terminal.ptutils.IPythonPTLexer at 0x151087677c0&gt;</span>
-
-<span class="sd">    In [47]: _ip.pt_app.lexer.python_lexer.pygments_lexer</span>
-<span class="sd">    Out[47]: &lt;pygments.lexers.PythonLexer with {&#39;stripnl&#39;: False, &#39;stripall&#39;: False, &#39;ensurenl&#39;: False}</span>
-
-
+<span class="sd">After importing either a Gruvbox pygments Style or InkPotStyle,</span>
+<span class="sd">we `merge_styles` to return the final lexer.</span>
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># TODO</span>
+<span class="c1"># In [47]: _ip.pt_app.lexer.python_lexer.pygments_lexer</span>
+<span class="c1"># Out[47]: &lt;pygments.lexers.PythonLexer with {&#39;stripnl&#39;: False, &#39;stripall&#39;: False, &#39;ensurenl&#39;: False}</span>
 <span class="kn">from</span> <span class="nn">traitlets.config</span> <span class="kn">import</span> <span class="n">LoggingConfigurable</span>
 <span class="kn">from</span> <span class="nn">traitlets.traitlets</span> <span class="kn">import</span> <span class="n">Instance</span>
+
 <span class="kn">from</span> <span class="nn">pygments.lexer</span> <span class="kn">import</span> <span class="n">Lexer</span>
 <span class="kn">from</span> <span class="nn">pygments.lexers.python</span> <span class="kn">import</span> <span class="n">PythonLexer</span>
 <span class="kn">from</span> <span class="nn">pygments.token</span> <span class="kn">import</span> <span class="n">Keyword</span><span class="p">,</span> <span class="n">Name</span>
 <span class="kn">from</span> <span class="nn">pygments.formatters.terminal256</span> <span class="kn">import</span> <span class="n">TerminalTrueColorFormatter</span>
 
+
+<span class="c1"># from prompt_toolkit import ANSI, HTML</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.layout.containers</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">HSplit</span><span class="p">,</span>
+    <span class="c1"># VSplit,</span>
+    <span class="n">Window</span><span class="p">,</span>
+    <span class="n">WindowAlign</span><span class="p">,</span>
+    <span class="c1"># for now</span>
+    <span class="c1"># FloatContainer,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.layout.controls</span> <span class="kn">import</span> <span class="n">BufferControl</span><span class="p">,</span> <span class="n">FormattedTextControl</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.layout.layout</span> <span class="kn">import</span> <span class="n">Layout</span>
+
+<span class="kn">from</span> <span class="nn">prompt_toolkit.layout.processors</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">HighlightMatchingBracketProcessor</span><span class="p">,</span>
+    <span class="n">DisplayMultipleCursors</span><span class="p">,</span>
+    <span class="n">HighlightSearchProcessor</span><span class="p">,</span>
+    <span class="n">HighlightIncrementalSearchProcessor</span><span class="p">,</span>
+    <span class="n">HighlightSelectionProcessor</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.lexers.pygments</span> <span class="kn">import</span> <span class="n">PygmentsLexer</span>  <span class="c1"># , PygmentsTokens</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.lexers.base</span> <span class="kn">import</span> <span class="n">DynamicLexer</span><span class="p">,</span> <span class="n">SimpleLexer</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.shortcuts.utils</span> <span class="kn">import</span> <span class="n">print_container</span>
 
 <span class="kn">from</span> <span class="nn">prompt_toolkit.styles</span> <span class="kn">import</span> <span class="n">style_from_pygments_cls</span><span class="p">,</span> <span class="n">default_pygments_style</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.styles.style</span> <span class="kn">import</span> <span class="n">Style</span><span class="p">,</span> <span class="n">merge_styles</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.styles.style</span> <span class="kn">import</span> <span class="n">merge_styles</span>  <span class="c1"># , Style,</span>
 
 <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 <span class="kn">from</span> <span class="nn">IPython.core.interactiveshell</span> <span class="kn">import</span> <span class="n">InteractiveShellABC</span>
-<span class="kn">from</span> <span class="nn">IPython.lib.lexers</span> <span class="kn">import</span> <span class="n">IPyLexer</span><span class="p">,</span> <span class="n">IPythonTracebackLexer</span>
+
+<span class="c1"># from IPython.lib.lexers import IPyLexer, IPythonTracebackLexer</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">gruvbox.ptgruvbox</span> <span class="kn">import</span> <span class="n">Gruvbox</span>
@@ -294,16 +309,63 @@
                 <span class="k">yield</span> <span class="n">index</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">value</span></div></div>
 
 
+<div class="viewcode-block" id="get_titlebar_text"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.35_lexer.get_titlebar_text">[docs]</a><span class="k">def</span> <span class="nf">get_titlebar_text</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Return (style, text) tuples for startup.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;class:title&quot;</span><span class="p">,</span> <span class="s2">&quot;Hello World!&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;class:title&quot;</span><span class="p">,</span> <span class="s2">&quot; (Press &lt;Exit&gt; to quit.)&quot;</span><span class="p">),</span>
+    <span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="generate_and_print_hsplit"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.35_lexer.generate_and_print_hsplit">[docs]</a><span class="k">def</span> <span class="nf">generate_and_print_hsplit</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Generate a `prompt_toolkit.layout.container.HSplit`.</span>
+
+<span class="sd">    Originally was in 33_bottom_toolbar but moved here so we can use the lexer.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">root_container</span> <span class="o">=</span> <span class="n">HSplit</span><span class="p">(</span>
+        <span class="n">children</span><span class="o">=</span><span class="p">[</span>
+            <span class="n">Window</span><span class="p">(</span>
+                <span class="n">height</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">content</span><span class="o">=</span><span class="n">FormattedTextControl</span><span class="p">(</span><span class="n">get_titlebar_text</span><span class="p">),</span>
+                <span class="n">align</span><span class="o">=</span><span class="n">WindowAlign</span><span class="o">.</span><span class="n">CENTER</span><span class="p">,</span>
+                <span class="n">wrap_lines</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">Window</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">char</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;class:line&quot;</span><span class="p">),</span>
+        <span class="p">],</span>
+        <span class="c1"># key_bindings=kb,</span>
+        <span class="c1"># style=GruvboxStyle,</span>
+        <span class="n">style</span><span class="o">=</span><span class="s2">&quot;#fe8019&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">print_container</span><span class="p">(</span><span class="n">root_container</span><span class="p">)</span>
+    <span class="c1"># Thisll probably be useful</span>
+    <span class="c1"># from prompt_toolkit.mouse_events import MouseEvent, MouseEventType</span>
+
+    <span class="c1"># float_container = FloatContainer(content=Window(...),</span>
+    <span class="c1">#                        floats=[</span>
+    <span class="c1">#                            Float(xcursor=True,</span>
+    <span class="c1">#                                 ycursor=True,</span>
+    <span class="c1">#                                 layout=CompletionMenu(...))</span>
+    <span class="c1">#                        ])</span>
+    <span class="n">exit_button</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span><span class="s2">&quot;Exit&quot;</span><span class="p">,</span> <span class="n">handler</span><span class="o">=</span><span class="n">exit_clicked</span><span class="p">)</span>
+    <span class="n">print_container</span><span class="p">(</span><span class="n">exit_button</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">root_container</span></div>
+
+
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="c1"># lexer = IPythonConfigurableLexer()</span>
     <span class="c1"># colorizer = Colorizer()</span>
     <span class="c1"># pt_lexer = get_lexer()</span>
-    <span class="n">lexer</span> <span class="o">=</span> <span class="n">MyPythonLexer</span><span class="p">()</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">get_ipython</span><span class="p">(),</span> <span class="s2">&quot;pt_app.lexer&quot;</span><span class="p">):</span>
-        <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">lexer</span> <span class="o">=</span> <span class="n">lexer</span>
 
-    <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">get_ipython</span><span class="p">(),</span> <span class="s2">&quot;pt_app.app.lexer&quot;</span><span class="p">):</span>
-        <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">lexer</span> <span class="o">=</span> <span class="n">lexer</span>
+    <span class="n">generate_and_print_hsplit</span><span class="p">()</span>
+    <span class="n">lexer</span> <span class="o">=</span> <span class="n">MyPythonLexer</span><span class="p">()</span>
+    <span class="c1"># if hasattr(get_ipython(), &quot;pt_app.lexer&quot;):</span>
+    <span class="c1">#     get_ipython().pt_app.lexer = lexer</span>
+
+    <span class="c1"># elif hasattr(get_ipython(), &quot;pt_app.app.lexer&quot;):</span>
+    <span class="c1">#     get_ipython().pt_app.app.lexer = lexer</span>
 </pre></div>
 
         </div>
@@ -311,7 +373,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 18, 2020.
+      Last updated on Feb 21, 2020.
     </div>
   </body>
 </html>

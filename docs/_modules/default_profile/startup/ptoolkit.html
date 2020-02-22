@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>default_profile.startup.ptoolkit &#8212; Dynamic IPython: version0.0.2</title>
+    <title>default_profile.startup.ptoolkit &#8212; Dynamic IPython</title>
     
     <link rel="stylesheet" href="../../../_static/scrolls.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -15,7 +15,6 @@
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/language_data.js"></script>
-    <script src="../../../_static/copybutton.js"></script>
     <script src="../../../_static/theme_extras.js"></script>
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/startup/ptoolkit.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -25,7 +24,7 @@
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="x-ua-compatible" content="ie=edge" />
-  <title>Floating label Demo</title>
+  <title>Dynamic IPython --- IPython Extensions</title>
   <meta name="description" content="" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style type="text/css">
@@ -136,7 +135,8 @@
   </style>
 </head>
 
-  </head><body> 
+  </head><body>
+
     <div id="content">
       <div class="header">
         <h1 class="heading"><a href="../../../index.html"
@@ -149,9 +149,30 @@
         <div role="main">
         
 <h1>Source code for default_profile.startup.ptoolkit</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">prompt_toolkit</span> <span class="kn">import</span> <span class="n">search</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.application.current</span> <span class="kn">import</span> <span class="n">get_app</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.enums</span> <span class="kn">import</span> <span class="n">DEFAULT_BUFFER</span>
+<span></span><span class="sd">&quot;&quot;&quot;Configure prompt_toolkit effectively within a running IPython instance.</span>
+
+<span class="sd">Summary</span>
+<span class="sd">-------</span>
+<span class="sd">Provides utilities functions and classes to work with both `prompt_toolkit`</span>
+<span class="sd">and `IPython`. The APIs of both libraries can be individually quite</span>
+<span class="sd">overwhelming, and the combination and interaction of the 2 can prove difficult</span>
+<span class="sd">to stay on top of.</span>
+
+<span class="sd">The `Helpers` class defined here gives a useful reference as to the</span>
+<span class="sd">relationship between a number of the intertwined classes in a running</span>
+<span class="sd">`PromptSession`.</span>
+
+<span class="sd">Notes</span>
+<span class="sd">-----</span>
+<span class="sd">Of use might be.:</span>
+
+<span class="sd">    get_ipython().pt_app.layout</span>
+
+<span class="sd">An object that contains the default_buffer, `DEFAULT_BUFFER`, a reference</span>
+<span class="sd">to a container `HSplit` and a few other things possibly worth exploring.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">reprlib</span> <span class="kn">import</span> <span class="nb">repr</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.keys</span> <span class="kn">import</span> <span class="n">Keys</span>
 
 <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
@@ -165,30 +186,20 @@
         <span class="k">return</span> <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span></div>
 
 
-<div class="viewcode-block" id="Helpers"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers">[docs]</a><span class="k">class</span> <span class="nc">Helpers</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;I think this class is probably the easiest summary of my frustration.&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="get_session"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.get_session">[docs]</a><span class="k">def</span> <span class="nf">get_session</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;A patch to cover up the fact that get_app() returns a DummyApplication.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">get_ipython</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span></div>
 
+
+<div class="viewcode-block" id="Helpers"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers">[docs]</a><span class="k">class</span> <span class="nc">Helpers</span><span class="p">:</span>
 <div class="viewcode-block" id="Helpers.__init__"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="p">()</span></div>
-
-<div class="viewcode-block" id="Helpers.is_running"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.is_running">[docs]</a>    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">is_running</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">pass</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pt_app</span> <span class="o">=</span> <span class="n">get_app</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">get_session</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{self.pt_app}</span><span class="s2">&quot;</span>
-
-<div class="viewcode-block" id="Helpers.app"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.app">[docs]</a>    <span class="k">def</span> <span class="nf">app</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_app</span> <span class="o">=</span> <span class="n">get_app</span><span class="p">()</span></div>
-
-<div class="viewcode-block" id="Helpers.pt_app"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.pt_app">[docs]</a>    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">pt_app</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span></div>
-
-<div class="viewcode-block" id="Helpers.session"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.session">[docs]</a>    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">session</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">pt_app</span></div>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{self.__class__.__name__}</span><span class="s2"> with app at </span><span class="si">{self.pt_app}</span><span class="s2">&quot;</span>
 
 <div class="viewcode-block" id="Helpers.pt_app_kb"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.pt_app_kb">[docs]</a>    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">pt_app_kb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -216,11 +227,11 @@
 
 <div class="viewcode-block" id="Helpers.session_layout"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.session_layout">[docs]</a>    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">session_layout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">layout</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">layout</span></div>
 
 <div class="viewcode-block" id="Helpers.layout"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.layout">[docs]</a>    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">layout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">app_layout</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">app_layout</span></div>
 
 <div class="viewcode-block" id="Helpers.pt_app_style"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.pt_app_style">[docs]</a>    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">pt_app_style</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -238,13 +249,69 @@
     <span class="k">def</span> <span class="nf">session_style</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">style</span></div>
 
-<div class="viewcode-block" id="Helpers.buffer"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.buffer">[docs]</a>    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">buffer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Helpers.current_buffer"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.current_buffer">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">current_buffer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">current_buffer</span></div>
 
-<div class="viewcode-block" id="Helpers.document"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.document">[docs]</a>    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">document</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="o">.</span><span class="n">document</span></div></div>
+<div class="viewcode-block" id="Helpers.current_container"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.current_container">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">current_container</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the HSplit defining the layout of the app.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">container</span></div>
+
+<div class="viewcode-block" id="Helpers.current_container_children"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.current_container_children">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">current_container_children</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a list of the current container children.</span>
+
+<span class="sd">        I genuinely don&#39;t think I expected it to be so big.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_container</span><span class="o">.</span><span class="n">children</span></div>
+
+<div class="viewcode-block" id="Helpers.current_control"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.current_control">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">current_control</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return IPython&#39;s buffer control.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">current_control</span></div>
+
+<div class="viewcode-block" id="Helpers.current_document"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.current_document">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">current_document</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">document</span></div>
+
+<div class="viewcode-block" id="Helpers.current_buffer_texts"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.current_buffer_texts">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">current_buffer_texts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the &#39;text&#39; attr of the current buffer as a string.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">text</span></div>
+
+<div class="viewcode-block" id="Helpers.current_document_text"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.current_document_text">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">current_document_text</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the &#39;lines&#39; attr of the current document as a list.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_document</span><span class="o">.</span><span class="n">lines</span></div>
+
+<div class="viewcode-block" id="Helpers.current_window"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.current_window">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">current_window</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">current_window</span></div>
+
+<div class="viewcode-block" id="Helpers.current_content"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.current_content">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">current_content</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The &#39;content&#39; attribute of a `Window` returns a UIControl instance.</span>
+
+<span class="sd">        In this specific case, it returns a BufferControl.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_window</span><span class="o">.</span><span class="n">content</span></div>
+
+<div class="viewcode-block" id="Helpers.content_is_control"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.content_is_control">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">content_is_control</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Is the `Window` content the control returned by the layout?&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_content</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_control</span></div>
+
+<div class="viewcode-block" id="Helpers.session_validator"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.session_validator">[docs]</a>    <span class="k">def</span> <span class="nf">session_validator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">validator</span></div>
+
+<div class="viewcode-block" id="Helpers.app_validator"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.app_validator">[docs]</a>    <span class="k">def</span> <span class="nf">app_validator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pt_app</span></div>
+
+<div class="viewcode-block" id="Helpers.validate_validators"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.validate_validators">[docs]</a>    <span class="k">def</span> <span class="nf">validate_validators</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># who watches the watchmen?</span>
+        <span class="nb">print</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">session_validator</span><span class="p">,</span> <span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">validator</span><span class="o">.</span><span class="n">Validator</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">app_validator</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="n">session_validator</span></div></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
@@ -256,7 +323,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 18, 2020.
+      Last updated on Feb 21, 2020.
     </div>
   </body>
 </html>
