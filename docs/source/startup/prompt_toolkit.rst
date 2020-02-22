@@ -173,45 +173,6 @@ They're basically Enums that get compared to ``editing_mode.input_mode``.::
    :show-inheritance:
 
 
-`~default_profile.startup.34_completion`
-===========================================
-
-.. currentmodule:: default_profile.startup.34_completion
-
-This module sets up different `Completer` classes for use. After setting
-up `readline` to use the :kbd:`TAB` key in `30_readline`, we can now use
-the `jedi` API, the :class:`~prompt_toolkit.completion.Completer` classes
-from prompt_toolkit and the built-in :class:`rlcompleter.Completer` class
-to aide us as well.
-
-Auto-Suggestions
-------------------
-
-In addition, `prompt_toolkit` provides a class
-:class:`prompt_toolkit.auto_suggest.AutoSuggestFromHistory` to give
-completions in a similar manner to the fish shell.
-
-.. admonition:: The API for for adding custom completers doesn't seem to be having an effect.
-
-   Specifically ``get_ipython.set_custom_completer``.
-
-
-.. code-block::
-
-    fuzzy_completer = FuzzyCompleter(ExecutableCompleter())
-    dynamic_completer = DynamicCompleter(fuzzy_completer)
-
-Doesn't work because the 'dynamic_completer' requires a callable and the fuzzy
-isn't one.
-
-
-.. automodule:: default_profile.startup.34_completion
-   :synopsis: add new completions to the shell to speed up autocompletion.
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-
 :mod:`~default_profile.startup.35_lexer`
 ===========================================
 

@@ -1,6 +1,27 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Module where readline is properly configured before prompt_toolkit is loaded."""
+"""Module where readline is properly configured before prompt_toolkit is loaded.
+
+Summary
+-------
+In tandem with :file:`../pyreadlineconfig.ini`, keybindings
+are set up to attempt adding the standard readline bindings
+to Vim insert mode.
+
+Extended Summary
+----------------
+The keybindings that prompt_toolkit provides are more powerful;
+however they're substantially more complicated and for simple
+modifications of how to work with a line-editor buffer, this proves
+needlessly complex in addition to periodically leaving the entire
+terminal in an unusuable state.
+
+See Also
+--------
+
+`Tim Pope's RSI Vim plugin <https://github.com/tpope/vim-rsi>`_.
+
+"""
 import atexit
 import logging
 import os
@@ -224,7 +245,7 @@ if __name__ == "__main__":
             history_file = os.path.expanduser("~/.python_history")
             readline.read_history_file(history_file)
             readline.set_history_length(2000)
-            atexit.register(append_history_file, history_file)
+            atexit.register(readline.write_history_file, history_file)
 
     else:
         # All the pyreadline submodules have to be called as pyreadline.

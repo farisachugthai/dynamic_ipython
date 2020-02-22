@@ -173,8 +173,26 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">reprlib</span> <span class="kn">import</span> <span class="nb">repr</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.keys</span> <span class="kn">import</span> <span class="n">Keys</span>
 
+<span class="kn">from</span> <span class="nn">prompt_toolkit.buffer</span> <span class="kn">import</span> <span class="n">Buffer</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.document</span> <span class="kn">import</span> <span class="n">Document</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.filters</span> <span class="kn">import</span> <span class="n">Condition</span><span class="p">,</span> <span class="n">is_searching</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.keys</span> <span class="kn">import</span> <span class="n">Keys</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.key_bindings</span> <span class="kn">import</span> <span class="n">KeyBindings</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings</span> <span class="kn">import</span> <span class="n">search</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.layout.containers</span> <span class="kn">import</span> <span class="n">HSplit</span><span class="p">,</span> <span class="n">Window</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.layout.controls</span> <span class="kn">import</span> <span class="n">BufferControl</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.layout.layout</span> <span class="kn">import</span> <span class="n">Layout</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.styles</span> <span class="kn">import</span> <span class="n">Style</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.widgets.toolbars</span> <span class="kn">import</span> <span class="n">SearchToolbar</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.layout.processors</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ConditionalProcessor</span><span class="p">,</span>
+    <span class="n">HighlightSearchProcessor</span><span class="p">,</span>
+    <span class="n">HighlightIncrementalSearchProcessor</span><span class="p">,</span>
+    <span class="n">HighlightSelectionProcessor</span><span class="p">,</span>
+    <span class="n">HighlightMatchingBracketProcessor</span><span class="p">,</span>
+    <span class="n">DisplayMultipleCursors</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 
 <span class="n">DEDENT_TOKENS</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">([</span><span class="s2">&quot;raise&quot;</span><span class="p">,</span> <span class="s2">&quot;return&quot;</span><span class="p">,</span> <span class="s2">&quot;pass&quot;</span><span class="p">,</span> <span class="s2">&quot;break&quot;</span><span class="p">,</span> <span class="s2">&quot;continue&quot;</span><span class="p">])</span>
@@ -302,11 +320,21 @@
         <span class="sd">&quot;&quot;&quot;Is the `Window` content the control returned by the layout?&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_content</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_control</span></div>
 
-<div class="viewcode-block" id="Helpers.session_validator"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.session_validator">[docs]</a>    <span class="k">def</span> <span class="nf">session_validator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Helpers.session_validator"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.session_validator">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">session_validator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The validator instance on the PromptSession.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Not only do we not have this attribute on the App, it&#39;s not bound to</span>
+<span class="sd">        anything by default in IPython!</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">validator</span></div>
 
-<div class="viewcode-block" id="Helpers.app_validator"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.app_validator">[docs]</a>    <span class="k">def</span> <span class="nf">app_validator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pt_app</span></div>
+    <span class="c1"># Doesn&#39;t actually exist!</span>
+    <span class="c1"># @property</span>
+    <span class="c1"># def app_validator(self):</span>
+    <span class="c1">#     return self.pt_app.validator</span>
 
 <div class="viewcode-block" id="Helpers.validate_validators"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.validate_validators">[docs]</a>    <span class="k">def</span> <span class="nf">validate_validators</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># who watches the watchmen?</span>
@@ -314,8 +342,78 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">app_validator</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="n">session_validator</span></div></div>
 
 
+<div class="viewcode-block" id="all_processors_for_searching"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.all_processors_for_searching">[docs]</a><span class="k">def</span> <span class="nf">all_processors_for_searching</span><span class="p">():</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="n">ConditionalProcessor</span><span class="p">(</span><span class="n">HighlightSearchProcessor</span><span class="p">(),</span> <span class="o">~</span><span class="n">is_searching</span><span class="p">),</span>
+        <span class="n">HighlightIncrementalSearchProcessor</span><span class="p">(),</span>
+        <span class="n">HighlightSelectionProcessor</span><span class="p">(),</span>
+        <span class="n">HighlightMatchingBracketProcessor</span><span class="p">(),</span>
+        <span class="n">DisplayMultipleCursors</span><span class="p">(),</span>
+    <span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="search_layout"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.search_layout">[docs]</a><span class="k">def</span> <span class="nf">search_layout</span><span class="p">():</span>
+    <span class="n">all_input_processors</span> <span class="o">=</span> <span class="n">all_processors_for_searching</span><span class="p">()</span>
+    <span class="n">search_toolbar</span> <span class="o">=</span> <span class="n">SearchToolbar</span><span class="p">(</span><span class="n">vi_mode</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># style = Style([(&quot;incsearch&quot;, &quot;fg:ansibrightcyan reverse&quot;)])</span>
+    <span class="n">control</span> <span class="o">=</span> <span class="n">BufferControl</span><span class="p">(</span>
+        <span class="n">Buffer</span><span class="p">(</span><span class="n">document</span><span class="o">=</span><span class="n">Document</span><span class="p">(),</span> <span class="n">read_only</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+        <span class="n">search_buffer_control</span><span class="o">=</span><span class="n">search_toolbar</span><span class="o">.</span><span class="n">control</span><span class="p">,</span>
+        <span class="n">preview_search</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">include_default_input_processors</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">input_processors</span><span class="o">=</span><span class="n">all_input_processors</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="c1"># Apparently theres something wrong with the style other put it in the</span>
+    <span class="c1"># HSplit constructor</span>
+    <span class="n">container</span> <span class="o">=</span> <span class="n">HSplit</span><span class="p">([</span><span class="n">Window</span><span class="p">(</span><span class="n">control</span><span class="p">),</span> <span class="n">search_toolbar</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">container</span></div>
+
+
+<div class="viewcode-block" id="create_searching_keybindings"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.create_searching_keybindings">[docs]</a><span class="k">def</span> <span class="nf">create_searching_keybindings</span><span class="p">():</span>
+
+    <span class="n">kb</span> <span class="o">=</span> <span class="n">KeyBindings</span><span class="p">()</span>
+
+    <span class="nd">@kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;q&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+        <span class="n">event</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+
+    <span class="nd">@Condition</span>
+    <span class="k">def</span> <span class="nf">search_buffer_is_empty</span><span class="p">():</span>
+        <span class="s2">&quot; Returns True when the search buffer is empty. &quot;</span>
+        <span class="k">return</span> <span class="n">get_app</span><span class="p">()</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)(</span><span class="n">search</span><span class="o">.</span><span class="n">start_forward_incremental_search</span><span class="p">)</span>
+    <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;?&quot;</span><span class="p">)(</span><span class="n">search</span><span class="o">.</span><span class="n">start_reverse_incremental_search</span><span class="p">)</span>
+    <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;enter&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">is_searching</span><span class="p">)(</span><span class="n">search</span><span class="o">.</span><span class="n">accept_search</span><span class="p">)</span>
+    <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;c-c&quot;</span><span class="p">)(</span><span class="n">search</span><span class="o">.</span><span class="n">abort_search</span><span class="p">)</span>
+    <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;backspace&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">search_buffer_is_empty</span><span class="p">)(</span><span class="n">search</span><span class="o">.</span><span class="n">abort_search</span><span class="p">)</span>
+
+    <span class="nd">@kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;n&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=~</span><span class="n">is_searching</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+        <span class="n">search_state</span> <span class="o">=</span> <span class="n">get_app</span><span class="p">()</span><span class="o">.</span><span class="n">current_search_state</span>
+        <span class="n">current_buffer</span> <span class="o">=</span> <span class="n">get_app</span><span class="p">()</span><span class="o">.</span><span class="n">current_buffer</span>
+
+        <span class="n">cursor_position</span> <span class="o">=</span> <span class="n">current_buffer</span><span class="o">.</span><span class="n">get_search_position</span><span class="p">(</span>
+            <span class="n">search_state</span><span class="p">,</span> <span class="n">include_current_position</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="n">current_buffer</span><span class="o">.</span><span class="n">cursor_position</span> <span class="o">=</span> <span class="n">cursor_position</span>
+
+    <span class="nd">@kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;N&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=~</span><span class="n">is_searching</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+        <span class="n">search_state</span> <span class="o">=</span> <span class="n">get_app</span><span class="p">()</span><span class="o">.</span><span class="n">current_search_state</span>
+        <span class="n">current_buffer</span> <span class="o">=</span> <span class="n">get_app</span><span class="p">()</span><span class="o">.</span><span class="n">current_buffer</span>
+
+        <span class="n">cursor_position</span> <span class="o">=</span> <span class="n">current_buffer</span><span class="o">.</span><span class="n">get_search_position</span><span class="p">(</span>
+            <span class="o">~</span><span class="n">search_state</span><span class="p">,</span> <span class="n">include_current_position</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="n">current_buffer</span><span class="o">.</span><span class="n">cursor_position</span> <span class="o">=</span> <span class="n">cursor_position</span>
+
+    <span class="k">return</span> <span class="n">kb</span></div>
+
+
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">pt</span> <span class="o">=</span> <span class="n">Helpers</span><span class="p">()</span>
+    <span class="n">container_search</span> <span class="o">=</span> <span class="n">search_layout</span><span class="p">()</span>
 </pre></div>
 
         </div>
@@ -323,7 +421,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 21, 2020.
+      Last updated on Feb 22, 2020.
     </div>
   </body>
 </html>

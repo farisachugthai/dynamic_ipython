@@ -8,6 +8,13 @@ Oct 06, 2019:
 
     Start IPython and run this as a post-mortem debugger!
 
+Unrelated but who wants to see something I was surprised about.::
+
+    from bdb import foo, bar
+
+Yeah those are real functions.::
+
+    foo()
 
 """
 import pdb
@@ -19,13 +26,7 @@ from prompt_toolkit.completion import DynamicCompleter
 from prompt_toolkit.enums import EditingMode
 from prompt_toolkit.keys import Keys
 from prompt_toolkit.key_binding import KeyBindings, merge_key_bindings
-from prompt_toolkit.key_binding.bindings.basic import load_basic_bindings
-from prompt_toolkit.key_binding.bindings.emacs import (
-    load_emacs_bindings,
-    load_emacs_search_bindings,
-)
-from prompt_toolkit.key_binding.bindings.mouse import load_mouse_bindings
-from prompt_toolkit.key_binding.bindings.cpr import load_cpr_bindings
+from prompt_toolkit.key_binding.defaults import load_key_bindings
 from prompt_toolkit.formatted_text import PygmentsTokens
 from prompt_toolkit.shortcuts.prompt import PromptSession
 
@@ -53,8 +54,6 @@ class IPD(Pdb):
         self,
         shell=None,
         keys=None,
-        completer=None,
-        prompt_toolkit_application=None,
         *args,
         **kwargs
     ):
@@ -77,21 +76,18 @@ class IPD(Pdb):
         if self.shell is None:
             raise UsageError
 
-        self.keys = keys or self.initialize_keybindings()
+        self.keys = self.initialize_keybindings(keys)
         # self.completer = completer or self.initialize_completer()
-        self.completer = completer or DynamicCompleter()
-        self.prompt_toolkit_application = prompt_toolkit_application or self.pt_init()
+        self.completer = DynamicCompleter(self.initialize_completer())
 
-        if kwargs:
-            if kwargs["prompt"]:
-                self.prompt = kwargs.pop("prompt")
-        else:
-            self.prompt = "Your Debugger: "
+        self.prompt = "Your Debugger: "
+
+        self.pt_session = self.pt_init()
 
         super().__init__(self, *args, **kwargs)
 
     def __repr__(self):
-        return "{!r}\t{!r}".format(self.__class__.__name__, self.shell.__repr__())
+        return f"{self.prompt}"
 
     # TODO:
     # def __call__(self):
@@ -105,23 +101,17 @@ class IPD(Pdb):
         """Create a completion instance for the debugger."""
         return IPythonPTCompleter(
             shell=self.shell,
-            namespace=self.shell.user_ns,
-            global_namespace=globals(),
-            parent=self.shell,
+            # namespace=self.shell.user_ns,
+            # global_namespace=globals(),
+            # parent=self.shell,
         )
 
-    def initialize_keybindings(self):
-        """Should make this explicit and as a result independent."""
-        return merge_key_bindings(
-            [
-                load_basic_bindings(),
-                load_emacs_bindings(),
-                load_emacs_search_bindings(),
-                load_mouse_bindings(),
-                load_cpr_bindings(),
-                create_ipython_shortcuts(self.shell),
-            ]
-        )
+    def initialize_keybindings(self, custom_keys=None):
+        _ = [ load_key_bindings(), create_ipython_shortcuts(self.shell), ]
+        if custom_keys is None:
+            return merge_key_bindings(_)
+        else:
+            return merge_key_bindings(_.append(custom_keys))
 
     def pt_init(self):
         """Override the default initialization for prompt_toolkit."""
@@ -135,7 +125,7 @@ class IPD(Pdb):
             mouse_support=self.shell.mouse_support,
             complete_style=self.shell.pt_complete_style,
             # style=self.shell.style,
-            inputhook=self.shell.inputhook,
+            # inputhook=self.shell.inputhook,
             color_depth=self.shell.color_depth,
         )
 
@@ -182,11 +172,16 @@ def formatted_traceback():
     print("Traceback: Formatted stack\n" + repr(traceback.format_stack()) + "\n")
 
 
-def main():
+def init_debugger():
     """Create an instance of our debugger."""
     ip = get_ipython()  # noqa C0103
     if ip is None:  # noqa C0103
         ip = initialize_ipython()
+
+    if hasattr(sys, "last_traceback"):
+        formatted_traceback()
+    else:
+        pdb.set_trace()
 
     # with patch_stdout.patch_stdout():
     dynamic_debugger = IPD(shell=ip)
@@ -194,15 +189,8 @@ def main():
 
 
 if __name__ == "__main__":
-    idebug = main()
-
-    if hasattr(sys, "last_traceback"):
-        formatted_traceback()
-    else:
-        pdb.set_trace()
-
-    debugger = main()
+    debugger = init_debugger()
     try:
-        debugger.prompt()
+        debugger.pt_session.prompt()
     except (KeyboardInterrupt, EOFError):
         sys.exit("Bye!")

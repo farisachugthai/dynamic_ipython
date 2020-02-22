@@ -16,6 +16,7 @@ Huh! This is neat. He imports pdb.Restart. Check out the call signature.
 
 """
 import argparse
+
 import logging
 import os
 import sys
@@ -217,6 +218,9 @@ def main():
         logger.warning("The program finished and will be restarted")
     except Restart:
         logger.info(f"Restarting {mainpyfile} with arguments:\t{str(sys.argv[1:])}")
+    except BdbQuit:
+        logger.critical('Quit signal received.  Goodbye!')
+
     except SystemExit:
         # In most cases SystemExit does not warrant a post-mortem session.
         print("The program exited via sys.exit(). Exit status: ", end="")
