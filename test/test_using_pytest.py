@@ -93,3 +93,33 @@ def import_module(name, deprecated=False, *, required_on=()):
             if sys.platform.startswith(tuple(required_on)):
                 raise
             raise unittest.SkipTest(str(msg))
+
+
+# /en/latest/reference.html#testdir>`_, as a "black-box" test.
+
+# For example, to ensure a simple test passes you can write:
+
+
+def test_true_assertion(testdir):
+    testdir.makepyfile(
+        """
+        def test_foo():
+            assert True
+    """
+    )
+    result = testdir.runpytest()
+    result.assert_outcomes(failed=0, passed=1)
+
+
+# Alternatively, it is possible to make checks based on the actual output of the termal using
+# *glob-like* expressions:
+
+def test_true_assertion(testdir):
+    testdir.makepyfile(
+        """
+        def test_foo():
+            assert False
+    """
+    )
+    result = testdir.runpytest()
+    result.stdout.fnmatch_lines(["*assert False*", "*1 failed*"])

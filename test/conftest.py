@@ -9,9 +9,8 @@ from IPython.core.interactiveshell import InteractiveShell
 import pytest
 from pytest import set_trace
 
-# from pytest.nose import *
-from _pytest import nose
-from _pytest import unittest
+from _pytest.nose import *
+from _pytest.unittest import *
 
 try:
     import default_profile
@@ -32,6 +31,16 @@ def pytest_load_initial_conftests(args):
 @pytest.fixture(scope="session", autouse=True)
 def _ip():
     return InteractiveShell()
+
+
+@pytest.fixture(scope="session")
+def get_session():
+    return get_ipython().pt_app
+
+
+@pytest.fixture(scope="session")
+def get_app():
+    return get_ipython().pt_app
 
 
 def pytest_addoption(parser):

@@ -5,8 +5,11 @@ import pickle
 import sys
 import unittest
 
-from test.support import (TESTFN, check_free_after_iterating, cpython_only,
+try:
+    from test.support import (TESTFN, check_free_after_iterating, cpython_only,
                           run_unittest, unlink)
+except ImportError:
+    run_unittest = None
 
 # Test result of triple loop (too big to inline)
 TRIPLETS = [
@@ -1059,5 +1062,8 @@ def test_main():
 
 
 if __name__ == "__main__":
-    unittest.skipIf(
-    test_main()
+    if run_unittest is None:
+        unittest.skip("Test suite not set up for iterators.")
+    else:
+        test_main()
+

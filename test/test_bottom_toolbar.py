@@ -1,4 +1,5 @@
 import importlib
+import unittest
 from io import StringIO
 from unittest import TestCase
 from unittest.mock import patch
@@ -16,10 +17,10 @@ else:
     bt_mod = importlib.import_module("default_profile.startup.33_bottom_toolbar")
 
 if bt_mod is None:
-    unittest.skip()
+    unittest.skip("Import failure for bottom_toolbar.")
 
-# def test_bottom_toolbar_exists():
-#     assert BottomToolbar()
+if bt_mod.get_app() is None:
+    unittest.skip("Prompt toolkit not running.")
 
 
 class TestBottomToolbar(TestCase):

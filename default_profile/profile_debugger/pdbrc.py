@@ -95,43 +95,50 @@ def save_history(hist_path=None):
             hist_path.touch()
         hist_path = hist_path.__fspath__()
 
-    readline.append_history_file(hist_path)
+    # readline.append_history_file(hist_path)
 
 
+# history_path = Path.expanduser("~/.pdb_history.py")
+# if not history_path.exists():
+#     history_path.touch()
 try:
     from default_profile.startup import readline_mod
     import readline
 except (ImportError, ModuleNotFoundError):  # noqa
-    history_path = Path.expanduser("~/.pdb_history.py")
-
-    if not history_path.exists():
-        history_path.touch()
-
+    pass
 else:
     readline.parse_and_bind("Tab:menu-complete")
-    readline.read_history_file(historyPath)
-    save_history(historyPath)
-
-    atexit.register(save_history, hist_path=historyPath)
+    # readline.read_history_file(historyPath)
+    # save_history(historyPath)
+    # atexit.register(save_history, hist_path=historyPath)
 
 # Customized Pdb
 
 
 class MyPdb(pdb.Pdb):
-    """Subclass Pdb."""
 
-    prompt = f"<YourPdb> : "
+    """Subclass Pdb. Currently defined as a callable.
+
+    Would it prove useful to add dunders for a context manager?
+
+    Notes
+    -----
+
+    Here's a comment I found in `bdb.Bdb`.:
+
+        Derived classes and clients can call the following methods
+        to manipulate breakpoints.  These methods return an
+        error message if something went wrong, None if all is well.
+        Set_break prints out the breakpoint line and file:lineno.
+        Call self.get_*break*() to see the breakpoints or better
+        for bp in Breakpoint.bpbynumber: if bp: bp.bpprint().
+
+    """
+
     doc_header = ""
 
     def __init__(
-        self,
-        completekey="tab",
-        skip="traitlets",
-        prompt=None,
-        doc_header=None,
-        shell=None,
-        *args,
-        **kwargs,
+        self, completekey="tab", skip="traitlets", shell=None, *args, **kwargs,
     ):
         """
         To explain all the keyword arguments, pdb inherits from both
@@ -141,11 +148,9 @@ class MyPdb(pdb.Pdb):
         .. todo:: I keep getting errors about self.botframe not being defined?
         """
         self.skip = skip
-        self.prompt = prompt
-        self.doc_header = doc_header
-        self.shell = shell
+        self.shell = get_ipython() if shell is None else shell
         if self.shell is not None:
-            self.prompt += " [" + self.shell.execution_count + "]: "
+            self.prompt = f"<YourPdb -> Why. [ {self.shell.execution_count} ] "
         self.bp = Breakpoint
         self.completekey = completekey
 
@@ -163,7 +168,7 @@ class MyPdb(pdb.Pdb):
             gc.collect()
             return
 
-    def __call__(self, statement):
+    def __call__(self, statement, *args, **kwargs):
         return self.run(statement)
 
     def completedefault(self):
@@ -180,7 +185,7 @@ class MyPdb(pdb.Pdb):
         pydoc.pipepager(inspect.getsource(pdb.Pdb), os.environ.get("PAGER"))
 
 
-debugger = MyPdb()
+debugger = MyPdb(shell=get_ipython())
 # TODO:
 # get_ipython().debugger_cls = MyPdb
 # Customize the sys.excepthook

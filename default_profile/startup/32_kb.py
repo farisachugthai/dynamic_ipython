@@ -21,7 +21,6 @@ from prompt_toolkit.keys import Keys
 
 
 class KeyBindingsManager(UserDict):
-
     def __init__(self, kb=None, shell=None, **kwargs):
         """Initialize the class.
 
@@ -257,3 +256,9 @@ class Documented(Document):
 
     def __iter__(self):
         return iter(self.text)
+
+
+if __name__ == "__main__":
+
+    get_ipython().pt_app.app.key_bindings.bindings.extend(load_key_bindings().bindings)
+    get_ipython().pt_app.app.key_bindings._update_cache()

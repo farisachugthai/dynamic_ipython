@@ -225,12 +225,12 @@ if __name__ == "__main__":
     # Do frames not return container objects? Because this line is raisin an error?
     # bottom_float = Float(Frame(partial_window, style="bg:#282828 #ffffff"), bottom=0)
     # print_container(bottom_float)
+
     bottom_toolbar = FormattedTextToolbar(bottom_text)
 
     shell = get_ipython()
-    # if shell is not None:
-    #     if hasattr(shell, "pt_app"):
-    #         # TODO:
-    #         shell.pt_app.bottom_toolbar = bottom_toolbar
+    if shell is not None:
+        if hasattr(shell, "pt_app"):
+            shell.pt_app.bottom_toolbar = bottom_text
 
     print_container(show_header())

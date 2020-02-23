@@ -215,9 +215,13 @@ def setup_historyfile(filename=None):
         readline.set_history_length(2000)
 
 
-def teardown_historyfile(histfile=None):
+def teardown_historyfile(starting_id, histfile=None):
+    if not hasattr(readline, 'append_history_file'):
+        return
+    new_h_len = readline.get_current_history_length()
+    readline.set_history_length(2000)
     try:
-        append_history_file(histfile)
+        readline.append_history_file(new_h_len - starting_id, histfile)
     except OSError:
         logging.error(
             "History not saved. There were problems saving to ~/.python_history"
@@ -276,5 +280,7 @@ if __name__ == "__main__":
     if readline is not None:
         history_file = os.path.expanduser("~/.python_history")
         setup_historyfile(history_file)
+        original_hist_length = readline.get_current_history_length()
         atexit.register(readline.write_history_file, history_file)
+        atexit.register(teardown_historyfile, original_hist_length, histfile=history_file)
         readline_config()

@@ -6,6 +6,7 @@ import sys
 import subprocess
 from subprocess import Popen, PIPE
 
+from IPython.core.getipython import get_ipython
 from IPython.core.magic import Magics, magics_class, line_magic
 from IPython.core.magics.packaging import (
     CONDA_ENV_FLAGS,
@@ -22,12 +23,8 @@ from IPython.terminal.interactiveshell import TerminalInteractiveShell
 class PackagingMagics(Magics):
     """Override the PackagingMagic."""
 
-    @property
+    @staticmethod
     def conda_path(self):
-        """Is this a thing? Method decorators in magics I mean.
-
-        Also. Property or classmethod?
-        """
         return shutil.which("conda")
 
     @property
@@ -36,7 +33,9 @@ class PackagingMagics(Magics):
 
     @line_magic
     def conda(self, line):
-        """First do a shutil check.
+        """Simpler re-implemented line magic.
+
+        First do a shutil check.
 
         Parameters
         ----------
@@ -48,26 +47,33 @@ class PackagingMagics(Magics):
         :exc:`NotImplementedError`
 
         """
-        if self.conda_path is None:
-            raise NotImplementedError("conda not installed or on $PATH envvar")
-
-        conda, *cmd = sys.argv
-
-        if self.stdin_disabled is not None:
+        # if self.stdin_disabled is not None:
             # hang on this doesn't seem like a good idea.
             # cmd.append(self.non_interactive_parameters(cmd))
             # TODO
-            raise NotImplementedError
+            # raise NotImplementedError
+        conda, *cmd = line
 
         # tbf i still question if that's a good way of checking interactivity
         try:
             if isinstance(self.shell, TerminalInteractiveShell):
-                return subprocess.run([conda, *cmd])
-        except AttributeError:
-            raise NotImplementedError
+                return subprocess.run([conda, *cmd], )
+        except subprocess.CalledProcessError:
+        # except AttributeError:
+        #     raise NotImplementedError
+            if self.conda_path is not None:
+                if self.conda_path.ends_with("bat"):
+                    conda = "call " + self.conda_path
+                    %sx conda
+
+    def python_api(self):
+        try:
+            from conda.cli import python_api
+        except ImportError:
+            return
 
 
-def load_ipython_extension(ip):
+def load_ipython_extension(ip=None):
     """TODO: Docstring for load_ipython_extension.
 
     Parameters
@@ -76,5 +82,7 @@ def load_ipython_extension(ip):
         Global IPython Instance
 
     """
+    if ip is None:
+        ip = get_ipython()
     ip.register_magics(PackagingMagics)
     ip.register_magic_function(PackagingMagics().conda)
