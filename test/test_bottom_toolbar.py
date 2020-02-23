@@ -23,12 +23,15 @@ if bt_mod is None:
 
 
 class TestBottomToolbar(TestCase):
+    def setUp(self):
+        """Is this supposed to be called something different?"""
+        self.toolbar = bt_mod.BottomToolbar(bt_mod.get_app())
+
     def test_toolbar_existence(self):
-        self.assertExists(bt_mod.BottomToolbar())
+        self.assertIsNotNone(self.toolbar)
 
     def test_toolbar_gets_to_stdout(self):
         with patch("sys.stdout", new=StringIO()) as fake_out:
-            tb = bt_mod.BottomToolbar()
-            print(tb)
+            print(self.toolbar)
 
         self.assertIsInstance(fake_out.getvalue(), str)

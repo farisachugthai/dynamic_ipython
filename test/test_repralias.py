@@ -1,3 +1,4 @@
+from pathlib import Path
 import pytest
 
 
@@ -16,10 +17,10 @@ def test_alias_manager_aliases_greater_than_user_aliases(_ip):
 
 
 # def test_ReprAlias_is_iterable(main_class):
-    # This doesn't work because main_class is a reference to the function not
-    # the object. iter(main_class()) calls the fixture which pytest will raise
-    #  a Failure for. :/
-    # assert iter(main_class)
+# This doesn't work because main_class is a reference to the function not
+# the object. iter(main_class()) calls the fixture which pytest will raise
+#  a Failure for. :/
+# assert iter(main_class)
 
 if __name__ == "__main__":
     # This is an odd way of doing thi but note that it's necessary as the object
@@ -33,4 +34,3 @@ if __name__ == "__main__":
     # Fuck me this is still raising errors
     # pytest.importorskip("default_profile.startup.repralias")
     from default_profile.startup import repralias
-    pytest.

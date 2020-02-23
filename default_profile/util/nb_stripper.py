@@ -73,8 +73,9 @@ def main():
 
     with codecs.open(filename, "r+", encoding="utf8") as f:
         nb = read(f, as_version=NO_CONVERT)
-        nb = strip_output(nb)
+        stripped = strip_output(nb)
+    return stripped
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()

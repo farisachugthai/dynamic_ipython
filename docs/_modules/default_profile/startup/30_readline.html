@@ -375,6 +375,20 @@
         <span class="p">)</span></div>
 
 
+<div class="viewcode-block" id="last_input"><a class="viewcode-back" href="../../../startup/setup_readline.html#default_profile.startup.30_readline.last_input">[docs]</a><span class="k">def</span> <span class="nf">last_input</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Returns the user&#39;s last input.</span>
+
+<span class="sd">    Utilizes the *raw_cell* attribute found on an</span>
+<span class="sd">    :class:`IPython.core.interactiveshell.ExecutionInfo` instance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">last_execution_result</span><span class="o">.</span><span class="n">info</span><span class="o">.</span><span class="n">raw_cell</span></div>
+
+
+<div class="viewcode-block" id="add_last_input"><a class="viewcode-back" href="../../../startup/setup_readline.html#default_profile.startup.30_readline.add_last_input">[docs]</a><span class="k">def</span> <span class="nf">add_last_input</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Calls readline&#39;s `add_history` function with `last_input`.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">readline</span><span class="o">.</span><span class="n">add_history</span><span class="p">(</span><span class="n">last_input</span><span class="p">())</span></div>
+
+
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="c1"># Interestingly this can work on Windows with a simple pip install pyreadline</span>
     <span class="c1"># however it can be imported as readline no alias so check it first</span>
@@ -389,14 +403,7 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="kn">import</span> <span class="nn">readline</span>
         <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-            <span class="k">pass</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">readline</span> <span class="kn">import</span> <span class="n">append_history_file</span>
-
-            <span class="n">history_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~/.python_history&quot;</span><span class="p">)</span>
-            <span class="n">readline</span><span class="o">.</span><span class="n">read_history_file</span><span class="p">(</span><span class="n">history_file</span><span class="p">)</span>
-            <span class="n">readline</span><span class="o">.</span><span class="n">set_history_length</span><span class="p">(</span><span class="mi">2000</span><span class="p">)</span>
-            <span class="n">atexit</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">readline</span><span class="o">.</span><span class="n">write_history_file</span><span class="p">,</span> <span class="n">history_file</span><span class="p">)</span>
+            <span class="n">readline</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># All the pyreadline submodules have to be called as pyreadline.</span>
@@ -416,11 +423,12 @@
 
         <span class="n">emacs_mode</span> <span class="o">=</span> <span class="n">EmacsMode</span><span class="p">(</span><span class="n">pyreadline</span><span class="o">.</span><span class="n">Readline</span><span class="p">())</span>
         <span class="n">vi_mode</span> <span class="o">=</span> <span class="n">ViMode</span><span class="p">(</span><span class="n">pyreadline</span><span class="o">.</span><span class="n">Readline</span><span class="p">())</span>
-        <span class="n">history_file</span> <span class="o">=</span> <span class="s2">&quot;~/.python_history&quot;</span>
-        <span class="n">setup_historyfile</span><span class="p">(</span><span class="n">history_file</span><span class="p">)</span>
-        <span class="n">atexit</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">readline</span><span class="o">.</span><span class="n">write_history_file</span><span class="p">)</span>
 
-    <span class="n">readline_config</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">readline</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">history_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~/.python_history&quot;</span><span class="p">)</span>
+        <span class="n">setup_historyfile</span><span class="p">(</span><span class="n">history_file</span><span class="p">)</span>
+        <span class="n">atexit</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">readline</span><span class="o">.</span><span class="n">write_history_file</span><span class="p">,</span> <span class="n">history_file</span><span class="p">)</span>
+        <span class="n">readline_config</span><span class="p">()</span>
 </pre></div>
 
         </div>

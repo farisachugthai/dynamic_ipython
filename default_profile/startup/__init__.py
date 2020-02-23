@@ -57,3 +57,15 @@ except ImportError:
     pass
 # import pygit
 # import event_loops
+
+
+class UsageError(Exception):
+    def __init__(self, err=None, *args, **kwargs):
+        self.err = err
+        super().__init__(self, *args, **kwargs)
+
+    def __repr__(self):
+        return "{}\t \t{}".format(self.__class__.__name__, self.err)
+
+    def __call__(self, err):
+        return self.__repr__(err)

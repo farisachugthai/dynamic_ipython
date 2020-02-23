@@ -6,6 +6,8 @@ import unittest
 from unittest.suite import TestSuite
 
 from IPython.testing.tools import get_ipython_cmd
+# don't forget about this as it may come in handy
+# from IPython.lib.deepreload import reload
 
 
 def _test():

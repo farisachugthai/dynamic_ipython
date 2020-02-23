@@ -10,7 +10,6 @@ from importlib import import_module
 from pathlib import Path
 
 from IPython.lib.lexers import IPyLexer, IPythonTracebackLexer
-from IPython.sphinxext import ipython_directive
 
 from pygments.lexers.markup import MarkdownLexer, RstLexer
 from pygments.lexers.shell import BashLexer, BashSessionLexer
@@ -30,7 +29,6 @@ from sphinx.util.template import ReSTRenderer
 
 import default_profile
 from default_profile.__about__ import __version__
-
 from default_profile import ask_for_import
 from default_profile.sphinxext.magics import CellMagicRole, LineMagicRole
 
@@ -42,7 +40,7 @@ DOCS_LOGGER.setLevel(logging.INFO)
 
 # Gotta hack at sys.path a little
 DOCS = Path(__file__).resolve().parent.parent
-BUILD_DIR = DOCS.joinpath('build/html')
+BUILD_DIR = DOCS.joinpath("build/html")
 ROOT = DOCS.parent
 JUPYTER = ROOT.joinpath("jupyter_conf")
 
@@ -108,13 +106,9 @@ extensions = [
     "default_profile.sphinxext.magics",
 ]
 
-if ask_for_import("default_profile.sphinxext.magics"):
-    extensions.append("default_profile.sphinxext.magics")
-    DOCS_LOGGER.info("magics in extensions")
-
 if ask_for_import("matplotlib"):
     extensions.extend(
-        ["matplotlib.sphinxext.plot_directive", "matplotlib.sphinxext.mathmpl",]
+        ["matplotlib.sphinxext.plot_directive", "matplotlib.sphinxext.mathmpl", ]
     )
     DOCS_LOGGER.info("matplotlib in extensions")
 
@@ -123,7 +117,7 @@ if ask_for_import("flake8_rst"):
     DOCS_LOGGER.info("flake8_rst in extensions")
 
 if ask_for_import("numpydoc"):
-    extensions.append("numpydoc.numpydoc")
+    extensions.append("numpydoc")
     DOCS_LOGGER.info("numpydoc in extensions")
 
 
@@ -628,16 +622,13 @@ def setup(app):
     app.connect("source-read", rstjinja)
     app.add_lexer("ipythontb", IPythonTracebackLexer)
     app.add_lexer("ipython", IPyLexer)
-    app.add_lexer("python3tb", Python3TracebackLexer)
+    app.add_lexer("py3tb", IPythonTracebackLexer)
     app.add_lexer("python3", PythonLexer)
     app.add_lexer("python", PythonLexer)
     app.add_lexer("pycon", PythonConsoleLexer)
     app.add_lexer("markdown", MarkdownLexer)
     app.add_lexer("rst", RstLexer)
     app.add_lexer("vim", VimLexer)
-
-    app.add_lexer("ipythontb", IPythonTracebackLexer)
-    # app.add_lexer("ipython3", IPython3Lexer)
     app.add_lexer("numpy", NumPyLexer)
     app.connect("autodoc-process-docstring", cut_lines(4, what=["module"]))
     app.add_object_type(

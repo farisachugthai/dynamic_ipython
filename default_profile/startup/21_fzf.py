@@ -223,11 +223,12 @@ class TestInter(TerminalInteractiveShell):
 
     """
 
-    shell = get_ipython()
-    if shell is None:
-        shell = TerminalIPythonApp().launch_instance()
+    def run(self):
+        shell = get_ipython()
+        if shell is None:
+            shell = self.launch_instance()
 
-    config = shell.config
+        config = shell.config
 
 
 def fzf_keys(inputted_list=None):

@@ -2,11 +2,13 @@
 # -*- coding: utf-8 -*-
 """Sphinx extension that allows us to properly use magics in the docs.
 
-.. module:: magics
-
-:URL: `<https://github.com/ipython/ipython/blob/master/docs/sphinxext/magics.py>`_
+See Also
+--------
+IPython's sphinx extension for magics.
+    `<https://github.com/ipython/ipython/blob/master/docs/sphinxext/magics.py>`_
 
 """
+from default_profile.startup import UsageError
 import logging
 import re
 
@@ -23,34 +25,17 @@ except (ImportError, ModuleNotFoundError) as e:
     # the package come crashing down
     XRefRole = object
 
-try:
-    # Let's get a more useful error than raising exception
-    from IPython.core.error import UsageError
-except (ImportError, ModuleNotFoundError) as e:
-    logging.warning(e)
-
-    class UsageError(Exception):
-        def __init__(self, err=None, *args, **kwargs):
-            self.err = err
-            super().__init__(self, *args, **kwargs)
-
-        def __repr__(self):
-            return "{}\t \t{}".format(self.__class__.__name__, self.err)
-
-        def __call__(self, err):
-            """KEEP IT MOVIN' OVA THERE"""
-            return self.__repr__(err)
-
 
 name_re = re.compile(r"[\w_]+")
 
 
 def parse_magic(env, sig, signode):
-    """Extend Sphinx to handle IPython magics.
+    r"""Extend Sphinx to handle IPython magics.
 
     Parameters
     ----------
-    env : 
+    env
+        Genuinely ensure what any of these parameters are.
 
     Raises
     ------
@@ -73,6 +58,7 @@ class LineMagicRole(XRefRole):
     prefix = "%"
 
     def process_link(self, env, refnode, has_explicit_title, title, target):
+        """Generate a link without the leading :kbd:`%` in it."""
         if not has_explicit_title:
             title = self.prefix + title.lstrip("%")
         target = target.lstrip("%")
@@ -80,6 +66,7 @@ class LineMagicRole(XRefRole):
 
 
 def parse_cell_magic(env, sig, signode):
+    """Read rst documents and check for :kbd:`%%`."""
     m = name_re.match(sig)
     if not m:
         raise ValueError("Invalid cell magic: %s" % sig)
