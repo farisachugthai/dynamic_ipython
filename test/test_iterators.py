@@ -6,8 +6,13 @@ import sys
 import unittest
 
 try:
-    from test.support import (TESTFN, check_free_after_iterating, cpython_only,
-                          run_unittest, unlink)
+    from test.support import (
+        TESTFN,
+        check_free_after_iterating,
+        cpython_only,
+        run_unittest,
+        unlink,
+    )
 except ImportError:
     run_unittest = None
 
@@ -41,6 +46,27 @@ TRIPLETS = [
     (2, 2, 1),
     (2, 2, 2),
 ]
+
+# Stolen directly from the stdlib regression test suite
+
+
+def run_unittest(*classes):
+    """Run tests from unittest.TestCase-derived classes."""
+    valid_types = (unittest.TestSuite, unittest.TestCase)
+    suite = unittest.TestSuite()
+    for cls in classes:
+        if isinstance(cls, str):
+            if cls in sys.modules:
+                suite.addTest(unittest.findTestCases(sys.modules[cls]))
+            else:
+                raise ValueError("str arguments must be keys in sys.modules")
+        elif isinstance(cls, valid_types):
+            suite.addTest(cls)
+        else:
+            suite.addTest(unittest.makeSuite(cls))
+    _filter_suite(suite, match_test)
+    _run_suite(suite)
+
 
 # Helper classes
 

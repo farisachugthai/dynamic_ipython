@@ -29,12 +29,12 @@ def pd_csv(cell):
 
     """
     if pd is None:
-        return  # should this simply raise?
+        return
     sio = StringIO(cell)
     return pd.read_csv(sio)
 
 
-def load_ipython_extension(ip):
+def load_ipython_extension(ip=None):
     """This function is called when the extension is loaded.
 
     It accepts an IPython |ip| instance. We can register the magic
@@ -46,4 +46,8 @@ def load_ipython_extension(ip):
     ip : |ip|
 
     """
+    if ip is None:
+        ip = get_ipython()
+    if ip is None:
+        return
     ip.register_magic_function("pd_csv")

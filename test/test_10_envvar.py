@@ -53,13 +53,13 @@ class TestPath(unittest.TestCase):
             DeprecationWarning: invalid escape sequence \P
             path = "C:\Program Files"
 
-	"""
+        """
         # How weird is the backslash handling here?
-        with self.assertWarns(DeprecationWarning):  # and why deprecation?
-            path = "C:\Program Files"
-            pathlibed = Path(path)
-            self.assertIsInstance(pathlibed, Path)
-            self.assertTrue(pathlibed.exists())
+        # with self.assertWarns(DeprecationWarning):  # and why deprecation?
+        path = "C:\Program Files"
+        pathlibed = Path(path)
+        self.assertIsInstance(pathlibed, Path)
+        self.assertTrue(pathlibed.exists())
 
     def test_unc_path(self):
         path = "\\C"

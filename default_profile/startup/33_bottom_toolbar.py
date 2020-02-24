@@ -9,31 +9,25 @@ other things that aren't utilized at all.
 """
 import functools
 import logging
+import time
 from datetime import date
 from pathlib import Path
 from shutil import get_terminal_size
 from traceback import print_exc
 
-# from prompt_toolkit.application.current import get_app
-
 from prompt_toolkit.enums import EditingMode
-from prompt_toolkit.formatted_text import FormattedText, to_formatted_text
+
+# from prompt_toolkit.formatted_text import FormattedText, to_formatted_text
 from prompt_toolkit.layout.controls import FormattedTextControl
 from prompt_toolkit.layout.containers import Window, Float
 from prompt_toolkit.layout.layout import Layout
 
 # from prompt_toolkit.layout.processors import DisplayMultipleMouses
-
 from prompt_toolkit.shortcuts import print_formatted_text, CompleteStyle
 from prompt_toolkit.shortcuts.utils import print_container
-
 from prompt_toolkit.styles import default_pygments_style
 from prompt_toolkit.styles import Style, merge_styles, style
-from prompt_toolkit.styles.pygments import (
-    style_from_pygments_cls,
-    style_from_pygments_dict,
-)
-
+from prompt_toolkit.styles.pygments import style_from_pygments_cls
 from prompt_toolkit.widgets import Frame, TextArea, Button
 from prompt_toolkit.widgets.toolbars import FormattedTextToolbar
 
@@ -66,30 +60,8 @@ def init_style():
     # Could set this to _ip.pt_app.style i suppose
     if GruvboxStyle is not None:
         bt_style = GruvboxStyle()
-        return style_from_pygments_dict(bt_style.style_rules)
-
-
-def override_style(style_overrides):
-    style = init_style()
-    if not hasattr(style_overrides):
-        raise TypeError
-    style_overrides = Style.from_dict(style_overrides)
-    try:
-        return merge_styles([style, style_overrides])
-    except (AttributeError, TypeError, ValueError):
-        print_exc()
-
-
-def merged_styles(overrides=None):
-    base = init_style()
-    return merge_styles([base, overrides, default_pygments_style()])
-
-
-def merged_style_rules():
-    """Originally was going to call this in `show_header` but it raises if you
-    had it a list or a Style instance. It looks like it's only made to take 1
-    style anyway."""
-    return merged_styles().style_rules
+        ours = style_from_pygments_cls(bt_style)
+        return merge_styles([ours, default_pygments_style()])
 
 
 def show_header():
@@ -99,11 +71,10 @@ def show_header():
 
 
 class LineCounter:
-    """Really basic counter displayed inspired by Doug Hellman.
+    """Simple counter inspired by Doug Hellman. Could set it to sys.displayhook.
 
     :URL: https://pymotw.com/3/sys/interpreter.html
 
-    Need to set this to the rprompt.
     """
 
     def __init__(self):
@@ -135,7 +106,9 @@ class BottomToolbar:
         """
         self.shell = get_ipython()
         self.app = app
-        self.unfinished_toolbar = self.rerender()
+        # self.unfinished_toolbar = self.rerender()
+        if self.app is None:
+            logging.warning("BottomToolbar app is None.")
         self.PythonLexer = PythonLexer()
         self.Formatter = TerminalTrueColorFormatter()
 
@@ -153,6 +126,10 @@ class BottomToolbar:
 
     def __str__(self):
         return f"<{self.__class__.__name__!s}:>"
+
+    def __iter__(self):
+        for i in self.rerender():
+            yield i
 
     def __repr__(self):
         return f"{self.rerender()!r}"
@@ -196,7 +173,7 @@ class BottomToolbar:
         # doing it this way only prints the words class:toolbar at the bottom
         # text = f" [F4] Vi: {current_vi_mode!r}  {date.today()!r}"
         # toolbar = [('class:toolbar', ' %s ' % text)]
-        toolbar = f" [F4] Vi: {current_vi_mode!r}  {date.today()!r}"
+        toolbar = f" [F4] Vi: {current_vi_mode!r} -- cwd: {Path.cwd().stem!r} Clock: {time.ctime()!r}"
         return toolbar
 
     def _render_emacs(self):
@@ -212,8 +189,9 @@ class BottomToolbar:
 def add_toolbar(toolbar=None):
     """Get the running IPython instance and add 'bottom_toolbar'."""
     _ip = get_ipython()
-    if hasattr(_ip, "pt_app"):
-        _ip.pt_app.bottom_toolbar = toolbar
+    if _ip is not None:
+        if hasattr(_ip, "pt_app"):
+            _ip.pt_app.bottom_toolbar = toolbar
 
 
 if __name__ == "__main__":
@@ -225,12 +203,6 @@ if __name__ == "__main__":
     # Do frames not return container objects? Because this line is raisin an error?
     # bottom_float = Float(Frame(partial_window, style="bg:#282828 #ffffff"), bottom=0)
     # print_container(bottom_float)
-
     bottom_toolbar = FormattedTextToolbar(bottom_text)
-
-    shell = get_ipython()
-    if shell is not None:
-        if hasattr(shell, "pt_app"):
-            shell.pt_app.bottom_toolbar = bottom_text
-
+    add_toolbar(bottom_text)
     print_container(show_header())

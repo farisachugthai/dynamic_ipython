@@ -8,6 +8,19 @@ import sys
 import traitlets
 from traitlets.config import get_config
 
+# I think we can safely assume this one
+from ipykernel.zmqshell import ZMQInteractiveShell
+from jupyter_core.paths import get_home_dir
+
+try:
+    from gruvbox.gruvbox import GruvboxStyle
+except ImportError:
+    GruvboxStyle = None
+
+
+# Globals:
+
+home = get_home_dir()
 c = get_config()
 
 logging.basicConfig(level=logging.WARNING)
@@ -171,6 +184,8 @@ def ConsoleWidgetDoc():
     pass
 
 
+c.ConsoleWidget.ansi_codes = True
+
 # The maximum number of lines of text before truncation. Specifying a non-
 #  positive number disables text truncation (not recommended).
 c.ConsoleWidget.buffer_size = 1000
@@ -196,8 +211,9 @@ c.ConsoleWidget.console_width = 120
 
 # I wonder if we can give multiple values
 # We cant. Also don't use this it's genuinely impossible to read
-# c.ConsoleWidget.font_family = "Source Code Pro Light"
-c.ConsoleWidget.font_family = "Hack"
+c.ConsoleWidget.font_family = "Source Code Pro "
+# c.ConsoleWidget.font_family = "Hack"
+
 
 # The font size. If unconfigured, Qt will be entrusted with the size of the
 #  font.
@@ -328,12 +344,10 @@ c.JupyterWidget.editor_line = "-c {line} -- {filename}"
 # If not empty, use this Pygments style for syntax highlighting. Otherwise, the
 #  style sheet is queried for Pygments style information.
 
-# try:
-#     from gruvbox.style import GruvboxDarkHard
-# except (ImportError, ModuleNotFoundError):
-#     c.JupyterWidget.syntax_style = "Solarized Dark"
-# else:
-#     c.JupyterWidget.syntax_style = "GruvboxDarkHard"
+if GruvboxStyle is None:
+    c.JupyterWidget.syntax_style = "Solarized Dark"
+else:
+    c.JupyterWidget.syntax_style = "GruvboxStyle"
 
 # ------------------------------------------------------------------------------
 # KernelManager(ConnectionFileMixin) configuration
@@ -435,7 +449,7 @@ c.JupyterWidget.editor_line = "-c {line} -- {filename}"
 # c.Session.copy_threshold = 65536
 
 # Debug output in the Session
-# c.Session.debug = False
+c.Session.debug = True
 
 # The maximum number of digests to remember.
 # The digest history will be culled when it exceeds this value.
@@ -474,15 +488,3 @@ c.JupyterWidget.editor_line = "-c {line} -- {filename}"
 c.Session.username = "faris"
 
 
-if __name__ == "__main__":
-
-    # In an ifmain because we still want documentation to be read, settings
-    # to be set even if we don't have qtconsole installed IE a console user
-    try:
-        import qtconsole  # kinda a prerequisite wouldn't you say?
-    except ImportError:
-        sys.exit("QTConsole not installed.")
-
-    from qtconsole import ZMQ
-
-        from jupyter_core.paths import get_home_dir

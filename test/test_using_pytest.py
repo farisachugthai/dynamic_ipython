@@ -42,6 +42,7 @@ import unittest
 from IPython.core.getipython import get_ipython
 
 import pytest
+from _pytest.tmpdir import tmpdir
 
 
 COLORS = {
@@ -95,8 +96,6 @@ def import_module(name, deprecated=False, *, required_on=()):
             raise unittest.SkipTest(str(msg))
 
 
-# /en/latest/reference.html#testdir>`_, as a "black-box" test.
-
 # For example, to ensure a simple test passes you can write:
 
 
@@ -114,7 +113,11 @@ def test_true_assertion(testdir):
 # Alternatively, it is possible to make checks based on the actual output of the termal using
 # *glob-like* expressions:
 
-def test_true_assertion(testdir):
+
+def test_true_assertion(testdir=None):
+    if testdir is None:
+        testdir = tmpdir()
+
     testdir.makepyfile(
         """
         def test_foo():

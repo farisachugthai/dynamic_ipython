@@ -6,6 +6,8 @@ Imports all files in this directory by utilizing the
 :mod:`importlib` API
 to avoid import problems as Python modules can't begin with numbers.
 
+Define `UsageError` as well as that needed to be redefined from IPython,
+and is used frequently enough to warrant being in the package's ``__init__``.
 """
 import importlib
 import logging
@@ -55,8 +57,6 @@ try:
     from repralias import ReprAlias
 except ImportError:
     pass
-# import pygit
-# import event_loops
 
 
 class UsageError(Exception):

@@ -24,9 +24,13 @@ if bt_mod.get_app() is None:
 
 
 class TestBottomToolbar(TestCase):
-    def setUp(self):
+    def setUp(self, _ip):
         """Is this supposed to be called something different?"""
         self.toolbar = bt_mod.BottomToolbar(bt_mod.get_app())
+        if bt_mod.BottomToolbar() is None:
+            self.toolbar = _ip
+        if _ip is not None:
+            bt_mod.add_toolbar(self.toolbar)
 
     def test_toolbar_existence(self):
         self.assertIsNotNone(self.toolbar)
