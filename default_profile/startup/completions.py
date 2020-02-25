@@ -12,7 +12,6 @@ import jedi
 from jedi import Script
 from jedi.api import replstartup
 from jedi.api.project import get_default_project
-from jedi.utils import setup_readline
 from jedi.api.environment import (
     get_cached_default_environment,
     find_virtualenvs,
@@ -35,31 +34,8 @@ from prompt_toolkit.completion.filesystem import ExecutableCompleter
 from prompt_toolkit.completion.fuzzy_completer import FuzzyWordCompleter, FuzzyCompleter
 from prompt_toolkit.document import Document
 
-from prompt_toolkit.key_binding import merge_key_bindings
 
-from traitlets.traitlets import Instance
-from traitlets.config import LoggingConfigurable
-
-
-class SimpleCompleter(Completer, abc.ABC):
-    @abc.abstractproperty
-    def document(self):
-        # does it make sense to create these 2 as abstract properties?
-        raise
-
-    @abc.abstractmethod
-    def get_completions(self, doc=None, complete_event=None, **kwargs):
-        raise
-
-    @abc.abstractmethod
-    def __call__(self, document, event):
-        return self.get_completions(doc=document, complete_event=event)
-
-
-class SimpleCompletions(SimpleCompleter):
-    # Do you make super calls after subclassing ABC?
-    # shit do we have to mix something else in?
-
+class SimpleCompletions(Completer):
     def __init__(self, shell=None, *args, **kwargs):
         self.shell = shell or get_ipython()
         self._initialize_completer()
@@ -125,11 +101,12 @@ def get_path_completer():
 
 
 def get_fuzzy_keyword_completer():
-    """Return all valid Python keywords."""
+    """Return FuzzyWordCompleter initialized with all valid Python keywords."""
     return FuzzyWordCompleter(keyword.kwlist)
 
 
 def get_word_completer():
+    """Return WordCompleter initialized with all valid Python keywords."""
     return WordCompleter(
         keyword.kwlist, pattern=re.compile(r"^([a-zA-Z0-9_.]+|[^a-zA-Z0-9_.\s]+)")
     )
@@ -147,20 +124,6 @@ def will_break_pt_app():
         ]
     )
     get_ipython().pt_app.completer = merged_completers
-
-    _ip = get_ipython()
-    # Here's a different way to break it
-    if _ip.editing_mode == "vi":
-        more_keybindings = merge_key_bindings(
-            [_ip.pt_app.app.key_bindings, load_vi_bindings()]
-        )
-    else:
-        more_keybindings = merge_key_bindings(
-            [_ip.pt_app.app.key_bindings, load_key_bindings()]
-        )
-
-    _ip.pt_app.app.key_bindings = more_keybindings
-    _ip.pt_app.app.key_bindings._update_cache()
 
 
 def venvs():
@@ -259,32 +222,44 @@ class FuzzyCallable(FuzzyCompleter):
         return self.get_completions(document, complete_event)
 
 
-if __name__ == "__main__":
-    setup_readline()
+def create_jedi_script():
+    # TODO:
+    _ip = get_ipython()
     # To set up Script or Interpreter later
     project = get_default_project()
     try:
         environment = get_cached_default_environment()
     except InvalidPythonEnvironment:
-        logging.warning("Jedi couldn't get the default project.")
+        print("Jedi couldn't get the default project.")
+        return
+    current_document = _ip.pt_app.default_buffer.document
+    script = Script(current_document.text, environment=environment)
+    return script
 
+
+def create_pt_completers():
+    _ip = get_ipython()
+    # alternatively to set_custom_completer, can i skip the types.methodtype part and just do:
+    # _ip.Completer.matchers.append(FuzzyCompleter(CustomCompleter))
+    # seems to be working
+    # So let's see how far we can chain these
+    fuzzy_completer = FuzzyCallable(ExecutableCompleter())
+    merged_completer = MergedCompleter(fuzzy_completer)
+
+    _ip.Completer.matchers.append(merged_completer)
+
+    threaded = ThreadedCompleter(get_word_completer())
+    _ip.set_custom_completer(get_path_completer())
+    _ip.set_custom_completer(get_fuzzy_keyword_completer)
+
+
+if __name__ == "__main__":
     jedi.settings.add_bracket_after_function = False
 
-    if get_ipython() is not None:
-        _ip = get_ipython()
-        # alternatively to set_custom_completer, can i skip the types.methodtype part and just do:
-        # _ip.Completer.matchers.append(FuzzyCompleter(CustomCompleter))
-        # seems to be working
-        # So let's see how far we can chain these
-        fuzzy_completer = FuzzyCallable(ExecutableCompleter())
-        merged_completer = MergedCompleter(fuzzy_completer)
+    create_pt_completers()
 
-        _ip.Completer.matchers.append(merged_completer)
-
-        threaded = ThreadedCompleter(get_word_completer())
-        _ip.set_custom_completer(get_path_completer())
-        _ip.set_custom_completer(get_fuzzy_keyword_completer)
-        _ip.pt_app.auto_suggest = AutoSuggestFromHistory()
-
-        current_document = _ip.pt_app.default_buffer.document
-        script = Script(current_document.text, environment=environment)
+    session = get_ipython().pt_app if get_ipython() is not None else None
+    if session is not None:
+        # when using tmux or windows this is super helpful
+        session.refresh_interval = 0.5
+        session.auto_suggest = AutoSuggestFromHistory()

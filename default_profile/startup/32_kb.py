@@ -4,7 +4,7 @@ import logging
 import operator
 import reprlib
 import warnings
-from collections import UserDict
+from collections import UserList
 from typing import Callable, Optional
 
 from IPython.core.getipython import get_ipython
@@ -20,7 +20,7 @@ from prompt_toolkit.key_binding.key_bindings import (
 from prompt_toolkit.keys import Keys
 
 
-class KeyBindingsManager(UserDict):
+class KeyBindingsManager(UserList):
     def __init__(self, kb=None, shell=None, **kwargs):
         """Initialize the class.
 
@@ -50,6 +50,8 @@ class KeyBindingsManager(UserDict):
         self._get_bindings_for_keys_cache = SimpleCache(maxsize=10000)
         self._get_bindings_starting_with_keys_cache = SimpleCache(maxsize=1000)
         self.__version = 0  # For cache invalidation.
+        self.data = self.kb
+
 
     def __repr__(self):
         return "<{}>: {}".format(self.__class__.__name__, len(self.kb.bindings))
@@ -213,12 +215,6 @@ class HandlesMergedKB(KeyBindingsManager):
                 #     for i in kb.registries:
                 #         unpack(i)
 
-    def __init__(self, kb=None, shell=None, *args, **kwargs):
-        """Honestly can't say I have a great grasp on proper initialization
-        of subclasses with both class attributes and __init__'s.
-        """
-        super().__init__(kb=kb, shell=shell, *args, **kwargs)
-
 
 def unnest_merged_kb(kb, pre_existing_list=None):
     if pre_existing_list:
@@ -256,9 +252,3 @@ class Documented(Document):
 
     def __iter__(self):
         return iter(self.text)
-
-
-if __name__ == "__main__":
-
-    get_ipython().pt_app.app.key_bindings.bindings.extend(load_key_bindings().bindings)
-    get_ipython().pt_app.app.key_bindings._update_cache()

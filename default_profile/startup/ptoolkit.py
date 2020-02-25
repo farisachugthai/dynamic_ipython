@@ -69,7 +69,7 @@ class Helpers:
         return f"{self.__class__.__name__} with app at {self.pt_app}"
 
     @property
-    def pt_app_kb(self):
+    def app_kb(self):
         """Application instance keybindings.
 
         NOT the same as 'session_kb'.
@@ -101,7 +101,7 @@ class Helpers:
         return self.app_layout
 
     @property
-    def pt_app_style(self):
+    def app_style(self):
         """Of course it's not the same as the session_style.
 
         In [108]: pt.pt_app.style
@@ -122,7 +122,11 @@ class Helpers:
 
     @property
     def current_container(self):
-        """Return the HSplit defining the layout of the app."""
+        """Return the container attr of the layout.
+
+        Typically will return the HSplit defining the layout
+        of the app.
+        """
         return self.layout.container
 
     @property
@@ -130,16 +134,20 @@ class Helpers:
         """Return a list of the current container children.
 
         I genuinely don't think I expected it to be so big.
+
+        .. admonition::
+            HSplit.children is a lie use HSplit._all_children
         """
-        return self.current_container.children
+        return self.current_container._all_children
 
     @property
     def current_control(self):
-        """Return IPython's buffer control."""
+        """Return the layout's current control. Typically a BufferControl."""
         return self.layout.current_control
 
     @property
     def current_document(self):
+        """The current buffer's document."""
         return self.current_buffer.document
 
     @property
@@ -187,8 +195,14 @@ class Helpers:
 
     def validate_validators(self):
         # who watches the watchmen?
-        print(isinstance(session_validator, prompt_toolkit.validator.Validator))
-        return self.app_validator is self.session_validator
+        print("Session validator: {}".format(self.session_validator))
+        print(isinstance(self.session_validator, prompt_toolkit.validator.Validator))
+        print("Is the app validator the same as the session validator?")
+        print(self.app_validator is self.session_validator)
+
+    def all_controls(self):
+        return list(self.layout.find_all_controls())
+
 
 
 def all_processors_for_searching():
@@ -210,7 +224,7 @@ def search_layout():
         search_buffer_control=search_toolbar.control,
         preview_search=True,
         include_default_input_processors=False,
-        input_processors=all_input_processors,
+        input_processors=all_processors_for_searching(),
     )
     # Apparently theres something wrong with the style other put it in the
     # HSplit constructor
