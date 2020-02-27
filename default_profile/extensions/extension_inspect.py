@@ -11,12 +11,18 @@ for some good uses of the std lib module.
 from pprint import pformat
 
 from pygments import highlight
-from pygments.formatters import Terminal256Formatter  # Or TerminalFormatter
+from pygments.formatters.terminal256 import TerminalTrueColorFormatter
+
+try:
+    from gruvbox.gruvbox import GruvboxStyle
+except ImportError:
+    GruvboxStyle = None
+    from pygments.styles.inkpot import InkPotStyle
 
 from IPython.core.getipython import get_ipython
 from IPython.core.magic import Magics, magics_class, line_magic
-from IPython.core.magic import register_line_magic, magic_escapes
 from IPython.lib.lexers import IPyLexer
+from IPython.lib.pretty import pprint
 
 
 @magics_class
@@ -27,13 +33,28 @@ class PrettyColorfulInspector(Magics):
     version of the provided object.
     """
 
+    # Use Pygments to do syntax highlighting
+    lexer = IPyLexer()
+    if GruvboxStyle is not None:
+        style = GruvboxStyle
+    else:
+        style = InkPotStyle
+    formatter = TerminalTrueColorFormatter(style=style)
+
+    def shell(self):
+        # why the fuck is this returning none
+        return get_ipython()
+
+    def __repr__(self):
+        return f"<{self.__class__.__name__}>:"
+
     @line_magic
-    def i(self, line=None):
-        """Alias for the `%inspect magic defined here."""
+    def ins(self, line=None):
+        """Alias for the `%inspect_obj magic defined here."""
         self.inspect(line=line)
 
     @line_magic
-    def inspect(self, line=None):
+    def inspect_obj(self, line=None):
         """Deviate from the original implementation a bit.
 
         In this version, we'll use the IPython lexer used at IPython.lib
@@ -47,32 +68,29 @@ class PrettyColorfulInspector(Magics):
             So we might wanna wrap this in a try/except but idk what it'll raise.
 
         """
-        if line:
-            # Use Pygments to do syntax highlighting
-            lexer = IPyLexer()
-            formatter = Terminal256Formatter()
+        if not line:
+            return
 
-            # evaluate the line to get a python object
-            python_object = self.shell.ev(line)
+        # evaluate the line to get a python object
+        python_object = self.shell.ev(line)
 
-            # Pretty Print/Format the object
-            formatted_object = pformat(python_object)
-
-            # Print the output, but don't return anything (otherwise, we'd
-            # potentially get a wall of color-coded text.
-            # print(highlight(formatted_object, lexer, formatter).strip())
-
-            formatted_dict = pformat(python_object.__dict__)
-            print(highlight(formatted_dict, lexer, formatter).strip())
+        # Pretty Print/Format the object
+        # Print the output, but don't return anything (otherwise, we'd
+        # potentially get a wall of color-coded text.
+        formatted_dict = pformat(python_object.__dict__)
+        print(highlight(formatted_dict, lexer, formatter).strip())
+        pprint(python_object)
 
 
 def load_ipython_extension(shell=None):
     """Add to the list of extensions used by IPython."""
     if shell is None:
         shell = get_ipython()
+    if shell is None:
+        return
     shell.register_magics(PrettyColorfulInspector)
-    shell.register_line_magic(PrettyColorfulInspector.inspect)
-    shell.register_line_magic(PrettyColorfulInspector.i)
+    shell.register_magic_function(PrettyColorfulInspector.inspect_obj)
+    shell.register_magic_function(PrettyColorfulInspector.ins)
 
 
 if __name__ == "__main__":

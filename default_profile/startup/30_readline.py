@@ -235,6 +235,12 @@ def setup_historyfile(filename=None):
     else:
         readline.set_history_length(2000)
 
+    # now ipython
+    shell = get_ipython()
+    if shell is None:
+        return
+    shell.events.register("post_run_cell", add_last_input)
+
 
 def teardown_historyfile(starting_id, histfile=None):
     if not hasattr(readline, "append_history_file"):

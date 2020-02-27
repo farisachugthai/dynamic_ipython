@@ -27,8 +27,13 @@ from prompt_toolkit.buffer import Buffer
 from prompt_toolkit.document import Document
 from prompt_toolkit.filters import Condition, is_searching
 from prompt_toolkit.keys import Keys
-from prompt_toolkit.key_binding.key_bindings import KeyBindings
+from prompt_toolkit.key_binding import merge_key_bindings
 from prompt_toolkit.key_binding.bindings import search
+from prompt_toolkit.key_binding.bindings.vi import (
+    load_vi_bindings,
+    load_vi_search_bindings,
+)
+from prompt_toolkit.key_binding.key_bindings import KeyBindings
 from prompt_toolkit.layout.containers import HSplit, Window
 from prompt_toolkit.layout.controls import BufferControl
 from prompt_toolkit.styles import Style
@@ -277,3 +282,13 @@ def create_searching_keybindings():
 if __name__ == "__main__":
     pt = Helpers()
     container_search = search_layout()
+
+    # Honestly I'm wary to do this but let's go for it
+    get_ipython().pt_app.app.key_bindings = merge_key_bindings(
+        [
+            get_ipython().pt_app.app.key_bindings,
+            load_vi_bindings(),
+            load_vi_search_bindings(),
+        ]
+    )
+    get_ipython().pt_app.app.key_bindings._update_cache()

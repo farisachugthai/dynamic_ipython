@@ -168,7 +168,8 @@
 
 <span class="kn">from</span> <span class="nn">prompt_toolkit.enums</span> <span class="kn">import</span> <span class="n">EditingMode</span>
 
-<span class="c1"># from prompt_toolkit.formatted_text import FormattedText, to_formatted_text</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.formatted_text</span> <span class="kn">import</span> <span class="n">FormattedText</span><span class="p">,</span> <span class="n">to_formatted_text</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.formatted_text</span> <span class="kn">import</span> <span class="n">PygmentsTokens</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.layout.controls</span> <span class="kn">import</span> <span class="n">FormattedTextControl</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.layout.containers</span> <span class="kn">import</span> <span class="n">Window</span><span class="p">,</span> <span class="n">Float</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.layout.layout</span> <span class="kn">import</span> <span class="n">Layout</span>
@@ -346,15 +347,17 @@
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># bottom_formatted_text = FormattedText(</span>
+    <span class="c1">#     BottomToolbar(get_app()), style=(&quot;class:toolbar&quot;, &quot;underline #80a0ff&quot;)</span>
+    <span class="c1"># )</span>
     <span class="n">bottom_text</span> <span class="o">=</span> <span class="n">BottomToolbar</span><span class="p">(</span><span class="n">get_app</span><span class="p">())</span>
-
     <span class="n">partial_window</span> <span class="o">=</span> <span class="n">Window</span><span class="p">(</span><span class="n">FormattedTextControl</span><span class="p">(</span><span class="n">bottom_text</span><span class="p">),</span> <span class="n">width</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
     <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">print_container</span><span class="p">(</span><span class="n">partial_window</span><span class="p">))</span>
     <span class="c1"># Do frames not return container objects? Because this line is raisin an error?</span>
     <span class="c1"># bottom_float = Float(Frame(partial_window, style=&quot;bg:#282828 #ffffff&quot;), bottom=0)</span>
     <span class="c1"># print_container(bottom_float)</span>
-    <span class="n">bottom_toolbar</span> <span class="o">=</span> <span class="n">FormattedTextToolbar</span><span class="p">(</span><span class="n">bottom_text</span><span class="p">)</span>
+    <span class="n">bottom_toolbar</span> <span class="o">=</span> <span class="n">FormattedTextToolbar</span><span class="p">(</span><span class="n">PygmentsTokens</span><span class="p">(</span><span class="n">bottom_text</span><span class="p">))</span>
     <span class="n">add_toolbar</span><span class="p">(</span><span class="n">bottom_text</span><span class="p">)</span>
     <span class="n">print_container</span><span class="p">(</span><span class="n">show_header</span><span class="p">())</span>
 </pre></div>
@@ -364,7 +367,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 26, 2020.
+      Last updated on Feb 27, 2020.
     </div>
   </body>
 </html>

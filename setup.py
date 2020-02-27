@@ -49,8 +49,22 @@ import sys
 
 logging.basicConfig()
 
+from distutils.errors import DistutilsArgError
 from setuptools import setup, find_packages, Command, Extension, PackageFinder
+from setuptools.dist import Distribution
 
+# This is useful
+d = Distribution()
+if len(sys.argv) == 0:
+    d.print_commands()
+
+try:
+    d.parse_command_line()
+except DistutilsArgError:
+    print('No args provided.')
+
+
+# Obviously there's a ton more we can do here
 # try:
 #     from setuptools.wheel import (
 #         Wheel,
