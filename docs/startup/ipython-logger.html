@@ -154,7 +154,12 @@
           <h3>Table of Contents</h3>
           <ul>
 <li><a class="reference internal" href="#">05_log — IPython logger</a><ul>
+<li><a class="reference internal" href="#get-history">get_history</a><ul>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
 <li><a class="reference internal" href="#module-default_profile.startup.05_log"><code class="xref py py-mod docutils literal notranslate"><span class="pre">05_log</span></code> module</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -171,13 +176,34 @@ file for every calendar day of the year.</p>
 session continues after the point when the logfile rolls over.</p>
 <p>If multiple sessions are started, the new instances will append onto the same
 file as the older ones.</p>
-<div class="admonition-linux-only admonition">
-<p class="admonition-title">Linux Only</p>
-<p>This only works on Linux. The Win API seemingly isn’t able to
-maintain multiple connections to the same file.</p>
+<div class="section" id="get-history">
+<h2>get_history<a class="headerlink" href="#get-history" title="Permalink to this headline">¶</a></h2>
+<p>Extract a session from the IPython input history.</p>
+<div class="section" id="usage">
+<h3>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="default_profile.startup.05_log.get_history">
+<code class="sig-name descname">get_history</code><span class="sig-paren">(</span><em class="sig-param">session_number</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/05_log.html#get_history"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.get_history" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+</dd></dl>
+
+</div>
+<div class="section" id="examples">
+<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3 ipython-get-history.py <span class="m">57</span> record.ipy
+</pre></div>
+</div>
+<p>This script is a simple demonstration of
+<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.history.html#IPython.core.history.HistoryAccessor" title="(in IPython v7.12.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.history.HistoryAccessor</span></code></a>. It should be possible
+to build much more flexible and powerful tools to browse and pull from the
+history database.</p>
+<p>So this is a rewrite of that history accessor since IPython’s handling of
+history sessions out of the box is oddly limited.</p>
+<p>Let’s ignore the direct calls to sys.argv and combine argparse and the
+magic_argparse functions to make something more durable and useful.</p>
 </div>
 <div class="section" id="module-default_profile.startup.05_log">
-<span id="log-module"></span><h2><a class="reference internal" href="#module-default_profile.startup.05_log" title="default_profile.startup.05_log"><code class="xref py py-mod docutils literal notranslate"><span class="pre">05_log</span></code></a> module<a class="headerlink" href="#module-default_profile.startup.05_log" title="Permalink to this headline">¶</a></h2>
+<span id="log-module"></span><h3><a class="reference internal" href="#module-default_profile.startup.05_log" title="default_profile.startup.05_log"><code class="xref py py-mod docutils literal notranslate"><span class="pre">05_log</span></code></a> module<a class="headerlink" href="#module-default_profile.startup.05_log" title="Permalink to this headline">¶</a></h3>
 <p>output to a file.</p>
 <div class="admonition-todo admonition" id="id1">
 <p class="admonition-title">Todo</p>
@@ -196,6 +222,32 @@ double quotes and in the comment add system info like py version, venv,
 conda, any of the 1000000 things you could add.</p></li>
 </ul>
 </div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Windows Users</p>
+<p>Simulataneous IPython processes may throw.</p>
+</div>
+<div class="highlight-py3tb notranslate"><div class="highlight"><pre><span></span><span class="ne">PermissionError</span>: [WinError 32]
+<span class="n">The</span> <span class="n">process</span> <span class="n">cannot</span> <span class="n">access</span> <span class="n">the</span> <span class="n">file</span> <span class="n">because</span> <span class="n">it</span> <span class="ow">is</span> <span class="n">being</span> <span class="n">used</span> <span class="n">by</span> <span class="n">another</span> <span class="n">process</span><span class="p">:</span>
+<span class="s1">&#39;C:</span><span class="se">\\</span><span class="s1">Users</span><span class="se">\\</span><span class="s1">fac</span><span class="se">\\</span><span class="s1">.ipython</span><span class="se">\\</span><span class="s1">profile_default</span><span class="se">\\</span><span class="s1">log</span><span class="se">\\</span><span class="s1">log-2020-02-26.py&#39;</span> <span class="o">-&gt;</span>
+<span class="s1">&#39;C:</span><span class="se">\\</span><span class="s1">Users</span><span class="se">\\</span><span class="s1">fac</span><span class="se">\\</span><span class="s1">.ipython</span><span class="se">\\</span><span class="s1">profile_default</span><span class="se">\\</span><span class="s1">log</span><span class="se">\\</span><span class="s1">log-2020-02-26.py.001~&#39;</span>
+</pre></div>
+</div>
+<dl class="function">
+<dt id="default_profile.startup.05_log.print_history">
+<code class="sig-name descname">print_history</code><span class="sig-paren">(</span><em class="sig-param">hist_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/05_log.html#print_history"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.print_history" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the contents of the running shell’s SQLite history.</p>
+<dl>
+<dt>hist_file<span class="classifier">str (<code class="xref py py-obj docutils literal notranslate"><span class="pre">os.Pathlike</span></code>), optional</span></dt><dd><p>Path to history file. Assume default profile’s history.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<code class="sig-name descname">get_history</code><span class="sig-paren">(</span><em class="sig-param">session_number=None</em>, <em class="sig-param">raw=True</em>, <em class="sig-param">profile=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/05_log.html#get_history"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
 <dl class="function">
 <dt id="default_profile.startup.05_log.betterConfig">
 <code class="sig-name descname">betterConfig</code><span class="sig-paren">(</span><em class="sig-param">name=None</em>, <em class="sig-param">parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/05_log.html#betterConfig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.betterConfig" title="Permalink to this definition">¶</a></dt>
@@ -220,28 +272,22 @@ it’s default behavior is to allow all <code class="xref py py-class docutils l
 </dd></dl>
 
 <dl class="class">
-<dt id="default_profile.startup.05_log.VerboseLoggingConfigurable">
-<em class="property">class </em><code class="sig-name descname">VerboseLoggingConfigurable</code><span class="sig-paren">(</span><em class="sig-param">logger_name=None</em>, <em class="sig-param">logger_parent=None</em>, <em class="sig-param">shell=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/05_log.html#VerboseLoggingConfigurable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.VerboseLoggingConfigurable" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">traitlets.config.configurable.LoggingConfigurable</span></code></p>
-<p>Tried building on the LoggingConfigurable. Doesn’t work currently.</p>
-<p>We need to register the currently running IPython instance so it gets
-access to the config and parent attributes.</p>
-<dl class="method">
-<dt id="default_profile.startup.05_log.VerboseLoggingConfigurable.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">logger_name=None</em>, <em class="sig-param">logger_parent=None</em>, <em class="sig-param">shell=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/05_log.html#VerboseLoggingConfigurable.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.VerboseLoggingConfigurable.__init__" title="Permalink to this definition">¶</a></dt>
+<dt id="default_profile.startup.05_log.ConfigurableLogger">
+<em class="property">class </em><code class="sig-name descname">ConfigurableLogger</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/05_log.html#ConfigurableLogger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.ConfigurableLogger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">traitlets.config.configurable.LoggingConfigurable</span></code>, <a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Logger" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">logging.Logger</span></code></a></p>
+<dl class="attribute">
+<dt id="default_profile.startup.05_log.ConfigurableLogger.name">
+<code class="sig-name descname">name</code><em class="property"> = 'default_profile.startup.05_log'</em><a class="headerlink" href="#default_profile.startup.05_log.ConfigurableLogger.name" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="default_profile.startup.05_log.VerboseLoggingConfigurable.shell">
-<code class="sig-name descname">shell</code><a class="headerlink" href="#default_profile.startup.05_log.VerboseLoggingConfigurable.shell" title="Permalink to this definition">¶</a></dt>
-<dd><p>A trait whose value must be an instance of a specified class.</p>
-<p>The value can also be an instance of a subclass of the specified class.</p>
-<p>Subclasses can declare default classes by overriding the klass attribute</p>
-</dd></dl>
+<dt id="default_profile.startup.05_log.ConfigurableLogger.level">
+<code class="sig-name descname">level</code><em class="property"> = 30</em><a class="headerlink" href="#default_profile.startup.05_log.ConfigurableLogger.level" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
-<dt id="default_profile.startup.05_log.VerboseLoggingConfigurable.log">
-<code class="sig-name descname">log</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">msg</em>, <em class="sig-param">level=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/05_log.html#VerboseLoggingConfigurable.log"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.VerboseLoggingConfigurable.log" title="Permalink to this definition">¶</a></dt>
+<dt id="default_profile.startup.05_log.ConfigurableLogger.log">
+<code class="sig-name descname">log</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">msg</em>, <em class="sig-param">level=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/05_log.html#ConfigurableLogger.log"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.ConfigurableLogger.log" title="Permalink to this definition">¶</a></dt>
 <dd><p>Override the superclasses implementation of log.</p>
 <p>Allow level to be a keyword argument.</p>
 <dl class="field-list simple">
@@ -252,18 +298,6 @@ access to the config and parent attributes.</p>
 </ul>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="default_profile.startup.05_log.VerboseLoggingConfigurable.handlers">
-<code class="sig-name descname">handlers</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/05_log.html#VerboseLoggingConfigurable.handlers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.VerboseLoggingConfigurable.handlers" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the <a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Handler" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">logging.Handler</span></code></a> objects associated with the logger.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="default_profile.startup.05_log.VerboseLoggingConfigurable.filters">
-<code class="sig-name descname">filters</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/05_log.html#VerboseLoggingConfigurable.filters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.VerboseLoggingConfigurable.filters" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the <a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Filter" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">logging.Filter</span></code></a> objects associated with the logger.</p>
 </dd></dl>
 
 </dd></dl>
@@ -302,6 +336,47 @@ named based on the date.</p>
 </dl>
 </dd></dl>
 
+<dl class="class">
+<dt id="default_profile.startup.05_log.MyHistoryAccessor">
+<em class="property">class </em><code class="sig-name descname">MyHistoryAccessor</code><span class="sig-paren">(</span><em class="sig-param">profile='default'</em>, <em class="sig-param">hist_file=''</em>, <em class="sig-param">**traits</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/05_log.html#MyHistoryAccessor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.MyHistoryAccessor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.history.html#IPython.core.history.HistoryAccessor" title="(in IPython v7.12.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.history.HistoryAccessor</span></code></a></p>
+<p>Modified HistoryAccessor to fetch the whole ipython history across all sessions</p>
+<dl class="method">
+<dt id="default_profile.startup.05_log.MyHistoryAccessor.get_tail">
+<code class="sig-name descname">get_tail</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">n=10</em>, <em class="sig-param">raw=True</em>, <em class="sig-param">output=False</em>, <em class="sig-param">include_latest=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/05_log.html#MyHistoryAccessor.get_tail"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.MyHistoryAccessor.get_tail" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the last n lines from the history database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul>
+<li><p><strong>n</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The number of lines to get</p></li>
+<li><p><strong>output</strong> (<em>raw</em><em>,</em>) – See <code class="xref py py-meth docutils literal notranslate"><span class="pre">get_range()</span></code></p></li>
+<li><p><strong>include_latest</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – If False (default), n+1 lines are fetched, and the latest one
+is discarded. This is intended to be used where the function
+is called by a user command, which it should not return.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Tuples as <code class="xref py py-meth docutils literal notranslate"><span class="pre">get_range()</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="default_profile.startup.05_log.rem_dups">
+<code class="sig-name descname">rem_dups</code><span class="sig-paren">(</span><em class="sig-param">lst</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/05_log.html#rem_dups"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.rem_dups" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="default_profile.startup.05_log.access_all_history">
+<code class="sig-name descname">access_all_history</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/05_log.html#access_all_history"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.05_log.access_all_history" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
 </div>
 </div>
 
@@ -311,7 +386,7 @@ named based on the date.</p>
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 22, 2020.
+      Last updated on Feb 26, 2020.
     </div>
   </body>
 </html>

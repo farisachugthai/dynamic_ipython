@@ -182,11 +182,11 @@
 <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings</span> <span class="kn">import</span> <span class="n">search</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.layout.containers</span> <span class="kn">import</span> <span class="n">HSplit</span><span class="p">,</span> <span class="n">Window</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.layout.controls</span> <span class="kn">import</span> <span class="n">BufferControl</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.layout.layout</span> <span class="kn">import</span> <span class="n">Layout</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.styles</span> <span class="kn">import</span> <span class="n">Style</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.widgets.toolbars</span> <span class="kn">import</span> <span class="n">SearchToolbar</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.layout.processors</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">ConditionalProcessor</span><span class="p">,</span>
+    <span class="n">DisplayMultipleCursors</span><span class="p">,</span>
     <span class="n">HighlightSearchProcessor</span><span class="p">,</span>
     <span class="n">HighlightIncrementalSearchProcessor</span><span class="p">,</span>
     <span class="n">HighlightSelectionProcessor</span><span class="p">,</span>
@@ -219,8 +219,8 @@
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{self.__class__.__name__}</span><span class="s2"> with app at </span><span class="si">{self.pt_app}</span><span class="s2">&quot;</span>
 
-<div class="viewcode-block" id="Helpers.pt_app_kb"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.pt_app_kb">[docs]</a>    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">pt_app_kb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Helpers.app_kb"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.app_kb">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">app_kb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Application instance keybindings.</span>
 
 <span class="sd">        NOT the same as &#39;session_kb&#39;.</span>
@@ -251,8 +251,8 @@
     <span class="k">def</span> <span class="nf">layout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">app_layout</span></div>
 
-<div class="viewcode-block" id="Helpers.pt_app_style"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.pt_app_style">[docs]</a>    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">pt_app_style</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Helpers.app_style"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.app_style">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">app_style</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Of course it&#39;s not the same as the session_style.</span>
 
 <span class="sd">        In [108]: pt.pt_app.style</span>
@@ -273,7 +273,11 @@
 
 <div class="viewcode-block" id="Helpers.current_container"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.current_container">[docs]</a>    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">current_container</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return the HSplit defining the layout of the app.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Return the container attr of the layout.</span>
+
+<span class="sd">        Typically will return the HSplit defining the layout</span>
+<span class="sd">        of the app.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">container</span></div>
 
 <div class="viewcode-block" id="Helpers.current_container_children"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.current_container_children">[docs]</a>    <span class="nd">@property</span>
@@ -281,16 +285,20 @@
         <span class="sd">&quot;&quot;&quot;Return a list of the current container children.</span>
 
 <span class="sd">        I genuinely don&#39;t think I expected it to be so big.</span>
+
+<span class="sd">        .. admonition::</span>
+<span class="sd">            HSplit.children is a lie use HSplit._all_children</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_container</span><span class="o">.</span><span class="n">children</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_container</span><span class="o">.</span><span class="n">_all_children</span></div>
 
 <div class="viewcode-block" id="Helpers.current_control"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.current_control">[docs]</a>    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">current_control</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return IPython&#39;s buffer control.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Return the layout&#39;s current control. Typically a BufferControl.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">current_control</span></div>
 
 <div class="viewcode-block" id="Helpers.current_document"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.current_document">[docs]</a>    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">current_document</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The current buffer&#39;s document.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">document</span></div>
 
 <div class="viewcode-block" id="Helpers.current_buffer_texts"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.current_buffer_texts">[docs]</a>    <span class="nd">@property</span>
@@ -338,11 +346,17 @@
 
 <div class="viewcode-block" id="Helpers.validate_validators"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.validate_validators">[docs]</a>    <span class="k">def</span> <span class="nf">validate_validators</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># who watches the watchmen?</span>
-        <span class="nb">print</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">session_validator</span><span class="p">,</span> <span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">validator</span><span class="o">.</span><span class="n">Validator</span><span class="p">))</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">app_validator</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="n">session_validator</span></div></div>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Session validator: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">session_validator</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">session_validator</span><span class="p">,</span> <span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">validator</span><span class="o">.</span><span class="n">Validator</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Is the app validator the same as the session validator?&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">app_validator</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="n">session_validator</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Helpers.all_controls"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.all_controls">[docs]</a>    <span class="k">def</span> <span class="nf">all_controls</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">find_all_controls</span><span class="p">())</span></div></div>
 
 
 <div class="viewcode-block" id="all_processors_for_searching"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.all_processors_for_searching">[docs]</a><span class="k">def</span> <span class="nf">all_processors_for_searching</span><span class="p">():</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Return a list of `prompt_toolkit.layout.processor.Processor`\&#39;s.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">[</span>
         <span class="n">ConditionalProcessor</span><span class="p">(</span><span class="n">HighlightSearchProcessor</span><span class="p">(),</span> <span class="o">~</span><span class="n">is_searching</span><span class="p">),</span>
         <span class="n">HighlightIncrementalSearchProcessor</span><span class="p">(),</span>
@@ -361,7 +375,7 @@
         <span class="n">search_buffer_control</span><span class="o">=</span><span class="n">search_toolbar</span><span class="o">.</span><span class="n">control</span><span class="p">,</span>
         <span class="n">preview_search</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">include_default_input_processors</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">input_processors</span><span class="o">=</span><span class="n">all_input_processors</span><span class="p">,</span>
+        <span class="n">input_processors</span><span class="o">=</span><span class="n">all_processors_for_searching</span><span class="p">(),</span>
     <span class="p">)</span>
     <span class="c1"># Apparently theres something wrong with the style other put it in the</span>
     <span class="c1"># HSplit constructor</span>
@@ -421,7 +435,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 22, 2020.
+      Last updated on Feb 26, 2020.
     </div>
   </body>
 </html>

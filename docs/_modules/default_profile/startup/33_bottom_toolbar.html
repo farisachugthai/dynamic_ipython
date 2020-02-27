@@ -160,31 +160,25 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">functools</span>
 <span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span> <span class="nn">shutil</span> <span class="kn">import</span> <span class="n">get_terminal_size</span>
 <span class="kn">from</span> <span class="nn">traceback</span> <span class="kn">import</span> <span class="n">print_exc</span>
 
-<span class="c1"># from prompt_toolkit.application.current import get_app</span>
-
 <span class="kn">from</span> <span class="nn">prompt_toolkit.enums</span> <span class="kn">import</span> <span class="n">EditingMode</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.formatted_text</span> <span class="kn">import</span> <span class="n">FormattedText</span><span class="p">,</span> <span class="n">to_formatted_text</span>
+
+<span class="c1"># from prompt_toolkit.formatted_text import FormattedText, to_formatted_text</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.layout.controls</span> <span class="kn">import</span> <span class="n">FormattedTextControl</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.layout.containers</span> <span class="kn">import</span> <span class="n">Window</span><span class="p">,</span> <span class="n">Float</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.layout.layout</span> <span class="kn">import</span> <span class="n">Layout</span>
 
 <span class="c1"># from prompt_toolkit.layout.processors import DisplayMultipleMouses</span>
-
 <span class="kn">from</span> <span class="nn">prompt_toolkit.shortcuts</span> <span class="kn">import</span> <span class="n">print_formatted_text</span><span class="p">,</span> <span class="n">CompleteStyle</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.shortcuts.utils</span> <span class="kn">import</span> <span class="n">print_container</span>
-
 <span class="kn">from</span> <span class="nn">prompt_toolkit.styles</span> <span class="kn">import</span> <span class="n">default_pygments_style</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.styles</span> <span class="kn">import</span> <span class="n">Style</span><span class="p">,</span> <span class="n">merge_styles</span><span class="p">,</span> <span class="n">style</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.styles.pygments</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">style_from_pygments_cls</span><span class="p">,</span>
-    <span class="n">style_from_pygments_dict</span><span class="p">,</span>
-<span class="p">)</span>
-
+<span class="kn">from</span> <span class="nn">prompt_toolkit.styles.pygments</span> <span class="kn">import</span> <span class="n">style_from_pygments_cls</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.widgets</span> <span class="kn">import</span> <span class="n">Frame</span><span class="p">,</span> <span class="n">TextArea</span><span class="p">,</span> <span class="n">Button</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.widgets.toolbars</span> <span class="kn">import</span> <span class="n">FormattedTextToolbar</span>
 
@@ -217,30 +211,8 @@
     <span class="c1"># Could set this to _ip.pt_app.style i suppose</span>
     <span class="k">if</span> <span class="n">GruvboxStyle</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">bt_style</span> <span class="o">=</span> <span class="n">GruvboxStyle</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">style_from_pygments_dict</span><span class="p">(</span><span class="n">bt_style</span><span class="o">.</span><span class="n">style_rules</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="override_style"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.override_style">[docs]</a><span class="k">def</span> <span class="nf">override_style</span><span class="p">(</span><span class="n">style_overrides</span><span class="p">):</span>
-    <span class="n">style</span> <span class="o">=</span> <span class="n">init_style</span><span class="p">()</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">style_overrides</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span>
-    <span class="n">style_overrides</span> <span class="o">=</span> <span class="n">Style</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">style_overrides</span><span class="p">)</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">merge_styles</span><span class="p">([</span><span class="n">style</span><span class="p">,</span> <span class="n">style_overrides</span><span class="p">])</span>
-    <span class="k">except</span> <span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
-        <span class="n">print_exc</span><span class="p">()</span></div>
-
-
-<div class="viewcode-block" id="merged_styles"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.merged_styles">[docs]</a><span class="k">def</span> <span class="nf">merged_styles</span><span class="p">(</span><span class="n">overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="n">base</span> <span class="o">=</span> <span class="n">init_style</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">merge_styles</span><span class="p">([</span><span class="n">base</span><span class="p">,</span> <span class="n">overrides</span><span class="p">,</span> <span class="n">default_pygments_style</span><span class="p">()])</span></div>
-
-
-<div class="viewcode-block" id="merged_style_rules"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.merged_style_rules">[docs]</a><span class="k">def</span> <span class="nf">merged_style_rules</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Originally was going to call this in `show_header` but it raises if you</span>
-<span class="sd">    had it a list or a Style instance. It looks like it&#39;s only made to take 1</span>
-<span class="sd">    style anyway.&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">merged_styles</span><span class="p">()</span><span class="o">.</span><span class="n">style_rules</span></div>
+        <span class="n">ours</span> <span class="o">=</span> <span class="n">style_from_pygments_cls</span><span class="p">(</span><span class="n">bt_style</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">merge_styles</span><span class="p">([</span><span class="n">ours</span><span class="p">,</span> <span class="n">default_pygments_style</span><span class="p">()])</span></div>
 
 
 <div class="viewcode-block" id="show_header"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.show_header">[docs]</a><span class="k">def</span> <span class="nf">show_header</span><span class="p">():</span>
@@ -250,11 +222,10 @@
 
 
 <div class="viewcode-block" id="LineCounter"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.LineCounter">[docs]</a><span class="k">class</span> <span class="nc">LineCounter</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Really basic counter displayed inspired by Doug Hellman.</span>
+    <span class="sd">&quot;&quot;&quot;Simple counter inspired by Doug Hellman. Could set it to sys.displayhook.</span>
 
 <span class="sd">    :URL: https://pymotw.com/3/sys/interpreter.html</span>
 
-<span class="sd">    Need to set this to the rprompt.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="LineCounter.__init__"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.LineCounter.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -286,7 +257,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">app</span> <span class="o">=</span> <span class="n">app</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">unfinished_toolbar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rerender</span><span class="p">()</span>
+        <span class="c1"># self.unfinished_toolbar = self.rerender()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">app</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;BottomToolbar app is None.&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">PythonLexer</span> <span class="o">=</span> <span class="n">PythonLexer</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Formatter</span> <span class="o">=</span> <span class="n">TerminalTrueColorFormatter</span><span class="p">()</span></div>
 
@@ -304,6 +277,10 @@
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{self.__class__.__name__!s}</span><span class="s2">:&gt;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rerender</span><span class="p">():</span>
+            <span class="k">yield</span> <span class="n">i</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;{self.rerender()!r}&quot;</span>
@@ -347,7 +324,7 @@
         <span class="c1"># doing it this way only prints the words class:toolbar at the bottom</span>
         <span class="c1"># text = f&quot; [F4] Vi: {current_vi_mode!r}  {date.today()!r}&quot;</span>
         <span class="c1"># toolbar = [(&#39;class:toolbar&#39;, &#39; %s &#39; % text)]</span>
-        <span class="n">toolbar</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot; [F4] Vi: </span><span class="si">{current_vi_mode!r}</span><span class="s2">  {date.today()!r}&quot;</span>
+        <span class="n">toolbar</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot; [F4] Vi: </span><span class="si">{current_vi_mode!r}</span><span class="s2"> -- cwd: {Path.cwd().stem!r} Clock: {time.ctime()!r}&quot;</span>
         <span class="k">return</span> <span class="n">toolbar</span>
 
     <span class="k">def</span> <span class="nf">_render_emacs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -363,8 +340,9 @@
 <div class="viewcode-block" id="add_toolbar"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.add_toolbar">[docs]</a><span class="k">def</span> <span class="nf">add_toolbar</span><span class="p">(</span><span class="n">toolbar</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Get the running IPython instance and add &#39;bottom_toolbar&#39;.&quot;&quot;&quot;</span>
     <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_ip</span><span class="p">,</span> <span class="s2">&quot;pt_app&quot;</span><span class="p">):</span>
-        <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">bottom_toolbar</span> <span class="o">=</span> <span class="n">toolbar</span></div>
+    <span class="k">if</span> <span class="n">_ip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_ip</span><span class="p">,</span> <span class="s2">&quot;pt_app&quot;</span><span class="p">):</span>
+            <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">bottom_toolbar</span> <span class="o">=</span> <span class="n">toolbar</span></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
@@ -377,13 +355,7 @@
     <span class="c1"># bottom_float = Float(Frame(partial_window, style=&quot;bg:#282828 #ffffff&quot;), bottom=0)</span>
     <span class="c1"># print_container(bottom_float)</span>
     <span class="n">bottom_toolbar</span> <span class="o">=</span> <span class="n">FormattedTextToolbar</span><span class="p">(</span><span class="n">bottom_text</span><span class="p">)</span>
-
-    <span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-    <span class="c1"># if shell is not None:</span>
-    <span class="c1">#     if hasattr(shell, &quot;pt_app&quot;):</span>
-    <span class="c1">#         # TODO:</span>
-    <span class="c1">#         shell.pt_app.bottom_toolbar = bottom_toolbar</span>
-
+    <span class="n">add_toolbar</span><span class="p">(</span><span class="n">bottom_text</span><span class="p">)</span>
     <span class="n">print_container</span><span class="p">(</span><span class="n">show_header</span><span class="p">())</span>
 </pre></div>
 
@@ -392,7 +364,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 22, 2020.
+      Last updated on Feb 26, 2020.
     </div>
   </body>
 </html>

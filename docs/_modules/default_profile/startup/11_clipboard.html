@@ -421,21 +421,27 @@
         <span class="c1"># else:</span>
         <span class="c1">#     self.shell.pt_app.clipboard = PyperclipClipboard()</span>
 
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<div class="viewcode-block" id="setup_clipboard"><a class="viewcode-back" href="../../../startup/clipboard.html#default_profile.startup.11_clipboard.setup_clipboard">[docs]</a><span class="k">def</span> <span class="nf">setup_clipboard</span><span class="p">():</span>
     <span class="n">ipy</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">ipy</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># Because this occasionally happens and I have no idea why</span>
+        <span class="c1"># qtconsole</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ipy</span><span class="p">,</span> <span class="s2">&quot;pt_app&quot;</span><span class="p">):</span>
-            <span class="n">breakpoint</span><span class="p">()</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ipy</span><span class="p">,</span> <span class="s2">&quot;ZMQInteractiveShell&quot;</span><span class="p">):</span>
+                <span class="k">return</span>
+        <span class="c1"># idk why this one happen tho</span>
         <span class="k">elif</span> <span class="n">ipy</span><span class="o">.</span><span class="n">pt_app</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">breakpoint</span><span class="p">()</span>
+            <span class="n">breakpoint</span><span class="p">()</span></div>
 
         <span class="c1"># only commented because ipy.pt_app.app.clipboard exists too</span>
         <span class="c1"># if PyperclipClipboard is not None:</span>
         <span class="c1">#     ipy.pt_app.clipboard = PyperclipClipboard()</span>
         <span class="c1"># else:</span>
         <span class="c1">#     ipy.pt_app.clipboard = InMemoryClipboard()</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">setup_clipboard</span><span class="p">()</span>
 </pre></div>
 
         </div>
@@ -443,7 +449,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 22, 2020.
+      Last updated on Feb 26, 2020.
     </div>
   </body>
 </html>

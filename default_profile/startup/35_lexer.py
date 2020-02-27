@@ -15,9 +15,6 @@ from pygments.lexer import Lexer
 from pygments.lexers.python import PythonLexer
 from pygments.token import Keyword, Name
 from pygments.formatters.terminal256 import TerminalTrueColorFormatter
-
-
-# from prompt_toolkit import ANSI, HTML
 from prompt_toolkit.layout.containers import (
     HSplit,
     # VSplit,
@@ -26,16 +23,7 @@ from prompt_toolkit.layout.containers import (
     # for now
     # FloatContainer,
 )
-from prompt_toolkit.layout.controls import BufferControl, FormattedTextControl
-from prompt_toolkit.layout.layout import Layout
-
-from prompt_toolkit.layout.processors import (
-    HighlightMatchingBracketProcessor,
-    DisplayMultipleCursors,
-    HighlightSearchProcessor,
-    HighlightIncrementalSearchProcessor,
-    HighlightSelectionProcessor,
-)
+from prompt_toolkit.layout.controls import FormattedTextControl
 from prompt_toolkit.lexers.pygments import PygmentsLexer  # , PygmentsTokens
 from prompt_toolkit.lexers.base import DynamicLexer, SimpleLexer
 from prompt_toolkit.shortcuts.utils import print_container

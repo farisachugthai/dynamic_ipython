@@ -31,11 +31,11 @@ from prompt_toolkit.key_binding.key_bindings import KeyBindings
 from prompt_toolkit.key_binding.bindings import search
 from prompt_toolkit.layout.containers import HSplit, Window
 from prompt_toolkit.layout.controls import BufferControl
-from prompt_toolkit.layout.layout import Layout
 from prompt_toolkit.styles import Style
 from prompt_toolkit.widgets.toolbars import SearchToolbar
 from prompt_toolkit.layout.processors import (
     ConditionalProcessor,
+    DisplayMultipleCursors,
     HighlightSearchProcessor,
     HighlightIncrementalSearchProcessor,
     HighlightSelectionProcessor,
@@ -204,8 +204,8 @@ class Helpers:
         return list(self.layout.find_all_controls())
 
 
-
 def all_processors_for_searching():
+    r"""Return a list of `prompt_toolkit.layout.processor.Processor`\'s."""
     return [
         ConditionalProcessor(HighlightSearchProcessor(), ~is_searching),
         HighlightIncrementalSearchProcessor(),

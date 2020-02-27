@@ -141,119 +141,25 @@ c.Application.log_level = 20
 # Generate default config file.
 # c.JupyterApp.generate_config = False
 
-# -----------------------------------------------------------------------------
-# ZMQTerminalIPythonApp(JupyterApp,JupyterConsoleApp) configuration
-# -----------------------------------------------------------------------------
-
-# -----------------------------------------------------------------------------
-# ZMQTerminalInteractiveShell(SingletonConfigurable) configuration
-# -----------------------------------------------------------------------------
-
-# Text to display before the first prompt. Will be formatted with variables
-#  {version} and {kernel_banner}.
-c.ZMQTerminalInteractiveShell.banner = ""
-
-# c.ZMQTerminalInteractiveShell.callable_image_handler = None
+# ------------------------------------------------------------------------------
+# JupyterConsoleApp(ConnectionFileMixin) configuration
+# ------------------------------------------------------------------------------
 
 # Set to display confirmation dialog on exit. You can always use 'exit' or
 #  'quit', to force a direct exit without any confirmation.
-# Jupyter Console is complaining that ZMQTerminal doesn't recognize this option?
-# c.ZMQTerminalInteractiveShell.confirm_exit = False
+c.JupyterConsoleApp.confirm_exit = False
 
-# Shortcut style to use at the prompt. 'vi' or 'emacs'.
-# c.ZMQTerminalInteractiveShell.editing_mode = 'emacs'
+# connect to an already running kernel
+# c.JupyterConsoleApp.existing = ''
 
-# The name of a Pygments style to use for syntax highlighting
-try:
-    from gruvbox.style import GruvboxDarkHard
-except (ImportError, ModuleNotFoundError):
-    c.ZMQTerminalInteractiveShell.highlighting_style = "friendly"
-else:
-    c.ZMQTerminalInteractiveShell.highlighting_style = "Gruvbox"
+# The name of the default kernel to start.
+c.JupyterConsoleApp.kernel_name = "python3"
 
-# Override highlighting format for specific tokens
-# c.ZMQTerminalInteractiveShell.highlighting_style_overrides = {}
+# Path to the ssh key to use for logging in to the ssh server.
+# c.JupyterConsoleApp.sshkey = ''
 
-# How many history items to load into memory
-c.ZMQTerminalInteractiveShell.history_load_length = 5000
-
-# Whether to include output from clients other than this one sharing the same
-#  kernel.
-#
-#  Outputs are not displayed until enter is pressed.
-c.ZMQTerminalInteractiveShell.include_other_output = True
-
-# Timeout (in seconds) for giving up on a kernel's is_complete response.
-#
-#  If the kernel does not respond at any point within this time, the kernel will
-#  no longer be asked if code is complete, and the console will default to the
-#  built-in is_complete test.
-# c.ZMQTerminalInteractiveShell.kernel_is_complete_timeout = 1
-
-# Timeout for giving up on a kernel (in seconds).
-#
-#  On first connect and restart, the console tests whether the kernel is running
-#  and responsive by sending kernel_info_requests. This sets the timeout in
-#  seconds for how long the kernel can take before being presumed dead.
-# c.ZMQTerminalInteractiveShell.kernel_timeout = 60
-
-# Preferred object representation MIME type in order.  First matched MIME type
-#  will be used.
-# c.ZMQTerminalInteractiveShell.mime_preference = ['image/png', 'image/jpeg', 'image/svg+xml']
-
-# Prefix to add to outputs coming from clients other than this one.
-#
-#  Only relevant if include_other_output is True.
-# c.ZMQTerminalInteractiveShell.other_output_prefix = '[remote] '
-
-# Use simple fallback prompt. Features may be limited.
-# c.ZMQTerminalInteractiveShell.simple_prompt = False
-
-# Command to invoke an image viewer program when you are using 'stream' image
-#  handler.  This option is a list of string where the first element is the
-#  command itself and reminders are the options for the command.  Raw image data
-#  is given as STDIN to the program.
-# c.ZMQTerminalInteractiveShell.stream_image_handler = []
-
-# Command to invoke an image viewer program when you are using 'tempfile' image
-#  handler.  This option is a list of string where the first element is the
-#  command itself and reminders are the options for the command.  You can use
-#  {file} and {format} in the string to represent the location of the generated
-#  image file and image format.
-# c.ZMQTerminalInteractiveShell.tempfile_image_handler = []
-
-# Use 24bit colors instead of 256 colors in prompt highlighting. If your
-#  terminal supports true color, the following command should print 'TRUECOLOR'
-#  in orange: printf "\x1b[38;2;255;100;0mTRUECOLOR\x1b[0m\n"
-c.ZMQTerminalInteractiveShell.true_color = True
-
-# Whether to use the kernel's is_complete message handling. If False, then the
-#  frontend will use its own is_complete handler.
-# c.ZMQTerminalInteractiveShell.use_kernel_is_complete = True
-
-# -----------------------------------------------------------------------------
-# KernelManager(ConnectionFileMixin) configuration
-# -----------------------------------------------------------------------------
-
-# Manages a single kernel in a subprocess on this host.
-#
-#  This version starts kernels with Popen.
-
-# Should we autorestart the kernel if it dies.
-# c.KernelManager.autorestart = True
-
-# DEPRECATED: Use kernel_name instead.
-#
-#  The Popen Command to launch the kernel. Override this if you have a custom
-#  kernel. If kernel_cmd is specified in a configuration file, Jupyter does not
-#  pass any arguments to the kernel, because it cannot make any assumptions about
-#  the arguments that the kernel understands. In particular, this means that the
-#  kernel does not receive the option --debug if it given on the Jupyter command
-#  line.
-# c.KernelManager.kernel_cmd = []
-
-# Time to wait for a kernel to terminate before killing it, in seconds.
-# c.KernelManager.shutdown_wait_time = 5.0
+# The SSH server to use to connect to the kernel.
+# c.JupyterConsoleApp.sshserver = ''
 
 # -----------------------------------------------------------------------------
 # KernelRestarter(LoggingConfigurable) configuration

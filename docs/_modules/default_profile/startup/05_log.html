@@ -151,7 +151,7 @@
 <h1>Source code for default_profile.startup.05_log</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;Establish a file-logger for IPython.</span>
+<span class="sa">r</span><span class="sd">&quot;&quot;&quot;Establish a file-logger for IPython.</span>
 
 <span class="sd">Collects both the input and output of every command run through the IPython</span>
 <span class="sd">interpreter, prepends a timestamp to the commands, and save the untransformed</span>
@@ -166,22 +166,89 @@
 <span class="sd">      double quotes and in the comment add system info like py version, venv,</span>
 <span class="sd">      conda, any of the 1000000 things you could add.</span>
 
+<span class="sd">.. note:: Windows Users</span>
+
+<span class="sd">    Simulataneous IPython processes may throw.</span>
+
+<span class="sd">.. code-block:: py3tb</span>
+
+<span class="sd">   PermissionError: [WinError 32]</span>
+<span class="sd">   The process cannot access the file because it is being used by another process:</span>
+<span class="sd">   &#39;C:\\Users\\fac\\.ipython\\profile_default\\log\\log-2020-02-26.py&#39; -&gt;</span>
+<span class="sd">   &#39;C:\\Users\\fac\\.ipython\\profile_default\\log\\log-2020-02-26.py.001~&#39;</span>
+
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">codecs</span>
 <span class="kn">import</span> <span class="nn">functools</span>
 <span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pprint</span>
 <span class="kn">import</span> <span class="nn">reprlib</span>
+<span class="kn">import</span> <span class="nn">sqlite3</span>
+<span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">path</span><span class="p">,</span> <span class="n">devnull</span>
+<span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">groupby</span>
 <span class="kn">from</span> <span class="nn">queue</span> <span class="kn">import</span> <span class="n">SimpleQueue</span>
 
 <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 <span class="kn">from</span> <span class="nn">IPython.core.error</span> <span class="kn">import</span> <span class="n">UsageError</span>
+<span class="kn">from</span> <span class="nn">IPython.core.history</span> <span class="kn">import</span> <span class="n">HistoryAccessor</span>
+<span class="c1"># from IPython.core.history import HistorySavinThread, HistoryManager</span>
+<span class="kn">from</span> <span class="nn">IPython.paths</span> <span class="kn">import</span> <span class="n">get_ipython_dir</span>
 <span class="kn">from</span> <span class="nn">traitlets.config.configurable</span> <span class="kn">import</span> <span class="n">LoggingConfigurable</span>
 <span class="kn">from</span> <span class="nn">traitlets.config.application</span> <span class="kn">import</span> <span class="n">LevelFormatter</span>
 <span class="kn">from</span> <span class="nn">traitlets.traitlets</span> <span class="kn">import</span> <span class="n">Instance</span>
 
 <span class="kn">from</span> <span class="nn">default_profile</span> <span class="kn">import</span> <span class="n">QueueHandler</span>
 <span class="kn">from</span> <span class="nn">default_profile.startup</span> <span class="kn">import</span> <span class="n">STARTUP_LOGGER</span>
+
+
+<div class="viewcode-block" id="print_history"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.print_history">[docs]</a><span class="k">def</span> <span class="nf">print_history</span><span class="p">(</span><span class="n">hist_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Write the contents of the running shell&#39;s SQLite history.</span>
+
+<span class="sd">    hist_file : str (`os.Pathlike`), optional</span>
+<span class="sd">        Path to history file. Assume default profile&#39;s history.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">hist_file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">hist_file</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;{get_ipython_dir()}/profile_default/history.sqlite&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">hist_file</span><span class="p">):</span>
+            <span class="k">return</span>
+
+    <span class="k">with</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">hist_file</span><span class="p">)</span> <span class="k">as</span> <span class="n">con</span><span class="p">:</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+            <span class="s2">&quot;SELECT count(source_raw) as csr,</span><span class="se">\</span>
+<span class="s2">                  source_raw FROM history</span><span class="se">\</span>
+<span class="s2">                  GROUP BY source_raw</span><span class="se">\</span>
+<span class="s2">                  ORDER BY csr&quot;</span>
+        <span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+        <span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">compact</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+<span class="c1"># TODO: isn&#39;t working</span>
+<div class="viewcode-block" id="get_history"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.get_history">[docs]</a><span class="k">def</span> <span class="nf">get_history</span><span class="p">(</span><span class="n">session_number</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">profile</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">profile</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;# coding: utf-8</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Profiles other than &#39;default&#39; can be specified here with a profile= argument:</span>
+    <span class="n">hist</span> <span class="o">=</span> <span class="n">HistoryAccessor</span><span class="p">(</span><span class="n">profile</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">session_number</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">session_number</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">running_tally</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">session</span><span class="p">,</span> <span class="n">lineno</span><span class="p">,</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">hist</span><span class="o">.</span><span class="n">get_range</span><span class="p">(</span><span class="n">session</span><span class="o">=</span><span class="n">session_number</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="n">raw</span><span class="p">):</span>
+        <span class="n">cell</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>  <span class="c1"># This line is only needed on Python 2.</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">cell</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1"># we could even</span>
+        <span class="n">running_tally</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="n">session</span><span class="p">:</span> <span class="p">{</span><span class="n">lineno</span><span class="p">:</span> <span class="n">cell</span><span class="p">}})</span>
+    <span class="k">return</span> <span class="n">running_tally</span></div>
 
 
 <div class="viewcode-block" id="betterConfig"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.betterConfig">[docs]</a><span class="k">def</span> <span class="nf">betterConfig</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -217,6 +284,10 @@
         <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;log_mod&quot;</span>
 
     <span class="k">if</span> <span class="n">parent</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span>
+            <span class="n">parent</span><span class="p">,</span> <span class="n">logging</span><span class="o">.</span><span class="n">Logger</span>
+        <span class="p">):</span>  <span class="c1"># we needed the parent&#39;s name not the instance</span>
+            <span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span><span class="o">.</span><span class="n">name</span>
         <span class="n">better_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">getChild</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">better_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
@@ -225,10 +296,12 @@
     <span class="n">better_stream</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">shell</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">logfile</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-        <span class="n">logfileobject</span> <span class="o">=</span> <span class="n">shell</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">logfile</span>
-        <span class="n">logfile</span> <span class="o">=</span> <span class="n">logfileobject</span><span class="o">.</span><span class="n">name</span>
+        <span class="c1"># confusingly this sometimes returns nothing</span>
+        <span class="c1"># logfileobject = shell.logger.logfile</span>
+        <span class="c1"># logfile = logfileobject.name</span>
+        <span class="n">logfile</span> <span class="o">=</span> <span class="n">shell</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">logfname</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">logfile</span> <span class="o">=</span> <span class="n">devnull</span>
+        <span class="n">logfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">devnull</span>
     <span class="n">handler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="p">(</span><span class="n">logfile</span><span class="p">)</span>
     <span class="c1"># And one of our own</span>
     <span class="n">queue_handler</span> <span class="o">=</span> <span class="n">QueueHandler</span><span class="p">(</span><span class="n">SimpleQueue</span><span class="p">())</span>
@@ -249,28 +322,11 @@
     <span class="k">return</span> <span class="n">better_logger</span></div>
 
 
-<div class="viewcode-block" id="VerboseLoggingConfigurable"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.VerboseLoggingConfigurable">[docs]</a><span class="k">class</span> <span class="nc">VerboseLoggingConfigurable</span><span class="p">(</span><span class="n">LoggingConfigurable</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Tried building on the LoggingConfigurable. Doesn&#39;t work currently.</span>
+<div class="viewcode-block" id="ConfigurableLogger"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.ConfigurableLogger">[docs]</a><span class="k">class</span> <span class="nc">ConfigurableLogger</span><span class="p">(</span><span class="n">LoggingConfigurable</span><span class="p">,</span> <span class="n">logging</span><span class="o">.</span><span class="n">Logger</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="vm">__name__</span>
+    <span class="n">level</span> <span class="o">=</span> <span class="mi">30</span>
 
-<span class="sd">    We need to register the currently running IPython instance so it gets</span>
-<span class="sd">    access to the config and parent attributes.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">shell</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="s2">&quot;InteractiveShellABC&quot;</span><span class="p">)</span>
-
-<div class="viewcode-block" id="VerboseLoggingConfigurable.__init__"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.VerboseLoggingConfigurable.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logger_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">logger_parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">log</span> <span class="o">=</span> <span class="n">betterConfig</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">logger_name</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">logger_parent</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger_name</span> <span class="o">=</span> <span class="n">logger_name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger_parent</span> <span class="o">=</span> <span class="n">logger_parent</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">shell</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">shell</span><span class="o">.</span><span class="n">config</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">shell</span><span class="o">.</span><span class="n">parent</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">UsageError</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">shell</span><span class="o">=</span><span class="n">shell</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="VerboseLoggingConfigurable.log"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.VerboseLoggingConfigurable.log">[docs]</a>    <span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ConfigurableLogger.log"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.ConfigurableLogger.log">[docs]</a>    <span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Override the superclasses implementation of log.</span>
 
 <span class="sd">        Allow level to be a keyword argument.</span>
@@ -288,15 +344,7 @@
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Pretty print the truncated results of :meth:`traits`.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">reprlib</span><span class="o">.</span><span class="n">Repr</span><span class="p">()</span><span class="o">.</span><span class="n">repr_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">traits</span><span class="p">(),</span> <span class="n">level</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
-
-<div class="viewcode-block" id="VerboseLoggingConfigurable.handlers"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.VerboseLoggingConfigurable.handlers">[docs]</a>    <span class="k">def</span> <span class="nf">handlers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns the `logging.Handler` objects associated with the logger.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">handlers</span></div>
-
-<div class="viewcode-block" id="VerboseLoggingConfigurable.filters"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.VerboseLoggingConfigurable.filters">[docs]</a>    <span class="k">def</span> <span class="nf">filters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns the `logging.Filter` objects associated with the logger.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">filters</span></div></div>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{self.__class__.__name__}</span><span class="s2">&gt; {reprlib.Repr().repr(self.traits())}&quot;</span></div>
 
 
 <div class="viewcode-block" id="logging_decorator"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.logging_decorator">[docs]</a><span class="k">def</span> <span class="nf">logging_decorator</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
@@ -351,8 +399,8 @@
     <span class="c1"># Setup for the logger</span>
     <span class="n">log_dir</span> <span class="o">=</span> <span class="n">shell</span><span class="o">.</span><span class="n">profile_dir</span><span class="o">.</span><span class="n">log_dir</span>
     <span class="n">fname</span> <span class="o">=</span> <span class="s2">&quot;log-&quot;</span> <span class="o">+</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.py&quot;</span>
-    <span class="n">filename</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">log_dir</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
-    <span class="n">notnew</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">log_dir</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
+    <span class="n">notnew</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
     <span class="n">logger</span> <span class="o">=</span> <span class="n">shell</span><span class="o">.</span><span class="n">logger</span>
 
     <span class="k">try</span><span class="p">:</span>
@@ -360,6 +408,16 @@
     <span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; Already logging to &quot;</span> <span class="o">+</span> <span class="n">logger</span><span class="o">.</span><span class="n">logfname</span><span class="p">)</span>
         <span class="k">return</span>
+    <span class="k">except</span> <span class="ne">PermissionError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="ne">WindowsError</span><span class="p">):</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; Already logging to &quot;</span> <span class="o">+</span> <span class="n">logger</span><span class="o">.</span><span class="n">logfname</span><span class="p">)</span>
+                <span class="k">return</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">breakpoint</span><span class="p">()</span>
+
     <span class="c1"># todo</span>
     <span class="c1"># else:</span>
     <span class="c1">#     extra_logger = betterConfig(name=filename, parent=STARTUP_LOGGER.name)</span>
@@ -375,6 +433,64 @@
     <span class="k">return</span> <span class="n">logger</span></div>
 
 
+<div class="viewcode-block" id="MyHistoryAccessor"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.MyHistoryAccessor">[docs]</a><span class="k">class</span> <span class="nc">MyHistoryAccessor</span><span class="p">(</span><span class="n">HistoryAccessor</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Modified HistoryAccessor to fetch the whole ipython history across all sessions &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="MyHistoryAccessor.get_tail"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.MyHistoryAccessor.get_tail">[docs]</a>    <span class="k">def</span> <span class="nf">get_tail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">include_latest</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the last n lines from the history database.</span>
+<span class="sd">    </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        n : int</span>
+<span class="sd">            The number of lines to get</span>
+<span class="sd">        raw, output : bool</span>
+<span class="sd">            See :meth:`get_range`</span>
+<span class="sd">        include_latest : bool</span>
+<span class="sd">            If False (default), n+1 lines are fetched, and the latest one</span>
+<span class="sd">            is discarded. This is intended to be used where the function</span>
+<span class="sd">            is called by a user command, which it should not return.</span>
+<span class="sd">    </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Tuples as :meth:`get_range`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">writeout_cache</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">include_latest</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cur</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_sql</span><span class="p">(</span>
+                <span class="s2">&quot;ORDER BY session DESC, line DESC LIMIT ?&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">n</span><span class="p">,),</span> <span class="n">raw</span><span class="o">=</span><span class="n">raw</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="n">output</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cur</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_sql</span><span class="p">(</span>
+                <span class="s2">&quot;ORDER BY session DESC, line DESC&quot;</span><span class="p">,</span> <span class="p">(),</span> <span class="n">raw</span><span class="o">=</span><span class="n">raw</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="n">output</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">include_latest</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">cur</span><span class="p">)[</span><span class="mi">1</span><span class="p">:])</span>
+        <span class="k">return</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">cur</span><span class="p">))</span></div></div>
+
+
+<div class="viewcode-block" id="rem_dups"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.rem_dups">[docs]</a><span class="k">def</span> <span class="nf">rem_dups</span><span class="p">(</span><span class="n">lst</span><span class="p">):</span>
+    <span class="c1"># OrderedSet would be nicer, but for simplicity we use this approach</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">key</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">groupby</span><span class="p">(</span><span class="n">lst</span><span class="p">)]</span></div>
+
+
+<div class="viewcode-block" id="access_all_history"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.access_all_history">[docs]</a><span class="k">def</span> <span class="nf">access_all_history</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="c1"># Syntax: ipythonhist [LAST X ITEMS]</span>
+    <span class="n">hist</span> <span class="o">=</span> <span class="n">MyHistoryAccessor</span><span class="p">()</span>
+    <span class="n">history</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">hist</span><span class="o">.</span><span class="n">get_tail</span><span class="p">())</span>
+    <span class="n">history</span> <span class="o">=</span> <span class="n">rem_dups</span><span class="p">(</span><span class="n">history</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">head</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">history</span><span class="p">[</span><span class="o">-</span><span class="n">head</span><span class="p">:]:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">entry</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">history</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">entry</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span></div>
+
+
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
 
     <span class="n">ipy_logger</span> <span class="o">=</span> <span class="n">ipython_logger</span><span class="p">()</span>
@@ -385,8 +501,11 @@
             <span class="n">ipy_logger</span><span class="o">.</span><span class="n">logmode</span> <span class="o">=</span> <span class="n">logmode</span>
             <span class="n">ipy_logger</span><span class="o">.</span><span class="n">log_output</span> <span class="o">=</span> <span class="n">log_output</span>
             <span class="n">ipy_logger</span><span class="o">.</span><span class="n">timestamp</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="c1"># I think this has to be set</span>
+            <span class="n">ipy_logger</span><span class="o">.</span><span class="n">log_active</span> <span class="o">=</span> <span class="kc">True</span>
 
-    <span class="n">better_logger</span> <span class="o">=</span> <span class="n">betterConfig</span><span class="p">()</span>
+    <span class="c1"># Don&#39;t use name=__name__ here or it&#39;ll dump a log file in your cwd</span>
+    <span class="n">better_logger</span> <span class="o">=</span> <span class="n">betterConfig</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">STARTUP_LOGGER</span><span class="p">)</span>
 </pre></div>
 
         </div>
@@ -394,7 +513,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 22, 2020.
+      Last updated on Feb 26, 2020.
     </div>
   </body>
 </html>

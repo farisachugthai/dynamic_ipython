@@ -79,4 +79,5 @@ if __name__ == "__main__":
     if len(asyncio.log.logger.root.handlers) > 0:
         asyncio.log.logger.root.handlers.pop()
     asyncio.log.logger.setLevel(99)
+    asyncio.log.logger.root.setLevel(99)
     enable_multiprocessing_logging()

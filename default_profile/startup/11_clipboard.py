@@ -270,13 +270,15 @@ class UsefulClipboard(Clipboard):
         # else:
         #     self.shell.pt_app.clipboard = PyperclipClipboard()
 
-
-if __name__ == "__main__":
+def setup_clipboard():
     ipy = get_ipython()
     if ipy is not None:
         # Because this occasionally happens and I have no idea why
+        # qtconsole
         if not hasattr(ipy, "pt_app"):
-            breakpoint()
+            if isinstance(ipy, "ZMQInteractiveShell"):
+                return
+        # idk why this one happen tho
         elif ipy.pt_app is None:
             breakpoint()
 
@@ -285,3 +287,7 @@ if __name__ == "__main__":
         #     ipy.pt_app.clipboard = PyperclipClipboard()
         # else:
         #     ipy.pt_app.clipboard = InMemoryClipboard()
+
+
+if __name__ == "__main__":
+    setup_clipboard()
