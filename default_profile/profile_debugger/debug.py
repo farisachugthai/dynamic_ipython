@@ -24,13 +24,22 @@ import traceback
 from bdb import BdbQuit
 from contextlib import contextmanager
 from pathlib import Path
-from pdb import Restart
+from pdb import Restart, Pdb
 from textwrap import dedent
 
 try:
     from pdbrc import MyPdb
 except:  # noqa
     MyPdb = None
+
+try:
+    import ipdb
+except ImportError:
+    try:
+        from IPython.terminal.debugger import Pdb
+    except ImportError:
+        ipdb = None
+
 
 from jedi.api import replstartup
 from IPython.core.getipython import get_ipython
@@ -44,7 +53,12 @@ logger = logging.getLogger()
 def _init_pdb(context=3, commands=None, debugger_kls=None):
     """Needed to add a debugger_cls param to this."""
     if debugger_kls is None:
-        debugger_kls = debugger_kls
+        if MyPdb is not None:
+            debugger_kls = MyPdb
+        elif ipdb is not None:
+            debugger_kls = ipdb
+        else:
+            debugger_kls = Pdb
     if commands is None:
         commands = []
     try:
@@ -219,7 +233,7 @@ def main():
     except Restart:
         logger.info(f"Restarting {mainpyfile} with arguments:\t{str(sys.argv[1:])}")
     except BdbQuit:
-        logger.critical('Quit signal received.  Goodbye!')
+        logger.critical("Quit signal received.  Goodbye!")
 
     except SystemExit:
         # In most cases SystemExit does not warrant a post-mortem session.

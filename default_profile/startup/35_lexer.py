@@ -171,10 +171,9 @@ def generate_and_print_hsplit():
         ],
         # key_bindings=kb,
         # style=GruvboxStyle,
-        style="#fe8019",
+        style="underline #80a0ff",
     )
-
-    print("\n\n\n")
+    print("\n")
     print_container(root_container)
     # Thisll probably be useful
     # from prompt_toolkit.mouse_events import MouseEvent, MouseEventType

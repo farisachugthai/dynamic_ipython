@@ -1,6 +1,7 @@
 # Test iterators.
 
 import collections.abc
+import logging
 import pickle
 import sys
 import unittest
@@ -8,13 +9,17 @@ import unittest
 try:
     from test.support import (
         TESTFN,
-        check_free_after_iterating,
-        cpython_only,
         run_unittest,
         unlink,
     )
 except ImportError:
     run_unittest = None
+    from os import unlink
+    from tempfile import NamedTemporaryFile
+    TESTFN =  NamedTemporaryFile().name
+
+
+logging.basicConfig()
 
 # Test result of triple loop (too big to inline)
 TRIPLETS = [
@@ -64,8 +69,11 @@ def run_unittest(*classes):
             suite.addTest(cls)
         else:
             suite.addTest(unittest.makeSuite(cls))
-    _filter_suite(suite, match_test)
-    _run_suite(suite)
+    logging.info(suite.countTestCases())
+    # _filter_suite(suite, match_test)
+    # _run_suite(suite)
+    results = suite.run(unittest.TestResult())
+    return results
 
 
 # Helper classes
@@ -920,7 +928,6 @@ class TestCase(unittest.TestCase):
         (a, b), (c,) = IteratingSequenceClass(2), {42: 24}
         self.assertEqual((a, b, c), (0, 1, 42))
 
-    @cpython_only
     def test_ref_counting_behavior(self):
         class C(object):
             count = 0
@@ -1055,7 +1062,6 @@ class TestCase(unittest.TestCase):
         lst.extend(gen())
         self.assertEqual(len(lst), 760)
 
-    @cpython_only
     def test_iter_overflow(self):
         # Test for the issue 22939
         it = iter(UnlimitedSequenceClass())
@@ -1075,8 +1081,8 @@ class TestCase(unittest.TestCase):
         self.assertEqual(next(it), 0)
         self.assertEqual(next(it), 1)
 
-    def test_free_after_iterating(self):
-        check_free_after_iterating(self, iter, SequenceClass, (0,))
+    # def test_free_after_iterating(self):
+    #     check_free_after_iterating(self, iter, SequenceClass, (0,))
 
     def test_error_iter(self):
         for typ in (DefaultIterClass, NoIterClass):

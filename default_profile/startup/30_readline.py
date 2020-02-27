@@ -127,29 +127,49 @@ def readline_config():
 
     """
     readline.parse_and_bind("set show-all-if-ambiguous on")
-    readline.parse_and_bind("TAB: menu-complete")
+    readline.parse_and_bind("set show-all-if-ambiguous on")
+    readline.parse_and_bind('"TAB": complete')
     # readline.parse_and_bind("CR: accept-line")
     readline.parse_and_bind('"\\e[B": history-search-forward')
     readline.parse_and_bind('"\\e[A": history-search-backward')
     # readline.parse_and_bind('"\\C-d": end-of-file')
+
+    readline.parse_and_bind('"\\C-a": beginning-of-line')
+    readline.parse_and_bind('"\\C-b": backward-char')
     readline.parse_and_bind('"\\C-e": end-of-line')
+    readline.parse_and_bind('"\\C-f": forward-char')
     readline.parse_and_bind('"\\C-h": backward-delete-char')
-    readline.parse_and_bind('"\\C-i": tab-insert')
+    readline.parse_and_bind('"\\C-g": abort')
+    # "\C-x\C-g": abort
+    # readline.parse_and_bind('"\\C-i": tab-insert')
+
+    readline.parse_and_bind('"\\C-h": backward-delete-char')
     readline.parse_and_bind('"\\C-j": accept-line')
     readline.parse_and_bind('"\\C-k": "kill-whole-line"')
     readline.parse_and_bind('"\\C-l": clear-screen')
     readline.parse_and_bind('"\\C-m": accept-line')
-    readline.parse_and_bind('"\\C-n": complete')
+    readline.parse_and_bind('"\\C-n": menu-complete')
     readline.parse_and_bind('"\\C-r": reverse-search-history')
     readline.parse_and_bind('"\\C-s": forward-search-history')
     # readline.parse_and_bind('"\\C-p": "history-search-backward"'),
+    readline.parse_and_bind('"\\C-n": menu-backward-complete')
     # readline.parse_and_bind('"\\C-n": "history-search-forward"'),
     readline.parse_and_bind('"\\C-u": unix-line-discard')
 
-    readline.parse_and_bind('"\\C-w": unix-word-rubout')
+    readline.parse_and_bind('"\\C-w": unix-filename-rubout')
     readline.parse_and_bind('"\\C-]": character-search')
-    # readline.parse_and_bind('"\\e\C-]": character-search-backward')
+    readline.parse_and_bind('"\\e\\C-]": character-search-backward')
     readline.parse_and_bind('"Insert": overwrite-mode')
+    readline.parse_and_bind("Meta-/: complete")
+    readline.parse_and_bind('"\\eb": backward-word')
+    readline.parse_and_bind('"\\ef": forward-word')
+    readline.parse_and_bind('"\\e?": possible-completions')
+    readline.parse_and_bind('"\\e/": possible-completions')
+    readline.parse_and_bind('"\\ed": kill-word')
+    # "\C-q": quoted-insert
+    # "\C-v": quoted-insert
+    # "\er": redraw-current-line
+    # "\C-x\C-r": re-read-init-file
     # readline.set_completer(Completer().complete
 
 
@@ -182,6 +202,7 @@ def py_readline(rl=None):
     # todo: check which mode we're in
     # if pyreadline.editingmodes.
     # readline.read_and_parse('z-=', "redraw-screen")
+
 
 # History
 
@@ -216,7 +237,7 @@ def setup_historyfile(filename=None):
 
 
 def teardown_historyfile(starting_id, histfile=None):
-    if not hasattr(readline, 'append_history_file'):
+    if not hasattr(readline, "append_history_file"):
         return
     new_h_len = readline.get_current_history_length()
     readline.set_history_length(2000)
@@ -282,5 +303,7 @@ if __name__ == "__main__":
         setup_historyfile(history_file)
         original_hist_length = readline.get_current_history_length()
         atexit.register(readline.write_history_file, history_file)
-        atexit.register(teardown_historyfile, original_hist_length, histfile=history_file)
+        atexit.register(
+            teardown_historyfile, original_hist_length, histfile=history_file
+        )
         readline_config()

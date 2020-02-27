@@ -17,7 +17,8 @@ from traceback import print_exc
 
 from prompt_toolkit.enums import EditingMode
 
-# from prompt_toolkit.formatted_text import FormattedText, to_formatted_text
+from prompt_toolkit.formatted_text import FormattedText, to_formatted_text
+from prompt_toolkit.formatted_text import PygmentsTokens
 from prompt_toolkit.layout.controls import FormattedTextControl
 from prompt_toolkit.layout.containers import Window, Float
 from prompt_toolkit.layout.layout import Layout
@@ -195,14 +196,16 @@ def add_toolbar(toolbar=None):
 
 
 if __name__ == "__main__":
+    # bottom_formatted_text = FormattedText(
+    #     BottomToolbar(get_app()), style=("class:toolbar", "underline #80a0ff")
+    # )
     bottom_text = BottomToolbar(get_app())
-
     partial_window = Window(FormattedTextControl(bottom_text), width=10, height=2)
 
     logging.debug(print_container(partial_window))
     # Do frames not return container objects? Because this line is raisin an error?
     # bottom_float = Float(Frame(partial_window, style="bg:#282828 #ffffff"), bottom=0)
     # print_container(bottom_float)
-    bottom_toolbar = FormattedTextToolbar(bottom_text)
+    bottom_toolbar = FormattedTextToolbar(PygmentsTokens(bottom_text))
     add_toolbar(bottom_text)
     print_container(show_header())

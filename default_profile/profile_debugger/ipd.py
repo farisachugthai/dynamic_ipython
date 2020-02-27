@@ -54,6 +54,7 @@ class IPD(Pdb):
         self,
         shell=None,
         keys=None,
+        context=None,
         *args,
         **kwargs
     ):
@@ -81,7 +82,7 @@ class IPD(Pdb):
         self.completer = DynamicCompleter(self.initialize_completer())
 
         self.prompt = "Your Debugger: "
-
+        self.context = context
         self.pt_session = self.pt_init()
 
         super().__init__(self, *args, **kwargs)
