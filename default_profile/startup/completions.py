@@ -261,5 +261,6 @@ if __name__ == "__main__":
     session = get_ipython().pt_app if get_ipython() is not None else None
     if session is not None:
         # when using tmux or windows this is super helpful
-        session.refresh_interval = 0.5
+        # yeah but otherwise destroys your ability to scroll backwards
+        # session.refresh_interval = 0.5
         session.auto_suggest = AutoSuggestFromHistory()

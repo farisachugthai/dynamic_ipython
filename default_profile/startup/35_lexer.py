@@ -190,6 +190,74 @@ def generate_and_print_hsplit():
     return root_container
 
 
+# Pretty printing
+def pphighlight(o, *a, **kw):
+    s = pprint.pformat(o, *a, **kw)
+    try:
+        sys.stdout.write(highlight(s, PythonLexer(), TerminalFormatter()))
+    except UnicodeError:
+        sys.stdout.write(s)
+        sys.stdout.write("\n")
+
+
+def extra_displayhook():
+    help_types = [
+        types.BuiltinFunctionType,
+        types.BuiltinMethodType,
+        types.FunctionType,
+        types.MethodType,
+        types.ModuleType,
+        type,
+        # method_descriptor
+        type(list.remove),
+    ]
+    if hasattr(types, "UnboundMethodType"):
+        help_types.append(types.UnboundMethodType)
+    help_types = tuple(help_types)
+
+    def get_width():
+        return shutil.get_terminal_size()[1]
+
+    if hasattr(inspect, "getfullargspec"):
+        getargspec = inspect.getfullargspec
+    else:
+        getargspec = inspect.getargspec
+
+    def pprinthook(value):
+        """Pretty print an object to sys.stdout and also save it in
+        __builtin__.
+        """
+
+        if value is None:
+            return
+        __builtin__._ = value
+
+        if isinstance(value, help_types):
+            reprstr = repr(value)
+            try:
+                if inspect.isfunction(value):
+                    parts = reprstr.split(" ")
+                    parts[1] += inspect.formatargspec(*getargspec(value))
+                    reprstr = " ".join(parts)
+                elif inspect.ismethod(value):
+                    parts = reprstr[:-1].split(" ")
+                    parts[2] += inspect.formatargspec(*getargspec(value))
+                    reprstr = " ".join(parts) + ">"
+            except TypeError:
+                pass
+            sys.stdout.write(reprstr)
+            sys.stdout.write("\n")
+            if getattr(value, "__doc__", None):
+                sys.stdout.write("\n")
+                sys.stdout.write(pydoc.getdoc(value))
+                sys.stdout.write("\n")
+        else:
+            pphighlight(value, width=get_width() or 80)
+
+    sys.displayhook = pprinthook
+    return pprinthook
+
+
 if __name__ == "__main__":
     # lexer = IPythonConfigurableLexer()
     # colorizer = Colorizer()

@@ -13,7 +13,7 @@
 import asyncio
 from asyncio.__main__ import AsyncIOInteractiveConsole, REPLThread
 from asyncio import format_helpers
-
+from os.path import abspath
 try:
     from asyncio.windows_events import ProactorEventLoop, IocpProactor
 except ImportError:
@@ -85,16 +85,17 @@ if "__name__" == "__main":
     repl_thread = REPLThread()
     repl_thread.daemon = True
     repl_thread.start()
-
-    # while True:
-    #     try:
-    #         loop.run_forever()
-    #     except KeyboardInterrupt:
-    #         if repl_future and not repl_future.done():
-    #             repl_future.cancel()
-    #             repl_future_interrupted = True
-    #         continue
-    #     except EOFError:
-    #         sys.exit()
-    #     except Exception as e:
-    #         format_helpers.extract_stack(e)
+    startup = abspath('.')
+    exec_dir(startup)
+    while True:
+        try:
+            loop.run_forever()
+        except KeyboardInterrupt:
+            if repl_future and not repl_future.done():
+                repl_future.cancel()
+                repl_future_interrupted = True
+            continue
+        except EOFError:
+            sys.exit()
+        except Exception as e:
+            format_helpers.extract_stack(e)
