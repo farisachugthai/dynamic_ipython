@@ -27,8 +27,6 @@ import logging
 import os
 from pathlib import Path
 import platform
-import rlcompleter
-from rlcompleter import Completer
 import sys
 import traceback
 
@@ -126,54 +124,52 @@ def readline_config():
     as parameters.
 
     """
-    readline.parse_and_bind("set show-all-if-ambiguous on")
-    readline.parse_and_bind("set show-all-if-ambiguous on")
-    readline.parse_and_bind('"TAB": complete')
-    # readline.parse_and_bind("CR: accept-line")
-    readline.parse_and_bind('"\\e[B": history-search-forward')
-    readline.parse_and_bind('"\\e[A": history-search-backward')
+    # Dude how refreshing is that
+    readline.parse_and_bind('"Up": history-search-forward')
+    readline.parse_and_bind('"Down": history-search-backward')
     # readline.parse_and_bind('"\\C-d": end-of-file')
 
     readline.parse_and_bind('"\\C-a": beginning-of-line')
     readline.parse_and_bind('"\\C-b": backward-char')
     readline.parse_and_bind('"\\C-e": end-of-line')
     readline.parse_and_bind('"\\C-f": forward-char')
-    readline.parse_and_bind('"\\C-h": backward-delete-char')
     readline.parse_and_bind('"\\C-g": abort')
-    # "\C-x\C-g": abort
-    # readline.parse_and_bind('"\\C-i": tab-insert')
-
     readline.parse_and_bind('"\\C-h": backward-delete-char')
+    readline.parse_and_bind('"\\C-i": complete')
     readline.parse_and_bind('"\\C-j": accept-line')
     readline.parse_and_bind('"\\C-k": "kill-whole-line"')
     readline.parse_and_bind('"\\C-l": clear-screen')
     readline.parse_and_bind('"\\C-m": accept-line')
-    readline.parse_and_bind('"\\C-n": menu-complete')
+    # readline.parse_and_bind('"\\C-n": menu-complete')
+    # readline.parse_and_bind('"\\C-p": menu-complete-backward')
+    # "\C-q": quoted-insert
     readline.parse_and_bind('"\\C-r": reverse-search-history')
     readline.parse_and_bind('"\\C-s": forward-search-history')
-    # readline.parse_and_bind('"\\C-p": "history-search-backward"'),
-    readline.parse_and_bind('"\\C-n": menu-backward-complete')
-    # readline.parse_and_bind('"\\C-n": "history-search-forward"'),
+    # readline.parse_and_bind('"\\C-t": transpose-chars')
     readline.parse_and_bind('"\\C-u": unix-line-discard')
-
-    readline.parse_and_bind('"\\C-w": unix-filename-rubout')
-    readline.parse_and_bind('"\\C-]": character-search')
-    readline.parse_and_bind('"\\e\\C-]": character-search-backward')
-    readline.parse_and_bind('"Insert": overwrite-mode')
-    readline.parse_and_bind("Meta-/: complete")
-    readline.parse_and_bind('"\\eb": backward-word')
-    readline.parse_and_bind('"\\ef": forward-word')
-    readline.parse_and_bind('"\\e?": possible-completions')
-    readline.parse_and_bind('"\\e/": possible-completions')
-    readline.parse_and_bind('"\\ed": kill-word')
-    # "\C-q": quoted-insert
     # "\C-v": quoted-insert
+    # readline.parse_and_bind('"\\C-w": unix-filename-rubout')
+    readline.parse_and_bind('"\\C-y": yank')
+    # readline.parse_and_bind('"\\C-x\\C-g": abort')
+    # readline.parse_and_bind('"\\C-x\\C-r": re-read-init-file')
+
+    # Whew!
+    readline.parse_and_bind('"\\C-]": character-search')
+    readline.parse_and_bind('"\\C-_": undo')
+    # readline.parse_and_bind('\\e\C-]": character-search-backward')
+    readline.parse_and_bind('"Insert": overwrite-mode')
+    # readline.parse_and_bind("Meta-/: complete")
+    # readline.parse_and_bind('"\\eb": backward-word')
+    # readline.parse_and_bind('"\\ef": forward-word')
+    # readline.parse_and_bind('"\\e?": possible-completions')
+    # readline.parse_and_bind('"\\e/": possible-completions')
+    # readline.parse_and_bind('"\\ed": kill-word')
+    # readline.parse_and_bind('"Meta-Tab": tab-insert')
     # "\er": redraw-current-line
-    # "\C-x\C-r": re-read-init-file
     # readline.set_completer(Completer().complete
 
 
-def py_readline(rl=None):
+def pyreadline_specific(rl=None):
     """Utilize the pyreadline API.
 
     Parameters
@@ -192,13 +188,6 @@ def py_readline(rl=None):
     # This is actually really neat
     rl.allow_ctrl_c = True
     rl.command_color = "#7daea3"
-    rl.read_init_file()
-    inputrc = os.environ.get("INPUTRC")
-    if inputrc is not None:
-        rl.read_inputrc()
-    elif os.path.expanduser("~/pyreadlineconfig.ini"):
-        rl.read_inputrc(os.path.expanduser("~/pyreadlineconfig.ini"))
-
     # todo: check which mode we're in
     # if pyreadline.editingmodes.
     # readline.read_and_parse('z-=', "redraw-screen")
@@ -284,6 +273,11 @@ if __name__ == "__main__":
             import readline
         except ImportError:
             readline = None
+        else:
+            # Only immport rlcompleter if we're on linux. pyreadline
+            # doesn't match all of it's API
+            import rlcompleter
+            from rlcompleter import Completer
 
     else:
         # All the pyreadline submodules have to be called as pyreadline.
@@ -291,25 +285,29 @@ if __name__ == "__main__":
         # in that case
         from pyreadline.lineeditor.lineobj import ReadLineTextBuffer
         from readline import GetOutputFile  # output console via ctype
+        # oh also call the pyreadline top module
+        import readline
 
         out_console = GetOutputFile()
         from pyreadline.console.ansi import AnsiState, AnsiWriter
 
         # from pyreadline import append_history_file
-        readline = Readline()
-        py_readline(readline)
-        from pyreadline.modes.emacs import EmacsMode
-        from pyreadline.modes.vi import ViMode
+        rl_class = Readline()
+        pyreadline_specific(rl_class)
+        # not needed yet but a good reminder of the API
+        # from pyreadline.modes.emacs import EmacsMode
+        # from pyreadline.modes.vi import ViMode, ViExternalEditor, ViCommand
 
-        emacs_mode = EmacsMode(pyreadline.Readline())
-        vi_mode = ViMode(pyreadline.Readline())
+        # emacs_mode = EmacsMode(pyreadline.Readline())
+        # vi_mode = ViMode(pyreadline.Readline())
 
     if readline is not None:
         history_file = os.path.expanduser("~/.python_history")
         setup_historyfile(history_file)
         original_hist_length = readline.get_current_history_length()
+        readline.read_history_file(history_file)
         atexit.register(readline.write_history_file, history_file)
         atexit.register(
             teardown_historyfile, original_hist_length, histfile=history_file
         )
-        readline_config()
+        # readline.set_startup_hook(readline_config())

@@ -72,15 +72,19 @@ except DistutilsArgError:
 # except ImportError:
 #     Wheel = None
 
+try:
+    from pkg_resources import find_distributions
+except ImportError:
+    pass
+else:
+    # check this one out
+    eggdist = list(find_distributions(os.path.abspath(".")))
 
 try:  # new replacement for the pkg_resources API
     import importlib_metadata
 except ImportError:
     importlib_metadata = None
-
-## Back to the import stuff i guess
-
-if importlib_metadata is not None:
+else:
     our_dist = importlib_metadata.distribution("dynamic_ipython")
     # TODO:
     dynamic_entry_point = importlib_metadata.EntryPoint('foo', 'bar', 'dynamic_ipython')

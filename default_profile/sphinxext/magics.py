@@ -1,13 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Sphinx extension that allows us to properly use magics in the docs.
-
-See Also
---------
-IPython's sphinx extension for magics.
-    `<https://github.com/ipython/ipython/blob/master/docs/sphinxext/magics.py>`_
-
-"""
+"""Sphinx extension that allows us to properly use magics in the docs."""
 from default_profile.startup import UsageError
 import logging
 import re
@@ -35,7 +28,7 @@ def parse_magic(env, sig, signode):
     Parameters
     ----------
     env
-        Genuinely ensure what any of these parameters are.
+        Genuinely unsure what any of these parameters are.
 
     Raises
     ------
