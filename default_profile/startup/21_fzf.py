@@ -270,6 +270,16 @@ def run_in_terminal_fzf():
         fzf_prompt.prompt()
 
 
+def fzf_history(event):
+    cnx = sqlite3.connect(home+'/.ipython/profile_default/history.sqlite')
+    fzf=FzfPrompt()
+    df = pd.read_sql_query("SELECT * FROM history", cnx)
+    itext=fzf.prompt(df['source'])
+    # print(itext)
+    if itext!=[]:
+        event.current_buffer.insert_text(itext[0])
+
+
 if __name__ == "__main__":
     fzf_aliases = FZF._setup_fzf()
     get_ipython().alias_manager.define_alias("fzf", "fzf-tmux")

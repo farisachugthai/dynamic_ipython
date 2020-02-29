@@ -1,18 +1,11 @@
-# Copyright (c) 2011-2016 Godefroid Chapelle and ipdb development team
-#
-# This file is part of ipdb.
-# Redistributable under the revised BSD license
-# https://opensource.org/licenses/BSD-3-Clause
-"""Copied it because the BdbQuit_excepthook he uses is deprecated.
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""Create a script that allows for interactive use of the `MyPdb` class.
 
-Huh! This is neat. He imports pdb.Restart. Check out the call signature.
+The class generated in the `default_profile.profile_debugger.pdbrc` module,
+`MyPdb` comes with a customized prompt, readline integration and fault
+handlers to catch any exceptions.
 
-.. class:: pdb.Restart
-
-   class Restart(builtins.Exception)
-   Causes a debugger to be restarted for the debugged python program.
-
-.. todo:: ipdb doesnt take a -m option. pdb started taking it in 3.7.
 
 """
 import argparse
@@ -31,15 +24,6 @@ try:
     from pdbrc import MyPdb
 except:  # noqa
     MyPdb = None
-
-try:
-    import ipdb
-except ImportError:
-    try:
-        from IPython.terminal.debugger import Pdb
-    except ImportError:
-        ipdb = None
-
 
 from jedi.api import replstartup
 from IPython.core.getipython import get_ipython
@@ -196,42 +180,23 @@ def get_parser():
     return parser
 
 
-# def debug_forever():
-
-
-def main():
-    program_name, *args = sys.argv
-    parser = get_parser()
-    if not args:
-        sys.exit(parser.print_help())
-
-    namespace = parser.parse_args(args)
-
-    if hasattr(namespace, "mainpyfile"):
-        if not Path(namespace.mainpyfile).exists():
-            raise FileNotFoundError
-
-        mainpyfile = namespace.mainpyfile
-        # Replace pdb's dir with script's dir in front of module search path.
-        sys.path.insert(0, os.path.dirname(mainpyfile))
-    # should probably make an else.
-
+def debug_script(script=None):
+    if script is None:
+        return
     # Note on saving/restoring sys.argv: it's a good idea when sys.argv was
     # modified by the script being debugged. It's a bad idea when it was
     # changed by the user from the command line. There is a "restart" command
     # which allows explicit specification of command line arguments.
     pdb = _init_pdb(commands=namespace.commands)
 
-    # ????
-    # while True:
-    #     debug_forever()
+
     try:
-        pdb._runscript(mainpyfile)
+        pdb._runscript(script)
         if pdb._user_requested_quit:
             return
         logger.warning("The program finished and will be restarted")
     except Restart:
-        logger.info(f"Restarting {mainpyfile} with arguments:\t{str(sys.argv[1:])}")
+        logger.info(f"Restarting {script} with arguments:\t{str(sys.argv[1:])}")
     except BdbQuit:
         logger.critical("Quit signal received.  Goodbye!")
 
@@ -245,24 +210,61 @@ def main():
         print("Running 'cont' or 'step' will restart the program")
         t = sys.exc_info()[2]
         pdb.interaction(None, t)
-        print("Post mortem debugger finished. The " + mainpyfile + " will be restarted")
+        print("Post mortem debugger finished. The " + script + " will be restarted")
+
+def main():
+    """Parses users argument and dispatches based on responses."""
+    program_name, *args = sys.argv
+    parser = get_parser()
+    if not args:
+        # Print some help, then don't do the other junk here
+        parser.print_help()
+        return
+
+    try:
+        namespace = parser.parse_args(args)
+    except SystemExit:
+        # can't believe i'm catching sysexit but fuck you argparse
+        namespace = None
+
+    if hasattr(namespace, "mainpyfile"):
+        if namespace.mainpyfile is not None:
+            if not Path(namespace.mainpyfile).exists():
+                raise FileNotFoundError
+    else:
+        _init_pdb().set_trace()
+
+    mainpyfile = namespace.mainpyfile
+    # Replace pdb's dir with script's dir in front of module search path.
+    if mainpyfile is not None:
+        sys.path.insert(0, os.path.dirname(mainpyfile))
+        debug_script(mainpyfile)
 
 
-if __name__ == "__main__":
-    # Moving all the globals because that shit drives me nuts
+def get_or_start_ipython():
+    """Returns the global IPython instance.
+
+    Summary
+    -------
+
+    Extended Summary
+    ----------------
+    In contrast to `IPython.core.getipython.get_ipython`, this will start
+    IPython if `get_ipython` returns None.
+
+    Builds a terminal app in order to force IPython to load the
+    user's configuration.
+    `IPython.terminal.TerminalIPythonApp.interact` is set to False to
+    avoid output (banner, prints) and then the TerminalIPythonApp is
+    initialized with '--no-term-title'.
+    """
     shell = get_ipython()
     if shell is None:
-        # Not inside IPython
-        # Build a terminal app in order to force ipython to load the
-        # configuration
         ipapp = TerminalIPythonApp()
-        # Avoid output (banner, prints)
         ipapp.interact = False
         ipapp.initialize(["--no-term-title"])
         shell = ipapp.shell
     else:
-        # Running inside IPython
-
         # Detect if embed shell or not and display a message
         if isinstance(shell, InteractiveShellEmbed):
             sys.stderr.write(
@@ -270,19 +272,6 @@ if __name__ == "__main__":
                 "the configuration will not be loaded.\n\n"
             )
 
-    # todo: so the actual implementation of this in ipython is shell.debugger()
-    # a method to run IPython.core.ultratb.AutoformattedTB.debugger()
-    # AutoFormattedTB is bound to the shell as InteractiveTB.
-    # It also doesnt have a debugger method but subclasses VerboseTB which does.
-    # So if we bind this debugger class to the `debugger` attribute
-    # A) things becone a little less interconnected and fucky and
-    # B) itll probably run faster since it wont need to resolve mixins on  subclasses on subclasses
 
-    # Also of note.:
-    # :attr:`debugger_history`
-    # In [43]: _ip.debugger_history
-    # Out[43]: <prompt_toolkit.history.InMemoryHistory at 0x7e42910490>
-    # add an arg for log file and switch this to a FileHistory
-    global debugger_cls
-    debugger_cls = MyPdb
+if __name__ == "__main__":
     main()

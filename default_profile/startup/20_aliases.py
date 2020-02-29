@@ -591,6 +591,7 @@ class WindowsAliases(CommonAliases):
             # ("cp", "copy %s %s"),
             ("cpanel", "control %l"),
             ("cygpath", "cygpath %l"),
+            ("dism", "dism"),
             ("ddir", "dir /ad /on %l"),
             ("echo", "echo %l"),
             ("find", "find %l"),
@@ -612,6 +613,7 @@ class WindowsAliases(CommonAliases):
             ("rmdir", "rmdir %l"),
             # i'll admit this is specific but I'm NEVER gonna remember it
             ("rmdir -r", "rmdir /S %l"),
+            ("sc", "sc %l"),
             ("set", "set %l"),  # but honestly might just work better as os.environ.putenv
             ("sfc", "sfc %l"),
             ("start", "start %l"),

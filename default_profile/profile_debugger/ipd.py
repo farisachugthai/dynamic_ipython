@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Run ipdb and capture args.
+"""Run pdb and capture args.
 
 Oct 06, 2019:
 

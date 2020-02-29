@@ -4,13 +4,15 @@
 
 Make `pp` use IPython's pretty printer, instead of the standard `pprint` module.
 
-:URL: https://nedbatchelder.com/blog/200704/my_pdbrc.html
+Assumes that the user has IPython, prompt_toolkit, jedi and pygments installed.
+prompt_toolkit, jedi and pygments are all dependencies of IPython, so a simple
+``pip install -e .`` in the root of this repository can handle this.
 
-Jesus Christ this got out of control.
-
+In addition, readline is assumed to be present on the system. On systems that don't have readline installed by default, ``pyreadline`` can work as a drop-in replacement.
 """
 import atexit
 from bdb import BdbQuit, Breakpoint
+import cmd
 import cgitb
 from contextlib import suppress
 import faulthandler
@@ -20,22 +22,32 @@ import keyword
 from logging import getLogger, StreamHandler, BufferingFormatter, Filter
 import os
 from pathlib import Path
-from pprint import pprint as print
+import readline
 import pdb
 import pydoc
-import rlcompleter
 import runpy
 import sys
 import time
 import trace
+import tracemalloc
 import traceback
+
+from jedi.api import replstartup
+from IPython.core.getipython import get_ipython
+from IPython.terminal.prompts import Prompts
+from prompt_toolkit.completion.fuzzy_completer import FuzzyWordCompleter
+from prompt_toolkit.shortcuts import print_formatted_text as print
+import pygments
+from pygments.lexers.python import PythonLexer
+from pygments.formatters.terminal256 import TerminalTrueColorFormatter
+
 
 if sys.version_info < (3, 7):
     from default_profile import ModuleNotFoundError
 
-# Run all this before any non-std lib imports. They should get profiled too
 print(f".pdbrc.py started {time.ctime()}")
 
+# GLOBALS:
 log_format = (
     "[ %(name)s : %(relativeCreated)d :] %(levelname)s : %(module)s : --- %(message)s "
 )
@@ -49,35 +61,12 @@ logger.addFilter(Filter())
 logger.addHandler(handler)
 logger.setLevel(30)
 
-faulthandler.enable()
+debugger_completer = FuzzyWordCompleter(words=keyword.kwlist).get_completions
+shell = get_ipython()
+
 cgitb.enable(format="text")
-
-try:
-    import prompt_toolkit
-except ImportError:
-    debugger_completer = rlcompleter.Completer.complete
-else:
-    from prompt_toolkit.completion.fuzzy_completer import FuzzyWordCompleter
-
-    debugger_completer = FuzzyWordCompleter(words=keyword.kwlist).get_completions
-
-
-try:
-    from IPython.core.getipython import get_ipython
-except:  # noqa
-    shell = None
-else:
-    shell = get_ipython()
-
-
-# Use IPython's pretty printing within PDB
-with suppress(ImportError):
-    from IPython.lib.pretty import pprint
-
-
-with suppress(ImportError):
-    from jedi.api import replstartup
-
+faulthandler.enable()
+tracemalloc.start()
 
 # History: Set up separately
 
@@ -95,27 +84,41 @@ def save_history(hist_path=None):
             hist_path.touch()
         hist_path = hist_path.__fspath__()
 
-    # readline.append_history_file(hist_path)
-
-
-# history_path = Path.expanduser("~/.pdb_history.py")
-# if not history_path.exists():
-#     history_path.touch()
 try:
     from default_profile.startup import readline_mod
-    import readline
 except (ImportError, ModuleNotFoundError):  # noqa
     pass
 else:
     readline.parse_and_bind("Tab:menu-complete")
-    # readline.read_history_file(historyPath)
-    # save_history(historyPath)
-    # atexit.register(save_history, hist_path=historyPath)
+
+
+# Customized prompt
+
+class DebuggerPrompt(Prompts):
+
+    def __init__(self):
+        self.shell = get_ipython()
+        super().__init__(self.shell)
+
+    def python_location(self):
+        env = os.environ.get('CONDA_DEFAULT_ENV')
+        if env is None:
+            return Path(sys.prefix)
+        return Path(env)
+
+    def in_prompt_tokens(self):
+        return [(Token.Comment, self.python_location()), (Token.Keyword, '<YourPDB> @'), (Token.Keyword, self.shell.execution_count)]
+
+    def __call__(self):
+        return self.in_prompt_tokens()
+
+    def __repr__(self):
+        return self.in_prompt_tokens()
 
 # Customized Pdb
 
 
-class MyPdb(pdb.Pdb):
+class MyPdb(pdb.Pdb, cmd.Cmd):
 
     """Subclass Pdb. Currently defined as a callable.
 
@@ -136,6 +139,8 @@ class MyPdb(pdb.Pdb):
     """
 
     doc_header = ""
+    lexer = PythonLexer()
+    formatter = TerminalTrueColorFormatter()
 
     def __init__(
         self, completekey="tab", skip="traitlets", shell=None, *args, **kwargs,
@@ -148,17 +153,18 @@ class MyPdb(pdb.Pdb):
         .. todo:: I keep getting errors about self.botframe not being defined?
         """
         self.skip = skip
+        self.completekey = completekey
+        self.allow_kbdint = True
+        self.lineno = None
+        super().__init__(completekey=self.completekey, skip=self.skip, *args, **kwargs)
         self.shell = get_ipython() if shell is None else shell
         if self.shell is not None:
-            self.prompt = f"<YourPdb -> Why. [ {self.shell.execution_count} ] "
+            self.prompt = DebuggerPrompt()
         self.bp = Breakpoint
-        self.completekey = completekey
-
-        super().__init__(completekey=self.completekey, skip=self.skip, *args, **kwargs)
 
     def __repr__(self):
         """Better repr with :meth:`bdb.Bdb.get_all_breaks` thrown in."""
-        return f"<{self.__class__.__name__} {self.get_all_breaks()}"
+        return f"<{self.__class__.__name__}:> {self.get_all_breaks()}"
 
     def run(self, statement, *args, **kwargs):
         """Garbage collect after running because asyncio."""
@@ -171,13 +177,37 @@ class MyPdb(pdb.Pdb):
     def __call__(self, statement, *args, **kwargs):
         return self.run(statement)
 
+    def colorizer(self, code):
+        """color from pygments."""
+        if code is not None:
+            return pygments.highlight(code, self.lexer, self.formatter)
+
+    def displayhook(self, code):
+        """Override the superclasses implementation and use pygments."""
+        return self.colorizer(code)
+
     def completedefault(self):
         """The superclass has this return nothing. Lets have this complete `locals.keys()`"""
         self.complete(sorted(locals().keys()))
 
+    # FUCK. pdb assigns to this too?
+    # @property
+    # def curframe(self):
+    #     """Gettin errors because pdb's preloop needs curframe. Has to be a property because we use the attributes on the frame"""
+    #     return inspect.currentframe()
+
+    def do_raise(self, exception):
+        # Seriously why the fuck wouldn't this stop popping up
+        if isinstance(exception, Exception):
+            raise exception
+        else:
+            return
+
+    def curframe_locals(self):
+        return self.curframe.f_locals()
+
     def message(self, msg):
-        if colorizer is not None:
-            return colorizer(super().message(msg))
+        return self.colorizer(super().message(msg))
 
     @staticmethod
     def help():
@@ -186,10 +216,6 @@ class MyPdb(pdb.Pdb):
 
 
 debugger = MyPdb(shell=get_ipython())
-# TODO:
-# get_ipython().debugger_cls = MyPdb
-# Customize the sys.excepthook
-
 
 def exception_hook(type=None, value=None, tb=None):
     """Return to debugger after fatal exception (Python cookbook 14.5)."""
@@ -201,8 +227,11 @@ def exception_hook(type=None, value=None, tb=None):
     pdb.pm()
 
 
-sys.excepthook = exception_hook
+# sys.excepthook = exception_hook
 
 end = time.time()
 duration = end - start
-print(f".pdbrc.py finished.{time.ctime()}\nduration was: {duration}.\n")
+print(f".pdbrc.py finished.{time.ctime()}" + "\n" + f"duration was: {duration}.")
+
+malloced = tracemalloc.take_snapshot()
+
