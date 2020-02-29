@@ -13,7 +13,10 @@
 import asyncio
 from asyncio.__main__ import AsyncIOInteractiveConsole, REPLThread
 from asyncio import format_helpers
+from os import scandir
 from os.path import abspath
+
+from pathlib import Path
 
 try:
     from asyncio.windows_events import ProactorEventLoop, IocpProactor

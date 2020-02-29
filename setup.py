@@ -39,6 +39,9 @@ Here's a really good one to check out.:
 
         An exception has occurred, use %tb to see the full traceback.
 """
+from setuptools.dist import Distribution
+from setuptools import setup, find_packages, Command, Extension, PackageFinder
+from distutils.errors import DistutilsArgError
 import codecs
 import logging
 import os
@@ -49,9 +52,6 @@ import sys
 
 logging.basicConfig()
 
-from distutils.errors import DistutilsArgError
-from setuptools import setup, find_packages, Command, Extension, PackageFinder
-from setuptools.dist import Distribution
 
 # This is useful
 d = Distribution()
@@ -135,12 +135,14 @@ REQUIRED = [
 ]
 
 EXTRAS = {
-    "develop": ["pipenv", "pandas", "matplotlib",],
-    "docs": ["sphinx>=2.2", "matplotlib>=3.0.0", "numpydoc>=0.9",],
-    "test": ["pytest", "testpath",],
+    "develop": ["pipenv", "pandas", "matplotlib", ],
+    "docs": ["sphinx>=2.2", "matplotlib>=3.0.0", "numpydoc>=0.9", ],
+    "test": ["pytest", "testpath", ],
 }
 
 # }}}}
+
+
 class UploadCommand(Command):  # {{{
     """Support setup.py upload."""
 
@@ -243,7 +245,7 @@ setup(
         "Programming Language :: Python :: Implementation :: CPython",
     ],
     # $ setup.py publish support.
-    cmdclass={"upload": UploadCommand,},
+    cmdclass={"upload": UploadCommand, },
     # project home page, if any
     project_urls={
         "Bug Tracker": "https://www.github.com/farisachugthai/dynamic_ipython/issues",

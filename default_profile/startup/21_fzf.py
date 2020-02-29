@@ -197,6 +197,10 @@ def is_rg():
 
 
 def fzf_history(event):
+    try:
+        import pandas as pd
+    except ImportError:
+        return
     if pd is None:
         return
     cnx = sqlite3.connect(home + "/.ipython/profile_default/history.sqlite")

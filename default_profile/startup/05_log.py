@@ -288,7 +288,7 @@ class MyHistoryAccessor(HistoryAccessor):
 
     def get_tail(self, n=10, raw=True, output=False, include_latest=False):
         """Get the last n lines from the history database.
-    
+
         Parameters
         ----------
         n : int
@@ -299,7 +299,7 @@ class MyHistoryAccessor(HistoryAccessor):
             If False (default), n+1 lines are fetched, and the latest one
             is discarded. This is intended to be used where the function
             is called by a user command, which it should not return.
-    
+
         Returns
         -------
         Tuples as :meth:`get_range`

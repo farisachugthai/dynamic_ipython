@@ -17,12 +17,14 @@ from IPython.core.page import pager_page
 
 class NotInIPythonError(RuntimeError):
     """Error raised when a magic is invoked outside of IPython."""
+
     def __init__(self, *args, **kwargs):
         super().__init__(self, *args, **kwargs)
 
 
 class PyPager:
     """A pager if you're outside of IPython."""
+
     def __init__(self, *args, text=None, use_pager=True):
         """Initializes the class.
 

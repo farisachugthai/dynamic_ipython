@@ -108,7 +108,7 @@ class IPD(Pdb):
         )
 
     def initialize_keybindings(self, custom_keys=None):
-        _ = [ load_key_bindings(), create_ipython_shortcuts(self.shell), ]
+        _ = [load_key_bindings(), create_ipython_shortcuts(self.shell), ]
         if custom_keys is None:
             return merge_key_bindings(_)
         else:

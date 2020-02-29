@@ -661,7 +661,7 @@ class ReadlineInteractiveShell(InteractiveShell):
         # spaces, if the user's actual input started itself with whitespace.
         if self.autoindent:
             if num_ini_spaces(line) > self.indent_current_nsp:
-                line = line[self.indent_current_nsp :]
+                line = line[self.indent_current_nsp:]
                 self.indent_current_nsp = 0
 
         return line

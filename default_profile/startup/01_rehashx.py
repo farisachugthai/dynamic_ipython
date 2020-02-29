@@ -30,6 +30,8 @@ sys.excepthook, threading.excepthook and others.
     possibly be :func:`dis.distb`.
 
 """
+from traitlets.config import Configurable
+from IPython.core.getipython import get_ipython
 import cgitb
 import code
 import faulthandler
@@ -48,9 +50,6 @@ from traceback import FrameSummary, StackSummary, format_exc, format_tb
 from tracemalloc import Snapshot
 
 logging.basicConfig(level=logging.WARNING)
-
-from IPython.core.getipython import get_ipython
-from traitlets.config import Configurable
 
 
 def formatted_tb():

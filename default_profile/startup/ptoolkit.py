@@ -23,6 +23,7 @@ to a container `HSplit` and a few other things possibly worth exploring.
 """
 from reprlib import repr
 
+import prompt_toolkit
 from prompt_toolkit.buffer import Buffer
 from prompt_toolkit.document import Document
 from prompt_toolkit.filters import Condition, is_searching
@@ -65,7 +66,10 @@ def get_session():
 
 
 class Helpers:
+    """A class that attempt enumerating the hierarchy of classes in prompt_toolkit."""
+
     def __init__(self):
+        """Define the shell, PromptSession and Application."""
         self.shell = get_ipython()
         self.pt_app = get_app()
         self.session = get_session()
@@ -109,11 +113,13 @@ class Helpers:
     def app_style(self):
         """Of course it's not the same as the session_style.
 
-        In [108]: pt.pt_app.style
-        Out[108]: <prompt_toolkit.styles.base.DynamicStyle at 0x7f164da54f40>
+        ::
 
-        In [109]: pt.session.style
-        Out[109]: <prompt_toolkit.styles.base.DynamicStyle at 0x7f1658a90a30>
+            In [108]: pt.pt_app.style
+            Out[108]: <prompt_toolkit.styles.base.DynamicStyle at 0x7f164da54f40>
+
+            In [109]: pt.session.style
+            Out[109]: <prompt_toolkit.styles.base.DynamicStyle at 0x7f1658a90a30>
         """
         return self.pt_app.style
 
@@ -129,8 +135,7 @@ class Helpers:
     def current_container(self):
         """Return the container attr of the layout.
 
-        Typically will return the HSplit defining the layout
-        of the app.
+        Typically will return the HSplit defining the layout of the app.
         """
         return self.layout.container
 
@@ -140,8 +145,10 @@ class Helpers:
 
         I genuinely don't think I expected it to be so big.
 
-        .. admonition::
-            HSplit.children is a lie use HSplit._all_children
+        .. admonition:: HSplit.children is a lie.
+
+            Use HSplit._all_children
+
         """
         return self.current_container._all_children
 
@@ -221,6 +228,7 @@ def all_processors_for_searching():
 
 
 def search_layout():
+    """Generate a `Layout` with a `SearchToolbar` and keybindings."""
     all_input_processors = all_processors_for_searching()
     search_toolbar = SearchToolbar(vi_mode=True)
     # style = Style([("incsearch", "fg:ansibrightcyan reverse")])

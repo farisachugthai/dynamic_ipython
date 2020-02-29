@@ -189,7 +189,6 @@ def debug_script(script=None):
     # which allows explicit specification of command line arguments.
     pdb = _init_pdb(commands=namespace.commands)
 
-
     try:
         pdb._runscript(script)
         if pdb._user_requested_quit:
@@ -211,6 +210,7 @@ def debug_script(script=None):
         t = sys.exc_info()[2]
         pdb.interaction(None, t)
         print("Post mortem debugger finished. The " + script + " will be restarted")
+
 
 def main():
     """Parses users argument and dispatches based on responses."""
