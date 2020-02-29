@@ -5,6 +5,7 @@ from io import StringIO
 from unittest import TestCase
 from unittest.mock import patch
 
+from IPython.terminal.interactiveshell import InteractiveShell
 # Doesn't work. Says theres no bt_mod. Ugh
 # bt_mod = importlib.import_module('default_profile.startup.33_bottom_toolbar')
 # from bt_mod import BottomToolbar  # noqa
@@ -24,10 +25,16 @@ if bt_mod.get_app() is None:
     unittest.skip("Prompt toolkit not running.")
 
 
+def shell():
+    return InteractiveShell()
+
+def pt_app():
+    return shell.pt_app
+
 class TestBottomToolbar(TestCase):
-    def setUp(self, _ip):
+    def setUp(self):
         """Is this supposed to be called something different?"""
-        self.toolbar = bt_mod.BottomToolbar(bt_mod.get_app())
+        self.toolbar = bt_mod.BottomToolbar(pt_app)
         if bt_mod.BottomToolbar() is None:
             self.toolbar = _ip
         if _ip is not None:

@@ -61,14 +61,13 @@ class TestPath(unittest.TestCase):
         self.assertIsInstance(pathlibed, Path)
         self.assertTrue(pathlibed.exists())
 
-    def test_unc_path(self):
-        path = "\\C"
-        # TODO
+    # def test_unc_path(self):
+    #     path = "\\C"
 
-    def test_invalid_path(self):
-        path = "C:\not\a\\path"
-        with self.assertRaises(OSError):
-            foo = Path(path).exists()
+    # def test_invalid_path(self):
+    #     path = "C:\not\a\\path"
+    #     with self.assertRaises(OSError):
+    #         foo = Path(path).exists()
 
 
 class TestEnvironMagics(unittest.TestCase):
