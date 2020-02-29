@@ -40,6 +40,8 @@ if os.environ.get("IPYTHONDIR"):
 else:
     logging.basicConfig(format="%(message)s", level=logging.DEBUG)
 
+# Completion
+
 
 class SimpleCompleter:
     """Completion mechanism that tracks candidates for different subcommands.
@@ -89,6 +91,17 @@ class SimpleCompleter:
             response = None
         logging.debug("complete(%s, %s) => %s", repr(text), state, repr(response))
         return response
+
+
+def complete(text, state):
+    """If no text in front of the cursor, return 4 spaces. Otherwise use the standard completer."""
+    if not text:
+        # Insert four spaces for indentation
+        return ("    ", None)[state]
+    else:
+        if readline is not None:
+            old_complete = readline.get_completer()
+            return old_complete(text, state)
 
 
 def input_loop():
@@ -222,7 +235,7 @@ def setup_historyfile(filename=None):
     except OSError as e:
         logging.exception("Could not read the history file.")
     else:
-        readline.set_history_length(2000)
+        readline.set_history_length(-1)
 
     # now ipython
     shell = get_ipython()
@@ -233,6 +246,7 @@ def setup_historyfile(filename=None):
 
 def teardown_historyfile(starting_id, histfile=None):
     if not hasattr(readline, "append_history_file"):
+        readline.write_history_file(histfile)
         return
     new_h_len = readline.get_current_history_length()
     readline.set_history_length(2000)
@@ -285,6 +299,7 @@ if __name__ == "__main__":
         # in that case
         from pyreadline.lineeditor.lineobj import ReadLineTextBuffer
         from readline import GetOutputFile  # output console via ctype
+
         # oh also call the pyreadline top module
         import readline
 

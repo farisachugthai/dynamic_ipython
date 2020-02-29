@@ -162,7 +162,7 @@ class CommonAliases(UserDict):
 
     def append(self, list_aliases):
         for i in list_aliases:
-            self.shell.alias_manager.define_alias(alias)
+            self.__add__(i)
 
     def __getattr__(self, attr):
         """Define a getattr as dicts typically don't have one defined."""
