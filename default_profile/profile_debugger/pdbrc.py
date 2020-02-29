@@ -96,10 +96,6 @@ else:
 
 class DebuggerPrompt(Prompts):
 
-    def __init__(self):
-        self.shell = get_ipython()
-        super().__init__(self.shell)
-
     def python_location(self):
         env = os.environ.get('CONDA_DEFAULT_ENV')
         if env is None:
@@ -115,10 +111,14 @@ class DebuggerPrompt(Prompts):
     def __repr__(self):
         return self.in_prompt_tokens()
 
+    def __len__(self):
+        """Define length of the instance by the superclasses `_width`."""
+        return self._width()
+
 # Customized Pdb
 
 
-class MyPdb(pdb.Pdb, cmd.Cmd):
+class MyPdb(pdb.Pdb):
 
     """Subclass Pdb. Currently defined as a callable.
 
@@ -158,9 +158,7 @@ class MyPdb(pdb.Pdb, cmd.Cmd):
         self.lineno = None
         super().__init__(completekey=self.completekey, skip=self.skip, *args, **kwargs)
         self.shell = get_ipython() if shell is None else shell
-        if self.shell is not None:
-            self.prompt = DebuggerPrompt()
-        self.bp = Breakpoint
+        self.prompt = DebuggerPrompt(self.shell)
 
     def __repr__(self):
         """Better repr with :meth:`bdb.Bdb.get_all_breaks` thrown in."""
@@ -209,10 +207,14 @@ class MyPdb(pdb.Pdb, cmd.Cmd):
     def message(self, msg):
         return self.colorizer(super().message(msg))
 
-    @staticmethod
-    def help():
+    def do_helper(self):
         # Ill concede this has nothing to do with anything but I find it helpful
+        # we should bind an instance of pydoc.Helper to this class those suckers are useful.
         pydoc.pipepager(inspect.getsource(pdb.Pdb), os.environ.get("PAGER"))
+
+    @property
+    def bp(self, *args, **kwargs):
+        return Breakpoint(*args, **kwargs)
 
 
 debugger = MyPdb(shell=get_ipython())
