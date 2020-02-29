@@ -62,6 +62,8 @@ try:
     d.parse_command_line()
 except DistutilsArgError:
     print("No args provided.")
+except TypeError:
+    pass
 
 
 # Obviously there's a ton more we can do here
@@ -137,13 +139,12 @@ REQUIRED = [
 EXTRAS = {
     "develop": ["pipenv", "pandas", "matplotlib", ],
     "docs": ["sphinx>=2.2", "matplotlib>=3.0.0", "numpydoc>=0.9", ],
-    "test": ["pytest", "testpath", ],
+    "test": ["pytest", "testpath", "nose", "matplotlib"],
 }
-
 # }}}}
 
-
-class UploadCommand(Command):  # {{{
+# {{{
+class UploadCommand(Command):
     """Support setup.py upload."""
 
     description = "Build and publish the package."
@@ -189,6 +190,7 @@ class UploadCommand(Command):  # {{{
 
 
 # }}}
+
 # Where the magic happens: {{{1
 
 setup(
