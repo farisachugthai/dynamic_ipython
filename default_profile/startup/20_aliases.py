@@ -400,10 +400,10 @@ class CommonAliases(UserDict):
             ),
             ("gls", "git ls-tree master %l"),
             ("git ls", "git ls-tree master %l"),
-            ("gm", "git merge --no-ff %l"),
+            ("gm", "git merge --stat --squash --progress %l"),
             ("gma", "git merge --abort %l"),
             ("gmc", "git merge --continue %l"),
-            ("gmm", "git merge --no-ff master %l"),
+            ("gmm", "git merge --stat --squash --progress master %l"),
             ("gmt", "git mergetool %l"),
             ("gp", "git pull --all %l"),
             ("gpo", "git pull origin %l"),
@@ -614,7 +614,10 @@ class WindowsAliases(CommonAliases):
             # i'll admit this is specific but I'm NEVER gonna remember it
             ("rmdir -r", "rmdir /S %l"),
             ("sc", "sc %l"),
-            ("set", "set %l"),  # but honestly might just work better as os.environ.putenv
+            (
+                "set",
+                "set %l",
+            ),  # but honestly might just work better as os.environ.putenv
             ("sfc", "sfc %l"),
             ("start", "start %l"),
             ("tasklist", "tasklist %l"),

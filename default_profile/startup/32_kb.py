@@ -52,7 +52,6 @@ class KeyBindingsManager(UserList):
         self.__version = 0  # For cache invalidation.
         self.data = self.kb
 
-
     def __repr__(self):
         return "<{}>: {}".format(self.__class__.__name__, len(self.kb.bindings))
 

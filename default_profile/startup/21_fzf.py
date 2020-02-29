@@ -53,6 +53,7 @@ from IPython.terminal.shortcuts import create_ipython_shortcuts
 # TODO
 # if  TYPE_CHECKING: etc
 
+
 class Executable(ContextDecorator):
     """An object representing some executable on a user computer."""
 
@@ -194,15 +195,16 @@ def is_rg():
     """Returns the path to rg."""
     return shutil.which("rg")
 
+
 def fzf_history(event):
     if pd is None:
         return
-    cnx = sqlite3.connect(home+'/.ipython/profile_default/history.sqlite')
-    fzf=FzfPrompt()
+    cnx = sqlite3.connect(home + "/.ipython/profile_default/history.sqlite")
+    fzf = FzfPrompt()
     df = pd.read_sql_query("SELECT * FROM history", cnx)
-    itext=fzf.prompt(df['source'])
+    itext = fzf.prompt(df["source"])
     # print(itext)
-    if itext!=[]:
+    if itext != []:
         event.current_buffer.insert_text(itext[0])
 
 
@@ -210,9 +212,7 @@ def add_fzf_binding():
     insert_mode = ViInsertMode() | EmacsInsertMode()
     registry = get_ipython().pt_app.key_binding
 
-    registry.add_binding(Keys.ControlY,
-                         filter=HasFocus(DEFAULT_BUFFER)
-                        )(fzf_history)
+    registry.add_binding(Keys.ControlY, filter=HasFocus(DEFAULT_BUFFER))(fzf_history)
 
 
 class TestInter(TerminalInteractiveShell):
@@ -271,12 +271,12 @@ def run_in_terminal_fzf():
 
 
 def fzf_history(event):
-    cnx = sqlite3.connect(home+'/.ipython/profile_default/history.sqlite')
-    fzf=FzfPrompt()
+    cnx = sqlite3.connect(home + "/.ipython/profile_default/history.sqlite")
+    fzf = FzfPrompt()
     df = pd.read_sql_query("SELECT * FROM history", cnx)
-    itext=fzf.prompt(df['source'])
+    itext = fzf.prompt(df["source"])
     # print(itext)
-    if itext!=[]:
+    if itext != []:
         event.current_buffer.insert_text(itext[0])
 
 

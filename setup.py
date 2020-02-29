@@ -61,7 +61,7 @@ if len(sys.argv) == 0:
 try:
     d.parse_command_line()
 except DistutilsArgError:
-    print('No args provided.')
+    print("No args provided.")
 
 
 # Obviously there's a ton more we can do here
@@ -87,24 +87,25 @@ except ImportError:
 else:
     our_dist = importlib_metadata.distribution("dynamic_ipython")
     # TODO:
-    dynamic_entry_point = importlib_metadata.EntryPoint('foo', 'bar', 'dynamic_ipython')
+    dynamic_entry_point = importlib_metadata.EntryPoint("foo", "bar", "dynamic_ipython")
 
-
-# Conda Support: {{{1
-
-try:
-    import distutils.command.bdist_conda
-except (ImportError, ModuleNotFoundError):
-    distclass = (None,)
-else:
-    distclass = distutils.command.bdist_conda.CondaDistribution
 
 # Metadata: {{{1
 
 try:
     from default_profile.__about__ import __version__
-except:  # noqa
+    from default_profile import ModuleNotFoundError
+except ImportError:  # noqa
     __version__ = "0.0.2"
+
+# Conda Support: {{{1
+
+try:
+    import distutils.command.bdist_conda
+except ImportError:
+    distclass = (None,)
+else:
+    distclass = distutils.command.bdist_conda.CondaDistribution
 
 NAME = "dynamic_ipython"
 AUTHOR = "Faris Chugthai"

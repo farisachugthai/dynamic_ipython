@@ -43,6 +43,7 @@ from queue import SimpleQueue
 from IPython.core.getipython import get_ipython
 from IPython.core.error import UsageError
 from IPython.core.history import HistoryAccessor
+
 # from IPython.core.history import HistorySavinThread, HistoryManager
 from IPython.paths import get_ipython_dir
 from traitlets.config.configurable import LoggingConfigurable

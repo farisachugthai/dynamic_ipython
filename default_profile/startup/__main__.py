@@ -14,6 +14,7 @@ import asyncio
 from asyncio.__main__ import AsyncIOInteractiveConsole, REPLThread
 from asyncio import format_helpers
 from os.path import abspath
+
 try:
     from asyncio.windows_events import ProactorEventLoop, IocpProactor
 except ImportError:
@@ -85,7 +86,7 @@ if "__name__" == "__main":
     repl_thread = REPLThread()
     repl_thread.daemon = True
     repl_thread.start()
-    startup = abspath('.')
+    startup = abspath(".")
     exec_dir(startup)
     while True:
         try:
