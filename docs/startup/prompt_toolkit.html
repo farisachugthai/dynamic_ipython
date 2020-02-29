@@ -782,10 +782,12 @@ to a container <code class="xref py py-obj docutils literal notranslate"><span c
 <dt id="default_profile.startup.ptoolkit.Helpers">
 <em class="property">class </em><code class="sig-name descname">Helpers</code><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#Helpers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.Helpers" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A class that attempt enumerating the hierarchy of classes in prompt_toolkit.</p>
 <dl class="method">
 <dt id="default_profile.startup.ptoolkit.Helpers.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#Helpers.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.Helpers.__init__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Define the shell, PromptSession and Application.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="default_profile.startup.ptoolkit.Helpers.app_kb">
@@ -823,10 +825,13 @@ Out[102]: True</p>
 <dt id="default_profile.startup.ptoolkit.Helpers.app_style">
 <em class="property">property </em><code class="sig-name descname">app_style</code><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#Helpers.app_style"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.Helpers.app_style" title="Permalink to this definition">¶</a></dt>
 <dd><p>Of course it’s not the same as the session_style.</p>
-<p>In [108]: pt.pt_app.style
-Out[108]: &lt;prompt_toolkit.styles.base.DynamicStyle at 0x7f164da54f40&gt;</p>
-<p>In [109]: pt.session.style
-Out[109]: &lt;prompt_toolkit.styles.base.DynamicStyle at 0x7f1658a90a30&gt;</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">108</span><span class="p">]:</span> <span class="n">pt</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">style</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">108</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">styles</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">DynamicStyle</span> <span class="n">at</span> <span class="mh">0x7f164da54f40</span><span class="o">&gt;</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">109</span><span class="p">]:</span> <span class="n">pt</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">style</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">109</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">styles</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">DynamicStyle</span> <span class="n">at</span> <span class="mh">0x7f1658a90a30</span><span class="o">&gt;</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -843,8 +848,7 @@ Out[109]: &lt;prompt_toolkit.styles.base.DynamicStyle at 0x7f1658a90a30&gt;</p>
 <dt id="default_profile.startup.ptoolkit.Helpers.current_container">
 <em class="property">property </em><code class="sig-name descname">current_container</code><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#Helpers.current_container"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.Helpers.current_container" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the container attr of the layout.</p>
-<p>Typically will return the HSplit defining the layout
-of the app.</p>
+<p>Typically will return the HSplit defining the layout of the app.</p>
 </dd></dl>
 
 <dl class="method">
@@ -852,6 +856,10 @@ of the app.</p>
 <em class="property">property </em><code class="sig-name descname">current_container_children</code><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#Helpers.current_container_children"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.Helpers.current_container_children" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a list of the current container children.</p>
 <p>I genuinely don’t think I expected it to be so big.</p>
+<div class="admonition-hsplit-children-is-a-lie admonition">
+<p class="admonition-title">HSplit.children is a lie.</p>
+<p>Use HSplit._all_children</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -926,7 +934,8 @@ anything by default in IPython!</p>
 <dl class="function">
 <dt id="default_profile.startup.ptoolkit.search_layout">
 <code class="sig-name descname">search_layout</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#search_layout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.search_layout" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Generate a <code class="xref py py-obj docutils literal notranslate"><span class="pre">Layout</span></code> with a <code class="xref py py-obj docutils literal notranslate"><span class="pre">SearchToolbar</span></code> and keybindings.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="default_profile.startup.ptoolkit.create_searching_keybindings">

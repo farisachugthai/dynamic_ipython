@@ -204,6 +204,7 @@
 <span class="c1"># TODO</span>
 <span class="c1"># if  TYPE_CHECKING: etc</span>
 
+
 <div class="viewcode-block" id="Executable"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.Executable">[docs]</a><span class="k">class</span> <span class="nc">Executable</span><span class="p">(</span><span class="n">ContextDecorator</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;An object representing some executable on a user computer.&quot;&quot;&quot;</span>
 
@@ -345,15 +346,20 @@
     <span class="sd">&quot;&quot;&quot;Returns the path to rg.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;rg&quot;</span><span class="p">)</span></div>
 
+
 <span class="k">def</span> <span class="nf">fzf_history</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="k">return</span>
     <span class="k">if</span> <span class="n">pd</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span>
-    <span class="n">cnx</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">home</span><span class="o">+</span><span class="s1">&#39;/.ipython/profile_default/history.sqlite&#39;</span><span class="p">)</span>
-    <span class="n">fzf</span><span class="o">=</span><span class="n">FzfPrompt</span><span class="p">()</span>
+    <span class="n">cnx</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">home</span> <span class="o">+</span> <span class="s2">&quot;/.ipython/profile_default/history.sqlite&quot;</span><span class="p">)</span>
+    <span class="n">fzf</span> <span class="o">=</span> <span class="n">FzfPrompt</span><span class="p">()</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql_query</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM history&quot;</span><span class="p">,</span> <span class="n">cnx</span><span class="p">)</span>
-    <span class="n">itext</span><span class="o">=</span><span class="n">fzf</span><span class="o">.</span><span class="n">prompt</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">])</span>
+    <span class="n">itext</span> <span class="o">=</span> <span class="n">fzf</span><span class="o">.</span><span class="n">prompt</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">])</span>
     <span class="c1"># print(itext)</span>
-    <span class="k">if</span> <span class="n">itext</span><span class="o">!=</span><span class="p">[]:</span>
+    <span class="k">if</span> <span class="n">itext</span> <span class="o">!=</span> <span class="p">[]:</span>
         <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">insert_text</span><span class="p">(</span><span class="n">itext</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
 
@@ -361,9 +367,7 @@
     <span class="n">insert_mode</span> <span class="o">=</span> <span class="n">ViInsertMode</span><span class="p">()</span> <span class="o">|</span> <span class="n">EmacsInsertMode</span><span class="p">()</span>
     <span class="n">registry</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">key_binding</span>
 
-    <span class="n">registry</span><span class="o">.</span><span class="n">add_binding</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlY</span><span class="p">,</span>
-                         <span class="nb">filter</span><span class="o">=</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)</span>
-                        <span class="p">)(</span><span class="n">fzf_history</span><span class="p">)</span></div>
+    <span class="n">registry</span><span class="o">.</span><span class="n">add_binding</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlY</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">))(</span><span class="n">fzf_history</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="TestInter"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.TestInter">[docs]</a><span class="k">class</span> <span class="nc">TestInter</span><span class="p">(</span><span class="n">TerminalInteractiveShell</span><span class="p">):</span>
@@ -422,12 +426,12 @@
 
 
 <div class="viewcode-block" id="fzf_history"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.fzf_history">[docs]</a><span class="k">def</span> <span class="nf">fzf_history</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
-    <span class="n">cnx</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">home</span><span class="o">+</span><span class="s1">&#39;/.ipython/profile_default/history.sqlite&#39;</span><span class="p">)</span>
-    <span class="n">fzf</span><span class="o">=</span><span class="n">FzfPrompt</span><span class="p">()</span>
+    <span class="n">cnx</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">home</span> <span class="o">+</span> <span class="s2">&quot;/.ipython/profile_default/history.sqlite&quot;</span><span class="p">)</span>
+    <span class="n">fzf</span> <span class="o">=</span> <span class="n">FzfPrompt</span><span class="p">()</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql_query</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM history&quot;</span><span class="p">,</span> <span class="n">cnx</span><span class="p">)</span>
-    <span class="n">itext</span><span class="o">=</span><span class="n">fzf</span><span class="o">.</span><span class="n">prompt</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">])</span>
+    <span class="n">itext</span> <span class="o">=</span> <span class="n">fzf</span><span class="o">.</span><span class="n">prompt</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">])</span>
     <span class="c1"># print(itext)</span>
-    <span class="k">if</span> <span class="n">itext</span><span class="o">!=</span><span class="p">[]:</span>
+    <span class="k">if</span> <span class="n">itext</span> <span class="o">!=</span> <span class="p">[]:</span>
         <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">insert_text</span><span class="p">(</span><span class="n">itext</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div>
 
 
