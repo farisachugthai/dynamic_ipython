@@ -31,16 +31,16 @@ def shell():
 def pt_app():
     return shell.pt_app
 
+@unittest.skipIf(bt_mod.get_app() is None, "prompt_toolkit not running")
 class TestBottomToolbar(TestCase):
     def setUp(self):
         """Is this supposed to be called something different?"""
-        self.toolbar = bt_mod.BottomToolbar(pt_app)
         if bt_mod.BottomToolbar() is None:
-            self.toolbar = _ip
-        if _ip is not None:
-            bt_mod.add_toolbar(self.toolbar)
+            if _ip is not None:
+                bt_mod.add_toolbar(self.toolbar)
 
-    def test_toolbar_existence(self):
+    def test_toolbar_existence(self, _ip):
+        self.toolbar = bt_mod.BottomToolbar(_ip.pt_app)
         self.assertIsNotNone(self.toolbar)
 
     def test_toolbar_gets_to_stdout(self):
