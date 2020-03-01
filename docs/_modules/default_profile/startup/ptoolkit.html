@@ -180,6 +180,7 @@
 <span class="kn">from</span> <span class="nn">prompt_toolkit.keys</span> <span class="kn">import</span> <span class="n">Keys</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding</span> <span class="kn">import</span> <span class="n">merge_key_bindings</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings</span> <span class="kn">import</span> <span class="n">search</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.auto_suggest</span> <span class="kn">import</span> <span class="n">load_auto_suggest_bindings</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.vi</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">load_vi_bindings</span><span class="p">,</span>
     <span class="n">load_vi_search_bindings</span><span class="p">,</span>
@@ -280,8 +281,7 @@
     <span class="k">def</span> <span class="nf">current_container</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the container attr of the layout.</span>
 
-<span class="sd">        Typically will return the HSplit defining the layout</span>
-<span class="sd">        of the app.</span>
+<span class="sd">        Typically will return the HSplit defining the layout of the app.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">container</span></div>
 
@@ -291,8 +291,10 @@
 
 <span class="sd">        I genuinely don&#39;t think I expected it to be so big.</span>
 
-<span class="sd">        .. admonition::</span>
-<span class="sd">            HSplit.children is a lie use HSplit._all_children</span>
+<span class="sd">        .. admonition:: HSplit.children is a lie.</span>
+
+<span class="sd">            Use HSplit._all_children</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_container</span><span class="o">.</span><span class="n">_all_children</span></div>
 
@@ -398,7 +400,7 @@
 
     <span class="nd">@Condition</span>
     <span class="k">def</span> <span class="nf">search_buffer_is_empty</span><span class="p">():</span>
-        <span class="s2">&quot; Returns True when the search buffer is empty. &quot;</span>
+        <span class="sd">&quot;&quot;&quot;Returns True when the search buffer is empty.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">get_app</span><span class="p">()</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span>
 
     <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)(</span><span class="n">search</span><span class="o">.</span><span class="n">start_forward_incremental_search</span><span class="p">)</span>
@@ -440,6 +442,7 @@
             <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span><span class="p">,</span>
             <span class="n">load_vi_bindings</span><span class="p">(),</span>
             <span class="n">load_vi_search_bindings</span><span class="p">(),</span>
+            <span class="n">load_auto_suggest_bindings</span><span class="p">(),</span>  <span class="c1"># these stopped getting added when i did this</span>
         <span class="p">]</span>
     <span class="p">)</span>
     <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span><span class="o">.</span><span class="n">_update_cache</span><span class="p">()</span>
@@ -450,7 +453,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 28, 2020.
+      Last updated on Mar 01, 2020.
     </div>
   </body>
 </html>

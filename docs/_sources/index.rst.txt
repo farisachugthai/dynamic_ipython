@@ -19,11 +19,18 @@ This repository hosts startup scripts that can be used during
 IPython's startup.
 
 The scripts add well over 1000 aliases to the namespace, import commonly used
-modules, configure the data analysis library Pandas, add multiple application
-specific loggers, and more.
+modules, instantiate exception hooks from `cgitb`, format a `traceback`,
+import readline to add additional keybindings as well as checking for pyreadline
+for Windows users, lex documents with the `pygments` library and stylize the
+REPL as a  result, add multiple application specific loggers, and more.
 
-This repository contains a collection of different scripts written over the
-course of the last year modifying `IPython <docs/profile_default.html>`_.
+Heavy use of `prompt_toolkit` and Jedi's respective APIs are utilized here.
+
+As both libraries as well as pygments are explicit dependencies of IPython,
+no additional installation is required for those features.
+
+Specifically, new completers are added to the shell to handle fuzzy completion
+as well as autocompletion of paths and executables.
 
 
 .. _root-extensions:
@@ -32,6 +39,10 @@ Extensions
 ==========
 
 In addition this repository handles a growing number of IPython extensions.
+
+Some of the bundled extensions provide a more usable `PAGER` for users on
+Window than the one provided by `pydoc`, others modify runtime behavior of
+
 To see more, continue reading about :ref:`extensions`.
 
 
@@ -112,31 +123,56 @@ changed like so::
    c.TerminalInteractiveShell.editor = 'nvim'
 
 See Also
-==========
+----------
 
-For further reading, feel free to see the output of any of the following::
+For further reading, feel free to see the output of any of the following.
 
-    >>> from IPython.core.interactiveshell import InteractiveShell
-    >>> help(InteractiveShell)
+.. ipython::
+   :verbatim:
+
+   >>> from IPython.core.interactiveshell import InteractiveShell
+   >>> help(InteractiveShell)
 
 Which features descriptions of functions relevant to startup such as
 :func:`IPython.core.interactiveshell.register_magic_function` and literally
 every option available through the `%config` magic.
 
 For commands that are more related to the interactive aspect of the shell,
-see the following::
+see the following.
 
-    >>> from IPython import get_ipython
-    >>> _ip = get_ipython()
-    >>> help(_ip)  # doctest: +SKIP
-    >>> dir(_ip):  # doctest: +SKIP
+.. ipython::
+   :verbatim:
+
+   >>> from IPython import get_ipython
+   >>> _ip = get_ipython()
+   >>> help(_ip)  # doctest: +SKIP
+   >>> dir(_ip):  # doctest: +SKIP
 
 In addition, there's an abundance of documentation online in the
 form of rst docs and :abbr:`ipynb` notebooks.
 
+.. _root-toc:
 
 Table of Contents
 ==================
+
+{% if single_doc and single_doc.endswith('.rst') -%}
+.. toctree::
+    :maxdepth: 3
+    :titlesonly:
+ 
+    {{ single_doc[:-4] }}
+{% elif single_doc %}
+.. autosummary::
+    :toctree: reference/api/
+ 
+    {{ single_doc }}
+{% else -%}
+.. toctree::
+    :maxdepth: 3
+    :hidden:
+    :titlesonly:
+{% endif %}
 
 Startup
 -------

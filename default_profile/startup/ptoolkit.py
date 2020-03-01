@@ -29,6 +29,7 @@ from prompt_toolkit.filters import Condition, is_searching
 from prompt_toolkit.keys import Keys
 from prompt_toolkit.key_binding import merge_key_bindings
 from prompt_toolkit.key_binding.bindings import search
+from prompt_toolkit.key_binding.bindings.auto_suggest import load_auto_suggest_bindings
 from prompt_toolkit.key_binding.bindings.vi import (
     load_vi_bindings,
     load_vi_search_bindings,
@@ -129,8 +130,7 @@ class Helpers:
     def current_container(self):
         """Return the container attr of the layout.
 
-        Typically will return the HSplit defining the layout
-        of the app.
+        Typically will return the HSplit defining the layout of the app.
         """
         return self.layout.container
 
@@ -140,8 +140,10 @@ class Helpers:
 
         I genuinely don't think I expected it to be so big.
 
-        .. admonition::
-            HSplit.children is a lie use HSplit._all_children
+        .. admonition:: HSplit.children is a lie.
+
+            Use HSplit._all_children
+
         """
         return self.current_container._all_children
 
@@ -247,7 +249,7 @@ def create_searching_keybindings():
 
     @Condition
     def search_buffer_is_empty():
-        " Returns True when the search buffer is empty. "
+        """Returns True when the search buffer is empty."""
         return get_app().current_buffer.text == ""
 
     kb.add("/")(search.start_forward_incremental_search)
@@ -289,6 +291,7 @@ if __name__ == "__main__":
             get_ipython().pt_app.app.key_bindings,
             load_vi_bindings(),
             load_vi_search_bindings(),
+            load_auto_suggest_bindings(),  # these stopped getting added when i did this
         ]
     )
     get_ipython().pt_app.app.key_bindings._update_cache()

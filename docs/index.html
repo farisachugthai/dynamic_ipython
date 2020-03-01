@@ -157,8 +157,10 @@
 <li><a class="reference internal" href="#portability">Portability</a></li>
 <li><a class="reference internal" href="#motivation">Motivation</a></li>
 <li><a class="reference internal" href="#installation">Installation</a></li>
-<li><a class="reference internal" href="#assumptions">Assumptions</a></li>
+<li><a class="reference internal" href="#assumptions">Assumptions</a><ul>
 <li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#table-of-contents">Table of Contents</a><ul>
 <li><a class="reference internal" href="#startup">Startup</a></li>
 <li><a class="reference internal" href="#sphinx-extensions">Sphinx Extensions</a></li>
@@ -177,7 +179,7 @@
 <h1>Welcome to Dynamic IPython’s documentation!<a class="headerlink" href="#welcome-to-dynamic-ipython-s-documentation" title="Permalink to this headline">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">date</dt>
-<dd class="field-odd"><p>February 28, 2020</p>
+<dd class="field-odd"><p>March 01, 2020</p>
 </dd>
 </dl>
 <span class="target" id="module-root_index"></span><div class="section" id="startup-scripts">
@@ -185,15 +187,22 @@
 <p>This repository hosts startup scripts that can be used during
 IPython’s startup.</p>
 <p>The scripts add well over 1000 aliases to the namespace, import commonly used
-modules, configure the data analysis library Pandas, add multiple application
-specific loggers, and more.</p>
-<p>This repository contains a collection of different scripts written over the
-course of the last year modifying <a class="reference external" href="docs/profile_default.html">IPython</a>.</p>
+modules, instantiate exception hooks from <a class="reference external" href="https://docs.python.org/3/library/cgitb.html#module-cgitb" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cgitb</span></code></a>, format a <a class="reference external" href="https://docs.python.org/3/library/traceback.html#module-traceback" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">traceback</span></code></a>,
+import readline to add additional keybindings as well as checking for pyreadline
+for Windows users, lex documents with the <code class="xref py py-obj docutils literal notranslate"><span class="pre">pygments</span></code> library and stylize the
+REPL as a  result, add multiple application specific loggers, and more.</p>
+<p>Heavy use of <code class="xref py py-obj docutils literal notranslate"><span class="pre">prompt_toolkit</span></code> and Jedi’s respective APIs are utilized here.</p>
+<p>As both libraries as well as pygments are explicit dependencies of IPython,
+no additional installation is required for those features.</p>
+<p>Specifically, new completers are added to the shell to handle fuzzy completion
+as well as autocompletion of paths and executables.</p>
 </div>
 <div class="section" id="extensions">
 <span id="root-extensions"></span><h2>Extensions<a class="headerlink" href="#extensions" title="Permalink to this headline">¶</a></h2>
-<p>In addition this repository handles a growing number of IPython extensions.
-To see more, continue reading about <a class="reference internal" href="extensions/index.html#extensions"><span class="std std-ref">Extensions</span></a>.</p>
+<p>In addition this repository handles a growing number of IPython extensions.</p>
+<p>Some of the bundled extensions provide a more usable <code class="xref py py-obj docutils literal notranslate"><span class="pre">PAGER</span></code> for users on
+Window than the one provided by <a class="reference external" href="https://docs.python.org/3/library/pydoc.html#module-pydoc" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pydoc</span></code></a>, others modify runtime behavior of</p>
+<p>To see more, continue reading about <a class="reference internal" href="extensions/index.html#extensions"><span class="std std-ref">Extensions</span></a>.</p>
 </div>
 <div class="section" id="portability">
 <h2>Portability<a class="headerlink" href="#portability" title="Permalink to this headline">¶</a></h2>
@@ -240,30 +249,22 @@ changed like so:</p>
 <span class="n">c</span><span class="o">.</span><span class="n">TerminalInteractiveShell</span><span class="o">.</span><span class="n">editor</span> <span class="o">=</span> <span class="s1">&#39;nvim&#39;</span>
 </pre></div>
 </div>
-</div>
 <div class="section" id="see-also">
-<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
-<p>For further reading, feel free to see the output of any of the following:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">IPython.core.interactiveshell</span> <span class="kn">import</span> <span class="n">InteractiveShell</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">help</span><span class="p">(</span><span class="n">InteractiveShell</span><span class="p">)</span>
-</pre></div>
-</div>
+<h3>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h3>
+<p>For further reading, feel free to see the output of any of the following.</p>
 <p>Which features descriptions of functions relevant to startup such as
 <code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.core.interactiveshell.register_magic_function()</span></code> and literally
 every option available through the <code class="xref py py-obj docutils literal notranslate"><span class="pre">%config</span></code> magic.</p>
 <p>For commands that are more related to the interactive aspect of the shell,
-see the following:</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">help</span><span class="p">(</span><span class="n">_ip</span><span class="p">)</span>  <span class="c1"># doctest: +SKIP</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="nb">dir</span><span class="p">(</span><span class="n">_ip</span><span class="p">):</span>  <span class="c1"># doctest: +SKIP</span>
-</pre></div>
-</div>
+see the following.</p>
 <p>In addition, there’s an abundance of documentation online in the
 form of rst docs and <abbr>ipynb</abbr> notebooks.</p>
 </div>
+</div>
 <div class="section" id="table-of-contents">
-<h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h2>
+<span id="root-toc"></span><h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+</div>
 <div class="section" id="startup">
 <h3>Startup<a class="headerlink" href="#startup" title="Permalink to this headline">¶</a></h3>
 <div class="toctree-wrapper compound">
@@ -308,7 +309,6 @@ form of rst docs and <abbr>ipynb</abbr> notebooks.</p>
 <li class="toctree-l2"><a class="reference internal" href="util/machine.html">Machine</a></li>
 <li class="toctree-l2"><a class="reference internal" href="util/matplotlib_rc.html">Matplotlib Startup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="util/module_log.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">module_log</span></code> module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util/nb_stripper.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">nb_stripper</span></code> module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="util/pager2.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pager2</span></code> module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="util/paths.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paths</span></code> module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="util/profile_override.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">profile_override</span></code> module</a></li>
@@ -341,7 +341,7 @@ form of rst docs and <abbr>ipynb</abbr> notebooks.</p>
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 28, 2020.
+      Last updated on Mar 01, 2020.
     </div>
   </body>
 </html>

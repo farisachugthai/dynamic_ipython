@@ -157,7 +157,7 @@
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">runpy</span>
 <span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">MethodType</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">AsyncGenerator</span>
 
 <span class="kn">import</span> <span class="nn">jedi</span>
 <span class="kn">from</span> <span class="nn">jedi</span> <span class="kn">import</span> <span class="n">Script</span>
@@ -172,70 +172,104 @@
 <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 
 <span class="kn">from</span> <span class="nn">prompt_toolkit.auto_suggest</span> <span class="kn">import</span> <span class="n">AutoSuggestFromHistory</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.completion</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.completion</span> <span class="kn">import</span> <span class="n">WordCompleter</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.completion.base</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">DynamicCompleter</span><span class="p">,</span>
     <span class="n">Completer</span><span class="p">,</span>
     <span class="n">CompleteEvent</span><span class="p">,</span>
     <span class="n">Completion</span><span class="p">,</span>
-    <span class="n">PathCompleter</span><span class="p">,</span>
     <span class="n">ThreadedCompleter</span><span class="p">,</span>
-    <span class="n">WordCompleter</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.completion.base</span> <span class="kn">import</span> <span class="n">DynamicCompleter</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.completion.filesystem</span> <span class="kn">import</span> <span class="n">ExecutableCompleter</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.completion.filesystem</span> <span class="kn">import</span> <span class="n">ExecutableCompleter</span><span class="p">,</span> <span class="n">PathCompleter</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.completion.fuzzy_completer</span> <span class="kn">import</span> <span class="n">FuzzyWordCompleter</span><span class="p">,</span> <span class="n">FuzzyCompleter</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.document</span> <span class="kn">import</span> <span class="n">Document</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.eventloop</span> <span class="kn">import</span> <span class="n">generator_to_async_generator</span>
 
 
-<div class="viewcode-block" id="SimpleCompletions"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.completions.SimpleCompletions">[docs]</a><span class="k">class</span> <span class="nc">SimpleCompletions</span><span class="p">(</span><span class="n">Completer</span><span class="p">):</span>
-<div class="viewcode-block" id="SimpleCompletions.__init__"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.completions.SimpleCompletions.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="SimpleCompleter"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.completions.SimpleCompleter">[docs]</a><span class="k">class</span> <span class="nc">SimpleCompleter</span><span class="p">(</span><span class="n">Completer</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Building up a customized Completer using the prompt_toolkit API.</span>
+
+<span class="sd">    Utilizes the *min_input_len* of the PathCompleter along with</span>
+<span class="sd">    adding more necessary dunders and functionally useful</span>
+<span class="sd">    fallbacks in case of being called incorrectly, rather adding</span>
+<span class="sd">    dozens of assert statements.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SimpleCompleter.__init__"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.completions.SimpleCompleter.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">min_input_len</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">completer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">shell</span> <span class="ow">or</span> <span class="n">get_ipython</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_completer</span><span class="p">()</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="SimpleCompletions.user_ns"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.completions.SimpleCompletions.user_ns">[docs]</a>    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">user_ns</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">user_ns</span></div>
-
-    <span class="k">def</span> <span class="nf">_initialize_completer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">completer</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">completer</span> <span class="o">=</span> <span class="n">WordCompleter</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">user_ns</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^([a-zA-Z0-9_.]+|[^a-zA-Z0-9_.\s]+)&quot;</span><span class="p">)</span>
             <span class="p">)</span>
-        <span class="c1"># TODO: else:</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">completer</span> <span class="o">=</span> <span class="n">completer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_input_len</span> <span class="o">=</span> <span class="n">min_input_len</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{self.__class__.__name__}</span><span class="s2">&gt;&quot;</span>
+<div class="viewcode-block" id="SimpleCompleter.user_ns"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.completions.SimpleCompleter.user_ns">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">user_ns</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">user_ns</span></div>
 
-<div class="viewcode-block" id="SimpleCompletions.document"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.completions.SimpleCompletions.document">[docs]</a>    <span class="k">def</span> <span class="nf">document</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{self.__class__.__name__}</span><span class="s2">:&gt; </span><span class="si">{self.completer}</span><span class="s2">&quot;</span>
+
+<div class="viewcode-block" id="SimpleCompleter.document"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.completions.SimpleCompleter.document">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">document</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance of `prompt_toolkit.document.Document`.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">document</span></div>
 
-<div class="viewcode-block" id="SimpleCompletions.get_completions"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.completions.SimpleCompletions.get_completions">[docs]</a>    <span class="k">def</span> <span class="nf">get_completions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">complete_event</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;For now lets not worry about CompleteEvent too much. But we will need to add a</span>
-<span class="sd">        get_async_completions method.&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="SimpleCompleter.get_completions"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.completions.SimpleCompleter.get_completions">[docs]</a>    <span class="k">def</span> <span class="nf">get_completions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">complete_event</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;For now lets not worry about CompleteEvent too much.</span>
+
+<span class="sd">        But we will need to add a get_async_completions method.</span>
+
+<span class="sd">        .. todo:: Possibly alias this to `complete` for readline compat.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">doc</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">doc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">document</span>
+        <span class="c1"># Complete only when we have at least the minimal input length,</span>
+        <span class="c1"># otherwise, we can too many results and autocompletion will become too</span>
+        <span class="c1"># heavy.</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">text</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_input_len</span><span class="p">:</span>
+            <span class="k">return</span>
+
         <span class="k">if</span> <span class="n">complete_event</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">complete_event</span> <span class="o">=</span> <span class="n">CompleteEvent</span><span class="p">()</span>
+
         <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">completer</span><span class="o">.</span><span class="n">get_completions</span><span class="p">(</span>
-            <span class="n">document</span><span class="o">=</span><span class="n">doc</span><span class="p">,</span> <span class="n">complete_event</span><span class="o">=</span><span class="n">complete_event</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="n">document</span><span class="o">=</span><span class="n">doc</span><span class="p">,</span> <span class="n">complete_event</span><span class="o">=</span><span class="n">complete_event</span>
         <span class="p">)</span></div>
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">document</span><span class="p">:</span> <span class="n">Document</span><span class="p">,</span> <span class="n">complete_event</span><span class="p">:</span> <span class="n">CompleteEvent</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Completion</span><span class="p">]:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">get_completions</span><span class="p">(</span><span class="n">doc</span><span class="o">=</span><span class="n">document</span><span class="p">,</span> <span class="n">complete_event</span><span class="o">=</span><span class="n">complete_event</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_completions_async</span><span class="p">(</span><span class="n">document</span><span class="p">,</span> <span class="n">complete_event</span><span class="o">=</span><span class="n">complete_event</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SimpleCompleter.get_completions_async"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.completions.SimpleCompleter.get_completions_async">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_completions_async</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">document</span><span class="p">:</span> <span class="n">Document</span><span class="p">,</span> <span class="n">complete_event</span><span class="p">:</span> <span class="n">CompleteEvent</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncGenerator</span><span class="p">[</span><span class="n">Completion</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Asynchronous generator of completions.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">async</span> <span class="k">for</span> <span class="n">completion</span> <span class="ow">in</span> <span class="n">generator_to_async_generator</span><span class="p">(</span>
+            <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">completer</span><span class="o">.</span><span class="n">get_completions</span><span class="p">(</span><span class="n">document</span><span class="p">,</span> <span class="n">complete_event</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="k">yield</span> <span class="n">completion</span></div></div>
 
 
 <div class="viewcode-block" id="PathCallable"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.completions.PathCallable">[docs]</a><span class="k">class</span> <span class="nc">PathCallable</span><span class="p">(</span><span class="n">PathCompleter</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;OF COURSE ITS NOT CALLABLE.</span>
+    <span class="sd">&quot;&quot;&quot;PathCompleter with ``__call__`` defined.</span>
 
-<span class="sd">    Also why is get_paths even a method? If someones looking for a relative</span>
+<span class="sd">    The expanduser attribute is set to True. Thos can be overridddden in a subclass.</span>
+
+<span class="sd">    Also why is get_paths part of the publc API? If someones looking for a relative</span>
 <span class="sd">    directory, why wouldn&#39;t you assume that it&#39;s relative **to their current</span>
 <span class="sd">    working directory??**</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">get_paths</span> <span class="o">=</span> <span class="n">Path</span><span class="p">()</span>
+    <span class="n">expanduser</span> <span class="o">=</span> <span class="kc">True</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{self.__class__.__name__}</span><span class="s2">&gt;&quot;</span>
@@ -243,7 +277,8 @@
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">document</span><span class="p">:</span> <span class="n">Document</span><span class="p">,</span> <span class="n">complete_event</span><span class="p">:</span> <span class="n">CompleteEvent</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Completion</span><span class="p">]:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">get_completions</span><span class="p">(</span><span class="n">doc</span><span class="o">=</span><span class="n">document</span><span class="p">,</span> <span class="n">complete_event</span><span class="o">=</span><span class="n">complete_event</span><span class="p">)</span></div>
+        <span class="sd">&quot;&quot;&quot;Call but note doc is positional not keyword arg as it is in CustomCompleter.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_completions</span><span class="p">(</span><span class="n">document</span><span class="p">,</span> <span class="n">complete_event</span><span class="o">=</span><span class="n">complete_event</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="get_path_completer"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.completions.get_path_completer">[docs]</a><span class="k">def</span> <span class="nf">get_path_completer</span><span class="p">():</span>
@@ -263,20 +298,6 @@
     <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="will_break_pt_app"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.completions.will_break_pt_app">[docs]</a><span class="k">def</span> <span class="nf">will_break_pt_app</span><span class="p">():</span>
-    <span class="c1"># ergh</span>
-    <span class="n">merged_completers</span> <span class="o">=</span> <span class="n">merge_completers</span><span class="p">(</span>
-        <span class="p">[</span>
-            <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">completer</span><span class="p">,</span>
-            <span class="n">SimpleCompletions</span><span class="p">(),</span>
-            <span class="n">get_path_completer</span><span class="p">(),</span>
-            <span class="n">get_fuzzy_keyword_completer</span><span class="p">(),</span>
-            <span class="n">get_word_completer</span><span class="p">(),</span>
-        <span class="p">]</span>
-    <span class="p">)</span>
-    <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">completer</span> <span class="o">=</span> <span class="n">merged_completers</span></div>
-
-
 <div class="viewcode-block" id="venvs"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.completions.venvs">[docs]</a><span class="k">def</span> <span class="nf">venvs</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Use `jedi.api.find_virtualenvs` and return all values.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">find_virtualenvs</span><span class="p">()]</span></div>
@@ -291,7 +312,7 @@
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">document</span><span class="p">:</span> <span class="n">Document</span><span class="p">,</span> <span class="n">complete_event</span><span class="p">:</span> <span class="n">CompleteEvent</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Completion</span><span class="p">]:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">get_completions</span><span class="p">(</span><span class="n">doc</span><span class="o">=</span><span class="n">document</span><span class="p">,</span> <span class="n">complete_event</span><span class="o">=</span><span class="n">complete_event</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_completions</span><span class="p">(</span><span class="n">document</span><span class="p">,</span> <span class="n">complete_event</span><span class="o">=</span><span class="n">complete_event</span><span class="p">)</span>
 
 <div class="viewcode-block" id="CustomCompleter.get_completions"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.completions.CustomCompleter.get_completions">[docs]</a>    <span class="k">def</span> <span class="nf">get_completions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">document</span><span class="p">,</span> <span class="n">complete_event</span><span class="p">):</span>
         <span class="k">global</span> <span class="n">options</span>
@@ -341,12 +362,17 @@
                 <span class="k">yield</span> <span class="n">c</span></div>
 
 <div class="viewcode-block" id="MergedCompleter.get_completions_async"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.completions.MergedCompleter.get_completions_async">[docs]</a>    <span class="k">def</span> <span class="nf">get_completions_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">document</span><span class="p">,</span> <span class="n">complete_event</span><span class="p">):</span>
-        <span class="c1"># Get all completions from the other completers in a blocking way.</span>
+        <span class="sd">&quot;&quot;&quot;Get all completions from `completers` in a non-blocking way.</span>
+
+<span class="sd">        Checks that the completer actually defined this method before calling it so we don&#39;t force the method definition.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">completer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">completers</span><span class="p">:</span>
             <span class="c1"># Consume async generator -&gt; item can be `AsyncGeneratorItem` or</span>
             <span class="c1"># `Future`.</span>
-            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">completer</span><span class="o">.</span><span class="n">get_completions_async</span><span class="p">(</span><span class="n">document</span><span class="p">,</span> <span class="n">complete_event</span><span class="p">):</span>
-                <span class="k">yield</span> <span class="n">item</span></div></div>
+            <span class="c1"># note i didnt define  it every time so we gotta checl</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">completer</span><span class="p">,</span> <span class="s2">&quot;get_completions_async&quot;</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">completer</span><span class="o">.</span><span class="n">get_completions_async</span><span class="p">(</span><span class="n">document</span><span class="p">,</span> <span class="n">complete_event</span><span class="p">):</span>
+                    <span class="k">yield</span> <span class="n">item</span></div></div>
 
 
 <div class="viewcode-block" id="FuzzyCallable"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.completions.FuzzyCallable">[docs]</a><span class="k">class</span> <span class="nc">FuzzyCallable</span><span class="p">(</span><span class="n">FuzzyCompleter</span><span class="p">):</span>
@@ -389,25 +415,36 @@
 
 
 <div class="viewcode-block" id="create_pt_completers"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.completions.create_pt_completers">[docs]</a><span class="k">def</span> <span class="nf">create_pt_completers</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;A combination of all the completers in this module.</span>
+
+<span class="sd">    Still needs to factor in magic completions before its officially integrated into the rest of the app.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># No longer utilizes the set_custom_completer  method of IPython as that requires the name of the completer&#39;s complete method.</span>
+
+    <span class="c1"># Actually thats a great thing to allow to be specified. It allows for readlines `complete` method and pt&#39;s get_completions to work togethwr!</span>
+    <span class="c1"># Need to review their api tho.</span>
     <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
     <span class="c1"># alternatively to set_custom_completer, can i skip the types.methodtype part and just do:</span>
     <span class="c1"># _ip.Completer.matchers.append(FuzzyCompleter(CustomCompleter))</span>
     <span class="c1"># seems to be working</span>
     <span class="c1"># So let&#39;s see how far we can chain these</span>
     <span class="n">fuzzy_completer</span> <span class="o">=</span> <span class="n">FuzzyCallable</span><span class="p">(</span><span class="n">ExecutableCompleter</span><span class="p">())</span>
-    <span class="n">merged_completer</span> <span class="o">=</span> <span class="n">MergedCompleter</span><span class="p">(</span><span class="n">fuzzy_completer</span><span class="p">)</span>
-
-    <span class="n">_ip</span><span class="o">.</span><span class="n">Completer</span><span class="o">.</span><span class="n">matchers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">merged_completer</span><span class="p">)</span>
-
-    <span class="n">threaded</span> <span class="o">=</span> <span class="n">ThreadedCompleter</span><span class="p">(</span><span class="n">get_word_completer</span><span class="p">())</span>
-    <span class="n">_ip</span><span class="o">.</span><span class="n">set_custom_completer</span><span class="p">(</span><span class="n">get_path_completer</span><span class="p">())</span>
-    <span class="n">_ip</span><span class="o">.</span><span class="n">set_custom_completer</span><span class="p">(</span><span class="n">get_fuzzy_keyword_completer</span><span class="p">)</span></div>
+    <span class="n">merged_completer</span> <span class="o">=</span> <span class="n">MergedCompleter</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="n">fuzzy_completer</span><span class="p">,</span>
+            <span class="n">get_path_completer</span><span class="p">(),</span>
+            <span class="n">get_word_completer</span><span class="p">(),</span>
+            <span class="n">get_fuzzy_keyword_completer</span><span class="p">(),</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">threaded</span> <span class="o">=</span> <span class="n">SimpleCompleter</span><span class="p">(</span><span class="n">completer</span><span class="o">=</span><span class="n">merged_completer</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">threaded</span></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">jedi</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">add_bracket_after_function</span> <span class="o">=</span> <span class="kc">False</span>
 
-    <span class="n">create_pt_completers</span><span class="p">()</span>
+    <span class="n">combined_completers</span> <span class="o">=</span> <span class="n">create_pt_completers</span><span class="p">()</span>
 
     <span class="n">session</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span> <span class="k">if</span> <span class="n">get_ipython</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="n">session</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -422,7 +459,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 28, 2020.
+      Last updated on Mar 01, 2020.
     </div>
   </body>
 </html>

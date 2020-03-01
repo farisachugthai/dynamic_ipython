@@ -158,6 +158,7 @@
 <span class="sd">other things that aren&#39;t utilized at all.</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">asyncio</span>
 <span class="kn">import</span> <span class="nn">functools</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">time</span>
@@ -350,10 +351,18 @@
     <span class="c1"># bottom_formatted_text = FormattedText(</span>
     <span class="c1">#     BottomToolbar(get_app()), style=(&quot;class:toolbar&quot;, &quot;underline #80a0ff&quot;)</span>
     <span class="c1"># )</span>
+
+    <span class="c1"># Silence the goddamn loggers</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">asyncio</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">handlers</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">asyncio</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">handlers</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+    <span class="n">asyncio</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="mi">99</span><span class="p">)</span>
+    <span class="n">asyncio</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="mi">99</span><span class="p">)</span>
+
+    <span class="c1"># Back to our usual program</span>
     <span class="n">bottom_text</span> <span class="o">=</span> <span class="n">BottomToolbar</span><span class="p">(</span><span class="n">get_app</span><span class="p">())</span>
     <span class="n">partial_window</span> <span class="o">=</span> <span class="n">Window</span><span class="p">(</span><span class="n">FormattedTextControl</span><span class="p">(</span><span class="n">bottom_text</span><span class="p">),</span> <span class="n">width</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">print_container</span><span class="p">(</span><span class="n">partial_window</span><span class="p">))</span>
+    <span class="n">print_container</span><span class="p">(</span><span class="n">partial_window</span><span class="p">)</span>
     <span class="c1"># Do frames not return container objects? Because this line is raisin an error?</span>
     <span class="c1"># bottom_float = Float(Frame(partial_window, style=&quot;bg:#282828 #ffffff&quot;), bottom=0)</span>
     <span class="c1"># print_container(bottom_float)</span>
@@ -367,7 +376,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Feb 28, 2020.
+      Last updated on Mar 01, 2020.
     </div>
   </body>
 </html>

@@ -11,7 +11,7 @@ don't entirely seem well supported in the python standard library yet.
 
 
 Asyncio operations
-------------------
+==================
 
 Here's a useful asyncio function::
 
@@ -19,7 +19,13 @@ Here's a useful asyncio function::
         Replacement for traceback.extract_stack() that only does the
         necessary work for asyncio debug mode.
 
-Bug
+
+Reduced Imports
+----------------
+
+Todo
+
+Bugs
 -----
 
 What the hell is this?::

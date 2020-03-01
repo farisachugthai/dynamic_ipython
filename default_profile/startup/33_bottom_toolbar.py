@@ -7,6 +7,7 @@ TODO: currently initialize a titlebar, an exit button and a few
 other things that aren't utilized at all.
 
 """
+import asyncio
 import functools
 import logging
 import time
@@ -199,10 +200,18 @@ if __name__ == "__main__":
     # bottom_formatted_text = FormattedText(
     #     BottomToolbar(get_app()), style=("class:toolbar", "underline #80a0ff")
     # )
+
+    # Silence the goddamn loggers
+    if len(asyncio.log.logger.root.handlers) > 0:
+        asyncio.log.logger.root.handlers.pop()
+    asyncio.log.logger.setLevel(99)
+    asyncio.log.logger.root.setLevel(99)
+
+    # Back to our usual program
     bottom_text = BottomToolbar(get_app())
     partial_window = Window(FormattedTextControl(bottom_text), width=10, height=2)
 
-    logging.debug(print_container(partial_window))
+    print_container(partial_window)
     # Do frames not return container objects? Because this line is raisin an error?
     # bottom_float = Float(Frame(partial_window, style="bg:#282828 #ffffff"), bottom=0)
     # print_container(bottom_float)
