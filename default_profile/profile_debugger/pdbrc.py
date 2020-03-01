@@ -37,9 +37,11 @@ from IPython.core.getipython import get_ipython
 from IPython.terminal.prompts import Prompts
 from prompt_toolkit.completion.fuzzy_completer import FuzzyWordCompleter
 from prompt_toolkit.shortcuts import print_formatted_text as print
+
 import pygments
 from pygments.lexers.python import PythonLexer
 from pygments.formatters.terminal256 import TerminalTrueColorFormatter
+from pygments.token import Token
 
 
 if sys.version_info < (3, 7):
@@ -83,6 +85,7 @@ def save_history(hist_path=None):
             logger.warning("Creating PDB history file at ~/.pdb_history.")
             hist_path.touch()
         hist_path = hist_path.__fspath__()
+
 
 try:
     from default_profile.startup import readline_mod
@@ -219,6 +222,7 @@ class MyPdb(pdb.Pdb):
 
 debugger = MyPdb(shell=get_ipython())
 
+
 def exception_hook(type=None, value=None, tb=None):
     """Return to debugger after fatal exception (Python cookbook 14.5)."""
     if type or value or tb is None:
@@ -236,4 +240,3 @@ duration = end - start
 print(f".pdbrc.py finished.{time.ctime()}" + "\n" + f"duration was: {duration}.")
 
 malloced = tracemalloc.take_snapshot()
-

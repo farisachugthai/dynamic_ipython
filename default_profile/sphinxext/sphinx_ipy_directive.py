@@ -15,12 +15,13 @@ class IPythonDirectiveError(SphinxError):
 def python_validator(self):
     pass
 
+
 def doctest_validator(self):
     pass
 
+
 def verbatim_validator(self):
     pass
-
 
 
 class IPDirective(SphinxDirective):

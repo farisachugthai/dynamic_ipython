@@ -586,5 +586,3 @@ c.Session.debug = True
 
 # Username for the Session. Default is your system username.
 c.Session.username = "faris"
-
-

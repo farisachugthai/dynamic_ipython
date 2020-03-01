@@ -8,6 +8,10 @@ we `merge_styles` to return the final lexer.
 # TODO
 # In [47]: _ip.pt_app.lexer.python_lexer.pygments_lexer
 # Out[47]: <pygments.lexers.PythonLexer with {'stripnl': False, 'stripall': False, 'ensurenl': False}
+import inspect
+import sys
+import types
+
 from traitlets.config import LoggingConfigurable
 from traitlets.traitlets import Instance
 
@@ -15,6 +19,8 @@ from pygments.lexer import Lexer
 from pygments.lexers.python import PythonLexer
 from pygments.token import Keyword, Name
 from pygments.formatters.terminal256 import TerminalTrueColorFormatter
+
+from prompt_toolkit.formatted_text import FormattedText
 from prompt_toolkit.layout.containers import (
     HSplit,
     # VSplit,
@@ -53,7 +59,7 @@ def our_style():
         ]
     )  # TODO
     return merge_styles(
-        [style_from_pygments_cls(Gruvbox), default_pygments_style(),]
+        [style_from_pygments_cls(Gruvbox), default_pygments_style(), ]
     )  # TODO
 
 

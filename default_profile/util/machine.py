@@ -53,6 +53,7 @@ class Platform:
         Environment variables to add to the instance.
 
     """
+
     def __init__(self, shell=None, env=None, **kwargs):
         """Initialize a user specific object.
 

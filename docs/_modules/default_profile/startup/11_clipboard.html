@@ -373,8 +373,8 @@
         <span class="k">if</span> <span class="n">platform</span><span class="o">.</span><span class="n">platform</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;Win&quot;</span><span class="p">):</span>
             <span class="n">clipboard</span> <span class="o">=</span> <span class="n">WindowsClipboard</span><span class="p">()</span>
         <span class="k">elif</span> <span class="n">platform</span><span class="o">.</span><span class="n">platform</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;Linux&quot;</span><span class="p">):</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;DISPLAY&#39;</span><span class="p">):</span>
-                <span class="n">clipboard</span> <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">termux_clipboard_get</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;DISPLAY&quot;</span><span class="p">):</span>
+                <span class="n">clipboard</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">termux_clipboard_get</span><span class="p">()</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">clipboard</span> <span class="o">=</span> <span class="n">tkinter_clipboard_get</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
@@ -420,6 +420,7 @@
             <span class="k">raise</span> <span class="n">ClipboardEmpty</span></div></div>
         <span class="c1"># else:</span>
         <span class="c1">#     self.shell.pt_app.clipboard = PyperclipClipboard()</span>
+
 
 <div class="viewcode-block" id="setup_clipboard"><a class="viewcode-back" href="../../../startup/clipboard.html#default_profile.startup.11_clipboard.setup_clipboard">[docs]</a><span class="k">def</span> <span class="nf">setup_clipboard</span><span class="p">():</span>
     <span class="n">ipy</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>

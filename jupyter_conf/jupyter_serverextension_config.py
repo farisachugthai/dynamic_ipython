@@ -6,9 +6,9 @@
 # Application(SingletonConfigurable) configuration
 # ------------------------------------------------------------------------------
 
-## This is an application.
+# This is an application.
 
-## The date format used by logging formatters for %(asctime)s
+# The date format used by logging formatters for %(asctime)s
 # c.Application.log_datefmt = '%Y-%m-%d %H:%M:%S'
 
 # The Logging format template
@@ -50,11 +50,11 @@
 # Whether to do a user install
 # c.BaseExtensionApp.user = False
 
-## DEPRECATED: Verbosity level
+# DEPRECATED: Verbosity level
 # c.BaseExtensionApp.verbose = None
 
 # ------------------------------------------------------------------------------
 # ServerExtensionApp(BaseExtensionApp) configuration
 # ------------------------------------------------------------------------------
 
-## Root level server extension app
+# Root level server extension app

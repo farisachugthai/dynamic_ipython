@@ -8,6 +8,7 @@ IPyParallel
 Initialize a IPyParallel profile for IPython.
 
 """
+from . import ipcluster_config, ipcontroller_config, ipengine_config
 import logging
 
 try:
@@ -28,5 +29,3 @@ try:
     import ipyparallel
 except (ImportError, ModuleNotFoundError) as e:
     logging.warning(e)
-
-from . import ipcluster_config, ipcontroller_config, ipengine_config

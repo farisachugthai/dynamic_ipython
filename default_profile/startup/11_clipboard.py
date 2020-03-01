@@ -222,8 +222,8 @@ class UsefulClipboard(Clipboard):
         if platform.platform().startswith("Win"):
             clipboard = WindowsClipboard()
         elif platform.platform().startswith("Linux"):
-            if not self._environ.get('DISPLAY'):
-                clipboard =  self.termux_clipboard_get()
+            if not self._environ.get("DISPLAY"):
+                clipboard = self.termux_clipboard_get()
             else:
                 clipboard = tkinter_clipboard_get()
         else:
@@ -269,6 +269,7 @@ class UsefulClipboard(Clipboard):
             raise ClipboardEmpty
         # else:
         #     self.shell.pt_app.clipboard = PyperclipClipboard()
+
 
 def setup_clipboard():
     ipy = get_ipython()

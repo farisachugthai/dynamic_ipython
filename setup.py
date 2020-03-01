@@ -39,6 +39,9 @@ Here's a really good one to check out.:
 
         An exception has occurred, use %tb to see the full traceback.
 """
+from setuptools.dist import Distribution
+from setuptools import setup, find_packages, Command, Extension, PackageFinder
+from distutils.errors import DistutilsArgError
 import codecs
 import logging
 import os
@@ -49,9 +52,6 @@ import sys
 
 logging.basicConfig()
 
-from distutils.errors import DistutilsArgError
-from setuptools import setup, find_packages, Command, Extension, PackageFinder
-from setuptools.dist import Distribution
 
 # This is useful
 d = Distribution()
@@ -61,7 +61,9 @@ if len(sys.argv) == 0:
 try:
     d.parse_command_line()
 except DistutilsArgError:
-    print('No args provided.')
+    print("No args provided.")
+except TypeError:
+    pass
 
 
 # Obviously there's a ton more we can do here
@@ -87,24 +89,25 @@ except ImportError:
 else:
     our_dist = importlib_metadata.distribution("dynamic_ipython")
     # TODO:
-    dynamic_entry_point = importlib_metadata.EntryPoint('foo', 'bar', 'dynamic_ipython')
+    dynamic_entry_point = importlib_metadata.EntryPoint("foo", "bar", "dynamic_ipython")
 
-
-# Conda Support: {{{1
-
-try:
-    import distutils.command.bdist_conda
-except (ImportError, ModuleNotFoundError):
-    distclass = (None,)
-else:
-    distclass = distutils.command.bdist_conda.CondaDistribution
 
 # Metadata: {{{1
 
 try:
     from default_profile.__about__ import __version__
-except:  # noqa
+    from default_profile import ModuleNotFoundError
+except ImportError:  # noqa
     __version__ = "0.0.2"
+
+# Conda Support: {{{1
+
+try:
+    import distutils.command.bdist_conda
+except ImportError:
+    distclass = (None,)
+else:
+    distclass = distutils.command.bdist_conda.CondaDistribution
 
 NAME = "dynamic_ipython"
 AUTHOR = "Faris Chugthai"
@@ -134,13 +137,14 @@ REQUIRED = [
 ]
 
 EXTRAS = {
-    "develop": ["pipenv", "pandas", "matplotlib",],
-    "docs": ["sphinx>=2.2", "matplotlib>=3.0.0", "numpydoc>=0.9",],
-    "test": ["pytest", "testpath",],
+    "develop": ["pipenv", "pandas", "matplotlib", ],
+    "docs": ["sphinx>=2.2", "matplotlib>=3.0.0", "numpydoc>=0.9", ],
+    "test": ["pytest", "testpath", "nose", "matplotlib"],
 }
-
 # }}}}
-class UploadCommand(Command):  # {{{
+
+# {{{
+class UploadCommand(Command):
     """Support setup.py upload."""
 
     description = "Build and publish the package."
@@ -186,6 +190,7 @@ class UploadCommand(Command):  # {{{
 
 
 # }}}
+
 # Where the magic happens: {{{1
 
 setup(
@@ -242,7 +247,7 @@ setup(
         "Programming Language :: Python :: Implementation :: CPython",
     ],
     # $ setup.py publish support.
-    cmdclass={"upload": UploadCommand,},
+    cmdclass={"upload": UploadCommand, },
     # project home page, if any
     project_urls={
         "Bug Tracker": "https://www.github.com/farisachugthai/dynamic_ipython/issues",

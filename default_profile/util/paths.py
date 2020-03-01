@@ -57,6 +57,7 @@ class PathValidator:
         C:\\Program Files\\ and their ilk?
 
     """
+
     def __init__(self):
         """Initialize with parameters. Which parameters though?"""
         self.env = dict(os.environ.copy())

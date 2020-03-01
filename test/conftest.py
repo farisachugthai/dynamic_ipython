@@ -3,6 +3,7 @@ import multiprocessing
 import os
 import sys
 import tempfile
+from warnings import simplefilter
 
 from IPython.core.interactiveshell import InteractiveShell
 
@@ -18,6 +19,10 @@ except:
     sys.exit("Not installed.")
 else:
     from default_profile import ask_for_import
+
+
+simplefilter("ignore", category=DeprecationWarning)
+simplefilter("ignore", category=PendingDeprecationWarning)
 
 
 def pytest_load_initial_conftests(args):

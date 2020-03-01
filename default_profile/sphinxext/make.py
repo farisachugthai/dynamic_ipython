@@ -1,5 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+from default_profile.sphinxext import sphinxext_logger
+from default_profile.__about__ import __version__
+from default_profile import ask_for_import
+from jinja2.lexer import get_lexer
+from jinja2.loaders import FileSystemLoader
+from jinja2.ext import autoescape, do, with_
+from jinja2.exceptions import TemplateError
+from jinja2.environment import Environment
+from sphinx.util.tags import Tags
+from sphinx.util.logging import getLogger
+from sphinx.project import Project
+from sphinx.jinja2glue import SphinxFileSystemLoader
+from sphinx.errors import ApplicationError
+from sphinx.config import Config, eval_config_file
+from sphinx.cmd.make_mode import build_main
+from sphinx.application import Sphinx
 import argparse
 import codecs
 import os
@@ -19,25 +35,9 @@ try:
 except (ImportError, ModuleNotFoundError):
     sys.exit("Sphinx documentation module not found. Exiting.")
 
-from sphinx.application import Sphinx
-from sphinx.cmd.make_mode import build_main
-from sphinx.config import Config, eval_config_file
-from sphinx.errors import ApplicationError
-from sphinx.jinja2glue import SphinxFileSystemLoader
-from sphinx.project import Project
-from sphinx.util.logging import getLogger
-from sphinx.util.tags import Tags
 
 # from jinja2.constants import TRIM_BLOCKS, LSTRIP_BLOCKS
-from jinja2.environment import Environment
-from jinja2.exceptions import TemplateError
-from jinja2.ext import autoescape, do, with_
-from jinja2.loaders import FileSystemLoader
-from jinja2.lexer import get_lexer
 
-from default_profile import ask_for_import
-from default_profile.__about__ import __version__
-from default_profile.sphinxext import sphinxext_logger
 
 logger = getLogger(name=__name__)
 
