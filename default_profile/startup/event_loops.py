@@ -1,33 +1,75 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import asyncio
+
 from asyncio.events import (
-    get_child_watcher,
-    get_event_loop,
+    #     get_child_watcher,
+    #     get_event_loop,
     get_event_loop_policy,
     get_running_loop,
 )
-
-try:
-    from curio import Task
-except:
-    from asyncio.tasks import Task
-
-from asyncio.tasks import current_task, all_tasks, create_task
-
-# messes up %run
-try:
-    from trio import run as _async_run
-except:
-    from asyncio import run as _async_run
-
-import logging
 import multiprocessing
-from multiprocessing.process import current_process
+
+# from multiprocessing.process import current_process
 import platform
 import shlex
-import threading
 
+# from threading
+try:
+    from _thread import _excepthook as excepthook, _ExceptHookArgs as ExceptHookArgs
+except ImportError:
+    # Simple Python implementation if _thread._excepthook() is not available
+    from traceback import print_exception as _print_exception
+    from collections import namedtuple
+
+    _ExceptHookArgs = namedtuple(
+        "ExceptHookArgs", "exc_type exc_value exc_traceback thread"
+    )
+
+    def ExceptHookArgs(args):
+        return _ExceptHookArgs(*args)
+
+    def excepthook(args, /):
+        """
+        Handle uncaught Thread.run() exception.
+        """
+        if args.exc_type == SystemExit:
+            # silently ignore SystemExit
+            return
+
+        if _sys is not None and _sys.stderr is not None:
+            stderr = _sys.stderr
+        elif args.thread is not None:
+            stderr = args.thread._stderr
+            if stderr is None:
+                # do nothing if sys.stderr is None and sys.stderr was None
+                # when the thread was created
+                return
+        else:
+            # do nothing if sys.stderr is None and args.thread is None
+            return
+
+        if args.thread is not None:
+            name = args.thread.name
+        else:
+            name = get_ident()
+        print(f"Exception in thread {name}:", file=stderr, flush=True)
+        _print_exception(args.exc_type, args.exc_value, args.exc_traceback, file=stderr)
+        stderr.flush()
+
+
+# try:
+#     from curio import Task
+# except:
+#     from asyncio.tasks import Task
+
+# from asyncio.tasks import current_task, all_tasks, create_task
+
+# messes up %run
+# try:
+#     from trio import run as _async_run
+# except:
+#     from asyncio import run as _async_run
 from IPython.core.getipython import get_ipython
 
 
@@ -50,8 +92,7 @@ async def system_command(command_to_run):
     --------
     ::
 
-        In [40]: await system_command('ls')
-
+        In [40]: await system_command('ls')  # +NORMALIZE_WHITESPACE
         01_rehashx.py       20_aliases.py        31_yank_last_arg.py
         36_ptutils.py     cscope.out  05_log.py           21_fzf.py
         32_kb.py              41_numpy_init.py  event_loops.py 06_help_helpers.py
@@ -76,8 +117,9 @@ async def system_command(command_to_run):
 
 
 if __name__ == "__main__":
-    if len(asyncio.log.logger.root.handlers) > 0:
-        asyncio.log.logger.root.handlers.pop()
-    asyncio.log.logger.setLevel(99)
-    asyncio.log.logger.root.setLevel(99)
-    enable_multiprocessing_logging()
+    try:
+        loop = get_running_loop()
+    except RuntimeError:
+        # sigh
+        event_policy = get_event_loop_policy()
+        loop = event_policy.new_event_loop()
