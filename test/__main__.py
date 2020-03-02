@@ -1,18 +1,58 @@
-"""Create a single entry point for the test suite."""
+""". Create a single entry point for the test suite.
+
+:date: 09/04/2019
+
+On a positive note, the debug logging informed me that your sys.path mods
+are actually making their way across the package. The LogRecords just showed
+up while I was playing around with the configurations for
+unittest in PyCharm.
+
+.. ipython::
+    :verbatim:
+
+    root: DEBUG: Found packages were: []
+    root: DEBUG: Found namespace packages were: []
+    root: DEBUG: Sys.path before:[
+    '/home/faris/projects',
+    '/home/faris/projects/dynamic_ipython',
+]
+
+
+"""
+import argparse
 import doctest
 import importlib
+import logging
+import os
 import sys
 import unittest
+import warnings
+from doctest import testmod, testfile
 from unittest.suite import TestSuite
 
-from IPython.testing.tools import get_ipython_cmd
+from unittest.loader import TestLoader, defaultTestLoader, findTestCases
+
+import IPython
 # don't forget about this as it may come in handy
 # from IPython.lib.deepreload import reload
+from IPython.testing.tools import get_ipython_cmd
+from IPython import get_ipython
+
+try:
+    import nose  # noqa F401
+except ImportError as e:
+    print(e)
+
+try:
+    import pytest
+except ImportError:
+    warnings.warn("No Pytest. Using unittest.")
+    pytest = None
+
+import default_profile
 
 
-def _test():
-    import argparse
-
+def _parse():
     parser = argparse.ArgumentParser(description="doctest runner")
     parser.add_argument(
         "-v",
@@ -45,6 +85,9 @@ def _test():
     )
     parser.add_argument("file", nargs="+", help="file containing the tests to run")
     args = parser.parse_args()
+    return args
+
+def doctests(args):
     testfiles = args.file
     # Verbose used to be handled by the "inspect argv" magic in DocTestRunner,
     # but since we are using argparse we are passing it manually now.
@@ -54,6 +97,14 @@ def _test():
         options |= doctest.OPTIONFLAGS_BY_NAME[option]
     if args.fail_fast:
         options |= doctest.FAIL_FAST
+
+    doctest_suite = doctest.DocTestSuite(module="default_profile")
+    sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
+
+    doctest_finder = doctest.DocTestFinder()
+    found_test_cases = findTestCases('*')
+    doctest.DocTestSuite("__main__", globs="*")
+
     for filename in testfiles:
         if filename.endswith(".py"):
             # It is a module -- insert its dir into sys.path and try to
@@ -61,7 +112,7 @@ def _test():
             # won't work because of package imports.
             dirname, filename = os.path.split(filename)
             sys.path.insert(0, dirname)
-            m = __import__(filename[:-3])
+            m = importlib.import_module(filename[:-3])
             del sys.path[0]
             failures, _ = testmod(m, verbose=verbose, optionflags=options)
         else:
@@ -73,30 +124,47 @@ def _test():
     return 0
 
 
-if __name__ == "__main__":
-    doctest_suite = doctest.DocTestSuite(module='default_profile')
+def add_test(testcase, suite=None):
+    if suite is None:
+        suite = unittest.TestCaseSuite()
+    return suite.addTests(unittest.defaultTestLoader.loadTestsFromTestCase(testcase))
 
-    try:
-        import pytest  # noqa F401
-    except ImportError as e:
 
-        warnings.warn("No Pytest. Using unittest.")
+def setup_test_logging():
+    """Set up some logging so we can see what's happening."""
+    logger = logging.getLogger(name=__name__)
+    test_handler = logging.StreamHandler(stream=sys.stdout)
+    test_formatter = logging.Formatter(
+        fmt="%(created)f : %(module)s : %(levelname)s : %(message)s"
+    )
+    test_handler.setFormatter(test_formatter)
+    test_handler.setLevel(logging.WARNING)
+    logger.setLevel(logging.WARNING)
+    logger.addHandler(test_handler)
+    return logger
 
-        # Believe it or not this is in fact necessary if you want to run
-        # the tests inside of IPython.
-        old_sys_argv = sys.argv[:]
-        # DONT FORGET SPACES
-        # sys.argv = [sys.executable, ' -m', ' unittest', ' -v']
-        sys.argv = get_ipython_cmd(as_string=False)
-        # todo: add options
-        test_00_ipython = importlib.import_module("test_00_ipython", package=".")
-        test_20_aliases = importlib.import_module("test_20_aliases", package=".")
 
+def run():
+
+    args = _parse()
+    test_logger = setup_test_logging()
+    doctests()
+    # Believe it or not this is in fact necessary if you want to run
+    # the tests inside of IPython.
+    old_sys_argv = sys.argv[:]
+    sys.argv = get_ipython_cmd(as_string=False)
+    test_00_ipython = importlib.import_module("test_00_ipython", package=".")
+    test_20_aliases = importlib.import_module("test_20_aliases", package=".")
+
+    if pytest is None:
         suite = TestSuite()
-        suite.addTest(test_00_ipython.TestIPython())
-        suite.addTest(test_20_aliases.TestAliases())
+        add_test(test_00_ipython.TestIPython(), suite)
+        add_test(test_20_aliases.TestAliases(), suite)
         unittest.main()
 
-        _test()
     else:
         pytest.main()
+
+
+if __name__ == "__main__":
+    run()
