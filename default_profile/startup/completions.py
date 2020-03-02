@@ -1,4 +1,23 @@
-"""Use both Jedi and prompt_toolkit to aide IPython out."""
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""Use both Jedi and prompt_toolkit to aide IPython out.
+
+This creates a combination of almost all of prompt_toolkits completion
+mechanisms and combines them.
+
+.. data:: combined_completers
+
+    A ThreadedCompleter instantiated with a MergedCompleter that combines
+    FuzzyWordCompleter, FuzzyCompleter, PathCompleter, WordCompleter
+    and IPython's IPythonPTCompleter.
+
+In addition, autosuggestions are generated in a manner similar to fish from an
+`prompt_toolkit.auto_suggest.AutoSuggestFromHistory` instance wrapped in
+a `prompt_toolkit.auto_suggest.ThreadedAutoSuggest` instance as this
+dramatically speeds the completions up.
+
+
+"""
 import abc
 import keyword
 import logging
@@ -21,7 +40,7 @@ from jedi.api.environment import (
 from IPython.core.getipython import get_ipython
 from IPython.terminal.ptutils import IPythonPTCompleter
 
-from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
+from prompt_toolkit.auto_suggest import AutoSuggestFromHistory, ThreadedAutoSuggest
 from prompt_toolkit.completion import WordCompleter
 from prompt_toolkit.completion.base import (
     DynamicCompleter,
@@ -74,7 +93,9 @@ class SimpleCompleter(Completer):
 
         But we will need to add a get_async_completions method.
 
-        .. todo:: Possibly alias this to `complete` for readline compat.
+        .. todo::
+            Possibly alias this to `complete` for readline compat.
+
         """
         if doc is None:
             doc = self.document
@@ -99,9 +120,7 @@ class SimpleCompleter(Completer):
     async def get_completions_async(
         self, document: Document, complete_event: CompleteEvent
     ) -> AsyncGenerator[Completion, None]:
-        """
-        Asynchronous generator of completions.
-        """
+        """Asynchronous generator of completions."""
         async for completion in generator_to_async_generator(
             lambda: self.completer.get_completions(document, complete_event)
         ):
@@ -214,7 +233,8 @@ class MergedCompleter(Completer):
     def get_completions_async(self, document, complete_event):
         """Get all completions from `completers` in a non-blocking way.
 
-        Checks that the completer actually defined this method before calling it so we don't force the method definition.
+        Checks that the completer actually defined this method before calling
+        it so we don't force the method definition.
         """
         for completer in self.completers:
             # Consume async generator -> item can be `AsyncGeneratorItem` or
@@ -226,9 +246,10 @@ class MergedCompleter(Completer):
 
 
 class FuzzyCallable(FuzzyCompleter):
+    """A FuzzyCompleter with ``__call__`` defined."""
+
     def __init__(self, completer=None, words=None, meta_dict=None, WORD=False):
         """The exact code for FuzzyWordCompleter...except callable."""
-        # assert callable(words) or all(isinstance(w, string_types) for w in words)
         self.words = words
         if self.words is None:
             self.words = keyword.kwlist
@@ -253,7 +274,6 @@ def create_jedi_script():
     # TODO:
     _ip = get_ipython()
     # To set up Script or Interpreter later
-    project = get_default_project()
     try:
         environment = get_cached_default_environment()
     except InvalidPythonEnvironment:
@@ -265,15 +285,15 @@ def create_jedi_script():
 
 
 def create_pt_completers():
-    """A combination of all the completers in this module.
+    """Return a combination of all the completers in this module.
 
-    Still needs to factor in magic completions before its officially integrated into the rest of the app.
+    Still needs to factor in magic completions before its officially
+    integrated into the rest of the app.
     """
     # No longer utilizes the set_custom_completer  method of IPython as that requires the name of the completer's complete method.
 
     # Actually thats a great thing to allow to be specified. It allows for readlines `complete` method and pt's get_completions to work togethwr!
     # Need to review their api tho.
-    _ip = get_ipython()
     # alternatively to set_custom_completer, can i skip the types.methodtype part and just do:
     # _ip.Completer.matchers.append(FuzzyCompleter(CustomCompleter))
     # seems to be working
@@ -285,7 +305,7 @@ def create_pt_completers():
             get_path_completer(),
             get_word_completer(),
             get_fuzzy_keyword_completer(),
-            IPythonPTCompleter(get_ipython())
+            IPythonPTCompleter(get_ipython()),
         ]
     )
     threaded = SimpleCompleter(completer=merged_completer)
@@ -295,6 +315,7 @@ def create_pt_completers():
 if __name__ == "__main__":
     jedi.settings.add_bracket_after_function = False
 
+    default_project = get_default_project()
     combined_completers = create_pt_completers()
 
     session = get_ipython().pt_app if get_ipython() is not None else None
@@ -302,7 +323,7 @@ if __name__ == "__main__":
         # when using tmux or windows this is super helpful
         # yeah but otherwise destroys your ability to scroll backwards
         # session.refresh_interval = 0.5
-        session.auto_suggest = AutoSuggestFromHistory()
+        session.auto_suggest = ThreadedAutoSuggest(AutoSuggestFromHistory())
 
         # not there because no event loop but  we're so close
         # session.completer = combined_completers

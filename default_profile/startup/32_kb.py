@@ -5,6 +5,7 @@ import operator
 import reprlib
 import warnings
 from collections import UserList
+import sys
 from typing import Callable, Optional
 
 from IPython.core.getipython import get_ipython
@@ -21,6 +22,13 @@ from prompt_toolkit.keys import Keys
 
 
 class KeyBindingsManager(UserList):
+    """An object to make working with keybindings easier.
+
+    Subclasses UserList with a list of Keys and their handlers.
+    By defining dunders, the collection of keybindings are much
+    easier to work with.
+    """
+
     def __init__(self, kb=None, shell=None, **kwargs):
         """Initialize the class.
 
@@ -99,6 +107,7 @@ class KeyBindingsManager(UserList):
 
     @property
     def bindings(self):
+        """Make the *kb* attributes bindings visible at the top level."""
         return self.kb.bindings
 
     @bindings.setter
@@ -144,18 +153,22 @@ class KeyBindingsManager(UserList):
 
         (This return also inactive bindings, so the `filter` still has to be
         called, for checking it.)
+
         :param keys: tuple of keys.
+
         """
         self.get(keys)
         return self._get_bindings_for_keys_cache.get(keys, get)
 
     def get_bindings_starting_with_keys(self, keys):
-        """
-        Return a list of key bindings that handle a key sequence starting with
-        `keys`. (It does only return bindings for which the sequences are
+        """Return a list of key bindings that handle a sequence starting with `keys`.
+
+        (It does only return bindings for which the sequences are
         longer than `keys`. And like `get_bindings_for_keys`, it also includes
         inactive bindings.)
+
         :param keys: tuple of keys.
+
         """
 
         def get():
@@ -215,35 +228,12 @@ class HandlesMergedKB(KeyBindingsManager):
                 #         unpack(i)
 
 
-def unnest_merged_kb(kb, pre_existing_list=None):
-    if pre_existing_list:
-        ret = pre_existing_list
-    else:
-        ret = []
-    if type(kb) == _MergedKeyBindings:
-        for i in kb.registries:
-            ret.append(i)
-        for i in ret:
-            unnest_merged_kb(kb, pre_existing_list=ret)
-    else:
-        if ret:
-            return ret
-        else:
-            return
-
-
-def _rewritten_add(registry, _binding):
-    key = _binding.keys
-    filter = _binding.filter
-    handler = _binding.handler
-    registry.add(key, filter=filter)(handler)
-    return registry
-
-
 class Documented(Document):
     """I'll admit this subclass doesn't exist for much of a reason.
 
     However, it's a LOT easier to work with classes with their dunders defined.
+
+    Implement the basics for a class to be considered a sequence IE len and iter.
     """
 
     def __len__(self):

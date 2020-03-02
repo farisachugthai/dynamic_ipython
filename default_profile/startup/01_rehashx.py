@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
+"""Initialize exception handlers and run `%rehashx`.
 
 rehashx magic
 -------------
+
 This is an incredible little gem that's hugely useful for
 making IPython work as a more versatile system shell.
 
@@ -30,8 +31,6 @@ sys.excepthook, threading.excepthook and others.
     possibly be :func:`dis.distb`.
 
 """
-from traitlets.config import Configurable
-from IPython.core.getipython import get_ipython
 import cgitb
 import code
 import faulthandler
@@ -42,6 +41,7 @@ import sys
 import threading
 import trace
 import traceback
+import tracemalloc
 from collections.abc import Sequence
 from os import scandir, listdir
 from pathlib import Path
@@ -49,11 +49,14 @@ from runpy import run_module, run_path
 from traceback import FrameSummary, StackSummary, format_exc, format_tb
 from tracemalloc import Snapshot
 
+from traitlets.config import Configurable
+from IPython.core.getipython import get_ipython
+
 logging.basicConfig(level=logging.WARNING)
 
 
 def formatted_tb():
-    """A view of the last exception that intentionally doesn't require arguments.
+    """Return a str of the last exception.
 
     Returns
     -------
@@ -72,6 +75,7 @@ def formatted_tb():
 
 
 def last_exc():
+    """Return `format_exc`."""
     return format_exc()
 
 
@@ -93,6 +97,7 @@ def get_exec_dir():
         exec_dir = _ip.profile_dir.startup_dir
     else:
         exec_dir = "."
+    return exec_dir
 
 
 def safe_run_path(fileobj, logger=None):
@@ -112,9 +117,6 @@ def safe_run_path(fileobj, logger=None):
             logger.exception(e)
     except Exception as e:  # noqa
         logger.exception(e)
-        raise
-    except:
-        traceback.print_exc()
         raise
 
 
@@ -152,6 +154,7 @@ def execfile(filename, global_namespace=None, local_namespace=None):
 
 
 def ipy_execfile(f):
+    """Run the IPython `%run` -i on a file."""
     get_ipython().run_line_magic("run", "-i", f)
 
 
@@ -178,6 +181,7 @@ def ipy_execdir(directory):
 if __name__ == "__main__":
     faulthandler.enable()
     handled = cgitb.Hook(file=sys.stdout, format="text")
+    tracemalloc.start()
     sys.excepthook = handled
 
     _ip = get_ipython()

@@ -11,6 +11,9 @@
 
 """
 import asyncio
+import gc
+import platform
+import sys
 from asyncio.__main__ import AsyncIOInteractiveConsole, REPLThread
 from asyncio import format_helpers
 from os import scandir
@@ -24,7 +27,6 @@ except ImportError:
     # not available
     # from asyncio import ProactorEventLoop, IocpProactor
     pass
-import sys
 
 from prompt_toolkit.shortcuts import print_formatted_text as print
 from IPython.core.getipython import get_ipython
@@ -91,6 +93,9 @@ if "__name__" == "__main":
     repl_thread.start()
     startup = abspath(".")
     exec_dir(startup)
+
+    gc.collect()
+
     while True:
         try:
             loop.run_forever()
@@ -103,3 +108,5 @@ if "__name__" == "__main":
             sys.exit()
         except Exception as e:
             format_helpers.extract_stack(e)
+
+

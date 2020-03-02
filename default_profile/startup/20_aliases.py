@@ -8,8 +8,7 @@ import shutil
 import subprocess
 import traceback
 
-# from IPython.core.alias import AliasManager, default_aliases, AliasError
-from IPython.core.alias import InvalidAliasError, default_aliases
+from IPython.core.alias import AliasError, InvalidAliasError, default_aliases
 from IPython.core.getipython import get_ipython
 from traitlets.config.application import ApplicationError
 

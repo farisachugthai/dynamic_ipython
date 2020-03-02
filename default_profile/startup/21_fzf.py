@@ -1,12 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""FZF works in IPython!!!!
-
-Trying to rework this over in ../extensions/namespaces.py
-
-Also worth noting the aliasmanager rewrite in ./22_alias_manager.py
-
-"""
+"""FZF works in IPython!!!!"""
 import functools
 import os
 import shlex
@@ -25,7 +19,7 @@ try:
     import pyfzf
 except:
     pyfzf = None
-    fufpy = fuf = None
+    fufpy = fuf = FzfPrompt = None
 else:
     from pyfzf.pyfzf import FzfPrompt
 
@@ -39,19 +33,7 @@ from prompt_toolkit.keys import Keys
 from prompt_toolkit.shortcuts import print_formatted_text as print
 from prompt_toolkit.utils import Event
 
-from traitlets.config.application import get_config
 from IPython.core.getipython import get_ipython
-from IPython.terminal.ipapp import TerminalIPythonApp
-from IPython.terminal.interactiveshell import TerminalInteractiveShell
-from IPython.terminal.shortcuts import create_ipython_shortcuts
-
-# try:
-#     import pandas as pd
-# except ImportError:
-#     pd = None
-
-# TODO
-# if  TYPE_CHECKING: etc
 
 
 class Executable(ContextDecorator):
@@ -118,7 +100,6 @@ class FZF:
         self.fzf_alias = fzf_alias or ""
         self.fzf_config = fzf_configs or {}
         self._setup_fzf()
-        super().__init__()
 
     def __repr__(self):
         return "{}    {}".format(self.__class__.__name__, self.fzf_alias)
@@ -207,7 +188,6 @@ def fzf_history(event):
     fzf = FzfPrompt()
     df = pd.read_sql_query("SELECT * FROM history", cnx)
     itext = fzf.prompt(df["source"])
-    # print(itext)
     if itext != []:
         event.current_buffer.insert_text(itext[0])
 
@@ -216,28 +196,14 @@ def add_fzf_binding():
     insert_mode = ViInsertMode() | EmacsInsertMode()
     registry = get_ipython().pt_app.key_binding
 
-    registry.add_binding(Keys.ControlY, filter=HasFocus(DEFAULT_BUFFER))(fzf_history)
-
-
-class TestInter(TerminalInteractiveShell):
-    """Checks if IPython is running.
-
-    If not use TerminalIPythonApp().launch_instance to start it.
-    Noticed that method while skimming traitlets.config.application.
-
-    """
-
-    def run(self):
-        shell = get_ipython()
-        if shell is None:
-            shell = self.launch_instance()
-
-        config = shell.config
+    handle = registry.add_binding
+    handle(Keys.ControlY, filter=HasFocus(DEFAULT_BUFFER))(fzf_history)
+    handle(Keys.ControlT, HasFocus(DEFAULT_BUFFER))(fzf_keys)
 
 
 def fzf_keys(inputted_list=None):
     if inputted_list is None:
-        inputtted_list = []
+        inputted_list = []
 
     # idk if you can do this.
     with open(tempfile.mkstemp()) as f:
@@ -247,50 +213,23 @@ def fzf_keys(inputted_list=None):
         FzfPrompt(inputted_list)
 
 
-def new_shortcuts():
-    """Let's overlay a few shortcuts with the default ones."""
-    shell = get_ipython()
-    kb = create_ipython_shortcuts(shell)
-    if hasattr(kb, "add"):
-        handle = kb.add
-    else:
-        # probably should whine
-        return
-
-    handle(Keys.ControlT, HasFocus(DEFAULT_BUFFER))(fzf_keys)
-    # todo:
-    # kb.add_binding()
-
-
 def run_in_terminal_fzf():
-    termshell = TestInter()
     # not sure how pt wants us to do this part
     # TODO:
     # Ah so this raises an error because FzfPrompt() doesn't have an __enter__
     # attribute and we're trying to run it as a contextmanager. ah.
-    with run_in_terminal(FzfPrompt(), render_cli_done=True, in_executor=True):
+    with run_in_terminal(FZF(), render_cli_done=True, in_executor=True):
         fzf_prompt = FzfPrompt()
         # launch with
         fzf_prompt.prompt()
-
-
-def fzf_history(event):
-    cnx = sqlite3.connect(home + "/.ipython/profile_default/history.sqlite")
-    fzf = FzfPrompt()
-    df = pd.read_sql_query("SELECT * FROM history", cnx)
-    itext = fzf.prompt(df["source"])
-    # print(itext)
-    if itext != []:
-        event.current_buffer.insert_text(itext[0])
 
 
 if __name__ == "__main__":
     fzf_aliases = FZF._setup_fzf()
     get_ipython().alias_manager.define_alias("fzf", "fzf-tmux")
 
-    home = str(Path.home())
-
-    if fuf is not None:
+    add_fzf_binding()
+    if FzfPrompt is not None:
 
         class Fuf(FZF, FzfPrompt):
             fzf_default_opts = None

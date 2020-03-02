@@ -93,6 +93,7 @@ class HelpMagics(Magics):
         ----------
         arg : obj, optional
             Object to run :magic:`pinfo` on.
+
         """
         if arg is None:
             return
@@ -144,11 +145,14 @@ class HelpMagics(Magics):
 
         Examples
         ---------
-        >>> i = %dirip()
-        >>> i.grep('complete')
-        ['Completer', 'check_complete', 'complete', 'init_completer', 'pt_complete_style', 'set_completer_frame', 'set_custom_completer']
 
-        .. where did completer go?
+        .. ipython::
+            :doctest:
+
+            >>> i = HelpMagics().dirip()
+            >>> i.grep('complete')
+            ['Completer', 'check_complete', 'complete', 'init_completer',
+            'pt_complete_style', 'set_completer_frame', 'set_custom_completer']  # +NORMALIZE_WHITESPACE
 
         """
         if self.shell is None:

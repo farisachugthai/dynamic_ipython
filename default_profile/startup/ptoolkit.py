@@ -22,6 +22,7 @@ to a container `HSplit` and a few other things possibly worth exploring.
 
 """
 from reprlib import repr
+import sys
 
 import prompt_toolkit
 from prompt_toolkit.buffer import Buffer
@@ -77,6 +78,13 @@ class Helpers:
 
     def __repr__(self):
         return f"{self.__class__.__name__} with app at {self.pt_app}"
+
+    def __sizeof__(self):
+        # Unfortunately I've added so much to this class that it might be necessary to check
+        # how big ano object is now
+        return object.__sizeof__(self) + sum(
+            sys.getsizeof(v) for v in self.__dict__.values()
+        )
 
     @property
     def app_kb(self):

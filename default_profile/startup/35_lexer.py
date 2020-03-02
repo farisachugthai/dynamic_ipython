@@ -8,19 +8,24 @@ we `merge_styles` to return the final lexer.
 # TODO
 # In [47]: _ip.pt_app.lexer.python_lexer.pygments_lexer
 # Out[47]: <pygments.lexers.PythonLexer with {'stripnl': False, 'stripall': False, 'ensurenl': False}
+import builtins
 import inspect
+import pprint
+import pydoc
+import shutil
 import sys
 import types
 
 from traitlets.config import LoggingConfigurable
 from traitlets.traitlets import Instance
 
+import pygments
 from pygments.lexer import Lexer
 from pygments.lexers.python import PythonLexer
 from pygments.token import Keyword, Name
 from pygments.formatters.terminal256 import TerminalTrueColorFormatter
 
-from prompt_toolkit.formatted_text import FormattedText
+from prompt_toolkit.formatted_text import FormattedText, PygmentsTokens
 from prompt_toolkit.layout.containers import (
     HSplit,
     # VSplit,
@@ -30,17 +35,19 @@ from prompt_toolkit.layout.containers import (
     # FloatContainer,
 )
 from prompt_toolkit.layout.controls import FormattedTextControl
-from prompt_toolkit.lexers.pygments import PygmentsLexer  # , PygmentsTokens
+from prompt_toolkit.lexers.pygments import PygmentsLexer
 from prompt_toolkit.lexers.base import DynamicLexer, SimpleLexer
 from prompt_toolkit.shortcuts.utils import print_container
 
 from prompt_toolkit.styles import style_from_pygments_cls, default_pygments_style
 from prompt_toolkit.styles.style import merge_styles  # , Style,
+from prompt_toolkit.widgets import Button
 
 from IPython.core.getipython import get_ipython
 from IPython.core.interactiveshell import InteractiveShellABC
 
 # from IPython.lib.lexers import IPyLexer, IPythonTracebackLexer
+# or IPython.terminal.ptutils.IPythonPTLexer
 
 try:
     from gruvbox.ptgruvbox import Gruvbox
@@ -200,7 +207,7 @@ def generate_and_print_hsplit():
 def pphighlight(o, *a, **kw):
     s = pprint.pformat(o, *a, **kw)
     try:
-        sys.stdout.write(highlight(s, PythonLexer(), TerminalFormatter()))
+        sys.stdout.write(pygments.highlight(s, PythonLexer(), TerminalTrueColorFormatter()))
     except UnicodeError:
         sys.stdout.write(s)
         sys.stdout.write("\n")
@@ -236,7 +243,6 @@ def extra_displayhook():
 
         if value is None:
             return
-        __builtin__._ = value
 
         if isinstance(value, help_types):
             reprstr = repr(value)
