@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import asyncio
 import cgitb
 import logging
 import math
@@ -10,13 +11,14 @@ from datetime import datetime
 from importlib import import_module
 from pathlib import Path
 
-from IPython.lib.lexers import IPyLexer, IPythonTracebackLexer
+from IPython.lib.lexers import IPyLexer
 
 import jinja2
+from jinja2.bccache import FileSystemBytecodeCache
 from jinja2.environment import Environment
 from jinja2.exceptions import TemplateError
-from jinja2.ext import autoescape, do, with_
-from jinja2.loaders import FileSystemLoader
+from jinja2.ext import autoescape, do, with_, debug
+from jinja2.loaders import FileSystemLoader, ChoiceLoader, ModuleLoader
 from jinja2.lexer import get_lexer
 
 from pygments.lexers.markup import MarkdownLexer, RstLexer
@@ -30,8 +32,11 @@ from pygments.lexers.python import (
     PythonTracebackLexer,
 )
 import sphinx
+from sphinx.application import Sphinx
 from sphinx.domains.rst import ReSTDomain
+from sphinx.environment import BuildEnvironment
 from sphinx.ext.autodoc import cut_lines
+from sphinx.jinja2glue import SphinxFileSystemLoader, SandboxedEnvironment
 from sphinx.util.docfields import GroupedField
 from sphinx.util.template import ReSTRenderer
 
@@ -43,8 +48,12 @@ from default_profile.sphinxext.magics import CellMagicRole, LineMagicRole
 # Logging
 DOCS_LOGGER = logging.getLogger(name=__name__)
 DOCS_HANDLER = logging.StreamHandler()
+DOCS_HANDLER.setLevel(logging.INFO)
+DOCS_LOGGER.handlers=[]
 DOCS_LOGGER.addHandler(DOCS_HANDLER)
+DOCS_FILTER  = logging.Filter(name=__name__)
 DOCS_LOGGER.setLevel(logging.INFO)
+DOCS_LOGGER.addFilter(DOCS_FILTER)
 
 # Gotta hack at sys.path a little
 DOCS = Path(__file__).resolve().parent.parent
@@ -62,32 +71,67 @@ UTIL = ROOT.joinpath("default_profile/util")
 
 sys.path.insert(0, str(UTIL))
 
+# -- Jinja2 ---------------------------------------------------
+
+loop = asyncio.new_event_loop()
+jinja_templates = FileSystemBytecodeCache(
+    os.environ.get("TMP") + "jinja_cache", "%s.cache"
+)
+sphinx_root = os.path.dirname(sphinx.__file__)
+sphinx_templates = os.path.join(sphinx_root, "templates", "basic")
+
+
+def instantiate_jinja_loader():
+    template_path = "_templates"
+    try:
+        loader = ChoiceLoader(
+            [
+                SphinxFileSystemLoader(sphinx_templates),
+                SphinxFileSystemLoader(template_path),
+            ]
+        )
+    except TemplateError:
+        return
+    else:
+        return loader
+
+
+jinja_loader = instantiate_jinja_loader()
+
+
 def create_jinja_env():
     """Use jinja to set up the Sphinx environment."""
     TRIM_BLOCKS = True
     LSTRIP_BLOCKS = True
-    template_path = "_templates"
-    try:
-        loader = FileSystemLoader(template_path)
-    except TemplateError:
-        return
     env = Environment(
         trim_blocks=TRIM_BLOCKS,
         lstrip_blocks=LSTRIP_BLOCKS,
-        loader=FileSystemLoader(template_path),
-        extensions=["jinja2.ext.i18n", autoescape, do, with_],
+        autoescape=jinja2.select_autoescape(
+            disabled_extensions=("txt",), default_for_string=True, default=True
+        ),
+        extensions=["jinja2.ext.i18n", autoescape, do, with_, debug],
         enable_async=True,
+        bytecode_cache=jinja_templates,
+        loader=jinja_loader,
     )
     return env
 
-lexer = get_lexer(create_jinja_env())
+
+jinja_env = create_jinja_env()
+lexer = get_lexer(jinja_env)
 
 with open(os.path.join(DOCS, "source", "index.rst")) as f:
     t = jinja2.Template(f.read())
 with open(os.path.join(DOCS, "source", "index.rst.ignore"), "w") as f:
     f.write(t.render())
 
-# -- Imports ---------------------------------------------------
+
+@jinja2.contextfunction
+def get_exported_names(context):
+    return sorted(context.exported_vars)
+
+
+# -- Extensions ---------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
 
@@ -625,9 +669,8 @@ def setup(app):
 
     cgitb.enable(format="text")
     app.connect("source-read", rstjinja)
-    app.add_lexer("ipythontb", IPythonTracebackLexer)
     app.add_lexer("ipython", IPyLexer)
-    app.add_lexer("py3tb", IPythonTracebackLexer)
+    app.add_lexer("py3tb", Python3TracebackLexer)
     app.add_lexer("python3", PythonLexer)
     app.add_lexer("python", PythonLexer)
     app.add_lexer("pycon", PythonConsoleLexer)
