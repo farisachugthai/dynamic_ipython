@@ -22,9 +22,6 @@ of whether someone has ``pip install``-ed it.
 As a result, local imports or any imports not in the standard library
 should be discouraged here.
 
-In addition, enable `faulthandler`, tracemalloc and assign them to
-sys.excepthook, threading.excepthook and others.
-
 .. tip::
 
     A possible alternative to get_ipython().showsyntaxerror might
@@ -33,23 +30,17 @@ sys.excepthook, threading.excepthook and others.
 """
 import cgitb
 import code
-import faulthandler
 import logging
 import platform
 import runpy
 import sys
 import threading
-import trace
 import traceback
-import tracemalloc
-from collections.abc import Sequence
 from os import scandir, listdir
 from pathlib import Path
 from runpy import run_module, run_path
-from traceback import FrameSummary, StackSummary, format_exc, format_tb
-from tracemalloc import Snapshot
+from traceback import format_exc, format_tb
 
-from traitlets.config import Configurable
 from IPython.core.getipython import get_ipython
 
 logging.basicConfig(level=logging.WARNING)
@@ -179,9 +170,7 @@ def ipy_execdir(directory):
 
 
 if __name__ == "__main__":
-    faulthandler.enable()
     handled = cgitb.Hook(file=sys.stdout, format="text")
-    tracemalloc.start()
     sys.excepthook = handled
 
     _ip = get_ipython()

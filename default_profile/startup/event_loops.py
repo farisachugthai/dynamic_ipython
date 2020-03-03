@@ -2,37 +2,55 @@
 # -*- coding: utf-8 -*-
 import asyncio
 
-from asyncio.events import (
-    #     get_child_watcher,
-    #     get_event_loop,
-    get_event_loop_policy,
-    get_running_loop,
-)
+from asyncio.events import get_event_loop_policy
+
+try:
+    # get_event_loop() is one of the most frequently called
+    # functions in asyncio.  Pure Python implementation is
+    # about 4 times slower than C-accelerated.
+    from _asyncio import (
+        _get_running_loop,
+        _set_running_loop,
+        get_running_loop,
+        get_event_loop,
+    )
+except ImportError:
+    from asyncio.events import (
+        _get_running_loop,
+        _set_running_loop,
+        get_running_loop,
+        get_event_loop,
+    )
+
 import multiprocessing
 
 # from multiprocessing.process import current_process
 import platform
 import shlex
+import threading
 
-# from threading
+# from threading and _threading_local
+import sys as _sys
+
 try:
+    from _thread import _local as local
     from _thread import _excepthook as excepthook, _ExceptHookArgs as ExceptHookArgs
 except ImportError:
     # Simple Python implementation if _thread._excepthook() is not available
     from traceback import print_exception as _print_exception
     from collections import namedtuple
+    from _threading_local import local
 
     _ExceptHookArgs = namedtuple(
         "ExceptHookArgs", "exc_type exc_value exc_traceback thread"
     )
 
     def ExceptHookArgs(args):
+        """Return a namedtuple of 'exc_type exc_value exc_traceback thread'."""
         return _ExceptHookArgs(*args)
 
     def excepthook(args, /):
-        """
-        Handle uncaught Thread.run() exception.
-        """
+        """Handle uncaught `threading.Thread.run` exception."""
         if args.exc_type == SystemExit:
             # silently ignore SystemExit
             return
@@ -52,7 +70,7 @@ except ImportError:
         if args.thread is not None:
             name = args.thread.name
         else:
-            name = get_ident()
+            name = threading.get_ident()
         print(f"Exception in thread {name}:", file=stderr, flush=True)
         _print_exception(args.exc_type, args.exc_value, args.exc_traceback, file=stderr)
         stderr.flush()
@@ -78,10 +96,10 @@ def children():
     return multiprocessing.active_children()
 
 
-def enable_multiprocessing_logging(level=30):
+def enable_multiprocessing_logging(level=50):
     """Log to stderr."""
     logger = multiprocessing.log_to_stderr()
-    logger.setLevel(30)
+    logger.setLevel(level)
     return logger
 
 
@@ -117,9 +135,11 @@ async def system_command(command_to_run):
 
 
 if __name__ == "__main__":
+    event_policy = get_event_loop_policy()
     try:
         loop = get_running_loop()
     except RuntimeError:
         # sigh
-        event_policy = get_event_loop_policy()
         loop = event_policy.new_event_loop()
+
+    watcher = event_policy.get_child_watcher()
