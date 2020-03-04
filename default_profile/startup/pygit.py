@@ -1,16 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import logging
-from pathlib import Path
 import subprocess
+from os import getcwd
+from pathlib import Path
 
 try:
-    from git import Git
-except:
-    Git = None
-    Repo = None
-else:
     from git import Repo
+except:
+    Repo = None
+
+from pip._internal.vcs.git import Git
 
 
 class ShellRepo:
@@ -53,3 +53,21 @@ class ShellRepo:
                 # uhhhhhhh
                 self.log.critical(f"{self.root} doesn't exist")
             return Git(self.root())
+
+
+class PyGit(Git):
+    """Subclass pip's Git implementation."""
+
+    def __mro__(self):
+        """For `inspect.getmro`."""
+        if hasattr(self, "__bases__"):
+            return self.__bases__
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}"
+
+    def get_current_branch(self, location=None):
+        """Make the super classes' *location* parameter optional."""
+        if location is None:
+            location = getcwd()
+        return super().get_current_branch(location)

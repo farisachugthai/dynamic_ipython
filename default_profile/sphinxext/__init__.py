@@ -22,6 +22,8 @@ import pkgutil
 import sys
 from pathlib import Path
 
+import pkg_resources
+
 from default_profile import ask_for_import
 from default_profile import default_log_format
 from default_profile.sphinxext import custom_doctests  # noqa F401
@@ -43,11 +45,5 @@ sphinxext_logger.addFilter(sphinxext_filter)
 # How to check the current namespace
 if hasattr(locals(), "__path__"):
     __path__ = pkgutil.extend_path(__path__, __name__)
-# else:
-#     sys.path.insert(0, str(Path(__file__).resolve()))
 
-
-# Don't emit an error on IPython startup if not installed.
-ask_for_import("IPython")
-
-# We kinda have to assume we're installed if we're building our docs
+pkg_resources.declare_namespace(__name__)

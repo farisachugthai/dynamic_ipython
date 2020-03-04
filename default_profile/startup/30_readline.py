@@ -32,6 +32,11 @@ import traceback
 
 from IPython.core.getipython import get_ipython
 
+try:
+    import readline
+except ImportError:
+    readline = None
+
 if os.environ.get("IPYTHONDIR"):
     LOG_FILENAME = os.path.join(os.environ.get("IPYTHONDIR"), "completer.log")
     logging.basicConfig(
@@ -283,15 +288,10 @@ if __name__ == "__main__":
 
         # from pyreadline.lineobj.history import EscapeHistory, LineEditor
     except (ImportError, ModuleNotFoundError):
-        try:
-            import readline
-        except ImportError:
-            readline = None
-        else:
-            # Only immport rlcompleter if we're on linux. pyreadline
-            # doesn't match all of it's API
-            import rlcompleter
-            from rlcompleter import Completer
+        # Only immport rlcompleter if we're on linux. pyreadline
+        # doesn't match all of it's API
+        import rlcompleter
+        from rlcompleter import Completer
 
     else:
         # All the pyreadline submodules have to be called as pyreadline.

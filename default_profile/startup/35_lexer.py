@@ -66,7 +66,7 @@ def our_style():
         ]
     )  # TODO
     return merge_styles(
-        [style_from_pygments_cls(Gruvbox), default_pygments_style(), ]
+        [style_from_pygments_cls(Gruvbox), default_pygments_style(),]
     )  # TODO
 
 
@@ -207,7 +207,9 @@ def generate_and_print_hsplit():
 def pphighlight(o, *a, **kw):
     s = pprint.pformat(o, *a, **kw)
     try:
-        sys.stdout.write(pygments.highlight(s, PythonLexer(), TerminalTrueColorFormatter()))
+        sys.stdout.write(
+            pygments.highlight(s, PythonLexer(), TerminalTrueColorFormatter())
+        )
     except UnicodeError:
         sys.stdout.write(s)
         sys.stdout.write("\n")

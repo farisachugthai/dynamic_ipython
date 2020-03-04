@@ -72,8 +72,7 @@ def get_docs_and_page():
     _, *args = sys.argv[:]
     if len(args) > 0:
         print(getdoc(*args))
-    else:
-        sys.exit("Need to provide an argument.")
+        return getdoc(*args)
 
 
 def were_in_ipython():
@@ -101,15 +100,8 @@ def provided_or_last(s=None, shell=None):
 
     Notes
     -------
+    We should consider using something else to find user code.
 
-    What is the actual implementation name for the var ``_i``? I think IPython
-    stores a :attr:`last_execution_result` or maybe a
-    :attr:`last_execution_succeeded`.
-
-    Well the classes that they made for the last_execution_result and info
-    are odd to say the least.
-
-    Also we should consider using something else to find user code.
     """
     if shell is None:
         shell = get_ipython()
@@ -156,8 +148,4 @@ def c(s=None):
 
 if __name__ == "__main__":
     get_ipython().register_magic_function(c)
-    inspector = IPython.core.oinspect.Inspector()
-
-    # I don't think using sys.argv is the way to go. pytest, nose, and IPython all fight to claim it
-    # if len(sys.argv[:]) > 1:
-    #     c(sys.argv[1:])
+    # inspector = IPython.core.oinspect.Inspector()

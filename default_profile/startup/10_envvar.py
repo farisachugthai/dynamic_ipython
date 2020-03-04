@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """Implement a few magics so as to modify the user's environment."""
+import contextlib
 import os
+import sys
+from io import TextIOWrapper
 from pathlib import Path
 
 from IPython.core.magic import line_magic, Magics, magics_class
@@ -39,4 +42,25 @@ class EnvironMagics(Magics):
 
     @line_magic
     def symlink(self, dest, source=None):
+        pass
+
+
+class DevNull(TextIOWrapper):
+    """The standard library implements a version of os.devnull.
+
+    Surprisingly, that implementation equates it to a string, and as a result
+    the expression, ``sys.stdout = os.devnull``, will crash the interpreter.
+    """
+    original_stdin = sys.stdin
+    original_stdout = sys.stdout
+    original_stderr = sys.stderr
+
+    @contextlib.contextmanager
+    def stdout(self):
+        try:
+            self = sys.stdout
+        finally:
+            sys.stdout = original_stdout
+
+    def __enter__(self):
         pass

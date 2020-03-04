@@ -9,7 +9,6 @@ other things that aren't utilized at all.
 """
 import asyncio
 import functools
-import logging
 import time
 from datetime import date
 from pathlib import Path
@@ -43,8 +42,6 @@ try:
     from gruvbox.gruvbox import GruvboxStyle
 except ImportError:
     GruvboxStyle = None
-
-logging.basicConfig()
 
 
 def get_app():
@@ -109,8 +106,6 @@ class BottomToolbar:
         self.shell = get_ipython()
         self.app = app
         # self.unfinished_toolbar = self.rerender()
-        if self.app is None:
-            logging.warning("BottomToolbar app is None.")
         self.PythonLexer = PythonLexer()
         self.Formatter = TerminalTrueColorFormatter()
 
@@ -204,8 +199,12 @@ if __name__ == "__main__":
     # Silence the goddamn loggers
     if len(asyncio.log.logger.root.handlers) > 0:
         asyncio.log.logger.root.handlers.pop()
+    if len(asyncio.log.logger.handlers) > 0:
+        asyncio.log.logger.handlers.pop()
     asyncio.log.logger.setLevel(99)
     asyncio.log.logger.root.setLevel(99)
+    asyncio.log.logger.disabled = True
+    asyncio.log.logger.root.disabled = True
 
     # Back to our usual program
     bottom_text = BottomToolbar(get_app())

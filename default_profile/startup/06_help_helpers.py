@@ -141,18 +141,18 @@ class HelpMagics(Magics):
         This function utilizes the IPython `SList` class to make it easier
         to work with.
 
-        Methods of note are the :meth:`grep` and ``s``, ``l`` and ``p`` attributes.
+        Methods of note are the :meth:`grep`.
+        Attributes of note ``s``, ``l`` and ``p`` attributes.
 
         Examples
         ---------
 
-        .. ipython::
-            :doctest:
+        .. doctest::
 
             >>> i = HelpMagics().dirip()
             >>> i.grep('complete')
             ['Completer', 'check_complete', 'complete', 'init_completer',
-            'pt_complete_style', 'set_completer_frame', 'set_custom_completer']  # +NORMALIZE_WHITESPACE
+            'pt_complete_style', 'set_completer_frame', 'set_custom_completer']  # +doctest.NORMALIZE_WHITESPACE
 
         """
         if self.shell is None:

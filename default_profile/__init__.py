@@ -30,10 +30,7 @@ import pkgutil
 import sys
 from collections import deque
 from pathlib import Path
-
-# from pkg_resources import declare_namespace
-from setuptools import find_packages, find_namespace_packages
-
+import pkg_resources
 from traitlets.config.application import LevelFormatter
 
 # Lol note that there are FOUR different logging.Formatter.fmt strings in this module
@@ -51,25 +48,9 @@ PROFILE_DEFAULT_LOG.addHandler(PROFILE_DEFAULT_HANDLER)
 default_traitlets_log_format = "[ %(name)s  %(relativeCreated)d ] %(highlevel)s %(levelname)s %(module)s %(message)s "
 default_formatter = LevelFormatter(fmt=default_traitlets_log_format)
 
-
 # Pkg-resources:
-# This kills everything on termux and makes run pytest or tox in the root
-# of this repo impossible. hmmmmm. Is there a fix for that?
-# declare_namespace(REPO_ROOT)
+pkg_resources.declare_namespace(__name__)
 
-# found_packages = find_packages(where="..")
-# found_namespace_packages = find_namespace_packages(where="..")
-
-# PROFILE_DEFAULT_LOG.debug("Found packages were: {}".format(found_packages))
-# PROFILE_DEFAULT_LOG.debug(
-#     "Found namespace packages were: {}".format(found_namespace_packages)
-# )
-
-PROFILE_DEFAULT_LOG.debug("sys.path before:" + str(sys.path))
-PROFILE_DEFAULT_LOG.debug("sys.path after:" + str(sys.path))
-
-if hasattr(locals(), "__path__"):
-    ___path__ = pkgutil.extend_path(__path__, __name__)
 
 
 def ask_for_import(mod, package=None):
@@ -206,4 +187,6 @@ def setup_logging(debug=True, logfile=None):
         handler.addFilter(logging.Filter())
         root_logger.addHandler(handler)
 
-    root_logger.setLevel(10)
+    root_logger.setLevel(40)
+
+setup_logging()

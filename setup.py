@@ -39,9 +39,6 @@ Here's a really good one to check out.:
 
         An exception has occurred, use %tb to see the full traceback.
 """
-from setuptools.dist import Distribution
-from setuptools import setup, find_packages, Command, Extension, PackageFinder
-from distutils.errors import DistutilsArgError
 import codecs
 import logging
 import os
@@ -50,6 +47,10 @@ from runpy import run_path, run_module
 from shutil import rmtree
 import sys
 
+from setuptools.dist import Distribution
+from setuptools import setup, find_packages, Command, Extension, PackageFinder
+from distutils.errors import DistutilsArgError
+
 logging.basicConfig()
 
 
@@ -57,6 +58,7 @@ logging.basicConfig()
 d = Distribution()
 if len(sys.argv) == 0:
     d.print_commands()
+    sys.exit()
 
 try:
     d.parse_command_line()
@@ -99,6 +101,7 @@ try:
     from default_profile import ModuleNotFoundError
 except ImportError:  # noqa
     __version__ = "0.0.2"
+# }}}
 
 # Conda Support: {{{1
 
@@ -137,14 +140,13 @@ REQUIRED = [
 ]
 
 EXTRAS = {
-    "develop": ["pipenv", "pandas", "matplotlib", ],
-    "docs": ["sphinx>=2.2", "matplotlib>=3.0.0", "numpydoc>=0.9", ],
+    "develop": ["pipenv", "pandas", "matplotlib",],
+    "docs": ["sphinx>=2.2", "matplotlib>=3.0.0", "numpydoc>=0.9",],
     "test": ["pytest", "testpath", "nose", "matplotlib"],
 }
 # }}}}
 
-# {{{
-class UploadCommand(Command):
+class UploadCommand(Command):  # {{{
     """Support setup.py upload."""
 
     description = "Build and publish the package."
@@ -212,6 +214,7 @@ setup(
     entry_points={
         "console_scripts": ["ip=default_profile.profile_debugger:debug.main"],
     },
+    namespace_packages=["default_profile", "default_profile.sphinxext"],
     install_requires=REQUIRED,
     extras_require=EXTRAS,
     test_suite="test",
@@ -247,7 +250,7 @@ setup(
         "Programming Language :: Python :: Implementation :: CPython",
     ],
     # $ setup.py publish support.
-    cmdclass={"upload": UploadCommand, },
+    cmdclass={"upload": UploadCommand,},
     # project home page, if any
     project_urls={
         "Bug Tracker": "https://www.github.com/farisachugthai/dynamic_ipython/issues",

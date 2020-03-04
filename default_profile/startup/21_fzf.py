@@ -8,6 +8,7 @@ import shutil
 import sqlite3
 import subprocess
 import sys
+import tempfile
 import types
 
 from contextlib import ContextDecorator, contextmanager
@@ -28,7 +29,7 @@ else:
 
 from prompt_toolkit.application.run_in_terminal import run_in_terminal
 from prompt_toolkit.enums import DEFAULT_BUFFER
-from prompt_toolkit.filters import HasFocus
+from prompt_toolkit.filters import HasFocus, ViInsertMode, EmacsInsertMode
 from prompt_toolkit.keys import Keys
 from prompt_toolkit.shortcuts import print_formatted_text as print
 from prompt_toolkit.utils import Event
@@ -42,14 +43,14 @@ class Executable(ContextDecorator):
     def __init__(self, command):
         """Initialize with *command*."""
         self.command = command
-        self.command_path = self._get_command_path()
+        self.command_path = self._get_command_path(command)
         super().__init__()
 
     @property
     def _command(self):
         return self.command
 
-    def _get_command_path(self):
+    def _get_command_path(self, command):
         """Return the path to an executable if *command* is on `PATH`.
 
         Same signature as :func:`shutil.which`.
@@ -60,7 +61,7 @@ class Executable(ContextDecorator):
             Path to an executable if it's found. Otherwise `None`.
 
         """
-        return shutil.which(self.command)
+        return shutil.which(command)
 
     def __repr__(self):
         return "Executable: {!r}".format(self.command)
@@ -94,22 +95,25 @@ class RedirectStdout:
 class FZF:
     """Wrap FZF together."""
 
-    fzf_alias = ""
-
-    def __init__(self, fzf_alias=None, fzf_configs=None, **kwargs):
-        self.fzf_alias = fzf_alias or ""
+    def __init__(self, fzf_configs=None, **kwargs):
         self.fzf_config = fzf_configs or {}
         self._setup_fzf()
 
     def __repr__(self):
-        return "{}    {}".format(self.__class__.__name__, self.fzf_alias)
+        return "{}    {}".format(self.__class__.__name__, self.fzf_config)
 
     def __call__(self, *args, **kwargs):
         """Run :attr:`safe_default_cmd` with ``*args`` as a command.
 
         Accepts any optional ``**kwargs`` passed along to :func:`subprocess.run`.
         """
-        subprocess.run([self.safe_default_cmd, *args], **kwargs)
+        with (RedirectStdout(), "rt+") as f:
+            return subprocess.run(
+                [self.safe_default_cmd, *args],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                **kwargs
+            )
 
     def default_cmds(self):
         return "rg --pretty --hidden --max-columns-preview --no-heading --no-messages --no-column --no-line-number -C 0 -e ^ | fzf --ansi --multi "
@@ -145,12 +149,10 @@ class FZF:
 
     @classmethod
     def _setup_fzf(cls, *args):
-        if cls.fzf_alias is None:
-            cls.fzf_alias = ()
         if shutil.which("fzf") and shutil.which("rg"):
             # user_aliases.extend(
             #     ('fzf', '$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS'))
-            cls.fzf_alias = (
+            cls.fzf = (
                 "fzf",
                 "rg --pretty --hidden --max-columns-preview --no-heading --no-messages --no-column --no-line-number -C 0 -e ^ | fzf --ansi --multi ",
             )
@@ -158,7 +160,7 @@ class FZF:
         elif shutil.which("fzf") and shutil.which("ag"):
             # user_aliases.extend(
             #     ('fzf', '$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS'))
-            cls.fzf_alias = ("fzf", "ag -C 0 --color-win-ansi --noheading %l | fzf")
+            cls.fzf = ("fzf", "ag -C 0 --color-win-ansi --noheading %l | fzf")
 
         if args:
             cls.fzf_alias.extend(args)
@@ -194,19 +196,21 @@ def fzf_history(event):
 
 def add_fzf_binding():
     insert_mode = ViInsertMode() | EmacsInsertMode()
-    registry = get_ipython().pt_app.key_binding
+    registry = get_ipython().pt_app.key_bindings
 
     handle = registry.add_binding
     handle(Keys.ControlY, filter=HasFocus(DEFAULT_BUFFER))(fzf_history)
-    handle(Keys.ControlT, HasFocus(DEFAULT_BUFFER))(fzf_keys)
+    # this freezes the whole prompt holy hell
+    # handle(Keys.ControlT, filter=HasFocus(DEFAULT_BUFFER))(fzf_keys)
 
 
 def fzf_keys(inputted_list=None):
+
     if inputted_list is None:
         inputted_list = []
 
     # idk if you can do this.
-    with open(tempfile.mkstemp()) as f:
+    with open(tempfile.mkstemp()[-1], "rt+") as f:
         sys.stdout = f
         sys.stdin = f
         # also is this class a contextmanager because that'd be thoughtful

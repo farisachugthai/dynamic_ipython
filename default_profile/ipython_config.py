@@ -536,8 +536,6 @@ class StandardPythonPrompt(ClassicPrompts):
     >>> from IPython.terminal.prompts import ClassicPrompts
     >>> from IPython.core.getipython import get_ipython
     >>> ClassicPrompts(get_ipython()).continuation_prompt_tokens()
-    [(Token.Prompt, '... ')]
-    >>> ClassicPrompts(get_ipython()).continuation_prompt_tokens()
     [(Token.Prompt, '>>> ')]
 
     """

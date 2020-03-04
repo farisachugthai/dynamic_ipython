@@ -11,7 +11,6 @@
 
 """
 import asyncio
-import gc
 import platform
 import sys
 from asyncio.__main__ import AsyncIOInteractiveConsole, REPLThread
@@ -58,10 +57,6 @@ if "__name__" == "__main":
     if not shell:
         print("startup.__main__: get_ipython returned None")
 
-    asyncio.log.logger.root.handlers.pop()
-    asyncio.log.logger.setLevel(99)
-    asyncio.log.logger.disabled = True
-
     this_dir = Path(__file__).parent
     # this doesn't do anything yet but hey at least we found the api
     if platform.platform().startswith("win"):
@@ -93,8 +88,6 @@ if "__name__" == "__main":
     repl_thread.start()
     startup = abspath(".")
     exec_dir(startup)
-
-    gc.collect()
 
     while True:
         try:

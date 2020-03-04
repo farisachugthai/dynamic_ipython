@@ -225,6 +225,26 @@ class Helpers:
         return list(self.layout.find_all_controls())
 
 
+    def app_context(self):
+        """What is this?
+
+        Behaves similarly to a dict but won't display values.::
+
+            [ins] In [165]: _ip.pt_app.app.context
+            Out[165]: <Context at 0x7877b7d880>
+
+            [ins] In [166]: _ip.pt_app.app.context.items()
+            Out[166]: <items at 0x7877ac00f0>
+
+            [ins] In [167]: _ip.pt_app.app.context.keys()
+            Out[167]: <keys at 0x7877b46e00>
+
+            [ins] In [168]: print_formatted_text(_ip.pt_app.app.context)
+            <Context object at 0x787791c380>
+
+        """
+        return self.pt_app.context
+
 def all_processors_for_searching():
     r"""Return a list of `prompt_toolkit.layout.processor.Processor`\'s."""
     return [
