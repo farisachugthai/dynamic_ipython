@@ -32,7 +32,9 @@ class CommonAliases(UserDict):
 
     """
 
-    def __init__(self, shell=None, user_aliases=None, **kwargs):
+    shell = get_ipython()
+
+    def __init__(self, user_aliases=None, **kwargs):
         """OS Agnostic aliases.
 
         Parameters
@@ -41,8 +43,6 @@ class CommonAliases(UserDict):
             User aliases to add the user's namespace.
 
         """
-        self.shell = shell or get_ipython()
-
         if user_aliases is None:
             self.user_aliases = default_aliases()
         else:
@@ -56,14 +56,21 @@ class CommonAliases(UserDict):
             self.update(**kwargs)
         super().__init__(self.dict_aliases)
 
+    @property
     def alias_manager(self):
         return self.shell.alias_manager
 
     def define_alias(self, name, cmd):
-        self.alias_manager.define_alias(name, cmd)
+        caller = Alias(shell=self.shell, name=name, cmd=cmd)
+        try:
+            self.shell.magics_manager.register_function(
+                caller, magic_kind="line", magic_name=name
+            )
+        except AliasError:
+            return
 
-    def soft_define_alias(self, name, cmd):
-        self.alias_manager.soft_define_alias(name, cmd)
+    def is_alias(self, name):
+        return name in self.dict_aliases
 
     def undefine_alias(self, name):
         """Override to raise AliasError not ValueError.
@@ -80,48 +87,6 @@ class CommonAliases(UserDict):
         return self._generator()
 
     def _generator(self):
-        for itm in self.dict_aliases:
-            yield itm
-
-    def __repr__(self):  # reprlib?
-        return "<Common Aliases>: # of aliases: {!r} ".format(len(self.dict_aliases))
-
-    # def __contains__(self, other):
-    # is this the right definition for contains?
-    # if other in self.dict_aliases:
-    # return True
-    @staticmethod
-    def _find_exe(self, exe=None):
-        """Use :func:`shutil.which` to determine whether an executable exists.
-
-        Parameters
-        ----------
-        exe : command, optional
-            The command to check.
-
-        Returns
-        -------
-        path : str (path-like)
-            Where the executable is located.
-
-        Note
-        ----
-        shutil.which actually checks :envvar:`PATHEXT`! That's real nice.
-
-        """
-        return shutil.which(exe)
-
-    def extend(self, list_aliases):
-        """Implement the method `extend` in a similar way to how `list.extend` works.
-
-        Parameters
-        ----------
-        list_aliases : list of tuple
-        """
-        for i in list_aliases:
-            self.shell.alias_manager.define_alias(*alias)
-
-    def update(self, other):
         """Properly map aliases as dictionaries.
 
         As stated in the language reference under Common Sequence Operations.:
@@ -135,13 +100,24 @@ class CommonAliases(UserDict):
                 - **If concatenating tuple objects, extend a list instead.**
 
         """
-        try:
-            self.dict_aliases.update(other)
-        except TypeError:
-            raise
+        for itm in self.dict_aliases:
+            yield itm
 
-    def __add__(self, name=None, cmd=None, *args):
-        """Allow name or cmd to not be specified. But if you pass non-kwargs please keep it in a tuple."""
+    def __repr__(self):  # reprlib?
+        return "<Common Aliases>: # of aliases: {!r} ".format(len(self.dict_aliases))
+
+    def __add__(self, other):
+        """Allow instances to be added."""
+        if hasattr(other, "dict_aliases"):
+            self.update(other.dict_aliases)
+
+    def __mul__(self):
+        raise NotImplementedError
+
+    def __len__(self):
+        return len(self.dict_aliases)
+
+    def __iadd__(self, name=None, cmd=None, *args):
         # I think i made this as flexible as possible. Cross your fingers.
         if name is None and cmd is None:
             if len(args) != 2:
@@ -150,17 +126,29 @@ class CommonAliases(UserDict):
                 name, cmd = args
         self.define_alias(name, cmd)
 
-    def __mul__(self):
-        raise NotImplementedError
+    def __copy__(self):
+        return copy.copy(self.aliases)
 
-    def __len__(self):
-        return len(self.dict_aliases)
+    def __contains__(self, other):
+        return name in self.dict_aliases
+
+    def __iter__(self):
+        return iter(self.dict_aliases.items())
+
+    def __next__(self):
+        max = len(self)
+        if max >= self.idx:
+            # Reset the loop and raise stopiteration
+            self.idx = 0
+            raise StopIteration
+        self.idx += 1
+        return self.dict_aliases[self.idx]
 
     def len(self):
         return self.__len__()
 
-    def append(self, list_aliases):
-        for i in list_aliases:
+    def append(self, aliases):
+        for i in aliases:
             self.__add__(i)
 
     def __getattr__(self, attr):
@@ -227,7 +215,6 @@ class CommonAliases(UserDict):
     def unalias(self, alias):
         """Remove an alias.
 
-        .. magic:: unalias
 
         Parameters
         ----------
@@ -235,6 +222,19 @@ class CommonAliases(UserDict):
 
         """
         self.shell.run_line_magic("unalias", alias)
+
+    def user_shell(self):
+        """Determine the user's shell. Checks :envvar:`SHELL` and :envvar:`COMSPEC`."""
+        if self.shell:
+            return self.shell
+        elif os.environ.get("SHELL"):
+            return os.environ.get("SHELL")
+        elif os.environ.get("COMSPEC"):
+            return os.environ.get("COMSPEC")
+        else:
+            raise OSError(
+                "Neither $SHELL nor $COMSPEC set. Can't determine running terminal."
+            )
 
     def python_exes(self):
         """Python executables like pydoc get executed in a subprocess currently.
@@ -525,7 +525,6 @@ class LinuxAliases(CommonAliases):
             ("startup", "cd ~/projects/dotfiles/unix/.ipython/default_profile/startup"),
             ("tail", "tail -n 30 %l"),
         ]
-        return self.user_aliases
 
     def thirdparty(self):
         """Contrasted to busybox, these require external installation.
@@ -540,7 +539,6 @@ class LinuxAliases(CommonAliases):
             ("nman", 'nvim -c "Man %l" -c"wincmd T"'),
             ("tre", "tree -DAshFC --prune -I .git %l"),
         ]
-        return self.user_aliases
 
 
 class WindowsAliases(CommonAliases):
@@ -578,7 +576,7 @@ class WindowsAliases(CommonAliases):
         Also note :envvar:`DIRCMD` for :command:`dir`.
 
         """
-        self.user_aliases = [
+        self.user_aliases += [
             ("assoc", "assoc %l"),
             ("cd", "cd %l"),
             ("chdir", "chdir %l"),
@@ -631,7 +629,6 @@ class WindowsAliases(CommonAliases):
             ("where", "where %l"),
             ("wmic", "wmic %l"),
         ]
-        return cls.user_aliases
 
     def powershell_aliases(self):
         r"""Aliases for Windows OSes using :command:`powershell`.
@@ -645,7 +642,7 @@ class WindowsAliases(CommonAliases):
         that this section is still under development and frequently changes.
 
         """
-        self.user_aliases = [
+        self.user_aliases += [
             ("ac", "Add-Content %l"),
             ("asnp", "Add-PSSnapin %l"),
             ("cat", "Get-Content %l"),
@@ -705,20 +702,6 @@ class WindowsAliases(CommonAliases):
             ("wjb", "Wait-Job %l"),
             ("write", "Write-Output %l"),
         ]
-        return cls.user_aliases
-
-    def user_shell(self):
-        """Determine the user's shell. Checks :envvar:`SHELL` and :envvar:`COMSPEC`."""
-        if self.shell:
-            return self.shell
-        elif os.environ.get("SHELL"):
-            return os.environ.get("SHELL")
-        elif os.environ.get("COMSPEC"):
-            return os.environ.get("COMSPEC")
-        else:
-            raise OSError(
-                "Neither $SHELL nor $COMSPEC set. Can't determine running terminal."
-            )
 
 
 def generate_aliases(_ip=None):
@@ -730,25 +713,23 @@ def generate_aliases(_ip=None):
     """
     if _ip is None:
         _ip = get_ipython()
-    if not hasattr(_ip, "magics_manager"):
+    if not hasattr(_ip, "alias_manager"):
         raise ApplicationError("Are you running in IPython?")
 
-    common_aliases = CommonAliases(
-        shell=_ip, user_aliases=_ip.alias_manager.user_aliases
-    )
     from default_profile.util.machine import Platform
 
     machine = Platform()
 
     if machine.is_linux:
-        linux_aliases = LinuxAliases()
-        # TODO: allow adding of these classes
-        # common_aliases.user_aliases.append(linux_aliases.user_aliases)
+        aliases = LinuxAliases(user_aliases=_ip.alias_manager.user_aliases)
+        aliases.busybox()
+        aliases.thirdparty()
     elif machine.is_windows:
-        windows_aliases = WindowsAliases()
-        # common_aliases.user_aliases.append(windows_aliases.user_aliases)
+        aliases = WindowsAliases(user_aliases=_ip.alias_manager.user_aliases)
+        aliases.cmd_aliases()
+    aliases.ls_patch(_ip)
 
-    return common_aliases
+    return aliases
 
 
 def redefine_aliases(aliases, shell=None):
@@ -771,8 +752,7 @@ def redefine_aliases(aliases, shell=None):
     --------
     >>> shell = get_ipython()
     >>> len(shell.alias_manager.user_aliases)  # DOCTEST: +SKIP
-        3
-    >>> # and even if it's not
+        0 # and even if it's not
     >>> shell.alias_manager.user_aliases = [('a', 'a'), ('b', 'b'), ('c', 'c')]
     >>> redefine_aliases([('ls', 'ls -F')])
     >>> shell.alias_manager.user_aliases
@@ -783,11 +763,6 @@ def redefine_aliases(aliases, shell=None):
         shell = get_ipython()
     if not hasattr(shell, "alias_manager"):
         raise ApplicationError
-    for i, j in enumerate(aliases):
-        try:
-            shell.alias_manager.define_alias(j, all_aliases.dict_aliases[j])
-        except InvalidAliasError:
-            raise
 
 
 if __name__ == "__main__":
@@ -797,18 +772,24 @@ if __name__ == "__main__":
         all_aliases = generate_aliases()
         # our combined classes have an attribute dict_aliases
         # that makes operations a lot easier to perform
-        redefine_aliases(all_aliases.dict_aliases)
-        from default_profile.util.module_log import stream_logger
+        for i in all_aliases:
+            try:
+                _ip.alias_manager.define_alias(i[0], i[1])
+            except InvalidAliasError:
+                raise
 
-        ALIAS_LOGGER = stream_logger(
-            logger="default_profile.startup.20_aliases",
-            msg_format=(
-                "[ %(name)s  %(relativeCreated)d ] %(levelname)s %(module)s %(message)s "
-            ),
-            log_level=logging.WARNING,
-        )
-
-        ALIAS_LOGGER.info("Number of aliases is: %s" % all_aliases)
         _ip.run_line_magic("alias_magic", "p pycat")
-        common_aliases = CommonAliases()
-        common_aliases.ls_patch(_ip)
+
+    # this doesnt log anything
+#     from default_profile.util.module_log import stream_logger
+
+#     ALIAS_LOGGER = stream_logger(
+#         logger="default_profile.startup.20_aliases",
+#         msg_format=(
+#             "[ %(name)s  %(relativeCreated)d ] %(levelname)s %(module)s %(message)s "
+#         ),
+#         log_level=logging.WARNING,
+#     )
+
+#     if _ip is not None:
+#         ALIAS_LOGGER.info("Number of aliases is: %s" % all_aliases)
