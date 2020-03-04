@@ -10,11 +10,12 @@ prompt_toolkit, jedi and pygments are all dependencies of IPython, so a simple
 
 In addition, readline is assumed to be present on the system. On systems that don't have readline installed by default, ``pyreadline`` can work as a drop-in replacement.
 """
+import argparse
 import atexit
 from bdb import BdbQuit, Breakpoint
 import cmd
 import cgitb
-from contextlib import suppress
+from contextlib import suppress, contextmanager
 import faulthandler
 import gc
 import inspect
@@ -24,12 +25,12 @@ import os
 from pathlib import Path
 import readline
 import pdb
+from pdb import Restart, Pdb
 import pydoc
 import runpy
 import sys
+from textwrap import dedent
 import time
-import trace
-import tracemalloc
 import traceback
 
 from jedi.api import replstartup
@@ -68,7 +69,6 @@ shell = get_ipython()
 
 cgitb.enable(format="text")
 faulthandler.enable()
-tracemalloc.start()
 
 # History: Set up separately
 
@@ -95,18 +95,78 @@ else:
     readline.parse_and_bind("Tab:menu-complete")
 
 
+def get_parser():
+    """Factored out of main. Well sweet this now rasies an error."""
+    parser = argparse.ArgumentParser(
+        prog="ipdb+",
+        description=(
+            "\nAn IPython flavored version of pdb with even more useful features."
+            "\nWhy?\nYou're debugging code you don't want to figure out if you"
+            " imported something or not.\n\n"
+        ),
+    )
+
+    parser.add_argument(
+        "-f",
+        "--file",
+        action="store",
+        dest="mainpyfile",
+        help="File to run under the debugger.",
+    )
+
+    parser.add_argument(
+        "-c",
+        "--commands",
+        nargs="*",
+        type=list,
+        help="List of commands to run before starting.",
+        default=[],
+        action="append",
+    )
+
+    parser.add_argument(
+        "-m",
+        "--module",
+        nargs="+",
+        help=dedent(
+            "Module to debug. Note that the provided module will be subject"
+            " to all the standard rules that any imported module would be"
+            " as per the import rules specified in the language/library"
+            " references."
+        ),
+        dest="mod",
+    )
+
+    parser.add_argument(
+        "-i",
+        "--interactive",
+        help="Force interactivity if pdb would otherwise exit.",
+        const=True,
+        nargs="?",
+        default=False,
+    )
+
+    parser.add_argument("-v", "--version", action="version")
+
+    return parser
+
+
 # Customized prompt
 
-class DebuggerPrompt(Prompts):
 
+class DebuggerPrompt(Prompts):
     def python_location(self):
-        env = os.environ.get('CONDA_DEFAULT_ENV')
+        env = os.environ.get("CONDA_DEFAULT_ENV")
         if env is None:
             return Path(sys.prefix)
         return Path(env)
 
     def in_prompt_tokens(self):
-        return [(Token.Comment, self.python_location()), (Token.Keyword, '<YourPDB> @'), (Token.Keyword, self.shell.execution_count)]
+        return [
+            (Token.Comment, self.python_location()),
+            (Token.Keyword, "<YourPDB> @"),
+            (Token.Keyword, self.shell.execution_count),
+        ]
 
     def __call__(self):
         return self.in_prompt_tokens()
@@ -118,7 +178,27 @@ class DebuggerPrompt(Prompts):
         """Define length of the instance by the superclasses `_width`."""
         return self._width()
 
+
 # Customized Pdb
+
+
+def _init_pdb(context=3, commands=None, debugger_kls=None):
+    """Needed to add a debugger_cls param to this."""
+    if debugger_kls is None:
+        if MyPdb is not None:
+            debugger_kls = MyPdb
+        elif ipdb is not None:
+            debugger_kls = ipdb
+        else:
+            debugger_kls = Pdb
+    if commands is None:
+        commands = []
+    try:
+        p = debugger_kls(context=context)
+    except TypeError:
+        p = debugger_kls()
+    p.rcLines.extend(commands)
+    return p
 
 
 class MyPdb(pdb.Pdb):
@@ -161,7 +241,12 @@ class MyPdb(pdb.Pdb):
         self.lineno = None
         super().__init__(completekey=self.completekey, skip=self.skip, *args, **kwargs)
         self.shell = get_ipython() if shell is None else shell
-        self.prompt = DebuggerPrompt(self.shell)
+        self.prompt = (
+            DebuggerPrompt(self.shell) if self.shell is not None else "YourPdb: "
+        )
+        self.curframe = inspect.currentframe()
+        self._wait_for_mainpyfile = False
+        self._user_requested_quit = True
 
     def __repr__(self):
         """Better repr with :meth:`bdb.Bdb.get_all_breaks` thrown in."""
@@ -170,13 +255,13 @@ class MyPdb(pdb.Pdb):
     def run(self, statement, *args, **kwargs):
         """Garbage collect after running because asyncio."""
         try:
-            super().run(statement=statement, *args, **kwargs)
+            super().run(statement, *args, **kwargs)
         except BdbQuit:
             gc.collect()
             return
 
-    def __call__(self, statement, *args, **kwargs):
-        return self.run(statement)
+    # def __call__(self, statement, *args, **kwargs):
+    #     return self.run(statement)
 
     def colorizer(self, code):
         """color from pygments."""
@@ -191,18 +276,27 @@ class MyPdb(pdb.Pdb):
         """The superclass has this return nothing. Lets have this complete `locals.keys()`"""
         self.complete(sorted(locals().keys()))
 
-    # FUCK. pdb assigns to this too?
-    # @property
-    # def curframe(self):
-    #     """Gettin errors because pdb's preloop needs curframe. Has to be a property because we use the attributes on the frame"""
-    #     return inspect.currentframe()
+    def _runmodule(self, module_name):
+        self._wait_for_mainpyfile = True
+        self._user_requested_quit = False
+        import runpy
 
-    def do_raise(self, exception):
-        # Seriously why the fuck wouldn't this stop popping up
-        if isinstance(exception, Exception):
-            raise exception
-        else:
-            return
+        mod_name, mod_spec, code = runpy._get_module_details(module_name)
+        self.mainpyfile = self.canonic(code.co_filename)
+        import __main__
+
+        __main__.__dict__.clear()
+        __main__.__dict__.update(
+            {
+                "__name__": "__main__",
+                "__file__": self.mainpyfile,
+                "__package__": mod_spec.parent,
+                "__loader__": mod_spec.loader,
+                "__spec__": mod_spec,
+                "__builtins__": __builtins__,
+            }
+        )
+        self.run(code)
 
     def curframe_locals(self):
         return self.curframe.f_locals()
@@ -239,4 +333,67 @@ end = time.time()
 duration = end - start
 print(f".pdbrc.py finished.{time.ctime()}" + "\n" + f"duration was: {duration}.")
 
-malloced = tracemalloc.take_snapshot()
+
+def debug_script(script=None):
+    if script is None:
+        return
+    # Note on saving/restoring sys.argv: it's a good idea when sys.argv was
+    # modified by the script being debugged. It's a bad idea when it was
+    # changed by the user from the command line. There is a "restart" command
+    # which allows explicit specification of command line arguments.
+    pdb = _init_pdb(commands=namespace.commands)
+
+    try:
+        pdb._runscript(script)
+        if pdb._user_requested_quit:
+            return
+        logger.warning("The program finished and will be restarted")
+    except Restart:
+        logger.info(f"Restarting {script} with arguments:\t{str(sys.argv[1:])}")
+    except BdbQuit:
+        logger.critical("Quit signal received.  Goodbye!")
+
+    except SystemExit:
+        # In most cases SystemExit does not warrant a post-mortem session.
+        print("The program exited via sys.exit(). Exit status: ", end="")
+        print(sys.exc_info()[1])
+    except:
+        traceback.print_exc()
+        print("Uncaught exception. Entering post mortem debugging")
+        print("Running 'cont' or 'step' will restart the program")
+        t = sys.exc_info()[2]
+        pdb.interaction(None, t)
+        print("Post mortem debugger finished. The " + script + " will be restarted")
+
+
+def main():
+    """Parses users argument and dispatches based on responses."""
+    program_name, *args = sys.argv
+    parser = get_parser()
+    if not args:
+        # Print some help, then don't do the other junk here
+        parser.print_help()
+        return
+
+    try:
+        namespace = parser.parse_args(args)
+    except SystemExit:
+        # can't believe i'm catching sysexit but fuck you argparse
+        namespace = None
+
+    if hasattr(namespace, "mainpyfile"):
+        if namespace.mainpyfile is not None:
+            if not Path(namespace.mainpyfile).exists():
+                raise FileNotFoundError
+            # else: dedent 2 tabs if uncommenting
+            #     _init_pdb().set_trace()
+
+            # Replace pdb's dir with script's dir in front of module search path.
+            sys.path.insert(0, os.path.dirname(namespace.mainpyfile))
+            debug_script(namespace.mainpyfile)
+    elif hasattr(namespace, "mod"):
+        _init_pdb()._runmodule(mod)
+
+
+if __name__ == "__main__":
+    main()

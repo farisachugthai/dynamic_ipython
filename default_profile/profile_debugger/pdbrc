@@ -1,12 +1,15 @@
 # https://github.com/python/cpython/blob/3.7/Lib/pdb.py#L1380
 import inspect
 import os
+import readline
+import rlcompleter
+import traceback
 from pprint import pprint
 
-try:
-    exec(os.path.expanduser("~/.pdbrc.py"))
-except:
-    raise
+from default_profile.profile_debugger import pdbrc
+from default_profile.profile_debugger.pdbrc import debugger
+
+# eval(compile(".pdbrc", '<pdbrc>', 'eval'))
 
 # in the do_alias() function it mentions some examples and they sounded like
 # useful alias to tack on!
@@ -61,5 +64,7 @@ alias dll d;;ll
 
 # Let's keep it going
 alias who pp dir(%1)
+
+# interact
 
 # Vim: set ft=python:

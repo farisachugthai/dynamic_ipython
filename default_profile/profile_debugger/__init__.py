@@ -1,5 +1,4 @@
 """Initialize a debugger profile for IPython."""
-from . import debug
 import logging
 import queue
 
