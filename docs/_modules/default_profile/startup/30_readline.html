@@ -316,7 +316,7 @@
     <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-s&quot;: forward-search-history&#39;</span><span class="p">)</span>
     <span class="c1"># readline.parse_and_bind(&#39;&quot;\\C-t&quot;: transpose-chars&#39;)</span>
     <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-u&quot;: unix-line-discard&#39;</span><span class="p">)</span>
-    <span class="c1"># &quot;\C-v&quot;: quoted-insert</span>
+    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-v&quot;: quoted-insert&#39;</span><span class="p">)</span>
     <span class="c1"># readline.parse_and_bind(&#39;&quot;\\C-w&quot;: unix-filename-rubout&#39;)</span>
     <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-y&quot;: yank&#39;</span><span class="p">)</span>
     <span class="c1"># readline.parse_and_bind(&#39;&quot;\\C-x\\C-g&quot;: abort&#39;)</span>
@@ -400,20 +400,6 @@
     <span class="n">shell</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;post_run_cell&quot;</span><span class="p">,</span> <span class="n">add_last_input</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="teardown_historyfile"><a class="viewcode-back" href="../../../startup/setup_readline.html#default_profile.startup.30_readline.teardown_historyfile">[docs]</a><span class="k">def</span> <span class="nf">teardown_historyfile</span><span class="p">(</span><span class="n">starting_id</span><span class="p">,</span> <span class="n">histfile</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">readline</span><span class="p">,</span> <span class="s2">&quot;append_history_file&quot;</span><span class="p">):</span>
-        <span class="n">readline</span><span class="o">.</span><span class="n">write_history_file</span><span class="p">(</span><span class="n">histfile</span><span class="p">)</span>
-        <span class="k">return</span>
-    <span class="n">new_h_len</span> <span class="o">=</span> <span class="n">readline</span><span class="o">.</span><span class="n">get_current_history_length</span><span class="p">()</span>
-    <span class="n">readline</span><span class="o">.</span><span class="n">set_history_length</span><span class="p">(</span><span class="mi">2000</span><span class="p">)</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">readline</span><span class="o">.</span><span class="n">append_history_file</span><span class="p">(</span><span class="n">new_h_len</span> <span class="o">-</span> <span class="n">starting_id</span><span class="p">,</span> <span class="n">histfile</span><span class="p">)</span>
-    <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
-            <span class="s2">&quot;History not saved. There were problems saving to ~/.python_history&quot;</span>
-        <span class="p">)</span></div>
-
-
 <div class="viewcode-block" id="last_input"><a class="viewcode-back" href="../../../startup/setup_readline.html#default_profile.startup.30_readline.last_input">[docs]</a><span class="k">def</span> <span class="nf">last_input</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Returns the user&#39;s last input.</span>
 
@@ -473,10 +459,8 @@
         <span class="n">original_hist_length</span> <span class="o">=</span> <span class="n">readline</span><span class="o">.</span><span class="n">get_current_history_length</span><span class="p">()</span>
         <span class="n">readline</span><span class="o">.</span><span class="n">read_history_file</span><span class="p">(</span><span class="n">history_file</span><span class="p">)</span>
         <span class="n">atexit</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">readline</span><span class="o">.</span><span class="n">write_history_file</span><span class="p">,</span> <span class="n">history_file</span><span class="p">)</span>
-        <span class="n">atexit</span><span class="o">.</span><span class="n">register</span><span class="p">(</span>
-            <span class="n">teardown_historyfile</span><span class="p">,</span> <span class="n">original_hist_length</span><span class="p">,</span> <span class="n">histfile</span><span class="o">=</span><span class="n">history_file</span>
-        <span class="p">)</span>
         <span class="c1"># readline.set_startup_hook(readline_config())</span>
+        <span class="n">readline</span><span class="o">.</span><span class="n">set_completer_delims</span><span class="p">(</span><span class="s2">&quot;@#$_&amp;-+()/*</span><span class="se">\&quot;</span><span class="s2">&#39;:;!?~`|÷×</span><span class="si">{}</span><span class="s2">=[]%&lt;&gt;</span><span class="se">\r\t\n</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 
         </div>
@@ -484,7 +468,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Mar 03, 2020.
+      Last updated on Mar 04, 2020.
     </div>
   </body>
 </html>

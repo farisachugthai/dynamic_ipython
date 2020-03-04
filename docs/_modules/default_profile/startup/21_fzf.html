@@ -188,6 +188,37 @@
 <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 
 
+<div class="viewcode-block" id="inside_dir"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.inside_dir">[docs]</a><span class="nd">@contextmanager</span>
+<span class="k">def</span> <span class="nf">inside_dir</span><span class="p">(</span><span class="n">dirpath</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Execute code from inside the given directory</span>
+<span class="sd">    :param dirpath: String, path of the directory the command is being run.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">old_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">dirpath</span><span class="p">)</span>
+        <span class="k">yield</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">old_path</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="run_inside_dir"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.run_inside_dir">[docs]</a><span class="k">def</span> <span class="nf">run_inside_dir</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">dirpath</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Run a command from inside a given directory, returning the exit status</span>
+
+<span class="sd">    :param command: Command that will be executed</span>
+<span class="sd">    :param dirpath: String, path of the directory the command is being run.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="n">inside_dir</span><span class="p">(</span><span class="n">dirpath</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">check_call</span><span class="p">(</span><span class="n">shlex</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">command</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="check_output_inside_dir"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.check_output_inside_dir">[docs]</a><span class="k">def</span> <span class="nf">check_output_inside_dir</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">dirpath</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Run a command from inside a given directory, returning the command output&quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="n">inside_dir</span><span class="p">(</span><span class="n">dirpath</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">check_output</span><span class="p">(</span><span class="n">shlex</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">command</span><span class="p">))</span></div>
+
+
 <div class="viewcode-block" id="Executable"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.Executable">[docs]</a><span class="k">class</span> <span class="nc">Executable</span><span class="p">(</span><span class="n">ContextDecorator</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;An object representing some executable on a user computer.&quot;&quot;&quot;</span>
 
@@ -223,24 +254,6 @@
             <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span>
             <span class="k">def</span> <span class="nf">wrapped</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
                 <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="RedirectStdout"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.RedirectStdout">[docs]</a><span class="k">class</span> <span class="nc">RedirectStdout</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Need to determine whether to use homebrewed class or contextlib.redirect_stdout.&quot;&quot;&quot;</span>
-
-<div class="viewcode-block" id="RedirectStdout.__init__"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.RedirectStdout.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_stdout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;If stdout is None, redirect to /dev/null&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_new_stdout</span> <span class="o">=</span> <span class="n">new_stdout</span> <span class="ow">or</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">devnull</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span></div>
-
-    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">reconfigure</span><span class="p">(</span><span class="n">line_buffering</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># implies flush</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">oldstdout_fno</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">dup</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">fileno</span><span class="p">())</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">dup2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_new_stdout</span><span class="o">.</span><span class="n">fileno</span><span class="p">(),</span> <span class="mi">1</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_new_stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">dup2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">oldstdout_fno</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">oldstdout_fno</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="FZF"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.FZF">[docs]</a><span class="k">class</span> <span class="nc">FZF</span><span class="p">:</span>
@@ -379,8 +392,17 @@
         <span class="n">fzf_prompt</span><span class="o">.</span><span class="n">prompt</span><span class="p">()</span></div>
 
 
+<div class="viewcode-block" id="fgs"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.fgs">[docs]</a><span class="k">def</span> <span class="nf">fgs</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Return git status!&quot;&quot;&quot;</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;bash&quot;</span><span class="p">,</span> <span class="s2">&quot;-c&quot;</span><span class="p">,</span> <span class="s1">&#39;source &quot;$HOME/.bashrc.d/fzf_git.bash&quot;</span><span class="se">\n</span><span class="s1">fgh</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">]</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">CalledProcessError</span><span class="p">:</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">ret</span></div>
+
+
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">fzf_aliases</span> <span class="o">=</span> <span class="n">FZF</span><span class="o">.</span><span class="n">_setup_fzf</span><span class="p">()</span>
     <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">define_alias</span><span class="p">(</span><span class="s2">&quot;fzf&quot;</span><span class="p">,</span> <span class="s2">&quot;fzf-tmux&quot;</span><span class="p">)</span>
 
     <span class="n">add_fzf_binding</span><span class="p">()</span>
@@ -395,7 +417,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Mar 03, 2020.
+      Last updated on Mar 04, 2020.
     </div>
   </body>
 </html>
