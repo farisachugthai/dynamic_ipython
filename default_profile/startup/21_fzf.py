@@ -37,6 +37,37 @@ from prompt_toolkit.utils import Event
 from IPython.core.getipython import get_ipython
 
 
+@contextmanager
+def inside_dir(dirpath):
+    """
+    Execute code from inside the given directory
+    :param dirpath: String, path of the directory the command is being run.
+    """
+    old_path = os.getcwd()
+    try:
+        os.chdir(dirpath)
+        yield
+    finally:
+        os.chdir(old_path)
+
+
+def run_inside_dir(command, dirpath):
+    """
+    Run a command from inside a given directory, returning the exit status
+
+    :param command: Command that will be executed
+    :param dirpath: String, path of the directory the command is being run.
+    """
+    with inside_dir(dirpath):
+        return subprocess.check_call(shlex.split(command))
+
+
+def check_output_inside_dir(command, dirpath):
+    """Run a command from inside a given directory, returning the command output"""
+    with inside_dir(dirpath):
+        return subprocess.check_output(shlex.split(command))
+
+
 class Executable(ContextDecorator):
     """An object representing some executable on a user computer."""
 
@@ -72,24 +103,6 @@ class Executable(ContextDecorator):
             @functools.wraps
             def wrapped(*args, **kwargs):
                 func(*args, **kwargs)
-
-
-class RedirectStdout:
-    """Need to determine whether to use homebrewed class or contextlib.redirect_stdout."""
-
-    def __init__(self, new_stdout=None):
-        """If stdout is None, redirect to /dev/null"""
-        self._new_stdout = new_stdout or open(os.devnull, "w")
-
-    def __enter__(self):
-        sys.stdout.reconfigure(line_buffering=True)  # implies flush
-        self.oldstdout_fno = os.dup(sys.stdout.fileno())
-        os.dup2(self._new_stdout.fileno(), 1)
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        self._new_stdout.flush()
-        os.dup2(self.oldstdout_fno, 1)
-        os.close(self.oldstdout_fno)
 
 
 class FZF:
@@ -228,8 +241,17 @@ def run_in_terminal_fzf():
         fzf_prompt.prompt()
 
 
+def fgs():
+    """Return git status!"""
+    cmd = ["bash", "-c", 'source "$HOME/.bashrc.d/fzf_git.bash"\nfgh\n']
+    try:
+        ret = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    except subprocess.CalledProcessError:
+        ret = 1
+    return ret
+
+
 if __name__ == "__main__":
-    fzf_aliases = FZF._setup_fzf()
     get_ipython().alias_manager.define_alias("fzf", "fzf-tmux")
 
     add_fzf_binding()

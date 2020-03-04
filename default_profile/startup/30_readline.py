@@ -165,7 +165,7 @@ def readline_config():
     readline.parse_and_bind('"\\C-s": forward-search-history')
     # readline.parse_and_bind('"\\C-t": transpose-chars')
     readline.parse_and_bind('"\\C-u": unix-line-discard')
-    # "\C-v": quoted-insert
+    readline.parse_and_bind('"\\C-v": quoted-insert')
     # readline.parse_and_bind('"\\C-w": unix-filename-rubout')
     readline.parse_and_bind('"\\C-y": yank')
     # readline.parse_and_bind('"\\C-x\\C-g": abort')
@@ -249,20 +249,6 @@ def setup_historyfile(filename=None):
     shell.events.register("post_run_cell", add_last_input)
 
 
-def teardown_historyfile(starting_id, histfile=None):
-    if not hasattr(readline, "append_history_file"):
-        readline.write_history_file(histfile)
-        return
-    new_h_len = readline.get_current_history_length()
-    readline.set_history_length(2000)
-    try:
-        readline.append_history_file(new_h_len - starting_id, histfile)
-    except OSError:
-        logging.error(
-            "History not saved. There were problems saving to ~/.python_history"
-        )
-
-
 def last_input():
     """Returns the user's last input.
 
@@ -322,7 +308,5 @@ if __name__ == "__main__":
         original_hist_length = readline.get_current_history_length()
         readline.read_history_file(history_file)
         atexit.register(readline.write_history_file, history_file)
-        atexit.register(
-            teardown_historyfile, original_hist_length, histfile=history_file
-        )
         # readline.set_startup_hook(readline_config())
+        readline.set_completer_delims("@#$_&-+()/*\"':;!?~`|÷×{}=[]%<>\r\t\n")

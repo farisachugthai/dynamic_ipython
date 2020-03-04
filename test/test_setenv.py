@@ -13,3 +13,7 @@ class TestDirectoryInit:
 
     def test_cwd_again_starts_empty(self):
         assert os.listdir(os.getcwd()) == []
+
+
+# not from pytest examples
+import default_profile

@@ -4,7 +4,16 @@
 import contextlib
 import os
 import sys
-from io import TextIOWrapper
+from _io import (
+    DEFAULT_BUFFER_SIZE,
+    BlockingIOError,
+    UnsupportedOperation,
+    BufferedRWPair,
+    BufferedWriter,
+    BufferedReader,
+    TextIOWrapper,
+)
+# from io import RawIOBase
 from pathlib import Path
 
 from IPython.core.magic import line_magic, Magics, magics_class
@@ -51,16 +60,42 @@ class DevNull(TextIOWrapper):
     Surprisingly, that implementation equates it to a string, and as a result
     the expression, ``sys.stdout = os.devnull``, will crash the interpreter.
     """
+
     original_stdin = sys.stdin
     original_stdout = sys.stdout
     original_stderr = sys.stderr
 
-    @contextlib.contextmanager
-    def stdout(self):
-        try:
-            self = sys.stdout
-        finally:
-            sys.stdout = original_stdout
+    def __init__(self, new_stdout=None, *args, **kwargs):
+        """If stdout is None, redirect to /dev/null"""
+        self._new_stdout = new_stdout or open(os.devnull, "w")
+        self.reader = self._reader()
+        self.writer = self._writer()
+        self._buffer = self._bufferedrw()
+        super().__init__(buffer=self._buffer, *args, **kwargs)
 
     def __enter__(self):
-        pass
+        sys.stdout.reconfigure(line_buffering=True)  # implies flush
+        self.oldstdout_fno = os.dup(sys.stdout.fileno())
+        os.dup2(self._new_stdout.fileno(), 1)
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self._new_stdout.flush()
+        os.dup2(self.oldstdout_fno, 1)
+        os.close(self.oldstdout_fno)
+
+    def _reader(self):
+        return BufferedReader(sys.stdin)
+
+    def _writer(self):
+        return BufferedWriter(sys.stdout)
+
+    def _bufferedrw(self):
+        return BufferedRWPair(self.reader, self.writer, DEFAULT_BUFFER_SIZE)
+
+
+@contextlib.contextmanager
+def stdout(self):
+    try:
+        self = sys.stdout
+    finally:
+        sys.stdout = original_stdout
