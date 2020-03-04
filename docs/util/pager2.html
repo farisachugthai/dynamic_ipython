@@ -173,18 +173,13 @@
         
 <div class="section" id="pager2-module">
 <h1><a class="reference internal" href="#module-default_profile.util.pager2" title="default_profile.util.pager2: Rewrite how IPython utilizes the pager on Windows."><code class="xref py py-mod docutils literal notranslate"><span class="pre">pager2</span></code></a> module<a class="headerlink" href="#pager2-module" title="Permalink to this headline">¶</a></h1>
-<p>Still a Work in Progress.</p>
-<p>Still considering different ways of designing a new Windows specific pager
-on IPython. It’s a bit difficult as the default implementation is over 10
-years old, and it seems to mirror a similar setup from <a class="reference external" href="https://docs.python.org/3/library/pydoc.html#module-pydoc" title="(in Python v3.8)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pydoc</span></code></a> where a
-Windows user who doesn’t have <span class="target" id="index-0"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PAGER</span></code> set will use a home-brewed
-<strong class="command">more</strong> lite type pager.</p>
-<p>However, I haven’t found anywhere in the docs where this is mentioned which
-is frustrating, in addition to the fact that both APIs are written with no
-ability to change or configure things in mind.</p>
+<p>Rewrite the module that creates the <code class="docutils literal notranslate"><span class="pre">%pycat</span></code> magic.</p>
+<p>In it’s current implementation, the pager gives Windows a dumb terminal and
+never checks for whether <strong class="command">less</strong> is on the <span class="target" id="index-0"></span><a class="reference external" href="https://matplotlib.org/faq/environment_variables_faq.html#envvar-PATH" title="(in Matplotlib v3.1.3)"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PATH</span></code></a> or
+if the user has a pager they wanna implement!</p>
 <div class="section" id="original-implementation">
 <h2>Original Implementation<a class="headerlink" href="#original-implementation" title="Permalink to this headline">¶</a></h2>
-<p>Below is the source code for how the original <a class="reference external" href="https://ipython.readthedocs.io/en/stable/interactive/magics.html#magic-pycat" title="(in IPython v7.12.0)"><code class="xref std std-magic docutils literal notranslate"><span class="pre">pycat</span></code></a> was implemented.:</p>
+<p>Below is the source code for how the original <a class="reference external" href="https://ipython.readthedocs.io/en/stable/interactive/magics.html#magic-pycat" title="(in IPython v7.13.0)"><code class="xref std std-magic docutils literal notranslate"><span class="pre">pycat</span></code></a> was implemented.:</p>
 </div>
 <div class="section" id="implementing-the-rewrite">
 <h2>Implementing the rewrite<a class="headerlink" href="#implementing-the-rewrite" title="Permalink to this headline">¶</a></h2>
@@ -195,10 +190,14 @@ the value of <span class="target" id="index-1"></span><code class="xref std std-
 be expected to respond to.</p>
 <div class="section" id="revisions">
 <h3>Revisions<a class="headerlink" href="#revisions" title="Permalink to this headline">¶</a></h3>
-<p>Rewrite the module that creates the <code class="docutils literal notranslate"><span class="pre">%pycat</span></code> magic.</p>
-<p>In it’s current implementation, the pager gives Windows a dumb terminal and
-never checks for whether <strong class="command">less</strong> is on the <span class="target" id="index-2"></span><a class="reference external" href="https://matplotlib.org/faq/environment_variables_faq.html#envvar-PATH" title="(in Matplotlib v3.1.3)"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PATH</span></code></a> or
-if the user has a pager they wanna implement!</p>
+<p>Still considering different ways of designing a new Windows specific pager
+on IPython. It’s a bit difficult as the default implementation is over 10
+years old, and it seems to mirror a similar setup from <a class="reference external" href="https://docs.python.org/3/library/pydoc.html#module-pydoc" title="(in Python v3.8)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pydoc</span></code></a> where a
+Windows user who doesn’t have <span class="target" id="index-2"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PAGER</span></code> set will use a home-brewed
+<strong class="command">more</strong> lite type pager.</p>
+<p>However, I haven’t found anywhere in the docs where this is mentioned which
+is frustrating, in addition to the fact that both APIs are written with no
+ability to change or configure things in mind.</p>
 </div>
 </div>
 <div class="section" id="working-implementation">
@@ -213,41 +212,22 @@ be there.</p>
 <p>I believe that this magic gets loaded automatically on startup now.</p>
 <div class="section" id="original-pydoc-implementation-and-errors">
 <span id="pydoc-bug"></span><h3>Original Pydoc Implementation and Errors<a class="headerlink" href="#original-pydoc-implementation-and-errors" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-py3tb notranslate"><div class="highlight"><pre><span></span>$ pydoc FRAMEOBJECTS
-Traceback (most recent call last):
-File &quot;C:/tools/miniconda3/lib/runpy.py&quot;, line 193, in _run_module_as_main
-   &quot;__main__&quot;, mod_spec)
-File &quot;C:/tools/miniconda3/lib/runpy.py&quot;, line 85, in _run_code
-   exec(code, run_globals)
-   elif request in self.topics: self.showtopic(request)
-File &quot;C:/tools/miniconda3/lib/pydoc.py&quot;, line 2021, in showtopic
-   return self.showtopic(target, more_xrefs)
-File &quot;C:/tools/miniconda3/lib/pydoc.py&quot;, line 2037, in showtopic
-   pager(doc)
-File &quot;C:/tools/miniconda3/lib/pydoc.py&quot;, line 1449, in pager
-   pager(text)
-File &quot;C:/tools/miniconda3/lib/pydoc.py&quot;, line 1462, in &lt;lambda&gt;
-   return lambda text: tempfilepager(plain(text), use_pager)
-File &quot;C:/tools/miniconda3/lib/pydoc.py&quot;, line 1519, in tempfilepager
-   os.system(cmd + &#39; &quot;&#39; + filename + &#39;&quot;&#39;)
-KeyboardInterrupt
-</pre></div>
-</div>
+<p>Running pydoc with PAGER set on Windows doesn’t catch the KeyboardInterrupt…</p>
 <p>Outside of the stupid traceback, that command worked perfectly for me.</p>
 <p>I have <span class="target" id="index-3"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PAGER</span></code> set on Windows {which I realize isn’t typical},
 however we should re-use this implementation entirely and cut
-<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.page.html#IPython.core.page.page" title="(in IPython v7.12.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IPython.core.page.page</span></code></a> out.</p>
-<p>Also worth noting <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.payloadpage.html#IPython.core.payloadpage.page" title="(in IPython v7.12.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IPython.core.payloadpage.page</span></code></a>.:</p>
+<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.page.html#IPython.core.page.page" title="(in IPython v7.13.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IPython.core.page.page</span></code></a> out.</p>
+<p>Also worth noting <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.payloadpage.html#IPython.core.payloadpage.page" title="(in IPython v7.13.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IPython.core.payloadpage.page</span></code></a>.:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">63</span><span class="p">]:</span> <span class="n">pydoc</span><span class="o">.</span><span class="n">pipepager</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getdoc</span><span class="p">(</span><span class="n">arg</span><span class="p">),</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;PAGER&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
 <p>Despite the source code of the std lib stating that pipes are completely
 broken on windows, this worked just fine for me.</p>
-<p>Define arg as an object like if you pass a string it’ll give you the help message
-for a str.</p>
-<p><a class="reference external" href="https://docs.python.org/3/library/inspect.html#module-inspect" title="(in Python v3.8)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">inspect</span></code></a> has a million more methods and pydoc does too so possibly change the
-<a class="reference external" href="https://docs.python.org/3/library/inspect.html#inspect.getdoc" title="(in Python v3.8)"><code class="xref py py-func docutils literal notranslate"><span class="pre">inspect.getdoc()</span></code></a> part, but honestly that one line is 80% of the way
-to what I’ve been trying to do.</p>
+<p>Define arg as an object like if you pass a string it’ll give you the help
+message for a str.</p>
+<p><a class="reference external" href="https://docs.python.org/3/library/inspect.html#module-inspect" title="(in Python v3.8)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">inspect</span></code></a> has a million more methods and pydoc does too so possibly change
+the <a class="reference external" href="https://docs.python.org/3/library/inspect.html#inspect.getdoc" title="(in Python v3.8)"><code class="xref py py-func docutils literal notranslate"><span class="pre">inspect.getdoc()</span></code></a> part, but honestly that one line is 80% of the way to
+what I’ve been trying to do.</p>
 </div>
 </div>
 <div class="section" id="module-default_profile.util.pager2">
@@ -369,7 +349,7 @@ can display the magics through the attribute …magics.</p>
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Mar 01, 2020.
+      Last updated on Mar 03, 2020.
     </div>
   </body>
 </html>

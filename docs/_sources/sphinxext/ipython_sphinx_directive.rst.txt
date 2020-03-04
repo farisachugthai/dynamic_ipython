@@ -143,9 +143,7 @@ inserted at doc build time, and the prompts will be renumbered starting
 from ``1``. For example, the prompt below is renumbered so as to follow
 the code block from above.
 
-.. OH SHIT THIS DIRECTIVE WORKS!
-
-.. code-block:: ipythontb
+.. code-block:: py3tb
 
    In [138]: z = x*3   # x is recalled from previous block
 

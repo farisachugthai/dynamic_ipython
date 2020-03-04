@@ -149,7 +149,26 @@
         <div role="main">
         
 <h1>Source code for default_profile.startup.completions</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Use both Jedi and prompt_toolkit to aide IPython out.&quot;&quot;&quot;</span>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;Use both Jedi and prompt_toolkit to aide IPython out.</span>
+
+<span class="sd">This creates a combination of almost all of prompt_toolkits completion</span>
+<span class="sd">mechanisms and combines them.</span>
+
+<span class="sd">.. data:: combined_completers</span>
+
+<span class="sd">    A ThreadedCompleter instantiated with a MergedCompleter that combines</span>
+<span class="sd">    FuzzyWordCompleter, FuzzyCompleter, PathCompleter, WordCompleter</span>
+<span class="sd">    and IPython&#39;s IPythonPTCompleter.</span>
+
+<span class="sd">In addition, autosuggestions are generated in a manner similar to fish from an</span>
+<span class="sd">`prompt_toolkit.auto_suggest.AutoSuggestFromHistory` instance wrapped in</span>
+<span class="sd">a `prompt_toolkit.auto_suggest.ThreadedAutoSuggest` instance as this</span>
+<span class="sd">dramatically speeds the completions up.</span>
+
+
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">abc</span>
 <span class="kn">import</span> <span class="nn">keyword</span>
 <span class="kn">import</span> <span class="nn">logging</span>
@@ -170,8 +189,9 @@
 <span class="p">)</span>
 
 <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+<span class="kn">from</span> <span class="nn">IPython.terminal.ptutils</span> <span class="kn">import</span> <span class="n">IPythonPTCompleter</span>
 
-<span class="kn">from</span> <span class="nn">prompt_toolkit.auto_suggest</span> <span class="kn">import</span> <span class="n">AutoSuggestFromHistory</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.auto_suggest</span> <span class="kn">import</span> <span class="n">AutoSuggestFromHistory</span><span class="p">,</span> <span class="n">ThreadedAutoSuggest</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.completion</span> <span class="kn">import</span> <span class="n">WordCompleter</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.completion.base</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">DynamicCompleter</span><span class="p">,</span>
@@ -224,7 +244,9 @@
 
 <span class="sd">        But we will need to add a get_async_completions method.</span>
 
-<span class="sd">        .. todo:: Possibly alias this to `complete` for readline compat.</span>
+<span class="sd">        .. todo::</span>
+<span class="sd">            Possibly alias this to `complete` for readline compat.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">doc</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">doc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">document</span>
@@ -249,9 +271,7 @@
 <div class="viewcode-block" id="SimpleCompleter.get_completions_async"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.completions.SimpleCompleter.get_completions_async">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_completions_async</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">document</span><span class="p">:</span> <span class="n">Document</span><span class="p">,</span> <span class="n">complete_event</span><span class="p">:</span> <span class="n">CompleteEvent</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncGenerator</span><span class="p">[</span><span class="n">Completion</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Asynchronous generator of completions.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Asynchronous generator of completions.&quot;&quot;&quot;</span>
         <span class="k">async</span> <span class="k">for</span> <span class="n">completion</span> <span class="ow">in</span> <span class="n">generator_to_async_generator</span><span class="p">(</span>
             <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">completer</span><span class="o">.</span><span class="n">get_completions</span><span class="p">(</span><span class="n">document</span><span class="p">,</span> <span class="n">complete_event</span><span class="p">)</span>
         <span class="p">):</span>
@@ -364,7 +384,8 @@
 <div class="viewcode-block" id="MergedCompleter.get_completions_async"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.completions.MergedCompleter.get_completions_async">[docs]</a>    <span class="k">def</span> <span class="nf">get_completions_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">document</span><span class="p">,</span> <span class="n">complete_event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get all completions from `completers` in a non-blocking way.</span>
 
-<span class="sd">        Checks that the completer actually defined this method before calling it so we don&#39;t force the method definition.</span>
+<span class="sd">        Checks that the completer actually defined this method before calling</span>
+<span class="sd">        it so we don&#39;t force the method definition.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">completer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">completers</span><span class="p">:</span>
             <span class="c1"># Consume async generator -&gt; item can be `AsyncGeneratorItem` or</span>
@@ -376,9 +397,10 @@
 
 
 <div class="viewcode-block" id="FuzzyCallable"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.completions.FuzzyCallable">[docs]</a><span class="k">class</span> <span class="nc">FuzzyCallable</span><span class="p">(</span><span class="n">FuzzyCompleter</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A FuzzyCompleter with ``__call__`` defined.&quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="FuzzyCallable.__init__"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.completions.FuzzyCallable.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">completer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">words</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">meta_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">WORD</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The exact code for FuzzyWordCompleter...except callable.&quot;&quot;&quot;</span>
-        <span class="c1"># assert callable(words) or all(isinstance(w, string_types) for w in words)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">words</span> <span class="o">=</span> <span class="n">words</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">words</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">words</span> <span class="o">=</span> <span class="n">keyword</span><span class="o">.</span><span class="n">kwlist</span>
@@ -403,7 +425,6 @@
     <span class="c1"># TODO:</span>
     <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
     <span class="c1"># To set up Script or Interpreter later</span>
-    <span class="n">project</span> <span class="o">=</span> <span class="n">get_default_project</span><span class="p">()</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">environment</span> <span class="o">=</span> <span class="n">get_cached_default_environment</span><span class="p">()</span>
     <span class="k">except</span> <span class="n">InvalidPythonEnvironment</span><span class="p">:</span>
@@ -415,15 +436,15 @@
 
 
 <div class="viewcode-block" id="create_pt_completers"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.completions.create_pt_completers">[docs]</a><span class="k">def</span> <span class="nf">create_pt_completers</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;A combination of all the completers in this module.</span>
+    <span class="sd">&quot;&quot;&quot;Return a combination of all the completers in this module.</span>
 
-<span class="sd">    Still needs to factor in magic completions before its officially integrated into the rest of the app.</span>
+<span class="sd">    Still needs to factor in magic completions before its officially</span>
+<span class="sd">    integrated into the rest of the app.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># No longer utilizes the set_custom_completer  method of IPython as that requires the name of the completer&#39;s complete method.</span>
 
     <span class="c1"># Actually thats a great thing to allow to be specified. It allows for readlines `complete` method and pt&#39;s get_completions to work togethwr!</span>
     <span class="c1"># Need to review their api tho.</span>
-    <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
     <span class="c1"># alternatively to set_custom_completer, can i skip the types.methodtype part and just do:</span>
     <span class="c1"># _ip.Completer.matchers.append(FuzzyCompleter(CustomCompleter))</span>
     <span class="c1"># seems to be working</span>
@@ -435,6 +456,7 @@
             <span class="n">get_path_completer</span><span class="p">(),</span>
             <span class="n">get_word_completer</span><span class="p">(),</span>
             <span class="n">get_fuzzy_keyword_completer</span><span class="p">(),</span>
+            <span class="n">IPythonPTCompleter</span><span class="p">(</span><span class="n">get_ipython</span><span class="p">()),</span>
         <span class="p">]</span>
     <span class="p">)</span>
     <span class="n">threaded</span> <span class="o">=</span> <span class="n">SimpleCompleter</span><span class="p">(</span><span class="n">completer</span><span class="o">=</span><span class="n">merged_completer</span><span class="p">)</span>
@@ -444,6 +466,7 @@
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">jedi</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">add_bracket_after_function</span> <span class="o">=</span> <span class="kc">False</span>
 
+    <span class="n">default_project</span> <span class="o">=</span> <span class="n">get_default_project</span><span class="p">()</span>
     <span class="n">combined_completers</span> <span class="o">=</span> <span class="n">create_pt_completers</span><span class="p">()</span>
 
     <span class="n">session</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span> <span class="k">if</span> <span class="n">get_ipython</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
@@ -451,7 +474,10 @@
         <span class="c1"># when using tmux or windows this is super helpful</span>
         <span class="c1"># yeah but otherwise destroys your ability to scroll backwards</span>
         <span class="c1"># session.refresh_interval = 0.5</span>
-        <span class="n">session</span><span class="o">.</span><span class="n">auto_suggest</span> <span class="o">=</span> <span class="n">AutoSuggestFromHistory</span><span class="p">()</span>
+        <span class="n">session</span><span class="o">.</span><span class="n">auto_suggest</span> <span class="o">=</span> <span class="n">ThreadedAutoSuggest</span><span class="p">(</span><span class="n">AutoSuggestFromHistory</span><span class="p">())</span>
+
+        <span class="c1"># not there because no event loop but  we&#39;re so close</span>
+        <span class="c1"># session.completer = combined_completers</span>
 </pre></div>
 
         </div>
@@ -459,7 +485,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Mar 01, 2020.
+      Last updated on Mar 03, 2020.
     </div>
   </body>
 </html>

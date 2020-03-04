@@ -1,4 +1,5 @@
 {%- extends "!layout.html" %}
+
 {%- block extrahead %}
 <!-- <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" /> -->
 <!-- <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" media="screen" rel="stylesheet" type="text/css" /> -->
@@ -115,7 +116,9 @@
     }
   </style>
 </head>
-{% endblock %} {% block header %} {%- if logo %}
+{% endblock %}
+{% block header %}
+{%- if logo %}
 <div class="header" role="banner">
   <div class="logo">
     <a href="{{ pathto(master_doc) }}">
@@ -125,10 +128,8 @@
 </div>
 {%- endif %}
 {% endblock %}
-{%- block sidebarlogo %}
-{%- endblock %}
-{%- block sidebarsourcelink %}
-{%- endblock %}
+{%- block sidebarlogo %} {%- endblock %}
+{%- block sidebarsourcelink %} {%- endblock %}
 {% if next %}
 <a href="{{ next.link|e }}">
   {{ next.title }}</a>

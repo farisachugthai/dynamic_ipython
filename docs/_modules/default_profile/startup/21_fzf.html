@@ -151,13 +151,7 @@
 <h1>Source code for default_profile.startup.21_fzf</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;FZF works in IPython!!!!</span>
-
-<span class="sd">Trying to rework this over in ../extensions/namespaces.py</span>
-
-<span class="sd">Also worth noting the aliasmanager rewrite in ./22_alias_manager.py</span>
-
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">&quot;&quot;&quot;FZF works in IPython!!!!&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">functools</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">shlex</span>
@@ -165,6 +159,7 @@
 <span class="kn">import</span> <span class="nn">sqlite3</span>
 <span class="kn">import</span> <span class="nn">subprocess</span>
 <span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
 <span class="kn">import</span> <span class="nn">types</span>
 
 <span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">ContextDecorator</span><span class="p">,</span> <span class="n">contextmanager</span>
@@ -176,7 +171,7 @@
     <span class="kn">import</span> <span class="nn">pyfzf</span>
 <span class="k">except</span><span class="p">:</span>
     <span class="n">pyfzf</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">fufpy</span> <span class="o">=</span> <span class="n">fuf</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">fufpy</span> <span class="o">=</span> <span class="n">fuf</span> <span class="o">=</span> <span class="n">FzfPrompt</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">pyfzf.pyfzf</span> <span class="kn">import</span> <span class="n">FzfPrompt</span>
 
@@ -185,24 +180,12 @@
 
 <span class="kn">from</span> <span class="nn">prompt_toolkit.application.run_in_terminal</span> <span class="kn">import</span> <span class="n">run_in_terminal</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.enums</span> <span class="kn">import</span> <span class="n">DEFAULT_BUFFER</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.filters</span> <span class="kn">import</span> <span class="n">HasFocus</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.filters</span> <span class="kn">import</span> <span class="n">HasFocus</span><span class="p">,</span> <span class="n">ViInsertMode</span><span class="p">,</span> <span class="n">EmacsInsertMode</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.keys</span> <span class="kn">import</span> <span class="n">Keys</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.shortcuts</span> <span class="kn">import</span> <span class="n">print_formatted_text</span> <span class="k">as</span> <span class="nb">print</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.utils</span> <span class="kn">import</span> <span class="n">Event</span>
 
-<span class="kn">from</span> <span class="nn">traitlets.config.application</span> <span class="kn">import</span> <span class="n">get_config</span>
 <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
-<span class="kn">from</span> <span class="nn">IPython.terminal.ipapp</span> <span class="kn">import</span> <span class="n">TerminalIPythonApp</span>
-<span class="kn">from</span> <span class="nn">IPython.terminal.interactiveshell</span> <span class="kn">import</span> <span class="n">TerminalInteractiveShell</span>
-<span class="kn">from</span> <span class="nn">IPython.terminal.shortcuts</span> <span class="kn">import</span> <span class="n">create_ipython_shortcuts</span>
-
-<span class="c1"># try:</span>
-<span class="c1">#     import pandas as pd</span>
-<span class="c1"># except ImportError:</span>
-<span class="c1">#     pd = None</span>
-
-<span class="c1"># TODO</span>
-<span class="c1"># if  TYPE_CHECKING: etc</span>
 
 
 <div class="viewcode-block" id="Executable"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.Executable">[docs]</a><span class="k">class</span> <span class="nc">Executable</span><span class="p">(</span><span class="n">ContextDecorator</span><span class="p">):</span>
@@ -211,14 +194,14 @@
 <div class="viewcode-block" id="Executable.__init__"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.Executable.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize with *command*.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">command</span> <span class="o">=</span> <span class="n">command</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">command_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_command_path</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">command_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_command_path</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">_command</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">command</span>
 
-    <span class="k">def</span> <span class="nf">_get_command_path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_get_command_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the path to an executable if *command* is on `PATH`.</span>
 
 <span class="sd">        Same signature as :func:`shutil.which`.</span>
@@ -229,7 +212,7 @@
 <span class="sd">            Path to an executable if it&#39;s found. Otherwise `None`.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;Executable: </span><span class="si">{!r}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="p">)</span>
@@ -263,23 +246,25 @@
 <div class="viewcode-block" id="FZF"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.FZF">[docs]</a><span class="k">class</span> <span class="nc">FZF</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Wrap FZF together.&quot;&quot;&quot;</span>
 
-    <span class="n">fzf_alias</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-
-<div class="viewcode-block" id="FZF.__init__"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.FZF.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fzf_alias</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fzf_configs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fzf_alias</span> <span class="o">=</span> <span class="n">fzf_alias</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
+<div class="viewcode-block" id="FZF.__init__"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.FZF.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fzf_configs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fzf_config</span> <span class="o">=</span> <span class="n">fzf_configs</span> <span class="ow">or</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_setup_fzf</span><span class="p">()</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setup_fzf</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">    </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fzf_alias</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">    </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fzf_config</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Run :attr:`safe_default_cmd` with ``*args`` as a command.</span>
 
 <span class="sd">        Accepts any optional ``**kwargs`` passed along to :func:`subprocess.run`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">safe_default_cmd</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">with</span> <span class="p">(</span><span class="n">RedirectStdout</span><span class="p">(),</span> <span class="s2">&quot;rt+&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+                <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">safe_default_cmd</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">],</span>
+                <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
+                <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
 
 <div class="viewcode-block" id="FZF.default_cmds"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.FZF.default_cmds">[docs]</a>    <span class="k">def</span> <span class="nf">default_cmds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;rg --pretty --hidden --max-columns-preview --no-heading --no-messages --no-column --no-line-number -C 0 -e ^ | fzf --ansi --multi &quot;</span></div>
@@ -315,12 +300,10 @@
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">_setup_fzf</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">fzf_alias</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">fzf_alias</span> <span class="o">=</span> <span class="p">()</span>
         <span class="k">if</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;fzf&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;rg&quot;</span><span class="p">):</span>
             <span class="c1"># user_aliases.extend(</span>
             <span class="c1">#     (&#39;fzf&#39;, &#39;$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS&#39;))</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">fzf_alias</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">fzf</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="s2">&quot;fzf&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;rg --pretty --hidden --max-columns-preview --no-heading --no-messages --no-column --no-line-number -C 0 -e ^ | fzf --ansi --multi &quot;</span><span class="p">,</span>
             <span class="p">)</span>
@@ -328,7 +311,7 @@
         <span class="k">elif</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;fzf&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;ag&quot;</span><span class="p">):</span>
             <span class="c1"># user_aliases.extend(</span>
             <span class="c1">#     (&#39;fzf&#39;, &#39;$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS&#39;))</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">fzf_alias</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;fzf&quot;</span><span class="p">,</span> <span class="s2">&quot;ag -C 0 --color-win-ansi --noheading %l | fzf&quot;</span><span class="p">)</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">fzf</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;fzf&quot;</span><span class="p">,</span> <span class="s2">&quot;ag -C 0 --color-win-ansi --noheading %l | fzf&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">args</span><span class="p">:</span>
             <span class="bp">cls</span><span class="o">.</span><span class="n">fzf_alias</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
@@ -347,7 +330,7 @@
     <span class="k">return</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;rg&quot;</span><span class="p">)</span></div>
 
 
-<span class="k">def</span> <span class="nf">fzf_history</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+<div class="viewcode-block" id="fzf_history"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.fzf_history">[docs]</a><span class="k">def</span> <span class="nf">fzf_history</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
     <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
@@ -358,90 +341,50 @@
     <span class="n">fzf</span> <span class="o">=</span> <span class="n">FzfPrompt</span><span class="p">()</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql_query</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM history&quot;</span><span class="p">,</span> <span class="n">cnx</span><span class="p">)</span>
     <span class="n">itext</span> <span class="o">=</span> <span class="n">fzf</span><span class="o">.</span><span class="n">prompt</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">])</span>
-    <span class="c1"># print(itext)</span>
     <span class="k">if</span> <span class="n">itext</span> <span class="o">!=</span> <span class="p">[]:</span>
-        <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">insert_text</span><span class="p">(</span><span class="n">itext</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">insert_text</span><span class="p">(</span><span class="n">itext</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div>
 
 
 <div class="viewcode-block" id="add_fzf_binding"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.add_fzf_binding">[docs]</a><span class="k">def</span> <span class="nf">add_fzf_binding</span><span class="p">():</span>
     <span class="n">insert_mode</span> <span class="o">=</span> <span class="n">ViInsertMode</span><span class="p">()</span> <span class="o">|</span> <span class="n">EmacsInsertMode</span><span class="p">()</span>
-    <span class="n">registry</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">key_binding</span>
+    <span class="n">registry</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">key_bindings</span>
 
-    <span class="n">registry</span><span class="o">.</span><span class="n">add_binding</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlY</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">))(</span><span class="n">fzf_history</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="TestInter"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.TestInter">[docs]</a><span class="k">class</span> <span class="nc">TestInter</span><span class="p">(</span><span class="n">TerminalInteractiveShell</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Checks if IPython is running.</span>
-
-<span class="sd">    If not use TerminalIPythonApp().launch_instance to start it.</span>
-<span class="sd">    Noticed that method while skimming traitlets.config.application.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-
-<div class="viewcode-block" id="TestInter.run"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.TestInter.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">shell</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">shell</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">launch_instance</span><span class="p">()</span>
-
-        <span class="n">config</span> <span class="o">=</span> <span class="n">shell</span><span class="o">.</span><span class="n">config</span></div></div>
+    <span class="n">handle</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">add_binding</span>
+    <span class="n">handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlY</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">))(</span><span class="n">fzf_history</span><span class="p">)</span></div>
+    <span class="c1"># this freezes the whole prompt holy hell</span>
+    <span class="c1"># handle(Keys.ControlT, filter=HasFocus(DEFAULT_BUFFER))(fzf_keys)</span>
 
 
 <div class="viewcode-block" id="fzf_keys"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.fzf_keys">[docs]</a><span class="k">def</span> <span class="nf">fzf_keys</span><span class="p">(</span><span class="n">inputted_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
     <span class="k">if</span> <span class="n">inputted_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">inputtted_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">inputted_list</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="c1"># idk if you can do this.</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">())</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;rt+&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">f</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">stdin</span> <span class="o">=</span> <span class="n">f</span>
         <span class="c1"># also is this class a contextmanager because that&#39;d be thoughtful</span>
         <span class="n">FzfPrompt</span><span class="p">(</span><span class="n">inputted_list</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="new_shortcuts"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.new_shortcuts">[docs]</a><span class="k">def</span> <span class="nf">new_shortcuts</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Let&#39;s overlay a few shortcuts with the default ones.&quot;&quot;&quot;</span>
-    <span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-    <span class="n">kb</span> <span class="o">=</span> <span class="n">create_ipython_shortcuts</span><span class="p">(</span><span class="n">shell</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">kb</span><span class="p">,</span> <span class="s2">&quot;add&quot;</span><span class="p">):</span>
-        <span class="n">handle</span> <span class="o">=</span> <span class="n">kb</span><span class="o">.</span><span class="n">add</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="c1"># probably should whine</span>
-        <span class="k">return</span>
-
-    <span class="n">handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlT</span><span class="p">,</span> <span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">))(</span><span class="n">fzf_keys</span><span class="p">)</span></div>
-    <span class="c1"># todo:</span>
-    <span class="c1"># kb.add_binding()</span>
-
-
 <div class="viewcode-block" id="run_in_terminal_fzf"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.run_in_terminal_fzf">[docs]</a><span class="k">def</span> <span class="nf">run_in_terminal_fzf</span><span class="p">():</span>
-    <span class="n">termshell</span> <span class="o">=</span> <span class="n">TestInter</span><span class="p">()</span>
     <span class="c1"># not sure how pt wants us to do this part</span>
     <span class="c1"># TODO:</span>
     <span class="c1"># Ah so this raises an error because FzfPrompt() doesn&#39;t have an __enter__</span>
     <span class="c1"># attribute and we&#39;re trying to run it as a contextmanager. ah.</span>
-    <span class="k">with</span> <span class="n">run_in_terminal</span><span class="p">(</span><span class="n">FzfPrompt</span><span class="p">(),</span> <span class="n">render_cli_done</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">in_executor</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">run_in_terminal</span><span class="p">(</span><span class="n">FZF</span><span class="p">(),</span> <span class="n">render_cli_done</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">in_executor</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="n">fzf_prompt</span> <span class="o">=</span> <span class="n">FzfPrompt</span><span class="p">()</span>
         <span class="c1"># launch with</span>
         <span class="n">fzf_prompt</span><span class="o">.</span><span class="n">prompt</span><span class="p">()</span></div>
-
-
-<div class="viewcode-block" id="fzf_history"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.21_fzf.fzf_history">[docs]</a><span class="k">def</span> <span class="nf">fzf_history</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
-    <span class="n">cnx</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">home</span> <span class="o">+</span> <span class="s2">&quot;/.ipython/profile_default/history.sqlite&quot;</span><span class="p">)</span>
-    <span class="n">fzf</span> <span class="o">=</span> <span class="n">FzfPrompt</span><span class="p">()</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql_query</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM history&quot;</span><span class="p">,</span> <span class="n">cnx</span><span class="p">)</span>
-    <span class="n">itext</span> <span class="o">=</span> <span class="n">fzf</span><span class="o">.</span><span class="n">prompt</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">])</span>
-    <span class="c1"># print(itext)</span>
-    <span class="k">if</span> <span class="n">itext</span> <span class="o">!=</span> <span class="p">[]:</span>
-        <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">insert_text</span><span class="p">(</span><span class="n">itext</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">fzf_aliases</span> <span class="o">=</span> <span class="n">FZF</span><span class="o">.</span><span class="n">_setup_fzf</span><span class="p">()</span>
     <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">define_alias</span><span class="p">(</span><span class="s2">&quot;fzf&quot;</span><span class="p">,</span> <span class="s2">&quot;fzf-tmux&quot;</span><span class="p">)</span>
 
-    <span class="n">home</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">())</span>
-
-    <span class="k">if</span> <span class="n">fuf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">add_fzf_binding</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">FzfPrompt</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
 
         <span class="k">class</span> <span class="nc">Fuf</span><span class="p">(</span><span class="n">FZF</span><span class="p">,</span> <span class="n">FzfPrompt</span><span class="p">):</span>
             <span class="n">fzf_default_opts</span> <span class="o">=</span> <span class="kc">None</span>
@@ -452,7 +395,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Mar 01, 2020.
+      Last updated on Mar 03, 2020.
     </div>
   </body>
 </html>

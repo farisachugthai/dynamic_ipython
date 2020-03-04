@@ -159,19 +159,24 @@
 <span class="c1"># TODO</span>
 <span class="c1"># In [47]: _ip.pt_app.lexer.python_lexer.pygments_lexer</span>
 <span class="c1"># Out[47]: &lt;pygments.lexers.PythonLexer with {&#39;stripnl&#39;: False, &#39;stripall&#39;: False, &#39;ensurenl&#39;: False}</span>
+<span class="kn">import</span> <span class="nn">builtins</span>
 <span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">import</span> <span class="nn">pprint</span>
+<span class="kn">import</span> <span class="nn">pydoc</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">types</span>
 
 <span class="kn">from</span> <span class="nn">traitlets.config</span> <span class="kn">import</span> <span class="n">LoggingConfigurable</span>
 <span class="kn">from</span> <span class="nn">traitlets.traitlets</span> <span class="kn">import</span> <span class="n">Instance</span>
 
+<span class="kn">import</span> <span class="nn">pygments</span>
 <span class="kn">from</span> <span class="nn">pygments.lexer</span> <span class="kn">import</span> <span class="n">Lexer</span>
 <span class="kn">from</span> <span class="nn">pygments.lexers.python</span> <span class="kn">import</span> <span class="n">PythonLexer</span>
 <span class="kn">from</span> <span class="nn">pygments.token</span> <span class="kn">import</span> <span class="n">Keyword</span><span class="p">,</span> <span class="n">Name</span>
 <span class="kn">from</span> <span class="nn">pygments.formatters.terminal256</span> <span class="kn">import</span> <span class="n">TerminalTrueColorFormatter</span>
 
-<span class="kn">from</span> <span class="nn">prompt_toolkit.formatted_text</span> <span class="kn">import</span> <span class="n">FormattedText</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.formatted_text</span> <span class="kn">import</span> <span class="n">FormattedText</span><span class="p">,</span> <span class="n">PygmentsTokens</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.layout.containers</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">HSplit</span><span class="p">,</span>
     <span class="c1"># VSplit,</span>
@@ -181,17 +186,19 @@
     <span class="c1"># FloatContainer,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.layout.controls</span> <span class="kn">import</span> <span class="n">FormattedTextControl</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.lexers.pygments</span> <span class="kn">import</span> <span class="n">PygmentsLexer</span>  <span class="c1"># , PygmentsTokens</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.lexers.pygments</span> <span class="kn">import</span> <span class="n">PygmentsLexer</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.lexers.base</span> <span class="kn">import</span> <span class="n">DynamicLexer</span><span class="p">,</span> <span class="n">SimpleLexer</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.shortcuts.utils</span> <span class="kn">import</span> <span class="n">print_container</span>
 
 <span class="kn">from</span> <span class="nn">prompt_toolkit.styles</span> <span class="kn">import</span> <span class="n">style_from_pygments_cls</span><span class="p">,</span> <span class="n">default_pygments_style</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.styles.style</span> <span class="kn">import</span> <span class="n">merge_styles</span>  <span class="c1"># , Style,</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.widgets</span> <span class="kn">import</span> <span class="n">Button</span>
 
 <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 <span class="kn">from</span> <span class="nn">IPython.core.interactiveshell</span> <span class="kn">import</span> <span class="n">InteractiveShellABC</span>
 
 <span class="c1"># from IPython.lib.lexers import IPyLexer, IPythonTracebackLexer</span>
+<span class="c1"># or IPython.terminal.ptutils.IPythonPTLexer</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">gruvbox.ptgruvbox</span> <span class="kn">import</span> <span class="n">Gruvbox</span>
@@ -210,7 +217,7 @@
         <span class="p">]</span>
     <span class="p">)</span>  <span class="c1"># TODO</span>
     <span class="k">return</span> <span class="n">merge_styles</span><span class="p">(</span>
-        <span class="p">[</span><span class="n">style_from_pygments_cls</span><span class="p">(</span><span class="n">Gruvbox</span><span class="p">),</span> <span class="n">default_pygments_style</span><span class="p">(),</span> <span class="p">]</span>
+        <span class="p">[</span><span class="n">style_from_pygments_cls</span><span class="p">(</span><span class="n">Gruvbox</span><span class="p">),</span> <span class="n">default_pygments_style</span><span class="p">(),]</span>
     <span class="p">)</span>  <span class="c1"># TODO</span></div>
 
 
@@ -351,7 +358,9 @@
 <div class="viewcode-block" id="pphighlight"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.35_lexer.pphighlight">[docs]</a><span class="k">def</span> <span class="nf">pphighlight</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
     <span class="n">s</span> <span class="o">=</span> <span class="n">pprint</span><span class="o">.</span><span class="n">pformat</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">highlight</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">PythonLexer</span><span class="p">(),</span> <span class="n">TerminalFormatter</span><span class="p">()))</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+            <span class="n">pygments</span><span class="o">.</span><span class="n">highlight</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">PythonLexer</span><span class="p">(),</span> <span class="n">TerminalTrueColorFormatter</span><span class="p">())</span>
+        <span class="p">)</span>
     <span class="k">except</span> <span class="ne">UnicodeError</span><span class="p">:</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
@@ -387,7 +396,6 @@
 
         <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span>
-        <span class="n">__builtin__</span><span class="o">.</span><span class="n">_</span> <span class="o">=</span> <span class="n">value</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">help_types</span><span class="p">):</span>
             <span class="n">reprstr</span> <span class="o">=</span> <span class="nb">repr</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
@@ -434,7 +442,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Mar 01, 2020.
+      Last updated on Mar 03, 2020.
     </div>
   </body>
 </html>

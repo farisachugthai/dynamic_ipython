@@ -208,7 +208,7 @@ can be overridden later.</p>
 <div class="section" id="notes">
 <h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
 <dl class="simple">
-<dt><code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.core.magic.run_line_magic()</span></code></dt><dd><p>A method of the <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.12.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveShell</span></code></a> instance to run a specific magic currently in the
+<dt><code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.core.magic.run_line_magic()</span></code></dt><dd><p>A method of the <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.13.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveShell</span></code></a> instance to run a specific magic currently in the
 IPython.core.interactiveshell.InteractiveShell.user_ns
 or user namespace.</p>
 </dd>
@@ -229,7 +229,9 @@ an error, so an empty <a class="reference external" href="https://docs.python.or
 <code class="docutils literal notranslate"><span class="pre">_stack_depth</span></code> = 2.</p>
 <p>This is added to ensure backward compatibility for use
 of <code class="xref py py-func docutils literal notranslate"><span class="pre">IPython.core.magics.get_ipython().magic()</span></code></p>
-<span class="target" id="module-default_profile.startup.01_rehashx"></span><p>Unfortunately, it executes files in the cwd in an odd manner on Windows,
+<span class="target" id="module-default_profile.startup.01_rehashx"></span><p>This is an incredible little gem that’s hugely useful for
+making IPython work as a more versatile system shell.</p>
+<p>Unfortunately, it executes files in the cwd in an odd manner on Windows,
 and believes files on Dropbox should be executed without checking a filetype.</p>
 <div class="section" id="work-in-progress">
 <h4>Work in Progress<a class="headerlink" href="#work-in-progress" title="Permalink to this headline">¶</a></h4>
@@ -239,8 +241,6 @@ formatters for exceptions.</p>
 of whether someone has <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span></code>-ed it.
 As a result, local imports or any imports not in the standard library
 should be discouraged here.</p>
-<p>In addition, enable <a class="reference external" href="https://docs.python.org/3/library/faulthandler.html#module-faulthandler" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">faulthandler</span></code></a>, tracemalloc and assign them to
-sys.excepthook, threading.excepthook and others.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>A possible alternative to get_ipython().showsyntaxerror might
@@ -249,7 +249,7 @@ possibly be <a class="reference external" href="https://docs.python.org/3/librar
 <dl class="function">
 <dt id="default_profile.startup.01_rehashx.formatted_tb">
 <code class="sig-name descname">formatted_tb</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/01_rehashx.html#formatted_tb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.01_rehashx.formatted_tb" title="Permalink to this definition">¶</a></dt>
-<dd><p>A view of the last exception that intentionally doesn’t require arguments.</p>
+<dd><p>Return a str of the last exception.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p></p>
@@ -264,7 +264,8 @@ possibly be <a class="reference external" href="https://docs.python.org/3/librar
 <dl class="function">
 <dt id="default_profile.startup.01_rehashx.last_exc">
 <code class="sig-name descname">last_exc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/01_rehashx.html#last_exc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.01_rehashx.last_exc" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Return <code class="xref py py-obj docutils literal notranslate"><span class="pre">format_exc</span></code>.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="default_profile.startup.01_rehashx.rehashx_run">
@@ -272,7 +273,7 @@ possibly be <a class="reference external" href="https://docs.python.org/3/librar
 <dd><p>Add all executables on the user’s <span class="target" id="index-0"></span><a class="reference external" href="https://matplotlib.org/faq/environment_variables_faq.html#envvar-PATH" title="(in Matplotlib v3.1.3)"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PATH</span></code></a> into the IPython ns.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>shell</strong> (<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.12.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveShell</span></code></a> instance) – IPython shell instance.</p>
+<dd class="field-odd"><p><strong>shell</strong> (<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.13.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveShell</span></code></a> instance) – IPython shell instance.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -310,7 +311,8 @@ possibly be <a class="reference external" href="https://docs.python.org/3/librar
 <dl class="function">
 <dt id="default_profile.startup.01_rehashx.ipy_execfile">
 <code class="sig-name descname">ipy_execfile</code><span class="sig-paren">(</span><em class="sig-param">f</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/01_rehashx.html#ipy_execfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.01_rehashx.ipy_execfile" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Run the IPython <code class="xref py py-obj docutils literal notranslate"><span class="pre">%run</span></code> -i on a file.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="default_profile.startup.01_rehashx.ipy_execdir">
@@ -339,7 +341,7 @@ pointless for interactive use.</p>
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Mar 01, 2020.
+      Last updated on Mar 03, 2020.
     </div>
   </body>
 </html>

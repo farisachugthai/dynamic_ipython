@@ -91,30 +91,22 @@ installs files globally, and that the :command:`python` command points to
 python3.7. In most cases it does not.
 
 If one has :command:`pipenv` installed, an easier installation could be
+``pipenv install -e .``
 
-.. ipython::
-   :verbatim:
+If a non-pipenv installation is desired for some reason, a fully 
+specified installation could look like.
 
-   pipenv install -e .
+   python3 setup.py build
+   python3 -m pip install -U --user pip -e .
 
-If a non-pipenv installation is desired for some reason, a fully specified
-installation could look like.
-
-.. ipython::
-   :verbatim:
-
-   python3.7 setup.py build
-   python3.7 -m pip install -U --user pip -e .
-
-As one can see this gets complicated very quickly, and as a result,
-installation via pipenv is the recommended method.
+As one can see this gets complicated very quickly, and as a 
+result, installation via pipenv is the recommended method.
 
 
-Assumptions
-===========
+Modifying traitlets behavior
+----------------------------
 
 Neovim is the default editor.
-
 If this behavior isn't desired, the following parameter needs to be
 changed like so::
 
@@ -127,7 +119,7 @@ See Also
 
 For further reading, feel free to see the output of any of the following.
 
-.. ipython::
+.. ipython:: python
    :verbatim:
 
    >>> from IPython.core.interactiveshell import InteractiveShell
@@ -140,7 +132,7 @@ every option available through the `%config` magic.
 For commands that are more related to the interactive aspect of the shell,
 see the following.
 
-.. ipython::
+.. ipython:: python
    :verbatim:
 
    >>> from IPython import get_ipython

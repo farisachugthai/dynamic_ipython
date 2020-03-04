@@ -173,6 +173,7 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">reprlib</span> <span class="kn">import</span> <span class="nb">repr</span>
+<span class="kn">import</span> <span class="nn">sys</span>
 
 <span class="kn">import</span> <span class="nn">prompt_toolkit</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.buffer</span> <span class="kn">import</span> <span class="n">Buffer</span>
@@ -228,6 +229,13 @@
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{self.__class__.__name__}</span><span class="s2"> with app at </span><span class="si">{self.pt_app}</span><span class="s2">&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__sizeof__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Unfortunately I&#39;ve added so much to this class that it might be necessary to check</span>
+        <span class="c1"># how big ano object is now</span>
+        <span class="k">return</span> <span class="nb">object</span><span class="o">.</span><span class="n">__sizeof__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">(</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">getsizeof</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+        <span class="p">)</span>
 
 <div class="viewcode-block" id="Helpers.app_kb"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.app_kb">[docs]</a>    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">app_kb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -365,8 +373,28 @@
         <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">app_validator</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="n">session_validator</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Helpers.all_controls"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.all_controls">[docs]</a>    <span class="k">def</span> <span class="nf">all_controls</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">find_all_controls</span><span class="p">())</span></div></div>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">find_all_controls</span><span class="p">())</span></div>
 
+
+<div class="viewcode-block" id="Helpers.app_context"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.app_context">[docs]</a>    <span class="k">def</span> <span class="nf">app_context</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;What is this?</span>
+
+<span class="sd">        Behaves similarly to a dict but won&#39;t display values.::</span>
+
+<span class="sd">            [ins] In [165]: _ip.pt_app.app.context</span>
+<span class="sd">            Out[165]: &lt;Context at 0x7877b7d880&gt;</span>
+
+<span class="sd">            [ins] In [166]: _ip.pt_app.app.context.items()</span>
+<span class="sd">            Out[166]: &lt;items at 0x7877ac00f0&gt;</span>
+
+<span class="sd">            [ins] In [167]: _ip.pt_app.app.context.keys()</span>
+<span class="sd">            Out[167]: &lt;keys at 0x7877b46e00&gt;</span>
+
+<span class="sd">            [ins] In [168]: print_formatted_text(_ip.pt_app.app.context)</span>
+<span class="sd">            &lt;Context object at 0x787791c380&gt;</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">context</span></div></div>
 
 <div class="viewcode-block" id="all_processors_for_searching"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.all_processors_for_searching">[docs]</a><span class="k">def</span> <span class="nf">all_processors_for_searching</span><span class="p">():</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Return a list of `prompt_toolkit.layout.processor.Processor`\&#39;s.&quot;&quot;&quot;</span>
@@ -460,7 +488,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Mar 01, 2020.
+      Last updated on Mar 03, 2020.
     </div>
   </body>
 </html>

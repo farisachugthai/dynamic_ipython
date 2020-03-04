@@ -313,6 +313,10 @@ They’re basically Enums that get compared to <code class="docutils literal not
 <dt id="default_profile.startup.32_kb.KeyBindingsManager">
 <em class="property">class </em><code class="sig-name descname">KeyBindingsManager</code><span class="sig-paren">(</span><em class="sig-param">kb=None</em>, <em class="sig-param">shell=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/32_kb.html#KeyBindingsManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.32_kb.KeyBindingsManager" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.UserList" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.UserList</span></code></a></p>
+<p>An object to make working with keybindings easier.</p>
+<p>Subclasses UserList with a list of Keys and their handlers.
+By defining dunders, the collection of keybindings are much
+easier to work with.</p>
 <dl class="method">
 <dt id="default_profile.startup.32_kb.KeyBindingsManager.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">kb=None</em>, <em class="sig-param">shell=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/32_kb.html#KeyBindingsManager.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.32_kb.KeyBindingsManager.__init__" title="Permalink to this definition">¶</a></dt>
@@ -338,12 +342,14 @@ Handling this is gonna be hard unfortunately.</p>
 <dl class="method">
 <dt id="default_profile.startup.32_kb.KeyBindingsManager.bindings">
 <em class="property">property </em><code class="sig-name descname">bindings</code><a class="reference internal" href="../_modules/default_profile/startup/32_kb.html#KeyBindingsManager.bindings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.32_kb.KeyBindingsManager.bindings" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Make the <em>kb</em> attributes bindings visible at the top level.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="default_profile.startup.32_kb.KeyBindingsManager.call_iadd">
 <em class="property">property </em><code class="sig-name descname">call_iadd</code><a class="reference internal" href="../_modules/default_profile/startup/32_kb.html#KeyBindingsManager.call_iadd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.32_kb.KeyBindingsManager.call_iadd" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Make the <em>kb</em> attributes bindings visible at the top level.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="default_profile.startup.32_kb.KeyBindingsManager.get_keys">
@@ -355,18 +361,26 @@ Handling this is gonna be hard unfortunately.</p>
 <code class="sig-name descname">get_bindings_for_keys</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">keys</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/32_kb.html#KeyBindingsManager.get_bindings_for_keys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.32_kb.KeyBindingsManager.get_bindings_for_keys" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a list of key bindings that can handle this key.</p>
 <p>(This return also inactive bindings, so the <a class="reference external" href="https://docs.python.org/3/library/functions.html#filter" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">filter</span></code></a> still has to be
-called, for checking it.)
-:param keys: tuple of keys.</p>
+called, for checking it.)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>keys</strong> – tuple of keys.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="default_profile.startup.32_kb.KeyBindingsManager.get_bindings_starting_with_keys">
 <code class="sig-name descname">get_bindings_starting_with_keys</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">keys</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/32_kb.html#KeyBindingsManager.get_bindings_starting_with_keys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.32_kb.KeyBindingsManager.get_bindings_starting_with_keys" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a list of key bindings that handle a key sequence starting with
-<code class="xref py py-obj docutils literal notranslate"><span class="pre">keys</span></code>. (It does only return bindings for which the sequences are
+<dd><p>Return a list of key bindings that handle a sequence starting with <code class="xref py py-obj docutils literal notranslate"><span class="pre">keys</span></code>.</p>
+<p>(It does only return bindings for which the sequences are
 longer than <code class="xref py py-obj docutils literal notranslate"><span class="pre">keys</span></code>. And like <a class="reference internal" href="#default_profile.startup.32_kb.KeyBindingsManager.get_bindings_for_keys" title="default_profile.startup.32_kb.KeyBindingsManager.get_bindings_for_keys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_bindings_for_keys</span></code></a>, it also includes
-inactive bindings.)
-:param keys: tuple of keys.</p>
+inactive bindings.)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>keys</strong> – tuple of keys.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -400,17 +414,13 @@ between _MergedKeyBindings and ConditionalKeyBindings through class attributes.<
 
 </dd></dl>
 
-<dl class="function">
-<dt id="default_profile.startup.32_kb.unnest_merged_kb">
-<code class="sig-name descname">unnest_merged_kb</code><span class="sig-paren">(</span><em class="sig-param">kb</em>, <em class="sig-param">pre_existing_list=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/32_kb.html#unnest_merged_kb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.32_kb.unnest_merged_kb" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="class">
 <dt id="default_profile.startup.32_kb.Documented">
 <em class="property">class </em><code class="sig-name descname">Documented</code><span class="sig-paren">(</span><em class="sig-param">text: str = ''</em>, <em class="sig-param">cursor_position: Optional[int] = None</em>, <em class="sig-param">selection: Optional[prompt_toolkit.selection.SelectionState] = None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/32_kb.html#Documented"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.32_kb.Documented" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://python-prompt-toolkit.readthedocs.io/en/stable/pages/reference.html#prompt_toolkit.document.Document" title="(in prompt_toolkit v3.0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">prompt_toolkit.document.Document</span></code></a></p>
 <p>I’ll admit this subclass doesn’t exist for much of a reason.</p>
 <p>However, it’s a LOT easier to work with classes with their dunders defined.</p>
+<p>Implement the basics for a class to be considered a sequence IE len and iter.</p>
 </dd></dl>
 
 </div>
@@ -426,7 +436,7 @@ are utilized quite heavily.</p>
 <p>It’s not very difficult to crash the entire application as a result of
 giving it the wrong type.</p>
 </div>
-<p>The <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.12.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveShell</span></code></a>.`pt_app.bottom_toolbar` type is expected to be some kind of
+<p>The <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.13.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveShell</span></code></a>.`pt_app.bottom_toolbar` type is expected to be some kind of
 FormattedText. Unfortunately, feeding it an already populated control like a
 FormattedTextToolbar will break the application.</p>
 <p>Don’t run.:</p>
@@ -753,7 +763,7 @@ are terminated at newlines, so that paging the output works correctly.</p>
 <div class="section" id="module-default_profile.startup.ptoolkit">
 <span id="ptoolkit"></span><h2><a class="reference internal" href="#module-default_profile.startup.ptoolkit" title="default_profile.startup.ptoolkit: Generate a more generalized class to interact with prompt_toolkit."><code class="xref py py-mod docutils literal notranslate"><span class="pre">ptoolkit</span></code></a><a class="headerlink" href="#module-default_profile.startup.ptoolkit" title="Permalink to this headline">¶</a></h2>
 <p>Provides utilities functions and classes to work with both <code class="xref py py-obj docutils literal notranslate"><span class="pre">prompt_toolkit</span></code>
-and <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.12.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IPython</span></code></a>. The APIs of both libraries can be individually quite
+and <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.13.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IPython</span></code></a>. The APIs of both libraries can be individually quite
 overwhelming, and the combination and interaction of the 2 can prove difficult
 to stay on top of.</p>
 <p>The <a class="reference internal" href="#default_profile.startup.ptoolkit.Helpers" title="default_profile.startup.ptoolkit.Helpers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Helpers</span></code></a> class defined here gives a useful reference as to the
@@ -923,6 +933,26 @@ anything by default in IPython!</p>
 <code class="sig-name descname">all_controls</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#Helpers.all_controls"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.Helpers.all_controls" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="method">
+<dt id="default_profile.startup.ptoolkit.Helpers.app_context">
+<code class="sig-name descname">app_context</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#Helpers.app_context"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.Helpers.app_context" title="Permalink to this definition">¶</a></dt>
+<dd><p>What is this?</p>
+<p>Behaves similarly to a dict but won’t display values.:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">ins</span><span class="p">]</span> <span class="n">In</span> <span class="p">[</span><span class="mi">165</span><span class="p">]:</span> <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">context</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">165</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">Context</span> <span class="n">at</span> <span class="mh">0x7877b7d880</span><span class="o">&gt;</span>
+
+<span class="p">[</span><span class="n">ins</span><span class="p">]</span> <span class="n">In</span> <span class="p">[</span><span class="mi">166</span><span class="p">]:</span> <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">166</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">items</span> <span class="n">at</span> <span class="mh">0x7877ac00f0</span><span class="o">&gt;</span>
+
+<span class="p">[</span><span class="n">ins</span><span class="p">]</span> <span class="n">In</span> <span class="p">[</span><span class="mi">167</span><span class="p">]:</span> <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">167</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">keys</span> <span class="n">at</span> <span class="mh">0x7877b46e00</span><span class="o">&gt;</span>
+
+<span class="p">[</span><span class="n">ins</span><span class="p">]</span> <span class="n">In</span> <span class="p">[</span><span class="mi">168</span><span class="p">]:</span> <span class="n">print_formatted_text</span><span class="p">(</span><span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
+<span class="o">&lt;</span><span class="n">Context</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x787791c380</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="function">
@@ -945,6 +975,18 @@ anything by default in IPython!</p>
 </div>
 <div class="section" id="module-default_profile.startup.completions">
 <span id="completions"></span><h2><a class="reference internal" href="#module-default_profile.startup.completions" title="default_profile.startup.completions"><code class="xref py py-mod docutils literal notranslate"><span class="pre">completions</span></code></a><a class="headerlink" href="#module-default_profile.startup.completions" title="Permalink to this headline">¶</a></h2>
+<dl class="data">
+<dt id="default_profile.startup.completions.combined_completers">
+<code class="sig-name descname">combined_completers</code><a class="headerlink" href="#default_profile.startup.completions.combined_completers" title="Permalink to this definition">¶</a></dt>
+<dd><p>A ThreadedCompleter instantiated with a MergedCompleter that combines
+FuzzyWordCompleter, FuzzyCompleter, PathCompleter, WordCompleter
+and IPython’s IPythonPTCompleter.</p>
+</dd></dl>
+
+<p>In addition, autosuggestions are generated in a manner similar to fish from an
+<a class="reference external" href="https://python-prompt-toolkit.readthedocs.io/en/stable/pages/reference.html#prompt_toolkit.auto_suggest.AutoSuggestFromHistory" title="(in prompt_toolkit v3.0.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">prompt_toolkit.auto_suggest.AutoSuggestFromHistory</span></code></a> instance wrapped in
+a <a class="reference external" href="https://python-prompt-toolkit.readthedocs.io/en/stable/pages/reference.html#prompt_toolkit.auto_suggest.ThreadedAutoSuggest" title="(in prompt_toolkit v3.0.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">prompt_toolkit.auto_suggest.ThreadedAutoSuggest</span></code></a> instance as this
+dramatically speeds the completions up.</p>
 <dl class="class">
 <dt id="default_profile.startup.completions.SimpleCompleter">
 <em class="property">class </em><code class="sig-name descname">SimpleCompleter</code><span class="sig-paren">(</span><em class="sig-param">shell=None</em>, <em class="sig-param">min_input_len=0</em>, <em class="sig-param">completer=None</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/completions.html#SimpleCompleter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.completions.SimpleCompleter" title="Permalink to this definition">¶</a></dt>
@@ -1061,7 +1103,8 @@ working directory??</strong></p>
 <dt id="default_profile.startup.completions.MergedCompleter.get_completions_async">
 <code class="sig-name descname">get_completions_async</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">document</em>, <em class="sig-param">complete_event</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/completions.html#MergedCompleter.get_completions_async"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.completions.MergedCompleter.get_completions_async" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all completions from <code class="xref py py-obj docutils literal notranslate"><span class="pre">completers</span></code> in a non-blocking way.</p>
-<p>Checks that the completer actually defined this method before calling it so we don’t force the method definition.</p>
+<p>Checks that the completer actually defined this method before calling
+it so we don’t force the method definition.</p>
 </dd></dl>
 
 </dd></dl>
@@ -1070,6 +1113,7 @@ working directory??</strong></p>
 <dt id="default_profile.startup.completions.FuzzyCallable">
 <em class="property">class </em><code class="sig-name descname">FuzzyCallable</code><span class="sig-paren">(</span><em class="sig-param">completer=None</em>, <em class="sig-param">words=None</em>, <em class="sig-param">meta_dict=None</em>, <em class="sig-param">WORD=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/completions.html#FuzzyCallable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.completions.FuzzyCallable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">prompt_toolkit.completion.fuzzy_completer.FuzzyCompleter</span></code></p>
+<p>A FuzzyCompleter with <code class="docutils literal notranslate"><span class="pre">__call__</span></code> defined.</p>
 <dl class="method">
 <dt id="default_profile.startup.completions.FuzzyCallable.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">completer=None</em>, <em class="sig-param">words=None</em>, <em class="sig-param">meta_dict=None</em>, <em class="sig-param">WORD=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/completions.html#FuzzyCallable.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.completions.FuzzyCallable.__init__" title="Permalink to this definition">¶</a></dt>
@@ -1091,8 +1135,9 @@ working directory??</strong></p>
 <dl class="function">
 <dt id="default_profile.startup.completions.create_pt_completers">
 <code class="sig-name descname">create_pt_completers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/completions.html#create_pt_completers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.completions.create_pt_completers" title="Permalink to this definition">¶</a></dt>
-<dd><p>A combination of all the completers in this module.</p>
-<p>Still needs to factor in magic completions before its officially integrated into the rest of the app.</p>
+<dd><p>Return a combination of all the completers in this module.</p>
+<p>Still needs to factor in magic completions before its officially
+integrated into the rest of the app.</p>
 </dd></dl>
 
 </div>
@@ -1104,7 +1149,7 @@ working directory??</strong></p>
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Mar 01, 2020.
+      Last updated on Mar 03, 2020.
     </div>
   </body>
 </html>
