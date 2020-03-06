@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """Effectively me rewriting Prompt Toolkits keybindings handlers."""
 import logging
 import operator
@@ -79,28 +80,11 @@ class KeyBindingsManager(UserList):
     def len(self):
         return self.__len__()
 
-    def __str__(self, level=6):
-        return reprlib.Repr().repr_list(self.kb.bindings, level)
-
     def __repr_pretty(self, p, cycle):
         # I don't know why it has that call signature
         return (
             f"<{self.__class__.__name__}:> - {reprlib.recursive_repr(self.kb.bindings)}"
         )
-
-    def __call__(self):
-        """Simply calls the str method until we figure something out."""
-        return self.__str__()
-
-    def __iter__(self):
-        """This file in general is gonna suck to test isn't it?"""
-        try:
-            for i in iter(self.kb.bindings):
-                yield i
-        except TypeError:
-            raise  # uhm idk
-        except StopIteration:
-            pass
 
     def __getitem__(self, index):
         return operator.getitem(self.kb.bindings, index)

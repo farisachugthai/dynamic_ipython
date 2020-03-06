@@ -32,14 +32,13 @@ import cgitb
 import code
 import logging
 import platform
-import runpy
 import sys
 import threading
 import traceback
 from os import scandir, listdir
 from pathlib import Path
-from runpy import run_module, run_path
 from traceback import format_exc, format_tb
+from runpy import run_path
 
 from IPython.core.getipython import get_ipython
 
@@ -96,7 +95,7 @@ def safe_run_path(fileobj, logger=None):
         logger = logging.getLogger(name=__name__)
     logger.debug("File to execute is: %s", fileobj)
     try:
-        return runpy.run_path(fileobj, init_globals=globals(), run_name="rerun_startup")
+        return run_path(fileobj, init_globals=globals(), run_name="rerun_startup")
     except ImportError:
         logger.warning("ImportError for mod: ", sys.last_traceback)
     except ConnectionResetError:  # happens in windows async loop all the time

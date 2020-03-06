@@ -23,19 +23,29 @@ import keyword
 from logging import getLogger, StreamHandler, BufferingFormatter, Filter
 import os
 from pathlib import Path
-import readline
 import pdb
 from pdb import Restart, Pdb
 import pydoc
+try:
+    import readline
+except ImportError:
+    readline = None
 import runpy
 import sys
 from textwrap import dedent
 import time
 import traceback
+try:
+    from pdbrc import MyPdb
+except:  # noqa
+    MyPdb = None
 
 from jedi.api import replstartup
 from IPython.core.getipython import get_ipython
 from IPython.terminal.prompts import Prompts
+from IPython.terminal.embed import InteractiveShellEmbed
+from IPython.terminal.ipapp import TerminalIPythonApp
+
 from prompt_toolkit.completion.fuzzy_completer import FuzzyWordCompleter
 from prompt_toolkit.shortcuts import print_formatted_text as print
 
@@ -44,6 +54,13 @@ from pygments.lexers.python import PythonLexer
 from pygments.formatters.terminal256 import TerminalTrueColorFormatter
 from pygments.token import Token
 
+try:
+    from gruvbox.gruvbox import GruvboxStyle
+except ImportError:
+    from pygments.styles.inkpot import InkPotStyle
+    pdb_style = InkPotStyle
+else:
+    pdb_style = GruvboxStyle()
 
 if sys.version_info < (3, 7):
     from default_profile import ModuleNotFoundError
@@ -202,7 +219,6 @@ def _init_pdb(context=3, commands=None, debugger_kls=None):
 
 
 class MyPdb(pdb.Pdb):
-
     """Subclass Pdb. Currently defined as a callable.
 
     Would it prove useful to add dunders for a context manager?
@@ -220,10 +236,10 @@ class MyPdb(pdb.Pdb):
         for bp in Breakpoint.bpbynumber: if bp: bp.bpprint().
 
     """
+    doc_header = "Whew!"
 
-    doc_header = ""
     lexer = PythonLexer()
-    formatter = TerminalTrueColorFormatter()
+    formatter = TerminalTrueColorFormatter(style=pdb_style)
 
     def __init__(
         self, completekey="tab", skip="traitlets", shell=None, *args, **kwargs,
@@ -237,16 +253,22 @@ class MyPdb(pdb.Pdb):
         """
         self.skip = skip
         self.completekey = completekey
-        self.allow_kbdint = True
+        self.allow_kbdint = False
         self.lineno = None
+
+        self.stack = []
+        self.curindex = 0
+        self.curframe = inspect.currentframe()
         super().__init__(completekey=self.completekey, skip=self.skip, *args, **kwargs)
+
         self.shell = get_ipython() if shell is None else shell
         self.prompt = (
             DebuggerPrompt(self.shell) if self.shell is not None else "YourPdb: "
         )
-        self.curframe = inspect.currentframe()
         self._wait_for_mainpyfile = False
         self._user_requested_quit = True
+        self.forget()
+        self.execRcLines()
 
     def __repr__(self):
         """Better repr with :meth:`bdb.Bdb.get_all_breaks` thrown in."""
@@ -266,7 +288,7 @@ class MyPdb(pdb.Pdb):
     def colorizer(self, code):
         """color from pygments."""
         if code is not None:
-            return pygments.highlight(code, self.lexer, self.formatter)
+            return pygments.highlight(code, self.lexer, self.formatter, outfile=sys.stdout)
 
     def displayhook(self, code):
         """Override the superclasses implementation and use pygments."""
@@ -298,6 +320,9 @@ class MyPdb(pdb.Pdb):
         )
         self.run(code)
 
+    def _debug_post_mortem(self):
+        self.shell.debugger(force=True)
+
     def curframe_locals(self):
         return self.curframe.f_locals()
 
@@ -315,6 +340,68 @@ class MyPdb(pdb.Pdb):
 
 
 debugger = MyPdb(shell=get_ipython())
+
+def wrap_sys_excepthook():
+    """Make sure we wrap it only once or we would end up with a cycle.
+
+    As it's written don't we lose the old sys excepthook as soon as we leave
+    this functions ns though?
+
+    Also how do you compare Exceptions and whatever excepthook is?
+    """
+    if sys.excepthook != BdbQuit:
+        original_excepthook = sys.excepthook
+        sys.excepthook = BdbQuit
+
+
+def set_trace(frame=None, context=3):
+    # wrap_sys_excepthook()
+    if frame is None:
+        frame = sys._getframe().f_back
+    p = _init_pdb(context).set_trace(frame)
+    if p and hasattr(p, "shell"):
+        p.shell.restore_sys_module_state()
+
+
+def post_mortem(tb=None):
+    # wrap_sys_excepthook()
+    p = _init_pdb()
+    p.reset()
+    if tb is None:
+        # sys.exc_info() returns (type, value, traceback) if an exception is
+        # being handled, otherwise it returns None
+        tb = sys.exc_info()[2]
+    if tb:
+        p.interaction(None, tb)
+
+
+def pm():
+    post_mortem(sys.last_traceback)
+
+
+def _run(statement, globals=None, locals=None):
+    """Sorry but run overlaps with the magic `%run`!"""
+    _init_pdb().run(statement, globals, locals)
+
+
+def runcall(*args, **kwargs):
+    return _init_pdb().runcall(*args, **kwargs)
+
+
+def runeval(expression, globals=None, locals=None):
+    return _init_pdb().runeval(expression, globals, locals)
+
+
+@contextmanager
+def launch_ipdb_on_exception():
+    try:
+        yield
+    except Exception:
+        if hasattr(sys, "exc_info"):
+            print(sys.exc_info()[2])
+        post_mortem(tb)
+    finally:
+        pass
 
 
 def exception_hook(type=None, value=None, tb=None):
@@ -352,7 +439,10 @@ def debug_script(script=None):
         logger.info(f"Restarting {script} with arguments:\t{str(sys.argv[1:])}")
     except BdbQuit:
         logger.critical("Quit signal received.  Goodbye!")
-
+    except EOFError:
+        sys.exit("EOF caught. Goodbye!")
+    except KeyboardInterrupt:
+        sys.exit("KeyboardInterrupt caught. Goodbye!")
     except SystemExit:
         # In most cases SystemExit does not warrant a post-mortem session.
         print("The program exited via sys.exit(). Exit status: ", end="")
@@ -364,6 +454,39 @@ def debug_script(script=None):
         t = sys.exc_info()[2]
         pdb.interaction(None, t)
         print("Post mortem debugger finished. The " + script + " will be restarted")
+
+
+
+def get_or_start_ipython():
+    """Returns the global IPython instance.
+
+    Summary
+    -------
+
+    Extended Summary
+    ----------------
+    In contrast to `IPython.core.getipython.get_ipython`, this will start
+    IPython if `get_ipython` returns None.
+
+    Builds a terminal app in order to force IPython to load the
+    user's configuration.
+    `IPython.terminal.TerminalIPythonApp.interact` is set to False to
+    avoid output (banner, prints) and then the TerminalIPythonApp is
+    initialized with '--no-term-title'.
+    """
+    shell = get_ipython()
+    if shell is None:
+        ipapp = TerminalIPythonApp()
+        ipapp.interact = False
+        ipapp.initialize(["--no-term-title"])
+        shell = ipapp.shell
+    else:
+        # Detect if embed shell or not and display a message
+        if isinstance(shell, InteractiveShellEmbed):
+            sys.stderr.write(
+                "\nYou are currently into an embedded ipython shell,\n"
+                "the configuration will not be loaded.\n\n"
+            )
 
 
 def main():
@@ -385,14 +508,14 @@ def main():
         if namespace.mainpyfile is not None:
             if not Path(namespace.mainpyfile).exists():
                 raise FileNotFoundError
-            # else: dedent 2 tabs if uncommenting
-            #     _init_pdb().set_trace()
+    else:
+        namespace.mainpyfile = None
 
+    mainpyfile = namespace.mainpyfile
             # Replace pdb's dir with script's dir in front of module search path.
-            sys.path.insert(0, os.path.dirname(namespace.mainpyfile))
-            debug_script(namespace.mainpyfile)
-    elif hasattr(namespace, "mod"):
-        _init_pdb()._runmodule(mod)
+    if mainpyfile is not None:
+        sys.path.insert(0, os.path.dirname(mainpyfile))
+        debug_script(mainpyfile)
 
 
 if __name__ == "__main__":

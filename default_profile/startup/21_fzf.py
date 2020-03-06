@@ -118,6 +118,7 @@ class FZF:
     def __init__(self, fzf_configs=None, **kwargs):
         self.fzf_config = fzf_configs or {}
         self._setup_fzf()
+        super().__init__()
 
     def __repr__(self):
         return "{}    {}".format(self.__class__.__name__, self.fzf_config)
@@ -135,8 +136,19 @@ class FZF:
                 **kwargs
             )
 
+    def run(self, *args, **kwargs):
+        print("Running: {}".format(self.safe_default_cmd))
+        return subprocess.run(
+            [self.safe_default_cmd, *args],
+            **kwargs,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE
+        )
+
     def default_cmds(self):
-        return "rg --pretty --hidden --max-columns-preview --no-heading --no-messages --no-column --no-line-number -C 0 -e ^ | fzf --ansi --multi "
+        return "rg --pretty --hidden --max-columns-preview --no-heading" \
+               "--no-messages --no-column --no-line-number -C 0 -e ^ " \
+               "| fzf --ansi --multi "
 
     def default_cmd(self):
         """Define the cmd for FZF.
@@ -170,20 +182,18 @@ class FZF:
     @classmethod
     def _setup_fzf(cls, *args):
         if shutil.which("fzf") and shutil.which("rg"):
-            # user_aliases.extend(
-            #     ('fzf', '$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS'))
             cls.fzf = (
                 "fzf",
-                "rg --pretty --hidden --max-columns-preview --no-heading --no-messages --no-column --no-line-number -C 0 -e ^ | fzf --ansi --multi ",
+                "rg --pretty --hidden --max-columns-preview --no-heading"
+                "--no-messages --no-column --no-line-number -C 0 -e ^ "
+                "| fzf --ansi --multi ",
             )
 
         elif shutil.which("fzf") and shutil.which("ag"):
-            # user_aliases.extend(
-            #     ('fzf', '$FZF_DEFAULT_COMMAND | fzf-tmux $FZF_DEFAULT_OPTS'))
             cls.fzf = ("fzf", "ag -C 0 --color-win-ansi --noheading %l | fzf")
 
         if args:
-            cls.fzf_alias.extend(args)
+            cls.fzf.extend(args)
 
         return cls
 
@@ -258,11 +268,23 @@ def fgs():
     return ret
 
 
+def fzf_history(event):
+    cnx = sqlite3.connect(home + "/.ipython/profile_default/history.sqlite")
+    fzf = FzfPrompt()
+    df = pd.read_sql_query("SELECT * FROM history", cnx)
+    itext = fzf.prompt(df["source"])
+    # print(itext)
+    if itext != []:
+        event.current_buffer.insert_text(itext[0])
+
+
 if __name__ == "__main__":
+    fzf_aliases = FZF._setup_fzf()
     get_ipython().alias_manager.define_alias("fzf", "fzf-tmux")
 
-    add_fzf_binding()
-    if FzfPrompt is not None:
+    home = str(Path.home())
+
+    if fuf is not None:
 
         class Fuf(FZF, FzfPrompt):
             fzf_default_opts = None

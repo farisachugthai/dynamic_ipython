@@ -1,6 +1,22 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Create OS specific aliases to allow a user to use IPython anywhere."""
+"""Create OS specific aliases to allow a user to use IPython anywhere.
+
+Properly map aliases as dictionaries.
+As stated in the language reference under Common Sequence Operations.:
+
+.. compound::
+
+    Concatenating immutable sequences always results in a new object.
+    This means that building up a sequence by repeated concatenation
+    will have a quadratic runtime cost in the total sequence length.
+    To get a linear runtime cost, you must switch to one of the
+    alternatives below:
+
+        - **If concatenating tuple objects, extend a list instead.**
+
+"""
+import keyword
 import logging
 import operator
 import os
@@ -8,29 +24,94 @@ import shutil
 import subprocess
 import traceback
 from collections import UserDict
+from typing import Iterable, TYPE_CHECKING, Dict
 
 from IPython.core.alias import Alias, AliasError, InvalidAliasError, default_aliases
 from IPython.core.getipython import get_ipython
 from traitlets.config.application import ApplicationError
 
 
+def validate_alias(alias) -> Dict:
+    try:
+        caller = self.shell.magics_manager.magics['line'][self.name]
+    except KeyError:
+        pass
+    else:
+        if not isinstance(caller, Alias):
+            raise InvalidAliasError("The name %s can't be aliased "
+                                    "because it is another magic command." % self.name)
+
+    if not (isinstance(self.cmd, str)):
+        raise InvalidAliasError("An alias command must be a string, "
+                                "got: %r" % self.cmd)
+
+    nargs = self.cmd.count('%s') - self.cmd.count('%%s')
+
+    if (nargs > 0) and (self.cmd.find('%l') >= 0):
+        raise InvalidAliasError('The %s and %l specifiers are mutually '
+                                'exclusive in alias definitions.')
+
+    return nargs
+
+
+class Alias(UserDict):
+    """Callable object storing the details of one alias.
+
+    Reasonably this is the object that should be the UserDict. CommonAliases
+    makes more sense as a list of dicts.
+    """
+    blacklist = ['dhist', 'alias', 'unalias']
+    blacklist.extend(keyword.kwlist)
+
+    def __init__(self, name, cmd):
+        """Validate the alias, and return the number of arguments."""
+        self.name = name
+        self.cmd = cmd
+        if self.name in self.blacklist:
+            # Wait can we note that we didn't checkout the keyword list though.
+            raise InvalidAliasError(
+                f"The name {self.name} can't be aliased because it is a keyword or builtin."
+            )
+
+    @property
+    def shell(self):
+        return get_ipython()
+
+    def __repr__(self):
+        return f"<Alias: {self.name!r} for {self.cmd!r}>"
+
+    def __call__(self, rest=''):
+        cmd = self.cmd
+        nargs = self.nargs
+        # Expand the %l special to be the user's input line
+        if cmd.find('%l') >= 0:
+            cmd = cmd.replace('%l', rest)
+            rest = ''
+
+        if nargs == 0:
+            if cmd.find('%%s') >= 1:
+                cmd = cmd.replace('%%s', '%s')
+            # Simple, argument-less aliases
+            cmd = '%s %s' % (cmd, rest)
+        else:
+            # Handle aliases with positional arguments
+            args = rest.split(None, nargs)
+            if len(args) < nargs:
+                raise UsageError('Alias <%s> requires %s arguments, %s given.' %
+                                 (self.name, nargs, len(args)))
+            cmd = '%s %s' % (cmd % tuple(args[:nargs]), ' '.join(args[nargs:]))
+
+        self.shell.system(cmd)
+
+
 class CommonAliases(UserDict):
-    r"""Add aliases common to all OSes. Overwhelmingly :command:`Git` aliases.
+    r"""Aliases that are usable on any major platform.
 
-    This method adds around 100 aliases that can be
-    implemented on most of the major platforms.
+    Aliases are added by calling the :meth:`update` method which will add
+    aliases to the attribute *dict_aliases*.
 
-    The only real requirement is Git being installed and working. Docker
-    commands possibly going to be added.
-
-    .. todo:: :command:`git show`
-
-    .. todo:: The class method doesn't work if we don't have a class attribute.
-
-        But if we create a class attribute, does updating the aliases for an instance
-        change it for subclasses? Write a test to ensure that this isn't what
-        happens.
-
+    In addition, note that the definition for updating indicates that the
+    class `update`s aliases and will `add` other instances.
     """
 
     shell = get_ipython()
@@ -59,9 +140,23 @@ class CommonAliases(UserDict):
 
     @property
     def alias_manager(self):
+        """The 'alias_manager' attribute of |ip|."""
         return self.shell.alias_manager
 
     def define_alias(self, name, cmd):
+        """Define a new alias.
+
+        Examples
+        --------
+        ::
+
+            In [54]: pkg?
+            Repr: <alias pkg for 'pkg'>
+            In [55]: aliases + ('pkg', 'pkg list-a')
+            In [56]: pkg?
+            Repr: <alias pkg for 'pkg list-a'>
+
+        """
         caller = Alias(shell=self.shell, name=name, cmd=cmd)
         try:
             self.shell.magics_manager.register_function(
@@ -72,6 +167,12 @@ class CommonAliases(UserDict):
 
     def is_alias(self, name):
         return name in self.dict_aliases
+
+    def soft_define_alias(self, name, cmd):
+        """Define a new alias and don't raise an error on an invalid alias.
+
+        """
+        self.alias_manager.soft_define_alias(name, cmd)
 
     def undefine_alias(self, name):
         """Override to raise AliasError not ValueError.
@@ -84,25 +185,31 @@ class CommonAliases(UserDict):
         else:
             raise AliasError("%s is not an alias" % name)
 
-    def _generator(self):
-        """Properly map aliases as dictionaries.
-
-        As stated in the language reference under Common Sequence Operations.:
-
-            Concatenating immutable sequences always results in a new object.
-            This means that building up a sequence by repeated concatenation
-            will have a quadratic runtime cost in the total sequence length.
-            To get a linear runtime cost, you must switch to one of the
-            alternatives below:
-
-                - **If concatenating tuple objects, extend a list instead.**
-
-        """
-        for itm in self.dict_aliases:
-            yield itm
-
     def __repr__(self):  # reprlib?
         return "<Common Aliases>: # of aliases: {!r} ".format(len(self.dict_aliases))
+
+    def update(self, other):
+        """Update the mapping of aliases to system commands.
+
+        Ensure that this is properly defined as this can be critical for speed.
+
+
+        If a TypeError is raised by doing so then attempt to pass the alias along
+        to the shell's `AliasManager` with `soft_define_alias`.
+        """
+        try:
+            self.dict_aliases.update(other)
+        except TypeError:
+            self.soft_define_alias(alias)
+
+    def __copy__(self):
+        return copy.copy(self.aliases)
+
+    def __contains__(self, other):
+        return other in self.dict_aliases
+
+    def __iter__(self):
+        return iter(self.dict_aliases.items())
 
     def __add__(self, other, name=None, cmd=None, *args):
         """Allow instances to be added."""
@@ -121,23 +228,6 @@ class CommonAliases(UserDict):
     def __len__(self):
         return len(self.dict_aliases)
 
-    def __iadd__(self, other, name=None, cmd=None, *args):
-        # I think i made this as flexible as possible. Cross your fingers.
-        self.__add__(other, name=name,cmd=cmd, *args)
-
-    def __copy__(self):
-        return copy.copy(self.aliases)
-
-    def __contains__(self, other):
-        return name in self.dict_aliases
-
-    def __iter__(self):
-        return iter(self.dict_aliases.items())
-
-    # which one?
-    # def __iter__(self):
-    #     return self._generator()
-
     def __next__(self):
         max = len(self)
         if max >= self.idx:
@@ -147,8 +237,15 @@ class CommonAliases(UserDict):
         self.idx += 1
         return self.dict_aliases[self.idx]
 
-    # def __getitem__(self, index):
-    #     return operator.getitem(self.kb.bindings, index)
+    def __getitem__(self, index):
+        return operator.getitem(self.kb.bindings, index)
+
+    def len(self):
+        return self.__len__()
+
+    def add(self, aliases):
+        for i in aliases:
+            self.__add__(i)
 
     # def __getattr__(self, attr):
     #     return getattr(self, attr)
@@ -164,14 +261,7 @@ class CommonAliases(UserDict):
         return ret
 
     def unalias(self, alias):
-        """Remove an alias.
-
-
-        Parameters
-        ----------
-        alias : Alias to remove
-
-        """
+        """Remove an alias."""
         self.shell.run_line_magic("unalias", alias)
 
     def user_shell(self):
@@ -227,57 +317,6 @@ class CommonAliases(UserDict):
             from shutil import chown
 
     def git(self):
-        """100+ git aliases.
-
-        Notes
-        -----
-        Aliases of note.
-
-        - gcls: git clone [url]
-
-            - This uses the ``%s`` argument to indicate it requires 1 and only 1 argument as git clone does
-
-            - Note this is in contrast to gcl, or git clone, as that can have additional options specified
-
-        - gcim: git commit --message [message]
-
-            - Also uses ``%s``
-
-        Unless otherwise noted every alias uses ``%l`` to allow the user to specify
-        any relevant options or flags on the command line as necessary.
-
-        Returns
-        -------
-        user_aliases : A list of tuples
-            The format of IPython aliases got taken it's logical conclusion
-            and probably pushed a little further than that.
-
-            In order to make new subcommands in a way similar to how git allows
-            one to come up with aliases, I first tried using whitespace in
-            the alias.::
-
-                ('git last', 'git log -1 HEAD %l')
-
-            However that simply registers the word ``git`` as an alias and then
-            sends ``git last`` to the underlying shell, which it may or may
-            not recognize.
-
-            Therefore I tried using a hyphen to separate the words, but the
-            python interpreter uses hyphens as well as whitespace to separate
-            keywords, and as a result, would split the alias in the middle of
-            the command.
-
-        Examples
-        --------
-        ::
-
-            In [58]: %git_staged?
-            Object `staged` not found.
-
-            In [60]: %git_staged?
-            Object `%git_staged` not found.
-
-        """
         self.user_aliases += [
             ("g", "git diff --staged --stat %l"),
             ("ga", "git add -v %l"),
@@ -722,8 +761,10 @@ if __name__ == "__main__":
     # that makes operations a lot easier to perform
     for i in all_aliases:
         try:
-            all_aliases.define_alias(*i)
+            # so this expression here is how we now we didn't properly separate responsibilities
+            all_aliases.soft_define_alias(*i)
         except InvalidAliasError:
             raise
 
     get_ipython().run_line_magic("alias_magic", "p pycat")
+    get_ipython().alias_manager.define_alias("fzf", "fzf-tmux")

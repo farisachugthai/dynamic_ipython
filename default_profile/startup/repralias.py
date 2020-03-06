@@ -78,8 +78,8 @@ class ReprAlias(reprlib.Repr):
             raise
 
     def __index__(self, other):
-        """I  think the difference is ``__getitem__`` ==> ReprAlias['ls']
-        and ``__index__`` ==> ReprAlias[0]."""
+        # I think the difference is ``__getitem__`` ==> ReprAlias['ls']
+        # and ``__index__`` ==> ReprAlias[0].
         return index(self.keys(), other)
 
     def keys(self):
@@ -104,6 +104,7 @@ class ReprAlias(reprlib.Repr):
         return {i[0]: i[1] for i in list_of_tuples}
 
     def __len__(self):
+        """Length of 'aliases_dict'."""
         return len(self.aliases_dict)
 
     def __repr__(self):
@@ -116,47 +117,8 @@ class ReprAlias(reprlib.Repr):
         )
 
     def define_alias(self, alias):
+        """Dispatch to the running IPython's AliasManager to define an alias."""
         self.alias_manager.define_alias(alias)
-
-    def soft_define_alias(self, alias):
-        """Define a new alias and don't raise an error on an invalid alias.
-
-        Examples
-        --------
-        ::
-
-            In [54]: pkg?
-            Repr: <alias pkg for 'pkg'>
-            In [55]: aliases + ('pkg', 'pkg list-a')
-            In [56]: pkg?
-            Repr: <alias pkg for 'pkg list-a'>
-
-        """
-        self.alias_manager.soft_define_alias(*alias)
-
-    def __add__(self, alias):
-        self.soft_define_alias(alias)
-
-    def __iadd__(self, alias):
-        self.soft_define_alias(alias)
-
-    def __copy__(self):
-        return copy.copy(self.aliases)
-
-    def __contains__(self, other):
-        return other in self.aliases_dict
-
-    def __iter__(self):
-        return iter(self.aliases_dict.items())
-
-    def __next__(self):
-        max = len(self)
-        if max >= self.idx:
-            # Reset the loop and raise stopiteration
-            self.idx = 0
-            raise StopIteration
-        self.idx += 1
-        return self.aliases_dict[self.idx]
 
 
 class AliasedCmd(Alias):

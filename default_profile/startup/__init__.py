@@ -11,11 +11,17 @@ and is used frequently enough to warrant being in the package's ``__init__``.
 """
 import importlib
 import logging
-import sys
-
 from importlib.util import find_spec
-from importlib.machinery import SourceFileLoader, FileFinder
-from importlib.resources import Package, Resource
+try:
+    from importlib.machinery import SourceFileLoader, FileFinder
+except ImportError:
+    SourceFileLoader = FileFinder = None
+
+try:
+    from importlib.resources import Package, Resource
+except ImportError:
+    Package = Resource = None
+
 
 import default_profile
 from default_profile import QueueHandler

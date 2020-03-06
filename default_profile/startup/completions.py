@@ -39,17 +39,14 @@ from jedi.api.environment import (
 
 from IPython.core.getipython import get_ipython
 from IPython.terminal.ptutils import IPythonPTCompleter
-
 from prompt_toolkit.auto_suggest import AutoSuggestFromHistory, ThreadedAutoSuggest
-from prompt_toolkit.completion import WordCompleter
-from prompt_toolkit.completion.base import (
-    DynamicCompleter,
-    Completer,
+from prompt_toolkit.completion import (
     CompleteEvent,
-    Completion,
     ThreadedCompleter,
+    WordCompleter
 )
 from prompt_toolkit.completion.filesystem import ExecutableCompleter, PathCompleter
+from prompt_toolkit.completion.base import DynamicCompleter, Completion, Completer
 from prompt_toolkit.completion.fuzzy_completer import FuzzyWordCompleter, FuzzyCompleter
 from prompt_toolkit.document import Document
 from prompt_toolkit.eventloop import generator_to_async_generator
@@ -63,9 +60,7 @@ class SimpleCompleter(Completer):
     fallbacks in case of being called incorrectly, rather adding
     dozens of assert statements.
     """
-
-    def __init__(self, shell=None, min_input_len=0, completer=None, *args, **kwargs):
-
+    def __init__(self, shell=None, completer=None, min_input_len=0, *args, **kwargs):
         self.shell = shell or get_ipython()
         if not completer:
             self.completer = WordCompleter(
@@ -88,7 +83,7 @@ class SimpleCompleter(Completer):
         """Instance of `prompt_toolkit.document.Document`."""
         return self.shell.pt_app.app.current_buffer.document
 
-    def get_completions(self, doc=None, complete_event=None):
+    def get_completions(self, complete_event, doc=None):
         """For now lets not worry about CompleteEvent too much.
 
         But we will need to add a get_async_completions method.
@@ -104,10 +99,8 @@ class SimpleCompleter(Completer):
         # heavy.
         if len(doc.text) < self.min_input_len:
             return
-
-        if complete_event is None:
-            complete_event = CompleteEvent()
-
+        if not doc.current_line.strip():
+            return
         yield self.completer.get_completions(
             document=doc, complete_event=complete_event
         )
@@ -121,6 +114,10 @@ class SimpleCompleter(Completer):
         self, document: Document, complete_event: CompleteEvent
     ) -> AsyncGenerator[Completion, None]:
         """Asynchronous generator of completions."""
+        if len(doc.text) < self.min_input_len:
+            return
+        if not doc.current_line.strip():
+            return
         async for completion in generator_to_async_generator(
             lambda: self.completer.get_completions(document, complete_event)
         ):
@@ -324,6 +321,5 @@ if __name__ == "__main__":
         # yeah but otherwise destroys your ability to scroll backwards
         # session.refresh_interval = 0.5
         session.auto_suggest = ThreadedAutoSuggest(AutoSuggestFromHistory())
-
         # not there because no event loop but  we're so close
         # session.completer = combined_completers

@@ -25,34 +25,33 @@ readline library[1], or you can use a different Python distribution
 [1]: http://pypi.python.org/pypi/readline
 """
 import atexit
-from pydoc import pager
+import builtins
+import cgitb
+import functools
+import inspect
 from inspect import findsource, getmodule, getsource, getsourcefile
-import re
+from io import StringIO
 import linecache
 from linecache import cache
-from pathlib import Path
 import logging
-import cgitb
+import os
+from pathlib import Path
 import types
 import pydoc
-import inspect
+from pydoc import pager
 import pprint
-import os
+import re
 import shutil
 import sys
 
+logging.basicConfig(level=logging.WARNING)
 cgitb.enable(format="text")
 
 try:
     import readline
-    import rlcompleter
 except ImportError:
-    sys.stderr.write("readline unavailable - tab completion disabled.\n")
-
-try:
-    from io import StringIO
-except ImportError:
-    pass
+    logging.error("readline unavailable - tab completion disabled.\n")
+    readline = None
 
 try:
     from pygments import highlight
@@ -62,12 +61,15 @@ except ImportError:
     pass
 
 try:
-    import __builtin__
-except ImportError:
-    import builtins as __builtin__
+    import jedi
+except:
+    jedi = None
+else:
+    from jedi.api import replstartup
 
 
-def s(param):
+def pyg_highlight(param):
+    """Run a string through the pygments highlighter."""
     return highlight(param, PythonLexer(), TerminalFormatter())
 
 
@@ -82,52 +84,74 @@ def complete(text, state):
 
 def _pythonrc_enable_readline():
     """Enable readline, tab completion, and history"""
-
     readline.parse_and_bind("tab: complete")
     readline.set_completer(complete)
 
 
-def _pythonrc_enable_history():
-    # "NOHIST= python" will disable history
-    if "NOHIST" in os.environ:
+has_written = False
+
+
+def write_history(history_path):
+    if readline is None:
         return
-    history_path = Path("~/.history/python").expanduser()
+    readline.write_history_file(history_path)
+    logging.info("Written history to %s" % history_path)
+    has_written = True
 
-    has_written = [False]
 
-    def write_history():
-        if not has_written[0]:
-            readline.write_history_file(history_path)
-            print("Written history to %s" % history_path)
-            has_written[0] = True
+def _pythonrc_enable_history():
+    """Register readline's history functions with atexit.
 
-    atexit.register(write_history)
-
+    "NOHIST= python" will disable history.
+    """
+    if os.environ.get("NOHIST"):
+        return
+    if readline is None:
+        return
+    history_path = Path("~/.python_history").expanduser()
+    if not history_path.exists():
+        history_path.touch()
     if os.path.isfile(history_path):
         try:
             readline.read_history_file(history_path)
-        except IOError:
+        except OSError:
             pass
 
+    if not has_written:
+        write_history(history_path)
+    atexit.register(write_history, history_path)
     readline.set_history_length(-1)
+
+
+def pphighlight(o, *a, **kw):
+    """Lex a `pprint.pformat`ted string, pass it through `pyg_highlight` then rerun it through pygments.highlight."""
+    s = pprint.pformat(o, *a, **kw)
+    try:
+        sys.stdout.write(highlight(s, PythonLexer(), TerminalFormatter()))
+    except UnicodeError:
+        sys.stdout.write(s)
+        sys.stdout.write("\n")
+
+
+def highlighter(func, *args, **kwargs):
+    """Decorator to run a function through `pphighlight`."""
+
+    @functools.wraps
+    def _():
+        return pphighlight(func, *args, **kwargs)
+
+
+def get_width():
+    return shutil.get_terminal_size()[1]
 
 
 def _pythonrc_enable_pprint():
     """Enable pretty printing of evaluated expressions"""
 
-    def pphighlight(o, *a, **kw):
-        s = pprint.pformat(o, *a, **kw)
-        try:
-            sys.stdout.write(highlight(s, PythonLexer(), TerminalFormatter()))
-        except UnicodeError:
-            sys.stdout.write(s)
-            sys.stdout.write("\n")
-
     _old_excepthook = sys.excepthook
 
     def excepthook(exctype, value, traceback):
         """Prints exceptions to sys.stderr and colorizes them"""
-
         # traceback.format_exception() isn't used because it's
         # inconsistent with the built-in formatter
         old_stderr = sys.stderr
@@ -136,7 +160,9 @@ def _pythonrc_enable_pprint():
             _old_excepthook(exctype, value, traceback)
             stderror = sys.stderr.getvalue()
             try:
-                ret = s(stderror, PythonTracebackLexer(), TerminalFormatter())
+                ret = pyg_highlight(
+                    stderror, PythonTracebackLexer(), TerminalFormatter()
+                )
             except UnicodeError:
                 pass
                 old_stderr.write(ret)
@@ -161,22 +187,18 @@ def _pythonrc_enable_pprint():
         help_types.append(types.UnboundMethodType)
     help_types = tuple(help_types)
 
-    def get_width():
-        return shutil.get_terminal_size()[1]
-
     if hasattr(inspect, "getfullargspec"):
         getargspec = inspect.getfullargspec
     else:
         getargspec = inspect.getargspec
 
     def pprinthook(value):
-        """Pretty print an object to sys.stdout and also save it in
-        __builtin__.
+        """Pretty print an object to sys.stdout and also save it in the sys.displayhook.
         """
 
         if value is None:
             return
-        __builtin__._ = value
+        builtins._ = value
 
         if isinstance(value, help_types):
             reprstr = repr(value)
@@ -322,29 +344,15 @@ def source(obj):
 
 
 if __name__ == "__main__":
-
-    # Make sure modules in the current directory can't interfere
-    try:
-        cwd = sys.path.index("")
-        sys.path.pop(cwd)
-    except ValueError:
-        cwd = None
-
     sys.ps1 = "\001\033[0;32m\002>>> \001\033[1;37m\002"
     sys.ps2 = "\001\033[1;31m\002... \001\033[1;37m\002"
 
     # Run installation functions and don't taint the global namespace
     try:
-        try:
-            import jedi.utils
-
-            jedi.utils.setup_readline()
-        except:
-            print("No jedi here. Coming to the dark side.")
-            _pythonrc_enable_readline()
+        _pythonrc_enable_readline()
         _pythonrc_enable_history()
         _pythonrc_enable_pprint()
         _pythonrc_fix_linecache()
     finally:
-        if cwd is not None:
-            sys.path.insert(cwd, "")
+        if os.path.curdir is not None:
+            sys.path.insert(0, os.path.curdir)

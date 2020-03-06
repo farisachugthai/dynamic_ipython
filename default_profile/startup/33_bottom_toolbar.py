@@ -295,8 +295,6 @@ if __name__ == "__main__":
     # bottom_formatted_text = FormattedText(
     #     BottomToolbar(get_app()), style=("class:toolbar", "underline #80a0ff")
     # )
-
-    # Back to our usual program
     bottom_text = BottomToolbar(get_app())
     partial_window = Window(
         FormattedTextControl(bottom_text), width=60, height=3, style=pygments_style

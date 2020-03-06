@@ -40,6 +40,7 @@ from prompt_toolkit.key_binding.key_bindings import KeyBindings
 from prompt_toolkit.layout.containers import HSplit, Window
 from prompt_toolkit.layout.controls import BufferControl
 from prompt_toolkit.styles import Style
+from prompt_toolkit.styles.pygments import style_from_pygments_cls
 from prompt_toolkit.widgets.toolbars import SearchToolbar
 from prompt_toolkit.layout.processors import (
     ConditionalProcessor,
@@ -51,6 +52,9 @@ from prompt_toolkit.layout.processors import (
     DisplayMultipleCursors,
 )
 from IPython.core.getipython import get_ipython
+
+from pygments.styles.inkpot import InkPotStyle
+
 
 DEDENT_TOKENS = frozenset(["raise", "return", "pass", "break", "continue"])
 
@@ -133,12 +137,36 @@ class Helpers:
         return self.pt_app.style
 
     @property
+    def editing_mode(self):
+        """Thankfully the same on a PromptSession and Application.
+
+        In [5]: _ip.pt_app.editing_mode
+        Out[5]: <EditingMode.VI: 'VI'>
+
+        In [6]: _ip.pt_app.app.editing_mode
+        Out[6]: <EditingMode.VI: 'VI'>
+        """
+        return self.session.editing_mode
+
+    @property
     def session_style(self):
         return self.session.style
 
     @property
     def current_buffer(self):
+        """Current buffer as returned by the layout property."""
         return self.layout.current_buffer
+
+    @property
+    def current_buffer_app(self):
+        """Current buffer a returned by the App. Doesn't exist on the PromptSession."""
+        return self.session.current_buffer
+
+    # todo:
+    # In [3]: _ip.pt_app.validator
+
+    # In [4]: _ip.pt_app.app.validator
+    # AttributeError: 'Application' object has no attribute 'validator'
 
     @property
     def current_container(self):
@@ -224,6 +252,49 @@ class Helpers:
     def all_controls(self):
         return list(self.layout.find_all_controls())
 
+    @property
+    def app_renderer(self):
+        """Note that session doesn't have this attribute."""
+        return self.pt_app.renderer
+
+    @property
+    def renderer_output(self):
+        """The output attribute from the `prompt_toolkit.renderer.Renderer`.
+
+        Examples
+        --------
+        ::
+
+            In [9]: h = Helpers()
+
+            In [10]: h.session.output
+            Out[10]: <prompt_toolkit.output.windows10.Windows10_Output at 0x240ff55b460>
+
+            In [11]: h.pt_app.output
+            Out[11]: <prompt_toolkit.output.windows10.Windows10_Output at 0x240ff55b460>
+
+            In [12]: h.session.input
+            Out[12]: <prompt_toolkit.input.win32.Win32Input at 0x240ff722050>
+
+            In [13]: h.pt_app.input
+            Out[13]: <prompt_toolkit.input.win32.Win32Input at 0x240ff722050>
+
+        """
+        return self.app_renderer.output
+
+    def current_buffer_lines(self):
+        """Effectively a full history of every command I've run across sessions.
+
+        This is crazy to look at and I don't know where it's storing this
+        persistent info.
+
+        Returns
+        -------
+        _working_lines : lines
+
+        """
+        return self.current_buffer._working_lines
+
 
     def app_context(self):
         """What is this?
@@ -257,10 +328,15 @@ def all_processors_for_searching():
 
 
 def search_layout():
-    """Generate a `Layout` with a `SearchToolbar` and keybindings."""
+    """Generate a `Layout` with a `SearchToolbar` and keybindings.
+
+    Notes
+    ------
+    Windows require their `content` arguments to have a method `reset`.
+
+    """
     all_input_processors = all_processors_for_searching()
-    search_toolbar = SearchToolbar(vi_mode=True)
-    # style = Style([("incsearch", "fg:ansibrightcyan reverse")])
+    search_toolbar = SearchToolbar("Search Toolbar", vi_mode=True)
     control = BufferControl(
         Buffer(document=Document(), read_only=True),
         search_buffer_control=search_toolbar.control,
@@ -268,9 +344,12 @@ def search_layout():
         include_default_input_processors=False,
         input_processors=all_processors_for_searching(),
     )
+    style = style_from_pygments_cls(InkPotStyle)
     # Apparently theres something wrong with the style other put it in the
     # HSplit constructor
-    container = HSplit([Window(control), search_toolbar])
+    buf_container = Window(control, style=style)
+    search_container = Window(search_toolbar, style=style)
+    container = HSplit([buf_container, search_container])
     return container
 
 
@@ -317,16 +396,18 @@ def create_searching_keybindings():
 
 
 if __name__ == "__main__":
-    pt = Helpers()
-    container_search = search_layout()
+    pt_helper = Helpers()
+    # container_search = search_layout()
 
     # Honestly I'm wary to do this but let's go for it
-    get_ipython().pt_app.app.key_bindings = merge_key_bindings(
-        [
-            get_ipython().pt_app.app.key_bindings,
-            load_vi_bindings(),
-            load_vi_search_bindings(),
-            load_auto_suggest_bindings(),  # these stopped getting added when i did this
-        ]
-    )
-    get_ipython().pt_app.app.key_bindings._update_cache()
+    if get_ipython() is not None:
+        all_kb = merge_key_bindings(
+            [
+                get_ipython().pt_app.app.key_bindings,
+                load_vi_bindings(),
+                load_vi_search_bindings(),
+                load_auto_suggest_bindings(),  # these stopped getting added when i did this
+            ]
+        )
+        get_ipython().pt_app.app.key_bindings = all_kb
+        get_ipython().pt_app.app.key_bindings._update_cache()

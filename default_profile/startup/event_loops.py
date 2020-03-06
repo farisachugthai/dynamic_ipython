@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import asyncio
-
 from asyncio.events import get_event_loop_policy
 
 try:
@@ -22,6 +21,7 @@ except ImportError:
         get_event_loop,
     )
 
+import logging
 import multiprocessing
 
 # from multiprocessing.process import current_process
@@ -135,6 +135,20 @@ async def system_command(command_to_run):
 
 
 if __name__ == "__main__":
+    # Me trying to shut the loggers up
+    if len(asyncio.log.logger.root.handlers) > 0:
+        asyncio.log.logger.root.handlers.pop()
+    if len(asyncio.log.logger.handlers) > 0:
+        asyncio.log.logger.handlers.pop()
+
+    asyncio.log.logger.setLevel(99)
+    asyncio.log.logger.root.setLevel(99)
+    if len(logging.root.handlers) > 0:
+        logging.root.handlers.pop()
+    logging.root.setLevel(99)
+    asyncio.log.logger.disabled = True
+    asyncio.log.logger.root.disabled = True
+
     event_policy = get_event_loop_policy()
     try:
         loop = get_running_loop()
@@ -142,4 +156,6 @@ if __name__ == "__main__":
         # sigh
         loop = event_policy.new_event_loop()
 
-    watcher = event_policy.get_child_watcher()
+    if not platform.platform().startswith("Win"):
+        # This raises a NotImplementedError on Windows
+        watcher = event_policy.get_child_watcher()

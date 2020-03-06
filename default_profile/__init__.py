@@ -49,7 +49,7 @@ default_traitlets_log_format = "[ %(name)s  %(relativeCreated)d ] %(highlevel)s 
 default_formatter = LevelFormatter(fmt=default_traitlets_log_format)
 
 # Pkg-resources:
-pkg_resources.declare_namespace(__name__)
+# pkg_resources.declare_namespace(os.path.abspath(__file__))
 
 
 
