@@ -20,8 +20,6 @@ Notes
 Therefore that function shouldn't be used anywhere in this file.
 
 """
-from traitlets.config.application import get_config, ApplicationError
-from traitlets.config.configurable import LoggingConfigurable, ConfigurableError
 import builtins
 import logging
 import os
@@ -31,8 +29,12 @@ import sys
 import traceback
 from pathlib import Path
 
+import IPython
 from IPython.core.release import version_info
 from IPython.terminal.prompts import ClassicPrompts
+from traitlets.config.application import get_config, ApplicationError
+from traitlets.config.configurable import LoggingConfigurable, ConfigurableError
+
 
 log_datefmt = "%Y-%m-%d %H:%M:%S"
 default_log_format = (
@@ -316,7 +318,7 @@ else:
 # c.InteractiveShell.enable_html_pager = False
 
 # Total length of command history
-c.InteractiveShell.history_length = 50000
+c.InteractiveShell.history_length = 5000
 
 # The number of saved history entries to be loaded into the history buffer at
 #  startup.
@@ -389,7 +391,7 @@ c.InteractiveShell.wildcards_case_sensitive = False
 # Switch modes for the IPython exception handlers.
 # Default: 'Context'
 # Choices: ['Context', 'Plain', 'Verbose', 'Minimal']
-c.InteractiveShell.xmode = "Minimal"
+c.InteractiveShell.xmode = "Verbose"
 
 # ----------------------------------------------------------------------------
 # TerminalInteractiveShell(InteractiveShell) configuration
@@ -446,23 +448,11 @@ c.TerminalInteractiveShell.editing_mode = "vi"
 # check IPython/core/usage.py
 # unfortunately this doesn't work yet. release isn't defined and idk where
 # they define it in the original file.
-# rewritten_banner_parts = [
-#     "Python %s\n" % sys.version.split("\n")[0],
-#     "IPython {version} ".format(version=release.version),
-# ]
 
-#  rewritten_banner = ''.join(rewritten_banner_parts)
-
-#  c.InteractiveShell.banner1 = rewritten_banner
+c.InteractiveShell.banner1 = "\n" + f"Python {sys.version!s}" + "\n" + f"IPython {IPython.core.release.version!s}" + "\n"
 
 # The part of the banner to be printed after the profile
 c.InteractiveShell.banner2 = ""
-
-c.TerminalInteractiveShell.banner1 = (
-    "Press Control-Y to paste from the system clipboard.\n"
-    "Press Control-Space or Control-@ to enter selection mode.\n"
-    "Press Control-W to cut to clipboard.\n"
-)
 
 # TODO: What is the API for traitlets.LazyConfigValue? It doesn't have a log method.
 # c.log("Editing Mode:\t {!s}".format(c.TerminalInteractiveShell.editing_mode))

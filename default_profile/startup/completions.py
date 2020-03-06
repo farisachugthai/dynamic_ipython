@@ -314,7 +314,7 @@ def create_pt_completers():
 
 if __name__ == "__main__":
     jedi.settings.add_bracket_after_function = False
-
+    jedi.settings.case_insensitive_completion = True
     default_project = get_default_project()
     combined_completers = create_pt_completers()
 

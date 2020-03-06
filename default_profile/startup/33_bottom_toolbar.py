@@ -10,6 +10,7 @@ other things that aren't utilized at all.
 import asyncio
 import functools
 import time
+import textwrap
 from datetime import date
 from pathlib import Path
 from shutil import get_terminal_size
@@ -39,9 +40,13 @@ from IPython.core.getipython import get_ipython
 from IPython.terminal.ptutils import IPythonPTLexer
 
 try:
-    from gruvbox.gruvbox import GruvboxStyle
+    from gruvbox import GruvboxStyle
 except ImportError:
     GruvboxStyle = None
+    from pygments.styles.inkpot import InkPotStyle
+    pygments_style = InkPotStyle
+else:
+    pygments_style = GruvboxStyle
 
 
 def get_app():
@@ -63,9 +68,13 @@ def init_style():
         return merge_styles([ours, default_pygments_style()])
 
 
-def show_header():
+def show_header(header_text=None):
+    if header_text is None:
+        header_text = textwrap.dedent("Press Control-Y to paste from the system clipboard.\n"
+    "Press Control-Space or Control-@ to enter selection mode.\n"
+    "Press Control-W to cut to clipboard.\n")
     # TODO: Should replace that text with somethin else
-    text_area = TextArea(get_ipython().banner, style="#ebdbb2")
+    text_area = TextArea(header_text, style="#ebdbb2")
     return Frame(text_area)
 
 
@@ -105,7 +114,6 @@ class BottomToolbar:
         """
         self.shell = get_ipython()
         self.app = app
-        # self.unfinished_toolbar = self.rerender()
         self.PythonLexer = PythonLexer()
         self.Formatter = TerminalTrueColorFormatter()
 
@@ -129,7 +137,7 @@ class BottomToolbar:
             yield i
 
     def __repr__(self):
-        return f"{self.rerender()!r}"
+        return f"<{self.__class__.__name__!r}:>"
 
     def __call__(self):
         return f"{self.rerender()}"
@@ -170,7 +178,7 @@ class BottomToolbar:
         # doing it this way only prints the words class:toolbar at the bottom
         # text = f" [F4] Vi: {current_vi_mode!r}  {date.today()!r}"
         # toolbar = [('class:toolbar', ' %s ' % text)]
-        toolbar = f" [F4] Vi: {current_vi_mode!r} -- cwd: {Path.cwd().stem!r} Clock: {time.ctime()!r}"
+        toolbar = f" [F4] Vi: {current_vi_mode!r} \ncwd: {Path.cwd().stem!r}\n Clock: {time.ctime()!r}"
         return toolbar
 
     def _render_emacs(self):
@@ -188,7 +196,8 @@ def add_toolbar(toolbar=None):
     _ip = get_ipython()
     if _ip is not None:
         if hasattr(_ip, "pt_app"):
-            _ip.pt_app.bottom_toolbar = toolbar
+            if _ip.pt_app.bottom_toolbar is None:
+                _ip.pt_app.bottom_toolbar = toolbar
 
 
 if __name__ == "__main__":
@@ -208,12 +217,27 @@ if __name__ == "__main__":
 
     # Back to our usual program
     bottom_text = BottomToolbar(get_app())
-    partial_window = Window(FormattedTextControl(bottom_text), width=10, height=2)
+    partial_window = Window(FormattedTextControl(bottom_text), width=60, height=3, style=pygments_style)
 
-    print_container(partial_window)
+    style=Style.from_dict({
+        'dialog': 'bg:#cdbbb3',
+        'button': 'bg:#bf99a4',
+        'checkbox': '#e8612c',
+        'dialog.body': 'bg:#a9cfd0',
+        'dialog shadow': 'bg:#c98982',
+        'frame.label': '#fcaca3',
+        'dialog.body label': '#fd8bb6',
+    })
+
+    example_style = Style.from_dict({
+        'dialog':             'bg:#88ff88',
+        'dialog frame.label': 'bg:#ffffff #000000',
+        'dialog.body':        'bg:#000000 #00ff00',
+        'dialog shadow':      'bg:#00aa00',
+    })
     # Do frames not return container objects? Because this line is raisin an error?
     # bottom_float = Float(Frame(partial_window, style="bg:#282828 #ffffff"), bottom=0)
     # print_container(bottom_float)
-    bottom_toolbar = FormattedTextToolbar(PygmentsTokens(bottom_text))
+    bottom_toolbar = FormattedTextToolbar(PygmentsTokens(bottom_text), style=style)
     add_toolbar(bottom_text)
     print_container(show_header())

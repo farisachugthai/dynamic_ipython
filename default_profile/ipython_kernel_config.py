@@ -7,33 +7,33 @@ from pathlib import Path
 from platform import platform
 
 from traitlets.config import get_config
+from IPython.core.getipython import get_ipython
+from ipykernel.zmqshell import ZMQShellDisplayHook
+from zmq.backend.cython.context import Context
 
 c = get_config()  # noqa
 
-kernel_logger = logging.getLogger(name=__name__)
+context = Context()
 
-log_datefmt = "%Y-%m-%d %H:%M:%S"
-# The date format used by logging formatters for %(asctime)s
-c.Application.log_datefmt = log_datefmt
-# The Logging format template
+def instantiate_kernel_logger():
+    kernel_logger = logging.getLogger(name=__name__)
+    log_datefmt = "%Y-%m-%d %H:%M:%S"
+    BASIC_FORMAT = "[%(created)f %(levelname)s ] %(module)s  %(message)s : "
+    kernel_formatter = logging.Formatter(fmt=BASIC_FORMAT, datefmt=log_datefmt)
+    kernel_logger.handlers = []
+    handler = logging.StreamHandler()
+    handler.setFormatter(kernel_formatter)
+    handler.setLevel(logging.WARNING)
+    kernel_logger.addHandler(handler)
+    kernel_logger.setLevel(logging.WARNING)
+    return kernel_logger
 
-BASIC_FORMAT = "[%(created)f %(levelname)s ] %(module)s  %(message)s : "
 
-kernel_formatter = logging.Formatter(fmt=BASIC_FORMAT, datefmt=log_datefmt)
-
-handler = logging.StreamHandler().setFormatter(kernel_formatter)
-kernel_logger.addHandler(handler)
-kernel_logger.setLevel(logging.WARNING)
-
-c.Application.log_format = BASIC_FORMAT
-
-# Set the log level by value or name.
-c.Application.log_level = 30
+logger = instantiate_kernel_logger()
 
 
 def get_home():
-    """Return :func:`pathlib.Path.home`.
-    """
+    """Return :func:`pathlib.Path.home`."""
     return Path.home()
 
 
@@ -69,7 +69,11 @@ else:
 # IPython: an enhanced interactive Python shell.
 
 # The importstring for the DisplayHook factory
-# c.IPKernelApp.displayhook_class = 'ipykernel.displayhook.ZMQDisplayHook'
+shell = get_ipython()
+if shell is not None:
+    zmq_display_hook = ZMQShellDisplayHook(shell)
+    c.IPKernelApp.displayhook_class = zmq_display_hook
+    # 'ipykernel.displayhook.ZMQDisplayHook'
 
 cur_platform = platform()
 if cur_platform.startswith("Win"):
@@ -137,7 +141,7 @@ c.IPythonKernel.help_links = [
 
 # Set this flag to False to deactivate the use of experimental IPython
 # completion APIs.
-c.IPythonKernel.use_experimental_completions = True
+c.IPythonKernel.use_experimental_completions = False
 
 # -----------------------------------------------------------------------------
 # InteractiveShell(SingletonConfigurable) configuration

@@ -100,30 +100,27 @@ def import_module(name, deprecated=False, *, required_on=()):
 
 
 # Both of these raises errors but i got them from the pytest website ....
-# def test_true_assertion(testdir):
-#     testdir.makepyfile(
-#         """
-#         def test_foo():
-#             assert True
-#     """
-#     )
-#     result = testdir.runpytest()
-#     result.assert_outcomes(failed=0, passed=1)
+def test_true_assertion(tmpdir):
+    tmpdir.makepyfile(
+        """
+        def test_foo():
+            assert True
+    """
+    )
+    result = tmpdir.runpytest()
+    result.assert_outcomes(failed=0, passed=1)
 
 
-# # Alternatively, it is possible to make checks based on the actual output of the termal using
-# # *glob-like* expressions:
+# Alternatively, it is possible to make checks based on the actual output of the termal using
+# *glob-like* expressions:
 
 
-# def test_true_assertion_2(testdir=None):
-#     if testdir is None:
-#         testdir = tmpdir()
-
-#     testdir.makepyfile(
-#         """
-#         def test_foo():
-#             assert False
-#     """
-#     )
-#     result = testdir.runpytest()
-#     result.stdout.fnmatch_lines(["*assert False*", "*1 failed*"])
+def test_true_assertion_2(tmpdir):
+    tmpdir.makepyfile(
+        """
+        def test_foo():
+            assert False
+    """
+    )
+    result = tmpdir.runpytest()
+    result.stdout.fnmatch_lines(["*assert False*", "*1 failed*"])

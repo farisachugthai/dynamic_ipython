@@ -247,6 +247,7 @@ def ipython_logger(shell=None):
         return
 
     # Setup for the logger
+    shell.logger.logmode = "append"
     log_dir = shell.profile_dir.log_dir
     fname = "log-" + time.strftime("%Y-%m-%d") + ".py"
     filename = os.path.join(log_dir, fname)

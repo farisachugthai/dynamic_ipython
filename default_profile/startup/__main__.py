@@ -30,10 +30,6 @@ except ImportError:
 from prompt_toolkit.shortcuts import print_formatted_text as print
 from IPython.core.getipython import get_ipython
 
-# Are you allowed to do this? This shit confuses me so much
-# Nope! Gotta figure out how relative imports and implicit imports work.
-# from . import STARTUP_LOGGER
-
 
 def exec_startup():
     """Be careful!!
@@ -51,7 +47,7 @@ def exec_dir(directory):
             exec(compile(open(i.name).read(), "<string>", "exec",), globals(), locals())
 
 
-if "__name__" == "__main":
+def startup():
     shell = get_ipython()
 
     if not shell:
@@ -103,3 +99,5 @@ if "__name__" == "__main":
             format_helpers.extract_stack(e)
 
 
+if "__name__" == "__main":
+    startup()
