@@ -152,7 +152,6 @@
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="kn">import</span> <span class="nn">asyncio</span>
-
 <span class="kn">from</span> <span class="nn">asyncio.events</span> <span class="kn">import</span> <span class="n">get_event_loop_policy</span>
 
 <span class="k">try</span><span class="p">:</span>
@@ -173,6 +172,7 @@
         <span class="n">get_event_loop</span><span class="p">,</span>
     <span class="p">)</span>
 
+<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">multiprocessing</span>
 
 <span class="c1"># from multiprocessing.process import current_process</span>
@@ -286,6 +286,20 @@
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># Me trying to shut the loggers up</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">asyncio</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">handlers</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">asyncio</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">handlers</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">asyncio</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">handlers</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">asyncio</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">handlers</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+
+    <span class="n">asyncio</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="mi">99</span><span class="p">)</span>
+    <span class="n">asyncio</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="mi">99</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">handlers</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">handlers</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="mi">99</span><span class="p">)</span>
+    <span class="n">asyncio</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">disabled</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">asyncio</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">disabled</span> <span class="o">=</span> <span class="kc">True</span>
+
     <span class="n">event_policy</span> <span class="o">=</span> <span class="n">get_event_loop_policy</span><span class="p">()</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">loop</span> <span class="o">=</span> <span class="n">get_running_loop</span><span class="p">()</span>
@@ -293,7 +307,9 @@
         <span class="c1"># sigh</span>
         <span class="n">loop</span> <span class="o">=</span> <span class="n">event_policy</span><span class="o">.</span><span class="n">new_event_loop</span><span class="p">()</span>
 
-    <span class="n">watcher</span> <span class="o">=</span> <span class="n">event_policy</span><span class="o">.</span><span class="n">get_child_watcher</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">platform</span><span class="o">.</span><span class="n">platform</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;Win&quot;</span><span class="p">):</span>
+        <span class="c1"># This raises a NotImplementedError on Windows</span>
+        <span class="n">watcher</span> <span class="o">=</span> <span class="n">event_policy</span><span class="o">.</span><span class="n">get_child_watcher</span><span class="p">()</span>
 </pre></div>
 
         </div>
@@ -301,7 +317,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Mar 04, 2020.
+      Last updated on Mar 05, 2020.
     </div>
   </body>
 </html>

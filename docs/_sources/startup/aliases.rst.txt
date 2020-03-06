@@ -1,7 +1,6 @@
 ==============
 System Aliases
 ==============
-.. highlight:: ipython
 
 .. currentmodule:: default_profile.startup.20_aliases
 
@@ -11,6 +10,15 @@ These aliases depend on the operating system used as Linux OSes will default
 to a :command:`bash` system shell, and Windows will have :command:`dosbatch` or
 :command:`powershell` shells.
 
+The Magic System
+================
+
+.. magic:: alias
+
+.. magic:: unalias
+
+This document will summarize the specific use of the `%alias` and `%unalias` 
+magics.
 
 .. _aliases-overview:
 
@@ -36,21 +44,10 @@ However on Windows, it is possible that the user has a shell that runs
 As a result, the environment variable :envvar:`COMSPEC` will be checked,
 and if present, that value is used.
 
-
-.. _aliases-notes:
-
-Notes
-------
-
-When writing aliases, an ``%alias`` definition can take various string
-placeholders. As per the official documentation:
-
-
 .. _aliases-attributes:
 
 Attributes
 ----------
-
 _ip : |ip|
     A global object representing the active IPython session.
     Contains varying packages as well as the current global namespace.
@@ -59,41 +56,40 @@ _ip : |ip|
 
 .. _aliases-parmeters:
 
-`%alias` magic
-==============
+Parameters
+----------
+:kbd:`%l` : Command-line argument.
+   The remainder of the user's input. Commonly referred to in the Jupyter
+   documentation as the remaining 'cell'.
+   You can use the ``%l`` specifier in an ``%alias`` definition
+   to represent the whole line when the alias is called.
+`%s` : Command line argument
+   A required positional parameter can be given to the alias.
 
-.. magic:: alias
 
-The official IPython documentation notes.:
+Variable Expansion
+==================
 
-.. ipython::
+From the official IPython documentation.::
 
-    In [2]: %alias bracket echo "Input in brackets: <%l>"
-    In [3]: bracket hello world
-    Input in brackets: <hello world>
+   In [2]: %alias bracket echo "Input in brackets: <%l>"
+   In [3]: bracket hello world
+   Input in brackets: <hello world>
 
 Note that we quote when in the configuration file but when running `%alias`
-interactively the syntax '`%alias` alias_name cmd' doesn't require quoting.
+interactively the syntax.::
+
+   %alias alias_name cmd
+
+Doesn't require quoting.
 
 Aliases expand Python variables just like system calls using :kbd:`!` 
 or :kbd:`!!` do: all expressions prefixed with :kbd:`$` get expanded.
 For details of the semantic rules, see :pep:`215`:
-
-This is the library used by IPython for variable expansion.
-
-Parameters
-----------
-
-``%l`` : Command-line argument.
-    You can use the ``%l`` specifier in an ``%alias`` definition
-    to represent the whole line when the alias is called.
+As this is the library used by IPython for variable expansion.
 
 Meaning that it behaves similarly to the parameter :kbd:`$*`
 in typical POSIX shells.
-
-Alternatively the parameter:
-``%s``
-can be given.
 
 .. seealso::
 
@@ -101,49 +97,11 @@ can be given.
        Module where the alias functionality for IPython is defined and the basic
        implementation scaffolded.
 
-
-Roadmap
---------
-
-Create a class with instance attributes for `sys.platform`.
-Break linux up like so::
-
-    class AliasOSAgnostic:
-
-        def __init__(self):
-            self._sys.platform = sys.platform().lower()
-
-        @property
-        def has_alias(self):
-            return ....
-
-    class LinuxAlias(AliasOSAgnostic):
-
-        def busybox(self):
-            aliases = [
-                ('cd', 'cd foo %l'),
-                ...
-                ('ls', 'ls -F --color=always %l)
-            ]
-
-        def standardubuntu(self):
-            aliases = [
-                ('ag', 'ag -l %l')
-                ('rg', 'way too many options')
-            ]
-
-Then maybe implement either a factory function or a factory manager but
-I haven't fleshed that part out in my head.
-
-This may have to take the back-burner as I reorganize the rest of
-the repo.
-
-I think that :command:`declare -f` could have a nice tie in to
-`inspect.is_function` or whatever.
+.. I think that :command:`declare -f` could have a nice tie in to
+   `inspect.is_function` or whatever.
 
 Linux Aliases
 -------------
-
 Aliases that have either:
 
 - Only been tested on Linux
@@ -167,9 +125,77 @@ Subsystem for Linux.
 
 .. _aliases-api-docs:
 
+API Docs
+--------
+
+.. class:: Alias(alias)
+
+   After a sufficient amount of time, the definition of an alias needed to be
+   built on, and a new alias class was defined in this module.
+
+   It is initialized with a mapping of 'name' to 'cmds'.
+
+
+.. class:: CommonAliases(dict=None)
+
+   A dictionary mapping aliases to system commands, this class implements most
+   of the functionality in the module.
+
+   .. method:: git
+
+      100+ git aliases.
+
+      Aliases of note.
+
+      - gcls: git clone [url]
+
+         - This uses the ``%s`` argument to indicate it requires 1 and only 1
+           argument as git clone does
+
+      - Note this is in contrast to gcl, or git clone, as that can have
+        additional options specified
+
+      - gcim: git commit --message [message]
+
+         - Also uses ``%s``
+
+      Unless otherwise noted every alias uses ``%l`` to allow the user to specify
+      any relevant options or flags on the command line as necessary.
+
+      Returns
+      -------
+      user_aliases : A list of tuples
+         The format of IPython aliases got taken it's logical conclusion
+         and probably pushed a little further than that.
+
+         In order to make new subcommands in a way similar to how git allows
+         one to come up with aliases, I first tried using whitespace in
+         the alias.::
+
+             ('git last', 'git log -1 HEAD %l')
+
+         However that simply registers the word ``git`` as an alias and then
+         sends ``git last`` to the underlying shell, which it may or may
+         not recognize.
+
+         Therefore I tried using a hyphen to separate the words, but the
+         python interpreter uses hyphens as well as whitespace to separate
+         keywords, and as a result, would split the alias in the middle of
+         the command.
+
+      Examples
+      --------
+      ::
+
+         In [58]: %git_staged?
+         Object `staged` not found.
+
+         In [60]: %git_staged?
+         Object `%git_staged` not found.
+
+
 Autogenerated Documentation
 ---------------------------
-.. magic:: unalias
 
 .. automodule:: default_profile.startup.20_aliases
    :synopsis: Generate OS specific aliases to aide in use as a system shell.

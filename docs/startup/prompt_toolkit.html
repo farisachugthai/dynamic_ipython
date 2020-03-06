@@ -845,6 +845,16 @@ Out[102]: True</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="default_profile.startup.ptoolkit.Helpers.editing_mode">
+<em class="property">property </em><code class="sig-name descname">editing_mode</code><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#Helpers.editing_mode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.Helpers.editing_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Thankfully the same on a PromptSession and Application.</p>
+<p>In [5]: _ip.pt_app.editing_mode
+Out[5]: &lt;EditingMode.VI: ‘VI’&gt;</p>
+<p>In [6]: _ip.pt_app.app.editing_mode
+Out[6]: &lt;EditingMode.VI: ‘VI’&gt;</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="default_profile.startup.ptoolkit.Helpers.session_style">
 <em class="property">property </em><code class="sig-name descname">session_style</code><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#Helpers.session_style"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.Helpers.session_style" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -852,7 +862,14 @@ Out[102]: True</p>
 <dl class="method">
 <dt id="default_profile.startup.ptoolkit.Helpers.current_buffer">
 <em class="property">property </em><code class="sig-name descname">current_buffer</code><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#Helpers.current_buffer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.Helpers.current_buffer" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Current buffer as returned by the layout property.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="default_profile.startup.ptoolkit.Helpers.current_buffer_app">
+<em class="property">property </em><code class="sig-name descname">current_buffer_app</code><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#Helpers.current_buffer_app"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.Helpers.current_buffer_app" title="Permalink to this definition">¶</a></dt>
+<dd><p>Current buffer a returned by the App. Doesn’t exist on the PromptSession.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="default_profile.startup.ptoolkit.Helpers.current_container">
@@ -934,6 +951,50 @@ anything by default in IPython!</p>
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="default_profile.startup.ptoolkit.Helpers.app_renderer">
+<em class="property">property </em><code class="sig-name descname">app_renderer</code><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#Helpers.app_renderer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.Helpers.app_renderer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Note that session doesn’t have this attribute.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="default_profile.startup.ptoolkit.Helpers.renderer_output">
+<em class="property">property </em><code class="sig-name descname">renderer_output</code><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#Helpers.renderer_output"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.Helpers.renderer_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>The output attribute from the <a class="reference external" href="https://python-prompt-toolkit.readthedocs.io/en/stable/pages/reference.html#prompt_toolkit.renderer.Renderer" title="(in prompt_toolkit v3.0.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">prompt_toolkit.renderer.Renderer</span></code></a>.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">9</span><span class="p">]:</span> <span class="n">h</span> <span class="o">=</span> <span class="n">Helpers</span><span class="p">()</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">10</span><span class="p">]:</span> <span class="n">h</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">output</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">10</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">windows10</span><span class="o">.</span><span class="n">Windows10_Output</span> <span class="n">at</span> <span class="mh">0x240ff55b460</span><span class="o">&gt;</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">11</span><span class="p">]:</span> <span class="n">h</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">output</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">11</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">windows10</span><span class="o">.</span><span class="n">Windows10_Output</span> <span class="n">at</span> <span class="mh">0x240ff55b460</span><span class="o">&gt;</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">12</span><span class="p">]:</span> <span class="n">h</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">input</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">12</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">input</span><span class="o">.</span><span class="n">win32</span><span class="o">.</span><span class="n">Win32Input</span> <span class="n">at</span> <span class="mh">0x240ff722050</span><span class="o">&gt;</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">13</span><span class="p">]:</span> <span class="n">h</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">input</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">13</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">input</span><span class="o">.</span><span class="n">win32</span><span class="o">.</span><span class="n">Win32Input</span> <span class="n">at</span> <span class="mh">0x240ff722050</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="default_profile.startup.ptoolkit.Helpers.current_buffer_lines">
+<code class="sig-name descname">current_buffer_lines</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#Helpers.current_buffer_lines"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.Helpers.current_buffer_lines" title="Permalink to this definition">¶</a></dt>
+<dd><p>Effectively a full history of every command I’ve run across sessions.</p>
+<p>This is crazy to look at and I don’t know where it’s storing this
+persistent info.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>_working_lines</strong></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>lines</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="default_profile.startup.ptoolkit.Helpers.app_context">
 <code class="sig-name descname">app_context</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#Helpers.app_context"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.Helpers.app_context" title="Permalink to this definition">¶</a></dt>
 <dd><p>What is this?</p>
@@ -965,6 +1026,8 @@ anything by default in IPython!</p>
 <dt id="default_profile.startup.ptoolkit.search_layout">
 <code class="sig-name descname">search_layout</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/ptoolkit.html#search_layout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.ptoolkit.search_layout" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a <code class="xref py py-obj docutils literal notranslate"><span class="pre">Layout</span></code> with a <code class="xref py py-obj docutils literal notranslate"><span class="pre">SearchToolbar</span></code> and keybindings.</p>
+<p class="rubric">Notes</p>
+<p>Windows require their <code class="xref py py-obj docutils literal notranslate"><span class="pre">content</span></code> arguments to have a method <code class="xref py py-obj docutils literal notranslate"><span class="pre">reset</span></code>.</p>
 </dd></dl>
 
 <dl class="function">
@@ -989,7 +1052,7 @@ a <a class="reference external" href="https://python-prompt-toolkit.readthedocs.
 dramatically speeds the completions up.</p>
 <dl class="class">
 <dt id="default_profile.startup.completions.SimpleCompleter">
-<em class="property">class </em><code class="sig-name descname">SimpleCompleter</code><span class="sig-paren">(</span><em class="sig-param">shell=None</em>, <em class="sig-param">min_input_len=0</em>, <em class="sig-param">completer=None</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/completions.html#SimpleCompleter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.completions.SimpleCompleter" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">SimpleCompleter</code><span class="sig-paren">(</span><em class="sig-param">shell=None</em>, <em class="sig-param">completer=None</em>, <em class="sig-param">min_input_len=0</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/completions.html#SimpleCompleter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.completions.SimpleCompleter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">prompt_toolkit.completion.base.Completer</span></code></p>
 <p>Building up a customized Completer using the prompt_toolkit API.</p>
 <p>Utilizes the <em>min_input_len</em> of the PathCompleter along with
@@ -998,7 +1061,7 @@ fallbacks in case of being called incorrectly, rather adding
 dozens of assert statements.</p>
 <dl class="method">
 <dt id="default_profile.startup.completions.SimpleCompleter.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">shell=None</em>, <em class="sig-param">min_input_len=0</em>, <em class="sig-param">completer=None</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/completions.html#SimpleCompleter.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.completions.SimpleCompleter.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">shell=None</em>, <em class="sig-param">completer=None</em>, <em class="sig-param">min_input_len=0</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/completions.html#SimpleCompleter.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.completions.SimpleCompleter.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -1014,7 +1077,7 @@ dozens of assert statements.</p>
 
 <dl class="method">
 <dt id="default_profile.startup.completions.SimpleCompleter.get_completions">
-<code class="sig-name descname">get_completions</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">doc=None</em>, <em class="sig-param">complete_event=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/completions.html#SimpleCompleter.get_completions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.completions.SimpleCompleter.get_completions" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_completions</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">complete_event</em>, <em class="sig-param">doc=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/completions.html#SimpleCompleter.get_completions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.completions.SimpleCompleter.get_completions" title="Permalink to this definition">¶</a></dt>
 <dd><p>For now lets not worry about CompleteEvent too much.</p>
 <p>But we will need to add a get_async_completions method.</p>
 <div class="admonition-todo admonition" id="id2">
@@ -1149,7 +1212,7 @@ integrated into the rest of the app.</p>
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Mar 04, 2020.
+      Last updated on Mar 05, 2020.
     </div>
   </body>
 </html>

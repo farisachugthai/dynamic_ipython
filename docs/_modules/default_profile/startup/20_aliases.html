@@ -151,36 +151,118 @@
 <h1>Source code for default_profile.startup.20_aliases</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;Create OS specific aliases to allow a user to use IPython anywhere.&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">UserDict</span>
+<span class="sd">&quot;&quot;&quot;Create OS specific aliases to allow a user to use IPython anywhere.</span>
+
+<span class="sd">Properly map aliases as dictionaries.</span>
+<span class="sd">As stated in the language reference under Common Sequence Operations.:</span>
+
+<span class="sd">.. compound::</span>
+
+<span class="sd">    Concatenating immutable sequences always results in a new object.</span>
+<span class="sd">    This means that building up a sequence by repeated concatenation</span>
+<span class="sd">    will have a quadratic runtime cost in the total sequence length.</span>
+<span class="sd">    To get a linear runtime cost, you must switch to one of the</span>
+<span class="sd">    alternatives below:</span>
+
+<span class="sd">        - **If concatenating tuple objects, extend a list instead.**</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">keyword</span>
 <span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">operator</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">import</span> <span class="nn">subprocess</span>
 <span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">UserDict</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Dict</span>
 
 <span class="kn">from</span> <span class="nn">IPython.core.alias</span> <span class="kn">import</span> <span class="n">AliasError</span><span class="p">,</span> <span class="n">InvalidAliasError</span><span class="p">,</span> <span class="n">default_aliases</span>
 <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 <span class="kn">from</span> <span class="nn">traitlets.config.application</span> <span class="kn">import</span> <span class="n">ApplicationError</span>
 
 
+<div class="viewcode-block" id="validate_alias"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.validate_alias">[docs]</a><span class="k">def</span> <span class="nf">validate_alias</span><span class="p">(</span><span class="n">alias</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">caller</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">magics_manager</span><span class="o">.</span><span class="n">magics</span><span class="p">[</span><span class="s1">&#39;line&#39;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">caller</span><span class="p">,</span> <span class="n">Alias</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">InvalidAliasError</span><span class="p">(</span><span class="s2">&quot;The name </span><span class="si">%s</span><span class="s2"> can&#39;t be aliased &quot;</span>
+                                    <span class="s2">&quot;because it is another magic command.&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cmd</span><span class="p">,</span> <span class="nb">str</span><span class="p">)):</span>
+        <span class="k">raise</span> <span class="n">InvalidAliasError</span><span class="p">(</span><span class="s2">&quot;An alias command must be a string, &quot;</span>
+                                <span class="s2">&quot;got: </span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">cmd</span><span class="p">)</span>
+
+    <span class="n">nargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cmd</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">cmd</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%%</span><span class="s1">s&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">nargs</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cmd</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;%l&#39;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">InvalidAliasError</span><span class="p">(</span><span class="s1">&#39;The </span><span class="si">%s</span><span class="s1"> and %l specifiers are mutually &#39;</span>
+                                <span class="s1">&#39;exclusive in alias definitions.&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">nargs</span></div>
+
+
+<div class="viewcode-block" id="Alias"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.Alias">[docs]</a><span class="k">class</span> <span class="nc">Alias</span><span class="p">(</span><span class="n">UserDict</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Callable object storing the details of one alias.</span>
+
+<span class="sd">    Reasonably this is the object that should be the UserDict. CommonAliases</span>
+<span class="sd">    makes more sense as a list of dicts.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">blacklist</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;dhist&#39;</span><span class="p">,</span> <span class="s1">&#39;alias&#39;</span><span class="p">,</span> <span class="s1">&#39;unalias&#39;</span><span class="p">]</span>
+    <span class="n">blacklist</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">keyword</span><span class="o">.</span><span class="n">kwlist</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Alias.__init__"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.Alias.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">cmd</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Validate the alias, and return the number of arguments.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmd</span> <span class="o">=</span> <span class="n">cmd</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">blacklist</span><span class="p">:</span>
+            <span class="c1"># Wait can we note that we didn&#39;t checkout the keyword list though.</span>
+            <span class="k">raise</span> <span class="n">InvalidAliasError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;The name </span><span class="si">{self.name}</span><span class="s2"> can&#39;t be aliased because it is a keyword or builtin.&quot;</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="Alias.shell"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.Alias.shell">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">shell</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">get_ipython</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;Alias: </span><span class="si">{self.name!r}</span><span class="s2"> for </span><span class="si">{self.cmd!r}</span><span class="s2">&gt;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rest</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cmd</span>
+        <span class="n">nargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nargs</span>
+        <span class="c1"># Expand the %l special to be the user&#39;s input line</span>
+        <span class="k">if</span> <span class="n">cmd</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;%l&#39;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="n">cmd</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;%l&#39;</span><span class="p">,</span> <span class="n">rest</span><span class="p">)</span>
+            <span class="n">rest</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+        <span class="k">if</span> <span class="n">nargs</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">cmd</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%%</span><span class="s1">s&#39;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">cmd</span> <span class="o">=</span> <span class="n">cmd</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%%</span><span class="s1">s&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="c1"># Simple, argument-less aliases</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">rest</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Handle aliases with positional arguments</span>
+            <span class="n">args</span> <span class="o">=</span> <span class="n">rest</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">nargs</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">nargs</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">UsageError</span><span class="p">(</span><span class="s1">&#39;Alias &lt;</span><span class="si">%s</span><span class="s1">&gt; requires </span><span class="si">%s</span><span class="s1"> arguments, </span><span class="si">%s</span><span class="s1"> given.&#39;</span> <span class="o">%</span>
+                                 <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">nargs</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)))</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span> <span class="o">%</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">args</span><span class="p">[:</span><span class="n">nargs</span><span class="p">]),</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="n">nargs</span><span class="p">:]))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div>
+
+
 <div class="viewcode-block" id="CommonAliases"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases">[docs]</a><span class="k">class</span> <span class="nc">CommonAliases</span><span class="p">(</span><span class="n">UserDict</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Add aliases common to all OSes. Overwhelmingly :command:`Git` aliases.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Aliases that are usable on any major platform.</span>
 
-<span class="sd">    This method adds around 100 aliases that can be</span>
-<span class="sd">    implemented on most of the major platforms.</span>
+<span class="sd">    Aliases are added by calling the :meth:`update` method which will add</span>
+<span class="sd">    aliases to the attribute *dict_aliases*.</span>
 
-<span class="sd">    The only real requirement is Git being installed and working. Docker</span>
-<span class="sd">    commands possibly going to be added.</span>
-
-<span class="sd">    .. todo:: :command:`git show`</span>
-
-<span class="sd">    .. todo:: The class method doesn&#39;t work if we don&#39;t have a class attribute.</span>
-
-<span class="sd">        But if we create a class attribute, does updating the aliases for an instance</span>
-<span class="sd">        change it for subclasses? Write a test to ensure that this isn&#39;t what</span>
-<span class="sd">        happens.</span>
-
+<span class="sd">    In addition, note that the definition for updating indicates that the</span>
+<span class="sd">    class `update`s aliases and will `add` other instances.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
@@ -209,9 +291,23 @@
 
 <div class="viewcode-block" id="CommonAliases.alias_manager"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.alias_manager">[docs]</a>    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">alias_manager</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The &#39;alias_manager&#39; attribute of |ip|.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">alias_manager</span></div>
 
 <div class="viewcode-block" id="CommonAliases.define_alias"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.define_alias">[docs]</a>    <span class="k">def</span> <span class="nf">define_alias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">cmd</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Define a new alias.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        ::</span>
+
+<span class="sd">            In [54]: pkg?</span>
+<span class="sd">            Repr: &lt;alias pkg for &#39;pkg&#39;&gt;</span>
+<span class="sd">            In [55]: aliases + (&#39;pkg&#39;, &#39;pkg list-a&#39;)</span>
+<span class="sd">            In [56]: pkg?</span>
+<span class="sd">            Repr: &lt;alias pkg for &#39;pkg list-a&#39;&gt;</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">caller</span> <span class="o">=</span> <span class="n">Alias</span><span class="p">(</span><span class="n">shell</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">cmd</span><span class="o">=</span><span class="n">cmd</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">magics_manager</span><span class="o">.</span><span class="n">register_function</span><span class="p">(</span>
@@ -222,6 +318,12 @@
 
 <div class="viewcode-block" id="CommonAliases.is_alias"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.is_alias">[docs]</a>    <span class="k">def</span> <span class="nf">is_alias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict_aliases</span></div>
+
+<div class="viewcode-block" id="CommonAliases.soft_define_alias"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.soft_define_alias">[docs]</a>    <span class="k">def</span> <span class="nf">soft_define_alias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">cmd</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Define a new alias and don&#39;t raise an error on an invalid alias.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">soft_define_alias</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">cmd</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="CommonAliases.undefine_alias"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.undefine_alias">[docs]</a>    <span class="k">def</span> <span class="nf">undefine_alias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Override to raise AliasError not ValueError.</span>
@@ -234,28 +336,31 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">AliasError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> is not an alias&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generator</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">_generator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Properly map aliases as dictionaries.</span>
-
-<span class="sd">        As stated in the language reference under Common Sequence Operations.:</span>
-
-<span class="sd">            Concatenating immutable sequences always results in a new object.</span>
-<span class="sd">            This means that building up a sequence by repeated concatenation</span>
-<span class="sd">            will have a quadratic runtime cost in the total sequence length.</span>
-<span class="sd">            To get a linear runtime cost, you must switch to one of the</span>
-<span class="sd">            alternatives below:</span>
-
-<span class="sd">                - **If concatenating tuple objects, extend a list instead.**</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">itm</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict_aliases</span><span class="p">:</span>
-            <span class="k">yield</span> <span class="n">itm</span>
-
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># reprlib?</span>
         <span class="k">return</span> <span class="s2">&quot;&lt;Common Aliases&gt;: # of aliases: </span><span class="si">{!r}</span><span class="s2"> &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dict_aliases</span><span class="p">))</span>
+
+<div class="viewcode-block" id="CommonAliases.update"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Update the mapping of aliases to system commands.</span>
+
+<span class="sd">        Ensure that this is properly defined as this can be critical for speed.</span>
+
+
+<span class="sd">        If a TypeError is raised by doing so then attempt to pass the alias along</span>
+<span class="sd">        to the shell&#39;s `AliasManager` with `soft_define_alias`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict_aliases</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">soft_define_alias</span><span class="p">(</span><span class="n">alias</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">__copy__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">aliases</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">other</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict_aliases</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dict_aliases</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
 
     <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Allow instances to be added.&quot;&quot;&quot;</span>
@@ -268,24 +373,6 @@
     <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dict_aliases</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__iadd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmd</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
-        <span class="c1"># I think i made this as flexible as possible. Cross your fingers.</span>
-        <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">cmd</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="n">AliasError</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">name</span><span class="p">,</span> <span class="n">cmd</span> <span class="o">=</span> <span class="n">args</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">define_alias</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">cmd</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">__copy__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">aliases</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict_aliases</span>
-
-    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dict_aliases</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
-
     <span class="k">def</span> <span class="fm">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">max</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">max</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="p">:</span>
@@ -295,10 +382,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">idx</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict_aliases</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span>
 
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">operator</span><span class="o">.</span><span class="n">getitem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kb</span><span class="o">.</span><span class="n">bindings</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
+
 <div class="viewcode-block" id="CommonAliases.len"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.len">[docs]</a>    <span class="k">def</span> <span class="nf">len</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__len__</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="CommonAliases.append"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.append">[docs]</a>    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aliases</span><span class="p">):</span>
+<div class="viewcode-block" id="CommonAliases.add"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aliases</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">aliases</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="fm">__add__</span><span class="p">(</span><span class="n">i</span><span class="p">)</span></div>
 
@@ -307,53 +397,6 @@
         <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span>
 
 <div class="viewcode-block" id="CommonAliases.tuple_to_dict"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.tuple_to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">tuple_to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">list_of_tuples</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Showcasing how to convert a tuple into a dict.</span>
-
-<span class="sd">        Nothing particularly hard, just a good exercise.</span>
-<span class="sd">        Also some good docstring practice!</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        color_templates : tuple of tuples</span>
-<span class="sd">        Each element maps ANSI escape codes to the colors they represent.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        Flattened dict : dict with {str: str} for each element</span>
-<span class="sd">            Maps exactly as intended and reduces a little of the nesting.</span>
-
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-<span class="sd">        ::</span>
-
-<span class="sd">            In [3]: tuple_to_dict(color_templates)</span>
-<span class="sd">            Out[14]:</span>
-<span class="sd">            {&#39;Black&#39;: &#39;0;30&#39;,</span>
-<span class="sd">            &#39;Red&#39;: &#39;0;31&#39;,</span>
-<span class="sd">            &#39;Green&#39;: &#39;0;32&#39;,</span>
-<span class="sd">            &#39;Brown&#39;: &#39;0;33&#39;,</span>
-<span class="sd">            &#39;Blue&#39;: &#39;0;34&#39;,</span>
-<span class="sd">            &#39;Purple&#39;: &#39;0;35&#39;,</span>
-<span class="sd">            &#39;Cyan&#39;: &#39;0;36&#39;,</span>
-<span class="sd">            &#39;LightGray&#39;: &#39;0;37&#39;,</span>
-<span class="sd">            &#39;DarkGray&#39;: &#39;1;30&#39;,</span>
-<span class="sd">            &#39;LightRed&#39;: &#39;1;31&#39;,</span>
-<span class="sd">            &#39;LightGreen&#39;: &#39;1;32&#39;,</span>
-<span class="sd">            &#39;Yellow&#39;: &#39;1;33&#39;,</span>
-<span class="sd">            &#39;LightBlue&#39;: &#39;1;34&#39;,</span>
-<span class="sd">            &#39;LightPurple&#39;: &#39;1;35&#39;,</span>
-<span class="sd">            &#39;LightCyan&#39;: &#39;1;36&#39;,</span>
-<span class="sd">            &#39;White&#39;: &#39;1;37&#39;,</span>
-<span class="sd">            &#39;BlinkBlack&#39;: &#39;5;30&#39;,</span>
-<span class="sd">            &#39;BlinkRed&#39;: &#39;5;31&#39;,</span>
-<span class="sd">            &#39;BlinkGreen&#39;: &#39;5;32&#39;,</span>
-<span class="sd">            &#39;BlinkYellow&#39;: &#39;5;33&#39;,</span>
-<span class="sd">            &#39;BlinkBlue&#39;: &#39;5;34&#39;,</span>
-<span class="sd">            &#39;BlinkPurple&#39;: &#39;5;35&#39;,</span>
-<span class="sd">            &#39;BlinkCyan&#39;: &#39;5;36&#39;,</span>
-<span class="sd">            &#39;BlinkLightGray&#39;: &#39;5;37&#39;}</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">a</span> <span class="o">=</span> <span class="n">list_of_tuples</span>
         <span class="k">if</span> <span class="n">a</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span>
@@ -364,14 +407,7 @@
         <span class="k">return</span> <span class="n">ret</span></div>
 
 <div class="viewcode-block" id="CommonAliases.unalias"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.unalias">[docs]</a>    <span class="k">def</span> <span class="nf">unalias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alias</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Remove an alias.</span>
-
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        alias : Alias to remove</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Remove an alias.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s2">&quot;unalias&quot;</span><span class="p">,</span> <span class="n">alias</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="CommonAliases.user_shell"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.user_shell">[docs]</a>    <span class="k">def</span> <span class="nf">user_shell</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -427,57 +463,6 @@
             <span class="kn">from</span> <span class="nn">shutil</span> <span class="kn">import</span> <span class="n">chown</span></div>
 
 <div class="viewcode-block" id="CommonAliases.git"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.git">[docs]</a>    <span class="k">def</span> <span class="nf">git</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;100+ git aliases.</span>
-
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">        Aliases of note.</span>
-
-<span class="sd">        - gcls: git clone [url]</span>
-
-<span class="sd">            - This uses the ``%s`` argument to indicate it requires 1 and only 1 argument as git clone does</span>
-
-<span class="sd">            - Note this is in contrast to gcl, or git clone, as that can have additional options specified</span>
-
-<span class="sd">        - gcim: git commit --message [message]</span>
-
-<span class="sd">            - Also uses ``%s``</span>
-
-<span class="sd">        Unless otherwise noted every alias uses ``%l`` to allow the user to specify</span>
-<span class="sd">        any relevant options or flags on the command line as necessary.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        user_aliases : A list of tuples</span>
-<span class="sd">            The format of IPython aliases got taken it&#39;s logical conclusion</span>
-<span class="sd">            and probably pushed a little further than that.</span>
-
-<span class="sd">            In order to make new subcommands in a way similar to how git allows</span>
-<span class="sd">            one to come up with aliases, I first tried using whitespace in</span>
-<span class="sd">            the alias.::</span>
-
-<span class="sd">                (&#39;git last&#39;, &#39;git log -1 HEAD %l&#39;)</span>
-
-<span class="sd">            However that simply registers the word ``git`` as an alias and then</span>
-<span class="sd">            sends ``git last`` to the underlying shell, which it may or may</span>
-<span class="sd">            not recognize.</span>
-
-<span class="sd">            Therefore I tried using a hyphen to separate the words, but the</span>
-<span class="sd">            python interpreter uses hyphens as well as whitespace to separate</span>
-<span class="sd">            keywords, and as a result, would split the alias in the middle of</span>
-<span class="sd">            the command.</span>
-
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-<span class="sd">        ::</span>
-
-<span class="sd">            In [58]: %git_staged?</span>
-<span class="sd">            Object `staged` not found.</span>
-
-<span class="sd">            In [60]: %git_staged?</span>
-<span class="sd">            Object `%git_staged` not found.</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">+=</span> <span class="p">[</span>
             <span class="p">(</span><span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="s2">&quot;git diff --staged --stat %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;ga&quot;</span><span class="p">,</span> <span class="s2">&quot;git add -v %l&quot;</span><span class="p">),</span>
@@ -917,33 +902,18 @@
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+    <span class="n">all_aliases</span> <span class="o">=</span> <span class="n">generate_aliases</span><span class="p">()</span>
+    <span class="c1"># our combined classes have an attribute dict_aliases</span>
+    <span class="c1"># that makes operations a lot easier to perform</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">all_aliases</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># so this expression here is how we now we didn&#39;t properly separate responsibilities</span>
+            <span class="n">all_aliases</span><span class="o">.</span><span class="n">soft_define_alias</span><span class="p">(</span><span class="o">*</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">InvalidAliasError</span><span class="p">:</span>
+            <span class="k">raise</span>
 
-    <span class="k">if</span> <span class="n">_ip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">all_aliases</span> <span class="o">=</span> <span class="n">generate_aliases</span><span class="p">()</span>
-        <span class="c1"># our combined classes have an attribute dict_aliases</span>
-        <span class="c1"># that makes operations a lot easier to perform</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">all_aliases</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">_ip</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">define_alias</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-            <span class="k">except</span> <span class="n">InvalidAliasError</span><span class="p">:</span>
-                <span class="k">raise</span>
-
-        <span class="n">_ip</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s2">&quot;alias_magic&quot;</span><span class="p">,</span> <span class="s2">&quot;p pycat&quot;</span><span class="p">)</span>
-
-    <span class="c1"># this doesnt log anything</span>
-<span class="c1">#     from default_profile.util.module_log import stream_logger</span>
-
-<span class="c1">#     ALIAS_LOGGER = stream_logger(</span>
-<span class="c1">#         logger=&quot;default_profile.startup.20_aliases&quot;,</span>
-<span class="c1">#         msg_format=(</span>
-<span class="c1">#             &quot;[ %(name)s  %(relativeCreated)d ] %(levelname)s %(module)s %(message)s &quot;</span>
-<span class="c1">#         ),</span>
-<span class="c1">#         log_level=logging.WARNING,</span>
-<span class="c1">#     )</span>
-
-<span class="c1">#     if _ip is not None:</span>
-<span class="c1">#         ALIAS_LOGGER.info(&quot;Number of aliases is: %s&quot; % all_aliases)</span>
+    <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s2">&quot;alias_magic&quot;</span><span class="p">,</span> <span class="s2">&quot;p pycat&quot;</span><span class="p">)</span>
+    <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">define_alias</span><span class="p">(</span><span class="s2">&quot;fzf&quot;</span><span class="p">,</span> <span class="s2">&quot;fzf-tmux&quot;</span><span class="p">)</span>
 </pre></div>
 
         </div>
@@ -951,7 +921,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Mar 04, 2020.
+      Last updated on Mar 05, 2020.
     </div>
   </body>
 </html>

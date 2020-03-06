@@ -150,6 +150,7 @@
         
 <h1>Source code for default_profile.startup.32_kb</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;Effectively me rewriting Prompt Toolkits keybindings handlers.&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">operator</span>
@@ -230,28 +231,11 @@
 <div class="viewcode-block" id="KeyBindingsManager.len"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.32_kb.KeyBindingsManager.len">[docs]</a>    <span class="k">def</span> <span class="nf">len</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__len__</span><span class="p">()</span></div>
 
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">6</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">reprlib</span><span class="o">.</span><span class="n">Repr</span><span class="p">()</span><span class="o">.</span><span class="n">repr_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kb</span><span class="o">.</span><span class="n">bindings</span><span class="p">,</span> <span class="n">level</span><span class="p">)</span>
-
     <span class="k">def</span> <span class="nf">__repr_pretty</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">cycle</span><span class="p">):</span>
         <span class="c1"># I don&#39;t know why it has that call signature</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{self.__class__.__name__}</span><span class="s2">:&gt; - {reprlib.recursive_repr(self.kb.bindings)}&quot;</span>
         <span class="p">)</span>
-
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Simply calls the str method until we figure something out.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;This file in general is gonna suck to test isn&#39;t it?&quot;&quot;&quot;</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kb</span><span class="o">.</span><span class="n">bindings</span><span class="p">):</span>
-                <span class="k">yield</span> <span class="n">i</span>
-        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
-            <span class="k">raise</span>  <span class="c1"># uhm idk</span>
-        <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
-            <span class="k">pass</span>
 
     <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">operator</span><span class="o">.</span><span class="n">getitem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kb</span><span class="o">.</span><span class="n">bindings</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
@@ -399,7 +383,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Mar 04, 2020.
+      Last updated on Mar 05, 2020.
     </div>
   </body>
 </html>
