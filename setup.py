@@ -96,6 +96,7 @@ EXTRAS = {
 }
 # }}}}
 
+
 class UploadCommand(Command):  # {{{
     """Support setup.py upload."""
 
@@ -125,88 +126,86 @@ class UploadCommand(Command):  # {{{
             logging.warning("Could not remove previous builds")
 
         self.status("Building Source and Wheel (universal) distribution...")
-
         # I really dislike the idea of forking a new process from python to make
         # a new python process....will this work the same way with exec(compile)?
         # os.system("{0} setup.py sdist bdist_wheel --universal".format(sys.executable))
         setup()
-
         self.status("Uploading the package to PyPI via Twine...")
         os.system("twine upload dist/*")
-
         self.status("Pushing git tags…")
         os.system("git tag v{0}".format(__version__))
         os.system("git push --tags")
-
         sys.exit()
 
 
 # }}}
 
-# Where the magic happens: {{{1
+# Where the magic happens: {{{
+try:
+    setup(
+        name=NAME,
+        version=VERSION,
+        description=DESCRIPTION,
+        long_description=LONG_DESCRIPTION,
+        long_description_content_type="text/restructuredtext",
+        python_requires=REQUIRES_PYTHON,
+        author=AUTHOR,
+        author_email=EMAIL,
+        maintainer=AUTHOR,
+        maintainer_email=EMAIL,
+        url=URL,
+        packages=find_packages(where="."),
+        # If your package is a single module, use this instead of 'packages':
+        # py_modules=['mypackage'],
+        # using this temporarily
+        entry_points={"console_scripts": ["ip=default_profile.startup.__main__:"],},
+        namespace_packages=["default_profile", "default_profile.sphinxext"],
+        install_requires=REQUIRED,
+        extras_require=EXTRAS,
+        test_suite="test",
+        include_package_data=True,
+        package_data={
+            # If any package contains *.txt or *.rst files, include them:
+            "": ["*.txt", "*.rst"],
+        },
+        license=LICENSE,
+        # https://www.python.org/dev/peps/pep-0345/#platform-multiple-use
+        # A Platform specification describing an operating system supported by the
+        # distribution which is not listed in the "Operating System" Trove
+        # classifiers. See "Classifier" below.#
+        # Platform='Linux',
+        classifiers=[
+            # Trove classifiers
+            # Full list: https://pypi.python.org/pypi?%3Aaction=list_classifiers
+            "Environment :: Console",
+            "Framework :: IPython",
+            "Framework :: Jupyter",
+            "Intended Audience :: Developers",
+            "License :: OSI Approved :: MIT License",
+            "Natural Language :: English",
+            "Operating System :: Android",
+            "Operating System :: Microsoft :: Windows :: Windows 10",
+            "Operating System :: POSIX:: Linux",
+            "Programming Language :: Python",
+            "Programming Language :: Python :: 3",
+            "Programming Language :: Python :: 3 :: Only",
+            "Programming Language :: Python :: 3.6",
+            "Programming Language :: Python :: 3.7",
+            "Programming Language :: Python :: 3.8",
+            "Programming Language :: Python :: Implementation :: CPython",
+        ],
+        # $ setup.py publish support.
+        cmdclass={"upload": UploadCommand,},
+        # project home page, if any
+        project_urls={
+            "Bug Tracker": "https://www.github.com/farisachugthai/dynamic_ipython/issues",
+            "Documentation": "https://farisachugthai.github.io/dynamic_ipython",
+            "Source Code": "https://www.github.com/farisachugthai/dynamic_ipython",
+        }
+        # could also include long_description, download_url, classifiers, etc.
+    )
+except (DistutilsArgError, SystemExit):
+    d.print_commands()
+# }}}
 
-setup(
-    name=NAME,
-    version=VERSION,
-    description=DESCRIPTION,
-    long_description=LONG_DESCRIPTION,
-    long_description_content_type="text/restructuredtext",
-    python_requires=REQUIRES_PYTHON,
-    author=AUTHOR,
-    author_email=EMAIL,
-    maintainer=AUTHOR,
-    maintainer_email=EMAIL,
-    url=URL,
-    packages=find_packages(where="."),
-    # If your package is a single module, use this instead of 'packages':
-    # py_modules=['mypackage'],
-    # using this temporarily
-    entry_points={
-        "console_scripts": ["ip=default_profile.profile_debugger:debug.main"],
-    },
-    install_requires=REQUIRED,
-    extras_require=EXTRAS,
-    test_suite="test",
-    include_package_data=True,
-    package_data={
-        # If any package contains *.txt or *.rst files, include them:
-        "": ["*.txt", "*.rst"],
-    },
-    license=LICENSE,
-    # https://www.python.org/dev/peps/pep-0345/#platform-multiple-use
-    # A Platform specification describing an operating system supported by the
-    # distribution which is not listed in the "Operating System" Trove
-    # classifiers. See "Classifier" below.#
-    # Platform='Linux',
-    classifiers=[
-        # Trove classifiers
-        # Full list: https://pypi.python.org/pypi?%3Aaction=list_classifiers
-        "Environment :: Console",
-        "Framework :: IPython",
-        "Framework :: Jupyter",
-        "Intended Audience :: Developers",
-        "License :: OSI Approved :: MIT License",
-        "Natural Language :: English",
-        "Operating System :: Android",
-        "Operating System :: Microsoft :: Windows :: Windows 10",
-        "Operating System :: POSIX:: Linux",
-        "Programming Language :: Python",
-        "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3 :: Only",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: Implementation :: CPython",
-    ],
-    # $ setup.py publish support.
-    cmdclass={"upload": UploadCommand,},
-    # project home page, if any
-    project_urls={
-        "Bug Tracker": "https://www.github.com/farisachugthai/dynamic_ipython/issues",
-        "Documentation": "https://farisachugthai.github.io/dynamic_ipython",
-        "Source Code": "https://www.github.com/farisachugthai/dynamic_ipython",
-    }
-    # could also include long_description, download_url, classifiers, etc.
-)  # }}}
-
-# Vim: set fdm=marker:
+# Vim: set fdm=marker fdls=0:

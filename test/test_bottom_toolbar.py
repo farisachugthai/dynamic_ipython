@@ -48,7 +48,7 @@ class TestBottomToolbar(TestCase):
     def test_toolbar_gets_to_stdout(self):
         self.logpoint()
         with patch("sys.stdout", new=StringIO()) as fake_out:
-            print (self.toolbar)
+            print(self.toolbar)
 
         self.assertIsInstance(fake_out.getvalue(), str)
 
@@ -56,5 +56,3 @@ class TestBottomToolbar(TestCase):
         currentTest = self.id().split(".")[-1]
         callingFunction = inspect.stack()[1][3]
         print("in %s - %s()" % (currentTest, callingFunction))
-
-

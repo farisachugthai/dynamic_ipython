@@ -43,7 +43,6 @@ try:
 except ImportError:
     GruvboxStyle = None
     from pygments.styles.inkpot import InkPotStyle
-
     pygments_style = InkPotStyle
 else:
     pygments_style = GruvboxStyle
@@ -72,90 +71,11 @@ def init_style():
 
 def show_header(header_text=None):
     if header_text is None:
-        header_text = textwrap.dedent(
-            "Press Control-Y to paste from the system clipboard.\n"
-            "Press Control-Space or Control-@ to enter selection mode.\n"
-            "Press Control-W to cut to clipboard.\n"
-        )
+        header_text = textwrap.dedent("Press Control-Y to paste from the system clipboard.\n"
+    "Press Control-Space or Control-@ to enter selection mode.\n"
+    "Press Control-W to cut to clipboard.\n")
     # TODO: Should replace that text with somethin else
-    # XXX: style errors
-
-    # [ins] In [15]: edit 33_bottom_toolbar.py
-    # Editing... done. Executing edited code...
-    # ---------------------------------------------------------------------------
-    # TypeError                                 Traceback (most recent call last)
-    # ~/projects/dynamic_ipython/default_profile/startup/33_bottom_toolbar.py in <module>
-    #     244     bottom_toolbar = FormattedTextToolbar(PygmentsTokens(bottom_text), style=style)
-    #     245     add_toolbar(bottom_text)
-    # --> 246     print_container(show_header())
-    #         global print_container = <function print_container at 0x73eefc0670>
-    #         global show_header = <function show_header at 0x73ec91c9d0>
-
-    # ~/projects/dynamic_ipython/default_profile/startup/33_bottom_toolbar.py in show_header(header_text='Press Control-Y to paste from the system clipboa...ction mode.\nPress Control-W to cut to clipboard.\n')
-    #      79         )
-    #      80     # TODO: Should replace that text with somethin else
-    # ---> 81     text_area = TextArea(header_text, style=style_from_pygments_cls(InkPotStyle))
-    #         text_area = undefined
-    #         global TextArea = <class 'prompt_toolkit.widgets.base.TextArea'>
-    #         header_text = 'Press Control-Y to paste from the system clipboard.\nPress Control-Space or Control-@ to enter selection mode.\nPress Control-W to cut to clipboard.\n'
-    #         global style = <prompt_toolkit.styles.style.Style object at 0x73eb333070>
-    #         global style_from_pygments_cls = <function style_from_pygments_cls at 0x73ef4dbee0>
-    #         global InkPotStyle = <class 'pygments.styles.inkpot.InkPotStyle'>
-    #      82     # its legitimately insane to me that this raises.
-    #      83     # TODO: Changes what a style is
-
-    # ~/.local/share/virtualenvs/dynamic_ipython-mVJ3Ohov/lib/python3.8/site-packages/prompt_toolkit/widgets/base.py in __init__(self=<prompt_toolkit.widgets.base.TextArea object>, text='Press Control-Y to paste from the system clipboa...ction mode.\nPress Control-W to cut to clipboard.\n', multiline=True, password=False, lexer=None, auto_suggest=None, completer=None, complete_while_typing=True, accept_handler=None, history=None, focusable=True, focus_on_click=False, wrap_lines=True, read_only=False, width=None, height=None, dont_extend_height=False, dont_extend_width=False, line_numbers=False, get_line_prefix=None, scrollbar=False, style=<prompt_toolkit.styles.style.Style object>, search_field=None, preview_search=True, prompt='', input_processors=[])
-    #     252             right_margins = []
-    #     253
-    # --> 254         style = "class:text-area " + style
-    #         style = <prompt_toolkit.styles.style.Style object at 0x73eb333130>
-    #     255
-    #     256         self.window = Window(
-
-    # TypeError: can only concatenate str (not "Style") to str
-
-    # [ins] In [16]: edit 33_bottom_toolbar.py
-    # Editing... done. Executing edited code...
-    # ---------------------------------------------------------------------------
-    # TypeError                                 Traceback (most recent call last)
-    # ~/projects/dynamic_ipython/default_profile/startup/33_bottom_toolbar.py in <module>
-    #     244     bottom_toolbar = FormattedTextToolbar(PygmentsTokens(bottom_text), style=style)
-    #     245     add_toolbar(bottom_text)
-    # --> 246     print_container(show_header())
-    #         global print_container = <function print_container at 0x73eefc0670>
-    #         global show_header = <function show_header at 0x73ebb4c040>
-
-    # ~/projects/dynamic_ipython/default_profile/startup/33_bottom_toolbar.py in show_header(header_text='Press Control-Y to paste from the system clipboa...ction mode.\nPress Control-W to cut to clipboard.\n')
-    #      79         )
-    #      80     # TODO: Should replace that text with somethin else
-    # ---> 81     text_area = TextArea(header_text, style=style_from_pygments_cls(InkPotStyle()))
-    #         text_area = undefined
-    #         global TextArea = <class 'prompt_toolkit.widgets.base.TextArea'>
-    #         header_text = 'Press Control-Y to paste from the system clipboard.\nPress Control-Space or Control-@ to enter selection mode.\nPress Control-W to cut to clipboard.\n'
-    #         global style = <prompt_toolkit.styles.style.Style object at 0x73eb378d30>
-    #         global style_from_pygments_cls = <function style_from_pygments_cls at 0x73ef4dbee0>
-    #         global InkPotStyle = <class 'pygments.styles.inkpot.InkPotStyle'>
-    #      82     # its legitimately insane to me that this raises.
-    #      83     # TODO: Changes what a style is
-
-    # ~/.local/share/virtualenvs/dynamic_ipython-mVJ3Ohov/lib/python3.8/site-packages/prompt_toolkit/styles/pygments.py in style_from_pygments_cls(pygments_style_cls=<pygments.styles.inkpot.InkPotStyle object>)
-    #      39     from pygments.style import Style as PygmentsStyle
-    #      40
-    # ---> 41     assert issubclass(pygments_style_cls, PygmentsStyle)
-    #         global issubclass = undefined
-    #         pygments_style_cls = <pygments.styles.inkpot.InkPotStyle object at 0x73eb1e0e20>
-    #         PygmentsStyle = <class 'pygments.style.Style'>
-    #      42
-    #      43     return style_from_pygments_dict(pygments_style_cls.styles)
-
-    # TypeError: issubclass() arg 1 must be a class
-
     text_area = TextArea(header_text, style="#ebdbb2")
-    # its legitimately insane to me that all 3 raises.
-            # style=style_from_pygments_cls(InkPotStyle()))
-            # style=style_from_pygments_cls(InkPotStyle))
-    # TODO: Changes what a style is
-    # style=[("toolbar", "#ebdbb2")])
     return Frame(text_area)
 
 
@@ -269,7 +189,7 @@ class BottomToolbar:
         # doing it this way only prints the words class:toolbar at the bottom
         # text = f" [F4] Vi: {current_vi_mode!r}  {date.today()!r}"
         # toolbar = [('class:toolbar', ' %s ' % text)]
-        toolbar = f" [F4] Vi: {current_vi_mode!r} \n  cwd: {Path.cwd().stem!r}\n Clock: {time.ctime()!r}"
+        toolbar = f" [F4] Vi: {current_vi_mode!r} \ncwd: {Path.cwd().stem!r}\n Clock: {time.ctime()!r}"
         return toolbar
 
     def _render_emacs(self):
@@ -296,30 +216,24 @@ if __name__ == "__main__":
     #     BottomToolbar(get_app()), style=("class:toolbar", "underline #80a0ff")
     # )
     bottom_text = BottomToolbar(get_app())
-    partial_window = Window(
-        FormattedTextControl(bottom_text), width=60, height=3, style=pygments_style
-    )
+    partial_window = Window(FormattedTextControl(bottom_text), width=60, height=3, style=pygments_style)
 
-    style = Style.from_dict(
-        {
-            "dialog": "bg:#cdbbb3",
-            "button": "bg:#bf99a4",
-            "checkbox": "#e8612c",
-            "dialog.body": "bg:#a9cfd0",
-            "dialog shadow": "bg:#c98982",
-            "frame.label": "#fcaca3",
-            "dialog.body label": "#fd8bb6",
-        }
-    )
+    style=Style.from_dict({
+        'dialog': 'bg:#cdbbb3',
+        'button': 'bg:#bf99a4',
+        'checkbox': '#e8612c',
+        'dialog.body': 'bg:#a9cfd0',
+        'dialog shadow': 'bg:#c98982',
+        'frame.label': '#fcaca3',
+        'dialog.body label': '#fd8bb6',
+    })
 
-    example_style = Style.from_dict(
-        {
-            "dialog": "bg:#88ff88",
-            "dialog frame.label": "bg:#ffffff #000000",
-            "dialog.body": "bg:#000000 #00ff00",
-            "dialog shadow": "bg:#00aa00",
-        }
-    )
+    example_style = Style.from_dict({
+        'dialog':             'bg:#88ff88',
+        'dialog frame.label': 'bg:#ffffff #000000',
+        'dialog.body':        'bg:#000000 #00ff00',
+        'dialog shadow':      'bg:#00aa00',
+    })
     # Do frames not return container objects? Because this line is raisin an error?
     # bottom_float = Float(Frame(partial_window, style="bg:#282828 #ffffff"), bottom=0)
     # print_container(bottom_float)
