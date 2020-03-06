@@ -41,16 +41,18 @@ PROFILE_DEFAULT_LOG = logging.getLogger(name="default_profile")
 PROFILE_DEFAULT_LOG.setLevel(logging.WARNING)
 PROFILE_DEFAULT_HANDLER = logging.StreamHandler()
 PROFILE_DEFAULT_HANDLER.setLevel(logging.WARNING)
-PROFILE_DEFAULT_FORMATTER = logging.Formatter(fmt=default_log_format)
+
+PROFILE_DEFAULT_FORMATTER = logging.Formatter(
+    fmt=default_log_format, datefmt="%Y-%m-%d %H:%M:%S"
+)
+
 PROFILE_DEFAULT_HANDLER.addFilter(logging.Filterer())
 PROFILE_DEFAULT_HANDLER.setFormatter(PROFILE_DEFAULT_FORMATTER)
 PROFILE_DEFAULT_LOG.addHandler(PROFILE_DEFAULT_HANDLER)
+
 default_traitlets_log_format = "[ %(name)s  %(relativeCreated)d ] %(highlevel)s %(levelname)s %(module)s %(message)s "
+
 default_formatter = LevelFormatter(fmt=default_traitlets_log_format)
-
-# Pkg-resources:
-# pkg_resources.declare_namespace(os.path.abspath(__file__))
-
 
 
 def ask_for_import(mod, package=None):
@@ -188,5 +190,3 @@ def setup_logging(debug=True, logfile=None):
         root_logger.addHandler(handler)
 
     root_logger.setLevel(40)
-
-setup_logging()
