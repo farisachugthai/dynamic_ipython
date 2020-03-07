@@ -39,8 +39,8 @@ from IPython.core.getipython import get_ipython
 
 @contextmanager
 def inside_dir(dirpath):
-    """
-    Execute code from inside the given directory
+    """Context manager that executes code from inside the given directory.
+
     :param dirpath: String, path of the directory the command is being run.
     """
     old_path = os.getcwd()
@@ -52,20 +52,27 @@ def inside_dir(dirpath):
 
 
 def run_inside_dir(command, dirpath):
-    """
-    Run a command from inside a given directory, returning the exit status
+    """Run a command from inside a given directory, returning the exit status.
 
     :param command: Command that will be executed
     :param dirpath: String, path of the directory the command is being run.
     """
     with inside_dir(dirpath):
-        return subprocess.check_call(shlex.split(command))
+        return subprocess.check_call(
+            shlex.split(shlex.quote(command)), stdout=subprocess.PIPE, stderr=subprocess.PIPE
+        )
 
 
 def check_output_inside_dir(command, dirpath):
-    """Run a command from inside a given directory, returning the command output"""
+    """Run a command from inside a given directory, returning the command output.
+
+    :param command: Command that will be executed
+    :param dirpath: String, path of the directory the command is being run.
+    """
     with inside_dir(dirpath):
-        return subprocess.check_output(shlex.split(command))
+        return subprocess.check_output(
+            shlex.split(shlex.quote(command)), stdout=subprocess.PIPE, stderr=subprocess.PIPE
+        )
 
 
 class Executable(ContextDecorator):

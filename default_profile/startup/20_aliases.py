@@ -1,14 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """Create OS specific aliases to allow a user to use IPython anywhere."""
-from collections import UserDict
 import logging
+import operator
 import os
 import shutil
 import subprocess
 import traceback
+from collections import UserDict
 
-from IPython.core.alias import AliasError, InvalidAliasError, default_aliases
+from IPython.core.alias import Alias, AliasError, InvalidAliasError, default_aliases
 from IPython.core.getipython import get_ipython
 from traitlets.config.application import ApplicationError
 
@@ -83,9 +84,6 @@ class CommonAliases(UserDict):
         else:
             raise AliasError("%s is not an alias" % name)
 
-    def __iter__(self):
-        return self._generator()
-
     def _generator(self):
         """Properly map aliases as dictionaries.
 
@@ -106,10 +104,16 @@ class CommonAliases(UserDict):
     def __repr__(self):  # reprlib?
         return "<Common Aliases>: # of aliases: {!r} ".format(len(self.dict_aliases))
 
-    def __add__(self, other):
+    def __add__(self, other, name=None, cmd=None, *args):
         """Allow instances to be added."""
         if hasattr(other, "dict_aliases"):
             self.update(other.dict_aliases)
+        if name is None and cmd is None:
+            if len(args) == 2:
+                name, cmd = args
+            else:
+                name, cmd = other
+        self.define_alias(name, cmd)
 
     def __mul__(self):
         raise NotImplementedError
@@ -117,14 +121,9 @@ class CommonAliases(UserDict):
     def __len__(self):
         return len(self.dict_aliases)
 
-    def __iadd__(self, name=None, cmd=None, *args):
+    def __iadd__(self, other, name=None, cmd=None, *args):
         # I think i made this as flexible as possible. Cross your fingers.
-        if name is None and cmd is None:
-            if len(args) != 2:
-                raise AliasError
-            else:
-                name, cmd = args
-        self.define_alias(name, cmd)
+        self.__add__(other, name=name,cmd=cmd, *args)
 
     def __copy__(self):
         return copy.copy(self.aliases)
@@ -135,6 +134,10 @@ class CommonAliases(UserDict):
     def __iter__(self):
         return iter(self.dict_aliases.items())
 
+    # which one?
+    # def __iter__(self):
+    #     return self._generator()
+
     def __next__(self):
         max = len(self)
         if max >= self.idx:
@@ -144,65 +147,13 @@ class CommonAliases(UserDict):
         self.idx += 1
         return self.dict_aliases[self.idx]
 
-    def len(self):
-        return self.__len__()
+    # def __getitem__(self, index):
+    #     return operator.getitem(self.kb.bindings, index)
 
-    def append(self, aliases):
-        for i in aliases:
-            self.__add__(i)
-
-    def __getattr__(self, attr):
-        """Define a getattr as dicts typically don't have one defined."""
-        return getattr(self, attr)
+    # def __getattr__(self, attr):
+    #     return getattr(self, attr)
 
     def tuple_to_dict(self, list_of_tuples):
-        """Showcasing how to convert a tuple into a dict.
-
-        Nothing particularly hard, just a good exercise.
-        Also some good docstring practice!
-
-        Parameters
-        ----------
-        color_templates : tuple of tuples
-        Each element maps ANSI escape codes to the colors they represent.
-
-        Returns
-        -------
-        Flattened dict : dict with {str: str} for each element
-            Maps exactly as intended and reduces a little of the nesting.
-
-        Examples
-        --------
-        ::
-
-            In [3]: tuple_to_dict(color_templates)
-            Out[14]:
-            {'Black': '0;30',
-            'Red': '0;31',
-            'Green': '0;32',
-            'Brown': '0;33',
-            'Blue': '0;34',
-            'Purple': '0;35',
-            'Cyan': '0;36',
-            'LightGray': '0;37',
-            'DarkGray': '1;30',
-            'LightRed': '1;31',
-            'LightGreen': '1;32',
-            'Yellow': '1;33',
-            'LightBlue': '1;34',
-            'LightPurple': '1;35',
-            'LightCyan': '1;36',
-            'White': '1;37',
-            'BlinkBlack': '5;30',
-            'BlinkRed': '5;31',
-            'BlinkGreen': '5;32',
-            'BlinkYellow': '5;33',
-            'BlinkBlue': '5;34',
-            'BlinkPurple': '5;35',
-            'BlinkCyan': '5;36',
-            'BlinkLightGray': '5;37'}
-
-        """
         a = list_of_tuples
         if a is None:
             a = self.user_aliases
@@ -766,30 +717,13 @@ def redefine_aliases(aliases, shell=None):
 
 
 if __name__ == "__main__":
-    _ip = get_ipython()
+    all_aliases = generate_aliases()
+    # our combined classes have an attribute dict_aliases
+    # that makes operations a lot easier to perform
+    for i in all_aliases:
+        try:
+            all_aliases.define_alias(*i)
+        except InvalidAliasError:
+            raise
 
-    if _ip is not None:
-        all_aliases = generate_aliases()
-        # our combined classes have an attribute dict_aliases
-        # that makes operations a lot easier to perform
-        for i in all_aliases:
-            try:
-                _ip.alias_manager.define_alias(i[0], i[1])
-            except InvalidAliasError:
-                raise
-
-        _ip.run_line_magic("alias_magic", "p pycat")
-
-    # this doesnt log anything
-#     from default_profile.util.module_log import stream_logger
-
-#     ALIAS_LOGGER = stream_logger(
-#         logger="default_profile.startup.20_aliases",
-#         msg_format=(
-#             "[ %(name)s  %(relativeCreated)d ] %(levelname)s %(module)s %(message)s "
-#         ),
-#         log_level=logging.WARNING,
-#     )
-
-#     if _ip is not None:
-#         ALIAS_LOGGER.info("Number of aliases is: %s" % all_aliases)
+    get_ipython().run_line_magic("alias_magic", "p pycat")

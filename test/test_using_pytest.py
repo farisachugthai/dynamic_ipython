@@ -38,12 +38,15 @@ import importlib
 import re
 import sys
 import unittest
+from typing import TYPE_CHECKING
 
 from IPython.core.getipython import get_ipython
 
 import pytest
 from _pytest.tmpdir import tmpdir
 
+if TYPE_CHECKING:
+    from py._path.local import LocalPath  # tmpdir
 
 COLORS = {
     "red": "\x1b[31m",

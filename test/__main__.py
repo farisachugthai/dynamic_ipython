@@ -1,24 +1,4 @@
-""". Create a single entry point for the test suite.
-
-:date: 09/04/2019
-
-On a positive note, the debug logging informed me that your sys.path mods
-are actually making their way across the package. The LogRecords just showed
-up while I was playing around with the configurations for
-unittest in PyCharm.
-
-.. ipython::
-    :verbatim:
-
-    root: DEBUG: Found packages were: []
-    root: DEBUG: Found namespace packages were: []
-    root: DEBUG: Sys.path before:[
-    '/home/faris/projects',
-    '/home/faris/projects/dynamic_ipython',
-]
-
-
-"""
+"""Create a single entry point for the test suite."""
 import argparse
 import doctest
 import importlib
@@ -33,6 +13,7 @@ from unittest.suite import TestSuite
 from unittest.loader import TestLoader, defaultTestLoader, findTestCases
 
 import IPython
+
 # don't forget about this as it may come in handy
 # from IPython.lib.deepreload import reload
 from IPython.testing.tools import get_ipython_cmd
@@ -87,6 +68,17 @@ def _parse():
     args = parser.parse_args()
     return args
 
+
+def flatten_test_suite(suite):
+    flatten = unittest.TestSuite()
+    for test in suite:
+        if isinstance(test, unittest.TestSuite):
+            flatten.addTests(flatten_test_suite(test))
+        else:
+            flatten.addTest(test)
+    return flatten
+
+
 def doctests(args):
     testfiles = args.file
     # Verbose used to be handled by the "inspect argv" magic in DocTestRunner,
@@ -102,7 +94,7 @@ def doctests(args):
     sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 
     doctest_finder = doctest.DocTestFinder()
-    found_test_cases = findTestCases('*')
+    found_test_cases = findTestCases("*")
     doctest.DocTestSuite("__main__", globs="*")
 
     for filename in testfiles:
@@ -119,13 +111,12 @@ def doctests(args):
             failures, _ = testfile(
                 filename, module_relative=False, verbose=verbose, optionflags=options
             )
-        if failures:
-            return 1
-    return 0
 
 
 def add_test(testcase, suite=None):
-    if suite is None:
+    if suite is not None:
+        suite = flatten_test_suite(suite)
+    else:
         suite = unittest.TestCaseSuite()
     return suite.addTests(unittest.defaultTestLoader.loadTestsFromTestCase(testcase))
 
@@ -148,7 +139,7 @@ def run():
 
     args = _parse()
     test_logger = setup_test_logging()
-    doctests()
+    # doctests()
     # Believe it or not this is in fact necessary if you want to run
     # the tests inside of IPython.
     old_sys_argv = sys.argv[:]
@@ -158,9 +149,20 @@ def run():
 
     if pytest is None:
         suite = TestSuite()
-        add_test(test_00_ipython.TestIPython(), suite)
-        add_test(test_20_aliases.TestAliases(), suite)
-        unittest.main()
+        all_test_suites = unittest.defaultTestLoader.discover(start_dir="test")
+        # add_test(test_00_ipython.TestIPython(), suite)
+        # add_test(test_20_aliases.TestAliases(), suite)
+        tests = []
+
+        for test in flatten_test_suite(all_test_suites):
+            tests.append(test)
+        suite.addTests(tests)
+        successful = (
+            unittest.TextTestRunner(verbosity=v, failfast=options.exitfirst)
+            .run(suite)
+            .wasSuccessful()
+        )
+        return 0 if successful else 1
 
     else:
         pytest.main()
