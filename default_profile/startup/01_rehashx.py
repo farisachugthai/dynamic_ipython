@@ -97,7 +97,7 @@ def safe_run_path(fileobj, logger=None):
     try:
         return run_path(fileobj, init_globals=globals(), run_name="rerun_startup")
     except ImportError:
-        logger.warning("ImportError for mod: ", sys.last_traceback)
+        logger.warning("ImportError for mod: ", sys.last_value)
     except ConnectionResetError:  # happens in windows async loop all the time
         pass
     except OSError as e:
@@ -127,7 +127,10 @@ def rerun_startup():
     logger.setLevel(logging.WARNING)
     for i in scandir(exec_dir):
         if i.name.endswith(".py"):
-            safe_run_path(i.name, logger=logger)
+            try:
+                safe_run_path(i.name, logger=logger)
+            except Exception as e:
+                print(e)
     return ret
 
 

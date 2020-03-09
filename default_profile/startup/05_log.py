@@ -38,6 +38,7 @@ import sys
 import time
 import traceback
 from itertools import groupby
+from logging.handlers import MemoryHandler
 from queue import SimpleQueue
 
 from IPython.core.getipython import get_ipython
@@ -50,8 +51,7 @@ from traitlets.config.configurable import LoggingConfigurable
 from traitlets.config.application import LevelFormatter
 from traitlets.traitlets import Instance
 
-from default_profile import QueueHandler
-from default_profile.startup import STARTUP_LOGGER
+import default_profile
 
 
 def print_history(hist_file=None):
@@ -144,6 +144,7 @@ def betterConfig(name=None, parent=None):
 
     # Now let's set up a couple handlers
     better_stream = logging.StreamHandler()
+    better_logger.addHandler(better_stream)
 
     if shell.logger.logfile != "":
         # confusingly this sometimes returns nothing
@@ -152,16 +153,17 @@ def betterConfig(name=None, parent=None):
         logfile = shell.logger.logfname
     else:
         logfile = os.devnull
-    handler = logging.FileHandler(logfile)
-    # And one of our own
-    queue_handler = QueueHandler(SimpleQueue())
+    file_handler = logging.FileHandler(logfile)
+    better_logger.addHandler(file_handler)
 
+    # literally no idea if this is a good number or not
+    handler = MemoryHandler(100, target=sys.stderr)
+    better_logger.addHandler(handler)
     better_formatter = LevelFormatter(BASIC_FORMAT + "%(highlevel)s")
 
     for handler in better_logger.handlers:
         handler.setLevel(log_level)
         handler.setFormatter(better_formatter)
-        better_logger.addHandler(handler)
 
     filterer = logging.Filter("logger")
     better_logger.addFilter(filterer)
@@ -356,4 +358,4 @@ if __name__ == "__main__":
             ipy_logger.log_active = True
 
     # Don't use name=__name__ here or it'll dump a log file in your cwd
-    better_logger = betterConfig(parent=STARTUP_LOGGER)
+    # better_logger = betterConfig(parent=STARTUP_LOGGER)

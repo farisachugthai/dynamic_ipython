@@ -21,10 +21,7 @@ from prompt_toolkit.enums import EditingMode
 from prompt_toolkit.formatted_text import PygmentsTokens
 from prompt_toolkit.layout.controls import FormattedTextControl
 from prompt_toolkit.layout.containers import Window, Float
-from prompt_toolkit.layout.layout import Layout
 
-# from prompt_toolkit.layout.processors import DisplayMultipleMouses
-from prompt_toolkit.shortcuts import print_formatted_text, CompleteStyle
 from prompt_toolkit.shortcuts.utils import print_container
 from prompt_toolkit.styles import default_pygments_style
 from prompt_toolkit.styles import Style, merge_styles, style
@@ -43,6 +40,7 @@ try:
 except ImportError:
     GruvboxStyle = None
     from pygments.styles.inkpot import InkPotStyle
+
     pygments_style = InkPotStyle
 else:
     pygments_style = GruvboxStyle
@@ -60,21 +58,16 @@ def exit_clicked():
 
 
 def init_style():
-    # Could set this to _ip.pt_app.style i suppose
-    if GruvboxStyle is not None:
-        bt_style = GruvboxStyle()
-        ours = style_from_pygments_cls(bt_style)
-        return merge_styles([ours, default_pygments_style()])
-    else:
-        return default_pygments_style()
+    return merge_styles([pygments_style, default_pygments_style()])
 
 
 def show_header(header_text=None):
     if header_text is None:
-        header_text = textwrap.dedent("Press Control-Y to paste from the system clipboard.\n"
-    "Press Control-Space or Control-@ to enter selection mode.\n"
-    "Press Control-W to cut to clipboard.\n")
-    # TODO: Should replace that text with somethin else
+        header_text = textwrap.dedent(
+            "Press Control-Y to paste from the system clipboard.\n"
+            "Press Control-Space or Control-@ to enter selection mode.\n"
+            "Press Control-W to cut to clipboard.\n"
+        )
     text_area = TextArea(header_text, style="#ebdbb2")
     return Frame(text_area)
 
@@ -83,7 +76,6 @@ class LineCounter:
     """Simple counter inspired by Doug Hellman. Could set it to sys.displayhook.
 
     :URL: https://pymotw.com/3/sys/interpreter.html
-
     """
 
     def __init__(self):
@@ -115,6 +107,7 @@ class BottomToolbar:
         f" [F4] Vi: {current_vi_mode!r} \n  cwd: {Path.cwd().stem!r}\n Clock: {time.ctime()!r}"
 
     """
+
     # are you allowed to doctest fstrings
 
     def __init__(self, app, *args, **kwargs):
@@ -127,11 +120,6 @@ class BottomToolbar:
         self.app = app
         self.PythonLexer = PythonLexer()
         self.Formatter = TerminalTrueColorFormatter()
-
-    # @property
-    # def app(self):
-    #     # TODO: Be more consistent and check multiple versions of pt as done in other files
-    #     return self.shell.pt_app.app
 
     @property
     def is_vi_mode(self):
@@ -182,22 +170,10 @@ class BottomToolbar:
 
     def _render_vi(self):
         current_vi_mode = self.app.vi_state.input_mode
-        # temp_toolbar = f" [F4] Vi: {current_vi_mode!r}  {date.today()!r}"
-        # toolbar = Frame(TextArea(temp_toolbar))
-        # return toolbar.body
-
-        # doing it this way only prints the words class:toolbar at the bottom
-        # text = f" [F4] Vi: {current_vi_mode!r}  {date.today()!r}"
-        # toolbar = [('class:toolbar', ' %s ' % text)]
-        toolbar = f" [F4] Vi: {current_vi_mode!r} \ncwd: {Path.cwd().stem!r}\n Clock: {time.ctime()!r}"
+        toolbar = f" [F4] Vi: {current_vi_mode!r} \n  cwd: {Path.cwd().stem!r}\n Clock: {time.ctime()!r}"
         return toolbar
 
     def _render_emacs(self):
-        # return [(Token.Generic.Heading, "[F4] Emacs: "),
-        #         (Token.Generic.Prompt, f"{Path.cwd()} {date.today()}")]
-        # temp_toolbar = f" [F4] Emacs: {Path.cwd()!r} {date.today()!a}"
-        # toolbar = Frame(TextArea(temp_toolbar))
-        # return toolbar.body
         toolbar = f" [F4] Emacs: {Path.cwd()!r} {date.today()!a}"
         return toolbar
 
@@ -212,31 +188,11 @@ def add_toolbar(toolbar=None):
 
 
 if __name__ == "__main__":
-    # bottom_formatted_text = FormattedText(
-    #     BottomToolbar(get_app()), style=("class:toolbar", "underline #80a0ff")
-    # )
     bottom_text = BottomToolbar(get_app())
-    partial_window = Window(FormattedTextControl(bottom_text), width=60, height=3, style=pygments_style)
+    #  partial_window = Window(width=60, height=3, style=pygments_style)
 
-    style=Style.from_dict({
-        'dialog': 'bg:#cdbbb3',
-        'button': 'bg:#bf99a4',
-        'checkbox': '#e8612c',
-        'dialog.body': 'bg:#a9cfd0',
-        'dialog shadow': 'bg:#c98982',
-        'frame.label': '#fcaca3',
-        'dialog.body label': '#fd8bb6',
-    })
-
-    example_style = Style.from_dict({
-        'dialog':             'bg:#88ff88',
-        'dialog frame.label': 'bg:#ffffff #000000',
-        'dialog.body':        'bg:#000000 #00ff00',
-        'dialog shadow':      'bg:#00aa00',
-    })
-    # Do frames not return container objects? Because this line is raisin an error?
-    # bottom_float = Float(Frame(partial_window, style="bg:#282828 #ffffff"), bottom=0)
-    # print_container(bottom_float)
-    bottom_toolbar = FormattedTextToolbar(PygmentsTokens(bottom_text), style=style)
+    # creating the tokens is raising...
+    # bottom_toolbar_tokens = PygmentsTokens(bottom_text)
+    # bottom_toolbar = FormattedTextControl(bottom_toolbar_tokens)
     add_toolbar(bottom_text)
     print_container(show_header())

@@ -295,7 +295,6 @@ class Helpers:
         """
         return self.current_buffer._working_lines
 
-
     def app_context(self):
         """What is this?
 
@@ -315,6 +314,7 @@ class Helpers:
 
         """
         return self.pt_app.context
+
 
 def all_processors_for_searching():
     r"""Return a list of `prompt_toolkit.layout.processor.Processor`\'s."""

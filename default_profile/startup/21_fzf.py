@@ -59,7 +59,9 @@ def run_inside_dir(command, dirpath):
     """
     with inside_dir(dirpath):
         return subprocess.check_call(
-            shlex.split(shlex.quote(command)), stdout=subprocess.PIPE, stderr=subprocess.PIPE
+            shlex.split(shlex.quote(command)),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
         )
 
 
@@ -71,7 +73,9 @@ def check_output_inside_dir(command, dirpath):
     """
     with inside_dir(dirpath):
         return subprocess.check_output(
-            shlex.split(shlex.quote(command)), stdout=subprocess.PIPE, stderr=subprocess.PIPE
+            shlex.split(shlex.quote(command)),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
         )
 
 
@@ -146,9 +150,11 @@ class FZF:
         )
 
     def default_cmds(self):
-        return "rg --pretty --hidden --max-columns-preview --no-heading" \
-               "--no-messages --no-column --no-line-number -C 0 -e ^ " \
-               "| fzf --ansi --multi "
+        return (
+            "rg --pretty --hidden --max-columns-preview --no-heading"
+            "--no-messages --no-column --no-line-number -C 0 -e ^ "
+            "| fzf --ansi --multi "
+        )
 
     def default_cmd(self):
         """Define the cmd for FZF.

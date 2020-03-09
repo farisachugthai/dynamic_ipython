@@ -20,36 +20,49 @@ import keyword
 import logging
 import operator
 import os
+import platform
 import shutil
 import subprocess
 import traceback
 from collections import UserDict
 from typing import Iterable, TYPE_CHECKING, Dict
 
-from IPython.core.alias import Alias, AliasError, InvalidAliasError, default_aliases
+from IPython.core.alias import default_aliases
 from IPython.core.getipython import get_ipython
 from traitlets.config.application import ApplicationError
 
 
+class AliasError(Exception):
+    pass
+
+
+class InvalidAliasError(AliasError):
+    pass
+
+
 def validate_alias(alias) -> Dict:
     try:
-        caller = self.shell.magics_manager.magics['line'][self.name]
+        caller = self.shell.magics_manager.magics["line"][self.name]
     except KeyError:
         pass
     else:
         if not isinstance(caller, Alias):
-            raise InvalidAliasError("The name %s can't be aliased "
-                                    "because it is another magic command." % self.name)
+            raise InvalidAliasError(
+                "The name %s can't be aliased "
+                "because it is another magic command." % self.name
+            )
 
     if not (isinstance(self.cmd, str)):
-        raise InvalidAliasError("An alias command must be a string, "
-                                "got: %r" % self.cmd)
+        raise InvalidAliasError(
+            "An alias command must be a string, " "got: %r" % self.cmd
+        )
 
-    nargs = self.cmd.count('%s') - self.cmd.count('%%s')
+    nargs = self.cmd.count("%s") - self.cmd.count("%%s")
 
-    if (nargs > 0) and (self.cmd.find('%l') >= 0):
-        raise InvalidAliasError('The %s and %l specifiers are mutually '
-                                'exclusive in alias definitions.')
+    if (nargs > 0) and (self.cmd.find("%l") >= 0):
+        raise InvalidAliasError(
+            "The %s and %l specifiers are mutually " "exclusive in alias definitions."
+        )
 
     return nargs
 
@@ -60,8 +73,6 @@ class Alias(UserDict):
     Reasonably this is the object that should be the UserDict. CommonAliases
     makes more sense as a list of dicts.
     """
-    blacklist = ['dhist', 'alias', 'unalias']
-    blacklist.extend(keyword.kwlist)
 
     def __init__(self, name, cmd):
         """Validate the alias, and return the number of arguments."""
@@ -77,29 +88,51 @@ class Alias(UserDict):
     def shell(self):
         return get_ipython()
 
+    @property
+    def blacklist(self):
+        """Override the super classes blacklist. The reset magic no longer works.
+
+        We change prompt_toolkit properties and don't reset them with that magic,
+        so it expects the interface to continue existing.
+
+        """
+        blacklist = ["dhist", "alias", "unalias"]
+        blacklist.extend(keyword.kwlist)
+        return blacklist
+
     def __repr__(self):
         return f"<Alias: {self.name!r} for {self.cmd!r}>"
 
-    def __call__(self, rest=''):
+    def __call__(self, rest=""):
+        """If an Alias is called, run it with the shell's system function.
+
+        Parameters
+        ----------
+        rest : str
+            Remainder of the user's command line.
+
+        """
         cmd = self.cmd
         nargs = self.nargs
         # Expand the %l special to be the user's input line
-        if cmd.find('%l') >= 0:
-            cmd = cmd.replace('%l', rest)
-            rest = ''
+        if cmd.find("%l") >= 0:
+            cmd = cmd.replace("%l", rest)
+            rest = ""
 
         if nargs == 0:
-            if cmd.find('%%s') >= 1:
-                cmd = cmd.replace('%%s', '%s')
+            if cmd.find("%%s") >= 1:
+                cmd = cmd.replace("%%s", "%s")
             # Simple, argument-less aliases
-            cmd = '%s %s' % (cmd, rest)
+            cmd = "%s %s" % (cmd, rest)
         else:
             # Handle aliases with positional arguments
             args = rest.split(None, nargs)
             if len(args) < nargs:
-                raise UsageError('Alias <%s> requires %s arguments, %s given.' %
-                                 (self.name, nargs, len(args)))
-            cmd = '%s %s' % (cmd % tuple(args[:nargs]), ' '.join(args[nargs:]))
+                raise UsageError(
+                    "Alias <%s> requires %s arguments, %s given."
+                    % (self.name, nargs, len(args))
+                )
+            cmd = "%s %s" % (cmd % tuple(args[:nargs]), " ".join(args[nargs:]))
 
         self.shell.system(cmd)
 
@@ -111,7 +144,8 @@ class CommonAliases(UserDict):
     aliases to the attribute *dict_aliases*.
 
     In addition, note that the definition for updating indicates that the
-    class `update`s aliases and will `add` other instances.
+    class `update`\s aliases and will `add` other instances.
+
     """
 
     shell = get_ipython()
@@ -694,40 +728,12 @@ class WindowsAliases(CommonAliases):
         ]
 
 
-def generate_aliases(_ip=None):
-    """Set up aliases for the user namespace for IPython.
-
-    Planning on coming up with a new way of introducing the aliases into the user namespace.
-
-    # TODO: Work in the Executable() class check.
-    """
-    if _ip is None:
-        _ip = get_ipython()
-    if not hasattr(_ip, "alias_manager"):
-        raise ApplicationError("Are you running in IPython?")
-
-    from default_profile.util.machine import Platform
-
-    machine = Platform()
-
-    if machine.is_linux:
-        aliases = LinuxAliases(user_aliases=_ip.alias_manager.user_aliases)
-        aliases.busybox()
-        aliases.thirdparty()
-    elif machine.is_windows:
-        aliases = WindowsAliases(user_aliases=_ip.alias_manager.user_aliases)
-        aliases.cmd_aliases()
-    aliases.ls_patch(_ip)
-
-    return aliases
-
-
-def redefine_aliases(aliases, shell=None):
-    """Now a function to allow the user to rerun as necesaary.
+def generate_aliases(aliases=None):
+    """Define aliases in case the user needs to redefine
 
     Parameters
     ----------
-    aliases : list of tuples
+    aliases : `list` of `tuple`
         Aliases to rerun. Can be easily generated from `generate_aliases`
 
     Returns
@@ -737,6 +743,8 @@ def redefine_aliases(aliases, shell=None):
     Raises
     ------
     :exc:`traitlets.config.application.ApplicationError`
+        Raises an ApplicationError if `get_ipython` returns an object that
+        doesn't have an attribute 'alias_manager'.
 
     Examples
     --------
@@ -749,10 +757,26 @@ def redefine_aliases(aliases, shell=None):
         4
 
     """
-    if shell is None:
-        shell = get_ipython()
-    if not hasattr(shell, "alias_manager"):
-        raise ApplicationError
+    _ip = get_ipython()
+    if _ip is not None:
+        if not hasattr(_ip, "alias_manager"):
+            raise ApplicationError
+    else:
+        return
+    machine = platform.platform()
+
+    if machine.startswith("Linux"):
+        aliases = LinuxAliases(user_aliases=_ip.alias_manager.user_aliases)
+        aliases.busybox()
+        aliases.thirdparty()
+    elif machine.startswith("Win"):
+        aliases = WindowsAliases(user_aliases=_ip.alias_manager.user_aliases)
+        aliases.cmd_aliases()
+    else:
+        raise AliasError
+    aliases.ls_patch(_ip)
+
+    return aliases
 
 
 if __name__ == "__main__":

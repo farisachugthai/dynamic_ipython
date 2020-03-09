@@ -40,11 +40,7 @@ from jedi.api.environment import (
 from IPython.core.getipython import get_ipython
 from IPython.terminal.ptutils import IPythonPTCompleter
 from prompt_toolkit.auto_suggest import AutoSuggestFromHistory, ThreadedAutoSuggest
-from prompt_toolkit.completion import (
-    CompleteEvent,
-    ThreadedCompleter,
-    WordCompleter
-)
+from prompt_toolkit.completion import CompleteEvent, ThreadedCompleter, WordCompleter
 from prompt_toolkit.completion.filesystem import ExecutableCompleter, PathCompleter
 from prompt_toolkit.completion.base import DynamicCompleter, Completion, Completer
 from prompt_toolkit.completion.fuzzy_completer import FuzzyWordCompleter, FuzzyCompleter
@@ -60,6 +56,7 @@ class SimpleCompleter(Completer):
     fallbacks in case of being called incorrectly, rather adding
     dozens of assert statements.
     """
+
     def __init__(self, shell=None, completer=None, min_input_len=0, *args, **kwargs):
         self.shell = shell or get_ipython()
         if not completer:
