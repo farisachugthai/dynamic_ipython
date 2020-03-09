@@ -5,10 +5,12 @@ import codecs
 import logging
 import os
 import sys
+import platform
 from pathlib import Path
 from runpy import run_path, run_module
 from shutil import rmtree
 
+import setuptools
 from setuptools.dist import Distribution
 from setuptools import setup, find_packages, Command, Extension, PackageFinder
 from distutils.errors import DistutilsArgError
@@ -32,7 +34,11 @@ except ImportError:
     pass
 else:
     # check this one out
-    eggdist = list(find_distributions(os.path.abspath(".")))
+    listdist = list(find_distributions(os.path.abspath(".")))
+    try:
+        dist = listdist[0]
+    except IndexError:
+        pass
 
 try:  # new replacement for the pkg_resources API
     import importlib_metadata
@@ -40,8 +46,6 @@ except ImportError:
     importlib_metadata = None
 else:
     our_dist = importlib_metadata.distribution("dynamic_ipython")
-    # TODO:
-    # dynamic_entry_point = importlib_metadata.EntryPoint("dynamic_ipython")
 # }}}
 
 # Metadata: {{{1
@@ -51,6 +55,9 @@ try:
     from default_profile import ModuleNotFoundError
 except ImportError:  # noqa
     __version__ = "0.0.2"
+
+__path__ = find_packages()
+
 # }}}
 
 # Conda Support: {{{1
@@ -86,16 +93,19 @@ with codecs.open(README, encoding="utf-8") as f:
 
 # TODO: How to do conditionals? Only windows needs pyreadline
 REQUIRED = [
-    "IPython>=7.10",
+    "IPython>=7.12",
+    "ipykernel",
 ]
+if platform.platform().startswith('Win'):
+    REQUIRED.append('pyreadline')
+
 
 EXTRAS = {
     "develop": ["pipenv", "pandas", "matplotlib",],
-    "docs": ["sphinx>=2.2", "matplotlib>=3.0.0", "numpydoc>=0.9",],
-    "test": ["pytest", "testpath", "nose", "matplotlib"],
+    "docs": ["sphinx>=2.2", "matplotlib>=3.0.0", "numpydoc>=0.9", "flake8-rst", "recommonmark"],
+    "test": ["ipyparallel", "pytest", "testpath", "nose", "matplotlib"],
 }
 # }}}}
-
 
 class UploadCommand(Command):  # {{{
     """Support setup.py upload."""
@@ -158,8 +168,8 @@ try:
         # If your package is a single module, use this instead of 'packages':
         # py_modules=['mypackage'],
         # using this temporarily
-        entry_points={"console_scripts": ["ip=default_profile.startup.__main__:"],},
-        namespace_packages=["default_profile", "default_profile.sphinxext"],
+        # entry_points={"console_scripts": ["ip=default_profile.startup.__main__:"],},
+        # namespace_packages=["default_profile", "default_profile.sphinxext"],
         install_requires=REQUIRED,
         extras_require=EXTRAS,
         test_suite="test",
@@ -168,12 +178,16 @@ try:
             # If any package contains *.txt or *.rst files, include them:
             "": ["*.txt", "*.rst"],
         },
+
         license=LICENSE,
+
         # https://www.python.org/dev/peps/pep-0345/#platform-multiple-use
+
         # A Platform specification describing an operating system supported by the
         # distribution which is not listed in the "Operating System" Trove
         # classifiers. See "Classifier" below.#
-        # Platform='Linux',
+        platform='any',
+
         classifiers=[
             # Trove classifiers
             # Full list: https://pypi.python.org/pypi?%3Aaction=list_classifiers
@@ -204,8 +218,9 @@ try:
         }
         # could also include long_description, download_url, classifiers, etc.
     )
-except (DistutilsArgError, SystemExit):
+except DistutilsArgError:
     d.print_commands()
+
 # }}}
 
 # Vim: set fdm=marker fdls=0:

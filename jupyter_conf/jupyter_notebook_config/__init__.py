@@ -124,18 +124,28 @@ class NonGraphicalEnvironmentError(OSError):
 
 
 # Probably should refactor into a simple function.
-if platform.system() == "Linux":
-    if os.environ.get("DISPLAY"):
-        if shutil.which("qutebrowser"):
-            c.NotebookApp.browser = "qutebrowser"
-    else:
-        try:
-            browser = webbrowser.get()
-        except Exception as e:  # eh
-            raise NonGraphicalEnvironmentError(e)
+
+def get_browser():
+    if platform.system() == "Linux":
+        if os.environ.get("DISPLAY"):
+            if shutil.which("qutebrowser"):
+                return "qutebrowser"
         else:
-            logging.info("Using browser: \t%s ", browser)
-            c.NotebookApp.browser = browser
+            return "w3m"
+
+    try:
+        _browser = webbrowser.get()
+    except Exception as e:  # eh
+        raise NonGraphicalEnvironmentError(e)
+    else:
+        logging.info("Using browser: \t%s ", _browser)
+        browser = _browser
+    return browser
+
+try:
+    c.NotebookApp.browser = get_browser()
+except NonGraphicalEnvironmentError:
+    pass
 
 # The full path to an SSL/TLS certificate file.
 # c.NotebookApp.certfile = ''

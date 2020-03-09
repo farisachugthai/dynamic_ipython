@@ -9,9 +9,14 @@ from unittest.mock import patch
 
 from IPython.terminal.interactiveshell import InteractiveShell
 
-spec = importlib.util.spec_from_file_location(
-    "../default_profile/startup/33_bottom_toolbar"
-)
+try:
+    spec = importlib.util.spec_from_file_location(
+        "default_profile.startup.bottom_toolbar_mod",
+        location="../default_profile/startup/33_bottom_toolbar"
+    )
+except ModuleNotFoundError:
+    spec = None
+
 if spec is not None:
     bt_mod = importlib.util.module_from_spec(spec)
 else:
