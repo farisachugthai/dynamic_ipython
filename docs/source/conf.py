@@ -8,7 +8,6 @@ import os
 import re
 import sys
 from datetime import datetime
-from importlib import import_module
 from pathlib import Path
 
 from IPython.lib.lexers import IPyLexer
@@ -18,11 +17,11 @@ from jinja2.bccache import FileSystemBytecodeCache
 from jinja2.environment import Environment
 from jinja2.exceptions import TemplateError
 from jinja2.ext import autoescape, do, with_, debug
-from jinja2.loaders import FileSystemLoader, ChoiceLoader, ModuleLoader
+from jinja2.loaders import FileSystemLoader, ChoiceLoader  # , ModuleLoader
 from jinja2.lexer import get_lexer
 
 from pygments.lexers.markup import MarkdownLexer, RstLexer
-from pygments.lexers.shell import BashLexer, BashSessionLexer
+from pygments.lexers.shell import BashLexer  # , BashSessionLexer
 from pygments.lexers.textedit import VimLexer
 from pygments.lexers.python import (
     NumPyLexer,
@@ -33,25 +32,28 @@ from pygments.lexers.python import (
 )
 import sphinx
 from sphinx.application import Sphinx
-from sphinx.domains.rst import ReSTDomain
 from sphinx.environment import BuildEnvironment
 from sphinx.ext.autodoc import cut_lines
-from sphinx.jinja2glue import SphinxFileSystemLoader, SandboxedEnvironment
+from sphinx.jinja2glue import SphinxFileSystemLoader  # , SandboxedEnvironment
 from sphinx.util.docfields import GroupedField
 from sphinx.util.template import ReSTRenderer
 
-import default_profile
-from default_profile.__about__ import __version__
+import default_profile  # noqa
 from default_profile import ask_for_import
-from default_profile.sphinxext.magics import CellMagicRole, LineMagicRole
+from default_profile.sphinxext.magics import CellMagicRole, LineMagicRole   # noqa
 
+try:
+    from default_profile.__about__ import __version__
+except ImportError:
+    import importlib_metadata
+    dist = importlib_metadata.Distribution().from_name('dynamic_ipython')
 # Logging
 DOCS_LOGGER = logging.getLogger(name=__name__)
 DOCS_HANDLER = logging.StreamHandler()
 DOCS_HANDLER.setLevel(logging.INFO)
 DOCS_LOGGER.handlers=[]
 DOCS_LOGGER.addHandler(DOCS_HANDLER)
-DOCS_FILTER  = logging.Filter(name=__name__)
+DOCS_FILTER = logging.Filter(name=__name__)
 DOCS_LOGGER.setLevel(logging.INFO)
 DOCS_LOGGER.addFilter(DOCS_FILTER)
 
@@ -141,23 +143,24 @@ needs_sphinx = "2.1.0"
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    "sphinx.ext.autodoc",
-    "sphinx.ext.autosectionlabel",
-    "sphinx.ext.autosummary",
-    "sphinx.ext.doctest",
-    "sphinx.ext.extlinks",
-    "sphinx.ext.githubpages",
-    "sphinx.ext.intersphinx",
-    "sphinx.ext.napoleon",
-    "sphinx.ext.todo",
-    "sphinx.ext.viewcode",
-    "IPython.sphinxext.ipython_directive",
-    "default_profile.sphinxext.magics",
-]
+        "sphinx.config",
+        "sphinx.ext.autodoc",
+        "sphinx.ext.autosectionlabel",
+        "sphinx.ext.autosummary",
+        "sphinx.ext.doctest",
+        "sphinx.ext.extlinks",
+        "sphinx.ext.githubpages",
+        "sphinx.ext.intersphinx",
+        "sphinx.ext.napoleon",
+        "sphinx.ext.todo",
+        "sphinx.ext.viewcode",
+        "IPython.sphinxext.ipython_directive",
+        "default_profile.sphinxext.magics",
+    ]
 
 if ask_for_import("matplotlib"):
     extensions.extend(
-        ["matplotlib.sphinxext.plot_directive", "matplotlib.sphinxext.mathmpl", ]
+        ["matplotlib.sphinxext.plot_directive", "matplotlib.sphinxext.mathmpl"]
     )
     DOCS_LOGGER.info("matplotlib in extensions")
 
