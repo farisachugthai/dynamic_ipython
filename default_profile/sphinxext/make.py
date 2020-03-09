@@ -1,21 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from default_profile.sphinxext import sphinxext_logger
-from default_profile.__about__ import __version__
-from default_profile import ask_for_import
-from jinja2.lexer import get_lexer
-from jinja2.loaders import FileSystemLoader
-from jinja2.ext import autoescape, do, with_
-from jinja2.exceptions import TemplateError
-from jinja2.environment import Environment
-from sphinx.util.tags import Tags
-from sphinx.util.logging import getLogger
-from sphinx.project import Project
-from sphinx.jinja2glue import SphinxFileSystemLoader
-from sphinx.errors import ApplicationError
-from sphinx.config import Config, eval_config_file
-from sphinx.cmd.make_mode import build_main
-from sphinx.application import Sphinx
 import argparse
 import codecs
 import os
@@ -27,16 +11,32 @@ import sys
 from typing import List, Any
 import webbrowser
 
-if sys.version_info < (3, 7):
-    from default_profile import ModuleNotFoundError
+# from jinja2.constants import TRIM_BLOCKS, LSTRIP_BLOCKS
+from jinja2.environment import Environment
+from jinja2.exceptions import TemplateError
+from jinja2.ext import autoescape, do, with_
+from jinja2.lexer import get_lexer
+from jinja2.loaders import FileSystemLoader
+from sphinx.application import Sphinx
+from sphinx.cmd.make_mode import Make
+from sphinx.config import Config, eval_config_file
+from sphinx.errors import ApplicationError
+from sphinx.jinja2glue import SphinxFileSystemLoader
+from sphinx.project import Project
+from sphinx.util.logging import getLogger
+from sphinx.util.tags import Tags
 
 try:
     import sphinx
 except (ImportError, ModuleNotFoundError):
     sys.exit("Sphinx documentation module not found. Exiting.")
 
+if sys.version_info < (3, 7):
+    from default_profile import ModuleNotFoundError
 
-# from jinja2.constants import TRIM_BLOCKS, LSTRIP_BLOCKS
+from default_profile.sphinxext import sphinxext_logger
+from default_profile.__about__ import __version__
+from default_profile import ask_for_import
 
 
 logger = getLogger(name=__name__)
@@ -300,19 +300,25 @@ def generate_sphinx_app(root):
     return app
 
 
-def setup_jinja():
-    """Use jinja to set up the Sphinx environment."""
-    TRIM_BLOCKS = True
-    LSTRIP_BLOCKS = True
-    template_path = "_templates"
+def get_jinja_loader(template_path=None):
+    if template_path is None:
+        template_path = "_templates"
     try:
         loader = FileSystemLoader(template_path)
     except TemplateError:
         return
+    return loader
+
+
+def setup_jinja(path_to_template):
+    """Use jinja to set up the Sphinx environment."""
+    TRIM_BLOCKS = True
+    LSTRIP_BLOCKS = True
+    loader = get_jinja_loader(path_to_template)
     env = Environment(
         trim_blocks=TRIM_BLOCKS,
         lstrip_blocks=LSTRIP_BLOCKS,
-        loader=FileSystemLoader(template_path),
+        loader=loader,
         extensions=["jinja2.ext.i18n", autoescape, do, with_],
         enable_async=True,
     )
@@ -320,16 +326,20 @@ def setup_jinja():
 
 
 def main(repo_root=None):
+    """Create the required objects to simulate the sphinx make-main command.
+
+    Create a `jinja2.Environment`, a `sphinx.project.Project`,
+    `sphinx.jinja2glue.SphinxFileSystemLoader`.
+
+    .. todo:: Need to create tags for use in `sphinx.config.eval_config_file`.
+
+    """
     # Probably should initialize in a different/ better way but eh
     # build_opts = gather_sphinx_options()
     build_opts = _parse_arguments()
-
-    if ask_for_import("jinja2"):
-        env = setup_jinja()
-    else:
-        env = Environment()
-
     doc_root = Path(repo_root).joinpath("docs")
+    template_path = doc_root.joinpath("source/_templates")
+    env = setup_jinja(template_path)
     app = generate_sphinx_app(doc_root)
     project = Project(doc_root, source_suffix="rst")
     sphinx_fs = SphinxFileSystemLoader(
@@ -345,6 +355,17 @@ def run_ext(command):
         ).strip()
     except subprocess.CalledProcessError as e:
         logger.exception(e)
+
+
+class Maker(Make):
+    def __init__(self, source_dir, build_dir, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.source_dir
+        self.build_dir
+
+    def run_generic_build(self):
+        # TODO
+        pass
 
 
 if __name__ == "__main__":

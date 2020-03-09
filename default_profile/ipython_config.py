@@ -449,7 +449,13 @@ c.TerminalInteractiveShell.editing_mode = "vi"
 # unfortunately this doesn't work yet. release isn't defined and idk where
 # they define it in the original file.
 
-c.InteractiveShell.banner1 = "\n" + f"Python {sys.version!s}" + "\n" + f"IPython {IPython.core.release.version!s}" + "\n"
+c.InteractiveShell.banner1 = (
+    "\n"
+    + f"Python {sys.version!s}"
+    + "\n"
+    + f"IPython {IPython.core.release.version!s}"
+    + "\n"
+)
 
 # The part of the banner to be printed after the profile
 c.InteractiveShell.banner2 = ""

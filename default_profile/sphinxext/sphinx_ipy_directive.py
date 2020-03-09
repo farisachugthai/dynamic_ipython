@@ -1,4 +1,8 @@
-from docutils.parsers.rst import directives
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+from docutils import node
+from docutils.parsers.rst import directives, Directive
 from docutils.parsers.rst.directives.images import Image
 
 from sphinx.application import Sphinx
@@ -6,6 +10,12 @@ from sphinx.errors import ExtensionError, SphinxError
 from sphinx.util.docutils import SphinxDirective
 
 import IPython
+
+
+class HelloWorld(Directive):
+    def run(self):
+        paragraph_node = node.paragraph(text="Hello World")
+        return [paragraph_node]
 
 
 class IPythonDirectiveError(SphinxError):
@@ -39,6 +49,7 @@ class IPDirective(SphinxDirective):
     def run(self):
         # TODO
         raise NotImplementedError
+
 
 # Sphinx.add_directive(IPDirective)
 # aka

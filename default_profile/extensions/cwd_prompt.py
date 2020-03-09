@@ -19,7 +19,7 @@ from os import getcwd
 from pygments.token import Token
 
 from IPython.core.getipython import get_ipython
-from IPython.core.magic import  magics_class
+from IPython.core.magic import magics_class
 from IPython.terminal.prompts import Prompts
 
 
@@ -99,6 +99,6 @@ def unload_ipython_extension(shell):
 if __name__ == "__main__":
     # So here's a more direct way of loading these suckers
     # without setting off the deprecation warning
-    get_ipython().extension_manager._call_load_ipython_extension('cwd_prompt')
+    get_ipython().extension_manager._call_load_ipython_extension("cwd_prompt")
     # or i guess
-    get_ipython().extension_manager._call_unload_ipython_extension('cwd_prompt')
+    get_ipython().extension_manager._call_unload_ipython_extension("cwd_prompt")

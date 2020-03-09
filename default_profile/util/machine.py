@@ -91,8 +91,7 @@ class Platform:
         self.Path = Path
 
     def __repr__(self):
-        return "{!r}: {!r}.".format(self.__class__.__name__,
-                                    self._sys_platform)
+        return "{!r}: {!r}.".format(self.__class__.__name__, self._sys_platform)
 
     @property
     def is_windows(self):
@@ -152,6 +151,7 @@ class Platform:
 
 class Shell(Platform):
     """Subclass Platform to gain information about the user's shell."""
+
     @property
     def is_cmd(self):
         """Unsure of how to implement this. TODO:"""
@@ -177,6 +177,6 @@ if __name__ == "__main__":
         log_level=logging.INFO,
     )
 
-    users_machine = Platform(shell=get_ipython(),
-                             LOGGER=MACHINE_LOGGER,
-                             env=os.environ.copy())
+    users_machine = Platform(
+        shell=get_ipython(), LOGGER=MACHINE_LOGGER, env=os.environ.copy()
+    )

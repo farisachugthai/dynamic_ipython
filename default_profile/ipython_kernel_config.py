@@ -15,6 +15,7 @@ c = get_config()  # noqa
 
 context = Context()
 
+
 def instantiate_kernel_logger():
     kernel_logger = logging.getLogger(name=__name__)
     log_datefmt = "%Y-%m-%d %H:%M:%S"

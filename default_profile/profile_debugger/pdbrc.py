@@ -26,6 +26,7 @@ from pathlib import Path
 import pdb
 from pdb import Restart, Pdb
 import pydoc
+
 try:
     import readline
 except ImportError:
@@ -35,6 +36,7 @@ import sys
 from textwrap import dedent
 import time
 import traceback
+
 try:
     from pdbrc import MyPdb
 except:  # noqa
@@ -58,6 +60,7 @@ try:
     from gruvbox.gruvbox import GruvboxStyle
 except ImportError:
     from pygments.styles.inkpot import InkPotStyle
+
     pdb_style = InkPotStyle
 else:
     pdb_style = GruvboxStyle()
@@ -236,6 +239,7 @@ class MyPdb(pdb.Pdb):
         for bp in Breakpoint.bpbynumber: if bp: bp.bpprint().
 
     """
+
     doc_header = "Whew!"
 
     lexer = PythonLexer()
@@ -288,7 +292,9 @@ class MyPdb(pdb.Pdb):
     def colorizer(self, code):
         """color from pygments."""
         if code is not None:
-            return pygments.highlight(code, self.lexer, self.formatter, outfile=sys.stdout)
+            return pygments.highlight(
+                code, self.lexer, self.formatter, outfile=sys.stdout
+            )
 
     def displayhook(self, code):
         """Override the superclasses implementation and use pygments."""
@@ -301,8 +307,6 @@ class MyPdb(pdb.Pdb):
     def _runmodule(self, module_name):
         self._wait_for_mainpyfile = True
         self._user_requested_quit = False
-        import runpy
-
         mod_name, mod_spec, code = runpy._get_module_details(module_name)
         self.mainpyfile = self.canonic(code.co_filename)
         import __main__
@@ -338,8 +342,13 @@ class MyPdb(pdb.Pdb):
     def bp(self, *args, **kwargs):
         return Breakpoint(*args, **kwargs)
 
+    # TODO:
+    # def default(self):
+    #     return
+
 
 debugger = MyPdb(shell=get_ipython())
+
 
 def wrap_sys_excepthook():
     """Make sure we wrap it only once or we would end up with a cycle.
@@ -456,7 +465,6 @@ def debug_script(script=None):
         print("Post mortem debugger finished. The " + script + " will be restarted")
 
 
-
 def get_or_start_ipython():
     """Returns the global IPython instance.
 
@@ -512,7 +520,7 @@ def main():
         namespace.mainpyfile = None
 
     mainpyfile = namespace.mainpyfile
-            # Replace pdb's dir with script's dir in front of module search path.
+    # Replace pdb's dir with script's dir in front of module search path.
     if mainpyfile is not None:
         sys.path.insert(0, os.path.dirname(mainpyfile))
         debug_script(mainpyfile)

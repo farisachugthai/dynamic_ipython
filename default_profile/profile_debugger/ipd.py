@@ -50,14 +50,7 @@ class IPD(Pdb):
     of the application.
     """
 
-    def __init__(
-        self,
-        shell=None,
-        keys=None,
-        context=None,
-        *args,
-        **kwargs
-    ):
+    def __init__(self, shell=None, keys=None, context=None, *args, **kwargs):
         """Add everything to call signature.
 
         The original only displays star args and star kwargs.
@@ -108,7 +101,10 @@ class IPD(Pdb):
         )
 
     def initialize_keybindings(self, custom_keys=None):
-        _ = [load_key_bindings(), create_ipython_shortcuts(self.shell), ]
+        _ = [
+            load_key_bindings(),
+            create_ipython_shortcuts(self.shell),
+        ]
         if custom_keys is None:
             return merge_key_bindings(_)
         else:

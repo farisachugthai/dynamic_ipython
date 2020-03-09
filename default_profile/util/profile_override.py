@@ -1,17 +1,18 @@
-"""
+"""Rewrite the IPython ProfileDir.
+
 Profile Override
 ================
 
 Override the IPython ProfileDir.
 
-It feels rude to do it this way but all I wanna do is add a repr! Oh I guess I
-could just inherit everything from this class.
+Initially created to implement a repr for the class, it was expanded in order
+to also modify the behavior that automatically adds a PID dir,
 
-Eh. I also wanna modify the behavior that automatically adds a PID dir,
-security dir, etc.
+It automatically creates them in the current working directory and this
+behavior was not designed to be modifiable.
 
-I get why it's difficult to run it selectively but it automatically creates
-them in the wrong dir often enough that it should be toggleable behavior.
+As a result, profiles are frequently created in the
+wrong dir often enough that it should be toggleable behavior.
 
 See Also
 --------
@@ -22,12 +23,14 @@ See Also
 import errno
 import os
 import shutil
+import sys
 from pathlib import Path
 from traceback import print_exc
 
+from IPython.core.getipython import get_ipython
+from IPython.core.profiledir import ProfileDir
 from IPython.terminal.embed import InteractiveShellEmbed
 from IPython.terminal.ipapp import TerminalIPythonApp
-from IPython.core.profiledir import ProfileDir
 
 # from IPython.paths import ensure_dir_exists, get_ipython_package_dir
 from traitlets.config import Bool, Unicode, observe
@@ -109,21 +112,21 @@ class DirectoryChecker:
     easier.
     """
 
-    def __init__(self, canary=None, *args, **kwargs):
+    def __init__(self):
         """Initialize our own version of ipython."""
-        if canary is not None:
-            self.canary = canary
-        else:
-            self.canary = get_ipython()
         self.fs = Path
+
+    @property
+    def shell(self):
+        return get_ipython()
 
     def initialize(self):
         """TODO: Add getattr checks for this func so we don't call on an uninitialized object."""
-        if self.canary.initialized():
+        if self.shell.initialized():
             # Running inside IPython
 
             # Detect if embed shell or not and display a message
-            if isinstance(self.canary, InteractiveShellEmbed):
+            if isinstance(self.shell, InteractiveShellEmbed):
                 sys.stderr.write(
                     "\nYou are currently in an embedded IPython shell,\n"
                     "the configuration will not be loaded.\n\n"
@@ -183,4 +186,4 @@ class DirectoryChecker:
         except OSError as e:
             print_exc(e)
         else:
-            self.canary.profile_dir = os.path.expanduser("~/.ipython/default_profile")
+            self.shell.profile_dir = os.path.expanduser("~/.ipython/default_profile")

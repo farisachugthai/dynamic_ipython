@@ -23,6 +23,7 @@ extensions_logger.addHandler(extensions_handler)
 # Probably alo worth notin
 try:
     from sympy import init_printing
+
     init_printing()
 except ImportError:
     pass
