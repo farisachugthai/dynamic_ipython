@@ -21,6 +21,20 @@ Also a good check to see whats being counted as a package is:
 >>> logging.debug('Found packages were: {}'.format(found_packages))
 >>> logging.debug('Found namespace packages were: {}'.format(found_namespace_packages))
 
+Mar 10, 2020:
+
+Oh my god.
+I can't import a function...inside of this file. Only the module are
+available. I mean how is that even possible.::
+
+    In [3]: from default_profile import default_log_format
+
+    ImportError                               Traceback (most recent call last)
+    <ipython-input-3-e51e0eb9b984> in <module>
+    ----> 1 from default_profile import default_log_format
+
+    ImportError: cannot import name 'default_log_format' from 'default_profile' (/mnt/c/Users/fac/projects/dynamic_ipython/default_profile/__init__.py)
+
 """
 import importlib
 import inspect
@@ -40,11 +54,18 @@ from traitlets.config.application import LevelFormatter
 from py._path.local import LocalPath
 
 # DON'T ASSIGN THIS TO PACKAGE.
-__path__ = sys.path[:]
+# __path__ = sys.path[:]
 
-__path__ = pkgutil.extend_path(__path__, os.path.dirname(os.path.abspath(__name__)))
+# pkg_resources.declare_namespace(__package__)
 
-__path__.extend(setuptools.find_packages("."))
+try:
+    __path__ = pkgutil.extend_path(__path__, os.path.dirname(os.path.abspath(__name__)))
+    __path__.extend(setuptools.find_packages("."))
+except NameError:
+    pass
+
+# JFC: I have no idea. Don't ask.
+# from default_profile.build.lib import *
 
 # Lol note that there are FOUR different logging.Formatter.fmt strings in this module
 default_log_format = (
@@ -205,3 +226,11 @@ def setup_logging(debug=True, logfile=None):
         root_logger.addHandler(handler)
 
     root_logger.setLevel(40)
+
+
+# let me tell you i am LOVING this
+try:
+    from . import startup
+except ImportError:
+    importlib.invalidate_caches()
+    print('startup not imported')

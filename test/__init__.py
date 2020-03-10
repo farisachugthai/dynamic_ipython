@@ -12,6 +12,6 @@ __path__ = sys.path
 __path__ = pkgutil.extend_path(__path__, __name__)
 
 try:
-    importlib.import_module('default_profile')
+    importlib.import_module("default_profile")
 except ImportError:
     pass

@@ -47,7 +47,7 @@ def exec_dir(directory):
             exec(compile(open(i.name).read(), "<string>", "exec",), globals(), locals())
 
 
-def startup():
+def async_startup():
     shell = get_ipython()
 
     if not shell:
@@ -99,5 +99,5 @@ def startup():
             format_helpers.extract_stack(e)
 
 
-if "__name__" == "__main":
-    startup()
+if "__name__" == "__main__":
+    async_startup()

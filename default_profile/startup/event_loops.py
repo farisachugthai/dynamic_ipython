@@ -81,6 +81,9 @@ except ImportError:
 # except:
 #     from asyncio.tasks import Task
 
+from curio import Kernel
+from curio.debug import logcrash, longblock
+
 # from asyncio.tasks import current_task, all_tasks, create_task
 
 # messes up %run
@@ -92,7 +95,7 @@ from IPython.core.getipython import get_ipython
 
 
 def children():
-    """Simply to save the typing."""
+    """Return `multiprocessing.active_children`. Simply to save the typing."""
     return multiprocessing.active_children()
 
 
@@ -104,7 +107,7 @@ def enable_multiprocessing_logging(level=50):
 
 
 async def system_command(command_to_run):
-    """Run a system command.
+    """Run a system command using prompt_toolkit's run_system_command.
 
     Examples
     --------
@@ -132,6 +135,36 @@ async def system_command(command_to_run):
     await get_ipython().pt_app.app.run_system_command(
         command=com, wait_for_enter=False, wait_text="", display_before_text=""
     )
+
+
+def initialize_kernel():
+    """Initialize a `curio.Kernel`."""
+    return Kernel([longblock, logcrash])
+
+
+async def kernel_run(command, kernel):
+    return await kernel.run(
+        subprocess.run(
+            shlex.split(shlex.quote(command)),
+            stderr=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+        )
+    )
+
+
+async def subproc(command):
+    results = []
+    try:
+        async with timeout_after(0.5):
+            # TODO: might want to preprocess the command
+            out = await subprocess.run(
+                [command], stdout=subprocess.PIPE, stderr=subprocess.PIPE
+            )
+    except TaskTimeout as e:
+        results.append("timeout")
+        results.append(e.stdout)
+        results.append(e.stderr)
+    return results
 
 
 if __name__ == "__main__":

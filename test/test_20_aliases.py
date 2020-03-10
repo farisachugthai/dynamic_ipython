@@ -113,4 +113,3 @@ if __name__ == "__main__":
     with suppress(Skipped):
         pytest.importorskip("nose")
         pytest.main()
-

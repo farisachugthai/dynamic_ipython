@@ -125,6 +125,7 @@ class NonGraphicalEnvironmentError(OSError):
 
 # Probably should refactor into a simple function.
 
+
 def get_browser():
     if platform.system() == "Linux":
         if os.environ.get("DISPLAY"):
@@ -141,6 +142,7 @@ def get_browser():
         logging.info("Using browser: \t%s ", _browser)
         browser = _browser
     return browser
+
 
 try:
     c.NotebookApp.browser = get_browser()

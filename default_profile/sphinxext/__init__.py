@@ -24,16 +24,16 @@ from pathlib import Path
 
 import pkg_resources
 
-from default_profile import ask_for_import
-from default_profile import default_log_format
-from default_profile.sphinxext import custom_doctests  # noqa F401
-from default_profile.sphinxext.magics import (
+# from default_profile import ask_for_import
+# from default_profile import default_log_format
+from . import custom_doctests  # noqa F401
+from .magics import (
     LineMagicRole,
     CellMagicRole,
 )  # noqa F401
 
 sphinxext_logger = logging.getLogger(name="default_profile").getChild("sphinxext")
-sphinxext_formatter = logging.Formatter(default_log_format)
+sphinxext_formatter = logging.Formatter(datefmt="%H:%M:%S")
 sphinxext_handler = logging.StreamHandler()
 sphinxext_handler.setFormatter(sphinxext_formatter)
 sphinxext_handler.setLevel(logging.WARNING)

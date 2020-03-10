@@ -13,6 +13,7 @@ from ipykernel.zmqshell import ZMQInteractiveShell
 from jupyter_core.paths import get_home_dir
 
 from jupyter_client.manager import KernelManager, start_new_kernel
+
 # Something in this is throwing an error
 from jupyter_client.session import Session
 

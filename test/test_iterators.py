@@ -16,7 +16,8 @@ except ImportError:
     run_unittest = None
     from os import unlink
     from tempfile import NamedTemporaryFile
-    TESTFN =  NamedTemporaryFile().name
+
+    TESTFN = NamedTemporaryFile().name
 
 
 logging.basicConfig()
@@ -1098,4 +1099,3 @@ if __name__ == "__main__":
         unittest.skip("Test suite not set up for iterators.")
     else:
         test_main()
-

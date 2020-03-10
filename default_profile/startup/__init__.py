@@ -27,9 +27,10 @@ try:
 except ImportError:
     Package = Resource = None
 
-__path__ = sys.path
-
-__path__ = pkgutil.extend_path(__path__, __name__)
+try:
+    __path__ = pkgutil.extend_path(__path__, __name__)
+except NameError:
+    pass
 
 BASIC_FORMAT = "[ %(name)s  %(relativeCreated)d ] %(levelname)s %(module)s %(message)s "
 STARTUP_LOGGER = logging.getLogger(name=__name__)
@@ -43,6 +44,18 @@ STARTUP_LOGGER.addHandler(STARTUP_HANDLER)
 STARTUP_LOGGER.setLevel(logging.WARNING)
 
 # imp = functools.partial(importlib.util.module_from_spec importlib.util.module_from_spec(_find_spec_from_path))
+
+
+class UsageError(Exception):
+    def __init__(self, err=None, *args, **kwargs):
+        self.err = err
+        super().__init__(self, *args, **kwargs)
+
+    def __repr__(self):
+        return "{}\t \t{}".format(self.__class__.__name__, self.err)
+
+    def __call__(self, err):
+        return self.__repr__(err)
 
 
 def module_from_path(path):
@@ -60,12 +73,8 @@ def module_from_path(path):
 
 rehashx_mod = module_from_path("default_profile.startup.01_rehashx")
 
-log_mod = importlib.util.module_from_spec(
-    _find_spec_from_path("default_profile.startup.05_log")
-)
+log_mod = module_from_path("default_profile.startup.05_log")
 
-# TEST: nope
-# logged_mod = (imp("default_profile.startup.05_log"))
 help_helpers_mod = importlib.util.module_from_spec(
     _find_spec_from_path("default_profile.startup.06_help_helpers")
 )
@@ -118,20 +127,3 @@ pygit_mod = importlib.util.module_from_spec(
 repralias_mod = importlib.util.module_from_spec(
     _find_spec_from_path("default_profile.startup.repralias")
 )
-try:
-    import repralias
-    from repralias import ReprAlias
-except ImportError:
-    pass
-
-
-class UsageError(Exception):
-    def __init__(self, err=None, *args, **kwargs):
-        self.err = err
-        super().__init__(self, *args, **kwargs)
-
-    def __repr__(self):
-        return "{}\t \t{}".format(self.__class__.__name__, self.err)
-
-    def __call__(self, err):
-        return self.__repr__(err)

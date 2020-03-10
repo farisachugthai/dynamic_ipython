@@ -61,10 +61,12 @@ else:
 
 try:  # new replacement for the pkg_resources API
     import importlib_metadata
+    our_dist = importlib_metadata.distribution("dynamic_ipython")
 except ImportError:
     importlib_metadata = None
-else:
-    our_dist = importlib_metadata.distribution("dynamic_ipython")
+except importlib_metadata.PackageNotFoundError:
+    pass
+
 # }}}
 
 # Metadata: {{{1
@@ -117,13 +119,20 @@ with codecs.open(README, encoding="utf-8") as f:
 REQUIRED = [
     "IPython>=7.12",
     "ipykernel",
+    "curio",
+    "importlib-metadata",
+    "pyfzf",
+    "pyperclip",
+    "trio",
 ]
+
 if platform.platform().startswith("Win"):
     REQUIRED.append("pyreadline")
+    REQUIRED.append("colorama")
 
 
 EXTRAS = {
-    "develop": ["pipenv", "pandas", "matplotlib",],
+    "develop": ["pipenv", "pandas", "matplotlib", ],
     "docs": [
         "sphinx>=2.2",
         "matplotlib>=3.0.0",
@@ -133,9 +142,12 @@ EXTRAS = {
     ],
     "test": ["ipyparallel", "pytest", "testpath", "nose", "matplotlib"],
 }
-# }}}}
+# }}}
 
-class UploadCommand(Command):  # {{{
+# {{{
+
+
+class UploadCommand(Command):
     """Support setup.py upload."""
 
     description = "Build and publish the package."
@@ -232,7 +244,7 @@ try:
             "Programming Language :: Python :: Implementation :: CPython",
         ],
         # $ setup.py publish support.
-        cmdclass={"upload": UploadCommand,},
+        cmdclass={"upload": UploadCommand, },
         # project home page, if any
         project_urls={
             "Bug Tracker": "https://www.github.com/farisachugthai/dynamic_ipython/issues",

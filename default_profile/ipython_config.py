@@ -51,15 +51,12 @@ except (ImportError, ModuleNotFoundError):
     logging.error(
         "Import error. Try relaunching IPython in the root of this repository."
     )
-    # todo: realistically we should also set exec_files to None since everything ./startup is gonna crash
-else:
-    from default_profile import PROFILE_DEFAULT_LOG
-
-    import __main__
-
     # 3.6 compat
     if ModuleNotFoundError not in dir(builtins):
-        from default_profile import ModuleNotFoundError
+        try:
+            from default_profile import ModuleNotFoundError
+        except ImportError as e:
+            logging.exception(e)
 
 
 def get_home():

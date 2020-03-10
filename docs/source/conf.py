@@ -40,18 +40,19 @@ from sphinx.util.template import ReSTRenderer
 
 import default_profile  # noqa
 from default_profile import ask_for_import
-from default_profile.sphinxext.magics import CellMagicRole, LineMagicRole   # noqa
+from default_profile.sphinxext.magics import CellMagicRole, LineMagicRole  # noqa
 
 try:
     from default_profile.__about__ import __version__
 except ImportError:
     import importlib_metadata
-    dist = importlib_metadata.Distribution().from_name('dynamic_ipython')
+
+    dist = importlib_metadata.Distribution().from_name("dynamic_ipython")
 # Logging
 DOCS_LOGGER = logging.getLogger(name=__name__)
 DOCS_HANDLER = logging.StreamHandler()
 DOCS_HANDLER.setLevel(logging.INFO)
-DOCS_LOGGER.handlers=[]
+DOCS_LOGGER.handlers = []
 DOCS_LOGGER.addHandler(DOCS_HANDLER)
 DOCS_FILTER = logging.Filter(name=__name__)
 DOCS_LOGGER.setLevel(logging.INFO)
@@ -143,20 +144,20 @@ needs_sphinx = "2.1.0"
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-        "sphinx.config",
-        "sphinx.ext.autodoc",
-        "sphinx.ext.autosectionlabel",
-        "sphinx.ext.autosummary",
-        "sphinx.ext.doctest",
-        "sphinx.ext.extlinks",
-        "sphinx.ext.githubpages",
-        "sphinx.ext.intersphinx",
-        "sphinx.ext.napoleon",
-        "sphinx.ext.todo",
-        "sphinx.ext.viewcode",
-        "IPython.sphinxext.ipython_directive",
-        "default_profile.sphinxext.magics",
-    ]
+    "sphinx.config",
+    "sphinx.ext.autodoc",
+    "sphinx.ext.autosectionlabel",
+    "sphinx.ext.autosummary",
+    "sphinx.ext.doctest",
+    "sphinx.ext.extlinks",
+    "sphinx.ext.githubpages",
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.todo",
+    "sphinx.ext.viewcode",
+    "IPython.sphinxext.ipython_directive",
+    "default_profile.sphinxext.magics",
+]
 
 if ask_for_import("matplotlib"):
     extensions.extend(

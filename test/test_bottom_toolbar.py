@@ -12,7 +12,7 @@ from IPython.terminal.interactiveshell import InteractiveShell
 try:
     spec = importlib.util.spec_from_file_location(
         "default_profile.startup.bottom_toolbar_mod",
-        location="../default_profile/startup/33_bottom_toolbar"
+        location="../default_profile/startup/33_bottom_toolbar",
     )
 except ModuleNotFoundError:
     spec = None

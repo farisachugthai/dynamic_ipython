@@ -130,7 +130,7 @@ def rerun_startup():
             try:
                 safe_run_path(i.name, logger=logger)
             except Exception as e:
-                print(e)
+                logger.exception(e)
     return ret
 
 

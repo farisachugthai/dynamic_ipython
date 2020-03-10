@@ -34,26 +34,27 @@ class UserDictTest(unittest.TestCase):
         # keyword arg constructor
         self.assertEqual(collections.UserDict(one=1, two=2), d2)
         # item sequence constructor
-        self.assertEqual(collections.UserDict([('one', 1), ('two', 2)]), d2)
+        self.assertEqual(collections.UserDict([("one", 1), ("two", 2)]), d2)
         with self.assertWarnsRegex(DeprecationWarning, "'dict'"):
-            self.assertEqual(collections.UserDict(dict=[('one', 1), ('two', 2)]), d2)
+            self.assertEqual(collections.UserDict(dict=[("one", 1), ("two", 2)]), d2)
         # both together
-        self.assertEqual(collections.UserDict([('one', 1), ('two', 2)], two=3, three=5), d3)
+        self.assertEqual(
+            collections.UserDict([("one", 1), ("two", 2)], two=3, three=5), d3
+        )
 
         # alternate constructor
-        self.assertEqual(collections.UserDict.fromkeys('one two'.split()), d4)
-        self.assertEqual(collections.UserDict().fromkeys('one two'.split()), d4)
-        self.assertEqual(collections.UserDict.fromkeys('one two'.split(), 1), d5)
-        self.assertEqual(collections.UserDict().fromkeys('one two'.split(), 1), d5)
-        self.assertTrue(u1.fromkeys('one two'.split()) is not u1)
-        self.assertIsInstance(u1.fromkeys('one two'.split()), collections.UserDict)
-        self.assertIsInstance(u2.fromkeys('one two'.split()), collections.UserDict)
+        self.assertEqual(collections.UserDict.fromkeys("one two".split()), d4)
+        self.assertEqual(collections.UserDict().fromkeys("one two".split()), d4)
+        self.assertEqual(collections.UserDict.fromkeys("one two".split(), 1), d5)
+        self.assertEqual(collections.UserDict().fromkeys("one two".split(), 1), d5)
+        self.assertTrue(u1.fromkeys("one two".split()) is not u1)
+        self.assertIsInstance(u1.fromkeys("one two".split()), collections.UserDict)
+        self.assertIsInstance(u2.fromkeys("one two".split()), collections.UserDict)
 
         # Test __repr__
         self.assertEqual(str(u0), str(d0))
         self.assertEqual(repr(u1), repr(d1))
-        self.assertIn(repr(u2), ("{'one': 1, 'two': 2}",
-                                 "{'two': 2, 'one': 1}"))
+        self.assertIn(repr(u2), ("{'one': 1, 'two': 2}", "{'two': 2, 'one': 1}"))
 
         # Test rich comparison and __len__
         all = [d0, d1, d2, u, u0, u1, u2, uu, uu0, uu1, uu2]
@@ -86,14 +87,15 @@ class UserDictTest(unittest.TestCase):
         self.assertEqual(u2b, u2c)
 
         class MyUserDict(collections.UserDict):
-            def display(self): print(self)
+            def display(self):
+                print(self)
 
         m2 = MyUserDict(u2)
         m2a = m2.copy()
         self.assertEqual(m2a, m2)
 
         # SF bug #476616 -- copy() of UserDict subclass shared data
-        m2['foo'] = 'bar'
+        m2["foo"] = "bar"
         self.assertNotEqual(m2a, m2)
 
         # Test keys, items, values
@@ -147,22 +149,24 @@ class UserDictTest(unittest.TestCase):
         self.assertRaises(KeyError, t.popitem)
 
     def test_init(self):
-        for kw in 'self', 'other', 'iterable':
-            self.assertEqual(list(collections.UserDict(**{kw: 42}).items()),
-                             [(kw, 42)])
-        self.assertEqual(list(collections.UserDict({}, dict=42).items()),
-                         [('dict', 42)])
-        self.assertEqual(list(collections.UserDict({}, dict=None).items()),
-                         [('dict', None)])
+        for kw in "self", "other", "iterable":
+            self.assertEqual(list(collections.UserDict(**{kw: 42}).items()), [(kw, 42)])
+        self.assertEqual(
+            list(collections.UserDict({}, dict=42).items()), [("dict", 42)]
+        )
+        self.assertEqual(
+            list(collections.UserDict({}, dict=None).items()), [("dict", None)]
+        )
         with self.assertWarnsRegex(DeprecationWarning, "'dict'"):
-            self.assertEqual(list(collections.UserDict(dict={'a': 42}).items()),
-                             [('a', 42)])
+            self.assertEqual(
+                list(collections.UserDict(dict={"a": 42}).items()), [("a", 42)]
+            )
         self.assertRaises(TypeError, collections.UserDict, 42)
         self.assertRaises(TypeError, collections.UserDict, (), ())
         self.assertRaises(TypeError, collections.UserDict.__init__)
 
     def test_update(self):
-        for kw in 'self', 'dict', 'other', 'iterable':
+        for kw in "self", "dict", "other", "iterable":
             d = collections.UserDict()
             d.update(**{kw: 42})
             self.assertEqual(list(d.items()), [(kw, 42)])
@@ -182,6 +186,7 @@ class UserDictTest(unittest.TestCase):
         class D(collections.UserDict):
             def __missing__(self, key):
                 return 42
+
         d = D({1: 2, 3: 4})
         self.assertEqual(d[1], 2)
         self.assertEqual(d[3], 4)
@@ -192,6 +197,7 @@ class UserDictTest(unittest.TestCase):
         class E(collections.UserDict):
             def __missing__(self, key):
                 raise RuntimeError(key)
+
         e = E()
         try:
             e[42]
@@ -205,6 +211,7 @@ class UserDictTest(unittest.TestCase):
                 # An instance variable __missing__ should have no effect
                 self.__missing__ = lambda key: None
                 collections.UserDict.__init__(self)
+
         f = F()
         try:
             f[42]
@@ -215,6 +222,7 @@ class UserDictTest(unittest.TestCase):
 
         class G(collections.UserDict):
             pass
+
         g = G()
         try:
             g[42]
