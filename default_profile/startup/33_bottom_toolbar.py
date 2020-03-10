@@ -16,6 +16,7 @@ from pathlib import Path
 from shutil import get_terminal_size
 from traceback import print_exc
 
+from IPython import InteractiveShell
 from prompt_toolkit.enums import EditingMode
 
 from prompt_toolkit.formatted_text import PygmentsTokens
@@ -80,12 +81,15 @@ class LineCounter:
 
     def __init__(self):
         self.count = 0
-        self.time = strftime("%H:%M:%S")
+        self.time = time.strftime("%H:%M:%S")
 
     def __call__(self):
         """Yes!!! This now behaves as expected."""
         self.count += 1
         return "(< In[{:3d}]: Time:{}  )".format(self.count, self.time)
+
+    def __repr__(self):
+        return f"<{self.__class__.__name__}:> {self.__call__}"
 
 
 class BottomToolbar:
@@ -107,10 +111,11 @@ class BottomToolbar:
         f" [F4] Vi: {current_vi_mode!r} \n  cwd: {Path.cwd().stem!r}\n Clock: {time.ctime()!r}"
 
     """
+    shell: InteractiveShell
 
     # are you allowed to doctest fstrings
 
-    def __init__(self, app, *args, **kwargs):
+    def __init__(self, app, _style=None, *args, **kwargs):
         """Require an 'app' for initialization.
 
         This will eliminate all IPython code out of this class and make things
@@ -120,6 +125,7 @@ class BottomToolbar:
         self.app = app
         self.PythonLexer = PythonLexer()
         self.Formatter = TerminalTrueColorFormatter()
+        self._style = _style if _style is not None else self.app.style
 
     @property
     def is_vi_mode(self):
@@ -140,6 +146,9 @@ class BottomToolbar:
 
     def __call__(self):
         return f"{self.rerender()}"
+
+    def style(self):
+        return self._style
 
     def terminal_width(self):
         """Returns `shutil.get_terminal_size.columns`."""
@@ -170,11 +179,11 @@ class BottomToolbar:
 
     def _render_vi(self):
         current_vi_mode = self.app.vi_state.input_mode
-        toolbar = f" [F4] Vi: {current_vi_mode!r} \n  cwd: {Path.cwd().stem!r}\n Clock: {time.ctime()!r}"
+        toolbar = f" [F4] {self.app.editing_mode}: {current_vi_mode!r} \n  cwd: {Path.cwd().stem!r}\n Clock: {time.ctime()!r}"
         return toolbar
 
     def _render_emacs(self):
-        toolbar = f" [F4] Emacs: {Path.cwd()!r} {date.today()!a}"
+        toolbar = f" [F4] {self.app.editing_mode}: {Path.cwd()!r} {date.today()!a}"
         return toolbar
 
 

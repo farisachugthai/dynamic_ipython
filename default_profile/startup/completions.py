@@ -1,6 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Use both Jedi and prompt_toolkit to aide IPython out.
+"""Use both Jedi and prompt_toolkit to aide IPython in generating completions..
+
+The function from this module that will be easiest for end users to utilize is.:
+
+.. function:: create_pt_completers()
+
+    Return a MergedCompleter combining all of the public facing completers initialized in this module.
+    This includes all of the concrete `prompt_toolkit.completion.Completers` as well as subclasses
+    of the abstract base class.
 
 This creates a combination of almost all of prompt_toolkits completion
 mechanisms and combines them.
@@ -18,18 +26,13 @@ dramatically speeds the completions up.
 
 
 """
-import abc
 import keyword
-import logging
-from pathlib import Path
 import re
-import runpy
-from types import MethodType
-from typing import Iterable, TYPE_CHECKING, AsyncGenerator
+from typing import Iterable, AsyncGenerator
 
 import jedi
 from jedi import Script
-from jedi.api import replstartup
+from jedi.api import replstartup  # noqa
 from jedi.api.project import get_default_project
 from jedi.api.environment import (
     get_cached_default_environment,
@@ -42,7 +45,7 @@ from IPython.terminal.ptutils import IPythonPTCompleter
 from prompt_toolkit.auto_suggest import AutoSuggestFromHistory, ThreadedAutoSuggest
 from prompt_toolkit.completion import CompleteEvent, ThreadedCompleter, WordCompleter
 from prompt_toolkit.completion.filesystem import ExecutableCompleter, PathCompleter
-from prompt_toolkit.completion.base import DynamicCompleter, Completion, Completer
+from prompt_toolkit.completion.base import Completion, Completer
 from prompt_toolkit.completion.fuzzy_completer import FuzzyWordCompleter, FuzzyCompleter
 from prompt_toolkit.document import Document
 from prompt_toolkit.eventloop import generator_to_async_generator
@@ -66,10 +69,11 @@ class SimpleCompleter(Completer):
         else:
             self.completer = completer
         self.min_input_len = min_input_len
-        super().__init__(*args, **kwargs)
 
     @property
     def user_ns(self):
+        if get_ipython() is None:
+            return None
         return self.shell.user_ns
 
     def __repr__(self) -> str:
@@ -104,16 +108,16 @@ class SimpleCompleter(Completer):
 
     def __call__(
         self, document: Document, complete_event: CompleteEvent
-    ) -> Iterable[Completion]:
-        self.get_completions_async(document, complete_event=complete_event)
+    ) -> AsyncGenerator[Completion, None]:
+        return self.get_completions_async(document, complete_event=complete_event)
 
     async def get_completions_async(
         self, document: Document, complete_event: CompleteEvent
     ) -> AsyncGenerator[Completion, None]:
         """Asynchronous generator of completions."""
-        if len(doc.text) < self.min_input_len:
+        if not document.current_line.strip():
             return
-        if not doc.current_line.strip():
+        if len(document.text) < self.min_input_len:
             return
         async for completion in generator_to_async_generator(
             lambda: self.completer.get_completions(document, complete_event)
@@ -124,12 +128,11 @@ class SimpleCompleter(Completer):
 class PathCallable(PathCompleter):
     """PathCompleter with ``__call__`` defined.
 
-    The expanduser attribute is set to True. Thos can be overridddden in a subclass.
+    The superclass :class:`prompt_toolkit.Completion.PathCompleter` is
+    initialized with a set of parameters, and 'expanduser' defaults to False.
 
-    Also why is get_paths part of the publc API? If someones looking for a relative
-    directory, why wouldn't you assume that it's relative **to their current
-    working directory??**
-
+    The 'expanduser' attribute  in this instance  is set to True; however,
+    that can be overridddden in a subclass.
     """
 
     expanduser = True
@@ -141,7 +144,7 @@ class PathCallable(PathCompleter):
         self, document: Document, complete_event: CompleteEvent
     ) -> Iterable[Completion]:
         """Call but note doc is positional not keyword arg as it is in CustomCompleter."""
-        self.get_completions(document, complete_event=complete_event)
+        return self.get_completions(document, complete_event=complete_event)
 
 
 def get_path_completer():
@@ -164,51 +167,6 @@ def get_word_completer():
 def venvs():
     """Use `jedi.api.find_virtualenvs` and return all values."""
     return [i for i in find_virtualenvs()]
-
-
-class CustomCompleter(Completer):
-    """A completer that attempts to meet prompt_toolkits API as generically as possible."""
-
-    def __repr__(self):
-        return f"{self.__class__.__name__}>"
-
-    def __call__(
-        self, document: Document, complete_event: CompleteEvent
-    ) -> Iterable[Completion]:
-        self.get_completions(document, complete_event=complete_event)
-
-    def get_completions(self, document, complete_event):
-        global options
-        method_dict = get_options()
-        word = document.get_word_before_cursor()
-
-        methods = list(method_dict.items())
-
-        selected = document.text.split()
-        if len(selected) > 0:
-            selected = selected[-1]
-            if not selected.startswith("--"):
-                current = method_dict.get(selected)
-                if current is not None:
-                    has_options = method_dict.get(selected)["options"]
-                    if has_options is not None:
-                        options = [
-                            ("--{}".format(o["flag"]), {"meta": o["meta"]})
-                            for o in has_options
-                        ]
-                        methods = options + methods
-            else:
-                methods = options
-
-        for m in methods:
-            method_name, flag = m
-            if method_name.startswith(word):
-                meta = (
-                    flag["meta"] if isinstance(flag, dict) and flag.get("meta") else ""
-                )
-                yield Completion(
-                    method_name, start_position=-len(word), display_meta=meta,
-                )
 
 
 class MergedCompleter(Completer):
@@ -238,24 +196,27 @@ class MergedCompleter(Completer):
                 for item in completer.get_completions_async(document, complete_event):
                     yield item
 
+    def __repr__(self):
+        return f"{self.__class__.__name__}"
+
+    def __call__(self, document, complete_event):
+        return self.get_completions_async(document, complete_event)
+
 
 class FuzzyCallable(FuzzyCompleter):
     """A FuzzyCompleter with ``__call__`` defined."""
 
-    def __init__(self, completer=None, words=None, meta_dict=None, WORD=False):
+    def __init__(self, words=None, meta_dict=None, WORD=False, *args, **kwargs):
         """The exact code for FuzzyWordCompleter...except callable."""
         self.words = words
         if self.words is None:
             self.words = keyword.kwlist
         self.meta_dict = meta_dict or {}
         self.WORD = WORD
-
         self.word_completer = WordCompleter(words=lambda: self.words, WORD=self.WORD)
-
         self.fuzzy_completer = FuzzyCompleter(self.word_completer, WORD=self.WORD)
-
         self.completer = self.fuzzy_completer
-        super().__init__(completer=self.completer)
+        super().__init__(completer=self.completer, *args, **kwargs)
 
     def get_completions(self, document, complete_event):
         return self.fuzzy_completer.get_completions(document, complete_event)
@@ -265,6 +226,7 @@ class FuzzyCallable(FuzzyCompleter):
 
 
 def create_jedi_script():
+    """Initialize a jedi.Script with the prompt_toolkit.default_buffer.document."""
     # TODO:
     _ip = get_ipython()
     # To set up Script or Interpreter later
@@ -284,25 +246,28 @@ def create_pt_completers():
     Still needs to factor in magic completions before its officially
     integrated into the rest of the app.
     """
-    # No longer utilizes the set_custom_completer  method of IPython as that requires the name of the completer's complete method.
-
-    # Actually thats a great thing to allow to be specified. It allows for readlines `complete` method and pt's get_completions to work togethwr!
+    # No longer utilizes the set_custom_completer  method of IPython as that
+    # requires the name of the completer's complete method.
+    # Actually thats a great thing to allow to be specified. It allows for
+    # readlines `complete` method and pt's get_completions to work togethwr!
     # Need to review their api tho.
     # alternatively to set_custom_completer, can i skip the types.methodtype part and just do:
     # _ip.Completer.matchers.append(FuzzyCompleter(CustomCompleter))
     # seems to be working
     # So let's see how far we can chain these
     fuzzy_completer = FuzzyCallable(ExecutableCompleter())
-    merged_completer = MergedCompleter(
-        [
-            fuzzy_completer,
-            get_path_completer(),
-            get_word_completer(),
-            get_fuzzy_keyword_completer(),
-            IPythonPTCompleter(get_ipython()),
-        ]
-    )
-    threaded = SimpleCompleter(completer=merged_completer)
+    list_of_completers = [
+        fuzzy_completer,
+        get_path_completer(),
+        get_word_completer(),
+        get_fuzzy_keyword_completer(),
+        SimpleCompleter(),
+    ]
+    if get_ipython() is not None:
+        list_of_completers.append(IPythonPTCompleter(get_ipython()))
+
+    merged_completer = MergedCompleter(list_of_completers)
+    threaded = ThreadedCompleter(merged_completer)
     return threaded
 
 

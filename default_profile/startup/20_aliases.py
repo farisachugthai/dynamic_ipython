@@ -16,20 +16,19 @@ As stated in the language reference under Common Sequence Operations.:
         - **If concatenating tuple objects, extend a list instead.**
 
 """
+import copy
 import keyword
-import logging
 import operator
 import os
 import platform
-import shutil
-import subprocess
-import traceback
 from collections import UserDict
-from typing import Iterable, TYPE_CHECKING, Dict
+from typing import Any, Optional, Union
 
 from IPython.core.alias import default_aliases
 from IPython.core.getipython import get_ipython
 from traitlets.config.application import ApplicationError
+
+from default_profile.startup import UsageError
 
 
 class AliasError(Exception):
@@ -40,26 +39,50 @@ class InvalidAliasError(AliasError):
     pass
 
 
-def validate_alias(alias) -> Dict:
+def validate_alias(alias) -> Optional[Any]:
+    """Check attributes and formatting of Alias string.
+
+    Verifies alias through the name and cmd attributes.
+
+    Parameters
+    ----------
+    alias : Alias
+        Alias to verify
+
+    Returns
+    -------
+    nargs
+
+    Raises
+    ------
+    `InvalidAliasError`
+
+    """
+    shell = alias.shell
+
+    if shell is None:
+        return
+    if not hasattr(alias, 'name'):
+        raise InvalidAliasError('Alias does not have name attribute.')
     try:
-        caller = self.shell.magics_manager.magics["line"][self.name]
+        caller = shell.magics_manager.magics["line"][alias.name]
     except KeyError:
         pass
     else:
         if not isinstance(caller, Alias):
             raise InvalidAliasError(
                 "The name %s can't be aliased "
-                "because it is another magic command." % self.name
+                "because it is another magic command." % shell.name
             )
 
-    if not (isinstance(self.cmd, str)):
+    if not (isinstance(shell.cmd, str)):
         raise InvalidAliasError(
             "An alias command must be a string, " "got: %r" % self.cmd
         )
 
-    nargs = self.cmd.count("%s") - self.cmd.count("%%s")
+    nargs = alias.cmd.count("%s") - alias.cmd.count("%%s")
 
-    if (nargs > 0) and (self.cmd.find("%l") >= 0):
+    if (nargs > 0) and (alias.cmd.find("%l") >= 0):
         raise InvalidAliasError(
             "The %s and %l specifiers are mutually " "exclusive in alias definitions."
         )
@@ -74,7 +97,7 @@ class Alias(UserDict):
     makes more sense as a list of dicts.
     """
 
-    def __init__(self, name, cmd):
+    def __init__(self, name, cmd, **kwargs: dict):
         """Validate the alias, and return the number of arguments."""
         self.name = name
         self.cmd = cmd
@@ -83,6 +106,7 @@ class Alias(UserDict):
             raise InvalidAliasError(
                 f"The name {self.name} can't be aliased because it is a keyword or builtin."
             )
+        self.nargs = validate_alias(self)
 
     @property
     def shell(self):
@@ -159,6 +183,7 @@ class CommonAliases(UserDict):
             User aliases to add the user's namespace.
 
         """
+        self.linemagics = None
         if user_aliases is None:
             self.user_aliases = default_aliases()
         else:
@@ -191,7 +216,7 @@ class CommonAliases(UserDict):
             Repr: <alias pkg for 'pkg list-a'>
 
         """
-        caller = Alias(shell=self.shell, name=name, cmd=cmd)
+        caller = Alias(name=name, cmd=cmd)
         try:
             self.shell.magics_manager.register_function(
                 caller, magic_kind="line", magic_name=name
@@ -203,9 +228,7 @@ class CommonAliases(UserDict):
         return name in self.dict_aliases
 
     def soft_define_alias(self, name, cmd):
-        """Define a new alias and don't raise an error on an invalid alias.
-
-        """
+        """Define a new alias and don't raise an error on an invalid alias."""
         self.alias_manager.soft_define_alias(name, cmd)
 
     def undefine_alias(self, name):
@@ -222,7 +245,7 @@ class CommonAliases(UserDict):
     def __repr__(self):  # reprlib?
         return "<Common Aliases>: # of aliases: {!r} ".format(len(self.dict_aliases))
 
-    def update(self, other):
+    def update(self, other, **kwargs):
         """Update the mapping of aliases to system commands.
 
         Ensure that this is properly defined as this can be critical for speed.
@@ -230,14 +253,18 @@ class CommonAliases(UserDict):
 
         If a TypeError is raised by doing so then attempt to pass the alias along
         to the shell's `AliasManager` with `soft_define_alias`.
+        :param **kwargs:
+        :type **kwargs:
         """
         try:
             self.dict_aliases.update(other)
         except TypeError:
-            self.soft_define_alias(alias)
+            self.soft_define_alias(other)
+        if kwargs:
+            self.update(other=kwargs)
 
     def __copy__(self):
-        return copy.copy(self.aliases)
+        return copy.copy(self.dict_aliases)
 
     def __contains__(self, other):
         return other in self.dict_aliases
@@ -248,7 +275,7 @@ class CommonAliases(UserDict):
     def __add__(self, other, name=None, cmd=None, *args):
         """Allow instances to be added."""
         if hasattr(other, "dict_aliases"):
-            self.update(other.dict_aliases)
+            self.update(other.dict_aliases, )
         if name is None and cmd is None:
             if len(args) == 2:
                 name, cmd = args
@@ -314,24 +341,7 @@ class CommonAliases(UserDict):
     def python_exes(self):
         """Python executables like pydoc get executed in a subprocess currently.
 
-        Let's fix that behavior because that's silly.
-
-        So this method may have exposed a big problem in the way these data
-        structures are set up. It'd be way smarter to have this set up like
-        dictionaries.
-
-        I want to do a check for if pydoc and apropos are in teh aliases.
-        But if we iterate over the list then we still get a tuple.
-        We could do something like::
-
-            for i in self.user_aliases:
-                if i[0] == 'pydoc':
-                    self.unalias('pydoc')
-
-        But that's clunky because we're forced to iterate over all aliases.
-        Then we could try and do something like a merge sort to find pydoc
-        and apropos quickly but jeez that's gonna get complicated kinda quick
-        don't you think?
+        I want to do a check for if pydoc and apropos are in the aliases.
 
         .. todo::
             os.environ => env
@@ -423,10 +433,10 @@ class CommonAliases(UserDict):
             ),
             ("gls", "git ls-tree master %l"),
             ("git ls", "git ls-tree master %l"),
-            ("gm", "git merge --stat --squash --progress %l"),
+            ("gm", "git merge --stat --progress %l"),
             ("gma", "git merge --abort %l"),
             ("gmc", "git merge --continue %l"),
-            ("gmm", "git merge --stat --squash --progress master %l"),
+            ("gmm", "git merge --stat --progress master %l"),
             ("gmt", "git mergetool %l"),
             ("gp", "git pull --all %l"),
             ("gpo", "git pull origin %l"),
@@ -735,7 +745,7 @@ class WindowsAliases(CommonAliases):
         ]
 
 
-def generate_aliases(aliases=None):
+def generate_aliases() -> Union[None, LinuxAliases, WindowsAliases]:
     """Define aliases in case the user needs to redefine
 
     Parameters
@@ -752,16 +762,6 @@ def generate_aliases(aliases=None):
     :exc:`traitlets.config.application.ApplicationError`
         Raises an ApplicationError if `get_ipython` returns an object that
         doesn't have an attribute 'alias_manager'.
-
-    Examples
-    --------
-    >>> shell = get_ipython()
-    >>> len(shell.alias_manager.user_aliases)  # DOCTEST: +SKIP
-        0 # and even if it's not
-    >>> shell.alias_manager.user_aliases = [('a', 'a'), ('b', 'b'), ('c', 'c')]
-    >>> redefine_aliases([('ls', 'ls -F')])
-    >>> shell.alias_manager.user_aliases
-        4
 
     """
     _ip = get_ipython()

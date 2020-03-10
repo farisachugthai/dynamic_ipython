@@ -128,7 +128,7 @@ def rerun_startup():
     for i in scandir(exec_dir):
         if i.name.endswith(".py"):
             try:
-                safe_run_path(i.name, logger=logger)
+                ret.update(safe_run_path(i.name, logger=logger))
             except Exception as e:
                 logger.exception(e)
     return ret

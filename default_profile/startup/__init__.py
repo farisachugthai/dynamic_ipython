@@ -75,55 +75,22 @@ rehashx_mod = module_from_path("default_profile.startup.01_rehashx")
 
 log_mod = module_from_path("default_profile.startup.05_log")
 
-help_helpers_mod = importlib.util.module_from_spec(
-    _find_spec_from_path("default_profile.startup.06_help_helpers")
-)
-
-envvar_mod = importlib.util.module_from_spec(
-    _find_spec_from_path("default_profile.startup.10_envvar")
-)
-clipboard_mod = importlib.util.module_from_spec(
-    _find_spec_from_path("default_profile.startup.11_clipboard")
-)
-
-aliases_mod = importlib.util.module_from_spec(
-    _find_spec_from_path("default_profile.startup.20_aliases")
-)
+help_helpers_mod = module_from_path("default_profile.startup.06_help_helpers")
+envvar_mod = module_from_path("default_profile.startup.10_envvar")
+clipboard_mod = module_from_path("default_profile.startup.11_clipboard")
+aliases_mod = module_from_path("default_profile.startup.20_aliases")
 _fzf_spec = _find_spec_from_path("default_profile.startup.fzf")
 if _fzf_spec is not None:
     fzf_mod = importlib.util.module_from_spec(_fzf_spec)
 
 tmux_mod = module_from_path("default_profile.startup.tmux")
 
-readline_mod = importlib.util.module_from_spec(
-    _find_spec_from_path("default_profile.startup.30_readline")
-)
-kb_mod = importlib.util.module_from_spec(
-    _find_spec_from_path("default_profile.startup.32_kb")
-)
-bottom_toolbar_mod = importlib.util.module_from_spec(
-    _find_spec_from_path("default_profile.startup.33_bottom_toolbar")
-)
-lexer_mod = importlib.util.module_from_spec(
-    _find_spec_from_path("default_profile.startup.35_lexer")
-)
-
-numpy_init_mod = importlib.util.module_from_spec(
-    _find_spec_from_path("default_profile.startup.41_numpy_init")
-)
-
-completions_mod = importlib.util.module_from_spec(
-    _find_spec_from_path("default_profile.startup.completions")
-)
-
-event_loop_mod = importlib.util.module_from_spec(
-    _find_spec_from_path("default_profile.startup.event_loops")
-)
-
-pygit_mod = importlib.util.module_from_spec(
-    _find_spec_from_path("default_profile.startup.pygit")
-)
-
-repralias_mod = importlib.util.module_from_spec(
-    _find_spec_from_path("default_profile.startup.repralias")
-)
+readline_mod = module_from_path("default_profile.startup.30_readline")
+kb_mod = module_from_path("default_profile.startup.32_kb")
+bottom_toolbar_mod = module_from_path("default_profile.startup.33_bottom_toolbar")
+lexer_mod = module_from_path("default_profile.startup.35_lexer")
+numpy_init_mod = module_from_path("default_profile.startup.41_numpy_init")
+completions_mod = module_from_path("default_profile.startup.completions")
+event_loop_mod = module_from_path("default_profile.startup.event_loops")
+pygit_mod = module_from_path("default_profile.startup.pygit")
+repralias_mod = module_from_path("default_profile.startup.repralias")

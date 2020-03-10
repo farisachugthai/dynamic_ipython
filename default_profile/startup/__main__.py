@@ -13,7 +13,11 @@
 import asyncio
 import platform
 import sys
-from asyncio.__main__ import AsyncIOInteractiveConsole, REPLThread
+try:
+    from asyncio.__main__ import AsyncIOInteractiveConsole, REPLThread
+except ImportError:  # py3.8 only
+    AsyncIOInteractiveConsole =  REPLThread = None
+
 from asyncio import format_helpers
 from os import scandir
 from os.path import abspath

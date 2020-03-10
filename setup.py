@@ -18,12 +18,12 @@ import os
 import sys
 import platform
 from pathlib import Path
-from runpy import run_path, run_module
 from shutil import rmtree
 
-import setuptools
+import distutils   # noqa
+import setuptools  # noqa
 from setuptools.dist import Distribution
-from setuptools import setup, find_packages, Command, Extension, PackageFinder
+from setuptools import setup, find_packages, Command
 from distutils.errors import DistutilsArgError
 
 logging.basicConfig()
@@ -90,6 +90,7 @@ try:
     import distutils.command.bdist_conda
 except ImportError:
     distclass = (None,)
+    bdist_conda = None
 else:
     distclass = distutils.command.bdist_conda.CondaDistribution
 
@@ -123,7 +124,7 @@ REQUIRED = [
     "importlib-metadata",
     "pyfzf",
     "pyperclip",
-    "trio",
+    "trio", 'pygments', 'pyreadline'
 ]
 
 if platform.platform().startswith("Win"):

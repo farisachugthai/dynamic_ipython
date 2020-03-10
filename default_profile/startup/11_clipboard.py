@@ -10,14 +10,13 @@ Let's re-implement it as an `abstract factory
 import platform
 import shutil
 import subprocess
-import sys
 from os import environ
+from typing import TYPE_CHECKING, AnyStr
 
 from IPython.core.magic import line_magic, Magics, magics_class
 from IPython.core.error import TryNext
 from IPython.core.getipython import get_ipython
-from prompt_toolkit.clipboard import DynamicClipboard
-from prompt_toolkit.clipboard.base import ClipboardData, Clipboard
+from prompt_toolkit.clipboard.base import Clipboard, ClipboardData
 from prompt_toolkit.clipboard.in_memory import InMemoryClipboard
 
 try:
@@ -27,6 +26,12 @@ except ImportError:
     clipboard = None
 else:
     from prompt_toolkit.clipboard.pyperclip import PyperclipClipboard
+
+try:
+    import win32clipboard
+except ImportError:
+    win32clipboard = None
+
 
 
 class ClipboardEmpty(ValueError):
@@ -51,16 +56,19 @@ class WindowsClipboard(Clipboard):
             If win32clipboard can't be imported.
 
         """
-        try:
-            import win32clipboard
-        except ImportError:
-            raise TryNext(
-                "Getting text from the clipboard requires the pywin32 "
-                "extensions: http://sourceforge.net/projects/pywin32/"
-            )
+        if win32clipboard is None:
+            print(
+            "Getting text from the clipboard requires the pywin32 "
+            "extensions: http://sourceforge.net/projects/pywin32/"
+        )
         win32clipboard.OpenClipboard()
 
     def win_clip_pywin32(self):
+        """Utilize pywin32 to get the user's text.
+
+        :return:
+        :rtype:
+        """
         try:
             text = win32clipboard.GetClipboardData(win32clipboard.CF_UNICODETEXT)
         except (TypeError, win32clipboard.error):
@@ -90,14 +98,7 @@ class WindowsClipboard(Clipboard):
         except ClipboardEmpty:
             return
         except Exception:  # noqa
-            try:
-                # or something
-                return subprocess.run(
-                    ["win32yank", "-o", "lf"], stdout=subprocess.PIPE
-                ).stdout
-                # "-i", "crlf",
-            except subprocess.CalledProcessError:
-                raise
+            return subprocess.run(["win32yank", "-o", "lf"], stdout=subprocess.PIPE).stdout
 
     def __call__(self):
         self.win32_clipboard_get()
@@ -169,7 +170,7 @@ class ClipboardMagics(Magics):
 
     def load_ipython_extension(self):
         """Sep 20, 2019: Works!"""
-        self.shell.set_hook("clipboard_get", termux_clipboard_get)
+        self.shell.set_hook("clipboard_get", self.termux_clipboard_get)
 
     @line_magic
     def termux_clipboard_get(self):
@@ -202,12 +203,12 @@ class UsefulClipboard(Clipboard):
         self.shell = get_ipython()
         if clipboard is None:
             try:
-                self.clipboard = self.pyperclip()
+                self._clipboard = self.pyperclip()
             except ClipboardEmpty:
-                self.clipboard = self.load()
+                self._clipboard = self.load()
 
         else:
-            self.clipboard = clipboard
+            self._clipboard = clipboard
 
     def load(self):
         """TODO: This actually isn't gonna work.
@@ -239,8 +240,12 @@ class UsefulClipboard(Clipboard):
     def rotate(self):
         self._clipboard().rotate()
 
-    def get_data(self):
+    def get_data(self) -> ClipboardData:
         return self._clipboard().get_data()
+
+    def get_text(self) -> AnyStr:
+        """Return the text on the clipboard."""
+        return self.get_data().text
 
     def __call__(self):
         return self.get_data()
@@ -250,8 +255,7 @@ class UsefulClipboard(Clipboard):
 
     def __len__(self):
         """Return the length of clipboard data on the clipboard."""
-        # return len(self.clipboard().text)
-        return len(self.get_data())
+        return len(self.get_text())
 
     def termux_clipboard_get(self):
         if not shutil.which("termux-clipboard-get"):

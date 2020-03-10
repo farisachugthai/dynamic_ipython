@@ -232,9 +232,6 @@ except (ImportError, ModuleNotFoundError):
     c.TerminalIPythonApp.matplotlib = None
 except OSError:
     c.TerminalIPythonApp.matplotlib = None
-except Exception as e:
-    if getattr(sys, "exc_info", None):
-        print(sys.exc_info()[2])
 else:
     c.TerminalIPythonApp.matplotlib = "auto"
     # TODO: I accidentally set this as a config of InteractiveShellApp.
@@ -342,8 +339,9 @@ c.InteractiveShell.history_load_length = 1000
 
 # TODO: allow_none should be added to the loop runner. Check below tb
 
-# File "/data/data/com.termux/files/home/.local/share/virtualenvs/dynamic_ipython-mVJ3Ohov/lib/python3.8/site-packages/IPython/core/interactiveshell.py", line 402, in _import_runner
-#     raise ValueError('loop_runner must be callable')
+# File "/data/data/com.termux/files/home/.local/share/virtualenvs/dynamic_ipython-mVJ3Ohov/lib/python3.8/site
+# -packages/IPython/core/interactiveshell.py", line 402, in _import_runner raise ValueError('loop_runner must be
+# callable')
 
 # ValueError: loop_runner must be callable
 
@@ -489,7 +487,7 @@ c.TerminalInteractiveShell.extra_open_editor_shortcuts = True
 # https://github.com/farisachugthai/Gruvbox_IPython
 
 try:
-    from gruvbox.gruvbox import GruvboxStyle
+    from gruvbox import GruvboxStyle
 except (ImportError, ModuleNotFoundError):
     from pygments.styles import inkpot
 
@@ -518,29 +516,7 @@ def get_env():
 
 # Class used to generate Prompt token for prompt_toolkit
 # So this wouldn't be a block of code to build off of but here's something
-# so you can get an idea of what's going on
-
-
-class StandardPythonPrompt(ClassicPrompts):
-    """Create a no-op class to demonstrate usage of the ClassicPrompts class.
-
-    Examples
-    --------
-    >>> from IPython.terminal.prompts import ClassicPrompts
-    >>> from IPython.core.getipython import get_ipython
-    >>> ClassicPrompts(get_ipython()).continuation_prompt_tokens()
-    [(Token.Prompt, '>>> ')]
-
-    """
-
-    def __repr__(self):
-        """The most boiler-platey repr I can come up with."""
-        return self.__class__.__name__
-
-        # def __call__(self):
-        """TODO"""
-        # return
-
+# so you can get an idea of what's going on.
 
 # As an aside I believe that this attr is the same as Prompt
 # c.TerminalInteractiveShell.prompts_class = 'IPython.terminal.prompts.Prompts'

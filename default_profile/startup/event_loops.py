@@ -49,7 +49,9 @@ except ImportError:
         """Return a namedtuple of 'exc_type exc_value exc_traceback thread'."""
         return _ExceptHookArgs(*args)
 
-    def excepthook(args, /):
+    # def excepthook(args, /):
+    # fun fact this is py3.8 only!
+    def excepthook(*args):
         """Handle uncaught `threading.Thread.run` exception."""
         if args.exc_type == SystemExit:
             # silently ignore SystemExit

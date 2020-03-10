@@ -312,16 +312,14 @@ class MyPdb(pdb.Pdb):
         import __main__
 
         __main__.__dict__.clear()
-        __main__.__dict__.update(
-            {
-                "__name__": "__main__",
-                "__file__": self.mainpyfile,
-                "__package__": mod_spec.parent,
-                "__loader__": mod_spec.loader,
-                "__spec__": mod_spec,
-                "__builtins__": __builtins__,
-            }
-        )
+        __main__.__dict__.update({
+            "__name__": "__main__",
+            "__file__": self.mainpyfile,
+            "__package__": mod_spec.parent,
+            "__loader__": mod_spec.loader,
+            "__spec__": mod_spec,
+            "__builtins__": __builtins__,
+        }, )
         self.run(code)
 
     def _debug_post_mortem(self):
