@@ -54,6 +54,7 @@ def module_from_path(path):
     except ModuleNotFoundError:
         pass
 
+
 # returned none
 # rehashx_mod = module_from_path("01_rehashx")
 
@@ -79,10 +80,11 @@ clipboard_mod = importlib.util.module_from_spec(
 aliases_mod = importlib.util.module_from_spec(
     _find_spec_from_path("default_profile.startup.20_aliases")
 )
-fzf_mod = importlib.util.module_from_spec(
-    _find_spec_from_path("default_profile.startup.21_fzf")
-)
-tmux_mod = module_from_path("default_profile.startup.22_tmux")
+_fzf_spec = _find_spec_from_path("default_profile.startup.fzf")
+if _fzf_spec is not None:
+    fzf_mod = importlib.util.module_from_spec(_fzf_spec)
+
+tmux_mod = module_from_path("default_profile.startup.tmux")
 
 readline_mod = importlib.util.module_from_spec(
     _find_spec_from_path("default_profile.startup.30_readline")

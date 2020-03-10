@@ -1,5 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""Install the repo as a python package.
+
+.. tip::
+    Always have a fallback for determining version.
+    If using an import from your repo doesn't work, then depending on that
+    will give a `None` for version to setuptools.setup().
+
+    Libraries like importlib_metadata exist for this purpose.
+
+"""
+
 # {{{
 import codecs
 import logging
@@ -28,6 +39,14 @@ d = Distribution()
 # except ImportError:
 #     Wheel = None
 
+if len(sys.argv) == 0:
+    d.print_commands()
+
+try:
+    d.parse_command_line()
+except DistutilsArgError:
+    print("No args provided.")
+
 try:
     from pkg_resources import find_distributions
 except ImportError:
@@ -50,6 +69,9 @@ else:
 
 # Metadata: {{{1
 
+# DON'T GET RID OF THIS. This took a while to debug and honestly it was an accident.
+# Incorrectly installing the package will leave the package partially installed
+# leading to software half running and creating deeply confusing tracebacks
 try:
     from default_profile.__about__ import __version__
     from default_profile import ModuleNotFoundError
@@ -96,13 +118,19 @@ REQUIRED = [
     "IPython>=7.12",
     "ipykernel",
 ]
-if platform.platform().startswith('Win'):
-    REQUIRED.append('pyreadline')
+if platform.platform().startswith("Win"):
+    REQUIRED.append("pyreadline")
 
 
 EXTRAS = {
     "develop": ["pipenv", "pandas", "matplotlib",],
-    "docs": ["sphinx>=2.2", "matplotlib>=3.0.0", "numpydoc>=0.9", "flake8-rst", "recommonmark"],
+    "docs": [
+        "sphinx>=2.2",
+        "matplotlib>=3.0.0",
+        "numpydoc>=0.9",
+        "flake8-rst",
+        "recommonmark",
+    ],
     "test": ["ipyparallel", "pytest", "testpath", "nose", "matplotlib"],
 }
 # }}}}
@@ -165,10 +193,9 @@ try:
         maintainer_email=EMAIL,
         url=URL,
         packages=find_packages(where="."),
-        # If your package is a single module, use this instead of 'packages':
-        # py_modules=['mypackage'],
-        # using this temporarily
-        # entry_points={"console_scripts": ["ip=default_profile.startup.__main__:"],},
+        entry_points={
+            "console_scripts": ["ip=default_profile.profile_debugger:debug.main"],
+        },
         # namespace_packages=["default_profile", "default_profile.sphinxext"],
         install_requires=REQUIRED,
         extras_require=EXTRAS,
@@ -178,16 +205,12 @@ try:
             # If any package contains *.txt or *.rst files, include them:
             "": ["*.txt", "*.rst"],
         },
-
         license=LICENSE,
-
         # https://www.python.org/dev/peps/pep-0345/#platform-multiple-use
-
         # A Platform specification describing an operating system supported by the
         # distribution which is not listed in the "Operating System" Trove
         # classifiers. See "Classifier" below.#
-        platform='any',
-
+        platform="any",
         classifiers=[
             # Trove classifiers
             # Full list: https://pypi.python.org/pypi?%3Aaction=list_classifiers

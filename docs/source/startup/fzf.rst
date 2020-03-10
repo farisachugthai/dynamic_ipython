@@ -1,10 +1,8 @@
-======================================
-:mod:`~default_profile.startup.21_fzf`
-======================================
+====
+FZF
+====
 
-.. currentmodule:: default_profile.startup.21_fzf
-
-.. automodule:: default_profile.startup.21_fzf
+.. automodule:: default_profile.startup.fzf
    :synopsis: Add FZF commands with aliases to the namespace.
    :members:
    :undoc-members:
