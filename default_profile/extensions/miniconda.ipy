@@ -1,21 +1,26 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import shutil
-import sys
+# import sys
 import subprocess
-from subprocess import Popen, PIPE
+# from subprocess import Popen, PIPE
+import warnings
 
 from IPython.core.getipython import get_ipython
 from IPython.core.magic import Magics, magics_class, line_magic
 from IPython.core.magics.packaging import (
-    CONDA_ENV_FLAGS,
-    CONDA_YES_FLAGS,
-    CONDA_COMMANDS_REQUIRING_YES,
-    CONDA_COMMANDS_REQUIRING_PREFIX,
+    # CONDA_ENV_FLAGS,
+    # CONDA_YES_FLAGS,
+    # CONDA_COMMANDS_REQUIRING_YES,
+    # CONDA_COMMANDS_REQUIRING_PREFIX,
     PackagingMagics,
 )
-from IPython.lib import kernel
 from IPython.terminal.interactiveshell import TerminalInteractiveShell
+
+try:
+    from ipykernel.ipkernel import IPythonKernel as kernel
+except ImportError:
+    warnings.warn('ipykernel not installed.')
 
 
 @magics_class
@@ -60,8 +65,7 @@ class PackagingMagics(Magics):
             # except AttributeError:
             #     raise NotImplementedError
             if self.conda_path is not None and self.conda_path.ends_with("bat"):
-                conda = "call " + self.conda_path
-                %sx conda
+                return %sx "call " + self.conda_path
 
     def python_api(self):
         """TODO

@@ -1,10 +1,11 @@
 """Set up pytest."""
+import importlib
 import multiprocessing
 import os
-import sys
 import tempfile
 from warnings import simplefilter
 
+from IPython import get_ipython
 from IPython.core.interactiveshell import InteractiveShell
 
 import pytest
@@ -17,8 +18,6 @@ try:
     import default_profile
 except:
     sys.exit("Not installed.")
-else:
-    from default_profile import ask_for_import
 
 
 simplefilter("ignore", category=DeprecationWarning)
@@ -83,9 +82,13 @@ def pytest_report_header():
 
     ret = []
     for i in ["matplotlib", "sqlite3", "pygments"]:
-        ask_for_import(i)
-        if sys.modules[i]:
-            ret.append(i)
+        try:
+            if sys.modules[i]:
+                ret.append(i)
+        except KeyError:
+            importlib.invalidate_caches()
+            importlib.import_module(i)
+
     return ret
 
 

@@ -8,6 +8,8 @@ from platform import platform
 
 from traitlets.config import get_config
 from IPython.core.getipython import get_ipython
+# even if we're not using them now we will
+from ipykernel.ipkernel import IPythonKernel, ZMQInteractiveShell   # noqa
 from ipykernel.zmqshell import ZMQShellDisplayHook
 from zmq.backend.cython.context import Context
 

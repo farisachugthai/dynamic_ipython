@@ -14,12 +14,16 @@ from IPython.core.getipython import get_ipython
 from prompt_toolkit.cache import SimpleCache
 from prompt_toolkit.document import Document
 from prompt_toolkit.key_binding.defaults import load_key_bindings
-from prompt_toolkit.key_binding.key_bindings import (
-    # KeyBindingsBase,
-    _MergedKeyBindings,
+from prompt_toolkit.key_binding import merge_key_bindings
+from prompt_toolkit.key_binding.bindings.auto_suggest import load_auto_suggest_bindings
+from prompt_toolkit.key_binding.bindings.vi import (
+    load_vi_bindings,
+    load_vi_search_bindings,
 )
-
+from prompt_toolkit.key_binding.key_bindings import KeyBindings, ConditionalKeyBindings
 from prompt_toolkit.keys import Keys
+
+from default_profile.startup.ptoolkit import create_searching_keybindings
 
 
 class KeyBindingsManager(UserList):
@@ -177,6 +181,10 @@ class KeyBindingsManager(UserList):
             sys.getsizeof(v) for v in self.__dict__.values()
         )
 
+    def get(self, keys):
+        # TODO:
+        pass
+
 
 class ApplicationKB(KeyBindingsManager):
     """Functionally the exact same thing except now we're bound to _ip.pt_app."""
@@ -225,3 +233,23 @@ class Documented(Document):
 
     def __iter__(self):
         return iter(self.text)
+
+
+def create_kb() -> KeyBindings:
+    all_kb = merge_key_bindings(
+        [
+            get_ipython().pt_app.app.key_bindings,
+            load_vi_bindings(),
+            load_vi_search_bindings(),
+            load_auto_suggest_bindings(),  # these stopped getting added when i did this
+            create_searching_keybindings(),
+        ]
+    )
+    get_ipython().pt_app.app.key_bindings = all_kb
+    get_ipython().pt_app.app.key_bindings._update_cache()
+
+
+if __name__ == '__main__':
+    # Honestly I'm wary to do this but let's go for it
+    if get_ipython() is not None:
+        create_kb()
