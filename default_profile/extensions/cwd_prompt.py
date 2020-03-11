@@ -42,7 +42,7 @@ class CwdPrompt(Prompts):
         self.shell = shell or get_ipython()
         if self.shell is not None:
             self.old_prompt = self.shell.prompts
-            super().__init__(self.shell, *args, **kwargs)
+            super().__init__(self.shell)
 
     def __repr__(self):
         return "{!r}".format(self.in_prompt_tokens())

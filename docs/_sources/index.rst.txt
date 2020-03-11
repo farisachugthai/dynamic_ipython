@@ -8,10 +8,6 @@ Welcome to Dynamic IPython's documentation!
 
 .. moduleauthor:: Faris Chugthai
 
-.. module:: root_index
-   :synopsis: Main landing page for the documentation.
-
-
 Startup Scripts
 ================
 
@@ -159,15 +155,17 @@ Startup
 
    Startup <startup/index>
    rehashx <startup/rehashx>
-   ipython-logger <startup/ipython-logger>
-   help_helpers <startup/help_helpers.rst>
-   clipboard <startup/clipboard>
-   aliases <startup/aliases>
-   fzf <startup/fzf>
-   setup_readline <startup/setup_readline>
+   IPython Logger <startup/ipython-logger>
+   Help Helpers <startup/help_helpers.rst>
+   Clipboard <startup/clipboard>
+   Aliases <startup/aliases>
+   FZF <startup/fzf>
+   Setup Readline <startup/setup_readline>
    prompt_toolkit <startup/prompt_toolkit>
-   41_numpy <startup/41_numpy>
-   eventloops <startup/eventloops>
+   Toolbar <startup/toolbar>
+   Lexer <startup/lexer>
+   Numpy <startup/41_numpy>
+   Eventloops <startup/eventloops>
 
 
 .. _sphinxext-package:

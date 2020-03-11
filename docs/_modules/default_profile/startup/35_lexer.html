@@ -208,7 +208,7 @@
     <span class="n">Gruvbox</span> <span class="o">=</span> <span class="n">InkPotStyle</span>  <span class="c1"># surprise!</span>
 
 
-<div class="viewcode-block" id="our_style"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.35_lexer.our_style">[docs]</a><span class="k">def</span> <span class="nf">our_style</span><span class="p">():</span>
+<div class="viewcode-block" id="our_style"><a class="viewcode-back" href="../../../startup/lexer.html#default_profile.startup.35_lexer.our_style">[docs]</a><span class="k">def</span> <span class="nf">our_style</span><span class="p">():</span>
     <span class="k">return</span> <span class="n">merge_styles</span><span class="p">(</span>
         <span class="p">[</span>
             <span class="n">style_from_pygments_cls</span><span class="p">(</span><span class="n">Gruvbox</span><span class="p">),</span>
@@ -221,17 +221,17 @@
     <span class="p">)</span>  <span class="c1"># TODO</span></div>
 
 
-<div class="viewcode-block" id="get_lexer"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.35_lexer.get_lexer">[docs]</a><span class="k">def</span> <span class="nf">get_lexer</span><span class="p">():</span>
+<div class="viewcode-block" id="get_lexer"><a class="viewcode-back" href="../../../startup/lexer.html#default_profile.startup.35_lexer.get_lexer">[docs]</a><span class="k">def</span> <span class="nf">get_lexer</span><span class="p">():</span>
     <span class="n">wrapped_lexer</span> <span class="o">=</span> <span class="n">PygmentsLexer</span><span class="p">(</span><span class="n">PythonLexer</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">wrapped_lexer</span></div>
 
 
-<div class="viewcode-block" id="pygments_tokens"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.35_lexer.pygments_tokens">[docs]</a><span class="k">def</span> <span class="nf">pygments_tokens</span><span class="p">():</span>
+<div class="viewcode-block" id="pygments_tokens"><a class="viewcode-back" href="../../../startup/lexer.html#default_profile.startup.35_lexer.pygments_tokens">[docs]</a><span class="k">def</span> <span class="nf">pygments_tokens</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;A  list of Pygments style tokens. In case you need that.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">PygmentsTokens</span><span class="p">(</span><span class="n">Gruvbox</span><span class="o">.</span><span class="n">style_rules</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="IPythonConfigurableLexer"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.35_lexer.IPythonConfigurableLexer">[docs]</a><span class="k">class</span> <span class="nc">IPythonConfigurableLexer</span><span class="p">(</span><span class="n">LoggingConfigurable</span><span class="p">):</span>
+<div class="viewcode-block" id="IPythonConfigurableLexer"><a class="viewcode-back" href="../../../startup/lexer.html#default_profile.startup.35_lexer.IPythonConfigurableLexer">[docs]</a><span class="k">class</span> <span class="nc">IPythonConfigurableLexer</span><span class="p">(</span><span class="n">LoggingConfigurable</span><span class="p">):</span>
     <span class="n">shell</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">InteractiveShellABC</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="n">lexer</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">Lexer</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Instance that lexs documents.&quot;</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">tag</span><span class="p">(</span>
@@ -257,7 +257,7 @@
     <span class="c1">#: Priority, should multiple lexers match and no content is provided</span>
     <span class="n">priority</span> <span class="o">=</span> <span class="mi">0</span>
 
-<div class="viewcode-block" id="IPythonConfigurableLexer.__init__"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.35_lexer.IPythonConfigurableLexer.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">original_lexer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="IPythonConfigurableLexer.__init__"><a class="viewcode-back" href="../../../startup/lexer.html#default_profile.startup.35_lexer.IPythonConfigurableLexer.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">original_lexer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">shell</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -270,7 +270,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">original_lexer</span> <span class="o">=</span> <span class="kc">None</span></div></div>
 
 
-<div class="viewcode-block" id="Colorizer"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.35_lexer.Colorizer">[docs]</a><span class="k">class</span> <span class="nc">Colorizer</span><span class="p">:</span>
+<div class="viewcode-block" id="Colorizer"><a class="viewcode-back" href="../../../startup/lexer.html#default_profile.startup.35_lexer.Colorizer">[docs]</a><span class="k">class</span> <span class="nc">Colorizer</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Make the pygments function &#39;highlight&#39; even easier to work with.</span>
 
 <span class="sd">    Additionally utilize ``__slots__`` to conserve memory.</span>
@@ -283,7 +283,7 @@
         <span class="c1"># &#39;highlight&#39;: pygments.highlight.__doc__</span>
     <span class="p">}</span>
 
-<div class="viewcode-block" id="Colorizer.__init__"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.35_lexer.Colorizer.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pylexer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">formatter</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Colorizer.__init__"><a class="viewcode-back" href="../../../startup/lexer.html#default_profile.startup.35_lexer.Colorizer.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pylexer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">formatter</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">pylexer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">pylexer</span> <span class="o">=</span> <span class="n">PythonLexer</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">formatter</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -292,17 +292,17 @@
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">code</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">highlight</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Colorizer.highlight"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.35_lexer.Colorizer.highlight">[docs]</a>    <span class="k">def</span> <span class="nf">highlight</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">code</span><span class="p">):</span>
+<div class="viewcode-block" id="Colorizer.highlight"><a class="viewcode-back" href="../../../startup/lexer.html#default_profile.startup.35_lexer.Colorizer.highlight">[docs]</a>    <span class="k">def</span> <span class="nf">highlight</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">code</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">pygments</span><span class="o">.</span><span class="n">highlight</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pylexer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">formatter</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{self.__class__.__name__}</span><span class="s2">&quot;</span></div>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span></div>
 
 
-<div class="viewcode-block" id="MyPythonLexer"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.35_lexer.MyPythonLexer">[docs]</a><span class="k">class</span> <span class="nc">MyPythonLexer</span><span class="p">(</span><span class="n">PythonLexer</span><span class="p">):</span>
+<div class="viewcode-block" id="MyPythonLexer"><a class="viewcode-back" href="../../../startup/lexer.html#default_profile.startup.35_lexer.MyPythonLexer">[docs]</a><span class="k">class</span> <span class="nc">MyPythonLexer</span><span class="p">(</span><span class="n">PythonLexer</span><span class="p">):</span>
     <span class="n">EXTRA_KEYWORDS</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="s2">&quot;!&quot;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="MyPythonLexer.get_tokens_unprocessed"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.35_lexer.MyPythonLexer.get_tokens_unprocessed">[docs]</a>    <span class="k">def</span> <span class="nf">get_tokens_unprocessed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+<div class="viewcode-block" id="MyPythonLexer.get_tokens_unprocessed"><a class="viewcode-back" href="../../../startup/lexer.html#default_profile.startup.35_lexer.MyPythonLexer.get_tokens_unprocessed">[docs]</a>    <span class="k">def</span> <span class="nf">get_tokens_unprocessed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">PythonLexer</span><span class="o">.</span><span class="n">get_tokens_unprocessed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">token</span> <span class="ow">is</span> <span class="n">Name</span> <span class="ow">and</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">EXTRA_KEYWORDS</span><span class="p">:</span>
                 <span class="k">yield</span> <span class="n">index</span><span class="p">,</span> <span class="n">Keyword</span><span class="o">.</span><span class="n">Pseudo</span><span class="p">,</span> <span class="n">value</span>
@@ -310,7 +310,7 @@
                 <span class="k">yield</span> <span class="n">index</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">value</span></div></div>
 
 
-<div class="viewcode-block" id="get_titlebar_text"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.35_lexer.get_titlebar_text">[docs]</a><span class="k">def</span> <span class="nf">get_titlebar_text</span><span class="p">():</span>
+<div class="viewcode-block" id="get_titlebar_text"><a class="viewcode-back" href="../../../startup/lexer.html#default_profile.startup.35_lexer.get_titlebar_text">[docs]</a><span class="k">def</span> <span class="nf">get_titlebar_text</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Return (style, text) tuples for startup.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">[</span>
         <span class="p">(</span><span class="s2">&quot;class:title&quot;</span><span class="p">,</span> <span class="s2">&quot;Hello World!&quot;</span><span class="p">),</span>
@@ -318,7 +318,7 @@
     <span class="p">]</span></div>
 
 
-<div class="viewcode-block" id="generate_and_print_hsplit"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.35_lexer.generate_and_print_hsplit">[docs]</a><span class="k">def</span> <span class="nf">generate_and_print_hsplit</span><span class="p">():</span>
+<div class="viewcode-block" id="generate_and_print_hsplit"><a class="viewcode-back" href="../../../startup/lexer.html#default_profile.startup.35_lexer.generate_and_print_hsplit">[docs]</a><span class="k">def</span> <span class="nf">generate_and_print_hsplit</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Generate a `prompt_toolkit.layout.container.HSplit`.</span>
 
 <span class="sd">    Originally was in 33_bottom_toolbar but moved here so we can use the lexer.</span>
@@ -355,7 +355,7 @@
 
 
 <span class="c1"># Pretty printing</span>
-<div class="viewcode-block" id="pphighlight"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.35_lexer.pphighlight">[docs]</a><span class="k">def</span> <span class="nf">pphighlight</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+<div class="viewcode-block" id="pphighlight"><a class="viewcode-back" href="../../../startup/lexer.html#default_profile.startup.35_lexer.pphighlight">[docs]</a><span class="k">def</span> <span class="nf">pphighlight</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
     <span class="n">s</span> <span class="o">=</span> <span class="n">pprint</span><span class="o">.</span><span class="n">pformat</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
@@ -366,7 +366,7 @@
         <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="extra_displayhook"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.35_lexer.extra_displayhook">[docs]</a><span class="k">def</span> <span class="nf">extra_displayhook</span><span class="p">():</span>
+<div class="viewcode-block" id="extra_displayhook"><a class="viewcode-back" href="../../../startup/lexer.html#default_profile.startup.35_lexer.extra_displayhook">[docs]</a><span class="k">def</span> <span class="nf">extra_displayhook</span><span class="p">():</span>
     <span class="n">help_types</span> <span class="o">=</span> <span class="p">[</span>
         <span class="n">types</span><span class="o">.</span><span class="n">BuiltinFunctionType</span><span class="p">,</span>
         <span class="n">types</span><span class="o">.</span><span class="n">BuiltinMethodType</span><span class="p">,</span>

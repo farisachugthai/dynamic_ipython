@@ -1,0 +1,399 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>35_lexer &#8212; Dynamic IPython</title>
+    
+    <link rel="stylesheet" href="../_static/scrolls.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/print.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/theme_extras.js"></script>
+    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/startup/lexer.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="numpy Initialization" href="41_numpy.html" />
+    <link rel="prev" title="33_bottom_toolbar" href="toolbar.html" />
+<!-- <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" /> -->
+<!-- <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" media="screen" rel="stylesheet" type="text/css" /> -->
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <title>Dynamic IPython --- IPython Extensions</title>
+  <meta name="description" content="" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style type="text/css">
+    /* CSS styles */
+    /* Example by Matthias Benkort at http://codepen.io/KtorZ/pen/ZOzdqG */
+    @import url(
+      https://fonts.googleapis.com/css?family=Roboto:400,
+      300,
+      500,
+      700
+    );
+    .wrapper {
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .material-textfield {
+      display: inline-block;
+      height: 4rem;
+      padding-top: 2rem;
+    }
+    .material-textfield input {
+      background: none;
+      border: none;
+      box-sizing: border-box;
+      display: block;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 1rem;
+      padding: 0.25rem 0.1rem;
+      width: 100%;
+    }
+    .material-textfield input:invalid {
+      box-shadow: none;
+    }
+    .material-textfield input:focus {
+      outline: none;
+    }
+    .material-textfield label {
+      display: inline-block;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 0;
+      pointer-events: none;
+      position: relative;
+      text-transform: uppercase;
+      width: 100%;
+    }
+    .material-textfield label::before {
+      content: attr(data-content);
+      position: relative;
+      transition: all 0.2s ease;
+      will-change: font-size, top;
+    }
+    .material-textfield label::after {
+      bottom: 0.9rem;
+      content: "";
+      height: 0.3rem;
+      left: 50%;
+      position: absolute;
+      transition: all 0.2s ease;
+      width: 0;
+      will-change: width, left;
+    }
+    .material-textfield label::before,
+    .material-textfield input[required]:focus ~ label::before {
+      font-size: 0.75rem;
+      top: -3.25rem;
+    }
+    .material-textfield input:focus ~ label::after {
+      left: 0%;
+      width: 100%;
+    }
+    .material-textfield input:invalid ~ label::before {
+      font-size: 1rem;
+      top: -2rem;
+    }
+
+    .material-textfield.blue input {
+      border-bottom: 0.1rem solid #03a9f4;
+      color: #0275a8;
+    }
+    .material-textfield.blue label::after {
+      background: #03a9f4;
+    }
+    .material-textfield.blue label::before,
+    .material-textfield.blue input[required]:focus ~ label::before {
+      color: #47c4fd;
+    }
+    .material-textfield.blue input:invalid ~ label::before {
+      color: #03a9f4;
+    }
+
+    .material-textfield.red input {
+      border-bottom: 0.1rem solid #f44336;
+      color: #d2190b;
+    }
+    .material-textfield.red label::after {
+      background: #f44336;
+    }
+    .material-textfield.red label::before,
+    .material-textfield.red input[required]:focus ~ label::before {
+      color: #f8877f;
+    }
+    .material-textfield.red input:invalid ~ label::before {
+      color: #f44336;
+    }
+  </style>
+</head>
+
+  </head><body>
+
+    <div id="content">
+      <div class="header">
+        <h1 class="heading"><a href="../index.html"
+          title="back to the documentation overview"><span>35_lexer</span></a></h1>
+      </div>
+      <div class="relnav" role="navigation" aria-label="related navigation">
+        <a href="toolbar.html">&laquo; <code class="xref py py-mod docutils literal notranslate"><span class="pre">33_bottom_toolbar</span></code></a> |
+        <a href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">35_lexer</span></code></a>
+        | <a href="41_numpy.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">numpy</span></code> Initialization &raquo;</a>
+      </div>
+      <div id="contentwrapper">
+        <div id="toc" role="navigation" aria-label="table of contents navigation">
+          <h3>Table of Contents</h3>
+          <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">35_lexer</span></code></a><ul>
+<li><a class="reference internal" href="#configurable-lexers">Configurable Lexers</a><ul>
+<li><a class="reference internal" href="#module-default_profile.startup.35_lexer">Lexer Autogenerated Docs</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+        <div role="main">
+        
+<div class="section" id="lexer">
+<h1><a class="reference internal" href="#module-default_profile.startup.35_lexer" title="default_profile.startup.35_lexer: Generate a lexer to provide syntax highlighting in the REPL."><code class="xref py py-mod docutils literal notranslate"><span class="pre">35_lexer</span></code></a><a class="headerlink" href="#lexer" title="Permalink to this headline">¶</a></h1>
+<p>Build our lexer in addition to utilizing already built ones.</p>
+<p>Pygments, IPython, prompt_toolkit, Jinja2 and Sphinx all come
+with their own concepts of lexers which doesn’t include
+the built-in modules.:</p>
+<ul>
+<li><a class="reference external" href="https://docs.python.org/3/library/parser.html#module-parser" title="(in Python v3.8)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">parser</span></code></a></li>
+<li><a class="reference external" href="https://docs.python.org/3/library/token.html#module-token" title="(in Python v3.8)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">token</span></code></a></li>
+<li><code class="xref py py-mod docutils literal notranslate"><span class="pre">tokenizer</span></code></li>
+<li><a class="reference external" href="https://docs.python.org/3/library/re.html#module-re" title="(in Python v3.8)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">re</span></code></a></li>
+<li><a class="reference external" href="https://docs.python.org/3/library/ast.html#module-ast" title="(in Python v3.8)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ast</span></code></a></li>
+</ul>
+<p>So it’d be tough to say we’re at a lack of tools!</p>
+<div class="section" id="configurable-lexers">
+<h2>Configurable Lexers<a class="headerlink" href="#configurable-lexers" title="Permalink to this headline">¶</a></h2>
+<p>The lexers defined here were originally created to stand in as objects
+able to merge the seemingly disjoint APIs of IPython, traitlets,
+prompt_toolkit and pygments.</p>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<p>The <code class="xref py py-obj docutils literal notranslate"><span class="pre">IPython.terminal.lexer.IPythonPTLexer</span></code> also should have a few
+of these attributes as well.</p>
+</div>
+<p>And here’s how you join the bridge.</p>
+<dl class="class">
+<dt>
+<code class="sig-name descname">PygmentsLexer(Lexer):</code></dt>
+<dd><p>Lexer that calls a pygments lexer.</p>
+<p>Example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pygments.lexers.html</span> <span class="kn">import</span> <span class="n">HtmlLexer</span>
+<span class="n">lexer</span> <span class="o">=</span> <span class="n">PygmentsLexer</span><span class="p">(</span><span class="n">HtmlLexer</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note: Don’t forget to also load a Pygments compatible style. E.g.:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">prompt_toolkit.styles.from_pygments</span> <span class="kn">import</span> <span class="n">style_from_pygments_cls</span>
+<span class="kn">from</span> <span class="nn">pygments.styles</span> <span class="kn">import</span> <span class="n">get_style_by_name</span>
+<span class="n">style</span> <span class="o">=</span> <span class="n">style_from_pygments_cls</span><span class="p">(</span><span class="n">get_style_by_name</span><span class="p">(</span><span class="s1">&#39;monokai&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul>
+<li><p><strong>pygments_lexer_cls</strong> – A <code class="xref py py-obj docutils literal notranslate"><span class="pre">Lexer</span></code> from Pygments.</p></li>
+<li><p><strong>sync_from_start</strong> – Start lexing at the start of the document. This
+will always give the best results, but it will be
+slow for bigger documents. (When the last part of the
+document is display, then the whole document will be
+lexed by Pygments on every key stroke.) It is
+recommended to disable this for inputs that are
+expected to be more than 1,000 lines.</p></li>
+<li><p><strong>syntax_sync</strong> – <code class="xref py py-obj docutils literal notranslate"><span class="pre">SyntaxSync</span></code> object.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="section" id="module-default_profile.startup.35_lexer">
+<span id="lexer-autogenerated-docs"></span><h3>Lexer Autogenerated Docs<a class="headerlink" href="#module-default_profile.startup.35_lexer" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="default_profile.startup.35_lexer.our_style">
+<code class="sig-name descname">our_style</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/35_lexer.html#our_style"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.35_lexer.our_style" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="default_profile.startup.35_lexer.get_lexer">
+<code class="sig-name descname">get_lexer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/35_lexer.html#get_lexer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.35_lexer.get_lexer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="default_profile.startup.35_lexer.pygments_tokens">
+<code class="sig-name descname">pygments_tokens</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/35_lexer.html#pygments_tokens"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.35_lexer.pygments_tokens" title="Permalink to this definition">¶</a></dt>
+<dd><p>A  list of Pygments style tokens. In case you need that.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="default_profile.startup.35_lexer.IPythonConfigurableLexer">
+<em class="property">class </em><code class="sig-name descname">IPythonConfigurableLexer</code><span class="sig-paren">(</span><em class="sig-param">shell=None</em>, <em class="sig-param">original_lexer=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/35_lexer.html#IPythonConfigurableLexer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.35_lexer.IPythonConfigurableLexer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">traitlets.config.configurable.LoggingConfigurable</span></code></p>
+<dl class="attribute">
+<dt id="default_profile.startup.35_lexer.IPythonConfigurableLexer.lexer">
+<code class="sig-name descname">lexer</code><a class="headerlink" href="#default_profile.startup.35_lexer.IPythonConfigurableLexer.lexer" title="Permalink to this definition">¶</a></dt>
+<dd><p>A trait whose value must be an instance of a specified class.</p>
+<p>The value can also be an instance of a subclass of the specified class.</p>
+<p>Subclasses can declare default classes by overriding the klass attribute</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="default_profile.startup.35_lexer.IPythonConfigurableLexer.name">
+<code class="sig-name descname">name</code><em class="property"> = None</em><a class="headerlink" href="#default_profile.startup.35_lexer.IPythonConfigurableLexer.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of the lexer</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="default_profile.startup.35_lexer.IPythonConfigurableLexer.aliases">
+<code class="sig-name descname">aliases</code><em class="property"> = []</em><a class="headerlink" href="#default_profile.startup.35_lexer.IPythonConfigurableLexer.aliases" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shortcuts for the lexer</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="default_profile.startup.35_lexer.IPythonConfigurableLexer.filenames">
+<code class="sig-name descname">filenames</code><em class="property"> = []</em><a class="headerlink" href="#default_profile.startup.35_lexer.IPythonConfigurableLexer.filenames" title="Permalink to this definition">¶</a></dt>
+<dd><p>File name globs</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="default_profile.startup.35_lexer.IPythonConfigurableLexer.alias_filenames">
+<code class="sig-name descname">alias_filenames</code><em class="property"> = []</em><a class="headerlink" href="#default_profile.startup.35_lexer.IPythonConfigurableLexer.alias_filenames" title="Permalink to this definition">¶</a></dt>
+<dd><p>Secondary file name globs</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="default_profile.startup.35_lexer.IPythonConfigurableLexer.mimetypes">
+<code class="sig-name descname">mimetypes</code><em class="property"> = []</em><a class="headerlink" href="#default_profile.startup.35_lexer.IPythonConfigurableLexer.mimetypes" title="Permalink to this definition">¶</a></dt>
+<dd><p>MIME types</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="default_profile.startup.35_lexer.IPythonConfigurableLexer.priority">
+<code class="sig-name descname">priority</code><em class="property"> = 0</em><a class="headerlink" href="#default_profile.startup.35_lexer.IPythonConfigurableLexer.priority" title="Permalink to this definition">¶</a></dt>
+<dd><p>Priority, should multiple lexers match and no content is provided</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="default_profile.startup.35_lexer.IPythonConfigurableLexer.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">shell=None</em>, <em class="sig-param">original_lexer=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/35_lexer.html#IPythonConfigurableLexer.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.35_lexer.IPythonConfigurableLexer.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="default_profile.startup.35_lexer.IPythonConfigurableLexer.shell">
+<code class="sig-name descname">shell</code><a class="headerlink" href="#default_profile.startup.35_lexer.IPythonConfigurableLexer.shell" title="Permalink to this definition">¶</a></dt>
+<dd><p>A trait whose value must be an instance of a specified class.</p>
+<p>The value can also be an instance of a subclass of the specified class.</p>
+<p>Subclasses can declare default classes by overriding the klass attribute</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="default_profile.startup.35_lexer.Colorizer">
+<em class="property">class </em><code class="sig-name descname">Colorizer</code><span class="sig-paren">(</span><em class="sig-param">pylexer=None</em>, <em class="sig-param">formatter=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/35_lexer.html#Colorizer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.35_lexer.Colorizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Make the pygments function ‘highlight’ even easier to work with.</p>
+<p>Additionally utilize <code class="docutils literal notranslate"><span class="pre">__slots__</span></code> to conserve memory.</p>
+<dl class="method">
+<dt id="default_profile.startup.35_lexer.Colorizer.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">pylexer=None</em>, <em class="sig-param">formatter=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/35_lexer.html#Colorizer.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.35_lexer.Colorizer.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="default_profile.startup.35_lexer.Colorizer.pylexer">
+<code class="sig-name descname">pylexer</code><a class="headerlink" href="#default_profile.startup.35_lexer.Colorizer.pylexer" title="Permalink to this definition">¶</a></dt>
+<dd><p>A PythonLexer from Pygments</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="default_profile.startup.35_lexer.Colorizer.formatter">
+<code class="sig-name descname">formatter</code><a class="headerlink" href="#default_profile.startup.35_lexer.Colorizer.formatter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format tokens with ANSI color sequences, for output in a true-color
+terminal or console.  Like in <code class="xref py py-obj docutils literal notranslate"><span class="pre">TerminalFormatter</span></code> color sequences
+are terminated at newlines, so that paging the output works correctly.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.1.</span></p>
+</div>
+<p>Options accepted:</p>
+<dl class="simple">
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">style</span></code></dt><dd><p>The style to use, can be a string or a Style subclass (default:
+<code class="docutils literal notranslate"><span class="pre">'default'</span></code>).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="default_profile.startup.35_lexer.Colorizer.highlight">
+<code class="sig-name descname">highlight</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">code</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/35_lexer.html#Colorizer.highlight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.35_lexer.Colorizer.highlight" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="default_profile.startup.35_lexer.MyPythonLexer">
+<em class="property">class </em><code class="sig-name descname">MyPythonLexer</code><span class="sig-paren">(</span><em class="sig-param">**options</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/35_lexer.html#MyPythonLexer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.35_lexer.MyPythonLexer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pygments.lexers.python.PythonLexer</span></code></p>
+<dl class="attribute">
+<dt id="default_profile.startup.35_lexer.MyPythonLexer.EXTRA_KEYWORDS">
+<code class="sig-name descname">EXTRA_KEYWORDS</code><em class="property"> = {'!'}</em><a class="headerlink" href="#default_profile.startup.35_lexer.MyPythonLexer.EXTRA_KEYWORDS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="default_profile.startup.35_lexer.MyPythonLexer.get_tokens_unprocessed">
+<code class="sig-name descname">get_tokens_unprocessed</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">text</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/35_lexer.html#MyPythonLexer.get_tokens_unprocessed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.35_lexer.MyPythonLexer.get_tokens_unprocessed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="default_profile.startup.35_lexer.get_titlebar_text">
+<code class="sig-name descname">get_titlebar_text</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/35_lexer.html#get_titlebar_text"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.35_lexer.get_titlebar_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return (style, text) tuples for startup.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="default_profile.startup.35_lexer.generate_and_print_hsplit">
+<code class="sig-name descname">generate_and_print_hsplit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/35_lexer.html#generate_and_print_hsplit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.35_lexer.generate_and_print_hsplit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a <code class="xref py py-obj docutils literal notranslate"><span class="pre">prompt_toolkit.layout.container.HSplit</span></code>.</p>
+<p>Originally was in 33_bottom_toolbar but moved here so we can use the lexer.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="default_profile.startup.35_lexer.pphighlight">
+<code class="sig-name descname">pphighlight</code><span class="sig-paren">(</span><em class="sig-param">o</em>, <em class="sig-param">*a</em>, <em class="sig-param">**kw</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/35_lexer.html#pphighlight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.35_lexer.pphighlight" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="default_profile.startup.35_lexer.extra_displayhook">
+<code class="sig-name descname">extra_displayhook</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/35_lexer.html#extra_displayhook"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.35_lexer.extra_displayhook" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+
+
+        </div>
+      </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+      Last updated on Mar 11, 2020.
+    </div>
+  </body>
+</html>

@@ -4,9 +4,6 @@
 Todo
 =====
 
-.. module:: todo
-   :synopsis: List of improvements
-
 Subcommands in IPython and Jupyter.
 ===================================
 

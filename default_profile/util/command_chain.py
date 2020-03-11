@@ -47,7 +47,7 @@ class CommandChainDispatcherRepr(IPython.utils.ipstruct.Struct):
         self.level = level
 
     def __repr__(self):
-        return Repr().repr(self.chain, level=self.level)
+        return Repr().repr(self.chain)
 
     def add(self, other):
         self.__add__(other)

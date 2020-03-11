@@ -27,12 +27,12 @@ class StoreAndLoadMagics(StoreMagics):
         """,
     ).tag(config=True)
 
-    def __init__(self, shell=None, *args, **kwargs):
+    def __init__(self, shell=None):
         """TODO: Docstring for function."""
-        super().__init__(self, *args, **kwargs)
         self.shell = shell or get_ipython()
         if self.shell is None:
             logging.error("StoreAndLoadMagics: shell is None")
+        super().__init__(self.shell)
         self.shell.configurables.append(self)
         if self.autorestore:
             restore_data(self.shell)

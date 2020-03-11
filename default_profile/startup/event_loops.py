@@ -141,7 +141,7 @@ async def system_command(command_to_run):
 
 def initialize_kernel():
     """Initialize a `curio.Kernel`."""
-    return Kernel([longblock, logcrash])
+    return Kernel()
 
 
 async def kernel_run(command, kernel):

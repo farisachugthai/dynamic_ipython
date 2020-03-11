@@ -1,0 +1,329 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>33_bottom_toolbar &#8212; Dynamic IPython</title>
+    
+    <link rel="stylesheet" href="../_static/scrolls.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/print.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/theme_extras.js"></script>
+    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/startup/toolbar.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="35_lexer" href="lexer.html" />
+    <link rel="prev" title="Prompt Toolkit" href="prompt_toolkit.html" />
+<!-- <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" /> -->
+<!-- <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" media="screen" rel="stylesheet" type="text/css" /> -->
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <title>Dynamic IPython --- IPython Extensions</title>
+  <meta name="description" content="" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style type="text/css">
+    /* CSS styles */
+    /* Example by Matthias Benkort at http://codepen.io/KtorZ/pen/ZOzdqG */
+    @import url(
+      https://fonts.googleapis.com/css?family=Roboto:400,
+      300,
+      500,
+      700
+    );
+    .wrapper {
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .material-textfield {
+      display: inline-block;
+      height: 4rem;
+      padding-top: 2rem;
+    }
+    .material-textfield input {
+      background: none;
+      border: none;
+      box-sizing: border-box;
+      display: block;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 1rem;
+      padding: 0.25rem 0.1rem;
+      width: 100%;
+    }
+    .material-textfield input:invalid {
+      box-shadow: none;
+    }
+    .material-textfield input:focus {
+      outline: none;
+    }
+    .material-textfield label {
+      display: inline-block;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 0;
+      pointer-events: none;
+      position: relative;
+      text-transform: uppercase;
+      width: 100%;
+    }
+    .material-textfield label::before {
+      content: attr(data-content);
+      position: relative;
+      transition: all 0.2s ease;
+      will-change: font-size, top;
+    }
+    .material-textfield label::after {
+      bottom: 0.9rem;
+      content: "";
+      height: 0.3rem;
+      left: 50%;
+      position: absolute;
+      transition: all 0.2s ease;
+      width: 0;
+      will-change: width, left;
+    }
+    .material-textfield label::before,
+    .material-textfield input[required]:focus ~ label::before {
+      font-size: 0.75rem;
+      top: -3.25rem;
+    }
+    .material-textfield input:focus ~ label::after {
+      left: 0%;
+      width: 100%;
+    }
+    .material-textfield input:invalid ~ label::before {
+      font-size: 1rem;
+      top: -2rem;
+    }
+
+    .material-textfield.blue input {
+      border-bottom: 0.1rem solid #03a9f4;
+      color: #0275a8;
+    }
+    .material-textfield.blue label::after {
+      background: #03a9f4;
+    }
+    .material-textfield.blue label::before,
+    .material-textfield.blue input[required]:focus ~ label::before {
+      color: #47c4fd;
+    }
+    .material-textfield.blue input:invalid ~ label::before {
+      color: #03a9f4;
+    }
+
+    .material-textfield.red input {
+      border-bottom: 0.1rem solid #f44336;
+      color: #d2190b;
+    }
+    .material-textfield.red label::after {
+      background: #f44336;
+    }
+    .material-textfield.red label::before,
+    .material-textfield.red input[required]:focus ~ label::before {
+      color: #f8877f;
+    }
+    .material-textfield.red input:invalid ~ label::before {
+      color: #f44336;
+    }
+  </style>
+</head>
+
+  </head><body>
+
+    <div id="content">
+      <div class="header">
+        <h1 class="heading"><a href="../index.html"
+          title="back to the documentation overview"><span>33_bottom_toolbar</span></a></h1>
+      </div>
+      <div class="relnav" role="navigation" aria-label="related navigation">
+        <a href="prompt_toolkit.html">&laquo; Prompt Toolkit</a> |
+        <a href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">33_bottom_toolbar</span></code></a>
+        | <a href="lexer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">35_lexer</span></code> &raquo;</a>
+      </div>
+      <div id="contentwrapper">
+        <div id="toc" role="navigation" aria-label="table of contents navigation">
+          <h3>Table of Contents</h3>
+          <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">33_bottom_toolbar</span></code></a><ul>
+<li><a class="reference internal" href="#module-default_profile.startup.33_bottom_toolbar">Toolbar API</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+        <div role="main">
+        
+<div class="section" id="bottom-toolbar">
+<h1><a class="reference internal" href="#module-default_profile.startup.33_bottom_toolbar" title="default_profile.startup.33_bottom_toolbar: Generate a toolbar using lower-level controls."><code class="xref py py-mod docutils literal notranslate"><span class="pre">33_bottom_toolbar</span></code></a><a class="headerlink" href="#bottom-toolbar" title="Permalink to this headline">¶</a></h1>
+<p>This module begins the section of the repository that entails more advanced
+customization of prompt_toolkit.</p>
+<p>Lower level constructs like widgets, toolbars and eventually the Layout classes
+are utilized quite heavily.</p>
+<div class="admonition-be-careful-what-the-bottom-toolbar-is-set-to admonition">
+<p class="admonition-title">Be careful what the bottom toolbar is set to.</p>
+<p>It’s not very difficult to crash the entire application as a result of
+giving it the wrong type.</p>
+</div>
+<p>The <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.13.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveShell</span></code></a>.`pt_app.bottom_toolbar` type is expected to be some kind of
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">FormattedText</span></code>. Unfortunately, feeding it an already populated control like a
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">FormattedTextToolbar</span></code> will break the application.</p>
+<p>Don’t run.:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bottom_toolbar</span> <span class="o">=</span> <span class="n">FormattedTextToolbar</span><span class="p">(</span><span class="n">bottom_text</span><span class="p">)</span>
+<span class="n">shell</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">bottom_toolbar</span> <span class="o">=</span> <span class="n">bottom_toolbar</span>
+</pre></div>
+</div>
+<p>Note that a similar expression is used to assign the <a class="reference internal" href="#default_profile.startup.33_bottom_toolbar.BottomToolbar" title="default_profile.startup.33_bottom_toolbar.BottomToolbar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BottomToolbar</span></code></a>
+to the shell’s <em>pt_app.bottom_toolbar</em> attribute.:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">prompt_toolkit.formatted_text</span> <span class="kn">import</span> <span class="n">FormattedText</span>
+<span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+
+<span class="n">bottom_text</span> <span class="o">=</span> <span class="n">BottomToolbar</span><span class="p">()</span>
+<span class="n">bottom_toolbar</span> <span class="o">=</span> <span class="n">FormattedText</span><span class="p">(</span><span class="n">bottom_text</span><span class="o">.</span><span class="n">rerender</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>However, the <code class="xref py py-obj docutils literal notranslate"><span class="pre">FormattedText</span></code> in and of itself doesn’t provide any functionality.
+A <code class="xref py py-obj docutils literal notranslate"><span class="pre">FormattedText</span></code> object is simply a subclass of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a>. The value is provided
+in defining a method <code class="docutils literal notranslate"><span class="pre">__pt_formatted_text__</span></code>.</p>
+<p>As a result, <a class="reference internal" href="#default_profile.startup.33_bottom_toolbar.BottomToolbar" title="default_profile.startup.33_bottom_toolbar.BottomToolbar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BottomToolbar</span></code></a> also defines this method and as a result an
+instance of the class can be passed directly as an assignment to the
+<code class="docutils literal notranslate"><span class="pre">_ip.pt_app.bottom_toolbar</span></code>.</p>
+<div class="section" id="module-default_profile.startup.33_bottom_toolbar">
+<span id="toolbar-api"></span><h2>Toolbar API<a class="headerlink" href="#module-default_profile.startup.33_bottom_toolbar" title="Permalink to this headline">¶</a></h2>
+<p>TODO: currently initialize a titlebar, an exit button and a few
+other things that aren’t utilized at all.</p>
+<dl class="function">
+<dt id="default_profile.startup.33_bottom_toolbar.get_app">
+<code class="sig-name descname">get_app</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#get_app"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.get_app" title="Permalink to this definition">¶</a></dt>
+<dd><p>A patch to cover up the fact that get_app() returns a DummyApplication.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="default_profile.startup.33_bottom_toolbar.exit_clicked">
+<code class="sig-name descname">exit_clicked</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#exit_clicked"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.exit_clicked" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exit from the prompt_toolkit side of things.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="default_profile.startup.33_bottom_toolbar.init_style">
+<code class="sig-name descname">init_style</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#init_style"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.init_style" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="default_profile.startup.33_bottom_toolbar.show_header">
+<code class="sig-name descname">show_header</code><span class="sig-paren">(</span><em class="sig-param">header_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#show_header"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.show_header" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="default_profile.startup.33_bottom_toolbar.terminal_width">
+<code class="sig-name descname">terminal_width</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#terminal_width"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.terminal_width" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns <code class="xref py py-obj docutils literal notranslate"><span class="pre">shutil.get_terminal_size.columns</span></code>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="default_profile.startup.33_bottom_toolbar.LineCounter">
+<em class="property">class </em><code class="sig-name descname">LineCounter</code><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#LineCounter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.LineCounter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Simple counter inspired by Doug Hellman. Could set it to sys.displayhook.</p>
+<dl class="field-list simple">
+<dt class="field-odd">URL</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://pymotw.com/3/sys/interpreter.html">https://pymotw.com/3/sys/interpreter.html</a></p>
+</dd>
+</dl>
+<dl class="method">
+<dt id="default_profile.startup.33_bottom_toolbar.LineCounter.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#LineCounter.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.LineCounter.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="default_profile.startup.33_bottom_toolbar.BottomToolbar">
+<em class="property">class </em><code class="sig-name descname">BottomToolbar</code><span class="sig-paren">(</span><em class="sig-param">_style=None</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#BottomToolbar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.BottomToolbar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Display the current input mode.</p>
+<blockquote>
+<div><p>As the bottom_toolbar property exists in both a prompt_toolkit
+PromptSession and Application, both are accessible from the <code class="xref py py-obj docutils literal notranslate"><span class="pre">session</span></code>
+and <code class="xref py py-obj docutils literal notranslate"><span class="pre">pt_app</span></code> attributes.</p>
+<p>Defines a method <a class="reference internal" href="#default_profile.startup.33_bottom_toolbar.BottomToolbar.rerender" title="default_profile.startup.33_bottom_toolbar.BottomToolbar.rerender"><code class="xref py py-meth docutils literal notranslate"><span class="pre">rerender()</span></code></a> and calls it whenever the instance
+is called via <code class="docutils literal notranslate"><span class="pre">__call__</span></code>.</p>
+</div></blockquote>
+<p>Clock: {time.ctime()!r}”</p>
+<dl class="method">
+<dt id="default_profile.startup.33_bottom_toolbar.BottomToolbar.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">_style=None</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#BottomToolbar.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.BottomToolbar.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Require an ‘app’ for initialization.</p>
+<p>This will eliminate all IPython code out of this class and make things
+a little more modular for the tests.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="default_profile.startup.33_bottom_toolbar.BottomToolbar.shell">
+<code class="sig-name descname">shell</code><em class="property">: InteractiveShell</em><em class="property"> = None</em><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.BottomToolbar.shell" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="default_profile.startup.33_bottom_toolbar.BottomToolbar.is_vi_mode">
+<em class="property">property </em><code class="sig-name descname">is_vi_mode</code><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#BottomToolbar.is_vi_mode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.BottomToolbar.is_vi_mode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="default_profile.startup.33_bottom_toolbar.BottomToolbar.style">
+<em class="property">property </em><code class="sig-name descname">style</code><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#BottomToolbar.style"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.BottomToolbar.style" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="default_profile.startup.33_bottom_toolbar.BottomToolbar.reset_style">
+<em class="property">property </em><code class="sig-name descname">reset_style</code><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#BottomToolbar.reset_style"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.BottomToolbar.reset_style" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="default_profile.startup.33_bottom_toolbar.BottomToolbar.full_width">
+<code class="sig-name descname">full_width</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#BottomToolbar.full_width"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.BottomToolbar.full_width" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bool indicating bottom toolbar == shutil.get_terminal_size().columns.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="default_profile.startup.33_bottom_toolbar.BottomToolbar.rerender">
+<code class="sig-name descname">rerender</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#BottomToolbar.rerender"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.BottomToolbar.rerender" title="Permalink to this definition">¶</a></dt>
+<dd><p>Render the toolbar at the bottom for prompt_toolkit.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Simple reminder about the difference between running an
+expression and returning one.
+If you accidentally forget the <code class="xref py py-obj docutils literal notranslate"><span class="pre">return</span></code> keyword, nothing will
+display.
+That’s all.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="default_profile.startup.33_bottom_toolbar.add_toolbar">
+<code class="sig-name descname">add_toolbar</code><span class="sig-paren">(</span><em class="sig-param">toolbar=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#add_toolbar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.add_toolbar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the running IPython instance and add ‘bottom_toolbar’.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+        </div>
+      </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+      Last updated on Mar 11, 2020.
+    </div>
+  </body>
+</html>

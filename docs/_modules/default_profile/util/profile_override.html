@@ -204,7 +204,7 @@
 
 <div class="viewcode-block" id="ReprProfileDir.__init__"><a class="viewcode-back" href="../../../util/profile_override.html#default_profile.util.profile_override.ReprProfileDir.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create an init and then make it way shorter.&quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ensure_dir_exists</span> <span class="o">=</span> <span class="n">DirectoryChecker</span>
         <span class="n">startup_dir</span> <span class="o">=</span> <span class="n">Unicode</span><span class="p">(</span><span class="s2">&quot;startup&quot;</span><span class="p">)</span>
         <span class="n">log_dir</span> <span class="o">=</span> <span class="n">Unicode</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
@@ -236,11 +236,11 @@
             <span class="k">raise</span> <span class="n">TraitError</span><span class="p">(</span><span class="s2">&quot;Cannot set profile location more than once.&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_location_isset</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="n">new</span> <span class="o">=</span> <span class="n">change</span><span class="p">[</span><span class="s2">&quot;new&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ensure_dir_exists</span><span class="p">(</span><span class="n">new</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ensure_dir_exists</span><span class="p">()</span>
 
         <span class="c1"># what is static?</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;security&quot;</span><span class="p">,</span> <span class="s2">&quot;log&quot;</span><span class="p">,</span> <span class="s2">&quot;startup&quot;</span><span class="p">,</span> <span class="s2">&quot;pid&quot;</span><span class="p">,</span> <span class="s2">&quot;static&quot;</span><span class="p">]:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ensure_dir_exists</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">new</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ensure_dir_exists</span><span class="p">()</span>
 
 <div class="viewcode-block" id="ReprProfileDir.ensure_dir_exists"><a class="viewcode-back" href="../../../util/profile_override.html#default_profile.util.profile_override.ReprProfileDir.ensure_dir_exists">[docs]</a>    <span class="k">def</span> <span class="nf">ensure_dir_exists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="s2">&quot;exists&quot;</span><span class="p">):</span>

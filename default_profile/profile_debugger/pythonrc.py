@@ -161,7 +161,7 @@ def _pythonrc_enable_pprint():
             stderror = sys.stderr.getvalue()
             try:
                 ret = pyg_highlight(
-                    stderror, PythonTracebackLexer(), TerminalFormatter()
+                    stderror
                 )
             except UnicodeError:
                 pass

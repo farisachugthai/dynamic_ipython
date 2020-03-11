@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""TODO: Check out conda API both the conda package and conda_api repo"""
 import shutil
 import sys
 import subprocess
@@ -24,7 +23,7 @@ class PackagingMagics(Magics):
     """Override the PackagingMagic."""
 
     @staticmethod
-    def conda_path(self):
+    def conda_path():
         return shutil.which("conda")
 
     @property
@@ -50,7 +49,6 @@ class PackagingMagics(Magics):
         # if self.stdin_disabled is not None:
         # hang on this doesn't seem like a good idea.
         # cmd.append(self.non_interactive_parameters(cmd))
-        # TODO
         # raise NotImplementedError
         conda, *cmd = line
 
@@ -61,12 +59,16 @@ class PackagingMagics(Magics):
         except subprocess.CalledProcessError:
             # except AttributeError:
             #     raise NotImplementedError
-            if self.conda_path is not None:
-                if self.conda_path.ends_with("bat"):
-                    conda = "call " + self.conda_path
-                    %sx conda
+            if self.conda_path is not None and self.conda_path.ends_with("bat"):
+                conda = "call " + self.conda_path
+                %sx conda
 
     def python_api(self):
+        """TODO
+
+        :return:
+        :rtype:
+        """
         try:
             from conda.cli import python_api
         except ImportError:
@@ -74,14 +76,6 @@ class PackagingMagics(Magics):
 
 
 def load_ipython_extension(ip=None):
-    """TODO: Docstring for load_ipython_extension.
-
-    Parameters
-    ----------
-    ip : shell
-        Global IPython Instance
-
-    """
     if ip is None:
         ip = get_ipython()
     ip.register_magics(PackagingMagics)

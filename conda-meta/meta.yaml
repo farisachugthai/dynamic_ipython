@@ -6,10 +6,10 @@
 
 package:
   name: "{{ name|lower }}"
-  version: "{{ GIT_DESCRIBE_TAG }}"
+  version: {{ data.get('version') }}
 
 source:
-  path: ../
+  path_url: ../..
 
 build:
   number: 0
@@ -18,21 +18,20 @@ build:
   # "skip: True  # [py<35]" (for example) to limit to Python 3.5 and newer, or
   # "skip: True  # [not win]" to limit to Windows.
   script: {{ PYTHON }} -m pip install --no-deps --ignore-installed -vv .
+  preserve_egg_dir: True
   noarch: python
-  entry_points:
-    {% for entry in setup_py['entry_points']['console_scripts'] %}
-      - {{ entry.split('=')[0].strip() }} = {{ entry.split('=')[1].strip() }}
-    {% endfor %}
 
 requirements:
-    run:
-        - IPython 7.10.2.*
-        - numpy {{ numpy }}
-        - python >=3.7.4
-        - wheel  <=0.33.6
-    host:
-        - python >=3.7
-        - pip  >=19.2.3
+  run:
+    - IPython 7.13
+    - numpy {{ numpy }}
+    - python >=3.7.4
+    - wheel  <=0.33.6
+    {{ data.get("REQUIRED")  }}
+
+  host:
+    - python >=3.7
+    - pip  >=19.2.3
 
 test:
   imports:

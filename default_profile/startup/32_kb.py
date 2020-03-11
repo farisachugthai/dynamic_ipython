@@ -187,7 +187,7 @@ class ApplicationKB(KeyBindingsManager):
             self.kb = kb or self.shell.pt_app.key_bindings
             if self.kb is None:
                 self.kb = load_key_bindings()
-        super().__init__(kb=self.kb, shell=self.shell, *args, **kwargs)
+        super().__init__(kb=self.kb, shell=self.shell, **kwargs)
 
 
 class HandlesMergedKB(KeyBindingsManager):

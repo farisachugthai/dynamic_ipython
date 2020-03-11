@@ -19,7 +19,7 @@ class NoUnNamedLoggers(NotImplementedError):
     """Raise this error if the logger a function was called with was anonymous."""
 
     def __init__(self, *args, **kwargs):
-        super().__init__(self, *args, **kwargs)
+        super().__init__(self, *args)
 
     def __call__(self):
         return "".format("You did not provide a name for the logger.")

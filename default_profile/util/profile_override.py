@@ -53,7 +53,7 @@ class ReprProfileDir(ProfileDir):
 
     def __init__(self, *args, **kwargs):
         """Create an init and then make it way shorter."""
-        super().__init__(*args, **kwargs)
+        super().__init__(**kwargs)
         self.ensure_dir_exists = DirectoryChecker
         startup_dir = Unicode("startup")
         log_dir = Unicode("log")
@@ -85,11 +85,11 @@ class ReprProfileDir(ProfileDir):
             raise TraitError("Cannot set profile location more than once.")
         self._location_isset = True
         new = change["new"]
-        self.ensure_dir_exists(new)
+        self.ensure_dir_exists()
 
         # what is static?
         for i in ["security", "log", "startup", "pid", "static"]:
-            self.ensure_dir_exists(Path(new, i))
+            self.ensure_dir_exists()
 
     def ensure_dir_exists(self, folder):
         if not hasattr(folder, "exists"):

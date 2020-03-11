@@ -4,9 +4,6 @@
 Developer's Notes
 =================
 
-.. module:: developers-notes
-   :synopsis: Notes to aid anyone interested in working with this source code.
-
 .. highlight:: bash
 
 .. _developer-installation:

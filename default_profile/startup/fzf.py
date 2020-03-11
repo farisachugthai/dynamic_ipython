@@ -250,7 +250,7 @@ def fzf_keys(inputted_list=None):
         sys.stdout = f
         sys.stdin = f
         # also is this class a contextmanager because that'd be thoughtful
-        FzfPrompt(inputted_list)
+        FzfPrompt()
 
 
 def run_in_terminal_fzf():

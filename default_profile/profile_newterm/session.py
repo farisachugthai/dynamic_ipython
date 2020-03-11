@@ -35,7 +35,7 @@ class SessionPrompt(Prompts):
 
     def __init__(self, *args, **kwargs):
         """What does this look like with an init and all the traits?"""
-        super().__init__(self, *args, **kwargs)
+        super().__init__(self)
         self.vi_mode = Bool(False, help="Enabled vi mode").tag(config=True)
 
         self.editing_mode = Enum(
