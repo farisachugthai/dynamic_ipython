@@ -50,22 +50,11 @@ import setuptools
 import pkg_resources
 from traitlets.config.application import LevelFormatter
 
-# This is about to become a required module windows is fucking up so badly
-from py._path.local import LocalPath
-
-# DON'T ASSIGN THIS TO PACKAGE.
-# __path__ = sys.path[:]
-
-# pkg_resources.declare_namespace(__package__)
-
 try:
     __path__ = pkgutil.extend_path(__path__, os.path.dirname(os.path.abspath(__name__)))
     __path__.extend(setuptools.find_packages("."))
 except NameError:
     pass
-
-# JFC: I have no idea. Don't ask.
-# from default_profile.build.lib import *
 
 # Lol note that there are FOUR different logging.Formatter.fmt strings in this module
 default_log_format = (
@@ -86,9 +75,6 @@ PROFILE_DEFAULT_LOG.addHandler(PROFILE_DEFAULT_HANDLER)
 
 default_traitlets_log_format = "[ %(name)s  %(relativeCreated)d ] %(highlevel)s %(levelname)s %(module)s %(message)s "
 default_formatter = LevelFormatter(fmt=default_traitlets_log_format)
-
-this = LocalPath(Path(__file__))
-this_mod = this.pyimport()
 
 
 def ask_for_import(mod, package=None):

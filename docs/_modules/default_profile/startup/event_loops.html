@@ -222,7 +222,7 @@
             <span class="n">name</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">thread</span><span class="o">.</span><span class="n">name</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">name</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">get_ident</span><span class="p">()</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Exception in thread </span><span class="si">{name}</span><span class="s2">:&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">stderr</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Exception in thread </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">stderr</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">_print_exception</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">exc_type</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">exc_value</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">exc_traceback</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">stderr</span><span class="p">)</span>
         <span class="n">stderr</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
 
@@ -231,6 +231,9 @@
 <span class="c1">#     from curio import Task</span>
 <span class="c1"># except:</span>
 <span class="c1">#     from asyncio.tasks import Task</span>
+
+<span class="kn">from</span> <span class="nn">curio</span> <span class="kn">import</span> <span class="n">Kernel</span>
+<span class="kn">from</span> <span class="nn">curio.debug</span> <span class="kn">import</span> <span class="n">logcrash</span><span class="p">,</span> <span class="n">longblock</span>
 
 <span class="c1"># from asyncio.tasks import current_task, all_tasks, create_task</span>
 
@@ -243,7 +246,7 @@
 
 
 <div class="viewcode-block" id="children"><a class="viewcode-back" href="../../../startup/eventloops.html#default_profile.startup.event_loops.children">[docs]</a><span class="k">def</span> <span class="nf">children</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Simply to save the typing.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Return `multiprocessing.active_children`. Simply to save the typing.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">active_children</span><span class="p">()</span></div>
 
 
@@ -255,7 +258,7 @@
 
 
 <div class="viewcode-block" id="system_command"><a class="viewcode-back" href="../../../startup/eventloops.html#default_profile.startup.event_loops.system_command">[docs]</a><span class="k">async</span> <span class="k">def</span> <span class="nf">system_command</span><span class="p">(</span><span class="n">command_to_run</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Run a system command.</span>
+    <span class="sd">&quot;&quot;&quot;Run a system command using prompt_toolkit&#39;s run_system_command.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -283,6 +286,36 @@
     <span class="k">await</span> <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">run_system_command</span><span class="p">(</span>
         <span class="n">command</span><span class="o">=</span><span class="n">com</span><span class="p">,</span> <span class="n">wait_for_enter</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">wait_text</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">display_before_text</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
     <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="initialize_kernel"><a class="viewcode-back" href="../../../startup/eventloops.html#default_profile.startup.event_loops.initialize_kernel">[docs]</a><span class="k">def</span> <span class="nf">initialize_kernel</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Initialize a `curio.Kernel`.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">Kernel</span><span class="p">([</span><span class="n">longblock</span><span class="p">,</span> <span class="n">logcrash</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="kernel_run"><a class="viewcode-back" href="../../../startup/eventloops.html#default_profile.startup.event_loops.kernel_run">[docs]</a><span class="k">async</span> <span class="k">def</span> <span class="nf">kernel_run</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">kernel</span><span class="p">):</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">kernel</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+            <span class="n">shlex</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">shlex</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">command</span><span class="p">)),</span>
+            <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
+            <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="subproc"><a class="viewcode-back" href="../../../startup/eventloops.html#default_profile.startup.event_loops.subproc">[docs]</a><span class="k">async</span> <span class="k">def</span> <span class="nf">subproc</span><span class="p">(</span><span class="n">command</span><span class="p">):</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">async</span> <span class="k">with</span> <span class="n">timeout_after</span><span class="p">(</span><span class="mf">0.5</span><span class="p">):</span>
+            <span class="c1"># TODO: might want to preprocess the command</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="k">await</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">command</span><span class="p">],</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span>
+            <span class="p">)</span>
+    <span class="k">except</span> <span class="n">TaskTimeout</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;timeout&quot;</span><span class="p">)</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">results</span></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
@@ -317,7 +350,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Mar 05, 2020.
+      Last updated on Mar 10, 2020.
     </div>
   </body>
 </html>

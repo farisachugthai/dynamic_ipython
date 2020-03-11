@@ -20,6 +20,7 @@ import importlib
 import logging
 import pkgutil
 import sys
+from logging import Logger
 from pathlib import Path
 
 import pkg_resources
@@ -32,7 +33,7 @@ from .magics import (
     CellMagicRole,
 )  # noqa F401
 
-sphinxext_logger = logging.getLogger(name="default_profile").getChild("sphinxext")
+sphinxext_logger: Logger = logging.getLogger(name="default_profile").getChild("sphinxext")
 sphinxext_formatter = logging.Formatter(datefmt="%H:%M:%S")
 sphinxext_handler = logging.StreamHandler()
 sphinxext_handler.setFormatter(sphinxext_formatter)
@@ -42,8 +43,7 @@ sphinxext_logger.setLevel(logging.WARNING)
 sphinxext_filter = logging.Filter()
 sphinxext_logger.addFilter(sphinxext_filter)
 
-# How to check the current namespace
-if hasattr(locals(), "__path__"):
+try:
     __path__ = pkgutil.extend_path(__path__, __name__)
-
-pkg_resources.declare_namespace(__name__)
+except NameError:
+    pass

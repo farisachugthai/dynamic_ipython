@@ -46,7 +46,7 @@ import pytest
 from _pytest.tmpdir import tmpdir
 
 if TYPE_CHECKING:
-    from py._path.local import LocalPath  # tmpdir
+    from py._path.local import LocalPath  # noqa:  it'st the tmpdir
 
 COLORS = {
     "red": "\x1b[31m",
@@ -67,8 +67,7 @@ class Option:
 
     @property
     def args(self):
-        values = []
-        values.append("--verbosity=%d" % self.verbosity)
+        values = ["--verbosity=%d" % self.verbosity]
         return values
 
 

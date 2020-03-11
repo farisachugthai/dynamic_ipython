@@ -4,8 +4,9 @@ Setting up readline
 
 .. currentmodule:: default_profile.startup.30_readline
 
-Summary
--------
+
+Readline Summary
+----------------
 
 Readline is implemented in the repository for a few reasons.
 
@@ -19,10 +20,13 @@ Readline is implemented in the repository for a few reasons.
 
       #) Frequently auto-completion will time out rather than serving a response
 
-   # `prompt_toolkit` has a rather rigid interface for it's API. There are
+   #) `prompt_toolkit` has a rather rigid interface for it's API. There are
       `assert`\'s all over the code base ensuring that the proper type is passed
       to a class constructor, in spite of the Python's dynamically typed
       foundation.
+
+
+.. _autocompletion-setup:
 
 Setting up autocompletion
 -------------------------

@@ -171,8 +171,6 @@
 <span class="sd">Therefore that function shouldn&#39;t be used anywhere in this file.</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">traitlets.config.application</span> <span class="kn">import</span> <span class="n">get_config</span><span class="p">,</span> <span class="n">ApplicationError</span>
-<span class="kn">from</span> <span class="nn">traitlets.config.configurable</span> <span class="kn">import</span> <span class="n">LoggingConfigurable</span><span class="p">,</span> <span class="n">ConfigurableError</span>
 <span class="kn">import</span> <span class="nn">builtins</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -182,8 +180,12 @@
 <span class="kn">import</span> <span class="nn">traceback</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
+<span class="kn">import</span> <span class="nn">IPython</span>
 <span class="kn">from</span> <span class="nn">IPython.core.release</span> <span class="kn">import</span> <span class="n">version_info</span>
 <span class="kn">from</span> <span class="nn">IPython.terminal.prompts</span> <span class="kn">import</span> <span class="n">ClassicPrompts</span>
+<span class="kn">from</span> <span class="nn">traitlets.config.application</span> <span class="kn">import</span> <span class="n">get_config</span><span class="p">,</span> <span class="n">ApplicationError</span>
+<span class="kn">from</span> <span class="nn">traitlets.config.configurable</span> <span class="kn">import</span> <span class="n">LoggingConfigurable</span><span class="p">,</span> <span class="n">ConfigurableError</span>
+
 
 <span class="n">log_datefmt</span> <span class="o">=</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span>
 <span class="n">default_log_format</span> <span class="o">=</span> <span class="p">(</span>
@@ -195,20 +197,17 @@
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">default_profile</span>
-<span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="n">ModuleNotFoundError</span><span class="p">):</span>
+<span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="ne">ModuleNotFoundError</span><span class="p">):</span>
     <span class="n">default_profile</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
         <span class="s2">&quot;Import error. Try relaunching IPython in the root of this repository.&quot;</span>
     <span class="p">)</span>
-    <span class="c1"># todo: realistically we should also set exec_files to None since everything ./startup is gonna crash</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">default_profile</span> <span class="kn">import</span> <span class="n">PROFILE_DEFAULT_LOG</span>
-
-    <span class="kn">import</span> <span class="nn">__main__</span>
-
     <span class="c1"># 3.6 compat</span>
-    <span class="k">if</span> <span class="n">ModuleNotFoundError</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">builtins</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">default_profile</span> <span class="kn">import</span> <span class="n">ModuleNotFoundError</span>
+    <span class="k">if</span> <span class="ne">ModuleNotFoundError</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">builtins</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">default_profile</span> <span class="kn">import</span> <span class="ne">ModuleNotFoundError</span>
+        <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="get_home"><a class="viewcode-back" href="../../startup/index.html#default_profile.ipython_config.get_home">[docs]</a><span class="k">def</span> <span class="nf">get_home</span><span class="p">():</span>
@@ -380,13 +379,10 @@
 <span class="c1">#     backend.</span>
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">matplotlib</span>
-<span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="n">ModuleNotFoundError</span><span class="p">):</span>
+<span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="ne">ModuleNotFoundError</span><span class="p">):</span>
     <span class="n">c</span><span class="o">.</span><span class="n">TerminalIPythonApp</span><span class="o">.</span><span class="n">matplotlib</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
     <span class="n">c</span><span class="o">.</span><span class="n">TerminalIPythonApp</span><span class="o">.</span><span class="n">matplotlib</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">sys</span><span class="p">,</span> <span class="s2">&quot;exc_info&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">()[</span><span class="mi">2</span><span class="p">])</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="n">c</span><span class="o">.</span><span class="n">TerminalIPythonApp</span><span class="o">.</span><span class="n">matplotlib</span> <span class="o">=</span> <span class="s2">&quot;auto&quot;</span>
     <span class="c1"># TODO: I accidentally set this as a config of InteractiveShellApp.</span>
@@ -467,7 +463,7 @@
 <span class="c1"># c.InteractiveShell.enable_html_pager = False</span>
 
 <span class="c1"># Total length of command history</span>
-<span class="n">c</span><span class="o">.</span><span class="n">InteractiveShell</span><span class="o">.</span><span class="n">history_length</span> <span class="o">=</span> <span class="mi">50000</span>
+<span class="n">c</span><span class="o">.</span><span class="n">InteractiveShell</span><span class="o">.</span><span class="n">history_length</span> <span class="o">=</span> <span class="mi">5000</span>
 
 <span class="c1"># The number of saved history entries to be loaded into the history buffer at</span>
 <span class="c1">#  startup.</span>
@@ -494,8 +490,9 @@
 
 <span class="c1"># TODO: allow_none should be added to the loop runner. Check below tb</span>
 
-<span class="c1"># File &quot;/data/data/com.termux/files/home/.local/share/virtualenvs/dynamic_ipython-mVJ3Ohov/lib/python3.8/site-packages/IPython/core/interactiveshell.py&quot;, line 402, in _import_runner</span>
-<span class="c1">#     raise ValueError(&#39;loop_runner must be callable&#39;)</span>
+<span class="c1"># File &quot;/data/data/com.termux/files/home/.local/share/virtualenvs/dynamic_ipython-mVJ3Ohov/lib/python3.8/site</span>
+<span class="c1"># -packages/IPython/core/interactiveshell.py&quot;, line 402, in _import_runner raise ValueError(&#39;loop_runner must be</span>
+<span class="c1"># callable&#39;)</span>
 
 <span class="c1"># ValueError: loop_runner must be callable</span>
 
@@ -540,7 +537,7 @@
 <span class="c1"># Switch modes for the IPython exception handlers.</span>
 <span class="c1"># Default: &#39;Context&#39;</span>
 <span class="c1"># Choices: [&#39;Context&#39;, &#39;Plain&#39;, &#39;Verbose&#39;, &#39;Minimal&#39;]</span>
-<span class="n">c</span><span class="o">.</span><span class="n">InteractiveShell</span><span class="o">.</span><span class="n">xmode</span> <span class="o">=</span> <span class="s2">&quot;Minimal&quot;</span>
+<span class="n">c</span><span class="o">.</span><span class="n">InteractiveShell</span><span class="o">.</span><span class="n">xmode</span> <span class="o">=</span> <span class="s2">&quot;Verbose&quot;</span>
 
 <span class="c1"># ----------------------------------------------------------------------------</span>
 <span class="c1"># TerminalInteractiveShell(InteractiveShell) configuration</span>
@@ -597,23 +594,17 @@
 <span class="c1"># check IPython/core/usage.py</span>
 <span class="c1"># unfortunately this doesn&#39;t work yet. release isn&#39;t defined and idk where</span>
 <span class="c1"># they define it in the original file.</span>
-<span class="c1"># rewritten_banner_parts = [</span>
-<span class="c1">#     &quot;Python %s\n&quot; % sys.version.split(&quot;\n&quot;)[0],</span>
-<span class="c1">#     &quot;IPython {version} &quot;.format(version=release.version),</span>
-<span class="c1"># ]</span>
 
-<span class="c1">#  rewritten_banner = &#39;&#39;.join(rewritten_banner_parts)</span>
-
-<span class="c1">#  c.InteractiveShell.banner1 = rewritten_banner</span>
+<span class="n">c</span><span class="o">.</span><span class="n">InteractiveShell</span><span class="o">.</span><span class="n">banner1</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;Python </span><span class="si">{</span><span class="n">sys</span><span class="o">.</span><span class="n">version</span><span class="si">!s}</span><span class="s2">&quot;</span>
+    <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;IPython </span><span class="si">{</span><span class="n">IPython</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">release</span><span class="o">.</span><span class="n">version</span><span class="si">!s}</span><span class="s2">&quot;</span>
+    <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+<span class="p">)</span>
 
 <span class="c1"># The part of the banner to be printed after the profile</span>
 <span class="n">c</span><span class="o">.</span><span class="n">InteractiveShell</span><span class="o">.</span><span class="n">banner2</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-
-<span class="n">c</span><span class="o">.</span><span class="n">TerminalInteractiveShell</span><span class="o">.</span><span class="n">banner1</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="s2">&quot;Press Control-Y to paste from the system clipboard.</span><span class="se">\n</span><span class="s2">&quot;</span>
-    <span class="s2">&quot;Press Control-Space or Control-@ to enter selection mode.</span><span class="se">\n</span><span class="s2">&quot;</span>
-    <span class="s2">&quot;Press Control-W to cut to clipboard.</span><span class="se">\n</span><span class="s2">&quot;</span>
-<span class="p">)</span>
 
 <span class="c1"># TODO: What is the API for traitlets.LazyConfigValue? It doesn&#39;t have a log method.</span>
 <span class="c1"># c.log(&quot;Editing Mode:\t {!s}&quot;.format(c.TerminalInteractiveShell.editing_mode))</span>
@@ -647,8 +638,8 @@
 <span class="c1"># https://github.com/farisachugthai/Gruvbox_IPython</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">gruvbox.gruvbox</span> <span class="kn">import</span> <span class="n">GruvboxStyle</span>
-<span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="n">ModuleNotFoundError</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">gruvbox</span> <span class="kn">import</span> <span class="n">GruvboxStyle</span>
+<span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="ne">ModuleNotFoundError</span><span class="p">):</span>
     <span class="kn">from</span> <span class="nn">pygments.styles</span> <span class="kn">import</span> <span class="n">inkpot</span>
 
     <span class="n">c</span><span class="o">.</span><span class="n">TerminalInteractiveShell</span><span class="o">.</span><span class="n">highlighting_style</span> <span class="o">=</span> <span class="s2">&quot;inkpot&quot;</span>
@@ -676,29 +667,7 @@
 
 <span class="c1"># Class used to generate Prompt token for prompt_toolkit</span>
 <span class="c1"># So this wouldn&#39;t be a block of code to build off of but here&#39;s something</span>
-<span class="c1"># so you can get an idea of what&#39;s going on</span>
-
-
-<div class="viewcode-block" id="StandardPythonPrompt"><a class="viewcode-back" href="../../startup/index.html#default_profile.ipython_config.StandardPythonPrompt">[docs]</a><span class="k">class</span> <span class="nc">StandardPythonPrompt</span><span class="p">(</span><span class="n">ClassicPrompts</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Create a no-op class to demonstrate usage of the ClassicPrompts class.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    &gt;&gt;&gt; from IPython.terminal.prompts import ClassicPrompts</span>
-<span class="sd">    &gt;&gt;&gt; from IPython.core.getipython import get_ipython</span>
-<span class="sd">    &gt;&gt;&gt; ClassicPrompts(get_ipython()).continuation_prompt_tokens()</span>
-<span class="sd">    [(Token.Prompt, &#39;&gt;&gt;&gt; &#39;)]</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The most boiler-platey repr I can come up with.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
-
-        <span class="c1"># def __call__(self):</span>
-        <span class="sd">&quot;&quot;&quot;TODO&quot;&quot;&quot;</span></div>
-        <span class="c1"># return</span>
-
+<span class="c1"># so you can get an idea of what&#39;s going on.</span>
 
 <span class="c1"># As an aside I believe that this attr is the same as Prompt</span>
 <span class="c1"># c.TerminalInteractiveShell.prompts_class = &#39;IPython.terminal.prompts.Prompts&#39;</span>
@@ -858,11 +827,11 @@
                 <span class="k">except</span><span class="p">:</span>
                     <span class="k">pass</span>
             <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;{_format_time(self.average, self._precision)}&quot;</span><span class="p">)</span>
-            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{pm}</span><span class="s2"> {_format_time(self.stdev, self._precision)} per loop&quot;</span><span class="p">)</span>
-            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{mean}</span><span class="s2"> </span><span class="si">{pm}</span><span class="s2"> std. dev. of </span><span class="si">{self.repeat}</span><span class="s2"> run.&quot;</span><span class="p">)</span>
-            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;{&#39;&#39; if self.repeat == 1 else &#39;s&#39;} </span><span class="si">{self.loops}</span><span class="s2"> loop&quot;</span><span class="p">)</span>
-            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;{&#39;&#39; if self.loops == 1 else &#39;s&#39;} each&quot;</span><span class="p">)</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">_format_time</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">average</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_precision</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">pm</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">_format_time</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stdev</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_precision</span><span class="p">)</span><span class="si">}</span><span class="s2"> per loop&quot;</span><span class="p">)</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">mean</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">pm</span><span class="si">}</span><span class="s2"> std. dev. of </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">repeat</span><span class="si">}</span><span class="s2"> run.&quot;</span><span class="p">)</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">repeat</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="s1">&#39;s&#39;</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">loops</span><span class="si">}</span><span class="s2"> loop&quot;</span><span class="p">)</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">loops</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="s1">&#39;s&#39;</span><span class="si">}</span><span class="s2"> each&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">ret</span></div>
 
 <div class="viewcode-block" id="TimedFormatter.timings"><a class="viewcode-back" href="../../startup/index.html#default_profile.ipython_config.TimedFormatter.timings">[docs]</a>        <span class="k">def</span> <span class="nf">timings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -872,7 +841,7 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
 
         <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{self.__class__.__name__}</span><span class="s2">&quot;</span></div>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span></div>
 
 
 <span class="c1"># ----------------------------------------------------------------------------</span>
@@ -971,7 +940,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Mar 05, 2020.
+      Last updated on Mar 10, 2020.
     </div>
   </body>
 </html>

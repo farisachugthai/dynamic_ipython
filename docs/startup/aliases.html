@@ -19,7 +19,7 @@
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/startup/aliases.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="21_fzf" href="fzf.html" />
+    <link rel="next" title="FZF" href="fzf.html" />
     <link rel="prev" title="11_clipboard module" href="clipboard.html" />
 <!-- <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro" media="screen" rel="stylesheet" type="text/css" /> -->
 <!-- <link charset="utf-8" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:regular,italic,bold,bolditalic" media="screen" rel="stylesheet" type="text/css" /> -->
@@ -147,7 +147,7 @@
       <div class="relnav" role="navigation" aria-label="related navigation">
         <a href="clipboard.html">&laquo; <code class="xref py py-mod docutils literal notranslate"><span class="pre">11_clipboard</span></code> module</a> |
         <a href="#">System Aliases</a>
-        | <a href="fzf.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">21_fzf</span></code> &raquo;</a>
+        | <a href="fzf.html">FZF &raquo;</a>
       </div>
       <div id="contentwrapper">
         <div id="toc" role="navigation" aria-label="table of contents navigation">
@@ -202,7 +202,7 @@ in a typical system shell.</p>
 it responds to, and it’s ability to receive and pass along input and output
 in pipelines will vary greatly.</p>
 <p>As a result, the module needs to test the user’s OS, what shell they’re using
-and what executables are available on the <span class="target" id="index-0"></span><a class="reference external" href="https://matplotlib.org/faq/environment_variables_faq.html#envvar-PATH" title="(in Matplotlib v3.1.3)"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PATH</span></code></a>.</p>
+and what executables are available on the <span class="target" id="index-0"></span><a class="reference external" href="https://matplotlib.org/faq/environment_variables_faq.html#envvar-PATH" title="(in Matplotlib v3.2.0)"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PATH</span></code></a>.</p>
 <p>On Unix platforms, it is assumed that the user is using a bash shell.</p>
 <p>However on Windows, it is possible that the user has a shell that runs
 <strong class="command">dosbatch</strong>, <strong class="command">powershell</strong>, or <strong class="command">bash</strong>.</p>
@@ -368,26 +368,49 @@ alternatives below:</p>
 </ul>
 </div></blockquote>
 </div>
+<dl class="exception">
+<dt id="default_profile.startup.20_aliases.AliasError">
+<em class="property">exception </em><code class="sig-name descname">AliasError</code><a class="reference internal" href="../_modules/default_profile/startup/20_aliases.html#AliasError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.20_aliases.AliasError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="default_profile.startup.20_aliases.InvalidAliasError">
+<em class="property">exception </em><code class="sig-name descname">InvalidAliasError</code><a class="reference internal" href="../_modules/default_profile/startup/20_aliases.html#InvalidAliasError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.20_aliases.InvalidAliasError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#default_profile.startup.20_aliases.AliasError" title="default_profile.startup.20_aliases.AliasError"><code class="xref py py-class docutils literal notranslate"><span class="pre">default_profile.startup.20_aliases.AliasError</span></code></a></p>
+</dd></dl>
+
 <dl class="function">
 <dt id="default_profile.startup.20_aliases.validate_alias">
-<code class="sig-name descname">validate_alias</code><span class="sig-paren">(</span><em class="sig-param">alias</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="../_modules/default_profile/startup/20_aliases.html#validate_alias"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.20_aliases.validate_alias" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">validate_alias</code><span class="sig-paren">(</span><em class="sig-param">alias</em><span class="sig-paren">)</span> &#x2192; Union[Any, NoneType]<a class="reference internal" href="../_modules/default_profile/startup/20_aliases.html#validate_alias"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.20_aliases.validate_alias" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check attributes and formatting of Alias string.</p>
+<p>Verifies alias through the name and cmd attributes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>alias</strong> (<a class="reference internal" href="#default_profile.startup.20_aliases.Alias" title="default_profile.startup.20_aliases.Alias"><em>Alias</em></a>) – Alias to verify</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>nargs</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="#default_profile.startup.20_aliases.InvalidAliasError" title="default_profile.startup.20_aliases.InvalidAliasError"><strong>InvalidAliasError</strong></a> – </p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="class">
 <dt>
-<em class="property">class </em><code class="sig-name descname">Alias</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">cmd</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/20_aliases.html#Alias"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><code class="sig-name descname">Alias</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">cmd</em>, <em class="sig-param">**kwargs: dict</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/20_aliases.html#Alias"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.UserDict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.UserDict</span></code></a></p>
 <p>Callable object storing the details of one alias.</p>
 <p>Reasonably this is the object that should be the UserDict. CommonAliases
 makes more sense as a list of dicts.</p>
-<dl class="attribute">
-<dt id="default_profile.startup.20_aliases.Alias.blacklist">
-<code class="sig-name descname">blacklist</code><em class="property"> = ['dhist', 'alias', 'unalias', 'False', 'None', 'True', 'and', 'as', 'assert', 'async', 'await', 'break', 'class', 'continue', 'def', 'del', 'elif', 'else', 'except', 'finally', 'for', 'from', 'global', 'if', 'import', 'in', 'is', 'lambda', 'nonlocal', 'not', 'or', 'pass', 'raise', 'return', 'try', 'while', 'with', 'yield']</em><a class="headerlink" href="#default_profile.startup.20_aliases.Alias.blacklist" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="method">
 <dt id="default_profile.startup.20_aliases.Alias.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">name</em>, <em class="sig-param">cmd</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/20_aliases.html#Alias.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.20_aliases.Alias.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">name</em>, <em class="sig-param">cmd</em>, <em class="sig-param">**kwargs: dict</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/20_aliases.html#Alias.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.20_aliases.Alias.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Validate the alias, and return the number of arguments.</p>
 </dd></dl>
 
@@ -395,6 +418,14 @@ makes more sense as a list of dicts.</p>
 <dt id="default_profile.startup.20_aliases.Alias.shell">
 <em class="property">property </em><code class="sig-name descname">shell</code><a class="reference internal" href="../_modules/default_profile/startup/20_aliases.html#Alias.shell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.20_aliases.Alias.shell" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="method">
+<dt id="default_profile.startup.20_aliases.Alias.blacklist">
+<em class="property">property </em><code class="sig-name descname">blacklist</code><a class="reference internal" href="../_modules/default_profile/startup/20_aliases.html#Alias.blacklist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.20_aliases.Alias.blacklist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Override the super classes blacklist. The reset magic no longer works.</p>
+<p>We change prompt_toolkit properties and don’t reset them with that magic,
+so it expects the interface to continue existing.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -406,7 +437,7 @@ makes more sense as a list of dicts.</p>
 <p>Aliases are added by calling the <a class="reference internal" href="#default_profile.startup.20_aliases.CommonAliases.update" title="default_profile.startup.20_aliases.CommonAliases.update"><code class="xref py py-meth docutils literal notranslate"><span class="pre">update()</span></code></a> method which will add
 aliases to the attribute <em>dict_aliases</em>.</p>
 <p>In addition, note that the definition for updating indicates that the
-class <code class="xref py py-obj docutils literal notranslate"><span class="pre">update`s</span> <span class="pre">aliases</span> <span class="pre">and</span> <span class="pre">will</span> <span class="pre">`add</span></code> other instances.</p>
+class <a class="reference internal" href="#default_profile.startup.20_aliases.CommonAliases.update" title="default_profile.startup.20_aliases.CommonAliases.update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code></a>s aliases and will <a class="reference internal" href="#default_profile.startup.20_aliases.CommonAliases.add" title="default_profile.startup.20_aliases.CommonAliases.add"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add</span></code></a> other instances.</p>
 <dl class="attribute">
 <dt id="default_profile.startup.20_aliases.CommonAliases.shell">
 <code class="sig-name descname">shell</code><em class="property"> = None</em><a class="headerlink" href="#default_profile.startup.20_aliases.CommonAliases.shell" title="Permalink to this definition">¶</a></dt>
@@ -464,11 +495,13 @@ match it’s interface.</p>
 
 <dl class="method">
 <dt id="default_profile.startup.20_aliases.CommonAliases.update">
-<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">other</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/20_aliases.html#CommonAliases.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.20_aliases.CommonAliases.update" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">other</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/20_aliases.html#CommonAliases.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.20_aliases.CommonAliases.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update the mapping of aliases to system commands.</p>
 <p>Ensure that this is properly defined as this can be critical for speed.</p>
 <p>If a TypeError is raised by doing so then attempt to pass the alias along
-to the shell’s <code class="xref py py-obj docutils literal notranslate"><span class="pre">AliasManager</span></code> with <a class="reference internal" href="#default_profile.startup.20_aliases.CommonAliases.soft_define_alias" title="default_profile.startup.20_aliases.CommonAliases.soft_define_alias"><code class="xref py py-obj docutils literal notranslate"><span class="pre">soft_define_alias</span></code></a>.</p>
+to the shell’s <code class="xref py py-obj docutils literal notranslate"><span class="pre">AliasManager</span></code> with <a class="reference internal" href="#default_profile.startup.20_aliases.CommonAliases.soft_define_alias" title="default_profile.startup.20_aliases.CommonAliases.soft_define_alias"><code class="xref py py-obj docutils literal notranslate"><span class="pre">soft_define_alias</span></code></a>.
+:param <a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs:
+:type <a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs:</p>
 </dd></dl>
 
 <dl class="method">
@@ -502,23 +535,8 @@ to the shell’s <code class="xref py py-obj docutils literal notranslate"><span
 <dt id="default_profile.startup.20_aliases.CommonAliases.python_exes">
 <code class="sig-name descname">python_exes</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/20_aliases.html#CommonAliases.python_exes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.20_aliases.CommonAliases.python_exes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Python executables like pydoc get executed in a subprocess currently.</p>
-<p>Let’s fix that behavior because that’s silly.</p>
-<p>So this method may have exposed a big problem in the way these data
-structures are set up. It’d be way smarter to have this set up like
-dictionaries.</p>
-<p>I want to do a check for if pydoc and apropos are in teh aliases.
-But if we iterate over the list then we still get a tuple.
-We could do something like:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;pydoc&#39;</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">unalias</span><span class="p">(</span><span class="s1">&#39;pydoc&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>But that’s clunky because we’re forced to iterate over all aliases.
-Then we could try and do something like a merge sort to find pydoc
-and apropos quickly but jeez that’s gonna get complicated kinda quick
-don’t you think?</p>
-<div class="admonition-todo admonition" id="id1">
+<p>I want to do a check for if pydoc and apropos are in the aliases.</p>
+<div class="admonition-todo admonition" id="id5">
 <p class="admonition-title">Todo</p>
 <p>os.environ =&gt; env</p>
 </div>
@@ -582,7 +600,7 @@ the namespace.</p>
 <dt id="default_profile.startup.20_aliases.WindowsAliases.cmd_aliases">
 <code class="sig-name descname">cmd_aliases</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/20_aliases.html#WindowsAliases.cmd_aliases"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.20_aliases.WindowsAliases.cmd_aliases" title="Permalink to this definition">¶</a></dt>
 <dd><p>Aliases for the <strong class="command">cmd</strong> shell.</p>
-<div class="admonition-todo admonition" id="id2">
+<div class="admonition-todo admonition" id="id6">
 <p class="admonition-title">Todo</p>
 <p>Cmd, <span class="target" id="index-5"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">COPYCMD</span></code> and IPython</p>
 <p>Need to consider how to handle env vars. Still working out how
@@ -615,19 +633,11 @@ that this section is still under development and frequently changes.</p>
 
 <dl class="function">
 <dt id="default_profile.startup.20_aliases.generate_aliases">
-<code class="sig-name descname">generate_aliases</code><span class="sig-paren">(</span><em class="sig-param">_ip=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/20_aliases.html#generate_aliases"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.20_aliases.generate_aliases" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set up aliases for the user namespace for IPython.</p>
-<p>Planning on coming up with a new way of introducing the aliases into the user namespace.</p>
-<p># TODO: Work in the Executable() class check.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="default_profile.startup.20_aliases.redefine_aliases">
-<code class="sig-name descname">redefine_aliases</code><span class="sig-paren">(</span><em class="sig-param">aliases</em>, <em class="sig-param">shell=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/20_aliases.html#redefine_aliases"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.20_aliases.redefine_aliases" title="Permalink to this definition">¶</a></dt>
-<dd><p>Now a function to allow the user to rerun as necesaary.</p>
+<code class="sig-name descname">generate_aliases</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Union[NoneType, default_profile.startup.20_aliases.LinuxAliases, default_profile.startup.20_aliases.WindowsAliases]<a class="reference internal" href="../_modules/default_profile/startup/20_aliases.html#generate_aliases"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.20_aliases.generate_aliases" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define aliases in case the user needs to redefine</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>aliases</strong> (<em>list of tuples</em>) – Aliases to rerun. Can be easily generated from <a class="reference internal" href="#default_profile.startup.20_aliases.generate_aliases" title="default_profile.startup.20_aliases.generate_aliases"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_aliases</span></code></a></p>
+<dd class="field-odd"><p><strong>aliases</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple</span></code></a>) – Aliases to rerun. Can be easily generated from <a class="reference internal" href="#default_profile.startup.20_aliases.generate_aliases" title="default_profile.startup.20_aliases.generate_aliases"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_aliases</span></code></a></p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p></p>
@@ -636,19 +646,10 @@ that this section is still under development and frequently changes.</p>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a></p>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>traitlets.config.application.ApplicationError</strong> – </p>
+<dd class="field-even"><p><strong>traitlets.config.application.ApplicationError</strong> – Raises an ApplicationError if <code class="xref py py-obj docutils literal notranslate"><span class="pre">get_ipython</span></code> returns an object that
+doesn’t have an attribute ‘alias_manager’.</p>
 </dd>
 </dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">shell</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">user_aliases</span><span class="p">)</span>  <span class="c1"># DOCTEST: +SKIP</span>
-<span class="go">    0 # and even if it&#39;s not</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">shell</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">)]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">redefine_aliases</span><span class="p">([(</span><span class="s1">&#39;ls&#39;</span><span class="p">,</span> <span class="s1">&#39;ls -F&#39;</span><span class="p">)])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">shell</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">user_aliases</span>
-<span class="go">    4</span>
-</pre></div>
-</div>
 </dd></dl>
 
 </div>
@@ -661,7 +662,7 @@ that this section is still under development and frequently changes.</p>
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Mar 05, 2020.
+      Last updated on Mar 10, 2020.
     </div>
   </body>
 </html>

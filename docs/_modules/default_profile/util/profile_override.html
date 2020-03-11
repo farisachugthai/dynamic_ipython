@@ -149,20 +149,21 @@
         <div role="main">
         
 <h1>Source code for default_profile.util.profile_override</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">&quot;&quot;&quot;Rewrite the IPython ProfileDir.</span>
+
 <span class="sd">Profile Override</span>
 <span class="sd">================</span>
 
 <span class="sd">Override the IPython ProfileDir.</span>
 
-<span class="sd">It feels rude to do it this way but all I wanna do is add a repr! Oh I guess I</span>
-<span class="sd">could just inherit everything from this class.</span>
+<span class="sd">Initially created to implement a repr for the class, it was expanded in order</span>
+<span class="sd">to also modify the behavior that automatically adds a PID dir,</span>
 
-<span class="sd">Eh. I also wanna modify the behavior that automatically adds a PID dir,</span>
-<span class="sd">security dir, etc.</span>
+<span class="sd">It automatically creates them in the current working directory and this</span>
+<span class="sd">behavior was not designed to be modifiable.</span>
 
-<span class="sd">I get why it&#39;s difficult to run it selectively but it automatically creates</span>
-<span class="sd">them in the wrong dir often enough that it should be toggleable behavior.</span>
+<span class="sd">As a result, profiles are frequently created in the</span>
+<span class="sd">wrong dir often enough that it should be toggleable behavior.</span>
 
 <span class="sd">See Also</span>
 <span class="sd">--------</span>
@@ -173,12 +174,14 @@
 <span class="kn">import</span> <span class="nn">errno</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span> <span class="nn">traceback</span> <span class="kn">import</span> <span class="n">print_exc</span>
 
+<span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+<span class="kn">from</span> <span class="nn">IPython.core.profiledir</span> <span class="kn">import</span> <span class="n">ProfileDir</span>
 <span class="kn">from</span> <span class="nn">IPython.terminal.embed</span> <span class="kn">import</span> <span class="n">InteractiveShellEmbed</span>
 <span class="kn">from</span> <span class="nn">IPython.terminal.ipapp</span> <span class="kn">import</span> <span class="n">TerminalIPythonApp</span>
-<span class="kn">from</span> <span class="nn">IPython.core.profiledir</span> <span class="kn">import</span> <span class="n">ProfileDir</span>
 
 <span class="c1"># from IPython.paths import ensure_dir_exists, get_ipython_package_dir</span>
 <span class="kn">from</span> <span class="nn">traitlets.config</span> <span class="kn">import</span> <span class="n">Bool</span><span class="p">,</span> <span class="n">Unicode</span><span class="p">,</span> <span class="n">observe</span>
@@ -260,21 +263,21 @@
 <span class="sd">    easier.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="DirectoryChecker.__init__"><a class="viewcode-back" href="../../../util/profile_override.html#default_profile.util.profile_override.DirectoryChecker.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">canary</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="DirectoryChecker.__init__"><a class="viewcode-back" href="../../../util/profile_override.html#default_profile.util.profile_override.DirectoryChecker.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize our own version of ipython.&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">canary</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">canary</span> <span class="o">=</span> <span class="n">canary</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">canary</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fs</span> <span class="o">=</span> <span class="n">Path</span></div>
+
+<div class="viewcode-block" id="DirectoryChecker.shell"><a class="viewcode-back" href="../../../util/profile_override.html#default_profile.util.profile_override.DirectoryChecker.shell">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">shell</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">get_ipython</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="DirectoryChecker.initialize"><a class="viewcode-back" href="../../../util/profile_override.html#default_profile.util.profile_override.DirectoryChecker.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;TODO: Add getattr checks for this func so we don&#39;t call on an uninitialized object.&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">canary</span><span class="o">.</span><span class="n">initialized</span><span class="p">():</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">initialized</span><span class="p">():</span>
             <span class="c1"># Running inside IPython</span>
 
             <span class="c1"># Detect if embed shell or not and display a message</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">canary</span><span class="p">,</span> <span class="n">InteractiveShellEmbed</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="p">,</span> <span class="n">InteractiveShellEmbed</span><span class="p">):</span>
                 <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
                     <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">You are currently in an embedded IPython shell,</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="s2">&quot;the configuration will not be loaded.</span><span class="se">\n\n</span><span class="s2">&quot;</span>
@@ -334,7 +337,7 @@
         <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="n">print_exc</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">canary</span><span class="o">.</span><span class="n">profile_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~/.ipython/default_profile&quot;</span><span class="p">)</span></div></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">profile_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~/.ipython/default_profile&quot;</span><span class="p">)</span></div></div>
 </pre></div>
 
         </div>
@@ -342,7 +345,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Mar 05, 2020.
+      Last updated on Mar 10, 2020.
     </div>
   </body>
 </html>

@@ -124,7 +124,7 @@ REQUIRED = [
     "importlib-metadata",
     "pyfzf",
     "pyperclip",
-    "trio", 'pygments', 'pyreadline'
+    "trio", 'pygments', 'pyreadline', 'jinja2', 'jedi'
 ]
 
 if platform.platform().startswith("Win"):

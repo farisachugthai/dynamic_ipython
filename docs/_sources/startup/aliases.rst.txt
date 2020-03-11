@@ -48,6 +48,7 @@ and if present, that value is used.
 
 Attributes
 ----------
+
 _ip : |ip|
     A global object representing the active IPython session.
     Contains varying packages as well as the current global namespace.
@@ -58,6 +59,7 @@ _ip : |ip|
 
 Parameters
 ----------
+
 :kbd:`%l` : Command-line argument.
    The remainder of the user's input. Commonly referred to in the Jupyter
    documentation as the remaining 'cell'.
@@ -102,6 +104,7 @@ in typical POSIX shells.
 
 Linux Aliases
 -------------
+
 Aliases that have either:
 
 - Only been tested on Linux

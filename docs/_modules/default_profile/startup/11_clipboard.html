@@ -161,14 +161,13 @@
 <span class="kn">import</span> <span class="nn">platform</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">import</span> <span class="nn">subprocess</span>
-<span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">environ</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">AnyStr</span>
 
 <span class="kn">from</span> <span class="nn">IPython.core.magic</span> <span class="kn">import</span> <span class="n">line_magic</span><span class="p">,</span> <span class="n">Magics</span><span class="p">,</span> <span class="n">magics_class</span>
 <span class="kn">from</span> <span class="nn">IPython.core.error</span> <span class="kn">import</span> <span class="n">TryNext</span>
 <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.clipboard</span> <span class="kn">import</span> <span class="n">DynamicClipboard</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.clipboard.base</span> <span class="kn">import</span> <span class="n">ClipboardData</span><span class="p">,</span> <span class="n">Clipboard</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.clipboard.base</span> <span class="kn">import</span> <span class="n">Clipboard</span><span class="p">,</span> <span class="n">ClipboardData</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.clipboard.in_memory</span> <span class="kn">import</span> <span class="n">InMemoryClipboard</span>
 
 <span class="k">try</span><span class="p">:</span>
@@ -178,6 +177,12 @@
     <span class="n">clipboard</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">prompt_toolkit.clipboard.pyperclip</span> <span class="kn">import</span> <span class="n">PyperclipClipboard</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">win32clipboard</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">win32clipboard</span> <span class="o">=</span> <span class="kc">None</span>
+
 
 
 <div class="viewcode-block" id="ClipboardEmpty"><a class="viewcode-back" href="../../../startup/clipboard.html#default_profile.startup.11_clipboard.ClipboardEmpty">[docs]</a><span class="k">class</span> <span class="nc">ClipboardEmpty</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
@@ -202,16 +207,19 @@
 <span class="sd">            If win32clipboard can&#39;t be imported.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="kn">import</span> <span class="nn">win32clipboard</span>
-        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">TryNext</span><span class="p">(</span>
-                <span class="s2">&quot;Getting text from the clipboard requires the pywin32 &quot;</span>
-                <span class="s2">&quot;extensions: http://sourceforge.net/projects/pywin32/&quot;</span>
-            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">win32clipboard</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+            <span class="s2">&quot;Getting text from the clipboard requires the pywin32 &quot;</span>
+            <span class="s2">&quot;extensions: http://sourceforge.net/projects/pywin32/&quot;</span>
+        <span class="p">)</span>
         <span class="n">win32clipboard</span><span class="o">.</span><span class="n">OpenClipboard</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="WindowsClipboard.win_clip_pywin32"><a class="viewcode-back" href="../../../startup/clipboard.html#default_profile.startup.11_clipboard.WindowsClipboard.win_clip_pywin32">[docs]</a>    <span class="k">def</span> <span class="nf">win_clip_pywin32</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Utilize pywin32 to get the user&#39;s text.</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        :rtype:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">text</span> <span class="o">=</span> <span class="n">win32clipboard</span><span class="o">.</span><span class="n">GetClipboardData</span><span class="p">(</span><span class="n">win32clipboard</span><span class="o">.</span><span class="n">CF_UNICODETEXT</span><span class="p">)</span>
         <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="n">win32clipboard</span><span class="o">.</span><span class="n">error</span><span class="p">):</span>
@@ -241,14 +249,7 @@
         <span class="k">except</span> <span class="n">ClipboardEmpty</span><span class="p">:</span>
             <span class="k">return</span>
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>  <span class="c1"># noqa</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="c1"># or something</span>
-                <span class="k">return</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
-                    <span class="p">[</span><span class="s2">&quot;win32yank&quot;</span><span class="p">,</span> <span class="s2">&quot;-o&quot;</span><span class="p">,</span> <span class="s2">&quot;lf&quot;</span><span class="p">],</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span>
-                <span class="p">)</span><span class="o">.</span><span class="n">stdout</span>
-                <span class="c1"># &quot;-i&quot;, &quot;crlf&quot;,</span>
-            <span class="k">except</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">CalledProcessError</span><span class="p">:</span>
-                <span class="k">raise</span></div>
+            <span class="k">return</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="s2">&quot;win32yank&quot;</span><span class="p">,</span> <span class="s2">&quot;-o&quot;</span><span class="p">,</span> <span class="s2">&quot;lf&quot;</span><span class="p">],</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">)</span><span class="o">.</span><span class="n">stdout</span></div>
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">win32_clipboard_get</span><span class="p">()</span>
@@ -320,7 +321,7 @@
 
 <div class="viewcode-block" id="ClipboardMagics.load_ipython_extension"><a class="viewcode-back" href="../../../startup/clipboard.html#default_profile.startup.11_clipboard.ClipboardMagics.load_ipython_extension">[docs]</a>    <span class="k">def</span> <span class="nf">load_ipython_extension</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Sep 20, 2019: Works!&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">set_hook</span><span class="p">(</span><span class="s2">&quot;clipboard_get&quot;</span><span class="p">,</span> <span class="n">termux_clipboard_get</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">set_hook</span><span class="p">(</span><span class="s2">&quot;clipboard_get&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">termux_clipboard_get</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ClipboardMagics.termux_clipboard_get"><a class="viewcode-back" href="../../../startup/clipboard.html#default_profile.startup.11_clipboard.ClipboardMagics.termux_clipboard_get">[docs]</a>    <span class="nd">@line_magic</span>
     <span class="k">def</span> <span class="nf">termux_clipboard_get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -335,7 +336,7 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="c1"># This is what you were looking for.</span>
             <span class="kn">from</span> <span class="nn">prompt_toolkit.clipboard.pyperclip</span> <span class="kn">import</span> <span class="n">PyperclipClipboard</span>
-        <span class="k">except</span> <span class="n">ModuleNotFoundError</span><span class="p">:</span>
+        <span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
             <span class="c1"># womp</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;pyperclip not imported.&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -353,12 +354,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">clipboard</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">clipboard</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pyperclip</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_clipboard</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pyperclip</span><span class="p">()</span>
             <span class="k">except</span> <span class="n">ClipboardEmpty</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">clipboard</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_clipboard</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">clipboard</span> <span class="o">=</span> <span class="n">clipboard</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_clipboard</span> <span class="o">=</span> <span class="n">clipboard</span></div>
 
 <div class="viewcode-block" id="UsefulClipboard.load"><a class="viewcode-back" href="../../../startup/clipboard.html#default_profile.startup.11_clipboard.UsefulClipboard.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;TODO: This actually isn&#39;t gonna work.</span>
@@ -390,19 +391,22 @@
 <div class="viewcode-block" id="UsefulClipboard.rotate"><a class="viewcode-back" href="../../../startup/clipboard.html#default_profile.startup.11_clipboard.UsefulClipboard.rotate">[docs]</a>    <span class="k">def</span> <span class="nf">rotate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_clipboard</span><span class="p">()</span><span class="o">.</span><span class="n">rotate</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="UsefulClipboard.get_data"><a class="viewcode-back" href="../../../startup/clipboard.html#default_profile.startup.11_clipboard.UsefulClipboard.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="UsefulClipboard.get_data"><a class="viewcode-back" href="../../../startup/clipboard.html#default_profile.startup.11_clipboard.UsefulClipboard.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ClipboardData</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clipboard</span><span class="p">()</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="UsefulClipboard.get_text"><a class="viewcode-back" href="../../../startup/clipboard.html#default_profile.startup.11_clipboard.UsefulClipboard.get_text">[docs]</a>    <span class="k">def</span> <span class="nf">get_text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AnyStr</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the text on the clipboard.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span><span class="o">.</span><span class="n">text</span></div>
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{self.__class__.__name__}</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span>
 
     <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the length of clipboard data on the clipboard.&quot;&quot;&quot;</span>
-        <span class="c1"># return len(self.clipboard().text)</span>
-        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_data</span><span class="p">())</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_text</span><span class="p">())</span>
 
 <div class="viewcode-block" id="UsefulClipboard.termux_clipboard_get"><a class="viewcode-back" href="../../../startup/clipboard.html#default_profile.startup.11_clipboard.UsefulClipboard.termux_clipboard_get">[docs]</a>    <span class="k">def</span> <span class="nf">termux_clipboard_get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;termux-clipboard-get&quot;</span><span class="p">):</span>
@@ -415,7 +419,7 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="c1"># This is what you were looking for.</span>
             <span class="kn">from</span> <span class="nn">prompt_toolkit.clipboard.pyperclip</span> <span class="kn">import</span> <span class="n">PyperclipClipboard</span>
-        <span class="k">except</span> <span class="n">ModuleNotFoundError</span><span class="p">:</span>
+        <span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
             <span class="c1"># womp</span>
             <span class="k">raise</span> <span class="n">ClipboardEmpty</span></div></div>
         <span class="c1"># else:</span>
@@ -450,7 +454,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Mar 05, 2020.
+      Last updated on Mar 10, 2020.
     </div>
   </body>
 </html>

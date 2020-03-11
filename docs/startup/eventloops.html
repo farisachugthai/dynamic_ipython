@@ -190,7 +190,7 @@ don’t entirely seem well supported in the python standard library yet.</p>
 <p>What the hell is this?:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">29</span><span class="p">]:</span> <span class="o">%</span><span class="n">edit</span> <span class="n">event_loops</span><span class="o">.</span><span class="n">py</span>
 <span class="n">Editing</span><span class="o">...</span> <span class="n">done</span><span class="o">.</span> <span class="n">Executing</span> <span class="n">edited</span> <span class="n">code</span><span class="o">...</span>
-<span class="n">ModuleNotFoundError</span><span class="p">:</span> <span class="n">No</span> <span class="n">module</span> <span class="n">named</span> <span class="s1">&#39;_overlapped&#39;</span>
+<span class="ne">ModuleNotFoundError</span><span class="p">:</span> <span class="n">No</span> <span class="n">module</span> <span class="n">named</span> <span class="s1">&#39;_overlapped&#39;</span>
 
 <span class="o">&gt;</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">farbuntu</span><span class="o">/</span><span class="n">miniconda3</span><span class="o">/</span><span class="n">envs</span><span class="o">/</span><span class="n">working</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="o">.</span><span class="mi">8</span><span class="o">/</span><span class="n">asyncio</span><span class="o">/</span><span class="n">windows_events</span><span class="o">.</span><span class="n">py</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span><span class="p">()</span>
     <span class="mi">1</span> <span class="c1"># &quot;Selector and proactor event loops for Windows.</span>
@@ -207,7 +207,7 @@ don’t entirely seem well supported in the python standard library yet.</p>
 <dl class="function">
 <dt id="default_profile.startup.event_loops.children">
 <code class="sig-name descname">children</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/event_loops.html#children"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.event_loops.children" title="Permalink to this definition">¶</a></dt>
-<dd><p>Simply to save the typing.</p>
+<dd><p>Return <a class="reference external" href="https://docs.python.org/3/library/multiprocessing.html#multiprocessing.active_children" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">multiprocessing.active_children</span></code></a>. Simply to save the typing.</p>
 </dd></dl>
 
 <dl class="function">
@@ -219,7 +219,7 @@ don’t entirely seem well supported in the python standard library yet.</p>
 <dl class="function">
 <dt id="default_profile.startup.event_loops.system_command">
 <em class="property">async </em><code class="sig-name descname">system_command</code><span class="sig-paren">(</span><em class="sig-param">command_to_run</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/event_loops.html#system_command"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.event_loops.system_command" title="Permalink to this definition">¶</a></dt>
-<dd><p>Run a system command.</p>
+<dd><p>Run a system command using prompt_toolkit’s run_system_command.</p>
 <p class="rubric">Examples</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">40</span><span class="p">]:</span> <span class="k">await</span> <span class="n">system_command</span><span class="p">(</span><span class="s1">&#39;ls&#39;</span><span class="p">)</span>  <span class="c1"># +NORMALIZE_WHITESPACE</span>
 <span class="mi">01</span><span class="n">_rehashx</span><span class="o">.</span><span class="n">py</span>       <span class="mi">20</span><span class="n">_aliases</span><span class="o">.</span><span class="n">py</span>        <span class="mi">31</span><span class="n">_yank_last_arg</span><span class="o">.</span><span class="n">py</span>
@@ -235,6 +235,22 @@ don’t entirely seem well supported in the python standard library yet.</p>
 <p>Whoo!</p>
 </dd></dl>
 
+<dl class="function">
+<dt id="default_profile.startup.event_loops.initialize_kernel">
+<code class="sig-name descname">initialize_kernel</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/event_loops.html#initialize_kernel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.event_loops.initialize_kernel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize a <code class="xref py py-obj docutils literal notranslate"><span class="pre">curio.Kernel</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="default_profile.startup.event_loops.kernel_run">
+<em class="property">async </em><code class="sig-name descname">kernel_run</code><span class="sig-paren">(</span><em class="sig-param">command</em>, <em class="sig-param">kernel</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/event_loops.html#kernel_run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.event_loops.kernel_run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="default_profile.startup.event_loops.subproc">
+<em class="property">async </em><code class="sig-name descname">subproc</code><span class="sig-paren">(</span><em class="sig-param">command</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/event_loops.html#subproc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.event_loops.subproc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </div>
 </div>
 
@@ -244,7 +260,7 @@ don’t entirely seem well supported in the python standard library yet.</p>
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Mar 05, 2020.
+      Last updated on Mar 10, 2020.
     </div>
   </body>
 </html>

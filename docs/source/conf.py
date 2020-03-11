@@ -17,29 +17,30 @@ from jinja2.bccache import FileSystemBytecodeCache
 from jinja2.environment import Environment
 from jinja2.exceptions import TemplateError
 from jinja2.ext import autoescape, do, with_, debug
-from jinja2.loaders import FileSystemLoader, ChoiceLoader  # , ModuleLoader
+from jinja2.loaders import ChoiceLoader  # , ModuleLoader, FileSystemLoader,
 from jinja2.lexer import get_lexer
 
 from pygments.lexers.markup import MarkdownLexer, RstLexer
-from pygments.lexers.shell import BashLexer  # , BashSessionLexer
 from pygments.lexers.textedit import VimLexer
 from pygments.lexers.python import (
     NumPyLexer,
     PythonConsoleLexer,
     PythonLexer,
-    Python3TracebackLexer,
     PythonTracebackLexer,
 )
 import sphinx
-from sphinx.application import Sphinx
-from sphinx.environment import BuildEnvironment
+# from sphinx.application import Sphinx
+# from sphinx.environment import BuildEnvironment
+from sphinx import addnodes
 from sphinx.ext.autodoc import cut_lines
 from sphinx.jinja2glue import SphinxFileSystemLoader  # , SandboxedEnvironment
 from sphinx.util.docfields import GroupedField
 from sphinx.util.template import ReSTRenderer
 
+import matplotlib  # noqa
+
 import default_profile  # noqa
-from default_profile import ask_for_import
+# from default_profile import ask_for_import
 from default_profile.sphinxext.magics import CellMagicRole, LineMagicRole  # noqa
 
 try:
@@ -157,22 +158,12 @@ extensions = [
     "sphinx.ext.viewcode",
     "IPython.sphinxext.ipython_directive",
     "default_profile.sphinxext.magics",
+    "matplotlib.sphinxext.plot_directive",
+    "matplotlib.sphinxext.mathmpl",
+    "flake8_rst.sphinxext.custom_roles",
+    "numpydoc.numpydoc",
+    "recommonmark"
 ]
-
-if ask_for_import("matplotlib"):
-    extensions.extend(
-        ["matplotlib.sphinxext.plot_directive", "matplotlib.sphinxext.mathmpl"]
-    )
-    DOCS_LOGGER.info("matplotlib in extensions")
-
-if ask_for_import("flake8_rst"):
-    extensions.append("flake8_rst.sphinxext.custom_roles")
-    DOCS_LOGGER.info("flake8_rst in extensions")
-
-if ask_for_import("numpydoc"):
-    extensions.append("numpydoc")
-    DOCS_LOGGER.info("numpydoc in extensions")
-
 
 # -- General Configuration ----------------------------------------
 
@@ -186,12 +177,9 @@ renderers = ReSTRenderer(templates_path)
 source_suffix = {
     ".rst": "restructuredtext",
     ".txt": "restructuredtext",
+    ".md": "markdown",
 }
 
-if ask_for_import("recommonmark"):
-    DOCS_LOGGER.info("recommonmark in extensions")
-    extensions.append("recommonmark")
-    source_suffix.update({".md": "markdown"})
 
 # The encoding of source files.
 source_encoding = u"utf-8"
@@ -504,16 +492,6 @@ ipython_execlines = [
     "import matplotlib.pyplot",
 ]
 
-if ask_for_import("matplotlib"):
-    HAS_MPL = True
-    extensions.extend(["matplotlib.sphinxext.plot_directive"])
-    ipython_execlines.append(
-        "import matplotlib as mpl; import matplotlib.pyplot as plt"
-    )
-else:
-    ipython_mplbackend = "None"
-    HAS_MPL = False
-
 # -------------------------------------------------------------------
 # Autosummary
 # -------------------------------------------------------------------
@@ -674,7 +652,7 @@ def setup(app):
     cgitb.enable(format="text")
     app.connect("source-read", rstjinja)
     app.add_lexer("ipython", IPyLexer)
-    app.add_lexer("py3tb", Python3TracebackLexer)
+    app.add_lexer("py3tb", PythonTracebackLexer)
     app.add_lexer("python3", PythonLexer)
     app.add_lexer("python", PythonLexer)
     app.add_lexer("pycon", PythonConsoleLexer)
