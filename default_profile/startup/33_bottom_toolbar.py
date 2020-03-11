@@ -17,9 +17,14 @@ from shutil import get_terminal_size
 from traceback import print_exc
 
 from IPython import InteractiveShell
-from prompt_toolkit.enums import EditingMode
 
-from prompt_toolkit.formatted_text import PygmentsTokens
+import prompt_toolkit
+from prompt_toolkit.enums import EditingMode
+from prompt_toolkit.formatted_text import (
+    PygmentsTokens,
+    to_formatted_text,
+    FormattedText,
+)
 from prompt_toolkit.layout.controls import FormattedTextControl
 from prompt_toolkit.layout.containers import Window, Float
 
@@ -30,6 +35,7 @@ from prompt_toolkit.styles.pygments import style_from_pygments_cls
 from prompt_toolkit.widgets import Frame, TextArea, Button
 from prompt_toolkit.widgets.toolbars import FormattedTextToolbar
 
+import pygments
 from pygments.token import Token
 from pygments.lexers.python import PythonLexer
 from pygments.formatters.terminal256 import TerminalTrueColorFormatter
@@ -39,10 +45,11 @@ from IPython.terminal.ptutils import IPythonPTLexer
 try:
     from gruvbox import GruvboxStyle
 except ImportError:
-    GruvboxStyle = None
-    from pygments.styles.inkpot import InkPotStyle
+    # actually we can't do this. he requires that styles have an invalidationhash
 
-    pygments_style = InkPotStyle
+    # from pygments.styles.inkpot import InkPotStyle
+    pygments_style = default_pygments_style()
+    # pygments_style = InkPotStyle
 else:
     pygments_style = GruvboxStyle
 
@@ -71,6 +78,11 @@ def show_header(header_text=None):
         )
     text_area = TextArea(header_text, style="#ebdbb2")
     return Frame(text_area)
+
+
+def terminal_width(self):
+    """Returns `shutil.get_terminal_size.columns`."""
+    return get_terminal_size().columns
 
 
 class LineCounter:
@@ -111,18 +123,19 @@ class BottomToolbar:
         f" [F4] Vi: {current_vi_mode!r} \n  cwd: {Path.cwd().stem!r}\n Clock: {time.ctime()!r}"
 
     """
+
     shell: InteractiveShell
 
     # are you allowed to doctest fstrings
 
-    def __init__(self, app, _style=None, *args, **kwargs):
+    def __init__(self, _style=None, *args, **kwargs):
         """Require an 'app' for initialization.
 
         This will eliminate all IPython code out of this class and make things
         a little more modular for the tests.
         """
         self.shell = get_ipython()
-        self.app = app
+        self.app = get_app()
         self.PythonLexer = PythonLexer()
         self.Formatter = TerminalTrueColorFormatter()
         self._style = _style if _style is not None else self.app.style
@@ -147,12 +160,14 @@ class BottomToolbar:
     def __call__(self):
         return f"{self.rerender()}"
 
+    @property
     def style(self):
         return self._style
 
-    def terminal_width(self):
-        """Returns `shutil.get_terminal_size.columns`."""
-        return get_terminal_size().columns
+    @style.setter
+    def reset_style(self, new_style):
+        # do these function names even show up in `dir`?
+        self._style = new_style
 
     def __len__(self):
         """The length of the text we display."""
@@ -160,7 +175,7 @@ class BottomToolbar:
 
     def full_width(self):
         """Bool indicating bottom toolbar == shutil.get_terminal_size().columns."""
-        return len(self) == self.terminal_width()
+        return len(self) == terminal_width()
 
     def rerender(self):
         """Render the toolbar at the bottom for prompt_toolkit.
@@ -173,18 +188,36 @@ class BottomToolbar:
             That's all.
         """
         if self.is_vi_mode:
-            return self._render_vi()
+            toolbar = PygmentsTokens(self._render_vi())
         else:
-            return self._render_emacs()
+            toolbar = PygmentsTokens(self._render_emacs())
+        return to_formatted_text(toolbar)
 
     def _render_vi(self):
         current_vi_mode = self.app.vi_state.input_mode
-        toolbar = f" [F4] {self.app.editing_mode}: {current_vi_mode!r} \n  cwd: {Path.cwd().stem!r}\n Clock: {time.ctime()!r}"
-        return toolbar
+        _toolbar = []
+        _toolbar.append((Token.Keyword, f"[F4] {self.app.editing_mode!r}"))
+        _toolbar.append((Token.String.Heading, f"{current_vi_mode!r}"))
+        _toolbar.append((Token.Literal.String.Double, f"cwd: {Path.cwd().stem!r}"))
+        _toolbar.append((Token.Number.Integer, f"Clock: {time.ctime()!r}"))
+        # how do i fill all this dead space?
+        # remaining_space = terminal_width() - len(self)
+        # _toolbar.append((Token.Operator, remaining_space * " "))
+        # This crashes in a seemingly random spot and the whole interpreter
+        # dies
+        return _toolbar
 
     def _render_emacs(self):
         toolbar = f" [F4] {self.app.editing_mode}: {Path.cwd()!r} {date.today()!a}"
         return toolbar
+
+    def __pt_formatted_text__(self):
+        """A list of ``(style, text)`` tuples.
+
+        (In some situations, this can also be ``(style, text, mouse_handler)``
+        tuples.)
+        """
+        return self.rerender()
 
 
 def add_toolbar(toolbar=None):
@@ -197,11 +230,8 @@ def add_toolbar(toolbar=None):
 
 
 if __name__ == "__main__":
-    bottom_text = BottomToolbar(get_app())
-    #  partial_window = Window(width=60, height=3, style=pygments_style)
-
-    # creating the tokens is raising...
-    # bottom_toolbar_tokens = PygmentsTokens(bottom_text)
-    # bottom_toolbar = FormattedTextControl(bottom_toolbar_tokens)
+    bottom_text = BottomToolbar(_style=pygments_style)
     add_toolbar(bottom_text)
     print_container(show_header())
+    # TODO:
+    #  partial_window = Window(width=60, height=3, style=pygments_style)

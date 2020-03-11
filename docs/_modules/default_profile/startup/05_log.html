@@ -206,14 +206,16 @@
 
 
 <div class="viewcode-block" id="print_history"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.print_history">[docs]</a><span class="k">def</span> <span class="nf">print_history</span><span class="p">(</span><span class="n">hist_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Write the contents of the running shell&#39;s SQLite history.</span>
+    <span class="sd">&quot;&quot;&quot;Write the contents of the running shell&#39;s :mod:`sqlite` history.</span>
 
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
 <span class="sd">    hist_file : str (`os.Pathlike`), optional</span>
 <span class="sd">        Path to history file. Assume default profile&#39;s history.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">hist_file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">hist_file</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">get_ipython_dir</span><span class="p">()</span><span class="si">}</span><span class="s2">/profile_default/history.sqlite&quot;</span>
+        <span class="n">hist_file</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;{get_ipython_dir()}/profile_default/history.sqlite&quot;</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">hist_file</span><span class="p">):</span>
             <span class="k">return</span>
@@ -297,16 +299,6 @@
     <span class="n">better_stream</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">()</span>
     <span class="n">better_logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">better_stream</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">shell</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">logfile</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-        <span class="c1"># confusingly this sometimes returns nothing</span>
-        <span class="c1"># logfileobject = shell.logger.logfile</span>
-        <span class="c1"># logfile = logfileobject.name</span>
-        <span class="n">logfile</span> <span class="o">=</span> <span class="n">shell</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">logfname</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">logfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">devnull</span>
-    <span class="n">file_handler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="p">(</span><span class="n">logfile</span><span class="p">)</span>
-    <span class="n">better_logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">file_handler</span><span class="p">)</span>
-
     <span class="c1"># literally no idea if this is a good number or not</span>
     <span class="n">handler</span> <span class="o">=</span> <span class="n">MemoryHandler</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
     <span class="n">better_logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span>
@@ -347,7 +339,7 @@
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Pretty print the truncated results of :meth:`traits`.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&gt; </span><span class="si">{</span><span class="n">reprlib</span><span class="o">.</span><span class="n">Repr</span><span class="p">()</span><span class="o">.</span><span class="n">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">traits</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span></div>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{self.__class__.__name__}</span><span class="s2">&gt; {reprlib.Repr().repr(self.traits())}&quot;</span></div>
 
 
 <div class="viewcode-block" id="logging_decorator"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.logging_decorator">[docs]</a><span class="k">def</span> <span class="nf">logging_decorator</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
@@ -517,7 +509,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Mar 10, 2020.
+      Last updated on Mar 11, 2020.
     </div>
   </body>
 </html>

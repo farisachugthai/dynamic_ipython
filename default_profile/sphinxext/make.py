@@ -17,8 +17,12 @@ from jinja2.exceptions import TemplateError
 from jinja2.ext import autoescape, do, with_
 from jinja2.lexer import get_lexer
 from jinja2.loaders import FileSystemLoader
+
+import importlib_metadata
+
+import sphinx
 from sphinx.application import Sphinx
-from sphinx.cmd.make_mode import Make
+from sphinx.cmd.make_mode import Make, build_main
 from sphinx.config import Config, eval_config_file
 from sphinx.errors import ApplicationError
 from sphinx.jinja2glue import SphinxFileSystemLoader
@@ -26,17 +30,8 @@ from sphinx.project import Project
 from sphinx.util.logging import getLogger
 from sphinx.util.tags import Tags
 
-try:
-    import sphinx
-except (ImportError, ModuleNotFoundError):
-    sys.exit("Sphinx documentation module not found. Exiting.")
-
 if sys.version_info < (3, 7):
     from default_profile import ModuleNotFoundError
-
-from default_profile.sphinxext import sphinxext_logger
-from default_profile.__about__ import __version__
-from default_profile import ask_for_import
 
 
 logger = getLogger(name=__name__)
@@ -127,6 +122,8 @@ def _parse_arguments(cmds=None) -> argparse.ArgumentParser:
         help="Enable verbose logging and increase level to `debug`.",
     )
 
+    dist = importlib_metadata.Distribution().from_name('dynamic_ipython')
+    __version__ = dist.version
     parser.add_argument("--version", action="version", version=__version__)
 
     user_args = parser.parse_args()
@@ -152,8 +149,6 @@ class DocBuilder:
         The filetype :command:`make` invokes :command:`sphinx-build` to create.
 
     """
-
-    MAKE_LOGGER = sphinxext_logger
 
     def __init__(self, kind=None, num_jobs=1, verbosity=0):
         """Kind has to be first in case the user uses the class with a positional parameter.
@@ -200,7 +195,7 @@ class DocBuilder:
             self.status("Removing previous builds…")
             shutil.rmtree("build")
         except OSError as e:
-            self.MAKE_LOGGER.error(e)
+            logger.error(e)
 
     def sphinx_build(self):
         """Build docs.
@@ -225,7 +220,7 @@ class DocBuilder:
             os.path.join(BUILD_PATH, "doctrees"),
             os.path.join(BUILD_PATH, self.kind),
         ]
-        self.MAKE_LOGGER.debug("Cmd is ", cmd)
+        logger.debug("Cmd is ", cmd)
         return cmd
 
     def run(self):
@@ -270,7 +265,7 @@ def termux_hack():
         except Exception as e:
             raise e
     except FileNotFoundError:
-        MAKE_LOGGER.error("Sphinx was unable to create the build directory.")
+        logger.error("Sphinx was unable to create the build directory.")
 
 
 def rsync():
@@ -345,7 +340,10 @@ def main(repo_root=None):
     sphinx_fs = SphinxFileSystemLoader(
         searchpath=doc_root.joinpath("source/_templates")
     )
-    build_main(build_opts)
+    # TODO: need to convert build_opts [a namespace object]
+    # to a dict of its args. check how to do that later.
+    breakpoint()
+    build_main()
 
 
 def run_ext(command):
@@ -370,6 +368,6 @@ class Maker(Make):
 
 if __name__ == "__main__":
     git_root = run_ext(["git", "rev-parse", "--show-toplevel"])
-    sphinxext_logger.setLevel(30)
-    sphinxext_logger.debug(f"git root was: {git_root}")
+    logger.setLevel(30)
+    logger.debug(f"git root was: {git_root}")
     sys.exit(main(git_root))

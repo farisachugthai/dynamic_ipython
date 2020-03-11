@@ -96,6 +96,8 @@ If one has :command:`pipenv` installed, an easier installation could be
 If a non-pipenv installation is desired for some reason, a fully 
 specified installation could look like.
 
+.. code-block:: bash
+
    python3 setup.py build
    python3 -m pip install -U --user pip -e .
 
@@ -103,31 +105,8 @@ As one can see this gets complicated very quickly, and as a
 result, installation via pipenv is the recommended method.
 
 
-Modifying traitlets behavior
-----------------------------
-
-Neovim is the default editor.
-If this behavior isn't desired, the following parameter needs to be
-changed like so::
-
-   from traitlets import get_config
-   c = get_config()
-   c.TerminalInteractiveShell.editor = 'nvim'
-
 See Also
 ----------
-
-For further reading, feel free to see the output of any of the following.
-
-.. ipython:: python
-   :verbatim:
-
-   >>> from IPython.core.interactiveshell import InteractiveShell
-   >>> help(InteractiveShell)
-
-Which features descriptions of functions relevant to startup such as
-:func:`IPython.core.interactiveshell.register_magic_function` and literally
-every option available through the `%config` magic.
 
 For commands that are more related to the interactive aspect of the shell,
 see the following.
@@ -139,6 +118,10 @@ see the following.
    >>> _ip = get_ipython()
    >>> help(_ip)  # doctest: +SKIP
    >>> dir(_ip):  # doctest: +SKIP
+
+Which features descriptions of functions relevant to startup such as
+:func:`IPython.core.interactiveshell.register_magic_function` and literally
+every option available through the `%config` magic.
 
 In addition, there's an abundance of documentation online in the
 form of rst docs and :abbr:`ipynb` notebooks.

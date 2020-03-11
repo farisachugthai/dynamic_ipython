@@ -29,6 +29,7 @@ from pygments.lexers.python import (
     PythonTracebackLexer,
 )
 import sphinx
+
 # from sphinx.application import Sphinx
 # from sphinx.environment import BuildEnvironment
 from sphinx import addnodes
@@ -40,6 +41,7 @@ from sphinx.util.template import ReSTRenderer
 import matplotlib  # noqa
 
 import default_profile  # noqa
+
 # from default_profile import ask_for_import
 from default_profile.sphinxext.magics import CellMagicRole, LineMagicRole  # noqa
 
@@ -132,6 +134,7 @@ with open(os.path.join(DOCS, "source", "index.rst.ignore"), "w") as f:
 
 @jinja2.contextfunction
 def get_exported_names(context):
+    """View the exported vars from the jinja2 context."""
     return sorted(context.exported_vars)
 
 
@@ -147,9 +150,12 @@ needs_sphinx = "2.1.0"
 extensions = [
     "sphinx.config",
     "sphinx.ext.autodoc",
+    "sphinx.ext.autodoc.typehints",
     "sphinx.ext.autosectionlabel",
+    "sphinx.ext.coverage",
     "sphinx.ext.autosummary",
     "sphinx.ext.doctest",
+    "sphinx.ext.duration",
     "sphinx.ext.extlinks",
     "sphinx.ext.githubpages",
     "sphinx.ext.intersphinx",
@@ -162,7 +168,7 @@ extensions = [
     "matplotlib.sphinxext.mathmpl",
     "flake8_rst.sphinxext.custom_roles",
     "numpydoc.numpydoc",
-    "recommonmark"
+    "recommonmark",
 ]
 
 # -- General Configuration ----------------------------------------
@@ -612,6 +618,7 @@ plot_html_show_source_link = True
 
 
 def parse_event(sig, signode):
+    """Add 'event' event to Sphinx."""
     event_sig_re = re.compile(r"([a-zA-Z-]+)\s*\((.*)\)")
     m = event_sig_re.match(sig)
     if not m:
@@ -633,12 +640,13 @@ def rstjinja(app, docname, source):
     if app.builder.format != "html":
         return
     src = source[0]
-    rendered = app.builder.templates.render_string(src, app.config.html_context)
+    rendered = app.builder.templates.render_string(
+        src, app.config.html_context)
     source[0] = rendered
 
 
 def setup(app):
-    """ Add in jinja templates to the site.
+    """Add in jinja templates to the site.
 
     Add IPython lexers from IPython and Sphinx's use of `confval` to the docs.
     Listen for the autodoc-process-docstring event and trim docstring lines.

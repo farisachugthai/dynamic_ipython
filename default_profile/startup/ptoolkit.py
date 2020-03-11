@@ -2,6 +2,14 @@
 
 Summary
 -------
+
+Create classes used to enhance the prompt_toolkit objects
+bound to the running IPython interpreter.
+
+
+Extended Summary
+----------------
+
 Provides utilities functions and classes to work with both `prompt_toolkit`
 and `IPython`. The APIs of both libraries can be individually quite
 overwhelming, and the combination and interaction of the 2 can prove difficult
@@ -11,8 +19,10 @@ The `Helpers` class defined here gives a useful reference as to the
 relationship between a number of the intertwined classes in a running
 `PromptSession`.
 
+
 Notes
 -----
+
 Of use might be.:
 
     get_ipython().pt_app.layout
@@ -23,6 +33,8 @@ to a container `HSplit` and a few other things possibly worth exploring.
 """
 from reprlib import repr
 import sys
+
+import jedi
 
 import prompt_toolkit
 from prompt_toolkit.buffer import Buffer
@@ -36,7 +48,7 @@ from prompt_toolkit.key_binding.bindings.vi import (
     load_vi_bindings,
     load_vi_search_bindings,
 )
-from prompt_toolkit.key_binding.key_bindings import KeyBindings
+from prompt_toolkit.key_binding.key_bindings import KeyBindings, ConditionalKeyBindings
 from prompt_toolkit.layout.containers import HSplit, Window
 from prompt_toolkit.layout.controls import BufferControl
 from prompt_toolkit.styles import Style
@@ -69,6 +81,35 @@ def get_session():
     """A patch to cover up the fact that get_app() returns a DummyApplication."""
     if get_ipython() is not None:
         return get_ipython().pt_app
+
+
+def get_jedi_interpreter(document):
+    # Copied from ptpython.utils
+    try:
+        return jedi.Interpreter(
+            document.text,
+            column=document.cursor_position_col,
+            line=document.cursor_position_row + 1,
+            path="input-text",
+            namespaces=[locals, globals],
+        )
+    except ValueError:
+        # Invalid cursor position.
+        # ValueError('`column` parameter is not in a valid range.')
+        return None
+    except AttributeError:
+        # Workaround for #65: https://github.com/jonathanslenders/python-prompt-toolkit/issues/65
+        # See also: https://github.com/davidhalter/jedi/issues/508
+        return None
+    except IndexError:
+        # Workaround Jedi issue #514: for https://github.com/davidhalter/jedi/issues/514
+        return None
+    except KeyError:
+        # Workaroud for a crash when the input is "u'", the start of a unicode string.
+        return None
+    # except Exception:
+    # Workaround for: https://github.com/jonathanslenders/ptpython/issues/91
+    # return None
 
 
 class Helpers:
@@ -244,7 +285,10 @@ class Helpers:
 
     def validate_validators(self):
         # who watches the watchmen?
-        print("Session validator: {}".format(self.session_validator))
+        print(
+            f"Session validator: {self.session_validator}."
+            "Checking if the session validator is a prompt_toolkit.validator.Validator."
+        )
         print(isinstance(self.session_validator, prompt_toolkit.validator.Validator))
         print("Is the app validator the same as the session validator?")
         print(self.app_validator is self.session_validator)
@@ -356,43 +400,41 @@ def search_layout():
 def create_searching_keybindings():
 
     kb = KeyBindings()
+    # These get referenced more than once so keep them up here
+    search_state = get_app().current_search_state
+    current_buffer = get_app().current_buffer
+
 
     @kb.add("q")
     def _(event):
         event.app.exit()
 
-    @Condition
-    def search_buffer_is_empty():
-        """Returns True when the search buffer is empty."""
-        return get_app().current_buffer.text == ""
+    # @Condition
+    # def search_buffer_is_empty():
+    #     """Returns True when the search buffer is empty."""
+    #     return get_app().current_buffer.text == ""
 
     kb.add("/")(search.start_forward_incremental_search)
     kb.add("?")(search.start_reverse_incremental_search)
-    kb.add("enter", filter=is_searching)(search.accept_search)
+    kb.add("enter")(search.accept_search)
     kb.add("c-c")(search.abort_search)
-    kb.add("backspace", filter=search_buffer_is_empty)(search.abort_search)
+    kb.add("backspace")(search.abort_search)
 
-    @kb.add("n", filter=~is_searching)
-    def _(event):
-        search_state = get_app().current_search_state
-        current_buffer = get_app().current_buffer
-
+    @kb.add("n")
+    def repeat_search(event):
         cursor_position = current_buffer.get_search_position(
             search_state, include_current_position=False
         )
         current_buffer.cursor_position = cursor_position
 
-    @kb.add("N", filter=~is_searching)
-    def _(event):
-        search_state = get_app().current_search_state
-        current_buffer = get_app().current_buffer
-
+    @kb.add("N")
+    def repeat_search_backwards(event):
         cursor_position = current_buffer.get_search_position(
             ~search_state, include_current_position=False
         )
         current_buffer.cursor_position = cursor_position
 
-    return kb
+    return ConditionalKeyBindings(kb, filter=is_searching)
 
 
 if __name__ == "__main__":
@@ -407,6 +449,7 @@ if __name__ == "__main__":
                 load_vi_bindings(),
                 load_vi_search_bindings(),
                 load_auto_suggest_bindings(),  # these stopped getting added when i did this
+                create_searching_keybindings(),
             ]
         )
         get_ipython().pt_app.app.key_bindings = all_kb

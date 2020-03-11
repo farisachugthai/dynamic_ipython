@@ -6,155 +6,15 @@ Prompt Toolkit
    :synopsis: Combined docs on all prompt_toolkit modules.
 
 
+This module begins the section of the repository that entails more advanced
+customization of prompt_toolkit.
+
+Lower level constructs like widgets, toolbars and eventually the Layout classes
+are utilized quite heavily.
+
+
 `~default_profile.startup.32_kb`
 ===========================================
-
-.. currentmodule:: default_profile.startup.32_kb
-
-.. _keybindings-summary:
-
-Summary
--------
-
-Make prompt_toolkit's keybindings more extensible.
-
-Reminder of where you left off:
-
-Bottom toolbar works but isn't bound to a key idk why it isn't working.
-The seemingly recommended interface is to merge with merge_key_bindings
-Difficult to add key_bindings after the merge though.
-Mostly everything's behaving as it should however.
-
-I'm just gonna note how much this bugs me though.::
-
-    In [30]: p = PromptSessionKB()
-    Out[30]: <PromptSessionKB>: 13
-
-    In [31]: a = ApplicationKB()
-    Out[31]: <ApplicationKB>: 24
-
-Alright now I need to start keeping track because this is rough.::
-
-    In [1]: _ip.pt_app.app  # Application. _ip.pt_app is the PromptSession.
-    Out[1]: <prompt_toolkit.application.application.Application at 0x7f2710ac7d90>
-
-
-    In [9]: _ip.pt_app.current_buffer
-    AttributeError: 'PromptSession' object has no attribute 'current_buffer'
-
-    In [2]: _ip.pt_app.app.current_buffer
-    Out[2]: <Buffer(name='DEFAULT_BUFFER', text='_ip.pt_app.a...') at 139805760009696>
-
-    In [3]: _ip.pt_app.validator
-
-    In [4]: _ip.pt_app.app.validator
-    AttributeError: 'Application' object has no attribute 'validator'
-
-Alright so they're not the similar after all right?
-From the docs.:
-
-    Dynamically switch between Emacs and Vi mode
-
-    The Application has an editing_mode attribute.
-    We can change the key bindings by changing this attribute from
-    `EditingMode.VI` to `EditingMode.EMACS`.
-
-Guess what else has an editing_mode attribute.::
-
-    In [5]: _ip.pt_app.editing_mode
-    Out[5]: <EditingMode.VI: 'VI'>
-
-    In [6]: _ip.pt_app.app.editing_mode
-    Out[6]: <EditingMode.VI: 'VI'>
-
-
-Dude `_MergedKeyBindings` are horrible.::
-
-    In [30]: _ip.pt_app.app.key_bindings
-    Out[30]: <prompt_toolkit.key_binding.key_bindings._MergedKeyBindings at 0x7f271047f340>
-
-    In [31]: _ip.pt_app.app.key_bindings.registries
-    Out[31]:
-    [<prompt_toolkit.key_binding.key_bindings._MergedKeyBindings at 0x7f2710ac7b50>,
-    <prompt_toolkit.key_binding.key_bindings.ConditionalKeyBindings at 0x7f2710447430>]
-
-    In [32]: _ip.pt_app.app.key_bindings.registries[0]
-    Out[32]: <prompt_toolkit.key_binding.key_bindings._MergedKeyBindings at 0x7f2710ac7b50>
-
-    In [33]: _ip.pt_app.app.key_bindings.registries[0].registries
-    Out[33]:
-    [<prompt_toolkit.key_binding.key_bindings._MergedKeyBindings at 0x7f2710ac77f0>,
-    <prompt_toolkit.key_binding.key_bindings.DynamicKeyBindings at 0x7f2710ac79a0>]
-
-    In [34]: _ip.pt_app.app.key_bindings.registries[0].registries[0]
-    Out[34]: <prompt_toolkit.key_binding.key_bindings._MergedKeyBindings at 0x7f2710ac77f0>
-
-    In [35]: _ip.pt_app.app.key_bindings.registries[0].registries[0].registries[0]
-    Out[35]: <prompt_toolkit.key_binding.key_bindings.KeyBindings at 0x7f2710ac3160>
-
-    In [36]: _ip.pt_app.app.key_bindings.registries[0].registries[0].registries[0].bindings
-    Out[36]:
-    [Binding(keys=(<Keys.Right: 'right'>,), handler=<function load_auto_suggest_bindings.<locals>._ at 0x7f2710aadd30>),
-    Binding(keys=(<Keys.ControlE: 'c-e'>,), handler=<function load_auto_suggest_bindings.<locals>._ at 0x7f2710aadd30>),
-    Binding(keys=(<Keys.ControlF: 'c-f'>,), handler=<function load_auto_suggest_bindings.<locals>._ at 0x7f2710aadd30>),
-    Binding(keys=(<Keys.Escape: 'escape'>, 'f'), handler=<function load_auto_suggest_bindings.<locals>._ at 0x7f2710aadc10>)]
-
-And you kinda can't do anything about it.::
-
-    In [39]: did_we_make_it_better = DynamicKeyBindings(_ip.pt_app.app.key_bindings)
-    Out[39]: <prompt_toolkit.key_binding.key_bindings.DynamicKeyBindings at 0x7f26f7d9ba30>
-
-    In [40]: did_we_make_it_better.bindings
-    TypeError: '_MergedKeyBindings' object is not callable
-
-Can't extract anything from them.::
-
-    In [42]: for i in load_key_bindings().registries[0].bindings:
-        ...:     _ip.pt_app.key_bindings.add(i.keys)(i.handler)
-        ...: ValueError: Invalid key: (<Keys.ControlX: 'c-x'>, 'r', 'y')
-
-Gotta be honest I felt very creative working my way up to that one.
-If we can't do that, lets keep working at the individual bindings.::
-
-    In [43]: i.keys
-    Out[43]: (<Keys.ControlX: 'c-x'>, 'r', 'y')
-    In [44]: type(i.keys)
-    Out[44]: tuple
-    In [45]: i.keys[0]
-    Out[45]: <Keys.ControlX: 'c-x'>
-
-So far so good?::
-
-    In [57]: c = ""
-    ...: for j in i.keys:
-    ...:     c += Keys(j)
-    ...: ValueError: 'r' is not a valid Keys
-        During handling of the above exception, another exception occurred:
-        ValueError: 'r' is not a valid Keys
-
-Yup. We have to redefine what a key is.
-
-
-Fun with Vim
-------------
-
-Dude these are all the vi modes prompt_toolkit has...lol
-So I just checked. Wanna know what it does?
-They're basically Enums that get compared to ``editing_mode.input_mode``.::
-
-    from prompt_toolkit.filters.app import (
-        vi_selection_mode,
-        vi_recording_macro,
-        vi_register_names,
-        vi_mode,
-        vi_replace_mode,
-        vi_waiting_for_text_object_mode,
-        vi_insert_mode,
-        vi_search_direction_reversed,
-        vi_navigation_mode,
-        vi_digraph_mode,
-        vi_insert_multiple_mode,
-    )
 
 .. automodule:: default_profile.startup.32_kb
    :synopsis: Begin reworking prompt_toolkit's keybindings.
@@ -163,14 +23,8 @@ They're basically Enums that get compared to ``editing_mode.input_mode``.::
    :show-inheritance:
 
 
-`~default_profile.startup.33_bottom_toolbar`
-=============================================
-
-This module begins the section of the repository that entails more advanced
-customization of prompt_toolkit.
-
-Lower level constructs like widgets, toolbars and eventually the Layout classes
-are utilized quite heavily.
+:mod:`~default_profile.startup.33_bottom_toolbar`
+==================================================
 
 .. admonition:: Be careful what the bottom toolbar is set to.
 
@@ -178,13 +32,36 @@ are utilized quite heavily.
    giving it the wrong type.
 
 The |ip|\.`pt_app.bottom_toolbar` type is expected to be some kind of
-FormattedText. Unfortunately, feeding it an already populated control like a
-FormattedTextToolbar will break the application.
+`FormattedText`. Unfortunately, feeding it an already populated control like a
+`FormattedTextToolbar` will break the application.
 
-Don't run.::
+Don't run.:
+
+.. parsed-literal::
 
     bottom_toolbar = FormattedTextToolbar(bottom_text)
     shell.pt_app.bottom_toolbar = bottom_toolbar
+
+Note that a similar expression is used to assign the `BottomToolbar`
+to the shell's *pt_app.bottom_toolbar* attribute.::
+
+   from prompt_toolkit.formatted_text import FormattedText
+   from IPython import get_ipython
+
+   bottom_text = BottomToolbar()
+   bottom_toolbar = FormattedText(bottom_text.rerender())
+
+However, the `FormattedText` in and of itself doesn't provide any functionality.
+A `FormattedText` object is simply a subclass of `list`. The value is provided
+in defining a method ``__pt_formatted_text__``.
+
+As a result, `BottomToolbar` also defines this method and as a result an
+instance of the class can be passed directly as an assignment to the
+``_ip.pt_app.bottom_toolbar``.
+
+
+Toolbar API
+-----------
 
 .. automodule:: default_profile.startup.33_bottom_toolbar
    :synopsis: Generate a toolbar using lower-level controls.
@@ -243,13 +120,17 @@ So it'd be tough to say we're at a lack of tools!
 
    :param pygments_lexer_cls: A `Lexer` from Pygments.
    :param sync_from_start: Start lexing at the start of the document. This
-      will always give the best results, but it will be slow for bigger
-      documents. (When the last part of the document is display, then the
-      whole document will be lexed by Pygments on every key stroke.) It is
-      recommended to disable this for inputs that are expected to be more
-      than 1,000 lines.
+                           will always give the best results, but it will be
+                           slow for bigger documents. (When the last part of the
+                           document is display, then the whole document will be
+                           lexed by Pygments on every key stroke.) It is
+                           recommended to disable this for inputs that are
+                           expected to be more than 1,000 lines.
    :param syntax_sync: `SyntaxSync` object.
 
+
+Lexer Autogenerated Docs
+------------------------
 
 .. automodule:: default_profile.startup.35_lexer
    :synopsis: Generate a lexer to provide syntax highlighting in the REPL.
@@ -262,7 +143,7 @@ So it'd be tough to say we're at a lack of tools!
 ===========================================
 
 .. automodule:: default_profile.startup.ptoolkit
-   :synopsis: Generate a more generalized class to interact with prompt_toolkit.
+   :synopsis: Toolkit for prompt_toolkit.
    :members:
    :undoc-members:
    :show-inheritance:
@@ -272,6 +153,7 @@ So it'd be tough to say we're at a lack of tools!
 ===========================================
 
 .. automodule:: default_profile.startup.completions
+   :synopsis: Autocompletion for the REPL.
    :members:
    :undoc-members:
    :show-inheritance:

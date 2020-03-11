@@ -168,9 +168,14 @@
 <span class="kn">from</span> <span class="nn">traceback</span> <span class="kn">import</span> <span class="n">print_exc</span>
 
 <span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">InteractiveShell</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.enums</span> <span class="kn">import</span> <span class="n">EditingMode</span>
 
-<span class="kn">from</span> <span class="nn">prompt_toolkit.formatted_text</span> <span class="kn">import</span> <span class="n">PygmentsTokens</span>
+<span class="kn">import</span> <span class="nn">prompt_toolkit</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.enums</span> <span class="kn">import</span> <span class="n">EditingMode</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.formatted_text</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">PygmentsTokens</span><span class="p">,</span>
+    <span class="n">to_formatted_text</span><span class="p">,</span>
+    <span class="n">FormattedText</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.layout.controls</span> <span class="kn">import</span> <span class="n">FormattedTextControl</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.layout.containers</span> <span class="kn">import</span> <span class="n">Window</span><span class="p">,</span> <span class="n">Float</span>
 
@@ -181,6 +186,7 @@
 <span class="kn">from</span> <span class="nn">prompt_toolkit.widgets</span> <span class="kn">import</span> <span class="n">Frame</span><span class="p">,</span> <span class="n">TextArea</span><span class="p">,</span> <span class="n">Button</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.widgets.toolbars</span> <span class="kn">import</span> <span class="n">FormattedTextToolbar</span>
 
+<span class="kn">import</span> <span class="nn">pygments</span>
 <span class="kn">from</span> <span class="nn">pygments.token</span> <span class="kn">import</span> <span class="n">Token</span>
 <span class="kn">from</span> <span class="nn">pygments.lexers.python</span> <span class="kn">import</span> <span class="n">PythonLexer</span>
 <span class="kn">from</span> <span class="nn">pygments.formatters.terminal256</span> <span class="kn">import</span> <span class="n">TerminalTrueColorFormatter</span>
@@ -190,10 +196,11 @@
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">gruvbox</span> <span class="kn">import</span> <span class="n">GruvboxStyle</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="n">GruvboxStyle</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="kn">from</span> <span class="nn">pygments.styles.inkpot</span> <span class="kn">import</span> <span class="n">InkPotStyle</span>
+    <span class="c1"># actually we can&#39;t do this. he requires that styles have an invalidationhash</span>
 
-    <span class="n">pygments_style</span> <span class="o">=</span> <span class="n">InkPotStyle</span>
+    <span class="c1"># from pygments.styles.inkpot import InkPotStyle</span>
+    <span class="n">pygments_style</span> <span class="o">=</span> <span class="n">default_pygments_style</span><span class="p">()</span>
+    <span class="c1"># pygments_style = InkPotStyle</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="n">pygments_style</span> <span class="o">=</span> <span class="n">GruvboxStyle</span>
 
@@ -224,6 +231,11 @@
     <span class="k">return</span> <span class="n">Frame</span><span class="p">(</span><span class="n">text_area</span><span class="p">)</span></div>
 
 
+<div class="viewcode-block" id="terminal_width"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.terminal_width">[docs]</a><span class="k">def</span> <span class="nf">terminal_width</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns `shutil.get_terminal_size.columns`.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">get_terminal_size</span><span class="p">()</span><span class="o">.</span><span class="n">columns</span></div>
+
+
 <div class="viewcode-block" id="LineCounter"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.LineCounter">[docs]</a><span class="k">class</span> <span class="nc">LineCounter</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Simple counter inspired by Doug Hellman. Could set it to sys.displayhook.</span>
 
@@ -240,7 +252,7 @@
         <span class="k">return</span> <span class="s2">&quot;(&lt; In[</span><span class="si">{:3d}</span><span class="s2">]: Time:</span><span class="si">{}</span><span class="s2">  )&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">:&gt; </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="fm">__call__</span><span class="si">}</span><span class="s2">&quot;</span></div>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{self.__class__.__name__}</span><span class="s2">:&gt; </span><span class="si">{self.__call__}</span><span class="s2">&quot;</span></div>
 
 
 <div class="viewcode-block" id="BottomToolbar"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.BottomToolbar">[docs]</a><span class="k">class</span> <span class="nc">BottomToolbar</span><span class="p">:</span>
@@ -262,18 +274,19 @@
 <span class="sd">        f&quot; [F4] Vi: {current_vi_mode!r} \n  cwd: {Path.cwd().stem!r}\n Clock: {time.ctime()!r}&quot;</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">shell</span><span class="p">:</span> <span class="n">InteractiveShell</span>
 
     <span class="c1"># are you allowed to doctest fstrings</span>
 
-<div class="viewcode-block" id="BottomToolbar.__init__"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.BottomToolbar.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">app</span><span class="p">,</span> <span class="n">_style</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="BottomToolbar.__init__"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.BottomToolbar.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_style</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Require an &#39;app&#39; for initialization.</span>
 
 <span class="sd">        This will eliminate all IPython code out of this class and make things</span>
 <span class="sd">        a little more modular for the tests.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">app</span> <span class="o">=</span> <span class="n">app</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">app</span> <span class="o">=</span> <span class="n">get_app</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">PythonLexer</span> <span class="o">=</span> <span class="n">PythonLexer</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Formatter</span> <span class="o">=</span> <span class="n">TerminalTrueColorFormatter</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_style</span> <span class="o">=</span> <span class="n">_style</span> <span class="k">if</span> <span class="n">_style</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">style</span></div>
@@ -286,24 +299,26 @@
             <span class="k">return</span> <span class="kc">False</span></div>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">!s}</span><span class="s2">:&gt;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{self.__class__.__name__!s}</span><span class="s2">:&gt;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rerender</span><span class="p">():</span>
             <span class="k">yield</span> <span class="n">i</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">!r}</span><span class="s2">:&gt;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{self.__class__.__name__!r}</span><span class="s2">:&gt;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">rerender</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;{self.rerender()}&quot;</span>
 
-<div class="viewcode-block" id="BottomToolbar.style"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.BottomToolbar.style">[docs]</a>    <span class="k">def</span> <span class="nf">style</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BottomToolbar.style"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.BottomToolbar.style">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">style</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_style</span></div>
 
-<div class="viewcode-block" id="BottomToolbar.terminal_width"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.BottomToolbar.terminal_width">[docs]</a>    <span class="k">def</span> <span class="nf">terminal_width</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns `shutil.get_terminal_size.columns`.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">get_terminal_size</span><span class="p">()</span><span class="o">.</span><span class="n">columns</span></div>
+<div class="viewcode-block" id="BottomToolbar.reset_style"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.BottomToolbar.reset_style">[docs]</a>    <span class="nd">@style</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">reset_style</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_style</span><span class="p">):</span>
+        <span class="c1"># do these function names even show up in `dir`?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_style</span> <span class="o">=</span> <span class="n">new_style</span></div>
 
     <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The length of the text we display.&quot;&quot;&quot;</span>
@@ -311,7 +326,7 @@
 
 <div class="viewcode-block" id="BottomToolbar.full_width"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.BottomToolbar.full_width">[docs]</a>    <span class="k">def</span> <span class="nf">full_width</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Bool indicating bottom toolbar == shutil.get_terminal_size().columns.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">terminal_width</span><span class="p">()</span></div>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">==</span> <span class="n">terminal_width</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="BottomToolbar.rerender"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.BottomToolbar.rerender">[docs]</a>    <span class="k">def</span> <span class="nf">rerender</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Render the toolbar at the bottom for prompt_toolkit.</span>
@@ -324,18 +339,36 @@
 <span class="sd">            That&#39;s all.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_vi_mode</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_render_vi</span><span class="p">()</span>
+            <span class="n">toolbar</span> <span class="o">=</span> <span class="n">PygmentsTokens</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_render_vi</span><span class="p">())</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_render_emacs</span><span class="p">()</span></div>
+            <span class="n">toolbar</span> <span class="o">=</span> <span class="n">PygmentsTokens</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_render_emacs</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">to_formatted_text</span><span class="p">(</span><span class="n">toolbar</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_render_vi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">current_vi_mode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">vi_state</span><span class="o">.</span><span class="n">input_mode</span>
-        <span class="n">toolbar</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot; [F4] </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">editing_mode</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">current_vi_mode</span><span class="si">!r}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">  cwd: </span><span class="si">{</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">stem</span><span class="si">!r}</span><span class="se">\n</span><span class="s2"> Clock: </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">ctime</span><span class="p">()</span><span class="si">!r}</span><span class="s2">&quot;</span>
-        <span class="k">return</span> <span class="n">toolbar</span>
+        <span class="n">_toolbar</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">_toolbar</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">Token</span><span class="o">.</span><span class="n">Keyword</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;[F4] </span><span class="si">{self.app.editing_mode!r}</span><span class="s2">&quot;</span><span class="p">))</span>
+        <span class="n">_toolbar</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">Token</span><span class="o">.</span><span class="n">String</span><span class="o">.</span><span class="n">Heading</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{current_vi_mode!r}</span><span class="s2">&quot;</span><span class="p">))</span>
+        <span class="n">_toolbar</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">Token</span><span class="o">.</span><span class="n">Literal</span><span class="o">.</span><span class="n">String</span><span class="o">.</span><span class="n">Double</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;cwd: {Path.cwd().stem!r}&quot;</span><span class="p">))</span>
+        <span class="n">_toolbar</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">Token</span><span class="o">.</span><span class="n">Number</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Clock: {time.ctime()!r}&quot;</span><span class="p">))</span>
+        <span class="c1"># how do i fill all this dead space?</span>
+        <span class="c1"># remaining_space = terminal_width() - len(self)</span>
+        <span class="c1"># _toolbar.append((Token.Operator, remaining_space * &quot; &quot;))</span>
+        <span class="c1"># This crashes in a seemingly random spot and the whole interpreter</span>
+        <span class="c1"># dies</span>
+        <span class="k">return</span> <span class="n">_toolbar</span>
 
     <span class="k">def</span> <span class="nf">_render_emacs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">toolbar</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot; [F4] </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">editing_mode</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="si">!r}</span><span class="s2"> </span><span class="si">{</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="si">!a}</span><span class="s2">&quot;</span>
-        <span class="k">return</span> <span class="n">toolbar</span></div>
+        <span class="n">toolbar</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot; [F4] </span><span class="si">{self.app.editing_mode}</span><span class="s2">: {Path.cwd()!r} {date.today()!a}&quot;</span>
+        <span class="k">return</span> <span class="n">toolbar</span>
+
+    <span class="k">def</span> <span class="nf">__pt_formatted_text__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;A list of ``(style, text)`` tuples.</span>
+
+<span class="sd">        (In some situations, this can also be ``(style, text, mouse_handler)``</span>
+<span class="sd">        tuples.)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rerender</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="add_toolbar"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.33_bottom_toolbar.add_toolbar">[docs]</a><span class="k">def</span> <span class="nf">add_toolbar</span><span class="p">(</span><span class="n">toolbar</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -348,14 +381,11 @@
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">bottom_text</span> <span class="o">=</span> <span class="n">BottomToolbar</span><span class="p">(</span><span class="n">get_app</span><span class="p">())</span>
-    <span class="c1">#  partial_window = Window(width=60, height=3, style=pygments_style)</span>
-
-    <span class="c1"># creating the tokens is raising...</span>
-    <span class="c1"># bottom_toolbar_tokens = PygmentsTokens(bottom_text)</span>
-    <span class="c1"># bottom_toolbar = FormattedTextControl(bottom_toolbar_tokens)</span>
+    <span class="n">bottom_text</span> <span class="o">=</span> <span class="n">BottomToolbar</span><span class="p">(</span><span class="n">_style</span><span class="o">=</span><span class="n">pygments_style</span><span class="p">)</span>
     <span class="n">add_toolbar</span><span class="p">(</span><span class="n">bottom_text</span><span class="p">)</span>
     <span class="n">print_container</span><span class="p">(</span><span class="n">show_header</span><span class="p">())</span>
+    <span class="c1"># TODO:</span>
+    <span class="c1">#  partial_window = Window(width=60, height=3, style=pygments_style)</span>
 </pre></div>
 
         </div>
@@ -363,7 +393,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Mar 10, 2020.
+      Last updated on Mar 11, 2020.
     </div>
   </body>
 </html>

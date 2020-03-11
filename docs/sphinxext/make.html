@@ -156,7 +156,7 @@
 <li><a class="reference internal" href="#">Make — Automated Documentation Builder</a><ul>
 <li><a class="reference internal" href="#moving-output-files">Moving output files</a></li>
 <li><a class="reference internal" href="#see-also">See Also</a><ul>
-<li><a class="reference internal" href="#api">API</a></li>
+<li><a class="reference internal" href="#module-default_profile.sphinxext.make">API</a></li>
 </ul>
 </li>
 </ul>
@@ -203,8 +203,162 @@ automatically keep the documentation fresh.</p>
 </dd>
 </dl>
 </div>
-<div class="section" id="api">
-<h3>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="module-default_profile.sphinxext.make">
+<span id="api"></span><h3>API<a class="headerlink" href="#module-default_profile.sphinxext.make" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="default_profile.sphinxext.make.DocBuilder">
+<em class="property">class </em><code class="sig-name descname">DocBuilder</code><span class="sig-paren">(</span><em class="sig-param">kind=None</em>, <em class="sig-param">num_jobs=1</em>, <em class="sig-param">verbosity=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/sphinxext/make.html#DocBuilder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.sphinxext.make.DocBuilder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Class to wrap the different commands of this script.</p>
+<p>All public methods of this class can be called as parameters of the
+script.</p>
+<dl class="attribute">
+<dt id="default_profile.sphinxext.make.DocBuilder.kind">
+<code class="sig-name descname">kind</code><a class="headerlink" href="#default_profile.sphinxext.make.DocBuilder.kind" title="Permalink to this definition">¶</a></dt>
+<dd><p>The filetype <strong class="command">make</strong> invokes <strong class="command">sphinx-build</strong> to create.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="default_profile.sphinxext.make.DocBuilder.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">kind=None</em>, <em class="sig-param">num_jobs=1</em>, <em class="sig-param">verbosity=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/sphinxext/make.html#DocBuilder.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.sphinxext.make.DocBuilder.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Kind has to be first in case the user uses the class with a positional parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul>
+<li><p><strong>kind</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – The kind of document <code class="docutils literal notranslate"><span class="pre">sphinx-build</span></code> will create.
+Defaults to html.</p></li>
+<li><p><strong>num_jobs</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – Number of jobs to run the build in parallel with.</p></li>
+<li><p><strong>verbosity</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Run verbosely</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">DocBuilder</span><span class="p">(</span><span class="s1">&#39;html&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">kind</span><span class="p">)</span>
+<span class="go">&#39;html&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="default_profile.sphinxext.make.DocBuilder.kinds">
+<em class="property">property </em><code class="sig-name descname">kinds</code><a class="reference internal" href="../_modules/default_profile/sphinxext/make.html#DocBuilder.kinds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.sphinxext.make.DocBuilder.kinds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allowable sphinx-build outputs.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="default_profile.sphinxext.make.DocBuilder.status">
+<em class="property">static </em><code class="sig-name descname">status</code><span class="sig-paren">(</span><em class="sig-param">output</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/sphinxext/make.html#DocBuilder.status"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.sphinxext.make.DocBuilder.status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print output in bold. Emits ANSI escape sequences to sys.stdout</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="default_profile.sphinxext.make.DocBuilder.cleanup">
+<code class="sig-name descname">cleanup</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/sphinxext/make.html#DocBuilder.cleanup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.sphinxext.make.DocBuilder.cleanup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clean the working tree.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="default_profile.sphinxext.make.DocBuilder.sphinx_build">
+<code class="sig-name descname">sphinx_build</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/sphinxext/make.html#DocBuilder.sphinx_build"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.sphinxext.make.DocBuilder.sphinx_build" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build docs.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DocBuilder</span><span class="p">(</span><span class="n">num_jobs</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">sphinx_build</span><span class="p">(</span><span class="s1">&#39;html&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="default_profile.sphinxext.make.DocBuilder.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/sphinxext/make.html#DocBuilder.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.sphinxext.make.DocBuilder.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run <strong class="command">sphinx-build</strong>.</p>
+<p>The <code class="xref py py-attr docutils literal notranslate"><span class="pre">check</span></code> argument to <a class="reference external" href="https://docs.python.org/3/library/subprocess.html#subprocess.run" title="(in Python v3.8)"><code class="xref py py-func docutils literal notranslate"><span class="pre">subprocess.run()</span></code></a>
+is not enabled so there’s no need to catch
+<code class="xref py py-class docutils literal notranslate"><span class="pre">subprocess.CalledProcessError()</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="default_profile.sphinxext.make.DocBuilder.open_browser">
+<code class="sig-name descname">open_browser</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">doc=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/sphinxext/make.html#DocBuilder.open_browser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.sphinxext.make.DocBuilder.open_browser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open a browser tab to the provided document.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="default_profile.sphinxext.make.termux_hack">
+<code class="sig-name descname">termux_hack</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/sphinxext/make.html#termux_hack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.sphinxext.make.termux_hack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Android permissions don’t allow viewing files in app specific files.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="default_profile.sphinxext.make.rsync">
+<code class="sig-name descname">rsync</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/sphinxext/make.html#rsync"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.sphinxext.make.rsync" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move docs into the right location with rsync</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="default_profile.sphinxext.make.generate_sphinx_app">
+<code class="sig-name descname">generate_sphinx_app</code><span class="sig-paren">(</span><em class="sig-param">root</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/sphinxext/make.html#generate_sphinx_app"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.sphinxext.make.generate_sphinx_app" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="default_profile.sphinxext.make.get_jinja_loader">
+<code class="sig-name descname">get_jinja_loader</code><span class="sig-paren">(</span><em class="sig-param">template_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/sphinxext/make.html#get_jinja_loader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.sphinxext.make.get_jinja_loader" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="default_profile.sphinxext.make.setup_jinja">
+<code class="sig-name descname">setup_jinja</code><span class="sig-paren">(</span><em class="sig-param">path_to_template</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/sphinxext/make.html#setup_jinja"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.sphinxext.make.setup_jinja" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use jinja to set up the Sphinx environment.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="default_profile.sphinxext.make.main">
+<code class="sig-name descname">main</code><span class="sig-paren">(</span><em class="sig-param">repo_root=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/sphinxext/make.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.sphinxext.make.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the required objects to simulate the sphinx make-main command.</p>
+<p>Create a <code class="xref py py-obj docutils literal notranslate"><span class="pre">jinja2.Environment</span></code>, a <code class="xref py py-obj docutils literal notranslate"><span class="pre">sphinx.project.Project</span></code>,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">sphinx.jinja2glue.SphinxFileSystemLoader</span></code>.</p>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<p>Need to create tags for use in <code class="xref py py-obj docutils literal notranslate"><span class="pre">sphinx.config.eval_config_file</span></code>.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="default_profile.sphinxext.make.run_ext">
+<code class="sig-name descname">run_ext</code><span class="sig-paren">(</span><em class="sig-param">command</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/sphinxext/make.html#run_ext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.sphinxext.make.run_ext" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="default_profile.sphinxext.make.Maker">
+<em class="property">class </em><code class="sig-name descname">Maker</code><span class="sig-paren">(</span><em class="sig-param">source_dir</em>, <em class="sig-param">build_dir</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/sphinxext/make.html#Maker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.sphinxext.make.Maker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sphinx.cmd.make_mode.Make</span></code></p>
+<dl class="method">
+<dt id="default_profile.sphinxext.make.Maker.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">source_dir</em>, <em class="sig-param">build_dir</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/sphinxext/make.html#Maker.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.sphinxext.make.Maker.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="default_profile.sphinxext.make.Maker.run_generic_build">
+<code class="sig-name descname">run_generic_build</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/sphinxext/make.html#Maker.run_generic_build"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.sphinxext.make.Maker.run_generic_build" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
 </div>
 </div>
@@ -215,7 +369,7 @@ automatically keep the documentation fresh.</p>
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Mar 10, 2020.
+      Last updated on Mar 11, 2020.
     </div>
   </body>
 </html>

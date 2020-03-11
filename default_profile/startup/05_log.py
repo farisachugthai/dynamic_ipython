@@ -55,8 +55,10 @@ import default_profile
 
 
 def print_history(hist_file=None):
-    """Write the contents of the running shell's SQLite history.
+    """Write the contents of the running shell's :mod:`sqlite` history.
 
+    Parameters
+    ----------
     hist_file : str (`os.Pathlike`), optional
         Path to history file. Assume default profile's history.
 
@@ -145,16 +147,6 @@ def betterConfig(name=None, parent=None):
     # Now let's set up a couple handlers
     better_stream = logging.StreamHandler()
     better_logger.addHandler(better_stream)
-
-    if shell.logger.logfile != "":
-        # confusingly this sometimes returns nothing
-        # logfileobject = shell.logger.logfile
-        # logfile = logfileobject.name
-        logfile = shell.logger.logfname
-    else:
-        logfile = os.devnull
-    file_handler = logging.FileHandler(logfile)
-    better_logger.addHandler(file_handler)
 
     # literally no idea if this is a good number or not
     handler = MemoryHandler(100, target=sys.stderr)
