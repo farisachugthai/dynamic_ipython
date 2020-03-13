@@ -152,24 +152,16 @@
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;Sphinx extension that allows us to properly use magics in the docs.&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">default_profile.startup</span> <span class="kn">import</span> <span class="n">UsageError</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">sphinx</span> <span class="kn">import</span> <span class="n">addnodes</span>
+
+<span class="c1"># from sphinx.domains.std import StandardDomain</span>
+<span class="kn">from</span> <span class="nn">sphinx.roles</span> <span class="kn">import</span> <span class="n">XRefRole</span>
+
+<span class="kn">from</span> <span class="nn">default_profile.startup</span> <span class="kn">import</span> <span class="n">UsageError</span>
 
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%(name)-12s</span><span class="s2">: </span><span class="si">%(levelname)-8s</span><span class="s2"> </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">sphinx</span> <span class="kn">import</span> <span class="n">addnodes</span>
-
-    <span class="c1"># from sphinx.domains.std import StandardDomain</span>
-    <span class="kn">from</span> <span class="nn">sphinx.roles</span> <span class="kn">import</span> <span class="n">XRefRole</span>
-<span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="ne">ModuleNotFoundError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
-    <span class="c1"># This has to be defined or else the module, and as a result,</span>
-    <span class="c1"># the package come crashing down</span>
-    <span class="n">XRefRole</span> <span class="o">=</span> <span class="nb">object</span>
-
-
 <span class="n">name_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[\w_]+&quot;</span><span class="p">)</span>
 
 
@@ -243,7 +235,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Mar 11, 2020.
+      Last updated on Mar 13, 2020.
     </div>
   </body>
 </html>

@@ -108,20 +108,26 @@ class Executable(ContextDecorator):
     def __repr__(self):
         return "Executable: {!r}".format(self.command)
 
-    def __call__(self, func, *args, **kwargs):
+    def __call__(self, *args, **kwargs):
         if self.command_path is not None:
 
             @functools.wraps
             def wrapped(*args, **kwargs):
-                func(*args, **kwargs)
+                return subprocess.run(
+                    ["bash", "-c", self.command_path(), *args], **kwargs
+                )
+
+            return wrapped(*args, **kwargs)
 
 
-class FZF:
+class FZF(FzfPrompt):
     """Wrap FZF together."""
 
     def __init__(self, fzf_configs=None, **kwargs):
         self.fzf_config = fzf_configs or {}
         self._setup_fzf()
+        self.sh = Executable("sh")
+        self.fzf = Executable("fzf")
         super().__init__()
 
     def __repr__(self):
@@ -137,7 +143,7 @@ class FZF:
                 [self.safe_default_cmd, *args],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
-                **kwargs
+                **kwargs,
             )
 
     def run(self, *args, **kwargs):
@@ -146,7 +152,7 @@ class FZF:
             [self.safe_default_cmd, *args],
             **kwargs,
             stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE
+            stderr=subprocess.PIPE,
         )
 
     def default_cmds(self):
@@ -185,10 +191,9 @@ class FZF:
     def safe_default_cmd(self):
         return shlex.split(shlex.quote(self.default_cmds()))
 
-    @classmethod
-    def _setup_fzf(cls, *args):
+    def _setup_fzf(self, *args):
         if shutil.which("fzf") and shutil.which("rg"):
-            cls.fzf = (
+            self.fzf = (
                 "fzf",
                 "rg --pretty --hidden --max-columns-preview --no-heading"
                 "--no-messages --no-column --no-line-number -C 0 -e ^ "
@@ -196,12 +201,30 @@ class FZF:
             )
 
         elif shutil.which("fzf") and shutil.which("ag"):
-            cls.fzf = ("fzf", "ag -C 0 --color-win-ansi --noheading %l | fzf")
-
+            self.fzf = ("fzf", "ag -C 0 --color-win-ansi --noheading %l | fzf")
         if args:
-            cls.fzf.extend(args)
+            self.fzf.extend(args)
+        return self
 
-        return cls
+    def prompt(self, choices=None, fzf_options=""):
+        # convert lists to strings [ 1, 2, 3 ] => "1\n2\n3"
+        choices_str = "".join(str(i) + "\n" for i in choices)
+        selection = []
+        with tempfile.NamedTemporaryFile() as input_file:
+            with tempfile.NamedTemporaryFile() as output_file:
+                # Create an temp file with list entries as lines
+                input_file.write(choices_str.encode("utf-8"))
+                input_file.flush()
+                # Invoke fzf externally and write to output file
+                self.sh[
+                    "-c",
+                    f"cat {input_file.name} | fzf {fzf_options} > {output_file.name}",
+                ]
+                # get selected options
+                with open(output_file.name) as f:
+                    for line in f:
+                        selection.append(line.strip("\n"))
+        return selection
 
 
 def is_tmux():
@@ -216,6 +239,7 @@ def is_rg():
 
 
 def fzf_history(event):
+    """Use this function along with the keybindings module to effectively use FZF."""
     try:
         import pandas as pd
     except ImportError:
@@ -231,6 +255,7 @@ def fzf_history(event):
 
 
 def add_fzf_binding():
+    """Bind `fzf_history` to :kbd:`ControlY`."""
     insert_mode = ViInsertMode() | EmacsInsertMode()
     registry = get_ipython().pt_app.key_bindings
 
@@ -241,16 +266,20 @@ def add_fzf_binding():
 
 
 def fzf_keys(inputted_list=None):
-
     if inputted_list is None:
         inputted_list = []
-
+    old_stdout = sys.stdout
+    old_stdin = sys.stdin
     # idk if you can do this.
-    with open(tempfile.mkstemp()[-1], "rt+") as f:
-        sys.stdout = f
-        sys.stdin = f
-        # also is this class a contextmanager because that'd be thoughtful
-        FzfPrompt()
+    try:
+        with open(tempfile.mkstemp()[-1], "rt+") as f:
+            sys.stdout = f
+            sys.stdin = f
+            # also is this class a contextmanager because that'd be thoughtful
+            FzfPrompt()
+    finally:
+        sys.stdout = old_stdout
+        sys.stdin = old_stdin
 
 
 def run_in_terminal_fzf():
@@ -282,15 +311,3 @@ def fzf_history(event):
     # print(itext)
     if itext != []:
         event.current_buffer.insert_text(itext[0])
-
-
-if __name__ == "__main__":
-    fzf_aliases = FZF._setup_fzf()
-    get_ipython().alias_manager.define_alias("fzf", "fzf-tmux")
-
-    home = str(Path.home())
-
-    if fuf is not None:
-
-        class Fuf(FZF, FzfPrompt):
-            fzf_default_opts = None

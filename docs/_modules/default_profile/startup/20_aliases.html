@@ -153,7 +153,16 @@
 <span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;Create OS specific aliases to allow a user to use IPython anywhere.</span>
 
-<span class="sd">Properly map aliases as dictionaries.</span>
+<span class="sd">Try to make viewing large amounts of aliases a bit more manageable.</span>
+
+<span class="sd">As a product of running `%rehashx` the alias magic is unusable.</span>
+
+<span class="sd">Therefore, we try to properly map aliases as dictionaries.</span>
+
+<span class="sd">This implies adding enough dunders to the CommonAliases class</span>
+<span class="sd">constructed here that it appropriately follows the ``mapping`` protocol</span>
+<span class="sd">as specified in the Python Language Reference.</span>
+
 <span class="sd">As stated in the language reference under Common Sequence Operations.:</span>
 
 <span class="sd">.. compound::</span>
@@ -168,10 +177,12 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">gc</span>
 <span class="kn">import</span> <span class="nn">keyword</span>
 <span class="kn">import</span> <span class="nn">operator</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">platform</span>
+<span class="kn">import</span> <span class="nn">reprlib</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">UserDict</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
@@ -213,8 +224,8 @@
 
     <span class="k">if</span> <span class="n">shell</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">alias</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="n">InvalidAliasError</span><span class="p">(</span><span class="s1">&#39;Alias does not have name attribute.&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">alias</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">InvalidAliasError</span><span class="p">(</span><span class="s2">&quot;Alias does not have name attribute.&quot;</span><span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">caller</span> <span class="o">=</span> <span class="n">shell</span><span class="o">.</span><span class="n">magics_manager</span><span class="o">.</span><span class="n">magics</span><span class="p">[</span><span class="s2">&quot;line&quot;</span><span class="p">][</span><span class="n">alias</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
@@ -393,8 +404,14 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">AliasError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> is not an alias&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># reprlib?</span>
-        <span class="k">return</span> <span class="s2">&quot;&lt;Common Aliases&gt;: # of aliases: </span><span class="si">{!r}</span><span class="s2"> &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dict_aliases</span><span class="p">))</span>
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&lt;</span><span class="si">{}</span><span class="s2">&gt;: </span><span class="si">{}</span><span class="s2"> aliases&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">aliases</span><span class="p">))</span>
+
+    <span class="nd">@reprlib</span><span class="o">.</span><span class="n">recursive_repr</span>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&lt;</span><span class="si">{}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">repr_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">aliases_dict</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxdict</span><span class="p">)</span>
+        <span class="p">)</span>
 
 <div class="viewcode-block" id="CommonAliases.update"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Update the mapping of aliases to system commands.</span>
@@ -412,7 +429,7 @@
         <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">soft_define_alias</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">kwargs</span><span class="p">)</span></div>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">kwargs</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">__copy__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dict_aliases</span><span class="p">)</span>
@@ -426,7 +443,7 @@
     <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmd</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Allow instances to be added.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">&quot;dict_aliases&quot;</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">dict_aliases</span><span class="p">,</span> <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">dict_aliases</span><span class="p">,)</span>
         <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">cmd</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
                 <span class="n">name</span><span class="p">,</span> <span class="n">cmd</span> <span class="o">=</span> <span class="n">args</span>
@@ -950,6 +967,9 @@
 
     <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s2">&quot;alias_magic&quot;</span><span class="p">,</span> <span class="s2">&quot;p pycat&quot;</span><span class="p">)</span>
     <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">define_alias</span><span class="p">(</span><span class="s2">&quot;fzf&quot;</span><span class="p">,</span> <span class="s2">&quot;fzf-tmux&quot;</span><span class="p">)</span>
+    <span class="n">gc</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+
+<span class="c1"># Vim: set et:</span>
 </pre></div>
 
         </div>
@@ -957,7 +977,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Mar 11, 2020.
+      Last updated on Mar 13, 2020.
     </div>
   </body>
 </html>

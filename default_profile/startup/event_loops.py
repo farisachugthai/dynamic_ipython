@@ -125,6 +125,11 @@ async def system_command(command_to_run):
         11_clipboard.py     30_readline.py       35_lexer.py
         __main__.py       tags
 
+    .. doctest::
+
+        >>> await _ip.pt_app.app.run_async(print('hi'))
+        hi
+
     Whoo!
     """
     if hasattr(command_to_run, "startswith"):

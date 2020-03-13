@@ -39,7 +39,13 @@ import time
 import traceback
 from itertools import groupby
 from logging.handlers import MemoryHandler
-from queue import SimpleQueue
+try:
+    from _queue import SimpleQueue
+except ImportError:
+    SimpleQueue = None
+if SimpleQueue is None:
+    from queue import _PySimpleQueue as SimpleQueue
+
 
 from IPython.core.getipython import get_ipython
 from IPython.core.error import UsageError

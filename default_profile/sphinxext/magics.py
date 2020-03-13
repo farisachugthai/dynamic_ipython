@@ -1,24 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """Sphinx extension that allows us to properly use magics in the docs."""
-from default_profile.startup import UsageError
 import logging
 import re
+from sphinx import addnodes
+
+# from sphinx.domains.std import StandardDomain
+from sphinx.roles import XRefRole
+
+from default_profile.startup import UsageError
 
 logging.basicConfig(format="%(name)-12s: %(levelname)-8s %(message)s")
-
-try:
-    from sphinx import addnodes
-
-    # from sphinx.domains.std import StandardDomain
-    from sphinx.roles import XRefRole
-except (ImportError, ModuleNotFoundError) as e:
-    logging.warning(e)
-    # This has to be defined or else the module, and as a result,
-    # the package come crashing down
-    XRefRole = object
-
-
 name_re = re.compile(r"[\w_]+")
 
 

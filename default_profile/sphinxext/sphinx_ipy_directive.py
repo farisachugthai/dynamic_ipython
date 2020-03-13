@@ -1,15 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from docutils import node
+from typing import TYPE_CHECKING
+from docutils import nodes
 from docutils.parsers.rst import directives, Directive
 from docutils.parsers.rst.directives.images import Image
 
-from sphinx.application import Sphinx
 from sphinx.errors import ExtensionError, SphinxError
 from sphinx.util.docutils import SphinxDirective
+from sphinx.util.nodes import nested_parse_with_titles  # useful to remember this exists
 
 import IPython
+
+if TYPE_CHECKING:
+    from sphinx.application import Sphinx
 
 
 class HelloWorld(Directive):

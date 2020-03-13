@@ -296,12 +296,3 @@ Then call it from a subsequent section.
    In [4]: square(3)
    Out [4]: 9
 
-API Docs
-=========
-
-.. automodule:: default_profile.sphinxext.custom_doctests
-   :synopsis: Custom doctests in rst docs. Add options to the doctest directive.
-   :members:
-   :undoc-members:
-   :show-inheritance:
-

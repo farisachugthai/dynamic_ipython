@@ -1,9 +1,8 @@
-=================================================
+===================
 Setting up readline
-=================================================
+===================
 
 .. currentmodule:: default_profile.startup.30_readline
-
 
 Readline Summary
 ----------------
@@ -58,6 +57,7 @@ Source::
 
 .. ipython::
 
+   In [11]: _ip = get_ipython()
    In [12]: _ip.Completer
    Out[12]: <IPython.core.completer.IPCompleter at 0x7a33dd6f50>
 

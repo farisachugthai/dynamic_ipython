@@ -6,5 +6,5 @@ import subprocess
 
 def tmux_new_window():
     return subprocess.run(
-        ["tmux", "neww"], stdout=subprocess.PIPE, stderr=subprocess.PIPE
+        ["tmux", "-u", "neww", "-Pdc", '"#{pane_current_path}"'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
     )

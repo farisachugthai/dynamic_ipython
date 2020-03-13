@@ -16,7 +16,7 @@ from pathlib import Path
 from shutil import get_terminal_size
 from traceback import print_exc
 
-from IPython import InteractiveShell
+from IPython.core.interactiveshell import InteractiveShell
 
 import prompt_toolkit
 from prompt_toolkit.enums import EditingMode
@@ -139,6 +139,14 @@ class BottomToolbar:
         self.PythonLexer = PythonLexer()
         self.Formatter = TerminalTrueColorFormatter()
         self._style = _style if _style is not None else self.app.style
+
+    @property
+    def session(self):
+        return self.shell.pt_app
+
+    @property
+    def layout(self):
+        return self.shell.pt_app.layout
 
     @property
     def is_vi_mode(self):

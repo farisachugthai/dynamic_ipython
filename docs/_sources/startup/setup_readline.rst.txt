@@ -39,34 +39,24 @@ custom Completers via the method :meth:`set_custom_completer`.
 However, all that the function does is a simple call to `types.MethodTypes` and then
 tacks it on to the list bound at ``get_ipython().Completer.matchers``.
 
+.. function:: set_custom_completer(completer, pos=0)
 
-.. code-block:: ipython
-
-   In [9]: from inspect import getdoc, getsource, getsourcelines
-
-   In [10]: %pinfo _ip.set_custom_completer
-   Signature: _ip.set_custom_completer(completer, pos=0)
-   Docstring:
    Adds a new custom completer function.
-
    The position argument (defaults to 0) is the index in the completers
    list where you want the completer to be inserted.
-   File:      ~/.local/share/virtualenvs/dynamic_ipython-mVJ3Ohov/lib/python3.7/site-packages/IPython/core/interactiveshell.py
-   Type:      method
 
-   In [11]: %pinfo2 _ip.set_custom_completer
-   Signature: _ip.set_custom_completer(completer, pos=0)
-   Source:
-       def set_custom_completer(self, completer, pos=0):
-           """Adds a new custom completer function.
+Source::
 
-           The position argument (defaults to 0) is the index in the completers
-           list where you want the completer to be inserted."""
+   def set_custom_completer(self, completer, pos=0):
+       """Adds a new custom completer function.
 
-           newcomp = types.MethodType(completer,self.Completer)
-           self.Completer.matchers.insert(pos,newcomp)
-   File:      ~/.local/share/virtualenvs/dynamic_ipython-mVJ3Ohov/lib/python3.7/site-packages/IPython/core/interactiveshell.py
-   Type:      method
+       The position argument (defaults to 0) is the index in the completers
+       list where you want the completer to be inserted."""
+
+       newcomp = types.MethodType(completer,self.Completer)
+       self.Completer.matchers.insert(pos,newcomp)
+
+.. ipython::
 
    In [12]: _ip.Completer
    Out[12]: <IPython.core.completer.IPCompleter at 0x7a33dd6f50>
@@ -87,6 +77,8 @@ Interestingly, there's also a method on the completer that returns a
 If so, then that would possibly make it
 the only use I've seen in the repo of this.
 
+Still unsure of what this class is though.
+
 .. ipython::
 
    In [10]: from IPython.utils.strdispatch import StrDispatch
@@ -97,12 +89,6 @@ the only use I've seen in the repo of this.
    In [12]: what?
    Type:        StrDispatch
    String form: <Strdispatch {}, {}>
-   File:
-   ~/.local/share/virtualenvs/utilities-lAlPOULO/lib/python3.8/site-packages/IPython/utils/strdispatch.py
-   Docstring:
-   Dispatch (lookup) a set of strings / regexps for match.
-
-   Example:
 
    >>> dis = StrDispatch()
    >>> dis.add_s('hei',34, priority = 4)
@@ -110,8 +96,6 @@ the only use I've seen in the repo of this.
    >>> dis.add_re('h.i', 686)
    >>> print(list(dis.flat_matches('hei')))
    [123, 34, 686]
-
-I've formatted the below for my own sake to improve readability.
 
 .. code-block:: ipython
 
@@ -124,17 +108,15 @@ I've formatted the below for my own sake to improve readability.
          '%cd': <IPython.core.hooks.CommandChainDispatcher object at 0x7f0acc3def10>,
          '%reset': <IPython.core.hooks.CommandChainDispatcher object at 0x7f0acc3ded00>},
          {}
-   >
 
    In [46]: dir(_ip.Completer.custom_completers)
-   Out[46]:
-    '...',
-    'add_re',
-    'add_s',
-    'dispatch',
-    'flat_matches',
-    'regexs',
-    's_matches',
+   Out[46]: ['...',
+            'add_re',
+            'add_s',
+            'dispatch',
+            'flat_matches',
+            'regexs',
+            's_matches']
 
 So hooks are implemented in the completion mechanism too?
 Dude I'm counting 3 nested classes and counting.

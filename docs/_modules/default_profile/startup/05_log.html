@@ -190,7 +190,13 @@
 <span class="kn">import</span> <span class="nn">traceback</span>
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">groupby</span>
 <span class="kn">from</span> <span class="nn">logging.handlers</span> <span class="kn">import</span> <span class="n">MemoryHandler</span>
-<span class="kn">from</span> <span class="nn">queue</span> <span class="kn">import</span> <span class="n">SimpleQueue</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">_queue</span> <span class="kn">import</span> <span class="n">SimpleQueue</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">SimpleQueue</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="k">if</span> <span class="n">SimpleQueue</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">queue</span> <span class="kn">import</span> <span class="n">_PySimpleQueue</span> <span class="k">as</span> <span class="n">SimpleQueue</span>
+
 
 <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 <span class="kn">from</span> <span class="nn">IPython.core.error</span> <span class="kn">import</span> <span class="n">UsageError</span>
@@ -509,7 +515,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Mar 11, 2020.
+      Last updated on Mar 13, 2020.
     </div>
   </body>
 </html>

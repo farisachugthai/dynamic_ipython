@@ -65,11 +65,17 @@ def _parse():
         ),
     )
     parser.add_argument("file", nargs="+", help="file containing the tests to run")
+
+    if len(sys.argv[:]) == 0:
+        parser.print_help()
+        return
     args = parser.parse_args()
+
     return args
 
 
 def flatten_test_suite(suite):
+    # In hindsight this really isnt needed
     flatten = unittest.TestSuite()
     for test in suite:
         if isinstance(test, unittest.TestSuite):
@@ -138,6 +144,9 @@ def setup_test_logging():
 def run():
 
     args = _parse()
+    if args is None:
+        # hm what should i do
+        return
     test_logger = setup_test_logging()
     # doctests()
     # Believe it or not this is in fact necessary if you want to run

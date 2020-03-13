@@ -6,10 +6,6 @@ Summary
 Create classes used to enhance the prompt_toolkit objects
 bound to the running IPython interpreter.
 
-
-Extended Summary
-----------------
-
 Provides utilities functions and classes to work with both `prompt_toolkit`
 and `IPython`. The APIs of both libraries can be individually quite
 overwhelming, and the combination and interaction of the 2 can prove difficult
@@ -38,7 +34,9 @@ import jedi
 import prompt_toolkit
 from prompt_toolkit.buffer import Buffer
 from prompt_toolkit.document import Document
-from prompt_toolkit.filters import Condition, is_searching
+from prompt_toolkit.keys import Keys
+from prompt_toolkit.key_binding import merge_key_bindings
+from prompt_toolkit.filters import Condition, is_searching, ViInsertMode
 from prompt_toolkit.key_binding.bindings import search
 from prompt_toolkit.layout.containers import HSplit, Window
 from prompt_toolkit.layout.controls import BufferControl
@@ -54,6 +52,15 @@ from prompt_toolkit.layout.processors import (
     HighlightMatchingBracketProcessor,
     DisplayMultipleCursors,
 )
+from prompt_toolkit.validation import (
+    ConditionalValidator,
+    ValidationError,
+    Validator,
+    ThreadedValidator,
+    DummyValidator,
+    DynamicValidator,
+)
+
 from IPython.core.getipython import get_ipython
 
 from pygments.styles.inkpot import InkPotStyle
@@ -427,7 +434,10 @@ def create_searching_keybindings():
 
     return ConditionalKeyBindings(kb, filter=is_searching)
 
+def pt_validator():
+    validator = ThreadedValidator(DynamicValidator(ConditionalValidator(DummyValidator(), filter=ViInsertMode())))
+    return validator
+
 
 if __name__ == "__main__":
     pt_helper = Helpers()
-    # container_search = search_layout()

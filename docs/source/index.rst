@@ -190,12 +190,34 @@ The `default_profile.sphinxext` package.
 Remaining API
 -------------
 
+.. _util-contents:
+
+Module contents
+===============
+
+.. automodule:: default_profile.util
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+The submodules contained in this package are as follows:
+
+Utilities Submodules
+====================
+
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   util/*
+
+
 .. toctree::
    :titlesonly:
    :caption: Remaining API
    :maxdepth: 2
 
-   IPython Utilities <util/index>
    Extensions <extensions/index>
    Developers Notes <dev>
 

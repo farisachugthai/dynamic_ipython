@@ -2,7 +2,16 @@
 # -*- coding: utf-8 -*-
 """Create OS specific aliases to allow a user to use IPython anywhere.
 
-Properly map aliases as dictionaries.
+Try to make viewing large amounts of aliases a bit more manageable.
+
+As a product of running `%rehashx` the alias magic is unusable.
+
+Therefore, we try to properly map aliases as dictionaries.
+
+This implies adding enough dunders to the CommonAliases class
+constructed here that it appropriately follows the ``mapping`` protocol
+as specified in the Python Language Reference.
+
 As stated in the language reference under Common Sequence Operations.:
 
 .. compound::
@@ -17,10 +26,12 @@ As stated in the language reference under Common Sequence Operations.:
 
 """
 import copy
+import gc
 import keyword
 import operator
 import os
 import platform
+import reprlib
 from collections import UserDict
 from typing import Any, Optional, Union
 
@@ -62,8 +73,8 @@ def validate_alias(alias) -> Optional[Any]:
 
     if shell is None:
         return
-    if not hasattr(alias, 'name'):
-        raise InvalidAliasError('Alias does not have name attribute.')
+    if not hasattr(alias, "name"):
+        raise InvalidAliasError("Alias does not have name attribute.")
     try:
         caller = shell.magics_manager.magics["line"][alias.name]
     except KeyError:
@@ -242,8 +253,14 @@ class CommonAliases(UserDict):
         else:
             raise AliasError("%s is not an alias" % name)
 
-    def __repr__(self):  # reprlib?
-        return "<Common Aliases>: # of aliases: {!r} ".format(len(self.dict_aliases))
+    def __repr__(self):
+        return "<{}>: {} aliases".format(self.__class__.__name__, len(self.aliases))
+
+    @reprlib.recursive_repr
+    def __str__(self):
+        return "<{}>\n{}".format(
+            self.__class__.__name__, self.repr_dict(self.aliases_dict, self.maxdict)
+        )
 
     def update(self, other, **kwargs):
         """Update the mapping of aliases to system commands.
@@ -261,7 +278,7 @@ class CommonAliases(UserDict):
         except TypeError:
             self.soft_define_alias(other)
         if kwargs:
-            self.update(other=kwargs)
+            super().update(other=kwargs)
 
     def __copy__(self):
         return copy.copy(self.dict_aliases)
@@ -275,7 +292,7 @@ class CommonAliases(UserDict):
     def __add__(self, other, name=None, cmd=None, *args):
         """Allow instances to be added."""
         if hasattr(other, "dict_aliases"):
-            self.update(other.dict_aliases, )
+            self.update(other.dict_aliases,)
         if name is None and cmd is None:
             if len(args) == 2:
                 name, cmd = args
@@ -799,3 +816,6 @@ if __name__ == "__main__":
 
     get_ipython().run_line_magic("alias_magic", "p pycat")
     get_ipython().alias_manager.define_alias("fzf", "fzf-tmux")
+    gc.collect()
+
+# Vim: set et:

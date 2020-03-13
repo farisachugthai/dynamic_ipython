@@ -25,9 +25,6 @@ from pathlib import Path
 
 import pkg_resources
 
-# from default_profile import ask_for_import
-# from default_profile import default_log_format
-from . import custom_doctests  # noqa F401
 from .magics import (
     LineMagicRole,
     CellMagicRole,

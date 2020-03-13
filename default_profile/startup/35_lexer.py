@@ -47,7 +47,8 @@ from IPython.core.getipython import get_ipython
 from IPython.core.interactiveshell import InteractiveShellABC
 
 # from IPython.lib.lexers import IPyLexer, IPythonTracebackLexer
-# or IPython.terminal.ptutils.IPythonPTLexer
+# or
+from IPython.terminal.ptutils import IPythonPTLexer
 
 try:
     from gruvbox.ptgruvbox import Gruvbox
@@ -134,7 +135,7 @@ class Colorizer:
 
     def __init__(self, pylexer=None, formatter=None):
         if pylexer is None:
-            self.pylexer = PythonLexer()
+            self.pylexer = get_lexer()
         if formatter is None:
             self.formatter = TerminalTrueColorFormatter()
 
@@ -148,7 +149,7 @@ class Colorizer:
         return f"{self.__class__.__name__}"
 
 
-class MyPythonLexer(PythonLexer):
+class MyPythonLexer(IPythonPTLexer):
     EXTRA_KEYWORDS = set("!")
 
     def get_tokens_unprocessed(self, text):
@@ -172,6 +173,10 @@ def generate_and_print_hsplit():
 
     Originally was in 33_bottom_toolbar but moved here so we can use the lexer.
     """
+    exit_button = Button("Exit")
+    # , handler=exit_clicked)
+    # print_container(exit_button)
+
     root_container = HSplit(
         children=[
             Window(
@@ -181,12 +186,12 @@ def generate_and_print_hsplit():
                 wrap_lines=True,
             ),
             Window(height=1, char="-", style="class:line"),
+            exit_button,
         ],
         # key_bindings=kb,
         # style=GruvboxStyle,
         style="underline #80a0ff",
     )
-    print("\n")
     print_container(root_container)
     # Thisll probably be useful
     # from prompt_toolkit.mouse_events import MouseEvent, MouseEventType
@@ -197,9 +202,6 @@ def generate_and_print_hsplit():
     #                                 ycursor=True,
     #                                 layout=CompletionMenu(...))
     #                        ])
-    exit_button = Button("Exit", handler=exit_clicked)
-    print_container(exit_button)
-
     return root_container
 
 
@@ -275,12 +277,12 @@ def extra_displayhook():
 if __name__ == "__main__":
     # lexer = IPythonConfigurableLexer()
     # colorizer = Colorizer()
-    # pt_lexer = get_lexer()
-
+    pt_lexer = get_lexer()
+    extra_displayhook()
     generate_and_print_hsplit()
     lexer = MyPythonLexer()
-    # if hasattr(get_ipython(), "pt_app.lexer"):
-    #     get_ipython().pt_app.lexer = lexer
+    if hasattr(get_ipython(), "pt_app.lexer"):
+        get_ipython().pt_app.lexer = lexer
 
-    # elif hasattr(get_ipython(), "pt_app.app.lexer"):
-    #     get_ipython().pt_app.app.lexer = lexer
+    elif hasattr(get_ipython(), "pt_app.app.lexer"):
+        get_ipython().pt_app.app.lexer = lexer
