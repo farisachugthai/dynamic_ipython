@@ -8,6 +8,7 @@
     
     <link rel="stylesheet" href="../_static/scrolls.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
     <link rel="stylesheet" href="_static/print.css" type="text/css" />
     
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -138,6 +139,7 @@
 </head>
 
   </head><body>
+  <link rel="stylesheet" href="../_static/style.css" /> 
 
     <div id="content">
       <div class="header">
@@ -204,7 +206,7 @@ in a typical system shell.</p>
 it responds to, and it’s ability to receive and pass along input and output
 in pipelines will vary greatly.</p>
 <p>As a result, the module needs to test the user’s OS, what shell they’re using
-and what executables are available on the <span class="target" id="index-0"></span><a class="reference external" href="https://matplotlib.org/faq/environment_variables_faq.html#envvar-PATH" title="(in Matplotlib v3.1.3)"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PATH</span></code></a>.</p>
+and what executables are available on the <span class="target" id="index-0"></span><a class="reference external" href="https://matplotlib.org/faq/environment_variables_faq.html#envvar-PATH" title="(in Matplotlib v3.2.0)"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PATH</span></code></a>.</p>
 <p>On Unix platforms, it is assumed that the user is using a bash shell.</p>
 <p>However on Windows, it is possible that the user has a shell that runs
 <strong class="command">dosbatch</strong>, <strong class="command">powershell</strong>, or <strong class="command">bash</strong>.</p>
@@ -214,7 +216,7 @@ and if present, that value is used.</p>
 <div class="section" id="attributes">
 <span id="aliases-attributes"></span><h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h3>
 <dl>
-<dt>_ip<span class="classifier"><a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.13.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveShell</span></code></a></span></dt><dd><p>A global object representing the active IPython session.
+<dt>ip<span class="classifier"><a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.13.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveShell</span></code></a></span></dt><dd><p>A global object representing the active IPython session.
 Contains varying packages as well as the current global namespace.
 Doesn’t need to be defined in advance during an interactive session.</p>
 </dd>
@@ -225,7 +227,7 @@ Doesn’t need to be defined in advance during an interactive session.</p>
 <dl class="simple">
 <dt><kbd class="kbd docutils literal notranslate">%l</kbd><span class="classifier">Command-line argument.</span></dt><dd><p>The remainder of the user’s input. Commonly referred to in the Jupyter
 documentation as the remaining ‘cell’.
-You can use the <code class="docutils literal notranslate"><span class="pre">%l</span></code> specifier in an <code class="docutils literal notranslate"><span class="pre">%alias</span></code> definition
+You can use the <kbd class="kbd docutils literal notranslate">%l</kbd> specifier in an <code class="xref py py-obj docutils literal notranslate"><span class="pre">%alias</span></code> definition
 to represent the whole line when the alias is called.</p>
 </dd>
 <dt><kbd class="kbd docutils literal notranslate">%s</kbd><span class="classifier">Command line argument</span></dt><dd><p>A required positional parameter can be given to the alias.</p>
@@ -246,8 +248,8 @@ interactively the syntax.</p>
 <p>Doesn’t require quoting.</p>
 <p>Aliases expand Python variables just like system calls using <kbd class="kbd docutils literal notranslate">!</kbd>
 or <kbd class="kbd docutils literal notranslate">!!</kbd> do: all expressions prefixed with <kbd class="kbd docutils literal notranslate">$</kbd> get expanded.
-For details of the semantic rules, see <span class="target" id="index-2"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0215"><strong>PEP 215</strong></a>:
-As this is the library used by IPython for variable expansion.</p>
+For details of the semantic rules, see <span class="target" id="index-2"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0215"><strong>PEP 215</strong></a> as this is the library used
+by IPython for variable expansion.</p>
 <p>Meaning that it behaves similarly to the parameter <kbd class="kbd docutils literal notranslate">$*</kbd>
 in typical POSIX shells.</p>
 <div class="admonition seealso">
@@ -275,27 +277,24 @@ pwsh builtins.</p></li>
 </div></blockquote>
 </li>
 </ul>
-<p>Packages such as ConEmu or Cmder allow a large number of GNU/Linux
-built-ins to exist on Windows, and as a result, the list may not be
-comprehensive and it may be that a reasonable
-portion of these aliases can be successfully executed from a shell
-such as Cygwin, MSys2, MinGW, Git on Windows or the Windows Subsystem for Linux.</p>
+<p>Packages such as ConEmu or Cmder allow a large number of GNU/Linux built-ins to
+exist on Windows, and as a result, the list may not be comprehensive and it may
+be that a reasonable portion of these aliases can be successfully executed from
+a shell such as Cygwin, MSys2, MinGW, Git on Windows or the Windows Subsystem
+for Linux.</p>
 </div>
 <div class="section" id="whitespace-in-aliases">
 <h3>Whitespace in Aliases<a class="headerlink" href="#whitespace-in-aliases" title="Permalink to this headline">¶</a></h3>
-<p>In order to make new subcommands in a way similar to how git allows
-one to come up with aliases, I first tried using whitespace in
-the alias.:</p>
+<p>In order to make new subcommands in a way similar to how git allows one to come
+up with aliases, I first tried using whitespace in the alias.:</p>
 <blockquote>
 <div><p>(‘git last’, ‘git log -1 HEAD %l’)</p>
 </div></blockquote>
-<p>However that simply registers the word <code class="docutils literal notranslate"><span class="pre">git</span></code> as an alias and then
-sends <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">last</span></code> to the underlying shell, which it may or may
-not recognize.</p>
-<p>Therefore I tried using a hyphen to separate the words, but the
-python interpreter uses hyphens as well as whitespace to separate
-keywords, and as a result, would split the alias in the middle of
-the command.</p>
+<p>However that simply registers the word <code class="docutils literal notranslate"><span class="pre">git</span></code> as an alias and then sends <code class="docutils literal notranslate"><span class="pre">git</span>
+<span class="pre">last</span></code> to the underlying shell, which it may or may not recognize.</p>
+<p>Therefore I tried using a hyphen to separate the words, but the python
+interpreter uses hyphens as well as whitespace to separate keywords, and as a
+result, would split the alias in the middle of the command.</p>
 </div>
 <div class="section" id="examples">
 <h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
@@ -346,10 +345,10 @@ additional options specified</p></li>
 </div></blockquote>
 </li>
 </ul>
-<p>Unless otherwise noted every alias uses <code class="docutils literal notranslate"><span class="pre">%l</span></code> to allow the user to specify
+<p>Unless otherwise noted every alias uses <kbd class="kbd docutils literal notranslate">%l</kbd> to allow the user to specify
 any relevant options or flags on the command line as necessary.</p>
 <dl class="simple">
-<dt>user_aliases<span class="classifier">A list of tuples</span></dt><dd><p>The format of IPython aliases got taken it’s logical conclusion
+<dt>:returns user_aliases<span class="classifier">A list of tuples</span></dt><dd><p>The format of IPython aliases got taken it’s logical conclusion
 and probably pushed a little further than that.</p>
 </dd>
 </dl>
@@ -487,7 +486,8 @@ Repr: &lt;alias pkg for &#39;pkg list-a&#39;&gt;
 <dl class="method">
 <dt id="default_profile.startup.20_aliases.CommonAliases.is_alias">
 <code class="sig-name descname">is_alias</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/20_aliases.html#CommonAliases.is_alias"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.20_aliases.CommonAliases.is_alias" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Return bool verifying if a name is defined in ‘dict_aliases.keys()’.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="default_profile.startup.20_aliases.CommonAliases.soft_define_alias">
@@ -509,9 +509,15 @@ match it’s interface.</p>
 <dd><p>Update the mapping of aliases to system commands.</p>
 <p>Ensure that this is properly defined as this can be critical for speed.</p>
 <p>If a TypeError is raised by doing so then attempt to pass the alias along
-to the shell’s <code class="xref py py-obj docutils literal notranslate"><span class="pre">AliasManager</span></code> with <a class="reference internal" href="#default_profile.startup.20_aliases.CommonAliases.soft_define_alias" title="default_profile.startup.20_aliases.CommonAliases.soft_define_alias"><code class="xref py py-obj docutils literal notranslate"><span class="pre">soft_define_alias</span></code></a>.
-:param <a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs:
-:type <a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs:</p>
+to the shell’s <code class="xref py py-obj docutils literal notranslate"><span class="pre">AliasManager</span></code> with <a class="reference internal" href="#default_profile.startup.20_aliases.CommonAliases.soft_define_alias" title="default_profile.startup.20_aliases.CommonAliases.soft_define_alias"><code class="xref py py-obj docutils literal notranslate"><span class="pre">soft_define_alias</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul>
+<li><p><strong>kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a>) – Any keyword arguments to pass to the superclass.</p></li>
+<li><p><strong>other</strong> – Other object to update instance dict with.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -546,7 +552,7 @@ to the shell’s <code class="xref py py-obj docutils literal notranslate"><span
 <code class="sig-name descname">python_exes</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/20_aliases.html#CommonAliases.python_exes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.20_aliases.CommonAliases.python_exes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Python executables like pydoc get executed in a subprocess currently.</p>
 <p>I want to do a check for if pydoc and apropos are in the aliases.</p>
-<div class="admonition-todo admonition" id="id5">
+<div class="admonition-todo admonition" id="id1">
 <p class="admonition-title">Todo</p>
 <p>os.environ =&gt; env</p>
 </div>
@@ -610,7 +616,7 @@ the namespace.</p>
 <dt id="default_profile.startup.20_aliases.WindowsAliases.cmd_aliases">
 <code class="sig-name descname">cmd_aliases</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/20_aliases.html#WindowsAliases.cmd_aliases"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.20_aliases.WindowsAliases.cmd_aliases" title="Permalink to this definition">¶</a></dt>
 <dd><p>Aliases for the <strong class="command">cmd</strong> shell.</p>
-<div class="admonition-todo admonition" id="id6">
+<div class="admonition-todo admonition" id="id2">
 <p class="admonition-title">Todo</p>
 <p>Cmd, <span class="target" id="index-5"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">COPYCMD</span></code> and IPython</p>
 <p>Need to consider how to handle env vars. Still working out how

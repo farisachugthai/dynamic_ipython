@@ -8,6 +8,7 @@
     
     <link rel="stylesheet" href="../../../_static/scrolls.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
     <link rel="stylesheet" href="_static/print.css" type="text/css" />
     
     <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
@@ -136,6 +137,7 @@
 </head>
 
   </head><body>
+  <link rel="stylesheet" href="../_static/style.css" /> 
 
     <div id="content">
       <div class="header">
@@ -387,7 +389,8 @@
             <span class="k">return</span></div>
 
 <div class="viewcode-block" id="CommonAliases.is_alias"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.is_alias">[docs]</a>    <span class="k">def</span> <span class="nf">is_alias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict_aliases</span></div>
+        <span class="sd">&quot;&quot;&quot;Return bool verifying if a name is defined in &#39;dict_aliases.keys()&#39;.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict_aliases</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="CommonAliases.soft_define_alias"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.soft_define_alias">[docs]</a>    <span class="k">def</span> <span class="nf">soft_define_alias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">cmd</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Define a new alias and don&#39;t raise an error on an invalid alias.&quot;&quot;&quot;</span>
@@ -418,11 +421,13 @@
 
 <span class="sd">        Ensure that this is properly defined as this can be critical for speed.</span>
 
-
 <span class="sd">        If a TypeError is raised by doing so then attempt to pass the alias along</span>
 <span class="sd">        to the shell&#39;s `AliasManager` with `soft_define_alias`.</span>
-<span class="sd">        :param **kwargs:</span>
-<span class="sd">        :type **kwargs:</span>
+
+<span class="sd">        :param kwargs: Any keyword arguments to pass to the superclass.</span>
+<span class="sd">        :type kwargs: dict</span>
+<span class="sd">        :param other: Other object to update instance dict with.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dict_aliases</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>

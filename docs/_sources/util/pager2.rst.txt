@@ -1,7 +1,7 @@
 ==========================================
 :mod:`~default_profile.util.pager2` module
 ==========================================
-.. highlight:: python
+.. highlight:: ipython
 
 .. currentmodule:: default_profile.util.pager2
 

@@ -8,6 +8,7 @@
     
     <link rel="stylesheet" href="_static/scrolls.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
     <link rel="stylesheet" href="_static/print.css" type="text/css" />
     
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -137,6 +138,7 @@
 </head>
 
   </head><body>
+  <link rel="stylesheet" href="../_static/style.css" /> 
 
     <div id="content">
       <div class="header">
@@ -163,7 +165,12 @@
 <li><a class="reference internal" href="#table-of-contents">Table of Contents</a><ul>
 <li><a class="reference internal" href="#startup">Startup</a></li>
 <li><a class="reference internal" href="#sphinx-extensions">Sphinx Extensions</a></li>
-<li><a class="reference internal" href="#remaining-api">Remaining API</a></li>
+<li><a class="reference internal" href="#id1">Extensions</a></li>
+<li><a class="reference internal" href="#module-default_profile.util">Utilities</a><ul>
+<li><a class="reference internal" href="#goals">Goals</a></li>
+<li><a class="reference internal" href="#utilities-submodules">Utilities Submodules</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
@@ -201,7 +208,7 @@ as well as autocompletion of paths and executables.</p>
 <p>In addition this repository handles a growing number of IPython extensions.</p>
 <p>Some of the bundled extensions provide a more usable <code class="xref py py-obj docutils literal notranslate"><span class="pre">PAGER</span></code> for users on
 Window than the one provided by <a class="reference external" href="https://docs.python.org/3/library/pydoc.html#module-pydoc" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pydoc</span></code></a>, others modify runtime behavior of</p>
-<p>To see more, continue reading about <a class="reference internal" href="extensions/index.html#extensions"><span class="std std-ref">Extensions</span></a>.</p>
+<p>To see more, continue reading about <span class="xref std std-ref">extensions</span>.</p>
 </div>
 <div class="section" id="portability">
 <h2>Portability<a class="headerlink" href="#portability" title="Permalink to this headline">¶</a></h2>
@@ -246,11 +253,13 @@ result, installation via pipenv is the recommended method.</p>
 <h3>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h3>
 <p>For commands that are more related to the interactive aspect of the shell,
 see the following.</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
-<span class="gp">   ...: </span><span class="o">&gt;&gt;&gt;</span> <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-<span class="gp">   ...: </span><span class="o">&gt;&gt;&gt;</span> <span class="n">help</span><span class="p">(</span><span class="n">_ip</span><span class="p">)</span>  <span class="c1"># doctest: +SKIP</span>
-<span class="gp">   ...: </span><span class="o">&gt;&gt;&gt;</span> <span class="nb">dir</span><span class="p">(</span><span class="n">_ip</span><span class="p">):</span>  <span class="c1"># doctest: +SKIP</span>
-<span class="gp">   ...: </span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+
+<span class="gp">In [2]: </span><span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+
+<span class="gp">In [3]: </span><span class="n">help</span><span class="p">(</span><span class="n">_ip</span><span class="p">)</span>  <span class="c1"># doctest: +SKIP</span>
+
+<span class="gp">In [4]: </span><span class="nb">dir</span><span class="p">(</span><span class="n">_ip</span><span class="p">):</span>  <span class="c1"># doctest: +SKIP</span>
 </pre></div>
 </div>
 <p>Which features descriptions of functions relevant to startup such as
@@ -299,30 +308,57 @@ form of rst docs and <abbr>ipynb</abbr> notebooks.</p>
 </ul>
 </div>
 </div>
-<div class="section" id="remaining-api">
-<h3>Remaining API<a class="headerlink" href="#remaining-api" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id1">
+<h3>Extensions<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<span class="target" id="module-default_profile.extensions"><span id="index-0"></span></span><p>Here are the varying <code class="xref py py-obj docutils literal notranslate"><span class="pre">%magic</span></code> extensions that are bundled with this
+portion of the repository.</p>
 <div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">Remaining API</span></p>
+<p class="caption"><span class="caption-text">Extensions</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="util/index.html">IPython Utilities</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="util/command_chain.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">command_chain</span></code> module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util/copytree.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">copytree</span></code> module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util/machine.html">Machine</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util/matplotlib_rc.html">Matplotlib Startup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util/module_log.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">module_log</span></code> module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util/pager2.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pager2</span></code> module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util/paths.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paths</span></code> module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util/profile_override.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">profile_override</span></code> module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util/timer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">timer</span></code> module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extensions/pandas_csv.html">Pandas CSV</a></li>
 </ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="extensions/index.html">Extensions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="extensions/pandas_csv.html">Pandas CSV</a></li>
-<li class="toctree-l2"><a class="reference internal" href="extensions/repr_requests.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">repr_requests</span></code></a></li>
-</ul>
-</li>
+</div>
+<p>Continue reading with the pandas extension at <a class="reference internal" href="extensions/pandas_csv.html#pandas-csv"><span class="std std-ref">Pandas CSV</span></a>.</p>
+</div>
+<div class="section" id="module-default_profile.util">
+<span id="utilities"></span><span id="util-contents"></span><h3>Utilities<a class="headerlink" href="#module-default_profile.util" title="Permalink to this headline">¶</a></h3>
+<p>They’re still all useful in their current state and when the user is
+running IPython interactively, but none of the scripts havet been fleshed out
+to the extent that they could be easily changed to IPython extensions.</p>
+<div class="section" id="goals">
+<h4>Goals<a class="headerlink" href="#goals" title="Permalink to this headline">¶</a></h4>
+<p>Currently the module aims to:</p>
+<ol class="arabic">
+<li><p>Create consistent <a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Logger" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">logging.Logger</span></code></a> objects</p></li>
+<li><p>Make a better pager on Windows</p></li>
+<li><p>Create a collection of classes that can more easily remove
+platform-specific issues that continue to arise.</p></li>
+</ol>
+<p>In addition, configure a module-wide logger by equating <code class="xref py py-obj docutils literal notranslate"><span class="pre">logging.BASIC_FORMAT</span></code>
+with a pre-determined template string like so:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">logging</span><span class="o">.</span><span class="n">BASIC_FORMAT</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> : </span><span class="si">%(levelname)s</span><span class="s1"> : </span><span class="si">%(message)s</span><span class="s1">&#39;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">UTIL_LOGGER</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;default_profile.util&#39;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">UTIL_LOGGER</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>The submodules contained in this package are as follows:</p>
+<div class="section" id="utilities-submodules">
+<h4>Utilities Submodules<a class="headerlink" href="#utilities-submodules" title="Permalink to this headline">¶</a></h4>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="util/command_chain.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">command_chain</span></code> module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util/copytree.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">copytree</span></code> module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util/machine.html">Machine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util/matplotlib_rc.html">Matplotlib Startup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util/module_log.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">module_log</span></code> module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util/pager2.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pager2</span></code> module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util/paths.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paths</span></code> module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util/profile_override.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">profile_override</span></code> module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util/timer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">timer</span></code> module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dev.html">Developers Notes</a></li>
 </ul>
+</div>
 </div>
 </div>
 </div>

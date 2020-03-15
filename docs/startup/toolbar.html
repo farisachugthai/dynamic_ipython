@@ -8,6 +8,7 @@
     
     <link rel="stylesheet" href="../_static/scrolls.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
     <link rel="stylesheet" href="_static/print.css" type="text/css" />
     
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -138,6 +139,7 @@
 </head>
 
   </head><body>
+  <link rel="stylesheet" href="../_static/style.css" /> 
 
     <div id="content">
       <div class="header">
@@ -154,6 +156,7 @@
           <h3>Table of Contents</h3>
           <ul>
 <li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">33_bottom_toolbar</span></code></a><ul>
+<li><a class="reference internal" href="#examples">Examples</a></li>
 <li><a class="reference internal" href="#module-default_profile.startup.33_bottom_toolbar">Toolbar API</a></li>
 </ul>
 </li>
@@ -196,6 +199,21 @@ in defining a method <code class="docutils literal notranslate"><span class="pre
 <p>As a result, <a class="reference internal" href="#default_profile.startup.33_bottom_toolbar.BottomToolbar" title="default_profile.startup.33_bottom_toolbar.BottomToolbar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BottomToolbar</span></code></a> also defines this method and as a result an
 instance of the class can be passed directly as an assignment to the
 <code class="docutils literal notranslate"><span class="pre">_ip.pt_app.bottom_toolbar</span></code>.</p>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">time</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">default_profile.startup</span> <span class="kn">import</span> <span class="n">bottom_toolbar_mod</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">bottom_toolbar_mod</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>   <span class="kn">from</span> <span class="nn">default_profile.startup.bottom_toolbar_mod</span>
+<span class="gp">&gt;&gt;&gt; </span>   <span class="n">bt</span> <span class="o">=</span> <span class="n">BottomToolbar</span><span class="p">(</span><span class="n">get_app</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span>   <span class="nb">print</span><span class="p">(</span><span class="n">bt</span><span class="p">)</span>
+<span class="go">       &lt;BottomToolbar:&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span>   <span class="n">bt</span><span class="p">()</span>
+<span class="go">       f&quot; [F4] Vi: {current_vi_mode!r} \n  cwd: {Path.cwd().stem!r}\n Clock: {time.ctime()!r}&quot;</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="module-default_profile.startup.33_bottom_toolbar">
 <span id="toolbar-api"></span><h2>Toolbar API<a class="headerlink" href="#module-default_profile.startup.33_bottom_toolbar" title="Permalink to this headline">¶</a></h2>
 <p>TODO: currently initialize a titlebar, an exit button and a few
@@ -250,14 +268,11 @@ other things that aren’t utilized at all.</p>
 <em class="property">class </em><code class="sig-name descname">BottomToolbar</code><span class="sig-paren">(</span><em class="sig-param">_style=None</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#BottomToolbar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.BottomToolbar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Display the current input mode.</p>
-<blockquote>
-<div><p>As the bottom_toolbar property exists in both a prompt_toolkit
+<p>As the bottom_toolbar property exists in both a prompt_toolkit
 PromptSession and Application, both are accessible from the <a class="reference internal" href="#default_profile.startup.33_bottom_toolbar.BottomToolbar.session" title="default_profile.startup.33_bottom_toolbar.BottomToolbar.session"><code class="xref py py-obj docutils literal notranslate"><span class="pre">session</span></code></a>
 and <code class="xref py py-obj docutils literal notranslate"><span class="pre">pt_app</span></code> attributes.</p>
 <p>Defines a method <a class="reference internal" href="#default_profile.startup.33_bottom_toolbar.BottomToolbar.rerender" title="default_profile.startup.33_bottom_toolbar.BottomToolbar.rerender"><code class="xref py py-meth docutils literal notranslate"><span class="pre">rerender()</span></code></a> and calls it whenever the instance
 is called via <code class="docutils literal notranslate"><span class="pre">__call__</span></code>.</p>
-</div></blockquote>
-<p>Clock: {time.ctime()!r}”</p>
 <dl class="method">
 <dt id="default_profile.startup.33_bottom_toolbar.BottomToolbar.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">_style=None</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/33_bottom_toolbar.html#BottomToolbar.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.33_bottom_toolbar.BottomToolbar.__init__" title="Permalink to this definition">¶</a></dt>
@@ -311,8 +326,7 @@ a little more modular for the tests.</p>
 <p>Simple reminder about the difference between running an
 expression and returning one.
 If you accidentally forget the <code class="xref py py-obj docutils literal notranslate"><span class="pre">return</span></code> keyword, nothing will
-display.
-That’s all.</p>
+display. That’s all.</p>
 </div>
 </dd></dl>
 

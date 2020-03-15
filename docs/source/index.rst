@@ -29,19 +29,6 @@ Specifically, new completers are added to the shell to handle fuzzy completion
 as well as autocompletion of paths and executables.
 
 
-.. _root-extensions:
-
-Extensions
-==========
-
-In addition this repository handles a growing number of IPython extensions.
-
-Some of the bundled extensions provide a more usable `PAGER` for users on
-Window than the one provided by `pydoc`, others modify runtime behavior of
-
-To see more, continue reading about :ref:`extensions`.
-
-
 Portability
 ============
 
@@ -110,10 +97,10 @@ see the following.
 .. ipython:: python
    :verbatim:
 
-   >>> from IPython import get_ipython
-   >>> _ip = get_ipython()
-   >>> help(_ip)  # doctest: +SKIP
-   >>> dir(_ip):  # doctest: +SKIP
+   from IPython import get_ipython
+   _ip = get_ipython()
+   help(_ip)  # doctest: +SKIP
+   dir(_ip):  # doctest: +SKIP
 
 Which features descriptions of functions relevant to startup such as
 :func:`IPython.core.interactiveshell.register_magic_function` and literally
@@ -187,13 +174,38 @@ The `default_profile.sphinxext` package.
    sphinxext/make
 
 
-Remaining API
--------------
+Extensions
+--------------
+
+In addition this repository handles a growing number of IPython extensions.
+
+Some of the bundled extensions provide a more usable `PAGER` for users on
+Window than the one provided by `pydoc`.
+
+.. index:: %magic
+
+.. automodule:: default_profile.extensions
+    :synopsis: Write additions to the IPython ecosystem and additional magics.
+
+Here are the varying `%magic` extensions that are bundled with this
+portion of the repository.
+
+.. toctree::
+   :maxdepth: 1
+   :glob:
+   :titlesonly:
+   :caption: Extensions
+
+   Pandas CSV <extensions/pandas_csv>
+   repr_requests <extensions/repr_requests>
+
+Continue reading with the pandas extension at :ref:`extensions/pandas_csv`.
+
 
 .. _util-contents:
 
-Module contents
-===============
+Utilities
+---------------
 
 .. automodule:: default_profile.util
    :members:
@@ -204,22 +216,16 @@ Module contents
 The submodules contained in this package are as follows:
 
 Utilities Submodules
-====================
+~~~~~~~~~~~~~~~~~~~~
 
 .. toctree::
+   :titlesonly:
    :maxdepth: 1
    :glob:
 
    util/*
-
-
-.. toctree::
-   :titlesonly:
-   :caption: Remaining API
-   :maxdepth: 2
-
-   Extensions <extensions/index>
    Developers Notes <dev>
+
 
 
 Indices and tables

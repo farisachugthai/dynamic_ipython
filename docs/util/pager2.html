@@ -8,6 +8,7 @@
     
     <link rel="stylesheet" href="../_static/scrolls.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
     <link rel="stylesheet" href="_static/print.css" type="text/css" />
     
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -138,6 +139,7 @@
 </head>
 
   </head><body>
+  <link rel="stylesheet" href="../_static/style.css" /> 
 
     <div id="content">
       <div class="header">
@@ -175,7 +177,7 @@
 <h1><a class="reference internal" href="#module-default_profile.util.pager2" title="default_profile.util.pager2: Rewrite how IPython utilizes the pager on Windows."><code class="xref py py-mod docutils literal notranslate"><span class="pre">pager2</span></code></a> module<a class="headerlink" href="#pager2-module" title="Permalink to this headline">¶</a></h1>
 <p>Rewrite the module that creates the <code class="docutils literal notranslate"><span class="pre">%pycat</span></code> magic.</p>
 <p>In it’s current implementation, the pager gives Windows a dumb terminal and
-never checks for whether <strong class="command">less</strong> is on the <span class="target" id="index-0"></span><a class="reference external" href="https://matplotlib.org/faq/environment_variables_faq.html#envvar-PATH" title="(in Matplotlib v3.1.3)"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PATH</span></code></a> or
+never checks for whether <strong class="command">less</strong> is on the <span class="target" id="index-0"></span><a class="reference external" href="https://matplotlib.org/faq/environment_variables_faq.html#envvar-PATH" title="(in Matplotlib v3.2.0)"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PATH</span></code></a> or
 if the user has a pager they wanna implement!</p>
 <div class="section" id="original-implementation">
 <h2>Original Implementation<a class="headerlink" href="#original-implementation" title="Permalink to this headline">¶</a></h2>
@@ -218,7 +220,7 @@ be there.</p>
 however we should re-use this implementation entirely and cut
 <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.page.html#IPython.core.page.page" title="(in IPython v7.13.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IPython.core.page.page</span></code></a> out.</p>
 <p>Also worth noting <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.payloadpage.html#IPython.core.payloadpage.page" title="(in IPython v7.13.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IPython.core.payloadpage.page</span></code></a>.:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">63</span><span class="p">]:</span> <span class="n">pydoc</span><span class="o">.</span><span class="n">pipepager</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getdoc</span><span class="p">(</span><span class="n">arg</span><span class="p">),</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;PAGER&#39;</span><span class="p">))</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [63]: </span><span class="n">pydoc</span><span class="o">.</span><span class="n">pipepager</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getdoc</span><span class="p">(</span><span class="n">arg</span><span class="p">),</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;PAGER&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
 <p>Despite the source code of the std lib stating that pipes are completely

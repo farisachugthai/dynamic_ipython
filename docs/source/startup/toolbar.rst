@@ -44,6 +44,20 @@ As a result, `BottomToolbar` also defines this method and as a result an
 instance of the class can be passed directly as an assignment to the
 ``_ip.pt_app.bottom_toolbar``.
 
+Examples
+--------
+
+>>> import time
+>>> from pathlib import Path
+>>> from default_profile.startup import bottom_toolbar_mod
+>>> if bottom_toolbar_mod is not None:
+>>>    from default_profile.startup.bottom_toolbar_mod
+>>>    bt = BottomToolbar(get_app())
+>>>    print(bt)
+       <BottomToolbar:>
+>>>    bt()
+       f" [F4] Vi: {current_vi_mode!r} \n  cwd: {Path.cwd().stem!r}\n Clock: {time.ctime()!r}"
+
 
 Toolbar API
 -----------
