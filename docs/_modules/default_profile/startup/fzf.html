@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="../../../_static/scrolls.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" href="_static/print.css" type="text/css" />
     
     <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
@@ -280,8 +281,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">fzf_config</span> <span class="o">=</span> <span class="n">fzf_configs</span> <span class="ow">or</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_setup_fzf</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sh</span> <span class="o">=</span> <span class="n">Executable</span><span class="p">(</span><span class="s2">&quot;sh&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fzf</span> <span class="o">=</span> <span class="n">Executable</span><span class="p">(</span><span class="s2">&quot;fzf&quot;</span><span class="p">)</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fzf</span> <span class="o">=</span> <span class="n">Executable</span><span class="p">(</span><span class="s2">&quot;fzf&quot;</span><span class="p">)</span></div>
+        <span class="c1"># so fzfprompt could be none so this needs to be conditional.</span>
+        <span class="c1"># super().__init__()</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">    </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fzf_config</span><span class="p">)</span>
@@ -419,6 +421,8 @@
 
 
 <div class="viewcode-block" id="fzf_keys"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.fzf.fzf_keys">[docs]</a><span class="k">def</span> <span class="nf">fzf_keys</span><span class="p">(</span><span class="n">inputted_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">FzfPrompt</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span>
     <span class="k">if</span> <span class="n">inputted_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">inputted_list</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">old_stdout</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
@@ -436,6 +440,8 @@
 
 
 <div class="viewcode-block" id="run_in_terminal_fzf"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.fzf.run_in_terminal_fzf">[docs]</a><span class="k">def</span> <span class="nf">run_in_terminal_fzf</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">FzfPrompt</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span>
     <span class="c1"># not sure how pt wants us to do this part</span>
     <span class="c1"># TODO:</span>
     <span class="c1"># Ah so this raises an error because FzfPrompt() doesn&#39;t have an __enter__</span>
@@ -457,6 +463,8 @@
 
 
 <div class="viewcode-block" id="fzf_history"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.fzf.fzf_history">[docs]</a><span class="k">def</span> <span class="nf">fzf_history</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">FzfPrompt</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span>
     <span class="n">cnx</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">home</span> <span class="o">+</span> <span class="s2">&quot;/.ipython/profile_default/history.sqlite&quot;</span><span class="p">)</span>
     <span class="n">fzf</span> <span class="o">=</span> <span class="n">FzfPrompt</span><span class="p">()</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql_query</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM history&quot;</span><span class="p">,</span> <span class="n">cnx</span><span class="p">)</span>
@@ -471,7 +479,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Mar 13, 2020.
+      Last updated on Mar 15, 2020.
     </div>
   </body>
 </html>

@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="../../../_static/scrolls.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" href="_static/print.css" type="text/css" />
     
     <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
@@ -166,6 +167,7 @@
 
 <span class="kn">from</span> <span class="nn">prompt_toolkit.cache</span> <span class="kn">import</span> <span class="n">SimpleCache</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.document</span> <span class="kn">import</span> <span class="n">Document</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.filters</span> <span class="kn">import</span> <span class="n">ViInsertMode</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.defaults</span> <span class="kn">import</span> <span class="n">load_key_bindings</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding</span> <span class="kn">import</span> <span class="n">merge_key_bindings</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings.auto_suggest</span> <span class="kn">import</span> <span class="n">load_auto_suggest_bindings</span>
@@ -388,24 +390,109 @@
         <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="create_kb"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.32_kb.create_kb">[docs]</a><span class="k">def</span> <span class="nf">create_kb</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">KeyBindings</span><span class="p">:</span>
+<div class="viewcode-block" id="custom_keybindings"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.32_kb.custom_keybindings">[docs]</a><span class="k">def</span> <span class="nf">custom_keybindings</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">KeyBindings</span><span class="p">:</span>
+
+    <span class="n">kb</span> <span class="o">=</span> <span class="n">KeyBindings</span><span class="p">()</span>
+    <span class="n">handle</span> <span class="o">=</span> <span class="n">kb</span><span class="o">.</span><span class="n">add</span>
+
+    <span class="c1"># Add custom key binding for PDB.</span>
+    <span class="c1"># holy hell this is genius. py3.7 just got breakpoint but this wouldve been a great addition to my ipy conf</span>
+    <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlB</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">pdb_snippet</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Pressing Control-B will insert `pdb.set_trace`.&quot;&quot;&quot;</span>
+        <span class="n">event</span><span class="o">.</span><span class="n">cli</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">insert_text</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">import pdb; pdb.set_trace()</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="nd">@handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlE</span><span class="p">,</span> <span class="n">Keys</span><span class="o">.</span><span class="n">ControlE</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">exec_line</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Typing ControlE twice should also execute the current command. (Alternative for Meta-Enter.)&quot;&quot;&quot;</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span>
+        <span class="k">if</span> <span class="n">b</span><span class="o">.</span><span class="n">accept_action</span><span class="o">.</span><span class="n">is_returnable</span><span class="p">:</span>
+            <span class="n">b</span><span class="o">.</span><span class="n">accept_action</span><span class="o">.</span><span class="n">validate_and_handle</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">cli</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+
+    <span class="nd">@handle</span><span class="p">(</span><span class="s2">&quot;j&quot;</span><span class="p">,</span> <span class="s2">&quot;j&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">normal_mode</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Map &#39;jj&#39; to Escape.&quot;&quot;&quot;</span>
+        <span class="n">event</span><span class="o">.</span><span class="n">cli</span><span class="o">.</span><span class="n">input_processor</span><span class="o">.</span><span class="n">feed</span><span class="p">(</span><span class="n">KeyPress</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">Escape</span><span class="p">))</span>
+
+    <span class="c1"># Custom key binding for some simple autocorrection while typing.</span>
+    <span class="c1"># TODO: Observe how much this slows stuff down because if its a quick lookup then you could add your autocorrect.vim</span>
+    <span class="n">corrections</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;impotr&quot;</span><span class="p">:</span> <span class="s2">&quot;import&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;pritn&quot;</span><span class="p">:</span> <span class="s2">&quot;print&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="nd">@handle</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">autocorrection</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;When a space is pressed. Check &amp; correct word before cursor.&quot;&quot;&quot;</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">cli</span><span class="o">.</span><span class="n">current_buffer</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">get_word_before_cursor</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">w</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">corrections</span><span class="p">:</span>
+                <span class="n">b</span><span class="o">.</span><span class="n">delete_before_cursor</span><span class="p">(</span><span class="n">count</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="p">))</span>
+                <span class="n">b</span><span class="o">.</span><span class="n">insert_text</span><span class="p">(</span><span class="n">corrections</span><span class="p">[</span><span class="n">w</span><span class="p">])</span>
+
+        <span class="n">b</span><span class="o">.</span><span class="n">insert_text</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">ConditionalKeyBindings</span><span class="p">(</span><span class="n">kb</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">ViInsertMode</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="determine_which_pt_attribute"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.32_kb.determine_which_pt_attribute">[docs]</a><span class="k">def</span> <span class="nf">determine_which_pt_attribute</span><span class="p">():</span>
+
+    <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+    <span class="c1"># IPython &lt; 7.0</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_ip</span><span class="p">,</span> <span class="s1">&#39;pt_cli&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_ip</span><span class="o">.</span><span class="n">pt_cli</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">key_bindings_registry</span>
+    <span class="c1"># IPython &gt;= 7.0</span>
+    <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_ip</span><span class="p">,</span> <span class="s1">&#39;pt_app&#39;</span><span class="p">):</span>
+        <span class="c1"># Here&#39;s one that might blow your mind.</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="p">)</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>  <span class="c1"># ran into this while running pytest.</span>
+            <span class="c1"># If you start IPython from something like pytest i guess it starts</span>
+            <span class="c1"># the machinery with a few parts missing...I don&#39;t know.</span>
+
+        <span class="k">return</span> <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">ipykernel.zmqshell</span> <span class="kn">import</span> <span class="n">ZMQInteractiveShell</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="ne">ModuleNotFoundError</span><span class="p">):</span>
+            <span class="n">ZMQInteractiveShell</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Jupyter QTConsole</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">_ip</span><span class="p">,</span> <span class="n">ZMQInteractiveShell</span><span class="p">):</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="create_kb"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.32_kb.create_kb">[docs]</a><span class="k">def</span> <span class="nf">create_kb</span><span class="p">():</span>
+
+    <span class="c1"># Honestly I&#39;m wary to do this but let&#39;s go for it</span>
+    <span class="k">if</span> <span class="n">get_ipython</span><span class="p">()</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="n">pre_existing_keys</span> <span class="o">=</span> <span class="n">determine_which_pt_attribute</span><span class="p">()</span>
     <span class="n">all_kb</span> <span class="o">=</span> <span class="n">merge_key_bindings</span><span class="p">(</span>
         <span class="p">[</span>
-            <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span><span class="p">,</span>
+            <span class="n">pre_existing_keys</span><span class="p">,</span>
             <span class="n">load_vi_bindings</span><span class="p">(),</span>
             <span class="n">load_vi_search_bindings</span><span class="p">(),</span>
             <span class="n">load_auto_suggest_bindings</span><span class="p">(),</span>  <span class="c1"># these stopped getting added when i did this</span>
             <span class="n">create_searching_keybindings</span><span class="p">(),</span>
+            <span class="n">custom_keybindings</span><span class="p">(),</span>
         <span class="p">]</span>
     <span class="p">)</span>
-    <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span> <span class="o">=</span> <span class="n">all_kb</span>
-    <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span><span class="o">.</span><span class="n">_update_cache</span><span class="p">()</span></div>
+    <span class="k">return</span> <span class="n">all_kb</span></div>
+
+<div class="viewcode-block" id="flatten_kb"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.32_kb.flatten_kb">[docs]</a><span class="k">def</span> <span class="nf">flatten_kb</span><span class="p">(</span><span class="n">merge</span><span class="p">):</span>
+    <span class="c1"># noinspection PyProtectedMember</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">merge</span><span class="o">.</span><span class="n">_bindings2</span><span class="o">.</span><span class="n">bindings</span><span class="p">))</span>
+    <span class="c1"># noinspection PyProtectedMember</span>
+    <span class="k">return</span> <span class="n">merge</span><span class="o">.</span><span class="n">_bindings2</span><span class="o">.</span><span class="n">bindings</span></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="c1"># Honestly I&#39;m wary to do this but let&#39;s go for it</span>
-    <span class="k">if</span> <span class="n">get_ipython</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">create_kb</span><span class="p">()</span>
+    <span class="n">merged_kb</span> <span class="o">=</span> <span class="n">create_kb</span><span class="p">()</span>
+    <span class="n">kb_we_want</span> <span class="o">=</span> <span class="n">flatten_kb</span><span class="p">(</span><span class="n">merged_kb</span><span class="p">)</span>
+    <span class="n">current_kb</span> <span class="o">=</span> <span class="n">determine_which_pt_attribute</span><span class="p">()</span>
+    <span class="n">current_kb</span> <span class="o">=</span> <span class="n">kb_we_want</span>
 </pre></div>
 
         </div>
@@ -413,7 +500,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Mar 13, 2020.
+      Last updated on Mar 15, 2020.
     </div>
   </body>
 </html>
