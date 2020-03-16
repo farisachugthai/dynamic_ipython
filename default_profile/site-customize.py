@@ -1,5 +1,6 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Startup script that adds niceties to the interactive interpreter.
+"""Sitecustomize startup script that adds niceties to the interactive interpreter.
 
 This script adds the following things:
 
@@ -15,65 +16,89 @@ This script adds the following things:
 - A source() function that displays the source of an arbitrary object
   (in a pager, with Pygments highlighting)
 
-Python 2.3 and newer are supported, including Python 3.x.
 
-Note: The default versions of Python that ship with Mac OS X don't
-come with readline. To get readline support, you can try a stand-alone
-readline library[1], or you can use a different Python distribution
-(like the one from MacPorts).
+Cython's site-customize.
+------------------------
 
-[1]: http://pypi.python.org/pypi/readline
+Cython is a compiler. Therefore it is natural that people tend to go
+through an edit/compile/test cycle with Cython modules. But my personal
+opinion is that one of the deep insights in Python's implementation is
+that a language can be compiled (Python modules are compiled to .pyc)
+files and hide that compilation process from the end-user so that they
+do not have to worry about it. Pyximport does this for Cython modules.
+For instance if you write a Cython module called foo.pyx, with
+Pyximport you can import it in a regular Python module like this::
+
+    import pyximport; pyximport.install()
+
 """
 import atexit
 import builtins
 import cgitb
+import errno
 import functools
 import inspect
-from inspect import findsource, getmodule, getsource, getsourcefile
-from io import StringIO
 import linecache
-from linecache import cache
 import logging
 import os
-from pathlib import Path
-import types
-import pydoc
-from pydoc import pager
+import pdb
 import pprint
+import pydoc
 import re
-import shutil
-import sys
-
-logging.basicConfig(level=logging.WARNING)
-cgitb.enable(format="text")
-
 try:
     import readline
 except ImportError:
-    logging.error("readline unavailable - tab completion disabled.\n")
     readline = None
 
+# pyreadline handles rlcompleter incorrectly so we only import it if we're not
+# using pyreadline
+try:
+    import pyreadline
+except ImportError:
+    import rlcompleter
+else:
+    rlcompleter = None
+
+
+import shutil
+import site
+import sys
+import types
+
+# noinspection PyProtectedMember
+from linecache import cache
+from inspect import findsource, getmodule, getsource, getsourcefile
+from io import StringIO
+from linecache import cache
+from pathlib import Path
+from pydoc import pager
+
+logging.basicConfig(level=logging.WARNING)
 try:
     from pygments import highlight
-    from pygments.lexers import PythonLexer, PythonTracebackLexer
-    from pygments.formatters import TerminalFormatter
+    from pygments.lexers.python import PythonLexer, PythonTracebackLexer
+    from pygments.formatters.terminal256 import TerminalTrueColorFormatter
 except ImportError:
     pass
 
+
 try:
     import jedi
-except:
+except ImportError:
     jedi = None
 else:
     from jedi.api import replstartup
 
+site.enablerlcompleter()
+site.ENABLE_USER_SITE = True
+site.check_enableusersite()
 
 def pyg_highlight(param):
     """Run a string through the pygments highlighter."""
     return highlight(param, PythonLexer(), TerminalFormatter())
 
 
-def complete(text, state):
+def _complete(text, state):
     old_complete = readline.get_completer()
     if not text:
         # Insert four spaces for indentation
@@ -82,21 +107,32 @@ def complete(text, state):
         return old_complete(text, state)
 
 
-def _pythonrc_enable_readline():
+def _pythonrc_enable_readline(history_path=None):
     """Enable readline, tab completion, and history"""
-    readline.parse_and_bind("tab: complete")
+    if readline is None:
+        return
+    if history_path is None:
+        history_path = Path("~/.python_history").expanduser()
+    try:
+        readline.read_history_file(history_path)
+    except OSError:
+        print("Error while trying to read the history file.")
+
+    write_history(history_path)
+    atexit.register(write_history, history_path)
+    readline.set_history_length(-1)
+    # readline.parse_and_bind("tab: complete")
+    readline.parse_and_bind("\\C-Space: _complete")
     readline.set_completer(complete)
 
 
-has_written = False
-
-
-def write_history(history_path):
+def write_history(history_path=None):
     if readline is None:
         return
+    if history_path is None:
+        history_path = Path("~/.python_history").expanduser()
     readline.write_history_file(history_path)
     logging.info("Written history to %s" % history_path)
-    has_written = True
 
 
 def _pythonrc_enable_history():
@@ -106,73 +142,104 @@ def _pythonrc_enable_history():
     """
     if os.environ.get("NOHIST"):
         return
-    if readline is None:
-        return
     history_path = Path("~/.python_history").expanduser()
-    if not history_path.exists():
-        history_path.touch()
-    if os.path.isfile(history_path):
-        try:
-            readline.read_history_file(history_path)
-        except OSError:
-            pass
-
-    if not has_written:
-        write_history(history_path)
     atexit.register(write_history, history_path)
-    readline.set_history_length(-1)
+    if not history_path.exists():
+        try:
+            history_path.touch()
+        except PermissionError:
+            raise
+        except OSError:
+            print("Error while trying to create the history file.")
+
+
+pygments_lexer = PythonLexer()
+pygments_formatter = TerminalTrueColorFormatter()
 
 
 def pphighlight(o, *a, **kw):
-    """Lex a `pprint.pformat`ted string, pass it through `pyg_highlight` then rerun it through pygments.highlight."""
+    """Lex a `pprint.pformat`\'ted string, then rerun it through pygments.highlight."""
     s = pprint.pformat(o, *a, **kw)
     try:
-        sys.stdout.write(highlight(s, PythonLexer(), TerminalFormatter()))
+        sys.stdout.write(highlight(s, pygments_lexer, pygments_formatter))
     except UnicodeError:
         sys.stdout.write(s)
         sys.stdout.write("\n")
 
 
-def highlighter(func, *args, **kwargs):
-    """Decorator to run a function through `pphighlight`."""
+def initialize_excepthook(**kwargs):
+    """Passes \*\*kwargs along to `cgitb.Hook`."""
+    syshook = cgitb.Hook(format="text", **kwargs)
+    sys.excepthook = syshook
+    return syshook
 
     @functools.wraps
     def _():
-        return pphighlight(func, *args, **kwargs)
+        return pyg_highlight(func, *args, **kwargs)
 
 
 def get_width():
     return shutil.get_terminal_size()[1]
 
 
-def _pythonrc_enable_pprint():
-    """Enable pretty printing of evaluated expressions"""
+def excepthook(exctype, value, traceback):
+    """Prints exceptions to sys.stderr and colorizes them.
 
-    _old_excepthook = sys.excepthook
+    Notes
+    -----
+    traceback.format_exception() isn't used because it's
+    inconsistent with the built-in formatter
+    """
+    old_stderr = sys.stderr
+    sys.stderr = StringIO()
 
-    def excepthook(exctype, value, traceback):
-        """Prints exceptions to sys.stderr and colorizes them"""
-        # traceback.format_exception() isn't used because it's
-        # inconsistent with the built-in formatter
-        old_stderr = sys.stderr
-        sys.stderr = StringIO()
-        try:
-            _old_excepthook(exctype, value, traceback)
-            stderror = sys.stderr.getvalue()
-            try:
-                ret = pyg_highlight(
-                    stderror
-                )
-            except UnicodeError:
-                pass
-                old_stderr.write(ret)
-            finally:
-                sys.stderr = old_stderr
+    our_hook = initialize_excepthook()
 
-            sys.excepthook = excepthook
-        except ImportError:
-            pphighlight = pprint.pprint
+    try:
+        our_hook(exctype, value, traceback)
+        stderror = sys.stderr.getvalue()
+        ret = s(stderror, PythonTracebackLexer(), TerminalFormatter())
+    except UnicodeError:
+        old_stderr.write(ret)
+    finally:
+        sys.stderr = old_stderr
 
+
+def format_callable(value):
+
+    if hasattr(inspect, "getfullargspec"):
+        getargspec = inspect.getfullargspec
+    else:
+        getargspec = inspect.getargspec
+
+    reprstr = repr(value)
+
+    if inspect.isfunction(value):
+        parts = reprstr.split(" ")
+        parts[1] += inspect.formatargspec(*getargspec(value))
+        reprstr = " ".join(parts)
+    elif inspect.ismethod(value):
+        parts = reprstr[:-1].split(" ")
+        parts[2] += inspect.formatargspec(*getargspec(value))
+        reprstr = " ".join(parts) + ">"
+    return reprstr
+
+
+def pprinthook(value=None):
+    """Pretty print an object to sys.stdout."""
+    if value is None:
+        return
+    help_types = get_help_types()
+    if not isinstance(value, help_types):
+        return pphighlight(value, width=get_width() or 80)
+
+    reprstr = format_callable(value)
+    sys.stdout.write(reprstr)
+    if getattr(value, "__doc__", None):
+        sys.stdout.write("\n" + str(pydoc.getdoc(value)) + "\n")
+
+
+def get_help_types():
     help_types = [
         types.BuiltinFunctionType,
         types.BuiltinMethodType,
@@ -186,43 +253,7 @@ def _pythonrc_enable_pprint():
     if hasattr(types, "UnboundMethodType"):
         help_types.append(types.UnboundMethodType)
     help_types = tuple(help_types)
-
-    if hasattr(inspect, "getfullargspec"):
-        getargspec = inspect.getfullargspec
-    else:
-        getargspec = inspect.getargspec
-
-    def pprinthook(value):
-        """Pretty print an object to sys.stdout and also save it in the sys.displayhook.
-        """
-
-        if value is None:
-            return
-        builtins._ = value
-
-        if isinstance(value, help_types):
-            reprstr = repr(value)
-            try:
-                if inspect.isfunction(value):
-                    parts = reprstr.split(" ")
-                    parts[1] += inspect.formatargspec(*getargspec(value))
-                    reprstr = " ".join(parts)
-                elif inspect.ismethod(value):
-                    parts = reprstr[:-1].split(" ")
-                    parts[2] += inspect.formatargspec(*getargspec(value))
-                    reprstr = " ".join(parts) + ">"
-            except TypeError:
-                pass
-            sys.stdout.write(reprstr)
-            sys.stdout.write("\n")
-            if getattr(value, "__doc__", None):
-                sys.stdout.write("\n")
-                sys.stdout.write(pydoc.getdoc(value))
-                sys.stdout.write("\n")
-        else:
-            pphighlight(value, width=get_width() or 80)
-
-    sys.displayhook = pprinthook
+    return help_types
 
 
 def _pythonrc_fix_linecache():
@@ -348,11 +379,12 @@ if __name__ == "__main__":
     sys.ps2 = "\001\033[1;31m\002... \001\033[1;37m\002"
 
     # Run installation functions and don't taint the global namespace
+    history_path = Path("~/.python_history").expanduser()
     try:
-        _pythonrc_enable_readline()
+        _pythonrc_enable_readline(history_path=history_path)
         _pythonrc_enable_history()
-        _pythonrc_enable_pprint()
+        initialize_excepthook()
+        sys.displayhook = pprinthook
         _pythonrc_fix_linecache()
-    finally:
-        if os.path.curdir is not None:
-            sys.path.insert(0, os.path.curdir)
+    except Exception as e:
+        print(e)

@@ -24,6 +24,7 @@ from logging import getLogger, StreamHandler, BufferingFormatter, Filter
 import os
 from pathlib import Path
 import pdb
+# noinspection PyProtectedMember
 from pdb import Restart, Pdb
 import pydoc
 
@@ -307,6 +308,7 @@ class MyPdb(pdb.Pdb):
     def _runmodule(self, module_name):
         self._wait_for_mainpyfile = True
         self._user_requested_quit = False
+        # noinspection PyProtectedMember
         mod_name, mod_spec, code = runpy._get_module_details(module_name)
         self.mainpyfile = self.canonic(code.co_filename)
         import __main__
@@ -364,6 +366,7 @@ def wrap_sys_excepthook():
 def set_trace(frame=None, context=3):
     # wrap_sys_excepthook()
     if frame is None:
+        # noinspection PyProtectedMember
         frame = sys._getframe().f_back
     p = _init_pdb(context).set_trace(frame)
     if p and hasattr(p, "shell"):
@@ -438,7 +441,9 @@ def debug_script(script=None):
     pdb = _init_pdb(commands=namespace.commands)
 
     try:
+        # noinspection PyProtectedMember
         pdb._runscript(script)
+        # noinspection PyProtectedMember
         if pdb._user_requested_quit:
             return
         logger.warning("The program finished and will be restarted")
