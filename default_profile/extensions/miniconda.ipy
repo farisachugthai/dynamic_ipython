@@ -1,26 +1,23 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import shutil
+
 # import sys
 import subprocess
+
 # from subprocess import Popen, PIPE
 import warnings
 
 from IPython.core.getipython import get_ipython
 from IPython.core.magic import Magics, magics_class, line_magic
-from IPython.core.magics.packaging import (
-    # CONDA_ENV_FLAGS,
-    # CONDA_YES_FLAGS,
-    # CONDA_COMMANDS_REQUIRING_YES,
-    # CONDA_COMMANDS_REQUIRING_PREFIX,
-    PackagingMagics,
-)
+from IPython.core.magics.packaging import PackagingMagics, CONDA_ENV_FLAGS, CONDA_COMMANDS_REQUIRING_PREFIX, \
+    CONDA_YES_FLAGS, CONDA_COMMANDS_REQUIRING_YES
 from IPython.terminal.interactiveshell import TerminalInteractiveShell
 
 try:
     from ipykernel.ipkernel import IPythonKernel as kernel
 except ImportError:
-    warnings.warn('ipykernel not installed.')
+    warnings.warn("ipykernel not installed.")
 
 
 @magics_class
@@ -28,7 +25,9 @@ class PackagingMagics(Magics):
     """Override the PackagingMagic."""
 
     @staticmethod
-    def conda_path():
+    def _get_conda_executable():
+        # If necessary call their goofy ass way but then i can't use conda the env
+        # manager outside of that env.
         return shutil.which("conda")
 
     @property
@@ -39,7 +38,9 @@ class PackagingMagics(Magics):
     def conda(self, line):
         """Simpler re-implemented line magic.
 
-        First do a shutil check.
+        Usage:
+
+            %conda install [pkgs]
 
         Parameters
         ----------
@@ -51,21 +52,39 @@ class PackagingMagics(Magics):
         :exc:`NotImplementedError`
 
         """
-        # if self.stdin_disabled is not None:
-        # hang on this doesn't seem like a good idea.
-        # cmd.append(self.non_interactive_parameters(cmd))
-        # raise NotImplementedError
-        conda, *cmd = line
+        # uh wth. i was trying to run conda build from a pipenv and it crashed guys
+        # if not _is_conda_environment():
+        #     raise ValueError(
+        #         "The python kernel does not appear to be a conda environment.  "
+        #         "Please use ``%pip install`` instead."
+        # )
 
-        # tbf i still question if that's a good way of checking interactivity
-        try:
-            if isinstance(self.shell, TerminalInteractiveShell):
-                return subprocess.run([conda, *cmd], )
-        except subprocess.CalledProcessError:
-            # except AttributeError:
-            #     raise NotImplementedError
-            if self.conda_path is not None and self.conda_path.ends_with("bat"):
-                return %sx "call " + self.conda_path
+        conda = self._get_conda_executable()
+        # now before we start slicing shit and going crazy let's do a few checks riht?
+        if line == "" or line == "-h" or line == "--help":
+            # conda with no args should be the same as running conda help
+            return self.shell.system([conda, "-h"])
+        unsplit_args = shlex.split(line)
+        # and we didn't even unpack the list correctly?
+        command, args = unsplit_args[:]
+
+        # When the subprocess does not allow us to respond "yes" during the installation,
+        # we need to insert --yes in the argument list for some commands
+        stdin_disabled = getattr(self.shell, "kernel", None) is not None
+        needs_yes = command in CONDA_COMMANDS_REQUIRING_YES
+        has_yes = set(args).intersection(CONDA_YES_FLAGS)
+        if stdin_disabled and needs_yes and not has_yes:
+            extra_args.append("--yes")
+
+        # Add --prefix to point conda installation to the current environment
+        needs_prefix = command in CONDA_COMMANDS_REQUIRING_PREFIX
+        has_prefix = set(args).intersection(CONDA_ENV_FLAGS)
+        if needs_prefix and not has_prefix:
+            extra_args.extend(["--prefix", sys.prefix])
+
+        self.shell.system(" ".join([conda, command] + extra_args + args))
+        if not self.quiet:
+            print("\nNote: you may need to restart the kernel to use updated packages.")
 
     def python_api(self):
         """TODO
@@ -79,8 +98,12 @@ class PackagingMagics(Magics):
             return
 
 
-def load_ipython_extension(ip=None):
+def load_conda_magic():
+    ip = get_ipython()
     if ip is None:
-        ip = get_ipython()
-    ip.register_magics(PackagingMagics)
-    ip.register_magic_function(PackagingMagics().conda)
+        return
+    instance = PackagingMagics(shell=ip)
+    ip.register_magics(instance)
+    ip.register_magic_function(instance.conda)
+    # in case anyone wants to inspect the body before it gets cold
+    return instance

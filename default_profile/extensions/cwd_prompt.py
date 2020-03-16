@@ -99,6 +99,8 @@ def unload_ipython_extension(shell):
 if __name__ == "__main__":
     # So here's a more direct way of loading these suckers
     # without setting off the deprecation warning
+    # noinspection PyProtectedMember
     get_ipython().extension_manager._call_load_ipython_extension("cwd_prompt")
     # or i guess
+    # noinspection PyProtectedMember
     get_ipython().extension_manager._call_unload_ipython_extension("cwd_prompt")
