@@ -4,6 +4,7 @@
 # Base16 Prompt Toolkit template by Carlos Pita (carlosjosepita@gmail.com
 # Gruvbox dark, hard scheme by Dawid Kurek (dawikur@gmail.com), morhetz (https://github.com/morhetz/gruvbox)
 
+# noinspection PyProtectedMember,PyProtectedMember
 from prompt_toolkit.output.vt100 import _256_colors
 from pygments.style import Style
 from pygments.token import (

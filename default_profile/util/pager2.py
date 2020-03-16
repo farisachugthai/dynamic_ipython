@@ -110,6 +110,7 @@ def provided_or_last(s=None, shell=None):
     if s is not None:
         code_to_page = shell.find_user_code(s, skip_encoding_cookie=True)
     else:
+        # noinspection PyProtectedMember
         code_to_page = shell._i
 
     return code_to_page

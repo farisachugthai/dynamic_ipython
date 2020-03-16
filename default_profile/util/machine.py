@@ -112,6 +112,7 @@ class Platform:
 
         Import needs to be inline. Windows libraries are not always available.
         """
+        # noinspection PyProtectedMember
         from prompt_toolkit.output.windows10 import is_win_vt100_enabled
 
         return self.is_win and is_win_vt100_enabled()

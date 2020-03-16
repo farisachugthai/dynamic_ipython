@@ -42,6 +42,7 @@ if __name__ == "__main__":
         from matplotlib.font_manager import get_fontconfig_fonts
         from matplotlib import set_loglevel, RcParams, rcdefaults
 
+        # noinspection PyProtectedMember
         from matplotlib.style.core import STYLE_BLACKLIST
 
         set_loglevel("info")

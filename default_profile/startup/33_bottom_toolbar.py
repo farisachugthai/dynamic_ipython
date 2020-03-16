@@ -114,14 +114,6 @@ class BottomToolbar:
     Defines a method :meth:`rerender` and calls it whenever the instance
     is called via ``__call__``.
 
-    Examples
-    --------
-    >>> bt = BottomToolbar(get_app())
-    >>> print(bt)
-        <BottomToolbar:>
-    >>> bt()
-        f" [F4] Vi: {current_vi_mode!r} \n  cwd: {Path.cwd().stem!r}\n Clock: {time.ctime()!r}"
-
     """
 
     shell: InteractiveShell
@@ -192,8 +184,8 @@ class BottomToolbar:
             Simple reminder about the difference between running an
             expression and returning one.
             If you accidentally forget the `return` keyword, nothing will
-            display.
-            That's all.
+            display. That's all.
+
         """
         if self.is_vi_mode:
             toolbar = PygmentsTokens(self._render_vi())

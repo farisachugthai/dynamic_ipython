@@ -128,7 +128,8 @@ class FZF(FzfPrompt):
         self._setup_fzf()
         self.sh = Executable("sh")
         self.fzf = Executable("fzf")
-        super().__init__()
+        # so fzfprompt could be none so this needs to be conditional.
+        # super().__init__()
 
     def __repr__(self):
         return "{}    {}".format(self.__class__.__name__, self.fzf_config)
@@ -266,6 +267,8 @@ def add_fzf_binding():
 
 
 def fzf_keys(inputted_list=None):
+    if FzfPrompt is None:
+        return
     if inputted_list is None:
         inputted_list = []
     old_stdout = sys.stdout
@@ -283,6 +286,8 @@ def fzf_keys(inputted_list=None):
 
 
 def run_in_terminal_fzf():
+    if FzfPrompt is None:
+        return
     # not sure how pt wants us to do this part
     # TODO:
     # Ah so this raises an error because FzfPrompt() doesn't have an __enter__
@@ -304,6 +309,8 @@ def fgs():
 
 
 def fzf_history(event):
+    if FzfPrompt is None:
+        return
     cnx = sqlite3.connect(home + "/.ipython/profile_default/history.sqlite")
     fzf = FzfPrompt()
     df = pd.read_sql_query("SELECT * FROM history", cnx)

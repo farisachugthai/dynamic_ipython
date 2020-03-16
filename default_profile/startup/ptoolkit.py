@@ -226,6 +226,7 @@ class Helpers:
             Use HSplit._all_children
 
         """
+        # noinspection PyProtectedMember
         return self.current_container._all_children
 
     @property
@@ -335,6 +336,7 @@ class Helpers:
         _working_lines : lines
 
         """
+        # noinspection PyProtectedMember
         return self.current_buffer._working_lines
 
     def app_context(self):

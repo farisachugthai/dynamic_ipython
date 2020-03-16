@@ -236,7 +236,8 @@ class CommonAliases(UserDict):
             return
 
     def is_alias(self, name):
-        return name in self.dict_aliases
+        """Return bool verifying if a name is defined in 'dict_aliases.keys()'."""
+        return name in self.dict_aliases.keys()
 
     def soft_define_alias(self, name, cmd):
         """Define a new alias and don't raise an error on an invalid alias."""
@@ -267,11 +268,13 @@ class CommonAliases(UserDict):
 
         Ensure that this is properly defined as this can be critical for speed.
 
-
         If a TypeError is raised by doing so then attempt to pass the alias along
         to the shell's `AliasManager` with `soft_define_alias`.
-        :param **kwargs:
-        :type **kwargs:
+
+        :param kwargs: Any keyword arguments to pass to the superclass.
+        :type kwargs: dict
+        :param other: Other object to update instance dict with.
+
         """
         try:
             self.dict_aliases.update(other)
@@ -369,6 +372,7 @@ class CommonAliases(UserDict):
             import pydoc
         if "apropos" in self.dict_aliases.keys():
             self.unalias("apropos")
+            # noinspection PyProtectedMember
             from pydoc import apropos
         if "which" in self.dict_aliases.keys():
             self.unalias("which")

@@ -10,6 +10,7 @@ try:
 except:
     Repo = None
 
+# noinspection PyProtectedMember
 from pip._internal.vcs.git import Git
 
 

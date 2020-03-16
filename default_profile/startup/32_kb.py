@@ -13,6 +13,7 @@ from IPython.core.getipython import get_ipython
 
 from prompt_toolkit.cache import SimpleCache
 from prompt_toolkit.document import Document
+from prompt_toolkit.filters import ViInsertMode
 from prompt_toolkit.key_binding.defaults import load_key_bindings
 from prompt_toolkit.key_binding import merge_key_bindings
 from prompt_toolkit.key_binding.bindings.auto_suggest import load_auto_suggest_bindings
@@ -235,21 +236,106 @@ class Documented(Document):
         return iter(self.text)
 
 
-def create_kb() -> KeyBindings:
+def custom_keybindings() -> KeyBindings:
+
+    kb = KeyBindings()
+    handle = kb.add
+
+    # Add custom key binding for PDB.
+    # holy hell this is genius. py3.7 just got breakpoint but this wouldve been a great addition to my ipy conf
+    @handle(Keys.ControlB)
+    def pdb_snippet(event):
+        """Pressing Control-B will insert `pdb.set_trace`."""
+        event.cli.current_buffer.insert_text("\nimport pdb; pdb.set_trace()\n")
+
+    @handle(Keys.ControlE, Keys.ControlE)
+    def exec_line(event):
+        """Typing ControlE twice should also execute the current command. (Alternative for Meta-Enter.)"""
+        b = event.current_buffer
+        if b.accept_action.is_returnable:
+            b.accept_action.validate_and_handle(event.cli, b)
+
+    @handle("j", "j")
+    def normal_mode(event):
+        """Map 'jj' to Escape."""
+        event.cli.input_processor.feed(KeyPress(Keys.Escape))
+
+    # Custom key binding for some simple autocorrection while typing.
+    # TODO: Observe how much this slows stuff down because if its a quick lookup then you could add your autocorrect.vim
+    corrections = {
+        "impotr": "import",
+        "pritn": "print",
+    }
+
+    @handle(" ")
+    def autocorrection(event):
+        """When a space is pressed. Check & correct word before cursor."""
+        b = event.cli.current_buffer
+        w = b.document.get_word_before_cursor()
+
+        if w is not None:
+            if w in corrections:
+                b.delete_before_cursor(count=len(w))
+                b.insert_text(corrections[w])
+
+        b.insert_text(" ")
+
+    return ConditionalKeyBindings(kb, filter=ViInsertMode())
+
+
+def determine_which_pt_attribute():
+
+    _ip = get_ipython()
+    # IPython < 7.0
+    if hasattr(_ip, 'pt_cli'):
+        return _ip.pt_cli.application.key_bindings_registry
+    # IPython >= 7.0
+    elif hasattr(_ip, 'pt_app'):
+        # Here's one that might blow your mind.
+        if type(_ip.pt_app) == None:
+            sys.exit()  # ran into this while running pytest.
+            # If you start IPython from something like pytest i guess it starts
+            # the machinery with a few parts missing...I don't know.
+
+        return _ip.pt_app.app.key_bindings
+
+    else:
+        try:
+            from ipykernel.zmqshell import ZMQInteractiveShell
+        except (ImportError, ModuleNotFoundError):
+            ZMQInteractiveShell = None
+        else:
+            # Jupyter QTConsole
+            if isinstance(_ip, ZMQInteractiveShell):
+                sys.exit()
+
+def create_kb():
+
+    # Honestly I'm wary to do this but let's go for it
+    if get_ipython() is None:
+        return
+    pre_existing_keys = determine_which_pt_attribute()
     all_kb = merge_key_bindings(
         [
-            get_ipython().pt_app.app.key_bindings,
+            pre_existing_keys,
             load_vi_bindings(),
             load_vi_search_bindings(),
             load_auto_suggest_bindings(),  # these stopped getting added when i did this
             create_searching_keybindings(),
+            custom_keybindings(),
         ]
     )
-    get_ipython().pt_app.app.key_bindings = all_kb
-    get_ipython().pt_app.app.key_bindings._update_cache()
+    return all_kb
+
+def flatten_kb(merge):
+    # noinspection PyProtectedMember
+    print(len(merge._bindings2.bindings))
+    # noinspection PyProtectedMember
+    return merge._bindings2.bindings
 
 
 if __name__ == '__main__':
-    # Honestly I'm wary to do this but let's go for it
-    if get_ipython() is not None:
-        create_kb()
+    merged_kb = create_kb()
+    kb_we_want = flatten_kb(merged_kb)
+    current_kb = determine_which_pt_attribute()
+    current_kb = kb_we_want

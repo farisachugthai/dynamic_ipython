@@ -44,6 +44,7 @@ try:
 except ImportError:
     SimpleQueue = None
 if SimpleQueue is None:
+    # noinspection PyProtectedMember
     from queue import _PySimpleQueue as SimpleQueue
 
 

@@ -7,6 +7,7 @@ try:
     # get_event_loop() is one of the most frequently called
     # functions in asyncio.  Pure Python implementation is
     # about 4 times slower than C-accelerated.
+    # noinspection PyProtectedMember,PyProtectedMember
     from _asyncio import (
         _get_running_loop,
         _set_running_loop,
@@ -14,6 +15,7 @@ try:
         get_event_loop,
     )
 except ImportError:
+    # noinspection PyProtectedMember,PyProtectedMember
     from asyncio.events import (
         _get_running_loop,
         _set_running_loop,
@@ -33,7 +35,9 @@ import threading
 import sys as _sys
 
 try:
+    # noinspection PyProtectedMember
     from _thread import _local as local
+    # noinspection PyProtectedMember,PyProtectedMember
     from _thread import _excepthook as excepthook, _ExceptHookArgs as ExceptHookArgs
 except ImportError:
     # Simple Python implementation if _thread._excepthook() is not available
@@ -60,6 +64,7 @@ except ImportError:
         if _sys is not None and _sys.stderr is not None:
             stderr = _sys.stderr
         elif args.thread is not None:
+            # noinspection PyProtectedMember
             stderr = args.thread._stderr
             if stderr is None:
                 # do nothing if sys.stderr is None and sys.stderr was None
