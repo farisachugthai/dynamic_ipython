@@ -5,6 +5,7 @@
 So I can't take much credit but their unit tests are too insightful to not
 through it in the mix.
 """
+
 import collections
 import unittest
 

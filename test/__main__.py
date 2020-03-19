@@ -9,7 +9,6 @@ import unittest
 import warnings
 from doctest import testmod, testfile
 from unittest.suite import TestSuite
-
 from unittest.loader import TestLoader, defaultTestLoader, findTestCases
 
 import IPython
@@ -141,8 +140,26 @@ def setup_test_logging():
     return logger
 
 
-def run():
+# Here's the unittest alternative to pytest.importorskip
+def import_module(name, deprecated=False, *, required_on=()):
+    """Import and return the module to be tested, raising SkipTest if
+    it is not available.
 
+    If deprecated is True, any module or package deprecation messages
+    will be suppressed. If a module is required on a platform but optional for
+    others, set required_on to an iterable of platform prefixes which will be
+    compared against sys.platform.
+    """
+    with _ignore_deprecated_imports(deprecated):
+        try:
+            return importlib.import_module(name)
+        except ImportError as msg:
+            if sys.platform.startswith(tuple(required_on)):
+                raise
+            raise unittest.SkipTest(str(msg))
+
+
+def run():
     args = _parse()
     if args is None:
         # hm what should i do

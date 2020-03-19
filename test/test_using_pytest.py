@@ -58,42 +58,12 @@ COLORS = {
 }
 RE_COLORS = {k: re.escape(v) for k, v in COLORS.items()}
 
-
-class Option:
-    """Create a new class for pytest options."""
-
-    def __init__(self, verbosity=0):
-        """Initialize with optional parameter for verbosity."""
-        self.verbosity = verbosity
-
-    @property
-    def args(self):
-        values = ["--verbosity=%d" % self.verbosity]
-        return values
-
-
-@pytest.fixture(
-    params=[Option(verbosity=0), Option(verbosity=1), Option(verbosity=-1)],
-    ids=["default", "verbose", "quiet"],
-)
-def option(request):
-    return request.param
-
-
-# Here's the unittest alternative to pytest.importorskip
-def import_module(name, deprecated=False, *, required_on=()):
-    """Import and return the module to be tested, raising SkipTest if
-    it is not available.
-
-    If deprecated is True, any module or package deprecation messages
-    will be suppressed. If a module is required on a platform but optional for
-    others, set required_on to an iterable of platform prefixes which will be
-    compared against sys.platform.
-    """
-    with _ignore_deprecated_imports(deprecated):
-        try:
-            return importlib.import_module(name)
-        except ImportError as msg:
-            if sys.platform.startswith(tuple(required_on)):
-                raise
-            raise unittest.SkipTest(str(msg))
+def test_myoutput(capsys):  # or use "capfd" for fd-level
+    print("hello")
+    sys.stderr.write("world\n")
+    captured = capsys.readouterr()
+    assert captured.out == "hello\n"
+    assert captured.err == "world\n"
+    print("next")
+    captured = capsys.readouterr()
+    assert captured.out == "next\n"

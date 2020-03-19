@@ -5,7 +5,7 @@ import os
 import tempfile
 from warnings import simplefilter
 
-from IPython import get_ipython
+from IPython.core.getipython import get_ipython
 from IPython.core.interactiveshell import InteractiveShell
 
 import pytest
@@ -18,7 +18,6 @@ try:
     import default_profile
 except:
     sys.exit("Not installed.")
-
 
 simplefilter("ignore", category=DeprecationWarning)
 simplefilter("ignore", category=PendingDeprecationWarning)
@@ -128,3 +127,24 @@ def pytest_runtest_setup(item):
     plat = sys.platform
     if supported_platforms and plat not in supported_platforms:
         pytest.skip("cannot run on platform {}".format(plat))
+
+
+class Option:
+    """Create a new class for pytest options."""
+
+    def __init__(self, verbosity=0):
+        """Initialize with optional parameter for verbosity."""
+        self.verbosity = verbosity
+
+    @property
+    def args(self):
+        values = ["--verbosity=%d" % self.verbosity]
+        return values
+
+
+@pytest.fixture(
+    params=[Option(verbosity=0), Option(verbosity=1), Option(verbosity=-1)],
+    ids=["default", "verbose", "quiet"],
+)
+def option(request):
+    return request.param
