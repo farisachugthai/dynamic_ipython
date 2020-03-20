@@ -28,6 +28,7 @@ import time
 from timeit import Timer
 
 from IPython.core.getipython import get_ipython
+
 # noinspection PyProtectedMember
 from IPython.core.magics.execution import _format_time as format_delta
 

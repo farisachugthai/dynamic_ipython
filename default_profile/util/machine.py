@@ -1,29 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-==================
-Platform Utilities
-==================
-
-The Platform class in this module can be easily initialized with:
-
->>> from default_profile.util.machine import Platform
->>> users_machine = Platform()
->>> users_machine.update_env()
->>> assert users_machine  is not None
-
-.. note::
-
-    Don't name the instance `platform` as that's a module in the standard
-    library.
-
-
-See Also
---------
-:mod:`default_profile.startup.20_aliases`
-    Shows an example use case
-
-"""
 from pathlib import Path
 import logging
 import os
@@ -35,56 +11,16 @@ from IPython.core.getipython import get_ipython
 
 
 class Platform:
-    """Abstract away platform differences.
-
-    After toying with the initial implementation, I realized I could simply
-    bind the :class:`pathlib.Path()` instance directly to `Platform`
-    during initialization.
-
-    This allows for a user to check the `sys.platform` instance, and then
-    act in an appropriate manner without knowing what the
-    :class:`pathlib.Path` actually initialized to.
-
-    Parameters
-    ----------
-    shell : |ip|, optional
-        Global IPython instance.
-    user_env : dict, optional
-        Environment variables to add to the instance.
-
-    """
 
     def __init__(self, shell=None, env=None, **kwargs):
-        """Initialize a user specific object.
-
-        Parameters
-        ----------
-        shell : |ip|, optional
-            Global IPython instance.
-        env : dict, optional
-            User environment variables.
-
-        Attributes
-        ----------
-        LOGGER : :class:`logging.Logger`
-            Class attribute. Logger for the class
-        _sys_platform : TODO (type?)
-            Value returned by sys.platform
-
-        """
         try:
             self.logger = kwargs["LOGGER"]
         except KeyError:
             self.logger = logging.basicConfig(level=logging.INFO)
 
-        self.shell = shell
-        if self.shell is None:
-            self.shell = get_ipython()
+        self.shell = shell if shell is not None else get_ipython()
 
-        if env is None:
-            self.env = self.get_env()
-        else:
-            self.env = env
+        self.env = env if env is not None else self.get_env()
 
         self._sys_platform = sys.platform.lower() or _sys_platform
         self._platform_system = platform.system()

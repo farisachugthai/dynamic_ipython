@@ -82,18 +82,14 @@ def stream_logger(logger, log_level=logging.INFO, msg_format=None):
 def file_logger(
     filename, logger=None, shell=None, log_level=logging.INFO, msg_format=None
 ):
-    """Removed docstring because it wouldn't stop emitting errors."""
     assert isinstance(shell, (IPython.core.interactiveshell.InteractiveShell, None))
 
     if shell is None:
         shell = get_ipython()
 
     logdir = shell.profile_dir.log_dir
-
     log_file = Path(logdir).joinpath(filename)
-
     handler = logging.FileHandler(log_file)
-
     handler.setLevel(log_level)
     if logger is None:
         logger = logging.getLogger(name=__name__)
@@ -113,32 +109,6 @@ def file_logger(
 
 
 def json_logger(logger=None, json_formatter=None):
-    """Set up a logger that returns properly formatted JSON.
-
-    Parameters
-    ----------
-    logger : str or :class:`logging.Logger`, optional
-        Either a named Logger instance or the string representing the desired instance
-    json_formatter : :class:`logging.Formatter`, optional
-        JSONFormatter instance.
-        Included in the listed parameters to be explicit; however, it's
-        probably easier to not include the parameter as one is configured
-        in the function anyway.
-
-    Returns
-    -------
-    root_logger : :class:`logging.Logger`
-        Instance of a :class:`logging.Logger()`.
-
-    Examples
-    --------
-    >>> import logging
-    >>> from default_profile.util.module_log import json_logger, JsonFormatter
-    >>> root_logger = json_logger(JsonFormatter=JsonFormatter())
-    >>> root_logger.warn('this is a test message')
-    >>> root_logger.debug('this request_id=%d name=%s', 1, 'John')
-
-    """
     handler = logging.StreamHandler()
 
     if not json_formatter:

@@ -1,25 +1,3 @@
-"""Rewrite the IPython ProfileDir.
-
-Profile Override
-================
-
-Override the IPython ProfileDir.
-
-Initially created to implement a repr for the class, it was expanded in order
-to also modify the behavior that automatically adds a PID dir,
-
-It automatically creates them in the current working directory and this
-behavior was not designed to be modifiable.
-
-As a result, profiles are frequently created in the
-wrong dir often enough that it should be toggleable behavior.
-
-See Also
---------
-
-:mod:`IPython.core.profileapp`.
-
-"""
 import errno
 import os
 import shutil
@@ -32,7 +10,6 @@ from IPython.core.profiledir import ProfileDir
 from IPython.terminal.embed import InteractiveShellEmbed
 from IPython.terminal.ipapp import TerminalIPythonApp
 
-# from IPython.paths import ensure_dir_exists, get_ipython_package_dir
 from traitlets.config import Bool, Unicode, observe
 from traitlets.traitlets import TraitError
 
