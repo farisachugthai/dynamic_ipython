@@ -65,7 +65,6 @@ from IPython.core.getipython import get_ipython
 
 from pygments.styles.inkpot import InkPotStyle
 
-
 DEDENT_TOKENS = frozenset(["raise", "return", "pass", "break", "continue"])
 
 
@@ -398,12 +397,10 @@ def search_layout():
 
 
 def create_searching_keybindings():
-
     kb = KeyBindings()
     # These get referenced more than once so keep them up here
     search_state = get_app().current_search_state
     current_buffer = get_app().current_buffer
-
 
     @kb.add("q")
     def _(event):
@@ -435,6 +432,7 @@ def create_searching_keybindings():
         current_buffer.cursor_position = cursor_position
 
     return ConditionalKeyBindings(kb, filter=is_searching)
+
 
 def pt_validator():
     validator = ThreadedValidator(DynamicValidator(ConditionalValidator(DummyValidator(), filter=ViInsertMode())))

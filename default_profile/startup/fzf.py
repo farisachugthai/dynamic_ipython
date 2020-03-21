@@ -110,7 +110,6 @@ class Executable(ContextDecorator):
 
     def __call__(self, *args, **kwargs):
         if self.command_path is not None:
-
             @functools.wraps
             def wrapped(*args, **kwargs):
                 return subprocess.run(

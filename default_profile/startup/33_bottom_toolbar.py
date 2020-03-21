@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """Draw a toolbar for the shell using prompt_toolkit.
 
 Takes into consideration whether Emacs mode or Vi mode is set
@@ -93,15 +95,32 @@ class LineCounter:
 
     def __init__(self):
         self.count = 0
-        self.time = time.strftime("%H:%M:%S")
+        self.executable = sys.prefix
+
+    def display(self):
+        self.count += 1
+        ret = [(Token.String.Subheading), (f"< In[{self.count:3d}]:")]
+        ret.append([(Token.Literal), (f"Time:{self.time}")])
+        return ret
 
     def __call__(self):
         """Yes!!! This now behaves as expected."""
-        self.count += 1
-        return "(< In[{:3d}]: Time:{}  )".format(self.count, self.time)
+        return self.display()
 
     def __repr__(self):
         return f"<{self.__class__.__name__}:> {self.__call__}"
+
+    @property
+    def time(self):
+        return time.strftime("%H:%M:%S")
+
+    def __pt_formatted_text__(self):
+        """A list of ``(style, text)`` tuples.
+
+        (In some situations, this can also be ``(style, text, mouse_handler)``
+        tuples.)
+        """
+        return self.display()
 
 
 class BottomToolbar:

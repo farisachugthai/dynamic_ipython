@@ -78,7 +78,7 @@ def get_lexer():
 
 def pygments_tokens():
     """A  list of Pygments style tokens. In case you need that."""
-    return PygmentsTokens(Gruvbox.style_rules)
+    return PygmentsTokens(Gruvbox.styles)
 
 
 class IPythonConfigurableLexer(LoggingConfigurable):

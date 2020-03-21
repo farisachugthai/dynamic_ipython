@@ -33,7 +33,6 @@ except ImportError:
     win32clipboard = None
 
 
-
 class ClipboardEmpty(ValueError):
     pass
 
@@ -58,9 +57,9 @@ class WindowsClipboard(Clipboard):
         """
         if win32clipboard is None:
             print(
-            "Getting text from the clipboard requires the pywin32 "
-            "extensions: http://sourceforge.net/projects/pywin32/"
-        )
+                "Getting text from the clipboard requires the pywin32 "
+                "extensions: http://sourceforge.net/projects/pywin32/"
+            )
         win32clipboard.OpenClipboard()
 
     def win_clip_pywin32(self):

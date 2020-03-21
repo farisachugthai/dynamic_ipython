@@ -51,24 +51,6 @@ class InvalidAliasError(AliasError):
 
 
 def validate_alias(alias) -> Optional[Any]:
-    """Check attributes and formatting of Alias string.
-
-    Verifies alias through the name and cmd attributes.
-
-    Parameters
-    ----------
-    alias : Alias
-        Alias to verify
-
-    Returns
-    -------
-    nargs
-
-    Raises
-    ------
-    `InvalidAliasError`
-
-    """
     shell = alias.shell
 
     if shell is None:
@@ -92,7 +74,6 @@ def validate_alias(alias) -> Optional[Any]:
         )
 
     nargs = alias.cmd.count("%s") - alias.cmd.count("%%s")
-
     if (nargs > 0) and (alias.cmd.find("%l") >= 0):
         raise InvalidAliasError(
             "The %s and %l specifiers are mutually " "exclusive in alias definitions."
@@ -521,13 +502,17 @@ class CommonAliases(UserDict):
 class LinuxAliases(CommonAliases):
     """Add Linux specific aliases."""
 
+    def __init__(self, user_aliases=None, *args, **kwargs):
+        super().__init__(**kwargs)
+        self.user_aliases = user_aliases if user_aliases is not None else args
+        self.busybox()
+        self.thirdparty()
+
     def __repr__(self):
         return "Linux Aliases: {!r}".format(len(self.user_aliases))
 
     def busybox(self):
         """Commands that are available on any Unix-ish system.
-
-        Apparently, I don't know how to use classmethods.
 
         Returns
         -------
@@ -608,6 +593,12 @@ class WindowsAliases(CommonAliases):
     Would it be useful to subclass :class:`reprlib.Repr` here?
 
     """
+
+
+    def __init__(self, user_aliases=None, *args, **kwargs):
+        super().__init__(**kwargs)
+        self.user_aliases = user_aliases if user_aliases is not None else args
+        self.cmd_aliases()
 
     def __repr__(self):
         return "Windows Aliases: {!r}".format(len(self.user_aliases))
@@ -795,8 +786,6 @@ def generate_aliases() -> Union[None, LinuxAliases, WindowsAliases]:
 
     if machine.startswith("Linux"):
         aliases = LinuxAliases(user_aliases=_ip.alias_manager.user_aliases)
-        aliases.busybox()
-        aliases.thirdparty()
     elif machine.startswith("Win"):
         aliases = WindowsAliases(user_aliases=_ip.alias_manager.user_aliases)
         aliases.cmd_aliases()

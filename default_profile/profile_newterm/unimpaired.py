@@ -112,10 +112,11 @@ class TerminallyUnimpaired(TerminalInteractiveShell):
         self.profile_dir = ProfileDir()
         self._profile_dir = os.path.expanduser("~/.ipython/profile_default")
 
-    def __init__(self, user_module=None, **kwargs):
+    def __init__(self, user_module=None, *args, **kwargs):
 
         # This is where traits with a config_key argument are updated
         # from the values on config.
+        super().__init__(*args, **kwargs)
         self.configurables = [self]
 
         self.init()
@@ -287,62 +288,6 @@ class TerminallyUnimpaired(TerminalInteractiveShell):
             self.log.warn("Error")
         except Exception as e:
             self.log.exception(e)
-
-    def showsyntaxerror(self, filename=None, *args, **kwargs):
-        """Display the syntax error that just occurred.
-
-        How refreshing is it to not have tracebacks intertwined with
-        every other aspect of your application :D
-
-        Parameters
-        ----------
-        filename :
-        **kwargs :
-
-        """
-        print("SyntaxError")
-
-    def _showsyntaxerror(self, *args, **kwargs):
-        # Override for avoid using sys.excepthook PY-12600
-        exception_type, value, tb = sys.exc_info()
-        sys.last_type = exception_type
-        sys.last_value = value
-        sys.last_traceback = tb
-        if tb is None:
-            return
-        if filename and exception_type is SyntaxError:
-            # Work hard to stuff the correct filename in the exception
-            try:
-                msg, (dummy_filename, lineno, offset, line) = value.args
-            except ValueError:
-                # Not the format we expect; leave it alone
-                pass
-            else:
-                # Stuff in the right filename
-                value = SyntaxError(msg, (filename, lineno, offset, line))
-                sys.last_value = value
-        formatted = traceback.format_exception_only(exception_type, value)
-        sys.stderr.write("".join(formatted))
-        return formatted
-
-    def showtraceback(self, *args, **kwargs):
-        """Display the exception that just occurred."""
-        # Override for avoid using sys.excepthook PY-12600
-        try:
-            exception_type, value, tb = sys.exc_info()
-            sys.last_type = exception_type
-            sys.last_value = value
-            sys.last_traceback = tb
-            tblist = traceback.extract_tb(tb)
-            del tblist[:1]
-            lines = traceback.format_list(tblist)
-            if lines:
-                lines.insert(0, "Traceback (most recent call last):\n")
-            lines.extend(traceback.format_exception_only(exception_type, value))
-        finally:
-            tblist = tb = None
-        if lines:
-            sys.stderr.write("".join(lines))
 
     def create_custom_toolbar(self) -> HTML:
         """TODO: I want this to return as the bottom toolbar.

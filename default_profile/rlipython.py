@@ -9,7 +9,6 @@ import sys
 from warnings import warn
 
 from jedi.api import replstartup
-
 from IPython.core.completerlib import (
     module_completer,
     magic_run_completer,
@@ -20,7 +19,7 @@ from IPython.core.completerlib import (
 from IPython.core.displayhook import DisplayHook
 from IPython.core.error import TryNext, UsageError
 from IPython.core.interactiveshell import InteractiveShell, InteractiveShellABC
-
+from IPython.core.getipython import get_ipython
 from IPython.terminal.interactiveshell import TerminalInteractiveShell
 from IPython.terminal.magics import TerminalMagics
 
@@ -238,6 +237,33 @@ class ReadlineInteractiveShell(InteractiveShell):
     # Overrides of init stages
     # -------------------------------------------------------------------------
 
+    def __init__(self, shell, **kwargs):
+        self.shell = shell if shell is not None else get_ipython()
+        super(ReadlineInteractiveShell, self).__init__(self.shell, **kwargs)
+
+        self.readline_use = True
+        self._custom_readline_config = False
+        self.readline_parse_and_bind = [
+            "tab: complete",
+            r'"\C-l": clear-screen',
+            r"set show-all-if-ambiguous on",
+            r'"\C-o": tab-insert',
+            r'"\C-r": reverse-search-history',
+            r'"\C-s": forward-search-history',
+            r'"\C-p": history-search-backward',
+            r'"\C-n": history-search-forward',
+            r'"\e[A": history-search-backward',
+            r'"\e[B": history-search-forward',
+            r'"\C-k": kill-line',
+            r'"\C-u": unix-line-discard',
+        ]
+        self.readline_remove_delims = "-/~"
+        self.multiline_history = False
+        self.rl_next_input = None
+        self.rl_do_indent = False
+
+        self.home_dir = Path.home()
+
     def init_display_formatter(self):
         """Terminal only supports plaintext.
 
@@ -252,28 +278,6 @@ class ReadlineInteractiveShell(InteractiveShell):
 
     def init_readline(self):
         """Command history completion/saving/reloading."""
-        self.readline_use = True
-        self._custom_readline_config = False
-        self.readline_parse_and_bind = [
-            "tab: complete",
-            '"\C-l": clear-screen',
-            "set show-all-if-ambiguous on",
-            '"\C-o": tab-insert',
-            '"\C-r": reverse-search-history',
-            '"\C-s": forward-search-history',
-            '"\C-p": history-search-backward',
-            '"\C-n": history-search-forward',
-            '"\e[A": history-search-backward',
-            '"\e[B": history-search-forward',
-            '"\C-k": kill-line',
-            '"\C-u": unix-line-discard',
-        ]
-        self.readline_remove_delims = "-/~"
-        self.multiline_history = False
-        self.rl_next_input = None
-        self.rl_do_indent = False
-
-        self.home_dir = Path.home()
 
         if not self.readline_use:
             self.readline = None
@@ -661,7 +665,7 @@ class ReadlineInteractiveShell(InteractiveShell):
         # spaces, if the user's actual input started itself with whitespace.
         if self.autoindent:
             if num_ini_spaces(line) > self.indent_current_nsp:
-                line = line[self.indent_current_nsp :]
+                line = line[self.indent_current_nsp:]
                 self.indent_current_nsp = 0
 
         return line

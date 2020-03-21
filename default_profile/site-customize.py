@@ -45,6 +45,9 @@ import pdb
 import pprint
 import pydoc
 import re
+
+from pygments.formatters.terminal import TerminalFormatter
+
 try:
     import readline
 except ImportError:
@@ -93,9 +96,10 @@ site.enablerlcompleter()
 site.ENABLE_USER_SITE = True
 site.check_enableusersite()
 
+
 def pyg_highlight(param):
     """Run a string through the pygments highlighter."""
-    return highlight(param, PythonLexer(), TerminalFormatter())
+    return highlight(param, PythonLexer(), TerminalTrueColorFormatter())
 
 
 def _complete(text, state):
@@ -167,15 +171,16 @@ def pphighlight(o, *a, **kw):
         sys.stdout.write("\n")
 
 
-def initialize_excepthook(**kwargs):
+def initialize_excepthook(func, **kwargs):
     """Passes \*\*kwargs along to `cgitb.Hook`."""
     syshook = cgitb.Hook(format="text", **kwargs)
     sys.excepthook = syshook
-    return syshook
 
     @functools.wraps
-    def _():
-        return pyg_highlight(func, *args, **kwargs)
+    def _(**kwargs):
+        return pyg_highlight(func, **kwargs)
+
+    return syshook
 
 
 def get_width():

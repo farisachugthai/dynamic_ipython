@@ -4,18 +4,18 @@
 import logging
 import operator
 import reprlib
-import warnings
 from collections import UserList
 import sys
-from typing import Callable, Optional
+from typing import Callable, Optional, Dict, TYPE_CHECKING
 
 from IPython.core.getipython import get_ipython
+from IPython.core.interactiveshell import InteractiveShell
 
 from prompt_toolkit.cache import SimpleCache
 from prompt_toolkit.document import Document
 from prompt_toolkit.filters import ViInsertMode
 from prompt_toolkit.key_binding.defaults import load_key_bindings
-from prompt_toolkit.key_binding import merge_key_bindings
+from prompt_toolkit.key_binding import merge_key_bindings, KeyPress
 from prompt_toolkit.key_binding.bindings.auto_suggest import load_auto_suggest_bindings
 from prompt_toolkit.key_binding.bindings.vi import (
     load_vi_bindings,
@@ -26,6 +26,8 @@ from prompt_toolkit.keys import Keys
 
 from default_profile.startup.ptoolkit import create_searching_keybindings
 
+logging.basicConfig(level=logging.WARNING)
+
 
 class KeyBindingsManager(UserList):
     """An object to make working with keybindings easier.
@@ -35,7 +37,7 @@ class KeyBindingsManager(UserList):
     easier to work with.
     """
 
-    def __init__(self, kb=None, shell=None, **kwargs):
+    def __init__(self, kb: KeyBindings = None, shell: InteractiveShell = None) -> Optional:
         """Initialize the class.
 
         Parameters
@@ -43,8 +45,11 @@ class KeyBindingsManager(UserList):
         kb : `KeyBindings`
             Any KeyBindings you wanna throw us right off the bat.
             Handling this is gonna be hard unfortunately.
+        :param kwargs:
+        :type kwargs: dict
 
         """
+        super().__init__()
         self.shell = shell or get_ipython()
         if self.shell is not None:
             if kb is None:
@@ -114,6 +119,18 @@ class KeyBindingsManager(UserList):
         self._get_bindings_starting_with_keys_cache.clear()
 
     def get_keys(self, keys):
+        """
+
+        :param keys:
+        :type keys:
+        :return:
+        :rtype:
+        """
+        try:
+            len(keys)
+        except AttributeError:
+            return
+
         result = []
         # Dude don't define the vars inside the for loop
         # It's easier to segregate them at the top and then work with them
@@ -146,8 +163,7 @@ class KeyBindingsManager(UserList):
         :param keys: tuple of keys.
 
         """
-        self.get(keys)
-        return self._get_bindings_for_keys_cache.get(keys, get)
+        return self._get_bindings_for_keys_cache.get(keys)
 
     def get_bindings_starting_with_keys(self, keys):
         """Return a list of key bindings that handle a sequence starting with `keys`.
@@ -185,6 +201,10 @@ class KeyBindingsManager(UserList):
     def get(self, keys):
         # TODO:
         pass
+
+    @_version.setter
+    def _version(self, value):
+        self.__version = value
 
 
 class ApplicationKB(KeyBindingsManager):
@@ -236,8 +256,7 @@ class Documented(Document):
         return iter(self.text)
 
 
-def custom_keybindings() -> KeyBindings:
-
+def custom_keybindings() -> ConditionalKeyBindings:
     kb = KeyBindings()
     handle = kb.add
 
@@ -284,7 +303,6 @@ def custom_keybindings() -> KeyBindings:
 
 
 def determine_which_pt_attribute():
-
     _ip = get_ipython()
     # IPython < 7.0
     if hasattr(_ip, 'pt_cli'):
@@ -303,14 +321,14 @@ def determine_which_pt_attribute():
         try:
             from ipykernel.zmqshell import ZMQInteractiveShell
         except (ImportError, ModuleNotFoundError):
-            ZMQInteractiveShell = None
+            pass
         else:
             # Jupyter QTConsole
             if isinstance(_ip, ZMQInteractiveShell):
                 sys.exit()
 
-def create_kb():
 
+def create_kb():
     # Honestly I'm wary to do this but let's go for it
     if get_ipython() is None:
         return
@@ -327,15 +345,17 @@ def create_kb():
     )
     return all_kb
 
+
 def flatten_kb(merge):
     # noinspection PyProtectedMember
-    print(len(merge._bindings2.bindings))
+    logging.debug(merge._bindings2.bindings)
     # noinspection PyProtectedMember
     return merge._bindings2.bindings
 
 
 if __name__ == '__main__':
-    merged_kb = create_kb()
-    kb_we_want = flatten_kb(merged_kb)
     current_kb = determine_which_pt_attribute()
-    current_kb = kb_we_want
+    merged_kb = create_kb()
+    if merged_kb is not None:
+        kb_we_want = flatten_kb(merged_kb)
+        current_kb = kb_we_want

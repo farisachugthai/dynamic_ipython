@@ -2,37 +2,35 @@
 # -*- coding: utf-8 -*-
 import argparse
 import codecs
+import locale
 import os
-from pathlib import Path
-from pprint import pprint
 import shutil
 import subprocess
 import sys
-from typing import List, Any
 import webbrowser
+from pathlib import Path
 
+import importlib_metadata
+import sphinx
 # from jinja2.constants import TRIM_BLOCKS, LSTRIP_BLOCKS
 from jinja2.environment import Environment
 from jinja2.exceptions import TemplateError
 from jinja2.ext import autoescape, do, with_
-from jinja2.lexer import get_lexer
 from jinja2.loaders import FileSystemLoader
-
-import importlib_metadata
-
-import sphinx
 from sphinx.application import Sphinx
-from sphinx.cmd.make_mode import Make, build_main
-from sphinx.config import Config, eval_config_file
-from sphinx.errors import ApplicationError
+from sphinx.cmd.build import build_main
+from sphinx.cmd.make_mode import Make
 from sphinx.jinja2glue import SphinxFileSystemLoader
-from sphinx.project import Project
+from sphinx.util.console import (  # type: ignore
+    colorize, color_terminal
+)
 from sphinx.util.logging import getLogger
-from sphinx.util.tags import Tags
+
+# from sphinx.ext.apidoc import create
+# from sphinx.ext.autosummary.generate import
 
 if sys.version_info < (3, 7):
-    from default_profile import ModuleNotFoundError
-
+    pass
 
 logger = getLogger(name=__name__)
 
@@ -56,7 +54,7 @@ def _parse_arguments(cmds=None) -> argparse.ArgumentParser:
         Shows a few good methods on how to programatically publish docs.
 
     """
-    cmds = [method for method in dir(DocBuilder) if not method.startswith("_")]
+    cmds = [method for method in dir(Runner) if not method.startswith("_")]
 
     parser = argparse.ArgumentParser(
         prog="Pure Python Makefile",
@@ -72,6 +70,20 @@ def _parse_arguments(cmds=None) -> argparse.ArgumentParser:
         choices=["html", "singlehtml", "text", "linkcheck", "doctest"],
         metavar="builder: ",
         help="command to run: {}".format(",\t ".join(cmds)),
+    )
+
+    parser.add_argument(
+        "-s",
+        "--sourcedir",
+        default=Path.cwd(),
+        help="Sourcedir to pass to Sphinx",
+    )
+
+    parser.add_argument(
+        "-d",
+        "--destdir",
+        default=None,
+        help="Sourcedir to pass to Sphinx",
     )
 
     parser.add_argument(
@@ -100,7 +112,8 @@ def _parse_arguments(cmds=None) -> argparse.ArgumentParser:
         "--log",
         default=sys.stdout,
         type=argparse.FileType("w"),
-        help="Where to write log records to. Defaults to" " stdout.",
+        help="Where to write log records to. Defaults to"
+        " stdout.",
     )
 
     parser.add_argument(
@@ -138,38 +151,7 @@ def _parse_arguments(cmds=None) -> argparse.ArgumentParser:
 
 
 class DocBuilder:
-    """Class to wrap the different commands of this script.
-
-    All public methods of this class can be called as parameters of the
-    script.
-
-    Attributes
-    -----------
-    kind : str
-        The filetype :command:`make` invokes :command:`sphinx-build` to create.
-
-    """
-
     def __init__(self, kind=None, num_jobs=1, verbosity=0):
-        """Kind has to be first in case the user uses the class with a positional parameter.
-
-        Parameters
-        ----------
-        kind : str, optional
-            The kind of document ``sphinx-build`` will create.
-            Defaults to html.
-        num_jobs : int, optional
-            Number of jobs to run the build in parallel with.
-        verbosity : bool, optional
-            Run verbosely
-
-        Examples
-        --------
-        >>> d = DocBuilder('html')
-        >>> print(d.kind)
-        'html'
-
-        """
         if kind is None:
             kind = "html"
         self.kind = kind
@@ -178,6 +160,9 @@ class DocBuilder:
 
     def __repr__(self):
         return "{}\t{}".format(self.__class__.__name__, self.kind)
+
+    def __call__(self, kind):
+        return self.run(kind)
 
     @property
     def kinds(self):
@@ -197,7 +182,7 @@ class DocBuilder:
         except OSError as e:
             logger.error(e)
 
-    def sphinx_build(self):
+    def sphinx_build(self, kind):
         """Build docs.
 
         Examples
@@ -205,12 +190,11 @@ class DocBuilder:
         >>> DocBuilder(num_jobs=4).sphinx_build('html')
 
         """
-        if self.kind not in self.kinds:
+        if kind not in self.kinds:
             raise ValueError(
-                "kind must be one of: {}".format(str(self.kinds))
-                + "not {}".format(self.kind)
-            )
-        cmd = ["sphinx-build", "-b", self.kind, ".", "-c", SOURCE_PATH]
+                "kind must be one of: {}".format(str(self.kinds)) +
+                "not {}".format(kind))
+        cmd = ["sphinx-build", "-b", kind, ".", "-c", SOURCE_PATH]
         if self.num_jobs:
             cmd += ["-j", str(self.num_jobs)]
         if self.verbosity:
@@ -218,12 +202,12 @@ class DocBuilder:
         cmd += [
             "-d",
             os.path.join(BUILD_PATH, "doctrees"),
-            os.path.join(BUILD_PATH, self.kind),
+            os.path.join(BUILD_PATH, kind),
         ]
         logger.debug("Cmd is ", cmd)
         return cmd
 
-    def run(self):
+    def run(self, kind):
         """Run :command:`sphinx-build`.
 
         The :attr:`check` argument to :func:`subprocess.run()`
@@ -232,14 +216,7 @@ class DocBuilder:
         """
         # Shit is that really the only time you gotta catch it?
         self.status("Running sphinx-build.")
-        output = subprocess.run(
-            self.sphinx_build(),
-            universal_newlines=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-        )
-
-        return output
+        return codecs.decode(subprocess.run(self.sphinx_build(kind),stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True).stdout, "utf-8").strip(),
 
     def open_browser(self, doc=None):
         """Open a browser tab to the provided document."""
@@ -250,35 +227,22 @@ class DocBuilder:
         webbrowser.open(url, new=2)
 
 
-def termux_hack():
-    """Android permissions don't allow viewing files in app specific files."""
-    try:
-        shutil.copytree(
-            BUILD_PATH, "/data/data/com.termux/files/home/storage/downloads/html"
-        )
-    except FileExistsError:
-        try:
-            shutil.rmtree("/data/data/com.termux/files/home/storage/downloads/html")
-            shutil.copytree(
-                BUILD_PATH, "/data/data/com.termux/files/home/storage/downloads/html"
-            )
-        except Exception as e:
-            raise e
-    except FileNotFoundError:
-        logger.error("Sphinx was unable to create the build directory.")
+class Runner:
 
+    def __init__(self, **kwargs):
+        self.builder = DocBuilder(**kwargs)
 
-def rsync():
-    """Move docs into the right location with rsync
+    def html(self):
+        return self.builder.run('html')
 
-    Returns
-    -------
-    None
+    def man(self):
+        return self.builder.run('man')
 
-    """
-    if shutil.which("rsync"):
-        output = subprocess.run(["rsync", "-hv8r", BUILD_PATH, DOC_PATH])
-        return output
+    def doctest(self):
+        return self.builder.run('doctest')
+
+    def texinfo(self):
+        return self.builder.run('texinfo')
 
 
 def generate_sphinx_app(root):
@@ -320,6 +284,20 @@ def setup_jinja(path_to_template):
     return env
 
 
+class Maker(Make):
+    def __init__(self, source_dir, build_dir, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.source_dir
+        self.build_dir
+
+    def run_generic_build(self, **kwargs):
+        # TODO
+        pass
+
+    def __repr__(self):
+        return self.__class__.__name__
+
+
 def main(repo_root=None):
     """Create the required objects to simulate the sphinx make-main command.
 
@@ -336,38 +314,20 @@ def main(repo_root=None):
     template_path = doc_root.joinpath("source/_templates")
     env = setup_jinja(template_path)
     app = generate_sphinx_app(doc_root)
-    project = Project(doc_root, source_suffix="rst")
+    # you don't need to instantiate a project as it exists on the app.
+    # project = Project(doc_root, source_suffix="rst")
     sphinx_fs = SphinxFileSystemLoader(
-        searchpath=doc_root.joinpath("source/_templates")
-    )
+        searchpath=doc_root.joinpath("source/_templates"))
     # TODO: need to convert build_opts [a namespace object]
     # to a dict of its args. check how to do that later.
     breakpoint()
-    build_main()
-
-
-def run_ext(command):
-    try:
-        return codecs.decode(
-            subprocess.run(command, stdout=subprocess.PIPE).stdout, "utf-8"
-        ).strip()
-    except subprocess.CalledProcessError as e:
-        logger.exception(e)
-
-
-class Maker(Make):
-    def __init__(self, source_dir, build_dir, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.source_dir
-        self.build_dir
-
-    def run_generic_build(self):
-        # TODO
-        pass
+    if color_terminal():
+        colorize(build_main())
 
 
 if __name__ == "__main__":
     git_root = run_ext(["git", "rev-parse", "--show-toplevel"])
     logger.setLevel(30)
     logger.debug(f"git root was: {git_root}")
+    sphinx.locale.setlocale(locale.LC_ALL, '')
     sys.exit(main(git_root))

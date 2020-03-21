@@ -1,25 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-==================================================
-IPython --- Configuration file for :mod:`IPython`.
-==================================================
-
-Notes
------
-.. note::
-
-    The standard :func:`IPython.get_ipython` function returns `None`
-    so I suppose IPython hasn't officially instantiated yet.
-
-.. code-block:: ipython
-
-    from IPython import get_ipython
-    _ip = get_ipython()
-
-Therefore that function shouldn't be used anywhere in this file.
-
-"""
 import builtins
 import logging
 import os

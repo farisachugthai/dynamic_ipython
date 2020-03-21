@@ -39,6 +39,7 @@ import time
 import traceback
 from itertools import groupby
 from logging.handlers import MemoryHandler
+
 try:
     from _queue import SimpleQueue
 except ImportError:
@@ -46,7 +47,6 @@ except ImportError:
 if SimpleQueue is None:
     # noinspection PyProtectedMember
     from queue import _PySimpleQueue as SimpleQueue
-
 
 from IPython.core.getipython import get_ipython
 from IPython.core.error import UsageError
