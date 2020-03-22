@@ -30,9 +30,11 @@ from pygments.lexers.python import (
 )
 import sphinx
 
-# from sphinx.application import Sphinx
-# from sphinx.environment import BuildEnvironment
 from sphinx import addnodes
+# from sphinx.application import Sphinx
+# Did I spell something wrong?
+# from sphinx.application import ExtensionError
+# from sphinx.environment import BuildEnvironment
 from sphinx.ext.autodoc import cut_lines
 from sphinx.jinja2glue import SphinxFileSystemLoader  # , SandboxedEnvironment
 from sphinx.util.docfields import GroupedField
