@@ -164,6 +164,19 @@ Examples
 API Docs
 --------
 
+.. function:: validate_alias
+
+   Check attributes and formatting of Alias string.
+   Verifies alias through the name and cmd attributes.
+
+   :param alias : Alias
+       Alias to verify
+
+   :return nargs:
+
+   :raises `InvalidAliasError`:
+
+
 .. class:: Alias(alias)
 
    After a sufficient amount of time, the definition of an alias needed to be

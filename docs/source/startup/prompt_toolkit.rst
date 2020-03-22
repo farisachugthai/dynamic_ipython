@@ -22,12 +22,3 @@ Prompt Toolkit
    :undoc-members:
    :show-inheritance:
 
-
-:mod:`~default_profile.startup.completions`
-===========================================
-
-.. automodule:: default_profile.startup.completions
-   :synopsis: Autocompletion for the REPL.
-   :members:
-   :undoc-members:
-   :show-inheritance:

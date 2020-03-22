@@ -38,7 +38,9 @@
         <div role="main">
         
 <h1>Source code for default_profile.startup.33_bottom_toolbar</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Draw a toolbar for the shell using prompt_toolkit.</span>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;Draw a toolbar for the shell using prompt_toolkit.</span>
 
 <span class="sd">Takes into consideration whether Emacs mode or Vi mode is set</span>
 <span class="sd">and adds :kbd:`F4` as a keybindings to toggle between each.</span>
@@ -133,15 +135,32 @@
 
 <div class="viewcode-block" id="LineCounter.__init__"><a class="viewcode-back" href="../../../startup/toolbar.html#default_profile.startup.33_bottom_toolbar.LineCounter.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%H:%M:%S&quot;</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">executable</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">prefix</span></div>
+
+<div class="viewcode-block" id="LineCounter.display"><a class="viewcode-back" href="../../../startup/toolbar.html#default_profile.startup.33_bottom_toolbar.LineCounter.display">[docs]</a>    <span class="k">def</span> <span class="nf">display</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="p">[(</span><span class="n">Token</span><span class="o">.</span><span class="n">String</span><span class="o">.</span><span class="n">Subheading</span><span class="p">),</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&lt; In[</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="si">:</span><span class="s2">3d</span><span class="si">}</span><span class="s2">]:&quot;</span><span class="p">)]</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">([(</span><span class="n">Token</span><span class="o">.</span><span class="n">Literal</span><span class="p">),</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Time:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)])</span>
+        <span class="k">return</span> <span class="n">ret</span></div>
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Yes!!! This now behaves as expected.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="k">return</span> <span class="s2">&quot;(&lt; In[</span><span class="si">{:3d}</span><span class="s2">]: Time:</span><span class="si">{}</span><span class="s2">  )&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">:&gt; </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="fm">__call__</span><span class="si">}</span><span class="s2">&quot;</span></div>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">:&gt; </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="fm">__call__</span><span class="si">}</span><span class="s2">&quot;</span>
+
+<div class="viewcode-block" id="LineCounter.time"><a class="viewcode-back" href="../../../startup/toolbar.html#default_profile.startup.33_bottom_toolbar.LineCounter.time">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%H:%M:%S&quot;</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">__pt_formatted_text__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;A list of ``(style, text)`` tuples.</span>
+
+<span class="sd">        (In some situations, this can also be ``(style, text, mouse_handler)``</span>
+<span class="sd">        tuples.)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="BottomToolbar"><a class="viewcode-back" href="../../../startup/toolbar.html#default_profile.startup.33_bottom_toolbar.BottomToolbar">[docs]</a><span class="k">class</span> <span class="nc">BottomToolbar</span><span class="p">:</span>
@@ -282,7 +301,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Mar 16, 2020.
+      Last updated on Mar 21, 2020.
     </div>
   </body>
 </html>

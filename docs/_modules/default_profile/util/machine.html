@@ -40,30 +40,6 @@
 <h1>Source code for default_profile.util.machine</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">==================</span>
-<span class="sd">Platform Utilities</span>
-<span class="sd">==================</span>
-
-<span class="sd">The Platform class in this module can be easily initialized with:</span>
-
-<span class="sd">&gt;&gt;&gt; from default_profile.util.machine import Platform</span>
-<span class="sd">&gt;&gt;&gt; users_machine = Platform()</span>
-<span class="sd">&gt;&gt;&gt; users_machine.update_env()</span>
-<span class="sd">&gt;&gt;&gt; assert users_machine  is not None</span>
-
-<span class="sd">.. note::</span>
-
-<span class="sd">    Don&#39;t name the instance `platform` as that&#39;s a module in the standard</span>
-<span class="sd">    library.</span>
-
-
-<span class="sd">See Also</span>
-<span class="sd">--------</span>
-<span class="sd">:mod:`default_profile.startup.20_aliases`</span>
-<span class="sd">    Shows an example use case</span>
-
-<span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -75,56 +51,16 @@
 
 
 <div class="viewcode-block" id="Platform"><a class="viewcode-back" href="../../../util/machine.html#default_profile.util.machine.Platform">[docs]</a><span class="k">class</span> <span class="nc">Platform</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Abstract away platform differences.</span>
-
-<span class="sd">    After toying with the initial implementation, I realized I could simply</span>
-<span class="sd">    bind the :class:`pathlib.Path()` instance directly to `Platform`</span>
-<span class="sd">    during initialization.</span>
-
-<span class="sd">    This allows for a user to check the `sys.platform` instance, and then</span>
-<span class="sd">    act in an appropriate manner without knowing what the</span>
-<span class="sd">    :class:`pathlib.Path` actually initialized to.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    shell : |ip|, optional</span>
-<span class="sd">        Global IPython instance.</span>
-<span class="sd">    user_env : dict, optional</span>
-<span class="sd">        Environment variables to add to the instance.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Platform.__init__"><a class="viewcode-back" href="../../../util/machine.html#default_profile.util.machine.Platform.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Initialize a user specific object.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        shell : |ip|, optional</span>
-<span class="sd">            Global IPython instance.</span>
-<span class="sd">        env : dict, optional</span>
-<span class="sd">            User environment variables.</span>
-
-<span class="sd">        Attributes</span>
-<span class="sd">        ----------</span>
-<span class="sd">        LOGGER : :class:`logging.Logger`</span>
-<span class="sd">            Class attribute. Logger for the class</span>
-<span class="sd">        _sys_platform : TODO (type?)</span>
-<span class="sd">            Value returned by sys.platform</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;LOGGER&quot;</span><span class="p">]</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">shell</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">shell</span> <span class="k">if</span> <span class="n">shell</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">get_ipython</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="n">env</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_env</span><span class="p">()</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="n">env</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="n">env</span> <span class="k">if</span> <span class="n">env</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_env</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_sys_platform</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">or</span> <span class="n">_sys_platform</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_platform_system</span> <span class="o">=</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span>
@@ -228,7 +164,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Mar 16, 2020.
+      Last updated on Mar 21, 2020.
     </div>
   </body>
 </html>
