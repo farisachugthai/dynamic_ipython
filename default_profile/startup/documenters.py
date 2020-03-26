@@ -22,7 +22,11 @@ import logging
 import pydoc
 import re
 import sys
+
+from pydoc import Helper
+from pydoc_data.topics import topics  # idk if this is official API but i like it 
 from traceback import print_exc
+from typing import Callable
 
 from IPython.core.getipython import get_ipython
 from IPython.core.magic import Magics, magics_class, register_line_magic, line_magic
@@ -47,6 +51,10 @@ class HelpMagics(Magics):
         single time we need it.
 
     """
+
+    @property
+    def helper(self) -> Callable:
+        return pydoc.Helper()
 
     @line_magic
     def print_help(self, arg=None):

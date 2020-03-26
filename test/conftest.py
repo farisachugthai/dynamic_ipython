@@ -3,6 +3,7 @@ import importlib
 import multiprocessing
 import os
 import tempfile
+from pathlib import Path
 from warnings import simplefilter
 
 from IPython.core.getipython import get_ipython
@@ -105,10 +106,17 @@ def pytest_runtest_setup(item):
             pytest.xfail("previous test failed ({})".format(previousfailed.name))
 
 
-@pytest.fixture()
+@pytest.fixture
 def cleandir():
+    """Return a dir as given by mkdtemp and chdir to it."""
     newpath = tempfile.mkdtemp()
     os.chdir(newpath)
+
+
+@pytest.fixture
+def tmpPath(tmpdir):
+    """Return a pytest tmpdir wrapped with a Path class."""
+    return Path(tmpdir)
 
 
 ALL = set("darwin linux win32".split())
@@ -148,3 +156,9 @@ class Option:
 )
 def option(request):
     return request.param
+
+
+def test_foo(pytestconfig):
+    """Session-scoped fixture that returns the :class:`_pytest.config.Config` object."""
+    if pytestconfig.getoption("verbose") > 0:
+        pass

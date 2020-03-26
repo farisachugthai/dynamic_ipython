@@ -31,6 +31,7 @@ def shell():
 
 
 def pt_app():
+    shell = shell()
     return shell.pt_app
 
 
@@ -39,7 +40,6 @@ class TestBottomToolbar(TestCase):
     # ugh this is proving entirely too difficult
 
     def setUp(self):
-        """Is this supposed to be called something different?"""
         self.logpoint()
         if bt_mod.BottomToolbar() is None:
             if _ip is not None:
@@ -61,3 +61,12 @@ class TestBottomToolbar(TestCase):
         currentTest = self.id().split(".")[-1]
         callingFunction = inspect.stack()[1][3]
         print("in %s - %s()" % (currentTest, callingFunction))
+
+
+def debugging_myoutput(capsys):
+    # or use "capfd" for fd-level
+    print(toolbar = bt_mod.BottomToolbar(_ip.pt_app))
+    sys.stderr.write("world\n")
+    captured = capsys.readouterr() 
+    # todo
+    # assert capture.out

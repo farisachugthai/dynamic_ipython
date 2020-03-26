@@ -4,8 +4,7 @@
 
 The heart of all IPython and console related code lives here.
 
-Moved ask_for_import up here so we can import it from all of the profiles
-below without intermingling.
+Also a good check to see whats being counted as a package is::
 
 >>> import pkg_resources
 >>> for i in pkg_resources.find_distributions('.'):
@@ -13,27 +12,11 @@ below without intermingling.
 ...
 dynamic-ipython 0.0.2
 
-Also a good check to see whats being counted as a package is:
-
 >>> from setuptools import find_packages, find_namespace_packages
 >>> found_packages = find_packages(where='.')
 >>> found_namespace_packages = find_namespace_packages(where='.')
 >>> logging.debug('Found packages were: {}'.format(found_packages))
 >>> logging.debug('Found namespace packages were: {}'.format(found_namespace_packages))
-
-Mar 10, 2020:
-
-Oh my god.
-I can't import a function...inside of this file. Only the module are
-available. I mean how is that even possible.::
-
-    In [3]: from default_profile import default_log_format
-
-    ImportError                               Traceback (most recent call last)
-    <ipython-input-3-e51e0eb9b984> in <module>
-    ----> 1 from default_profile import default_log_format
-
-    ImportError: cannot import name 'default_log_format' from 'default_profile' (/mnt/c/Users/fac/projects/dynamic_ipython/default_profile/__init__.py)
 
 """
 import importlib

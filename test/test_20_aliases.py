@@ -19,6 +19,7 @@ import importlib
 import unittest
 from unittest.case import TestCase
 
+from IPython.core.getipython import get_ipython
 from IPython.utils.capture import capture_output
 
 try:
@@ -29,14 +30,26 @@ except (ImportError, ModuleNotFoundError):
 else:
     NO_NOSE = None
 
-import pytest
-from _pytest.outcomes import Skipped
+
+with suppress(ImportError):
+    from default_profile.startup import aliases_mod
+
+
+def setup_module():
+    if get_ipython() is not None:
+        return get_ipython().alias_manager
+    else:
+        unittest.skip("Not in IPython")
+
 
 
 def test_alias_lifecycle(_ip):
     name = "test_alias1"
     cmd = 'echo "Hello"'
-    am = _ip.alias_manager
+    am = setup_module()
+    if am  is None:
+        unittest.skip("How the fuck are these lines still executing.")
+        return
     am.clear_aliases()
     am.define_alias(name, cmd)
     assert am.is_alias(name)
@@ -106,10 +119,8 @@ def test_alias_args_commented_nargs(_ip):
 #     am.define_alias("fzf-tmux", "fzf-tmux -d 50")
 #     _ip.run_line_magic("fzf-tmux", "")
 
+if __name__ == '__main__':
 
-if __name__ == "__main__":
-    with suppress(ImportError):
-        from default_profile.startup import aliases_mod
-    with suppress(Skipped):
-        pytest.importorskip("nose")
-        pytest.main()
+    unittest.skipIf(NO_NOSE, 'Nose not installed.')
+    # otherwise...
+    unittest.main()

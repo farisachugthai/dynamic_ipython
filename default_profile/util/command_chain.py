@@ -2,13 +2,18 @@
 from pprint import pprint
 from reprlib import Repr
 import sys
+from typing import TYPE_CHECKING
 
 import IPython
 from IPython.core.getipython import get_ipython
+from IPython.utils.ipstruct import Struct
 from traitlets.traitlets import Instance
 
+if TYPE_CHECKING:
+    from IPython.core.interactiveshell import InteractiveShellABC
 
-class CommandChainDispatcherRepr(IPython.utils.ipstruct.Struct):
+
+class CommandChainDispatcherRepr(Struct):
     """Subclass IPython's Struct to allow for more functionality.
 
     Methods
@@ -35,8 +40,8 @@ class CommandChainDispatcherRepr(IPython.utils.ipstruct.Struct):
         level : int
             Passed to `reprlib.Repr` for processing visual representation.
         """
-        super().__init__(*args, **kwargs)
         self.shell = shell or get_ipython()
+        super().__init__(self.shell, **kwargs)
 
         # self.chain might work really well as a queue.PriorityQueue
         if self.shell is not None:

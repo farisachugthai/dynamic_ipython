@@ -2,6 +2,7 @@
 
 import collections.abc
 import logging
+from operator import countOf, indexOf
 import pickle
 import sys
 import unittest
@@ -9,11 +10,9 @@ import unittest
 try:
     from test.support import (
         TESTFN,
-        run_unittest,
         unlink,
     )
 except ImportError:
-    run_unittest = None
     from os import unlink
     from tempfile import NamedTemporaryFile
 
@@ -748,7 +747,6 @@ class TestCase(unittest.TestCase):
 
     # Test iterators with operator.countOf (PySequence_Count).
     def test_countOf(self):
-        from operator import countOf
 
         self.assertEqual(countOf([1, 2, 2, 3, 2, 5], 2), 3)
         self.assertEqual(countOf((1, 2, 2, 3, 2, 5), 2), 3)
@@ -784,8 +782,6 @@ class TestCase(unittest.TestCase):
 
     # Test iterators with operator.indexOf (PySequence_Index).
     def test_indexOf(self):
-        from operator import indexOf
-
         self.assertEqual(indexOf([1, 2, 2, 3, 2, 5], 1), 0)
         self.assertEqual(indexOf((1, 2, 2, 3, 2, 5), 2), 1)
         self.assertEqual(indexOf((1, 2, 2, 3, 2, 5), 3), 3)
