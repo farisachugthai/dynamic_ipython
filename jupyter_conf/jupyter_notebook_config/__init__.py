@@ -118,9 +118,9 @@ c.Application.log_level = 30
 class NonGraphicalEnvironmentError(OSError):
     """Raised when we can't get any kind of a reasonable browser."""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args):
         """Todo. Need to create a more user error message."""
-        super().__init__(self, *args, **kwargs)
+        super().__init__(self, *args)
 
 
 # Probably should refactor into a simple function.
