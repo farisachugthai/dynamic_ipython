@@ -73,7 +73,6 @@
     <span class="n">win32clipboard</span> <span class="o">=</span> <span class="kc">None</span>
 
 
-
 <div class="viewcode-block" id="ClipboardEmpty"><a class="viewcode-back" href="../../../startup/clipboard.html#default_profile.startup.11_clipboard.ClipboardEmpty">[docs]</a><span class="k">class</span> <span class="nc">ClipboardEmpty</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
@@ -98,9 +97,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">win32clipboard</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span>
-            <span class="s2">&quot;Getting text from the clipboard requires the pywin32 &quot;</span>
-            <span class="s2">&quot;extensions: http://sourceforge.net/projects/pywin32/&quot;</span>
-        <span class="p">)</span>
+                <span class="s2">&quot;Getting text from the clipboard requires the pywin32 &quot;</span>
+                <span class="s2">&quot;extensions: http://sourceforge.net/projects/pywin32/&quot;</span>
+            <span class="p">)</span>
         <span class="n">win32clipboard</span><span class="o">.</span><span class="n">OpenClipboard</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="WindowsClipboard.win_clip_pywin32"><a class="viewcode-back" href="../../../startup/clipboard.html#default_profile.startup.11_clipboard.WindowsClipboard.win_clip_pywin32">[docs]</a>    <span class="k">def</span> <span class="nf">win_clip_pywin32</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -138,7 +137,9 @@
         <span class="k">except</span> <span class="n">ClipboardEmpty</span><span class="p">:</span>
             <span class="k">return</span>
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>  <span class="c1"># noqa</span>
-            <span class="k">return</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="s2">&quot;win32yank&quot;</span><span class="p">,</span> <span class="s2">&quot;-o&quot;</span><span class="p">,</span> <span class="s2">&quot;lf&quot;</span><span class="p">],</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">)</span><span class="o">.</span><span class="n">stdout</span></div>
+            <span class="k">return</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+                <span class="p">[</span><span class="s2">&quot;win32yank&quot;</span><span class="p">,</span> <span class="s2">&quot;-o&quot;</span><span class="p">,</span> <span class="s2">&quot;lf&quot;</span><span class="p">],</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">stdout</span></div>
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">win32_clipboard_get</span><span class="p">()</span>
@@ -343,7 +344,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Mar 21, 2020.
+      Last updated on Mar 26, 2020.
     </div>
   </body>
 </html>

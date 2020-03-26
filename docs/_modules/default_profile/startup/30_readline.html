@@ -67,7 +67,9 @@
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">import</span> <span class="nn">platform</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
 <span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
 <span class="kn">import</span> <span class="nn">traceback</span>
 
 <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
@@ -84,6 +86,101 @@
     <span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+
+<span class="c1"># Patching pyreadline:</span>
+
+
+<div class="viewcode-block" id="ViExternalEditor"><a class="viewcode-back" href="../../../startup/setup_readline.html#default_profile.startup.30_readline.ViExternalEditor">[docs]</a><span class="k">class</span> <span class="nc">ViExternalEditor</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;If I&#39;m not mistaken, there are typos that are causing Vi mode to fail.</span>
+
+<span class="sd">    03/22/2020:</span>
+<span class="sd">    After pressing :kbd:`Esc` to go into Normal mode, I tried invoking the</span>
+<span class="sd">    external editor with :kbd:`k`.</span>
+
+<span class="sd">    .. code-block:: py3tb</span>
+
+<span class="sd">    &gt;&gt;&gt; def cd(arg)</span>
+
+<span class="sd">    Readline internal error</span>
+<span class="sd">    Traceback (most recent call last):</span>
+<span class="sd">      File</span>
+<span class="sd">      &quot;C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/console/console.py&quot;,</span>
+<span class="sd">      line 768, in hook_wrapper_23 res = ensure_str(readline_hook(prompt)) File</span>
+<span class="sd">      &quot;C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/rlmain.py&quot;,</span>
+<span class="sd">      line 571, in readline self._readline_from_keyboard() File</span>
+<span class="sd">      &quot;C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/rlmain.py&quot;,</span>
+<span class="sd">      line 536, in _readline_from_keyboard if</span>
+<span class="sd">      self._readline_from_keyboard_poll(): File</span>
+<span class="sd">      &quot;C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/rlmain.py&quot;,</span>
+<span class="sd">      line 556, in _readline_from_keyboard_poll result =</span>
+<span class="sd">      self.mode.process_keyevent(event.keyinfo) File</span>
+<span class="sd">      &quot;C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/modes/vi.py&quot;,</span>
+<span class="sd">      line 41, in process_keyevent r = dispatch_func(keyinfo) File</span>
+<span class="sd">      &quot;C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/modes/vi.py&quot;,</span>
+<span class="sd">      line 101, in vi_key self._vi_command.add_char (e.char) File</span>
+<span class="sd">      &quot;C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/modes/vi.py&quot;,</span>
+<span class="sd">      line 384, in add_char fcn_instance (char) File</span>
+<span class="sd">      &quot;C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/modes/vi.py&quot;,</span>
+<span class="sd">      line 767, in key_v editor = ViExternalEditor</span>
+<span class="sd">      (self.readline.l_buffer.line_buffer) File</span>
+<span class="sd">      &quot;C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/modes/vi.py&quot;,</span>
+<span class="sd">      line 959, in __init__ fp_tmp = self.file_open (file_tmp, &#39;w&#39;) File</span>
+<span class="sd">      &quot;C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/modes/vi.py&quot;,</span>
+<span class="sd">      line 973, in file_open return file (filename, mode) NameError: name &#39;file&#39;</span>
+<span class="sd">      is not defined</span>
+
+<span class="sd">    Let&#39;s see what happens if we get rid of the space between file and (</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ViExternalEditor.__init__"><a class="viewcode-back" href="../../../startup/setup_readline.html#default_profile.startup.30_readline.ViExternalEditor.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instantiate the editor :command:`vi`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        line : str</span>
+<span class="sd">            Line that the user is typing.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">type</span><span class="p">([]):</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="n">file_tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tempfile</span><span class="p">()</span>
+        <span class="n">fp_tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_open</span><span class="p">(</span><span class="n">file_tmp</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+        <span class="n">fp_tmp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="n">fp_tmp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run_editor</span><span class="p">(</span><span class="n">file_tmp</span><span class="p">)</span>
+        <span class="n">fp_tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_open</span><span class="p">(</span><span class="n">file_tmp</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="n">fp_tmp</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">fp_tmp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_remove</span><span class="p">(</span><span class="n">file_tmp</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ViExternalEditor.get_tempfile"><a class="viewcode-back" href="../../../startup/setup_readline.html#default_profile.startup.30_readline.ViExternalEditor.get_tempfile">[docs]</a>    <span class="k">def</span> <span class="nf">get_tempfile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mktemp</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;readline-&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;.py&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ViExternalEditor.file_open"><a class="viewcode-back" href="../../../startup/setup_readline.html#default_profile.startup.30_readline.ViExternalEditor.file_open">[docs]</a>    <span class="k">def</span> <span class="nf">file_open</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">file</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ViExternalEditor.file_remove"><a class="viewcode-back" href="../../../startup/setup_readline.html#default_profile.startup.30_readline.ViExternalEditor.file_remove">[docs]</a>    <span class="k">def</span> <span class="nf">file_remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ViExternalEditor.get_editor"><a class="viewcode-back" href="../../../startup/setup_readline.html#default_profile.startup.30_readline.ViExternalEditor.get_editor">[docs]</a>    <span class="k">def</span> <span class="nf">get_editor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;EDITOR&quot;</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;vim&quot;</span>  <span class="c1"># ouch</span></div>
+
+<div class="viewcode-block" id="ViExternalEditor.run_editor"><a class="viewcode-back" href="../../../startup/setup_readline.html#default_profile.startup.30_readline.ViExternalEditor.run_editor">[docs]</a>    <span class="k">def</span> <span class="nf">run_editor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">get_editor</span><span class="p">(),</span> <span class="n">filename</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ViExternalEditor.run_command"><a class="viewcode-back" href="../../../startup/setup_readline.html#default_profile.startup.30_readline.ViExternalEditor.run_command">[docs]</a>    <span class="k">def</span> <span class="nf">run_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">):</span>
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+            <span class="n">command</span><span class="p">,</span>
+            <span class="n">stdin</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
+            <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
+            <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
+            <span class="n">universal_newlines</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span></div></div>
+
 
 <span class="c1"># Completion</span>
 
@@ -357,7 +454,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Mar 21, 2020.
+      Last updated on Mar 26, 2020.
     </div>
   </body>
 </html>

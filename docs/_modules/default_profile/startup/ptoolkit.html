@@ -71,6 +71,8 @@
 
 <span class="kn">import</span> <span class="nn">jedi</span>
 
+<span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+
 <span class="kn">import</span> <span class="nn">prompt_toolkit</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.buffer</span> <span class="kn">import</span> <span class="n">Buffer</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.document</span> <span class="kn">import</span> <span class="n">Document</span>
@@ -104,7 +106,6 @@
 <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 
 <span class="kn">from</span> <span class="nn">pygments.styles.inkpot</span> <span class="kn">import</span> <span class="n">InkPotStyle</span>
-
 
 <span class="n">DEDENT_TOKENS</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">([</span><span class="s2">&quot;raise&quot;</span><span class="p">,</span> <span class="s2">&quot;return&quot;</span><span class="p">,</span> <span class="s2">&quot;pass&quot;</span><span class="p">,</span> <span class="s2">&quot;break&quot;</span><span class="p">,</span> <span class="s2">&quot;continue&quot;</span><span class="p">])</span>
 
@@ -438,12 +439,10 @@
 
 
 <div class="viewcode-block" id="create_searching_keybindings"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.create_searching_keybindings">[docs]</a><span class="k">def</span> <span class="nf">create_searching_keybindings</span><span class="p">():</span>
-
     <span class="n">kb</span> <span class="o">=</span> <span class="n">KeyBindings</span><span class="p">()</span>
     <span class="c1"># These get referenced more than once so keep them up here</span>
     <span class="n">search_state</span> <span class="o">=</span> <span class="n">get_app</span><span class="p">()</span><span class="o">.</span><span class="n">current_search_state</span>
     <span class="n">current_buffer</span> <span class="o">=</span> <span class="n">get_app</span><span class="p">()</span><span class="o">.</span><span class="n">current_buffer</span>
-
 
     <span class="nd">@kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;q&quot;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
@@ -476,13 +475,50 @@
 
     <span class="k">return</span> <span class="n">ConditionalKeyBindings</span><span class="p">(</span><span class="n">kb</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">is_searching</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="ConditionalCallable"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.ConditionalCallable">[docs]</a><span class="k">class</span> <span class="nc">ConditionalCallable</span><span class="p">(</span><span class="n">ConditionalValidator</span><span class="p">):</span>
+<div class="viewcode-block" id="ConditionalCallable.__init__"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.ConditionalCallable.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">validator</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;document&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">document</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;document&quot;</span><span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">validator</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+    <span class="c1"># def validate(self, document, filter=None, *args, **kwargs):</span>
+    <span class="c1">#     &quot;&quot;&quot;Only abstract method is validate. Fuckin&#39; ConditionalValidator doesn&#39;t define this though.&quot;&quot;&quot;</span>
+    <span class="c1">#     self.validator.validate(document)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">validator</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="c1"># NOPE. We raise an error because &#39;validator type: str doesn&#39;t have a validate method.</span>
+    <span class="c1"># So this class defines validation in terms of `__call__` at some point.</span>
+    <span class="c1"># def __call__(self):</span>
+    <span class="c1"># &quot;&quot;&quot;Because it&#39;s annoying having to pass the document just to see it.&quot;&quot;&quot;</span>
+    <span class="c1"># return self.__repr__()</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">document</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">document</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">document</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">document</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">document</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_conditional_validator</span><span class="p">(</span><span class="n">validator</span><span class="p">,</span> <span class="n">document</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">ConditionalCallable</span><span class="p">(</span><span class="n">validator</span><span class="p">,</span> <span class="n">document</span><span class="o">=</span><span class="n">document</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">ViInsertMode</span><span class="p">())</span>
+
+
 <div class="viewcode-block" id="pt_validator"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.pt_validator">[docs]</a><span class="k">def</span> <span class="nf">pt_validator</span><span class="p">():</span>
-    <span class="n">validator</span> <span class="o">=</span> <span class="n">ThreadedValidator</span><span class="p">(</span><span class="n">DynamicValidator</span><span class="p">(</span><span class="n">ConditionalValidator</span><span class="p">(</span><span class="n">DummyValidator</span><span class="p">(),</span> <span class="nb">filter</span><span class="o">=</span><span class="n">ViInsertMode</span><span class="p">())))</span>
+    <span class="n">validator</span> <span class="o">=</span> <span class="n">ThreadedValidator</span><span class="p">(</span>
+        <span class="n">_conditional_validator</span><span class="p">(</span>
+            <span class="n">DummyValidator</span><span class="p">(),</span> <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">document</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
     <span class="k">return</span> <span class="n">validator</span></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">pt_helper</span> <span class="o">=</span> <span class="n">Helpers</span><span class="p">()</span>
+    <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">validator</span> <span class="o">=</span> <span class="n">pt_validator</span><span class="p">()</span>
 </pre></div>
 
         </div>
@@ -490,7 +526,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Mar 21, 2020.
+      Last updated on Mar 26, 2020.
     </div>
   </body>
 </html>

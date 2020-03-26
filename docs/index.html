@@ -20,7 +20,7 @@
     <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/index.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="IPython Startup" href="startup/index.html" />
+    <link rel="next" title="%rehashx — Add executables to $PATH" href="startup/rehashx.html" />
   <title>Dynamic IPython --- IPython Extensions</title>
 
   </head><body>
@@ -34,7 +34,7 @@
       </div>
       <div class="relnav" role="navigation" aria-label="related navigation">
         <a href="#">Welcome to Dynamic IPython’s documentation!</a>
-        | <a href="startup/index.html">IPython Startup &raquo;</a>
+        | <a href="startup/rehashx.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">%rehashx</span></code> — Add executables to $PATH &raquo;</a>
       </div>
       <div id="contentwrapper">
         <div id="toc" role="navigation" aria-label="table of contents navigation">
@@ -50,10 +50,12 @@
 </li>
 <li><a class="reference internal" href="#table-of-contents">Table of Contents</a><ul>
 <li><a class="reference internal" href="#startup">Startup</a></li>
+<li><a class="reference internal" href="#module-default_profile.ipython_config">IPython Config API</a></li>
+<li><a class="reference internal" href="#startup-api-docs">Startup API Docs</a></li>
 <li><a class="reference internal" href="#sphinx-extensions">Sphinx Extensions</a></li>
 <li><a class="reference internal" href="#extensions">Extensions</a></li>
-<li><a class="reference internal" href="#module-default_profile.util">Utilities</a><ul>
-<li><a class="reference internal" href="#goals">Goals</a></li>
+<li><a class="reference internal" href="#utilities">Utilities</a></li>
+<li><a class="reference internal" href="#goals">Goals</a><ul>
 <li><a class="reference internal" href="#utilities-submodules">Utilities Submodules</a></li>
 </ul>
 </li>
@@ -71,7 +73,7 @@
 <h1>Welcome to Dynamic IPython’s documentation!<a class="headerlink" href="#welcome-to-dynamic-ipython-s-documentation" title="Permalink to this headline">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">date</dt>
-<dd class="field-odd"><p>March 21, 2020</p>
+<dd class="field-odd"><p>March 26, 2020</p>
 </dd>
 </dl>
 <div class="section" id="startup-scripts">
@@ -154,13 +156,92 @@ form of rst docs and <abbr>ipynb</abbr> notebooks.</p>
 </div>
 <div class="section" id="startup">
 <h3>Startup<a class="headerlink" href="#startup" title="Permalink to this headline">¶</a></h3>
+<p>The first script to run invokes <code class="xref py py-obj docutils literal notranslate"><span class="pre">%rehashx</span></code> which initializes
+<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.13.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> with all of the commands that the system shell knows.</p>
+<p>By invoking <code class="xref py py-obj docutils literal notranslate"><span class="pre">%rehashx</span></code> at the beginning of startup, all system commands
+are added as well, which regularly adds well over 1000 commands to the shell.</p>
+<p>The IPython team cleverly remembers to also check the environment variable
+<span class="target" id="index-0"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PATHEXT</span></code> on Windows devices as it indicates to the system which
+files are executable without requiring the typical Unix file permissions
+system.</p>
+<p>Before delving into the startup files, the API for the main IPython config file
+will be discussed.</p>
+<p>This is simply a heavily configured version of the file that’s generated when
+<code class="docutils literal notranslate"><span class="pre">ipython</span> <span class="pre">--generate-config</span></code> is run on the command line.</p>
+<p>As a result, it heavily utilizes the <code class="docutils literal notranslate"><span class="pre">traitlets</span></code> module.</p>
+</div>
+<div class="section" id="module-default_profile.ipython_config">
+<span id="ipython-config-api"></span><h3>IPython Config API<a class="headerlink" href="#module-default_profile.ipython_config" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="default_profile.ipython_config.get_home">
+<code class="sig-name descname">get_home</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/default_profile/ipython_config.html#get_home"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.ipython_config.get_home" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define the user’s <span class="target" id="index-1"></span><a class="reference external" href="https://matplotlib.org/faq/environment_variables_faq.html#envvar-HOME" title="(in Matplotlib v3.2.1)"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">HOME</span></code></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="default_profile.ipython_config.conditional_editing_mode">
+<code class="sig-name descname">conditional_editing_mode</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/default_profile/ipython_config.html#conditional_editing_mode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.ipython_config.conditional_editing_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute this function to enable the emacs editing mode on Windows and vi only in tmux.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="default_profile.ipython_config.get_env">
+<code class="sig-name descname">get_env</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/default_profile/ipython_config.html#get_env"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.ipython_config.get_env" title="Permalink to this definition">¶</a></dt>
+<dd><p>Would it make sense to combine functools.lru_cache with this?</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="default_profile.ipython_config.TimedFormatter">
+<em class="property">class </em><code class="sig-name descname">TimedFormatter</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/default_profile/ipython_config.html#TimedFormatter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.ipython_config.TimedFormatter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>I’d imagine this would benefit from a dataclass.</p>
+<p>Rewrite the init so that it takes advantage of the dataclass
+module. If that doesn’t seem to be working namedtuples are similar.</p>
+<dl class="attribute">
+<dt id="default_profile.ipython_config.TimedFormatter.loops">
+<code class="sig-name descname">loops</code><em class="property">: int</em><em class="property"> = None</em><a class="headerlink" href="#default_profile.ipython_config.TimedFormatter.loops" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="default_profile.ipython_config.TimedFormatter.precision">
+<code class="sig-name descname">precision</code><em class="property">: int</em><em class="property"> = None</em><a class="headerlink" href="#default_profile.ipython_config.TimedFormatter.precision" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="default_profile.ipython_config.TimedFormatter.repeat">
+<code class="sig-name descname">repeat</code><em class="property">: int</em><em class="property"> = None</em><a class="headerlink" href="#default_profile.ipython_config.TimedFormatter.repeat" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="default_profile.ipython_config.TimedFormatter.all_runs">
+<code class="sig-name descname">all_runs</code><em class="property">: set</em><em class="property"> = None</em><a class="headerlink" href="#default_profile.ipython_config.TimedFormatter.all_runs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="default_profile.ipython_config.TimedFormatter.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/default_profile/ipython_config.html#TimedFormatter.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.ipython_config.TimedFormatter.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="default_profile.ipython_config.TimedFormatter.summary">
+<code class="sig-name descname">summary</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/default_profile/ipython_config.html#TimedFormatter.summary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.ipython_config.TimedFormatter.summary" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="default_profile.ipython_config.TimedFormatter.timings">
+<code class="sig-name descname">timings</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/default_profile/ipython_config.html#TimedFormatter.timings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.ipython_config.TimedFormatter.timings" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="startup-api-docs">
+<h3>Startup API Docs<a class="headerlink" href="#startup-api-docs" title="Permalink to this headline">¶</a></h3>
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">IPython Startup</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="startup/index.html">Startup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="startup/rehashx.html">rehashx</a></li>
 <li class="toctree-l1"><a class="reference internal" href="startup/ipython-logger.html">IPython Logger</a></li>
-<li class="toctree-l1"><a class="reference internal" href="startup/help_helpers.html">Help Helpers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="startup/clipboard.html">Clipboard</a></li>
 <li class="toctree-l1"><a class="reference internal" href="startup/aliases.html">Aliases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="startup/fzf.html">FZF</a></li>
@@ -192,7 +273,7 @@ form of rst docs and <abbr>ipynb</abbr> notebooks.</p>
 <p>In addition this repository handles a growing number of IPython extensions.</p>
 <p>Some of the bundled extensions provide a more usable <code class="xref py py-obj docutils literal notranslate"><span class="pre">PAGER</span></code> for users on
 Window than the one provided by <a class="reference external" href="https://docs.python.org/3/library/pydoc.html#module-pydoc" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pydoc</span></code></a>.</p>
-<span class="target" id="module-default_profile.extensions"><span id="index-0"></span></span><p>Here are the varying <code class="xref py py-obj docutils literal notranslate"><span class="pre">%magic</span></code> extensions that are bundled with this
+<span class="target" id="module-default_profile.extensions"><span id="index-2"></span></span><p>Here are the varying <code class="xref py py-obj docutils literal notranslate"><span class="pre">%magic</span></code> extensions that are bundled with this
 portion of the repository.</p>
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">Extensions</span></p>
@@ -203,13 +284,17 @@ portion of the repository.</p>
 </div>
 <p>Continue reading with the pandas extension at <span class="xref std std-ref">extensions/pandas_csv</span>.</p>
 </div>
-<div class="section" id="module-default_profile.util">
-<span id="utilities"></span><span id="util-contents"></span><h3>Utilities<a class="headerlink" href="#module-default_profile.util" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="utilities">
+<span id="util-contents"></span><h3>Utilities<a class="headerlink" href="#utilities" title="Permalink to this headline">¶</a></h3>
+<p>The modules contained in this package are, generally speaking, a collection of
+scripts that I’ve found useful while working with IPython, but that unfortunately
+haven’t been fleshed out enough.</p>
 <p>They’re still all useful in their current state and when the user is
 running IPython interactively, but none of the scripts havet been fleshed out
 to the extent that they could be easily changed to IPython extensions.</p>
+</div>
 <div class="section" id="goals">
-<h4>Goals<a class="headerlink" href="#goals" title="Permalink to this headline">¶</a></h4>
+<h3>Goals<a class="headerlink" href="#goals" title="Permalink to this headline">¶</a></h3>
 <p>Currently the module aims to:</p>
 <ol class="arabic">
 <li><p>Create consistent <a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Logger" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">logging.Logger</span></code></a> objects</p></li>
@@ -223,7 +308,6 @@ with a pre-determined template string like so:</p>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">UTIL_LOGGER</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;default_profile.util&#39;</span><span class="p">)</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">UTIL_LOGGER</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
 </pre></div>
-</div>
 </div>
 <p>The submodules contained in this package are as follows:</p>
 <div class="section" id="utilities-submodules">
@@ -261,7 +345,7 @@ with a pre-determined template string like so:</p>
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Mar 21, 2020.
+      Last updated on Mar 26, 2020.
     </div>
   </body>
 </html>

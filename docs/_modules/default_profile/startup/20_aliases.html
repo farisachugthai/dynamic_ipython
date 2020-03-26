@@ -91,24 +91,6 @@
 
 
 <div class="viewcode-block" id="validate_alias"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.validate_alias">[docs]</a><span class="k">def</span> <span class="nf">validate_alias</span><span class="p">(</span><span class="n">alias</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;Check attributes and formatting of Alias string.</span>
-
-<span class="sd">    Verifies alias through the name and cmd attributes.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    alias : Alias</span>
-<span class="sd">        Alias to verify</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    nargs</span>
-
-<span class="sd">    Raises</span>
-<span class="sd">    ------</span>
-<span class="sd">    `InvalidAliasError`</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">shell</span> <span class="o">=</span> <span class="n">alias</span><span class="o">.</span><span class="n">shell</span>
 
     <span class="k">if</span> <span class="n">shell</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -132,7 +114,6 @@
         <span class="p">)</span>
 
     <span class="n">nargs</span> <span class="o">=</span> <span class="n">alias</span><span class="o">.</span><span class="n">cmd</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">-</span> <span class="n">alias</span><span class="o">.</span><span class="n">cmd</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%%</span><span class="s2">s&quot;</span><span class="p">)</span>
-
     <span class="k">if</span> <span class="p">(</span><span class="n">nargs</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">alias</span><span class="o">.</span><span class="n">cmd</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;%l&quot;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">):</span>
         <span class="k">raise</span> <span class="n">InvalidAliasError</span><span class="p">(</span>
             <span class="s2">&quot;The </span><span class="si">%s</span><span class="s2"> and %l specifiers are mutually &quot;</span> <span class="s2">&quot;exclusive in alias definitions.&quot;</span>
@@ -146,6 +127,18 @@
 
 <span class="sd">    Reasonably this is the object that should be the UserDict. CommonAliases</span>
 <span class="sd">    makes more sense as a list of dicts.</span>
+
+<span class="sd">    Instances are registered as magic functions to allow use of aliases.</span>
+
+<span class="sd">    .. todo::</span>
+<span class="sd">        More dunders.</span>
+<span class="sd">        It would be sweet if we had a container we could ``+`` and ``-`` to.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    blacklist : method</span>
+<span class="sd">        Previously a class attribute, the blacklist is now a property of an Alias.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Alias.__init__"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.Alias.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
@@ -209,8 +202,11 @@
                 <span class="p">)</span>
             <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span> <span class="o">%</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">args</span><span class="p">[:</span><span class="n">nargs</span><span class="p">]),</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="n">nargs</span><span class="p">:]))</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
 
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">other</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="CommonAliases"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases">[docs]</a><span class="k">class</span> <span class="nc">CommonAliases</span><span class="p">(</span><span class="n">UserDict</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Aliases that are usable on any major platform.</span>
@@ -327,6 +323,10 @@
         <span class="k">return</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dict_aliases</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>  <span class="o">==</span> <span class="n">Alias</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict</span><span class="o">.</span><span class="n">aliases</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">other</span> <span class="o">==</span> <span class="n">i</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="n">other</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict_aliases</span>
 
     <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -561,13 +561,17 @@
 <div class="viewcode-block" id="LinuxAliases"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.LinuxAliases">[docs]</a><span class="k">class</span> <span class="nc">LinuxAliases</span><span class="p">(</span><span class="n">CommonAliases</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Add Linux specific aliases.&quot;&quot;&quot;</span>
 
+<div class="viewcode-block" id="LinuxAliases.__init__"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.LinuxAliases.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_aliases</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="n">user_aliases</span> <span class="k">if</span> <span class="n">user_aliases</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">args</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">busybox</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thirdparty</span><span class="p">()</span></div>
+
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;Linux Aliases: </span><span class="si">{!r}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span><span class="p">))</span>
 
 <div class="viewcode-block" id="LinuxAliases.busybox"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.LinuxAliases.busybox">[docs]</a>    <span class="k">def</span> <span class="nf">busybox</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Commands that are available on any Unix-ish system.</span>
-
-<span class="sd">        Apparently, I don&#39;t know how to use classmethods.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -648,6 +652,11 @@
 <span class="sd">    Would it be useful to subclass :class:`reprlib.Repr` here?</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="WindowsAliases.__init__"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.WindowsAliases.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_aliases</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span> <span class="o">=</span> <span class="n">user_aliases</span> <span class="k">if</span> <span class="n">user_aliases</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">args</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmd_aliases</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;Windows Aliases: </span><span class="si">{!r}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span><span class="p">))</span>
@@ -835,11 +844,8 @@
 
     <span class="k">if</span> <span class="n">machine</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;Linux&quot;</span><span class="p">):</span>
         <span class="n">aliases</span> <span class="o">=</span> <span class="n">LinuxAliases</span><span class="p">(</span><span class="n">user_aliases</span><span class="o">=</span><span class="n">_ip</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">user_aliases</span><span class="p">)</span>
-        <span class="n">aliases</span><span class="o">.</span><span class="n">busybox</span><span class="p">()</span>
-        <span class="n">aliases</span><span class="o">.</span><span class="n">thirdparty</span><span class="p">()</span>
     <span class="k">elif</span> <span class="n">machine</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;Win&quot;</span><span class="p">):</span>
         <span class="n">aliases</span> <span class="o">=</span> <span class="n">WindowsAliases</span><span class="p">(</span><span class="n">user_aliases</span><span class="o">=</span><span class="n">_ip</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">user_aliases</span><span class="p">)</span>
-        <span class="n">aliases</span><span class="o">.</span><span class="n">cmd_aliases</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">AliasError</span>
     <span class="n">aliases</span><span class="o">.</span><span class="n">ls_patch</span><span class="p">(</span><span class="n">_ip</span><span class="p">)</span>
@@ -870,13 +876,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-<<<<<<< HEAD
-      Last updated on Mar 20, 2020.
-||||||| 2b286418
-      Last updated on Mar 16, 2020.
-=======
-      Last updated on Mar 21, 2020.
->>>>>>> master
+      Last updated on Mar 26, 2020.
     </div>
   </body>
 </html>
