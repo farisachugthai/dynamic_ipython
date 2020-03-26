@@ -4,13 +4,12 @@ import os
 import readline
 import rlcompleter
 import traceback
+from inspect import getmembers
 from pprint import pprint
 
 try:
-    from default_profile.profile_debugger import pdbrc
-    from default_profile.profile_debugger.pdbrc import debugger
+    from .pdbrc import debugger
 except ImportError:
-    pdbrc = None
     debugger = None
 
 # eval(compile(".pdbrc", '<pdbrc>', 'eval'))
