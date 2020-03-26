@@ -65,8 +65,8 @@ class TestBottomToolbar(TestCase):
 
 def debugging_myoutput(capsys):
     # or use "capfd" for fd-level
-    print(toolbar = bt_mod.BottomToolbar(_ip.pt_app))
+    print()
     sys.stderr.write("world\n")
-    captured = capsys.readouterr() 
+    captured = capsys.readouterr()
     # todo
     # assert capture.out

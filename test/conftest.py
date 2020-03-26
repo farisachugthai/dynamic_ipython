@@ -17,7 +17,7 @@ from _pytest.unittest import *
 
 try:
     import default_profile
-except:
+except ImportError:
     sys.exit("Not installed.")
 
 simplefilter("ignore", category=DeprecationWarning)
@@ -78,7 +78,7 @@ def pytest_report_header():
     # crashes
     import IPython
 
-    print("IPython %s" % (IPython.__version__))
+    print("IPython %s" % IPython.__version__)
 
     ret = []
     for i in ["matplotlib", "sqlite3", "pygments"]:

@@ -302,7 +302,9 @@ class TestCase(unittest.TestCase):
 
     # Test two-argument iter() with function
     def test_iter_function(self):
-        def spam(state=[0]):
+        def spam(state=None):
+            if state is None:
+                state = [0]
             i = state[0]
             state[0] = i + 1
             return i
@@ -311,7 +313,9 @@ class TestCase(unittest.TestCase):
 
     # Test two-argument iter() with function that raises StopIteration
     def test_iter_function_stop(self):
-        def spam(state=[0]):
+        def spam(state=None):
+            if state is None:
+                state = [0]
             i = state[0]
             if i == 10:
                 raise StopIteration
@@ -322,7 +326,9 @@ class TestCase(unittest.TestCase):
 
     # Test exception propagation through function iterator
     def test_exception_function(self):
-        def spam(state=[0]):
+        def spam(state=None):
+            if state is None:
+                state = [0]
             i = state[0]
             state[0] = i + 1
             if i == 10:
@@ -557,12 +563,14 @@ class TestCase(unittest.TestCase):
 
     # Test map()'s use of iterators.
     def test_builtin_map(self):
+        if d is None:
+            d = d
         self.assertEqual(
             list(map(lambda x: x + 1, SequenceClass(5))), list(range(1, 6))
         )
 
         d = {"one": 1, "two": 2, "three": 3}
-        self.assertEqual(list(map(lambda k, d=d: (k, d[k]), d)), list(d.items()))
+        self.assertEqual(list(map(lambda k, d=None: (k, d[k]), d)), list(d.items()))
         dkeys = list(d.keys())
         expected = [
             (i < len(d) and dkeys[i] or None, i, i < len(d) and dkeys[i] or None)
@@ -985,7 +993,9 @@ class TestCase(unittest.TestCase):
 
     def test_sinkstate_callable(self):
         # This used to fail
-        def spam(state=[0]):
+        def spam(state=None):
+            if state is None:
+                state = [0]
             i = state[0]
             state[0] = i + 1
             if i == 10:
