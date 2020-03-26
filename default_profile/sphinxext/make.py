@@ -8,16 +8,19 @@ import shutil
 import subprocess
 import sys
 import webbrowser
+from argparse import Namespace
 from pathlib import Path
 
 import importlib_metadata
-import sphinx
+# import sphinx
 # from jinja2.constants import TRIM_BLOCKS, LSTRIP_BLOCKS
 from jinja2.environment import Environment
 from jinja2.exceptions import TemplateError
 from jinja2.ext import autoescape, do, with_
 from jinja2.loaders import FileSystemLoader
+
 from sphinx.application import Sphinx
+from sphinx.errors import ApplicationError
 from sphinx.cmd.build import build_main
 from sphinx.cmd.make_mode import Make
 from sphinx.jinja2glue import SphinxFileSystemLoader
@@ -35,13 +38,8 @@ if sys.version_info < (3, 7):
 logger = getLogger(name=__name__)
 
 
-def _parse_arguments(cmds=None) -> argparse.ArgumentParser:
+def _parse_arguments() -> Namespace:
     """Parse user arguments.
-
-    Parameters
-    ----------
-    cmd : str
-        Arguments provided by the user.
 
     Returns
     -------
@@ -151,12 +149,13 @@ def _parse_arguments(cmds=None) -> argparse.ArgumentParser:
 
 
 class DocBuilder:
-    def __init__(self, kind=None, num_jobs=1, verbosity=0):
+    def __init__(self, kind=None, num_jobs=1, verbosity=0, root=None):
         if kind is None:
             kind = "html"
         self.kind = kind
         self.num_jobs = num_jobs
         self.verbosity = verbosity
+        self.root = root if root is not None else os.getcwd()
 
     def __repr__(self):
         return "{}\t{}".format(self.__class__.__name__, self.kind)
@@ -182,7 +181,7 @@ class DocBuilder:
         except OSError as e:
             logger.error(e)
 
-    def sphinx_build(self, kind):
+    def sphinx_build(self, kind, BUILD_PATH=None):
         """Build docs.
 
         Examples
@@ -190,6 +189,7 @@ class DocBuilder:
         >>> DocBuilder(num_jobs=4).sphinx_build('html')
 
         """
+        BUILD_PATH = BUILD_PATH if BUILD_PATH is not None else Path.cwd().joinpath('build')
         if kind not in self.kinds:
             raise ValueError(
                 "kind must be one of: {}".format(str(self.kinds)) +
@@ -255,13 +255,16 @@ def generate_sphinx_app(root):
     srcdir = confdir = root.joinpath("source")
     doctreedir = "build/.doctrees"
     outdir = "build/html"
-    app = Sphinx(
-        buildername="html",
-        srcdir=srcdir,
-        outdir=outdir,
-        doctreedir=doctreedir,
-        confdir=confdir,
-    )
+    try:
+        app = Sphinx(
+            buildername="html",
+            srcdir=srcdir,
+            outdir=outdir,
+            doctreedir=doctreedir,
+            confdir=confdir,
+        )
+    except ApplicationError:
+        raise  # TODO
     return app
 
 
@@ -328,12 +331,18 @@ def main(repo_root=None):
     # to a dict of its args. check how to do that later.
     breakpoint()
     if color_terminal():
-        colorize(build_main())
+        colorize('sphinx_build', build_main())
 
+def get_git_root():
+    try:
+        return codecs.decode(subprocess.check_output(["git", "rev-parse", "--show-toplevel"]), 'utf-8')
+    except subprocess.CalledProcessError as e:
+        print(e)
+        return os.getcwd()
 
 if __name__ == "__main__":
-    git_root = run_ext(["git", "rev-parse", "--show-toplevel"])
+    git_root = get_git_root()
     logger.setLevel(30)
     logger.debug(f"git root was: {git_root}")
-    sphinx.locale.setlocale(locale.LC_ALL, '')
+    locale.setlocale(locale.LC_ALL, '')
     sys.exit(main(git_root))

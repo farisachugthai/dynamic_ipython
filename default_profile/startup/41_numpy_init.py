@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Set printing options.
-
-"""
+"""Set printing options."""
 import ctypes
 import doctest
 import logging
@@ -19,7 +17,6 @@ if platform.system() == "Windows":
 
 
 def numpy_setup():
-    """Jeez this got platform specific."""
     try:
         import numpy as np
     except (ImportError, ModuleNotFoundError):

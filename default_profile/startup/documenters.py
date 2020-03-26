@@ -23,8 +23,9 @@ import pydoc
 import re
 import sys
 
+# noinspection PyProtectedMember
 from pydoc import Helper
-from pydoc_data.topics import topics  # idk if this is official API but i like it 
+from pydoc_data.topics import topics  # idk if this is official API but i like it
 from traceback import print_exc
 from typing import Callable
 
@@ -71,7 +72,11 @@ class HelpMagics(Magics):
 
     @line_magic
     def save_help(self, redirected):
-        """Redirect output from sys.stdout to a string."""
+        """Redirect output from sys.stdout to a string.
+
+        Feeds that string directly to `help` and then returns
+        the redirected stdout.
+        """
         saved = io.StringIO()
         with contextlib.redirect_stdout(saved):
             help(redirected)
@@ -118,7 +123,7 @@ class HelpMagics(Magics):
         pattern : list, optional
             Unfortunately, lists are mutable objects and can't be used as
             default parameters.
-            Therefore a default value of::
+            Therefore a default value of:
 
                 pattern = ['^a-z.*$']
 
@@ -139,7 +144,7 @@ class HelpMagics(Magics):
 
     @line_magic
     def dirip(self):
-        """Accomodations for dir(get_ipython()).
+        """Convenience function for ``dir(get_ipython())``.
 
         The list of attributes that the IPython InteractiveShell class has is
         so long that it requires a pager to see all of it.
@@ -155,7 +160,7 @@ class HelpMagics(Magics):
         Examples
         ---------
 
-        .. doctest::
+        .. code-block:: python
 
             >>> i = HelpMagics().dirip()
             >>> i.grep('complete')
@@ -172,6 +177,7 @@ class HelpMagics(Magics):
         return shell_list
 
     def load(self):
+        """Convenience for calling load_ipython_extension."""
         load_ipython_extension()
 
 

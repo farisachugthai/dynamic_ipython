@@ -12,6 +12,7 @@ and is used frequently enough to warrant being in the package's ``__init__``.
 # import functools
 import importlib
 import logging
+
 # noinspection PyProtectedMember
 from importlib.util import _find_spec_from_path
 import os

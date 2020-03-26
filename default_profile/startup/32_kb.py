@@ -6,7 +6,7 @@ import operator
 import reprlib
 from collections import UserList
 import sys
-from typing import Callable, Optional, Dict, TYPE_CHECKING
+from typing import Callable, Optional, Dict, TYPE_CHECKING, Any
 
 from IPython.core.getipython import get_ipython
 from IPython.core.interactiveshell import InteractiveShell
@@ -15,13 +15,14 @@ from prompt_toolkit.cache import SimpleCache
 from prompt_toolkit.document import Document
 from prompt_toolkit.filters import ViInsertMode
 from prompt_toolkit.key_binding.defaults import load_key_bindings
-from prompt_toolkit.key_binding import merge_key_bindings, KeyPress
+from prompt_toolkit.key_binding import merge_key_bindings
 from prompt_toolkit.key_binding.bindings.auto_suggest import load_auto_suggest_bindings
 from prompt_toolkit.key_binding.bindings.vi import (
     load_vi_bindings,
     load_vi_search_bindings,
 )
 from prompt_toolkit.key_binding.key_bindings import KeyBindings, ConditionalKeyBindings
+from prompt_toolkit.key_binding.key_processor import KeyPress
 from prompt_toolkit.keys import Keys
 
 from default_profile.startup.ptoolkit import create_searching_keybindings
@@ -36,8 +37,11 @@ class KeyBindingsManager(UserList):
     By defining dunders, the collection of keybindings are much
     easier to work with.
     """
+    _get_bindings_for_keys_cache: SimpleCache[Any, Any]
 
-    def __init__(self, kb: KeyBindings = None, shell: InteractiveShell = None) -> Optional:
+    def __init__(
+        self, kb: KeyBindings = None, shell: InteractiveShell = None
+    ) -> Optional:
         """Initialize the class.
 
         Parameters
@@ -82,6 +86,7 @@ class KeyBindingsManager(UserList):
         return self.__add__(another_one)
 
     def add(self, another_one):
+        """Add another binding."""
         return self.__add__(another_one)
 
     def __len__(self):
@@ -110,6 +115,7 @@ class KeyBindingsManager(UserList):
 
     @property
     def _version(self):
+        """I think a tally that gets cleared when the list of handlers needs updating?"""
         return self.__version
 
     @_version.setter
@@ -119,7 +125,7 @@ class KeyBindingsManager(UserList):
         self._get_bindings_starting_with_keys_cache.clear()
 
     def get_keys(self, keys):
-        """
+        """Return handlers for 'keys'.
 
         :param keys:
         :type keys:
@@ -147,7 +153,7 @@ class KeyBindingsManager(UserList):
                         any_count += 1
 
                 if match:
-                    result.append((any_count, b))
+                    result.append((any_count, binding))
 
         # Place bindings that have more 'Any' occurrences in them at the end.
         result = sorted(result, key=lambda item: -item[0])
@@ -216,7 +222,7 @@ class ApplicationKB(KeyBindingsManager):
             self.kb = kb or self.shell.pt_app.key_bindings
             if self.kb is None:
                 self.kb = load_key_bindings()
-        super().__init__(kb=self.kb, shell=self.shell, **kwargs)
+        super().__init__(kb=self.kb, shell=self.shell)
 
 
 class HandlesMergedKB(KeyBindingsManager):
@@ -305,12 +311,12 @@ def custom_keybindings() -> ConditionalKeyBindings:
 def determine_which_pt_attribute():
     _ip = get_ipython()
     # IPython < 7.0
-    if hasattr(_ip, 'pt_cli'):
+    if hasattr(_ip, "pt_cli"):
         return _ip.pt_cli.application.key_bindings_registry
     # IPython >= 7.0
-    elif hasattr(_ip, 'pt_app'):
+    elif hasattr(_ip, "pt_app"):
         # Here's one that might blow your mind.
-        if type(_ip.pt_app) == None:
+        if type(_ip.pt_app) is None:
             sys.exit()  # ran into this while running pytest.
             # If you start IPython from something like pytest i guess it starts
             # the machinery with a few parts missing...I don't know.
@@ -353,7 +359,7 @@ def flatten_kb(merge):
     return merge._bindings2.bindings
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     current_kb = determine_which_pt_attribute()
     merged_kb = create_kb()
     if merged_kb is not None:

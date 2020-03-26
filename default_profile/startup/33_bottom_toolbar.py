@@ -82,7 +82,7 @@ def show_header(header_text=None):
     return Frame(text_area)
 
 
-def terminal_width(self):
+def terminal_width():
     """Returns `shutil.get_terminal_size.columns`."""
     return get_terminal_size().columns
 

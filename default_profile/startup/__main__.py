@@ -43,13 +43,13 @@ def exec_startup():
         All of the usual exec admonitions apply here.
 
     """
-    exec(compile(open(__file__).read(), "<string>", "exec", ), globals(), locals())
+    exec(compile(open(__file__).read(), "<string>", "exec",), globals(), locals())
 
 
 def exec_dir(directory):
     for i in scandir(directory):
         if i.name.endswith("py") or i.name.endswith("ipy"):
-            exec(compile(open(i.name).read(), "<string>", "exec", ), globals(), locals())
+            exec(compile(open(i.name).read(), "<string>", "exec",), globals(), locals())
 
 
 def async_startup():

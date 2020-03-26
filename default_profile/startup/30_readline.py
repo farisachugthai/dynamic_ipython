@@ -22,12 +22,15 @@ See Also
 `Tim Pope's RSI Vim plugin <https://github.com/tpope/vim-rsi>`_.
 
 """
+import asyncio
 import atexit
 import logging
 import os
 from pathlib import Path
 import platform
+import subprocess
 import sys
+import tempfile
 import traceback
 
 from IPython.core.getipython import get_ipython
@@ -44,6 +47,124 @@ if os.environ.get("IPYTHONDIR"):
     )
 else:
     logging.basicConfig(format="%(message)s", level=logging.DEBUG)
+
+
+# Patching pyreadline:
+
+
+class ViExternalEditor:
+    """If I'm not mistaken, there are typos that are causing Vi mode to fail.
+
+    03/22/2020:
+    After pressing :kbd:`Esc` to go into Normal mode, I tried invoking the
+    external editor with :kbd:`k`.
+
+    .. code-block:: py3tb
+
+    >>> def cd(arg)
+
+    Readline internal error
+    Traceback (most recent call last):
+      File
+      "C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/console/console.py",
+      line 768, in hook_wrapper_23 res = ensure_str(readline_hook(prompt)) File
+      "C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/rlmain.py",
+      line 571, in readline self._readline_from_keyboard() File
+      "C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/rlmain.py",
+      line 536, in _readline_from_keyboard if
+      self._readline_from_keyboard_poll(): File
+      "C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/rlmain.py",
+      line 556, in _readline_from_keyboard_poll result =
+      self.mode.process_keyevent(event.keyinfo) File
+      "C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/modes/vi.py",
+      line 41, in process_keyevent r = dispatch_func(keyinfo) File
+      "C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/modes/vi.py",
+      line 101, in vi_key self._vi_command.add_char (e.char) File
+      "C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/modes/vi.py",
+      line 384, in add_char fcn_instance (char) File
+      "C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/modes/vi.py",
+      line 767, in key_v editor = ViExternalEditor
+      (self.readline.l_buffer.line_buffer) File
+      "C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/modes/vi.py",
+      line 959, in __init__ fp_tmp = self.file_open (file_tmp, 'w') File
+      "C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/modes/vi.py",
+      line 973, in file_open return file (filename, mode) NameError: name 'file'
+      is not defined
+
+    Let's see what happens if we get rid of the space between file and (
+
+    """
+
+    def __init__(self, line):
+        """Instantiate the editor :command:`vi`.
+
+        Parameters
+        ----------
+        line : str
+            Line that the user is typing.
+        """
+        if isinstance(line, list):
+            line = "".join(i for i in line)
+        fp_tmp = self.file_open(self.file_tmp, "w")
+        fp_tmp.write(line)
+        fp_tmp.close()
+        self.run_editor(self.file_tmp)
+        # i really don't think you need to do this part in 2 steps like this
+        fp_tmp = self.file_open(self.file_tmp, "r")
+        self.result = fp_tmp.read()
+        fp_tmp.close()
+        self.file_remove(self.file_tmp)
+
+    def get_tempfile(self):
+        return tempfile.mktemp(prefix="readline-", suffix=".py")
+
+    @property
+    def file_tmp(self):
+        return self.get_tempfile()
+
+    def file_open(self, filename, mode):
+        """Can we just take a second to review this line of code...
+
+        >>> return file(filename, mode)
+
+        .. todo::
+            Would `mmap.mmap` do us any good here?
+
+        """
+        return open(filename, mode=mode)
+
+    def file_remove(self, filename):
+        os.remove(filename)
+
+    def get_editor(self):
+        try:
+            return os.environ["EDITOR"]
+        except KeyError:
+            return "vim"  # ouch
+
+    def run_editor(self, filename):
+        cmd = [self.get_editor(), filename]
+        self.run_command(cmd)
+
+    def run_command(self, command):
+        return subprocess.run(
+            command,
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
+        )
+
+    async def async_run_command(self, command):
+        # Did i do this right?
+        proc = await asyncio.subprocess.run(
+            command,
+            stdin=asyncio.subprocess.PIPE,
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE,
+        )
+
+
 
 # Completion
 
@@ -77,7 +198,6 @@ class SimpleCompleter:
         matches when state is 0, and then returns all of the candidate matches
         one at a time on subsequent calls.
         """
-        response = None
         if state == 0:
             # This is the first time for this text,
             # so build a match list.

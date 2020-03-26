@@ -31,6 +31,8 @@ import sys
 
 import jedi
 
+from IPython.core.getipython import get_ipython
+
 import prompt_toolkit
 from prompt_toolkit.buffer import Buffer
 from prompt_toolkit.document import Document
@@ -434,10 +436,46 @@ def create_searching_keybindings():
     return ConditionalKeyBindings(kb, filter=is_searching)
 
 
+class ConditionalCallable(ConditionalValidator):
+    def __init__(self, validator, **kwargs):
+        if kwargs:
+            if "document" in kwargs:
+                self.document = kwargs.pop("document")
+
+        super().__init__(validator, **kwargs)
+
+    # def validate(self, document, filter=None, *args, **kwargs):
+    #     """Only abstract method is validate. Fuckin' ConditionalValidator doesn't define this though."""
+    #     self.validator.validate(document)
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}: {self.validator}"
+
+    # NOPE. We raise an error because 'validator type: str doesn't have a validate method.
+    # So this class defines validation in terms of `__call__` at some point.
+    # def __call__(self):
+    # """Because it's annoying having to pass the document just to see it."""
+    # return self.__repr__()
+
+    def __call__(self, document=None):
+        if document is None:
+            document = get_ipython().pt_app.app.current_buffer.document
+        return self.validate(document)
+
+
+def _conditional_validator(validator, document):
+    return ConditionalCallable(validator, document=document, filter=ViInsertMode())
+
+
 def pt_validator():
-    validator = ThreadedValidator(DynamicValidator(ConditionalValidator(DummyValidator(), filter=ViInsertMode())))
+    validator = ThreadedValidator(
+        _conditional_validator(
+            DummyValidator(), get_ipython().pt_app.app.current_buffer.document
+        )
+    )
     return validator
 
 
 if __name__ == "__main__":
     pt_helper = Helpers()
+    get_ipython().pt_app.validator = pt_validator()

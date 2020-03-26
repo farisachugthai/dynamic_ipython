@@ -37,6 +37,7 @@ import sys as _sys
 try:
     # noinspection PyProtectedMember
     from _thread import _local as local
+
     # noinspection PyProtectedMember,PyProtectedMember
     from _thread import _excepthook as excepthook, _ExceptHookArgs as ExceptHookArgs
 except ImportError:

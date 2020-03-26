@@ -97,7 +97,9 @@ class WindowsClipboard(Clipboard):
         except ClipboardEmpty:
             return
         except Exception:  # noqa
-            return subprocess.run(["win32yank", "-o", "lf"], stdout=subprocess.PIPE).stdout
+            return subprocess.run(
+                ["win32yank", "-o", "lf"], stdout=subprocess.PIPE
+            ).stdout
 
     def __call__(self):
         self.win32_clipboard_get()

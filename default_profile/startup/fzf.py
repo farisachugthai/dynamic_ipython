@@ -72,7 +72,7 @@ def check_output_inside_dir(command, dirpath):
     :param dirpath: String, path of the directory the command is being run.
     """
     with inside_dir(dirpath):
-        return subprocess.check_output(
+        return subprocess.run(
             shlex.split(shlex.quote(command)),
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
@@ -110,6 +110,7 @@ class Executable(ContextDecorator):
 
     def __call__(self, *args, **kwargs):
         if self.command_path is not None:
+
             @functools.wraps
             def wrapped(*args, **kwargs):
                 return subprocess.run(
@@ -307,7 +308,7 @@ def fgs():
     return ret
 
 
-def fzf_history(event):
+def fzf_ctrl_r(event):
     if FzfPrompt is None:
         return
     cnx = sqlite3.connect(home + "/.ipython/profile_default/history.sqlite")

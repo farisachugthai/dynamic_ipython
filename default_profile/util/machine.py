@@ -16,7 +16,7 @@ class Platform:
         try:
             self.logger = kwargs["LOGGER"]
         except KeyError:
-            self.logger = logging.basicConfig(level=logging.INFO)
+            logging.basicConfig(level=logging.INFO)
 
         self.shell = shell if shell is not None else get_ipython()
 

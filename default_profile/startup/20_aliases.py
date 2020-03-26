@@ -87,6 +87,18 @@ class Alias(UserDict):
 
     Reasonably this is the object that should be the UserDict. CommonAliases
     makes more sense as a list of dicts.
+
+    Instances are registered as magic functions to allow use of aliases.
+
+    .. todo::
+        More dunders.
+        It would be sweet if we had a container we could ``+`` and ``-`` to.
+
+    Methods
+    -------
+    blacklist : method
+        Previously a class attribute, the blacklist is now a property of an Alias.
+
     """
 
     def __init__(self, name, cmd, **kwargs: dict):
@@ -152,6 +164,9 @@ class Alias(UserDict):
 
         self.shell.system(cmd)
 
+    def __eq__(self, other):
+        if other.items() == self.items():
+            return True
 
 class CommonAliases(UserDict):
     r"""Aliases that are usable on any major platform.
@@ -260,7 +275,7 @@ class CommonAliases(UserDict):
         try:
             self.dict_aliases.update(other)
         except TypeError:
-            self.soft_define_alias(other)
+            self.soft_define_alias(*other)
         if kwargs:
             super().update(other=kwargs)
 
@@ -268,6 +283,10 @@ class CommonAliases(UserDict):
         return copy.copy(self.dict_aliases)
 
     def __contains__(self, other):
+        if type(other)  == Alias:
+            for i in self.dict.aliases:
+                if other == i:
+                    return True
         return other in self.dict_aliases
 
     def __iter__(self):
@@ -594,7 +613,6 @@ class WindowsAliases(CommonAliases):
 
     """
 
-
     def __init__(self, user_aliases=None, *args, **kwargs):
         super().__init__(**kwargs)
         self.user_aliases = user_aliases if user_aliases is not None else args
@@ -788,7 +806,6 @@ def generate_aliases() -> Union[None, LinuxAliases, WindowsAliases]:
         aliases = LinuxAliases(user_aliases=_ip.alias_manager.user_aliases)
     elif machine.startswith("Win"):
         aliases = WindowsAliases(user_aliases=_ip.alias_manager.user_aliases)
-        aliases.cmd_aliases()
     else:
         raise AliasError
     aliases.ls_patch(_ip)

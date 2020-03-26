@@ -52,14 +52,6 @@ def formatted_tb():
     -------
     str
 
-    Examples
-    --------
-    .. ipython::
-        :okexcept:
-
-        >>> raise NotImplementedError
-        >>> formatted_tb()
-
     """
     return format_tb(*sys.exc_info())
 
@@ -82,6 +74,7 @@ def rehashx_run():
 
 
 def get_exec_dir():
+    """Returns IPython's profile_dir.startup_dir. If that can't be determined, return CWD."""
     _ip = get_ipython()
     if _ip is not None:
         exec_dir = _ip.profile_dir.startup_dir
