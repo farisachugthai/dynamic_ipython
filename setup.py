@@ -11,7 +11,7 @@
 
 """
 
-# {{{
+# Imports: {{{
 import codecs
 import logging
 import os
@@ -20,7 +20,7 @@ import platform
 from pathlib import Path
 from shutil import rmtree
 
-import distutils   # noqa
+import distutils  # noqa
 import setuptools  # noqa
 from setuptools.dist import Distribution
 from setuptools import setup, find_packages, Command
@@ -61,6 +61,7 @@ else:
 
 try:  # new replacement for the pkg_resources API
     import importlib_metadata
+
     our_dist = importlib_metadata.distribution("dynamic_ipython")
 except ImportError:
     importlib_metadata = None
@@ -69,7 +70,7 @@ except importlib_metadata.PackageNotFoundError:
 
 # }}}
 
-# Metadata: {{{1
+# Metadata: {{{
 
 # DON'T GET RID OF THIS. This took a while to debug and honestly it was an accident.
 # Incorrectly installing the package will leave the package partially installed
@@ -84,7 +85,7 @@ __path__ = find_packages()
 
 # }}}
 
-# Conda Support: {{{1
+# Conda Support: {{{
 
 try:
     import distutils.command.bdist_conda
@@ -94,6 +95,9 @@ except ImportError:
 else:
     distclass = distutils.command.bdist_conda.CondaDistribution
 
+# }}}
+
+# Metadata: {{{
 NAME = "dynamic_ipython"
 AUTHOR = "Faris Chugthai"
 EMAIL = "farischugthai@gmail.com"
@@ -124,9 +128,13 @@ REQUIRED = [
     "importlib-metadata",
     "pyfzf",
     "pyperclip",
-    "trio", 'pygments', 
-    # 'pyreadline', 
-    'jinja2', 'jedi', 'pyzmq', 'traitlets'
+    "trio",
+    "pygments",
+    # 'pyreadline',
+    "jinja2",
+    "jedi",
+    "pyzmq",
+    "traitlets",
 ]
 
 if platform.platform().startswith("Win"):
@@ -145,12 +153,11 @@ EXTRAS = {
     ],
     "test": ["ipyparallel", "pytest", "testpath", "nose", "matplotlib"],
 }
+
 # }}}
 
-# {{{
 
-
-class UploadCommand(Command):
+class UploadCommand(Command):  # {{{
     """Support setup.py upload."""
 
     description = "Build and publish the package."
