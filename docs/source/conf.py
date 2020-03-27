@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# {{{
 import asyncio
 import cgitb
 import logging
@@ -8,19 +9,22 @@ import os
 import re
 import sys
 from datetime import datetime
+from importlib import import_module
 from pathlib import Path
+from typing import TYPE_CHECKING
 
-from IPython.lib.lexers import IPyLexer
+from IPython.lib.lexers import IPyLexer, IPython3Lexer, IPythonTracebackLexer
 
 import jinja2
 from jinja2.bccache import FileSystemBytecodeCache
 from jinja2.environment import Environment
 from jinja2.exceptions import TemplateError
 from jinja2.ext import autoescape, do, with_, debug
-from jinja2.loaders import ChoiceLoader  # , ModuleLoader, FileSystemLoader,
+from jinja2.loaders import ChoiceLoader, ModuleLoader, FileSystemLoader
 from jinja2.lexer import get_lexer
 
 from pygments.lexers.markup import MarkdownLexer, RstLexer
+from pygments.lexers.shell import BashLexer
 from pygments.lexers.textedit import VimLexer
 from pygments.lexers.python import (
     NumPyLexer,
@@ -31,15 +35,24 @@ from pygments.lexers.python import (
 import sphinx
 
 from sphinx import addnodes
-# from sphinx.application import Sphinx, ExtensionError
+
+# from sphinx.application import Sphinx
 # and i think SphinxError is actually one too
 # from sphinx.environment import BuildEnvironment
+# could manually start creating extensions
+# from sphinx.errors import SphinxError, ExtensionError
+# from sphinx.extension import Extension
 from sphinx.ext.autodoc import cut_lines
-from sphinx.jinja2glue import SphinxFileSystemLoader  # , SandboxedEnvironment
+from sphinx.jinja2glue import SphinxFileSystemLoader, BuiltinTemplateLoader
+from sphinx.util.logging import getLogger
 from sphinx.util.docfields import GroupedField
 from sphinx.util.template import ReSTRenderer
 
-import matplotlib  # noqa
+if TYPE_CHECKING:
+    from jinja2.environment import TRIM_BLOCKS, LSTRIP_BLOCKS  # noqa
+    from sphinx.application import Sphinx  # noqa
+    from sphinx.domains.rst import ReSTDomain  # noqa
+# }}}
 
 import default_profile  # noqa
 
@@ -52,7 +65,9 @@ except ImportError:
     import importlib_metadata
 
     dist = importlib_metadata.Distribution().from_name("dynamic_ipython")
-# Logging
+
+# Logging: {{{
+
 DOCS_LOGGER = logging.getLogger(name=__name__)
 DOCS_HANDLER = logging.StreamHandler()
 DOCS_HANDLER.setLevel(logging.INFO)
@@ -78,6 +93,12 @@ UTIL = ROOT.joinpath("default_profile/util")
 
 sys.path.insert(0, str(UTIL))
 
+# Add markdown to the lexer's aliases
+MarkdownLexer.aliases = ["md", "markdown"]
+
+DOCS_LOGGER = logging.getLogger(__name__)
+
+cgitb.enable(format="text")
 # -- Jinja2 ---------------------------------------------------
 
 loop = asyncio.new_event_loop()
@@ -95,6 +116,7 @@ def instantiate_jinja_loader():
             [
                 SphinxFileSystemLoader(sphinx_templates),
                 SphinxFileSystemLoader(template_path),
+                FileSystemLoader(template_path),
             ]
         )
     except TemplateError:
@@ -110,13 +132,22 @@ def create_jinja_env():
     """Use jinja to set up the Sphinx environment."""
     TRIM_BLOCKS = True
     LSTRIP_BLOCKS = True
+    template_path = "_templates"
     env = Environment(
         trim_blocks=TRIM_BLOCKS,
         lstrip_blocks=LSTRIP_BLOCKS,
         autoescape=jinja2.select_autoescape(
             disabled_extensions=("txt",), default_for_string=True, default=True
         ),
-        extensions=["jinja2.ext.i18n", autoescape, do, with_, debug],
+        extensions=[
+            "jinja2.ext.i18n",
+            autoescape,
+            do,
+            with_,
+            debug,
+            "jinja2.ext.loopcontrols",
+            "jinja2.ext.do",
+        ],
         enable_async=True,
         bytecode_cache=jinja_templates,
         loader=jinja_loader,
@@ -124,8 +155,10 @@ def create_jinja_env():
     return env
 
 
-jinja_env = create_jinja_env()
-lexer = get_lexer(jinja_env)
+try:
+    lexer = get_lexer(create_jinja_env())
+except (TemplateError, TemplateSyntaxError):
+    pass
 
 with open(os.path.join(DOCS, "source", "index.rst")) as f:
     t = jinja2.Template(f.read())
@@ -187,7 +220,6 @@ source_suffix = {
     ".md": "markdown",
 }
 
-
 # The encoding of source files.
 source_encoding = u"utf-8"
 
@@ -217,13 +249,11 @@ release = version
 # Usually you set "language" from the command line for these cases.
 # language = None
 
-
 # There are two options for replacing |today|: either, you set today to some
 # non-false value, then it is used:
 # today = ''
 # Else, today_fmt is used as the format for a strftime call.
 today_fmt = u"%B %d, %Y"
-
 
 # The name of the default domain. Can also be None to disable a default domain.
 # The default is 'py'. Those objects in other domains (whether the domain name
@@ -311,7 +341,6 @@ html_theme = "scrolls"
 # further.  For a list of options available for each theme, see the
 # documentation.
 
-
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
@@ -355,7 +384,6 @@ html_compact_lists = False
 html_secnumber_suffix = " "
 
 # html_js_files = ["copybutton.js"]
-
 
 # -- Options for HTMLHelp output ---------------------------------------------
 
@@ -441,7 +469,6 @@ intersphinx_mapping = {
     "jupyter": ("https://jupyter.readthedocs.io/en/latest/", None),
     "numpy": ("https://docs.scipy.org/doc/numpy/", None),
 }
-
 
 # -- Options for todo extension ----------------------------------------------
 
@@ -613,7 +640,6 @@ plot_rcparams = {
 
 # Not from scpy but mpl related anyway
 plot_html_show_source_link = True
-
 
 # -- Setup -------------------------------------------------------------------
 

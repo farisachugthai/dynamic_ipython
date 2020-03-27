@@ -251,6 +251,12 @@ def generate_autosummary():
     generate_autosummary_docs()
 
 
+def generate_autosummary():
+    from sphinx.ext.autosummary.generate import generate_autosummary_docs, generate_autosummary_content, AutosummaryRenderer
+
+    generate_autosummary_docs()
+
+
 def generate_sphinx_app(root):
     srcdir = confdir = root.joinpath("source")
     doctreedir = "build/.doctrees"
