@@ -251,7 +251,7 @@ def fzf_history(event):
     fzf = FzfPrompt()
     df = pd.read_sql_query("SELECT * FROM history", cnx)
     itext = fzf.prompt(df["source"])
-    if itext != []:
+    if itext:
         event.current_buffer.insert_text(itext[0])
 
 
@@ -316,5 +316,5 @@ def fzf_ctrl_r(event):
     df = pd.read_sql_query("SELECT * FROM history", cnx)
     itext = fzf.prompt(df["source"])
     # print(itext)
-    if itext != []:
+    if itext:
         event.current_buffer.insert_text(itext[0])

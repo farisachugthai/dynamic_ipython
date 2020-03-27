@@ -310,7 +310,7 @@ class MyHistoryAccessor(HistoryAccessor):
         self.writeout_cache()
         if not include_latest:
             n += 1
-        if n == None:
+        if n is None:
             cur = self._run_sql(
                 "ORDER BY session DESC, line DESC LIMIT ?", (n,), raw=raw, output=output
             )

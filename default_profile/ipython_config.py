@@ -655,12 +655,10 @@ else:
                     pm = "\xb1"
                 except:
                     pass
-            ret = []
-            ret.append(f"{_format_time(self.average, self._precision)}")
-            ret.append(f"{pm} {_format_time(self.stdev, self._precision)} per loop")
-            ret.append(f"{mean} {pm} std. dev. of {self.repeat} run.")
-            ret.append(f"{'' if self.repeat == 1 else 's'} {self.loops} loop")
-            ret.append(f"{'' if self.loops == 1 else 's'} each")
+            ret = [f"{_format_time(self.average, self._precision)}",
+                   f"{pm} {_format_time(self.stdev, self._precision)} per loop",
+                   f"{mean} {pm} std. dev. of {self.repeat} run.",
+                   f"{'' if self.repeat == 1 else 's'} {self.loops} loop", f"{'' if self.loops == 1 else 's'} each"]
             return ret
 
         def timings(self):

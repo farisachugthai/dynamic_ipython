@@ -2,6 +2,8 @@
 Prompt Toolkit
 ==============
 
+How I've utilized prompt_toolkit and extended it.
+
 
 :mod:`~default_profile.startup.32_kb`
 ===========================================
@@ -22,3 +24,8 @@ Prompt Toolkit
    :undoc-members:
    :show-inheritance:
 
+
+See Also
+--------
+:doc:`completions`
+   Use of the `prompt_toolkit.completions.Completers`.

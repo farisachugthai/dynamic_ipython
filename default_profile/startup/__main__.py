@@ -79,12 +79,12 @@ def async_startup():
     }:
         repl_locals[key] = locals()[key]
 
-    console = AsyncIOInteractiveConsole(repl_locals, loop)
+    console = AsyncIOInteractiveConsole
 
     repl_future = None
     repl_future_interrupted = False
 
-    repl_thread = REPLThread()
+    repl_thread = REPLThread
     repl_thread.daemon = True
     repl_thread.start()
     startup = abspath(".")

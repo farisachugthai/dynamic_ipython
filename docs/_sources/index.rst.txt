@@ -184,6 +184,7 @@ Startup API Docs
    FZF <startup/fzf>
    Setup Readline <startup/setup_readline>
    prompt_toolkit <startup/prompt_toolkit>
+   Completions <startup/completions>
    Toolbar <startup/toolbar>
    Lexer <startup/lexer>
    Numpy <startup/41_numpy>
@@ -234,7 +235,7 @@ portion of the repository.
    Pandas CSV <extensions/pandas_csv>
    repr_requests <extensions/repr_requests>
 
-Continue reading with the pandas extension at :ref:`extensions/pandas_csv`.
+Continue reading with the pandas extension at :doc:`extensions/pandas_csv`.
 
 
 .. _util-contents:
@@ -249,7 +250,7 @@ scripts that I've found useful while working with IPython, but that unfortunatel
 haven't been fleshed out enough.
 
 They're still all useful in their current state and when the user is
-running IPython interactively, but none of the scripts havet been fleshed out
+running IPython interactively, but none of the scripts haven't been fleshed out
 to the extent that they could be easily changed to IPython extensions.
 
 Goals

@@ -31,9 +31,8 @@ from pygments.lexers.python import (
 import sphinx
 
 from sphinx import addnodes
-# from sphinx.application import Sphinx
-# Did I spell something wrong?
-# from sphinx.application import ExtensionError
+# from sphinx.application import Sphinx, ExtensionError
+# and i think SphinxError is actually one too
 # from sphinx.environment import BuildEnvironment
 from sphinx.ext.autodoc import cut_lines
 from sphinx.jinja2glue import SphinxFileSystemLoader  # , SandboxedEnvironment
@@ -686,7 +685,7 @@ def setup(app):
         "event", "event", "pair: %s; event", parse_event, doc_field_types=[fdesc]
     )
 
-    app.add_css_file("custom.css")
+    # app.add_css_file("custom.css")
     # already was added in a template
     # app.add_css_file('pygments.css')
     # There's a html.addjsfile call earlier in the file

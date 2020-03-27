@@ -8,7 +8,6 @@
     
     <link rel="stylesheet" href="../../../_static/scrolls.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
     <link rel="stylesheet" href="_static/print.css" type="text/css" />
     
     <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
@@ -24,7 +23,7 @@
 
   </head><body>
 
-  <link rel="stylesheet" href="../_static/style.css" />
+<link rel="stylesheet" href="../_static/style.css" />
 
     <div id="content">
       <div class="header">
@@ -37,6 +36,7 @@
       <div id="contentwrapper">
         <div role="main">
         
+
 <h1>Source code for default_profile.startup.30_readline</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
@@ -62,6 +62,7 @@
 <span class="sd">`Tim Pope&#39;s RSI Vim plugin &lt;https://github.com/tpope/vim-rsi&gt;`_.</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">asyncio</span>
 <span class="kn">import</span> <span class="nn">atexit</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -86,6 +87,7 @@
     <span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+
 
 <span class="c1"># Patching pyreadline:</span>
 
@@ -141,23 +143,35 @@
 <span class="sd">        line : str</span>
 <span class="sd">            Line that the user is typing.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">type</span><span class="p">([]):</span>
-            <span class="n">line</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-        <span class="n">file_tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tempfile</span><span class="p">()</span>
-        <span class="n">fp_tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_open</span><span class="p">(</span><span class="n">file_tmp</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">line</span><span class="p">)</span>
+        <span class="n">fp_tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_tmp</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
         <span class="n">fp_tmp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
         <span class="n">fp_tmp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">run_editor</span><span class="p">(</span><span class="n">file_tmp</span><span class="p">)</span>
-        <span class="n">fp_tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_open</span><span class="p">(</span><span class="n">file_tmp</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run_editor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_tmp</span><span class="p">)</span>
+        <span class="c1"># i really don&#39;t think you need to do this part in 2 steps like this</span>
+        <span class="n">fp_tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_tmp</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="n">fp_tmp</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
         <span class="n">fp_tmp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">file_remove</span><span class="p">(</span><span class="n">file_tmp</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_tmp</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ViExternalEditor.get_tempfile"><a class="viewcode-back" href="../../../startup/setup_readline.html#default_profile.startup.30_readline.ViExternalEditor.get_tempfile">[docs]</a>    <span class="k">def</span> <span class="nf">get_tempfile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mktemp</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;readline-&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;.py&quot;</span><span class="p">)</span></div>
 
+<div class="viewcode-block" id="ViExternalEditor.file_tmp"><a class="viewcode-back" href="../../../startup/setup_readline.html#default_profile.startup.30_readline.ViExternalEditor.file_tmp">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">file_tmp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tempfile</span><span class="p">()</span></div>
+
 <div class="viewcode-block" id="ViExternalEditor.file_open"><a class="viewcode-back" href="../../../startup/setup_readline.html#default_profile.startup.30_readline.ViExternalEditor.file_open">[docs]</a>    <span class="k">def</span> <span class="nf">file_open</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">file</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span></div>
+        <span class="sd">&quot;&quot;&quot;Can we just take a second to review this line of code...</span>
+
+<span class="sd">        &gt;&gt;&gt; return file(filename, mode)</span>
+
+<span class="sd">        .. todo::</span>
+<span class="sd">            Would `mmap.mmap` do us any good here?</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ViExternalEditor.file_remove"><a class="viewcode-back" href="../../../startup/setup_readline.html#default_profile.startup.30_readline.ViExternalEditor.file_remove">[docs]</a>    <span class="k">def</span> <span class="nf">file_remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
         <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span></div>
@@ -173,13 +187,23 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ViExternalEditor.run_command"><a class="viewcode-back" href="../../../startup/setup_readline.html#default_profile.startup.30_readline.ViExternalEditor.run_command">[docs]</a>    <span class="k">def</span> <span class="nf">run_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">):</span>
-        <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+        <span class="k">return</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
             <span class="n">command</span><span class="p">,</span>
             <span class="n">stdin</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
             <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
             <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
             <span class="n">universal_newlines</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="ViExternalEditor.async_run_command"><a class="viewcode-back" href="../../../startup/setup_readline.html#default_profile.startup.30_readline.ViExternalEditor.async_run_command">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">async_run_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">):</span>
+        <span class="c1"># Did i do this right?</span>
+        <span class="n">proc</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+            <span class="n">command</span><span class="p">,</span>
+            <span class="n">stdin</span><span class="o">=</span><span class="n">asyncio</span><span class="o">.</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
+            <span class="n">stdout</span><span class="o">=</span><span class="n">asyncio</span><span class="o">.</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
+            <span class="n">stderr</span><span class="o">=</span><span class="n">asyncio</span><span class="o">.</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
         <span class="p">)</span></div></div>
+
 
 
 <span class="c1"># Completion</span>
@@ -214,7 +238,6 @@
 <span class="sd">        matches when state is 0, and then returns all of the candidate matches</span>
 <span class="sd">        one at a time on subsequent calls.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">state</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="c1"># This is the first time for this text,</span>
             <span class="c1"># so build a match list.</span>

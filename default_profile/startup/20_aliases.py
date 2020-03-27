@@ -103,6 +103,7 @@ class Alias(UserDict):
 
     def __init__(self, name, cmd, **kwargs: dict):
         """Validate the alias, and return the number of arguments."""
+        super().__init__(**kwargs)
         self.name = name
         self.cmd = cmd
         if self.name in self.blacklist:

@@ -61,6 +61,8 @@ class WindowsClipboard(Clipboard):
                 "extensions: http://sourceforge.net/projects/pywin32/"
             )
         win32clipboard.OpenClipboard()
+        self.clipboard = clipboard
+        super(WindowsClipboard, self).__init__(*args, **kwargs)
 
     def win_clip_pywin32(self):
         """Utilize pywin32 to get the user's text.

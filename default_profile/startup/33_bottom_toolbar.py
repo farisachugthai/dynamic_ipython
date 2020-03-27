@@ -99,8 +99,7 @@ class LineCounter:
 
     def display(self):
         self.count += 1
-        ret = [(Token.String.Subheading), (f"< In[{self.count:3d}]:")]
-        ret.append([(Token.Literal), (f"Time:{self.time}")])
+        ret = [Token.String.Subheading, f"< In[{self.count:3d}]:", [(Token.Literal), (f"Time:{self.time}")]]
         return ret
 
     def __call__(self):
@@ -214,11 +213,9 @@ class BottomToolbar:
 
     def _render_vi(self):
         current_vi_mode = self.app.vi_state.input_mode
-        _toolbar = []
-        _toolbar.append((Token.Keyword, f"[F4] {self.app.editing_mode!r}"))
-        _toolbar.append((Token.String.Heading, f"{current_vi_mode!r}"))
-        _toolbar.append((Token.Literal.String.Double, f"cwd: {Path.cwd().stem!r}"))
-        _toolbar.append((Token.Number.Integer, f"Clock: {time.ctime()!r}"))
+        _toolbar = [(Token.Keyword, f"[F4] {self.app.editing_mode!r}"), (Token.String.Heading, f"{current_vi_mode!r}"),
+                    (Token.Literal.String.Double, f"cwd: {Path.cwd().stem!r}"),
+                    (Token.Number.Integer, f"Clock: {time.ctime()!r}")]
         # how do i fill all this dead space?
         # remaining_space = terminal_width() - len(self)
         # _toolbar.append((Token.Operator, remaining_space * " "))

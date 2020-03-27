@@ -53,7 +53,7 @@ class ShellRepo:
             if not self.root.exists():
                 # uhhhhhhh
                 self.log.critical(f"{self.root} doesn't exist")
-            return Git(self.root())
+            return Git(self.root)
 
 
 class PyGit(Git):

@@ -176,8 +176,7 @@ def setup_logging(debug=True, logfile=None):
         log_level = logging.INFO
         formatter = FMT_NORMAL
 
-    handlers = []
-    handlers.append(QueueHandler(QUEUE))
+    handlers = [QueueHandler(QUEUE)]
     if not logfile:
         handlers.append(logging.StreamHandler())
     else:
