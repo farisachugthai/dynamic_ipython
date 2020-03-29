@@ -210,7 +210,6 @@ if __name__ == "__main__":
     # lexer = IPythonConfigurableLexer()
     # colorizer = Colorizer()
     pt_lexer = get_lexer()
-    extra_displayhook()
     generate_and_print_hsplit()
     lexer = MyPythonLexer()
     if hasattr(get_ipython(), "pt_app.lexer"):

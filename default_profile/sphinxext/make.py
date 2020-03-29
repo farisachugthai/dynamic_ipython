@@ -4,29 +4,32 @@ import argparse
 import codecs
 import locale
 import os
+import pathlib
 import shutil
 import subprocess
 import sys
 import webbrowser
-from argparse import Namespace
 from pathlib import Path
 
 import importlib_metadata
-# import sphinx
 # from jinja2.constants import TRIM_BLOCKS, LSTRIP_BLOCKS
+import jinja2
 from jinja2.environment import Environment
 from jinja2.exceptions import TemplateError
 from jinja2.ext import autoescape, do, with_
 from jinja2.loaders import FileSystemLoader
 
+import sphinx
 from sphinx.application import Sphinx
-from sphinx.errors import ApplicationError
-from sphinx.cmd.build import build_main
+# from sphinx.cmd.build import build_main
+# from sphinx.cmd.build import handle_exception
 from sphinx.cmd.make_mode import Make
-from sphinx.jinja2glue import SphinxFileSystemLoader
-from sphinx.util.console import (  # type: ignore
-    colorize, color_terminal
-)
+from sphinx.errors import ApplicationError
+# from sphinx.jinja2glue import SphinxFileSystemLoader
+# from sphinx.util.console import (  # type: ignore
+#   colorize, color_terminal
+# )
+from sphinx.util.docutils import patch_docutils, docutils_namespace
 from sphinx.util.logging import getLogger
 
 # from sphinx.ext.apidoc import create
@@ -38,7 +41,7 @@ if sys.version_info < (3, 7):
 logger = getLogger(name=__name__)
 
 
-def _parse_arguments() -> Namespace:
+def _parse_arguments() -> argparse.ArgumentParser:
     """Parse user arguments.
 
     Returns
@@ -102,7 +105,7 @@ def _parse_arguments() -> Namespace:
         default=False,
         dest="open_browser",
         help="Toggle opening the docs in the default"
-        " browser after a successful build.",
+             " browser after a successful build.",
     )
 
     parser.add_argument(
@@ -111,7 +114,7 @@ def _parse_arguments() -> Namespace:
         default=sys.stdout,
         type=argparse.FileType("w"),
         help="Where to write log records to. Defaults to"
-        " stdout.",
+             " stdout.",
     )
 
     parser.add_argument(
@@ -137,15 +140,13 @@ def _parse_arguments() -> Namespace:
     __version__ = dist.version
     parser.add_argument("--version", action="version", version=__version__)
 
-    user_args = parser.parse_args()
-
     if len(sys.argv[1:]) == 0:
         parser.print_help()
         # This is actually annoying
         # raise argparse.ArgumentError(None, "Args not provided.")
         sys.exit()
 
-    return user_args
+    return parser
 
 
 class DocBuilder:
@@ -194,7 +195,7 @@ class DocBuilder:
             raise ValueError(
                 "kind must be one of: {}".format(str(self.kinds)) +
                 "not {}".format(kind))
-        cmd = ["sphinx-build", "-b", kind, ".", "-c", SOURCE_PATH]
+        cmd = ["sphinx-build", "-b", kind, ".", "-c", self.root]
         if self.num_jobs:
             cmd += ["-j", str(self.num_jobs)]
         if self.verbosity:
@@ -216,13 +217,16 @@ class DocBuilder:
         """
         # Shit is that really the only time you gotta catch it?
         self.status("Running sphinx-build.")
-        return codecs.decode(subprocess.run(self.sphinx_build(kind),stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True).stdout, "utf-8").strip(),
+        return codecs.decode(subprocess.run(self.sphinx_build(kind), stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                            universal_newlines=True).stdout, "utf-8").strip(),
 
     def open_browser(self, doc=None):
-        """Open a browser tab to the provided document."""
+        """Open a browser tab to the provided document.
+        :rtype: object
+        """
         if doc is None:
             doc = "index.html"
-        url = os.path.join("file://", DOC_PATH, "build", "html", doc)
+        url = os.path.join("file://", self.root, "build", "html", doc)
         self.status("Opening path to: {!s}".format(url))
         webbrowser.open(url, new=2)
 
@@ -245,33 +249,59 @@ class Runner:
         return self.builder.run('texinfo')
 
 
-def generate_autosummary():
-    from sphinx.ext.autosummary.generate import generate_autosummary_docs, generate_autosummary_content, AutosummaryRenderer
+def generate_autosummary(**kwar):
+    from sphinx.ext.autosummary.generate import generate_autosummary_docs
 
-    generate_autosummary_docs()
-
-
-def generate_autosummary():
-    from sphinx.ext.autosummary.generate import generate_autosummary_docs, generate_autosummary_content, AutosummaryRenderer
-
-    generate_autosummary_docs()
+    generate_autosummary_docs(**kwar)
 
 
-def generate_sphinx_app(root):
+def generate_sphinx_app(root, namespace):
+    """Generate the primary Sphinx application object that drives the project.
+
+    Parameters
+    ----------
+    root : str
+        The root of the repositories docs
+    namespace : arparse.NameSpace
+        User provided arments.
+
+    Returns
+    -------
+    app : Sphinx
+        :class:`sphinx.application.Sphinx` instance.
+
+    """
     srcdir = confdir = root.joinpath("source")
     doctreedir = "build/.doctrees"
     outdir = "build/html"
+    if hasattr(namespace, 'verbosity'):
+        if namespace.verbosity < 20:
+            verbosity = 2
+        elif namespace.verbosity < 40:
+            verbosity = 1
+        else:
+            verbosity = 0
+    else:
+        verbosity = 0
     try:
-        app = Sphinx(
-            buildername="html",
-            srcdir=srcdir,
-            outdir=outdir,
-            doctreedir=doctreedir,
-            confdir=confdir,
-        )
+        with patch_docutils(confdir), docutils_namespace():
+            app = Sphinx(
+                buildername=namespace.builder if namespace.builder is not None else "html",
+                srcdir=srcdir,
+                outdir=outdir,
+                doctreedir=doctreedir,
+                confdir=confdir,
+                parallel=namespace.jobs,
+                verbosity=verbosity,
+            )
+            app.build()
+            return app.statuscode
+
     except ApplicationError:
-        raise  # TODO
-    return app
+        raise
+    except (Exception, KeyboardInterrupt) as exc:
+        # handle_exception(app, namespace, exc)
+        return 2
 
 
 def get_jinja_loader(template_path=None):
@@ -284,7 +314,7 @@ def get_jinja_loader(template_path=None):
     return loader
 
 
-def setup_jinja(path_to_template):
+def setup_jinja(path_to_template: pathlib.Path) -> jinja2.environment.Environment:
     """Use jinja to set up the Sphinx environment."""
     TRIM_BLOCKS = True
     LSTRIP_BLOCKS = True
@@ -302,8 +332,8 @@ def setup_jinja(path_to_template):
 class Maker(Make):
     def __init__(self, source_dir, build_dir, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.source_dir
-        self.build_dir
+        self.source_dir = source_dir
+        self.build_dir = build_dir
 
     def run_generic_build(self, **kwargs):
         # TODO
@@ -324,31 +354,29 @@ def main(repo_root=None):
     """
     # Probably should initialize in a different/ better way but eh
     # build_opts = gather_sphinx_options()
-    build_opts = _parse_arguments()
+    user_parser = _parse_arguments()
+    user_args = user_parser.parse_args()
     doc_root = Path(repo_root).joinpath("docs")
     template_path = doc_root.joinpath("source/_templates")
     env = setup_jinja(template_path)
-    app = generate_sphinx_app(doc_root)
-    # you don't need to instantiate a project as it exists on the app.
-    # project = Project(doc_root, source_suffix="rst")
-    sphinx_fs = SphinxFileSystemLoader(
-        searchpath=doc_root.joinpath("source/_templates"))
-    # TODO: need to convert build_opts [a namespace object]
-    # to a dict of its args. check how to do that later.
-    breakpoint()
-    if color_terminal():
-        colorize('sphinx_build', build_main())
+
+    if user_args.log:
+        logger.setLevel(30)
+        logger.info(f"git root was: {repo_root}")
+        logger.info(f"jinja env: {env}")
+    generate_sphinx_app(doc_root, user_args)
+
 
 def get_git_root():
     try:
-        return codecs.decode(subprocess.check_output(["git", "rev-parse", "--show-toplevel"]), 'utf-8')
+        almost = codecs.decode(subprocess.check_output(["git", "rev-parse", "--show-toplevel"]), 'utf-8')
+        return almost.rstrip()
     except subprocess.CalledProcessError as e:
         print(e)
         return os.getcwd()
 
+
 if __name__ == "__main__":
     git_root = get_git_root()
-    logger.setLevel(30)
-    logger.debug(f"git root was: {git_root}")
     locale.setlocale(locale.LC_ALL, '')
     sys.exit(main(git_root))
