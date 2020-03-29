@@ -49,10 +49,9 @@ import shutil
 import site
 import sys
 import types
-# noinspection PyProtectedMember
-from linecache import cache
 from inspect import findsource, getmodule, getsource, getsourcefile
 from io import StringIO
+# noinspection PyProtectedMember
 # noinspection PyProtectedMember
 from linecache import cache
 from pathlib import Path
@@ -62,7 +61,7 @@ from pydoc import pager
 logging.basicConfig(level=logging.WARNING)
 
 try:
-    from pygments import highlight
+    import pygments
     from pygments.lexers.python import PythonLexer, PythonTracebackLexer
     from pygments.formatters.terminal256 import TerminalTrueColorFormatter
 except ImportError:
@@ -99,9 +98,9 @@ formatter = TerminalTrueColorFormatter()
 # }}}
 
 
-def pyg_highlight(param):
+def pyg_highlight(param, **kwargs):
     """Run a string through the pygments highlighter."""
-    return highlight(param, lexer, formatter)
+    return pygments.highlight(param, lexer, formatter)
 
 
 def _complete(text, state):
@@ -177,13 +176,14 @@ def initialize_excepthook(func, **kwargs):
 
     @functools.wraps
     def _(**kwargs):
-        return pyg_highlight(func)
+        return pyg_highlight(func, **kwargs)
 
     return syshook
 
 
 def get_height():
     return shutil.get_terminal_size()
+
 def get_width():
     return shutil.get_terminal_size()[1]
 
@@ -389,7 +389,7 @@ if __name__ == "__main__":
     try:
         _pythonrc_enable_readline(history_path=history_path)
         _pythonrc_enable_history()
-        initialize_excepthook()
+        initialize_excepthook(excepthook)
         sys.displayhook = pprinthook
         _pythonrc_fix_linecache()
     except Exception as e:

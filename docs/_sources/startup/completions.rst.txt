@@ -24,7 +24,7 @@ mechanisms and combines them.
     FuzzyWordCompleter, FuzzyCompleter, PathCompleter, WordCompleter
     and IPython's IPythonPTCompleter.
 
-In addition, autosuggestions are generated in a manner similar to fish from an
+In addition, auto-suggestions are generated in a manner similar to fish from an
 `prompt_toolkit.auto_suggest.AutoSuggestFromHistory` instance wrapped in
 a `prompt_toolkit.auto_suggest.ThreadedAutoSuggest` instance as this
 dramatically speeds the completions up.

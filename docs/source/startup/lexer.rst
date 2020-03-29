@@ -25,7 +25,7 @@ So it'd be tough to say we're at a lack of tools!
 Configurable Lexers
 ===================
 
-The lexers defined here were originally created to stand in as objects 
+The lexers defined here were originally created to stand in as objects
 able to merge the seemingly disjoint APIs of IPython, traitlets,
 prompt_toolkit and pygments.
 
