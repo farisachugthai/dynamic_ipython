@@ -76,7 +76,7 @@ python3.7. In most cases it does not.
 If one has :command:`pipenv` installed, an easier installation could be
 ``pipenv install -e .``
 
-If a non-pipenv installation is desired for some reason, a fully 
+If a non-pipenv installation is desired for some reason, a fully
 specified installation could look like.
 
 .. code-block:: bash
@@ -84,7 +84,7 @@ specified installation could look like.
    python3 setup.py build
    python3 -m pip install -U --user pip -e .
 
-As one can see this gets complicated very quickly, and as a 
+As one can see this gets complicated very quickly, and as a
 result, installation via pipenv is the recommended method.
 
 
@@ -118,12 +118,12 @@ Table of Contents
 .. toctree::
     :maxdepth: 3
     :titlesonly:
- 
+
     {{ single_doc[:-4] }}
 {% elif single_doc %}
 .. autosummary::
     :toctree: reference/api/
- 
+
     {{ single_doc }}
 {% else -%}
 .. toctree::
@@ -193,10 +193,19 @@ Startup API Docs
 
 .. _sphinxext-package:
 
-Sphinx Extensions
------------------
+IPython-specific Sphinx extensions.
+===================================
 
 The `default_profile.sphinxext` package.
+Imports the modules found in the current directory and utilizes
+:mod:`pkgutil` and :func:`pkgutil.extend_path`
+to extend the packages ``__path__`` parameter.
+
+It only imports the modules below if this repository has been installed.
+
+If this weren't true, then starting IPython without this package installed
+would emit :exc:`ImportError` on startup, which would be frustrating for
+users.
 
 .. toctree::
    :maxdepth: 2

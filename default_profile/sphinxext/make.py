@@ -12,6 +12,7 @@ import webbrowser
 from pathlib import Path
 
 import importlib_metadata
+
 # from jinja2.constants import TRIM_BLOCKS, LSTRIP_BLOCKS
 import jinja2
 from jinja2.environment import Environment
@@ -21,10 +22,12 @@ from jinja2.loaders import FileSystemLoader
 
 import sphinx
 from sphinx.application import Sphinx
+
 # from sphinx.cmd.build import build_main
 # from sphinx.cmd.build import handle_exception
 from sphinx.cmd.make_mode import Make
 from sphinx.errors import ApplicationError
+
 # from sphinx.jinja2glue import SphinxFileSystemLoader
 # from sphinx.util.console import (  # type: ignore
 #   colorize, color_terminal
@@ -74,17 +77,11 @@ def _parse_arguments() -> argparse.ArgumentParser:
     )
 
     parser.add_argument(
-        "-s",
-        "--sourcedir",
-        default=Path.cwd(),
-        help="Sourcedir to pass to Sphinx",
+        "-s", "--sourcedir", default=Path.cwd(), help="Sourcedir to pass to Sphinx",
     )
 
     parser.add_argument(
-        "-d",
-        "--destdir",
-        default=None,
-        help="Sourcedir to pass to Sphinx",
+        "-d", "--destdir", default=None, help="Sourcedir to pass to Sphinx",
     )
 
     parser.add_argument(
@@ -105,7 +102,7 @@ def _parse_arguments() -> argparse.ArgumentParser:
         default=False,
         dest="open_browser",
         help="Toggle opening the docs in the default"
-             " browser after a successful build.",
+        " browser after a successful build.",
     )
 
     parser.add_argument(
@@ -113,8 +110,7 @@ def _parse_arguments() -> argparse.ArgumentParser:
         "--log",
         default=sys.stdout,
         type=argparse.FileType("w"),
-        help="Where to write log records to. Defaults to"
-             " stdout.",
+        help="Where to write log records to. Defaults to" " stdout.",
     )
 
     parser.add_argument(
@@ -136,7 +132,7 @@ def _parse_arguments() -> argparse.ArgumentParser:
         help="Enable verbose logging and increase level to `debug`.",
     )
 
-    dist = importlib_metadata.Distribution().from_name('dynamic_ipython')
+    dist = importlib_metadata.Distribution().from_name("dynamic_ipython")
     __version__ = dist.version
     parser.add_argument("--version", action="version", version=__version__)
 
@@ -190,11 +186,14 @@ class DocBuilder:
         >>> DocBuilder(num_jobs=4).sphinx_build('html')
 
         """
-        BUILD_PATH = BUILD_PATH if BUILD_PATH is not None else Path.cwd().joinpath('build')
+        BUILD_PATH = (
+            BUILD_PATH if BUILD_PATH is not None else Path.cwd().joinpath("build")
+        )
         if kind not in self.kinds:
             raise ValueError(
-                "kind must be one of: {}".format(str(self.kinds)) +
-                "not {}".format(kind))
+                "kind must be one of: {}".format(str(self.kinds))
+                + "not {}".format(kind)
+            )
         cmd = ["sphinx-build", "-b", kind, ".", "-c", self.root]
         if self.num_jobs:
             cmd += ["-j", str(self.num_jobs)]
@@ -217,8 +216,17 @@ class DocBuilder:
         """
         # Shit is that really the only time you gotta catch it?
         self.status("Running sphinx-build.")
-        return codecs.decode(subprocess.run(self.sphinx_build(kind), stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                                            universal_newlines=True).stdout, "utf-8").strip(),
+        return (
+            codecs.decode(
+                subprocess.run(
+                    self.sphinx_build(kind),
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    universal_newlines=True,
+                ).stdout,
+                "utf-8",
+            ).strip(),
+        )
 
     def open_browser(self, doc=None):
         """Open a browser tab to the provided document.
@@ -232,21 +240,20 @@ class DocBuilder:
 
 
 class Runner:
-
     def __init__(self, **kwargs):
         self.builder = DocBuilder(**kwargs)
 
     def html(self):
-        return self.builder.run('html')
+        return self.builder.run("html")
 
     def man(self):
-        return self.builder.run('man')
+        return self.builder.run("man")
 
     def doctest(self):
-        return self.builder.run('doctest')
+        return self.builder.run("doctest")
 
     def texinfo(self):
-        return self.builder.run('texinfo')
+        return self.builder.run("texinfo")
 
 
 def generate_autosummary(**kwar):
@@ -274,7 +281,7 @@ def generate_sphinx_app(root, namespace):
     srcdir = confdir = root.joinpath("source")
     doctreedir = "build/.doctrees"
     outdir = "build/html"
-    if hasattr(namespace, 'verbosity'):
+    if hasattr(namespace, "verbosity"):
         if namespace.verbosity < 20:
             verbosity = 2
         elif namespace.verbosity < 40:
@@ -286,7 +293,9 @@ def generate_sphinx_app(root, namespace):
     try:
         with patch_docutils(confdir), docutils_namespace():
             app = Sphinx(
-                buildername=namespace.builder if namespace.builder is not None else "html",
+                buildername=namespace.builder
+                if namespace.builder is not None
+                else "html",
                 srcdir=srcdir,
                 outdir=outdir,
                 doctreedir=doctreedir,
@@ -369,7 +378,9 @@ def main(repo_root=None):
 
 def get_git_root():
     try:
-        almost = codecs.decode(subprocess.check_output(["git", "rev-parse", "--show-toplevel"]), 'utf-8')
+        almost = codecs.decode(
+            subprocess.check_output(["git", "rev-parse", "--show-toplevel"]), "utf-8"
+        )
         return almost.rstrip()
     except subprocess.CalledProcessError as e:
         print(e)
@@ -378,5 +389,5 @@ def get_git_root():
 
 if __name__ == "__main__":
     git_root = get_git_root()
-    locale.setlocale(locale.LC_ALL, '')
+    locale.setlocale(locale.LC_ALL, "")
     sys.exit(main(git_root))

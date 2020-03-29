@@ -301,28 +301,28 @@ class TestCase(unittest.TestCase):
         self.check_iterator(iter(C(), 10), list(range(10)), pickle=False)
 
     # Test two-argument iter() with function
-    def test_iter_function(self):
-        def spam(state=None):
-            if state is None:
-                state = [0]
-            i = state[0]
-            state[0] = i + 1
-            return i
+    # def test_iter_function(self):
+    #     def spam(state=None):
+    #         if state is None:
+    #             state = [0]
+    #         i = state[0]
+    #         state[0] = i + 1
+    #         return i
 
-        self.check_iterator(iter(spam, 10), list(range(10)), pickle=False)
+    #     self.check_iterator(iter(spam, 10), list(range(10)), pickle=False)
 
     # Test two-argument iter() with function that raises StopIteration
-    def test_iter_function_stop(self):
-        def spam(state=None):
-            if state is None:
-                state = [0]
-            i = state[0]
-            if i == 10:
-                raise StopIteration
-            state[0] = i + 1
-            return i
+    # def test_iter_function_stop(self):
+    #     def spam(state=None):
+    #         if state is None:
+    #             state = [0]
+    #         i = state[0]
+    #         if i == 10:
+    #             raise StopIteration
+    #         state[0] = i + 1
+    #         return i
 
-        self.check_iterator(iter(spam, 20), list(range(10)), pickle=False)
+    #     self.check_iterator(iter(spam, 20), list(range(10)), pickle=False)
 
     # Test exception propagation through function iterator
     # def test_exception_function(self):
@@ -959,20 +959,20 @@ class TestCase(unittest.TestCase):
         a.n = 10
         self.assertEqual(list(b), [])
 
-    def test_sinkstate_callable(self):
-        # This used to fail
-        def spam(state=None):
-            if state is None:
-                state = [0]
-            i = state[0]
-            state[0] = i + 1
-            if i == 10:
-                raise AssertionError("shouldn't have gotten this far")
-            return i
+    # def test_sinkstate_callable(self):
+    #     # This used to fail
+    #     def spam(state=None):
+    #         if state is None:
+    #             state = [0]
+    #         i = state[0]
+    #         state[0] = i + 1
+    #         if i == 10:
+    #             raise AssertionError("shouldn't have gotten this far")
+    #         return i
 
-        b = iter(spam, 5)
-        self.assertEqual(list(b), list(range(5)))
-        self.assertEqual(list(b), [])
+    #     b = iter(spam, 5)
+    #     self.assertEqual(list(b), list(range(5)))
+    #     self.assertEqual(list(b), [])
 
     def test_sinkstate_dict(self):
         # XXX For a more thorough test, see towards the end of:
