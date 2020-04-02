@@ -49,49 +49,38 @@
 <span class="sd">other things that aren&#39;t utilized at all.</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">asyncio</span>
-<span class="kn">import</span> <span class="nn">functools</span>
-<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">textwrap</span>
+<span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span> <span class="nn">shutil</span> <span class="kn">import</span> <span class="n">get_terminal_size</span>
-<span class="kn">from</span> <span class="nn">traceback</span> <span class="kn">import</span> <span class="n">print_exc</span>
-
-<span class="kn">from</span> <span class="nn">IPython.core.interactiveshell</span> <span class="kn">import</span> <span class="n">InteractiveShell</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">AnyStr</span>
 
 <span class="kn">import</span> <span class="nn">prompt_toolkit</span>
+<span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+<span class="kn">from</span> <span class="nn">IPython.core.interactiveshell</span> <span class="kn">import</span> <span class="n">InteractiveShell</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.enums</span> <span class="kn">import</span> <span class="n">EditingMode</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.formatted_text</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">PygmentsTokens</span><span class="p">,</span>
     <span class="n">to_formatted_text</span><span class="p">,</span>
-    <span class="n">FormattedText</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.layout.controls</span> <span class="kn">import</span> <span class="n">FormattedTextControl</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.layout.containers</span> <span class="kn">import</span> <span class="n">Window</span><span class="p">,</span> <span class="n">Float</span>
-
 <span class="kn">from</span> <span class="nn">prompt_toolkit.shortcuts.utils</span> <span class="kn">import</span> <span class="n">print_container</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.styles</span> <span class="kn">import</span> <span class="n">default_pygments_style</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.styles</span> <span class="kn">import</span> <span class="n">Style</span><span class="p">,</span> <span class="n">merge_styles</span><span class="p">,</span> <span class="n">style</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.styles.pygments</span> <span class="kn">import</span> <span class="n">style_from_pygments_cls</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.widgets</span> <span class="kn">import</span> <span class="n">Frame</span><span class="p">,</span> <span class="n">TextArea</span><span class="p">,</span> <span class="n">Button</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.widgets.toolbars</span> <span class="kn">import</span> <span class="n">FormattedTextToolbar</span>
-
-<span class="kn">import</span> <span class="nn">pygments</span>
-<span class="kn">from</span> <span class="nn">pygments.token</span> <span class="kn">import</span> <span class="n">Token</span>
-<span class="kn">from</span> <span class="nn">pygments.lexers.python</span> <span class="kn">import</span> <span class="n">PythonLexer</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.styles</span> <span class="kn">import</span> <span class="n">default_pygments_style</span><span class="p">,</span> <span class="n">style_from_pygments_cls</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.styles</span> <span class="kn">import</span> <span class="n">merge_styles</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.widgets</span> <span class="kn">import</span> <span class="n">Frame</span><span class="p">,</span> <span class="n">TextArea</span>
 <span class="kn">from</span> <span class="nn">pygments.formatters.terminal256</span> <span class="kn">import</span> <span class="n">TerminalTrueColorFormatter</span>
-<span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
-<span class="kn">from</span> <span class="nn">IPython.terminal.ptutils</span> <span class="kn">import</span> <span class="n">IPythonPTLexer</span>
+<span class="kn">from</span> <span class="nn">pygments.lexers.python</span> <span class="kn">import</span> <span class="n">PythonLexer</span>
+<span class="kn">from</span> <span class="nn">pygments.token</span> <span class="kn">import</span> <span class="n">Token</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">gruvbox</span> <span class="kn">import</span> <span class="n">GruvboxStyle</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="c1"># actually we can&#39;t do this. he requires that styles have an invalidationhash</span>
 
-    <span class="c1"># from pygments.styles.inkpot import InkPotStyle</span>
-    <span class="n">pygments_style</span> <span class="o">=</span> <span class="n">default_pygments_style</span><span class="p">()</span>
-    <span class="c1"># pygments_style = InkPotStyle</span>
+    <span class="kn">from</span> <span class="nn">pygments.styles.inkpot</span> <span class="kn">import</span> <span class="n">InkPotStyle</span>
+    <span class="c1"># pygments_style = default_pygments_style()</span>
+    <span class="n">pygments_style</span> <span class="o">=</span> <span class="n">InkPotStyle</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="n">pygments_style</span> <span class="o">=</span> <span class="n">GruvboxStyle</span>
 
@@ -108,10 +97,11 @@
 
 
 <div class="viewcode-block" id="init_style"><a class="viewcode-back" href="../../../startup/toolbar.html#default_profile.startup.33_bottom_toolbar.init_style">[docs]</a><span class="k">def</span> <span class="nf">init_style</span><span class="p">():</span>
-    <span class="k">return</span> <span class="n">merge_styles</span><span class="p">([</span><span class="n">pygments_style</span><span class="p">,</span> <span class="n">default_pygments_style</span><span class="p">()])</span></div>
+    <span class="sd">&quot;&quot;&quot;Merges the styles from default_pygments_style and the previously imported `pygments_style`.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">merge_styles</span><span class="p">([</span><span class="n">style_from_pygments_cls</span><span class="p">(</span><span class="n">pygments_style</span><span class="p">),</span> <span class="n">default_pygments_style</span><span class="p">()])</span></div>
 
 
-<div class="viewcode-block" id="show_header"><a class="viewcode-back" href="../../../startup/toolbar.html#default_profile.startup.33_bottom_toolbar.show_header">[docs]</a><span class="k">def</span> <span class="nf">show_header</span><span class="p">(</span><span class="n">header_text</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="show_header"><a class="viewcode-back" href="../../../startup/toolbar.html#default_profile.startup.33_bottom_toolbar.show_header">[docs]</a><span class="k">def</span> <span class="nf">show_header</span><span class="p">(</span><span class="n">header_text</span><span class="p">:</span> <span class="n">AnyStr</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">widgets</span><span class="o">.</span><span class="n">Frame</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">header_text</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">header_text</span> <span class="o">=</span> <span class="n">textwrap</span><span class="o">.</span><span class="n">dedent</span><span class="p">(</span>
             <span class="s2">&quot;Press Control-Y to paste from the system clipboard.</span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -139,7 +129,7 @@
 
 <div class="viewcode-block" id="LineCounter.display"><a class="viewcode-back" href="../../../startup/toolbar.html#default_profile.startup.33_bottom_toolbar.LineCounter.display">[docs]</a>    <span class="k">def</span> <span class="nf">display</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="n">ret</span> <span class="o">=</span> <span class="p">[</span><span class="n">Token</span><span class="o">.</span><span class="n">String</span><span class="o">.</span><span class="n">Subheading</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;&lt; In[</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="si">:</span><span class="s2">3d</span><span class="si">}</span><span class="s2">]:&quot;</span><span class="p">,</span> <span class="p">[(</span><span class="n">Token</span><span class="o">.</span><span class="n">Literal</span><span class="p">),</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Time:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)]]</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="p">[</span><span class="n">Token</span><span class="o">.</span><span class="n">String</span><span class="o">.</span><span class="n">Subheading</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;&lt; In[</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="si">:</span><span class="s2">3d</span><span class="si">}</span><span class="s2">]:&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">Token</span><span class="o">.</span><span class="n">Literal</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Time:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]]</span>
         <span class="k">return</span> <span class="n">ret</span></div>
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -178,7 +168,7 @@
 
     <span class="c1"># are you allowed to doctest fstrings</span>
 
-<div class="viewcode-block" id="BottomToolbar.__init__"><a class="viewcode-back" href="../../../startup/toolbar.html#default_profile.startup.33_bottom_toolbar.BottomToolbar.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_style</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="BottomToolbar.__init__"><a class="viewcode-back" href="../../../startup/toolbar.html#default_profile.startup.33_bottom_toolbar.BottomToolbar.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_style</span><span class="p">:</span> <span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">styles</span><span class="o">.</span><span class="n">Style</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Require an &#39;app&#39; for initialization.</span>
 
 <span class="sd">        This will eliminate all IPython code out of this class and make things</span>

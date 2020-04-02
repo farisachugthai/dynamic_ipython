@@ -45,6 +45,7 @@
 <span class="kn">import</span> <span class="nn">locale</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">pathlib</span>
+<span class="kn">import</span> <span class="nn">pprint</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">import</span> <span class="nn">subprocess</span>
 <span class="kn">import</span> <span class="nn">sys</span>
@@ -142,7 +143,7 @@
         <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;open_browser&quot;</span><span class="p">,</span>
         <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Toggle opening the docs in the default&quot;</span>
-        <span class="s2">&quot; browser after a successful build.&quot;</span><span class="p">,</span>
+             <span class="s2">&quot; browser after a successful build.&quot;</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
@@ -302,12 +303,12 @@
     <span class="n">generate_autosummary_docs</span><span class="p">(</span><span class="o">**</span><span class="n">kwar</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="generate_sphinx_app"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.generate_sphinx_app">[docs]</a><span class="k">def</span> <span class="nf">generate_sphinx_app</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">namespace</span><span class="p">):</span>
+<div class="viewcode-block" id="generate_sphinx_app"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.generate_sphinx_app">[docs]</a><span class="k">def</span> <span class="nf">generate_sphinx_app</span><span class="p">(</span><span class="n">root</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">namespace</span><span class="p">:</span> <span class="n">argparse</span><span class="o">.</span><span class="n">Namespace</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Generate the primary Sphinx application object that drives the project.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    root : str</span>
+<span class="sd">    root : str or pathlib.Path</span>
 <span class="sd">        The root of the repositories docs</span>
 <span class="sd">    namespace : arparse.NameSpace</span>
 <span class="sd">        User provided arments.</span>
@@ -318,7 +319,7 @@
 <span class="sd">        :class:`sphinx.application.Sphinx` instance.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">srcdir</span> <span class="o">=</span> <span class="n">confdir</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="s2">&quot;source&quot;</span><span class="p">)</span>
+    <span class="n">srcdir</span> <span class="o">=</span> <span class="n">confdir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">root</span><span class="p">)</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="s2">&quot;source&quot;</span><span class="p">)</span>
     <span class="n">doctreedir</span> <span class="o">=</span> <span class="s2">&quot;build/.doctrees&quot;</span>
     <span class="n">outdir</span> <span class="o">=</span> <span class="s2">&quot;build/html&quot;</span>
     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">namespace</span><span class="p">,</span> <span class="s2">&quot;verbosity&quot;</span><span class="p">):</span>
@@ -350,6 +351,7 @@
         <span class="k">raise</span>
     <span class="k">except</span> <span class="p">(</span><span class="ne">Exception</span><span class="p">,</span> <span class="ne">KeyboardInterrupt</span><span class="p">)</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
         <span class="c1"># handle_exception(app, namespace, exc)</span>
+        <span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span>
         <span class="k">return</span> <span class="mi">2</span></div>
 
 
@@ -421,7 +423,7 @@
         <span class="n">almost</span> <span class="o">=</span> <span class="n">codecs</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span>
             <span class="n">subprocess</span><span class="o">.</span><span class="n">check_output</span><span class="p">([</span><span class="s2">&quot;git&quot;</span><span class="p">,</span> <span class="s2">&quot;rev-parse&quot;</span><span class="p">,</span> <span class="s2">&quot;--show-toplevel&quot;</span><span class="p">]),</span> <span class="s2">&quot;utf-8&quot;</span>
         <span class="p">)</span>
-        <span class="k">return</span> <span class="n">almost</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">almost</span><span class="o">.</span><span class="n">rstrip</span><span class="p">())</span>
     <span class="k">except</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">CalledProcessError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span></div>

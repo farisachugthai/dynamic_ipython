@@ -25,8 +25,9 @@ Usage
 -----
 
 .. function:: get_history(session_number)
+   :noindex:
 
-   TODO
+   Queries the IPython database for history entries.
 
 Examples
 --------
@@ -34,6 +35,9 @@ Examples
 .. code-block:: bash
 
   python3 ipython-get-history.py 57 record.ipy
+
+Summary for Logger
+------------------
 
 This script is a simple demonstration of
 :class:`IPython.core.history.HistoryAccessor`. It should be possible

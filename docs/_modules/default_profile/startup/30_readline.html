@@ -101,10 +101,12 @@
 
 <span class="sd">    .. code-block:: py3tb</span>
 
-<span class="sd">    &gt;&gt;&gt; def cd(arg)</span>
+<span class="sd">        &gt;&gt;&gt; def cd(arg):</span>
+<span class="sd">        &gt;&gt;&gt;     pass</span>
 
 <span class="sd">    Readline internal error</span>
 <span class="sd">    Traceback (most recent call last):</span>
+
 <span class="sd">      File</span>
 <span class="sd">      &quot;C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/console/console.py&quot;,</span>
 <span class="sd">      line 768, in hook_wrapper_23 res = ensure_str(readline_hook(prompt)) File</span>
@@ -131,7 +133,7 @@
 <span class="sd">      line 973, in file_open return file (filename, mode) NameError: name &#39;file&#39;</span>
 <span class="sd">      is not defined</span>
 
-<span class="sd">    Let&#39;s see what happens if we get rid of the space between file and (</span>
+<span class="sd">    Let&#39;s see what happens if we get rid of the space between file and ``(``</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -142,6 +144,7 @@
 <span class="sd">        ----------</span>
 <span class="sd">        line : str</span>
 <span class="sd">            Line that the user is typing.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="n">line</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">line</span><span class="p">)</span>
@@ -165,7 +168,10 @@
 <div class="viewcode-block" id="ViExternalEditor.file_open"><a class="viewcode-back" href="../../../startup/setup_readline.html#default_profile.startup.30_readline.ViExternalEditor.file_open">[docs]</a>    <span class="k">def</span> <span class="nf">file_open</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Can we just take a second to review this line of code...</span>
 
-<span class="sd">        &gt;&gt;&gt; return file(filename, mode)</span>
+<span class="sd">        return file (filename, mode)</span>
+
+<span class="sd">        In case you&#39;re confused the gap in between file and the parenthesis</span>
+<span class="sd">        is in fact intentional.</span>
 
 <span class="sd">        .. todo::</span>
 <span class="sd">            Would `mmap.mmap` do us any good here?</span>
@@ -203,7 +209,6 @@
             <span class="n">stdout</span><span class="o">=</span><span class="n">asyncio</span><span class="o">.</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
             <span class="n">stderr</span><span class="o">=</span><span class="n">asyncio</span><span class="o">.</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
         <span class="p">)</span></div></div>
-
 
 
 <span class="c1"># Completion</span>

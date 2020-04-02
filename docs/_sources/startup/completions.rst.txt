@@ -4,14 +4,16 @@
 :mod:`~default_profile.startup.completions`
 ===========================================
 
-Use both Jedi and prompt_toolkit to aide IPython in generating completions..
+Use both `jedi` and `prompt_toolkit` to aide `IPython` in generating completions.
 
 The function from this module that will be easiest for end users to utilize is.:
 
 .. function:: create_pt_completers()
+   :noindex:
 
-    Return a MergedCompleter combining all of the public facing completers
-    initialized in this module. This includes all of the concrete
+    Return a `~prompt_toolkit.completion.MergedCompleter` combining all of
+    the public facing completers initialized in this module.
+    This includes all of the concrete
     `prompt_toolkit.completion.Completers` as well as subclasses of the
     abstract base class.
 
@@ -30,6 +32,13 @@ a `prompt_toolkit.auto_suggest.ThreadedAutoSuggest` instance as this
 dramatically speeds the completions up.
 
 
+See Also -- prompt_toolkit docs
+===============================
+
+:doc:`prompt_toolkit`
+   More documentation on use of the prompt_toolkit API.
+
+
 Completions API
 ===============
 
@@ -38,3 +47,4 @@ Completions API
    :members:
    :undoc-members:
    :show-inheritance:
+

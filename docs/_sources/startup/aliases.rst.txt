@@ -1,8 +1,8 @@
+.. currentmodule:: default_profile.startup.20_aliases
+
 ==============
 System Aliases
 ==============
-
-.. currentmodule:: default_profile.startup.20_aliases
 
 To date there are well over 100 aliases manually added to the shell.
 
@@ -148,16 +148,6 @@ Therefore I tried using a hyphen to separate the words, but the python
 interpreter uses hyphens as well as whitespace to separate keywords, and as a
 result, would split the alias in the middle of the command.
 
-Examples
---------
-:
-
-   In [58]: %git_staged?
-   Object `staged` not found.
-
-   In [60]: %git_staged?
-   Object `%git_staged` not found.
-
 
 .. _aliases-api-docs:
 
@@ -165,6 +155,7 @@ API Docs
 --------
 
 .. function:: validate_alias
+   :noindex:
 
    Check attributes and formatting of Alias string.
    Verifies alias through the name and cmd attributes.
@@ -175,9 +166,11 @@ API Docs
    :return nargs:
 
    :raises `InvalidAliasError`:
+      On incorrect aliases
 
 
 .. class:: Alias(alias)
+   :noindex:
 
    After a sufficient amount of time, the definition of an alias needed to be
    built on, and a new alias class was defined in this module.
@@ -186,11 +179,13 @@ API Docs
 
 
 .. class:: CommonAliases(dict=None)
+   :noindex:
 
    A dictionary mapping aliases to system commands, this class implements most
    of the functionality in the module.
 
    .. method:: git
+      :noindex:
 
       100+ git aliases.
 

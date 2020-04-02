@@ -24,8 +24,19 @@ can be overridden later.
 Aliases are easy to work with as they as composed of simple data structures.
 
 .. function:: rerun_startup()
+   :noindex:
 
    This function can be run in an interactive session.
+   The intended use case is one where the user needs to rerun the startup
+   files in the ``profile_default`` startup folder.
+   For various reasons, not all files in the startup foler may execute.
+   This can occur if there is a syntax error in one of the files.
+   After an unexpected exception is raised, the remaining files will all
+   collectively not run.
+
+   To fix that, they are all presented as arguments to the IPython magic,
+   `%run` and as a result, are added to the global namespace.
+
 
 Parameters
 ----------

@@ -10,9 +10,6 @@ Also worth noting is how Numpy and Scipy entirely circumvent the typical
 help system, pydoc, and the paging functions in IPython with their 
 :func:`numpy.info` and :func:`numpy.source` functions.
 
-
-See Also
---------
 .. seealso::
 
    :func:`numpy.info`
