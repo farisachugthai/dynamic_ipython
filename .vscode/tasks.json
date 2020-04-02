@@ -1,165 +1,163 @@
 {
-  "tasks": [
-    {
-      "args": [
-        "${file}"
-      ],
-      "command": "${config:python.pythonPath}",
-      "group": "build",
-      "label": "Run Python",
-      "presentation": {
-        "panel": "new",
-        "reveal": "always"
-      },
-      "problemMatcher": {
-        "fileLocation": "absolute",
-        "pattern": [
-          {
-            "file": 1,
-            "line": 2,
-            "message": 0,
-            "regexp": "^\\s+File \"(.*?)\", line ([0-9]+)[,]?.+?$"
-          },
-          {
-            "code": 1,
-            "regexp": "^\\s+(.+?)$"
-          }
-        ]
-      },
-      "type": "shell"
-    },
-    {
-      "command": "{config:python.pythonPath} -m pytest",
-      "group": {
-        "kind": "test",
-        "isDefault": true
-      },
-      "label": "pytest",
-      "presentation": {
-        "focus": true,
-        "panel": "new",
-        "reveal": "always"
-      },
-      "type": "shell"
-    },
-    {
-      "command": "${config:python.pythonPath} -m unittest",
-      "group": "test",
-      "label": "unittest",
-      "presentation": {
-        "focus": true,
-        "panel": "new",
-        "reveal": "always"
-      },
-      "type": "shell"
-    },
-    {
-      "command": "pipenv shell",
-      "group": "build",
-      "isBackground": true,
-      "label": "pipenv",
-      "type": "shell"
-    },
-    {
-      "command": "${config:python.pythonPath} -m sphinx ",
-      "dependsOrder": "sequence",
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      },
-      "label": "sphinx-build",
-      "type": "process",
-      "args": [
-        "-b",
-        "html"
-      ],
-      "windows": {
-        "args": [
-          "-o",
-          "docs\\build\\html",
-          "docs\\source"
-        ]
-      },
-      "linux": {
-        "args": [
-          "-o",
-          "docs/build/html",
-          "docs/source"
-        ]
-      },
-      "problemMatcher": []
-    },
-    {
-      "args": [
-        "-m",
-        "autopep8",
-        "-i",
-        "${file}"
-      ],
-      "command": "${config:python.pythonPath}",
-      "label": "autopep8 file. shell?",
-      "type": "shell"
-    },
-    {
-      "command": "${config:python.pythonPath}",
-      "label": "autopep8 current file. process?",
-      "type": "process"
-    },
-    {
-      "args": [
-        "-m",
-        "yapf",
-        "-i",
-        "${file}"
-      ],
-      "command": "${config:python.pythonPath}",
-      "group": "none",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "shared",
-        "showReuseMessage": true,
-        "clear": false
-      },
-      "label": "yapf file",
-      "type": "process"
-    },
-    {
-      "label": "npm-install jupyter_conf",
-      "path": "jupyter_conf/",
-      "script": "install",
-      "type": "npm"
-    },
-    {
-      "type": "process",
-      "windows": {
-        "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
-      },
-      "args": [
-        "."
-      ],
-      "label": "electron",
-      "command": [
-        "npx",
-        "electron"
-      ]
-    },
-    {
-      "type": "npm",
-      "script": "install",
-      "problemMatcher": []
-    },
-    {
-      "type": "npm",
-      "script": "run-lab",
-      "problemMatcher": []
-    },
-    {
-      "type": "npm",
-      "script": "lint",
-      "problemMatcher": []
-    }
-  ],
-  "version": "2.0.0"
+    "tasks": [
+        {
+            "args": [
+                "${file}"
+            ],
+            "command": "${config:python.pythonPath}",
+            "group": "build",
+            "label": "Run Python",
+            "presentation": {
+                "panel": "new",
+                "reveal": "always"
+            },
+            "problemMatcher": {
+                "fileLocation": "absolute",
+                "pattern": [
+                    {
+                        "file": 1,
+                        "line": 2,
+                        "message": 0,
+                        "regexp": "^\\s+File \"(.*?)\", line ([0-9]+)[,]?.+?$"
+                    },
+                    {
+                        "code": 1,
+                        "regexp": "^\\s+(.+?)$"
+                    }
+                ]
+            },
+            "type": "shell"
+        },
+        {
+            "command": "${config:python.pythonPath} -m pytest",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "label": "pytest",
+            "presentation": {
+                "focus": true,
+                "panel": "new",
+                "reveal": "always"
+            },
+            "type": "shell",
+            "problemMatcher": []
+        },
+        {
+            "command": "${config:python.pythonPath} -m unittest",
+            "group": "test",
+            "label": "unittest",
+            "presentation": {
+                "focus": true,
+                "panel": "new",
+                "reveal": "always"
+            },
+            "type": "shell"
+        },
+        {
+            "command": "pipenv shell",
+            "group": "build",
+            "isBackground": true,
+            "label": "pipenv",
+            "type": "shell"
+        },
+        {
+            "command": "${config:python.pythonPath} -m sphinx ",
+            "dependsOrder": "sequence",
+            "group": "build",
+            "label": "sphinx-build",
+            "type": "process",
+            "args": [
+                "-b",
+                "html"
+            ],
+            "windows": {
+                "args": [
+                    "-o",
+                    "docs\\build\\html",
+                    "docs\\source"
+                ]
+            },
+            "linux": {
+                "args": [
+                    "-o",
+                    "docs/build/html",
+                    "docs/source"
+                ]
+            },
+            "problemMatcher": []
+        },
+        {
+            "args": [
+                "-m",
+                "autopep8",
+                "-i",
+                "${file}"
+            ],
+            "command": "${config:python.pythonPath}",
+            "label": "autopep8 file. shell?",
+            "type": "shell"
+        },
+        {
+            "command": "${config:python.pythonPath}",
+            "label": "autopep8 current file. process?",
+            "type": "process"
+        },
+        {
+            "args": [
+                "-m",
+                "yapf",
+                "-i",
+                "${file}"
+            ],
+            "command": "${config:python.pythonPath}",
+            "group": "none",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "label": "yapf file",
+            "type": "process"
+        },
+        {
+            "label": "npm-install jupyter_conf",
+            "path": "jupyter_conf/",
+            "script": "install",
+            "type": "npm"
+        },
+        {
+            "type": "process",
+            "windows": {
+                "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
+            },
+            "args": [
+                "."
+            ],
+            "label": "electron",
+            "command": [
+                "npx",
+                "electron"
+            ]
+        },
+        {
+            "type": "npm",
+            "script": "install",
+            "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "run-lab",
+            "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "lint",
+            "problemMatcher": []
+        }
+    ],
+    "version": "2.0.0"
 }
