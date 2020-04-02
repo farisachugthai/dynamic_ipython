@@ -13,6 +13,7 @@ Document magics using the :rst:dir:`magic` directive.
    :show-inheritance:
 
 .. function:: setup(app)
+   :noindex:
 
    The standard setup function in all sphinx extensions.
    Adds 2 roles in linemagic and cellmagic as well as the `magic` role.

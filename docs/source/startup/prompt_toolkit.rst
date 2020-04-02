@@ -27,5 +27,7 @@ How I've utilized prompt_toolkit and extended it.
 
 See Also
 --------
+
 :doc:`completions`
    Use of the `prompt_toolkit.completions.Completers`.
+

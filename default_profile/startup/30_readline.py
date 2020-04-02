@@ -66,6 +66,7 @@ class ViExternalEditor:
 
     Readline internal error
     Traceback (most recent call last):
+
       File
       "C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/console/console.py",
       line 768, in hook_wrapper_23 res = ensure_str(readline_hook(prompt)) File
@@ -92,7 +93,7 @@ class ViExternalEditor:
       line 973, in file_open return file (filename, mode) NameError: name 'file'
       is not defined
 
-    Let's see what happens if we get rid of the space between file and (
+    Let's see what happens if we get rid of the space between file and ``(``
 
     """
 
@@ -103,6 +104,7 @@ class ViExternalEditor:
         ----------
         line : str
             Line that the user is typing.
+
         """
         if isinstance(line, list):
             line = "".join(i for i in line)
@@ -126,7 +128,10 @@ class ViExternalEditor:
     def file_open(self, filename, mode):
         """Can we just take a second to review this line of code...
 
-        >>> return file(filename, mode)
+        return file (filename, mode)
+
+        In case you're confused the gap in between file and the parenthesis
+        is in fact intentional.
 
         .. todo::
             Would `mmap.mmap` do us any good here?

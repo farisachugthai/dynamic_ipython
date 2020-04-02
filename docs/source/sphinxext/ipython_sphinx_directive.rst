@@ -334,19 +334,19 @@ line just below them (eg `@savefig`).:
 
 .. decorator:: suppress
 
-    Execute the IPython input block, but :dfn:`@suppress` the input and output
-    block from the rendered output.  Also, can be applied to the entire
-    ``.. ipython`` block as a directive option with :rst:dir:`suppress`.
+   Execute the ipython input block, but suppress the input and output
+   block from the rendered output.  Also, can be applied to the entire
+   ``..ipython`` block as a directive option with :rst:dir:`:suppress:`.
+
 
 .. decorator:: verbatim
 
-    Insert the input and output block in exactly as they were inputted, but
-    prepend an IPython prompt if necessary.
-    Auto-increment the prompt as appropriate for the state of the document.
-    Internally, the interpreter will be fed an empty
-    string, so it is a no-op that keeps line numbering consistent.
-    Also, can be applied to the entire ``.. ipython`` block as a
-    directive option with :rst:dir:`verbatim`.
+   Insert the input and output block in exactly as they were inputted, but
+   prepend an IPython prompt if necessary. Auto-increment the prompt as
+   appropriate for the state of the document. Internally, the interpreter will
+   be fed an empty string, so it is a no-op that keeps line numbering
+   consistent. Also, can be applied to the entire ``.. ipython`` block as a
+   directive option with :rst:dir:`verbatim`.
 
 .. decorator:: savefig
 
@@ -365,20 +365,11 @@ line just below them (eg `@savefig`).:
    match. Also, can be applied to the entire ``.. ipython`` block as a
    directive option with ``:doctest:``.
 
-.. decorator:: suppress
-
-   Execute the ipython input block, but suppress the input and output
-   block from the rendered output.  Also, can be applied to the entire
-   ``..ipython`` block as a directive option with ``:suppress:``.
-
 .. decorator:: okexcept
-
 
 .. decorator:: okwarning
 
-
 .. decorator:: python
-
 
 
 .. todo:: Document the magics.py sphinx extension!!

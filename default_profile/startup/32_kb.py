@@ -49,11 +49,11 @@ class KeyBindingsManager(UserList):
         kb : `KeyBindings`
             Any KeyBindings you wanna throw us right off the bat.
             Handling this is gonna be hard unfortunately.
-        :param kwargs:
-        :type kwargs: dict
+        kwargs : dict
+            kwargs passed to UserList
 
         """
-        super().__init__()
+        super().__init__(**kwargs)
         self.shell = shell or get_ipython()
         if self.shell is not None:
             if kb is None:

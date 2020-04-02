@@ -52,6 +52,7 @@ API
 ====
 
 .. class:: DocBuilder(build_type, num_jobs, verbosity)
+   :noindex:
 
    Class to wrap the different commands of this script.
 

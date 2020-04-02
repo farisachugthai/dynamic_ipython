@@ -36,6 +36,7 @@ prompt_toolkit and pygments.
 And here's how you join the bridge.
 
 .. class:: PygmentsLexer(Lexer):
+   :noindex:
 
    Lexer that calls a pygments lexer.
 

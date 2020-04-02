@@ -161,10 +161,10 @@ try:
 except (TemplateError, TemplateSyntaxError):
     pass
 
-with open(os.path.join(DOCS, "source", "index.rst")) as f:
-    t = jinja2.Template(f.read())
-with open(os.path.join(DOCS, "source", "index.rst.ignore"), "w") as f:
-    f.write(t.render())
+# with open(os.path.join(DOCS, "source", "index.rst")) as f:
+#     t = jinja2.Template(f.read())
+# with open(os.path.join(DOCS, "source", "index.rst.ignore"), "w") as f:
+#     f.write(t.render())
 
 
 @jinja2.contextfunction
